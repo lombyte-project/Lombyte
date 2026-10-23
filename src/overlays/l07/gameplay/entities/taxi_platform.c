@@ -3262,7 +3262,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void FUN_L07_00288968(void *, void *, void *, void *, void *);
+extern void reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3442,7 +3442,7 @@ void update_command_triggered_falling_platform(char *moby) {
             sway = fast_add_rotations(sway, forward);
             *(u128 *)current_rotation = *(u128 *)(moby + 0x40);
             *(u128 *)current_position = *(u128 *)(moby + 0x10);
-            FUN_L07_00288968(&hero.motion.pos, transformed, moby + 0x10, current_rotation, moby + 0x40);
+            reorient_position_about_pivot(&hero.motion.pos, transformed, moby + 0x10, current_rotation, moby + 0x40);
             subtract_vector_xyz(&hero.motion.platform_delta, transformed, &hero.motion.pos);
             hero.motion.platform_delta.f[2] += *(float *)(moby + 0x18) - current_position[2];
         }

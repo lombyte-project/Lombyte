@@ -1664,14 +1664,14 @@ extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
-void FUN_L07_00288968(void *a0, void *a1, void *a2, void *a3, void *a4);
+void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
 extern int func_001F9908_2F9A50(int *) __asm__("FUN_001f9740");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void func_L07_00289960_2F9A50(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
+extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void func_L00_00263B78_2F9A50(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_2F9A50(void *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_2F9A50(float, float) __asm__("FUN_001fa580");
@@ -1739,7 +1739,7 @@ void platform_update(Moby *moby)
         if (sink_level < old_z && (*(Vec_2F9A50 *)&moby->pos).z <= sink_level) {
             func_0022ED80_2F9A50(1, 0, moby);
         }
-        func_L07_00289960_2F9A50((D_0013E633_2F9A50 + 0x80), &carried_pos, &(*(Vec_2F9A50 *)&moby->pos), &old_angles, &data->ang);
+        reorient_position_about_pivot((D_0013E633_2F9A50 + 0x80), &carried_pos, &(*(Vec_2F9A50 *)&moby->pos), &old_angles, &data->ang);
         fast_vec_sub(D_0013E633_2F9A50 + 0xF0, &carried_pos, (D_0013E633_2F9A50 + 0x80));
         ((Hero *)D_0013E633_2F9A50)->motion.platform_delta.f[2] =
             ((Hero *)D_0013E633_2F9A50)->motion.platform_delta.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - old_pos.z);

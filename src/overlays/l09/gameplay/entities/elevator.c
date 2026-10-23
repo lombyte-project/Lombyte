@@ -1462,7 +1462,7 @@ extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
-void FUN_L07_00288968(void *a0, void *a1, void *a2, void *a3, void *a4);
+void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void func_001F9C30_30A560(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void func_001E9730_30A560() __asm__("FUN_001e93b0");
@@ -1472,7 +1472,7 @@ extern int func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern void func_001F9BF0_30A560(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void func_L07_00289960_30A560(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
+extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void func_L00_00263B78_30A560(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_30A560(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_30A560(float, float) __asm__("FUN_001fa580");
@@ -1575,7 +1575,7 @@ void update_floating_ship_piece(char *moby) {
             if (sink_level < old_z && new_z <= sink_level) {
                 func_0022ED80_30A560(1, 0, moby);
             }
-            func_L07_00289960_30A560((D_0013E633_30A560 + 0x80), carried_pos, moby + 0x10, old_angles, data + 0x60);
+            reorient_position_about_pivot((D_0013E633_30A560 + 0x80), carried_pos, moby + 0x10, old_angles, data + 0x60);
             func_001F9BF0_30A560(D_0013E633_30A560 + 0xF0, carried_pos, (D_0013E633_30A560 + 0x80));
             ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] = ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
         } else {
