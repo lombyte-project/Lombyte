@@ -50,6 +50,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     s32 text_x;
     u8 *label_text;
     s32 texture_index;
+    register s32 visited __asm__("$3");
 
     setup_gif_paging(0);
     vu1_add_g_sregister(0x42, 0x8000000044);
@@ -68,20 +69,21 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
         if (level_map_markers[level_index].x == 0) {
             continue;
         }
-        /* Near miss, 3 rows: retail fills the visited branch's delay slot without annulling it,
-           and sets availability to 2 after the level_available address. */
-        if (level_visit_state[level_index] == 0) {
+        /* Near miss, 2 rows: retail sets availability to 2 after the level_available
+           address. Fakematch: the pin keeps the visit flag in v1. */
+        visited = level_visit_state[level_index];
+        availability = 3;
+        if (visited == 0) {
             availability = 2;
             if (level_available[level_index] == 0) {
                 availability = 0;
             }
-        } else {
-            availability = 3;
         }
         if (availability == 0) {
             continue;
         }
-        marker_x = level_map_markers[level_index].x;
+        /* Fakematch: retail loads x again here instead of reusing the check above. */
+        marker_x = *(volatile s32 *)&level_map_markers[level_index].x;
         marker_y = level_map_markers[level_index].y;
         if (pal_mode != 0) {
             marker_y = marker_y * 0x1C0 / 0x1A0;
