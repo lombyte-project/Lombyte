@@ -2560,7 +2560,9 @@ typedef struct {
 extern int D_L00_00173E40[] __attribute__((section(".data")));
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
-float FUN_L00_002bec80(Vec4_2bec80 *probe_position, void *probing_moby) {
+float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) __asm__("FUN_L00_002bec80");
+
+float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
