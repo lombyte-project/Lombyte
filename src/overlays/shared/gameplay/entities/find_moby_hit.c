@@ -133,8 +133,8 @@ typedef struct {
 extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
-void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
-void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
+void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
+void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *hit_record;

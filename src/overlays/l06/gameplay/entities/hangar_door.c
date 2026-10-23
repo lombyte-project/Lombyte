@@ -1396,7 +1396,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char *FUN_L00_002730e0(float *, char *, int, unsigned char, unsigned char, int, float);
 extern void rotation_matrix_y(void *, float) __asm__("FUN_001f9ff8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
 
 extern void draw_beam_barrier_segments(char *moby) __asm__("FUN_L06_002f6dd0");
@@ -1531,7 +1531,7 @@ void update_beam_barrier(struct Moby *moby) {
                     fast_vec_normalize(work.shared.local[0], &moby->rot_row0, 1.0f);
                 else
                     fast_vec_normalize(work.shared.local[0], &moby->rot_row0, -1.0f);
-                FUN_L00_00259a88(hero.moby, work.shared.local[0]);
+                record_moby_hit(hero.moby, work.shared.local[0]);
                 if (D_00141968[43].count == 0 && vars->touch_timer == 0) {
                     short touches = vars->touches + 1;
                     vars->touches = touches;

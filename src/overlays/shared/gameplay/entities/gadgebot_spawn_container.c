@@ -1391,7 +1391,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_0025a120(void *);
 extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -1880,7 +1880,7 @@ void gadgebot_update(GbMoby *moby) {
                     path_and_attack_vector[1] = fast_sin(moby->rot);
                     path_and_attack_vector[2] = 0.0f;
                     make_hit_descriptor(vector_and_hit_scratch, moby, 0x10000, path_and_attack_vector, 2.0f);
-                    FUN_L00_00259a88(gadgebot_vars->target, vector_and_hit_scratch);
+                    record_moby_hit(gadgebot_vars->target, vector_and_hit_scratch);
                 }
             }
             if (moby->unk70 & 2) {

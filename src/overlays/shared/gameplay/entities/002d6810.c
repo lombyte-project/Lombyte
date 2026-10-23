@@ -157,7 +157,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00259a88(struct Moby *moby, void *hit);
+extern void record_moby_hit(struct Moby *moby, void *hit) __asm__("FUN_L00_00259a88");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
@@ -374,7 +374,7 @@ void electric_water_update(struct Moby *moby) {
             hit.v[2] = 1.0f;
             hit.v[3] = 5627.9248f;
             hit.unk18 = 0;
-            FUN_L00_00259a88(hero.moby, &hit);
+            record_moby_hit(hero.moby, &hit);
             if (moby->state == 2) {
                 D_L15_0015F448 = vars->saved_fog[0];
                 D_L15_0015F44C = vars->saved_fog[1];

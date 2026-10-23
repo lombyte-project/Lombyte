@@ -2274,7 +2274,7 @@ extern void FUN_001f9c48_cf(char *moby, float *vel, float target, float k, float
                             float max) __asm__("FUN_L00_00258278");
 extern void FUN_L00_001fefc8_cf(void *) __asm__("FUN_L03_002c95a8");
 extern void FUN_L00_001ff290_cf(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_L00_00259028_cf(void *, void *) __asm__("FUN_L00_00259a88");
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_00259710_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00259a88_cf(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_0025c698_cf(void *, void *, void *, int *, float *, int, float, float,
@@ -2649,7 +2649,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 hit.b1 = 1;
                 hit.id = m->cls;
                 if (selected_target.obj != 0) {
-                    FUN_L00_00259028_cf(selected_target.obj, &hit);
+                    record_moby_hit(selected_target.obj, &hit);
                 }
             } else if (m->b70 & 2) {
                 if (moby_data->i274 != 0) {

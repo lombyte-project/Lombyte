@@ -181,7 +181,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
-extern void FUN_L00_00259a88(int, void *);
+extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
 extern void draw_class_274_ring_effect() __asm__("FUN_L18_002dc4b8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -209,7 +209,7 @@ void update_class_274_ring_effect(struct Moby *moby) {
         fast_vec_normalize(hit_direction_vector, hit_direction_vector, frame_time * 4.0f);
         hit_direction_vector[2] = frame_time * 4.0f;
         make_hit_descriptor(hit_descriptor, (int)moby, 0x10001, hit_direction_vector, 1.0f);
-        FUN_L00_00259a88(*(int *)(target_position + 0x2000), hit_descriptor);
+        record_moby_hit(*(int *)(target_position + 0x2000), hit_descriptor);
     }
     flag = game_frame & 4;
     moby_vars[1] = moby_vars[1] + D_L18_00161CA0 * frame_time;

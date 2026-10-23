@@ -1115,7 +1115,7 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_L03_00161B28 __attribute__((sda));
@@ -1187,7 +1187,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
                 hit.kind = state;
                 hit.source = state;
                 hit.oclass = rocket_moby->oclass;
-                FUN_L00_00259a88(level[6], &hit);
+                record_moby_hit(level[6], &hit);
             }
             rocket_moby->state = 2;
         }

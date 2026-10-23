@@ -349,7 +349,7 @@ void draw_ribbon_effect_path(struct Moby *ribbon_moby, void *path, int outer_alp
 }
 extern s32 is_point_inside_clip_volume(u8 *base, s32 arg) __asm__("FUN_00214720");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_00259a88(s32, void *);
+extern void record_moby_hit(s32, void *) __asm__("FUN_L00_00259a88");
 
 typedef struct {
     f32 v[4];
@@ -386,7 +386,7 @@ void register_hero_hit_in_clip_volume(u8 *moby) {
         hit_request.c = *(u16 *)(moby + 0xA6);
         hero_base = base - 0x80;
         *(s32 *)(hero_base + 0x22A8) = 0;
-        FUN_L00_00259a88(*(s32 *)(hero_base + 0x2080), &hit_request);
+        record_moby_hit(*(s32 *)(hero_base + 0x2080), &hit_request);
     }
 }
 /* pvars of the lift that carries a rider moby and pushes the hero off its edge */

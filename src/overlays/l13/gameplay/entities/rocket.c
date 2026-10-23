@@ -343,7 +343,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern struct L13Ent00178480 D_L13_00178400[];
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
@@ -391,7 +391,7 @@ void update_gemlik_projectile(struct Moby *moby) {
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
                 if ((unsigned char)ent[0xA4] == 0xFF || (target_hit_entry = &D_L13_00178400[(unsigned char)ent[0xA4]])->p34 != ent) {
-                    FUN_L00_00259a88(ent, work.hit);
+                    record_moby_hit(ent, work.hit);
                 } else {
                     target_hit_entry->f2C += 1.0f;
                     D_L13_00178400[(unsigned char)ent[0xA4]].b28 = 1;
@@ -2433,7 +2433,7 @@ char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void forward_moby_hits_to_owner(struct Moby *moby) __asm__("FUN_L13_0030c060");
@@ -2458,7 +2458,7 @@ void forward_moby_hits_to_owner(struct Moby *moby) {
         *(short *)(forwarded_hit_descriptor + 0x1A) = *(short *)(hit_record + 0x2A);
         *(float *)(forwarded_hit_descriptor + 0x1C) = *(float *)(hit_record + 0x2C);
         *(int *)(forwarded_hit_descriptor + 0x20) = *(int *)(hit_record + 0x30);
-        FUN_L00_00259a88(*(void **)(data + 0x60), forwarded_hit_descriptor);
+        record_moby_hit(*(void **)(data + 0x60), forwarded_hit_descriptor);
     }
     moby->hit_slot = 0xFF;
 }

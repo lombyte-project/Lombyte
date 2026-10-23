@@ -262,7 +262,7 @@ extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00
 extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern float fast_cos_ece00(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_ece00(float) __asm__("FUN_001f9de0");
-extern void FUN_L00_00259a88(int, void *);
+extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                              int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -323,7 +323,7 @@ void rocket_update(struct Moby *moby) {
                 hit.unk18 = 1;
                 hit.unk19 = 1;
                 hit.oclass = moby->oclass;
-                FUN_L00_00259a88(D_L12_001742C0_ece00.moby, &hit);
+                record_moby_hit(D_L12_001742C0_ece00.moby, &hit);
             }
             moby->state = 2;
         }

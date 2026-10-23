@@ -67,7 +67,7 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
 extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -284,7 +284,7 @@ next_candidate:;
             if (candidate) {
                 if (!suck_get_aim_height(candidate) || !*(char **)(candidate + 0x24) ||
                     *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5)
-                    FUN_L00_00259a88(candidate, &hit);
+                    record_moby_hit(candidate, &hit);
                 else {
                     hit_result = 0; collided[collided_count++] = candidate;
                     *(int *)(candidate + 0x94) = 0;
@@ -313,7 +313,7 @@ next_candidate:;
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.first.hit0.id = *(short *)(o + 0xa6); effects.first.hit0.mode = 3; effects.first.hit0.kind = 5;
-        FUN_L00_00259a88(*(char **)(v + 0x20), &effects.first.hit0);
+        record_moby_hit(*(char **)(v + 0x20), &effects.first.hit0);
         timer = 5;
         data = (char *)suck_get_aim_height(*(char **)(v + 0x20));
         if (data && *(short *)(data + 4) == 1) timer = 1;
@@ -326,7 +326,7 @@ next_candidate:;
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.hit1.id = *(short *)(o + 0xa6); effects.hit1.kind = 5; effects.hit1.mode = 3;
-        FUN_L00_00259a88(*(char **)(v + 0x38), &effects.hit1);
+        record_moby_hit(*(char **)(v + 0x38), &effects.hit1);
         timer = 5;
         data = (char *)suck_get_aim_height(*(char **)(v + 0x38));
         if (data && *(short *)(data + 4) == 1) timer = 1;

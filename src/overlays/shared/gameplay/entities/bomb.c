@@ -2608,7 +2608,7 @@ extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern s32 func_L00_001F10E0_2CF808(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern s32 func_L00_00259868_2CF808(f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_00258830");
 extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
-extern void func_L00_0025AAC0_2CF808(void *, void *) __asm__("FUN_L00_00259a88");
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void func_L00_0025B040_2CF808(f32, void *) __asm__("FUN_L00_00259fe8");
 extern void *func_L00_0025B478_2CF808(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 func_L00_00259148_2CF808(f32, f32, f32, f32, f32, f32 *) __asm__("FUN_L00_00258110");
@@ -2792,7 +2792,7 @@ state2:
                 ((BombHit_2CF808 *)&direction)->kind = 1;
                 ((BombHit_2CF808 *)&direction)->mode = 2;
                 ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
-                func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
+                record_moby_hit((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                 if (category == 5) {
                     if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = drone_vars->health) > 0) {
                         random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);
@@ -2853,7 +2853,7 @@ state3:
                     ((BombHit_2CF808 *)&direction)->kind = 1;
                     ((BombHit_2CF808 *)&direction)->mode = 2;
                     ((BombHit_2CF808 *)&direction)->oclass = updated_moby->oclass;
-                    func_L00_0025AAC0_2CF808((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
+                    record_moby_hit((struct Moby *)coll_hit.moby, ((BombHit_2CF808 *)&direction));
                     if (cat2 == 5) {
                         if (coll_hit.moby && ((struct Moby *)coll_hit.moby)->oclass == 0x4D6 && (health = drone_vars->health) > 0) {
                             random = truncate_float_to_s32(((BombHit_2CF808 *)&direction)->amount);

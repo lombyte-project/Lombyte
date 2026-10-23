@@ -1695,7 +1695,7 @@ extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -1744,7 +1744,7 @@ void update_moby_motion_collision_and_burst(char *moby) {
                 hit_descriptor.b19 = 1;
                 hit_descriptor.s1A = *(unsigned short *)(moby + 0xA6);
                 hit_descriptor.b18 = 0;
-                FUN_L00_00259a88(*(void **)(collision_result + 0x18), &hit_descriptor);
+                record_moby_hit(*(void **)(collision_result + 0x18), &hit_descriptor);
             }
             moby[0x20] = 2;
         }

@@ -2330,7 +2330,7 @@ extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_0025a120(void *);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -2874,7 +2874,7 @@ void blarg_trooper_update(struct Moby *moby) {
             qcopy(st.w.p.v70, st.v50);
             st.w.p.v70[2] = st.w.p.v70[2] + 0.75f;
             if (target != 0) {
-                FUN_L00_00259a88(target, &st.w.p.blk);
+                record_moby_hit(target, &st.w.p.blk);
             }
         }
         if (moby->anim_flags & 2) {
