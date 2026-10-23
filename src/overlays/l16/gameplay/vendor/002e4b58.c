@@ -46,7 +46,9 @@ typedef struct {
 } M_4be0;
 
 extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
-char *FUN_L16_002e4be0(struct Moby *group_source_moby, int id) {
+char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) __asm__("FUN_L16_002e4be0");
+
+char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) {
     unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
     char *pool;
     int moby_pool_index;
