@@ -2670,7 +2670,9 @@ void FUN_L07_0030f308(char *moby, char *moby_data, int state, int anim, int seq,
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 
-int FUN_L07_0030f540(unsigned char *moby, int lower, int upper) {
+int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
+
+int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) {
     unsigned char *other = 0;
     if (!FUN_L00_002591d0((int *)&other, moby[0x21], 0, 0)) {
         if (other) {
@@ -2740,7 +2742,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L07_0030ed30_c(char *moby, char *data) __asm__("FUN_L07_0030ed30");
 int FUN_L07_0030f1e0_c(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
 int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
-int FUN_L07_0030f540_c(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
+int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void FUN_L07_0030e998_c(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
 void FUN_L07_0030eee8_c(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
@@ -2892,7 +2894,7 @@ void sharkigator_update(unsigned char *moby) {
             blend_moby_animation(moby, 0, 0, 10);
         }
         if (inside && target.moby != 0 && target.moby == *(int *)&D_001413D0 &&
-            !FUN_L07_0030f540_c(moby, 4, 6)) {
+            !test_other_group_moby_state_range(moby, 4, 6)) {
             if (moby[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 10);
             }
@@ -2926,7 +2928,7 @@ void sharkigator_update(unsigned char *moby) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         if (inside && target.moby != 0 && target.moby == *(int *)&D_001413D0) {
-            if (!FUN_L07_0030f540_c(moby, 4, 6)) {
+            if (!test_other_group_moby_state_range(moby, 4, 6)) {
                 if (moby[0x53] != 1) {
                     blend_moby_animation(moby, 1, 0, 10);
                 }
