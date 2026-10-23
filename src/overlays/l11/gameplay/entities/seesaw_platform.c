@@ -638,7 +638,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void approach_e088(float *, void *, float, float, float, float) __asm__("FUN_00213f38");
 extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030e690");
 extern int random_below_e088(int) __asm__("FUN_00213260");
@@ -727,7 +727,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
         if (water_tile_moby->command & 4) {
             water_tile_vars[2] = 1;
-            FUN_L01_0026e0e0(water_tile_moby->group, 2);
+            set_moby_list_state(water_tile_moby->group, 2);
         }
         water_tile_moby->command = 1;
         if (water_tile_vars[2] != 0) {
@@ -744,7 +744,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     case WATER_TILE_STATE_APPROACH_UPPER_HEIGHT:
         if (water_tile_moby->command & 8) {
             water_tile_vars[2] = 1;
-            FUN_L01_0026e0e0(water_tile_moby->group, 3);
+            set_moby_list_state(water_tile_moby->group, 3);
         }
         water_tile_moby->command = 2;
         if (water_tile_vars[2] != 0) {

@@ -46,9 +46,9 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L01_0026e090(int i, int v);
-void FUN_L01_0026e0e0(int list, int state);
+void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013E633_30D370[] __asm__("D_0013F350") NOT_SDA;
-extern void func_L01_0026F090_30D370(int list, int state) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void func_001FA190_30D370(void *) __asm__("FUN_001f9fc8");
@@ -96,7 +96,7 @@ void timed_activation_pads_update(unsigned char *moby)
     if (moby[0x20] < 6) {
         if (moby[0xB0] != 0xFF) {
             if (visited52[moby[0xB0] + (current_level_index << 4)] == 0xFF)
-                func_L01_0026F090_30D370(moby[0x21], 6);
+                set_moby_list_state(moby[0x21], 6);
         }
     }
 
@@ -129,7 +129,7 @@ void timed_activation_pads_update(unsigned char *moby)
         if (moby[0xBC] == 1) {
             if (func_001F9908_30D370((int *)pad_data)) {
                 func_0022ED80_30D370(2, 0, (int)moby);
-                func_L01_0026F090_30D370(moby[0x21], 8);
+                set_moby_list_state(moby[0x21], 8);
             } else if (func_001F9908_30D370((int *)(pad_data + 4))) {
                 func_0022ED80_30D370(0, 0, (int)moby);
                 *(int *)(pad_data + 4) = func_001F9850_30D370(0x2D) < func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
@@ -142,7 +142,7 @@ void timed_activation_pads_update(unsigned char *moby)
     case PAD_INITIALIZE:
         glow_n(moby, 0x80, 0x80, 0x80);
         func_L01_0026F040_30D370(moby[0x21], 0);
-        func_L01_0026F090_30D370(moby[0x21], 1);
+        set_moby_list_state(moby[0x21], 1);
         break;
     case PAD_WAIT_FOR_ACTIVATION:
         *(int *)(pad_data + 0x8) = 0;
@@ -158,7 +158,7 @@ void timed_activation_pads_update(unsigned char *moby)
             func_L01_0026F040_30D370(moby[0x21], 0);
             moby[0xBC] = on;
             func_0022ED80_30D370(3, 0, (int)moby);
-            func_L01_0026F090_30D370(moby[0x21], 2);
+            set_moby_list_state(moby[0x21], 2);
         }
         break;
     case PAD_ADVANCE_TO_FLASH_ACTIVATION_GATE:
@@ -169,7 +169,7 @@ void timed_activation_pads_update(unsigned char *moby)
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
             func_0022ED80_30D370(3, 0, (int)moby);
-            func_L01_0026F090_30D370(moby[0x21], 4);
+            set_moby_list_state(moby[0x21], 4);
         }
         break;
     case PAD_ENTER_FLASH_ACTIVATION_WAIT:
@@ -179,7 +179,7 @@ void timed_activation_pads_update(unsigned char *moby)
         if (flag) {
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
-            func_L01_0026F090_30D370(moby[0x21], 6);
+            set_moby_list_state(moby[0x21], 6);
             func_0022ED80_30D370(1, 0, (int)moby);
         }
         break;

@@ -76,8 +76,8 @@ extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
  * func_L01_0026F090), where it is exact; names translated to the US level
  * program. The datum needs the unsplit macro form here, so it is declared
  * through an alias (same symbol, .sdata) beside its neighbour's declaration. */
-void FUN_L01_0026e0e0(int list, int state);
-void FUN_L01_0026e0e0(int list, int state) {
+void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
+void set_moby_list_state(int list, int state) {
     unsigned short *moby_index_entry;
     unsigned short *moby_index_list = (unsigned short *)D_L01_001ABCC0[list];
 

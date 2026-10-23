@@ -35,7 +35,7 @@ extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
 extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
 extern s32 current_level_index __asm__("D_0015ED84");
@@ -99,7 +99,7 @@ void underwater_ring_update(struct Moby *moby) {
         if (save_byte[0x454] != 0 ||
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
-                FUN_L01_0026e0e0(moby->group, 4);
+                set_moby_list_state(moby->group, 4);
                 vars->timer = vars->restart_timer;
                 moby->state = 4;
                 break;
@@ -120,7 +120,7 @@ void underwater_ring_update(struct Moby *moby) {
         }
         if (moby->state == 2) {
             if (vars->child_count >= vars->notified_count) {
-                FUN_L01_0026e0e0(moby->group, 4);
+                set_moby_list_state(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
                 vars->timer = vars->restart_timer;
                 moby->state = 4;
@@ -130,7 +130,7 @@ void underwater_ring_update(struct Moby *moby) {
                     vars->child_count = 0;
                     vars->triggered = 0;
                     allocate_voice_for_target_entry(2, 0x31, moby);
-                    FUN_L01_0026e0e0(moby->group, 3);
+                    set_moby_list_state(moby->group, 3);
                 } else if (fast_dec_timer_s16(&vars->delay) != 0) {
                     allocate_voice_for_target_entry(0, 0x31, moby);
                     first = scale_game_frames(0x2d);

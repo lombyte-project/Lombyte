@@ -1037,7 +1037,7 @@ extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                             float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L01_0026e0e0(int list, int state);
+extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1108,7 +1108,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
             float step = *(float *)(limit + 0x2c);
             if (*remaining <= step) {
                 *remaining = 0.0f;
-                FUN_L01_0026e0e0(*(int *)(data + 0x74), 3);
+                set_moby_list_state(*(int *)(data + 0x74), 3);
                 clear_u64_value(position);
                 spawn_explosion(moby, position, (void *)0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 mark_moby_for_removal(moby);
@@ -1452,7 +1452,7 @@ extern void enqueue_callback_list_1_c(void *, void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 int FUN_L07_00281ef8(int id);
 void FUN_L01_0026e090(int i, int v);
-void FUN_L01_0026e0e0(int list, int state);
+void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 void FUN_L01_00275690(char *vec, float scale);
 void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
 void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
@@ -1466,7 +1466,7 @@ extern void FUN_L01_002b7ef0_2cd2b0(float) __asm__("FUN_L01_002b7ef0");
 extern void FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void FUN_L01_002b8288_2cd2b0(void *, int, float, float, float, float) __asm__("FUN_L01_002b8288");
 extern void FUN_L07_0030cd48_2cd2b0(int) __asm__("FUN_L07_0030cd48");
-extern void FUN_L01_0026e0e0_2cd2b0(int, int) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int FUN_L07_00281ef8_2cd2b0(void *, int, int, int) __asm__("FUN_L07_00281ef8");
 extern float FUN_00213ed8_2cd2b0(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L01_0026e090_2cd2b0(int, int) __asm__("FUN_L01_0026e090");
@@ -1569,7 +1569,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_APPROACH_LOW_HEIGHT:
         if (water_moby->sub & 4) {
-            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 1);
+            set_moby_list_state(water_moby->f21, 1);
         } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) && water_moby->sub != 1) {
             FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
             FUN_L01_0026e090_2cd2b0(water_moby->f21, 1);
@@ -1585,7 +1585,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_APPROACH_HIGH_HEIGHT:
         if (water_moby->sub & 8) {
-            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 2);
+            set_moby_list_state(water_moby->f21, 2);
         } else if (FUN_L07_00281ef8_2cd2b0(water_moby, water_moby->f21, 1, 0) && water_moby->sub != 2) {
             FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
             FUN_L01_0026e090_2cd2b0(water_moby->f21, 2);
@@ -1602,7 +1602,7 @@ void water_update(Moby_30D8E8 *water_moby) {
     case WATER_WAIT_FOR_HERO_IN_VOLUME:
         if (water_data->volume >= 0 && FUN_00214720_2cd2b0(&hero.motion.pos, water_data->volume)) {
             water_data->f1C = 0;
-            FUN_L01_0026e0e0_2cd2b0(water_moby->f21, 4);
+            set_moby_list_state(water_moby->f21, 4);
         }
         break;
     case WATER_WAIT_BEFORE_RISING:

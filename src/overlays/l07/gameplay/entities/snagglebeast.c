@@ -2332,7 +2332,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_00212f90(void *, int, int, int);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L01_0026e0e0(s32, s32);
+extern void set_moby_list_state(s32, s32) __asm__("FUN_L01_0026e0e0");
 
 typedef struct {
     u8 pad0[0x20];
@@ -2416,7 +2416,7 @@ void homing_mine_update(struct Moby *moby) {
             moby->command = 1;
             vars->bob_timer = scale_ticks(7);
             moby->state = 3;
-            if (vars->sound != -1) FUN_L01_0026e0e0(vars->sound, 2);
+            if (vars->sound != -1) set_moby_list_state(vars->sound, 2);
             moby->state = 2;
         }
         break;

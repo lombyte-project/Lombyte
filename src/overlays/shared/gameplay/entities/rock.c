@@ -1668,7 +1668,7 @@ void FUN_L01_003089f0(char *moby) {
 extern int D_0015ED84; /* no foreign declaration */
 extern int moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
-extern void FUN_L01_0026e0e0(char *arg, int val);
+extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void FUN_L01_00308b28(char *moby) {
     int level_bitset_byte_offset = D_0015ED84 << 8;
@@ -1679,7 +1679,7 @@ void FUN_L01_00308b28(char *moby) {
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     moby_group_index = *(unsigned char *)(moby + 0x21);
     if (moby_group_index != 0xFF)
-        FUN_L01_0026e0e0((char *)moby_group_index, 1);
+        set_moby_list_state((char *)moby_group_index, 1);
     else
         moby[0x20] = 1;
 }
@@ -1706,7 +1706,7 @@ extern void FUN_L01_003097e8_c(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
 extern void FUN_L01_003094f0_u(char *) __asm__("FUN_L01_003094f0");
-extern void FUN_L01_0026e0e0_c(char *, int) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(char *, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -1790,7 +1790,7 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_ENTER_WAIT_FOR_USE:
         if (moby->group != 0xFF) {
-            FUN_L01_0026e0e0_c((char *)moby->group, 1);
+            set_moby_list_state((char *)moby->group, 1);
         }
         moby->state = 1;
     case TELEPORTER_WAIT_FOR_USE: {

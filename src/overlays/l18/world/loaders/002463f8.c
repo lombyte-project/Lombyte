@@ -487,11 +487,11 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
 
-extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void set_moby_group_state_two(char *moby_group) __asm__("FUN_L18_002e9e50");
 
 void set_moby_group_state_two(char *moby_group) {
-    FUN_L02_002a4058_u(moby_group, 0x2);
+    set_moby_list_state(moby_group, 0x2);
 }
 

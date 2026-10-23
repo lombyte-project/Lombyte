@@ -3189,7 +3189,7 @@ extern void initialize_slots_30ca80(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_30ca80(float) __asm__("FUN_L01_002b7ef0");
 extern void copy_slot_30ca80(float *, int *) __asm__("FUN_L01_002b7c68");
 extern void record_grid_entry_neighbor_indices(int) __asm__("FUN_L05_0030d6a0");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern float advance_accelerated_scalar_30ca80(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
 
@@ -3335,7 +3335,7 @@ void water_update(struct Moby *moby) {
     case WATER_MOVE_TO_LOWERED_HEIGHT:
         if (moby->command & 4) {
             water_vars->moving = 1;
-            FUN_L01_0026e0e0(moby->group, 1);
+            set_moby_list_state(moby->group, 1);
         } else if (water_vars->f10 >= 0) {
             if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 1;
@@ -3357,7 +3357,7 @@ void water_update(struct Moby *moby) {
     case WATER_MOVE_TO_RAISED_HEIGHT:
         if (moby->command & 8) {
             water_vars->moving = 1;
-            FUN_L01_0026e0e0(moby->group, 2);
+            set_moby_list_state(moby->group, 2);
         } else {
             moby->command = 2;
         }
@@ -3446,7 +3446,7 @@ void water_update(struct Moby *moby) {
             }
         }
         if (moby->pos.z >= 44.0f) {
-            FUN_L01_0026e0e0(moby->group, 7);
+            set_moby_list_state(moby->group, 7);
         }
         break;
     }

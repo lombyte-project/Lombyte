@@ -16,7 +16,7 @@
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern void func_L01_0026F090_b0e80(int list, int state) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char *D_L13_00160058_m_b0e80 __asm__("D_L13_0015FFD8");
 extern char D_L13_001F41F8[];
 void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
@@ -46,7 +46,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x14) != -1 && data[0x2C] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x14), data[0x2C]);
+                set_moby_list_state(*(int *)(data + 0x14), data[0x2C]);
             {
                 int uid = *(int *)(data + 0x8);
                 if (uid != -1) {
@@ -63,7 +63,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x18) != -1 && data[0x2D] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x18), data[0x2D]);
+                set_moby_list_state(*(int *)(data + 0x18), data[0x2D]);
             {
                 int uid = *(int *)(data + 0xC);
                 if (uid != -1) {
@@ -80,7 +80,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x1C) != -1 && data[0x2E] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x1C), data[0x2E]);
+                set_moby_list_state(*(int *)(data + 0x1C), data[0x2E]);
             {
                 int uid = *(int *)(data + 0x10);
                 if (uid != -1) {
@@ -97,7 +97,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x20) != -1 && data[0x2F] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x20), data[0x2F]);
+                set_moby_list_state(*(int *)(data + 0x20), data[0x2F]);
             if (data[0x34] != -1)
                 moby[0x20] = data[0x34];
             if (data[0x36] != -1)
@@ -122,7 +122,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x14) != -1 && data[0x30] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x14), data[0x30]);
+                set_moby_list_state(*(int *)(data + 0x14), data[0x30]);
             {
                 int uid = *(int *)(data + 0x8);
                 if (uid != -1) {
@@ -139,7 +139,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x18) != -1 && data[0x31] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x18), data[0x31]);
+                set_moby_list_state(*(int *)(data + 0x18), data[0x31]);
             {
                 int uid = *(int *)(data + 0xC);
                 if (uid != -1) {
@@ -156,7 +156,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x1C) != -1 && data[0x32] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x1C), data[0x32]);
+                set_moby_list_state(*(int *)(data + 0x1C), data[0x32]);
             {
                 int uid = *(int *)(data + 0x10);
                 if (uid != -1) {
@@ -173,7 +173,7 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(data + 0x20) != -1 && data[0x33] != -1)
-                func_L01_0026F090_b0e80(*(int *)(data + 0x20), data[0x33]);
+                set_moby_list_state(*(int *)(data + 0x20), data[0x33]);
             if (data[0x35] != -1)
                 moby[0x20] = data[0x35];
             if (data[0x37] != -1)

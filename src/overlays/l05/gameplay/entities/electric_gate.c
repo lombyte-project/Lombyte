@@ -1015,7 +1015,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void create_particle_with_velocity_and_randomized_parameters(float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
 extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern unsigned char D_0014C050[][16];
@@ -1067,7 +1067,7 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
         break;
     case EMITTER_WAIT_FOR_TRIGGER:
         if (emitter_vars->trigger >= 0 && D_L05_0015FFD8[emitter_vars->trigger].command != 0) {
-            FUN_L01_0026e0e0(emitter_moby->group, 2);
+            set_moby_list_state(emitter_moby->group, 2);
         }
         break;
     case EMITTER_SPRAY_PARTICLES:

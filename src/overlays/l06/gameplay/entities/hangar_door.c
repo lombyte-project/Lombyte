@@ -3305,7 +3305,7 @@ void FUN_L06_002fbc88(struct Moby *moby) {
 }
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -3387,7 +3387,7 @@ void update_moby_pair_transforms(char *moby) {
             moby[0x20] = 4;
             *(int *)(data + 0x4c) = scale_game_frames_alt(0x14);
         } else if ((unsigned char)moby[0x21] != 0xff) {
-            FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
+            set_moby_list_state((unsigned char)moby[0x21], 3);
         } else {
             moby[0x20] = 3;
         }

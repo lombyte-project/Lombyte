@@ -2347,7 +2347,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_0022da68(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
 char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
@@ -2439,7 +2439,7 @@ void update_linked_switch_group(char *moby) {
         }
         if ((unsigned char)moby[0x20] == 2) {
             if (data->unk7A >= data->unk7B) {
-                FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
+                set_moby_list_state((unsigned char)moby[0x21], 4);
                 FUN_0022da68(1, 0, moby);
                 data->unk70 = data->unk84;
                 debug_print(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
@@ -2452,7 +2452,7 @@ void update_linked_switch_group(char *moby) {
                         data->unk74 = 0;
 
                         FUN_0022da68(2, 0, moby);
-                        FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
+                        set_moby_list_state((unsigned char)moby[0x21], 3);
                         debug_print(D_L13_001F4DB0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                         moby[0x20] = 3;
                     } else if (fast_dec_timer_s16(&data->unk72) != 0) {
@@ -2480,7 +2480,7 @@ void update_linked_switch_group(char *moby) {
                 data->unk74 = 0;
 
                 FUN_0022da68(2, 0, moby);
-                FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
+                set_moby_list_state((unsigned char)moby[0x21], 3);
                 debug_print(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                 moby[0x20] = 3;
             } else if (fast_dec_timer_s16(&data->unk72) != 0) {
