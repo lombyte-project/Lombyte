@@ -1223,7 +1223,7 @@ extern short D_L14_00161C58 __attribute__((sda));
 extern short D_L14_00161C5C __attribute__((sda));
 extern short D_L14_00161C60 __attribute__((sda));
 extern short D_L14_00161C64 __attribute__((sda));
-extern void FUN_L00_0028e990(void);
+extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L01_002a2480(void);
 extern void update_branched_lightning_arc(char *) __asm__("FUN_L14_002ed530");
@@ -1256,7 +1256,7 @@ void update_path_lightning_controller(struct Moby *moby) {
         start_scene(0);
         scene_start_guard_base[0x68] = moby_state;
         MOBY(moby)->state = 2;
-        FUN_L00_0028e990();
+        deactivate_recorded_moby();
         return;
     }
     if (moby_state == 2) {

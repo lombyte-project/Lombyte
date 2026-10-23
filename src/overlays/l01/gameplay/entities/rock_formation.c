@@ -704,7 +704,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void func_L00_0028FC68_2FC140(void) __asm__("FUN_L00_0028e990");
+extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -779,7 +779,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                     pp[0xF] = 1;
                 }
             }
-            func_L00_0028FC68_2FC140();
+            deactivate_recorded_moby();
             if (is_point_inside_clip_volume(D_0013F3D0, data->f10) != 0) {
                 moby->flags = moby->flags & 0xFFBE;
                 moby->f94 = moby->pclass->f10;
