@@ -2680,7 +2680,9 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 
-void FUN_L13_002ba178(void *moby_arg, void *data_arg) {
+void update_fighter_jet_flight(void *moby_arg, void *data_arg) __asm__("FUN_L13_002ba178");
+
+void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     FlightMoby *moby = moby_arg;
     FlightData *data = data_arg;
     FlightVec old_pos;
@@ -3006,7 +3008,7 @@ extern float jet_blend(float *,float,float) __asm__("FUN_00213ed8");
 extern void jet_animate(void *,float) __asm__("FUN_L00_00259fe8");
 extern void jet_place_camera(void *,void *,int,int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L13_002ba178_u(void *,void *) __asm__("FUN_L13_002ba178");
+extern void update_fighter_jet_flight(void *,void *) __asm__("FUN_L13_002ba178");
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 extern void jet_game_state(int,int) __asm__("FUN_L01_0027a248");
 extern void jet_set_hero_state(int,int) __asm__("FUN_L00_002223f8");
@@ -3147,7 +3149,7 @@ void fighter_jet_update(Jet *jet_moby) {
             jet_group_switch(D_L13_001CBDE8,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
             jet_moby->position[2]+=3.0f; jet_moby->scale=jet_moby->model->scale*0.25f; ((JetPlayer*)(&jet_player47))->in_craft=1;
             if (jet_data->engine_sound==-1) jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby);
-            D_L13_0015F608=2; FUN_L13_002ba178_u(jet_moby,jet_data); jet_camera_mode(); jet_game_state(2,4); jet_moby->state=4;
+            D_L13_0015F608=2; update_fighter_jet_flight(jet_moby,jet_data); jet_camera_mode(); jet_game_state(2,4); jet_moby->state=4;
         }
         break;
     case FIGHTER_JET_STATE_FLIGHT: {
@@ -3156,7 +3158,7 @@ void fighter_jet_update(Jet *jet_moby) {
         jet_force_help(6,0); D_L13_0015F608=2;
         audio=D_0013E550+jet_data->engine_sound*0x70;
         if (*(Jet**)(audio+0x88)!=jet_moby || !audio[0x74]) { jet_data->engine_sound=-1; jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby); }
-        FUN_L13_002ba178_u(jet_moby,jet_data);
+        update_fighter_jet_flight(jet_moby,jet_data);
         if (((JetPlayer*)(&jet_player47))->pad160F&1) jet_moby->state=5;
         if (jet_data->energy<=0) { jet_data->wait_timer=jet_scale_ticks(1200); jet_moby->state=8; }
         break;
