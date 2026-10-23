@@ -3471,7 +3471,9 @@ void predict_hero_ship_projectile_lead_position(char *predicted_target_position,
 
 extern void predict_hero_ship_projectile_lead_position(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 
-float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
+float calculate_hero_aim_angles(float *pos, float *pitch, float *yaw, float lead) __asm__("FUN_L13_002ea400");
+
+float calculate_hero_aim_angles(float *pos, float *pitch, float *yaw, float lead) {
     struct Hero *base = &hero;
     char *hero_ship_moby = ((char *)base->ship_moby);
     float target_position[4];
