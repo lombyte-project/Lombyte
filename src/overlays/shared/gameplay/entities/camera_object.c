@@ -1075,7 +1075,7 @@ extern s32 level_bolts[] __asm__("D_0013DF38");  /* bolts collected per level */
 extern s32 D_L00_0015F598;
 extern void *D_L00_0015FFDC_u __asm__("D_L00_0015FFDC");
 extern f32 D_0015ED6C;                       /* frame-rate scale */
-extern void FUN_L00_00239cc8(void);          /* bolt counter HUD: init */
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");          /* bolt counter HUD: init */
 extern void FUN_L00_00239d00(void);          /* update */
 extern void FUN_L00_00239df8(void);          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
@@ -1128,7 +1128,7 @@ void FUN_L00_002a6b70(struct Moby *bolt)
     level_bolts[current_level_index_b] += value;
 
     k = 0.7f;
-    queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8,
+    queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, FUN_L00_00239d00, FUN_L00_00239df8,
                            &current_bolt_count, 9999999);
 
     /* two sparkles 10 units out along a random direction, spinning opposite ways */

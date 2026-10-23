@@ -86,7 +86,7 @@ typedef struct {
 extern Ent *D_L00_001B9E90[];
 extern s32 D_L00_0015F5D8;
 extern s32 current_bolt_count __asm__("D_0015ED98");
-extern void FUN_L00_00239cc8(void);
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern s32 D_00141660[];
@@ -416,7 +416,7 @@ void close_pause_menu(void) {
         }
         handle = show_health_hud();
         hud_keep_visible(handle, scale_game_frames(0xb4));
-        handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
+        handle = queue_animation_update(2, 0x754e, initialize_bolt_counter_hud, FUN_L00_00239d00,
                                     FUN_L00_00239df8, &current_bolt_count, 9999999);
         hud_keep_visible(handle, scale_game_frames(0xb4));
         D_L00_001B9CF0.state = 0x14;

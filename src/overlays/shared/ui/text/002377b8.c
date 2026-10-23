@@ -1068,7 +1068,9 @@ extern HudCounter D_L00_0015FAB8;
 extern void FUN_L00_0023a760(HudElem *);
 
 /* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
-void FUN_L00_00239cc8(HudElem *hud_element) {
+void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8");
+
+void initialize_bolt_counter_hud(HudElem *hud_element) {
     FUN_L00_0023a760(hud_element);
     hud_element->unk80 = &D_L00_0015FAB8;
     D_L00_0015FAB8.unk0 = 0;

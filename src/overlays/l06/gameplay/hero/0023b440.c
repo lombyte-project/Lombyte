@@ -114,7 +114,7 @@ extern void draw_hud_item_selector_panel(void) __asm__("FUN_L00_002382a0");
 extern void initialize_four_slot_hud_selector(void) __asm__("FUN_L00_00238b18");
 extern void update_hud_radial_selector_selection_and_visibility(void) __asm__("FUN_L00_00238b80");
 extern void draw_hud_radial_selector_panel(void) __asm__("FUN_L00_00238f88");
-extern void FUN_L00_00239cc8(void);
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
@@ -188,7 +188,7 @@ void update_hero_state_machine(void) {
                                                (int)draw_hud_item_selector_panel, 0, 0);
                         id = func_L00_00235790_r();
                         hud_keep_visible(id, scale_game_frames(0xB4));
-                        id = queue_animation_update(2, 0x754E, (int)FUN_L00_00239cc8,
+                        id = queue_animation_update(2, 0x754E, (int)initialize_bolt_counter_hud,
                                                     (int)FUN_L00_00239d00, (int)FUN_L00_00239df8,
                                                     (int)&current_bolt_count, 0x98967F);
                         hud_keep_visible(id, scale_game_frames(0xB4));
