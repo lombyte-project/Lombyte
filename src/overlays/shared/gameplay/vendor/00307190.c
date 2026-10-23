@@ -185,7 +185,7 @@ extern int D_L08_00162358 __attribute__((sda));
 extern float D_L08_0016235C __attribute__((sda));
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
-extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
@@ -415,7 +415,7 @@ extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
@@ -450,7 +450,7 @@ void spawn_moby_radial_particles(char *moby) {
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;
-                FUN_L08_00272cb8(v, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
+                spawn_span_particle(v, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
             }
         }
     }

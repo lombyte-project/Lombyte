@@ -16,7 +16,9 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B2880 __attribute__((section(".data")));
-void FUN_L08_00272cb8(float *span_start_position, int kind, float *span_direction, float scale) {
+void spawn_span_particle(float *span_start_position, int kind, float *span_direction, float scale) __asm__("FUN_L08_00272cb8");
+
+void spawn_span_particle(float *span_start_position, int kind, float *span_direction, float scale) {
     enum {
         PARTICLE_SHORT_SPAN = 0,
         PARTICLE_MEDIUM_SPAN = 1,
