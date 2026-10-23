@@ -36,7 +36,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L04_0024c660(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
+float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) __asm__("FUN_L04_0024c660");
+
+float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
