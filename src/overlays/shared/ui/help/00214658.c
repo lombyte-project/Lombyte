@@ -549,7 +549,9 @@ extern void FUN_L00_00216130_2163f0(void *, void *, float, float, float,
                                     int) __asm__("FUN_L00_00216130");
 #define P D_0013F350_2163f0
 
-void FUN_L00_002163f0(void) {
+void apply_hero_reference_tilt(void) __asm__("FUN_L00_002163f0");
+
+void apply_hero_reference_tilt(void) {
     V_2163f0 working_matrix[4];
     V_2163f0 reference_vector;
     V_2163f0 original_position_offset;
@@ -585,7 +587,7 @@ void FUN_L00_002163f0(void) {
 }
 extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
                                      float) __asm__("FUN_L00_0025bc98");
-extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
+extern void apply_hero_reference_tilt(void) __asm__("FUN_L00_002163f0");
 
 void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 
@@ -624,7 +626,7 @@ void update_hero_tilt(void) {
         break;
     case HERO_TILT_APPLY_REFERENCE_ORIENTATION:
     case HERO_TILT_USE_NEGATED_REFERENCE_VECTOR:
-        FUN_L00_002163f0_2165b8();
+        apply_hero_reference_tilt();
         break;
     }
 }
