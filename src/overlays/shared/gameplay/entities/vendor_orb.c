@@ -2608,7 +2608,9 @@ extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_angle_limit) {
+float update_follow_camera_angle_blend_from_direction(char *camera, float *input_direction, float blend_update_angle_limit) __asm__("FUN_L00_002e86b0");
+
+float update_follow_camera_angle_blend_from_direction(char *camera, float *input_direction, float blend_update_angle_limit) {
     float axis_projection[4];
     float planar_input_direction[4];
     float planar_reference_direction[4];
@@ -2662,7 +2664,7 @@ void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_L00_002e88c8(char *camera, void *target_position, f32 x) {
     float focus_to_target_direction[4];
     FUN_001f9a28_c2(focus_to_target_direction, target_position, *(char **)(camera + 0x70) + 0x40);
-    return FUN_L00_002e86b0(camera, focus_to_target_direction, x);
+    return update_follow_camera_angle_blend_from_direction(camera, focus_to_target_direction, x);
 }
 extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e86b0_002e8918(char *, char *, float) __asm__("FUN_L00_002e86b0");
