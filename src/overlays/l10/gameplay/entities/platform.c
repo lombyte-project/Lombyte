@@ -1601,7 +1601,7 @@ extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern int FUN_L00_00262360();
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, int path_address, float x, float y, float z) __asm__("FUN_L10_002dd270");
 
 unsigned char *spawn_path_spark_effect(int a, void *pos, int b, float x, float y, float z) __asm__("FUN_L10_002dd270");
@@ -1634,7 +1634,7 @@ void update_path_spark_emitter(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case SPARK_STATE_WAIT_FOR_TIMER:
         if (*(int *)(spark_vars + 0xC) != -1) {
-            FUN_L00_0023e838(*(int *)(spark_vars + 0xC));
+            light_off_67e8(*(int *)(spark_vars + 0xC));
             *(int *)(spark_vars + 0xC) = -1;
         }
         if (*(int *)(spark_vars + 0x10) != -1) {

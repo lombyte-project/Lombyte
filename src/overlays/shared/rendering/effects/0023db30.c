@@ -318,8 +318,8 @@ extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
 void fast_mem_zero16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
-void FUN_L00_0023e838(int i);
-void FUN_L00_0023e838(int i) {
+void light_off_67e8(int i) __asm__("FUN_L00_0023e838");
+void light_off_67e8(int i) {
     detach_point_light();
     fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
     fast_mem_zero16(D_L00_001804C0 + i * 48, 48);

@@ -96,7 +96,7 @@ extern void FUN_L00_0020e4c8_2b2100(void) __asm__("FUN_L00_0020e4c8");
 extern float fast_cos_2b2100(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2b2100(float) __asm__("FUN_001f9de0");
 extern int FUN_L00_0023e738_2b2100(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void FUN_L00_0023e838_2b2100(int) __asm__("FUN_L00_0023e838");
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
 extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
@@ -325,12 +325,12 @@ void devastator_update(struct Moby *devastator_moby) {
         }
         FUN_001f9770_2b2100(&data->glow);
     } else if (data->light != -1) {
-        FUN_L00_0023e838_2b2100(data->light);
+        light_off_67e8(data->light);
         data->light = -1;
         data->glow = 0;
     }
     if (devastator_moby->prev_seq == 2) {
-        FUN_L00_0023e838_2b2100(data->light);
+        light_off_67e8(data->light);
         data->light = -1;
         data->glow = 0;
     }
@@ -1614,7 +1614,7 @@ int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
 void FUN_L00_0020e698(void);
 void FUN_L00_00233660(float *out, float x, float y, float z);
-void FUN_L00_0023e838(int);
+void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern unsigned char item_usage[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
@@ -1836,7 +1836,7 @@ void blaster_update(struct Moby *moby) {
         }
         fast_dec_timer(&data->glow);
     } else if (data->light != -1) {
-        FUN_L00_0023e838(data->light);
+        light_off_67e8(data->light);
         data->light = -1;
         data->glow = 0;
     }
@@ -2958,7 +2958,7 @@ void pyrocitor_update(struct Moby *moby) {
         if (v->light != -1) {
             lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580_2b77f0, 0.1f);
             if (fast_vec_length(&lights_2b2100[v->light]) < 0.001f) {
-                FUN_L00_0023e838_2b2100(v->light);
+                light_off_67e8(v->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
                 if (moby) v->light = -1; else v->light = -1;
             }
@@ -3095,7 +3095,7 @@ extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
 void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
-void FUN_L00_0023e838_2b8230(int) __asm__("FUN_L00_0023e838");
+void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 void FUN_0022d798_2b8230(int) __asm__("FUN_0022d798");
 int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
 void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
@@ -3113,7 +3113,7 @@ void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
         if (*(void **)pyrocitor_vars)
             FUN_0020c828_2b8230(*(void **)pyrocitor_vars);
         if (*(short *)(pyrocitor_vars + 0x44) != -1) {
-            FUN_L00_0023e838_2b8230(*(short *)(pyrocitor_vars + 0x44));
+            light_off_67e8(*(short *)(pyrocitor_vars + 0x44));
             *(short *)(pyrocitor_vars + 0x44) = -1;
         }
         voice_slot_or_time_stat = *(short *)(pyrocitor_vars + 0x4A);
@@ -3346,7 +3346,7 @@ int FUN_L00_0023e5e0(u128 *v, float a, float b, int col);
 void FUN_L00_00203908(int, int);
 void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e698(void);
-void FUN_L00_0023e838(int);
+void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 void FUN_L00_002b9310(char *moby);
 extern int D_0015EEA4;
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
@@ -3382,7 +3382,7 @@ extern int FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_0022da68_2b2100(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_0020e4c8_2b2100a(void) __asm__("FUN_L00_0020e4c8");
 extern void FUN_L00_0020e698_2b2100(void) __asm__("FUN_L00_0020e698");
-extern void FUN_L00_0023e838_2b2100a(int) __asm__("FUN_L00_0023e838");
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 
 void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
 void tesla_claw_update(struct Moby *m) {
@@ -3618,7 +3618,7 @@ void tesla_claw_update(struct Moby *m) {
         D_L00_001802C0_2b2100[s->light].y = k;
         D_L00_001802C0_2b2100[s->light].x = D_L00_001802C0_2b2100[s->light].y;
         if (done && s->light != -1) {
-            FUN_L00_0023e838_2b2100a(s->light);
+            light_off_67e8(s->light);
             s->light = -1;
         }
     }

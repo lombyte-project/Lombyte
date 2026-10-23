@@ -360,7 +360,7 @@ extern char D_L07_00180340[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 
 void update_timed_point_light_color(char *light_effect_state) __asm__("FUN_L07_00312150");
 
@@ -371,7 +371,7 @@ void update_timed_point_light_color(char *light_effect_state) {
     float *rgb_destination;
     if (fast_dec_timer_s16(light_effect_state + 0x284)) {
         if (*(short *)(light_effect_state + 0x280) != -1) {
-            FUN_L00_0023e838(*(short *)(light_effect_state + 0x280));
+            light_off_67e8(*(short *)(light_effect_state + 0x280));
             *(short *)(light_effect_state + 0x280) = -1;
             *(short *)(light_effect_state + 0x282) = -1;
         }

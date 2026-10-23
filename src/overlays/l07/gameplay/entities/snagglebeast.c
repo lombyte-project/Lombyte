@@ -744,7 +744,7 @@ extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern char *spawn_on_path(void *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void FUN_L06_002e6148(char *);
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *);
 extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern void update_timed_point_light_color(char *) __asm__("FUN_L07_00312150");
@@ -1767,7 +1767,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     case SNAGGLEBEAST_POST_DEATH_CLEANUP:
-        if (*(short *)(data + 0x280) != -1) FUN_L00_0023e838(*(short *)(data + 0x280));
+        if (*(short *)(data + 0x280) != -1) light_off_67e8(*(short *)(data + 0x280));
         if (*(int *)(data + 0x1D0) == -1 || !(*(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
             return;

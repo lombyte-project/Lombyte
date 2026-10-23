@@ -944,7 +944,7 @@ extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
 extern int FUN_L00_0023e738(void *, float, float, float, float, float);
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
@@ -1090,7 +1090,7 @@ void turret_update(struct Moby *moby) {
             }
             if (hero.ground_moby != moby && vars->beam != -1) {
                 allocate_voice_for_target_entry(2, 0, moby);
-                FUN_L00_0023e838(vars->beam);
+                light_off_67e8(vars->beam);
                 vars->beam = -1;
             }
         }

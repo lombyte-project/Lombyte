@@ -128,7 +128,7 @@ extern float D_L15_0015F450;
 extern float D_L15_0015F454;
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L15_002d6770(void);
@@ -200,7 +200,7 @@ void electric_water_update(struct Moby *moby) {
             vars->voice1 = -1;
         }
         if (vars->light != -1) {
-            FUN_L00_0023e838(vars->light);
+            light_off_67e8(vars->light);
             vars->light = -1;
         }
         return;
@@ -455,7 +455,7 @@ void electric_water_update(struct Moby *moby) {
             }
         }
         if (vars->light != -1) {
-            FUN_L00_0023e838(vars->light);
+            light_off_67e8(vars->light);
             vars->light = -1;
         }
         if (vars->off_timer != 0) {

@@ -1438,7 +1438,7 @@ void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e698(void);
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
-void FUN_L00_0023e838(int i);
+void light_off_67e8(int i) __asm__("FUN_L00_0023e838");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern char item_unlocked[] __asm__("D_0013D408");
@@ -1475,7 +1475,7 @@ extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10")
 extern int func_L00_0028EB98_2BDAF0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_2BDAF0(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FFCB0_2BDAF0(int) __asm__("FUN_001ff480");
-extern void func_L00_0023F1D0_2BDAF0(int) __asm__("FUN_L00_0023e838");
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void func_L00_0028EBF0_2BDAF0(int) __asm__("FUN_0022d798");
 extern void func_L00_0020ED30_2BDAF0(void) __asm__("FUN_L00_0020e698");
 extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
@@ -1633,12 +1633,12 @@ void morphoray_update(Moby *moby) {
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = brightness;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = brightness * 0.25f;
             if (func_001F9908_2BDAF0(&D_L00_001617C4) != 0) {
-                func_L00_0023F1D0_2BDAF0(D_L00_001617C0);
+                light_off_67e8(D_L00_001617C0);
                 D_L00_001617C0 = -1;
             }
         }
         if (D_L00_001617C0 >= 0 && D_L00_001617C4 == 0) {
-            func_L00_0023F1D0_2BDAF0(D_L00_001617C0);
+            light_off_67e8(D_L00_001617C0);
             D_L00_001617C0 = -1;
         }
         if (D_L00_001617C8 >= 0) {
@@ -1651,7 +1651,7 @@ void morphoray_update(Moby *moby) {
         func_L00_0020ED30_2BDAF0();
     }
     if (busy && D_L00_001617C0 >= 0) {
-        func_L00_0023F1D0_2BDAF0(D_L00_001617C0);
+        light_off_67e8(D_L00_001617C0);
         D_L00_001617C0 = -1;
     }
 }

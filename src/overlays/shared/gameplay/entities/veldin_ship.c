@@ -1859,7 +1859,7 @@ extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char D_L00_001802C0[];
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 int FUN_001fa728(Vec4f *, float);
@@ -1921,7 +1921,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
     }
     if (*(int *)(vars + 0x48) != -1 && fast_dec_timer((int *)(vars + 0x48))) {
         if (*(int *)(vars + 0x50) != -1) {
-            FUN_L00_0023e838(*(int *)(vars + 0x50));
+            light_off_67e8(*(int *)(vars + 0x50));
             *(int *)(vars + 0x50) = -1;
         }
         mark_moby_for_removal(moby);
@@ -2174,7 +2174,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
         }
     } else {
         if (*(int *)(vars + 0x50) != -1) {
-            FUN_L00_0023e838(*(int *)(vars + 0x50));
+            light_off_67e8(*(int *)(vars + 0x50));
             *(int *)(vars + 0x50) = r;
         }
     }

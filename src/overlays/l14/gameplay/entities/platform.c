@@ -105,7 +105,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_0023e838(int);
+extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
@@ -157,7 +157,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
         if (*(int *)(od + 0xF0) != -1) {
-            FUN_L00_0023e838(*(int *)(od + 0xF0));
+            light_off_67e8(*(int *)(od + 0xF0));
             *(int *)(od + 0xF0) = -1;
         }
     }
