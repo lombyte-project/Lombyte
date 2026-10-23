@@ -1572,7 +1572,9 @@ extern void lerp_vector(f32 *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern void FUN_L00_002ea9d8(void *);
 extern u8 *D_L01_001600EC;
 
-void FUN_L01_003087e0(char *moby) {
+void update_gold_bolt_pickup_camera(char *moby) __asm__("FUN_L01_003087e0");
+
+void update_gold_bolt_pickup_camera(char *moby) {
     char *data = *(char **)(moby + 0x78);
     V4_3087e0 output_position;
     V4_3087e0 output_rotation;
