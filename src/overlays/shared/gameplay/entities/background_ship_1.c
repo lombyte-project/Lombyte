@@ -112,7 +112,7 @@ extern short D_L02_00161F78 __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L02_002eca30_c(char *m, void *arg1) __asm__("FUN_L02_002eca30");
+extern void spawn_background_ship_1_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002eca30");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
@@ -194,7 +194,7 @@ void background_ship_1_update(char *moby) {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
         if (*(unsigned char *)(moby + 0x31) != 0) {
-            FUN_L02_002eca30_c(moby, tv);
+            spawn_background_ship_1_joint_sparks(moby, tv);
         }
         if (hit_record != 0 && 0.0f < *(float *)(hit_record + 0x2C)) {
             flag = 1;
@@ -289,7 +289,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002eca30(char *moby, void *previous_position) {
+void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) {
     float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4], emission_position[4];
     int i;
     fast_vec_sub(position_delta, moby + 0x10, previous_position);
