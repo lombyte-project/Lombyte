@@ -117,7 +117,7 @@ extern void delete_3DF8(void *) __asm__("FUN_0020c828");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
 extern void joint_3DF8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L08_002d3878();
-extern void FUN_L08_002d4108();
+extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 extern float frame_3DF8 __asm__("D_0015ED6C");
 extern float dt_3DF8 __asm__("D_0015ED70");
@@ -331,7 +331,7 @@ void scoutbot_update(Moby *moby) {
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
         joint_3DF8(moby, 3, data->f220);
-        draw_3DF8(FUN_L08_002d4108, moby);
+        draw_3DF8(draw_scoutbot_glow_quad, moby);
     }
 }
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
@@ -612,8 +612,8 @@ void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
 extern float D_L08_00161898 __attribute__((sda));
 extern float D_L08_0016189C __attribute__((sda));
-void FUN_L08_002d4108(char *arg);
-void FUN_L08_002d4108(char *moby) {
+void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
+void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
     Pk_002d4108 pk;
     float up[4];
