@@ -119,7 +119,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void destroy_gadgebot_spawn_container(void *, void *) __asm__("FUN_L06_002d8178");
-extern void FUN_L06_002d8738_u(char *) __asm__("FUN_L06_002d8738");
+extern void draw_gadgebot_spawn_container(char *) __asm__("FUN_L06_002d8738");
 extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d85a0");
@@ -151,7 +151,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
             destroy_gadgebot_spawn_container(moby, hit_record);
         }
         if (moby[0x31] != 0) {
-            enqueue_callback_list_1((int)FUN_L06_002d8738_u, (int)moby);
+            enqueue_callback_list_1((int)draw_gadgebot_spawn_container, (int)moby);
         }
         break;
     case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
@@ -200,7 +200,7 @@ static inline void transform_point(float *dst, float *src, float (*m)[4]) {
     transform_vector(dst, src, m);
 }
 
-void FUN_L06_002d8738(char *moby) {
+void draw_gadgebot_spawn_container(char *moby) {
     L06BackdropQuad quad;
     float matrix[3][4] __attribute__((aligned(16)));
     float pos[4] __attribute__((aligned(16)));
