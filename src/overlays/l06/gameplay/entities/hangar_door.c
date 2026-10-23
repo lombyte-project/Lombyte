@@ -1263,7 +1263,9 @@ extern float D_L06_00161D80 __attribute__((sda));
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L06_002f5d78(Moby *moby)
+void update_drawbridge_segment_transforms(Moby *moby) __asm__("FUN_L06_002f5d78");
+
+void update_drawbridge_segment_transforms(Moby *moby)
 {
     Vec_2F69D0 result, first, second;
     DrawbridgeVars *data = (DrawbridgeVars *)moby->pvars;
