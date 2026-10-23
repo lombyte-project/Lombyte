@@ -63,7 +63,9 @@ extern char D_0013E533[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
+void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
+
+void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *child_moby = func_0020D348_m(oClass);
     float child_joint_position[4], parent_joint_position[4];
     if (child_moby != 0) {
@@ -1211,59 +1213,59 @@ void spawn_gunship_parts(struct Moby *moby) {
     vars->slots[0].anchor = 0;
     vars->slots[0].joint = 0;
     vars->slots[0].pjoint = 0;
-    vars->slots[3].moby = FUN_L08_002e1c98((char *)moby, 0x1C1, 0, 2);
+    vars->slots[3].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C1, 0, 2);
     vars->slots[3].anchor = moby;
     vars->slots[3].joint = 0;
     vars->slots[3].pjoint = 2;
     pjoint = 3;
-    vars->slots[1].moby = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, pjoint);
+    vars->slots[1].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, pjoint);
     vars->slots[1].anchor = moby;
     vars->slots[1].joint = 0;
     vars->slots[1].pjoint = pjoint;
-    child_moby = FUN_L08_002e1c98((char *)moby, 0x1C2, 0, 4);
+    child_moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, 4);
     vars->slots[2].moby = child_moby;
     child_moby->flags |= 0x8000;
     vars->slots[2].anchor = moby;
     vars->slots[2].joint = 0;
     vars->slots[2].pjoint = 4;
-    vars->slots[7].moby = FUN_L08_002e1c98((char *)moby, 0x1C0, 0, 0);
+    vars->slots[7].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 0, 0);
     vars->slots[7].anchor = moby;
     vars->slots[7].joint = 0;
     vars->slots[7].pjoint = 0;
-    vars->slots[8].moby = FUN_L08_002e1c98((char *)moby, 0x1C0, 1, 1);
+    vars->slots[8].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 1, 1);
     vars->slots[8].anchor = moby;
     vars->slots[8].joint = 1;
     vars->slots[8].pjoint = 1;
-    vars->slots[9].moby = FUN_L08_002e1c98((char *)vars->slots[8].moby, 0x1C0, 1, 0);
+    vars->slots[9].moby = spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1C0, 1, 0);
     vars->slots[9].anchor = vars->slots[8].moby;
     vars->slots[9].joint = 1;
     vars->slots[9].pjoint = 0;
-    vars->slots[5].moby = FUN_L08_002e1c98((char *)vars->slots[9].moby, 0x1BD, 0, 0);
+    vars->slots[5].moby = spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BD, 0, 0);
     vars->slots[5].anchor = vars->slots[9].moby;
     vars->slots[5].joint = 0;
     vars->slots[5].pjoint = 0;
-    vars->slots[6].moby = FUN_L08_002e1c98((char *)vars->slots[7].moby, 0x1BA, 1, 1);
+    vars->slots[6].moby = spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BA, 1, 1);
     vars->slots[6].anchor = vars->slots[7].moby;
     vars->slots[6].joint = 1;
     vars->slots[6].pjoint = 1;
-    vars->slots[4].moby = FUN_L08_002e1c98((char *)moby, 0x1B9, 0, 0);
+    vars->slots[4].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1B9, 0, 0);
     vars->slots[4].anchor = vars->slots[6].moby;
     vars->slots[4].joint = 0;
     vars->slots[4].pjoint = 0;
     for (i = 0; i < 8; i++) {
-        vars->slots[10 + i].moby = FUN_L08_002e1c98((char *)vars->slots[7].moby, 0x1BB, 0, i + 2);
+        vars->slots[10 + i].moby = spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BB, 0, i + 2);
         vars->slots[10 + i].anchor = vars->slots[7].moby;
         vars->slots[10 + i].joint = 0;
         vars->slots[10 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[18 + i].moby = FUN_L08_002e1c98((char *)vars->slots[8].moby, 0x1BB, 0, i + 2);
+        vars->slots[18 + i].moby = spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1BB, 0, i + 2);
         vars->slots[18 + i].anchor = vars->slots[8].moby;
         vars->slots[18 + i].joint = 0;
         vars->slots[18 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[26 + i].moby = FUN_L08_002e1c98((char *)vars->slots[9].moby, 0x1BB, 0, i + 2);
+        vars->slots[26 + i].moby = spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BB, 0, i + 2);
         vars->slots[26 + i].anchor = vars->slots[9].moby;
         vars->slots[26 + i].joint = 0;
         vars->slots[26 + i].pjoint = i + 2;
