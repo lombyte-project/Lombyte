@@ -2603,7 +2603,9 @@ typedef struct {
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
 /* Same routine as FUN_L16_002cf9f8, with this level's data layout. */
-void FUN_L05_00306e10(char *patrol_moby) {
+void advance_racer_path_node(char *patrol_moby) __asm__("FUN_L05_00306e10");
+
+void advance_racer_path_node(char *patrol_moby) {
     L16PatrolMoby *moby = (L16PatrolMoby *)patrol_moby;
     L05PatrolData *patrol_data = moby->data;
     float target[4];
@@ -2814,7 +2816,7 @@ extern void FUN_L00_00263b38(void *, float);
 extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L05_00306e10_c(char *obj) __asm__("FUN_L05_00306e10");
+void advance_racer_path_node(char *obj) __asm__("FUN_L05_00306e10");
 void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
 void FUN_L05_00307570_c(struct Moby *m) __asm__("FUN_L05_00307570");
 extern char D_001413DC[];
@@ -2912,7 +2914,7 @@ void skid_mcmarx_update(Moby *moby) {
             int hit_count;
             int j;
 
-            FUN_L05_00306e10_c((char *)moby);
+            advance_racer_path_node((char *)moby);
             add_moby_frames_for_group_proximity((char *)moby);
             start_racer_branch_jump((char *)moby);
             if (data->jump_frames != 0) {
