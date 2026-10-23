@@ -2966,7 +2966,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 
-int FUN_L17_002efd48(struct Moby *moby, float *target, float speed) {
+int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed) __asm__("FUN_L17_002efd48");
+
+int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed) {
     char *data;
     float *yaw = &moby->rot.z;
     float target_yaw;
