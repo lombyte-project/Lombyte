@@ -104,7 +104,7 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
-extern void FUN_L00_00205f60(int a0, int a1, int a2);
+extern void emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
 extern void FUN_L00_00206c08(void);
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
@@ -435,8 +435,8 @@ void update_hero_state_transitions(void) {
                         if (ok && 0.22f < hero.unk229C) {
                             if (current_level_index == 0xC) {
                                 int slot = hero.unk12ED;
-                                FUN_L00_00205f60(slot, 0, 0);
-                                FUN_L00_00205f60(slot, 1, 0);
+                                emit_hero_animation_voice_and_ground_particle(slot, 0, 0);
+                                emit_hero_animation_voice_and_ground_particle(slot, 1, 0);
                             }
                             hero_set_state(HERO_STATE_RUN, 1);
                         }
@@ -1744,8 +1744,8 @@ void update_hero_state_transitions(void) {
                         int first;
                         int one;
 
-                        FUN_L00_00205f60(hero.unk12ED, 0, 1);
-                        FUN_L00_00205f60(hero.unk12ED, 1, 1);
+                        emit_hero_animation_voice_and_ground_particle(hero.unk12ED, 0, 1);
+                        emit_hero_animation_voice_and_ground_particle(hero.unk12ED, 1, 1);
                         if (frame_time * -9.0f > hero.motion.displacement.f[2]) {
                             hero.motion.displacement.f[2] = frame_time * -9.0f;
                         }

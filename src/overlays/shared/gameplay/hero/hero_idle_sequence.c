@@ -530,7 +530,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void spawn_texture_indexed_rotated_particle(float *, int, float) __asm__("FUN_L00_00274cf8");
 
-void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
+void emit_hero_animation_voice_and_ground_particle(int record_group_index, char *joint_index_offset, int enable_record_dispatch) __asm__("FUN_L00_00205f60");
+
+void emit_hero_animation_voice_and_ground_particle(int record_group_index, char *joint_index_offset, int enable_record_dispatch) {
     float ground_adjusted_position[4];
     if (enable_record_dispatch) {
         struct Hero *g = &hero;
@@ -554,7 +556,7 @@ void FUN_L00_00205f60(int record_group_index, char *joint_index_offset, int enab
 }
 extern int FUN_001f96f8_206080(int) __asm__("FUN_001f96f8");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
-extern void FUN_L00_00205f60_206080(int, char *, int) __asm__("FUN_L00_00205f60");
+extern void emit_hero_animation_voice_and_ground_particle(int, char *, int) __asm__("FUN_L00_00205f60");
 
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 
@@ -566,7 +568,7 @@ void dispatch_hero_animation_timed_events(void) {
     }
     k = hero_state->unk12ED;
     if (hero_state->state.current == 2 && hero_state->state_timer == FUN_001f96f8_206080(0x16)) {
-        FUN_L00_00205f60_206080(k, 0, 1);
+        emit_hero_animation_voice_and_ground_particle(k, 0, 1);
     }
     switch (((unsigned char *)hero.moby)[0x53]) {
     case 3:
@@ -574,10 +576,10 @@ void dispatch_hero_animation_timed_events(void) {
             return;
         }
         if (test_hero_animation_frame_window(49.5f)) {
-            FUN_L00_00205f60_206080(k, 0, 1);
+            emit_hero_animation_voice_and_ground_particle(k, 0, 1);
         }
         if (test_hero_animation_frame_window(17.0f)) {
-            FUN_L00_00205f60_206080(k, (char *)1, 1);
+            emit_hero_animation_voice_and_ground_particle(k, (char *)1, 1);
         }
         break;
     case 4:
@@ -585,10 +587,10 @@ void dispatch_hero_animation_timed_events(void) {
             return;
         }
         if (test_hero_animation_frame_window(12.5f)) {
-            FUN_L00_00205f60_206080(k, 0, 1);
+            emit_hero_animation_voice_and_ground_particle(k, 0, 1);
         }
         if (test_hero_animation_frame_window(1.0f)) {
-            FUN_L00_00205f60_206080(k, (char *)1, 1);
+            emit_hero_animation_voice_and_ground_particle(k, (char *)1, 1);
         }
         break;
     }
