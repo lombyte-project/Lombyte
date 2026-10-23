@@ -2238,7 +2238,7 @@ extern void FUN_L14_002b5290_c(unsigned char *m) __asm__("FUN_L14_002b5290");
 extern void FUN_L14_002b5428_c(char *moby) __asm__("FUN_L14_002b5428");
 extern void FUN_L14_002b5530_c(char *moby) __asm__("FUN_L14_002b5530");
 extern void FUN_L14_002b55b0_c(char *moby) __asm__("FUN_L14_002b55b0");
-extern void FUN_L14_002b5850_c(char *moby, float *target, float a, float b, float c, float d, float e, float f, float g) __asm__("FUN_L14_002b5850");
+extern void ease_minibomber_position_and_heading(char *moby, float *target, float a, float b, float c, float d, float e, float f, float g) __asm__("FUN_L14_002b5850");
 extern void FUN_L14_002b5968_u(char *m, float *input, float angle) __asm__("FUN_L14_002b5968");
 extern void FUN_L14_002b5c30_c(char *moby) __asm__("FUN_L14_002b5c30");
 extern void FUN_L14_002b5c98_c(char *moby) __asm__("FUN_L14_002b5c98");
@@ -2295,7 +2295,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     path_endpoint_target_position = d->f180;
     FUN_L14_002b5290_c((unsigned char *)moby);
     FUN_L14_002b5530_c((char *)moby);
-    FUN_L14_002b5850_c((char *)moby, path_endpoint_target_position, d->f17C, d->f170, d->f174, d->f178, d->f154, d->f158, d->f15C);
+    ease_minibomber_position_and_heading((char *)moby, path_endpoint_target_position, d->f17C, d->f170, d->f174, d->f178, d->f154, d->f158, d->f15C);
     FUN_L14_002b5428_c((char *)moby);
     FUN_L14_002b5dd8_c((char *)moby);
     if (moby->f31 != 0) {
@@ -2728,7 +2728,7 @@ extern float FUN_L00_0025b8c0_c2(float *p, float *v, float t, float u1, float u2
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void func_L00_002592B0_2B6AA0(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
-void FUN_L14_002b5850(char *moby, float *target, float target_heading, float b, float c, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
+void ease_minibomber_position_and_heading(char *moby, float *target, float target_heading, float b, float c, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
     int data;
     int moby_state = moby[0x20] & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
