@@ -15,7 +15,9 @@ extern int D_L08_001F84E8[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-void FUN_L08_00308db8(int pair_index) {
+void queue_batalia_eight_textured_batches(int pair_index) __asm__("FUN_L08_00308db8");
+
+void queue_batalia_eight_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
         FUN_L08_00258090(D_L08_001F8560, D_L08_001F84E8[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
@@ -45,7 +47,7 @@ extern int D_L08_001623C0 __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
-extern void FUN_L08_00308db8_u(int) __asm__("FUN_L08_00308db8");
+extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
 extern void FUN_L08_00308e90_u(int) __asm__("FUN_L08_00308e90");
 extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -60,12 +62,12 @@ void queue_batalia_textured_batch_passes(void) {
     font_queue_vu_state();
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
     vu1_add_g_sregister(0x42, (long)D_L08_00162390 << 32 | 0x64);
-    FUN_L08_00308db8_u(0);
+    queue_batalia_eight_textured_batches(0);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
     vu1_add_g_sregister(0x42, (long)((D_L08_00162394 * D_L08_00161E08_u) >> 8) << 32 | 0x62);
-    FUN_L08_00308db8_u(1);
+    queue_batalia_eight_textured_batches(1);
     vu1_add_g_sregister(0x42, (long)((D_L08_00162398 * D_L08_00161E08_u) >> 8) << 32 | 0x68);
-    FUN_L08_00308db8_u(2);
+    queue_batalia_eight_textured_batches(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)D_L08_001623B0 << 32 | 0x48);
     FUN_L08_00308e90_u(0);
