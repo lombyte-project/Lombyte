@@ -698,7 +698,7 @@ typedef struct {
 } G_2bb400;
 extern void FUN_0020c828_2bb400(void *) __asm__("FUN_0020c828");
 extern int FUN_001f96f8_2bb400(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_0024efb0_2bb400(void *, int, int) __asm__("FUN_L00_0024efb0");
+extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern float FUN_002132a8_2bb400(float, float) __asm__("FUN_002132a8");
 extern float FUN_L00_0025e310_2bb400(float) __asm__("FUN_L00_0025e310");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
@@ -739,7 +739,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
         angle_delta = 0xF40;
         moby_vars->ang = old + angle_delta;
     }
-    FUN_L00_0024efb0_2bb400(*(void **)(moby + 0x24), 0, angle_delta);
+    offset_moby_class_point_pairs(*(void **)(moby + 0x24), 0, angle_delta);
     *(float *)(moby + 0x2C) =
         *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * FUN_002132a8_2bb400(0.5f, 1.0f);
     *(float *)(moby + 0x44) =

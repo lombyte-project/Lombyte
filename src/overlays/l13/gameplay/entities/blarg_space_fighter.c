@@ -2539,7 +2539,7 @@ char *spawn_owner_linked_class_160_moby(char *owner) {
     }
     return moby;
 }
-extern void FUN_L00_0024efb0(unsigned char *, int, int);
+extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
 
 /* Fades the moby in (state 1), holds until its owner is gone or dying (state 2), fades it out (state 3) and removes it (state 4), easing its scale toward the class scale and spinning it all the while. */
 void update_owner_linked_class_160_moby(struct Moby *moby) __asm__("FUN_L13_002e84d8");
@@ -2606,7 +2606,7 @@ void update_owner_linked_class_160_moby(struct Moby *moby) {
         step = 0xFC0;
         moby_data[2] = old + step;
     }
-    FUN_L00_0024efb0(moby->pclass, 0, step);
+    offset_moby_class_point_pairs(moby->pclass, 0, step);
 }
 /* Picks a line to play from a group, starting at a random entry and skipping ones already used; returns 1 when one was queued. */
 extern int rand_q(void) __asm__("FUN_001160d8");

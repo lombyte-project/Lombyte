@@ -44,8 +44,8 @@ void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, floa
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
 /* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
-void FUN_L00_0024efb0(unsigned char *a, int dx, int dy);
-void FUN_L00_0024efb0(unsigned char *moby_class, int dx, int dy) {
+void offset_moby_class_point_pairs(unsigned char *a, int dx, int dy) __asm__("FUN_L00_0024efb0");
+void offset_moby_class_point_pairs(unsigned char *moby_class, int dx, int dy) {
     int i;
     int entry_count = moby_class[4] + moby_class[5];
     int *entry_cursor = *(int **)moby_class;

@@ -1600,7 +1600,7 @@ extern char D_L13_001F51E0[];
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_0024efb0(unsigned char *, int, int);
+extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
@@ -1711,7 +1711,7 @@ void update_controller_linked_gate(char *moby) {
         *(int *)(gate_data + 0x14) += 0x1000;
         step += 0x1000;
     }
-    FUN_L00_0024efb0(*(unsigned char **)(moby + 0x24), step, 0);
+    offset_moby_class_point_pairs(*(unsigned char **)(moby + 0x24), step, 0);
 }
 
 char D_L13_001F4F38[] = "tractor too long, abort\n";
