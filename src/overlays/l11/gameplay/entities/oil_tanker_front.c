@@ -912,7 +912,7 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale);
+char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) __asm__("FUN_L11_0031ada0");
 extern char D_L11_00161E18[] __attribute__((section(".sdata")));
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -1684,7 +1684,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
+char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) {
     char *moby = create_moby(0x5F4);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
