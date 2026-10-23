@@ -645,7 +645,9 @@ int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_en
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
 /* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
-int FUN_L00_00259430(int *packed_countdown, int decrement_amount) {
+int decrement_packed_countdown(int *packed_countdown, int decrement_amount) __asm__("FUN_L00_00259430");
+
+int decrement_packed_countdown(int *packed_countdown, int decrement_amount) {
     int original_packed_word = *packed_countdown;
     int remaining_countdown = (original_packed_word >> 24) - decrement_amount;
     if (remaining_countdown < 0)
