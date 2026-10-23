@@ -2863,7 +2863,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68(void *, void *, float);
 
-void FUN_L00_002bf810(char *start_vector, char *end_vector, int step_count) {
+void accumulate_local_vector_steps(char *start_vector, char *end_vector, int step_count) __asm__("FUN_L00_002bf810");
+
+void accumulate_local_vector_steps(char *start_vector, char *end_vector, int step_count) {
     float step_vector[4];
     float accumulated_vector[4];
     int i;
