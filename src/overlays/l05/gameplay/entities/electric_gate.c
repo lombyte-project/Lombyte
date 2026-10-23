@@ -1442,7 +1442,9 @@ extern f32 D_L05_00211B20[];
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void draw_textured_grid(char *) __asm__("FUN_L03_00291918");
 
-void FUN_L05_00316070(char *moby) {
+void draw_ocean_grid_outside_clip_volumes(char *moby) __asm__("FUN_L05_00316070");
+
+void draw_ocean_grid_outside_clip_volumes(char *moby) {
     int *clip_volume_index_cursor = *(int **)(moby + 0x78);
     int i;
     int none = 1;
