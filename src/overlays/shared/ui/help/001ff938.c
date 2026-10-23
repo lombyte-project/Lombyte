@@ -213,7 +213,7 @@ void update_hero_bobbing_and_target_position(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_002092E0), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015F5C4;
-extern void FUN_L00_00205538(void);
+extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00232628(void);
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
@@ -235,7 +235,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
             *(short *)(base + 0x1634) = -1;
         }
     }
-    FUN_L00_00205538();
+    reset_hero_easing_records();
     hero_state_bytes = ((unsigned char *)&D_0013E533) + 0xE1D;
     flag_clear_target = *(int *)(hero_state_bytes + 0xA84);
     hero_state_bytes[0x20A4] = 0;

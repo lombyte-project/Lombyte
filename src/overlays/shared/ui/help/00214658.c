@@ -904,7 +904,7 @@ void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
 void FUN_001f99f8_00216f90(void *) __asm__("FUN_001f99f8");
 void FUN_00217020_00216f90(void) __asm__("FUN_00217020");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-void FUN_L00_00205538_00216f90(void) __asm__("FUN_L00_00205538");
+void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void set_hero_animation_sequence_and_frame(int, int) __asm__("FUN_L00_002325a0");
 void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
@@ -940,7 +940,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     *(unsigned char *)(hero_base + 0x22CA) = 0;
     FUN_00217020_00216f90();
     cancel_hero_item_animation();
-    FUN_L00_00205538_00216f90();
+    reset_hero_easing_records();
     if (mode != -1)
         hero_set_state(mode, 1);
     set_hero_animation_sequence_and_frame(*(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x53),

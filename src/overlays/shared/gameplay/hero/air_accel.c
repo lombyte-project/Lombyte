@@ -721,7 +721,7 @@ int test_hero_ledge_ahead(Vec4 *ledge_probe_origin, f32 *facing_yaw)
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00205538(void);
+extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void FUN_L00_00206c08(void);
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
@@ -742,7 +742,7 @@ void FUN_L01_00231348(int vehicle_mode, int initial_state, int new_moby) {
     *(int *)(*(char **)(hero_state_base + 0x2080) + 0x98) = -1;
     FUN_L00_00232fe8();
     FUN_L00_00206c08();
-    FUN_L00_00205538();
+    reset_hero_easing_records();
     *(char *)(hero_state_base + 0x20A4) = vehicle_mode;
     *(int *)(hero_state_base + 0xA84) = new_moby;
     *(int *)(hero_state_base + 0x2080) = new_moby;
@@ -777,7 +777,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     char *previous_active_moby;
     char *moby_to_remove;
     char *restored_moby;
-    FUN_L00_00205538();
+    reset_hero_easing_records();
     hero_state_base = (char *)D_0013E533 + 0xE1D;
     previous_active_moby = *(char **)(hero_state_base + 0xA84);
     hero_state_base[0x20A4] = 0;

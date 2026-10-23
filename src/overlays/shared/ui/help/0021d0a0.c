@@ -343,7 +343,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
 #define MACRO_ADDR
 
 extern void FUN_0020c828_227cf8(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_00205538_227cf8(void) __asm__("FUN_L00_00205538");
+extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void FUN_L00_00206c08_227cf8(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
@@ -367,7 +367,7 @@ void restore_hero_from_vehicle_mode(void) {
     }
     {
         struct Hero *hero_restore_context = &hero;
-        FUN_L00_00205538_227cf8();
+        reset_hero_easing_records();
         hero_restore_context->vehicle_mode = 0;
         flag_clear_target = hero_restore_context->unkA84;
         if (flag_clear_target) {

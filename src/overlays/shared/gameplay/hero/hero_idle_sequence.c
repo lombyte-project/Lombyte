@@ -241,7 +241,9 @@ typedef struct {
 extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
 s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
 
-void FUN_L00_00205538(void) {
+void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
+
+void reset_hero_easing_records(void) {
     s32 i;
     char *manipulator_records_base = (char *)D_L00_0017A680_c;
     char *record_reset_destination = manipulator_records_base + 0x90;
