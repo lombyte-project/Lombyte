@@ -428,7 +428,9 @@ extern float vdot_2e6bf8(void *, void *) __asm__("FUN_001f9ab0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Resets the camera rig state from the moby position when idle. */
-void FUN_L00_002e6bf8(char *camera_moby) {
+void reset_follow_camera_state_from_position(char *camera_moby) __asm__("FUN_L00_002e6bf8");
+
+void reset_follow_camera_state_from_position(char *camera_moby) {
     float dn[4];
     float height_offset[4];
     char *camera_state;
