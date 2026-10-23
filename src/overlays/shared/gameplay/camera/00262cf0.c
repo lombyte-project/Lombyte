@@ -16,7 +16,9 @@ typedef struct {
 extern T D_L00_001E9060;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-void FUN_L00_00262d38(s32 i) {
+void queue_planet_unlock_message(s32 i) __asm__("FUN_L00_00262d38");
+
+void queue_planet_unlock_message(s32 i) {
     T dialogue_message_ids = D_L00_001E9060;
     if (i < 0)
         i = 0;

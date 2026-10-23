@@ -714,7 +714,7 @@ extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
-extern void func_L00_00263DB0_2FC140(int) __asm__("FUN_L00_00262d38");
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void func_L00_002512D8_2FC140(int) __asm__("FUN_L00_002502a0");
 extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50");
@@ -894,7 +894,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             break;
         }
         func_L00_00261848_2FC140(3);
-        func_L00_00263DB0_2FC140(3);
+        queue_planet_unlock_message(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
             ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;

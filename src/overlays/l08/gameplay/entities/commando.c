@@ -1188,7 +1188,7 @@ extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
 extern int D_L08_001621D8 __attribute__((sda));
 extern char *D_L08_001600EC;
-extern void FUN_L00_00262d38(int);
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
@@ -1267,7 +1267,7 @@ void commando_update(WM *moby) {
             commando_vars->b28 = 1;
             if (commando_vars->h24 == 3) {
                 unlock_planet(10);
-                FUN_L00_00262d38(10);
+                queue_planet_unlock_message(10);
                 jet_clear_persistent(((unsigned char *)moby)[0xB0]);
                 jet_reset_camera((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);
                 memcard_save_data(0, -1);

@@ -2936,7 +2936,7 @@ extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
-extern void FUN_L00_00262d38(s32);
+extern void queue_planet_unlock_message(s32) __asm__("FUN_L00_00262d38");
 extern void set_moby_dialogue_record_value(struct Moby *, s32) __asm__("FUN_L00_00266858");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void FUN_0020c828(struct Moby *);
@@ -3211,7 +3211,7 @@ void infobot_update(struct Moby *moby)
             return;
         }
         memcard_save_data(0, -1);
-        FUN_L00_00262d38(infobot->planet);
+        queue_planet_unlock_message(infobot->planet);
         FUN_0020c828(moby);
         return;
     }

@@ -733,7 +733,7 @@ extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
 extern void FUN_L00_00216f90_v(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00284e50_v(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
@@ -790,7 +790,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
                 char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
                 FUN_L00_00284e50_v(o + 0x30, o + 0x70);
             }
-            FUN_L00_00262d38_v(0x11);
+            queue_planet_unlock_message(0x11);
             memcard_save_data(0, -1);
             moby->state = 4;
         }
@@ -1148,7 +1148,7 @@ extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") __attr
 extern void FUN_L00_002502a0(int);
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void update_joint_animation(void *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L00_00262d38(int);
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_00284e50(void *, void *);
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L01_0027a248(int, int);
@@ -1366,7 +1366,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         break;
     case ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00262d38(0x10);
+            queue_planet_unlock_message(0x10);
             start_scene(2);
             moby->state = 8;
         }

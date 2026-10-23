@@ -6809,7 +6809,7 @@ extern void FUN_L00_002eac18_302578(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L00_00298840_302578(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002607d0_302578(int) __asm__("FUN_L00_002607d0");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void FUN_L00_00262d38_302578(int) __asm__("FUN_L00_00262d38");
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_002502a0_302578(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00284e50_302578(void *, void *) __asm__("FUN_L00_00284e50");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
@@ -7063,7 +7063,7 @@ void shuttle_update(struct Moby *moby) {
                 FUN_L00_00298840_302578(5);
                 moby->state = 9;
             } else {
-                FUN_L00_00262d38_302578(5);
+                queue_planet_unlock_message(5);
                 moby->state = 1;
                 enter_hero_idle_state_for_current_vehicle_mode();
                 memcard_Save_302578(0, -1);
@@ -7072,7 +7072,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS:
         if (D_L06_0015F5C4 != 2) {
-            FUN_L00_00262d38_302578(5);
+            queue_planet_unlock_message(5);
             memcard_Save_302578(0, -1);
             moby->state = 1;
         }
