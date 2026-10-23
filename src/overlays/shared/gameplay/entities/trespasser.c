@@ -408,7 +408,9 @@ void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002c6f88(unsigned char *owner_moby, float initial_hook_speed) {
+unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) __asm__("FUN_L00_002c6f88");
+
+unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) {
     unsigned char *spawned_moby = create_moby(0xd1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
@@ -2703,7 +2705,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-unsigned char *FUN_L00_002c6f88(unsigned char *src, float f);
+unsigned char *spawn_swingshot_hook(unsigned char *src, float f) __asm__("FUN_L00_002c6f88");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 extern int FUN_L00_002223f8_2bffa8(int, int) __asm__("FUN_L00_002223f8");
 extern Moby *FUN_L00_002c6f88_2bffa8(void *, float) __asm__("FUN_L00_002c6f88");
@@ -3016,7 +3018,7 @@ void swingshot_update(u8 *m) {
     if (vars == 0) return;
     motion = 0;
     if (*(u8 **)(vars + 0x14) == 0) {
-        if ((*(u8 **)(vars + 0x14) = FUN_L00_002c6f88(m, D_0015ED6C_2c6158 * 24.0f)) == 0)
+        if ((*(u8 **)(vars + 0x14) = spawn_swingshot_hook(m, D_0015ED6C_2c6158 * 24.0f)) == 0)
         goto child_ready;
     }
     motion = *(u8 **)(*(u8 **)(vars + 0x14) + 0x78);
