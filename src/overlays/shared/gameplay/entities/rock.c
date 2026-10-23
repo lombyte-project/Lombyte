@@ -648,7 +648,7 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
-extern void FUN_L01_002405a0(void);
+extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
@@ -734,7 +734,7 @@ void update_cutscene_trigger(char *moby) {
             } else {
                 FUN_L00_002eac18(0);
             }
-            FUN_L01_002405a0();
+            request_hero_idle_state_for_vehicle_mode();
             cutscene_active = 0;
             moby[0x20] = 3;
             moby[0xBC] = 0;

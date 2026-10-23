@@ -111,7 +111,7 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L01_002405a0(void);
+extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -637,7 +637,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     if (hero.vehicle_mode != 0) {
-                        FUN_L01_002405a0();
+                        request_hero_idle_state_for_vehicle_mode();
                         break;
                     }
                     if (controller_state.held & 0xA) {

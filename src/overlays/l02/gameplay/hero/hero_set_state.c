@@ -71,7 +71,7 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void FUN_L00_00262840(char *o);
-extern void FUN_L01_002405a0(void);
+extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 
@@ -139,7 +139,7 @@ int hero_set_state(int a, int b) {
         p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         clear_hero_idle_rotation_targets();
         if (p->vehicle_mode != 0) {
-            FUN_L01_002405a0();
+            request_hero_idle_state_for_vehicle_mode();
             return 1;
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);
@@ -1861,7 +1861,7 @@ extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
-extern void FUN_L01_002405a0(void);
+extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2236,7 +2236,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     if (hero.vehicle_mode != 0) {
-                        FUN_L01_002405a0();
+                        request_hero_idle_state_for_vehicle_mode();
                         break;
                     }
                     if (controller_state.held & 0xA) {

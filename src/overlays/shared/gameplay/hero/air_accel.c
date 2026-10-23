@@ -1575,7 +1575,9 @@ skip:
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
 
-void FUN_L01_002405a0(void) {
+void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
+
+void request_hero_idle_state_for_vehicle_mode(void) {
     switch ((unsigned char)D_0013E533[0x2EC1]) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         hero_set_state(HERO_STATE_IDLE, 1);

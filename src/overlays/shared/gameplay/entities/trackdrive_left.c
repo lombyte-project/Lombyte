@@ -453,7 +453,7 @@ void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002eaa30(char *src);
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void FUN_L00_002eac18(int mode);
-void FUN_L01_002405a0(void);
+void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
 void FUN_L02_002d93e8(char *moby);
@@ -477,7 +477,7 @@ extern void func_001F49B0_2D9F08(void (*)(void), Moby *) __asm__("FUN_001f4600")
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
 extern void func_L00_002EC0C8_2D9F08(int) __asm__("FUN_L00_002eac18");
-extern void func_L01_00240CE8_2D9F08(void) __asm__("FUN_L01_002405a0");
+extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void func_L00_0025E590_2D9F08(Moby *, Data_2D9F08 *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];
 extern Lvl_2D9F08 D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
@@ -650,7 +650,7 @@ void tresspasser_pad_update(Moby *moby) {
                 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
                 moby->state = 1;
                 func_L00_002EC0C8_2D9F08(1);
-                func_L01_00240CE8_2D9F08();
+                request_hero_idle_state_for_vehicle_mode();
                 data->h10 = func_001F9850_2D9F08(0x3C);
             }
         }
