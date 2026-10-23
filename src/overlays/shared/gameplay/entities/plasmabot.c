@@ -43,7 +43,9 @@ void FUN_L14_002b3318(char *moby) {
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Clears two flag bits, sets another, and copies a word from the moby's linked record.
-void FUN_L14_002b3330(char *moby) {
+void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
+
+void activate_plasmabot(char *moby) {
     unsigned short *field = (unsigned short *)(moby + 0x34);
     int linked_record_value;
     *field &= 0xFFBE;
@@ -292,7 +294,7 @@ void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void FUN_L14_002b2f60_c(char *m) __asm__("FUN_L14_002b2f60");
 void FUN_L14_002b3268_c(char *moby) __asm__("FUN_L14_002b3268");
 void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
-void FUN_L14_002b3330_c(char *moby) __asm__("FUN_L14_002b3330");
+void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void FUN_L14_002b3358_c(char *moby) __asm__("FUN_L14_002b3358");
 void FUN_L14_002b3578_c(char *moby) __asm__("FUN_L14_002b3578");
 void FUN_L14_002b37b0_c(char *moby, float angle) __asm__("FUN_L14_002b37b0");
@@ -443,7 +445,7 @@ void update_plasmabot(char *moby) {
         if (FUN_L14_002d9870_c(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(moby) == 0) return;
         *(short *)(data + 0x248) = scale_game_frames(D_L14_001614F0);
-        FUN_L14_002b3330_c(moby);
+        activate_plasmabot(moby);
         ((unsigned char *)moby)[0x20] = 2;
         set_moby_animation(moby, 1, 0);
         path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
