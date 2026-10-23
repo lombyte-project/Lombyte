@@ -2957,7 +2957,7 @@ extern int FUN_L00_001ff600();
 extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float FUN_L00_00259468(float *a, float *b, int *out, float f);
+float calculate_triangular_corrected_scalar(float *a, float *b, int *out, float f) __asm__("FUN_L00_00259468");
 float FUN_L00_002bec80_c2(void *p, void *q) __asm__("FUN_L00_002bec80");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_002beab0_c(char *a, int b, void *c) __asm__("FUN_L00_002beab0");

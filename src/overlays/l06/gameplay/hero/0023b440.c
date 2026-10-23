@@ -50,7 +50,7 @@ extern float predict_hero_trajectory_intercept_time(float a, float b, float c) _
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float FUN_L00_00259468(float *a, float *b, int *out, float f);
+extern float calculate_triangular_corrected_scalar(float *a, float *b, int *out, float f) __asm__("FUN_L00_00259468");
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -1076,7 +1076,7 @@ void update_hero_state_machine(void) {
                                 *(OvlQuad *)v1 = 0;
                                 *(OvlQuad *)v0 = 0;
                                 v1[2] = jump_velocity_z;
-                                t = FUN_L00_00259468(v0, v1, 0, hero.unk4A0);
+                                t = calculate_triangular_corrected_scalar(v0, v1, 0, hero.unk4A0);
                                 hero.unk48C = t + 0.05f;
                                 hero.unk430 = t;
                                 hero.unk4A0 = hero.unk5C8;
