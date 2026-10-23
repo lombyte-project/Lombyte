@@ -1526,7 +1526,7 @@ void update_hero_scalar_pulse(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208318), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00207d40_u(void) __asm__("FUN_L00_00207d40");
+extern void draw_hero_glow_quads(void) __asm__("FUN_L00_00207d40");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Once (flag at ((char *)&hero)+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
@@ -1534,7 +1534,7 @@ void enqueue_hero_glow_draw_callback_once(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->unk1EB2 == 0) {
         hero_state->unk1EB2 = 1;
-        enqueue_callback_list_1(FUN_L00_00207d40_u, ((int)hero_state->moby));
+        enqueue_callback_list_1(draw_hero_glow_quads, ((int)hero_state->moby));
     }
 }
 typedef struct {
@@ -1569,7 +1569,7 @@ extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
 #define P D_0013F350_207d40
 
-void FUN_L00_00207d40(void) {
+void draw_hero_glow_quads(void) {
     f32 k;
     int i;
     int vehicle_mode;
