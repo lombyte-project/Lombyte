@@ -2138,7 +2138,9 @@ typedef struct {
 } Level14VendorMoby;
 
 /* Picks state 2 when the data value is negative, else 1, and marks the data active. */
-void FUN_L14_002ef578(Level14VendorMoby *moby) {
+void enable_elevator_alternate_route(Level14VendorMoby *moby) __asm__("FUN_L14_002ef578");
+
+void enable_elevator_alternate_route(Level14VendorMoby *moby) {
     Level14VendorData *data = moby->data;
     moby->state = data->value < 0.0f ? 2 : 1;
     data->field124 = 1;
