@@ -605,7 +605,9 @@ extern MobyList D_L01_0016CCE0;
 extern Effect D_L01_0017C8C0;
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
-void FUN_L01_002fb4b8(void) {
+void attach_cutscene_fixed_scale_manipulator(void) __asm__("FUN_L01_002fb4b8");
+
+void attach_cutscene_fixed_scale_manipulator(void) {
     s32 i;
 
     if (cutscene_mode == 2 && D_0015EDB0 != 0) {

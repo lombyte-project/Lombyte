@@ -1871,7 +1871,7 @@ extern void FUN_0020c828(void *);
 extern void FUN_L00_0025a120(void *);
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void FUN_L01_002fb4b8(void *);
+extern void attach_cutscene_fixed_scale_manipulator(void *) __asm__("FUN_L01_002fb4b8");
 
 /* Activate the watcher and steer its body and head toward the player. */
 void qwark_rilgar_update(L03WatchMoby *m) __asm__("FUN_L03_002dc478");
@@ -1886,7 +1886,7 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L01_002fb4b8(moby);
+    attach_cutscene_fixed_scale_manipulator(moby);
     if (moby->near_flag) {
         if (FUN_001f9b48(moby->position, D_L03_00166EC0) < 30.0f) {
             FUN_L00_0025a120(moby);
