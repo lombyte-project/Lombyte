@@ -299,7 +299,7 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
-void FUN_L14_002b2f60_c(char *m) __asm__("FUN_L14_002b2f60");
+void process_plasmabot_hit_reaction(char *m) __asm__("FUN_L14_002b2f60");
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
@@ -367,7 +367,7 @@ void update_plasmabot(char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x1000;
     }
     if (((unsigned char *)moby)[0x20] != 0) {
-        FUN_L14_002b2f60_c(moby);
+        process_plasmabot_hit_reaction(moby);
         update_plasmabot_target(moby);
         FUN_L14_002b2ed8_c((struct Moby *)moby);
         owner = *(char **)(data + 0x110);
@@ -999,7 +999,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char D_0013E533[];
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
-void FUN_L14_002b2f60(char *moby) {
+void process_plasmabot_hit_reaction(char *moby) {
     enum {
         HIT_REACTION_UNAVAILABLE = 0,
         HIT_REACTION_LETHAL = 1,
