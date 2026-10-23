@@ -184,7 +184,9 @@ extern struct Quad D_L00_001CA480[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L00_0029ff58(void) {
+void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
+
+void draw_vendor_hologram_cone(void) {
     struct HoloPacket quad_packet;
     float transformed_vertex_offsets[4][4];
     int i;
@@ -305,7 +307,7 @@ extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
 extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
 extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
-extern void FUN_L00_0029ff58_u(void) __asm__("FUN_L00_0029ff58");
+extern void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
 extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
 extern void draw_vendor_purchase_panel(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
@@ -420,7 +422,7 @@ void draw_vendor_screen(void) {
     }
     draw_moby_list(p->f1C, 1);
     if (p->f40 == 0) {
-        FUN_L00_0029ff58_u();
+        draw_vendor_hologram_cone();
     }
     render_vendor_capture_pass_sequence(p->f1C);
     if (p->f5C != 0) {
