@@ -1751,7 +1751,7 @@ extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
 unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
 void FUN_L00_002bcf98(u8 *moby);
-void FUN_L00_002bdc50_c(void *o) __asm__("FUN_L00_002bdc50");
+void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern float D_L00_001617C0_2BE3A8 __asm__("D_L00_001616F0") __attribute__((sda));
 extern int D_L00_001617C4_2BE3A8 __asm__("D_L00_001616F4") __attribute__((sda));
@@ -1828,7 +1828,7 @@ extern float func_001F9FA8_2BE3A8(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2BE3A8(float) __asm__("FUN_001f9dc8");
 extern void func_001F9EE8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void func_001F49B0_2BE3A8(void *, struct Moby *) __asm__("FUN_001f4600");
-extern void func_L00_002BEF58_2BE3A8(void *) __asm__("FUN_L00_002bdc50");
+extern void draw_beam_ring_and_rail_effects(void *) __asm__("FUN_L00_002bdc50");
 extern float func_002140F8_2BE3A8(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2BE3A8(int) __asm__("FUN_00213260");
 extern int func_001F9850_2BE3A8(int) __asm__("FUN_001f96f8");
@@ -1940,7 +1940,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
             }
         }
     }
-    func_001F49B0_2BE3A8(func_L00_002BEF58_2BE3A8, moby);
+    func_001F49B0_2BE3A8(draw_beam_ring_and_rail_effects, moby);
     spark_size = func_002140F8_2BE3A8(0.1f, 2.0f);
     sign = func_002140B0_2BE3A8(2);
     if (sign == 0) {
@@ -2099,7 +2099,7 @@ void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 /* scrolls the two texture-offset accumulators and draws the 10x20 band of
    textured quads between the D_L00_001DC060/001DC1A0 rings, skipping
    back-facing ones */
-void FUN_L00_002bdc50(void *moby) {
+void draw_beam_ring_and_rail_effects(void *moby) {
     Quad quad;
     OvlVec4 edge_to_corner0, edge_to_corner2, face_normal, camera_to_corner1;
     float y, first_pass_v, second_pass_v, texture_scroll_step;
