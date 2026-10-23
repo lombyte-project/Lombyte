@@ -1649,7 +1649,9 @@ extern int fr_2a7e20(int) __asm__("FUN_001f96f8");
 extern void emit_2a7e20(float *, int, int, int, int, void *, float, float,
                         float) __asm__("FUN_L00_00272060");
 
-void FUN_L00_002a7e20(float *sparkle_spawn_position, int emission_pair_count) {
+void emit_randomized_sparkle_pairs(float *sparkle_spawn_position, int emission_pair_count) __asm__("FUN_L00_002a7e20");
+
+void emit_randomized_sparkle_pairs(float *sparkle_spawn_position, int emission_pair_count) {
     OvlQuad sparkle_initial_velocity[1];
     OvlQuad old[1];
     int i;
@@ -1889,7 +1891,7 @@ int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
-void FUN_L00_002a7e20(float *pos, int n);
+void emit_randomized_sparkle_pairs(float *pos, int n) __asm__("FUN_L00_002a7e20");
 void spawn_wrench_impact_effects(u8 *o) __asm__("FUN_L00_002a8028");
 void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
@@ -2142,7 +2144,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 MobyHitState *hit=(MobyHitState*)suck_get_aim_height(collision_hit.moby);
                 if (!hit || hit->hit_count<2 || hit->hit_index!=work.shifted.query.class_id) {
                     work.q[7]=*(WrenchQuad*)collision_hit.moby->position;
-                    FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); FUN_L00_002a7e20(work.v[6],5);
+                    FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); emit_randomized_sparkle_pairs(work.v[6],5);
                     wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby);
                 }
             }

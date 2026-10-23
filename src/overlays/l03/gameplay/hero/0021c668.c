@@ -117,7 +117,7 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void FUN_L00_002a7e20(void *, int);
+extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void FUN_L01_00232290(void);
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
@@ -1096,7 +1096,7 @@ void update_hero_state_machine(void) {
                     if (((unsigned char *)hero.moby)[0x53] == 0x73) {
                         if (test_hero_animation_frame_window(11.0f)) {
                             allocate_hero_voice_for_entry(0xD, 0);
-                            FUN_L00_002a7e20(hero.unk5E0.f, 4);
+                            emit_randomized_sparkle_pairs(hero.unk5E0.f, 4);
                         }
                         if (hero.unkA98 & 2) {
                             set_hero_animation(0x66, 0, scale_game_frames(0x1E));

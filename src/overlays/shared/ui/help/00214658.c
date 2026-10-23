@@ -1020,7 +1020,7 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
 
 extern int *D_L00_00177F00[];
 extern void offset_hero_position_against_gravity(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
-extern void FUN_L00_002a7e20(void *, int);
+extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 
 void FUN_L00_00217368(int voice_target, int entry_count) {
     if (entry_count != 0) {
@@ -1037,7 +1037,7 @@ void FUN_L00_00217368(int voice_target, int entry_count) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
                 offset_hero_position_against_gravity(v, v, 0.5f);
-                FUN_L00_002a7e20(v, 4);
+                emit_randomized_sparkle_pairs(v, 4);
             }
         }
     }
