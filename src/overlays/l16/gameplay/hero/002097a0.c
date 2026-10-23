@@ -186,7 +186,7 @@ f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
-void FUN_L00_002335c8(void *, f32, f32, f32);
+void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 void FUN_L00_002334d0(void *, void *, f32);
 f32 FUN_001f99c0(f32);
 
@@ -347,8 +347,8 @@ d1:
         if (i == 1) {
             side_probe_angle = -side_probe_angle;
         }
-        FUN_L00_002335c8(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
-        FUN_L00_002335c8(&unused_side_probe_endpoint, 0.2f, side_probe_angle, -0.45f);
+        transform_hero_polar_offset_to_world(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
+        transform_hero_polar_offset_to_world(&unused_side_probe_endpoint, 0.2f, side_probe_angle, -0.45f);
         if (collision_line(&side_probe_endpoint, &collision_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;

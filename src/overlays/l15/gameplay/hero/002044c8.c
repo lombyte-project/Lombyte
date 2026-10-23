@@ -565,7 +565,7 @@ extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
-extern void FUN_L00_002335c8(void *, f32, f32, f32);
+extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern s32 play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002598b0");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 struct PlayerSpeedTuning {
@@ -2374,7 +2374,7 @@ void update_hero_motion_for_current_state(void) {
                 break;
             }
             for (i = 0; i < 3; i++) {
-                FUN_L00_002335c8(&rotation_matrix_or_vector_work[1], 1.8f,
+                transform_hero_polar_offset_to_world(&rotation_matrix_or_vector_work[1], 1.8f,
                                  fast_add_rotations(-0.7853982f, (f32)i * 0.7853982f), 1.4f);
                 play_entity_sound((struct MobyView *)hero.moby, 2.2f, &rotation_matrix_or_vector_work[1], 0x30000, 40.0f, 1.0f, 0, 1, 0);
             }
@@ -2476,7 +2476,7 @@ void update_hero_motion_for_current_state(void) {
         s32 i;
         d = fast_difference_between_rotations(hero.motion.rot.f[2], hero.motion.move_yaw);
         for (i = 0; i < 3; i++) {
-            FUN_L00_002335c8(&spatial_or_hit_descriptor_work, 1.8f, fast_add_rotations(-0.7853982f, (f32)i * 0.7853982f), 1.4f);
+            transform_hero_polar_offset_to_world(&spatial_or_hit_descriptor_work, 1.8f, fast_add_rotations(-0.7853982f, (f32)i * 0.7853982f), 1.4f);
             play_entity_sound((struct MobyView *)hero.moby, 2.7f, &spatial_or_hit_descriptor_work, 0x30000, 40.0f, 1.0f, 0, 1, 0);
         }
         if (test_hero_animation_frame_window(30.0f) != 0 || test_hero_animation_frame_window(0.0f) != 0) {

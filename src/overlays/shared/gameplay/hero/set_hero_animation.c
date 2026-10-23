@@ -914,7 +914,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
-void FUN_L00_002335c8(float *out, float radius, float angle, float z) {
+void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) __asm__("FUN_L00_002335c8");
+
+void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) {
     struct Hero *base;
 
     out[0] = fast_cos(angle) * radius;

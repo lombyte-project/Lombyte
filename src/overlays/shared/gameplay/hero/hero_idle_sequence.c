@@ -2620,7 +2620,7 @@ typedef struct G0020a240 {
     f32 f234;
 } G0020a240;
 extern u8 D_L00_00173E60[];
-extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
+extern void transform_hero_polar_offset_to_world(V0020a240 *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) __asm__("FUN_L00_0020a240");
@@ -2630,8 +2630,8 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
     V0020a240 probe_start;
     V0020a240 probe_end;
 
-    FUN_L00_002335c8(&probe_start, hero_state->f234 - 0.02f, 0.0f, probe_z_offset);
-    FUN_L00_002335c8(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
+    transform_hero_polar_offset_to_world(&probe_start, hero_state->f234 - 0.02f, 0.0f, probe_z_offset);
+    transform_hero_polar_offset_to_world(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
     if (FUN_001efa68(&probe_start, &probe_end, 2, 0, 0)) {
         if (out != 0)
             *out = vector_distance_xy(hero_state->v80, D_L00_00173E60);

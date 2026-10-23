@@ -173,7 +173,7 @@ f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
-void FUN_L00_002335c8(void *, f32, f32, f32);
+void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 f32 FUN_001f99c0(f32);
 
 extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")));
@@ -326,8 +326,8 @@ d1:
         if (i == 1) {
             ground_probe_angle = -ground_probe_angle;
         }
-        FUN_L00_002335c8(&ground_probe_first_endpoint, 0.2f, ground_probe_angle, 0.45f);
-        FUN_L00_002335c8(&unused_ground_probe_output, 0.2f, ground_probe_angle, -0.45f);
+        transform_hero_polar_offset_to_world(&ground_probe_first_endpoint, 0.2f, ground_probe_angle, 0.45f);
+        transform_hero_polar_offset_to_world(&unused_ground_probe_output, 0.2f, ground_probe_angle, -0.45f);
         if (FUN_001efa68_u(&ground_probe_first_endpoint, &collision_ray_second_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
@@ -594,7 +594,7 @@ extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
-extern void FUN_L00_002335c8(void *, f32, f32, f32);
+extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern s32 play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002598b0");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 struct PlayerSpeedTuning {
