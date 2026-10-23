@@ -5885,7 +5885,7 @@ extern float cos_300278(float) __asm__("FUN_001f9dc8");
 extern float sin_300278(float) __asm__("FUN_001f9de0");
 extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
-extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
+extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
 extern float D_L06_0016204C __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
@@ -5918,7 +5918,7 @@ void spawn_moby_breakup_effect(char *source_moby) {
         vadd_300278(fragment_position, source_moby + 0x10, fragment_velocity);
         fragment_position[2] += rand_range_300278(D_L06_0016204C + 0.5f, D_L06_0016204C + 4.5f);
         vnorm_300278(fragment_velocity, fragment_velocity, fragment_step_length);
-        FUN_L06_00300c60(source_moby, fragment_position, fragment_velocity);
+        spawn_spinning_moby_fragment(source_moby, fragment_position, fragment_velocity);
     }
 }
 

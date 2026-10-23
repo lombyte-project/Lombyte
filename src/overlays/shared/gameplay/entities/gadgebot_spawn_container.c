@@ -19,7 +19,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern char *D_001413D0 __attribute__((section(".data")));
 extern float D_0015ED6C;
-extern unsigned char *FUN_L06_00300c60(char *, float *, float *);
+extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
 void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) __asm__("FUN_L06_002d8178");
 
@@ -71,7 +71,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
             fragment_velocity[1] += fast_sin(direction_angle) * speed;
         }
         fragment_velocity[2] = random_float_between(2.0f, 7.0f) * D_0015ED6C;
-        fragment = FUN_L06_00300c60(moby, pos, fragment_velocity);
+        fragment = spawn_spinning_moby_fragment(moby, pos, fragment_velocity);
         if (fragment != 0) {
             *(float *)(fragment + 0x2c) *= 0.3f;
         }
