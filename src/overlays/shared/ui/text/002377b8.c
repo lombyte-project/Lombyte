@@ -1336,7 +1336,7 @@ out:
 }
 extern short D_00140986 __attribute__((section(".data")));
 int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
-void FUN_L00_00235ad8(char *, int *, int *, int, int);
+void apply_hud_slide_offset(char *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
@@ -1350,7 +1350,7 @@ int draw_hud_cropped_gauge_panel(char *rec) {
     *(int *)(rec + 0x58) = 0x100;
     *(int *)(rec + 0x5C) = 0x40;
     hud_screen_position(rec, &x, &y);
-    FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
+    apply_hud_slide_offset(rec, &x, &y, *(int *)(rec + 0x6C), 0);
     sprite_width = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
     draw_cropped_hud_sprite(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);

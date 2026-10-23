@@ -81,7 +81,9 @@ extern float D_L00_0017E3A0[];
 extern float D_L00_0017E400[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) {
+void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) __asm__("FUN_L00_00235ad8");
+
+void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) {
     int dx = 0;
     int dy = 0;
     float slide_scale;
@@ -447,7 +449,7 @@ int draw_hud_stars(HudElem *element) {
         element->h = D_L00_0015F764;
     }
     hud_screen_position(element, &x, &y);
-    FUN_L00_00235ad8(element, &x, &y, element->unk6C, 0);
+    apply_hud_slide_offset(element, &x, &y, element->unk6C, 0);
 
     {
         int left_inset = D_L00_0015F760 * 0xD0;
@@ -586,7 +588,7 @@ int FUN_L00_00236e50(HudElem *hud_element) {
     hud_element->w = D_L00_0015F760;
     hud_element->h = D_L00_0015F764;
     hud_screen_position(hud_element, &x, &y);
-    FUN_L00_00235ad8(hud_element, &x, &y, hud_element->unk6C, 0);
+    apply_hud_slide_offset(hud_element, &x, &y, hud_element->unk6C, 0);
     image = get_icon_frame(*(int *)hud_element, 0);
     draw_rotated_hud_sprite(image, x + hud_element->unk48, y + hud_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     {
