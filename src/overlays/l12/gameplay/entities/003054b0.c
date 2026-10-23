@@ -93,7 +93,9 @@ extern int D_L12_00161F20 __attribute__((sda));
 extern int D_L12_00161F24 __attribute__((sda));
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L12_003054b0(char *moby) {
+void update_planetbuster_maximus_guns(char *moby) __asm__("FUN_L12_003054b0");
+
+void update_planetbuster_maximus_guns(char *moby) {
     char *owner_data = *(char **)(moby + 0x78);
     int i;
     float position_buffer[4];
