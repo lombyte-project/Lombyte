@@ -1573,7 +1573,9 @@ fail:
 }
 int FUN_L00_001ee1b0(OvlQuad *, float);
 /* True when FUN_L00_001ee1b0 returns non-zero for a copy of v and 0. */
-int FUN_L00_002e4290(OvlQuad *input_quad) {
+int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) __asm__("FUN_L00_002e4290");
+
+int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) {
     OvlQuad input_copy = *input_quad;
     return FUN_L00_001ee1b0(&input_copy, 0.0f) != 0;
 }
