@@ -398,7 +398,9 @@ s32 is_hero_slot_item_id_5_to_7(int slot_index) {
 }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
 /* True when hero_slot_item_id returns 0x1C or 0x1D. */
-int FUN_L00_0020d540(void) {
+int is_hero_slot_item_id_28_or_29(void) __asm__("FUN_L00_0020d540");
+
+int is_hero_slot_item_id_28_or_29(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
 /* True when hero.state.control_mode is 0x11/0x12 or state.current is 0x6A, 0x75, 0x76 or 0x82. */
