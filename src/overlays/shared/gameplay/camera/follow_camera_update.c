@@ -436,7 +436,9 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
 }
 void initialize_hero_aligned_camera_pose();
 /* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
-void FUN_L00_002e9ef0(char *camera_object) {
+void reset_hero_aligned_camera(char *camera_object) __asm__("FUN_L00_002e9ef0");
+
+void reset_hero_aligned_camera(char *camera_object) {
     int *camera_state = *(int **)(camera_object + 0x70);
     camera_state[0] = 0;
     camera_state[2] = 0;
