@@ -355,7 +355,7 @@ void rocket_update(struct Moby *moby) {
 
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -367,7 +367,7 @@ void update_hoven_help_and_dialogue(struct Moby *moby) __asm__("FUN_L12_002ed280
 
 void update_hoven_help_and_dialogue(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
-    if (FUN_L01_0026e008(moby_vars[3], -1) == 0) {
+    if (count_group_e81e0(moby_vars[3], -1) == 0) {
         unsigned char *dialogue_trigger_state = D_0013D50F_e;
         if (dialogue_trigger_state[0x14] == 0) {
             dialogue_trigger_state[0x14] = 1;

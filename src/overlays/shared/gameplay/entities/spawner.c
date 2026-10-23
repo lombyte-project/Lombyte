@@ -312,7 +312,7 @@ void FUN_L09_0030a9e8(unsigned char *moby, char *spawner_vars) {
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 
 int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) __asm__("FUN_L09_0030aae0");
 
@@ -320,7 +320,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     int last = -1;
     int i;
     char **slot;
-    spawner_vars[0x91] = FUN_L01_0026e008(*(int *)(spawner_vars + 0x94), -1);
+    spawner_vars[0x91] = count_group_e81e0(*(int *)(spawner_vars + 0x94), -1);
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
         if (slot_moby != 0 && *(short *)(slot_moby + 0xA6) == 0x75E && (unsigned char)slot_moby[0x20] != 0xFE &&

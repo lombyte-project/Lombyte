@@ -1142,7 +1142,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern void FUN_L00_002502a0(int);
@@ -1323,10 +1323,10 @@ void ultramech_scientist_update(struct Moby *moby) {
                 }
             }
         }
-        if (FUN_L01_0026e008(*(int *)(data + 0x144), 0x40) != 0) {
+        if (count_group_e81e0(*(int *)(data + 0x144), 0x40) != 0) {
             break;
         }
-        if (FUN_L01_0026e008(*(int *)(data + 0x148), 0x40) != 0) {
+        if (count_group_e81e0(*(int *)(data + 0x148), 0x40) != 0) {
             break;
         }
         moby->state = 4;

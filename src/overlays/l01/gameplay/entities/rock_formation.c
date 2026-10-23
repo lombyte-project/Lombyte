@@ -1846,7 +1846,7 @@ typedef struct {
     f32 x;
     f32 y;
 } PlayerPosView;
-extern s32 FUN_L01_0026e008(s32, s32);
+extern s32 count_group_e81e0(s32, s32) __asm__("FUN_L01_0026e008");
 extern ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *) __asm__("FUN_L01_00302328");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1872,7 +1872,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
         if (beehive_vars->src_id < 0) {
             break;
         }
-        if (FUN_L01_0026e008(beehive_vars->src_id, 0xC) != 0) {
+        if (count_group_e81e0(beehive_vars->src_id, 0xC) != 0) {
             break;
         }
         if (beehive_vars->count >= D_L01_00161E90) {
