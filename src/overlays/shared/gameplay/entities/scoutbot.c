@@ -84,7 +84,7 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 void FUN_L00_0025a120(char *o);
 void spawn_explosion(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate) __asm__("FUN_L00_0025e450");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-void FUN_L08_002d36e0_c(char *m) __asm__("FUN_L08_002d36e0");
+void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
 void FUN_L08_002d3878(char *m);
 void FUN_L08_002d3d78_c(char *m) __asm__("FUN_L08_002d3d78");
 void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
@@ -144,7 +144,7 @@ void scoutbot_update(Moby *moby) {
         wake_3DF8(moby);
         moby->shadow_range = 0x16;
     }
-    FUN_L08_002d36e0_c((char *)moby);
+    update_scoutbot_health_and_target((char *)moby);
     data->current_target = data->target;
     qcopy(target_pos, data->target_pos);
     switch (moby->state) {
@@ -347,7 +347,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
 
-void FUN_L08_002d36e0(char *moby) {
+void update_scoutbot_health_and_target(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int hit;
     float dmg;
