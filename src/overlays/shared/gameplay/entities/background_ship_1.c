@@ -726,14 +726,14 @@ typedef struct {
 } S_2fa6d8;
 
 extern S_2fa6d8 D_L02_00167600_2fa6d8 __asm__("D_L02_00167600");
-extern void FUN_L02_002fa710_c(void) __asm__("FUN_L02_002fa710");
+extern void apply_camera_offset_effect(void) __asm__("FUN_L02_002fa710");
 
 void FUN_L02_002fa6d8(void) {
     D_L02_00167600_2fa6d8.a = 0;
     D_L02_00167600_2fa6d8.b = 0;
     D_L02_00167600_2fa6d8.c = 10000.0f;
     D_L02_00167600_2fa6d8.d = 0;
-    D_L02_00167600_2fa6d8.e = FUN_L02_002fa710_c;
+    D_L02_00167600_2fa6d8.e = apply_camera_offset_effect;
 }
 /* Start the timed effect while its duration is nonzero. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
@@ -745,7 +745,7 @@ void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
 extern void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
-void FUN_L02_002fa710(void) {
+void apply_camera_offset_effect(void) {
     if (D_L02_0016760C != 0.0f) {
         follow_camera_set_offset_scale(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
         register_camera_update_callback(update_camera_offset_effect_state);
