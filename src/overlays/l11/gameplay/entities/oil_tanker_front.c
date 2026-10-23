@@ -1814,7 +1814,9 @@ extern void FUN_L08_00258090(void *, int, int, void *);
 
 extern short D_L11_00162540 __attribute__((sda));
 extern short D_L11_00162550 __attribute__((sda));
-void FUN_L11_0031d8d8(int pair_offset_index) {
+void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__("FUN_L11_0031d8d8");
+
+void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) {
     int *element_counts = (int *)&D_L11_00162530_d;
     int *triple_word_source_tables = (int *)&D_L11_00162540;
     int *pair_source_tables = (int *)&D_L11_00162550;
@@ -1832,7 +1834,7 @@ extern int D_L11_0016251C;
 extern int D_L11_00162528 __attribute__((sda));
 extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
-extern void FUN_L11_0031d8d8_c(int) __asm__("FUN_L11_0031d8d8");
+extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
 extern void FUN_L08_002f0c18(int);
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 extern void queue_oil_tanker_front_texture_2b_batches(int) __asm__("FUN_L11_0031e858");
@@ -1850,15 +1852,15 @@ void draw_level11_layered_effect_batches(void) {
     FUN_001f76a0_31db50();
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2C));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_001624F8 << 32 | 0x44);
-    FUN_L11_0031d8d8_c(0);
+    emit_level11_layered_effect_batches_with_pair_offset(0);
     if (D_L11_0016258C[4] != 0) {
         vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x29));
         vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_0016258C[4]) >> 8) << 32 |
                                              0x68);
-        FUN_L11_0031d8d8_c(1);
+        emit_level11_layered_effect_batches_with_pair_offset(1);
         vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_0016258C[4]) >> 8) << 32 |
                                              0x62);
-        FUN_L11_0031d8d8_c(2);
+        emit_level11_layered_effect_batches_with_pair_offset(2);
     }
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2A));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162518 << 32 | 0x48);
