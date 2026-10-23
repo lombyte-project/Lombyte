@@ -375,7 +375,7 @@ extern float D_L02_00161FD0 __attribute__((sda));
 extern float D_L02_00161FD4 __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
 extern void spawn_background_ship_2_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002ed420");
-extern void FUN_L02_002ed658_c(char *moby, void *arg) __asm__("FUN_L02_002ed658");
+extern void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *arg) __asm__("FUN_L02_002ed658");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 extern char D_001413F4[];
 
@@ -464,7 +464,7 @@ void background_ship_2_update(char *moby) {
             if (current_level_index != 10) {
                 spawn_background_ship_2_joint_sparks(moby, tv);
             } else {
-                FUN_L02_002ed658_c(moby, tv);
+                spawn_background_ship_2_level_10_joint_sparks(moby, tv);
             }
         }
         if (hit_record != 0 && 0.0f < *(float *)(hit_record + 0x2C)) {
@@ -591,7 +591,7 @@ extern short D_L02_00162024 __attribute__((sda));
 extern short D_L02_00162028 __attribute__((sda));
 extern short D_L02_0016202C __attribute__((sda));
 
-void FUN_L02_002ed658(char *moby, void *previous_position) {
+void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *previous_position) {
     float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4], emission_position[4];
     int i;
 
