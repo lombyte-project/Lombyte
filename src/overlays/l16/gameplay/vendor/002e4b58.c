@@ -13,7 +13,7 @@
 #ifndef __attribute__((section(".sdata")))
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L16_002e4be0");
-extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L16_002e4900");
+extern void initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L16_001600EC");
 void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4b58");
 
@@ -32,7 +32,7 @@ void transfer_moby_placement_to_linked_moby(void *moby_v) {
         entry = D_L16_001601AC_m_19510;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
-        func_L16_002E5D68_19510(spawn);
+        initialize_taxi_stop_state(spawn);
     }
     *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
 }
