@@ -60,7 +60,7 @@ extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
 extern void FUN_L00_00206c08(void);
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
-extern void FUN_L00_0020b930(void);
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
 extern void FUN_L00_0020e698(void);
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
@@ -132,7 +132,7 @@ int hero_set_state(int a, int b) {
         if (p->vehicle_mode == 3) {
             int s = p->state.current;
             if (!(s >= 0x53 && s <= 0x59) && !(s >= 0x65 && s <= 0x67) && s != 0 && s != 1) {
-                FUN_L00_0020b930();
+                exit_hero_vehicle_mode_if_mode_three();
             }
         }
     }

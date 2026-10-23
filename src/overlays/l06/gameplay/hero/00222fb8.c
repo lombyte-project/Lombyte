@@ -16,7 +16,7 @@
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
-extern void FUN_L00_0020b930(void);
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -77,7 +77,7 @@ void apply_hero_ground_material_response(void) {
         if (g2->selector_1 != 0) {
             if (g2->grounded_frames != 0) {
                 if (g2->state.current != 0x3C || g2->unk41E != 0) {
-                    FUN_L00_0020b930();
+                    exit_hero_vehicle_mode_if_mode_three();
                     if (g2->health.hp != 0) {
                         hero_set_state(0x3C, 1);
                     } else {
@@ -99,7 +99,7 @@ void apply_hero_ground_material_response(void) {
         return;
     if (!(g3->motion.displacement.f[2] < 0.0f))
         return;
-    FUN_L00_0020b930();
+    exit_hero_vehicle_mode_if_mode_three();
     hero_set_state(HERO_STATE_SINK, 1);
 }
 #include "qcopy.h"

@@ -3240,7 +3240,9 @@ void probe_hero_airborne_wall_contact(void) {
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 
 /* Calls FUN_L00_00210b30 when the byte at 0x20A4 of ((char *)&hero) is 3. */
-void FUN_L00_0020b930(void) {
+void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
+
+void exit_hero_vehicle_mode_if_mode_three(void) {
     if (hero.vehicle_mode == 3) {
         exit_hero_vehicle_mode();
     }
@@ -3301,7 +3303,7 @@ void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 int coll_sphere(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_20b960(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_20b960(f32) __asm__("FUN_001f99c0");
-void FUN_L00_0020b930_20b960(void) __asm__("FUN_L00_0020b930");
+void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 #define P D_0013F350_20b960
 void apply_hero_selected_flags_and_state_transitions(void) {
@@ -3369,7 +3371,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         goto call;
     }
     if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
-        FUN_L00_0020b930_20b960();
+        exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8)
             goto call3c;
         target_state = 0x7C;
@@ -3377,14 +3379,14 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     }
     if (P.b12EC && P.i2084 != 0x7F && FUN_001f99c0_20b960(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
-        FUN_L00_0020b930_20b960();
+        exit_hero_vehicle_mode_if_mode_three();
         target_state = 0x7F;
         goto call;
     }
     if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
         FUN_001f99c0_20b960(P.f2F4 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F4 - P.f88 &&
         (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
-        FUN_L00_0020b930_20b960();
+        exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8) {
             target_state = 0x68;
             goto call;
@@ -3400,7 +3402,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     }
     if (P.b12EB && P.i2084 != 0x7B && FUN_001f99c0_20b960(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F4 - P.f88 && P.f108 < 0.0f) {
-        FUN_L00_0020b930_20b960();
+        exit_hero_vehicle_mode_if_mode_three();
         hero_set_state(0x7B, 1);
     }
 }

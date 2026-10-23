@@ -329,7 +329,7 @@ extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_
 extern int func_L00_001F3958_2cd48(void) __asm__("FUN_001f0b58");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern float func_001F9B88_2cd48(float) __asm__("FUN_001f99c0");
-extern void func_L00_0020BFA8_2cd48(void) __asm__("FUN_L00_0020b930");
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 void FUN_L01_0022cd48(void) {
     struct Hero *hero_ptr = &hero;
     int saved_ground_type;
@@ -422,7 +422,7 @@ void FUN_L01_0022cd48(void) {
                     1.0f) {
                     if (sink_check_hero->water_surface_z - sink_check_hero->motion.pos.f[2] > 0.0f) {
                         if (sink_check_hero->motion.displacement.f[2] < 0.0f) {
-                            func_L00_0020BFA8_2cd48();
+                            exit_hero_vehicle_mode_if_mode_three();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
                     }

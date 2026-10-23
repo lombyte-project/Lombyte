@@ -11,7 +11,7 @@ void FUN_001f9810_239fc0(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_239fc0(f32) __asm__("FUN_001f99c0");
-void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
+void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
 
@@ -76,7 +76,7 @@ void apply_hero_ground_material_effects(void) {
         goto call;
     }
     if (hero.selector_1 && hero.grounded_frames && (hero.state.current != 0x3C || hero.unk41E != 0)) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         if (hero.health.hp)
             goto call3c;
         s = 0x7C;
@@ -84,14 +84,14 @@ void apply_hero_ground_material_effects(void) {
     }
     if (hero.selector_13 && hero.state.current != HERO_STATE_SINK && FUN_001f99c0_239fc0(hero.water_surface_z - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
         0.0f < hero.water_surface_z - hero.motion.pos.f[2] && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         s = 0x7F;
         goto call;
     }
     if (hero.selector_3 && hero.state.current != 0x68 && hero.state.current != 0x7B &&
         FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f && 0.0f < hero.unk2F4 - hero.motion.pos.f[2] &&
         (hero.state.current != 0x69 || hero.unk41E != 0) && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         if (hero.health.hp) {
             s = 0x68;
             goto call;
@@ -107,7 +107,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (hero.selector_11 && hero.state.current != 0x7B && FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
         0.0f < hero.unk2F4 - hero.motion.pos.f[2] && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         hero_set_state(0x7B, 1);
     }
 }

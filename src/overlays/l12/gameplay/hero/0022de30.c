@@ -12,7 +12,7 @@
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
-extern void FUN_L00_0020b930(void);
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -88,7 +88,7 @@ void update_hero_ground_material_flags(void) {
                 if (water_surface_distance < 1.0f) {
                     if (hero_for_sink_check->water_surface_z - hero_for_sink_check->motion.pos.f[2] > 0.0f) {
                         if (hero_for_sink_check->motion.displacement.f[2] < 0.0f) {
-                            FUN_L00_0020b930();
+                            exit_hero_vehicle_mode_if_mode_three();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
                     }

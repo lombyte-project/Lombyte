@@ -19,7 +19,7 @@
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
-extern void FUN_L00_0020b930(void);
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -102,7 +102,7 @@ void update_hero_surface_condition_flags(void) {
                 if (absolute_water_surface_z_difference < 1.0f) {
                     if (hero_ptr->water_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
                         if (hero_ptr->motion.displacement.f[2] < 0.0f) {
-                            FUN_L00_0020b930();
+                            exit_hero_vehicle_mode_if_mode_three();
                             hero_set_state(HERO_STATE_SINK, 1);
                         }
                     }
