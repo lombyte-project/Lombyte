@@ -1472,7 +1472,7 @@ extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L18_002dfba0(void *moby);
 extern int activate_drek_fight_missiles_in_group(char *moby, int idx, float *pos) __asm__("FUN_L18_002f0030");
-extern int FUN_L18_002f6878(char *moby, float arg, void *x);
+extern int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
 
 extern int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
@@ -1846,7 +1846,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         qcopy(position_and_displacement_scratch, boss_data->f340 + 4);
-        hit = FUN_L18_002f6878((char *)moby, 20.0f, position_and_displacement_scratch);
+        hit = advance_drek_boss_planar_position_toward_target((char *)moby, 20.0f, position_and_displacement_scratch);
         lvl = get_position_and_rotation_transition_progress(boss_data->f334);
         if (moby->f53 == 7) {
             if ((moby->f70 & 2) != 0) {
@@ -2438,7 +2438,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             /* Retail scales the index before it sets up the call. */
             int aim_node_byte_offset = boss_data->f3A8 * 0x80;
 
-            if (FUN_L18_002f6878((char *)moby, frame_time * 12.0f, D_L18_001600EC + aim_node_byte_offset + 0x30) !=
+            if (advance_drek_boss_planar_position_toward_target((char *)moby, frame_time * 12.0f, D_L18_001600EC + aim_node_byte_offset + 0x30) !=
                 0) {
                 moby->f20 = 0xE;
                 if (moby->f53 != 7) {
@@ -2454,7 +2454,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
         FUN_L18_002d6dc0(boss_data->f330);
-        if (FUN_L18_002f6878((char *)moby, frame_time * 12.0f, boss_data->f330->f10) != 0) {
+        if (advance_drek_boss_planar_position_toward_target((char *)moby, frame_time * 12.0f, boss_data->f330->f10) != 0) {
             int ticks;
 
             switch (boss_data->f34C) {
@@ -2962,7 +2962,7 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-int FUN_L18_002f6878(char *moby, float movement_speed_limit, void *x) {
+int advance_drek_boss_planar_position_toward_target(char *moby, float movement_speed_limit, void *x) {
     char *data = *(char **)(moby + 0x78);
     char *boss_position = data + 0x3C0;
     float planar_displacement[4];
@@ -2999,7 +2999,7 @@ extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern void FUN_L00_0025f730(void *a, float x);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
+int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 
 extern short D_L18_0016237C __attribute__((sda));
 void update_drek_boss_hero_follow_movement(struct Moby *moby) {
@@ -3026,7 +3026,7 @@ void update_drek_boss_hero_follow_movement(struct Moby *moby) {
     } else if (follow_speed_limit < lo) {
         follow_speed_limit = lo;
     }
-    FUN_L18_002f6878_c(moby, follow_speed_limit, follow_target_position);
+    advance_drek_boss_planar_position_toward_target(moby, follow_speed_limit, follow_target_position);
 }
 /* Pvars of the boss while it circles its arena node. */
 typedef struct {
@@ -3117,7 +3117,7 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
     } else {
         speed = 20.0f;
     }
-    FUN_L18_002f6878((char *)moby, speed * frame_time, &goal);
+    advance_drek_boss_planar_position_toward_target((char *)moby, speed * frame_time, &goal);
     approach_value(&boss_circle_vars->pos.f[2], ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[2], frame_time * 4.0f);
 }
 /* Finds the nearest moby in the self's list within range and returns it. */
