@@ -981,7 +981,7 @@ extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e
 extern void follow_camera_set_up_spring(float, float) __asm__("FUN_L00_002e85d8");
 extern void FUN_L00_002e8620(void);
 extern void FUN_L00_002e8648(void) __asm__("FUN_L00_002e8648");
-extern void FUN_L00_002e8918(float, float, float *) __asm__("FUN_L00_002e8918");
+extern void set_follow_camera_angle_blend_from_direction(float, float, float *) __asm__("FUN_L00_002e8918");
 extern void set_follow_camera_angle_blend_from_position(float, float, void *) __asm__("FUN_L00_002e8970");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -1162,7 +1162,7 @@ void apply_moby_camera_control(char *moby) {
                 heading_vector[0] = fast_cos(*(float *)(data + 0x40));
                 heading_vector[1] = fast_sin(*(float *)(data + 0x40));
                 heading_vector[2] = 0.0f;
-                FUN_L00_002e8918(amount, 0.0f, heading_vector);
+                set_follow_camera_angle_blend_from_direction(amount, 0.0f, heading_vector);
             } else if (*(short *)(data + 0x3c) == 3) {
                 float speed;
                 if (*(short *)(data + 0x20) < scale_game_frames(90))

@@ -131,7 +131,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_002e8918(f32 *, f32, f32);
+extern void set_follow_camera_angle_blend_from_direction(f32 *, f32, f32) __asm__("FUN_L00_002e8918");
 extern void set_follow_camera_angle_blend_from_position(void *, f32, f32) __asm__("FUN_L00_002e8970");
 extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 extern void FUN_L00_002e8620(void);
@@ -164,7 +164,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         direction_or_rotation_deltas[0] = fast_cos(rotation_or_blend_value);
         direction_or_rotation_deltas[1] = fast_sin(rotation_or_blend_value);
         direction_or_rotation_deltas[2] = 0.0f;
-        FUN_L00_002e8918(direction_or_rotation_deltas, 0.20943952f, direction_or_rotation_deltas[2]);
+        set_follow_camera_angle_blend_from_direction(direction_or_rotation_deltas, 0.20943952f, direction_or_rotation_deltas[2]);
         follow_camera_start_slide();
     }
     if (hero.state.control_mode == 0x11) {

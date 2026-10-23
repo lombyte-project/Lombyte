@@ -3492,7 +3492,7 @@ extern f32 D_L01_00161C38 __attribute__((sda));
 
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
-void FUN_L00_002e8918(void *, f32, f32);
+void set_follow_camera_angle_blend_from_direction(void *, f32, f32) __asm__("FUN_L00_002e8918");
 void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
@@ -3505,7 +3505,7 @@ void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) {
 
     camera_record = D_L01_001600EC_u + falling_rock_moby->sub->idx * 128;
     build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, D_L01_00161C28);
-    FUN_L00_002e8918(rotated_vector, 0.13962634f, 0.0f);
+    set_follow_camera_angle_blend_from_direction(rotated_vector, 0.13962634f, 0.0f);
     follow_camera_set_distance(0, D_L01_00161C2C, D_L01_00161C38);
     follow_camera_set_height(D_L01_00161C30, D_L01_00161C38);
     follow_camera_set_offset_scale(0, D_L01_00161C34, D_L01_00161C38);
