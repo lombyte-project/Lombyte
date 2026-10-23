@@ -722,7 +722,9 @@ typedef struct L18VD_1cc8 {
 
 extern void FUN_L12_0027b370_u(L18VM_1cc8 *, void *, int) __asm__("FUN_L12_0027b370");
 
-void FUN_L18_002f1cc8(L18VM_1cc8 *moby) {
+void reset_drek_boss_class_0565_moby(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1cc8");
+
+void reset_drek_boss_class_0565_moby(L18VM_1cc8 *moby) {
     L18VD_1cc8 *data = moby->data;
     if (moby->class_id == 0x565) {
         moby->state = 1;
