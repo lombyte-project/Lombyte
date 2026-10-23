@@ -18,7 +18,9 @@ extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
-s32 *FUN_L00_001ee1b0(OvlQuad *input_point, f32 rad) {
+s32 *find_camera_collision_volume_for_point(OvlQuad *input_point, f32 rad) __asm__("FUN_L00_001ee1b0");
+
+s32 *find_camera_collision_volume_for_point(OvlQuad *input_point, f32 rad) {
     V query_point;
     V volume_delta;
     V *tp;

@@ -612,7 +612,7 @@ extern OvlQuad D_0013F3D0_2ea488 __asm__("D_0013F3D0") __attribute__((section(".
 extern E_2ea488 *D_L00_0015EF50_2ea488 __asm__("D_L00_0015EF50");
 extern char *D_L00_00166E00_2ea488 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern char D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
-extern char *FUN_L00_001ee1b0_2ea488(void *, f32) __asm__("FUN_L00_001ee1b0");
+extern char *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9dc8_2ea488(f32) __asm__("FUN_001f9dc8");
 extern f32 FUN_001f9de0_2ea488(f32) __asm__("FUN_001f9de0");
@@ -652,7 +652,7 @@ int FUN_L00_002ea488(u8 *m, char *mode_check_object) {
         if (s != 0 && s != 10 && s != 14 && s != 2)
             goto off;
         *(OvlQuad *)&v = D_0013F3D0_2ea488;
-        r = FUN_L00_001ee1b0_2ea488(&v, 0.25f);
+        r = find_camera_collision_volume_for_point(&v, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
         q->i24 = 0;

@@ -1571,13 +1571,13 @@ int compute_follow_camera_radial_collision_positions(u128 *input_position, float
 fail:
     return 0;
 }
-int FUN_L00_001ee1b0(OvlQuad *, float);
+int find_camera_collision_volume_for_point(OvlQuad *, float) __asm__("FUN_L00_001ee1b0");
 /* True when FUN_L00_001ee1b0 returns non-zero for a copy of v and 0. */
 int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) __asm__("FUN_L00_002e4290");
 
 int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) {
     OvlQuad input_copy = *input_quad;
-    return FUN_L00_001ee1b0(&input_copy, 0.0f) != 0;
+    return find_camera_collision_volume_for_point(&input_copy, 0.0f) != 0;
 }
 typedef struct {
     u8 p0[0x2DC];
