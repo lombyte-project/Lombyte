@@ -2668,7 +2668,9 @@ void FUN_L14_002b5428(struct Moby *moby) {
 extern int *D_L14_001B0BB0[];
 extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int f);
 
-void FUN_L14_002b5530(struct Moby *moby) {
+void update_minibomber_target(struct Moby *moby) __asm__("FUN_L14_002b5530");
+
+void update_minibomber_target(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
         int *bound_path = D_L14_001B0BB0[*(int *)(data + 0xD4)];
