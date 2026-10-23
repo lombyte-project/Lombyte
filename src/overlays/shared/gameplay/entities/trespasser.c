@@ -770,7 +770,7 @@ extern void FUN_L00_002bec00(char *);
 extern void restore_saved_state_fields_from_hero(char *) __asm__("FUN_L00_002bec48");
 extern int FUN_L00_002beab0(char *,int,void *);
 extern void FUN_L00_00260400(void *,int,void *,void *,void *,void *);
-extern int FUN_L00_00258ad0(void *,void *,int,int,float,float);
+extern int move_moby_with_collision_integer_radius(void *,void *,int,int,float,float) __asm__("FUN_L00_00258ad0");
 extern void FUN_L00_00258278(void *,float *,float,float,float,float);
 extern struct Moby *select_class5_target_or_hero(void *,void *,void *,void *,int) __asm__("FUN_L00_002bed90");
 extern float select_moby_heading_by_collision_probes(void *,void *,float,float,float,float,float,void *,void *,float) __asm__("FUN_L00_002bf050");
@@ -896,7 +896,7 @@ void doom_bot_update(struct Moby *moby) {
         data->velocity.f[2]-=frame_time_sq*9.0f;
         save_state_fields_to_hero((char*)data);
         hp=(DoomBotParams*)&hero;
-        blocked=FUN_L00_00258ad0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
+        blocked=move_moby_with_collision_integer_radius(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
         if (blocked) { data->velocity.f[2]=0; fast_vec_scale(&data->velocity,&data->velocity,0.5f); }
         FUN_L00_001ff600(frame_scale*0.05f,&data->velocity,&data->velocity);
         if (moby->anim_flags&2) {
@@ -1107,7 +1107,7 @@ void doom_bot_update(struct Moby *moby) {
         data->velocity.f[2]-=frame_time_sq*9.0f;
         save_state_fields_to_hero((char*)data);
         hp=(DoomBotParams*)&hero;
-        blocked=FUN_L00_00258ad0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
+        blocked=move_moby_with_collision_integer_radius(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
         if (blocked) { data->velocity.f[2]=0; fast_vec_scale(&data->velocity,&data->velocity,0.5f); }
         clamp_vector_length(&data->velocity,&data->velocity,frame_scale*0.05f);
         if (!blocked) { if (moby->prev_seq!=5) blend_moby_animation(moby,5,0,scale_game_frames(5)); }

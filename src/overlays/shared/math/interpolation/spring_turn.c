@@ -355,7 +355,9 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L00_00258830(int, int, float, float, float, int);
 /* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
-void FUN_L00_00258ad0(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) {
+void move_moby_with_collision_integer_radius(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) __asm__("FUN_L00_00258ad0");
+
+void move_moby_with_collision_integer_radius(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) {
     FUN_L00_00258830(moby, movement_displacement, x, convert_integer_to_float(collision_radius_fixed) * (1.0f / 1024.0f), y, collision_flags);
 }
 #include "rnc/math/vector.h"

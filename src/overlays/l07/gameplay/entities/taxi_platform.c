@@ -290,7 +290,7 @@ void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) {
 
 extern float advance_accelerated_scalar(float *, float *, float, float, float,
                                         float) __asm__("FUN_00213f38");
-extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
+extern int move_moby_with_collision_integer_radius(int a, int b, int g, int e, float c, float d) __asm__("FUN_L00_00258ad0");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void advance_sharkigator_swim_movement(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) __asm__("FUN_L07_0030f0f8");
@@ -304,7 +304,7 @@ void advance_sharkigator_swim_movement(char *moby, char *moby_data, float accele
     qcopy(position_work, moby + 0x10);
     advance_accelerated_scalar(position_work + 2, (float *)(moby_data + 0xD8), *(float *)(moby_data + 0x138), acceleration_step, braking_step, maximum_speed);
     velocity = moby_data + 0xD0;
-    if (FUN_L00_00258ad0((int)moby, (int)velocity, 0x400, 0x10, 1.0f, 0.0f)) {
+    if (move_moby_with_collision_integer_radius((int)moby, (int)velocity, 0x400, 0x10, 1.0f, 0.0f)) {
         fast_vec_scale(velocity, velocity, 0.5f);
     }
 }
@@ -3119,7 +3119,7 @@ void sharkigator_update(unsigned char *moby) {
         }
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
-        if (FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
+        if (move_moby_with_collision_integer_radius((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
             fast_vec_scale_c(data + 0xD0, data + 0xD0, 0.5f);
         }
         if (next_state != 0xFF) {
@@ -3161,7 +3161,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 7;
         }
         F(data, 0xD8) -= frame_time * 9.8f;
-        if (FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
+        if (move_moby_with_collision_integer_radius((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
             fast_vec_scale_c(data + 0xD0, data + 0xD0, 0.5f);
         }
         if (next_state != 0xFF) {
@@ -3187,7 +3187,7 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 10;
         }
         F(data, 0xD8) -= frame_time * 9.8f;
-        if (FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
+        if (move_moby_with_collision_integer_radius((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
             fast_vec_scale_c(data + 0xD0, data + 0xD0, 0.5f);
         }
         data[0x58] = func_001FA898_r(8.0f);
@@ -3240,7 +3240,7 @@ void sharkigator_update(unsigned char *moby) {
     case SHARKIGATOR_DAMPED_GRAVITY_RECOVERY:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
-        FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
+        move_moby_with_collision_integer_radius((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
         if (moby[0x70] & 2) {
             ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)((char *)moby, data);
         }
@@ -3248,7 +3248,7 @@ void sharkigator_update(unsigned char *moby) {
     case SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE:
         fast_vec_scale_c(data + 0xD0, data + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
         F(data, 0xD8) -= frame_time * 9.8f;
-        FUN_L00_00258ad0((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
+        move_moby_with_collision_integer_radius((int)moby, (int)(data + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);

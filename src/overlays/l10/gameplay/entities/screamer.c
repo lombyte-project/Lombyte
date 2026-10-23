@@ -89,7 +89,7 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
 int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void FUN_L00_00258278_c(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
-void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);
+void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
 void FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
 void FUN_L00_0025bc00(float *p, void *o, float a, float lim);
 void FUN_L00_0025f3e8_c(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");

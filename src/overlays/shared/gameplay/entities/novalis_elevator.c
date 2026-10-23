@@ -1028,7 +1028,7 @@ struct DriftEmitter {
     f32 spread;         /* 0x30 */
 };
 extern struct DriftEmitter D_L01_001DEB38;
-extern s32 FUN_L00_00258ad0(void *, void *, s32, s32, f32, f32);
+extern s32 move_moby_with_collision_integer_radius(void *, void *, s32, s32, f32, f32) __asm__("FUN_L00_00258ad0");
 
 /* shrinks and sinks the moby, then hands it to the drift emitter */
 s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) __asm__("FUN_L01_002e3208");
@@ -1040,7 +1040,7 @@ s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) {
     shrink = frame_scale * -0.050000012f + 1.0f;
     movement_state->pos.x *= shrink;
     movement_state->pos.y *= shrink;
-    return FUN_L00_00258ad0(ctx, &movement_state->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
+    return move_moby_with_collision_integer_radius(ctx, &movement_state->pos, D_L01_001DEB38.count, 0, 0.3f, D_L01_001DEB38.spread);
 }
 /* Picks the best lock-on target for moby from the visible-moby list: a living, drawn class-5 enemy within range whose direction from `from`
  * is inside the yaw/pitch cone (or the wider near cone when close), scored by angle error and distance,
@@ -1261,7 +1261,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     add_vector_xyz(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), &velocity_adjustment);
     if (moby->state == 6)
         clamp_vector_length(((f32 *)(movement_state + 0x10)), ((f32 *)(movement_state + 0x10)), frame_time * 2.7f);
-    hit = FUN_L00_00258ad0(moby, ((f32 *)(movement_state + 0x10)), D_L01_001DEB38.count, 0,
+    hit = move_moby_with_collision_integer_radius(moby, ((f32 *)(movement_state + 0x10)), D_L01_001DEB38.count, 0,
                             1.0f, D_L01_001DEB38.spread);
     movement_magnitude = fast_vec_length(((f32 *)(movement_state + 0x10)));
     if (hit != 0) {

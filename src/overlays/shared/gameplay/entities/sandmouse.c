@@ -606,7 +606,7 @@ extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
-extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
+extern s32 move_moby_with_collision_integer_radius(struct Moby *, Vec4 *, f32, f32, s32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_vars) __asm__("FUN_L01_0030d880");
@@ -665,7 +665,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
         hover_tuning = &D_L01_001DEB38;
-        hit = FUN_L00_00258ad0(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
+        hit = move_moby_with_collision_integer_radius(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
         velocity_magnitude = fast_vec_length(&hover_vars->vel);
         if (hit == 0) {
             hover_vars->stuck = 0;

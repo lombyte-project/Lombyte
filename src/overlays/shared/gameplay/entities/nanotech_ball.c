@@ -2328,7 +2328,7 @@ float absolute_float_c(float input) __asm__("func_001F99C0");
 int invoke_optional_moby_callback_or_return_one(char *a) __asm__("FUN_L00_002da218");
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);
+void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
 void spawn_effect_particle_with_transformed_random_offset(void *pos, void *mat) __asm__("FUN_L00_0026c3d0");
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
