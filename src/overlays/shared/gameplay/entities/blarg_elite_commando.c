@@ -208,7 +208,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
-float FUN_L16_002d3eb8(char *moby, float *target);
+float advance_blarg_elite_commando_base_position(char *moby, float *target) __asm__("FUN_L16_002d3eb8");
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
 void update_blarg_elite_commando_joint_aim(char *commando_moby) __asm__("FUN_L16_002d4590");
 
@@ -761,7 +761,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-float FUN_L16_002d3eb8(char *moby, float *target) {
+float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
     char *base_position = data + 0x2C0;
     float distance = fast_vec_dist(base_position);
