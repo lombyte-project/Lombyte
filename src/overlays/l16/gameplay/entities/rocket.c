@@ -35,7 +35,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-unsigned char *FUN_L16_002c6268(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
+unsigned char *spawn_thrown_bomb(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) __asm__("FUN_L16_002c6268");
+
+unsigned char *spawn_thrown_bomb(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x119);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -1252,7 +1254,7 @@ extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f);
+unsigned char *spawn_thrown_bomb(int a, void *pos, float *dir, int c, float f) __asm__("FUN_L16_002c6268");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
