@@ -3322,7 +3322,9 @@ typedef struct {
 typedef void (*CB09)(M09 *);
 void FUN_L00_002df3d8_u(M09 *) __asm__("FUN_L00_002df3d8");
 void FUN_001f4600(CB09, M09 *);
-void FUN_L00_002df4a8(M09 *moby) {
+void enqueue_red_orb_group_draw_if_cache_changed(M09 *moby) __asm__("FUN_L00_002df4a8");
+
+void enqueue_red_orb_group_draw_if_cache_changed(M09 *moby) {
     u8 moby_selection_key;
     s32 current_cache_value;
     S09 *s;
