@@ -504,7 +504,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L13_002e8b58(struct Moby *moby);
+void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 #include "rnc/gameplay/state/game_globals.h"
 extern char D_0013F350[];

@@ -2717,7 +2717,9 @@ extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L13_002e8b58(struct Moby *moby) {
+void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
+
+void emit_randomized_moby_joint_effects(struct Moby *moby) {
     OvlQuad zv;
     float effect_position[4];
     int i;
