@@ -1986,7 +1986,9 @@ void draw_linked_pair_ribbons(char *moby, char *partner) __asm__("FUN_L16_002cf8
 
 void draw_linked_pair_ribbons(char *moby, char *partner) __asm__("FUN_L16_002cf850");
 
-void FUN_L16_002cf7a8(struct Moby *moby) {
+void draw_linked_pair_group_ribbons(struct Moby *moby) __asm__("FUN_L16_002cf7a8");
+
+void draw_linked_pair_group_ribbons(struct Moby *moby) {
     short *group_entry = (short *)D_L16_001ABCC0_c3[moby->group];
     if (group_entry) {
         do {
