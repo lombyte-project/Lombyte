@@ -290,7 +290,7 @@ typedef struct {
 extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
-void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
+void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 extern void FUN_L00_00250df8();
 
 BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 color) __asm__("FUN_L01_002fa068");
@@ -322,8 +322,8 @@ BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 
         qcopy(&spawned_moby->pos, pp);
         qcopy(&beam_vars->target, tp);
         beam_vars->color = color;
-        FUN_L00_0026daa0(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
-        FUN_L00_0026daa0(spawned_moby, 0x4F004F7F, beam_vars->color, -1, 115500.0f);
+        spawn_source_attached_fading_effect_particle(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
+        spawn_source_attached_fading_effect_particle(spawned_moby, 0x4F004F7F, beam_vars->color, -1, 115500.0f);
         FUN_L00_00250df8(spawned_moby);
     }
     return spawned_moby;

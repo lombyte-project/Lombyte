@@ -23,7 +23,7 @@ enum AsteroidSpinAxis {
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
-extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
 
@@ -61,7 +61,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *t
         }
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
         FUN_L00_00250df8(moby);
-        FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
+        spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }
     return moby;
 }

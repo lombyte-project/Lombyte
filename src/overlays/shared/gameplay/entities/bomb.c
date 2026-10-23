@@ -1090,7 +1090,7 @@ s32 FUN_L00_002caf40(s32 moby_address) {
 
 typedef int w128 __attribute__((mode(TI)));
 
-extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern char *func_0020D348_m(int);
 extern char D_L00_00173E60_c[] __asm__("D_L00_00173E60");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
@@ -1224,7 +1224,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
             *(float *)(moby + 0x44) = -fast_arc_tan_c2(length, direction[2]);
             return moby;
         } else {
-            FUN_L00_0026daa0(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
+            spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
             for (i = 0; i < 17; i++) {
                 trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (trail != 0) {

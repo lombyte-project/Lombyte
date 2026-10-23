@@ -29,7 +29,7 @@ extern f32 vector_length_xy_307ba8(OvlVec4 *) __asm__("FUN_001f9b20");
 extern f32 atan2_307ba8(f32, f32) __asm__("FUN_001f9e90");
 extern f32 random_float_between_307ba8(f32, f32) __asm__("FUN_002132a8");
 extern f32 distance_307ba8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b48");
-extern u8 *FUN_L00_0026daa0_307ba8(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
+extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
 extern void FUN_L00_00250df8_307ba8(struct Moby *) __asm__("FUN_L00_00250df8");
 
 struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) __asm__("FUN_L09_00307ba8");
@@ -70,8 +70,8 @@ struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel,
         trail = life * 5 / 4;
         spawned_moby->flags |= 0x200;
         spawned_moby->alpha = 0x40;
-        FUN_L00_0026daa0_307ba8(400000.0f, spawned_moby, 0x2F7F4F4F, trail, -1);
-        FUN_L00_0026daa0_307ba8(160000.0f, spawned_moby, 0x4F7F7F7F, trail, -1);
+        spawn_source_attached_fading_effect_particle(400000.0f, spawned_moby, 0x2F7F4F4F, trail, -1);
+        spawn_source_attached_fading_effect_particle(160000.0f, spawned_moby, 0x4F7F7F7F, trail, -1);
         FUN_L00_00250df8_307ba8(spawned_moby);
     }
     return spawned_moby;

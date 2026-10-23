@@ -1975,7 +1975,9 @@ void FUN_001f9a28_0026daa0(V_0026daa0 *, void *, V_0026daa0 *) __asm__("FUN_001f
 void FUN_001f9bf8_0026daa0(V_0026daa0 *, V_0026daa0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026daa0(void *, V_0026daa0 *, V_0026daa0 *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20E8 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026daa0(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
+unsigned char *spawn_source_attached_fading_effect_particle(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) __asm__("FUN_L00_0026daa0");
+
+unsigned char *spawn_source_attached_fading_effect_particle(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026daa0(0x1A);
     if (particle) {
         E_0026daa0 *particle_data = (E_0026daa0 *)(particle + 0x20);

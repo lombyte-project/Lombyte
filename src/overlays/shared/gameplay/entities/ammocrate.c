@@ -296,7 +296,7 @@ frame_tail:
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -342,7 +342,7 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
             (*(float *)(firing_moby + 0x2C) / *(float *)(*(char **)(firing_moby + 0x24) + 0x24));
         FUN_L00_00250df8(moby);
-        FUN_L00_0026daa0((char *)moby, 0x60808080, lifetime_frames, 0, 500000.0f);
+        spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, lifetime_frames, 0, 500000.0f);
     }
     return moby;
 }

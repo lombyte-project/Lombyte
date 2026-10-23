@@ -1644,7 +1644,7 @@ typedef struct {
     unsigned char unk70;
 } MobyAnim_309378;
 
-extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,

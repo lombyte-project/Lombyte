@@ -2316,7 +2316,7 @@ extern unsigned char *FUN_0020c4f8_dd(int) __asm__("FUN_0020c4f8");
 extern void glow_n(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_dd(float, float) __asm__("FUN_002132a8");
-extern void FUN_L00_0026daa0_dd(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
+extern void spawn_source_attached_fading_effect_particle(unsigned char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
 unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, int path_address, float x, float y, float z) {
     unsigned char *effect_moby = FUN_0020c4f8_dd(0x442);
@@ -2339,7 +2339,7 @@ unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, 
         effect_data[4] = source_moby;
         effect_data[5] = FUN_001fa6d0_dd(lifetime_frames);
         ((float *)effect_data)[6] = FUN_002132a8_dd(0.999f, 0.97f);
-        FUN_L00_0026daa0_dd(effect_moby, 0x1F4F7F7F, FUN_001fa6d0_dd(10.0f / (D_0015ED6C_dd * 5.0f)), -1, 126000.008f);
+        spawn_source_attached_fading_effect_particle(effect_moby, 0x1F4F7F7F, FUN_001fa6d0_dd(10.0f / (D_0015ED6C_dd * 5.0f)), -1, 126000.008f);
     }
     return effect_moby;
 }

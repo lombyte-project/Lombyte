@@ -1346,7 +1346,7 @@ extern GbHit D_L06_001745C0;
 extern Moby *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
 extern GbStats D_L06_0017EC58;
-extern char *FUN_L00_0026daa0(float, char *, int, int, int);
+extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern char D_L06_00167540[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
@@ -1983,7 +1983,7 @@ void gadgebot_update(GbMoby *moby) {
         moby->pos[1] = vector_and_hit_scratch[1] + gadgebot_vars->unk304->pos[1];
         if (rr < 1.0f) {
             moby->scale = moby->cls->unk24 * rr;
-            FUN_L00_0026daa0((1.0f - rr) * 0.5f * 210000.0f, (char *)moby, 0x3000407F,
+            spawn_source_attached_fading_effect_particle((1.0f - rr) * 0.5f * 210000.0f, (char *)moby, 0x3000407F,
                              scale_game_frames(2), 3);
         }
         if (moby->unk31 != 0) {

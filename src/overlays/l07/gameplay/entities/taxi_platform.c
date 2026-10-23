@@ -208,7 +208,7 @@ void update_fading_ring_effect(unsigned char *moby) {
 /* Spawn the class 0x419 effect moby at a position with a data block, and start its particle. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F750), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
+extern char *spawn_source_attached_fading_effect_particle(char *src, int col, int w, int v, float x) __asm__("FUN_L00_0026daa0");
 
 char *spawn_moby_class_1049(char *spawn_position, char *initial_velocity, int spawning_moby) __asm__("FUN_L07_0030e370");
 
@@ -228,7 +228,7 @@ char *spawn_moby_class_1049(char *spawn_position, char *initial_velocity, int sp
         spawned_moby[0x23] = 0x30;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
         FUN_L00_00250df8(spawned_moby);
-        FUN_L00_0026daa0(spawned_moby, 0x800040FF, 0x80, -1, 500000.0f);
+        spawn_source_attached_fading_effect_particle(spawned_moby, 0x800040FF, 0x80, -1, 500000.0f);
     }
     return spawned_moby;
 }

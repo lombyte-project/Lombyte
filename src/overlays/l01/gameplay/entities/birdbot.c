@@ -2853,7 +2853,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
+extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
@@ -2888,8 +2888,8 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         qcopy(&beam_vars->color, pc);
         beam_vars->kind = kind;
         beam_vars->len = fast_vec_length(pd);
-        FUN_L00_0026daa0(created_moby, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
-        FUN_L00_0026daa0(created_moby, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
+        spawn_source_attached_fading_effect_particle(created_moby, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
+        spawn_source_attached_fading_effect_particle(created_moby, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
         allocate_voice_for_target_entry(0, 0, created_moby);
         FUN_L00_00250df8(created_moby);
     }
