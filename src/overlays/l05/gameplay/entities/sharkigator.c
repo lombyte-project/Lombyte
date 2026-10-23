@@ -63,7 +63,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 
-void FUN_L05_002daf58(unsigned char *moby) {
+void handle_amoeboid_hits(unsigned char *moby) __asm__("FUN_L05_002daf58");
+
+void handle_amoeboid_hits(unsigned char *moby) {
     char *hit_record = find_moby_hit(moby, 0x330000, 0);
     if (hit_record != 0) {
         char *base_spark_vector = D_0013E533 + 0xF1D;
@@ -906,7 +908,7 @@ extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L05_002daf58_c(unsigned char *m) __asm__("FUN_L05_002daf58");
+extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
 extern void FUN_L05_002db018_c(unsigned char *moby) __asm__("FUN_L05_002db018");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -922,7 +924,7 @@ void amoeboid_update(struct Moby *moby) {
     };
     char *moby_data = (char *)moby->pvars;
     float facing_direction[4];
-    FUN_L05_002daf58_c(moby);
+    handle_amoeboid_hits(moby);
     switch (moby->state) {
     case AMOEBOID_INITIALIZE:
         moby->state = 1;
