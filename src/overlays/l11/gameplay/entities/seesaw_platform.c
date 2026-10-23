@@ -989,7 +989,7 @@ void seesaw_platform_update(struct Moby *platform) {
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern char D_0013D3E3_t[] __asm__("D_0013D3E3");
-extern int FUN_L11_0030f270(char *);
+extern int test_linked_moby_turn_trigger(char *) __asm__("FUN_L11_0030f270");
 extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
 extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
@@ -1013,7 +1013,7 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
         private_data[2] = turning_moby->rot.z;
         break;
     case LINKED_TURN_STATE_WAIT_FOR_LINK:
-        if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
+        if (test_linked_moby_turn_trigger(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
             if (level_frame >= 11) {
                 D_0013D3E3_t[0] = entry_state;
                 turning_moby->state = 2;

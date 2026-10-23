@@ -160,7 +160,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00259a88(struct Moby *moby, void *hit);
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L11_0030f270(void *);
+extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern int FUN_L00_0020d568(void);
 
 void electric_water_update(struct Moby *moby) __asm__("FUN_L15_002d6810");
@@ -439,7 +439,7 @@ void electric_water_update(struct Moby *moby) {
                 moby->state = 3;
                 FUN_L00_0028dc90(2, 0, &moby_array[vars->switches[sw]], 0x28F);
                 vars->armed = 0;
-            } else if (vars->switches[sw] != -1 && FUN_L11_0030f270(&moby_array[vars->switches[sw]]) != 0) {
+            } else if (vars->switches[sw] != -1 && test_linked_moby_turn_trigger(&moby_array[vars->switches[sw]]) != 0) {
                 vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
                 moby->state = 3;
                 FUN_L00_0028dc90(2, 0, &moby_array[vars->switches[sw]], 0x28F);
