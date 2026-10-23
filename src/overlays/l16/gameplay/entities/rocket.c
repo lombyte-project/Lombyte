@@ -2215,7 +2215,9 @@ f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __a
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 
-void FUN_L16_002d0058(L16LeapMoby_u *leap_moby) {
+void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) __asm__("FUN_L16_002d0058");
+
+void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) {
     float root0, root1;
     float pitch;
     L16LeapData_u *leap_data = leap_moby->data;
