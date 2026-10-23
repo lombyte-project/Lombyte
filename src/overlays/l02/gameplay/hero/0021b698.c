@@ -731,7 +731,7 @@ extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
-extern int FUN_L01_00226f10(int);
+extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_cf(int, int, int) __asm__("FUN_0022da68");
@@ -900,7 +900,7 @@ void update_hero_state_motion(void) {
 
                     anim = 0xD;
                     if (hero.state.current == 0x17) {
-                        anim = FUN_L01_00226f10(0);
+                        anim = get_hero_idle_animation_index(0);
                     }
                     if (((Moby *)hero.moby)->f53 != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(7));
@@ -1029,7 +1029,7 @@ void update_hero_state_motion(void) {
         if (anim != -1 && ((Moby *)hero.moby)->f52 != 0x36) {
             set_hero_animation(anim, 0, frames);
         } else if ((((Moby *)hero.moby)->f70 & 2) && ((Moby *)hero.moby)->f52 == 0x36) {
-            set_hero_animation(FUN_L01_00226f10(0), 0, scale_game_frames(5));
+            set_hero_animation(get_hero_idle_animation_index(0), 0, scale_game_frames(5));
         }
     } break;
     case 0x24:

@@ -22,7 +22,9 @@
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern unsigned char D_0013E533[];
 
-int FUN_L01_00226f10(int item_lookup_enabled) {
+int get_hero_idle_animation_index(int item_lookup_enabled) __asm__("FUN_L01_00226f10");
+
+int get_hero_idle_animation_index(int item_lookup_enabled) {
     char *hero_state_base = (char *)D_0013E533 + 0xE1D;
     char *item_record;
     int item_id;

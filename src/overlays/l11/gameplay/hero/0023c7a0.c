@@ -251,7 +251,7 @@ extern s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
 extern f32 FUN_001f99c0(f32);
 extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
-extern s32 FUN_L01_00226f10(s32);
+extern s32 get_hero_idle_animation_index(s32) __asm__("FUN_L01_00226f10");
 extern void adjust_hero_animation_speed_for_target_frame(f32, f32, f32, f32) __asm__("FUN_L00_00208f20");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -489,7 +489,7 @@ void update_hero_motion_by_state(void) {
                 } else if (hero.motion.unk184 == 0.0f) {
                     s32 anim = 0xD;
                     if (hero.state.current == 0x17) {
-                        anim = FUN_L01_00226f10(0);
+                        anim = get_hero_idle_animation_index(0);
                     }
                     if (MV(hero.moby)->b53 != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(7));
@@ -986,7 +986,7 @@ void update_hero_motion_by_state(void) {
         if (anim != -1 && MV(hero.moby)->b52 != 0x36) {
             set_hero_animation(anim, 0, frames);
         } else if ((MV(hero.moby)->b70 & 2) && MV(hero.moby)->b52 == 0x36) {
-            s32 an = FUN_L01_00226f10(0);
+            s32 an = get_hero_idle_animation_index(0);
             set_hero_animation(an, 0, scale_game_frames(5));
         }
         break;

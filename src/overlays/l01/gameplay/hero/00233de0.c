@@ -435,7 +435,7 @@ extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001ef
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00257b90_cf(int) __asm__("FUN_00213260");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
-extern int FUN_L01_00226f10(int);
+extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int random_float_between_cf(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int scale_game_frames(int);
@@ -610,7 +610,7 @@ void update_hero_motion_for_current_state(void) {
 
                     anim = 0xD;
                     if (hero.state.current == 0x17) {
-                        anim = FUN_L01_00226f10(0);
+                        anim = get_hero_idle_animation_index(0);
                     }
                     if (((Moby *)hero.moby)->f53 != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(7));
@@ -1158,7 +1158,7 @@ void update_hero_motion_for_current_state(void) {
         if (anim != -1 && ((Moby *)hero.moby)->f52 != 0x36) {
             set_hero_animation(anim, 0, frames);
         } else if ((((Moby *)hero.moby)->f70 & 2) && ((Moby *)hero.moby)->f52 == 0x36) {
-            set_hero_animation(FUN_L01_00226f10(0), 0, scale_game_frames(5));
+            set_hero_animation(get_hero_idle_animation_index(0), 0, scale_game_frames(5));
         }
     } break;
     case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
