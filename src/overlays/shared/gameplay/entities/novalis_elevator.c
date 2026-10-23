@@ -1759,7 +1759,7 @@ void update_moby_motion_collision_and_burst(char *moby) {
 }
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L01_002eec68_u(char *) __asm__("FUN_L01_002eec68");
+extern void process_amoeboid_hits_and_update_targeting(char *) __asm__("FUN_L01_002eec68");
 void spawn_amoeboid_movement_particles(unsigned char *moby) __asm__("FUN_L01_002ef560");
 
 extern void spawn_amoeboid_movement_particles(unsigned char *) __asm__("FUN_L01_002ef560");
@@ -1845,7 +1845,7 @@ void large_amoeboid_update(unsigned char *moby) {
         FUN_L00_0025a120(moby);
         moby[0x7f] = 0x16;
     }
-    FUN_L01_002eec68_u((char *)moby);
+    process_amoeboid_hits_and_update_targeting((char *)moby);
     target = *(char **)(data + 0x200);
     switch (moby[0x20]) {
     case LARGE_AMOEBOID_INITIALIZE:
@@ -2212,7 +2212,7 @@ extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sd
 extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sda));
 extern const float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
-void FUN_L01_002eec68(char *moby) {
+void process_amoeboid_hits_and_update_targeting(char *moby) {
     V_2F0040 scratch_vector;
     V_2F0040 line_test_endpoint;
     int flag;
