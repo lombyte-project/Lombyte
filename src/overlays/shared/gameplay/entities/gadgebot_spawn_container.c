@@ -2710,7 +2710,9 @@ extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm_
 extern void FUN_0022da68(int, int, void *);
 
 /* Looks for a target (query 0x330001); if its owner is a different hostile, sets up the aim/attack data and enters state 9. */
-void FUN_L06_002f3640(unsigned char *moby) {
+void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f3640");
+
+void handle_gadgebot_hit_knockback(unsigned char *moby) {
     char *state = *(char **)(moby + 0x78);
     if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
