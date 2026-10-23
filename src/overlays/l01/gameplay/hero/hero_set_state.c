@@ -1611,7 +1611,7 @@ extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
-extern int FUN_L00_0020fe30(void);
+extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
@@ -1703,7 +1703,7 @@ int handle_hero_gadget_button(void) {
         }
         break;
     case 0x1f:
-        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0 &&
+        if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0 &&
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
             hero.unk22DE == 0) {

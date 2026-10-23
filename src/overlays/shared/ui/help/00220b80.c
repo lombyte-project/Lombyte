@@ -369,7 +369,7 @@ extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
 extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
-extern s32 FUN_L00_0020fe30(void);
+extern s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
 extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
@@ -529,7 +529,7 @@ s32 process_hero_item_action_input(void)
         break;
 
     case HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE:
-        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0) {
+        if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0) {
             if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
                 hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
                 allocate_hero_voice_for_entry(0x18, 0);

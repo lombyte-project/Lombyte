@@ -1797,8 +1797,8 @@ void set_hero_item_switch_timer_for_item(int id) {
 }
 s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 /* True when 00233f38, D_L00_0015F5C4 and hero.vehicle_mode are 0, control_mode <3 or 4, and base_condition is 0. */
-s32 FUN_L00_0020fe30(void);
-s32 FUN_L00_0020fe30(void) {
+s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
+s32 can_select_hero_item_31(void) {
     struct Hero *hero_state;
     u32 control_mode;
     if (get_hero_target_pose_status())
@@ -1836,7 +1836,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
-s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
+s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -2035,7 +2035,7 @@ void hero_switch_item(int i) {
         sb = g->pending_item;
         s = sb + i;
         if (*s == 0x1F) {
-            if (FUN_L00_0020fe30_c()) {
+            if (can_select_hero_item_31()) {
                 int v;
                 if (g->unk22DE == 0) {
                     allocate_hero_voice_for_entry(0x18, 0);

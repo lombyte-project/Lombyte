@@ -90,7 +90,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
-s32 FUN_L00_0020fe30(void);
+s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -298,7 +298,7 @@ void apply_hero_item_slot_selection(int i) {
         sb = g->pending_item;
         s = sb + i;
         if (*s == 0x1F) {
-            if (FUN_L00_0020fe30()) {
+            if (can_select_hero_item_31()) {
                 int v;
                 if (*(short *)((char *)g + 0x22DE) == 0) {
                     allocate_hero_voice_for_entry(0x18, 0);
