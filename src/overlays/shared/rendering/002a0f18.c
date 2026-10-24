@@ -25,7 +25,7 @@ extern int D_L00_001611C0_002a0fc8 __asm__("D_L00_001611C0");
 void FUN_00122330_002a0fc8(int, short, int, int, int, int, int, int) __asm__("FUN_00122330");
 void append_draw_buffer_upload_packets(int dst, int draw_buffer_byte_address, int size) __asm__("FUN_L00_002a0fc8");
 
-void append_draw_buffer_upload_packets(int dst, int draw_buffer_byte_address, int size) {
+void append_draw_buffer_upload_packets(int upload_source_byte_address, int draw_buffer_byte_address, int size) {
     int left = (size + 0x3FFF) & ~0x3FFF;
     int transfer_byte_offset = 0;
     while (left > 0) {
@@ -38,7 +38,7 @@ void append_draw_buffer_upload_packets(int dst, int draw_buffer_byte_address, in
         FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (draw_buffer_byte_address + transfer_byte_offset) >> 8, 1, 0, 0, 0, 0x40, 0x40);
         D_L00_001611C0_002a0fc8 += 0x60;
         *(int *)D_L00_001611C0_002a0fc8 = 0x30000400;
-        *(int *)(D_L00_001611C0_002a0fc8 + 4) = dst + transfer_byte_offset;
+        *(int *)(D_L00_001611C0_002a0fc8 + 4) = upload_source_byte_address + transfer_byte_offset;
         *(int *)(D_L00_001611C0_002a0fc8 + 8) = 0;
         *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000400;
         D_L00_001611C0_002a0fc8 += 0x10;
