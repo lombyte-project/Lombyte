@@ -38,7 +38,7 @@ extern HeroTableEntry70 D_L12_00179D10[];
 extern S17AB80 D_L12_0017AB00;
 extern S17C2B8 D_L12_0017C238;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L12_0015F638;
+extern float fatal_fall_entry_z __asm__("D_L12_0015F638");
 extern float D_L12_00167258 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -128,8 +128,8 @@ void update_hero_state_transitions(void) {
     int prevSub;
     int prevState;
     int prevAnim;
-    float v0[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float ledge_probe_position[4] __attribute__((aligned(16)));
+    float sideways_ledge_probe_position[4] __attribute__((aligned(16)));
     int record_index;
     float probe_heading_0;
     float probe_heading_1;
@@ -199,7 +199,7 @@ void update_hero_state_transitions(void) {
                     }
                 }
             }
-            if (D_L12_0015F638 > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
+            if (fatal_fall_entry_z > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
                 hero.vehicle_mode != 2 && hero.state.current != 0x77) {
                 hero_set_state(0x77, 1);
             } else {
@@ -1193,9 +1193,9 @@ void update_hero_state_transitions(void) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
                     stick_target(0, 1.0f);
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(ledge_probe_position, hero.motion.pos.f);
                     probe_heading_0 = hero.motion.rot.f[2];
-                    if (test_hero_ledge_ahead(v0, &probe_heading_0) == 0) {
+                    if (test_hero_ledge_ahead(ledge_probe_position, &probe_heading_0) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.ledge_probe_cooldown = scale_game_frames(0xA);
                         break;
@@ -1217,11 +1217,11 @@ void update_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(sideways_ledge_probe_position, hero.motion.pos.f);
+                        sideways_ledge_probe_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        sideways_ledge_probe_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         probe_heading_1 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_1)) {
+                        if (test_hero_ledge_ahead(sideways_ledge_probe_position, &probe_heading_1)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1230,13 +1230,13 @@ void update_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(sideways_ledge_probe_position, hero.motion.pos.f);
+                        sideways_ledge_probe_position[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        sideways_ledge_probe_position[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         probe_heading_2 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_2)) {
+                        if (test_hero_ledge_ahead(sideways_ledge_probe_position, &probe_heading_2)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1245,20 +1245,20 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float sideways_yaw_offset;
 
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(ledge_probe_position, hero.motion.pos.f);
                     sideways_yaw_offset = 1.5707964f;
                     if (hero.state.current == 0x1B) {
                         sideways_yaw_offset = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], sideways_yaw_offset)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], sideways_yaw_offset)) * 0.3f;
+                    ledge_probe_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], sideways_yaw_offset)) * 0.3f;
+                    ledge_probe_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], sideways_yaw_offset)) * 0.3f;
                     probe_heading_3 = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.stick_magnitude < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], sideways_yaw_offset)) ||
-                        test_hero_ledge_ahead(v0, &probe_heading_3) == 0) {
+                        test_hero_ledge_ahead(ledge_probe_position, &probe_heading_3) == 0) {
                         if (hero.anim_flags & 2) {
                             hero_set_state(0x19, 1);
                             break;
