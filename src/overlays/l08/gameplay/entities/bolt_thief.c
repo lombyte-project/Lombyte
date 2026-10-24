@@ -1081,13 +1081,13 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
-extern int D_L08_00161C00 __attribute__((sda));
+extern int falling_debris_burst_particle_count __asm__("D_L08_00161C00") __attribute__((sda));
 extern int D_L08_00161C04 __attribute__((sda));
 extern int D_L08_00161C08 __attribute__((sda));
 extern float D_L08_00161C0C __attribute__((sda));
 extern float D_L08_00161C10 __attribute__((sda));
-extern float D_L08_00161C14 __attribute__((sda));
-extern float D_L08_00161C18 __attribute__((sda));
+extern float falling_debris_burst_primary_planar_scale __asm__("D_L08_00161C14") __attribute__((sda));
+extern float falling_debris_burst_secondary_planar_scale __asm__("D_L08_00161C18") __attribute__((sda));
 extern int D_L08_00161C1C __attribute__((sda));
 extern int D_L08_00161C20 __attribute__((sda));
 extern int D_L08_00161C24 __attribute__((sda));
@@ -1155,7 +1155,7 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (debris_moby->pos[2] < 15.2f) {
-            for (i = 0; i < D_L08_00161C00; i++) {
+            for (i = 0; i < falling_debris_burst_particle_count; i++) {
                 float particle_planar_angle = random_angle_radians_c();
                 int burst_frame_count;
                 int c2;
@@ -1164,11 +1164,11 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
                 particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
-                particle_primary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C14;
-                particle_primary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C14;
+                particle_primary_vector[0] += fast_cos(particle_planar_angle) * falling_debris_burst_primary_planar_scale;
+                particle_primary_vector[1] += fast_sin(particle_planar_angle) * falling_debris_burst_primary_planar_scale;
                 particle_secondary_vector[2] = D_L08_00161C10 * D_0015ED6C_gp;
-                particle_secondary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C18;
-                particle_secondary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C18;
+                particle_secondary_vector[0] += fast_cos(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
+                particle_secondary_vector[1] += fast_sin(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
                 particle_primary_vector[3] = D_L08_00161C28;
                 particle_secondary_vector[3] = D_L08_00161C2C;
                 burst_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
