@@ -1125,7 +1125,9 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
 
-void FUN_L11_00318e98(struct Moby *moby, void *src) {
+void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FUN_L11_00318e98");
+
+void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) {
     char *moby_vars;
     moby->state = 2;
     moby_vars = (char *)moby->pvars;

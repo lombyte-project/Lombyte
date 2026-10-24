@@ -1498,7 +1498,7 @@ extern int in_window_0180(struct Moby *, float) __asm__("FUN_00214cc8");
 extern void normalize_0180(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_0180(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void *spawn_class_511_moby_with_sparks(struct Moby *, void *, int) __asm__("FUN_L11_00318d10");
-extern void FUN_L11_00318e98_p(void *, void *) __asm__("FUN_L11_00318e98");
+extern void set_moby_state_two_data_and_timer(void *, void *) __asm__("FUN_L11_00318e98");
 extern int FUN_L00_0025c698_p(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00259740_p(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void FUN_L00_00257470_p(struct Moby *, int, int) __asm__("FUN_L00_00257470");
@@ -1617,7 +1617,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         if (psytcopus_vars->unk160 != 0 && in_window_0180(psytcopus, 33.0f) != 0) {
             normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, frame_time * 30.0f);
-            FUN_L11_00318e98_p(psytcopus_vars->unk160, &projectile_vector_scratch);
+            set_moby_state_two_data_and_timer(psytcopus_vars->unk160, &projectile_vector_scratch);
             psytcopus_vars->unk160 = 0;
         }
         if (psytcopus->anim_flags & 2) {
