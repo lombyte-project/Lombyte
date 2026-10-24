@@ -1351,11 +1351,11 @@ typedef struct Moby_2D3F40 {
 } Moby_2D3F40;
 
 extern float D_0015ED6C;
-extern int D_L00_00161900 __attribute__((sda));
-extern int D_L00_00161904 __attribute__((sda));
-extern int D_L00_00161908 __attribute__((sda));
-extern int D_L00_0016190C __attribute__((sda));
-extern int D_L00_00161910 __attribute__((sda));
+extern int metal_detector_trail_blend_minuend_selector_gp __asm__("D_L00_00161900") __attribute__((sda));
+extern int metal_detector_trail_blend_subtrahend_selector_gp __asm__("D_L00_00161904") __attribute__((sda));
+extern int metal_detector_trail_blend_alpha_factor_selector_gp __asm__("D_L00_00161908") __attribute__((sda));
+extern int metal_detector_trail_blend_addend_selector_gp __asm__("D_L00_0016190C") __attribute__((sda));
+extern int metal_detector_trail_blend_fixed_alpha_gp __asm__("D_L00_00161910") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
 extern int metal_detector_trail_initial_quad_color_gp __asm__("D_L00_00161914") __attribute__((sda));
 extern int metal_detector_trail_texture_selector_gp __asm__("D_L00_00161918") __attribute__((sda));
@@ -1383,7 +1383,7 @@ void draw_metal_detector_trail(Moby_2D3F40 *moby) {
     q.g[1] = trail_quad_texture;
     q.g[2] = 0xFF9000000260L;
     q.g[0] = 4;
-    q.g[3] = (long)D_L00_00161900 | ((long)D_L00_00161904 << 2) | ((long)D_L00_00161908 << 4) | ((long)D_L00_0016190C << 6) | ((long)D_L00_00161910 << 32);
+    q.g[3] = (long)metal_detector_trail_blend_minuend_selector_gp | ((long)metal_detector_trail_blend_subtrahend_selector_gp << 2) | ((long)metal_detector_trail_blend_alpha_factor_selector_gp << 4) | ((long)metal_detector_trail_blend_addend_selector_gp << 6) | ((long)metal_detector_trail_blend_fixed_alpha_gp << 32);
     q.uv[4] = q.uv[0] = 0.0f;
     q.uv[6] = q.uv[2] = 1.0f;
     q.uv[3] = q.uv[1] = 0.0f;
