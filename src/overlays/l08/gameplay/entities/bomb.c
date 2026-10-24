@@ -306,7 +306,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern float D_L08_00161860 __attribute__((sda));
+extern float bomb_downward_acceleration __asm__("D_L08_00161860") __attribute__((sda));
 extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern void FUN_L00_0025d458_c(void *, short *) __asm__("FUN_L00_0025d458");
@@ -379,7 +379,7 @@ void update_bomb(char *moby) {
         collision_z_offset = 0.16f;
         c.r.start[2] -= collision_z_offset;
         add_vector_xyz((moby + 0x10), (moby + 0x10), (bomb_vars + 0x10));
-        *(float *)(bomb_vars + 0x18) -= D_L08_00161860 * D_0015ED70_gp;
+        *(float *)(bomb_vars + 0x18) -= bomb_downward_acceleration * D_0015ED70_gp;
         qcopy(c.r.end, moby + 0x10);
         c.r.end[2] -= collision_z_offset;
         c.r.x.moby = moby;
