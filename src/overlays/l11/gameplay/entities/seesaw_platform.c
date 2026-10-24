@@ -374,9 +374,9 @@ typedef struct {
 extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
 int D_L11_00161F54 = 0;
-extern float D_L11_00161F58 __attribute__((sda));
-extern float D_L11_00161F5C __attribute__((sda));
-extern float D_L11_00161F60 __attribute__((sda));
+extern float child_grid_pose_blend_acceleration __asm__("D_L11_00161F58") __attribute__((sda));
+extern float child_grid_pose_blend_deceleration __asm__("D_L11_00161F5C") __attribute__((sda));
+extern float child_grid_pose_blend_max_speed __asm__("D_L11_00161F60") __attribute__((sda));
 extern float D_L11_0015F3FC;
 extern struct Moby *create_moby_d800(int) __asm__("FUN_0020c4f8");
 extern void FUN_0022da68_d800(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -462,8 +462,8 @@ void update_child_grid_controller(struct Moby *grid_controller) {
         break;
     case CHILD_GRID_STATE_BLEND_POINT_POSES:
         grid_controller_vars->prev = grid_controller_vars->t;
-        approach_d800(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
-                      D_L11_00161F60 * frame_time);
+        approach_d800(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, child_grid_pose_blend_acceleration * frame_time_sq, child_grid_pose_blend_deceleration * frame_time_sq,
+                      child_grid_pose_blend_max_speed * frame_time);
         lerp_vector_d800(&pos, (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7)) + 0x30,
                          (char *)(D_L11_001600EC_d800 + (grid_controller_vars->to << 7)) + 0x30, grid_controller_vars->t);
         clear_u64_value(&rot);
