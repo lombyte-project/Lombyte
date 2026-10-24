@@ -651,7 +651,9 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
 
 /* The caller passes two floats in f12/f13; this routine never reads them. */
-void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
+void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) __asm__("FUN_L14_002de2b8");
+
+void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *data = *(char **)(moby + 0x78);
     char *hero_state = (char *)((char *)((char *)&hero));
     float target_up_vector[4];
