@@ -82,9 +82,9 @@ typedef int Q2463f8 __attribute__((mode(TI)));
 extern Q2463f8 D_L18_001B06E0[];
 extern u8 D_L18_001985C0[];
 extern char *D_L18_0015F420;
-extern s32 D_L18_0015F438;
-extern s32 D_L18_0015F43C;
-extern s32 D_L18_0015F440;
+extern s32 level_counted_pointer_table_count __asm__("D_L18_0015F438");
+extern s32 level_counted_pointer_records_base __asm__("D_L18_0015F43C");
+extern s32 level_counted_pointer_table_base __asm__("D_L18_0015F440");
 extern s32 D_L18_0015FC98;
 extern s32 D_L18_0015FC9C;
 extern s32 D_L18_0015FCA0;
@@ -302,9 +302,9 @@ s32 load_level_core_data(s32 full, s32 keep) {
         if (level_header[0x28]) {
             relocate_counted_pointer_table(base + level_header[0x28]);
         } else {
-            D_L18_0015F438 = 0;
-            D_L18_0015F43C = 0;
-            D_L18_0015F440 = 0;
+            level_counted_pointer_table_count = 0;
+            level_counted_pointer_records_base = 0;
+            level_counted_pointer_table_base = 0;
         }
         if (level_header[0x29]) {
             load_two_int_two_float_header(base + level_header[0x29]);
