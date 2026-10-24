@@ -503,11 +503,11 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
-extern float D_L01_00162084 __attribute__((sda));
-extern float D_L01_00162088 __attribute__((sda));
-extern float D_L01_0016208C __attribute__((sda));
-extern float D_L01_00162090 __attribute__((sda));
-extern float D_L01_00162094 __attribute__((sda));
+extern float sandmouse_projectile_target_range __asm__("D_L01_00162084") __attribute__((sda));
+extern float sandmouse_projectile_target_yaw_limit_degrees __asm__("D_L01_00162088") __attribute__((sda));
+extern float sandmouse_projectile_target_pitch_limit_degrees __asm__("D_L01_0016208C") __attribute__((sda));
+extern float sandmouse_projectile_spawn_offset_distance __asm__("D_L01_00162090") __attribute__((sda));
+extern float sandmouse_projectile_fallback_aim_height __asm__("D_L01_00162094") __attribute__((sda));
 extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 
 typedef union {
@@ -529,8 +529,8 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
         return;
     moby_point_position(moby, (state[0x56] & 1) + 1, &spawn_position);
     state[0x56] = state[0x56] ^ 1;
-    target_moby = select_sandmouse_projectile_target(moby, &spawn_position, moby + 0x40, D_L01_00162088 * DEG_TO_RAD,
-                         D_L01_0016208C * DEG_TO_RAD, D_L01_00162084, 2.0f, 3.1415927f,
+    target_moby = select_sandmouse_projectile_target(moby, &spawn_position, moby + 0x40, sandmouse_projectile_target_yaw_limit_degrees * DEG_TO_RAD,
+                         sandmouse_projectile_target_pitch_limit_degrees * DEG_TO_RAD, sandmouse_projectile_target_range, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
         *(char **)(state + 0x60) = target_moby;
@@ -545,9 +545,9 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                     if (target_aim_height_data != 0)
                         target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(target_aim_height_data + 0x10);
                     else
-                        target_aim_position.f[2] = target_aim_position.f[2] + D_L01_00162094;
+                        target_aim_position.f[2] = target_aim_position.f[2] + sandmouse_projectile_fallback_aim_height;
                     fast_vec_sub(&spawn_offset, &target_aim_position, &spawn_position);
-                    fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00162090);
+                    fast_vec_normalize(&spawn_offset, &spawn_offset, sandmouse_projectile_spawn_offset_distance);
                     fast_vec_add(&spawn_position, &spawn_position, &spawn_offset);
                     target_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
                     spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
