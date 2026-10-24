@@ -47,10 +47,10 @@ extern int D_L12_00161DD4 __attribute__((sda));
 extern int D_L12_00161DD8 __attribute__((sda));
 extern int D_L12_00161DEC __attribute__((sda));
 extern int D_L12_00161DF0 __attribute__((sda));
-extern float D_L12_00161DF4 __attribute__((sda));
+extern float oscillating_link_strip_segment_u_step __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase __asm__("D_L12_00161DF8") __attribute__((sda));
 extern int oscillating_link_strip_reset_ticks __asm__("D_L12_00161E04");
-extern int D_L12_00161E08;
+extern int oscillating_link_strip_fade_pivot_ticks __asm__("D_L12_00161E08");
 extern int euler_rotation_matrix() __asm__("FUN_001fa050");
 extern int multiply_matrix() __asm__("FUN_001fa378");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -112,15 +112,15 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         }
     }
     for (ring = 0; ring < 4; ring++) {
-        if (D_L12_00161E08 < data->phase[ring]) {
-            fade = func_001FA888_303CA8(data->phase[ring] - D_L12_00161E08) / func_001FA888_303CA8(oscillating_link_strip_reset_ticks - D_L12_00161E08);
+        if (oscillating_link_strip_fade_pivot_ticks < data->phase[ring]) {
+            fade = func_001FA888_303CA8(data->phase[ring] - oscillating_link_strip_fade_pivot_ticks) / func_001FA888_303CA8(oscillating_link_strip_reset_ticks - oscillating_link_strip_fade_pivot_ticks);
         } else {
-            fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(D_L12_00161E08);
+            fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(oscillating_link_strip_fade_pivot_ticks);
         }
         quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, fade);
         scroll = 0.0f;
         for (segment = 0; segment < data->count - 1; segment++) {
-            scroll = scroll + D_L12_00161DF4;
+            scroll = scroll + oscillating_link_strip_segment_u_step;
             if (1.0f < scroll) {
                 scroll = scroll - 1.0f;
             }
@@ -298,7 +298,7 @@ void update_oscillating_target_link(Moby *moby) {
     }
     switch (moby->state) {
     case TARGET_TRACKING_STATE_INITIALIZE:
-        D_L12_00161E08 = 0x16;
+        oscillating_link_strip_fade_pivot_ticks = 0x16;
         oscillating_link_strip_reset_ticks = 0x2D;
         data->f231C = -1;
         data->f2304 = 0xB;
