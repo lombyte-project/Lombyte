@@ -689,10 +689,10 @@ extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
-extern int D_L18_00161970 __attribute__((sda));
-extern int D_L18_00161974 __attribute__((sda));
-extern int D_L18_00161978 __attribute__((sda));
-extern int D_L18_0016197C __attribute__((sda));
+extern int rocket_target_pulse_blend_minuend_selector_gp __asm__("D_L18_00161970") __attribute__((sda));
+extern int rocket_target_pulse_blend_subtrahend_selector_gp __asm__("D_L18_00161974") __attribute__((sda));
+extern int rocket_target_pulse_blend_alpha_factor_selector_gp __asm__("D_L18_00161978") __attribute__((sda));
+extern int rocket_target_pulse_blend_addend_selector_gp __asm__("D_L18_0016197C") __attribute__((sda));
 extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
 extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
@@ -703,8 +703,8 @@ void draw_rocket_target_pulse_quad(struct Moby *m) {
     col = fast_tween_color((fast_sin(fast_normalize_angle((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
                           rocket_target_pulse_color_start_gp, rocket_target_pulse_color_end_gp);
     pk.b = get_effect_texture(0xD);
-    pk.d = (unsigned long long)D_L18_00161970 | ((unsigned long long)D_L18_00161974 << 2) |
-           ((unsigned long long)D_L18_00161978 << 4) | ((unsigned long long)D_L18_0016197C << 6) |
+    pk.d = (unsigned long long)rocket_target_pulse_blend_minuend_selector_gp | ((unsigned long long)rocket_target_pulse_blend_subtrahend_selector_gp << 2) |
+           ((unsigned long long)rocket_target_pulse_blend_alpha_factor_selector_gp << 4) | ((unsigned long long)rocket_target_pulse_blend_addend_selector_gp << 6) |
            0x8000000000ULL;
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
