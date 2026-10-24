@@ -2244,7 +2244,7 @@ extern void send_blast_hits_2b6140(void *, void *, void *, int, int, int, int, i
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));
-extern float D_L00_00161498 __attribute__((sda));
+extern float visibomb_missile_speed_voice_control_scale_gp __asm__("D_L00_00161498") __attribute__((sda));
 extern float visibomb_missile_max_speed_gp __asm__("D_L00_001614A0") __attribute__((sda));
 extern float visibomb_missile_speed_target_blend_factor_gp __asm__("D_L00_001614A4") __attribute__((sda));
 extern float visibomb_missile_speed_blend_factor_gp __asm__("D_L00_001614A8") __attribute__((sda));
@@ -2306,7 +2306,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         if (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed_gp * D_0015ED6C_2b6140;
     }
     func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140
-        / (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140)) * D_L00_00161498));
+        / (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140)) * visibomb_missile_speed_voice_control_scale_gp));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
             float steered_pitch;
