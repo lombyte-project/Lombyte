@@ -3655,8 +3655,8 @@ extern void vadd_2b9310(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vzero_2b9310(void *) __asm__("FUN_001f99f8");
 
 extern int D_L00_0016167C __attribute__((sda));
-extern int D_L00_00161624 __attribute__((sda));
-extern int D_L00_00161678;
+extern int tesla_beam_initial_frame_count __asm__("D_L00_00161624") __attribute__((sda));
+extern int tesla_beam_scaled_initial_frame_count __asm__("D_L00_00161678");
 extern float D_L00_00161594 __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668;
@@ -3683,7 +3683,7 @@ void initialize_tesla_claw_beam(char *moby) {
     }
     D_L00_00161590_gp = 0;
     D_L00_0016167C = 0;
-    D_L00_00161678 = frames_2b9310(D_L00_00161624);
+    tesla_beam_scaled_initial_frame_count = frames_2b9310(tesla_beam_initial_frame_count);
     D_L00_001615F8 = 0x7F2020;
     vsub_2b9310(&beam_endpoint_delta, data + 0x10, data);
     vscale_2b9310(&step, &beam_endpoint_delta, D_L00_00161594 / 20.0f);
