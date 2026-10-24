@@ -1849,7 +1849,9 @@ extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 extern int D_L00_00161744 __attribute__((sda));
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern Tab_2BE3A8 D_L00_001E9AB0;
-void FUN_L00_002bd0a0(struct Moby *moby) {
+void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
+
+void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     Vec_2BE3A8 aim;
     Vec_2BE3A8 segment;
     Vec_2BE3A8 wave_offset;

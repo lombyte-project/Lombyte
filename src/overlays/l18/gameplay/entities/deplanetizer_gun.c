@@ -74,7 +74,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void rotate_vector_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
-extern void FUN_L00_002bd0a0(void *);
+extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
 extern int D_L18_00162498 __attribute__((sda));
 extern int D_L18_001624BC __attribute__((sda));
@@ -320,7 +320,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             data[19] = fast_arc_tan(vector_length_xy(&moby->rot_row1), moby->rot_row1.z);
             saved = D_L18_0016174C;
             D_L18_0016174C = 24.0f;
-            FUN_L00_002bd0a0(moby);
+            update_beam_ring_rail_and_pulse_effects(moby);
             D_L18_0016174C = saved;
             D_L18_001617F4 = color;
             D_L18_001617F8 = color2;
