@@ -7369,10 +7369,10 @@ extern float D_L06_00162170 __attribute__((sda));
 extern float D_L06_00162174 __attribute__((sda));
 extern float D_L06_00162178 __attribute__((sda));
 extern float D_L06_0016217C __attribute__((sda));
-extern int D_L06_00162180 __attribute__((sda));
-extern int D_L06_00162184 __attribute__((sda));
-extern int D_L06_00162188 __attribute__((sda));
-extern int D_L06_0016218C __attribute__((sda));
+extern int shuttle_breakup_particle_first_color_blend_a_gp __asm__("D_L06_00162180") __attribute__((sda));
+extern int shuttle_breakup_particle_first_color_blend_b_gp __asm__("D_L06_00162184") __attribute__((sda));
+extern int shuttle_breakup_particle_second_color_blend_a_gp __asm__("D_L06_00162188") __attribute__((sda));
+extern int shuttle_breakup_particle_second_color_blend_b_gp __asm__("D_L06_0016218C") __attribute__((sda));
 extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
 extern int D_L06_00162194 __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
@@ -7449,8 +7449,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
             particle_acceleration[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
             particle = emit_particle_03b68(
                 pos, particle_velocity, particle_acceleration,
-                fast_tween_color_03b68(D_L06_00162180, D_L06_00162184, random_float_between_03b68(0.0f, 1.0f)),
-                fast_tween_color_03b68(D_L06_00162188, D_L06_0016218C, random_float_between_03b68(0.0f, 1.0f)),
+                fast_tween_color_03b68(shuttle_breakup_particle_first_color_blend_a_gp, shuttle_breakup_particle_first_color_blend_b_gp, random_float_between_03b68(0.0f, 1.0f)),
+                fast_tween_color_03b68(shuttle_breakup_particle_second_color_blend_a_gp, shuttle_breakup_particle_second_color_blend_b_gp, random_float_between_03b68(0.0f, 1.0f)),
                 float_to_int_03b68(scale_time_03b68((float)D_L06_00162160 * random_float_between_03b68(0.0f, 1.0f) + 1.0f)),
                 float_to_int_03b68(scale_time_03b68(
                     (float)D_L06_00162164 * (random_float_between_03b68(-D_L06_0016216C, D_L06_0016216C) + 1.0f))),
