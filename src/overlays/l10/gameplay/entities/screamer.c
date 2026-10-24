@@ -2346,7 +2346,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_L10_00161E48 __attribute__((sda));
 float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
-    float hi, lo, owner_to_self_angle, owner_to_self_distance, v[3];
+    float hi, lo, owner_to_self_angle, owner_to_self_distance, translated_radial_point[3];
     short *group_entry;
     if (self->group == 0xFF) {
         return fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
@@ -2357,10 +2357,10 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     owner_to_self_angle = fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
                        self->pos.y - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, &self->pos);
-    v[0] = fast_cos(owner_to_self_angle) * 2.0f;
-    v[1] = fast_sin(owner_to_self_angle) * 2.0f;
-    v[2] = 0.0f;
-    fast_vec_add(v, v, ((unsigned char *)&D_0013E533) + 0xE9D);
+    translated_radial_point[0] = fast_cos(owner_to_self_angle) * 2.0f;
+    translated_radial_point[1] = fast_sin(owner_to_self_angle) * 2.0f;
+    translated_radial_point[2] = 0.0f;
+    fast_vec_add(translated_radial_point, translated_radial_point, ((unsigned char *)&D_0013E533) + 0xE9D);
     group_entry = D_L10_001ABCC0[self->group];
     if (group_entry != 0) {
         do {
