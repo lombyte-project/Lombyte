@@ -526,23 +526,23 @@ extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) __asm__("FUN_L00_0020d6b0");
 
 float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
-    float v[4] __attribute__((aligned(16)));
+    float target_scoring_origin[4] __attribute__((aligned(16)));
     struct Hero *hero_state;
     float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, target_score;
 
     *out = 0;
-    qcopy(v, &hero.motion.pos);
+    qcopy(target_scoring_origin, &hero.motion.pos);
     hero_state = &hero;
     if (hero_state->state.current == 0x14) {
-        v[2] = hero_state->ground_z.f;
+        target_scoring_origin[2] = hero_state->ground_z.f;
     }
-    target_distance = dist_20d6b0(v, target_moby + 0x10);
+    target_distance = dist_20d6b0(target_scoring_origin, target_moby + 0x10);
     if (range < target_distance)
         *out = 1;
-    hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - v[0], *(float *)(target_moby + 0x14) - v[1]), yaw);
+    hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - target_scoring_origin[0], *(float *)(target_moby + 0x14) - target_scoring_origin[1]), yaw);
     angular_penalty = hero_yaw_error;
     angular_limit_error = hero_yaw_error;
-    elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, target_moby + 0x10), *(float *)(target_moby + 0x18) - v[2]), 0.0f);
+    elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(target_scoring_origin, target_moby + 0x10), *(float *)(target_moby + 0x18) - target_scoring_origin[2]), 0.0f);
     if (hero_state->state.current == 1 || hero_state->state.current == 0x1E) {
         C_20d6b0 *camera = &player_camera;
         float b = adiff_20d6b0(
