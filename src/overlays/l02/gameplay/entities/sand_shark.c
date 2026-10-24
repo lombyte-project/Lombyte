@@ -2078,10 +2078,10 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L02_0015F5CC;
-extern float D_L02_00161BEC __attribute__((sda));
-extern float D_L02_00161BE8 __attribute__((sda));
-extern float D_L02_00161BF0 __attribute__((sda));
-extern float D_L02_00161C10 __attribute__((sda));
+extern float level02_elevator_ring_outer_radius __asm__("D_L02_00161BEC") __attribute__((sda));
+extern float level02_elevator_ring_vertical_spacing __asm__("D_L02_00161BE8") __attribute__((sda));
+extern float level02_elevator_ring_segment_half_height __asm__("D_L02_00161BF0") __attribute__((sda));
+extern float level02_elevator_ring_segment_angle_degrees __asm__("D_L02_00161C10") __attribute__((sda));
 int D_L02_00161BF4 = 0;
 int D_L02_00161BF8 = 2;
 int D_L02_00161BFC = 0;
@@ -2132,15 +2132,15 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
         *u = (*uv)[0];
         *v = (*uv)[1];
         if (i & 1) {
-            (*point)[2] = D_L02_00161BF0;
-            radius = D_L02_00161BEC;
+            (*point)[2] = level02_elevator_ring_segment_half_height;
+            radius = level02_elevator_ring_outer_radius;
         } else {
-            (*point)[2] = -D_L02_00161BF0;
-            radius = D_L02_00161BEC - 0.05f;
+            (*point)[2] = -level02_elevator_ring_segment_half_height;
+            radius = level02_elevator_ring_outer_radius - 0.05f;
         }
         index = (float)(i >> 1);
-        (*point)[0] = fast_cos(index * (D_L02_00161C10 * DEG_TO_RAD)) * radius;
-        (*point)[1] = fast_sin(index * (D_L02_00161C10 * DEG_TO_RAD)) * radius;
+        (*point)[0] = fast_cos(index * (level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD)) * radius;
+        (*point)[1] = fast_sin(index * (level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD)) * radius;
         (*point)[3] = 1.0f;
         v += 2;
         u += 2;
@@ -2154,16 +2154,16 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
         do {
             phase = (float)(D_L02_0015F5CC % period) * 0.02617991715669632f;
             sign = -sign;
-            for (j = 0; (float)j < 360.0f / D_L02_00161C10; j++) {
+            for (j = 0; (float)j < 360.0f / level02_elevator_ring_segment_angle_degrees; j++) {
                 matrix.basis[0][0] = fast_cos(
-                    wrap_angle((D_L02_00161C10 * DEG_TO_RAD) * (float)j + phase * (float)sign));
+                    wrap_angle((level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + phase * (float)sign));
                 matrix.basis[0][1] = fast_sin(
-                    wrap_angle((D_L02_00161C10 * DEG_TO_RAD) * (float)j + phase * (float)sign));
+                    wrap_angle((level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + phase * (float)sign));
                 matrix.basis[0][2] = 0.0f;
                 matrix.basis[1][0] = fast_cos(wrap_angle(
-                    (D_L02_00161C10 * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
+                    (level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
                 matrix.basis[1][1] = fast_sin(wrap_angle(
-                    (D_L02_00161C10 * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
+                    (level02_elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
                 matrix.basis[1][2] = 0.0f;
                 matrix.basis[2][2] = 1.0f;
                 packet.color[3] = color;
@@ -2172,7 +2172,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
                 packet.color[0] = color;
                 draw_geometry_quad(&packet, transform, 0);
             }
-            matrix.position[2] += D_L02_00161BE8;
+            matrix.position[2] += level02_elevator_ring_vertical_spacing;
         } while (matrix.position[2] < upper);
     }
 }
