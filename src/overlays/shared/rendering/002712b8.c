@@ -1367,7 +1367,7 @@ unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initia
                                 float *vec) __asm__("FUN_L00_002743a8");
 
 unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
-                                float *vec) {
+                                float *initial_position_offset) {
     unsigned char *particle = FUN_L00_002678b8(0x43);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
@@ -1391,10 +1391,10 @@ unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initia
         if (mode == 0) {
             *(short *)(particle_data + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(lifetime_frames));
         }
-        if (vec) {
-            *(float *)(particle_data + 0) = vec[0];
-            *(float *)(particle_data + 4) = vec[1];
-            *(float *)(particle_data + 8) = vec[2];
+        if (initial_position_offset) {
+            *(float *)(particle_data + 0) = initial_position_offset[0];
+            *(float *)(particle_data + 4) = initial_position_offset[1];
+            *(float *)(particle_data + 8) = initial_position_offset[2];
         }
         *(short *)(particle + 0xA) = lifetime_frames;
     }
