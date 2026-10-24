@@ -405,7 +405,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     char *data = *(char **)(moby + 0x78);
     struct Hero *player_hero = &hero;
     float position_delta[4];
-    char *l1;
+    char *group_member_moby;
     char *l2;
     char *other;
     char *od;
@@ -422,18 +422,18 @@ void add_moby_frames_for_group_proximity(char *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
-        while (l1) {
-            if (*(short *)(l1 + 0xA6) == 0x473) {
+        get_first_moby_in_group((int *)&group_member_moby, *(int *)(od + 0x44), 0, 0);
+        while (group_member_moby) {
+            if (*(short *)(group_member_moby + 0xA6) == 0x473) {
                 float offset_test_position[4];
                 float m[16];
-                char *candidate_moby = l1;
+                char *candidate_moby = group_member_moby;
                 qcopy(offset_test_position, data + 0x200);
                 offset_test_position[2] += 0.8f;
                 subtract_vector_xyz(position_delta, candidate_moby + 0x10, offset_test_position);
                 if (!(8.0f < vector_length_xyz(position_delta))) {
                     set_identity_matrix(m);
-                    transpose_rotation_matrix(m, l1 + 0xC0);
+                    transpose_rotation_matrix(m, group_member_moby + 0xC0);
                     transform_vector(position_delta, position_delta, m);
                     if (absolute_float(position_delta[0]) < 0.5f && absolute_float(position_delta[1]) < 2.5f &&
                         absolute_float(position_delta[2]) < 2.5f) {
@@ -442,7 +442,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&l1, (int)l1, 0, 0);
+            get_next_moby_in_group((int *)&group_member_moby, (int)group_member_moby, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
