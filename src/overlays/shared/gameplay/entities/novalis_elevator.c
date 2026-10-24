@@ -1356,10 +1356,10 @@ extern int sand_mouse_follow_projectile_count_limit_gp __asm__("D_L01_0016191C")
 extern int sand_mouse_fade_duration_frames_gp __asm__("D_L01_00161924") __attribute__((sda));
 extern int D_L01_00161928 __attribute__((sda));
 extern int D_L01_0016192C __attribute__((sda));
-extern float D_L01_00161930 __attribute__((sda));
+extern float sand_mouse_fade_particle_position_jitter_gp __asm__("D_L01_00161930") __attribute__((sda));
 extern float D_L01_00161934 __attribute__((sda));
 extern float D_L01_00161938 __attribute__((sda));
-extern int D_L01_0016193C __attribute__((sda));
+extern int sand_mouse_fade_particle_color_alpha_gp __asm__("D_L01_0016193C") __attribute__((sda));
 extern float D_L01_00161940 __attribute__((sda));
 extern char D_L01_0020AE80[];
 extern char D_L01_0020AEA0[];
@@ -1619,11 +1619,11 @@ void sand_mouse_update(struct Moby *moby) {
             float particle_random_float;
             *(u128_2e3f20 *)vb = 0;
             qcopy(va, ((float *)&moby->pos));
-            add_random_offset_to_vector_xyz(va, D_L01_00161930);
+            add_random_offset_to_vector_xyz(va, sand_mouse_fade_particle_position_jitter_gp);
             cr = (random_integer_3830() + 0x30) & 0x3F;
             cg = (random_integer_3830() + 0x20) & 0x3F;
             cb = random_integer_3830() & 0x2F;
-            col = cr | (cg << 8) | (cb << 16) | (D_L01_0016193C << 24);
+            col = cr | (cg << 8) | (cb << 16) | (sand_mouse_fade_particle_color_alpha_gp << 24);
             particle_random_remainder = random_integer_3830() % 2;
             if (sand_mouse_vars->timer & 1) {
                 particle_random_remainder = -particle_random_remainder;
