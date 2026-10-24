@@ -7731,11 +7731,11 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern float D_L06_001621B4 __attribute__((sda));
 extern int D_L06_001621B8 __attribute__((sda));
 void emit_red_button_particle_burst(int unused, void *effect_position) {
-    float pos[4];
+    float zero_effect_vector[4];
     V6 first_color_palette;
     V6 second_color_palette;
     int i = 0;
-    clear_u64_value(pos);
+    clear_u64_value(zero_effect_vector);
     if (D_L06_001621B8 > 0) {
         do {
             float frame_scaled_random_factor;
@@ -7753,7 +7753,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             pb = second_color_palette.v + random_integer_below(6);
             f = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(effect_position, pos, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
+            FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
         } while (i < D_L06_001621B8);
     }
 }
