@@ -1365,7 +1365,9 @@ extern void func_L00_001FF4B0_2D3F40(void *, void *, float) __asm__("FUN_001f9bf
 extern int func_001FA898_2D3F40(float) __asm__("FUN_001fa6d0");
 extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L00_002d2a90(Moby_2D3F40 *moby) {
+void draw_metal_detector_trail(Moby_2D3F40 *moby) __asm__("FUN_L00_002d2a90");
+
+void draw_metal_detector_trail(Moby_2D3F40 *moby) {
     Quad_2D3F40 q;
     Vu_2D3F40 tt[6];
     Data_2D3F40 *trail_data = moby->data;
