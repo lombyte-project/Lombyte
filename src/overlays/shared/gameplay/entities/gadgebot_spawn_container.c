@@ -3329,10 +3329,10 @@ extern void spawn_moving_hero_relative_alpha_fade_particle(void *, float, void *
 
 extern float energy_sphere_destruction_speed_range_start __asm__("D_L06_00161E84") __attribute__((sda));
 extern float energy_sphere_destruction_speed_range_end __asm__("D_L06_00161E88") __attribute__((sda));
-extern int D_L06_00161E98 __attribute__((sda));
-extern int D_L06_00161E9C __attribute__((sda));
-extern int D_L06_00161EA0 __attribute__((sda));
-extern int D_L06_00161EA4 __attribute__((sda));
+extern int energy_sphere_destruction_nonzero_branch_color_start __asm__("D_L06_00161E98") __attribute__((sda));
+extern int energy_sphere_destruction_nonzero_branch_color_end __asm__("D_L06_00161E9C") __attribute__((sda));
+extern int energy_sphere_destruction_zero_branch_color_start __asm__("D_L06_00161EA0") __attribute__((sda));
+extern int energy_sphere_destruction_zero_branch_color_end __asm__("D_L06_00161EA4") __attribute__((sda));
 extern float energy_sphere_destruction_scale_range_start __asm__("D_L06_00161EA8") __attribute__((sda));
 extern float energy_sphere_destruction_scale_range_end __asm__("D_L06_00161EAC") __attribute__((sda));
 extern unsigned char D_L06_00161E94 __attribute__((sda));
@@ -3348,10 +3348,10 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
                          energy_sphere_destruction_speed_range_end * frame_time);
         particle_scale = random_float_between_alt(energy_sphere_destruction_scale_range_start, energy_sphere_destruction_scale_range_end);
         if (random_integer_below(2) != 0) {
-            particle_color = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
+            particle_color = fast_tween_color(energy_sphere_destruction_nonzero_branch_color_start, energy_sphere_destruction_nonzero_branch_color_end,
                              random_float_between_alt(0.0f, 1.0f));
         } else {
-            particle_color = fast_tween_color(D_L06_00161EA0, D_L06_00161EA4,
+            particle_color = fast_tween_color(energy_sphere_destruction_zero_branch_color_start, energy_sphere_destruction_zero_branch_color_end,
                              random_float_between_alt(0.0f, 1.0f));
         }
         particle_lifetime = D_L06_00161E94;
