@@ -679,7 +679,7 @@ extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L
 
 /* Spawns a projectile moby (class 0x273) at pos, heading along dir,
  * owned by parent p. */
-char *spawn_mine_layer_projectile(char *parent_moby, void *pos, float *launch_velocity) {
+char *spawn_mine_layer_projectile(char *parent_moby, void *spawn_position, float *launch_velocity) {
     char *spawned_moby = create_moby_2cc888(0x273);
     char *spawned_moby_vars;
     float frame_scale_squared;
@@ -691,7 +691,7 @@ char *spawn_mine_layer_projectile(char *parent_moby, void *pos, float *launch_ve
     spawned_moby[0x30] = parent_moby[0x32];
     spawned_moby[0x31] = 1;
     *(long long *)(spawned_moby + 0x38) = *(long long *)(parent_moby + 0x38);
-    qcopy(spawned_moby + 0x10, pos);
+    qcopy(spawned_moby + 0x10, spawn_position);
     spawned_moby_vars = *(char **)(spawned_moby + 0x78);
     frame_scale_squared = frame_scale_sq;
     *(float *)(spawned_moby_vars + 0x10) = frame_scale_squared * 0.008f;
