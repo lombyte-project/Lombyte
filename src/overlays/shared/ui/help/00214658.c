@@ -291,7 +291,7 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 
 void update_hero_motion_response_parameters(void) {
-    f32 t, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, b, unclamped_magnitude;
+    f32 t, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, unclamped_response, unclamped_magnitude;
     s32 control_mode;
 
     if (hero.state.current == 0x44) {
@@ -327,12 +327,12 @@ void update_hero_motion_response_parameters(void) {
             X.f1240 = 0.28f;
         else if (unclamped_negated_value < -0.28f)
             X.f1240 = -0.28f;
-        b = t * 1.7f;
-        X.f1198 = b;
+        unclamped_response = t * 1.7f;
+        X.f1198 = unclamped_response;
         X.f10E8 = t * 0.58f;
-        if (0.7f < b)
+        if (0.7f < unclamped_response)
             X.f1198 = 0.7f;
-        else if (b < -0.7f)
+        else if (unclamped_response < -0.7f)
             X.f1198 = -0.7f;
         unclamped_magnitude = FUN_001f99c0_215b68(t) * 0.2f;
         X.f1194 = unclamped_magnitude;
