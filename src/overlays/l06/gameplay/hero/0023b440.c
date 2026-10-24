@@ -155,7 +155,7 @@ void update_hero_state_machine(void) {
     float ledge_shimmy_probe_yaw;
     int jump_prediction_steps;
     int sp58;
-    int sp5C;
+    int trajectory_prediction_steps;
     float alt_ledge_hang_probe_yaw;
     float alt_ledge_positive_side_probe_yaw;
     float alt_ledge_negative_side_probe_yaw;
@@ -2054,8 +2054,8 @@ void update_hero_state_machine(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp5C, hero.unk4A0);
-                        adjust_hero_animation_speed_for_target_frame(hero.unk440, sp5C, 0.5f, -1.0f);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &trajectory_prediction_steps, hero.unk4A0);
+                        adjust_hero_animation_speed_for_target_frame(hero.unk440, trajectory_prediction_steps, 0.5f, -1.0f);
                         break;
                     }
                     if (hero.unk41C != 0 && !(hero.state_timer < hero.unk3D0) &&
@@ -2421,7 +2421,7 @@ void update_hero_state_machine(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
@@ -2494,7 +2494,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
