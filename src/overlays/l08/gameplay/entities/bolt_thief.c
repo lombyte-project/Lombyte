@@ -1342,7 +1342,9 @@ extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L08_002e2250(struct Moby *moby) {
+void process_gunship_part_hits(struct Moby *moby) __asm__("FUN_L08_002e2250");
+
+void process_gunship_part_hits(struct Moby *moby) {
     char *data = *(char **)((char *)moby + 0x78);
     char *entries = data + 0x60;
     char *part_entry_cursor = entries;
