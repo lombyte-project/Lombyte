@@ -210,7 +210,7 @@ int mine_fall(char *moby, char *motion_state) {
     char *collision_metadata;
     int flags = 0;
 
-    float sc, f21, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
+    float sc, ground_reference_height, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
     int result_count, i;
 
     *(float *)(motion_state + 0x8) = *(float *)(motion_state + 0x8) - *(float *)(motion_state + 0x10);
@@ -230,18 +230,18 @@ int mine_fall(char *moby, char *motion_state) {
 
     qcopy(height_probe_position, moby + 0x10);
     height_probe_position[2] = height_probe_position[2] + *(float *)(motion_state + 0x28);
-    f21 = probe_ground_height(height_probe_position, 0, 0.5f);
+    ground_reference_height = probe_ground_height(height_probe_position, 0, 0.5f);
     if (collision_hit_material() == 0) {
-        if (*(float *)(motion_state + 0x5C) == 0.0f && f21 <= height_probe_position[2] && height_probe_position[2] + *(float *)(motion_state + 0x8) < f21) {
+        if (*(float *)(motion_state + 0x5C) == 0.0f && ground_reference_height <= height_probe_position[2] && height_probe_position[2] + *(float *)(motion_state + 0x8) < ground_reference_height) {
             *(float *)(motion_state + 0x5C) = 1.0f;
-            height_probe_position[2] = f21;
+            height_probe_position[2] = ground_reference_height;
             spawn_burst_moby(height_probe_position, 3.0f);
         }
-        f21 = func_L00_0025A748_f((moby + 0x10));
+        ground_reference_height = func_L00_0025A748_f((moby + 0x10));
     } else {
         if ((*(int *)(motion_state + 0x24) & 0x10) || *(short *)(motion_state + 0x3E) == 2) {
             add_vector_xyz_c(collision_probe_position, (moby + 0x10), motion_state);
-            if (func_L00_0025A748_f(collision_probe_position) < f21 - 0.25f) {
+            if (func_L00_0025A748_f(collision_probe_position) < ground_reference_height - 0.25f) {
                 set_vector_length_xy((float *)motion_state, (float *)motion_state, 0.0f);
             }
         }
@@ -283,7 +283,7 @@ int mine_fall(char *moby, char *motion_state) {
             } else {
                 float negative_half_gravity_step = *(float *)(motion_state + 0x10) * -0.5f;
                 landing_prediction_divisor = 60.0f;
-                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - ground_reference_height);
                 if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
                     landing_prediction_divisor = larger_quadratic_root;
                 }
