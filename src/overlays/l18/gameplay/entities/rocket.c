@@ -3272,7 +3272,7 @@ void draw_moby_billboard_quad_pair(void *mv) {
     Qec130 quad;
     Vec130 quad_transform[4];
     Vec130 *moby_position;
-    unsigned int c;
+    unsigned int uniform_quad_color;
     float corner_scale;
     int i;
     moby_position = (Vec130 *)mv;
@@ -3290,11 +3290,11 @@ void draw_moby_billboard_quad_pair(void *mv) {
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], (Vec130 *)&hero.gravity_dir);
     vscl_ec130(&quad_transform[1], &quad_transform[1], -1.0f);
     cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    c = D_L18_001620A0;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L18_001620A0;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     corner_scale = D_L18_001620A8 + spread_k(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
@@ -3303,11 +3303,11 @@ void draw_moby_billboard_quad_pair(void *mv) {
         quad.uv[i].v = D_L18_001D9CE0[i].v;
     }
     draw_ec130(&quad, 0, 0);
-    c = D_L18_00162054;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L18_00162054;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     corner_scale = D_L18_001620AC + spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
