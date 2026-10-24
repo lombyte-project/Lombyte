@@ -1103,14 +1103,14 @@ extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-extern float D_L14_001614D8 __attribute__((sda));
+extern float plasmabot_path_traversal_speed __asm__("D_L14_001614D8") __attribute__((sda));
 int follow_plasmabot_path(char *moby) {
     float path_target_position[4];
     float pre_spring_position[4];
     float target_offset[4];
     char *data = *(char **)(moby + 0x78);
     int reached = sample_path(D_L14_001B0BB0[*(int *)(data + 0x240)], path_target_position, data + 0x24C, data + 0x250, 0,
-                              D_L14_001614D8 * frame_time * *(float *)(data + 0x27C));
+                              plasmabot_path_traversal_speed * frame_time * *(float *)(data + 0x27C));
     float path_target_heading;
     float k;
     float turn_step_limit;
