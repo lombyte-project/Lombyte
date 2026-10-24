@@ -2532,7 +2532,7 @@ extern float rocket_guidance_velocity_correction_limit_gp __asm__("D_L08_00161A0
 extern float rocket_route_speed_gp __asm__("D_L08_00161A08") __attribute__((sda));
 extern float rocket_target_hit_distance_gp __asm__("D_L08_00161A0C") __attribute__((sda));
 extern float rocket_effect_radial_speed_range_end_gp __asm__("D_L08_00161A14") __attribute__((sda));
-extern float D_L08_00161A24 __attribute__((sda));
+extern float rocket_guidance_effect_velocity_w_gp __asm__("D_L08_00161A24") __attribute__((sda));
 extern float D_L08_00161A28 __attribute__((sda));
 extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float*,float,float);
@@ -2621,9 +2621,9 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=D_L08_00161A28;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
-        size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(D_L08_00161A28);
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
@@ -2651,9 +2651,9 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=D_L08_00161A28;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
-        size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(D_L08_00161A28);
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
     }
