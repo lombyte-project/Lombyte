@@ -167,8 +167,8 @@ typedef struct {
 extern GlowVec_bfa8 D_L01_0020B9D0[4];
 extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
-extern f32 D_L01_00162064 __attribute__((sda));
-extern f32 D_L01_0016206C __attribute__((sda));
+extern f32 moby_quad_c0_offset_scale __asm__("D_L01_00162064") __attribute__((sda));
+extern f32 moby_quad_e0_offset_scale __asm__("D_L01_0016206C") __attribute__((sda));
 extern s64 get_effect_texture_bfa8(s32) __asm__("FUN_001f44b8");
 extern void add_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -216,8 +216,8 @@ void draw_moby_offset_textured_quad(char *moby) {
     local.quad.unk68 = one;
     local.quad.unk6C = one;
 
-    scale_vector_xyz_bfa8(&local.basis.offset, moby + 0xc0, D_L01_00162064);
-    scale_vector_xyz_bfa8(&local.basis.partial, moby + 0xe0, D_L01_0016206C);
+    scale_vector_xyz_bfa8(&local.basis.offset, moby + 0xc0, moby_quad_c0_offset_scale);
+    scale_vector_xyz_bfa8(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale);
     add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     basis_axis_or_source_corner = &local.basis.mat0;
     add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, moby + 0x10);
