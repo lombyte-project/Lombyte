@@ -1907,13 +1907,13 @@ void update_hero_motion_for_current_state(void) {
             hero.unk2218 = -1;
         }
         if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
-            f32 ang;
+            f32 grind_particle_yaw;
             f32 rr;
             qcopy(&vector_or_hit_descriptor_scratch, &hero.motion.pos);
-            ang = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
+            grind_particle_yaw = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
             rr = random_float_between(D_0015ED6C_c * 4.0f, D_0015ED6C_c * 7.0f);
-            v10.f[0] = fast_cos(ang) * rr;
-            v10.f[1] = fast_sin(ang) * rr;
+            v10.f[0] = fast_cos(grind_particle_yaw) * rr;
+            v10.f[1] = fast_sin(grind_particle_yaw) * rr;
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
