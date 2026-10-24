@@ -3399,7 +3399,7 @@ extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC") 
 extern int D_L00_001619C0 __attribute__((sda));
 extern int D_L00_001619C4 __attribute__((sda));
 extern int smoke_fire_emitted_particle_base_color_gp __asm__("D_L00_001619C8") __attribute__((sda));
-extern float D_L00_001619E0 __attribute__((sda));
+extern float smoke_fire_far_culling_distance_gp __asm__("D_L00_001619E0") __attribute__((sda));
 extern V D_L00_00166DC0;
 void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
 float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -3476,7 +3476,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         qcopy(&culling_sphere, emitter_transform + 0x30);
         culling_sphere.z += 9.0f;
         culling_sphere.w = 10.0f;
-        if (fast_bsphere_check(&culling_sphere, D_L00_001619E0) < 0)
+        if (fast_bsphere_check(&culling_sphere, smoke_fire_far_culling_distance_gp) < 0)
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
             for (particle_end_or_emission_index = 0; particle_end_or_emission_index < smoke_fire_emission_attempts_per_update_gp; particle_end_or_emission_index++) {
