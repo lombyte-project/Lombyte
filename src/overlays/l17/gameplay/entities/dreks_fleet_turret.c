@@ -291,18 +291,18 @@ extern struct {
 void draw_fleet_beam_quad(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     S_a95b8 quad_primitive;
-    char m1[16];
-    char m2[16];
+    char beam_start_vertex_offset[16];
+    char beam_end_vertex_offset[16];
     char beam_end_to_start_vector[16];
     char quad_vertex_scratch[16];
     int i;
     func_001F9BF0_a95b8(beam_end_to_start_vector, moby_vars + 0x10, moby_vars + 0x20);
-    func_001F9BF0_a95b8(m1, moby_vars + 0x10, D_L17_001676C0);
-    func_001F9BF0_a95b8(m2, moby_vars + 0x20, D_L17_001676C0);
-    func_001F9CA0_a95b8(m1, m1, beam_end_to_start_vector);
-    func_L00_001FF4B0_a95b8(m1, m1, *(float *)(moby_vars + 0x4C));
-    func_001F9CA0_a95b8(m2, m2, beam_end_to_start_vector);
-    func_L00_001FF4B0_a95b8(m2, m2, *(float *)(moby_vars + 0x4C));
+    func_001F9BF0_a95b8(beam_start_vertex_offset, moby_vars + 0x10, D_L17_001676C0);
+    func_001F9BF0_a95b8(beam_end_vertex_offset, moby_vars + 0x20, D_L17_001676C0);
+    func_001F9CA0_a95b8(beam_start_vertex_offset, beam_start_vertex_offset, beam_end_to_start_vector);
+    func_L00_001FF4B0_a95b8(beam_start_vertex_offset, beam_start_vertex_offset, *(float *)(moby_vars + 0x4C));
+    func_001F9CA0_a95b8(beam_end_vertex_offset, beam_end_vertex_offset, beam_end_to_start_vector);
+    func_L00_001FF4B0_a95b8(beam_end_vertex_offset, beam_end_vertex_offset, *(float *)(moby_vars + 0x4C));
     quad_primitive.z78 = func_001F4868_a95b8(0xE);
     quad_primitive.q80 = 0xFF9000000260L;
     quad_primitive.q88 = 0x8000000048L;
@@ -315,13 +315,13 @@ void draw_fleet_beam_quad(struct Moby *moby) {
         quad_primitive.f[i].a = D_L17_001E6620_a95b8[i].a;
         quad_primitive.f[i].b = D_L17_001E6620_a95b8[i].b;
     }
-    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x10, m1);
+    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0) = *(OvlQuad *)quad_vertex_scratch;
-    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x10, m1);
+    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x10) = *(OvlQuad *)quad_vertex_scratch;
-    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x20, m2);
+    func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x20) = *(OvlQuad *)quad_vertex_scratch;
-    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x20, m2);
+    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x30) = *(OvlQuad *)quad_vertex_scratch;
     func_L00_001FD1D8_a95b8(&quad_primitive, 0, 0);
 }
