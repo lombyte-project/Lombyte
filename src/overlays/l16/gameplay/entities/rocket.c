@@ -2742,7 +2742,7 @@ extern char *D_L16_0015FFD8;
 extern char D_L16_001671C0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
-extern float D_L16_00161A80 __attribute__((sda));
+extern float class_0287_group_activation_value __asm__("D_L16_00161A80") __attribute__((sda));
 
 void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5ad0");
 
@@ -2767,7 +2767,7 @@ void *set_class_0287_group_activation_and_find_nearest(int index, int secondary)
         }
         data = *(float **)(moby + 0x78);
         moby[0x20] = 1;
-        activation_value = D_L16_00161A80;
+        activation_value = class_0287_group_activation_value;
         data[5] = activation_value;
         if (secondary)
             data[6] = activation_value;
