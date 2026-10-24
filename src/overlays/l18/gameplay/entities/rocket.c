@@ -186,7 +186,7 @@ extern void draw_class_274_ring_effect() __asm__("FUN_L18_002dc4b8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern float D_L18_00161CA0 __attribute__((sda));
+extern float class_274_ring_phase_rate __asm__("D_L18_00161CA0") __attribute__((sda));
 void update_class_274_ring_effect(struct Moby *moby) __asm__("FUN_L18_002dc260");
 
 void update_class_274_ring_effect(struct Moby *moby) {
@@ -212,7 +212,7 @@ void update_class_274_ring_effect(struct Moby *moby) {
         record_moby_hit(*(int *)(target_position + 0x2000), hit_descriptor);
     }
     flag = game_frame & 4;
-    moby_vars[1] = moby_vars[1] + D_L18_00161CA0 * frame_time;
+    moby_vars[1] = moby_vars[1] + class_274_ring_phase_rate * frame_time;
     if (flag == 0) {
         play_entity_sound(*(int *)(moby_vars + 3), moby_vars[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
     }
