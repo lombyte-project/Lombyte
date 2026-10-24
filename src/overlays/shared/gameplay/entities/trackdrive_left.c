@@ -1550,8 +1550,8 @@ extern int D_L02_00161BA8 __attribute__((sda));
 extern int tresspasser_default_radial_strip_color_gp __asm__("D_L02_00161BAC") __attribute__((sda));
 extern int tresspasser_reached_marker_strip_color_gp __asm__("D_L02_00161BB0") __attribute__((sda));
 extern int tresspasser_reverse_radial_strip_color_gp __asm__("D_L02_00161BB4") __attribute__((sda));
-extern int D_L02_00161BBC __attribute__((sda));
-extern int D_L02_00161BC0 __attribute__((sda));
+extern int tresspasser_unreached_marker_arc_flag_clear_color_gp __asm__("D_L02_00161BBC") __attribute__((sda));
+extern int tresspasser_unreached_marker_arc_flag_set_color_gp __asm__("D_L02_00161BC0") __attribute__((sda));
 extern int tresspasser_reached_marker_arc_color_gp __asm__("D_L02_00161BC4") __attribute__((sda));
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void draw_tresspasser_puzzle_arrow(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
@@ -1795,8 +1795,8 @@ void draw_tresspasser_puzzle(char *moby) {
         value = markers->slot[i];
         if (value != 0) {
             if (value == 2) color = tresspasser_reached_marker_arc_color_gp;
-            else if (D_L02_0015F5CC & 0x20) color = D_L02_00161BC0;
-            else color = D_L02_00161BBC;
+            else if (D_L02_0015F5CC & 0x20) color = tresspasser_unreached_marker_arc_flag_set_color_gp;
+            else color = tresspasser_unreached_marker_arc_flag_clear_color_gp;
             draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_marker_arc_first_boundary_radius_gp, (float)tresspasser_marker_arc_second_boundary_radius_gp, color);
         }
     }
