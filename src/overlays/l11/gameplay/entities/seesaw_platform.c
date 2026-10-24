@@ -1506,10 +1506,10 @@ extern void FUN_L00_0025f3e8_p(struct Moby *, void *, int, float, float) __asm__
 extern void remove_0180(struct Moby *) __asm__("FUN_0020c828");
 
 extern float D_L11_00161F88 __attribute__((sda));
-extern float D_L11_00161F8C __attribute__((sda));
-extern float D_L11_00161F90 __attribute__((sda));
-extern float D_L11_00161F94 __attribute__((sda));
-extern float D_L11_00161F98 __attribute__((sda));
+extern float psytcopus_hurt_knockback_base_vertical_speed_gp __asm__("D_L11_00161F8C") __attribute__((sda));
+extern float psytcopus_hurt_knockback_base_horizontal_speed_gp __asm__("D_L11_00161F90") __attribute__((sda));
+extern float psytcopus_death_knockback_base_vertical_speed_gp __asm__("D_L11_00161F94") __attribute__((sda));
+extern float psytcopus_death_knockback_base_horizontal_speed_gp __asm__("D_L11_00161F98") __attribute__((sda));
 extern float D_L11_00161F9C __attribute__((sda));
 extern int FUN_001f9740_p(void *) __asm__("FUN_001f9740");
 extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");
@@ -1726,8 +1726,8 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_KNOCKBACK_WITH_PROJECTILE_CANCELLATION_AND_TIMER_EXTENSION:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING_AND_TIMER_EXTENSION:
-            psytcopus_vars->unk88 = D_L11_00161F90 * frame_time;
-            psytcopus_vars->unk8C = D_L11_00161F8C * frame_time;
+            psytcopus_vars->unk88 = psytcopus_hurt_knockback_base_horizontal_speed_gp * frame_time;
+            psytcopus_vars->unk8C = psytcopus_hurt_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 3.0f;
             psytcopus_vars->unkC4 = 6.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
@@ -1748,8 +1748,8 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_DEATH_KNOCKBACK:
             psytcopus->flags &= 0xEFFF;
             psytcopus_vars->unk80 = D_L11_00161F88 * frame_time_sq;
-            psytcopus_vars->unk88 = D_L11_00161F98 * frame_time;
-            psytcopus_vars->unk8C = D_L11_00161F94 * frame_time;
+            psytcopus_vars->unk88 = psytcopus_death_knockback_base_horizontal_speed_gp * frame_time;
+            psytcopus_vars->unk8C = psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 4.0f;
             psytcopus_vars->unkC4 = 10.0f;
             source_to_psytcopus_heading = atan2_0180(psytcopus->pos.x - (*(struct Moby **)(info + 0x20))->pos.x,
