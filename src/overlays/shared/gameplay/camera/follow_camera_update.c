@@ -157,10 +157,10 @@ extern int fr_2e9518(int) __asm__("FUN_001f96f8");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
-extern float D_L00_00161CEC __attribute__((sda));
-extern float D_L00_00161CF0 __attribute__((sda));
-extern float D_L00_00161D14 __attribute__((sda));
-extern float D_L00_00161D18 __attribute__((sda));
+extern float orbit_distance_default_stiffness __asm__("D_L00_00161CEC") __attribute__((sda));
+extern float orbit_distance_default_damping __asm__("D_L00_00161CF0") __attribute__((sda));
+extern float orbit_distance_pull_back_stiffness __asm__("D_L00_00161D14") __attribute__((sda));
+extern float orbit_distance_pull_back_damping __asm__("D_L00_00161D18") __attribute__((sda));
 void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -183,8 +183,8 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             if (pull_back_state->f8 < interpolated_pull_back_value)
                 pull_back_state->f8 = interpolated_pull_back_value;
             pitch_s(0, pull_back_state->f8, 0.003f);
-            *x = D_L00_00161CEC + (D_L00_00161D14 - D_L00_00161CEC) * k;
-            *y = D_L00_00161CF0 + (D_L00_00161D18 - D_L00_00161CF0) * k;
+            *x = orbit_distance_default_stiffness + (orbit_distance_pull_back_stiffness - orbit_distance_default_stiffness) * k;
+            *y = orbit_distance_default_damping + (orbit_distance_pull_back_damping - orbit_distance_default_damping) * k;
             return;
         }
     }
@@ -192,8 +192,8 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
         pull_back_state->h4 = 0;
         pull_back_state->f8 = *(float *)(reference_orbit_state + 0x58);
     }
-    *x = D_L00_00161CEC;
-    *y = D_L00_00161CF0;
+    *x = orbit_distance_default_stiffness;
+    *y = orbit_distance_default_damping;
 }
 #define NOT_SDA
 
