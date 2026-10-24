@@ -1036,7 +1036,9 @@ extern f32 D_L12_001618D0 __attribute__((sda));
 extern f32 D_L12_001618D4 __attribute__((sda));
 /* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
-void FUN_L12_002e3528(struct Moby *moby) {
+void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");
+
+void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     AnklebiterVars_e3528 *vars = (AnklebiterVars_e3528 *)moby->pvars;
     Vec4 help_direction_or_hit_position;
     s32 hit;
