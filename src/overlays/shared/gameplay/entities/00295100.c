@@ -1573,7 +1573,7 @@ extern s32 D_L00_001CA020[];
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
-extern s32 D_L00_00161100 __attribute__((sda));
+extern s32 vendor_exit_hero_local_offset __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 D_L00_001610F0 __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
 extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
@@ -1686,7 +1686,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     hero.unk20A5 = 0;
     FUN_L00_002330d0();
     vendor_state_base = D_L00_001CA4C0_u;
-    transform_vector_by_basis(&world_position, &D_L00_00161100, *(char **)(vendor_state_base + 0x28) + 0xC0);
+    transform_vector_by_basis(&world_position, &vendor_exit_hero_local_offset, *(char **)(vendor_state_base + 0x28) + 0xC0);
     add_vector_xyz(&world_position, &world_position, *(char **)(vendor_state_base + 0x28) + 0x10);
     euler_rotation.f[0] = 0.0f;
     euler_rotation.f[1] = 0.0f;
