@@ -7,7 +7,7 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 
-extern float D_L00_00161BB0 __attribute__((sda));
+extern float vendor_orb_rotation_rate_degrees __asm__("D_L00_00161BB0") __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -28,7 +28,7 @@ void vendor_orb_update(unsigned char *moby) {
         attach_manipulator(moby, 1, manipulator);
         break;
     case VENDOR_ORB_ROTATE:
-        rotation_step_radians = D_L00_00161BB0 * DEG_TO_RAD * frame_time;
+        rotation_step_radians = vendor_orb_rotation_rate_degrees * DEG_TO_RAD * frame_time;
         *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), rotation_step_radians);
         *(float *)(manipulator + 0x40) = fast_add_rotations(*(float *)(manipulator + 0x40), rotation_step_radians * -2.0f);
         FUN_L00_001fff28(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
