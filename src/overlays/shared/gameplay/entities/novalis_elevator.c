@@ -603,7 +603,7 @@ extern char *D_L01_001600EC;
 extern char D_L01_001BAAA0[];
 extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
-extern f32 D_L01_001618A0 __attribute__((sda));
+extern f32 bolt_crank_radial_correction_step __asm__("D_L01_001618A0") __attribute__((sda));
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
@@ -684,7 +684,7 @@ void bolt_crank_update(struct Moby *moby) {
                             if (crank->progress < 1.0f) {
                                 area_clear = 1;
                                 crank->idle_frames = 0;
-                                D_L01_001618A0 = 0.0f;
+                                bolt_crank_radial_correction_step = 0.0f;
                                 for (other = (struct Moby *)D_L01_0015FFE4; other != 0; other = other->next) {
                                     if (other->flags & 0x1000) {
                                         if (vector_distance(&moby->pos, &other->pos) < 3.25f) {
@@ -838,9 +838,9 @@ void bolt_crank_update(struct Moby *moby) {
             offset[2] = 0.0f;
             distance = vector_length_xy(offset);
             spring_pos = -distance;
-            vendor_spring(&spring_pos, &D_L01_001618A0, 0.0f, frame_scale_sq * 0.015f,
+            vendor_spring(&spring_pos, &bolt_crank_radial_correction_step, 0.0f, frame_scale_sq * 0.015f,
                           frame_scale_sq * 0.3f, frame_time * 7.0f);
-            fast_vec_normalize(offset, offset, D_L01_001618A0);
+            fast_vec_normalize(offset, offset, bolt_crank_radial_correction_step);
             add_vector_xyz(&player->motion.pos, &player->motion.pos, offset);
             player->motion.pos.f[2] = height;
             if (opt_mirror_anim) {
