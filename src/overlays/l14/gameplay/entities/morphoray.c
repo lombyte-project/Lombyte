@@ -1873,10 +1873,10 @@ extern void rotate_axis_5d48(void *dst, void *vec, void *axis, float angle) __as
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_003171D0) */
 void update_path_key_camera(char *cam) __asm__("FUN_L14_00315d48");
 
-void update_path_key_camera(char *cam) {
-    CamData5d48 *data = ((CamObj5d48 *)cam)->data;
+void update_path_key_camera(char *path_key_camera) {
+    CamData5d48 *data = ((CamObj5d48 *)path_key_camera)->data;
     CamState5d48 *st = &data->st;
-    CamRec5d48 *rec = D_L14_0015EF50_s[((CamObj5d48 *)cam)->slot].rec;
+    CamRec5d48 *rec = D_L14_0015EF50_s[((CamObj5d48 *)path_key_camera)->slot].rec;
     CamAngles5d48 *cur = &data->cur;
     float *vel = data->vel;
     int side;
@@ -2072,24 +2072,24 @@ void update_path_key_camera(char *cam) {
     camera_placement_parameters[1] = cur->f4;
     camera_placement_parameters[0] = camera_placement_heading;
     camera_placement_parameters[2] = cur->f8;
-    compute_position_from_spherical_offset(cam + 0x30, camera_placement_parameters, &hero.motion.pos);
-    vec_sub_5d48(look_direction, &hero.motion.pos, cam + 0x30);
+    compute_position_from_spherical_offset(path_key_camera + 0x30, camera_placement_parameters, &hero.motion.pos);
+    vec_sub_5d48(look_direction, &hero.motion.pos, path_key_camera + 0x30);
     vec_scale_5d48(scaled_up_vector, &hero.gravity_dir, -1.5f);
     vec_add_5d48(look_direction, look_direction, scaled_up_vector);
-    vec_normalize_5d48(cam, look_direction, 1.0f);
-    vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
+    vec_normalize_5d48(path_key_camera, look_direction, 1.0f);
+    vec_cross_5d48(path_key_camera + 0x10, path_key_camera, scaled_up_vector);
     if (cur->fC != 0.0f) {
-        rotate_axis_5d48(cam, cam, cam + 0x10, cur->fC);
-        vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
+        rotate_axis_5d48(path_key_camera, path_key_camera, path_key_camera + 0x10, cur->fC);
+        vec_normalize_5d48(path_key_camera, path_key_camera, 1.0f);
+        vec_cross_5d48(path_key_camera + 0x10, path_key_camera, scaled_up_vector);
     }
     if (cur->f10 != 0.0f) {
-        rotate_axis_5d48(cam, cam, scaled_up_vector, cur->f10);
-        vec_normalize_5d48(cam, cam, 1.0f);
-        vec_cross_5d48(cam + 0x10, cam, scaled_up_vector);
+        rotate_axis_5d48(path_key_camera, path_key_camera, scaled_up_vector, cur->f10);
+        vec_normalize_5d48(path_key_camera, path_key_camera, 1.0f);
+        vec_cross_5d48(path_key_camera + 0x10, path_key_camera, scaled_up_vector);
     }
-    vec_normalize_5d48(cam + 0x10, cam + 0x10, 1.0f);
-    vec_cross_5d48(cam + 0x20, cam + 0x10, cam);
+    vec_normalize_5d48(path_key_camera + 0x10, path_key_camera + 0x10, 1.0f);
+    vec_cross_5d48(path_key_camera + 0x20, path_key_camera + 0x10, path_key_camera);
     st->count++;
 }
 /* Tells whether the vendor slot still blocks the menu (1) or lets it through (0). */
