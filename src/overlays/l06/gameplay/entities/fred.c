@@ -7861,7 +7861,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
     case UPDATE_VECTOR_STREAMS: {
         float stream_point_x;
         float stream_point_x_step;
-        float v;
+        float unwrapped_stream_phase;
         int i;
         int j;
         int k;
@@ -7871,10 +7871,10 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             vector_stream_vars->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         test_moby_vector_stream_collision_lines(moby);
-        v = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
-        D_L06_001621F8 = v;
-        if (1.0f < v) {
-            D_L06_001621F8 = v - 1.0f;
+        unwrapped_stream_phase = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
+        D_L06_001621F8 = unwrapped_stream_phase;
+        if (1.0f < unwrapped_stream_phase) {
+            D_L06_001621F8 = unwrapped_stream_phase - 1.0f;
         }
         stream_point_x_step = D_L06_00162204 / 30.0f;
         stream_point_x = -(D_L06_00162204 * 0.5f);
