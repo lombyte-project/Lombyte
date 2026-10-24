@@ -995,7 +995,9 @@ extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
 extern char D_L16_001671C0[];
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
-void FUN_L16_002c9a50(struct Moby *moby) {
+void update_conveyor_group_voice(struct Moby *moby) __asm__("FUN_L16_002c9a50");
+
+void update_conveyor_group_voice(struct Moby *moby) {
     short *group_entry = (short *)D_L16_001ABFC0_c9a50[moby->group];
     char *moby_data = (char *)moby->pvars;
     char *nearest = 0;
