@@ -1905,7 +1905,7 @@ extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
-extern float D_L11_001624F4;
+extern float layered_effect_bounds_radius __asm__("D_L11_001624F4");
 extern char D_L11_00167680[];
 extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
@@ -1964,7 +1964,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         effect_bounds[0] = layered_effect_position_x_gp;
         effect_bounds[1] = layered_effect_position_y;
         effect_bounds[2] = layered_effect_position_z;
-        effect_bounds[3] = D_L11_001624F4;
+        effect_bounds[3] = layered_effect_bounds_radius;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
