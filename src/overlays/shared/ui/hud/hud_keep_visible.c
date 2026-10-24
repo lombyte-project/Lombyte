@@ -576,7 +576,9 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
-int FUN_L00_00236e50(HudElem *hud_element) {
+int draw_uniform_size_hud_stars(HudElem *hud_element) __asm__("FUN_L00_00236e50");
+
+int draw_uniform_size_hud_stars(HudElem *hud_element) {
     float origin[4], direction[4], first_step[4], second_step[4], third_step[4], star_position[4];
     int x, y;
     float offset;

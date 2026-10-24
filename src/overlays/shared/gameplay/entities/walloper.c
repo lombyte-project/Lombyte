@@ -1418,7 +1418,7 @@ extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
 extern int FUN_L00_002223f8();
-extern int FUN_L00_00236e50();
+extern int draw_uniform_size_hud_stars() __asm__("FUN_L00_00236e50");
 extern int FUN_L00_0024f7c8();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
