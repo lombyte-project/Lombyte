@@ -3219,7 +3219,7 @@ struct L14RaceState {
 
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
-extern s32 D_L14_00161A2C __attribute__((sda));
+extern s32 level14_racer_start_interpolation_duration_frames __asm__("D_L14_00161A2C") __attribute__((sda));
 extern s32 D_L14_00161A34 __attribute__((sda));
 extern s32 D_L14_00161A5C __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
@@ -3293,7 +3293,7 @@ void update_level14_racer(struct Moby *racer_moby) {
         racer_moby->state = 3;
         set_moby_animation(racer_moby, 2, 0);
         racer_moby->anim_speed = 0.5f;
-        racer_vars->timer = scale_game_frames(D_L14_00161A2C);
+        racer_vars->timer = scale_game_frames(level14_racer_start_interpolation_duration_frames);
         racer_vars->inv_time = 1.0f / convert_integer_to_float(racer_vars->timer);
         qcopy(&racer_moby->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:
