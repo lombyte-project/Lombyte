@@ -16,7 +16,7 @@ struct SkyShellSet {
     struct SkyShell *shells[1];
 };
 
-extern f32 D_00160400 __attribute__((sda));
+extern f32 sky_shell_angle_step __asm__("D_00160400") __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
 extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -54,26 +54,26 @@ void draw_scrolling_sky_shells(void) {
             switch (shell_index) {
             case SKY_SHELL_TRIPLE_SCALE_LAYER:
                 rotation_angles[1] = 0.02f;
-                *shell_angle += D_00160400 * 0.55f;
+                *shell_angle += sky_shell_angle_step * 0.55f;
                 shell_scale = 3.0f;
                 break;
             case SKY_SHELL_TWO_AND_HALF_SCALE_LAYER:
                 rotation_angles[1] = -0.02f;
-                *shell_angle += D_00160400 * 0.6f;
+                *shell_angle += sky_shell_angle_step * 0.6f;
                 shell_scale = 2.5f;
                 break;
             case SKY_SHELL_DOUBLE_SCALE_LAYER:
                 rotation_angles[1] = 0.01f;
-                *shell_angle += D_00160400 * 0.7f;
+                *shell_angle += sky_shell_angle_step * 0.7f;
                 shell_scale = 2.0f;
                 break;
             case SKY_SHELL_ONE_AND_HALF_SCALE_LAYER:
                 rotation_angles[1] = -0.01f;
-                *shell_angle += D_00160400 * 0.75f;
+                *shell_angle += sky_shell_angle_step * 0.75f;
                 shell_scale = 1.5f;
                 break;
             case SKY_SHELL_ONE_AND_QUARTER_SCALE_LAYER:
-                *shell_angle += D_00160400 * 0.8f;
+                *shell_angle += sky_shell_angle_step * 0.8f;
                 shell_scale = 1.25f;
                 break;
             default:
