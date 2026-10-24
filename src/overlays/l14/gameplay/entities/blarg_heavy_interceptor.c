@@ -3003,9 +3003,9 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
 /* Flying debris: moves by its velocity under drag and gravity; while it is airborne it tumbles and trails
  * smoke, sparks and a light. When it hits the world or reaches the hero it explodes; once its timer runs out
  * or it leaves the level box it is removed. */
-extern f32 D_L14_001615D0 __attribute__((sda));
-extern f32 D_L14_001615D4 __attribute__((sda));
-extern f32 D_L14_001615D8 __attribute__((sda));
+extern f32 flying_debris_gravity __asm__("D_L14_001615D0") __attribute__((sda));
+extern f32 flying_debris_velocity_retention_factor __asm__("D_L14_001615D4") __attribute__((sda));
+extern f32 flying_debris_horizontal_drag_speed_threshold __asm__("D_L14_001615D8") __attribute__((sda));
 extern char D_L14_001809C0[];
 extern int tick_countdown_16_d(void *) __asm__("FUN_001f9770");
 extern void add_d(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3050,13 +3050,13 @@ void update_flying_debris(struct Moby *moby) {
     if (tick_countdown_16_d(debris_vars + 0x10) != 0)
         { remove_flying_debris((u8 *)moby); return; }
     add_d(&moby->pos, &moby->pos, debris_vars);
-    if (abs_d(*(float *)(debris_vars + 0x0)) > D_L14_001615D8 * frame_scale)
-        *(float *)(debris_vars + 0x0) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
-    if (abs_d(*(float *)(debris_vars + 0x4)) > D_L14_001615D8 * frame_scale)
-        *(float *)(debris_vars + 0x4) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(debris_vars + 0x0)) > flying_debris_horizontal_drag_speed_threshold * frame_scale)
+        *(float *)(debris_vars + 0x0) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(debris_vars + 0x4)) > flying_debris_horizontal_drag_speed_threshold * frame_scale)
+        *(float *)(debris_vars + 0x4) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
     if (*(float *)(debris_vars + 0x8) > 0.0f)
-        *(float *)(debris_vars + 0x8) *= (D_L14_001615D4 - 1.0f) * frame_scale + 1.0f;
-    *(float *)(debris_vars + 0x8) -= D_L14_001615D0 * frame_scale_sq;
+        *(float *)(debris_vars + 0x8) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
+    *(float *)(debris_vars + 0x8) -= flying_debris_gravity * frame_scale_sq;
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f || moby->pos.z < 2.0f ||
         moby->pos.z > 1021.0f)
         { remove_flying_debris((u8 *)moby); return; }
