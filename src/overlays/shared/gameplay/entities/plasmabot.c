@@ -743,7 +743,9 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
-void FUN_L14_002b2600(struct Moby *moby)
+void update_plasmabot_visual_effects(struct Moby *moby) __asm__("FUN_L14_002b2600");
+
+void update_plasmabot_visual_effects(struct Moby *moby)
 {
     Vec4 particle_spawn_position;
     Vec4 exhaust_position_offset;
