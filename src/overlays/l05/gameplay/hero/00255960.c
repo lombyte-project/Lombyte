@@ -136,7 +136,7 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-extern int D_L05_0015F6EC;
+extern int landing_run_entry_animation_frame __asm__("D_L05_0015F6EC");
 void update_hero_state_machine(void) __asm__("FUN_L05_00255960");
 
 void update_hero_state_machine(void) {
@@ -1475,7 +1475,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L05_0015F6EC, scale_game_frames(0xC));
+                            set_hero_animation(4, landing_run_entry_animation_frame, scale_game_frames(0xC));
                         }
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
