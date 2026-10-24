@@ -2040,10 +2040,10 @@ extern int D_L16_001619EC __attribute__((sda)); /* no foreign declaration */
 extern int D_L16_001619F0 __attribute__((sda)); /* no foreign declaration */
 extern int D_L16_001619E8 __attribute__((sda)); /* no foreign declaration */
 extern int D_L16_001619F4 __attribute__((sda)); /* no foreign declaration */
-extern float D_L16_001619F8 __attribute__((sda)); /* no foreign declaration */
-extern float D_L16_001619FC __attribute__((sda)); /* no foreign declaration */
-extern int D_L16_00161A00 __attribute__((sda)); /* no foreign declaration */
-extern int D_L16_00161A04 __attribute__((sda)); /* no foreign declaration */
+extern float linked_pair_ribbon_origin_z_offset __asm__("D_L16_001619F8") __attribute__((sda)); /* no foreign declaration */
+extern float linked_pair_ribbon_pass_z_step __asm__("D_L16_001619FC") __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_texture_id __asm__("D_L16_00161A00") __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_vertex_color __asm__("D_L16_00161A04") __attribute__((sda)); /* no foreign declaration */
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -2063,14 +2063,14 @@ void draw_linked_pair_ribbons(char *moby, char *partner) {
     frame[2][2] = 1.0f;
     cross_vectors_xyz(frame[1], frame[0], frame[2]);
     qcopy(frame[3], moby + 0x10);
-    frame[3][2] += D_L16_001619F8;
+    frame[3][2] += linked_pair_ribbon_origin_z_offset;
     frame[3][3] = 1.0f;
-    packet.texture = get_effect_texture(D_L16_00161A00);
+    packet.texture = get_effect_texture(linked_pair_ribbon_texture_id);
     packet.mode = (long)D_L16_001619E8 | ((long)D_L16_001619EC << 2) | ((long)D_L16_001619F0 << 4) |
                   ((long)D_L16_001619F4 << 6) | 0x8000000000L;
     packet.flags = 0xFF9000000260L;
     packet.zero = 0;
-    color = D_L16_00161A04;
+    color = linked_pair_ribbon_vertex_color;
     for (corner = 0; corner < 4; corner++) {
         packet.uv[corner].u = D_L16_001D31B0[corner][0];
         packet.uv[corner].v = D_L16_001D31B0[corner][1];
@@ -2079,7 +2079,7 @@ void draw_linked_pair_ribbons(char *moby, char *partner) {
     }
     for (pass = 0; pass < 4; pass++) {
         draw_geometry_quad(&packet, frame[0], 0);
-        frame[3][2] += D_L16_001619FC;
+        frame[3][2] += linked_pair_ribbon_pass_z_step;
     }
 }
 
