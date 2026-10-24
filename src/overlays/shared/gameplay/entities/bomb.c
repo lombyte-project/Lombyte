@@ -1570,8 +1570,8 @@ int fr_2cbf68(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_2cbf68(void *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
-extern int D_L00_001618A4 __attribute__((sda));
-extern float D_L00_001618A0 __attribute__((sda));
+extern int feather_base_lifetime __asm__("D_L00_001618A4") __attribute__((sda));
+extern float feather_scale_multiplier __asm__("D_L00_001618A0") __attribute__((sda));
 unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initial_velocity) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
@@ -1605,14 +1605,14 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
         *(float *)(moby_vars + 0x10) = rnda_2cbf68();
         {
             float initial_random_angle = rnda_2cbf68();
-            float base_lifetime = (float)D_L00_001618A4;
+            float base_lifetime = (float)feather_base_lifetime;
             *(float *)(moby_vars + 0x14) = initial_random_angle;
             lifetime_lower_bound = rf_2cbf68(base_lifetime * 0.7f);
         }
-        lifetime_upper_bound = rf_2cbf68((float)D_L00_001618A4 * 1.2f);
+        lifetime_upper_bound = rf_2cbf68((float)feather_base_lifetime * 1.2f);
         *(int *)(moby_vars + 0x1C) = fr_2cbf68(rndi_2cbf68(lifetime_lower_bound, lifetime_upper_bound));
         {
-            float k = D_L00_001618A0;
+            float k = feather_scale_multiplier;
             *(float *)(spawned_moby + 0x2C) *= k;
         }
         if (D_0013E535_2cbf68)
