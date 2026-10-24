@@ -3331,6 +3331,7 @@ int process_hero_equipped_item_input(void) {
     enum {
         ITEM_WRENCH = 8,
         ITEM_GRAPPLE = 12,
+        ITEM_VEHICLE_MODE_TOGGLE = 31,
         ITEM_REMOTE_VENDOR = 32
     };
     int out[3];
@@ -3493,7 +3494,7 @@ int process_hero_equipped_item_input(void) {
             }
         }
         break;
-    case 31:
+    case ITEM_VEHICLE_MODE_TOGGLE:
         if (D_0013F450_h228770.f20A4 != 0) {
             break;
         }
