@@ -535,12 +535,12 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *spawn_spawner_egg(int owner, void *pos, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
+char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
     char *spawned_moby = (char *)func_0020D348_m(0x75E);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         *(int *)(moby_vars + 0x10) = owner;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, initial_position);
         qcopy(moby_vars, initial_velocity);
         *(float *)(spawned_moby + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
         *(float *)(spawned_moby + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
