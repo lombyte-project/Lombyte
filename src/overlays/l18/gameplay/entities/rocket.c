@@ -567,7 +567,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 char *create_rocket_moby(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) __asm__("FUN_L18_002d5348");
 
-char *create_rocket_moby(float *pos, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
+char *create_rocket_moby(float *rocket_spawn_position, float *initial_movement_step, float *target, float movement_rotation_z, float movement_rotation_y, int frames, int kind) {
     char *moby = create_moby(0x234);
     if (moby != 0) {
         char *data;
@@ -577,7 +577,7 @@ char *create_rocket_moby(float *pos, float *initial_movement_step, float *target
         moby[0x20] = 0;
         set_moby_color(moby, 0xC0, 0xC0, 0xC0);
         *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * D_L18_00161960;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, rocket_spawn_position);
         data = *(char **)(moby + 0x78);
         qcopy(data, initial_movement_step);
         qcopy(data + 0x10, target);
