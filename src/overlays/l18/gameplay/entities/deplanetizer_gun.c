@@ -1329,7 +1329,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
-extern void FUN_L00_00261d78(float, void *, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
 float move_gadgebot_toward_target(char *self, float *target_position_source) {
     QVec target_position;
@@ -1355,7 +1355,7 @@ float move_gadgebot_toward_target(char *self, float *target_position_source) {
     v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[2] = -(frame_time + frame_time);
     FUN_L00_00258830((int)self, (int)v, movement_clearance, movement_clearance, z, 0);
-    FUN_L00_00261d78(movement_clearance, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
+    resolve_point_path_segment_xy_clearance(movement_clearance, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
     return initial_target_distance_xy;
 }
 #include "qcopy.h"

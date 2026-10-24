@@ -1122,7 +1122,7 @@ extern void FUN_L00_00257d78(float *, float, float);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00261d78(int, void *, void *, float);
+extern void resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN_L00_00261d78");
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
@@ -1274,7 +1274,7 @@ void extermibot_update(unsigned char *moby) {
             dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
+            resolve_point_path_segment_xy_clearance(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         (*(short *)(moby_data + 0x2D2))++;
         if ((vector_distance_xy_alt(moby_position, moby_data + 0x280) < 1.0f && *(short *)(moby_data + 0x2D2) > scale_game_frames(0x3C))
@@ -1299,7 +1299,7 @@ void extermibot_update(unsigned char *moby) {
             dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
+            resolve_point_path_segment_xy_clearance(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         near = 0;
         if (FUN_L00_00261b48(*(int *)(moby_data + 0x2C0), moby_position, target_moby + 0x10, hit) != 0

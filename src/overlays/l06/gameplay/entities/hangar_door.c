@@ -1900,7 +1900,7 @@ extern int FUN_L00_0024f7c8();
 extern int FUN_L00_00259740();
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
-extern void FUN_L00_00261d78(f32, s32, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -3291,7 +3291,7 @@ extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void FUN_L00_00261d78(f32, s32, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
 
 /* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
 void FUN_L06_002fbc88(struct Moby *moby) {
@@ -3331,7 +3331,7 @@ void FUN_L06_002fbc88(struct Moby *moby) {
     step.z = 0.0f;
     normalize_vector_xyz(&step, &step, circler_vars->speed);
     add_vector_xyz(&moby->pos, &moby->pos, &step);
-    FUN_L00_00261d78(1.0f, circler_vars->ground, &moby->pos, &moby->pos);
+    resolve_point_path_segment_xy_clearance(1.0f, circler_vars->ground, &moby->pos, &moby->pos);
 }
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

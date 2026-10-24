@@ -103,7 +103,7 @@ extern s32 mine_fall(struct Moby *, Vec4 *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *, Vec4 *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,
                              f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern s32 FUN_L00_00261b48(s32, void *, void *, void *);
-extern void FUN_L00_00261d78(s32, void *, void *, f32);
+extern void resolve_point_path_segment_xy_clearance(s32, void *, void *, f32) __asm__("FUN_L00_00261d78");
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void FUN_L00_00263fd8(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *);
 extern void FUN_L01_0026d930(MoveCtl *);
@@ -331,7 +331,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_movement_vector.f[2] = 0.0f;
         FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
-        FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
+        resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &movement_output_or_hit_vector_or_path_point) != 0 &&
             FUN_001f9b48(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
@@ -384,7 +384,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 moby->rot.z, fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y)) <
             0.7853982f) {
             FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
-            FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
+            resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (FUN_001f9b48(&vars->home, &moby->pos) < 1.0f) {
             moby->state = 1;

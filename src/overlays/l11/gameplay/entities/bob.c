@@ -486,7 +486,7 @@ void update_resort_owner_state_actions(void *mp) {
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
-extern void FUN_L00_00261d78(float, void *, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
 void apply_resort_owner_movement(void *mp) {
     unsigned char *moby = mp;
@@ -497,17 +497,17 @@ void apply_resort_owner_movement(void *mp) {
     qcopy(B, moby_vars + 0x130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
     if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(moby_vars + 0x15C) == 3)) {
-        FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x60 - -(*(int *)(moby_vars + 0x158) * 4)), moby + 0x10,
+        resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x60 - -(*(int *)(moby_vars + 0x158) * 4)), moby + 0x10,
                          moby + 0x10);
         switch (*(int *)(moby_vars + 0x158)) {
         case RESORT_OWNER_PENULTIMATE_PATH_LEG:
-            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x88), moby + 0x10, moby + 0x10);
+            resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+            resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
+            resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x88), moby + 0x10, moby + 0x10);
             break;
         case RESORT_OWNER_FINAL_PATH_LEG:
-            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
-            FUN_L00_00261d78(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
+            resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x80), moby + 0x10, moby + 0x10);
+            resolve_point_path_segment_xy_clearance(0.3f, *(void **)(moby_vars + 0x84), moby + 0x10, moby + 0x10);
             break;
         }
     }

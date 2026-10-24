@@ -2254,7 +2254,7 @@ extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void FUN_0020c828_2d4610(void *) __asm__("FUN_0020c828");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern void FUN_L00_00261d78_2d4610(int, float, void *, void *) __asm__("FUN_L00_00261d78");
+extern void resolve_point_path_segment_xy_clearance(int, float, void *, void *) __asm__("FUN_L00_00261d78");
 extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D5AC0), where it is exact; names translated to the US level program. */
@@ -2467,7 +2467,7 @@ void horny_toad_update(Moby *moby) {
     if (moby->state != 11 && moby->state != 12 && moby->state != 9) {
         FUN_00213ed8_2d4610(probe_ground_height((*(ToadVec *)&moby->pos), 0, 0.5f), frame_time * 7.0f, &(*(ToadVec *)&moby->pos)[2]);
         if (moby->state != 4) {
-            FUN_L00_00261d78_2d4610(data->unk1E0, 0.25f, (*(ToadVec *)&moby->pos), (*(ToadVec *)&moby->pos));
+            resolve_point_path_segment_xy_clearance(data->unk1E0, 0.25f, (*(ToadVec *)&moby->pos), (*(ToadVec *)&moby->pos));
         }
     }
     if (data->pickup_moby != -1) {

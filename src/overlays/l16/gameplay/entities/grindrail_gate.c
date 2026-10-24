@@ -1361,7 +1361,7 @@ extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025be00_c(float *, float *, float, float, float,
                                 float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(void *, void *, float, float, float, int);
-extern void FUN_L00_00261d78(float, void *, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern float func_00214D88_7890(float *, float, float, float, float,
                                 float *) __asm__("FUN_00213f38");
@@ -1386,7 +1386,7 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     normalize_vector_xyz(movement_delta, moby + 0xC0, *(float *)(moby_data + 0x204));
     movement_delta[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
-    FUN_L00_00261d78(0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
+    resolve_point_path_segment_xy_clearance(0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
     *(float *)(moby_data + 0x208) = oldz - *(float *)(moby + 0x18);
     return distance_to_target;
 }

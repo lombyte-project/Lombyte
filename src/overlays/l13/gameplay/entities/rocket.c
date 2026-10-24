@@ -834,7 +834,7 @@ extern void FUN_L00_00259d08(void *, void *, void *, void *, struct Moby *, Shot
 extern void FUN_L00_0025a120(void *);
 extern void approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00261d78(int, void *, void *, float);
+extern void resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN_L00_00261d78");
 extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L13_00308d10_c(struct Moby *) __asm__("FUN_L13_00308d10");
@@ -1029,7 +1029,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         } else {
             vars->unk1A8 = 0.0f;
         }
-        FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
+        resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         path_blocked = 0;
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
@@ -1064,7 +1064,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
         FUN_L00_00258b50(moby, &vars->ctl, &point, &origin, 1.0f);
-        FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
+        resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;
@@ -1120,7 +1120,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         if (fast_difference_between_rotations(moby->rot.z, fast_arc_tan_c(vars->home.f[0] - moby->pos.x,
                                                          vars->home.f[1] - moby->pos.y)) < 0.7853982f) {
             FUN_L00_00258b50(moby, &vars->ctl, &point, &origin, 1.0f);
-            FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
+            resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (fast_vec_dist(&vars->home, &moby->pos) < 1.0f) {
             moby->state = 1;

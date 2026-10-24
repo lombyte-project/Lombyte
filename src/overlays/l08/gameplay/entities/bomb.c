@@ -2010,7 +2010,7 @@ extern LiftLock D_L08_00179C10;
 extern s32 D_0013CAE4[];
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
-extern void FUN_L00_00261d78(s32, float, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(s32, float, void *, void *) __asm__("FUN_L00_00261d78");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_transform_wobble(struct Moby *) __asm__("FUN_L08_002dc4a0");
@@ -2076,7 +2076,7 @@ void shuttle_update(struct Moby *moby) {
         if (hero.ground_moby == moby) {
             if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
                 qcopy(&hero_position_probe, &hero.motion.pos);
-                FUN_L00_00261d78(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
+                resolve_point_path_segment_xy_clearance(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (distance_xyz(&hero.motion.pos, &hero_position_probe) < 0.001f) {
                     try_set_shuttle_departure_help_message((char *)moby);
                     if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)

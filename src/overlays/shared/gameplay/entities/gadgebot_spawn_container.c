@@ -924,7 +924,7 @@ void probe_frog_local_z_collision(char *moby) {
     collision_line(collision_line_start, collision_line_end, 2, 0, 0);
 }
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void FUN_L00_00261d78(float, int, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern f32 D_0015ED6C;
 extern u128 D_L06_001745E0 __attribute__((section(".data")));
 extern u128 D_L06_001745F0 __attribute__((section(".data")));
@@ -960,7 +960,7 @@ void move_frog_with_collision_resolution(float scale, float threshold, char *mob
         }
     }
     if (follow_path != 0) {
-        FUN_L00_00261d78(0.5f, *(int *)(*(char **)(moby + 0x78) + 0x1EC), moby + 0x10, moby + 0x10);
+        resolve_point_path_segment_xy_clearance(0.5f, *(int *)(*(char **)(moby + 0x78) + 0x1EC), moby + 0x10, moby + 0x10);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -1400,7 +1400,7 @@ extern void FUN_L00_0025a120(void *);
 extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
-extern void FUN_L00_00261d78(float, int, void *, void *);
+extern void resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
 extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
 extern void assign_gadgebot_attack_targets(void) __asm__("FUN_L06_002f2250");
@@ -1691,7 +1691,7 @@ void gadgebot_update(GbMoby *moby) {
                         qcopy(position_and_displacement_scratch, hero.motion.pos.f);
                     }
                     *(OvlQuad *)path_and_attack_vector = *(OvlQuad *)moby->pos;
-                    FUN_L00_00261d78(0.17f, gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, path_and_attack_vector);
+                    resolve_point_path_segment_xy_clearance(0.17f, gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, path_and_attack_vector);
                     p = D_L06_001B0C30[gadgebot_vars->paths.id[gadgebot_vars->unk27C]];
                     if (point_in_path_xy(path_and_attack_vector, p + 4, *p) != 0) {
                         *(OvlQuad *)moby->pos = *(OvlQuad *)path_and_attack_vector;
@@ -1829,7 +1829,7 @@ void gadgebot_update(GbMoby *moby) {
                         qcopy(vector_and_hit_scratch, gadgebot_vars->target->pos);
                     }
                     *(OvlQuad *)temporary_position = *(OvlQuad *)moby->pos;
-                    FUN_L00_00261d78(0.17f, gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, temporary_position);
+                    resolve_point_path_segment_xy_clearance(0.17f, gadgebot_vars->paths.id[gadgebot_vars->unk27C], moby->pos, temporary_position);
                     p = D_L06_001B0C30[gadgebot_vars->paths.id[gadgebot_vars->unk27C]];
                     if (point_in_path_xy(temporary_position, p + 4, *p) != 0) {
                         *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
