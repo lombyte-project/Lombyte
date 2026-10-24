@@ -1556,7 +1556,7 @@ extern float D_L13_00161210;
 extern float D_L13_00161214;
 extern void *D_L13_001612D0;
 extern void *D_L13_001612D4;
-extern int D_L13_001612D8;
+extern int gemlik_pool_tile_count __asm__("D_L13_001612D8");
 int D_L13_00161EF0 = -1;
 extern unsigned short D_L13_00161EF4 __attribute__((sda));
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -1629,7 +1629,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             tile_lighting->c3C = 0x60;
             tile_lighting->c3D = 0x40;
             tb = D_L13_001F1E80;
-            D_L13_001612D8 = 22;
+            gemlik_pool_tile_count = 22;
             D_L13_0016120C = 32768.0f;
             D_L13_00161210 = 255.0f;
             D_L13_00161214 = 48.0f;
