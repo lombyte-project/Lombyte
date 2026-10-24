@@ -659,7 +659,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     Cam_2E8210 *camera_state_base;
     CamG_2E8210 *g;
     char *q1;
-    char *q2;
+    char *camera_approach_state;
     char *camera_override_state;
     Cam240_2E8210 *p240;
     int r;
@@ -727,18 +727,18 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     ((Cam190_2E8210 *)q1)->i4 = 0;
     ((Cam190_2E8210 *)q1)->f14 = 14.2857f;
 
-    q2 = (char *)camera_moby->cam;
-    ((Cam_2E8210 *)q2)->p1A8.flags = 0;
-    q2 = (char *)&((Cam_2E8210 *)q2)->p1A8;
-    ((Cam1A8_2E8210 *)q2)->f14 = D_L00_0015EF44;
-    ((Cam1A8_2E8210 *)q2)->f18 = 0.5235988f;
-    ((Cam1A8_2E8210 *)q2)->i8 = 0;
-    ((Cam1A8_2E8210 *)q2)->i4 = 0;
-    ((Cam1A8_2E8210 *)q2)->iC = 0;
-    ((Cam1A8_2E8210 *)q2)->i10 = 0;
-    ((Cam1A8_2E8210 *)q2)->i1C = 0;
-    ((Cam1A8_2E8210 *)q2)->i20 = 0;
-    ((Cam1A8_2E8210 *)q2)->i24 = 0;
+    camera_approach_state = (char *)camera_moby->cam;
+    ((Cam_2E8210 *)camera_approach_state)->p1A8.flags = 0;
+    camera_approach_state = (char *)&((Cam_2E8210 *)camera_approach_state)->p1A8;
+    ((Cam1A8_2E8210 *)camera_approach_state)->f14 = D_L00_0015EF44;
+    ((Cam1A8_2E8210 *)camera_approach_state)->f18 = 0.5235988f;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i8 = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i4 = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->iC = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i10 = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i1C = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i20 = 0;
+    ((Cam1A8_2E8210 *)camera_approach_state)->i24 = 0;
 
     camera_override_state = (char *)camera_moby->cam;
     ((Cam_2E8210 *)camera_override_state)->p220.i0 = 0;
