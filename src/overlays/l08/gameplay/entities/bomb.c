@@ -90,10 +90,10 @@ extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
 extern float D_L08_0016144C __attribute__((sda));
-extern float D_L08_00161458 __attribute__((sda));
-extern float D_L08_0016145C __attribute__((sda));
-extern int D_L08_00161460 __attribute__((sda));
-extern float D_L08_00161464 __attribute__((sda));
+extern float bolt_pickup_collision_stop_speed_threshold __asm__("D_L08_00161458") __attribute__((sda));
+extern float bolt_pickup_collision_speed_reduction __asm__("D_L08_0016145C") __attribute__((sda));
+extern int bolt_pickup_bob_period_ticks __asm__("D_L08_00161460") __attribute__((sda));
+extern float bolt_pickup_bob_amplitude __asm__("D_L08_00161464") __attribute__((sda));
 extern int D_L08_00174658;
 extern int D_L08_0015F5CC;
 extern int FUN_L00_001ff660();
@@ -166,7 +166,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
             ok = 1;
             if (D_L08_001746D8_2B94B0i == 0 || moby_data->ticks >= 10) {
-                if (f20 < D_L08_00161458) {
+                if (f20 < bolt_pickup_collision_stop_speed_threshold) {
                     ok = 0;
                 } else {
                     subtract_vector_xyz(E, P, (D_L08_001746D8_2B94B0 + 8));
@@ -175,7 +175,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                 }
                 if (ok != 0) {
                     func_L00_001FF610_2B94B0(F, moby_data->vel, D_L08_00174700_2B94B0);
-                    adjusted_speed_or_bob_sine = fast_vec_length(F) - D_L08_0016145C;
+                    adjusted_speed_or_bob_sine = fast_vec_length(F) - bolt_pickup_collision_speed_reduction;
                     fast_vec_normalize(moby_data->vel, F, adjusted_speed_or_bob_sine < 0.0f ? 0.0f : adjusted_speed_or_bob_sine);
                 } else {
                     clear_u64_value(moby_data->vel);
@@ -219,11 +219,11 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         mark_moby_for_removal(moby);
         return;
     }
-    bob_period_ticks = D_L08_00161460;
+    bob_period_ticks = bolt_pickup_bob_period_ticks;
     bob_phase_radians = (float)(moby_data->ticks % bob_period_ticks) / (float)(bob_period_ticks - 1) * 6.2831855f - 3.1415927f;
     adjusted_speed_or_bob_sine = func_001F9FA8_2B94B0(bob_phase_radians);
     moby_data->f8 = moby->pos[2];
-    moby->pos[2] = moby->pos[2] + D_L08_00161464 * adjusted_speed_or_bob_sine;
+    moby->pos[2] = moby->pos[2] + bolt_pickup_bob_amplitude * adjusted_speed_or_bob_sine;
 }
 #define NOT_SDA
 
