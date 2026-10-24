@@ -12,8 +12,8 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L04_001B09B0[] __attribute__((section(".data")));
 extern char *D_L04_001D1700[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L04_00252e18(char *a, char *o, float best);
-int FUN_L04_00252e18(char *reference_object, char *output_record, float best) {
+int select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
+int select_moby_record_by_xy_distance(char *reference_object, char *output_record, float best) {
     struct Hero *hero = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
