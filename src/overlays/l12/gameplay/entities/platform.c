@@ -3136,7 +3136,7 @@ void edwina_update(L16WatchMoby *moby) {
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
 extern char D_0013D408[];
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
-extern int D_0015EE04 __attribute__((sda));
+extern int helicopter_help_message_hit_count __asm__("D_0015EE04") __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -3154,8 +3154,8 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
     unsigned char *help_message_state;
     if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
-            D_0015EE04 += 1;
-            if (D_0015EE04 >= 5) {
+            helicopter_help_message_hit_count += 1;
+            if (helicopter_help_message_hit_count >= 5) {
                 help_message_state = (unsigned char *)(D_0013D408);
                 if (help_message_state[0x15] == 0) {
                     help_message_state[0x15] = 1;
