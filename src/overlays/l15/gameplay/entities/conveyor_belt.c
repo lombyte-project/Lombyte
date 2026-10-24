@@ -660,7 +660,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     unsigned int i = 0;
     unsigned int output_vertex_byte_offset = 0;
     RingVars *data = (RingVars *)moby->pvars;
-    unsigned int n;
+    unsigned int scrolled_uv_vertex_index;
     int j;
     int k;
     int color;
@@ -701,12 +701,12 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
         output_vertex += 3;
     } while (i < 68);
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < 68; n++) {
+        for (scrolled_uv_vertex_index = 0; scrolled_uv_vertex_index < 68; scrolled_uv_vertex_index++) {
             uv_scroll_factors = D_L15_00162170;
-            D_L15_001DE530[n][0] =
-                D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
-            D_L15_001DE530[n][1] =
-                D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
+            D_L15_001DE530[scrolled_uv_vertex_index][0] =
+                D_L15_001DDED0[scrolled_uv_vertex_index][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
+            D_L15_001DE530[scrolled_uv_vertex_index][1] =
+                D_L15_001DDED0[scrolled_uv_vertex_index][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
