@@ -2103,11 +2103,11 @@ int D_L15_00162250[1] = {(int)D_L15_001E0020};
 int D_L15_00162254 = 128;
 int D_L15_00162258 = 45;
 int D_L15_0016225C = 64;
-extern float D_L15_00162260 __attribute__((sda));
+extern float ripple_88_radial_wavelength __asm__("D_L15_00162260") __attribute__((sda));
 extern float D_L15_00162264 __attribute__((sda));
-extern float D_L15_00162268 __attribute__((sda));
-extern float D_L15_0016226C __attribute__((sda));
-extern float D_L15_00162270 __attribute__((sda));
+extern float ripple_88_z_amplitude __asm__("D_L15_00162268") __attribute__((sda));
+extern float ripple_88_uv_scroll_rate __asm__("D_L15_0016226C") __attribute__((sda));
+extern float ripple_88_template_vertex_scale __asm__("D_L15_00162270") __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 88 scaled vertices and colours, then two passes of 88 texture coordinates. */
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edfc0");
 
@@ -2122,7 +2122,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (D_L15_0016226C * D_0015ED6C_2edfc0);
+    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (ripple_88_uv_scroll_rate * D_0015ED6C_2edfc0);
     FUN_00233980_2edfc0(6, FUN_001f44b8_2edfc0(D_L15_00162258));
     FUN_00233980_2edfc0(0x42, ((long)D_L15_00162254 << 32) | 0x44);
     FUN_00233980_2edfc0(8, 0);
@@ -2136,12 +2136,12 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = FUN_001f9988_2edfc0(x * x + y * y);
-        float radius_remainder = FUN_L00_00200260_2edfc0(rad, D_L15_00162260);
-        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / D_L15_00162260);
+        float radius_remainder = FUN_L00_00200260_2edfc0(rad, ripple_88_radial_wavelength);
+        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / ripple_88_radial_wavelength);
         float z = FUN_001f9de0_2edfc0(FUN_001fa580_2edfc0(w, data->angle));
-        D_L15_001DF940[i][0] = D_L15_00162270 * template_vertex[0] + moby->pos.x;
-        D_L15_001DF940[i][1] = D_L15_00162270 * template_vertex[1] + moby->pos.y;
-        D_L15_001DF940[i][2] = D_L15_00162270 * template_vertex[2] + moby->pos.z + D_L15_00162268 * z;
+        D_L15_001DF940[i][0] = ripple_88_template_vertex_scale * template_vertex[0] + moby->pos.x;
+        D_L15_001DF940[i][1] = ripple_88_template_vertex_scale * template_vertex[1] + moby->pos.y;
+        D_L15_001DF940[i][2] = ripple_88_template_vertex_scale * template_vertex[2] + moby->pos.z + ripple_88_z_amplitude * z;
         D_L15_001E0020[i] = color;
     }
     for (j = 0; j < 2; j++) {
