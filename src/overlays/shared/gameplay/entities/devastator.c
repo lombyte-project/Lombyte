@@ -1617,7 +1617,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
-struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
+struct Moby *spawn_homing_shot(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed) __asm__("FUN_L00_002caf70");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");

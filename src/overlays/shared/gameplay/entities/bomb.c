@@ -1126,7 +1126,9 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 #include "rnc/gameplay/state/item_state.h"
 
-char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) {
+char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) __asm__("FUN_L00_002caf70");
+
+char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) {
     float start_position[4];
     float probe[4];
     float direction[4];
