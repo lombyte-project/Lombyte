@@ -1782,10 +1782,10 @@ extern float D_L18_00161C20 __attribute__((sda));
 extern float D_L18_00161C24;
 extern float D_L18_00161C28 __attribute__((sda));
 extern float D_L18_00161C2C __attribute__((sda));
-extern int D_L18_00161C30 __attribute__((sda));
-extern int D_L18_00161C34;
-extern int D_L18_00161C38 __attribute__((sda));
-extern int D_L18_00161C3C __attribute__((sda));
+extern int ballistic_ring_trail_initial_color_start __asm__("D_L18_00161C30") __attribute__((sda));
+extern int ballistic_ring_trail_initial_color_end __asm__("D_L18_00161C34");
+extern int ballistic_ring_trail_second_color_start __asm__("D_L18_00161C38") __attribute__((sda));
+extern int ballistic_ring_trail_second_color_end __asm__("D_L18_00161C3C") __attribute__((sda));
 extern int ballistic_ring_trail_sparks_per_update __asm__("D_L18_00161C40") __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
@@ -1833,9 +1833,9 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
             clear_vector(second_spark_vector);
             first_spark_vector[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
             second_spark_vector[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
-            i0 = FUN_001fa6e0(D_L18_00161C30, D_L18_00161C34,
+            i0 = FUN_001fa6e0(ballistic_ring_trail_initial_color_start, ballistic_ring_trail_initial_color_end,
                               random_float_between(0.0f, 1.0f));
-            i1 = FUN_001fa6e0(D_L18_00161C38, D_L18_00161C3C,
+            i1 = FUN_001fa6e0(ballistic_ring_trail_second_color_start, ballistic_ring_trail_second_color_end,
                               random_float_between(0.0f, 1.0f));
             i2 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C10 * random_float_between(0.0f, 1.0f) + 1.0f));
