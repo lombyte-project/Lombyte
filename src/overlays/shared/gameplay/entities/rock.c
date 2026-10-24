@@ -1934,8 +1934,8 @@ void teleporter_update(struct Moby *moby) {
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
 
-extern float D_L01_00161F78 __attribute__((sda));
-extern float D_L01_00161F80 __attribute__((sda));
+extern float teleporter_child_position_z_offset __asm__("D_L01_00161F78") __attribute__((sda));
+extern float teleporter_child_displacement_angle_degrees __asm__("D_L01_00161F80") __attribute__((sda));
 void update_teleporter_child_transforms(char *parent_moby) {
     char *parent_data = *(char **)(parent_moby + 0x78);
     char **child_slot = (char **)(parent_data + 0x14);
@@ -1946,8 +1946,8 @@ void update_teleporter_child_transforms(char *parent_moby) {
         float u;
         char *child_moby = *child_slot;
         qcopy(child_moby + 0x10, parent_moby + 0x10);
-        u = D_L01_00161F80 * DEG_TO_RAD;
-        *(float *)(child_moby + 0x18) += D_L01_00161F78;
+        u = teleporter_child_displacement_angle_degrees * DEG_TO_RAD;
+        *(float *)(child_moby + 0x18) += teleporter_child_position_z_offset;
         *(float *)(*child_slot + 0x44) = u;
         child_offset_length = *(float *)(parent_data + 0x20) * 2.4f - 1.2f;
         euler_rotation_basis(*child_slot + 0xC0, *child_slot + 0x40);
