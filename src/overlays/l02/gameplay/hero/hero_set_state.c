@@ -709,7 +709,7 @@ int hero_set_state(int a, int b) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->unk1F2 != 0) {
             p->state.current = p->state.prev;
@@ -1290,7 +1290,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x68: {
+    case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
@@ -1313,7 +1313,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7B: {
+    case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
