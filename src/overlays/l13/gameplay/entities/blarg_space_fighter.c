@@ -2992,7 +2992,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 
-void FUN_L13_002e9680(void *unused, char *parent_data, int child_slot_index) {
+void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slot_index) __asm__("FUN_L13_002e9680");
+
+void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slot_index) {
     char *base = parent_data + 0xC4;
     int child_slot_byte_offset = child_slot_index * 4;
     char **slot = (char **)(base + child_slot_byte_offset);

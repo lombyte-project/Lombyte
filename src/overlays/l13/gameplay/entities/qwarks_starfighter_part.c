@@ -491,7 +491,7 @@ extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8
 extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
 extern void update_moby_spring_steering_and_banking(void *, void *, float, float) __asm__("FUN_L13_002e9018");
-extern void FUN_L13_002e9680(void *, void *, int);
+extern void detach_moby_joint_attachment(void *, void *, int) __asm__("FUN_L13_002e9680");
 extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e9a48");
 extern void draw_starfighter_tractor_beam();
 extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("FUN_L13_002eac00");
@@ -835,7 +835,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
         if (data->iF8 == 1) {
-            FUN_L13_002e9680(moby, data, 8);
+            detach_moby_joint_attachment(moby, data, 8);
             allocate_voice_for_target_entry_alt(7, 0, (int)moby);
         }
         tick_countdown_32_alt(&data->iF8);
