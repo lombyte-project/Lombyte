@@ -36,7 +36,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         HERO_MOTION_FIXED_POINT_ACCELERATION = 2
     };
     f32 predicted_position[4];
-    V4_32b90 v;
+    V4_32b90 position_or_acceleration_vector;
     V4_32b90 vector_scratch;
     V4_32b90 hero_position_copy;
     f32 quadratic_roots[6];
@@ -48,10 +48,10 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
             FUN_001f9a68_32b90(predicted_position, &hero.motion.velocity, prediction_time);
             predicted_position[2] -= ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale;
             FUN_001f9a10_32b90(predicted_position, predicted_position, &hero.motion.pos);
-            v.q = hero.motion.pos.q;
-            clip_negative_segment_endpoint_xyz(&v, predicted_position);
-            qcopy(&v, &hero.motion.pos);
-            if (FUN_001efa68_32b90(&v, predicted_position, 0xd24, 0, 0) != 0) {
+            position_or_acceleration_vector.q = hero.motion.pos.q;
+            clip_negative_segment_endpoint_xyz(&position_or_acceleration_vector, predicted_position);
+            qcopy(&position_or_acceleration_vector, &hero.motion.pos);
+            if (FUN_001efa68_32b90(&position_or_acceleration_vector, predicted_position, 0xd24, 0, 0) != 0) {
                 if (compute_gravity_relative_vector_inclination((f32 *)D_L00_00173E80_32b90) <= 0.87266463f) {
                     target_z = *(f32 *)(D_L00_00173E80_32b90 - 0x18);
                 }
@@ -66,11 +66,11 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         }
         break;
     case HERO_MOTION_STORED_VECTOR_ACCELERATION:
-        qcopy(&v, &hero.unk270);
-        FUN_001f9bf8_32b90(&v, &v, acceleration_scale);
-        FUN_001f9a68_32b90(&v, &v, -1.0f);
+        qcopy(&position_or_acceleration_vector, &hero.unk270);
+        FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, acceleration_scale);
+        FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
         FUN_001f9a68_32b90(predicted_position, &hero.motion.velocity, prediction_time);
-        FUN_001f9a68_32b90(&vector_scratch, &v, ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale);
+        FUN_001f9a68_32b90(&vector_scratch, &position_or_acceleration_vector, ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale);
         FUN_001f9a10_32b90(predicted_position, &vector_scratch, predicted_position);
         FUN_001f9a10_32b90(predicted_position, &hero.motion.pos, predicted_position);
         hero_position_copy.q = hero.motion.pos.q;
@@ -90,11 +90,11 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         vector_scratch.f[2] = 100.0f;
         vector_scratch.f[1] = 100.0f;
         vector_scratch.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&v, &hero.motion.pos, &vector_scratch);
-        FUN_001f9bf8_32b90(&v, &v, acceleration_scale);
-        FUN_001f9a68_32b90(&v, &v, -1.0f);
+        FUN_001f9a28_32b90(&position_or_acceleration_vector, &hero.motion.pos, &vector_scratch);
+        FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, acceleration_scale);
+        FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
         FUN_001f9a68_32b90(predicted_position, &hero.motion.velocity, prediction_time);
-        FUN_001f9a68_32b90(&vector_scratch, &v, ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale);
+        FUN_001f9a68_32b90(&vector_scratch, &position_or_acceleration_vector, ((prediction_time * prediction_time + prediction_time) * 0.5f) * acceleration_scale);
         FUN_001f9a10_32b90(predicted_position, &vector_scratch, predicted_position);
         FUN_001f9a10_32b90(predicted_position, &hero.motion.pos, predicted_position);
         hero_position_copy.q = hero.motion.pos.q;
