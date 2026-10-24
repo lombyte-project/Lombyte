@@ -85,8 +85,8 @@ extern float D_L09_00161390 __attribute__((sda));
 extern float D_L09_00161394 __attribute__((sda));
 extern float airship_part_initial_downward_acceleration_range_start_gp __asm__("D_L09_00161398") __attribute__((sda));
 extern float airship_part_initial_downward_acceleration_range_end_gp __asm__("D_L09_0016139C") __attribute__((sda));
-extern float D_L09_001613A0 __attribute__((sda));
-extern float D_L09_001613A4 __attribute__((sda));
+extern float airship_part_downward_acceleration_override_range_start_gp __asm__("D_L09_001613A0") __attribute__((sda));
+extern float airship_part_downward_acceleration_override_range_end_gp __asm__("D_L09_001613A4") __attribute__((sda));
 extern float D_L09_001613A8 __attribute__((sda));
 extern float D_L09_001613AC __attribute__((sda));
 extern float airship_part_initial_tumble_x_speed_limit_degrees_gp __asm__("D_L09_001613B0") __attribute__((sda));
@@ -223,7 +223,7 @@ void update_airship_part(struct Moby *moby) {
         part_vars->f64 = FUN_002132a8_2c26c8(airship_part_initial_downward_acceleration_range_start_gp * frame_time_sq_macro, airship_part_initial_downward_acceleration_range_end_gp * frame_time_sq_macro);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
             part_vars->f20 = part_vars->f20 / part_vars->f20 * (1.5707964f / part_vars->h2A);
-            part_vars->f64 = FUN_002132a8_2c26c8(D_L09_001613A0 * frame_time_sq_macro, D_L09_001613A4 * frame_time_sq_macro);
+            part_vars->f64 = FUN_002132a8_2c26c8(airship_part_downward_acceleration_override_range_start_gp * frame_time_sq_macro, airship_part_downward_acceleration_override_range_end_gp * frame_time_sq_macro);
         }
         moby->collision = 0;
         moby->state = 4;
