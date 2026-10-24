@@ -784,18 +784,18 @@ void hoven_turret_update(struct Moby *moby) {
                 ((Cam_304920 *)D_L12_00167180_304920)->f178 = scale_game_frames_alt(7);
                 data->f70 = scale_game_frames_alt(0x14);
                 for (i = 0; i < 5; i++) {
-                    Vec_304920 vel;
+                    Vec_304920 randomized_firing_direction;
                     Vec_304920 rnd;
 
                     *(u128 *)rnd = 0;
                     rnd[0] = random_float_between_c(-1.0f, 1.0f);
                     rnd[1] = random_float_between_c(-1.0f, 1.0f);
                     rnd[2] = random_float_between_c(-1.0f, 1.0f);
-                    *(u128 *)vel = *(u128 *)rnd;
-                    normalize_vector_xyz(vel, vel, vector_length_xyz(firing_offset) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
-                    add_vector_xyz(vel, firing_offset, vel);
-                    normalize_vector_xyz(vel, vel, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
-                    FUN_L00_0026dd20(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
+                    *(u128 *)randomized_firing_direction = *(u128 *)rnd;
+                    normalize_vector_xyz(randomized_firing_direction, randomized_firing_direction, vector_length_xyz(firing_offset) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
+                    add_vector_xyz(randomized_firing_direction, firing_offset, randomized_firing_direction);
+                    normalize_vector_xyz(randomized_firing_direction, randomized_firing_direction, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
+                    FUN_L00_0026dd20(muz, randomized_firing_direction, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
                 }
                 normalize_vector_xyz(firing_offset, firing_offset, D_0015ED6C_gp * 0.5f);
                 FUN_L00_0026dd20(muz, firing_offset, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
