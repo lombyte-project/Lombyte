@@ -88,9 +88,9 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_turn_and_pitch_globals.h"
 extern float follow_camera_input_stiffness_gp __asm__("D_L00_00161CAC") __attribute__((sda));
 extern float follow_camera_input_damping_gp __asm__("D_L00_00161CB0") __attribute__((sda));
-extern float D_L00_00161CBC __attribute__((sda));
-extern float D_L00_00161CC0 __attribute__((sda));
-extern float D_L00_00161CC4 __attribute__((sda));
+extern float follow_camera_pitch_input_tracking_step_limit __asm__("D_L00_00161CBC") __attribute__((sda));
+extern float follow_camera_pitch_input_return_step_limit __asm__("D_L00_00161CC0") __attribute__((sda));
+extern float follow_camera_pitch_angle_step_limit __asm__("D_L00_00161CC4") __attribute__((sda));
 void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float in) {
     V_2e8bb8 axis;
     unsigned char *camera_data;
@@ -122,15 +122,15 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     }
     z = 0.0f;
     if (in == z) {
-        sel = D_L00_00161CC0;
+        sel = follow_camera_pitch_input_return_step_limit;
     } else if (!(FUN_001f99c0_2e8bb8(in) < FUN_001f99c0_2e8bb8(*(float *)(turn_pitch_state + 8)))) {
-        sel = D_L00_00161CBC;
+        sel = follow_camera_pitch_input_tracking_step_limit;
     } else if (z < in && z < *(float *)(turn_pitch_state + 8)) {
-        sel = D_L00_00161CC0;
+        sel = follow_camera_pitch_input_return_step_limit;
     } else if (in < z && *(float *)(turn_pitch_state + 8) < z) {
-        sel = D_L00_00161CC0;
+        sel = follow_camera_pitch_input_return_step_limit;
     } else {
-        sel = D_L00_00161CBC;
+        sel = follow_camera_pitch_input_tracking_step_limit;
     }
     *(float *)(turn_pitch_state + 8) = FUN_001ebd78_2e8bb8(turn_pitch_state + 0xC, *(float *)(turn_pitch_state + 8), in, follow_camera_input_stiffness_gp,
                                             follow_camera_input_damping_gp, sel);
@@ -145,22 +145,22 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     FUN_001f9ad8_2e8bb8(axis, base + 0x20, turn_pitch_vector);
     FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
     current_pitch_angle = FUN_001f9e90_2e8bb8(turn_pitch_vector_length, reference_dot_product);
-    if (FUN_001f99c0_2e8bb8(current_pitch_angle) < FUN_001f99c0_2e8bb8(target_pitch_angle) && sel == D_L00_00161CC0) {
+    if (FUN_001f99c0_2e8bb8(current_pitch_angle) < FUN_001f99c0_2e8bb8(target_pitch_angle) && sel == follow_camera_pitch_input_return_step_limit) {
         *(float *)(turn_pitch_state + 8) = current_pitch_angle / 0.69813168f;
     }
     if (current_pitch_angle < target_pitch_angle) {
-        if (target_pitch_angle < FUN_001fa580_2e8bb8(current_pitch_angle, D_L00_00161CC4)) {
+        if (target_pitch_angle < FUN_001fa580_2e8bb8(current_pitch_angle, follow_camera_pitch_angle_step_limit)) {
             *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, current_pitch_angle);
         } else {
-            *(float *)(turn_pitch_vector + 0x38) = D_L00_00161CC4;
+            *(float *)(turn_pitch_vector + 0x38) = follow_camera_pitch_angle_step_limit;
         }
     } else if (target_pitch_angle < current_pitch_angle) {
         if (*(short *)(*(unsigned char **)(camera_object + 0x70) + 0x208) < 0) {
             *(float *)(turn_pitch_vector + 0x38) = 0.0f;
-        } else if (FUN_001fa580_2e8bb8(current_pitch_angle, -D_L00_00161CC4) < target_pitch_angle) {
+        } else if (FUN_001fa580_2e8bb8(current_pitch_angle, -follow_camera_pitch_angle_step_limit) < target_pitch_angle) {
             *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, current_pitch_angle);
         } else {
-            *(float *)(turn_pitch_vector + 0x38) = -D_L00_00161CC4;
+            *(float *)(turn_pitch_vector + 0x38) = -follow_camera_pitch_angle_step_limit;
         }
     } else {
         *(float *)(turn_pitch_vector + 0x38) = 0.0f;
