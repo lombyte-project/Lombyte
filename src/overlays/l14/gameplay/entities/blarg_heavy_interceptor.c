@@ -2924,7 +2924,7 @@ void initialize_minibomber_path_following(struct Moby *moby) {
     float initial_spring_value = D_L14_00161540 * 1.5f;
     char *moby_vars = (char *)moby->pvars;
     char *active_path;
-    float v[4] __attribute__((aligned(16)));
+    float initial_path_direction[4] __attribute__((aligned(16)));
     *(int *)(moby_vars + 0xE8) = 0;
     *(float *)(moby_vars + 0x160) = initial_spring_value;
     *(int *)(moby_vars + 0xEC) = 0;
@@ -2938,8 +2938,8 @@ void initialize_minibomber_path_following(struct Moby *moby) {
     else
         active_path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x150)];
     qcopy(&moby->pos, active_path + 0x10);
-    fast_vec_sub(v, active_path + 0x20, &moby->pos);
-    moby->rot.z = fast_arc_tan(v[0], v[1]);
+    fast_vec_sub(initial_path_direction, active_path + 0x20, &moby->pos);
+    moby->rot.z = fast_arc_tan(initial_path_direction[0], initial_path_direction[1]);
     *(int *)(moby_vars + 0xE4) = 0;
     clear_u64_value(moby_vars + 0xF0);
 }
