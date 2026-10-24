@@ -3417,10 +3417,10 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                     }
                     if (*(unsigned char *)(moby + 0x20) >= 2) {
                         if (*(int *)(boss_data + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
-                            char *w;
+                            char *follow_camera_gate_record;
                             q = D_L18_00167680;
-                            w = *(char **)(q + 0x180);
-                            if (w != 0 && *(short *)(w + 0x86) == 0) {
+                            follow_camera_gate_record = *(char **)(q + 0x180);
+                            if (follow_camera_gate_record != 0 && *(short *)(follow_camera_gate_record + 0x86) == 0) {
                                 follow_camera_set_distance(D_L18_001623E0, 0.003f, 0);
                                 follow_camera_set_height(D_L18_001623E4, 0.003f);
                             }
