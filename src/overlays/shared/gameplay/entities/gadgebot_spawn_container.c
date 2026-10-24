@@ -2890,7 +2890,7 @@ extern float rotation_group_angular_deceleration_degrees_gp __asm__("D_L06_00161
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
-extern float D_L06_00161D38 __attribute__((sda));
+extern float rotation_group_angular_velocity_adjustment_degrees_gp __asm__("D_L06_00161D38") __attribute__((sda));
 extern float rotation_group_max_angular_speed_degrees_gp __asm__("D_L06_00161D40") __attribute__((sda));
 extern float rotation_group_fallback_proximity_trigger_inhibit_gp __asm__("D_L06_00161D44") __attribute__((sda));
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
@@ -2988,7 +2988,7 @@ void update_moby_rotation_group(Moby *moby) {
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
     case ROTATE_AND_HIDE:
         approach_angle(&moby_vars->unk14, &moby_vars->unk20, 1.0471976f,
-                          D_L06_00161D38 * 0.017453292f * D_0015ED70,
+                          rotation_group_angular_velocity_adjustment_degrees_gp * 0.017453292f * D_0015ED70,
                           rotation_group_angular_deceleration_degrees_gp * 0.017453292f * D_0015ED70,
                           rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
@@ -3005,7 +3005,7 @@ void update_moby_rotation_group(Moby *moby) {
     case RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN:
     case RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE:
         approach_angle(&moby_vars->unk14, &moby_vars->unk20, 0.0f,
-                          D_L06_00161D38 * 0.017453292f * D_0015ED70,
+                          rotation_group_angular_velocity_adjustment_degrees_gp * 0.017453292f * D_0015ED70,
                           rotation_group_angular_deceleration_degrees_gp * 0.017453292f * D_0015ED70,
                           rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
