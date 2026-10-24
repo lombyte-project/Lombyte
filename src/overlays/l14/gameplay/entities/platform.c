@@ -643,8 +643,8 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern float D_L14_00161B00 __attribute__((sda));
-extern float D_L14_00161B04 __attribute__((sda));
+extern float platform_max_tilt_degrees __asm__("D_L14_00161B00") __attribute__((sda));
+extern float platform_tilt_direction_z_offset __asm__("D_L14_00161B04") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -679,14 +679,14 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
             qcopy(target_up_vector, up);
         } else {
             subtract_vector_xyz(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
-            direction_scratch[2] = direction_scratch[2] + D_L14_00161B04;
+            direction_scratch[2] = direction_scratch[2] + platform_tilt_direction_z_offset;
             direction_length = vector_length_xyz(direction_scratch);
             if (direction_length == 0.0f) {
                 qcopy(target_up_vector, up);
             } else {
                 dt = dot_vectors_xyz(up, direction_scratch);
                 tilt_angle = 1.5707963705f - fast_arc_sin(dt / direction_length);
-                max_tilt_angle = D_L14_00161B00 * 0.0174532924f;
+                max_tilt_angle = platform_max_tilt_degrees * 0.0174532924f;
                 if (max_tilt_angle < tilt_angle) {
                     tilt_angle = max_tilt_angle;
                 }
