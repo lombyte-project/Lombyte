@@ -2988,7 +2988,7 @@ extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013A4E0[];
-extern float D_L13_0015ED60;
+extern float fighter_jet_frame_scale __asm__("D_L13_0015ED60");
 extern int D_L13_0015ED84;
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
@@ -3070,9 +3070,9 @@ void fighter_jet_update(Jet *jet_moby) {
                     jet_add_vector(jet_moby->position,jet_moby->position,hit->velocity);
                     jet_reflect_vector(impulse,impulse,hit->velocity);
                     yaw_delta=jet_sub_rot(jet_angle(impulse[0],impulse[1]),jet_data->angles[2]);
-                    jet_data->angles[2]=jet_add_rot(jet_data->angles[2],yaw_delta*(D_L13_0015ED60*0.1f)*weight);
+                    jet_data->angles[2]=jet_add_rot(jet_data->angles[2],yaw_delta*(fighter_jet_frame_scale*0.1f)*weight);
                     pitch_delta=jet_sub_rot(jet_angle(jet_length_xy(impulse),impulse[2]),jet_data->angles[1]);
-                    jet_data->angles[1]=jet_add_rot(jet_data->angles[1],pitch_delta*(D_L13_0015ED60*0.1f)*weight);
+                    jet_data->angles[1]=jet_add_rot(jet_data->angles[1],pitch_delta*(fighter_jet_frame_scale*0.1f)*weight);
                 }
             } else {
                 build_spherical_offset(impulse,jet_data->speed,jet_data->angles[2],-jet_data->angles[1]);
@@ -3148,11 +3148,11 @@ void fighter_jet_update(Jet *jet_moby) {
             }
             jet_set_hero_state(0x32,1);
             jet_mount(jet_moby->position,jet_moby->rotation,0,0,0);
-            jet_data->missile_index=0; jet_data->counter6C=0; jet_data->counter70=0; jet_data->missile_timer=0; jet_data->speed=D_L13_0015ED60*0.1f; jet_data->gun_timer=0;
+            jet_data->missile_index=0; jet_data->counter6C=0; jet_data->counter70=0; jet_data->missile_timer=0; jet_data->speed=fighter_jet_frame_scale*0.1f; jet_data->gun_timer=0;
             jet_moby->alpha=jet_moby->render_flags=0xFF; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=-1;
             qcopy(jet_data->previous_rotation,jet_moby->rotation);
             jet_data->angle_a=0; jet_data->angle_b=0; jet_data->angle_c=0; jet_data->angle_d=0; jet_data->angle_e=0; jet_data->angle_f=0; ((JetPlayer*)(&jet_player47))->craft=jet_moby; { unsigned short cls=jet_moby->class_id; ((JetPlayer*)(&jet_player47))->health=255.0f; ((JetPlayer*)(&jet_player47))->ammo=10; ((JetPlayer*)(&jet_player47))->pad160E=1; ((JetPlayer*)(&jet_player47))->ammo2=20; ((JetPlayer*)(&jet_player47))->class_id=cls; ((JetPlayer*)(&jet_player47))->ammo3=20; jet_data->hud_previous=255; jet_data->hud_health=0; ((JetPlayer*)(&jet_player47))->ammo4=3; ((JetPlayer*)(&jet_player47))->ammo5=3; ((JetPlayer*)(&jet_player47))->ammo6=3; ((JetPlayer*)(&jet_player47))->pad160F=0; ((JetPlayer*)(&jet_player47))->max_health=256.0f; ((JetPlayer*)(&jet_player47))->health_scale=100.0f; }
-            build_spherical_offset(jet_data,D_L13_0015ED60*0.1f,jet_data->angles[2],-jet_data->angles[1]);
+            build_spherical_offset(jet_data,fighter_jet_frame_scale*0.1f,jet_data->angles[2],-jet_data->angles[1]);
             if (jet_data->group_a>0) jet_group_state(jet_data->group_a,1,1,1);
             if (jet_data->group_b>0) jet_group_state(jet_data->group_b,1,1,1);
             jet_group_switch(D_L13_001CBDE8,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
