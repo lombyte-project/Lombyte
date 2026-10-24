@@ -138,7 +138,7 @@ extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
-extern void FUN_L00_0028ecd8(void);
+extern void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void FUN_L00_0024e7a8(void);
 extern void FUN_L00_002648e0(void);
@@ -253,7 +253,7 @@ void handle_pause_input(void) {
     if (D_L00_0015F630) {
         D_L00_0015F630 = 0;
         if (hero.health.hp) {
-            FUN_L00_0028ecd8();
+            prepare_level_transition_with_help_cleanup();
             return;
         }
     }

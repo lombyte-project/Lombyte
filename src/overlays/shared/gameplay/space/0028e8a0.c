@@ -180,7 +180,9 @@ void sound_update(void) __asm__("FUN_0022ca50");
 void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
-void FUN_L00_0028ecd8(void) {
+void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
+
+void prepare_level_transition_with_help_cleanup(void) {
     struct Hero *hero_state = &hero;
     struct MusicStreamState *music_state;
     if (hero_state->health.hp <= 0)
