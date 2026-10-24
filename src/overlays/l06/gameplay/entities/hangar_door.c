@@ -3357,10 +3357,10 @@ extern float moby_pair_parent_phase_two_target_rotation_y __asm__("D_L06_00161F2
 extern float moby_pair_child_phase_two_target_rotation_y __asm__("D_L06_00161F30") __attribute__((sda));
 extern float D_L06_00161F34 __attribute__((sda));
 extern float D_L06_00161F38 __attribute__((sda));
-extern float D_L06_00161F3C __attribute__((sda));
+extern float moby_pair_phase_distance_max_speed __asm__("D_L06_00161F3C") __attribute__((sda));
 extern float D_L06_00161F40 __attribute__((sda));
 extern float D_L06_00161F44 __attribute__((sda));
-extern float D_L06_00161F48 __attribute__((sda));
+extern float moby_pair_phase_rotation_y_max_speed_degrees __asm__("D_L06_00161F48") __attribute__((sda));
 extern int moby_pair_phase_one_duration_min_frames __asm__("D_L06_00161F4C") __attribute__((sda));
 extern int moby_pair_phase_one_duration_max_frames __asm__("D_L06_00161F50") __attribute__((sda));
 extern int moby_pair_phase_two_duration_min_frames __asm__("D_L06_00161F54") __attribute__((sda));
@@ -3474,10 +3474,10 @@ void update_moby_pair_transforms(char *moby) {
         target_b = phase_b;
         acceleration = D_L06_00161F34;
         max_speed = D_L06_00161F38;
-        damping = D_L06_00161F3C;
+        damping = moby_pair_phase_distance_max_speed;
         rotation_acceleration = D_L06_00161F40;
         rotation_speed = D_L06_00161F44;
-        rotation_damping = D_L06_00161F48;
+        rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees;
         next_phase = 2;
         next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_two_duration_min_frames, (float)moby_pair_phase_two_duration_max_frames));
         goto phase_join;
@@ -3488,10 +3488,10 @@ void update_moby_pair_transforms(char *moby) {
         target_rot_b = moby_pair_child_phase_two_target_rotation_y;
         acceleration = D_L06_00161F34;
         max_speed = D_L06_00161F38;
-        damping = D_L06_00161F3C;
+        damping = moby_pair_phase_distance_max_speed;
         rotation_acceleration = D_L06_00161F40;
         rotation_speed = D_L06_00161F44;
-        rotation_damping = D_L06_00161F48;
+        rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees;
         next_phase = 1;
         next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_one_duration_min_frames, (float)moby_pair_phase_one_duration_max_frames));
         phase_join:
