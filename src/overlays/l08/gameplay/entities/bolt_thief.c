@@ -2786,8 +2786,8 @@ typedef struct {
     s16 sound;                   /* 0x13E */
 } SwarmVars;
 
-extern s32 D_L08_00161D30 __attribute__((sda));
-extern f32 D_L08_00161D24 __attribute__((sda));
+extern s32 shrub_updates_disabled __asm__("D_L08_00161D30") __attribute__((sda));
+extern f32 shrub_path_speed __asm__("D_L08_00161D24") __attribute__((sda));
 extern s32 D_L08_0015F5C4;
 extern s64 D_L08_0016D090 __attribute__((section(".data")));
 extern u8 D_0014C050[];
@@ -2848,7 +2848,7 @@ void shrub_update(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (D_L08_00161D30 != 0) {
+    if (shrub_updates_disabled != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -2884,8 +2884,8 @@ void shrub_update(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D24 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D24 * frame_time);
+        if (vector_length_xyz(&step) > shrub_path_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, shrub_path_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (moby->command == 0) {
@@ -2902,7 +2902,7 @@ void shrub_update(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D24 + D_L08_00161D24) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (shrub_path_speed + shrub_path_speed) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -2937,8 +2937,8 @@ void shrub_update(struct Moby *moby) {
             follower->point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D24 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D24 * frame_time);
+        if (vector_length_xyz(&step) > shrub_path_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, shrub_path_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_shrub_parts((char *)moby);
@@ -2949,7 +2949,7 @@ void shrub_update(struct Moby *moby) {
         moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D24 + D_L08_00161D24) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (shrub_path_speed + shrub_path_speed) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
