@@ -2236,7 +2236,9 @@ void FUN_001fa050_002dc938(Mtx_002dc938 *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_002dc938(void *, Mtx_002dc938 *) __asm__("FUN_001fa2b8");
 void FUN_0020e098_002dc938(char *) __asm__("FUN_0020e098");
 void FUN_0020c828_002dc938(char *) __asm__("FUN_0020c828");
-void FUN_L00_002dc938(char *moby, char *suction_record, int flag) {
+void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) __asm__("FUN_L00_002dc938");
+
+void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) {
     Mtx_002dc938 rotation_matrix;
     void (*fn)(char *);
     if (flag)
