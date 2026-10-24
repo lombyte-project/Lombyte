@@ -158,7 +158,7 @@ extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
 extern float D_L00_00161374_gp __asm__("D_L00_00161374") __attribute__((sda));
-extern float D_L00_00161378 __attribute__((sda));
+extern float wrapped_value_decrement_rate __asm__("D_L00_00161378") __attribute__((sda));
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
@@ -188,7 +188,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         D_L00_0016138C_gp = one / (float)scaled_frame_count;
         break;
     case UPDATE_WRAPPED_VALUE:
-        D_L00_00161374_gp -= D_L00_00161378 * frame_scale;
+        D_L00_00161374_gp -= wrapped_value_decrement_rate * frame_scale;
         if (D_L00_00161374_gp <= -8.0f)
             D_L00_00161374_gp += 8.0f;
         break;
