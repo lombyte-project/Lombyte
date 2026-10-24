@@ -288,10 +288,10 @@ void select_drek_fight_missile_wander_target(char *moby, void *out) {
 }
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
 extern int drek_missile_trail_draw_disabled __asm__("D_L18_0016223C") __attribute__((sda));
-extern int D_L18_00162240 __attribute__((sda));
-extern int D_L18_00162244 __attribute__((sda));
-extern int D_L18_00162248 __attribute__((sda));
-extern int D_L18_0016224C __attribute__((sda));
+extern int drek_missile_trail_blend_minuend_selector __asm__("D_L18_00162240") __attribute__((sda));
+extern int drek_missile_trail_blend_subtrahend_selector __asm__("D_L18_00162244") __attribute__((sda));
+extern int drek_missile_trail_blend_factor_selector __asm__("D_L18_00162248") __attribute__((sda));
+extern int drek_missile_trail_blend_addend_selector __asm__("D_L18_0016224C") __attribute__((sda));
 extern int drek_missile_trail_blend_start_color __asm__("D_L18_00162250") __attribute__((sda));
 extern int drek_missile_trail_blend_end_color __asm__("D_L18_00162254") __attribute__((sda));
 extern int game_frame __asm__("D_L18_0015F5CC");
@@ -327,8 +327,8 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
         quads[i].texture = get_effect_texture(19);
         quads[i].reserved.value = 0;
         quads[i].texture_state = 0xFF9000000260ULL;
-        quads[i].primitive = (u64)D_L18_00162240 | ((u64)D_L18_00162244 << 2) | ((u64)D_L18_00162248 << 4) |
-                             ((u64)D_L18_0016224C << 6) | 0x8000000000ULL;
+        quads[i].primitive = (u64)drek_missile_trail_blend_minuend_selector | ((u64)drek_missile_trail_blend_subtrahend_selector << 2) | ((u64)drek_missile_trail_blend_factor_selector << 4) |
+                             ((u64)drek_missile_trail_blend_addend_selector << 6) | 0x8000000000ULL;
         offset = convert_integer_to_float_group_quad((game_frame + 3) & 3) * 0.0625f;
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
