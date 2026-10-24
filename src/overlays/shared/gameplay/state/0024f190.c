@@ -21,13 +21,13 @@ void advance_moby_animation_blend(void *unused, unsigned char *animation_state) 
                 *(float *)(animation_state + 0x24) = 1.0f;
             }
             if (*(float *)(animation_state + 0x24) >= 1.0f) {
-                int u = animation_state[7];
+                int next_frame_remap_flag = animation_state[7];
                 do {
                     int o, p, animation_table_byte_offset;
-                    animation_state[6] = u;
+                    animation_state[6] = next_frame_remap_flag;
                     animation_state[5] |= 1;
                     animation_state[0x20] = animation_state[0x21];
-                    if ((unsigned char)u) {
+                    if ((unsigned char)next_frame_remap_flag) {
                         *(int *)(animation_state + 0x38) = *(int *)(animation_state + 0x3C);
                     }
                     animation_state[0x22] = animation_state[0x23];
