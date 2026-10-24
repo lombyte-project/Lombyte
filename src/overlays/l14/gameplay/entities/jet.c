@@ -2926,7 +2926,7 @@ extern int cart_voice_alive(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern int cart_sound(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern int D_0015EE08;
 extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
-extern s32 D_L14_00161F5C __attribute__((sda));
+extern s32 enemy_fighter_respawn_delay_frames __asm__("D_L14_00161F5C") __attribute__((sda));
 extern char D_0013E550[];
 char D_L14_001FCE10[] = "Enemy Fighter (moby908) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FCE48[] = "Enemy Fighter (moby908) with a flyPath that has no points. UID: %d - RAR\n";
@@ -3001,7 +3001,7 @@ void update_enemy_fighter(struct Moby *moby) {
         moby->update_dist = 0xff;
         moby->draw_dist = 0xff;
         data->sound = -1;
-        data->timer = cart_frames(D_L14_00161F5C);
+        data->timer = cart_frames(enemy_fighter_respawn_delay_frames);
         break;
     case ENEMY_FIGHTER_STATE_FOLLOW_PATH:
         advance_enemy_fighter_along_flight_path(moby);
@@ -3011,7 +3011,7 @@ void update_enemy_fighter(struct Moby *moby) {
         path = D_L14_001B0BB0_cart[data->path];
         moby->flags &= 0xffbe;
         moby->collision = moby->pclass->collision;
-        data->timer = cart_frames(D_L14_00161F5C);
+        data->timer = cart_frames(enemy_fighter_respawn_delay_frames);
         moby->state = 1;
         data->segment = 0;
         data->along = 0;
