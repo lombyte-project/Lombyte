@@ -2459,13 +2459,13 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
 
 void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
     W4_2838 old;
-    W4_2838 vel;
+    W4_2838 death_explosion_velocity;
     UQ_2838 up;
     W4_2838 ship_movement_vector;
     W4_2838 side;
-    W4_2838 ang;
+    W4_2838 camera_rotation;
     W4_2838 target;
-    W4_2838 diff;
+    W4_2838 camera_local_offset;
     float horizontal_steering_input;
     float vertical_steering_input;
     float ka;
@@ -2477,14 +2477,14 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     float k;
     float fov;
     struct PadState *pad;
-    struct Hero *g;
+    struct Hero *hero_input_source;
     char *collision_result;
     int hc;
 
     up.q = 0;
     ship_moby->flags &= 0xFEFF;
     up.v[2] = frame_time * 8.0f * D_L11_00162090_gp;
-    *(Q_2838 *)vel = up.q;
+    *(Q_2838 *)death_explosion_velocity = up.q;
     up.q = 0;
     up.v[2] = 1.0f;
     if (controller_state.raw_pressed & PAD_LEFT) {
@@ -2529,9 +2529,9 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     }
 
     if (D_L11_00162004 < ship_vars->count) {
-        g = &hero;
-        x = g->stick_x;
-        y = g->stick_y;
+        hero_input_source = &hero;
+        x = hero_input_source->stick_x;
+        y = hero_input_source->stick_y;
         ka = D_L11_001620A4;
         kb = D_L11_001620B4;
         horizontal_steering_input = x;
@@ -2572,7 +2572,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     }
     ship_vars->fC4 = ratio;
     {
-        T2_2838 tbl;
+        T2_2838 camera_offset_targets;
         T2_2838 wr;
         float ship_rotation_basis[12];
         wr.e[0].q = 0;
@@ -2583,20 +2583,20 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         wr.e[0].v[2] = (D_L11_00162028 + ship_vars->f70 * D_L11_0016212C) * D_L11_0016208C;
         wr.e[1].v[0] = D_L11_0016202C * D_L11_0016208C;
         wr.e[1].v[2] = D_L11_00162030 * D_L11_0016208C;
-        tbl.e[0].q = wr.e[0].q;
-        tbl.e[1].q = wr.e[1].q;
-        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, tbl.e[ship_vars->sel].v[0], D_L11_00162104, D_L11_00162108,
+        camera_offset_targets.e[0].q = wr.e[0].q;
+        camera_offset_targets.e[1].q = wr.e[1].q;
+        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L11_00162104, D_L11_00162108,
                          D_L11_0016210C);
-        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, tbl.e[ship_vars->sel].v[1], D_L11_00162110, D_L11_00162114,
+        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], D_L11_00162110, D_L11_00162114,
                          D_L11_00162118);
-        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, tbl.e[ship_vars->sel].v[2], D_L11_0016211C, D_L11_00162120,
+        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], D_L11_0016211C, D_L11_00162120,
                          D_L11_00162124);
-        diff[0] = ship_vars->fB4;
-        diff[1] = ship_vars->fB8;
-        diff[2] = ship_vars->fBC;
-        diff[3] = 0.0f;
+        camera_local_offset[0] = ship_vars->fB4;
+        camera_local_offset[1] = ship_vars->fB8;
+        camera_local_offset[2] = ship_vars->fBC;
+        camera_local_offset[3] = 0.0f;
         euler_basis_2838(ship_rotation_basis, &ship_vars->f30);
-        transform_by_basis_2838(target, diff, ship_rotation_basis);
+        transform_by_basis_2838(target, camera_local_offset, ship_rotation_basis);
         fast_vec_add(wr.e[0].v, &ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rot_2838(ship_vars->f30 * D_L11_00162038, ship_vars->f6C * D_L11_00162034);
@@ -2610,10 +2610,10 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         FUN_L00_0025bc98(&ship_vars->f28, &ship_vars->fA8, 0, wr.e[1].v[2], D_L11_001620F8, D_L11_001620FC,
                          D_L11_00162100);
     }
-    ang[0] = ship_vars->f20;
-    ang[2] = fast_sub_rot_2838(ship_vars->f28, ship_vars->fD4);
-    ang[1] = fast_sub_rot_2838(ship_vars->f24, ship_vars->fD8);
-    FUN_L00_002eaa30(ang);
+    camera_rotation[0] = ship_vars->f20;
+    camera_rotation[2] = fast_sub_rot_2838(ship_vars->f28, ship_vars->fD4);
+    camera_rotation[1] = fast_sub_rot_2838(ship_vars->f24, ship_vars->fD8);
+    FUN_L00_002eaa30(camera_rotation);
     if (controller_state.raw_held & PAD_CROSS) {
         fov = D_L11_00162138;
     } else {
@@ -2658,10 +2658,10 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_2838(side, collision_result + 0x50, collision_result + 0x60);
                         fast_vec_normalize(side, side, 1.0f);
-                        FUN_L00_001ff660(vel, ship_movement_vector, collision_result + 0x40);
-                        fast_vec_normalize(vel, vel, frame_time + frame_time);
+                        FUN_L00_001ff660(death_explosion_velocity, ship_movement_vector, collision_result + 0x40);
+                        fast_vec_normalize(death_explosion_velocity, death_explosion_velocity, frame_time + frame_time);
                         fast_vec_normalize(up.v, collision_result + 0x40, 1.0f);
-                        spawn_explosion(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
+                        spawn_explosion(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                                          9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
                         ship_moby->state = 7;
                     }
