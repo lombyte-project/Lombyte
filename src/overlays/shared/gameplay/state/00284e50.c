@@ -28,7 +28,7 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     char *saved_state;
     struct Hero *hero_state;
     char *saved_value_source;
-    char *g;
+    char *saved_state_fields_source;
     int lvl;
     signed char saved_value_override;
     int source_byte;
@@ -51,7 +51,7 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     qcopy(saved_state + 0x20, saved_rotation);
     hero_state = &hero;
     saved_value_source = D_001516D0;
-    g = D_0013E550;
+    saved_state_fields_source = D_0013E550;
     {
         char *hero_moby = ((char *)hero_state->moby);
         *(int *)(saved_state + 0x30) = *(int *)(hero_moby + 0x38);
@@ -60,10 +60,10 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
         *(int *)(saved_state + 0x44) = hero_state->vehicle_mode;
         *(char **)(saved_state + 0x48) = hero_moby;
         *(int *)(saved_state + 0x4C) = hero_state->unk22CC;
-        *(int *)(saved_state + 0x3C) = *(int *)(g + 0x64);
-        *(char *)(saved_state + 0x40) = *(unsigned char *)(g + 0x68);
-        *(char *)(saved_state + 0x41) = *(unsigned char *)(g + 0x69);
-        *(char *)(saved_state + 0x42) = *(unsigned char *)(g + 0x6A);
+        *(int *)(saved_state + 0x3C) = *(int *)(saved_state_fields_source + 0x64);
+        *(char *)(saved_state + 0x40) = *(unsigned char *)(saved_state_fields_source + 0x68);
+        *(char *)(saved_state + 0x41) = *(unsigned char *)(saved_state_fields_source + 0x69);
+        *(char *)(saved_state + 0x42) = *(unsigned char *)(saved_state_fields_source + 0x6A);
         saved_value_override = *(signed char *)(saved_value_source + 0x22);
         if (saved_value_override != -1) {
             *(int *)(saved_state + 0xC54) = saved_value_override;
