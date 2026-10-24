@@ -1023,15 +1023,15 @@ extern f32 moby_spark_horizontal_speed_range_start_gp __asm__("D_L06_00161C2C") 
 extern f32 moby_spark_horizontal_speed_range_end_gp __asm__("D_L06_00161C30") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_start_gp __asm__("D_L06_00161C34") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_end_gp __asm__("D_L06_00161C38") __attribute__((sda));
-extern f32 D_L06_00161C3C __attribute__((sda));
+extern f32 moby_spark_vertical_velocity_correction_scale_gp __asm__("D_L06_00161C3C") __attribute__((sda));
 extern f32 D_L06_00161C40 __attribute__((sda));
 extern f32 D_L06_00161C44 __attribute__((sda));
 extern s32 moby_spark_first_color_range_start_gp __asm__("D_L06_00161C48") __attribute__((sda));
 extern s32 moby_spark_second_color_range_start_gp __asm__("D_L06_00161C4C") __attribute__((sda));
 extern s32 moby_spark_first_color_range_end_gp __asm__("D_L06_00161C50") __attribute__((sda));
 extern s32 moby_spark_second_color_range_end_gp __asm__("D_L06_00161C54") __attribute__((sda));
-extern s32 D_L06_00161C58 __attribute__((sda));
-extern s32 D_L06_00161C5C __attribute__((sda));
+extern s32 moby_spark_first_frame_count_base_gp __asm__("D_L06_00161C58") __attribute__((sda));
+extern s32 moby_spark_second_frame_count_base_gp __asm__("D_L06_00161C5C") __attribute__((sda));
 extern s32 moby_spark_third_frame_count_base_gp __asm__("D_L06_00161C60") __attribute__((sda));
 extern f32 moby_spark_push_scale_range_end_gp __asm__("D_L06_00161C64") __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
@@ -1074,7 +1074,7 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
         burst_spark_velocity.f[1] += fast_sin(angle) * (speed * frame_time);
         burst_spark_velocity.f[2] += rise * frame_time;
         qcopy(&jittered_spark_velocity, &burst_spark_velocity);
-        jittered_spark_velocity.f[2] -= D_L06_00161C3C * frame_time_sq * (float)scale_game_frames(D_L06_00161C5C);
+        jittered_spark_velocity.f[2] -= moby_spark_vertical_velocity_correction_scale_gp * frame_time_sq * (float)scale_game_frames(moby_spark_second_frame_count_base_gp);
         for (j = 0; j < moby_sparks_per_burst_gp; j++) {
             float size = random_float_between(0.5f, 1.5f);
             int color0;
@@ -1088,8 +1088,8 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
             add_random_offset_to_vector_xyz(&jittered_spark_velocity, moby_spark_velocity_jitter_bound_gp * frame_time);
             color0 = fast_tween_color(moby_spark_first_color_range_start_gp, moby_spark_first_color_range_end_gp, random_float_between(0.0f, 1.0f));
             color1 = fast_tween_color(moby_spark_second_color_range_start_gp, moby_spark_second_color_range_end_gp, random_float_between(0.0f, 1.0f));
-            life = scale_game_frames(D_L06_00161C58);
-            fade = scale_game_frames(D_L06_00161C5C);
+            life = scale_game_frames(moby_spark_first_frame_count_base_gp);
+            fade = scale_game_frames(moby_spark_second_frame_count_base_gp);
             third_frame_count_base = (float)moby_spark_third_frame_count_base_gp;
             spawn_spark(&pos, &burst_spark_velocity, &jittered_spark_velocity, color0, color1, life, fade,
                         truncate_float_to_s32(scale_time(random_float_between(third_frame_count_base * 0.5f, third_frame_count_base * 2.5f))), -1);
