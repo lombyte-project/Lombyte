@@ -150,7 +150,9 @@ extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((sect
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-void FUN_L00_002d81b8(unsigned char *moby) {
+void update_nanotech_ball_grounding_and_fall(unsigned char *moby) __asm__("FUN_L00_002d81b8");
+
+void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
     V_2d81b8 probe_start_position, probe_end_position;
     D_2d81b8 *moby_data = *(D_2d81b8 **)(moby + 0x78);
     int hit = 0;
