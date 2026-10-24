@@ -1174,10 +1174,10 @@ extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
 extern float D_L14_0016226C __attribute__((sda));
 extern float D_L14_00162270 __attribute__((sda));
 extern float D_L14_00162274 __attribute__((sda));
-extern float D_L14_00162278 __attribute__((sda));
-extern float D_L14_00162280 __attribute__((sda));
-extern float D_L14_00162288 __attribute__((sda));
-extern float D_L14_0016228C __attribute__((sda));
+extern float flying_car_full_bank_yaw_error_gp __asm__("D_L14_00162278") __attribute__((sda));
+extern float flying_car_max_sink_offset_rate_gp __asm__("D_L14_00162280") __attribute__((sda));
+extern float flying_car_sink_offset_recovery_rate_gp __asm__("D_L14_00162288") __attribute__((sda));
+extern float flying_car_burst_height_threshold_gp __asm__("D_L14_0016228C") __attribute__((sda));
 extern int path_step_7620(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -1203,7 +1203,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
 
     end = path_step_7620(D_L14_001B0BB0_7620[*(int *)(flying_car_data + 0x78)], pos, flying_car_data + 0x70, flying_car_data + 0x74, *(short *)(flying_car_data + 0x8E),
                          *(float *)(flying_car_data + 0xC8) * frame_time);
-    if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) || moby->pos.z <= D_L14_0016228C) {
+    if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) || moby->pos.z <= flying_car_burst_height_threshold_gp) {
         cart_burst(moby, &moby->pos, 5.0f, 13.0f, -1);
         moby->state = 3;
         moby->flags |= 0x41;
@@ -1231,13 +1231,13 @@ int update_flying_car_path_motion(struct Moby *moby) {
         float lim;
         float s;
         s = *(float *)(flying_car_data + 0xB4) + *(float *)(flying_car_data + 0xB8) * frame_scale_sq;
-        lim = D_L14_00162280 * frame_time;
+        lim = flying_car_max_sink_offset_rate_gp * frame_time;
         *(float *)(flying_car_data + 0xB4) = s;
         if (lim < s)
             *(float *)(flying_car_data + 0xB4) = lim;
         *(float *)(flying_car_data + 0xB0) += *(float *)(flying_car_data + 0xB4);
     } else {
-        *(float *)(flying_car_data + 0xB0) -= D_L14_00162288 * frame_time;
+        *(float *)(flying_car_data + 0xB0) -= flying_car_sink_offset_recovery_rate_gp * frame_time;
         *(int *)(flying_car_data + 0xB4) = 0;
         if (*(float *)(flying_car_data + 0xB0) < *(float *)(flying_car_data + 0xB4))
             *(float *)(flying_car_data + 0xB0) = *(float *)(flying_car_data + 0xB4);
@@ -1255,7 +1255,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
         FUN_L00_00258278(moby, yaw, (f32 *)(flying_car_data + 0x98), D_L14_0016226C, D_L14_00162270, 0.0f);
         pitch = -atan2_7620(vector_length_xy(delta), delta[2]);
         vendor_spring(&moby->rot.y, (f32 *)(flying_car_data + 0x94), pitch, D_L14_0016226C, D_L14_00162270, 0.0f);
-        bank /= D_L14_00162278;
+        bank /= flying_car_full_bank_yaw_error_gp;
         if (1.0f < bank)
             bank = 1.0f;
         if (bank < -1.0f)
