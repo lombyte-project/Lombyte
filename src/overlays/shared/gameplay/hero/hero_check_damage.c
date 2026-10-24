@@ -618,7 +618,7 @@ void update_hero_condition_animation(void) __asm__("FUN_L00_0020da68");
 
 void update_hero_condition_animation(void) {
     int on, anim, slot_zero_item_id, hero_animation_id;
-    float spd, t;
+    float spd, condition_blend_base;
     unsigned char *animation_selector_data;
     char *animation_object;
     char *reloaded_animation_object;
@@ -652,9 +652,9 @@ void update_hero_condition_animation(void) {
     if (hero.state.control_mode == 0x11 && !D_0013D4C6_20da68) {
         on = 1;
         anim = 0x78;
-        t = FUN_001fa6c0_20da68(hero.unk22A0) / FUN_001fa6c0_20da68(10000);
-        t = 1.0f - t;
-        spd = t + 0.25f;
+        condition_blend_base = FUN_001fa6c0_20da68(hero.unk22A0) / FUN_001fa6c0_20da68(10000);
+        condition_blend_base = 1.0f - condition_blend_base;
+        spd = condition_blend_base + 0.25f;
         if (1.0f < spd)
             spd = 1.0f;
     }
