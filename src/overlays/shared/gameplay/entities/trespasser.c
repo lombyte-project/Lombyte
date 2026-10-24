@@ -81,21 +81,21 @@ extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") __attribute__((section
 void destroy_decoy_with_particles(unsigned char *moby) __asm__("FUN_L00_002c3440");
 
 void destroy_decoy_with_particles(unsigned char *moby) {
-    float v[4] __attribute__((aligned(16)));
+    float decoy_particle_position[4] __attribute__((aligned(16)));
     int i;
     int r, g;
     unsigned char b;
     float randomized_scalar;
     for (i = 0; i < 10; i++) {
-        qcopy(v, moby + 0x10);
-        v[0] += FUN_002132a8_2c3440(-0.2f, 0.2f);
-        v[1] += FUN_002132a8_2c3440(-0.2f, 0.2f);
-        v[2] += FUN_002132a8_2c3440(-0.2f, 0.2f);
+        qcopy(decoy_particle_position, moby + 0x10);
+        decoy_particle_position[0] += FUN_002132a8_2c3440(-0.2f, 0.2f);
+        decoy_particle_position[1] += FUN_002132a8_2c3440(-0.2f, 0.2f);
+        decoy_particle_position[2] += FUN_002132a8_2c3440(-0.2f, 0.2f);
         r = (FUN_001160d8_2c3440() + 0x30) & 0x3F;
         g = (FUN_001160d8_2c3440() + 0x20) & 0x3F;
         b = FUN_001160d8_2c3440() & 0x2F;
         randomized_scalar = FUN_002132a8_2c3440(100000.0f, 600000.0f);
-        FUN_L00_00269b70_2c3440(v, r, g, b, randomized_scalar, 0.0f,
+        FUN_L00_00269b70_2c3440(decoy_particle_position, r, g, b, randomized_scalar, 0.0f,
                                 FUN_001f96f8_2c3440(FUN_001160d8_2c3440() % 40 + 10));
     }
     FUN_L00_0025f800_2c3440(moby, D_L00_001B0830_lui);
