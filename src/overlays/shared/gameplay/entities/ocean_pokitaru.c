@@ -13,14 +13,14 @@ extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 extern unsigned char D_0013D389[];
 extern char D_L11_00179B18[];
 extern char D_L11_0021A900[];
-extern int D_L11_0015F640;
+extern int proximity_removal_frame_count __asm__("D_L11_0015F640");
 void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
 void remove_moby_when_near_hero(char *moby) {
     if (FUN_001f9b48_b7(moby + 0x10, &hero.motion.pos) < 2.0f) {
         D_0013D389[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, D_L11_0021A900);
-        D_L11_0015F640 = FUN_001f96f8_b7(0xB4);
+        proximity_removal_frame_count = FUN_001f96f8_b7(0xB4);
         FUN_0020c828_b7(moby);
     }
 }
