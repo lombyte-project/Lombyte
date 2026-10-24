@@ -529,8 +529,8 @@ void update_hero_motion_for_current_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
