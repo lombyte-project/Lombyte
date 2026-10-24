@@ -278,7 +278,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L14_001614E4_gp __asm__("D_L14_001614E4") __attribute__((sda));
 extern float D_L14_001614E8_gp __asm__("D_L14_001614E8") __attribute__((sda));
 extern int D_L14_001614EC_gp __asm__("D_L14_001614EC") __attribute__((sda));
-extern int D_L14_001614F0;
+extern int plasmabot_path_traversal_delay_frames __asm__("D_L14_001614F0");
 extern float D_L14_001614F4_gp __asm__("D_L14_001614F4") __attribute__((sda));
 extern u8 D_L14_00174560[];
 extern void DebugPrint(char *, ...);
@@ -454,7 +454,7 @@ void update_plasmabot(char *moby) {
         if (fast_dec_timer_s16(data + 0x248) == 0) return;
         if (FUN_L14_002d9870_c(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(moby) == 0) return;
-        *(short *)(data + 0x248) = scale_game_frames(D_L14_001614F0);
+        *(short *)(data + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
         activate_plasmabot(moby);
         ((unsigned char *)moby)[0x20] = 2;
         set_moby_animation(moby, 1, 0);
@@ -530,7 +530,7 @@ void update_plasmabot(char *moby) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 ((unsigned char *)moby)[0x20] = 9;
             } else {
-                *(short *)(data + 0x248) = scale_game_frames(D_L14_001614F0);
+                *(short *)(data + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
                 ((unsigned char *)moby)[0x20] = 0xD;
             }
         }
