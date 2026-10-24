@@ -105,6 +105,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_IDLE_CLEAR_MOTION = 0x67
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -199,7 +202,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_CLEAR_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
