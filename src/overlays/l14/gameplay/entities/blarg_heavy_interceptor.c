@@ -2793,7 +2793,9 @@ extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
                                 int) __asm__("FUN_L00_0026d000");
 
-void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
+void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float angle) __asm__("FUN_L14_002b5968");
+
+void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float angle) {
     float offset[4];
     float effect_spawn_position[4];
     float small_offset[4];
