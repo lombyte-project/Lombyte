@@ -2721,7 +2721,10 @@ extern void steer_5730(char *moby, float *vel, float target, float k, float d,
                        float max) __asm__("FUN_L00_00258278");
 
 extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
-int FUN_L14_002b5730(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
+int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
+                     float f13, float f14, float f15, float f16, float f17, float f18) __asm__("FUN_L14_002b5730");
+
+int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) {
     float path_target_position[3];
     int path_sample_result = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
