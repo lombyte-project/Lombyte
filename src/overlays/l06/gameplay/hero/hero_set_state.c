@@ -86,6 +86,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern char D_L06_0017C6A0[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1486,7 +1489,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7D: {
+    case HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT: {
         struct Hero *p = &hero;
         char *m;
         p->state.control_mode = 0x14;
