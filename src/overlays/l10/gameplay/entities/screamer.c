@@ -2810,10 +2810,10 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
 }
 extern s32 D_L10_00161EF0 __attribute__((sda));
 extern s32 D_L10_00161EF4 __attribute__((sda));
-extern f32 D_L10_00161EF8 __attribute__((sda));
-extern f32 D_L10_00161EFC __attribute__((sda));
+extern f32 directional_particle_speed_range_end __asm__("D_L10_00161EF8") __attribute__((sda));
+extern f32 directional_particle_speed_range_start __asm__("D_L10_00161EFC") __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
-extern s32 D_L10_00161F04 __attribute__((sda));
+extern s32 directional_particle_variant_threshold_percent __asm__("D_L10_00161F04") __attribute__((sda));
 extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
@@ -2849,7 +2849,7 @@ void emit_moby_directional_particles(struct Moby *moby) {
             /* Save the loop counter while selecting the particle variant. */
             life = i;
             i = random_integer_below(100);
-            variant = i < D_L10_00161F04;
+            variant = i < directional_particle_variant_threshold_percent;
             i = life;
             qcopy(&position, moby_position);
             offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
@@ -2860,9 +2860,9 @@ void emit_moby_directional_particles(struct Moby *moby) {
             offset.f[2] = random_float_between(-pvars[5], pvars[5]);
             add_vector_xyz(&position, &position, &offset);
 
-            x = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
-            y = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
-            z = random_float_between(D_L10_00161EFC, D_L10_00161EF8);
+            x = random_float_between(directional_particle_speed_range_start, directional_particle_speed_range_end);
+            y = random_float_between(directional_particle_speed_range_start, directional_particle_speed_range_end);
+            z = random_float_between(directional_particle_speed_range_start, directional_particle_speed_range_end);
             radius = x;
             if (radius < y) radius = y;
             if (radius < z) radius = z;
