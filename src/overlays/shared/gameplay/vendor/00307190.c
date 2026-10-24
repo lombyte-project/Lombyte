@@ -117,11 +117,11 @@ void update_fire_bolt(char *fire_bolt) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
 extern float D_L08_00162360[2];
-extern float D_L08_00162370;
+extern float ground_particle_scatter_refresh_countdown __asm__("D_L08_00162370");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int D_L08_00162374;
+extern int ground_particle_scatter_base_attempt_count __asm__("D_L08_00162374");
 
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
@@ -149,11 +149,11 @@ void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_prese
     D_L08_00162360[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     D_L08_00162360[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     countdown_range_start = multiply_global_factor_ed64(countdown_range_start);
-    D_L08_00162370 = random_float_between_alt(countdown_range_start, multiply_global_factor_ed64(10.0f));
+    ground_particle_scatter_refresh_countdown = random_float_between_alt(countdown_range_start, multiply_global_factor_ed64(10.0f));
     xy_range_reference_vector[0] = xy_random_range_scale * frame_time;
     xy_range_reference_vector[1] = xy_range_reference_vector[0];
     xy_length_ratio = vector_length_xy(D_L08_00162360) / fast_vec_length(xy_range_reference_vector);
-    D_L08_00162374 = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
+    ground_particle_scatter_base_attempt_count = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
 }
 #include "rnc/gameplay/entities/moby.h"
 
@@ -269,11 +269,11 @@ void scatter_ground_particles(Moby *moby) {
         randomize_ground_particle_scatter_parameters(flag);
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
-        if (update_float_countdown(&D_L08_00162370)) randomize_ground_particle_scatter_parameters(flag);
+        if (update_float_countdown(&ground_particle_scatter_refresh_countdown)) randomize_ground_particle_scatter_parameters(flag);
         func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        pass_attempt_count = D_L08_00162374;
+        pass_attempt_count = ground_particle_scatter_base_attempt_count;
         func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
             ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
         base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
