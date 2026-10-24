@@ -36,16 +36,16 @@ void FUN_L05_002661e8(char *moby) {
 extern int D_0013E500[];
 extern int D_0015ED80;
 extern u8 D_0013D388[];
-extern int D_L05_0015FA14 __attribute__((sda));
-extern int D_L05_0015FA18 __attribute__((sda));
-extern int D_L05_0015FA1C __attribute__((sda));
-extern int D_L05_0015FA20 __attribute__((sda));
-extern int D_L05_0015FA24 __attribute__((sda));
-extern int D_L05_0015FA28 __attribute__((sda));
-extern int D_L05_0015FA2C __attribute__((sda));
-extern int D_L05_0015FA30 __attribute__((sda));
-extern int D_L05_0015FA34 __attribute__((sda));
-extern int D_L05_0015FA44 __attribute__((sda));
+extern int hud_timer_frame_x __asm__("D_L05_0015FA14") __attribute__((sda));
+extern int hud_timer_frame_bottom_offset __asm__("D_L05_0015FA18") __attribute__((sda));
+extern int hud_timer_frame_width __asm__("D_L05_0015FA1C") __attribute__((sda));
+extern int hud_timer_frame_height __asm__("D_L05_0015FA20") __attribute__((sda));
+extern int hud_timer_frame_alpha __asm__("D_L05_0015FA24") __attribute__((sda));
+extern int hud_timer_label_color __asm__("D_L05_0015FA28") __attribute__((sda));
+extern int hud_timer_value_color __asm__("D_L05_0015FA2C") __attribute__((sda));
+extern int hud_timer_text_center_x __asm__("D_L05_0015FA30") __attribute__((sda));
+extern int hud_timer_optional_row_bottom_offset __asm__("D_L05_0015FA34") __attribute__((sda));
+extern int hud_timer_time_row_bottom_offset __asm__("D_L05_0015FA44") __attribute__((sda));
 extern char D_L05_0015F788[];
 extern char D_L05_0015F9D8[];
 extern char D_L05_0015FA50[];
@@ -168,9 +168,9 @@ int draw_hud_timer(HudElem *hud_element) {
         return 0;
     }
     /* written as -(row) + height: the plain `height - row` form folds the +10/+18 into the subtraction */
-    y0 = -(D_0015ED80 ? D_L05_0015FA18 + 10 : D_L05_0015FA18 + 18) + D_0013E500[1];
-    y1 = -(D_0015ED80 ? D_L05_0015FA34 + 10 : D_L05_0015FA34 + 18) + D_0013E500[1];
-    y2 = -(D_0015ED80 ? D_L05_0015FA44 + 10 : D_L05_0015FA44 + 18) + D_0013E500[1];
+    y0 = -(D_0015ED80 ? hud_timer_frame_bottom_offset + 10 : hud_timer_frame_bottom_offset + 18) + D_0013E500[1];
+    y1 = -(D_0015ED80 ? hud_timer_optional_row_bottom_offset + 10 : hud_timer_optional_row_bottom_offset + 18) + D_0013E500[1];
+    y2 = -(D_0015ED80 ? hud_timer_time_row_bottom_offset + 10 : hud_timer_time_row_bottom_offset + 18) + D_0013E500[1];
     per_min = D_0015ED80 ? 3000 : 3600;
     per_sec = per_min / 60;
     frames = hero.unk894;
@@ -181,27 +181,27 @@ int draw_hud_timer(HudElem *hud_element) {
     hund = frames * 100 / per_sec;
 
     if (D_0013D388[0]) {
-        draw_stretchable_ui_frame(D_L05_0015FA14, y0, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
-        x = D_L05_0015FA30;
+        draw_stretchable_ui_frame(hud_timer_frame_x, y0, hud_timer_frame_width, hud_timer_frame_height, hud_timer_frame_alpha);
+        x = hud_timer_text_center_x;
         sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
         x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
         sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x50A6));
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
-        print_text_with_texture_3(x, y1, D_L05_0015FA28, formatted_hud_text, -1);
+        print_text_with_texture_3(x, y1, hud_timer_label_color, formatted_hud_text, -1);
         x += FUN_001f6250(formatted_hud_text, -1);
         sprintf(formatted_hud_text, D_L05_0015FA50, hero.unk8A8);
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
-        print_text_with_texture_3(x, y1, D_L05_0015FA2C, formatted_hud_text, -1);
+        print_text_with_texture_3(x, y1, hud_timer_value_color, formatted_hud_text, -1);
     }
-    x = D_L05_0015FA30;
+    x = hud_timer_text_center_x;
     sprintf(formatted_hud_text, D_L05_0015FA58, get_help_message_text(0x5241));
     x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
     sprintf(formatted_hud_text, D_L05_0015FA68, get_help_message_text(0x5241));
     print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
-    print_text_with_texture_3(x, y2, D_L05_0015FA28, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y2, hud_timer_label_color, formatted_hud_text, -1);
     x += FUN_001f6250(formatted_hud_text, -1);
     sprintf(formatted_hud_text, D_L05_0015FA70, min, sec, hund);
     print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
-    print_text_with_texture_3(x, y2, D_L05_0015FA2C, formatted_hud_text, -1);
+    print_text_with_texture_3(x, y2, hud_timer_value_color, formatted_hud_text, -1);
     return hud_element->w;
 }
