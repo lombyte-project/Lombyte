@@ -554,7 +554,7 @@ extern float frame_time, D_0015EE70;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path() __asm__("FUN_L00_0025d808");
-extern float D_L16_00161D90 __attribute__((sda));
+extern float bolt_thief_path_speed __asm__("D_L16_00161D90") __attribute__((sda));
 extern float D_L16_00161D94_gp __asm__("D_L16_00161D94") __attribute__((sda));
 extern float D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -569,7 +569,7 @@ int advance_bolt_thief_path(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
-    float scaled_frame_time = D_L16_00161D90 * frame_time;
+    float scaled_frame_time = bolt_thief_path_speed * frame_time;
     int path_sample_result;
     char *path;
     if (moby->state == 5)
