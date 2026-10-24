@@ -475,8 +475,8 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c2(void *, int, float) __asm__("func_00213508");
-extern float D_L12_001618D8 __attribute__((sda));
-extern float D_L12_001618DC __attribute__((sda));
+extern float hoven_anklebiter_leap_launch_speed __asm__("D_L12_001618D8") __attribute__((sda));
+extern float hoven_anklebiter_leap_gravity __asm__("D_L12_001618DC") __attribute__((sda));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00259740(void *, void *, int);
 extern int FUN_L00_002dc9f0();
@@ -696,8 +696,8 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         if((fast_vec_length(work.v0)<data->range&&func_001F9B88_2E2EF0(data->home[2]-target->pos[2])<8.0f)||moby->proximity==2) {
             if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,2);
             moby->joints=0x40; data->zero=0.0f;
-            data->gravity=D_L12_001618DC*D_0015ED70; data->launch_speed=D_L12_001618D8*D_0015ED6C;
-            data->launch_time=func_L00_0025BC48_2E2EF0(moby->pos,data->home,&trajectory,data->launch_speed,-D_L12_001618DC);
+            data->gravity=hoven_anklebiter_leap_gravity*D_0015ED70; data->launch_speed=hoven_anklebiter_leap_launch_speed*D_0015ED6C;
+            data->launch_time=func_L00_0025BC48_2E2EF0(moby->pos,data->home,&trajectory,data->launch_speed,-hoven_anklebiter_leap_gravity);
             data->fall_mode=5; data->falling=0;
             setup_fall54(moby->rot[2],(char *)moby,data->fall,8,1,0);
             data->fall_a=5.0f; data->fall_b=10.0f; moby->state=12; moby->flags|=0x1000;
