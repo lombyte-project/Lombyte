@@ -2704,7 +2704,9 @@ extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void func_0022ED80_2E9CB0(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L08_002e88d8(char *parent_moby) {
+void process_shrub_part_hits(char *parent_moby) __asm__("FUN_L08_002e88d8");
+
+void process_shrub_part_hits(char *parent_moby) {
     char *data = *(char **)(parent_moby + 0x78);
     char *base = data + 0x60;
     char **part_entry_cursor = (char **)base;
