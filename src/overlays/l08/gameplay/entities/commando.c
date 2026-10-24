@@ -26,8 +26,8 @@ typedef struct {
     s16 sound;                   /* 0x17E */
 } SwarmVars;
 
-extern s32 D_L08_00161D40 __attribute__((sda));
-extern f32 D_L08_00161D34 __attribute__((sda));
+extern s32 swarm_update_disabled __asm__("D_L08_00161D40") __attribute__((sda));
+extern f32 swarm_path_movement_speed __asm__("D_L08_00161D34") __attribute__((sda));
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
@@ -87,7 +87,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (D_L08_00161D40 != 0) {
+    if (swarm_update_disabled != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -121,8 +121,8 @@ void update_path_following_moby_swarm(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D34 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
+        if (vector_length_xyz(&step) > swarm_path_movement_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, swarm_path_movement_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         process_linked_moby_part_hits(moby);
@@ -141,7 +141,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed + swarm_path_movement_speed) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -170,8 +170,8 @@ void update_path_following_moby_swarm(struct Moby *moby) {
             vars->follow[1].point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161D34 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161D34 * frame_time);
+        if (vector_length_xyz(&step) > swarm_path_movement_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, swarm_path_movement_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_commando_parts(moby);
@@ -182,7 +182,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
         moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161D34 + D_L08_00161D34) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed + swarm_path_movement_speed) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
