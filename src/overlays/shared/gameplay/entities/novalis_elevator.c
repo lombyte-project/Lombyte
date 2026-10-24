@@ -2238,7 +2238,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     float size_multiplier;
     float rate;
     float fixed_scale;
-    float f24;
+    float hit_decrement;
     float candidate_distance;
     float color_cycle_phase;
     float k;
@@ -2280,10 +2280,10 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     if (flag != 1 && amount != 0.0f && *(unsigned char *)(moby + 0x20) != 0xB && *(unsigned char *)(moby + 0x20) != 0xA && *(unsigned char *)(moby + 0x20) != 8) {
         size_multiplier = 0.8f;
         allocate_voice_for_target_entry(0, 0, moby);
-        f24 = 1.0f;
+        hit_decrement = 1.0f;
         fixed_scale = 1024.0f;
         rate = 0.008f;
-        *(float *)(moby_vars + 0x20) = *(float *)(moby_vars + 0x20) - f24;
+        *(float *)(moby_vars + 0x20) = *(float *)(moby_vars + 0x20) - hit_decrement;
         moby_vars[0x9D] = 0;
         *(float *)(moby_vars + 0x70) = rate;
         *(int *)(moby_vars + 0x84) = 8;
@@ -2311,7 +2311,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 first_spawn_angle = fast_subtract_rotations(first_spawn_angle, 0.7853982f);
                 trooper_start_knockback(spawned, q + 0x60, first_spawn_angle, 4, 8, 0);
                 spawned[0x20] = 8;
-                *(float *)(spawned + 0x58) = f24;
+                *(float *)(spawned + 0x58) = hit_decrement;
             }
             spawned = activate_smaller_amoeboid(moby);
             if (spawned != 0) {
@@ -2333,7 +2333,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 second_spawn_angle = fast_add_rotations_c(second_spawn_angle, 0.7853982f);
                 trooper_start_knockback(spawned, q + 0x60, second_spawn_angle, 4, 8, 0);
                 spawned[0x20] = 8;
-                *(float *)(spawned + 0x58) = f24;
+                *(float *)(spawned + 0x58) = hit_decrement;
             }
             hit_record_moby_for_class_check = *(char **)(hit_record + 0x20);
             if (hit_record_moby_for_class_check != 0 && (x2 = *(char **)(hit_record_moby_for_class_check + 0x24)) != 0 && *(short *)(x2 + 0x46) == 5) {
