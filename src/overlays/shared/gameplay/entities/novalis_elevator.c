@@ -1803,7 +1803,7 @@ extern float D_L01_0015F580[] __attribute__((section(".sdata")));
 
 extern char D_L01_00161A40 __attribute__((sda));
 extern char D_L01_00161A50 __attribute__((sda));
-extern float D_L01_001619AC __attribute__((sda));
+extern float large_amoeboid_path_lunge_distance_threshold_gp __asm__("D_L01_001619AC") __attribute__((sda));
 
 void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
@@ -2006,7 +2006,7 @@ void large_amoeboid_update(unsigned char *moby) {
         unsigned char path_hit;
         target_position = target + 0x10;
         distance = vector_distance(moby + 0x10, target_position);
-        if (distance < D_L01_001619AC) {
+        if (distance < large_amoeboid_path_lunge_distance_threshold_gp) {
             moby[0x20] = 6;
             *(float *)(data + 0x194) = (*(float *)(data + 0x23c) + *(float *)(data + 0x23c)) * frame_time_gp;
             if (moby[0x53] != 2)
