@@ -2414,7 +2414,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int level_frame_count __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern float D_L06_00161ED0 __attribute__((sda));
 extern int D_001413D0[];
-extern float D_L06_00161EE4 __attribute__((sda));
+extern float alien_snapper_glow_phase_speed_degrees_gp __asm__("D_L06_00161EE4") __attribute__((sda));
 int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
 extern int FUN_001fa6e0(int, int, float);
@@ -2555,7 +2555,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         }
         break;
     }
-    data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161EE4 * 0.017453292f * D_0015ED6C_c);
+    data->f1C8 = func_001FA748_2FA618(data->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * D_0015ED6C_c);
     moby->glow_color = func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC,
                                      (func_001F9FA8_2FA618(data->f1C8) + 1.0f) * 0.5f);
 
