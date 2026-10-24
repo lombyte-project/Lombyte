@@ -856,7 +856,7 @@ extern void scale_m(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_m(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_m(void *, int, int) __asm__("FUN_001f7d30");
 
-extern int D_L14_00161C0C __attribute__((sda));
+extern int wind_spark_base_color __asm__("D_L14_00161C0C") __attribute__((sda));
 float D_L14_001DFD40[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
@@ -887,7 +887,7 @@ void draw_wind_sparks(struct Moby *m) {
     pk.uv[7] = 0.0f;
     for (i = 0; i < 48; i++) {
         if (d->n320[i] != 0) {
-            col = D_L14_00161C0C | (d->n3E0[i] << 24);
+            col = wind_spark_base_color | (d->n3E0[i] << 24);
             pk.col[3] = col;
             pk.col[2] = col;
             pk.col[1] = col;
