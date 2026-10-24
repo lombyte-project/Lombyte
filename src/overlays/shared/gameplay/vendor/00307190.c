@@ -470,7 +470,7 @@ extern float frame_delta_time __asm__("D_0015ED7C");
 extern int FUN_L00_00263468();
 extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
 extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
-extern float D_L08_001625E8 __attribute__((sda));
+extern float smoothed_below_reference_ground_fraction __asm__("D_L08_001625E8") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __asm__("FUN_00214890");
 extern char D_0013E550[];
 extern char D_0013E5E0[];
@@ -497,21 +497,21 @@ void update_ground_height_modulated_voice(char *moby) {
         if (func_L00_002644E0_3091B0(point) < ((Cam_3091B0 *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
         angle += 0.31415927f;
     } while (angle < 6.2831855f);
-    if (D_L08_001625E8 < fraction) {
-        D_L08_001625E8 += frame_delta_time * 0.2f;
+    if (smoothed_below_reference_ground_fraction < fraction) {
+        smoothed_below_reference_ground_fraction += frame_delta_time * 0.2f;
     } else {
-        D_L08_001625E8 -= frame_delta_time * 0.75f;
+        smoothed_below_reference_ground_fraction -= frame_delta_time * 0.75f;
     }
-    if (1.0f < D_L08_001625E8) {
-        D_L08_001625E8 = 1.0f;
-    } else if (D_L08_001625E8 < 0.0f) {
-        D_L08_001625E8 = 0.0f;
+    if (1.0f < smoothed_below_reference_ground_fraction) {
+        smoothed_below_reference_ground_fraction = 1.0f;
+    } else if (smoothed_below_reference_ground_fraction < 0.0f) {
+        smoothed_below_reference_ground_fraction = 0.0f;
     }
     {
         char *slot = ((char *)&D_0013E550) + *(int *)(data + 8) * 0x70;
         if (*(char **)(slot + 0x8C) == moby && ((unsigned char *)slot)[0x74] != 0) {
             set_voice_volume(*(int *)(data + 8),
-                              (int)((*(float *)(data + 4) + D_L08_001625E8) / (*(float *)(data + 4) + 1.0f) * 1024.0f));
+                              (int)((*(float *)(data + 4) + smoothed_below_reference_ground_fraction) / (*(float *)(data + 4) + 1.0f) * 1024.0f));
         }
     }
     qcopy_nc(((char *)&D_0013E550) + 0x90 + *(int *)(data + 8) * 0x70, D_L08_001675C0);
