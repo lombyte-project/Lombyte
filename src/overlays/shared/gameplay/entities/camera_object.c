@@ -194,7 +194,9 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         break;
     }
 }
-int FUN_L00_002a4dc8(int addend) {
+int fetch_and_add_global_accumulator(int addend) __asm__("FUN_L00_002a4dc8");
+
+int fetch_and_add_global_accumulator(int addend) {
     int previous_value = D_L00_00161390;
     D_L00_00161390 = previous_value + addend;
     return previous_value;

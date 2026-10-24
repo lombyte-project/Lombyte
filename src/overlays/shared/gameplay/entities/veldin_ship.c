@@ -3399,7 +3399,7 @@ extern float D_L00_001619E0 __attribute__((sda));
 extern V D_L00_00166DC0;
 void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
 float fast_vec_length(void *) __asm__("FUN_001f9af0");
-int FUN_L00_002a4dc8(int);
+int fetch_and_add_global_accumulator(int) __asm__("FUN_L00_002a4dc8");
 int FUN_00213260_c(int) __asm__("FUN_00213260");
 void reset_smoke_fire_spawner_particle(P *spawner, int i) __asm__("FUN_L00_002d7bf0");
 
@@ -3447,7 +3447,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         else
             q->f44 = 3.0f;
         q->f50 = fast_vec_length(&D_L00_001600EC[q->idx].v2) * 0.5f;
-        particle_start = q->start = FUN_L00_002a4dc8(q->count + q->extra);
+        particle_start = q->start = fetch_and_add_global_accumulator(q->count + q->extra);
         particle_end_or_emission_index = particle_start + q->count;
         for (i = particle_start; i < particle_end_or_emission_index; i++) {
             r = FUN_00213260_c(2);
