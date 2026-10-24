@@ -3192,7 +3192,7 @@ float D_L11_001622C0 = 0;
 extern float D_L11_001622CC __attribute__((sda));
 extern float puffoid_spray_target_distance_metric_threshold_gp __asm__("D_L11_001622E4") __attribute__((sda));
 extern float puffoid_chase_heading_offset_limit_degrees_gp __asm__("D_L11_001622E8") __attribute__((sda));
-extern float D_L11_001622EC __attribute__((sda));
+extern float puffoid_jump_horizontal_speed_gp __asm__("D_L11_001622EC") __attribute__((sda));
 extern float D_L11_001622F0 __attribute__((sda));
 extern void update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
 extern void update_moby_target_heading_and_conditional_movement(char *a0, float *a1) __asm__("FUN_L11_00315f58");
@@ -3342,9 +3342,9 @@ void puffoid_update(struct Moby *moby) {
                 set_anim_4318(moby, 0, 0, 5);
             }
             sub_vector_4318(puffoid_vars->vel, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x20, &moby->pos);
-            scale_vector_4318(puffoid_vars->vel, puffoid_vars->vel, D_L11_001622EC * frame_time);
+            scale_vector_4318(puffoid_vars->vel, puffoid_vars->vel, puffoid_jump_horizontal_speed_gp * frame_time);
             puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x20, 0,
-                                        D_L11_001622EC * frame_time, -(D_L11_001622F0 * frame_time_sq));
+                                        puffoid_jump_horizontal_speed_gp * frame_time, -(D_L11_001622F0 * frame_time_sq));
         }
         break;
     }
@@ -3531,9 +3531,9 @@ void puffoid_update(struct Moby *moby) {
                 }
                 sub_vector_4318(puffoid_vars->vel, dest, &moby->pos);
                 scaled_animation_frames = frames_4318(0x3C);
-                moby->anim_speed = (float)scaled_animation_frames * (D_L11_001622EC * frame_time) / vector_length_4318(puffoid_vars->vel);
-                scale_vector_4318(puffoid_vars->vel, puffoid_vars->vel, D_L11_001622EC * frame_time);
-                puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, dest, 0, D_L11_001622EC * frame_time,
+                moby->anim_speed = (float)scaled_animation_frames * (puffoid_jump_horizontal_speed_gp * frame_time) / vector_length_4318(puffoid_vars->vel);
+                scale_vector_4318(puffoid_vars->vel, puffoid_vars->vel, puffoid_jump_horizontal_speed_gp * frame_time);
+                puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, dest, 0, puffoid_jump_horizontal_speed_gp * frame_time,
                                             -(D_L11_001622F0 * frame_time_sq));
                 moby->rot.z = atan2_4318(puffoid_vars->vel[0], puffoid_vars->vel[1]);
             }
