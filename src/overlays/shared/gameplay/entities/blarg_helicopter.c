@@ -146,7 +146,7 @@ extern char D_L03_001E2FA0[];
 
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern SpawnTarget *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
-extern void FUN_L00_0025d1b8(struct Moby *);
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern SpawnSound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 
@@ -236,7 +236,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             spawner_moby->unkB4 = 1;
         }
         current_moby->collision = ((SpawnClass *)current_moby->pclass)->unk10;
-        FUN_L00_0025d1b8(current_moby);
+        copy_hero_moby_field_38(current_moby);
         FUN_L00_00250df8(current_moby);
         spawned = current_moby;
         sound = suck_get_aim_height(spawned);

@@ -3745,7 +3745,7 @@ void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) {
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void FUN_L00_0025d1b8(unsigned char *);
+void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 float random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_L00_00250df8(unsigned char *);
@@ -3753,7 +3753,7 @@ unsigned char *spawn_burst_moby(u128 *v, float s) __asm__("FUN_L00_002d7e90");
 unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
     unsigned char *spawned_moby = create_moby(0x307);
     if (spawned_moby) {
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         set_moby_color(spawned_moby, 0x28, 0x28, 0x46);
         spawned_moby[0x30] = 0xff;
         *(short *)(spawned_moby + 0x32) = 0x40;

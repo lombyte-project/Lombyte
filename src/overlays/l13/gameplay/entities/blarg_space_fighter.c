@@ -281,7 +281,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char *initial_velocity) __asm__("FUN_L13_002c1f28");
@@ -310,7 +310,7 @@ unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char
             blend_moby_animation(moby, 1, 0, 10);
         }
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
     }
     return moby;
 }
@@ -2019,7 +2019,7 @@ char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_v
         *(float *)(moby + 0x44) = random_angle_radians();
         *(float *)(moby + 0x48) = random_angle_radians();
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
     }
     return moby;
 }
@@ -2519,7 +2519,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_owner_linked_class_160_moby(char *owner) __asm__("FUN_L13_002e8438");
 
@@ -2538,7 +2538,7 @@ char *spawn_owner_linked_class_160_moby(char *owner) {
         *(int *)(data + 4) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x200;
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
     }
     return moby;

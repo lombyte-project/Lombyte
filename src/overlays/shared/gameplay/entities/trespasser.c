@@ -213,7 +213,7 @@ extern S179AC0_2c52a8 D_L00_00179AC0_002c52a8[] __asm__("D_L00_00179AC0")
 unsigned char *FUN_0020c4f8_002c52a8(int) __asm__("FUN_0020c4f8");
 int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_002c52a8(void *) __asm__("FUN_L00_00250df8");
-void FUN_L00_0025d1b8_002c52a8(void *) __asm__("FUN_L00_0025d1b8");
+void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
 unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
     unsigned char *spawned_moby = 0;
@@ -240,7 +240,7 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
         moby_vars[8] = FUN_001f96f8_002c52a8(0x10);
         *(float *)(moby_vars + 10) = *(float *)(spawned_moby + 0x18);
         FUN_L00_00250df8_002c52a8(spawned_moby);
-        FUN_L00_0025d1b8_002c52a8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1773,7 +1773,7 @@ extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void append_unique_moby_index(void *, void *, s32) __asm__("FUN_L00_0025f780");
 
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
@@ -1831,7 +1831,7 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
             }
         }
         FUN_L00_00250df8(spawned_moby);
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         *(u16 *)data = 0;
         data[8] = 0;
         data[9] = 0;

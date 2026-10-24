@@ -14,7 +14,7 @@
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int spawn_moby_offset_effect(char *) __asm__("FUN_L08_00279f00");
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 extern float D_L08_00161468 __attribute__((sda));
 extern float D_L08_0016146C __attribute__((sda));
@@ -31,7 +31,7 @@ void initialize_bolt_pickup(struct Moby *moby) {
     *(float *)(moby_vars + 0xC) = random_float_between(random_range_start, random_range_end);
     *(int *)(moby_vars + 0x28) = 0;
     *(float *)(moby_vars + 8) = moby->pos.z;
-    FUN_L00_0025d1b8(moby);
+    copy_hero_moby_field_38(moby);
     *(int *)(moby_vars + 0x24) = spawn_moby_offset_effect(moby);
 }
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */

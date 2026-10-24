@@ -1047,7 +1047,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
 
@@ -1069,7 +1069,7 @@ char *spawn_moby_with_random_yaw(void *position, void *vector, int id) {
         *(float *)(moby + 0x48) = angle;
         *(float *)(moby + 0x44) = 0.7853982f;
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
     }
     return moby;
 }
@@ -1299,7 +1299,7 @@ char *spawn_ship_pickup_child(struct Moby *owner) {
             blend_moby_animation_c(moby, 2, 0xD, 0);
         }
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
     }
     return moby;
 }

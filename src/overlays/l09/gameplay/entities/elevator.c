@@ -1271,7 +1271,7 @@ void update_damage_causer(struct Moby *moby) {
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) __asm__("FUN_L09_00308220");
 
@@ -1288,7 +1288,7 @@ char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
         qcopy(moby + 0x40, &owner->rot);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         *(float *)(moby + 0x2C) = owner->scale;
         *(unsigned short *)(moby + 0x34) = owner->flags;
         **(int **)(moby + 0x78) = *(int *)owner->pvars;

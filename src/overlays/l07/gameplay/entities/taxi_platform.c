@@ -1003,7 +1003,7 @@ struct AnimTimer {
 };
 
 extern void update_moby_grids(struct Moby *, u32) __asm__("FUN_0020dc20");
-extern void FUN_L00_0025d1b8(struct Moby *);
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 
 /* resets a spawned moby from its class defaults and restarts its animation */
@@ -1027,7 +1027,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     ((struct SpawnMobyView *)moby)->unk71 = 0xFF;
     moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;
-    FUN_L00_0025d1b8(moby);
+    copy_hero_moby_field_38(moby);
     FUN_L00_00250df8(moby);
     animation_timer = suck_get_aim_height(moby);
     if (animation_timer != 0)

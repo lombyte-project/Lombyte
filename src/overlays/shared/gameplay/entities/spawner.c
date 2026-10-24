@@ -198,7 +198,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
 extern s32 FUN_L00_002591d0_30a778(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern void FUN_00212ed8_30a778(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern struct Moby *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
-extern void FUN_L00_0025d1b8_30a778(struct Moby *) __asm__("FUN_L00_0025d1b8");
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
 extern s16 *FUN_002141f8_30a778(struct Moby *) __asm__("FUN_002141f8");
 extern void FUN_001e93b0_30a778(char *, s32, s32) __asm__("FUN_001e93b0");
@@ -265,7 +265,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
             struct Moby *target = ((struct Moby *volatile *)&spawned_moby)[0];
             target->collision = target->pclass->collision;
         }
-        FUN_L00_0025d1b8_30a778(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         FUN_L00_00250df8_30a778(spawned_moby);
         result = spawned_moby;
         data = FUN_002141f8_30a778(result);

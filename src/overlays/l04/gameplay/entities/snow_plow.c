@@ -17,7 +17,7 @@
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void update_moby_translation_delta_matrix(char *moby) __asm__("FUN_L04_002d3580");
@@ -33,7 +33,7 @@ void update_moby_translation_delta_matrix(char *moby) {
         *(short *)(moby_vars + 0x24) = 0;
         moby_vars[0x28] = 4;
         *(short *)(moby_vars + 0x3E) = 0xD;
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         moby[0x20] = 1;
     }
 }

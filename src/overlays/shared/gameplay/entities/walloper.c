@@ -3089,7 +3089,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int ch
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
-void FUN_L00_0025d1b8(unsigned char *);
+void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
 
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) {
@@ -3106,7 +3106,7 @@ unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector)
         qcopy(moby_vars + 0x10, initial_vector);
         *(int *)(moby_vars + 0x60) = a;
         FUN_L00_00250df8(spawned_moby);
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
     }
     return spawned_moby;

@@ -135,7 +135,7 @@ typedef struct {
     s32 x20;
 } CollQuery;
 
-extern void FUN_L00_0025d1b8();
+extern void copy_hero_moby_field_38() __asm__("FUN_L00_0025d1b8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -151,7 +151,7 @@ void fan_update(SwayMoby *fan_moby) {
 
     sway_vars = fan_moby->pvars;
     if (fan_moby->state == 0) {
-        FUN_L00_0025d1b8(fan_moby);
+        copy_hero_moby_field_38(fan_moby);
         fan_moby->state = 1;
         sway_vars->sway = random_float_between(-1.0f, 1.0f);
         sway_vars->dir = (rand() & 1) ? 1.0f : -1.0f;
@@ -1668,7 +1668,7 @@ typedef struct {
     u8 pad4C[0x2C];
     OrbVars *pvars;
 } OrbMoby;
-extern void FUN_L00_0025d1b8(OrbMoby *);
+extern void copy_hero_moby_field_38(OrbMoby *) __asm__("FUN_L00_0025d1b8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
@@ -1679,7 +1679,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     spawned_moby = create_moby(0x313);
     if (spawned_moby != 0) {
         spawned_moby_vars = spawned_moby->pvars;
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         spawned_moby->w40 = 0;
         spawned_moby->h32 = 0x40;
         spawned_moby->b30 = 0xFF;

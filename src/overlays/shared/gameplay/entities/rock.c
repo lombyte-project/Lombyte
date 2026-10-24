@@ -431,7 +431,7 @@ typedef struct {
 
 extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
 extern struct Moby *create_moby_local(s32) __asm__("FUN_0020c4f8");
-extern void FUN_L00_0025d1b8_2f8530(struct Moby *) __asm__("FUN_L00_0025d1b8");
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern f32 random_float_between_2f8530(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand_e50(void) __asm__("FUN_001160d8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
@@ -456,7 +456,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     debris_moby = create_moby_local(oclass);
     if (debris_moby != 0) {
         debris_vars = (DebrisVars_2f8530 *)debris_moby->pvars;
-        FUN_L00_0025d1b8_2f8530(debris_moby);
+        copy_hero_moby_field_38(debris_moby);
         debris_moby->scale *= scale;
         debris_moby->update_dist = 0xFF;
         debris_moby->draw_dist = 0xFF;

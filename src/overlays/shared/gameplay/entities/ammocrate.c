@@ -48,7 +48,7 @@ float interpolate_value_with_repeated_squaring(int flag, int squaring_loop_limit
 
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 
@@ -62,7 +62,7 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) {
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
     }
     return moby;
 }

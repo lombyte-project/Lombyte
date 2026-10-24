@@ -901,7 +901,7 @@ void emit_randomized_vertical_effect(struct Moby *moby) {
 
 
 extern char *func_0020D348_m(int);
-extern int FUN_L00_0025d1b8();
+extern int copy_hero_moby_field_38() __asm__("FUN_L00_0025d1b8");
 extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");

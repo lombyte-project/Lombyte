@@ -675,7 +675,7 @@ typedef struct {
 
 extern struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(struct Moby *moby);
-extern void FUN_L00_0025d1b8(struct Moby *moby);
+extern void copy_hero_moby_field_38(struct Moby *moby) __asm__("FUN_L00_0025d1b8");
 
 /* spawns a class 0x24 child that copies its parent's position and scale */
 struct Moby *spawn_blarg_turret_child(struct Moby *parent) __asm__("FUN_L13_002b4958");
@@ -705,7 +705,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_vars->unk28 = 0;
         child_vars->unk30 = 0.9f;
         FUN_L00_00250df8(child_moby);
-        FUN_L00_0025d1b8(child_moby);
+        copy_hero_moby_field_38(child_moby);
     }
     return child_moby;
 }

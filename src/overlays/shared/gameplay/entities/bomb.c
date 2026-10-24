@@ -1564,7 +1564,7 @@ int rf_2cbf68(float) __asm__("FUN_001fa6d0");
 int rndi_2cbf68(int, int) __asm__("FUN_L00_00257b90");
 int fr_2cbf68(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_2cbf68(void *) __asm__("FUN_L00_00250df8");
-void FUN_L00_0025d1b8_2cbf68(void *) __asm__("FUN_L00_0025d1b8");
+void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 extern int D_L00_001618A4 __attribute__((sda));
 extern float D_L00_001618A0 __attribute__((sda));
@@ -1615,7 +1615,7 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
             *(float *)(spawned_moby + 0x2C) *= 2.0f;
         *(float *)(moby_vars + 0x20) = rndf_2cbf68(-1.2f, -0.4f) * D_0015ED6C_lui;
         FUN_L00_00250df8_2cbf68(spawned_moby);
-        FUN_L00_0025d1b8_2cbf68(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
     }
     return spawned_moby;
 }
@@ -2508,7 +2508,7 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
 
 extern char *spawn_2ce1f0(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern float atan2_2ce1f0(float, float) __asm__("FUN_001f9e90");
 extern float dist_2ce1f0(void *, void *) __asm__("FUN_001f9b80");
 
@@ -2533,7 +2533,7 @@ char *spawn_hero_drone(int previous_spawn_result, void *pos) {
         player = &hero;
         player->ammo_used++;
         FUN_L00_00250df8(spawned_moby);
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         *(float *)(moby_vars + 0x28) = atan2_2ce1f0(*(float *)(spawned_moby + 0x10) - player->motion.pos.f[0], *(float *)(spawned_moby + 0x14) - player->motion.pos.f[1]);
         *(float *)(moby_vars + 0x24) = atan2_2ce1f0(dist_2ce1f0(&player->motion.pos, spawned_moby + 0x10), *(float *)(spawned_moby + 0x18) - player->motion.pos.f[2]);
         *(float *)(moby_vars + 0x20) = dist_2ce1f0(spawned_moby + 0x10, &player->motion.pos);

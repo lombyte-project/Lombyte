@@ -1100,7 +1100,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
 extern char *func_0020D348_m(int);
 extern s32 rand();
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
 
@@ -1115,7 +1115,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
         qcopy(moby + 0x40, source_moby + 0x40);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
         if (spawned_moby_class == 0x514) {
             if (rand() & 1) {

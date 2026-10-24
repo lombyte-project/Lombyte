@@ -1949,7 +1949,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
 void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
 int FUN_L00_002bb360_2b58d8(void *) __asm__("FUN_L00_002bb360");
-void FUN_L00_0025d1b8_2b58d8(void *) __asm__("FUN_L00_0025d1b8");
+void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 int FUN_0022da68_2b58d8(int, int, void *) __asm__("FUN_0022da68");
 int FUN_001efa68_2b58d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
@@ -2002,7 +2002,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
             *(int *)(spawned_moby_vars + 0x20) = r;
             *(float *)(spawned_moby_vars + 0x48) = k;
         }
-        FUN_L00_0025d1b8_2b58d8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         *(int *)(spawned_moby_vars + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
         collision_start.q = *(OvlQuad *)(source_moby + 0x10);
         collision_start.f[2] = pos->f[2];

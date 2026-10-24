@@ -1555,7 +1555,7 @@ void update_path_mover(struct Moby *path_moby) {
     update_entity_matrix(path_moby_vars + 0x20, movement_scratch, &path_moby->rot, &path_moby->rot);
 }
 
-extern void FUN_L00_0025d1b8(struct Moby *);
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void clear_2db198(void *) __asm__("FUN_001f99f8");
 
 /* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
@@ -1575,7 +1575,7 @@ struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance
         spawned_moby->state = 0;
         moby_vars = spawned_moby->pvars;
         spawned_moby->flags |= 0x20;
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         qcopy(&spawned_moby->pos, &path->pts[0]);
         clear_2db198(&spawned_moby->rot);
         end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
