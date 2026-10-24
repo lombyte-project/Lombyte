@@ -1755,7 +1755,7 @@ extern void cross_vectors_xyz_c(void *, void *, void *) __asm__("func_001F9AD8")
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
-unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
+unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y) __asm__("FUN_L00_00275910");
 void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
