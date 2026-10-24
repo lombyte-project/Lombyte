@@ -52,6 +52,7 @@ void update_mode_freeze(void) {
     enum {
         FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
         FREEZE_MODE_AWAIT_CROSS_CONTINUE = 2,
+        FREEZE_MODE_STATE_DISPATCH = 3,
         FREEZE_MODE_DELAYED_CONTINUE = 5,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
@@ -236,7 +237,7 @@ void update_mode_freeze(void) {
         }
         break;
 
-    case 3:
+    case FREEZE_MODE_STATE_DISPATCH:
         freeze.unk20++;
         if (scale_game_frames(0x1E) < freeze.unk20) {
             if (freeze.unk24 != 0) {
