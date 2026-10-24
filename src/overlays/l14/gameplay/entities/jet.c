@@ -714,10 +714,10 @@ typedef struct {
     int i504;
 } Spk_k;
 
-extern int D_L14_00161C30 __attribute__((sda));
-extern int D_L14_00161C34 __attribute__((sda));
-extern float D_L14_00161C38 __attribute__((sda));
-extern float D_L14_00161C3C __attribute__((sda));
+extern int wind_spark_speed_range_start __asm__("D_L14_00161C30") __attribute__((sda));
+extern int wind_spark_speed_range_end __asm__("D_L14_00161C34") __attribute__((sda));
+extern float wind_spark_size_range_start __asm__("D_L14_00161C38") __attribute__((sda));
+extern float wind_spark_size_range_end __asm__("D_L14_00161C3C") __attribute__((sda));
 void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_travel_direction) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float fwd[4];
@@ -744,8 +744,8 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     add_k(spark_position, spark_position, position_offset);
     scale_k(position_offset, up, z);
     add_k(spark_position, spark_position, position_offset);
-    spark_vars->pos[i][3] = rand_k(D_L14_00161C38, D_L14_00161C3C);
-    spark_vars->f440[i] = rand_k(D_L14_00161C30, D_L14_00161C34) * D_0015ED6C_k;
+    spark_vars->pos[i][3] = rand_k(wind_spark_size_range_start, wind_spark_size_range_end);
+    spark_vars->f440[i] = rand_k(wind_spark_speed_range_start, wind_spark_speed_range_end) * D_0015ED6C_k;
     lifetime_frames = frames_k(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->f440[i]));
     spark_vars->n320[i] = lifetime_frames;
     spark_vars->n380[i] = lifetime_frames;
