@@ -2093,7 +2093,7 @@ extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
-extern float D_L18_00161BF4 __attribute__((sda));
+extern float ring_segment_particle_cull_depth_limit __asm__("D_L18_00161BF4") __attribute__((sda));
 extern int ring_segment_particle_color_start __asm__("D_L18_00161C80") __attribute__((sda));
 extern int ring_segment_particle_color_end __asm__("D_L18_00161C84") __attribute__((sda));
 extern float ring_segment_particle_scale __asm__("D_L18_00161C88") __attribute__((sda));
@@ -2111,7 +2111,7 @@ void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_sta
 
     lerp_vector(segment_bounding_sphere, segment_start, segment_end, 0.5f);
     segment_bounding_sphere[3] = FUN_001f9b48(segment_start, segment_end) * 0.5f;
-    if (fast_bsphere_check((char *)segment_bounding_sphere, D_L18_00161BF4) == -1) {
+    if (fast_bsphere_check((char *)segment_bounding_sphere, ring_segment_particle_cull_depth_limit) == -1) {
         return;
     }
     if (random_float_between(0.0f, 1.0f) < ring_segment_particle_spawn_probability) {
