@@ -572,7 +572,9 @@ extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 /* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
-struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
+struct Moby *spawn_path_following_asteroid(struct Moby *owner) __asm__("FUN_L09_002eaa50");
+
+struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     struct Moby *spawned_moby;
     PebbleVars *ovars;
     PebbleVars *vars;
