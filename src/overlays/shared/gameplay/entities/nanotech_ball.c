@@ -288,7 +288,7 @@ u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("F
 extern s32 nanotech_ball_collection_color_range_start_gp __asm__("D_L00_00161A7C") __attribute__((sda));
 extern s32 nanotech_ball_collection_color_range_end_gp __asm__("D_L00_00161A80") __attribute__((sda));
 extern s32 nanotech_ball_collection_second_particle_mode_selector __asm__("D_L00_00161A84") __attribute__((sda));
-extern s32 D_L00_00161A88 __attribute__((sda));
+extern s32 nanotech_ball_collection_particle_byte_source_index __asm__("D_L00_00161A88") __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
 extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
@@ -326,12 +326,12 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
         al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - color_progress_or_size_factor)) << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + D_L00_00161AB0[i];
-        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), D_L00_00161A88, 0,
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
                                     2, 1, D_L00_00161AA0[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
-                                    D_L00_00161A88, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
+                                    nanotech_ball_collection_particle_byte_source_index, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
                                     D_L00_00161AA0[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
