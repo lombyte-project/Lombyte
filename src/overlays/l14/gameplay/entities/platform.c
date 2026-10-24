@@ -113,7 +113,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     char *list[4];
     float near[4];
     float path_heading_delta[4];
-    float rot[4];
+    float hero_path_euler_rotation[4];
     int path_segment_index;
     float nearest_segment_distance;
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
@@ -133,13 +133,13 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
             nearest_segment_distance = 0.0f;
             FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &nearest_segment_distance, 0, 20.0f, 5.0f, 0.0f);
             subtract_vector_xyz(path_heading_delta, path + (path_segment_index * 16 + 0x40), path + (path_segment_index * 16 + 0x10));
-            rot[0] = 0.0f;
-            rot[1] = 0.0f;
-            rot[2] = fast_add_rotations(angle_atan2(path_heading_delta[0], path_heading_delta[1]), -1.5707964f);
-            rot[3] = 0.0f;
+            hero_path_euler_rotation[0] = 0.0f;
+            hero_path_euler_rotation[1] = 0.0f;
+            hero_path_euler_rotation[2] = fast_add_rotations(angle_atan2(path_heading_delta[0], path_heading_delta[1]), -1.5707964f);
+            hero_path_euler_rotation[3] = 0.0f;
             hero.unk564 = path_segment_index;
             hero.unk568 = 0.0f;
-            place_6570(path + (path_segment_index * 16 + 0x10), rot, 0x28, 0);
+            place_6570(path + (path_segment_index * 16 + 0x10), hero_path_euler_rotation, 0x28, 0);
         }
         *out++ = o;
     } while ((short)*moby_index_cursor++ >= 0);
