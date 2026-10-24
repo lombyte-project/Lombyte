@@ -1176,7 +1176,7 @@ void update_hero_motion_by_state(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&vector_and_hit_scratch, &((struct MobyView *)hero.grapple_target)->u10.v10);
