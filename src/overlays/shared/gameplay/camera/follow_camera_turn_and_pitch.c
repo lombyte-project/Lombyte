@@ -96,22 +96,22 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     unsigned char *base;
     unsigned char *turn_pitch_state;
     unsigned char *turn_pitch_vector;
-    float r;
+    float smoothed_turn_input;
     float target_pitch_angle;
     float sel;
     float reference_dot_product;
     float turn_pitch_vector_length;
-    float ang;
+    float current_pitch_angle;
     float z;
 
     camera_data = *(unsigned char **)(camera_object + 0x70);
     base = D_L00_00166E10_2e8bb8;
     turn_pitch_state = camera_data + 0x1A8;
     turn_pitch_vector = camera_data + 0x130;
-    r = FUN_001ebd78_2e8bb8(camera_data + 0x1AC, *(float *)(camera_data + 0x1A8), k, D_L00_00161CAC,
+    smoothed_turn_input = FUN_001ebd78_2e8bb8(camera_data + 0x1AC, *(float *)(camera_data + 0x1A8), k, D_L00_00161CAC,
                             D_L00_00161CB0, 0.0f);
-    *(float *)(camera_data + 0x1A8) = r;
-    *(float *)(turn_pitch_vector + 0x34) = *(float *)(turn_pitch_state + 0x14) * r;
+    *(float *)(camera_data + 0x1A8) = smoothed_turn_input;
+    *(float *)(turn_pitch_vector + 0x34) = *(float *)(turn_pitch_state + 0x14) * smoothed_turn_input;
     if (in < -0.3f) {
         in = (in + 0.3f) * 1.4285715f;
     } else if (0.3f < in) {
@@ -143,21 +143,21 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     turn_pitch_vector_length = FUN_001f9af0_2e8bb8(turn_pitch_vector);
     FUN_001f9ad8_2e8bb8(axis, base + 0x20, turn_pitch_vector);
     FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
-    ang = FUN_001f9e90_2e8bb8(turn_pitch_vector_length, reference_dot_product);
-    if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(target_pitch_angle) && sel == D_L00_00161CC0) {
-        *(float *)(turn_pitch_state + 8) = ang / 0.69813168f;
+    current_pitch_angle = FUN_001f9e90_2e8bb8(turn_pitch_vector_length, reference_dot_product);
+    if (FUN_001f99c0_2e8bb8(current_pitch_angle) < FUN_001f99c0_2e8bb8(target_pitch_angle) && sel == D_L00_00161CC0) {
+        *(float *)(turn_pitch_state + 8) = current_pitch_angle / 0.69813168f;
     }
-    if (ang < target_pitch_angle) {
-        if (target_pitch_angle < FUN_001fa580_2e8bb8(ang, D_L00_00161CC4)) {
-            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, ang);
+    if (current_pitch_angle < target_pitch_angle) {
+        if (target_pitch_angle < FUN_001fa580_2e8bb8(current_pitch_angle, D_L00_00161CC4)) {
+            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, current_pitch_angle);
         } else {
             *(float *)(turn_pitch_vector + 0x38) = D_L00_00161CC4;
         }
-    } else if (target_pitch_angle < ang) {
+    } else if (target_pitch_angle < current_pitch_angle) {
         if (*(short *)(*(unsigned char **)(camera_object + 0x70) + 0x208) < 0) {
             *(float *)(turn_pitch_vector + 0x38) = 0.0f;
-        } else if (FUN_001fa580_2e8bb8(ang, -D_L00_00161CC4) < target_pitch_angle) {
-            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, ang);
+        } else if (FUN_001fa580_2e8bb8(current_pitch_angle, -D_L00_00161CC4) < target_pitch_angle) {
+            *(float *)(turn_pitch_vector + 0x38) = FUN_001fa5c8_2e8bb8(target_pitch_angle, current_pitch_angle);
         } else {
             *(float *)(turn_pitch_vector + 0x38) = -D_L00_00161CC4;
         }
