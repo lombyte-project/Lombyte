@@ -1218,7 +1218,7 @@ extern void FUN_001f4600_302648(void (*)(char *), void *) __asm__("FUN_001f4600"
 extern void FUN_L01_00302438_302648(char *) __asm__("FUN_L01_00302438");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
-extern s32 D_L01_0015F30C __attribute__((sda));
+extern s32 visibomb_outside_zone_overlay_enabled __asm__("D_L01_0015F30C") __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
 void update_target_outside_zone_timeout(struct Moby *moby) __asm__("FUN_L01_00302648");
@@ -1260,7 +1260,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
         }
     }
     if (zone_vars->count > 0) {
-        if (D_L01_0015F30C) {
+        if (visibomb_outside_zone_overlay_enabled) {
             FUN_001f4600_302648(FUN_L01_00302438_302648, moby);
         }
         if (scale_game_frames(90) < zone_vars->count) {
