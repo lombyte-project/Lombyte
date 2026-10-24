@@ -2671,7 +2671,9 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern float FUN_0020c9e0(struct Moby *);
 
-void FUN_L05_00307570(struct Moby *moby) {
+void update_racer_jump_animations(struct Moby *moby) __asm__("FUN_L05_00307570");
+
+void update_racer_jump_animations(struct Moby *moby) {
     float root0, root1;
     struct LeapVars *leap_data = (struct LeapVars *)moby->pvars;
 
