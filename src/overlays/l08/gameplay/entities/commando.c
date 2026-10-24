@@ -630,6 +630,17 @@ float interpolate_sample_ring(float x, char *sample_ring_data) {
     samples_base = sample_ring_data + 0x90;
     return *(float *)(samples_base - (-(i * 4))) * (1.0f - fr) + *(float *)(samples_base - (-(j * 4))) * fr;
 }
+/* A point light slot, 0x20 bytes apart. */
+typedef struct {
+    f32 red;
+    f32 green;
+    f32 blue;
+    u8 padC[4];
+    Vec4 pos;
+} PointLight;
+
+extern PointLight D_L08_00180AC0[];
+
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
 #else
@@ -676,10 +687,7 @@ typedef struct {
     Vec_5e58 vertex[4]; unsigned int color[4]; float uv[8]; long gs[4];
 } Quad_5e58;
 
-typedef struct { char pad0[0x10]; Vec_5e58 position; } PointLight_5e58;
-
 extern float interpolate_sample_ring_5e58(char *, float) __asm__("FUN_L08_002f5d98");
-extern PointLight_5e58 point_lights_5e58[] __asm__("D_L08_00180AC0");
 extern float D_0015ED60;
 extern int D_L08_0015F3F8;
 extern f32 fast_cos_5e58(f32) __asm__("FUN_001f9dc8");
@@ -899,8 +907,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 }
             }
             if (data->light!=-1) {
-                PointLight_5e58 *light=&point_lights_5e58[data->light];
-                if (vector_distance_5e58(&data->light_pos,&light->position)<data->light_speed*D_0015ED60) {
+                PointLight *light=&D_L08_00180AC0[data->light];
+                if (vector_distance_5e58(&data->light_pos,&light->pos)<data->light_speed*D_0015ED60) {
                     float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->width)*0.5f;
                     float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->height)*0.5f;
                     normalize_vector_xyz(&scratch[0],&step,x);
@@ -909,10 +917,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
                     add_vector_xyz(&data->light_pos,&data->light_pos,&corner[0]);
                     add_vector_xyz(&data->light_pos,&data->light_pos,&moby->position);
                 } else {
-                    subtract_vector_xyz_5e58(&scratch[0],&data->light_pos,&light->position);
+                    subtract_vector_xyz_5e58(&scratch[0],&data->light_pos,&light->pos);
                     normalize_vector_xyz(&scratch[0],&scratch[0],data->light_speed*D_0015ED60);
-                    add_vector_xyz(&light->position,&light->position,&scratch[0]);
-                    light->position[3]=convert_integer_to_float(data->radius);
+                    add_vector_xyz(&light->pos,&light->pos,&scratch[0]);
+                    light->pos.f[3]=convert_integer_to_float(data->radius);
                 }
             }
             data->flags^=2;
@@ -953,15 +961,6 @@ typedef struct {
     f32 intensity;       /* 0x154 */
 } FlickerLightVars;
 
-/* A point light slot, 0x20 bytes apart. */
-typedef struct {
-    f32 red;
-    f32 green;
-    f32 blue;
-    u8 padC[0x14];
-} PointLight;
-
-extern PointLight D_L08_00180AC0[];
 extern char D_L08_001FC220[];
 char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max texture tile count (8)\n";
 extern char D_L08_001FC2A0[];
