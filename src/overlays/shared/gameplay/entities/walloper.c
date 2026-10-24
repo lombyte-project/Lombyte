@@ -2311,7 +2311,7 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF958). */
 #include "rnc/rendering/geometry_quad.h"
-extern int D_L00_00161760 __attribute__((sda));
+extern int beam_pulse_default_rgb __asm__("D_L00_00161760") __attribute__((sda));
 extern int D_L00_00161764 __attribute__((sda));
 extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
 extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
@@ -2339,7 +2339,7 @@ void draw_beam_pulse_quads(void *unused) {
     quad.texture_coordinates[3][0] = 1.0f;
     quad.texture_coordinates[3][1] = 1.0f;
     {
-        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : D_L00_00161760;
+        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : beam_pulse_default_rgb;
         color = selected_color & 0xFFFFFF;
     }
     origin = &position;
