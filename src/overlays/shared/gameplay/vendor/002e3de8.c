@@ -119,12 +119,12 @@ extern QuadCorner D_L10_001DA350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L10_001DA270[][2];
 extern float D_L10_001DA2F0[][2];
-extern int D_L10_0015F3F8;
+extern int quad_uv_animation_phase_input __asm__("D_L10_0015F3F8");
 extern int D_L10_001DA250[];
 extern int D_L10_001DA2B0[][2];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern int D_L10_00161F40 __attribute__((sda));
+extern int quad_layer_count __asm__("D_L10_00161F40") __attribute__((sda));
 extern int D_L10_00161F48[2] __attribute__((sda));
 extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));
@@ -176,7 +176,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         second_src++;
         second_dst += 4;
     }
-    for (pass = 0; pass < D_L10_00161F40; pass++) {
+    for (pass = 0; pass < quad_layer_count; pass++) {
         int parity = pass & 1;
         int shade;
         first.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
@@ -193,7 +193,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
                 int limit = truncate_float_to_s32(D_L10_001DA270[pass][axis] * 360.0f);
-                float angle = convert_integer_to_float(D_L10_0015F3F8 % limit) / D_L10_001DA270[pass][axis] - 180.0f;
+                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / D_L10_001DA270[pass][axis] - 180.0f;
                 float wave;
                 if (D_L10_001DA2B0[pass][axis] != 0) {
                     wave = fast_cos(angle * 0.017453292f);
