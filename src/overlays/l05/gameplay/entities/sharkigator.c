@@ -599,7 +599,7 @@ extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int frame_number __asm__("D_L05_0015F5CC");
-extern float D_L05_001613D4 __attribute__((sda));
+extern float scenery_ship_initialization_scale_multiplier_gp __asm__("D_L05_001613D4") __attribute__((sda));
 int D_L05_001613D8 = 0x80000080;
 int D_L05_001613DC = 0x80202020;
 float D_L05_001613E0 = 5.0f;
@@ -679,7 +679,7 @@ void scenery_ship_update(char *moby) {
     case SCENERY_SHIP_INITIALIZE: {
         *(unsigned char *)(moby + 0x30) = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L05_001613D4;
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * scenery_ship_initialization_scale_multiplier_gp;
         data->f1C = func_00214158_2D8388();
         data->f328 = -1;
         data->f368 = func_00214158_2D8388();
