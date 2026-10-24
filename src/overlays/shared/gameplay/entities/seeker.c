@@ -331,9 +331,9 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L09_001613F8 __attribute__((sda));
-extern float D_L09_00161400 __attribute__((sda));
-extern float D_L09_00161404 __attribute__((sda));
-extern float D_L09_00161408 __attribute__((sda));
+extern float seeker_hurt_knockback_xy_scale __asm__("D_L09_00161400") __attribute__((sda));
+extern float seeker_fatal_knockback_z_scale __asm__("D_L09_00161404") __attribute__((sda));
+extern float seeker_fatal_knockback_xy_scale __asm__("D_L09_00161408") __attribute__((sda));
 extern float D_L09_0016140C __attribute__((sda));
 extern int multiply_global_factor_ed64() __asm__("FUN_001f96b0");
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
@@ -440,7 +440,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         case 8:
             data->fC0 = 3.0f;
             data->fC4 = 6.0f;
-            data->f88 = D_L09_00161400 * D_0015ED6C;
+            data->f88 = seeker_hurt_knockback_xy_scale * D_0015ED6C;
             data->f8C = 0.0f;
             knock_angle = func_L00_001FF860_2C73D0(moby->pos.x - source->owner->pos.x, moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
@@ -456,8 +456,8 @@ void update_seeker_damage_and_target(Moby *moby) {
         case 2:
             moby->flags &= 0xEFFF;
             data->f80 = D_L09_001613F8 * D_0015ED70;
-            data->f88 = D_L09_00161408 * D_0015ED6C;
-            data->f8C = D_L09_00161404 * D_0015ED6C;
+            data->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
+            data->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
             data->fC0 = 14.0f;
             data->fC4 = 28.0f;
             knock_angle_fatal = func_L00_001FF860_2C73D0(moby->pos.x - source->owner->pos.x, moby->pos.y - source->owner->pos.y);
