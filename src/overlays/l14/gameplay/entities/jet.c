@@ -939,8 +939,8 @@ typedef struct {
 extern L14MinePath *D_L14_001B0BB0_mine[] __asm__("D_L14_001B0BB0");
 extern char D_L14_001FCA98[];
 extern char D_L14_001FCAD8[];
-extern f32 D_L14_00161C44 __attribute__((sda));
-extern f32 D_L14_00161C48 __attribute__((sda));
+extern f32 mine_path_step_rate __asm__("D_L14_00161C44") __attribute__((sda));
+extern f32 mine_glow_pulse_phase_step __asm__("D_L14_00161C48") __attribute__((sda));
 extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
 extern void mine_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mine_remove(void *) __asm__("FUN_0020c828");
@@ -1010,7 +1010,7 @@ void update_looping_path_moby(struct Moby *moby) {
         break;
     case MINE_STATE_FOLLOW_PATH:
         FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[mine_vars->path], path_target_position, &mine_vars->segment, &mine_vars->along, 1,
-                              D_L14_00161C44 * D_0015ED6C_mine * mine_vars->dir);
+                              mine_path_step_rate * D_0015ED6C_mine * mine_vars->dir);
         FUN_L00_0025b8c0(&moby->pos.x, &mine_vars->vel[0], path_target_position[0], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], path_target_position[1], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], path_target_position[2], 0.02f, 0.2f, 0.0f);
@@ -1029,7 +1029,7 @@ void update_looping_path_moby(struct Moby *moby) {
         moby->rot.x = mine_add_rot(moby->rot.x, mine_vars->spin[0]);
         moby->rot.y = mine_add_rot(moby->rot.y, mine_vars->spin[1]);
         moby->rot.z = mine_add_rot(moby->rot.z, mine_vars->spin[2]);
-        mine_vars->phase = mine_add_rot(mine_vars->phase, D_L14_00161C48);
+        mine_vars->phase = mine_add_rot(mine_vars->phase, mine_glow_pulse_phase_step);
         glow_pulse_sine = mine_sin(mine_vars->phase);
         glow_red_intensity = mine_ftoi(glow_pulse_sine * 48.0f) + 0xCF;
         glow_green_blue_intensity = mine_ftoi(glow_pulse_sine * 32.0f) + 0x30;
