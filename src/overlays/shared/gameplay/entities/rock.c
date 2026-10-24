@@ -1461,7 +1461,7 @@ extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
 extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
-void FUN_L01_00308550(char *m);
+void update_gold_bolt_glow_rings(char *m) __asm__("FUN_L01_00308550");
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -1487,7 +1487,7 @@ void update_gold_bolt_visuals(struct Moby *moby) {
         moby->rot.z = updated_rotation_z;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);
     }
-    FUN_L01_00308550(moby);
+    update_gold_bolt_glow_rings(moby);
     if (random_integer_below(*(int *)&D_L01_00161F50_gp) == 0) {
         FUN_L01_003089f0_u(moby);
     }
@@ -1518,7 +1518,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_00308550(char *moby) {
+void update_gold_bolt_glow_rings(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
     float glow_particle_position[4];
     float glow_origin_position[4];
