@@ -2088,9 +2088,9 @@ void update_proximity_corrected_size_alpha_tween_particle(char *particle) {
     char *particle_data = particle + 0x20;
     char *particle_position;
     float interpolation_factor;
-    float a[4] __attribute__((aligned(16)));
-    float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_velocity_scratch[4] __attribute__((aligned(16)));
+    float reference_position_delta[4] __attribute__((aligned(16)));
+    float proximity_correction_offset[4] __attribute__((aligned(16)));
     float *particle_velocity;
     int al;
     particle[8] += particle_data[0xA];
@@ -2109,24 +2109,24 @@ void update_proximity_corrected_size_alpha_tween_particle(char *particle) {
     }
     particle_position = particle + 0x10;
     *(int *)(particle + 4) = (al << 24) | (*(int *)(particle + 4) & 0xFFFFFF);
-    vcopy_276940(a, (float *)(particle_data + 0xC));
-    add_vector_xyz_c(particle_position, particle_position, a);
+    vcopy_276940(particle_velocity_scratch, (float *)(particle_data + 0xC));
+    add_vector_xyz_c(particle_position, particle_position, particle_velocity_scratch);
     if (*(int *)(particle_data + 0x18) != 0) {
-        subtract_vector_xyz(d, *(char **)(particle_data + 0x18) + 0x10, particle_position);
-        if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            cross_vectors_xyz(e, d, ((unsigned char *)D_0013F5E0));
-            fast_vec_normalize_c(e, e, *(float *)&D_L00_0016024C);
-            add_vector_xyz_c(particle_position, particle_position, e);
-            if (d[0] <= 0.5f && d[1] <= 0.5f) {
-                fast_vec_normalize_c(a, d, 0.03f);
+        subtract_vector_xyz(reference_position_delta, *(char **)(particle_data + 0x18) + 0x10, particle_position);
+        if (reference_position_delta[0] <= 2.0f && reference_position_delta[1] <= 2.0f) {
+            cross_vectors_xyz(proximity_correction_offset, reference_position_delta, ((unsigned char *)D_0013F5E0));
+            fast_vec_normalize_c(proximity_correction_offset, proximity_correction_offset, *(float *)&D_L00_0016024C);
+            add_vector_xyz_c(particle_position, particle_position, proximity_correction_offset);
+            if (reference_position_delta[0] <= 0.5f && reference_position_delta[1] <= 0.5f) {
+                fast_vec_normalize_c(particle_velocity_scratch, reference_position_delta, 0.03f);
             } else {
-                fast_vec_normalize_c(a, d, fast_vec_length(a));
+                fast_vec_normalize_c(particle_velocity_scratch, reference_position_delta, fast_vec_length(particle_velocity_scratch));
             }
             particle_velocity = (float *)(particle_data + 0xC);
-            *(float *)(particle_data + 0xC) = a[0];
-            particle_velocity[1] = a[1];
-            a[2] = a[2] + 0.02f;
-            particle_velocity[2] = a[2];
+            *(float *)(particle_data + 0xC) = particle_velocity_scratch[0];
+            particle_velocity[1] = particle_velocity_scratch[1];
+            particle_velocity_scratch[2] = particle_velocity_scratch[2] + 0.02f;
+            particle_velocity[2] = particle_velocity_scratch[2];
         }
     }
     if (fast_dec_timer_s16(particle + 0xA)) {
