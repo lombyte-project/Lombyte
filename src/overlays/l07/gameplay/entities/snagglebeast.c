@@ -755,6 +755,7 @@ void snagglebeast_update(unsigned char *moby) {
     enum {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
+        SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
         SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
@@ -1040,7 +1041,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 2: {
+    case SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST: {
         float rot;
         rot = *(float *)(moby + 0x48);
         if (level_frame_count % 6 == 0) spawn_moby_point_offset_particle((char *)moby, 0, 600000.0f, 5.0f);
