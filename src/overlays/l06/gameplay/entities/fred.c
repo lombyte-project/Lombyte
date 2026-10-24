@@ -505,7 +505,7 @@ void draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
 void draw_dual_texture_50_quad_mesh(void) {
     Packet_2fd1a0 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec2[4] __attribute__((aligned(16)));
+    float reference_to_quad_unit_direction[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
     float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier * D_L06_00167400[86];
     float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier * D_L06_00167400[85];
@@ -535,10 +535,10 @@ void draw_dual_texture_50_quad_mesh(void) {
     do {
         transform_2fd1a0(vec1, D_L06_001F2610[i], dual_texture_mesh_position_scale);
         multiply_2fd1a0(vec1, vec1, matrix);
-        subtract_2fd1a0(vec2, vec1, D_L06_00167540);
-        normalize_2fd1a0(vec2, vec2, 1.0f);
+        subtract_2fd1a0(reference_to_quad_unit_direction, vec1, D_L06_00167540);
+        normalize_2fd1a0(reference_to_quad_unit_direction, reference_to_quad_unit_direction, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix_ptr);
-        normalize_other_2fd1a0(vec2, vec1);
+        normalize_other_2fd1a0(reference_to_quad_unit_direction, vec1);
         j = 0;
         do {
             int vertex_index = D_L06_001F1220[i][j][0];
