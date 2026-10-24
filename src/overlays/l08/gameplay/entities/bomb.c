@@ -1105,9 +1105,9 @@ extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int D_L08_001618D4 __attribute__((sda));
 extern int D_L08_001618D8 __attribute__((sda));
-extern float D_L08_001618DC __attribute__((sda));
-extern float D_L08_001618E0 __attribute__((sda));
-extern float D_L08_001618E8 __attribute__((sda));
+extern float bomber_tank_joint_particle_jitter_magnitude_base __asm__("D_L08_001618DC") __attribute__((sda));
+extern float bomber_tank_joint_particle_vertical_spread __asm__("D_L08_001618E0") __attribute__((sda));
+extern float bomber_tank_joint_particle_horizontal_spread_range_end __asm__("D_L08_001618E8") __attribute__((sda));
 extern int D_L08_001618EC __attribute__((sda));
 extern int D_L08_001618F0 __attribute__((sda));
 extern int D_L08_001618F4 __attribute__((sda));
@@ -1156,27 +1156,27 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
         qcopy(velocity, data + 0x40);
         qcopy(spread_vector, data + 0x40);
         if (count / 3 < i) {
-            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(bomber_tank_joint_particle_jitter_magnitude_base, bomber_tank_joint_particle_jitter_magnitude_base * 1.2f) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
-            offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
+            offset = offset * (func_002140F8_2D6C58(0.0f, bomber_tank_joint_particle_horizontal_spread_range_end) * D_0015ED6C);
             spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
-            offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
+            offset = offset * (func_002140F8_2D6C58(0.0f, bomber_tank_joint_particle_horizontal_spread_range_end) * D_0015ED6C);
             spread_vector[1] = spread_vector[1] + offset;
-            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[2] = bomber_tank_joint_particle_vertical_spread * D_0015ED6C;
         } else {
-            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(0.0f, bomber_tank_joint_particle_jitter_magnitude_base) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
-            offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
+            offset = offset * (func_002140F8_2D6C58(0.0f, bomber_tank_joint_particle_horizontal_spread_range_end * 0.25f) * D_0015ED6C);
             spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
-            offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
+            offset = offset * (func_002140F8_2D6C58(0.0f, bomber_tank_joint_particle_horizontal_spread_range_end * 0.25f) * D_0015ED6C);
             spread_vector[1] = spread_vector[1] + offset;
-            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[2] = bomber_tank_joint_particle_vertical_spread * D_0015ED6C;
         }
         velocity[3] = D_L08_001618F8;
         spread_vector[3] = D_L08_001618FC;
