@@ -1505,8 +1505,8 @@ typedef struct VoiceSlot2d2ee8 {
 extern u8 D_0013E550[] __attribute__((section(".data")));
 extern u128 D_L00_001E1160 __attribute__((section(".data")));
 extern u8 D_L00_001E1170[] __attribute__((section(".data")));
-extern f32 D_L00_00161950 __attribute__((sda));
-extern f32 D_L00_00161954 __attribute__((sda));
+extern f32 metal_detector_aim_yaw_limit_degrees_gp __asm__("D_L00_00161950") __attribute__((sda));
+extern f32 metal_detector_aim_pitch_limit_degrees_gp __asm__("D_L00_00161954") __attribute__((sda));
 extern s32 D_L00_0016191C __attribute__((sda));
 extern s32 D_L00_00161920 __attribute__((sda));
 extern s32 D_L00_00161924 __attribute__((sda));
@@ -1607,12 +1607,12 @@ void metal_detector_update(struct Moby *moby) {
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = FUN_001f99c0(yaw);
             abs_pitch = FUN_001f99c0(pitch);
-            aim_angle_limit_radians = D_L00_00161950 * 0.017453292f;
+            aim_angle_limit_radians = metal_detector_aim_yaw_limit_degrees_gp * 0.017453292f;
             if (aim_angle_limit_radians < abs_yaw) {
                 yaw /= abs_yaw;
                 yaw *= aim_angle_limit_radians;
             }
-            aim_angle_limit_radians = D_L00_00161954 * 0.017453292f;
+            aim_angle_limit_radians = metal_detector_aim_pitch_limit_degrees_gp * 0.017453292f;
             if (aim_angle_limit_radians < abs_pitch) {
                 pitch /= abs_pitch;
                 pitch *= aim_angle_limit_radians;
