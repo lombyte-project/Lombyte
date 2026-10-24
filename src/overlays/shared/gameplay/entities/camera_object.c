@@ -151,7 +151,7 @@ void update_ambience_target_cycle(void) {
     }
 }
 extern int D_L00_00161390;
-extern int D_L00_00161368 __attribute__((sda));
+extern int configured_unscaled_frame_count __asm__("D_L00_00161368") __attribute__((sda));
 extern int D_L00_0016136C __attribute__((sda));
 extern int D_L00_00161370 __attribute__((sda));
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
@@ -179,7 +179,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         state_object[0x20] = 1;
         state_object[0x30] = 0xFF;
         one = 1.0f;
-        D_L00_0016137C_gp = scale_game_frames(D_L00_00161368);
+        D_L00_0016137C_gp = scale_game_frames(configured_unscaled_frame_count);
         scaled_frame_count = scale_game_frames(D_L00_0016136C);
         D_L00_00161380 = scaled_frame_count;
         D_L00_00161384_gp = one / convert_integer_to_float(scaled_frame_count);
