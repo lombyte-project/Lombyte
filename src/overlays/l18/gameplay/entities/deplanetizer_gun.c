@@ -382,7 +382,7 @@ extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
 extern float deplanetizer_camera_quad_local_offset_x __asm__("D_L18_00162550");
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
-extern float D_L18_0016255C;
+extern float deplanetizer_camera_quad_local_offset_w __asm__("D_L18_0016255C");
 extern int deplanetizer_camera_quad_first_color_gp __asm__("D_L18_001624F8") __attribute__((sda));
 extern int deplanetizer_camera_quad_smaller_color_gp __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
@@ -409,7 +409,7 @@ void draw_three_scaled_camera_facing_quads(void) {
             tilt = 0.15f;
         }
         D_L18_00162558 = tilt;
-        D_L18_0016255C = 1.0f;
+        deplanetizer_camera_quad_local_offset_w = 1.0f;
     }
     pk.b = tex_9780(0xB);
     pk.c = 0x0000FF9000000260ULL;
