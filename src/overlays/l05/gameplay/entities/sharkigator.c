@@ -1110,7 +1110,7 @@ extern int D_L05_00161A9C __attribute__((sda));
 extern int D_L05_00161AA0 __attribute__((sda));
 extern int D_L05_00161AA4 __attribute__((sda));
 extern int D_L05_00161AA8 __attribute__((sda));
-extern float D_L05_00161AAC __attribute__((sda));
+extern float extermibot_spark_lifetime_min_frames_gp __asm__("D_L05_00161AAC") __attribute__((sda));
 extern float D_L05_00161AB0 __attribute__((sda));
 extern float D_L05_00161AB4 __attribute__((sda));
 extern float extermibot_spark_facing_xy_scale_gp __asm__("D_L05_00161AB8") __attribute__((sda));
@@ -1399,7 +1399,7 @@ void extermibot_update(unsigned char *moby) {
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(extermibot_spark_random_z_scale_gp * D_0015ED6C), extermibot_spark_random_z_scale_gp * D_0015ED6C);
-                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
+                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_lifetime_min_frames_gp, extermibot_spark_lifetime_min_frames_gp * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
                 spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
@@ -1415,7 +1415,7 @@ void extermibot_update(unsigned char *moby) {
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(extermibot_spark_random_z_scale_gp * D_0015ED6C), extermibot_spark_random_z_scale_gp * D_0015ED6C);
-                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
+                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_lifetime_min_frames_gp, extermibot_spark_lifetime_min_frames_gp * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
                 spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
