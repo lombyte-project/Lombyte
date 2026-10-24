@@ -1018,8 +1018,8 @@ extern int D_L05_00161E9C __attribute__((sda));
 extern float D_L05_00161EA0 __attribute__((sda));
 extern float D_L05_00161EA4 __attribute__((sda));
 extern float spray_particle_speed_upper_bound_gp __asm__("D_L05_00161EA8") __attribute__((sda));
-extern float D_L05_00161EAC __attribute__((sda));
-extern float D_L05_00161EB0 __attribute__((sda));
+extern float spray_big_particle_speed_lower_bound_gp __asm__("D_L05_00161EAC") __attribute__((sda));
+extern float spray_small_particle_speed_lower_bound_gp __asm__("D_L05_00161EB0") __attribute__((sda));
 extern float D_L05_00161EB4 __attribute__((sda));
 extern float spray_particle_count_limit_per_update_gp __asm__("D_L05_00161EB8") __attribute__((sda));
 extern float spray_big_particle_selection_threshold_percent_gp __asm__("D_L05_00161EBC") __attribute__((sda));
@@ -1090,9 +1090,9 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
             if (spray_big_particle_selection_threshold_percent_gp < random_float_between(0.0f, 100.0f)) {
                 big = 0;
             }
-            minimum_particle_speed = D_L05_00161EAC;
+            minimum_particle_speed = spray_big_particle_speed_lower_bound_gp;
             if (!big) {
-                minimum_particle_speed = D_L05_00161EB0;
+                minimum_particle_speed = spray_small_particle_speed_lower_bound_gp;
             }
             qcopy(v, &emitter_moby->pos);
             fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
