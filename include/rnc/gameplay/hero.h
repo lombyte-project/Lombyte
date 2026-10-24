@@ -592,7 +592,8 @@ struct Hero {
     s32 unkAB0;                    /* 0xAB0 */
     s32 unkAB4;                    /* 0xAB4 */
     s32 unkAB8;                    /* 0xAB8 */
-    u8 pad_ABC[0x244];
+    u8 pad_ABC[0x4];
+    f32 joint_matrices[9][4][4];   /* 0xAC0: world matrices of 9 joints (compute_selected_world_matrices) */
     u8*unkD00;                     /* 0xD00 */
     u8*unkD04;                     /* 0xD04 */
     u8 *unkD08[2];                 /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
