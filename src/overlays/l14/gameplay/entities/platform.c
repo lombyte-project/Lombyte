@@ -392,15 +392,15 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             add_67e8(&ray, &ray, muzzle);
             muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
-                char *q = muzzle_flash_particle + 0x20;
+                char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
                 *(float *)(muzzle_flash_particle + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
-                *(short *)(q + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
-                *(short *)(q + 0x16) = 1;
+                *(short *)(muzzle_flash_particle_state + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
+                *(short *)(muzzle_flash_particle_state + 0x16) = 1;
                 lifetime_frames = frames_67e8(4);
                 *(short *)(muzzle_flash_particle + 0xA) = lifetime_frames;
-                *(float *)(q + 0x10) = 1.0f / itof_67e8((short)lifetime_frames);
-                *(int *)(q + 0x18) = 0x7F7F7F;
+                *(float *)(muzzle_flash_particle_state + 0x10) = 1.0f / itof_67e8((short)lifetime_frames);
+                *(int *)(muzzle_flash_particle_state + 0x18) = 0x7F7F7F;
             }
             qcopy(&ray.self, muzzle);
             ((float *)&ray.self)[2] -= 0.5f;
