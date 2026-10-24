@@ -1228,7 +1228,7 @@ extern float vector_length_xyz(void *a);
 extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
-extern float D_L16_001619CC __attribute__((sda));
+extern float test_dummy_bomb_horizontal_launch_speed __asm__("D_L16_001619CC") __attribute__((sda));
 extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -1386,7 +1386,7 @@ void test_dummy_update(unsigned char *moby) {
             qcopy(position_or_delta.f, dummy_data->target);
         }
         if (is_value_within_interpolated_window(moby, 15.0f) && dummy_data->child) {
-            float speed = D_L16_001619CC * D_0015ED6C;
+            float speed = test_dummy_bomb_horizontal_launch_speed * D_0015ED6C;
             float gravity = frame_time_sq * 10.0f;
             position_or_delta.f[2] = probe_ground_height(position_or_delta.f, 0, 0.5f);
             moby_point_position(dummy_data->child, 0, position_or_direction.f);
