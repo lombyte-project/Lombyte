@@ -642,7 +642,7 @@ typedef struct {
     float v[4];
 } __attribute__((aligned(16))) QVec;
 
-extern float D_L18_0016196C __attribute__((sda));
+extern float rocket_explosion_hit_priority __asm__("D_L18_0016196C") __attribute__((sda));
 
 void spawn_rocket_explosion(void *moby_object, void *movement_step) {
     char *moby = moby_object;
@@ -660,7 +660,7 @@ void spawn_rocket_explosion(void *moby_object, void *movement_step) {
                           0, -1, 0);
     if (hit_radius != 0.0f) {
         if (hero.vehicle_mode == 2) {
-            play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, D_L18_0016196C, 1.0f, 0, 1,
+            play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, rocket_explosion_hit_priority, 1.0f, 0, 1,
                              0);
         }
     }
