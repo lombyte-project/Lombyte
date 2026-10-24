@@ -657,8 +657,8 @@ void update_moby_hit_stats_and_state(char *moby) {
             }
         }
     } else if (((unsigned char *)moby)[0x20] == 5) {
-        struct Hero *g2 = &hero;
-        if (g2->state.current != 0x32) {
+        struct Hero *hero_for_state_check = &hero;
+        if (hero_for_state_check->state.current != 0x32) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 1;
