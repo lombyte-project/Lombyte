@@ -173,7 +173,7 @@ void update_hero_state_transitions(void) {
     float probe_heading_2;
     float probe_heading_3;
     int jump_trajectory_steps;
-    int sp58;
+    int jump_press_history_offset;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -2101,8 +2101,8 @@ void update_hero_state_transitions(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp58)) {
-                                    if (sp58 < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_history_offset)) {
+                                    if (jump_press_history_offset < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
