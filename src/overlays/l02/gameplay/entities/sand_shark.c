@@ -1137,8 +1137,8 @@ typedef struct {
     int i29C;             /* 0x29C */
 } Vars5c88;
 
-extern float D_L02_00161908 __attribute__((sda));
-extern float D_L02_0016190C __attribute__((sda));
+extern float sand_shark_death_knockback_vertical_speed_gp __asm__("D_L02_00161908") __attribute__((sda));
+extern float sand_shark_death_knockback_horizontal_speed_gp __asm__("D_L02_0016190C") __attribute__((sda));
 extern float D_L02_00161914 __attribute__((sda));
 extern float D_L02_00161918 __attribute__((sda));
 extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
@@ -1212,8 +1212,8 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
             moby_vars->i140 = 0x200;
             moby_vars->f130 = D_L02_00161914 * frame_time_sq;
             moby_vars->f134 = D_L02_00161918 * frame_time_sq;
-            moby_vars->f138 = D_L02_0016190C * D_0015ED6C;
-            moby_vars->f13C = D_L02_00161908 * D_0015ED6C;
+            moby_vars->f138 = sand_shark_death_knockback_horizontal_speed_gp * D_0015ED6C;
+            moby_vars->f13C = sand_shark_death_knockback_vertical_speed_gp * D_0015ED6C;
             moby_vars->b15D = 0;
             moby_vars->i144 = 9;
             moby_vars->f16C = 2.0f * D_0015ED6C;
