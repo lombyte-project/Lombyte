@@ -552,7 +552,7 @@ f32 FUN_001fa688_2a57a8(f32, f32) __asm__("FUN_001fa688");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
-extern f32 D_L00_001613A4 __attribute__((sda));
+extern f32 vendor_color_pulse_phase __asm__("D_L00_001613A4") __attribute__((sda));
 extern f32 D_L00_0016139C __attribute__((sda));
 extern f32 D_L00_001613A0 __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
@@ -568,11 +568,11 @@ void vendor_update(P_2a57a8 *vendor_moby) {
     u8 *v;
     f32 hero_distance, z;
 
-    D_L00_001613A4 += 0.05f;
-    if (D_L00_001613A4 > 3.14f)
-        D_L00_001613A4 = -3.14f;
+    vendor_color_pulse_phase += 0.05f;
+    if (vendor_color_pulse_phase > 3.14f)
+        vendor_color_pulse_phase = -3.14f;
     vendor_moby->i90 =
-        (((s32)(fast_sin(D_L00_001613A4) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
+        (((s32)(fast_sin(vendor_color_pulse_phase) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
     switch (vendor_moby->b20) {
     case VENDOR_INITIALIZE:
         vendor_moby->b20 = 1;
