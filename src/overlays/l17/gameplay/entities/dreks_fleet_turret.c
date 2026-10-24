@@ -699,7 +699,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
     float elevation_angle_offset;
     float f20;
     int particle_lifetime;
-    char *w;
+    char *particle_vector_scratch_destination;
 
     ring_vars = *(float **)(moby + 0x78);
     if (hero_is_in_special_state() != 0) {
@@ -777,8 +777,8 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                 else
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
-                                w = (char *)particle_vector_scratch;
-                                FUN_L00_001ff290(w, spE0, spF0);
+                                particle_vector_scratch_destination = (char *)particle_vector_scratch;
+                                FUN_L00_001ff290(particle_vector_scratch_destination, spE0, spF0);
                                 f20 = frame_time;
                                 f20 *= 10.0f;
                                 normalize_vector_xyz(
