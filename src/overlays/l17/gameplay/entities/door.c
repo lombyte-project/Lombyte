@@ -1168,8 +1168,8 @@ extern float D_L17_00162008 __attribute__((sda));
 extern float D_L17_0016200C __attribute__((sda));
 extern float D_L17_00162010 __attribute__((sda));
 int D_L17_00162014 = 5;
-extern float D_L17_00162018 __attribute__((sda));
-extern float D_L17_0016201C __attribute__((sda));
+extern float fighter_jet_impact_yaw_response_scale_gp __asm__("D_L17_00162018") __attribute__((sda));
+extern float fighter_jet_impact_pitch_response_scale_gp __asm__("D_L17_0016201C") __attribute__((sda));
 extern float D_L17_00162024 __attribute__((sda));
 extern float D_L17_00162028 __attribute__((sda));
 extern float D_L17_0016202C __attribute__((sda));
@@ -1488,11 +1488,11 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             FUN_L00_001ff660(movement_delta.v, movement_delta.v, collision_result + 0x40);
             ship_vars->f38 = fast_add_rotations(
                 ship_vars->f38,
-                fast_subtract_rotations(fast_arc_tan(movement_delta.v[0], movement_delta.v[1]), ship_vars->f38) * D_L17_00162018);
+                fast_subtract_rotations(fast_arc_tan(movement_delta.v[0], movement_delta.v[1]), ship_vars->f38) * fighter_jet_impact_yaw_response_scale_gp);
             collision_adjusted_pitch = fast_add_rotations(
                 ship_vars->f34,
                 fast_subtract_rotations(-fast_arc_tan(vector_length_xy(movement_delta.v), movement_delta.v[2]), ship_vars->f34) *
-                    D_L17_0016201C);
+                    fighter_jet_impact_pitch_response_scale_gp);
             k = ship_vars->speed * D_L17_0016205C;
             ship_vars->f34 = collision_adjusted_pitch;
             ship_vars->speed = k;
@@ -1726,11 +1726,11 @@ void fighter_jet_update(ShipMoby *moby) {
                         FUN_L00_001ff660(dir, dir, (char *)hit + 0x10);
                         ship_vars->rot[2] = fast_add_rotations(
                             ship_vars->rot[2],
-                            fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), ship_vars->rot[2]) * D_L17_00162018 * k);
+                            fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), ship_vars->rot[2]) * fighter_jet_impact_yaw_response_scale_gp * k);
                         ship_vars->rot[1] = fast_add_rotations(
                             ship_vars->rot[1],
                             fast_subtract_rotations(fast_arc_tan(vector_length_xy(dir), dir[2]), ship_vars->rot[1]) *
-                                D_L17_0016201C * k);
+                                fighter_jet_impact_pitch_response_scale_gp * k);
                     }
                 } else {
                     spherical_offset_ed(dir, ship_vars->speed, ship_vars->rot[2], -ship_vars->rot[1]);
