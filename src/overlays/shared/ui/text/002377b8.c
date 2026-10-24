@@ -199,7 +199,7 @@ extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
 extern int D_L00_0015FA90;
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
-extern int D_L00_0015FA9C __attribute__((sda));
+extern int saved_hud_selector_slot_index __asm__("D_L00_0015FA9C") __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern int D_L00_0017DC38 __attribute__((section(".data")));
 extern int D_L00_0017DC3C __attribute__((section(".data")));
@@ -325,7 +325,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         {
             int a = hud_element->w78;
             int selected_slot_snapshot = hud_element->w74;
-            D_L00_0015FA9C = selected_slot_snapshot;
+            saved_hud_selector_slot_index = selected_slot_snapshot;
             D_L00_0015FA98 = a;
         }
         remove_hud_item(hud_element->w64);
@@ -636,7 +636,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
         {
             int selection_state_snapshot = hud_element->w78;
             int selected_slot_snapshot = hud_element->w74;
-            D_L00_0015FA9C = selected_slot_snapshot;
+            saved_hud_selector_slot_index = selected_slot_snapshot;
             D_L00_0015FA98 = selection_state_snapshot;
         }
         remove_hud_item(hud_element->w64);
