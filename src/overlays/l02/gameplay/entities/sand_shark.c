@@ -1157,7 +1157,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Path-following enemy: respawns at its home point on request, takes hits (dies and drops to the
    ground), then follows its path and retargets the hero when it strays. */
-void FUN_L02_002d5c88(unsigned char *moby) {
+void handle_sand_shark_damage_and_targeting(unsigned char *moby) __asm__("FUN_L02_002d5c88");
+
+void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
     Vars5c88 *moby_vars = *(Vars5c88 **)(moby + 0x78);
     char *hit_record;
     int *path;
