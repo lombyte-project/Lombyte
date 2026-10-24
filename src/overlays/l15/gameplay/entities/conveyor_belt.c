@@ -1017,15 +1017,15 @@ void codebot_slot_update(struct Moby *moby) {
     };
     int *data = (int *)moby->pvars;
     float position_work_vector[4] __attribute__((aligned(16)));
-    float tmp[4] __attribute__((aligned(16)));
+    float position_rotation_work_vector[4] __attribute__((aligned(16)));
     OvlQuad position;
     float angle;
     char *effect;
     if (data[3] != -1) {
         if (moby->state != 0) {
-            subtract_vector_xyz(tmp, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
-            *(OvlQuad *)position_work_vector = *(OvlQuad *)tmp;
-            FUN_L00_001ff290(tmp, &moby->pos, position_work_vector);
+            subtract_vector_xyz(position_rotation_work_vector, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
+            *(OvlQuad *)position_work_vector = *(OvlQuad *)position_rotation_work_vector;
+            FUN_L00_001ff290(position_rotation_work_vector, &moby->pos, position_work_vector);
         }
         *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
     }
@@ -1059,19 +1059,19 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             position_work_vector[2] = 0.0f;
             FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
-            data[1] = (int)spawn_codebot_slot_effect((char *)position_work_vector, (char *)tmp);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
+            data[1] = (int)spawn_codebot_slot_effect((char *)position_work_vector, (char *)position_rotation_work_vector);
             data[2] = 0;
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             position_work_vector[2] = 0.0f;
             FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
             position_work_vector[2] = probe_ground_height(position_work_vector, 0, 0.5f);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            FUN_L00_00216f90(position_work_vector, tmp, 0x72, 0);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            FUN_L00_00216f90(position_work_vector, position_rotation_work_vector, 0x72, 0);
             if (data[8] != -1)
                 set_moby_list_visibility(data[8], 1);
             moby->state = 3;
@@ -1085,8 +1085,8 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
             position_work_vector[2] = 0.0f;
             effect = (char *)data[1];
-            add_vector_xyz(tmp, &moby->pos, position_work_vector);
-            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)tmp;
+            add_vector_xyz(position_rotation_work_vector, &moby->pos, position_work_vector);
+            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)position_rotation_work_vector;
             if (angle < 0.5f) {
                 unsigned int *bits;
                 bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + D_L15_0015ED84 * 0x100 + (char *)D_L15_0014C190);
@@ -1106,21 +1106,21 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[2] = 0.0f;
             FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
             *(OvlQuad *)&position = *(OvlQuad *)&moby->pos;
-            data[1] = (int)spawn_codebot_slot_effect((char *)&position, (char *)tmp);
+            data[1] = (int)spawn_codebot_slot_effect((char *)&position, (char *)position_rotation_work_vector);
         } else {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[2] = 0.0f;
             FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
             *(OvlQuad *)((char *)data[1] + 0x10) = *(OvlQuad *)position_work_vector;
-            *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)tmp;
+            *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)position_rotation_work_vector;
         }
         if (alternate_item_available[0x6D] == 0 && count_missing_or_dying_mobys_in_list(data[8]) > 9) {
             alternate_item_available[0x6D] = 1;
