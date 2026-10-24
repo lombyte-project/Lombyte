@@ -937,8 +937,8 @@ typedef struct {
 /* moby the sound collision probe ignores (clamp_voice_position_to_collision) */
 extern struct Moby *sound_probe_ignore[] __asm__("D_0013E5BC");
 extern s32 D_0015EDDC;
-extern f32 D_L09_00161CB0 __attribute__((sda));
-extern f32 D_L09_00161CB4 __attribute__((sda));
+extern f32 turret_camera_offset_length __asm__("D_L09_00161CB0") __attribute__((sda));
+extern f32 turret_camera_z_offset __asm__("D_L09_00161CB4") __attribute__((sda));
 extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
@@ -1194,8 +1194,8 @@ void turret_update(struct Moby *moby) {
             moby->flags |= 4;
             FUN_L08_00313ba8();
             moby_point_position(moby, 0, &work_vector);
-            build_spherical_offset(&shot, D_L09_00161CB0, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
-            shot.f[2] += D_L09_00161CB4;
+            build_spherical_offset(&shot, turret_camera_offset_length, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
+            shot.f[2] += turret_camera_z_offset;
             add_vector_xyz(&muzzle, &work_vector, &shot);
             FUN_L00_002ea9d8(&muzzle);
             firing_vector_or_camera_rotation.f[0] = 0.0f;
