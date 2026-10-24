@@ -1887,7 +1887,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
     int c1 = 0;
     int c2 = 0;
     int c3 = 0;
-    int r;
+    int sphere_check_result_or_light_slot_index;
 
     if (moby == 0) return;
     vars = *(unsigned char **)(moby + 0x78);
@@ -1938,9 +1938,9 @@ void update_animated_point_light_moby(unsigned char *moby) {
         tp.w = *(float *)(vars + 0x60);
         moby_position = position_or_sphere_ptr;
         position_or_sphere_ptr = (unsigned char *)&tp;
-        r = fast_bsphere_check(position_or_sphere_ptr, 255.0f);
+        sphere_check_result_or_light_slot_index = fast_bsphere_check(position_or_sphere_ptr, 255.0f);
     }
-    if (r != -1) {
+    if (sphere_check_result_or_light_slot_index != -1) {
         if (*(unsigned char **)(vars + 0x20) != 0) {
             qcopy(&base_position, *(unsigned char **)(vars + 0x20) + 0x10);
         } else {
@@ -2164,12 +2164,12 @@ void update_animated_point_light_moby(unsigned char *moby) {
                 *(float *)(vars + 0x5C) = random_float_between_c(a, b);
             }
         }
-        r = *(int *)(vars + 0x50);
-        if (r == -1) {
+        sphere_check_result_or_light_slot_index = *(int *)(vars + 0x50);
+        if (sphere_check_result_or_light_slot_index == -1) {
             float kk = convert_integer_to_float_c(vars[0x24]) / 100.0f;
             *(int *)(vars + 0x50) = allocate_colored_effect_slot((float *)moby_position, *(float *)(vars + 0x60), kk, *(float *)(vars + 0x54), *(float *)(vars + 0x58), *(float *)(vars + 0x5C));
         } else {
-            unsigned char *point_light_entry = D_L00_001802C0 + (r << 5);
+            unsigned char *point_light_entry = D_L00_001802C0 + (sphere_check_result_or_light_slot_index << 5);
             qcopy(point_light_entry + 0x10, moby_position);
             *(float *)(point_light_entry + 0x1C) = *(float *)(vars + 0x60);
             *(float *)(point_light_entry + 0x0) = *(float *)(vars + 0x54);
@@ -2180,7 +2180,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
     } else {
         if (*(int *)(vars + 0x50) != -1) {
             release_point_light_slot(*(int *)(vars + 0x50));
-            *(int *)(vars + 0x50) = r;
+            *(int *)(vars + 0x50) = sphere_check_result_or_light_slot_index;
         }
     }
 }
