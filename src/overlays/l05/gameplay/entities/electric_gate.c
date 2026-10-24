@@ -374,7 +374,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         MOBY_LOWER_BELOW_POSE_HEIGHT = 3
     };
     char *data = *(char **)(moby + 0x78);
-    float v[4];
+    float slide_motion_scratch[4];
     float slide_step_distance;
     float speed;
     char *pose_entry;
@@ -388,12 +388,12 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         initial_pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         qcopy(moby + 0x10, initial_pose_entry + 0x30);
         *(float *)(moby + 0x48) = *(float *)(initial_pose_entry + 0x78);
-        fast_vec_normalize(v, initial_pose_entry + 0x10, *(float *)(data + 0x18));
+        fast_vec_normalize(slide_motion_scratch, initial_pose_entry + 0x10, *(float *)(data + 0x18));
         if (*(int *)(data + 0x1C) != 0) {
-            fast_vec_scale(v, v, -1.0f);
+            fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             *(u16 *)(moby + 0x34) |= 0x8000;
         }
-        add_vector_xyz(moby + 0x10, moby + 0x10, v);
+        add_vector_xyz(moby + 0x10, moby + 0x10, slide_motion_scratch);
         *(u8 *)(moby + 0x20) = 1;
         break;
     }
@@ -408,19 +408,19 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         reach = *(float *)(data + 0x18) * 3.0f;
         slide_step_distance = 0.0f;
-        fast_vec_normalize(v, pose_entry + 0x10, reach);
+        fast_vec_normalize(slide_motion_scratch, pose_entry + 0x10, reach);
         if (*(int *)(data + 0x1C) != 0) {
-            fast_vec_scale(v, v, -1.0f);
+            fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
-        add_vector_xyz(v, pose_entry + 0x30, v);
-        subtract_vector_xyz(v, v, moby + 0x10);
-        remaining_slide_distance = vector_length_xyz(v);
+        add_vector_xyz(slide_motion_scratch, pose_entry + 0x30, slide_motion_scratch);
+        subtract_vector_xyz(slide_motion_scratch, slide_motion_scratch, moby + 0x10);
+        remaining_slide_distance = vector_length_xyz(slide_motion_scratch);
         speed = vector_length_xyz(data);
         advance_accelerated_scalar(remaining_slide_distance, frame_time_sq * 20.0f, frame_time_sq * 30.0f,
                                    frame_time * 10.0f, &slide_step_distance, &speed);
-        fast_vec_normalize(data, v, speed);
+        fast_vec_normalize(data, slide_motion_scratch, speed);
         add_vector_xyz(moby + 0x10, moby + 0x10, data);
-        if (vector_length_xyz(v) < 0.01f) {
+        if (vector_length_xyz(slide_motion_scratch) < 0.01f) {
             *(u8 *)(moby + 0x20) = 3;
         }
         break;
