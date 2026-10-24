@@ -449,7 +449,9 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-int FUN_L11_003192c8(char *moby) {
+int draw_linked_moby_trails(char *moby) __asm__("FUN_L11_003192c8");
+
+int draw_linked_moby_trails(char *moby) {
     TrailQuad quads[16];
     float offset[2][4];
     short *list, *next_list;
@@ -544,7 +546,7 @@ int FUN_L11_003192c8(char *moby) {
 
 
 extern int level_frame __asm__("D_L11_0015F5CC");
-extern int FUN_L11_003192c8();
+extern int draw_linked_moby_trails();
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
