@@ -2399,12 +2399,12 @@ extern float D_L11_0016208C __attribute__((sda));
 extern float D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern float D_L11_0016209C __attribute__((sda));
 extern float D_L11_001620A0 __attribute__((sda));
-extern float D_L11_001620A4 __attribute__((sda));
-extern float D_L11_001620A8 __attribute__((sda));
+extern float jet_fighter_horizontal_steering_snap_threshold_scale_gp __asm__("D_L11_001620A4") __attribute__((sda));
+extern float jet_fighter_l3_horizontal_steering_snap_threshold_scale_gp __asm__("D_L11_001620A8") __attribute__((sda));
 extern float D_L11_001620AC __attribute__((sda));
 extern float D_L11_001620B0 __attribute__((sda));
-extern float D_L11_001620B4 __attribute__((sda));
-extern float D_L11_001620B8 __attribute__((sda));
+extern float jet_fighter_vertical_steering_snap_threshold_scale_gp __asm__("D_L11_001620B4") __attribute__((sda));
+extern float jet_fighter_l3_vertical_steering_snap_threshold_scale_gp __asm__("D_L11_001620B8") __attribute__((sda));
 extern float D_L11_001620BC __attribute__((sda));
 extern float D_L11_001620C0 __attribute__((sda));
 extern float D_L11_001620C4 __attribute__((sda));
@@ -2419,13 +2419,13 @@ extern float D_L11_001620FC __attribute__((sda));
 extern float D_L11_00162100 __attribute__((sda));
 extern float D_L11_00162104 __attribute__((sda));
 extern float D_L11_00162108 __attribute__((sda));
-extern float D_L11_0016210C __attribute__((sda));
+extern float jet_fighter_camera_local_x_snap_threshold_scale_gp __asm__("D_L11_0016210C") __attribute__((sda));
 extern float D_L11_00162110 __attribute__((sda));
 extern float D_L11_00162114 __attribute__((sda));
-extern float D_L11_00162118 __attribute__((sda));
+extern float jet_fighter_camera_local_y_snap_threshold_scale_gp __asm__("D_L11_00162118") __attribute__((sda));
 extern float D_L11_0016211C __attribute__((sda));
 extern float D_L11_00162120 __attribute__((sda));
-extern float D_L11_00162124 __attribute__((sda));
+extern float jet_fighter_camera_local_z_snap_threshold_scale_gp __asm__("D_L11_00162124") __attribute__((sda));
 extern float D_L11_00162128 __attribute__((sda));
 extern float D_L11_0016212C __attribute__((sda));
 extern float D_L11_00162130 __attribute__((sda));
@@ -2533,15 +2533,15 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         hero_input_source = &hero;
         x = hero_input_source->stick_x;
         y = hero_input_source->stick_y;
-        ka = D_L11_001620A4;
-        kb = D_L11_001620B4;
+        ka = jet_fighter_horizontal_steering_snap_threshold_scale_gp;
+        kb = jet_fighter_vertical_steering_snap_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
         if (controller_state.held & PAD_L3) {
             horizontal_steering_input = x / D_L11_00162018 * D_L11_00162020;
             vertical_steering_input = y / D_L11_00162014 * D_L11_0016201C;
-            ka = D_L11_001620A8;
-            kb = D_L11_001620B8;
+            ka = jet_fighter_l3_horizontal_steering_snap_threshold_scale_gp;
+            kb = jet_fighter_l3_vertical_steering_snap_threshold_scale_gp;
         }
         adjust_ship_steering_for_flight_bounds(ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L11_0016209C, D_L11_001620A0, ka);
@@ -2587,11 +2587,11 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         camera_offset_targets.e[0].q = wr.e[0].q;
         camera_offset_targets.e[1].q = wr.e[1].q;
         vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L11_00162104, D_L11_00162108,
-                         D_L11_0016210C);
+                         jet_fighter_camera_local_x_snap_threshold_scale_gp);
         vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], D_L11_00162110, D_L11_00162114,
-                         D_L11_00162118);
+                         jet_fighter_camera_local_y_snap_threshold_scale_gp);
         vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], D_L11_0016211C, D_L11_00162120,
-                         D_L11_00162124);
+                         jet_fighter_camera_local_z_snap_threshold_scale_gp);
         camera_local_offset[0] = ship_vars->fB4;
         camera_local_offset[1] = ship_vars->fB8;
         camera_local_offset[2] = ship_vars->fBC;
