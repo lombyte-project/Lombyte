@@ -596,7 +596,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
-extern int D_L15_00161BF8 __attribute__((sda));
+extern int electric_water_bolt_init_requested __asm__("D_L15_00161BF8") __attribute__((sda));
 extern float D_L15_00161BFC __attribute__((sda));
 extern int D_L15_00161C8C __attribute__((sda));
 extern short D_L15_00161CD2;
@@ -613,8 +613,8 @@ void initialize_electric_water_bolt_effect(char *moby) {
     float step[4];
     int i;
     int j;
-    if (D_L15_00161BF8 != 0) {
-        D_L15_00161BF8 = 0;
+    if (electric_water_bolt_init_requested != 0) {
+        electric_water_bolt_init_requested = 0;
         D_L15_00161CE4 = 0;
         D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
         D_L15_00161C60_r = 0x7F2020;
