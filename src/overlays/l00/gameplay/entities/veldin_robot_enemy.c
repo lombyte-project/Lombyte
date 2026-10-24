@@ -480,7 +480,7 @@ extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32
 extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern f32 veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") __attribute__((sda));
 extern f32 veldin_robot_knockback_gravity_gp __asm__("D_L00_00161BD4") __attribute__((sda));
-extern f32 D_L00_00161BD8 __attribute__((sda));
+extern f32 veldin_robot_knockback_xy_speed_step_gp __asm__("D_L00_00161BD8") __attribute__((sda));
 extern f32 veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") __attribute__((sda));
 extern f32 veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") __attribute__((sda));
 
@@ -515,7 +515,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         vars->health -= dmg;
         vars->unk90 = 0x200;
         vars->unk80 = veldin_robot_knockback_gravity_gp * frame_time_sq;
-        vars->unk84 = D_L00_00161BD8 * frame_time_sq;
+        vars->unk84 = veldin_robot_knockback_xy_speed_step_gp * frame_time_sq;
         vars->unk88 = veldin_robot_knockback_xy_scale_gp * frame_time;
         vars->unk8C = veldin_robot_knockback_z_scale_gp * frame_time;
         vars->unkAD = 0;
