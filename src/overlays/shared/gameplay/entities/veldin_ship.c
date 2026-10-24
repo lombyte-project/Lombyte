@@ -2763,7 +2763,7 @@ extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
-extern float D_L00_00161990 __attribute__((sda));
+extern float infobot_slot_path_minimum_speed_gp __asm__("D_L00_00161990") __attribute__((sda));
 void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) __asm__("FUN_L00_002d5988");
 
 void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
@@ -2771,7 +2771,7 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     s32 path_segment_index;
     f32 segment_offset_or_fraction;
     Vec4_2d5988 v;
-    Vec4_2d5988 w;
+    Vec4_2d5988 path_target_point;
     f32 distance_along_path;
     f32 w_;
     f32 current_speed;
@@ -2782,7 +2782,7 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     f32 b;
 
     st = moby->st;
-    FUN_L00_0025df68_2d5988(path, &moby->v[0], &w, &path_segment_index, &segment_offset_or_fraction, 0, 999.0f, 5.0f, 0.0f);
+    FUN_L00_0025df68_2d5988(path, &moby->v[0], &path_target_point, &path_segment_index, &segment_offset_or_fraction, 0, 999.0f, 5.0f, 0.0f);
     distance_along_path = convert_integer_to_float(path_segment_index) * path->a[0].f[3] + segment_offset_or_fraction;
     w_ = distance_along_path + 2.0f;
     l = distance_xyz(&moby->v[0], (void *)((char *)path + path->n * 16));
@@ -2790,7 +2790,7 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     current_speed = st->v60;
     if (l <= (current_speed * current_speed) / (speed_increment + speed_increment)) {
         f32 low = current_speed - speed_increment;
-        f32 minimum_path_speed = D_L00_00161990 * D_0015ED6C_2d5988;
+        f32 minimum_path_speed = infobot_slot_path_minimum_speed_gp * D_0015ED6C_2d5988;
         st->v60 = low;
         if (low < minimum_path_speed)
             st->v60 = minimum_path_speed;
@@ -2807,12 +2807,12 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
         path_segment_index = path->n - 2;
         segment_offset_or_fraction = 1.0f;
     }
-    fast_vec_sub(&w, &path->b[path_segment_index], &path->a[path_segment_index]);
-    FUN_001f9a68_2d5988(&w, &w, segment_offset_or_fraction);
-    add_vector_xyz(&w, &w, &path->a[path_segment_index]);
+    fast_vec_sub(&path_target_point, &path->b[path_segment_index], &path->a[path_segment_index]);
+    FUN_001f9a68_2d5988(&path_target_point, &path_target_point, segment_offset_or_fraction);
+    add_vector_xyz(&path_target_point, &path_target_point, &path->a[path_segment_index]);
     l = vector_distance((void *)((char *)path + path->n * 16), &moby->v[0]);
     if (l < 1.0f) {
-        if (st->v60 <= D_L00_00161990 * D_0015ED6C_2d5988) {
+        if (st->v60 <= infobot_slot_path_minimum_speed_gp * D_0015ED6C_2d5988) {
             moby->flag = arrival_state;
         }
     }
@@ -2823,7 +2823,7 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
         r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
         moby->f48 = turn_f(&st->v6C, moby->f48, r, 0.01f, 0.3f, 0.1f);
     }
-    fast_vec_sub(&v, &w, &moby->v[0]);
+    fast_vec_sub(&v, &path_target_point, &moby->v[0]);
     l = FUN_001f9af0_2d5988(&v);
     if (st->v60 < l)
         l = st->v60;
