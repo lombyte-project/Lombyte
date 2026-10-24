@@ -519,10 +519,10 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L12_00161E60 __attribute__((sda));
-extern float D_L12_00161E64 __attribute__((sda));
-extern float D_L12_00161EA8 __attribute__((sda));
-extern float D_L12_00161EAC __attribute__((sda));
+extern float hoven_turret_destruction_view_offset_distance_min __asm__("D_L12_00161E60") __attribute__((sda));
+extern float hoven_turret_destruction_view_offset_distance_max __asm__("D_L12_00161E64") __attribute__((sda));
+extern float hoven_turret_pitch_min __asm__("D_L12_00161EA8") __attribute__((sda));
+extern float hoven_turret_pitch_max __asm__("D_L12_00161EAC") __attribute__((sda));
 extern float D_L12_00161ED0 __attribute__((sda));
 extern float D_L12_00161ED4 __attribute__((sda));
 extern float D_L12_00161ED8 __attribute__((sda));
@@ -746,11 +746,11 @@ void hoven_turret_update(struct Moby *moby) {
                 approach_value(&data->f78, target_pitch_step, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
             }
             data->f74 = fast_add_rotations_c3(data->f74, data->f78);
-            if (data->f74 > D_L12_00161EAC) {
-                data->f74 = D_L12_00161EAC;
+            if (data->f74 > hoven_turret_pitch_max) {
+                data->f74 = hoven_turret_pitch_max;
             }
-            if (data->f74 < D_L12_00161EA8) {
-                data->f74 = D_L12_00161EA8;
+            if (data->f74 < hoven_turret_pitch_min) {
+                data->f74 = hoven_turret_pitch_min;
             }
             FUN_L00_001fff28(data->f10, 1, -data->f74);
             if (moby->anim_flags & 2) {
@@ -814,7 +814,7 @@ void hoven_turret_update(struct Moby *moby) {
             float randomized_view_pitch;
             float t;
 
-            randomized_view_offset_distance = random_float_between_c(D_L12_00161E60, D_L12_00161E64);
+            randomized_view_offset_distance = random_float_between_c(hoven_turret_destruction_view_offset_distance_min, hoven_turret_destruction_view_offset_distance_max);
             randomized_view_yaw = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
             randomized_view_pitch = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
             qcopy(explosion_position, ((Cam_304920 *)D_L12_00167180_304920)->f140);
