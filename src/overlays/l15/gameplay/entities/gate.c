@@ -410,8 +410,8 @@ extern void *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern char D_L15_001673C0[];
 extern char *D_L15_0015FFE4;
 extern struct Moby *D_L15_0015FFD8;
-extern f32 D_L15_001614FC __attribute__((sda));
-extern f32 D_L15_00161500 __attribute__((sda));
+extern f32 swinging_door_swing_angle_degrees __asm__("D_L15_001614FC") __attribute__((sda));
+extern f32 swinging_door_swing_duration __asm__("D_L15_00161500") __attribute__((sda));
 
 void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
 
@@ -464,7 +464,7 @@ void update_swinging_door(struct Moby *moby) {
         if (vars->reverse) {
             moby->flags |= 0x8000;
         }
-        step = D_L15_001614FC * DEG_TO_RAD;
+        step = swinging_door_swing_angle_degrees * DEG_TO_RAD;
         if (!vars->reverse) {
             step = -step;
         }
@@ -483,8 +483,8 @@ void update_swinging_door(struct Moby *moby) {
         }
         break;
     case SWINGING_DOOR_OPENING:
-        vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
-        limit = D_L15_001614FC * DEG_TO_RAD;
+        vars->swing = fast_add_rotations(vars->swing, swinging_door_swing_angle_degrees / swinging_door_swing_duration * DEG_TO_RAD * frame_time);
+        limit = swinging_door_swing_angle_degrees * DEG_TO_RAD;
         if (vars->swing < limit) {
             vars->swing = limit;
             moby->state = 3;
@@ -502,7 +502,7 @@ void update_swinging_door(struct Moby *moby) {
         }
         break;
     case SWINGING_DOOR_CLOSING:
-        vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
+        vars->swing = fast_add_rotations(vars->swing, -(swinging_door_swing_angle_degrees / swinging_door_swing_duration * DEG_TO_RAD * frame_time));
         if (0.0f < vars->swing) {
             vars->swing = 0.0f;
             moby->state = 1;
