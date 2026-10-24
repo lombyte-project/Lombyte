@@ -412,35 +412,35 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         SKY_SHELL_ONE_AND_A_HALF_SCALE = 4,
         SKY_SHELL_ONE_AND_A_QUARTER_SCALE = 5
     };
-    float v[4] __attribute__((aligned(16)));
+    float sky_shell_transform_rotation_angles[4] __attribute__((aligned(16)));
     int i = 0;
     float *shell_rotation_phase;
     unsigned char *M;
     float k;
     D_L00_0016051C_28b1a0->h4 = 0;
     FUN_001f9fc8_28b1a0(D_L00_001BD7E0_28b1a0);
-    FUN_001f99f8_28b1a0(v);
+    FUN_001f99f8_28b1a0(sky_shell_transform_rotation_angles);
     for (; i < D_L00_0016051C_28b1a0->h6; i++) {
         shell_rotation_phase = (float *)(D_L00_0016051C_28b1a0->e[i] + 8);
         k = 1.0f;
         switch (i) {
         case SKY_SHELL_TRIPLE_SCALE:
-            v[1] = 0.02f;
+            sky_shell_transform_rotation_angles[1] = 0.02f;
             k = 3.0f;
             *shell_rotation_phase += D_L00_001604C0 * 0.55f;
             break;
         case SKY_SHELL_TWO_AND_A_HALF_SCALE:
-            v[1] = -0.02f;
+            sky_shell_transform_rotation_angles[1] = -0.02f;
             k = 2.5f;
             *shell_rotation_phase += D_L00_001604C0 * 0.6f;
             break;
         case SKY_SHELL_DOUBLE_SCALE:
-            v[1] = 0.01f;
+            sky_shell_transform_rotation_angles[1] = 0.01f;
             k = 2.0f;
             *shell_rotation_phase += D_L00_001604C0 * 0.7f;
             break;
         case SKY_SHELL_ONE_AND_A_HALF_SCALE:
-            v[1] = -0.01f;
+            sky_shell_transform_rotation_angles[1] = -0.01f;
             k = 1.5f;
             *shell_rotation_phase += D_L00_001604C0 * 0.75f;
             break;
@@ -454,8 +454,8 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         }
         if (i > 0) {
             M = D_L00_001BD7E0_28b1a0;
-            v[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
-            FUN_001fa070_28b1a0(M, v);
+            sky_shell_transform_rotation_angles[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
+            FUN_001fa070_28b1a0(M, sky_shell_transform_rotation_angles);
             FUN_001f9a80_28b1a0(M, M, k);
             FUN_001f9a80_28b1a0(M + 0x10, M + 0x10, k);
             FUN_001f9a80_28b1a0(M + 0x20, M + 0x20, k);
