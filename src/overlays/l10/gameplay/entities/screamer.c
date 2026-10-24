@@ -3024,7 +3024,7 @@ extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */
 extern Moby *D_L10_0015FFE4;
-extern int D_L10_00161F38 __attribute__((sda)); /* no foreign declaration */
+extern int hero_inside_conditional_help_volume __asm__("D_L10_00161F38") __attribute__((sda)); /* no foreign declaration */
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D504[];
 extern unsigned char D_00141B20[];
@@ -3058,9 +3058,9 @@ void update_conditional_help_messages(Moby *moby)
     int elapsed;
 
     if (func_00215570_2E9978(D_0013F3D0_r, data->f1C)) {
-        D_L10_00161F38 = 1;
+        hero_inside_conditional_help_volume = 1;
     } else {
-        D_L10_00161F38 = 0;
+        hero_inside_conditional_help_volume = 0;
     }
     switch (moby->state) {
     case HELP_MESSAGE_STATE_INITIALIZE:
