@@ -876,7 +876,7 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_l
 char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
     float adjusted_target_position[4];
     float r;
-    float g;
+    float ballistic_gravity_magnitude;
     char *found = 0;
     short *moby_list_entry = (short *)D_L18_001AC240_q[moby_list_index];
     char *moby;
@@ -926,9 +926,9 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_l
         subtract_vector_xyz(data + 0x180, adjusted_target_position, launch_position);
         *(int *)(data + 0x188) = 0;
         normalize_vector_xyz(data + 0x180, data + 0x180, horizontal_speed);
-        g = D_0015EE70 * 10.0f;
+        ballistic_gravity_magnitude = D_0015EE70 * 10.0f;
         *(short *)(data + 0xC8) = 0;
-        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position, adjusted_target_position, 0, horizontal_speed, -g);
+        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position, adjusted_target_position, 0, horizontal_speed, -ballistic_gravity_magnitude);
         *(float *)(moby + 0x48) =
             angle_atan2(*(float *)(data + 0x180), *(float *)(data + 0x184));
         *(int *)(data + 0x194) = detonation_countdown;
