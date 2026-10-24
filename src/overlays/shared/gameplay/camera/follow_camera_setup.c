@@ -1177,7 +1177,7 @@ extern u8 D_L00_00166E10_2e7d20[] __asm__("D_L00_00166E10") __attribute__((secti
 extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
 extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
 extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
-extern f32 D_L00_00161CD0 __attribute__((sda));
+extern f32 follow_camera_minimum_retracted_orbit_distance __asm__("D_L00_00161CD0") __attribute__((sda));
 typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
 extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
@@ -1293,8 +1293,8 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     hit = FUN_L00_002e7520_2e7d20(camera_moby) == 0 ? hit : 1;
     hit = FUN_L00_002e7318_2e7d20(camera_moby) == 0 ? hit : 1;
     orbit_distance = AF_2e7d20(0x2C);
-    if (orbit_distance - BF_2e7d20(0x30) < D_L00_00161CD0) {
-        BF_2e7d20(0x30) = orbit_distance - D_L00_00161CD0;
+    if (orbit_distance - BF_2e7d20(0x30) < follow_camera_minimum_retracted_orbit_distance) {
+        BF_2e7d20(0x30) = orbit_distance - follow_camera_minimum_retracted_orbit_distance;
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
     if (BH_2e7d20(0x3A) != 0) {
