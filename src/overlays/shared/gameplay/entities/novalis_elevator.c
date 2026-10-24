@@ -1351,9 +1351,9 @@ typedef struct {
 #define mover_2e3f20 (*(Mover_2e3f20 *)&D_L01_001DEB38)
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
 extern int D_0015ED84;
-extern int D_L01_00161918 __attribute__((sda));
-extern int D_L01_0016191C __attribute__((sda));
-extern int D_L01_00161924 __attribute__((sda));
+extern int sand_mouse_follow_duration_frames_gp __asm__("D_L01_00161918") __attribute__((sda));
+extern int sand_mouse_follow_projectile_count_limit_gp __asm__("D_L01_0016191C") __attribute__((sda));
+extern int sand_mouse_fade_duration_frames_gp __asm__("D_L01_00161924") __attribute__((sda));
 extern int D_L01_00161928 __attribute__((sda));
 extern int D_L01_0016192C __attribute__((sda));
 extern float D_L01_00161930 __attribute__((sda));
@@ -1485,7 +1485,7 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME:
         if (D_0013D4C5 != 0 && hero_2e3f20->i1158 == 5) {
             sand_mouse_vars->count = 0;
-            sand_mouse_vars->t60 = scale_game_frames(D_L01_00161918);
+            sand_mouse_vars->t60 = scale_game_frames(sand_mouse_follow_duration_frames_gp);
             if (moby->visible != 0 && (moby->anim_flags & 2)) {
                 if (moby->prev_seq != random_integer_3830() % 3) {
                     blend_moby_animation_3830(moby, random_integer_3830() % 3, 0, scale_game_frames(10));
@@ -1585,7 +1585,7 @@ void sand_mouse_update(struct Moby *moby) {
             && hero_2e3f20->i208C != 0x14
             && hero_2e3f20->b20A4 == 0
             && !fast_dec_timer(&sand_mouse_vars->t60)
-            && sand_mouse_vars->count < D_L01_0016191C) {
+            && sand_mouse_vars->count < sand_mouse_follow_projectile_count_limit_gp) {
             sand_mouse_compute_target((char *)moby, (char *)sand_mouse_vars);
             update_hover_moby_steering(moby, sand_mouse_vars);
         } else {
@@ -1593,7 +1593,7 @@ void sand_mouse_update(struct Moby *moby) {
                 blend_moby_animation_3830(moby, 5, 0, scale_game_frames(10));
             }
             qzero(sand_mouse_vars->vel);
-            sand_mouse_vars->timer = D_L01_00161924;
+            sand_mouse_vars->timer = sand_mouse_fade_duration_frames_gp;
             moby->state = 6;
             if (sand_mouse_vars->parent != -1) {
                 ents_2e3f20[sand_mouse_vars->parent].command = 5;
@@ -1632,7 +1632,7 @@ void sand_mouse_update(struct Moby *moby) {
             particle_random_float = random_float_between_alt(D_L01_00161934, D_L01_00161938);
             spawn_particle_2e3f20(va, particle_random_integer, col, 2, particle_random_remainder, vb, particle_random_float, 0.001f, D_L01_00161940 * frame_time_sq);
             moby->flags |= 0x200;
-            moby->alpha -= 0x80 / D_L01_00161924;
+            moby->alpha -= 0x80 / sand_mouse_fade_duration_frames_gp;
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
         }
         break;
