@@ -269,11 +269,11 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
     char *moby_vars = *(char **)(moby + 0x78);
     float planar_heading_vector[4];
     float helper_scratch_buffer[4];
-    float f;
-    f = FUN_001fa580_c(FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
-    FUN_L00_0025be00_c(moby + 0x48, moby_vars + 0x250, f, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
-    f = FUN_0020c9e0_c(moby);
-    if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < f && f < 22.0f) {
+    float target_heading_or_record_value;
+    target_heading_or_record_value = FUN_001fa580_c(FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
+    FUN_L00_0025be00_c(moby + 0x48, moby_vars + 0x250, target_heading_or_record_value, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
+    target_heading_or_record_value = FUN_0020c9e0_c(moby);
+    if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < target_heading_or_record_value && target_heading_or_record_value < 22.0f) {
         *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
         planar_heading_vector[0] = FUN_001f9dc8_c(*(float *)(moby + 0x48)) * 2.0f;
         planar_heading_vector[1] = FUN_001f9de0_c(*(float *)(moby + 0x48)) * 2.0f;
