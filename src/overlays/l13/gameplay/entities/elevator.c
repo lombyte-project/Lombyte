@@ -1117,7 +1117,7 @@ extern float D_L13_0015F630;
 extern float robosquawker_damage_knockback_vertical_speed_gp __asm__("D_L13_00161390") __attribute__((sda));
 extern float robosquawker_damage_knockback_horizontal_speed_gp __asm__("D_L13_00161394") __attribute__((sda));
 extern float robosquawker_home_hop_horizontal_speed_gp __asm__("D_L13_00161398") __attribute__((sda));
-extern float D_L13_0016139C __attribute__((sda));
+extern float robosquawker_home_hop_gravity_gp __asm__("D_L13_0016139C") __attribute__((sda));
 extern float D_L13_001670C0[];
 extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1612,9 +1612,9 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation_c(robosquawker_moby, (rand() & 1) + 9, 0, scale_game_frames_alt(3));
             }
             robosquawker_vars->f134 = 0.0f;
-            robosquawker_vars->f130 = D_L13_0016139C;
+            robosquawker_vars->f130 = robosquawker_home_hop_gravity_gp;
             robosquawker_vars->f138 = robosquawker_home_hop_horizontal_speed_gp * frame_time;
-            robosquawker_vars->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &robosquawker_vars->v1D0, &out, robosquawker_home_hop_horizontal_speed_gp * frame_time, -D_L13_0016139C);
+            robosquawker_vars->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &robosquawker_vars->v1D0, &out, robosquawker_home_hop_horizontal_speed_gp * frame_time, -robosquawker_home_hop_gravity_gp);
             robosquawker_vars->w144 = 0xD;
             robosquawker_vars->b15D = 0;
             trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);
