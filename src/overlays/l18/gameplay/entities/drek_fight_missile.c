@@ -377,12 +377,12 @@ extern void FUN_001f9a10_c7(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern float FUN_001fa580_c7(float, float) __asm__("FUN_001fa580");
 
-extern float D_L18_00162258 __attribute__((sda));
-extern float D_L18_0016225C __attribute__((sda));
-extern int D_L18_00162260 __attribute__((sda));
-extern int D_L18_00162264 __attribute__((sda));
-extern float D_L18_00162268 __attribute__((sda));
-extern float D_L18_0016226C __attribute__((sda));
+extern float drek_missile_moving_effect_phase_rate_degrees __asm__("D_L18_00162258") __attribute__((sda));
+extern float drek_missile_wait_to_explode_effect_phase_rate_degrees __asm__("D_L18_0016225C") __attribute__((sda));
+extern int drek_missile_effect_blend_start_color __asm__("D_L18_00162260") __attribute__((sda));
+extern int drek_missile_effect_blend_end_color __asm__("D_L18_00162264") __attribute__((sda));
+extern float drek_missile_effect_quad_scale __asm__("D_L18_00162268") __attribute__((sda));
+extern float drek_missile_effect_position_offset_length __asm__("D_L18_0016226C") __attribute__((sda));
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) __asm__("FUN_L18_002f06c0");
 
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
@@ -397,24 +397,24 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
         return;
     }
     group_entry = D_L18_001AC240_c7[group_moby->group];
-    moving_phase_step = D_L18_00162258 * DEG_TO_RAD * D_0015ED6C_c7;
-    wait_to_explode_phase_step = D_L18_0016225C * DEG_TO_RAD * D_0015ED6C_c7;
+    moving_phase_step = drek_missile_moving_effect_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C_c7;
+    wait_to_explode_phase_step = drek_missile_wait_to_explode_effect_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C_c7;
     do {
         missile_moby = D_L18_0015FFD8_c7 + ((*group_entry & 0x7FFF) << 8);
         if (*(short *)(missile_moby + 0xA6) == 0x54B) {
             missile_vars = *(char **)(missile_moby + 0x78);
             phase_blended_color = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(missile_vars + 0x168)) * 0.5f + 0.5f,
-                                D_L18_00162260, D_L18_00162264);
-            FUN_001f9bf8_c7(effect_world_position, missile_moby + 0xC0, D_L18_0016226C);
+                                drek_missile_effect_blend_start_color, drek_missile_effect_blend_end_color);
+            FUN_001f9bf8_c7(effect_world_position, missile_moby + 0xC0, drek_missile_effect_position_offset_length);
             FUN_001f9a10_c7(effect_world_position, effect_world_position, missile_moby + 0x10);
             switch (missile_moby[0x20]) {
             case DREK_MISSILE_WANDER:
             case DREK_MISSILE_DIVE:
-                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), moving_phase_step);
                 break;
             case DREK_MISSILE_WAIT_TO_EXPLODE:
-                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, D_L18_00162268, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), wait_to_explode_phase_step);
                 break;
             }
