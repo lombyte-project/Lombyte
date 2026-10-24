@@ -7805,7 +7805,7 @@ extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
+unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");

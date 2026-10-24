@@ -2091,7 +2091,7 @@ extern float FUN_001f9b48(void *, void *);
 extern int FUN_001fa6e0(int, int, float);
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
 extern float D_L18_00161BF4 __attribute__((sda));
 extern int D_L18_00161C80 __attribute__((sda));
@@ -2120,10 +2120,10 @@ void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_sta
         fast_vec_normalize(particle_velocity, particle_velocity, *(float *)(moby_vars + 0x20));
         col = FUN_001fa6e0(D_L18_00161C80, D_L18_00161C84,
                            random_float_between(0.0f, 1.0f));
-        FUN_L00_002730e0(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C8C) & 0xFF,
+        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C8C) & 0xFF,
                          random_integer_below(0xFF) & 0xFF, 0, D_L18_00161C88);
         particle_velocity[2] = 0.0f;
-        FUN_L00_002730e0(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C90) & 0xFF,
+        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(D_L18_00161C90) & 0xFF,
                          random_integer_below(0xFF) & 0xFF, 0, D_L18_00161C88);
     }
 }

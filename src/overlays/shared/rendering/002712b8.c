@@ -883,9 +883,12 @@ typedef struct {
     f32 x, y, z;
 } G_2730e0;
 int FUN_001fa6d0_2730e0(float) __asm__("FUN_001fa6d0");
-unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
-                                float scale);
-unsigned char *FUN_L00_002730e0(float *pos, OvlQuad *initial_velocity, int color, u8 life, u8 initial_rotation, int mode,
+unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, OvlQuad *initial_velocity, int color, u8 life, u8 initial_rotation, int mode,
+                                float scale) __asm__("FUN_L00_002730e0");
+
+unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, OvlQuad *vel, int color, u8 life, u8 b, int mode,
+                                float scale) __asm__("FUN_L00_002730e0");
+unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, OvlQuad *initial_velocity, int color, u8 life, u8 initial_rotation, int mode,
                                 float scale) {
     unsigned char *particle;
     float *particle_data;

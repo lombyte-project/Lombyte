@@ -254,7 +254,7 @@ extern int FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int random_integer_below_q(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
-extern unsigned char *FUN_L00_002730e0_q(float *pos, char *vel, int color, unsigned char life,
+extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life,
                                          unsigned char b, int mode,
                                          float scale) __asm__("FUN_L00_002730e0");
 extern unsigned char *create_drone_flight_trail_record(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
@@ -398,7 +398,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         float x = random_float_between_alt_q(frame_time + frame_time, frame_time * 10.0f);
         float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
         build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
-        FUN_L00_002730e0_q(&moby->pos.x, (char *)a, 0x60FF3020, 0xF,
+        spawn_moving_hero_relative_alpha_fade_particle(&moby->pos.x, (char *)a, 0x60FF3020, 0xF,
                            random_integer_below_q(0xFF), 0, 3.0f);
         if (tick_countdown_32_q(drone_vars + 0x38) != 0) {
             mmr_q_q(moby);

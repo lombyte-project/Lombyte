@@ -1143,7 +1143,7 @@ extern int D_L02_00161CB4 __attribute__((sda));
 extern float D_L02_00161CB8 __attribute__((sda));
 extern float D_L02_00161CBC;
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
@@ -1198,7 +1198,7 @@ void swingshot_versatarget_update(char *moby) {
                     normalize_vector_xyz(particle_velocity, particle_position, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
                     add_vector_xyz(particle_position, particle_position, moby + 0x10);
                     particle_lifetime = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(particle_position, particle_velocity, D_L02_00161CB4, particle_lifetime,
+                    spawn_moving_hero_relative_alpha_fade_particle(particle_position, particle_velocity, D_L02_00161CB4, particle_lifetime,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      D_L02_00161CB8);
                 }

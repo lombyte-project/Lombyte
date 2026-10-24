@@ -225,7 +225,7 @@ float FUN_00213308_002d8418(void) __asm__("FUN_00213308");
 void FUN_00214890_002d8418(Vec4_002d8418 *, Vec4_002d8418 *, Vec4_002d8418 *,
                            float) __asm__("FUN_00214890");
 int FUN_00213260_002d8418(int) __asm__("FUN_00213260");
-void FUN_L00_002730e0_002d8418(void *, Vec4_002d8418 *, int, int, int, int,
+void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int, int, int, int,
                                float) __asm__("FUN_L00_002730e0");
 extern float D_L00_00161A60 __attribute__((sda));
 extern float D_L00_00161A64 __attribute__((sda));
@@ -244,9 +244,9 @@ void FUN_L00_002d8418(char *moby) {
                           FUN_002132a8_002d8418(D_L00_00161A60 * frame_time,
                                                 D_L00_00161A64 * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
-    FUN_L00_002730e0_002d8418(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A74);
-    FUN_L00_002730e0_002d8418(moby_position, &effect_vector, D_L00_00161A70, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A70, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A78);
 }
 typedef struct {

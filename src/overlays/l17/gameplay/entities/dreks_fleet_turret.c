@@ -656,8 +656,8 @@ extern short D_L17_00161B88 __attribute__((sda));
 extern short D_L17_00161B8C __attribute__((sda));
 extern short D_L17_00161B90 __attribute__((sda));
 extern short D_L17_00161B94 __attribute__((sda));
-extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life,
-                                       unsigned char b, int mode, float scale);
+extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life,
+                                       unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
@@ -784,7 +784,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                 normalize_vector_xyz(
                                     spF0, spF0,
                                     random_float_between(f20, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
-                                FUN_L00_002730e0((float *)spE0, (char *)spF0,
+                                spawn_moving_hero_relative_alpha_fade_particle((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
                                                  *(float *)&D_L17_00161B8C);

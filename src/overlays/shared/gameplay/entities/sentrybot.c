@@ -2428,7 +2428,7 @@ extern int D_L15_001614B8 __attribute__((sda));
 extern float D_L15_001614BC __attribute__((sda));
 extern int D_L15_001614C0 __attribute__((sda));
 extern float D_L15_001614C4 __attribute__((sda));
-extern void FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale);
+extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
 extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
@@ -2477,7 +2477,7 @@ void update_hero_seeking_group_moby(char *moby) {
         converted_particle_lifetime_frames = func_001FA898_r((float)particle_lifetime_frames);
         life = (unsigned char)converted_particle_lifetime_frames;
         particle_initial_rotation = random_integer_below_c(0xFF);
-        FUN_L00_002730e0(pb, (char *)va, D_L15_001614B8, life, (unsigned char)particle_initial_rotation, 0, *(float *)&D_L15_001614BC);
+        spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, D_L15_001614B8, life, (unsigned char)particle_initial_rotation, 0, *(float *)&D_L15_001614BC);
         callback_frame_stamp = *(char **)(data + 0x6C);
         if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
             if (callback_frame_stamp != 0) {

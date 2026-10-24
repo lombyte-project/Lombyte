@@ -1397,7 +1397,7 @@ extern int collision_line(void *, void *, int, void *, void *);
 extern s32 fast_dec_timer_s16(s16 *) __asm__("func_001F9770");
 extern unsigned int fast_tween_color(unsigned int, unsigned int, float) __asm__("FUN_001fa6e0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern unsigned char *FUN_L00_002730e0(float *, char *, int, unsigned char, unsigned char, int, float);
+extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *, char *, int, unsigned char, unsigned char, int, float) __asm__("FUN_L00_002730e0");
 extern void rotation_matrix_y(void *, float) __asm__("FUN_001f9ff8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
@@ -1640,7 +1640,7 @@ void update_beam_barrier(struct Moby *moby) {
                 life = (unsigned char)scale_game_frames(lifetime_units);
                 random_byte = (unsigned char)random_integer_below(0xFF);
                 /* Called through a cast: retail evaluates the arguments in this order. */
-                ((void (*)(float *, char *, int, float, unsigned char, unsigned char, int))FUN_L00_002730e0)(work.offset, (char *)work.effect, color, scale, life, random_byte, 0);
+                ((void (*)(float *, char *, int, float, unsigned char, unsigned char, int))spawn_moving_hero_relative_alpha_fade_particle)(work.offset, (char *)work.effect, color, scale, life, random_byte, 0);
                 spark = spark - 1;
             } while (spark >= 0);
             segment = next_segment;

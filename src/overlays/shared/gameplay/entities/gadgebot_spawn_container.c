@@ -3117,7 +3117,7 @@ extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+extern void spawn_moving_hero_relative_alpha_fade_particle(void *, float, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3323,7 +3323,7 @@ void energy_sphere_update(struct Moby *sphere_moby) {
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+extern void spawn_moving_hero_relative_alpha_fade_particle(void *, float, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
 
 extern float D_L06_00161E84 __attribute__((sda));
 extern float D_L06_00161E88 __attribute__((sda));
@@ -3354,7 +3354,7 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
         }
         particle_lifetime = D_L06_00161E94;
         random_particle_byte = random_integer_below(0xFF);
-        FUN_L00_002730e0(moby + 0x10, particle_scale, particle_velocity, particle_color, particle_lifetime, (unsigned char)random_particle_byte, 0);
+        spawn_moving_hero_relative_alpha_fade_particle(moby + 0x10, particle_scale, particle_velocity, particle_color, particle_lifetime, (unsigned char)random_particle_byte, 0);
     }
 }
 

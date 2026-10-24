@@ -1634,7 +1634,7 @@ void update_gold_bolt_pickup_camera(char *moby) {
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 extern float D_L01_00161F54 __attribute__((sda));
@@ -1664,14 +1664,14 @@ void spawn_gold_bolt_particles(char *moby) {
     frame_duration = frame_time;
     random_vector(particle_velocity, D_L01_00161F54 * frame_duration, D_L01_00161F58 * frame_duration);
     particle_lifetime = *(unsigned char *)&D_L01_00161F64;
-    FUN_L00_002730e0(v, particle_velocity, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
+    spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
                      D_L01_00161F70);
     for (i = 2; i >= 0; i--) {
         frame_duration = frame_time;
         random_vector(u, D_L01_00161F5C * frame_duration, D_L01_00161F60 * frame_duration);
         add_vector_xyz(particle_velocity, particle_velocity, u);
         loop_particle_lifetime = *(unsigned char *)&D_L01_00161F64;
-        FUN_L00_002730e0(v, particle_velocity, D_L01_00161F6C, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
+        spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, D_L01_00161F6C, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
                          0, D_L01_00161F74);
     }
 }
