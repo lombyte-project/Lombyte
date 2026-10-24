@@ -333,7 +333,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013D418 __attribute__((section(".data")));
 typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
 extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
-extern int D_00151F38 __attribute__((sda));
+extern int screamer_death_message_gate __asm__("D_00151F38") __attribute__((sda));
 extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time_2DFC38(float) __asm__("FUN_001f96b0");
 extern int truncate_float_2DFC38(float) __asm__("FUN_001fa6d0");
@@ -365,7 +365,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         hit_update_2DFC38(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
             if (data->f20 <= hit_record->f2C) {
-                if (D_00151F38 != 0 && D_0013D408_2DFC38.flag == 0) {
+                if (screamer_death_message_gate != 0 && D_0013D408_2DFC38.flag == 0) {
                     D_0013D408_2DFC38.flag = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     play_sound_2DFC38(0x53d6, -1);
