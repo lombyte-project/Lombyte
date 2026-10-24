@@ -138,8 +138,8 @@ void sentrybot_update(unsigned char *moby) {
     };
     float va[4];
     float vb[4];
-    float pos[4];
-    float mat[4][4];
+    float emission_origin[4];
+    float selected_joint_world_matrix[4][4];
     int j2;
     int j3;
     unsigned char *data;
@@ -663,19 +663,19 @@ void sentrybot_update(unsigned char *moby) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
                 j2 = 2;
-                compute_selected_world_matrices(moby, 1, &j2, mat);
-                transform_scaled_vertex_batch((char *)moby, 1, &j2, (char *)pos);
-                normalize_vector_xyz(va, mat[1], D_L15_00161410 * frame_time);
-                subtract_vector_xyz(vb, data + 0x100, pos);
+                compute_selected_world_matrices(moby, 1, &j2, selected_joint_world_matrix);
+                transform_scaled_vertex_batch((char *)moby, 1, &j2, (char *)emission_origin);
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], D_L15_00161410 * frame_time);
+                subtract_vector_xyz(vb, data + 0x100, emission_origin);
                 normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    spawn_class_3a6_moby((char *)moby, va, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, va, (char *)emission_origin, (char *)(data + 0x100));
                 } else {
-                    spawn_class_3a6_moby((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, vb, (char *)emission_origin, (char *)(data + 0x100));
                 }
                 data[0x19E] = 1;
             }
@@ -721,19 +721,19 @@ void sentrybot_update(unsigned char *moby) {
             float t = compute_interpolated_record_value(moby);
             if (t >= 0.85f && t < 3.0f) {
                 j3 = 3;
-                compute_selected_world_matrices(moby, 1, &j3, mat);
-                transform_scaled_vertex_batch((char *)moby, 1, &j3, (char *)pos);
-                normalize_vector_xyz(va, mat[1], -(D_L15_00161410 * frame_time));
-                subtract_vector_xyz(vb, data + 0x100, pos);
+                compute_selected_world_matrices(moby, 1, &j3, selected_joint_world_matrix);
+                transform_scaled_vertex_batch((char *)moby, 1, &j3, (char *)emission_origin);
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], -(D_L15_00161410 * frame_time));
+                subtract_vector_xyz(vb, data + 0x100, emission_origin);
                 normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    spawn_class_3a6_moby((char *)moby, va, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, va, (char *)emission_origin, (char *)(data + 0x100));
                 } else {
-                    spawn_class_3a6_moby((char *)moby, vb, (char *)pos, (char *)(data + 0x100));
+                    spawn_class_3a6_moby((char *)moby, vb, (char *)emission_origin, (char *)(data + 0x100));
                 }
                 data[0x19E] = 1;
             }
