@@ -409,7 +409,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     R_b3058 *r;
     f32 launch_yaw, b;
     s32 k;
-    f32 t[4] __attribute__((aligned(16)));
+    f32 launch_position[4] __attribute__((aligned(16)));
     f32 u[4] __attribute__((aligned(16)));
 
     if (visibomb_moby == 0) {
@@ -446,23 +446,23 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
             launch_yaw = FUN_001f9e90_b3058(camera->f350, camera->f354);
             b = -FUN_001f9e90_b3058(FUN_001f9b20_b3058(&camera->f350), camera->f358);
-            FUN_001f9bf8_b3058(t, &camera->f350, 0.3f);
+            FUN_001f9bf8_b3058(launch_position, &camera->f350, 0.3f);
             FUN_001f9bf8_b3058(u, camera->v370, -0.35f);
-            FUN_001f9a10_b3058(t, t, u);
-            FUN_001f9a10_b3058(t, t, camera->v140);
+            FUN_001f9a10_b3058(launch_position, launch_position, u);
+            FUN_001f9a10_b3058(launch_position, launch_position, camera->v140);
         } else if (hero.unk22C8 == 1) {
             b = FUN_001f9e90_b3058(FUN_001f9b20_b3058(visibomb_moby->vD0), visibomb_moby->fD8);
-            FUN_00214db0_b3058(t, 0.6f, launch_yaw, -b);
-            FUN_001f9a10_b3058(t, t, visibomb_moby->v10);
+            FUN_00214db0_b3058(launch_position, 0.6f, launch_yaw, -b);
+            FUN_001f9a10_b3058(launch_position, launch_position, visibomb_moby->v10);
         } else {
-            FUN_00214db0_b3058(t, 0.6f, launch_yaw, -b);
-            FUN_001f9a10_b3058(t, t, visibomb_moby->v10);
+            FUN_00214db0_b3058(launch_position, 0.6f, launch_yaw, -b);
+            FUN_001f9a10_b3058(launch_position, launch_position, visibomb_moby->v10);
         }
         if (visibomb_moby->b53 != 3) {
             FUN_00212f90_b3058(visibomb_moby, 3, 0, 0);
         }
         FUN_L00_00203b18_b3058();
-        v->i4 = FUN_L00_002b58d8_b3058(visibomb_moby, t, launch_yaw, b);
+        v->i4 = FUN_L00_002b58d8_b3058(visibomb_moby, launch_position, launch_yaw, b);
         r = &D_00141680_b3058;
         if (r->u68 < 0xFFFF) {
             r->u68++;
