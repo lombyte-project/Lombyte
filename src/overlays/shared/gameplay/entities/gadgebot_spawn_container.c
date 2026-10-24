@@ -3107,13 +3107,13 @@ typedef struct {
 extern char D_L06_00167540[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
-extern int D_L06_00161E58 __attribute__((sda));
-extern int D_L06_00161E5C __attribute__((sda));
+extern int energy_sphere_holder_beam_color_start __asm__("D_L06_00161E58") __attribute__((sda));
+extern int energy_sphere_holder_beam_color_end __asm__("D_L06_00161E5C") __attribute__((sda));
 extern int D_L06_00161E60 __attribute__((sda));
-extern int D_L06_00161E64 __attribute__((sda));
-extern int D_L06_00161E68 __attribute__((sda));
-extern float D_L06_00161E6C __attribute__((sda));
-extern int D_L06_00161E70 __attribute__((sda));
+extern int energy_sphere_holder_beam_texture_index __asm__("D_L06_00161E64") __attribute__((sda));
+extern int energy_sphere_holder_spark_color __asm__("D_L06_00161E68") __attribute__((sda));
+extern float energy_sphere_holder_spark_size_scale __asm__("D_L06_00161E6C") __attribute__((sda));
+extern int energy_sphere_holder_spark_lifetime_frames __asm__("D_L06_00161E70") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -3154,8 +3154,8 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
             beam->t[i] = scale_game_frames(0xFF);
         }
         timer_progress = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
-        beam_sprite_color = fast_tween_color(D_L06_00161E58, D_L06_00161E5C, absolute_float(0.5f - timer_progress));
-        func_L00_00273E08_g(beam_sprite_position, beam_sprite_color, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+        beam_sprite_color = fast_tween_color(energy_sphere_holder_beam_color_start, energy_sphere_holder_beam_color_end, absolute_float(0.5f - timer_progress));
+        func_L00_00273E08_g(beam_sprite_position, beam_sprite_color, func_001FA898_g(beam->ph[i]), energy_sphere_holder_beam_texture_index, D_L06_00161E60, 2, 0,
                           beam->sz[i]);
         add_vector_xyz(beam_sprite_position, beam_sprite_position, step);
     }
@@ -3164,11 +3164,11 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
         if (level_frame_count & 4) sgn = -1.0f;
         clear_u64_value(spark_position);
         spark_position[2] += sgn * 0.9f;
-        normalize_vector_xyz(spark_velocity, spark_position, -2.0f / (float)scale_game_frames(D_L06_00161E70));
+        normalize_vector_xyz(spark_velocity, spark_position, -2.0f / (float)scale_game_frames(energy_sphere_holder_spark_lifetime_frames));
         add_vector_xyz(spark_position, spark_position, moby + 0x10);
         spark_position[2] += 0.85f;
-        func_L00_00273F80_g(spark_position, spark_velocity, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
-                          (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);
+        func_L00_00273F80_g(spark_position, spark_velocity, energy_sphere_holder_spark_color, (unsigned char)func_001FA898_g((float)scale_game_frames(energy_sphere_holder_spark_lifetime_frames)),
+                          (unsigned char)random_integer_below(0xFF), 0, energy_sphere_holder_spark_size_scale);
     }
 }
 
