@@ -1817,6 +1817,7 @@ void large_amoeboid_update(unsigned char *moby) {
         LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8,
         LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH = 9,
         LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME = 13,
+        LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION = 14,
         LARGE_AMOEBOID_MOVE_DIRECTLY_TOWARD_TARGET = 15,
         LARGE_AMOEBOID_WAIT_WHILE_BLOCKED = 16
     };
@@ -2164,7 +2165,7 @@ void large_amoeboid_update(unsigned char *moby) {
             moby[0x31] = 1;
         }
         return;
-    case 14:
+    case LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0(moby, data + 0x60)) {
             moby[0x20] = 1;
             *(u16 *)(data + 0x128) = 0;
