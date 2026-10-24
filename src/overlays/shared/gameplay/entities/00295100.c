@@ -1948,7 +1948,7 @@ extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
 extern s32 vendor_auxiliary_moby_local_offset_gp __asm__("D_L00_00161080") __attribute__((sda));
 extern s32 vendor_item_display_common_local_offset_gp __asm__("D_L00_001610A0") __attribute__((sda));
-extern s32 D_L00_001610B0 __attribute__((sda));
+extern s32 vendor_rotating_display_local_offset_gp __asm__("D_L00_001610B0") __attribute__((sda));
 extern s32 D_L00_001610C0 __attribute__((sda));
 extern s32 vendor_close_delay_frames_remaining __asm__("D_L00_00161E14");
 extern s32 D_L00_00161E18;
@@ -2397,7 +2397,7 @@ void update_vendor_menu(void) {
         }
         k1 = -0.05f;
         k2 = -0.36f;
-        transform_vector_by_basis(&vendor_menu.f20[0].pos, &D_L00_001610B0, vendor_menu.f1c->mtx);
+        transform_vector_by_basis(&vendor_menu.f20[0].pos, &vendor_rotating_display_local_offset_gp, vendor_menu.f1c->mtx);
         k3 = 0.05f;
         add_vector_xyz(&vendor_menu.f20[0].pos, &vendor_menu.f20[0].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[0].rot.f[0] = fast_add_rotations(vendor_menu.f20[0].rot.f[0], multiply_global_factor_ed64(k1));
