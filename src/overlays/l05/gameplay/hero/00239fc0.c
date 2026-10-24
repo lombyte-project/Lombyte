@@ -157,7 +157,7 @@ void update_hero_ground_contact(void) {
     u8 *hit_moby_record;
 
     s32 k;
-    f32 g;
+    f32 ground_probe_endpoint_offset;
 
     hero.unk270.f[2] = 1.0f;
     hero.air_frames.u++;
@@ -176,11 +176,11 @@ void update_hero_ground_contact(void) {
     k = 0;
     if (hero.unk20B3)
         k = 1;
-    g = hero.unk234 * 2.2f;
+    ground_probe_endpoint_offset = hero.unk234 * 2.2f;
     if (hero.state.control_mode == 2) {
-        g = hero.unk234 * 2.9f;
+        ground_probe_endpoint_offset = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&ground_probe_endpoint, &shared_probe_endpoint, k, g, -48.0f);
+    hero_get_collision_ray_endpoints(&ground_probe_endpoint, &shared_probe_endpoint, k, ground_probe_endpoint_offset, -48.0f);
     if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
