@@ -6067,7 +6067,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern float D_L06_00162090 __attribute__((sda));
+extern float moby_bobbing_amplitude __asm__("D_L06_00162090") __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void update_moby_bobbing_and_motion(char *moby) __asm__("FUN_L06_00300df0");
 
@@ -6097,7 +6097,7 @@ void update_moby_bobbing_and_motion(char *moby) {
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * bobbing_sine_factor;
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + moby_bobbing_amplitude * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
