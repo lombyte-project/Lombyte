@@ -752,9 +752,9 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
 extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern float D_L05_00161DD8 __attribute__((sda));
-extern float D_L05_00161DDC __attribute__((sda));
-extern float D_L05_00161DE0 __attribute__((sda));
-extern float D_L05_00161DE4 __attribute__((sda));
+extern float drain_cover_tilt_acceleration __asm__("D_L05_00161DDC") __attribute__((sda));
+extern float drain_cover_tilt_deceleration __asm__("D_L05_00161DE0") __attribute__((sda));
+extern float drain_cover_tilt_max_speed __asm__("D_L05_00161DE4") __attribute__((sda));
 extern float approach_angle(float *, float, float *, float, float,
                             float) __asm__("FUN_L00_0025be00");
 
@@ -792,14 +792,14 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     angle1 = fast_sin(*(float *)(data + 0x9c));
     target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
-    rate0 = D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq;
-    rate1 = D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq;
-    limit = D_L05_00161DE4 * 0.017453292f * frame_time;
+    rate0 = drain_cover_tilt_acceleration * speed_scale * 0.017453292f * frame_time_sq;
+    rate1 = drain_cover_tilt_deceleration * speed_scale * 0.017453292f * frame_time_sq;
+    limit = drain_cover_tilt_max_speed * 0.017453292f * frame_time;
     approach_angle(&MOBY(moby)->rot.x, target0, (float *)(data + 0x90), rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y, target1, (float *)(data + 0x94),
-                   D_L05_00161DDC * speed_scale * 0.017453292f * frame_time_sq,
-                   D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq,
-                   D_L05_00161DE4 * 0.017453292f * frame_time);
+                   drain_cover_tilt_acceleration * speed_scale * 0.017453292f * frame_time_sq,
+                   drain_cover_tilt_deceleration * speed_scale * 0.017453292f * frame_time_sq,
+                   drain_cover_tilt_max_speed * 0.017453292f * frame_time);
 }
 extern void *hit_by_f5c8(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern struct Moby *spawn_moby_f5c8(int) __asm__("FUN_0020c4f8");
