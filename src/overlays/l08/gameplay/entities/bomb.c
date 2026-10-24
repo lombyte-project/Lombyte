@@ -1359,7 +1359,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
 /* Splashes the hero into the water: once inits the water plane, queues the
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
 
-extern int D_L08_00161970 __attribute__((sda));
+extern int water_entry_plane_initialized __asm__("D_L08_00161970") __attribute__((sda));
 extern float D_L08_001D7060[4];
 extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
@@ -1389,8 +1389,8 @@ void update_hero_water_entry_effects(struct Moby *moby) {
     int spray_random_value;
     float sc, sp;
 
-    if (D_L08_00161970 == 0) {
-        D_L08_00161970 = 1;
+    if (water_entry_plane_initialized == 0) {
+        water_entry_plane_initialized = 1;
         prepare_scaled_table_with_byte_128(D_L08_001D7060, 0.6666667f);
     }
     enqueue_callback_list_1(FUN_L08_002da0d0, moby);
