@@ -1472,7 +1472,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L18_002dfba0(void *moby);
+extern int classify_moby_state_two_or_three(void *moby) __asm__("FUN_L18_002dfba0");
 extern int activate_drek_fight_missiles_in_group(char *moby, int idx, float *pos) __asm__("FUN_L18_002f0030");
 extern int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f70b8");
@@ -2021,7 +2021,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         break;
     }
     case DREK_BOSS_WAIT_TO_RESTORE_SAVED_TRANSFORM:
-        if (FUN_L18_002dfba0(boss_data->f334) == 2) {
+        if (classify_moby_state_two_or_three(boss_data->f334) == 2) {
             qcopy(boss_data->f3C0, boss_data->f300);
             qcopy(moby->f40, boss_data->f310);
             moby->f20 = 9;

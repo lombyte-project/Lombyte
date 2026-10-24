@@ -2415,7 +2415,9 @@ void start_position_and_rotation_transition(struct Moby *moby, void *transition_
     hero.invulnerable_frames = scale_game_frames(invulnerability_duration_frames);
 }
 /* Maps states 2 and 3 to results 1 and 2; all other states return 0. */
-s32 FUN_L18_002dfba0(const u8 *moby) {
+s32 classify_moby_state_two_or_three(const u8 *moby) __asm__("FUN_L18_002dfba0");
+
+s32 classify_moby_state_two_or_three(const u8 *moby) {
     u32 state = moby[0x20];
     s32 result = 2;
 
