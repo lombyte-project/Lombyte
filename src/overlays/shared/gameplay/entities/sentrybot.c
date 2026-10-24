@@ -2998,9 +2998,9 @@ extern float fast_add_rotations_c2(float, float) __asm__("func_001FA580");
 extern s32 rand(void);
 extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
-extern int D_L15_00161558 __attribute__((sda));
-extern float D_L15_0016155C __attribute__((sda));
-extern float D_L15_00161560 __attribute__((sda));
+extern int spiderbot_effect_spawn_count __asm__("D_L15_00161558") __attribute__((sda));
+extern float spiderbot_effect_scale __asm__("D_L15_0016155C") __attribute__((sda));
+extern float spiderbot_effect_lifetime_range_end __asm__("D_L15_00161560") __attribute__((sda));
 extern u8 D_L15_00174460[];
 extern void FUN_L15_002a7628_c() __asm__("FUN_L15_002a7628");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -3137,14 +3137,14 @@ void spiderbot_update(unsigned char *moby) {
         } else {
             *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)A;
         }
-        for (i = 0; i < D_L15_00161558; i++) {
+        for (i = 0; i < spiderbot_effect_spawn_count; i++) {
             float effect_direction_sign;
             float effect_segment_length;
             int k;
             unsigned char life;
             effect_direction_sign = -1.0f;
             if (rand() & 1) effect_direction_sign = 1.0f;
-            k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
+            k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(spiderbot_effect_lifetime_range_end * 0.5f, spiderbot_effect_lifetime_range_end)));
             subtract_vector_xyz_c3(T2, moby_data + 0x10, moby + 0x10);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
             fast_vec_scale(B, B, effect_direction_sign);
@@ -3154,7 +3154,7 @@ void spiderbot_update(unsigned char *moby) {
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
             FUN_L00_001ff290(T2, A, B);
             fast_vec_normalize(B, B, random_float_between(D_0015ED6C * 10.0f, effect_segment_length / convert_integer_to_float_c3(k * 4)));
-            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, D_L15_0016155C);
+            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, spiderbot_effect_scale);
         }
     }
     enqueue_callback_list_1_alt(FUN_L15_002a7628_c, moby);
