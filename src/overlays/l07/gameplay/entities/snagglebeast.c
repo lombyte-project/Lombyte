@@ -756,6 +756,7 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
         SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
+        SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
         SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
@@ -1068,7 +1069,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 3:
+    case SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK:
         FUN_L00_00258278((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 1.5707964f, frame_time_sq * 0.6981317f, frame_time * 1.0471976f);
         if (FUN_00214cc8(moby, 31.0f) || FUN_00214cc8(moby, 67.0f) || FUN_00214cc8(moby, 101.0f)) {
             float speed;
