@@ -896,11 +896,11 @@ extern float D_L06_0016201C __attribute__((sda));
 extern float D_L06_00162020 __attribute__((sda));
 extern float D_L06_00162024 __attribute__((sda));
 extern float D_L06_00162028 __attribute__((sda));
-extern float D_L06_0016202C __attribute__((sda));
-extern float D_L06_00162030 __attribute__((sda));
-extern float D_L06_00162034 __attribute__((sda));
-extern float D_L06_00162038 __attribute__((sda));
-extern float D_L06_0016203C __attribute__((sda));
+extern float beam_spark_horizontal_scale_range_start __asm__("D_L06_0016202C") __attribute__((sda));
+extern float beam_spark_horizontal_scale_range_end __asm__("D_L06_00162030") __attribute__((sda));
+extern float beam_spark_vector_z_range_start __asm__("D_L06_00162034") __attribute__((sda));
+extern float beam_spark_vector_z_range_end __asm__("D_L06_00162038") __attribute__((sda));
+extern float beam_spark_spawn_probability __asm__("D_L06_0016203C") __attribute__((sda));
 extern int D_L06_00162040 __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -921,23 +921,23 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
             *(float *)(data - (-(next_point_index * 16)) + 0x23C) < 0.99f) {
             continue;
         }
-        if (D_L06_0016203C < random_float_between(0.0f, 1.0f)) {
+        if (beam_spark_spawn_probability < random_float_between(0.0f, 1.0f)) {
             continue;
         }
         first_vector_angle = random_angle_radians();
         second_vector_angle = random_angle_radians();
         first_spark_vector[0] = fast_cos(first_vector_angle) *
-               random_float_between(D_L06_0016202C, D_L06_00162030);
+               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
         first_spark_vector[1] = fast_sin(first_vector_angle) *
-               random_float_between(D_L06_0016202C, D_L06_00162030);
+               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
         first_spark_vector[2] = 0;
         second_spark_vector[0] = fast_cos(second_vector_angle) *
-               random_float_between(D_L06_0016202C, D_L06_00162030);
+               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
         second_spark_vector[1] = fast_sin(second_vector_angle) *
-               random_float_between(D_L06_0016202C, D_L06_00162030);
+               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
         second_spark_vector[2] = 0;
-        first_spark_vector[2] = random_float_between(D_L06_00162034, D_L06_00162038);
-        second_spark_vector[2] = random_float_between(D_L06_00162034, D_L06_00162038);
+        first_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start, beam_spark_vector_z_range_end);
+        second_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start, beam_spark_vector_z_range_end);
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(D_L06_00162014, D_L06_00162018)));
         second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
