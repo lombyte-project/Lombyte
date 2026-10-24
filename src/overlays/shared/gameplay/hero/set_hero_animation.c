@@ -407,7 +407,7 @@ extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0"
 extern void FUN_L00_002321a8(void);
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00251ce8(void *, int);
 extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
@@ -460,7 +460,7 @@ void set_hero_animation(int a0, int a1, float t) {
         g2->unkAA4 = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     g3 = &hero;
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) =
@@ -510,7 +510,7 @@ void FUN_L00_002325e0(int bank, int seq) {
     }
 }
 /* Sets the word at 0xAB0 of hero to -1 and clears the one at 0xAB8. */
-void FUN_L00_00232628(void) {
+void clear_hero_queued_animation(void) {
     struct Hero *hero_base = &hero;
     hero_base->unkAB0 = -1;
     hero_base->unkAB8 = 0;

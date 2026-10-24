@@ -42,7 +42,7 @@ void clear_jet_camera_mode_latch(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205598), where it is exact; names translated to the US level program. */
 
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
 extern unsigned char D_0014161B[];
@@ -59,7 +59,7 @@ void reset_hero_to_idle(void) {
     hero_state->state.current = 0;
     *(int *)(D_0014161B + 0x4D) = 0;
     hero_state->unkA94 = 1.0f;
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     hero_set_state(HERO_STATE_IDLE, 1);
 }
 #define NOT_SDA

@@ -345,7 +345,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
 extern void FUN_0020c828_227cf8(void *) __asm__("FUN_0020c828");
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
@@ -386,7 +386,7 @@ void restore_hero_from_vehicle_mode(void) {
             *(int *)(restored_hero_moby + 0x98) = 0;
         }
         hero_restore_context->unkA94 = 1.0f;
-        FUN_L00_00232628_227cf8();
+        clear_hero_queued_animation();
         if (hero_restore_context->state.current != 100 ||
             (D_L06_0015F5C4 != 2 && D_L06_0015F5C4 != 6)) {
             hero_set_state(HERO_STATE_IDLE, 1);

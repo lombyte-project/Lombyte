@@ -725,7 +725,7 @@ extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_update_items() __asm__("FUN_L00_00210748");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00232fe8(void);
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
@@ -754,7 +754,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     *(unsigned short *)(*(char **)(hero_state_base + 0x2080) + 0x34) |= 6;
     *(float *)(hero_state_base + 0xA90) = 1.0f;
     *(float *)(hero_state_base + 0xA94) = 1.0f;
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     FUN_L00_00257024(*(void **)(hero_state_base + 0x2080));
     apply_hero_and_item_scale_sequence();
     *(short *)(hero_state_base + 0x22CC) = initial_state;
@@ -798,7 +798,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     qcopy(restored_moby + 0x10, hero_state_base + 0x80);
     *(int *)(restored_moby + 0x98) = 0;
     *(float *)(hero_state_base + 0xA94) = 1.0f;
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     if (*(int *)(hero_state_base + 0x2084) == 0x64) {
         if (cutscene_mode == 2)
             return;
