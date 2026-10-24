@@ -2733,13 +2733,13 @@ int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_ind
                      float f13, float f14, float f15, float f16, float f17, float f18) __asm__("FUN_L14_002b5730");
 
 int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
-                     float f13, float f14, float f15, float f16, float f17, float f18) {
+                     float position_error_gain, float position_velocity_damping, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
     float path_target_position[3];
     int path_sample_result = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
-    FUN_L00_0025b8c0_5730(&moby->pos.x, position_easing_velocity, path_target_position[0], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.y, position_easing_velocity + 1, path_target_position[1], f13, f14, f15);
-    FUN_L00_0025b8c0_5730(&moby->pos.z, position_easing_velocity + 2, path_target_position[2], f13, f14, f15);
-    steer_5730(moby, heading_easing_velocity, atan_5730(position_easing_velocity[0], position_easing_velocity[1]), f16, f17, f18);
+    FUN_L00_0025b8c0_5730(&moby->pos.x, position_easing_velocity, path_target_position[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+    FUN_L00_0025b8c0_5730(&moby->pos.y, position_easing_velocity + 1, path_target_position[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+    FUN_L00_0025b8c0_5730(&moby->pos.z, position_easing_velocity + 2, path_target_position[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+    steer_5730(moby, heading_easing_velocity, atan_5730(position_easing_velocity[0], position_easing_velocity[1]), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
     return path_sample_result != 0;
 }
 /* eases a moby's position and heading toward targets while in states 4-6 or 8 */
