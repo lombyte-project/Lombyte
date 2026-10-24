@@ -55,7 +55,7 @@ extern char *D_L18_00174840_2463f8[] __asm__("D_L18_00174840");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg2463f8;
 extern Ldg2463f8 D_0015EE48;
 extern s32 level_texture_data_base __asm__("D_L18_0015F40C");
-extern s32 D_L18_00160004;
+extern s32 level_sound_bank_handle __asm__("D_L18_00160004");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L18_001831C0[3];
 extern u64 D_L18_001831D8[3];
@@ -70,7 +70,7 @@ extern s32 D_L18_001C7100[];
 extern s32 level_shrub_texture_ref_count __asm__("D_L18_001604AC");
 extern s32 D_L18_001BCFB0[];
 extern char *D_L18_0015F600_2463f8 __asm__("D_L18_0015F600");
-extern s32 D_L18_0016051C;
+extern s32 level_sky_data_base __asm__("D_L18_0016051C");
 extern Class2463f8 *D_L18_00197D00[];
 extern s32 D_L18_0016000C;
 extern s32 D_L18_00160010;
@@ -226,7 +226,7 @@ s32 load_level_core_data(s32 full, s32 keep) {
         level_texture_data_base = 0;
         FUN_001f9838_2463f8(D_L18_0015FC88, visited52 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), level_header[0], (char *)level_header + level_header[1]);
-        D_L18_00160004 = sound_bank_handle;
+        level_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
         used = FUN_L00_0024d8d0_2463f8((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         level_texture_data_base = (s32)(base + level_header[0x18]);
@@ -270,7 +270,7 @@ s32 load_level_core_data(s32 full, s32 keep) {
         if (level_header[4])
             relocate_sky_definition(base + level_header[4]);
         else
-            D_L18_0016051C = 0;
+            level_sky_data_base = 0;
         resolve_level_asset_block_pointers(base + level_header[5]);
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7]; i < level_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)level_header + level_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
@@ -383,18 +383,18 @@ s32 load_level_core_data(s32 full, s32 keep) {
         printf_1e93b0(D_L18_001F0F90, KB(D_L18_00174800_2463f8.f14 - D_L18_00174800_2463f8.f10));
         if (D_L18_0015F600_2463f8 != 0)
             printf_1e93b0(D_L18_001F0FA8, KB(D_L18_0015F600_2463f8 - D_L18_00174800_2463f8.f14));
-        else if (D_L18_0016051C != 0)
-            printf_1e93b0(D_L18_001F0FA8, KB((char *)D_L18_0016051C - D_L18_00174800_2463f8.f14));
+        else if (level_sky_data_base != 0)
+            printf_1e93b0(D_L18_001F0FA8, KB((char *)level_sky_data_base - D_L18_00174800_2463f8.f14));
         else
             printf_1e93b0(D_L18_001F0FC0);
         if (D_L18_0015F600_2463f8 != 0) {
-            if (D_L18_0016051C != 0)
-                printf_1e93b0(D_L18_001F0FE0, KB(D_L18_0016051C - (s32)D_L18_0015F600_2463f8));
+            if (level_sky_data_base != 0)
+                printf_1e93b0(D_L18_001F0FE0, KB(level_sky_data_base - (s32)D_L18_0015F600_2463f8));
             else
                 printf_1e93b0(D_L18_001F0FE0, KB(D_L18_00174840_2463f8[0] - D_L18_0015F600_2463f8));
         }
         if (level_header[4])
-            printf_1e93b0(D_L18_001F0FF8, KB(D_L18_00174840_2463f8[0] - (char *)D_L18_0016051C));
+            printf_1e93b0(D_L18_001F0FF8, KB(D_L18_00174840_2463f8[0] - (char *)level_sky_data_base));
         printf_1e93b0(D_L18_001F1010, KB(level_texture_data_base - (s32)D_L18_00174840_2463f8[0]));
         printf_1e93b0(D_L18_001F1028, KB((D_L18_001B2480[1] >> 4) - level_texture_data_base));
         printf_1e93b0(D_L18_001F1040, KB((s32)D_L18_0015F420 - (D_L18_001B2480[1] >> 4)));
