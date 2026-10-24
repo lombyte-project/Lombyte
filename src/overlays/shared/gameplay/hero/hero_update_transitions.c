@@ -165,7 +165,7 @@ void hero_update_transitions(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int idle_fidget_index;
-    int sp24;
+    int respawn_wait_jump_press_age_frames;
     int path_seg;
     float path_t;
     int new_path;
@@ -1028,7 +1028,7 @@ void hero_update_transitions(void) {
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
-                            if (pad_pressed_within(0x40, scale_game_frames(7), &sp24)) {
+                            if (pad_pressed_within(0x40, scale_game_frames(7), &respawn_wait_jump_press_age_frames)) {
                                 hero_set_state(0x69, 1);
                             }
                         }
