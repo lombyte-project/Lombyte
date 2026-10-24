@@ -2581,10 +2581,10 @@ typedef struct {
     float cam_max;       /* 0xB4 */
 } Varsdc88;
 
-extern float D_L02_00161C20 __attribute__((sda));
-extern float D_L02_00161C24 __attribute__((sda));
-extern float D_L02_00161C40 __attribute__((sda));
-extern float D_L02_00161C44 __attribute__((sda));
+extern float transport_pod_configured_rail_a_height_offset_gp __asm__("D_L02_00161C20") __attribute__((sda));
+extern float transport_pod_configured_rail_b_height_offset_gp __asm__("D_L02_00161C24") __attribute__((sda));
+extern float transport_pod_rail_cycle_enabled_gp __asm__("D_L02_00161C40") __attribute__((sda));
+extern float transport_pod_path_markers_enabled_gp __asm__("D_L02_00161C44") __attribute__((sda));
 extern float D_L02_00161C48 __attribute__((sda));
 extern float D_L02_00161C4C __attribute__((sda));
 extern float D_L02_00161C50 __attribute__((sda));
@@ -2680,7 +2680,7 @@ void transport_pod_update(unsigned char *moby) {
 
     fast_vec_scale(&delta, moby + 0x10, -1.0f);
     qcopy(&previous_rotation, moby + 0x40);
-    if (D_L02_00161C44 != 0.0f) {
+    if (transport_pod_path_markers_enabled_gp != 0.0f) {
         for (i = 0; i < *D_L02_001B0AB0_dc88[transport_pod_vars->path]; i++) {
             qcopy(&a, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + i * 0x10 + 0x10);
             path_marker_dc88(&a, moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.1f);
@@ -2937,10 +2937,10 @@ void transport_pod_update(unsigned char *moby) {
         moby[0x20] = 0xF;
         break;
     case TRANSPORT_POD_POSITION_RAILS_FROM_CONFIGURED_OFFSETS:
-        transport_pod_vars->rail_a_off = D_L02_00161C20;
-        transport_pod_vars->rail_b_off = D_L02_00161C24;
+        transport_pod_vars->rail_a_off = transport_pod_configured_rail_a_height_offset_gp;
+        transport_pod_vars->rail_b_off = transport_pod_configured_rail_b_height_offset_gp;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
-        if (D_L02_00161C40 != 0.0f) {
+        if (transport_pod_rail_cycle_enabled_gp != 0.0f) {
             moby[0x20] = 0x10;
         }
         break;
@@ -2948,7 +2948,7 @@ void transport_pod_update(unsigned char *moby) {
         transport_pod_vars->rail_a_off = 2.0f;
         transport_pod_vars->rail_b_off = -4.0f;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
-        if (D_L02_00161C40 == 0.0f) {
+        if (transport_pod_rail_cycle_enabled_gp == 0.0f) {
             moby[0x20] = 0xF;
         } else if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
                    absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
@@ -2959,7 +2959,7 @@ void transport_pod_update(unsigned char *moby) {
         transport_pod_vars->rail_a_off = -1.0f;
         transport_pod_vars->rail_b_off = -1.0f;
         advance_transport_pod_rails_to_offsets((struct Moby *)moby);
-        if (D_L02_00161C40 == 0.0f) {
+        if (transport_pod_rail_cycle_enabled_gp == 0.0f) {
             moby[0x20] = 0xF;
         } else if (absolute_float_dc88(*(float *)(transport_pod_vars->rail_a + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f &&
                    absolute_float_dc88(*(float *)(transport_pod_vars->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 1.0f) < 0.01f) {
