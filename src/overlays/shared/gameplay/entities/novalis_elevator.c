@@ -2578,7 +2578,7 @@ extern s32 amoeboid_burst_spark_secondary_color_randomization_start_gp __asm__("
 extern s32 amoeboid_burst_spark_spawn_color_randomization_end_gp __asm__("D_L01_00161A24") __attribute__((sda));
 extern s32 amoeboid_burst_spark_secondary_color_randomization_end_gp __asm__("D_L01_00161A28") __attribute__((sda));
 extern s32 D_L01_00161A2C __attribute__((sda));
-extern s32 D_L01_00161A30 __attribute__((sda));
+extern s32 amoeboid_burst_downward_velocity_adjustment_frames_gp __asm__("D_L01_00161A30") __attribute__((sda));
 extern s32 amoeboid_burst_spark_duration_base_gp __asm__("D_L01_00161A34") __attribute__((sda));
 extern f32 amoeboid_burst_input_motion_scale_max_gp __asm__("D_L01_00161A38") __attribute__((sda));
 
@@ -2621,7 +2621,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
         origin[2] += scaled_vertical;
         qcopy(velocity, origin_copy);
         next = i + 1;
-        velocity[2] -= amoeboid_burst_downward_velocity_adjustment_factor_gp * D_0015ED70 * (f32)scale_game_frames(D_L01_00161A30);
+        velocity[2] -= amoeboid_burst_downward_velocity_adjustment_factor_gp * D_0015ED70 * (f32)scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
         for (j = 0; j < amoeboid_burst_sparks_per_group_gp; j++) {
             scale = random_float_between_alt(0.5f, 1.5f);
             origin[3] = scale * D_L01_00161A14;
@@ -2631,7 +2631,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             lower = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_spawn_color_randomization_start_gp, amoeboid_burst_spark_spawn_color_randomization_end_gp);
             upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_secondary_color_randomization_start_gp, amoeboid_burst_spark_secondary_color_randomization_end_gp);
             first = scale_game_frames(D_L01_00161A2C);
-            second = scale_game_frames(D_L01_00161A30);
+            second = scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)amoeboid_burst_spark_duration_base_gp * 0.5f, (f32)amoeboid_burst_spark_duration_base_gp * 2.5f)));
             spawn_spark(spawn_position, origin_copy, velocity, lower, upper, first, second, duration, -1);
         }
