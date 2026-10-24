@@ -879,7 +879,7 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_l
 
 char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
     float adjusted_target_position[4];
-    float r;
+    float pitch_and_target_setback_scalar;
     float ballistic_gravity_magnitude;
     char *found = 0;
     short *moby_list_entry = (short *)D_L18_001AC240_q[moby_list_index];
@@ -918,9 +918,9 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_l
             blend_moby_animation_q(moby, 0, 0, 1);
         }
         qcopy(moby + 0x10, launch_position);
-        r = *(float *)&D_L18_00161994_q;
+        pitch_and_target_setback_scalar = *(float *)&D_L18_00161994_q;
         *(int *)(moby + 0x40) = 0;
-        *(float *)(moby + 0x44) = -r;
+        *(float *)(moby + 0x44) = -pitch_and_target_setback_scalar;
         target_position[2] = target_position[2] + 0.75f;
         subtract_vector_xyz(adjusted_target_position, target_position, launch_position);
         trooper_scale(adjusted_target_position, adjusted_target_position, vector_length_xy(adjusted_target_position) - *(float *)&D_L18_00161994_q);
