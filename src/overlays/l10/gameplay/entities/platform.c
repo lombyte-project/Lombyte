@@ -30,8 +30,8 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 int D_L10_00161BF0 = 240;
 int D_L10_00161BF4 = 600;
 extern float bombthrower_grass_yaw_offset_limit_degrees __asm__("D_L10_00161BF8") __attribute__((sda));
-extern float D_L10_00161BFC __attribute__((sda));
-extern float D_L10_00161C00 __attribute__((sda));
+extern float bombthrower_grass_launch_elevation_min_degrees __asm__("D_L10_00161BFC") __attribute__((sda));
+extern float bombthrower_grass_launch_elevation_max_degrees __asm__("D_L10_00161C00") __attribute__((sda));
 extern float bombthrower_grass_launch_speed_min __asm__("D_L10_00161C04") __attribute__((sda));
 extern float bombthrower_grass_launch_speed_max __asm__("D_L10_00161C08") __attribute__((sda));
 void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
@@ -49,7 +49,7 @@ void bombthrower_grass_update(struct Moby *moby) {
         float yaw_offset = random_float_between_alt(-x, x) * DEG_TO_RAD;
         float launch_yaw = fast_add_rotations(moby->rot.z, yaw_offset);
         float r =
-            random_float_between_alt(D_L10_00161BFC, D_L10_00161C00) *
+            random_float_between_alt(bombthrower_grass_launch_elevation_min_degrees, bombthrower_grass_launch_elevation_max_degrees) *
             DEG_TO_RAD;
         build_spherical_offset(
             launch_offset,
