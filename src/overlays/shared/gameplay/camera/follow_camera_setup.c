@@ -1097,7 +1097,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     int i;
     int found;
     float spd;
-    float dist;
+    float accumulated_radial_adjustment_distance;
     float orbit_distance_ratio;
 
     found = 0;
@@ -1106,7 +1106,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     orbit = base + 0x130;
     camera_collision_state = base + 0x1D0;
     qcopy(initial_orbit_vector, orbit);
-    dist = 0.0f;
+    accumulated_radial_adjustment_distance = 0.0f;
     qcopy(probe_position, base + 0x90);
     spd = follow_cam_min_distance_gp;
     FUN_001f9bf8_2e7a30(ndir, initial_orbit_vector, 1.0f);
@@ -1117,7 +1117,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
                 FUN_L00_002e79c8_2e7a30(camera_moby, i, probe_position, spd) == 0) {
                 qcopy(step, D_L00_00173E60_2e7a30);
                 qcopy(save, probe_position);
-                if (FUN_L00_002e7618_2e7a30(camera_moby, probe_position, i, dist, spd)) {
+                if (FUN_L00_002e7618_2e7a30(camera_moby, probe_position, i, accumulated_radial_adjustment_distance, spd)) {
                     found = 1;
                     if (hero_state->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
                         subtract_vector_xyz(position_delta, step, save);
@@ -1148,7 +1148,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
             orbit_distance_ratio = (tot - *(float *)(camera_collision_state + 0x30)) / tot;
         }
         spd += *(float *)(camera_collision_state + 0x44) * *(float *)(camera_collision_state + 0x3C);
-        dist += spd;
+        accumulated_radial_adjustment_distance += spd;
         scale_vector_xyz(step, ndir, spd * orbit_distance_ratio);
         add_vector_xyz(probe_position, probe_position, step);
     }
