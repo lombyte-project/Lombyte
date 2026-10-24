@@ -2002,8 +2002,8 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
 
 extern char D_L11_00167680[];
-extern int D_L11_001625CC;
-extern int D_L11_001625EC;
+extern int distance_faded_effect_texture_29_fixed_alpha_scale __asm__("D_L11_001625CC");
+extern int distance_faded_effect_texture_2a_pair_one_fixed_alpha __asm__("D_L11_001625EC");
 extern int D_L11_00162610; /* no foreign declaration */
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -2040,16 +2040,16 @@ void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
     if (*(unsigned char *)&D_L11_00162610 != 0 && flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x29));
         vu1_add_g_sregister(
-            0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x68);
+            0x42, ((long)((distance_faded_effect_texture_29_fixed_alpha_scale * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x68);
         draw_scrolled_mesh_batch(1);
         vu1_add_g_sregister(
-            0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x62);
+            0x42, ((long)((distance_faded_effect_texture_29_fixed_alpha_scale * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x62);
         draw_scrolled_mesh_batch(2);
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2A));
     vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625E8 << 32) | 0x48);
     emit_oil_tanker_render_batches_with_pair_offset(0);
-    vu1_add_g_sregister(0x42, ((long)D_L11_001625EC << 32) | 0x48);
+    vu1_add_g_sregister(0x42, ((long)distance_faded_effect_texture_2a_pair_one_fixed_alpha << 32) | 0x48);
     emit_oil_tanker_render_batches_with_pair_offset(1);
     if (flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x2B));
