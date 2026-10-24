@@ -3067,9 +3067,15 @@ extern void FUN_L00_0025e450(struct Moby *, QVec *, QVec *, f32, f32, s32, s32, 
 void gunship_follow_path(struct Moby *m) __asm__("FUN_L01_002f5168");
 
 void gunship_follow_path(struct Moby *moby) {
+    enum {
+        GUNSHIP_PATH_STATE_INITIALIZE = 0,
+        GUNSHIP_PATH_STATE_FOLLOW_PATH = 1,
+        GUNSHIP_PATH_STATE_WAIT_FOR_PATH = 2,
+        GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER = 3
+    };
     QVec path_displacement;
     QVec zero;
-    QVec rot40;
+    QVec previous_rotation;
     QVec previous_position;
     QVec off[4];
     QVec dA0;
@@ -3149,7 +3155,7 @@ void gunship_follow_path(struct Moby *moby) {
     }
 
     switch (moby->state) {
-    case 0:
+    case GUNSHIP_PATH_STATE_INITIALIZE:
         if (path_cursor->path_id != -1) {
             PathNodes *pn = (PathNodes *)D_L01_001B0930[path_cursor->path_id];
             if (FUN_001f9b48(&pn->node[0], &pn->node[pn->count - 1]) < 0.5f)
@@ -3229,7 +3235,7 @@ void gunship_follow_path(struct Moby *moby) {
         moby->state = 1;
         return;
 
-    case 2:
+    case GUNSHIP_PATH_STATE_WAIT_FOR_PATH:
         if (path_cursor->path_id == -1)
             return;
         moby->state = 0;
@@ -3241,21 +3247,21 @@ void gunship_follow_path(struct Moby *moby) {
         v->unk11E = -1;
         return;
 
-    case 3:
+    case GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER:
         if (FUN_001f9770(&v->unk11C)) {
             v->unk11C = 0;
             moby->state = 1;
         }
         return;
 
-    case 1:
+    case GUNSHIP_PATH_STATE_FOLLOW_PATH:
         break;
 
     default:
         return;
     }
 
-    rot40.q = *(u128 *)&moby->rot;
+    previous_rotation.q = *(u128 *)&moby->rot;
     previous_position.q = *(u128 *)&moby->pos;
     if (1.0f <= v->unkF0) {
         s32 advanced_node_index;
@@ -3314,13 +3320,13 @@ void gunship_follow_path(struct Moby *moby) {
     if (!frozen)
         apply_gunship_path_position_offsets((char *)moby, (float *)&moby->pos);
     if (v->unk120 & 0x1F) {
-        s32 n2 = 0;
+        s32 attachment_point_index = 0;
         s32 i;
         for (i = 0; i < 5; i++) {
             if (!((v->unk120 >> i) & 1))
                 continue;
-            FUN_L00_0024f7c8(moby, n2, &off[0]);
-            n2++;
+            FUN_L00_0024f7c8(moby, attachment_point_index, &off[0]);
+            attachment_point_index++;
             FUN_001f9a28(&off[1], &off[0], &moby->pos);
             if (!(v->unk120 & 1)) {
                 struct Moby *c;
