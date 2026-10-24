@@ -969,8 +969,8 @@ void walloper_update(char *m) {
     enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
-extern f32 D_L00_00161690 __attribute__((sda));
-extern f32 D_L00_00161694 __attribute__((sda));
+extern f32 walloper_arc_first_pass_half_width __asm__("D_L00_00161690") __attribute__((sda));
+extern f32 walloper_arc_second_pass_half_width __asm__("D_L00_00161694") __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
@@ -985,7 +985,7 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
             arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, walloper_arc_first_pass_half_width, walloper_arc_second_pass_half_width, 0.2f);
         }
     }
     draw_walloper_camera_facing_quad(moby);
