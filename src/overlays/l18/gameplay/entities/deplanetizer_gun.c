@@ -1216,7 +1216,7 @@ extern float D_L18_001625FC __attribute__((sda));
 extern float gadgebot_glow_default_phase_speed_degrees_per_second_gp __asm__("D_L18_00162614") __attribute__((sda));
 extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm__("D_L18_00162618") __attribute__((sda));
 extern float gadgebot_death_fall_gravity_gp __asm__("D_L18_0016261C") __attribute__((sda));
-extern float D_L18_00162620 __attribute__((sda));
+extern float gadgebot_death_fall_horizontal_speed_approach_rate_gp __asm__("D_L18_00162620") __attribute__((sda));
 extern float gadgebot_death_fall_base_horizontal_speed_gp __asm__("D_L18_00162624") __attribute__((sda));
 extern float gadgebot_death_fall_base_vertical_speed_gp __asm__("D_L18_00162628") __attribute__((sda));
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
@@ -1273,7 +1273,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
                 sentry_vars->unk98 = 0.5f;
                 sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
-                sentry_vars->unk84 = D_L18_00162620 * frame_time_sq;
+                sentry_vars->unk84 = gadgebot_death_fall_horizontal_speed_approach_rate_gp * frame_time_sq;
                 sentry_vars->unk88 = gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
                 sentry_vars->unk8C = gadgebot_death_fall_base_vertical_speed_gp * frame_time;
                 reaction_value_or_path_address = 0x29;
