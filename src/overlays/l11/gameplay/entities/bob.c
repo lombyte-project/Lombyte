@@ -1745,9 +1745,9 @@ int is_pokitaru_boat_target_group_clear(struct Moby *moby) __asm__("FUN_L11_0030
 
 extern int is_pokitaru_boat_target_group_clear(struct Moby *) __asm__("FUN_L11_0030a850");
 
-extern float D_L11_00161DD4 __attribute__((sda));
-extern float D_L11_00161DD8 __attribute__((sda));
-extern float D_L11_00161DDC __attribute__((sda));
+extern float pokitaru_boat_path_speed __asm__("D_L11_00161DD4") __attribute__((sda));
+extern float pokitaru_boat_turn_acceleration_degrees __asm__("D_L11_00161DD8") __attribute__((sda));
+extern float pokitaru_boat_max_turn_speed_degrees __asm__("D_L11_00161DDC") __attribute__((sda));
 extern float D_L11_00161DEC __attribute__((sda));
 extern float D_L11_00161DF0 __attribute__((sda));
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
@@ -1842,7 +1842,7 @@ void pokitaru_boat_update(struct Moby *moby) {
                 }
                 boat_vars->slot_c8 = -1;
             }
-            approach_value_2518(&boat_vars->approach_d0, D_L11_00161DD4 * frame_time, frame_time_sq * 6.0f);
+            approach_value_2518(&boat_vars->approach_d0, pokitaru_boat_path_speed * frame_time, frame_time_sq * 6.0f);
         } else {
             if (!check_slot_309ac0(moby, boat_vars->slot_c8)) {
                 boat_vars->slot_c8 = allocate_voice_2518(0, 4, moby);
@@ -1862,7 +1862,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         scale_vec_309ac0(path_movement, boat_vars->approach_d0);
         add_vector_xyz(&moby->pos, &moby->pos, path_movement);
         if (boat_vars->seg_d4 < boat_vars->path_c4[0] - 1) {
-            if (distance_xyz(&moby->pos, target) < D_L11_00161DD4 * frame_time) {
+            if (distance_xyz(&moby->pos, target) < pokitaru_boat_path_speed * frame_time) {
                 float *pt;
                 boat_vars->seg_d4 += 1;
                 pt = (float *)((char *)boat_vars->path_c4 + boat_vars->seg_d4 * 16);
@@ -1892,9 +1892,9 @@ void pokitaru_boat_update(struct Moby *moby) {
             moby->state = 3;
         }
         approach_angle(&moby->rot.z, fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y), boat_vars->vel_d8,
-                         D_L11_00161DD8 * 0.017453292f * frame_time_sq,
-                         D_L11_00161DD8 * 0.017453292f * frame_time_sq,
-                         D_L11_00161DDC * 0.017453292f * frame_time);
+                         pokitaru_boat_turn_acceleration_degrees * 0.017453292f * frame_time_sq,
+                         pokitaru_boat_turn_acceleration_degrees * 0.017453292f * frame_time_sq,
+                         pokitaru_boat_max_turn_speed_degrees * 0.017453292f * frame_time);
         if (boat_vars->flag_c0 != 0) {
             FUN_L00_002e8450_309ac0(0, D_L11_00161DEC, 0.003f);
             FUN_L00_002e84b8_309ac0(D_L11_00161DF0, 0.003f);
