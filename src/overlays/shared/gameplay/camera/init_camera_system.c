@@ -344,15 +344,15 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
 
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
-    float v[4] __attribute__((aligned(16)));
+    float camera_movement_origin_snapshot[4] __attribute__((aligned(16)));
     char *o = D_166C80_1ed6a8.o;
     float *camera_movement_origin = (float *)(o + 0x64);
     int step_count, i, j;
 
-    v[0] = camera_movement_origin[0];
-    v[1] = camera_movement_origin[1];
-    v[2] = camera_movement_origin[2];
-    ((int *)v)[3] = 0;
+    camera_movement_origin_snapshot[0] = camera_movement_origin[0];
+    camera_movement_origin_snapshot[1] = camera_movement_origin[1];
+    camera_movement_origin_snapshot[2] = camera_movement_origin[2];
+    ((int *)camera_movement_origin_snapshot)[3] = 0;
     if (*(short *)(o + 0x8A) != 0) {
         if (D_L00_0016C06C == 0) {
             qcopy(&D_166C80_1ed6a8.q, camera_position);
@@ -360,10 +360,10 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         *(short *)(o + 0x8A) = 0;
         return;
     }
-    f9a28_1ed6a8(step_delta, camera_position, v);
+    f9a28_1ed6a8(step_delta, camera_position, camera_movement_origin_snapshot);
     step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
     ff378_1ed6a8(step_delta, step_delta, fa6c0_1ed6a8(step_count));
-    qcopy(camera_position, v);
+    qcopy(camera_position, camera_movement_origin_snapshot);
     for (i = 0; i < step_count; i++) {
         f9a10_1ed6a8(camera_position, camera_position, step_delta);
         for (j = 0; j < 6 && f0d60_1ed6a8(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
