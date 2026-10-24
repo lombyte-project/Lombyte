@@ -82,6 +82,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 extern char D_L11_0017C960[];
 extern char D_L11_0017C920[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_SHALLOW_WATER_RUN = 0x73
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -512,7 +515,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_RUN:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
