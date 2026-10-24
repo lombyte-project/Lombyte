@@ -1049,8 +1049,8 @@ int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int t
 
 int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) {
     char *class_callback_data = get_moby_suck_cannon_record(moby);
-    int r = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
-    if (r != 0) {
+    int projectile_launch_result = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
+    if (projectile_launch_result != 0) {
         moby[0x20] = 5;
     } else if ((unsigned char)moby[0x20] == 5) {
         moby[0x20] = 1;
@@ -1058,7 +1058,7 @@ int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int t
     if (*(short *)(class_callback_data + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
     }
-    return r;
+    return projectile_launch_result;
 }
 #define NOT_SDA
 
