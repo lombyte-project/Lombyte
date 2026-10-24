@@ -277,7 +277,7 @@ extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
    D_L11_00161EC4..ED8. */
 void update_child_set_poses(struct Moby *parent_moby) {
-    Vec4f v;
+    Vec4f child_placement_vector_scratch;
     Vec4f child_position_scratch;
     Vec4f parent_axis1_offset;
     int i;
@@ -293,14 +293,14 @@ void update_child_set_poses(struct Moby *parent_moby) {
         D_L11_001DA710[i]->rot.y = D_L11_00161EBC * 0.017453292f;
         D_L11_001DA710[i]->rot.x = ang;
         euler_rotation_basis(&D_L11_001DA710[i]->rot_row0, &D_L11_001DA710[i]->rot);
-        zero_vector_d1b0(&v);
-        normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
-        v.z += D_L11_00161EAC;
-        add_vector_xyz(&v, &v, &parent_moby->pos);
+        zero_vector_d1b0(&child_placement_vector_scratch);
+        normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
+        child_placement_vector_scratch.z += D_L11_00161EAC;
+        add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
-        add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
         qcopy_nc(&D_L11_001DA710[i]->pos, &child_position_scratch);
         FUN_L00_00250df8(D_L11_001DA710[i]);
     }
@@ -314,14 +314,14 @@ void update_child_set_poses(struct Moby *parent_moby) {
         D_L11_00161F20[j]->rot.y = D_L11_00161EBC * 0.017453292f;
         D_L11_00161F20[j]->rot.x = ang;
         euler_rotation_basis(&D_L11_00161F20[j]->rot_row0, &D_L11_00161F20[j]->rot);
-        zero_vector_d1b0(&v);
-        normalize_vector_xyz(&v, &parent_moby->rot_row0, 14.0f);
-        v.z += D_L11_00161EAC;
-        add_vector_xyz(&v, &v, &parent_moby->pos);
+        zero_vector_d1b0(&child_placement_vector_scratch);
+        normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
+        child_placement_vector_scratch.z += D_L11_00161EAC;
+        add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
-        add_vector_xyz(&child_position_scratch, &child_position_scratch, &v);
+        add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
         qcopy(&D_L11_00161F20[j]->pos, &child_position_scratch);
         r = fast_sub_rotations((float)k * 0.2617994f, 1.3962634f);
         r = r * ((k == -1) ? D_L11_00161EC8 : D_L11_00161ECC);
@@ -331,10 +331,10 @@ void update_child_set_poses(struct Moby *parent_moby) {
     }
     for (n = 0; n < 4; n++) {
         float rotation_y_progress;
-        normalize_vector_xyz(&v, &D_L11_00161F20[n]->rot_row2, D_L11_00161EFC);
+        normalize_vector_xyz(&child_placement_vector_scratch, &D_L11_00161F20[n]->rot_row2, D_L11_00161EFC);
         normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[n]->rot_row1, D_L11_00161F00);
-        add_vector_xyz(&v, &v, &child_position_scratch);
-        add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &v);
+        add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &child_position_scratch);
+        add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &child_placement_vector_scratch);
         qcopy(&D_L11_00161F30[n]->rot, &D_L11_00161F20[n]->rot);
         rotation_y_progress = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
         D_L11_00161F30[n]->rot.y = fast_add_rotations(D_L11_00161F30[n]->rot.y,
@@ -353,9 +353,9 @@ void update_child_set_poses(struct Moby *parent_moby) {
             signed_axis0_offset = 20.0f;
         }
         signed_axis0_offset *= sgn;
-        normalize_vector_xyz(&v, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
-        v.z = D_L11_00161F08;
-        add_vector_xyz(&D_L11_00161F10[q]->pos, &v, &parent_moby->pos);
+        normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
+        child_placement_vector_scratch.z = D_L11_00161F08;
+        add_vector_xyz(&D_L11_00161F10[q]->pos, &child_placement_vector_scratch, &parent_moby->pos);
         qcopy_nc(&D_L11_00161F10[q]->rot, &parent_moby->rot);
         FUN_L00_00250df8(D_L11_00161F10[q]);
     }
