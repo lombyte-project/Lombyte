@@ -24,7 +24,7 @@ void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 void adjust_hero_pose_targets_from_motion(void) {
     f32 run_step_pose_input, nv, k, run_pose_magnitude, motion_correction_scale, relative_displacement_angle;
     f32 run_pose_weight, nw;
-    f32 scaled_pose_input, c1, c2, c3;
+    f32 scaled_pose_input, c1, c2, unclamped_pose_magnitude;
     f32 x;
 
     if (hero.state.current == HERO_STATE_RUN) {
@@ -91,10 +91,10 @@ void adjust_hero_pose_targets_from_motion(void) {
         TF(0x1C0) = scaled_pose_input * -0.28f;
         if (0.6f < c2) TF(0x278) = 0.6f;
         else if (c2 < -0.6f) TF(0x278) = -0.6f;
-        c3 = absolute_float(scaled_pose_input) * 0.2f;
-        TF(0x274) = c3;
-        if (0.2f < c3) TF(0x274) = 0.2f;
-        else if (c3 < -0.2f) TF(0x274) = -0.2f;
+        unclamped_pose_magnitude = absolute_float(scaled_pose_input) * 0.2f;
+        TF(0x274) = unclamped_pose_magnitude;
+        if (0.2f < unclamped_pose_magnitude) TF(0x274) = 0.2f;
+        else if (unclamped_pose_magnitude < -0.2f) TF(0x274) = -0.2f;
         TF(0x270) = absolute_float(scaled_pose_input) * 0.16f;
         if (hero.state.current == 0x81) {
             if (frame_time * 0.5f < hero.motion.unk164) {
