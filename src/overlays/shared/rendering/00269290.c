@@ -788,17 +788,17 @@ extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribut
 
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 
-extern int D_L00_001601A8 __attribute__((sda));
-extern int D_L00_001601AC __attribute__((sda));
-extern int D_L00_001601B0 __attribute__((sda));
-extern int D_L00_001601B4 __attribute__((sda));
+extern int spinning_particle_default_initial_color_blend_source __asm__("D_L00_001601A8") __attribute__((sda));
+extern int spinning_particle_default_initial_color_blend_target __asm__("D_L00_001601AC") __attribute__((sda));
+extern int spinning_particle_default_final_color_blend_source __asm__("D_L00_001601B0") __attribute__((sda));
+extern int spinning_particle_default_final_color_blend_target __asm__("D_L00_001601B4") __attribute__((sda));
 extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
 extern int spinning_particle_default_lifetime_lower_bound __asm__("D_L00_001601C0") __attribute__((sda));
 extern int spinning_particle_default_lifetime_upper_bound __asm__("D_L00_001601C4") __attribute__((sda));
-extern int D_L00_001601C8 __attribute__((sda));
-extern int D_L00_001601CC __attribute__((sda));
-extern int D_L00_001601D0 __attribute__((sda));
-extern int D_L00_001601D4 __attribute__((sda));
+extern int spinning_particle_alternate_initial_color_blend_source __asm__("D_L00_001601C8") __attribute__((sda));
+extern int spinning_particle_alternate_initial_color_blend_target __asm__("D_L00_001601CC") __attribute__((sda));
+extern int spinning_particle_alternate_final_color_blend_source __asm__("D_L00_001601D0") __attribute__((sda));
+extern int spinning_particle_alternate_final_color_blend_target __asm__("D_L00_001601D4") __attribute__((sda));
 extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
 extern int spinning_particle_alternate_lifetime_lower_bound __asm__("D_L00_001601E0") __attribute__((sda));
 extern int spinning_particle_alternate_lifetime_upper_bound __asm__("D_L00_001601E4") __attribute__((sda));
@@ -818,14 +818,14 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float scale = D_L00_001601D8_gp;
             float hi = (float)spinning_particle_alternate_lifetime_upper_bound;
             float lo = (float)spinning_particle_alternate_lifetime_lower_bound;
-            *(int *)(particle + 4) = D_L00_001601C8;
+            *(int *)(particle + 4) = spinning_particle_alternate_initial_color_blend_source;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
                 FUN_002132a8_26b230(lo, hi)));
-            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(D_L00_001601C8, D_L00_001601CC,
+            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_alternate_initial_color_blend_source, spinning_particle_alternate_initial_color_blend_target,
                                                           FUN_002132a8_26b230(zero, one));
-            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(D_L00_001601D0,
-                                                          D_L00_001601D4,
+            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_alternate_final_color_blend_source,
+                                                          spinning_particle_alternate_final_color_blend_target,
                                                           FUN_002132a8_26b230(zero, one));
             { unsigned char texture = *D_L00_001B20E0;
               particle[3] = 0x48;
@@ -837,14 +837,14 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float scale = D_L00_001601B8_gp;
             float hi = (float)spinning_particle_default_lifetime_upper_bound;
             float lo = (float)spinning_particle_default_lifetime_lower_bound;
-            *(int *)(particle + 4) = D_L00_001601A8;
+            *(int *)(particle + 4) = spinning_particle_default_initial_color_blend_source;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
                 FUN_002132a8_26b230(lo, hi)));
-            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(D_L00_001601A8, D_L00_001601AC,
+            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_default_initial_color_blend_source, spinning_particle_default_initial_color_blend_target,
                                                           FUN_002132a8_26b230(zero, one));
-            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(D_L00_001601B0,
-                                                          D_L00_001601B4,
+            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_default_final_color_blend_source,
+                                                          spinning_particle_default_final_color_blend_target,
                                                           FUN_002132a8_26b230(zero, one));
             if (flags & 4) {
                 offset = 8;
