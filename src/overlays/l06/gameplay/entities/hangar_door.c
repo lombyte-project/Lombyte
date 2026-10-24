@@ -3353,18 +3353,18 @@ extern float moby_pair_parent_fixed_distance __asm__("D_L06_00161F1C") __attribu
 extern float moby_pair_child_fixed_distance __asm__("D_L06_00161F20") __attribute__((sda));
 extern float moby_pair_parent_phase_target_distance __asm__("D_L06_00161F24") __attribute__((sda));
 extern float moby_pair_child_phase_target_distance __asm__("D_L06_00161F28") __attribute__((sda));
-extern float D_L06_00161F2C __attribute__((sda));
-extern float D_L06_00161F30 __attribute__((sda));
+extern float moby_pair_parent_phase_two_target_rotation_y __asm__("D_L06_00161F2C") __attribute__((sda));
+extern float moby_pair_child_phase_two_target_rotation_y __asm__("D_L06_00161F30") __attribute__((sda));
 extern float D_L06_00161F34 __attribute__((sda));
 extern float D_L06_00161F38 __attribute__((sda));
 extern float D_L06_00161F3C __attribute__((sda));
 extern float D_L06_00161F40 __attribute__((sda));
 extern float D_L06_00161F44 __attribute__((sda));
 extern float D_L06_00161F48 __attribute__((sda));
-extern int D_L06_00161F4C __attribute__((sda));
-extern int D_L06_00161F50 __attribute__((sda));
-extern int D_L06_00161F54 __attribute__((sda));
-extern int D_L06_00161F58 __attribute__((sda));
+extern int moby_pair_phase_one_duration_min_frames __asm__("D_L06_00161F4C") __attribute__((sda));
+extern int moby_pair_phase_one_duration_max_frames __asm__("D_L06_00161F50") __attribute__((sda));
+extern int moby_pair_phase_two_duration_min_frames __asm__("D_L06_00161F54") __attribute__((sda));
+extern int moby_pair_phase_two_duration_max_frames __asm__("D_L06_00161F58") __attribute__((sda));
 extern float moby_pair_reset_enabled __asm__("D_L06_00161F5C") __attribute__((sda));
 
 void update_moby_pair_transforms(char *moby) __asm__("FUN_L06_002fbfb0");
@@ -3479,13 +3479,13 @@ void update_moby_pair_transforms(char *moby) {
         rotation_speed = D_L06_00161F44;
         rotation_damping = D_L06_00161F48;
         next_phase = 2;
-        next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F54, (float)D_L06_00161F58));
+        next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_two_duration_min_frames, (float)moby_pair_phase_two_duration_max_frames));
         goto phase_join;
         phase_two:
         target_a = moby_pair_parent_phase_target_distance;
         target_b = moby_pair_child_phase_target_distance;
-        target_rot_a = D_L06_00161F2C;
-        target_rot_b = D_L06_00161F30;
+        target_rot_a = moby_pair_parent_phase_two_target_rotation_y;
+        target_rot_b = moby_pair_child_phase_two_target_rotation_y;
         acceleration = D_L06_00161F34;
         max_speed = D_L06_00161F38;
         damping = D_L06_00161F3C;
@@ -3493,7 +3493,7 @@ void update_moby_pair_transforms(char *moby) {
         rotation_speed = D_L06_00161F44;
         rotation_damping = D_L06_00161F48;
         next_phase = 1;
-        next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
+        next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_one_duration_min_frames, (float)moby_pair_phase_one_duration_max_frames));
         phase_join:
         FUN_00213f38(&phase_a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38(&phase_b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
