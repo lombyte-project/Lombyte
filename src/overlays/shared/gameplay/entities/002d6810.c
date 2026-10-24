@@ -113,8 +113,8 @@ extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") __attribute__((section(".data
 extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-extern float D_L15_00161BC8 __attribute__((sda));
-extern float D_L15_00161BCC __attribute__((sda));
+extern float electric_water_on_duration_seconds __asm__("D_L15_00161BC8") __attribute__((sda));
+extern float electric_water_off_duration_seconds __asm__("D_L15_00161BCC") __attribute__((sda));
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
@@ -224,7 +224,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         vars->light = -1;
@@ -237,7 +237,7 @@ void electric_water_update(struct Moby *moby) {
         inside = 0;
         wet = FUN_L15_002d6770();
         if (fast_dec_timer_s16(&vars->on_timer) != 0) {
-            vars->off_timer = truncate_float_to_s32(scale_time(D_L15_00161BCC * 60.0f));
+            vars->off_timer = truncate_float_to_s32(scale_time(electric_water_off_duration_seconds * 60.0f));
             moby->state = 2;
             if (vars->owner != 0) {
                 if (vars->voice1 != -1) {
@@ -427,7 +427,7 @@ void electric_water_update(struct Moby *moby) {
             vars->voice1 = FUN_L00_0028dc90(1, 5, vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&vars->off_timer) != 0 && moby->state == 2) {
-            vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+            vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
             vars->off_timer = scale_game_frames(200);
             vars->shock_count = 0;
             moby->state = 1;
@@ -512,7 +512,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[i]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         moby->state = 1;
