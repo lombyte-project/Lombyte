@@ -2545,7 +2545,9 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L08_002e4e90(struct Moby *moby, float *out, float *output_euler_angles) {
+void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby, float *out, float *output_euler_angles) __asm__("FUN_L08_002e4e90");
+
+void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby, float *out, float *output_euler_angles) {
     float output_rotation_matrix[16];
     float base_rotation_matrix[16];
     float up[4];
