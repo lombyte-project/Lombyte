@@ -473,7 +473,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RT_2baae0 first_pass_render_attributes;
     RW_2baae0 q2[4];
     RT_2baae0 u;
-    RW_2baae0 w120, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
+    RW_2baae0 camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, segment_start_camera_distance, segment_end_camera_distance, l2;
     first_pass_render_attributes.q0 = tex_2baae0(D_L00_00161638);
@@ -512,23 +512,23 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.f[7] = 1.0f;
     fast_vec_sub(first_pass_point_camera_offset, point_bytes, g_debug_camera);
     fast_vec_sub(segment_delta, point_bytes + 0x10, point_bytes);
-    fast_vec_cross(w120, segment_delta, first_pass_point_camera_offset);
-    len0 = fast_vec_length(w120);
+    fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+    len0 = fast_vec_length(camera_facing_side_vector);
     if (len0 != 0)
         len0 = 1.0f / len0;
-    fast_vec_scale(D_L00_001615FC * len0, w120, w120);
-    fast_vec_add(first_pass_corners[0], point_bytes, w120);
-    fast_vec_sub(first_pass_corners[1], point_bytes, w120);
+    fast_vec_scale(D_L00_001615FC * len0, camera_facing_side_vector, camera_facing_side_vector);
+    fast_vec_add(first_pass_corners[0], point_bytes, camera_facing_side_vector);
+    fast_vec_sub(first_pass_corners[1], point_bytes, camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
         fast_vec_sub(first_pass_point_camera_offset, v[i], g_debug_camera);
         fast_vec_sub(segment_delta, v[i + 1], v[i]);
-        fast_vec_cross(w120, segment_delta, first_pass_point_camera_offset);
-        len = fast_vec_length(w120);
+        fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+        len = fast_vec_length(camera_facing_side_vector);
         if (len != 0)
             len = 1.0f / len;
-        fast_vec_scale(D_L00_001615FC * len, w120, w120);
-        fast_vec_add(first_pass_corners[2], v[i], w120);
-        fast_vec_sub(first_pass_corners[3], v[i], w120);
+        fast_vec_scale(D_L00_001615FC * len, camera_facing_side_vector, camera_facing_side_vector);
+        fast_vec_add(first_pass_corners[2], v[i], camera_facing_side_vector);
+        fast_vec_sub(first_pass_corners[3], v[i], camera_facing_side_vector);
         if (i == 1) {
             first_pass_render_attributes.c[1] = D_L00_001615F4;
             first_pass_render_attributes.c[0] = D_L00_001615F4;
@@ -566,11 +566,11 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         fast_vec_sub(adjusted_segment_start, adjusted_segment_start, s1B0);
         fast_vec_add(adjusted_segment_end, adjusted_segment_end, s1B0);
         fast_vec_sub(s1A0, g_debug_camera, adjusted_segment_start);
-        fast_vec_cross(w120, s1A0, segment_delta);
-        l2 = fast_vec_length(w120);
+        fast_vec_cross(camera_facing_side_vector, s1A0, segment_delta);
+        l2 = fast_vec_length(camera_facing_side_vector);
         if (l2 != 0)
             l2 = 1.0f / l2;
-        fast_vec_scale(sy * l2, second_pass_width_offset, w120);
+        fast_vec_scale(sy * l2, second_pass_width_offset, camera_facing_side_vector);
         fast_vec_add(q2[0], adjusted_segment_start, second_pass_width_offset);
         fast_vec_sub(q2[1], adjusted_segment_start, second_pass_width_offset);
         fast_vec_add(q2[2], adjusted_segment_end, second_pass_width_offset);
