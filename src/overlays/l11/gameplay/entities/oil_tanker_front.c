@@ -368,9 +368,9 @@ void *FUN_L11_00316210(struct Moby *arg) {
 
 #include "qcopy.h"
 
-extern float D_L11_00162308 __attribute__((sda));
-extern float D_L11_0016230C __attribute__((sda));
-extern float D_L11_00162310 __attribute__((sda));
+extern float gate_door_z_offset __asm__("D_L11_00162308") __attribute__((sda));
+extern float gate_door_x_rotation_degrees __asm__("D_L11_0016230C") __attribute__((sda));
+extern float gate_door_y_rotation_degrees __asm__("D_L11_00162310") __attribute__((sda));
 extern struct Moby *spawn_moby_class(s32) __asm__("FUN_0020c4f8");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern s32 FUN_00214720(void *, s32);
@@ -421,8 +421,8 @@ void update_two_door_gate(struct Moby *moby) {
         door_moby->pos.z -= 4.0f;
         door_rotation_target = gate_vars->left;
         qcopy(&door_rotation_target->rot, &moby->rot);
-        door_rotation_target->rot.x = -(D_L11_0016230C * 0.017453292f);
-        gate_vars->left->rot.y = D_L11_00162310 * 0.017453292f;
+        door_rotation_target->rot.x = -(gate_door_x_rotation_degrees * 0.017453292f);
+        gate_vars->left->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
         door_vars = gate_vars->left->pvars;
         *(u8 **)(door_vars + 8) = door_vars + 0x20;
         *(u32 *)(door_vars + 0x5C) |= 1;
@@ -436,8 +436,8 @@ void update_two_door_gate(struct Moby *moby) {
         door_moby->pos.z -= 4.0f;
         door_rotation_target = gate_vars->right;
         qcopy(&door_rotation_target->rot, &moby->rot);
-        door_rotation_target->rot.x = D_L11_0016230C * 0.017453292f;
-        gate_vars->right->rot.y = D_L11_00162310 * 0.017453292f;
+        door_rotation_target->rot.x = gate_door_x_rotation_degrees * 0.017453292f;
+        gate_vars->right->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
         door_vars = gate_vars->right->pvars;
         *(u8 **)(door_vars + 8) = door_vars + 0x20;
         *(u32 *)(door_vars + 0x5C) |= 1;
@@ -471,7 +471,7 @@ void update_two_door_gate(struct Moby *moby) {
         float a;
         advance_accelerated_scalar(&gate_vars->t, &gate_vars->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
                                    frame_time * 10.0f);
-        a = (1.0f - gate_vars->t) * (D_L11_00162310 * 0.017453292f);
+        a = (1.0f - gate_vars->t) * (gate_door_y_rotation_degrees * 0.017453292f);
         gate_vars->left->rot.y = a;
         gate_vars->right->rot.y = a;
         FUN_L00_00250df8(gate_vars->left);
@@ -504,14 +504,14 @@ void update_two_door_gate(struct Moby *moby) {
     case GATE_APPLY_CONFIGURED_DOOR_POSE:
         fast_vec_normalize(door_position_offset, &moby->rot_row0, 0.5f);
         fast_vec_add(&gate_vars->left->pos, &moby->pos, door_position_offset);
-        gate_vars->left->pos.z = moby->pos.z + D_L11_00162308;
-        gate_vars->left->rot.x = -(D_L11_0016230C * 0.017453292f);
-        gate_vars->left->rot.y = D_L11_00162310 * 0.017453292f;
+        gate_vars->left->pos.z = moby->pos.z + gate_door_z_offset;
+        gate_vars->left->rot.x = -(gate_door_x_rotation_degrees * 0.017453292f);
+        gate_vars->left->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
         FUN_L00_00250df8(gate_vars->left);
         fast_vec_add(&gate_vars->right->pos, &moby->pos, door_position_offset);
-        gate_vars->right->pos.z = moby->pos.z + D_L11_00162308;
-        gate_vars->right->rot.x = D_L11_0016230C * 0.017453292f;
-        gate_vars->right->rot.y = D_L11_00162310 * 0.017453292f;
+        gate_vars->right->pos.z = moby->pos.z + gate_door_z_offset;
+        gate_vars->right->rot.x = gate_door_x_rotation_degrees * 0.017453292f;
+        gate_vars->right->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
         FUN_L00_00250df8(gate_vars->right);
         break;
     }
