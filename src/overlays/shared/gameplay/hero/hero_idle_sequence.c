@@ -2765,7 +2765,7 @@ extern void FUN_L00_0020a1e0_a540_0020a1f8(f32, f32) __asm__("FUN_L00_0020a1f8")
 extern void FUN_L00_0020a1e0_a540_0020a228(f32, f32) __asm__("FUN_L00_0020a228");
 extern s32 FUN_L00_00257b90_a540(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 FUN_L00_00257c48_a540(f32, f32) __asm__("FUN_L00_00257c48");
-extern f32 FUN_L00_0025b6a8_a540(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
+extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
 extern u8 D_0015EDB3 __asm__("D_0015EDB3");
 #define G D_0013F350_a540
@@ -2816,8 +2816,8 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
         G.f1004 = -random_float_between(-0.15707964f, 0.43633232f);
         G.f1008 = FUN_L00_00257c48_a540(0.34906584f, 0.99483764f);
         random_blend_factor = random_float_between(0.0f, 1.0f);
-        G.f1014 = FUN_L00_0025b6a8_a540(0.015f, 0.007f, random_blend_factor);
-        G.f1018 = FUN_L00_0025b6a8_a540(0.29f, 0.3f, random_blend_factor);
+        G.f1014 = interpolate_scalar_linear(0.015f, 0.007f, random_blend_factor);
+        G.f1018 = interpolate_scalar_linear(0.29f, 0.3f, random_blend_factor);
         min_delay_frames = scale_game_frames(90);
         G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(200));
         G.i1010 += truncate_float_to_s32((f32)scale_game_frames(80) * random_blend_factor);

@@ -681,7 +681,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
+f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");

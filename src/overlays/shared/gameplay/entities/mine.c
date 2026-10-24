@@ -1572,7 +1572,7 @@ extern int FUN_L00_00257b90_2adb30(int, int) __asm__("FUN_L00_00257b90");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern void mine_blast_mobys(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern float FUN_L00_0025b6a8_2adb30(float, float, float) __asm__("FUN_L00_0025b6a8");
+extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern unsigned FUN_L00_0025c0e8_2adb30(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *FUN_L00_002603d0_2adb30(unsigned char *) __asm__("FUN_L00_002603d0");
@@ -1995,7 +1995,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
         float r;
         int n;
         bomb_moby->flags |= 0x41;
-        r = FUN_L00_0025b6a8_2adb30(0.5f, (FUN_001fa6c0_2adb30(*((unsigned char *)&D_E910 + 0xA)) + 1.0f) * 3.0f - 0.5f,
+        r = interpolate_scalar_linear(0.5f, (FUN_001fa6c0_2adb30(*((unsigned char *)&D_E910 + 0xA)) + 1.0f) * 3.0f - 0.5f,
                               FUN_001fa6c0_2adb30(bomb_moby->bBC) / (float)FUN_001f96f8_2adb30(0xF));
         n = probe_world_sphere(&bomb_moby->pos, 0x10, bomb_moby, 0, r);
         p.q = bomb_moby->pos.q;

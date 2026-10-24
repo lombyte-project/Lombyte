@@ -662,7 +662,7 @@ extern int allocate_voice_7b10(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_7b10(int) __asm__("FUN_001f96f8");
 extern float random_float_7b10(float, float) __asm__("FUN_002132a8");
 extern float int_to_float_7b10(int) __asm__("FUN_001fa6c0");
-extern float FUN_L00_0025b6a8(float, float, float);
+extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 extern int collect_mobies_7b10(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void blast_mobys_7b10(struct Moby *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern float scale_time_7b10(float) __asm__("FUN_001f96b0");
@@ -738,7 +738,7 @@ void poison_vessel_update(struct Moby *moby) {
     case POISON_VESSEL_BLASTING:
         qcopy(pos, &moby->pos);
         pos[2] += 1.0f;
-        hits = collect_mobies_7b10(FUN_L00_0025b6a8(D_L13_00161E30, D_L13_00161E34,
+        hits = collect_mobies_7b10(interpolate_scalar_linear(D_L13_00161E30, D_L13_00161E34,
                                               int_to_float_7b10(vars->timer) /
                                                   int_to_float_7b10(scale_game_frames_7b10(D_L13_00161E2C))),
                                     pos, 0x10, moby, 0);
