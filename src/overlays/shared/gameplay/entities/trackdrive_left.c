@@ -896,7 +896,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     s32 unwrapped_uv_scroll;
     s32 wrapped_uv_scroll_offset;
     s32 strip_texture_tex0;
-    f32 f24, f25, f26, f27, f28, f29, f30, f31;
+    f32 f24, f25, start_corner_cosine_component, f27, f28, start_corner_sine_component, end_corner_cosine_component, end_corner_sine_component;
     f32 trig_value;
 
     unwrapped_uv_scroll = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
@@ -915,19 +915,19 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    f29 = f25 + trig_value * 2.0f;
+    start_corner_sine_component = f25 + trig_value * 2.0f;
     trig_value = fast_cos(angle);
     f25 = f25 - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f26 = f24 - trig_value * 2.0f;
+    start_corner_cosine_component = f24 - trig_value * 2.0f;
     trig_value = fast_sin(angle);
     f24 = f24 + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f31 = f28 + trig_value * 2.0f;
+    end_corner_sine_component = f28 + trig_value * 2.0f;
     trig_value = fast_cos(angle);
     f28 = f28 - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f30 = f27 - trig_value * 2.0f;
+    end_corner_cosine_component = f27 - trig_value * 2.0f;
     trig_value = fast_sin(angle);
     f27 = f27 + trig_value * 2.0f;
 
@@ -936,12 +936,12 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     packed_vertices[1] = 0xFFFFF000000000ULL;
     packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
-    LO4(packed_vertices[0], truncate_float_to_s32(f29));
+    NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
+    LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
     NEG20(packed_vertices[1], truncate_float_to_s32(f24));
     LO4(packed_vertices[1], truncate_float_to_s32(f25));
-    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
-    LO4(packed_vertices[2], truncate_float_to_s32(f31));
+    NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
+    LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
     NEG20(packed_vertices[3], truncate_float_to_s32(f27));
     LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
@@ -958,19 +958,19 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     f28 = fast_sin(angle) * end_distance;
     f27 = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    f29 = f25 + trig_value * 5.0f;
+    start_corner_sine_component = f25 + trig_value * 5.0f;
     trig_value = fast_cos(angle);
     f25 = f25 - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f26 = f24 - trig_value * 5.0f;
+    start_corner_cosine_component = f24 - trig_value * 5.0f;
     trig_value = fast_sin(angle);
     f24 = f24 + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f31 = f28 + trig_value * 5.0f;
+    end_corner_sine_component = f28 + trig_value * 5.0f;
     trig_value = fast_cos(angle);
     f28 = f28 - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f30 = f27 - trig_value * 5.0f;
+    end_corner_cosine_component = f27 - trig_value * 5.0f;
     trig_value = fast_sin(angle);
     f27 = f27 + trig_value * 5.0f;
 
@@ -979,12 +979,12 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     packed_vertices[1] = 0xFFFFF000000000ULL;
     packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
-    LO4(packed_vertices[0], truncate_float_to_s32(f29));
+    NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
+    LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
     NEG20(packed_vertices[1], truncate_float_to_s32(f24));
     LO4(packed_vertices[1], truncate_float_to_s32(f25));
-    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
-    LO4(packed_vertices[2], truncate_float_to_s32(f31));
+    NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
+    LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
     NEG20(packed_vertices[3], truncate_float_to_s32(f27));
     LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
