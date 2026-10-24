@@ -792,10 +792,10 @@ extern s32 D_L06_00161FE4 __attribute__((sda));
 extern s32 D_L06_00161FE8 __attribute__((sda));
 extern s32 D_L06_00161FEC __attribute__((sda));
 extern s32 beam_effect_texture_index __asm__("D_L06_00161FF0") __attribute__((sda));
-extern s32 D_L06_00161FF4 __attribute__((sda));
-extern s32 D_L06_00161FF8 __attribute__((sda));
-extern s32 D_L06_00161FFC __attribute__((sda));
-extern s32 D_L06_00162000 __attribute__((sda));
+extern s32 beam_outer_corner_color_at_zero_weight __asm__("D_L06_00161FF4") __attribute__((sda));
+extern s32 beam_outer_corner_color_at_unit_weight __asm__("D_L06_00161FF8") __attribute__((sda));
+extern s32 beam_inset_corner_color_at_zero_weight __asm__("D_L06_00161FFC") __attribute__((sda));
+extern s32 beam_inset_corner_color_at_unit_weight __asm__("D_L06_00162000") __attribute__((sda));
 /* Scrolling texture coordinates of the four corners. */
 extern f32 D_L06_001F2E90[4][2];
 
@@ -853,11 +853,11 @@ void draw_blarg_space_commando_beam(char *moby) {
                 normalize_vector_xyz(corner_inset_vector, corner_inset_vector, 0.5f);
                 subtract_vector_xyz(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), D_L06_00161FFC,
-                                                D_L06_00162000);
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_inset_corner_color_at_zero_weight,
+                                                beam_inset_corner_color_at_unit_weight);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), D_L06_00161FF4,
-                                                D_L06_00161FF8);
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_outer_corner_color_at_zero_weight,
+                                                beam_outer_corner_color_at_unit_weight);
             }
             pk[0].uv[j][0] = D_L06_001F2E90[j][0];
             pk[0].uv[j][1] = D_L06_001F2E90[j][1];
