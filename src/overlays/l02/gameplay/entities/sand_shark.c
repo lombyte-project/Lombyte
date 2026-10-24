@@ -3138,7 +3138,7 @@ typedef struct {
 } TurretVoiceSlot;
 
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern f32 D_L02_00161C6C __attribute__((sda));
+extern f32 rocket_launcher_projectile_speed __asm__("D_L02_00161C6C") __attribute__((sda));
 extern f32 D_L02_00161C70 __attribute__((sda));
 extern f32 D_L02_00161C74 __attribute__((sda));
 s32 D_L02_00161C78 = 0x800000ff;
@@ -3211,7 +3211,7 @@ void rocket_launcher_update(struct Moby *moby) {
             turret_joint_pos(moby, 1, &muzzle);
             turret_joint_pos(moby, 0, &projectile_velocity);
             turret_vec_sub(&projectile_velocity, &muzzle, &projectile_velocity);
-            turret_vec_set_len(&projectile_velocity, &projectile_velocity, D_L02_00161C6C * D_0015ED6C);
+            turret_vec_set_len(&projectile_velocity, &projectile_velocity, rocket_launcher_projectile_speed * D_0015ED6C);
             turret_spawn_debris(moby, &projectile_velocity, &muzzle, 0.0f, 0.0f, 0, 6, 0x20, 7.0f, 4.0f, 1.0f, 3.0f, -1, 30.0f,
                                 0, 1, -1, 0);
             spawn_projectile_moby((char *)moby, &muzzle, (float *)&projectile_velocity);
