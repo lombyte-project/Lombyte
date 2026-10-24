@@ -618,7 +618,7 @@ int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void update_moby_glow_and_queue_draw(char *m) __asm__("FUN_L05_002d7020");
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
-void FUN_L05_002d7920(char *moby);
+void draw_group_scenery_ship_trails(char *moby) __asm__("FUN_L05_002d7920");
 extern char *func_L00_0025B478_2D8388(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float func_00214158_2D8388(void) __asm__("FUN_00213308");
 extern float func_L00_001FF860_2D8388(float, float) __asm__("FUN_001f9e90");
@@ -825,7 +825,7 @@ extern void draw_geometry_quad_7920(void *, int, int) __asm__("FUN_001f7d30");
 extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
 
 /* Builds 16 fading glow quads, then draws three ribbons of quads for each linked moby of class 0x4F in view. */
-void FUN_L05_002d7920(char *moby) {
+void draw_group_scenery_ship_trails(char *moby) {
     L05GlowPacket packet[16];
     float matrix[8];
     float center[4];
