@@ -822,7 +822,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_L13_00161E70;
+extern int blarg_space_commando_face_target_wait_frames __asm__("D_L13_00161E70");
 extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
@@ -947,7 +947,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
-                vars->timer = scale_game_frames(D_L13_00161E70);
+                vars->timer = scale_game_frames(blarg_space_commando_face_target_wait_frames);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
