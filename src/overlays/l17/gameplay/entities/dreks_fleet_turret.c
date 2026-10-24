@@ -110,7 +110,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
         BEAM_UPDATE_STATIONARY = 1,
         BEAM_UPDATE_OSCILLATING = 2
     };
-    float c[4];
+    float beam_endpoint_and_offset_scratch[4];
     float beam_vector_scratch[4];
     float beam_geometry_scratch[4];
     float hero_offset[4];
@@ -154,11 +154,11 @@ void update_fleet_beam(struct Moby *beam_moby) {
         beam_vector_scratch[0] = 13.0f;
         transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
         add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
-        *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
-        if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
-            *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
+        *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
+        if (collision_line(&beam_moby->pos, beam_endpoint_and_offset_scratch, 2, 0, 0)) {
+            *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)D_L17_00174760;
         }
-        subtract_vector_xyz(beam_geometry_scratch, c, &beam_moby->pos);
+        subtract_vector_xyz(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
         *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         break;
     case BEAM_UPDATE_STATIONARY:
@@ -189,12 +189,12 @@ void update_fleet_beam(struct Moby *beam_moby) {
             beam_vector_scratch[0] = 13.0f;
             transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
             add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
-            *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
-            if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
-                *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
+            *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
+            if (collision_line(&beam_moby->pos, beam_endpoint_and_offset_scratch, 2, 0, 0)) {
+                *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)D_L17_00174760;
             }
             flag = 1;
-            subtract_vector_xyz(beam_geometry_scratch, c, &beam_moby->pos);
+            subtract_vector_xyz(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
             *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         }
         break;
@@ -203,17 +203,17 @@ void update_fleet_beam(struct Moby *beam_moby) {
     beam_vector_scratch[0] = 12.0f;
     transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
     add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vars + 0x30);
-    *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
+    *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
     if (*(int *)(beam_vars + 0x60) != 0) {
         normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&D_L17_00161498 - 0.2f));
         normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&D_L17_00161498);
-        add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, c);
+        add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
         e = *(char **)(beam_vars + 0x60);
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
-        add_vector_xyz(beam_geometry_scratch, e + 0x10, c);
+        add_vector_xyz(beam_geometry_scratch, e + 0x10, beam_endpoint_and_offset_scratch);
         *(OvlQuad *)(e + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
-        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)c;
+        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_endpoint_and_offset_scratch;
     }
     if (flag) {
         *(float *)(beam_vars + 0x4C) =
@@ -237,21 +237,21 @@ void update_fleet_beam(struct Moby *beam_moby) {
             signed_beam_length = vector_length_xyz(beam_vars + 0x30);
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
             for (i = 0; i < 7; i++) {
-                scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
-                FUN_L00_001ff290(hit_descriptor_and_vector_scratch, c, beam_endpoint_position_scratch);
+                scale_vector_xyz(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
+                FUN_L00_001ff290(hit_descriptor_and_vector_scratch, beam_endpoint_and_offset_scratch, beam_endpoint_position_scratch);
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
-                FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
+                FUN_L17_0026fb60(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             signed_beam_length = -signed_beam_length;
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x20);
             for (i = 0; i < 8; i++) {
-                scale_vector_xyz(c, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
-                subtract_vector_xyz(hit_descriptor_and_vector_scratch, beam_endpoint_position_scratch, c);
-                *(OvlQuad *)c = *(OvlQuad *)hit_descriptor_and_vector_scratch;
+                scale_vector_xyz(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
+                subtract_vector_xyz(hit_descriptor_and_vector_scratch, beam_endpoint_position_scratch, beam_endpoint_and_offset_scratch);
+                *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
-                FUN_L17_0026fb60(beam_moby, c, beam_vector_scratch);
+                FUN_L17_0026fb60(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
             beam_vector_scratch[0] += random_float_between(-0.01f, 0.01f);
