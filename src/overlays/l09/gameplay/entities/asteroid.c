@@ -193,9 +193,9 @@ extern char D_L09_00166EC0[];
 
 extern float D_L09_00166F40[];
 extern float D_L09_0016CBC0[];
-extern float D_L09_001612F8;
-extern float D_L09_001612FC;
-extern float D_L09_00161300;
+extern float saved_textured_grid_fog_near_distance __asm__("D_L09_001612F8");
+extern float saved_textured_grid_fog_far_distance __asm__("D_L09_001612FC");
+extern float saved_textured_grid_fog_near_intensity __asm__("D_L09_00161300");
 extern float D_L09_00161304 __attribute__((section(".sdata")));
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
@@ -222,9 +222,9 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     float saved1 = current[0x21c / 4];
     float saved2 = current[0x228 / 4];
     float saved3 = current[0x22c / 4];
-    D_L09_001612F8 = saved0;
-    D_L09_001612FC = saved1;
-    D_L09_00161300 = saved2;
+    saved_textured_grid_fog_near_distance = saved0;
+    saved_textured_grid_fog_far_distance = saved1;
+    saved_textured_grid_fog_near_intensity = saved2;
     D_L09_00161304 = saved3;
     if (textured_grid_view_settings_mode != 1) {
         current[0x218 / 4] = *(float *)(data + 0x20);
