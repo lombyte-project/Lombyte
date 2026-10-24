@@ -1176,7 +1176,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED60;
 extern float optional_glow_suppression_level __asm__("D_L13_0015F5D0");
-extern float D_L13_0015F5D4;
+extern float blarg_space_fighter_fire_suppression_level __asm__("D_L13_0015F5D4");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int update_blarg_space_fighter_path_following();
 extern s32 rand(void);
@@ -1356,8 +1356,8 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
                     fighter_data->fB8 = scale_game_frames_alt(0x78);
                     moby->bBC = 2;
                 }
-                if (tick_countdown_32_alt(&fighter_data->fA4) != 0 && optional_glow_suppression_level < 0.9f && D_L13_0015F5D4 < 0.9f) {
-                    fighter_data->fA4 = scale_game_frames_alt(6) + func_001FA898_s((optional_glow_suppression_level + D_L13_0015F5D4) * 1.3f);
+                if (tick_countdown_32_alt(&fighter_data->fA4) != 0 && optional_glow_suppression_level < 0.9f && blarg_space_fighter_fire_suppression_level < 0.9f) {
+                    fighter_data->fA4 = scale_game_frames_alt(6) + func_001FA898_s((optional_glow_suppression_level + blarg_space_fighter_fire_suppression_level) * 1.3f);
                     if (vehd != 0) {
                         Vec_2C56B0 up;
                         float lateral_aim_offset[4];
