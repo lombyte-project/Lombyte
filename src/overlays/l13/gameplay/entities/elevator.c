@@ -2472,13 +2472,13 @@ void draw_fighter_jet_hud(char *moby) {
     int aim_reticle_texture;
     int i;
     unsigned char ammo_icon_count;
-    unsigned char c;
+    unsigned char target_marker_alpha;
     int j;
     int x;
     int y;
     int ex;
     int ey;
-    int a;
+    int target_marker_green;
     int health_palette_fill_end;
     int lo;
     int hi;
@@ -2498,13 +2498,13 @@ void draw_fighter_jet_hud(char *moby) {
             marker_opacity_factor = 2.0f * (1.0f - marker_transition_fraction);
             k = marker_transition_fraction * 5.0f + 1.0f;
             if (marker_opacity_factor > 1.0f) marker_opacity_factor = 1.0f;
-            c = func_001FA898_r(marker_opacity_factor * 96.0f);
-            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
+            target_marker_alpha = func_001FA898_r(marker_opacity_factor * 96.0f);
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, target_marker_alpha);
             *(int *)(moby_vars + 0xEC) = 0;
         } else {
-            a = 0xFF;
-            if ((*(int *)(moby_vars + 0x8C) / scale_game_frames_alt(0x14)) & 1) a = 0;
-            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            target_marker_green = 0xFF;
+            if ((*(int *)(moby_vars + 0x8C) / scale_game_frames_alt(0x14)) & 1) target_marker_green = 0;
+            func_L13_002B9590_f(convert_integer_to_float(target_screen_x), convert_integer_to_float(target_screen_y), 1.0f, 0.0f, 0xFF, target_marker_green, 0, 0x60);
             *(int *)(moby_vars + 0xEC) = *(int *)(moby_vars + 0x88);
         }
     }
