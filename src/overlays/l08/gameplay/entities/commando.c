@@ -1186,7 +1186,7 @@ typedef struct {
 } WD8;
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
-extern int D_L08_001621D8 __attribute__((sda));
+extern int commando_height_probe_distance_limit __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -1215,9 +1215,9 @@ void commando_update(WM *moby) {
     int tracking;
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->opacity) {
-        if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
+        if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)commando_height_probe_distance_limit) {
             FUN_L00_0025a120(moby);
-            moby->b7F = (D_L08_001621D8 * 13) >> 4;
+            moby->b7F = (commando_height_probe_distance_limit * 13) >> 4;
         }
     }
     switch (moby->state) {
