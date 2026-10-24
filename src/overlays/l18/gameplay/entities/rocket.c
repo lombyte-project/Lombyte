@@ -2829,8 +2829,8 @@ extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char *spawn_glow_particle(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002ac910");
 extern int explosion_burst_spark_count_gp __asm__("D_L18_00161F6C") __attribute__((sda));
-extern int D_L18_00161F78 __attribute__((sda));
-extern int D_L18_00161F7C __attribute__((sda));
+extern int explosion_burst_spark_initial_color_gp __asm__("D_L18_00161F78") __attribute__((sda));
+extern int explosion_burst_spark_second_color_gp __asm__("D_L18_00161F7C") __attribute__((sda));
 extern int explosion_burst_spark_frame_count_gp __asm__("D_L18_00161F80") __attribute__((sda));
 extern int explosion_burst_spark_second_frame_count_gp __asm__("D_L18_00161F84") __attribute__((sda));
 extern int explosion_burst_spark_third_frame_count_gp __asm__("D_L18_00161F88") __attribute__((sda));
@@ -2894,7 +2894,7 @@ void spawn_explosion_burst(void *source_moby) {
             a = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_frame_count_gp) * scale);
             b = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_second_frame_count_gp) * scale);
             third_spark_frame_count = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_third_frame_count_gp) * scale);
-            spawn_spark(&moby->pos, velocity, offset, D_L18_00161F78, D_L18_00161F7C, a, b, third_spark_frame_count, *(int *)&D_L18_00161F68);
+            spawn_spark(&moby->pos, velocity, offset, explosion_burst_spark_initial_color_gp, explosion_burst_spark_second_color_gp, a, b, third_spark_frame_count, *(int *)&D_L18_00161F68);
         } while (i < explosion_burst_spark_count_gp);
     }
     j = 0;
