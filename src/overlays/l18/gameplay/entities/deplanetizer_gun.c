@@ -1215,12 +1215,12 @@ typedef struct {
     float spin;                /* 0x1F8 */
 } SentryVars_c100;
 
-extern int D_L18_00162604 __attribute__((sda));
-extern int D_L18_0016260C __attribute__((sda));
-extern int D_L18_00162610 __attribute__((sda));
+extern int gadgebot_joint_glows_last_queued_frame __asm__("D_L18_00162604") __attribute__((sda));
+extern int gadgebot_glow_tint_start __asm__("D_L18_0016260C") __attribute__((sda));
+extern int gadgebot_glow_tint_end __asm__("D_L18_00162610") __attribute__((sda));
 extern float D_L18_001625FC __attribute__((sda));
-extern float D_L18_00162614 __attribute__((sda));
-extern float D_L18_00162618 __attribute__((sda));
+extern float gadgebot_glow_default_phase_speed_degrees_per_second __asm__("D_L18_00162614") __attribute__((sda));
+extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second __asm__("D_L18_00162618") __attribute__((sda));
 extern float D_L18_0016261C __attribute__((sda));
 extern float D_L18_00162620 __attribute__((sda));
 extern float D_L18_00162624 __attribute__((sda));
@@ -1240,16 +1240,16 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     if (moby->state == 0 || moby->state == 8) {
         return;
     }
-    if (moby->state != 7 && game_frame != D_L18_00162604) {
-        D_L18_00162604 = game_frame;
+    if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame) {
+        gadgebot_joint_glows_last_queued_frame = game_frame;
         enqueue_callback_list_1(draw_group_class_0772_joint_glows, moby);
     }
-    speed = D_L18_00162614;
+    speed = gadgebot_glow_default_phase_speed_degrees_per_second;
     if (moby->state == 4 || moby->state == 5) {
-        speed = D_L18_00162618;
+        speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second;
     }
     sentry_vars->spin = fast_add_rotations_c100(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
-    moby->glow_color = tween_color_c100(D_L18_0016260C, D_L18_00162610,
+    moby->glow_color = tween_color_c100(gadgebot_glow_tint_start, gadgebot_glow_tint_end,
                                 fast_sin_c100(sentry_vars->spin) * 0.5f + 0.5f);
     if (moby->pos.z < 100.0f && moby->state != 7) {
         moby->state = 6;
