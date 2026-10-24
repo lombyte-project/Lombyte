@@ -7365,16 +7365,16 @@ extern int D_L06_00162160 __attribute__((sda));
 extern int D_L06_00162164 __attribute__((sda));
 extern int D_L06_00162168 __attribute__((sda));
 extern float shuttle_breakup_particle_timing_variation_fraction_gp __asm__("D_L06_0016216C") __attribute__((sda));
-extern float D_L06_00162170 __attribute__((sda));
-extern float D_L06_00162174 __attribute__((sda));
-extern float D_L06_00162178 __attribute__((sda));
-extern float D_L06_0016217C __attribute__((sda));
+extern float shuttle_breakup_particle_velocity_w_random_bound_a_gp __asm__("D_L06_00162170") __attribute__((sda));
+extern float shuttle_breakup_particle_velocity_w_random_bound_b_gp __asm__("D_L06_00162174") __attribute__((sda));
+extern float shuttle_breakup_particle_acceleration_w_random_bound_a_gp __asm__("D_L06_00162178") __attribute__((sda));
+extern float shuttle_breakup_particle_acceleration_w_random_bound_b_gp __asm__("D_L06_0016217C") __attribute__((sda));
 extern int shuttle_breakup_particle_first_color_blend_a_gp __asm__("D_L06_00162180") __attribute__((sda));
 extern int shuttle_breakup_particle_first_color_blend_b_gp __asm__("D_L06_00162184") __attribute__((sda));
 extern int shuttle_breakup_particle_second_color_blend_a_gp __asm__("D_L06_00162188") __attribute__((sda));
 extern int shuttle_breakup_particle_second_color_blend_b_gp __asm__("D_L06_0016218C") __attribute__((sda));
 extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
-extern int D_L06_00162194 __attribute__((sda));
+extern int shuttle_breakup_particle_table_index_and_flags_gp __asm__("D_L06_00162194") __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void clear_vector_03b68(void *) __asm__("FUN_001f99f8");
@@ -7445,8 +7445,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
             add_vector_03b68(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
             random_vector_03b68(particle_velocity, 0.0f, shuttle_breakup_particle_max_speed_gp * frame_time);
             clear_vector_03b68(particle_acceleration);
-            particle_velocity[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
-            particle_acceleration[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
+            particle_velocity[3] = random_float_between_03b68(shuttle_breakup_particle_velocity_w_random_bound_a_gp, shuttle_breakup_particle_velocity_w_random_bound_b_gp);
+            particle_acceleration[3] = random_float_between_03b68(shuttle_breakup_particle_acceleration_w_random_bound_a_gp, shuttle_breakup_particle_acceleration_w_random_bound_b_gp);
             particle = emit_particle_03b68(
                 pos, particle_velocity, particle_acceleration,
                 fast_tween_color_03b68(shuttle_breakup_particle_first_color_blend_a_gp, shuttle_breakup_particle_first_color_blend_b_gp, random_float_between_03b68(0.0f, 1.0f)),
@@ -7456,7 +7456,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
                     (float)D_L06_00162164 * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
                 float_to_int_03b68(scale_time_03b68(
                     (float)D_L06_00162168 * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
-                D_L06_00162194);
+                shuttle_breakup_particle_table_index_and_flags_gp);
             if (particle != 0) {
                 particle[9] = float_to_int_03b68(4.0f) - 0x20;
             }
