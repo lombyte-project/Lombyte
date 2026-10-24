@@ -752,7 +752,7 @@ typedef struct {
 } L03LevelState;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern s32 D_L03_00161B04 __attribute__((sda));
+extern s32 taxi_path_point_debug_draw_enabled __asm__("D_L03_00161B04") __attribute__((sda));
 extern f32 rail_flyer_max_speed __asm__("D_L03_00161B08") __attribute__((sda));
 extern f32 rail_flyer_pitch_acceleration_degrees __asm__("D_L03_00161B10") __attribute__((sda));
 extern f32 rail_flyer_roll_acceleration_degrees __asm__("D_L03_00161B18") __attribute__((sda));
@@ -799,7 +799,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
     s32 route_index;
 
     set_moby_dialogue_record_value(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
-    if (D_L03_00161B04 != 0) {
+    if (taxi_path_point_debug_draw_enabled != 0) {
         for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
             draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
         }
