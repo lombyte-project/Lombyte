@@ -1068,7 +1068,7 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *input_vector) {
     struct Hero *base = &hero;
-    float m[16] __attribute__((aligned(16)));
+    float moby_rotation_matrix[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
@@ -1077,8 +1077,8 @@ float gravity_length_xy(float *input_vector) {
         return vector_length_xy(input_vector);
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
-        transpose_rotation_matrix(inv, m);
+        euler_rotation_matrix(moby_rotation_matrix, ((char *)base->moby) + 0x40);
+        transpose_rotation_matrix(inv, moby_rotation_matrix);
         transform_vector(out, input_vector, inv);
         return vector_length_xy(out);
     }
