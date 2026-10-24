@@ -1163,7 +1163,9 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
+void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
+
+void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     char *data = *(char **)(moby + 0x78);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
