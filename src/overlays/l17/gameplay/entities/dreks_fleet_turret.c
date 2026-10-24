@@ -825,14 +825,14 @@ typedef struct {
 extern float D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
 extern RingUV D_L17_001D3F70[4];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L17_00161BBC __attribute__((sda));
+extern float fleet_radial_uv_scroll_rate __asm__("D_L17_00161BBC") __attribute__((sda));
 extern float FUN_L00_00200260(float, float);
 extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
 extern int D_L17_00161B98 __attribute__((sda));
 extern int D_L17_00161B9C __attribute__((sda));
 extern int D_L17_00161BA0 __attribute__((sda));
 extern int D_L17_00161BA4 __attribute__((sda));
-extern int D_L17_00161BB8 __attribute__((sda));
+extern int fleet_radial_quad_rgba __asm__("D_L17_00161BB8") __attribute__((sda));
 extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
@@ -849,7 +849,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     int j;
     int k;
 
-    scroll = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_00161BBC * frame_time);
+    scroll = convert_integer_to_float(D_L17_0015F5CC) * (fleet_radial_uv_scroll_rate * frame_time);
     scroll = FUN_L00_00200260(scroll, 1.0f);
     euler_rotation_matrix(moby_transform_matrix, &moby->rot.x);
     *(OvlQuad *)&moby_transform_matrix[12] = *(OvlQuad *)&moby->pos;
@@ -885,10 +885,10 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
                                                           spread[j]));
                 vj[3] = 1.0f;
             }
-            quad_primitive.rgba[3] = D_L17_00161BB8;
-            quad_primitive.rgba[2] = D_L17_00161BB8;
-            quad_primitive.rgba[1] = D_L17_00161BB8;
-            quad_primitive.rgba[0] = D_L17_00161BB8;
+            quad_primitive.rgba[3] = fleet_radial_quad_rgba;
+            quad_primitive.rgba[2] = fleet_radial_quad_rgba;
+            quad_primitive.rgba[1] = fleet_radial_quad_rgba;
+            quad_primitive.rgba[0] = fleet_radial_quad_rgba;
             draw_geometry_quad(&quad_primitive, moby_transform_matrix, 0);
         }
     }
