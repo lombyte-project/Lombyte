@@ -1147,12 +1147,12 @@ extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
 
-extern s32 D_L00_0015F834 __attribute__((sda));
-extern s32 D_L00_0015F838 __attribute__((sda));
+extern s32 bolt_count_text_x_offset __asm__("D_L00_0015F834") __attribute__((sda));
+extern s32 bolt_count_text_y_offset __asm__("D_L00_0015F838") __attribute__((sda));
 extern s32 D_L00_0015F83C __attribute__((sda));
 extern s32 D_L00_0015F840 __attribute__((sda));
-extern s32 D_L00_0015F844 __attribute__((sda));
-extern s32 D_L00_0015F848 __attribute__((sda));
+extern s32 bolt_dot_separator_x_offset __asm__("D_L00_0015F844") __attribute__((sda));
+extern s32 bolt_dot_separator_y_offset __asm__("D_L00_0015F848") __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
 int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
@@ -1210,15 +1210,15 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element)
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
     shadow = fast_tween_color(0, 0x80000000, text);
     sprintf_alt(bolt_display_text, bolt_count_format, current_bolt_count);
-    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, bolt_display_text, -1);
-    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, bolt_display_text, -1);
+    font_print_right(x + bolt_count_text_x_offset + 1, y + bolt_count_text_y_offset + 1, shadow, bolt_display_text, -1);
+    font_print_right(x + bolt_count_text_x_offset, y + bolt_count_text_y_offset, color, bolt_display_text, -1);
 
     /* thousands separators */
     if (game_language != 3)
         apostrophe = game_language != 5;
     sprintf_alt(bolt_display_text, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
-    dy = apostrophe ? D_L00_0015F840 : D_L00_0015F848;
-    dx = apostrophe ? D_L00_0015F83C : D_L00_0015F844;
+    dy = apostrophe ? D_L00_0015F840 : bolt_dot_separator_y_offset;
+    dx = apostrophe ? D_L00_0015F83C : bolt_dot_separator_x_offset;
     for (i = 3; i < digits; i += 3) {
         sx = x + dx;
         sy = y + dy;
