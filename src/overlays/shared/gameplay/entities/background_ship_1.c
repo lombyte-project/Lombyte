@@ -97,16 +97,16 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_L02_00161F7C __attribute__((sda));
 extern float D_L02_00161F80 __attribute__((sda));
-extern int D_0015EDF4;
-extern int D_0015EDFC;
+extern int level_2_ship_removal_count __asm__("D_0015EDF4");
+extern int level_9_ship_removal_count __asm__("D_0015EDFC");
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
-extern float D_L02_00161F64 __attribute__((sda));
-extern float D_L02_00161F70 __attribute__((sda));
+extern float background_ship_1_path_travel_speed __asm__("D_L02_00161F64") __attribute__((sda));
+extern float background_ship_1_color_phase_rate_degrees __asm__("D_L02_00161F70") __attribute__((sda));
 extern short D_L02_00161F74 __attribute__((sda));
 extern short D_L02_00161F78 __attribute__((sda));
 extern unsigned char D_0013D408[];
@@ -176,7 +176,7 @@ void background_ship_1_update(char *moby) {
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        path_travel_distance = *(float *)&D_L02_00161F64 * frame_time;
+        path_travel_distance = *(float *)&background_ship_1_path_travel_speed * frame_time;
         *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) + path_travel_distance / *(float *)(moby_data + 0x70);
         if ((float)*(int *)path < *(float *)(moby_data + 0x64)) {
             *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) - (float)*(int *)path;
@@ -205,8 +205,8 @@ void background_ship_1_update(char *moby) {
         break;
     case BACKGROUND_SHIP_1_REMOVE:
         if (current_level_index == 2) {
-            D_0015EDF4 = D_0015EDF4 + 1;
-            if (D_0015EDF4 >= 3) {
+            level_2_ship_removal_count = level_2_ship_removal_count + 1;
+            if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = D_0013D408;
                 if (p[2] == 0) {
                     p[2] = 1;
@@ -217,8 +217,8 @@ void background_ship_1_update(char *moby) {
         }
         if (current_level_index == 9) {
             if (*(int *)(D_001413D4) == 0x32) {
-                D_0015EDFC = D_0015EDFC + 1;
-                if (D_0015EDFC >= 5) {
+                level_9_ship_removal_count = level_9_ship_removal_count + 1;
+                if (level_9_ship_removal_count >= 5) {
                     unsigned char *p = D_0013D408;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
@@ -253,7 +253,7 @@ void background_ship_1_update(char *moby) {
             int tweened_color;
             float k;
             tweened_color = fast_tween_color(*(int *)&D_L02_00161F74, *(int *)&D_L02_00161F78, x);
-            k = *(float *)&D_L02_00161F70 * 0.017453292f * frame_time;
+            k = *(float *)&background_ship_1_color_phase_rate_degrees * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
@@ -476,8 +476,8 @@ void background_ship_2_update(char *moby) {
         break;
     case BACKGROUND_SHIP_2_REMOVE:
         if (current_level_index == 2) {
-            D_0015EDF4 = D_0015EDF4 + 1;
-            if (D_0015EDF4 >= 3) {
+            level_2_ship_removal_count = level_2_ship_removal_count + 1;
+            if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = D_0013D408;
                 if (p[2] == 0) {
                     p[2] = 1;
@@ -488,8 +488,8 @@ void background_ship_2_update(char *moby) {
         }
         if (current_level_index == 9) {
             if (*(int *)D_001413D4 == 0x32) {
-                D_0015EDFC = D_0015EDFC + 1;
-                if (D_0015EDFC >= 5) {
+                level_9_ship_removal_count = level_9_ship_removal_count + 1;
+                if (level_9_ship_removal_count >= 5) {
                     unsigned char *p = D_0013D408;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
