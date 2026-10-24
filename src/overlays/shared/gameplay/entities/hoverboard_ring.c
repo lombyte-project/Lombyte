@@ -609,7 +609,9 @@ extern float rope_spring_turn(void *, float, float, float, float, float) __asm__
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
 /* Camera that orbits the hero while hero.unk88E is set, easing yaw, pitch and distance toward their goals. */
-void FUN_L05_003298d8(Camera *cam) {
+void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
+
+void update_hero_follow_camera_orbit(Camera *cam) {
     Vec4 up;
     Vec4 side;
     Vec4 fwd;
