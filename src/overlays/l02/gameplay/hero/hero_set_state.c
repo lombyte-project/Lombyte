@@ -1889,7 +1889,7 @@ void update_hero_state_transitions(void) {
     float positive_lateral_probe_yaw;
     float negative_lateral_probe_yaw;
     float lateral_step_probe_yaw;
-    int sp38;
+    int predicted_trajectory_steps;
     int jump_press_age_frames;
 
     moby = ((unsigned char *)hero.moby);
@@ -3211,9 +3211,9 @@ void update_hero_state_transitions(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp38,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_trajectory_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp38, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_trajectory_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
