@@ -5,7 +5,7 @@
 #include "asm.h"
 
 extern u8 D_L02_001CB9C0[];
-extern s32 D_L02_001612A0 __attribute__((sda));
+extern s32 scaled_table_header_leading_word __asm__("D_L02_001612A0") __attribute__((sda));
 extern s32 D_L02_001612A4;
 extern s32 D_L02_001612A8;
 extern s32 D_L02_001612AC;
@@ -19,7 +19,7 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     float *source;
     float *base;
     value_target[0x3F] = val;
-    *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
+    *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word;
     *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
     *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
     *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
