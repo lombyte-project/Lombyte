@@ -1648,7 +1648,9 @@ extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0930");
 extern char D_0013F420[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 
-void FUN_L05_00303390(Moby *moby) {
+void handle_extermibot_hits_and_update_targeting(Moby *moby) __asm__("FUN_L05_00303390");
+
+void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     enum {
         EXTERMIBOT_HIT_NO_RESPONSE = 0,
         EXTERMIBOT_HIT_LETHAL = 1,
