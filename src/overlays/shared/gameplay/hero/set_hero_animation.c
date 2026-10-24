@@ -404,7 +404,7 @@ extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F6E0 __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
-extern void FUN_L00_002321a8(void);
+extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
@@ -472,7 +472,7 @@ void set_hero_animation(int a0, int a1, float t) {
     if (g3->vehicle_mode == 0) {
         blend_hero_slot3_mapped_animation_pair(a0, a1, t);
     }
-    FUN_L00_002321a8();
+    clear_hero_mapped_moby_animation_state();
     if (((int)g3->unk2278) != 0) {
         blend_hero_mapped_moby_animation(a0, a1, t);
     }

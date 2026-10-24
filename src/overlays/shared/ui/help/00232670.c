@@ -28,7 +28,7 @@ struct AnimClass670 {
 
 extern s32 D_L00_0015F5C4 __attribute__((sda));
 extern u8 D_0013E550[];
-extern void FUN_L00_002321a8(void);
+extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
 extern void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
@@ -52,7 +52,7 @@ void FUN_L00_00232670(void) {
     f32 dt;
     f32 prev;
 
-    FUN_L00_002321a8();
+    clear_hero_mapped_moby_animation_state();
     hero.unkA98 &= ~3;
     same = m->seq == m->prev_seq;
     frame0 = m->frame;
