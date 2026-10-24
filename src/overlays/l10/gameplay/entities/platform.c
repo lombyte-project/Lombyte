@@ -684,7 +684,7 @@ extern char D_0013E550[];
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
-extern void *FUN_L00_0026fd28(char *a, char *b, unsigned char c, int d);
+extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -720,11 +720,11 @@ void update_timed_effect_emitter(struct Moby *moby) {
         rotated_vector[2] = *(float *)data * 3.0f * D_0015ED6C_c;
         transform_vector(rotated_vector, rotated_vector, rotation_matrix);
         scale_vector_xyz(position_step, rotated_vector, 0.33f);
-        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
+        spawn_splitting_effect_particle_with_collision_response_and_fade((char *)position, (char *)rotated_vector, 0x40, (int)moby);
         add_vector_xyz(position, position, position_step);
-        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
+        spawn_splitting_effect_particle_with_collision_response_and_fade((char *)position, (char *)rotated_vector, 0x40, (int)moby);
         add_vector_xyz(position, position, position_step);
-        FUN_L00_0026fd28((char *)position, (char *)rotated_vector, 0x40, (int)moby);
+        spawn_splitting_effect_particle_with_collision_response_and_fade((char *)position, (char *)rotated_vector, 0x40, (int)moby);
         if (voice_is_playing(moby, *(int *)(data + 0x10)) == 0) {
             *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
         }
