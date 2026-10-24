@@ -64,7 +64,7 @@ void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_hei
 void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
-    int *g;
+    int *vertex_depth_source;
     *(int *)(D_L00_001611C0_23b6c0 + 0) = 0x10000005;
     *(int *)(D_L00_001611C0_23b6c0 + 4) = 0;
     *(int *)(D_L00_001611C0_23b6c0 + 8) = 0;
@@ -78,12 +78,12 @@ void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_hei
     packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = 0;
     coordinate_offsets = D_0013E500_23b6c0;
-    g = D_L00_0017E4D8_23b6c0;
-    packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
+    vertex_depth_source = D_L00_0017E4D8_23b6c0;
+    packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)vertex_depth_source[3] << 32);
     packet_words[7] = (draw_height << 20) + (draw_width << 4);
     x += draw_width;
     y += draw_height;
-    packet_words[8] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)g[3] << 32);
+    packet_words[8] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)vertex_depth_source[3] << 32);
     packet_words[9] = 0;
     *(char *volatile *)&D_L00_001611C0_23b6c0 += 0x50;
 }
