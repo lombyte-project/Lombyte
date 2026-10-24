@@ -536,9 +536,9 @@ extern int D_L05_00161CF4 __attribute__((sda));
 extern int D_L05_00161CF8 __attribute__((sda));
 extern int D_L05_00161CFC __attribute__((sda));
 extern int D_L05_00161D00 __attribute__((sda));
-extern int D_L05_00161D04 __attribute__((sda));
-extern int D_L05_00161D08 __attribute__((sda));
-extern int D_L05_00161D0C __attribute__((sda));
+extern int wobble_quad_start_color __asm__("D_L05_00161D04") __attribute__((sda));
+extern int wobble_quad_end_color __asm__("D_L05_00161D08") __attribute__((sda));
+extern int wobble_quad_texture_index __asm__("D_L05_00161D0C") __attribute__((sda));
 
 typedef struct {
     float vertex[4][4];
@@ -580,7 +580,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     cross_vector_xyz_30c220(direction, up, side);
     qcopy(matrix + 12, position);
 
-    texture = get_effect_texture_30c220(D_L05_00161D0C);
+    texture = get_effect_texture_30c220(wobble_quad_texture_index);
     flags = (u64)(s64)D_L05_00161CF4 |
             ((u64)(s64)D_L05_00161CF8 << 2) |
             ((u64)(s64)D_L05_00161CFC << 4) |
@@ -612,7 +612,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            quad_a.color[j] = quad_b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
+            quad_a.color[j] = quad_b.color[j] = fast_tween_color(wobble_quad_start_color, wobble_quad_end_color, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
