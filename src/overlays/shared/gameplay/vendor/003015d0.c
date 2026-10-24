@@ -357,10 +357,10 @@ extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
-extern int D_L14_001620E0 __attribute__((sda));
-extern int D_L14_001620E4 __attribute__((sda));
-extern int D_L14_001620E8 __attribute__((sda));
-extern int D_L14_001620EC __attribute__((sda));
+extern int vendor_beam_blend_minuend_selector_gp __asm__("D_L14_001620E0") __attribute__((sda));
+extern int vendor_beam_blend_subtrahend_selector_gp __asm__("D_L14_001620E4") __attribute__((sda));
+extern int vendor_beam_blend_alpha_factor_selector_gp __asm__("D_L14_001620E8") __attribute__((sda));
+extern int vendor_beam_blend_addend_selector_gp __asm__("D_L14_001620EC") __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
@@ -392,8 +392,8 @@ void draw_vendor_beam(char *moby) {
     subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
     transform_vector_xyz(camera, camera, inverse);
     texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
-    gs_state = (u64)D_L14_001620E0 | ((u64)D_L14_001620E4 << 2) | ((u64)D_L14_001620E8 << 4)
-               | ((u64)D_L14_001620EC << 6) | (0x8000ULL << 24);
+    gs_state = (u64)vendor_beam_blend_minuend_selector_gp | ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) | ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4)
+               | ((u64)vendor_beam_blend_addend_selector_gp << 6) | (0x8000ULL << 24);
     packet[2].texture_state = 0xFF9000000260ULL;
     packet[1].texture_state = 0xFF9000000260ULL;
     packet[0].texture_state = 0xFF9000000260ULL;
