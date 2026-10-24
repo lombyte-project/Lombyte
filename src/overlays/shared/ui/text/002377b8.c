@@ -699,9 +699,9 @@ extern float D_L00_0015F78C __attribute__((sda));
 extern int D_L00_0015F7B0 __attribute__((sda)); /* no foreign declaration */
 extern float D_L00_0015F7C0 __attribute__((sda));
 extern float D_L00_0015F7C4 __attribute__((sda));
-extern int D_L00_0015F7D4 __attribute__((sda)); /* no foreign declaration */
-extern int D_L00_0015F7D8 __attribute__((sda)); /* no foreign declaration */
-extern int D_L00_0015F7DC __attribute__((sda)); /* no foreign declaration */
+extern int radial_selector_label_color_from __asm__("D_L00_0015F7D4") __attribute__((sda)); /* no foreign declaration */
+extern int radial_selector_label_color_to __asm__("D_L00_0015F7D8") __attribute__((sda)); /* no foreign declaration */
+extern int radial_selector_label_y_offset __asm__("D_L00_0015F7DC") __attribute__((sda)); /* no foreign declaration */
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");
@@ -805,9 +805,9 @@ int draw_hud_radial_selector_panel(Elem_239918 *element) {
             text = get_text(text_ids.v[selected]);
             if (text != 0 && func_00116810_239918(text) != 0) {
                 float fade = text_fade * open_fade;
-                color = func_001FA8A8_239918(D_L00_0015F7D4, D_L00_0015F7D8, fade);
+                color = func_001FA8A8_239918(radial_selector_label_color_from, radial_selector_label_color_to, fade);
                 shadow = func_001FA8A8_239918(0, 0x80000000, fade);
-                text_y = y + D_L00_0015F7DC + D_L00_0015F724;
+                text_y = y + radial_selector_label_y_offset + D_L00_0015F724;
                 func_001F6EA8_239918(x + D_L00_0015F720 - 1, text_y - 1, shadow, text, -1);
                 func_001F6EA8_239918(x + D_L00_0015F720, text_y, color, text, -1);
             }
