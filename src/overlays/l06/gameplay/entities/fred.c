@@ -7729,14 +7729,14 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
-extern int D_L06_001621B8 __attribute__((sda));
+extern int red_button_particle_emission_count __asm__("D_L06_001621B8") __attribute__((sda));
 void emit_red_button_particle_burst(int unused, void *effect_position) {
     float zero_effect_vector[4];
     V6 first_color_palette;
     V6 second_color_palette;
     int i = 0;
     clear_u64_value(zero_effect_vector);
-    if (D_L06_001621B8 > 0) {
+    if (red_button_particle_emission_count > 0) {
         do {
             float frame_scaled_random_factor;
             float f;
@@ -7754,7 +7754,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             f = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
             FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
-        } while (i < D_L06_001621B8);
+        } while (i < red_button_particle_emission_count);
     }
 }
 /* Level 06 update for moby class 1123: waits for its partner, animates four ribbons, then bursts into particles. */
