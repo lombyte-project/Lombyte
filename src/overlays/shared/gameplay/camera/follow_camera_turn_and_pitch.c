@@ -183,7 +183,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
 void follow_camera_auto_turn(int camera_object) {
     char *camera_data = *(char **)(camera_object + 0x70);
-    char *r = camera_data + 0x1D0;
+    char *auto_turn_length_state = camera_data + 0x1D0;
     char *auto_turn_vector = camera_data + 0x130;
     if (*(short *)(camera_data + 0x10) > 0) {
         float position_difference[4];
@@ -196,14 +196,14 @@ void follow_camera_auto_turn(int camera_object) {
         if (maximum_length < vector_length) {
             vector_length = maximum_length;
             fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
-            *(float *)(r + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
+            *(float *)(auto_turn_length_state + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
         } else {
-            float minimum_length = maximum_length - *(float *)(r + 0x30);
+            float minimum_length = maximum_length - *(float *)(auto_turn_length_state + 0x30);
             if (vector_length < minimum_length) {
                 vector_length = minimum_length;
                 fast_vec_normalize(auto_turn_vector, auto_turn_vector, vector_length);
             }
-            *(float *)(r + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
+            *(float *)(auto_turn_length_state + 0x30) = *(float *)(auto_turn_vector + 0x2C) - vector_length;
         }
     }
 }
