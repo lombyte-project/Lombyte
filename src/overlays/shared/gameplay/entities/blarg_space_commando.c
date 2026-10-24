@@ -463,7 +463,9 @@ void update_blarg_space_commando_beam(void *arg) __asm__("FUN_L06_002ff2c8");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L06_002feb40(char *moby) {
+void process_blarg_space_commando_hits(char *moby) __asm__("FUN_L06_002feb40");
+
+void process_blarg_space_commando_hits(char *moby) {
     enum {
         HIT_RESPONSE_WITHOUT_KNOCKBACK = 0,
         FATAL_HIT_RESPONSE = 1,
