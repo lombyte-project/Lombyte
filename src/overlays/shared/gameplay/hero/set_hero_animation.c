@@ -414,15 +414,15 @@ void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void set_hero_animation(int a0, int a1, float t) __asm__("FUN_L00_002323b8");
 void set_hero_animation(int requested_animation_id, int starting_frame_index, float t) {
-    struct Hero *g2;
+    struct Hero *hero_blend_state;
     struct Hero *g3;
-    struct Hero *g1 = &hero;
-    char *hero_animation_moby = ((char *)g1->moby);
+    struct Hero *hero_base = &hero;
+    char *hero_animation_moby = ((char *)hero_base->moby);
     int slot;
     int sequence_pointer_byte_offset;
     char *animation_slot_copy_destination;
 
-    if (g1->anim_flags & 2) {
+    if (hero_base->anim_flags & 2) {
         *(int *)(hero_animation_moby + 0x54) = 0;
     }
     if (D_0015EDB4_m[1] != 0) {
@@ -448,16 +448,16 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     *(unsigned char *)(hero_animation_moby + 0x51) = starting_frame_index;
     *(unsigned char *)(hero_animation_moby + 0x53) = requested_animation_id;
     update_moby_animation_state(hero_animation_moby);
-    g2 = &hero;
-    g2->anim_speed = 1.0f;
+    hero_blend_state = &hero;
+    hero_blend_state->anim_speed = 1.0f;
     if (t > 0.0f) {
-        g2->anim_frame_rate = 1.0f / t;
+        hero_blend_state->anim_frame_rate = 1.0f / t;
         *(float *)(hero_animation_moby + 0x54) = 0.0f;
-        g2->anim_blend_curve = -1;
+        hero_blend_state->anim_blend_curve = -1;
     } else {
-        g2->anim_frame_rate = 1.0f;
-        g2->anim_blend_curve = truncate_float_to_s32(-t) - 1;
-        g2->anim_blend_step = 0;
+        hero_blend_state->anim_frame_rate = 1.0f;
+        hero_blend_state->anim_blend_curve = truncate_float_to_s32(-t) - 1;
+        hero_blend_state->anim_blend_step = 0;
         *(float *)(hero_animation_moby + 0x54) = 0.0f;
     }
     clear_hero_queued_animation();
