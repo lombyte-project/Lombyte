@@ -1970,8 +1970,8 @@ extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
 
 int D_L16_00161E98 = 0x60d0d080;
 int D_L16_00161E9C = 0x801000;
-extern float D_L16_00161EA0 __attribute__((sda));
-extern float D_L16_00161EA4 __attribute__((sda));
+extern float path_walker_particle_movement_velocity_scale __asm__("D_L16_00161EA0") __attribute__((sda));
+extern float path_walker_particle_random_velocity_scale __asm__("D_L16_00161EA4") __attribute__((sda));
 extern float D_L16_00161EA8 __attribute__((sda));
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
@@ -1987,8 +1987,8 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     if (!(FUN_001f9b48(source_moby + 0x10, D_L16_001671C0) < 75.0f))
         return;
     movement_distance = FUN_001f9b48(source_moby + 0x10, input);
-    scale_vector_xyz(out, source_moby + 0xC0, D_L16_00161EA0 * movement_distance);
-    size = D_L16_00161EA4;
+    scale_vector_xyz(out, source_moby + 0xC0, path_walker_particle_movement_velocity_scale * movement_distance);
+    size = path_walker_particle_random_velocity_scale;
     size *= frame_time;
     normalize_vector_xyz(offset, source_moby + 0xC0, -0.5f);
     add_vector_xyz(offset, offset, source_moby + 0x10);
