@@ -1771,8 +1771,8 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_p() __asm__("FUN_001fa6d0");
 extern short D_L18_00161BFC __attribute__((sda));
 extern int ballistic_ring_glow_color_end __asm__("D_L18_00161C00") __attribute__((sda));
-extern float D_L18_00161C04 __attribute__((sda));
-extern float D_L18_00161C08 __attribute__((sda));
+extern float ballistic_ring_trail_spark_gravity __asm__("D_L18_00161C04") __attribute__((sda));
+extern float ballistic_ring_trail_movement_step_scale __asm__("D_L18_00161C08") __attribute__((sda));
 extern float D_L18_00161C0C __attribute__((sda));
 extern int D_L18_00161C10 __attribute__((sda));
 extern int D_L18_00161C14 __attribute__((sda));
@@ -1825,7 +1825,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
         i = 0;
         for (; i < ballistic_ring_trail_sparks_per_update; i++) {
             cc = spark_vector_offset;
-            scale_vector_xyz(first_spark_vector, moby_vars, D_L18_00161C08);
+            scale_vector_xyz(first_spark_vector, moby_vars, ballistic_ring_trail_movement_step_scale);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
             add_vector_xyz(first_spark_vector, cc, first_spark_vector);
             FUN_L00_00257d78(spark_spawn_position, 0.0f, 0.5f);
@@ -1847,7 +1847,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
                 (float)D_L18_00161C18 *
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
-            second_spark_vector[2] = second_spark_vector[2] - D_L18_00161C04 * frame_time_sq * (float)i3;
+            second_spark_vector[2] = second_spark_vector[2] - ballistic_ring_trail_spark_gravity * frame_time_sq * (float)i3;
             spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
