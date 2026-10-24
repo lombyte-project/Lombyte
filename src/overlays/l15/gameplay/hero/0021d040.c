@@ -148,13 +148,13 @@ void update_hero_state_machine(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
-    int sp24;
+    int respawn_wait_jump_press_age_frames;
     float probe_heading_0;
     float probe_heading_1;
     float probe_heading_2;
     float probe_heading_3;
-    int sp38;
-    int sp3C;
+    int predicted_jump_trajectory_steps;
+    int airborne_jump_press_age_frames;
     int sp40;
 
     moby = ((unsigned char *)hero.moby);
@@ -902,7 +902,7 @@ void update_hero_state_machine(void) {
                     if (hero.unk1660 < 2) {
                         if (scale_game_frames(0xF) + hero.unk1660 * scale_game_frames(0x19) <
                             hero.state_timer) {
-                            if (pad_pressed_within(0x40, scale_game_frames(7), &sp24)) {
+                            if (pad_pressed_within(0x40, scale_game_frames(7), &respawn_wait_jump_press_age_frames)) {
                                 hero_set_state(0x69, 1);
                             }
                         }
@@ -1594,9 +1594,9 @@ void update_hero_state_machine(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp38,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_jump_trajectory_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp38, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_jump_trajectory_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
@@ -1723,8 +1723,8 @@ void update_hero_state_machine(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp3C)) {
-                                    if (sp3C < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &airborne_jump_press_age_frames)) {
+                                    if (airborne_jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
