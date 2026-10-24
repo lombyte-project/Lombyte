@@ -1606,8 +1606,8 @@ extern float extermibot_nonlethal_knockback_z_scale_gp __asm__("D_L05_00161A8C")
 extern float extermibot_death_knockback_xy_scale_gp __asm__("D_L05_00161A90") __attribute__((sda));
 extern float extermibot_death_knockback_z_scale_gp __asm__("D_L05_00161A94") __attribute__((sda));
 extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
-extern float D_L05_00161AD0 __attribute__((sda));
-extern float D_L05_00161AD4 __attribute__((sda));
+extern float extermibot_knockback_gravity_gp __asm__("D_L05_00161AD0") __attribute__((sda));
+extern float extermibot_death_knockback_gravity_gp __asm__("D_L05_00161AD4") __attribute__((sda));
 extern int coll_line_fix() __asm__("FUN_001efa68");
 extern int fun_00213928() __asm__("FUN_00213928");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
@@ -1707,7 +1707,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         }
         k = func_001FA898_3047E8(D_L05_00161A98_gp * 409.6f);
         moby_data->f98 = D_L05_00161A98_gp * 0.4f;
-        moby_data->f80 = D_L05_00161AD0 * D_0015ED70;
+        moby_data->f80 = extermibot_knockback_gravity_gp * D_0015ED70;
         moby_data->f90 = k;
         moby_data->f94 = 9;
         moby_data->bAD = 0;
@@ -1739,7 +1739,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
         case EXTERMIBOT_HIT_LETHAL:
         case EXTERMIBOT_HIT_DEATH_KNOCKBACK:
             moby->flags &= 0xEFFF;
-            moby_data->f80 = D_L05_00161AD4 * D_0015ED70;
+            moby_data->f80 = extermibot_death_knockback_gravity_gp * D_0015ED70;
             moby_data->f88 = extermibot_death_knockback_xy_scale_gp * D_0015ED6C;
             moby_data->f8C = extermibot_death_knockback_z_scale_gp * D_0015ED6C;
             moby_data->fC0 = 5.5f;
