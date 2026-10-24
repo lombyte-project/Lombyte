@@ -224,7 +224,7 @@ typedef struct Tb_2E9358 {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_0015ED6C;
-extern float D_L15_00161FBC __attribute__((sda));
+extern float poison_vessel_gravity __asm__("D_L15_00161FBC") __attribute__((sda));
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();
@@ -286,7 +286,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     state = moby->state;
     switch (state) {
     case POISON_VESSEL_FREE_FLIGHT:
-        data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
+        data->f8 = data->f8 - poison_vessel_gravity * frame_time_sq;
         func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
