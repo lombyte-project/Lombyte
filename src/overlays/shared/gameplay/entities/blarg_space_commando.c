@@ -71,10 +71,10 @@ typedef struct {
 } Moby1068Vars;
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
-extern s32 D_L06_00161FC0 __attribute__((sda));
-extern f32 D_L06_00161FC4 __attribute__((sda));
+extern s32 ranged_attack_cooldown_frames __asm__("D_L06_00161FC0") __attribute__((sda));
+extern f32 melee_attack_distance_threshold __asm__("D_L06_00161FC4") __attribute__((sda));
 extern f32 D_L06_00161FC8 __attribute__((sda));
-extern f32 D_L06_00161FCC __attribute__((sda));
+extern f32 vehicle_melee_windup_animation_speed __asm__("D_L06_00161FCC") __attribute__((sda));
 extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
@@ -182,7 +182,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
-            if (D_L06_00161FC4 < vector_distance(&moby->pos, &target->pos)) {
+            if (melee_attack_distance_threshold < vector_distance(&moby->pos, &target->pos)) {
                 if (fast_difference_between_rotations(
                         moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y)) <
                     0.17453292f) {
@@ -253,7 +253,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
-                vars->timer = scale_game_frames(D_L06_00161FC0);
+                vars->timer = scale_game_frames(ranged_attack_cooldown_frames);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
@@ -272,7 +272,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
             }
-        } else if (vector_distance(&moby->pos, &target->pos) < D_L06_00161FC4) {
+        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -293,7 +293,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         movement_input_or_output_or_melee_origin.f[2] += 0.3f;
         cur_frame = compute_interpolated_record_value(moby);
         if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
-            moby->anim_speed = D_L06_00161FCC;
+            moby->anim_speed = vehicle_melee_windup_animation_speed;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
             movement_output_or_hit_vector_or_path_point.f[0] = fast_cos(moby->rot.z);
@@ -343,7 +343,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (vector_distance(&moby->pos, &target->pos) < D_L06_00161FC4) {
+        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold) {
             moby->state = 12;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
