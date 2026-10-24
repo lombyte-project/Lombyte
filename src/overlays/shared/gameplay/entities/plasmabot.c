@@ -1000,7 +1000,7 @@ extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) _
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern float D_L14_001614C8 __attribute__((sda));
+extern float plasmabot_stagger_motion_z_scale __asm__("D_L14_001614C8") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -1047,7 +1047,7 @@ void process_plasmabot_hit_reaction(char *moby) {
             moby[0x20] = 0xA;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;
-            stagger_motion_z = D_L14_001614C8 * frame_duration;
+            stagger_motion_z = plasmabot_stagger_motion_z_scale * frame_duration;
             k = frame_duration * 8.0f;
             *(short *)(state + 0x26) = stagger_duration_frames;
             *(float *)(state + 0x78) = k;
