@@ -679,8 +679,8 @@ void update_cutscene_playback(void) {
     s32 audio_chunk_frame_threshold;
     Vec4 *keys;
     f32 fade;
-    f32 a[4] __attribute__((aligned(16)));
-    f32 b[4] __attribute__((aligned(16)));
+    f32 weighted_current_key_position[4] __attribute__((aligned(16)));
+    f32 weighted_next_key_position[4] __attribute__((aligned(16)));
 
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
         FUN_L00_00297e30();
@@ -743,9 +743,9 @@ void update_cutscene_playback(void) {
                 cutscene_moby->blend = 1.0f;
             }
             keys = cutscene_moby->keys;
-            fast_vec_scale(a, &keys[cutscene_moby->frame], 1.0f - cutscene_moby->blend);
-            fast_vec_scale(b, &keys[cutscene_moby->next_frame], cutscene_moby->blend);
-            add_vector_xyz(&cutscene_moby->pos, a, b);
+            fast_vec_scale(weighted_current_key_position, &keys[cutscene_moby->frame], 1.0f - cutscene_moby->blend);
+            fast_vec_scale(weighted_next_key_position, &keys[cutscene_moby->next_frame], cutscene_moby->blend);
+            add_vector_xyz(&cutscene_moby->pos, weighted_current_key_position, weighted_next_key_position);
             cutscene_moby->b71 = 0xFF;
             FUN_L00_00250df8(cutscene_moby);
             if (cutscene_moby->b7F) {
