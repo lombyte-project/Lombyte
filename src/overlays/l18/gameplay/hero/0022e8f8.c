@@ -154,6 +154,11 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void process_hero_state_transitions(void) __asm__("FUN_L18_0022e8f8");
 
 void process_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_VEHICLE_MODE_2_RUN = 91,
+        HERO_STATE_VEHICLE_MODE_2_FALL = 92,
+        HERO_STATE_VEHICLE_MODE_2_JUMP = 94
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -2226,7 +2231,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 90:
+                case HERO_STATE_VEHICLE_MODE_2_IDLE:
                     if (hero.anim_flags & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -2268,7 +2273,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(0x5B, 1);
                     }
                     break;
-                case 94:
+                case HERO_STATE_VEHICLE_MODE_2_JUMP:
                     if (hero.past_jump_apex != 0) {
                         qcopy(temporary_position, hero.motion.pos.f);
                         temporary_position[2] -= 1.0f;
@@ -2352,7 +2357,7 @@ void process_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 92:
+                case HERO_STATE_VEHICLE_MODE_2_FALL:
                     if (hero.past_jump_apex != 0) {
                         qcopy(temporary_position, hero.motion.pos.f);
                         temporary_position[2] -= 1.0f;
@@ -2410,7 +2415,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(0x5A, 1);
                     }
                     break;
-                case 91:
+                case HERO_STATE_VEHICLE_MODE_2_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 8.0f;
                     if (hero.anim_speed < 0.75f) {
                         hero.anim_speed = 0.75f;
