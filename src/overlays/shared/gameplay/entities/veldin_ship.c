@@ -3277,7 +3277,9 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int f2i_2d6cd0(float) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00272f68(void *, int, int, int, int, int, int, float);
 
-void FUN_L00_002d6cd0(char *moby) {
+void update_infobot_particle_effect(char *moby) __asm__("FUN_L00_002d6cd0");
+
+void update_infobot_particle_effect(char *moby) {
     P_2d6cd0 *vars = *(P_2d6cd0 **)(moby + 0x78);
     union {
         OvlQuad q;
