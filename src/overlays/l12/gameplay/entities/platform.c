@@ -353,20 +353,20 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern float D_L12_00161888 __attribute__((sda));
-extern float D_L12_0016188C __attribute__((sda));
-extern float D_L12_00161890 __attribute__((sda));
-extern float D_L12_00161894 __attribute__((sda));
-extern float D_L12_00161898 __attribute__((sda));
-extern float D_L12_0016189C __attribute__((sda));
+extern float spark_scatter_vertical_z_range_start __asm__("D_L12_00161888") __attribute__((sda));
+extern float spark_scatter_vertical_z_range_end __asm__("D_L12_0016188C") __attribute__((sda));
+extern float spark_scatter_radial_z_range_start __asm__("D_L12_00161890") __attribute__((sda));
+extern float spark_scatter_radial_z_range_end __asm__("D_L12_00161894") __attribute__((sda));
+extern float spark_scatter_radial_xy_scale_range_start __asm__("D_L12_00161898") __attribute__((sda));
+extern float spark_scatter_radial_xy_scale_range_end __asm__("D_L12_0016189C") __attribute__((sda));
 extern float D_L12_001618A0 __attribute__((sda));
 extern float D_L12_001618A4 __attribute__((sda));
-extern int D_L12_001618AC __attribute__((sda));
-extern int D_L12_001618B0 __attribute__((sda));
-extern int D_L12_001618B4 __attribute__((sda));
-extern int D_L12_001618B8 __attribute__((sda));
-extern int D_L12_001618BC __attribute__((sda));
-extern int D_L12_001618C0 __attribute__((sda));
+extern int spark_scatter_frame_count_range_start __asm__("D_L12_001618AC") __attribute__((sda));
+extern int spark_scatter_frame_count_range_end __asm__("D_L12_001618B0") __attribute__((sda));
+extern int spark_scatter_second_frame_count_range_start __asm__("D_L12_001618B4") __attribute__((sda));
+extern int spark_scatter_second_frame_count_range_end __asm__("D_L12_001618B8") __attribute__((sda));
+extern int spark_scatter_third_frame_count_range_start __asm__("D_L12_001618BC") __attribute__((sda));
+extern int spark_scatter_third_frame_count_range_end __asm__("D_L12_001618C0") __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
@@ -389,25 +389,25 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
         spark_position[0] = spark_position[0] + random_float_between_alt(-0.25f, 0.25f);
         spark_position[1] = spark_position[1] + random_float_between_alt(-0.25f, 0.25f);
         clear_u64_value(vertical_spark_vector);
-        radial_spark_vector[0] = fast_cos(radial_angle_radians) * (random_float_between_alt(D_L12_00161898,
-                                                        D_L12_0016189C) *
+        radial_spark_vector[0] = fast_cos(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start,
+                                                        spark_scatter_radial_xy_scale_range_end) *
                                frame_time);
-        radial_spark_vector[1] = fast_sin(radial_angle_radians) * (random_float_between_alt(D_L12_00161898,
-                                                        D_L12_0016189C) *
+        radial_spark_vector[1] = fast_sin(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start,
+                                                        spark_scatter_radial_xy_scale_range_end) *
                                frame_time);
         *(int *)&radial_spark_vector[2] = 0;
-        vertical_spark_vector[2] = random_float_between_alt(D_L12_00161888, D_L12_0016188C) *
+        vertical_spark_vector[2] = random_float_between_alt(spark_scatter_vertical_z_range_start, spark_scatter_vertical_z_range_end) *
                 frame_time;
-        radial_spark_vector[2] = random_float_between_alt(D_L12_00161890, D_L12_00161894) *
+        radial_spark_vector[2] = random_float_between_alt(spark_scatter_radial_z_range_start, spark_scatter_radial_z_range_end) *
                 frame_time;
         vertical_spark_vector[3] = D_L12_001618A0;
         radial_spark_vector[3] = D_L12_001618A4;
-        frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
-                                                     (float)D_L12_001618B0));
-        second_frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
-                                                     (float)D_L12_001618B8));
-        third_frame_count = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
-                                                     (float)D_L12_001618C0));
+        frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_frame_count_range_start,
+                                                     (float)spark_scatter_frame_count_range_end));
+        second_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_second_frame_count_range_start,
+                                                     (float)spark_scatter_second_frame_count_range_end));
+        third_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_third_frame_count_range_start,
+                                                     (float)spark_scatter_third_frame_count_range_end));
         spawn_spark(spark_position, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, frame_count, second_frame_count, third_frame_count,
                      D_L12_001618CC);
     } while (--i >= 0);
