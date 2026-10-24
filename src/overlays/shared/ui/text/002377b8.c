@@ -365,14 +365,14 @@ extern float D_L00_0015F78C_gp __asm__("D_L00_0015F78C") __attribute__((sda));
 extern int D_L00_0015F790_gp __asm__("D_L00_0015F790") __attribute__((sda));
 extern int D_L00_0015F794_gp __asm__("D_L00_0015F794") __attribute__((sda));
 extern int D_L00_0015F798_gp __asm__("D_L00_0015F798") __attribute__((sda));
-extern int D_L00_0015F79C;
+extern int hud_item_selector_text_shadow_color_to __asm__("D_L00_0015F79C");
 extern int D_L00_0015F7A0_gp __asm__("D_L00_0015F7A0") __attribute__((sda));
 extern int D_L00_0015F7A4_gp __asm__("D_L00_0015F7A4") __attribute__((sda));
 extern int D_L00_0015F7A8_gp __asm__("D_L00_0015F7A8") __attribute__((sda));
-extern int D_L00_0015F7AC;
+extern int hud_item_selector_nonzero_ammo_text_color_to __asm__("D_L00_0015F7AC");
 extern int D_L00_0015F7B0_gp __asm__("D_L00_0015F7B0") __attribute__((sda));
-extern int D_L00_0015F7B4;
-extern int D_L00_0015F7B8;
+extern int hud_item_selector_title_with_ammo_y_offset __asm__("D_L00_0015F7B4");
+extern int hud_item_selector_split_title_without_ammo_y_offset __asm__("D_L00_0015F7B8");
 extern int D_L00_0015F7BC_gp __asm__("D_L00_0015F7BC") __attribute__((sda));
 extern float D_L00_0015F7C0;
 extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
@@ -448,7 +448,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     }
     selected = rec->unk74;
     if (selected >= 0 && *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C) != 0) {
-        color = fast_tween_color_c(D_L00_0015F798_gp, D_L00_0015F79C, open * fade);
+        color = fast_tween_color_c(D_L00_0015F798_gp, hud_item_selector_text_shadow_color_to, open * fade);
         {
         int id;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
@@ -458,7 +458,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             item = weapon_ammo_counts[id];
             sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(weapon_entry + 0xE));
             if (item != 0)
-                shadow = fast_tween_color_c(D_L00_0015F7A8_gp, D_L00_0015F7AC, open * fade);
+                shadow = fast_tween_color_c(D_L00_0015F7A8_gp, hud_item_selector_nonzero_ammo_text_color_to, open * fade);
             else
                 shadow = fast_tween_color_c(D_L00_0015F7A0_gp, D_L00_0015F7A4_gp, open * fade);
             font_print_center(x + D_L00_0015F720_gp + 1, y + D_L00_0015F724_gp + 13, color, formatted, -1);
@@ -509,9 +509,9 @@ int draw_hud_item_selector_panel(HudElem *rec) {
         id = *(int *)((char *)D_00141EA0 + selected * 4);
         weapon_entry = ((char *)&D_L00_001C40B0) + id * 24;
         if (*(unsigned short *)(weapon_entry + 8) != 0)
-            text_y += D_L00_0015F7B4;
+            text_y += hud_item_selector_title_with_ammo_y_offset;
         else if (prefix_length != 0)
-            text_y += D_L00_0015F7B8;
+            text_y += hud_item_selector_split_title_without_ammo_y_offset;
         else
             text_y += D_L00_0015F7BC_gp;
         }
