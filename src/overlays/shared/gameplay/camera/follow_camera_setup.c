@@ -882,7 +882,9 @@ extern V002e7318 D_L00_00173E70;
 extern s32 compute_follow_camera_radial_collision_positions(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_002e7138_c(O002e7318 *, V002e7318 *, s32, s32) __asm__("FUN_L00_002e7138");
-s32 FUN_L00_002e7318(O002e7318 *camera_moby) {
+s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) __asm__("FUN_L00_002e7318");
+
+s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     V002e7318 candidate_camera_position;
     V002e7318 normalized_position_delta;
     u8 *b = camera_moby->p70;
