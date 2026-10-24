@@ -2760,7 +2760,9 @@ extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
 extern float D_L00_00161990 __attribute__((sda));
-void FUN_L00_002d5988(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
+void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) __asm__("FUN_L00_002d5988");
+
+void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
     St_2d5988 *st;
     s32 path_segment_index;
     f32 segment_offset_or_fraction;
