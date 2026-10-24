@@ -2114,11 +2114,11 @@ extern float beam_ring_texture_u_scroll_speed_gp __asm__("D_L00_0016171C") __att
 extern float D_L00_00161720 __attribute__((sda));
 extern float D_L00_00161724 __attribute__((sda));
 extern float beam_ring_texture_v_scroll_speed_gp __asm__("D_L00_00161728") __attribute__((sda));
-extern int D_L00_0016176C __attribute__((sda));
-extern int D_L00_00161770 __attribute__((sda));
-extern float D_L00_00161774 __attribute__((sda));
-extern float D_L00_00161778 __attribute__((sda));
-extern float D_L00_0016177C __attribute__((sda));
+extern int beam_rail_first_pass_alpha_gp __asm__("D_L00_0016176C") __attribute__((sda));
+extern int beam_rail_second_pass_alpha_gp __asm__("D_L00_00161770") __attribute__((sda));
+extern float beam_rail_first_pass_half_width_gp __asm__("D_L00_00161774") __attribute__((sda));
+extern float beam_rail_second_pass_half_width_gp __asm__("D_L00_00161778") __attribute__((sda));
+extern float beam_rail_second_pass_segment_extension_factor_gp __asm__("D_L00_0016177C") __attribute__((sda));
 extern int D_L00_00161784 __attribute__((sda));
 extern int D_L00_00161788 __attribute__((sda));
 extern float beam_rail_first_pass_texture_u_offset_gp __asm__("D_L00_0016178C") __attribute__((sda));
@@ -2154,8 +2154,8 @@ void draw_beam_ring_and_rail_effects(void *moby) {
 
     beam_rail_first_pass_texture_u_offset_gp = beam_rail_first_pass_texture_u_offset_gp - beam_rail_first_pass_texture_u_scroll_speed_gp * frame_scale;
     if (beam_rail_first_pass_texture_u_offset_gp <= -8.0f) beam_rail_first_pass_texture_u_offset_gp += 8.0f;
-    draw_scrolling_ribbon_colored(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161784);
-    draw_scrolling_ribbon_colored(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161788);
+    draw_scrolling_ribbon_colored(D_L00_001DC020, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, D_L00_00161784);
+    draw_scrolling_ribbon_colored(D_L00_001DC0E0, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, D_L00_00161788);
     draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
@@ -2265,7 +2265,7 @@ void draw_scrolling_ribbon_colored(void *mv, int a, int b, float sx, float sy, f
     fast_vec_cross(w120, w150, w140);
     len0 = fast_vec_length(w120);
     if (len0 != 0) len0 = 1.0f / len0;
-    fast_vec_scale(D_L00_00161774 * len0, w120, w120);
+    fast_vec_scale(beam_rail_first_pass_half_width_gp * len0, w120, w120);
     fast_vec_add(q[0], m, w120);
     fast_vec_sub(q[1], m, w120);
     for (i = 1; i < n - 1; i++) {
@@ -2274,7 +2274,7 @@ void draw_scrolling_ribbon_colored(void *mv, int a, int b, float sx, float sy, f
         fast_vec_cross(w120, w150, w140);
         len = fast_vec_length(w120);
         if (len != 0) len = 1.0f / len;
-        fast_vec_scale(D_L00_00161774 * len, w120, w120);
+        fast_vec_scale(beam_rail_first_pass_half_width_gp * len, w120, w120);
         fast_vec_add(q[2], &m[i], w120);
         fast_vec_sub(q[3], &m[i], w120);
         if (i == 1) {
