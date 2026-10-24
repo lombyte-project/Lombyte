@@ -116,9 +116,9 @@ extern f32 D_L00_0015EF40;
 extern s32 D_L00_00161D94 __attribute__((sda));
 extern f32 D_L00_00161D84 __attribute__((sda));
 extern f32 D_L00_00161D88 __attribute__((sda));
-extern f32 D_L00_00161D98 __attribute__((sda));
-extern f32 D_L00_00161D9C __attribute__((sda));
-extern f32 D_L00_00161DA0 __attribute__((sda));
+extern f32 follow_camera_vehicle_offset_scale __asm__("D_L00_00161D98") __attribute__((sda));
+extern f32 follow_camera_vehicle_orbit_distance __asm__("D_L00_00161D9C") __attribute__((sda));
+extern f32 follow_camera_vehicle_orbit_height __asm__("D_L00_00161DA0") __attribute__((sda));
 extern f32 D_L00_00161DA4 __attribute__((sda));
 extern f32 D_L00_00161DA8 __attribute__((sda));
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -198,9 +198,9 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     }
     if (hero.vehicle_mode == 2) {
         if (camera_override_state->i10 < 2) {
-            follow_camera_set_offset_scale(0, D_L00_00161D98, 0.005f);
-            follow_camera_set_distance(1, D_L00_00161D9C, 0.003f);
-            follow_camera_set_height(D_L00_00161DA0, 0.003f);
+            follow_camera_set_offset_scale(0, follow_camera_vehicle_offset_scale, 0.005f);
+            follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance, 0.003f);
+            follow_camera_set_height(follow_camera_vehicle_orbit_height, 0.003f);
         }
         FUN_L00_002e8620();
         camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
