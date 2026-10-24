@@ -62,6 +62,7 @@ void update_mode_freeze(void) {
         FREEZE_CHOICE_CANCEL_EXIT = 3
     };
     enum {
+        MODE_FREEZE_AWAIT_CROSS_RESUME = 2,
         MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16
     };
     s32 video_mode;
@@ -243,7 +244,7 @@ void update_mode_freeze(void) {
             }
         }
         switch (mode_freeze_state) {
-        case 2:
+        case MODE_FREEZE_AWAIT_CROSS_RESUME:
             if (freeze.unk4 == 0) {
                 if (controller_state.pressed & PAD_CROSS) {
                     mode_freeze_flags &= ~1;
