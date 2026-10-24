@@ -701,14 +701,14 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
     collision_start.q = ((Vec4_2c82f0 *)(collision_reference_moby + 0x10))->q;
     collision_start.f[2] = release_position->f[2];
     if (FUN_001efa68_002c82f0(&collision_start, release_position, 0, collision_reference_moby, 0)) {
-        char *g = D_L00_00173E60_002c82f0;
+        char *collision_hit_cursor = D_L00_00173E60_002c82f0;
         float x;
-        qcopy(released_moby_position, g);
+        qcopy(released_moby_position, collision_hit_cursor);
         x = D_0015ED70_002c82f0;
-        g += 0x20;
-        FUN_001f9bf8_002c82f0(&collision_position_offset, g, x * 9.0f - x * 0.1f);
+        collision_hit_cursor += 0x20;
+        FUN_001f9bf8_002c82f0(&collision_position_offset, collision_hit_cursor, x * 9.0f - x * 0.1f);
         FUN_001f9a10_002c82f0(released_moby_position, released_moby_position, &collision_position_offset);
-        FUN_L00_001ff660_002c82f0(q, q, g);
+        FUN_L00_001ff660_002c82f0(q, q, collision_hit_cursor);
         FUN_001f9a68_002c82f0(q, q, 0.6f);
     }
     released_moby[0x20] = 2;
