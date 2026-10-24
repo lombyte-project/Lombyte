@@ -32,8 +32,8 @@ int D_L10_00161BF4 = 600;
 extern float bombthrower_grass_yaw_offset_limit_degrees __asm__("D_L10_00161BF8") __attribute__((sda));
 extern float D_L10_00161BFC __attribute__((sda));
 extern float D_L10_00161C00 __attribute__((sda));
-extern float D_L10_00161C04 __attribute__((sda));
-extern float D_L10_00161C08 __attribute__((sda));
+extern float bombthrower_grass_launch_speed_min __asm__("D_L10_00161C04") __attribute__((sda));
+extern float bombthrower_grass_launch_speed_max __asm__("D_L10_00161C08") __attribute__((sda));
 void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
 void bombthrower_grass_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -53,7 +53,7 @@ void bombthrower_grass_update(struct Moby *moby) {
             DEG_TO_RAD;
         build_spherical_offset(
             launch_offset,
-            random_float_between_alt(D_L10_00161C04, D_L10_00161C08) *
+            random_float_between_alt(bombthrower_grass_launch_speed_min, bombthrower_grass_launch_speed_max) *
                 frame_time,
             launch_yaw, r);
         fast_vec_add(launch_position, &moby->pos, launch_offset);
