@@ -1689,7 +1689,7 @@ struct PortalMobyView {
 };
 
 extern s32 D_L04_0015F5C4;
-extern s32 D_L04_0015F640;
+extern s32 dialogue_message_duration_frames __asm__("D_L04_0015F640");
 extern u8 D_0013D4F1[];
 extern u8 D_0013D4C9[];
 extern char D_L04_001DC760[];
@@ -1745,7 +1745,7 @@ void suck_cannon_update(struct Moby *moby) {
             queue_dialogue_message(0xFA7, -1);
         else
             queue_dialogue_message(0x53DF, -1);
-        D_L04_0015F640 = 0xB4;
+        dialogue_message_duration_frames = 0xB4;
         grant_inventory_item(9, 1);
         if (vars->exitMoby != -1) {
             exit = &portal_mobys_2e1a10[vars->exitMoby];
