@@ -2382,9 +2382,9 @@ extern void finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 extern float D_0013F3D0[];
 
 int D_L05_00161B74 = 5;
-extern float D_L05_00161AF0 __attribute__((sda));
+extern float extermitank_child_animation_speed_divisor __asm__("D_L05_00161AF0") __attribute__((sda));
 extern const float frame_time_const __asm__("D_0015ED6C");
-extern float D_L05_00161AF4 __attribute__((sda));
+extern float extermitank_child_animation_speed_offset_scale __asm__("D_L05_00161AF4") __attribute__((sda));
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -2492,8 +2492,8 @@ mark_children:
         char *first;
         float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= D_L05_00161AF0 * frame_time_const;
-        offset_scale = D_L05_00161AF4;
+        speed /= extermitank_child_animation_speed_divisor * frame_time_const;
+        offset_scale = extermitank_child_animation_speed_offset_scale;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
             *(float *)(data + 0x84) * offset_scale;
@@ -2505,8 +2505,8 @@ mark_children:
         char *second;
         float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= D_L05_00161AF0 * frame_time_const;
-        offset_scale = D_L05_00161AF4;
+        speed /= extermitank_child_animation_speed_divisor * frame_time_const;
+        offset_scale = extermitank_child_animation_speed_offset_scale;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=
             *(float *)(data + 0x84) * offset_scale;
