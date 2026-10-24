@@ -8,7 +8,9 @@ extern void FUN_L00_0024f440(void *, int, int, int);
 extern void FUN_L00_00252990(void *);
 
 /* advances an animation blend timer and steps through its frame table */
-void FUN_L00_0024f190(void *unused, unsigned char *animation_state) {
+void advance_moby_animation_blend(void *unused, unsigned char *animation_state) __asm__("FUN_L00_0024f190");
+
+void advance_moby_animation_blend(void *unused, unsigned char *animation_state) {
     float unscaled_frame_step = *(float *)(animation_state + 0x28);
     animation_state[5] = 0;
     if (unscaled_frame_step != 0.0f && *(float *)(animation_state + 0x2C) != 0.0f) {

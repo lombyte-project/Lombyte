@@ -1048,7 +1048,7 @@ void cancel_hero_item_animation(void) {
 extern int get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L00_0024f190(void *, unsigned char *);
+extern void advance_moby_animation_blend(void *, unsigned char *) __asm__("FUN_L00_0024f190");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1093,7 +1093,7 @@ void update_hero_held_items_and_orientation(void) {
         current = slot_owner->unkD08 + slot_index;
         {
         struct Hero *pose_owner = &hero;
-        FUN_L00_0024f190(pose_owner->moby, *current);
+        advance_moby_animation_blend(pose_owner->moby, *current);
 
         if (pose_owner->unkD14 != 0) {
             if (pose_owner->unkD14 == 2) {
