@@ -2724,7 +2724,7 @@ extern float probe_ground_height_5e80(void *, int, float) __asm__("FUN_00213508"
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 
 extern short D_L18_00162330 __attribute__((sda));
-extern int D_L18_00162388 __attribute__((sda));
+extern int drek_boss_arena_transition_frame_count_gp __asm__("D_L18_00162388") __attribute__((sda));
 extern int drek_boss_arena_phase_reset_requested_gp __asm__("D_L18_0016238C") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void update_drek_boss_damage_and_phase_transitions(char *moby) {
@@ -2933,7 +2933,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     V80[2] = atan2_5e80(current_path[4] - V60[0], current_path[5] - V60[1]);
                 }
                 V80[1] = 0.34906584f;
-                start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_5e80, D_L18_00162388, 0);
+                start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_5e80, drek_boss_arena_transition_frame_count_gp, 0);
             } else {
                 moby[0x20] = 0x15;
                 if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
