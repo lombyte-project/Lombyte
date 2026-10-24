@@ -1174,8 +1174,8 @@ extern float D_L17_00162024 __attribute__((sda));
 extern float D_L17_00162028 __attribute__((sda));
 extern float D_L17_0016202C __attribute__((sda));
 extern float D_L17_00162030 __attribute__((sda));
-extern float D_L17_00162034 __attribute__((sda));
-extern float D_L17_00162038 __attribute__((sda));
+extern float fighter_jet_camera_base_offset_x_gp __asm__("D_L17_00162034") __attribute__((sda));
+extern float fighter_jet_camera_base_offset_z_gp __asm__("D_L17_00162038") __attribute__((sda));
 extern float D_L17_0016203C __attribute__((sda));
 extern float D_L17_00162040 __attribute__((sda));
 extern float D_L17_00162044 __attribute__((sda));
@@ -1434,9 +1434,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         wr.e[0].q = 0;
         wr.e[1].q = 0;
         wr.e[0].v[0] =
-            (D_L17_00162034 - ship_vars->f70 * D_L17_00162138 - ratio * D_L17_00162140) * D_L17_0016209C;
+            (fighter_jet_camera_base_offset_x_gp - ship_vars->f70 * D_L17_00162138 - ratio * D_L17_00162140) * D_L17_0016209C;
         wr.e[0].v[1] = ship_vars->f6C * D_L17_00162090 * D_L17_0016209C;
-        wr.e[0].v[2] = (D_L17_00162038 + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
+        wr.e[0].v[2] = (fighter_jet_camera_base_offset_z_gp + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
         wr.e[1].v[0] = D_L17_0016203C * D_L17_0016209C;
         wr.e[1].v[2] = D_L17_00162040 * D_L17_0016209C;
         tbl.e[0].q = wr.e[0].q;
@@ -1848,8 +1848,8 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->h32 = 0xFF;
                 moby->b30 = 0xFF;
                 ship_vars->f28 = ship_vars->rot[2] = moby->rot[2];
-                ship_vars->fB4 = D_L17_00162034 * D_L17_0016209C;
-                ship_vars->fBC = D_L17_00162038 * D_L17_0016209C;
+                ship_vars->fB4 = fighter_jet_camera_base_offset_x_gp * D_L17_0016209C;
+                ship_vars->fBC = fighter_jet_camera_base_offset_z_gp * D_L17_0016209C;
                 ship_vars->fB8 = 0.0f;
                 ((ShipCamera *)g->moby)->unk98 = -1;
                 spherical_offset_ed(ship_vars->dir, fighter_jet_initial_flight_speed_gp, ship_vars->rot[2], -ship_vars->rot[1]);
