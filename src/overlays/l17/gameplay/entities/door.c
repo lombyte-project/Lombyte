@@ -564,6 +564,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
 int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
     enum {
+        MOBY_CLASS_RADAR_CONTACT_DRAW_BYPASS = 0x188,
         MOBY_CLASS_CONTACT_DRAW_BYPASS = 0x18F,
         MOBY_CLASS_CONTACT_RENDER_SUPPRESSED = 0x190
     };
@@ -726,7 +727,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
         case MOBY_CLASS_EXCLUDED_FROM_RADAR:
         case MOBY_CLASS_RADAR_RENDER_BYPASS:
         case MOBY_CLASS_RADAR_ICON_SUPPRESSED:
-        case 0x188:
+        case MOBY_CLASS_RADAR_CONTACT_DRAW_BYPASS:
         case 0x189:
         case 0x18A:
         case 0x18B:
