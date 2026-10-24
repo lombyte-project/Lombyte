@@ -1752,10 +1752,10 @@ void update_level02_bot(struct Moby *moby) {
     FUN_L00_0025a120(moby);
 }
 
-extern float D_L02_00161A64 __attribute__((sda));
-extern float D_L02_00161A68 __attribute__((sda));
-extern float D_L02_00161A6C __attribute__((sda));
-extern float D_L02_00161A70 __attribute__((sda));
+extern float level02_bot_death_knockback_horizontal_speed __asm__("D_L02_00161A64") __attribute__((sda));
+extern float level02_bot_death_knockback_vertical_speed __asm__("D_L02_00161A68") __attribute__((sda));
+extern float level02_bot_hit_knockback_horizontal_speed __asm__("D_L02_00161A6C") __attribute__((sda));
+extern float level02_bot_hit_knockback_vertical_speed __asm__("D_L02_00161A70") __attribute__((sda));
 extern float D_L02_00161A74 __attribute__((sda));
 extern float D_L02_00161A78 __attribute__((sda));
 extern float D_L02_00161A9C __attribute__((sda));
@@ -1825,8 +1825,8 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
                 moby_vars->flash = 0x78;
                 moby_vars->f80 = D_L02_00161A84 * frame_time_sq;
                 moby_vars->f84 = D_L02_00161A78 * frame_time_sq;
-                moby_vars->f88 = D_L02_00161A6C * D_0015ED6C;
-                moby_vars->f8C = D_L02_00161A70 * D_0015ED6C;
+                moby_vars->f88 = level02_bot_hit_knockback_horizontal_speed * D_0015ED6C;
+                moby_vars->f8C = level02_bot_hit_knockback_vertical_speed * D_0015ED6C;
                 moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
                 moby_vars->fA0 = 0.5f;
                 moby_vars->i94 = 25;
@@ -1842,8 +1842,8 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
             void *k2 = moby_vars->knock;
             moby_vars->f80 = D_L02_00161A84 * frame_time_sq;
             moby_vars->f84 = D_L02_00161A74 * frame_time_sq;
-            moby_vars->f88 = D_L02_00161A64 * D_0015ED6C;
-            moby_vars->f8C = D_L02_00161A68 * D_0015ED6C;
+            moby_vars->f88 = level02_bot_death_knockback_horizontal_speed * D_0015ED6C;
+            moby_vars->f8C = level02_bot_death_knockback_vertical_speed * D_0015ED6C;
             moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
             moby_vars->i94 = 9;
             moby_vars->bAD = 0;
