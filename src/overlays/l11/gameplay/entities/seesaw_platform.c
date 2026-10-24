@@ -3190,8 +3190,8 @@ extern char D_L11_001677C0_4318[] __asm__("D_L11_001677C0");
 extern char D_0013F3D0_4318[] __asm__("D_0013F3D0");
 float D_L11_001622C0 = 0;
 extern float D_L11_001622CC __attribute__((sda));
-extern float D_L11_001622E4 __attribute__((sda));
-extern float D_L11_001622E8 __attribute__((sda));
+extern float puffoid_spray_target_distance_metric_threshold_gp __asm__("D_L11_001622E4") __attribute__((sda));
+extern float puffoid_chase_heading_offset_limit_degrees_gp __asm__("D_L11_001622E8") __attribute__((sda));
 extern float D_L11_001622EC __attribute__((sda));
 extern float D_L11_001622F0 __attribute__((sda));
 extern void update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
@@ -3370,7 +3370,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_IDLE:
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
+            puffoid_vars->unk24C = random_float_4318(-puffoid_chase_heading_offset_limit_degrees_gp, puffoid_chase_heading_offset_limit_degrees_gp) * 0.017453292f;
             moby->state = 4;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
@@ -3392,7 +3392,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_WANDER_NEAR_HOME:
         update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->unk260);
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
+            puffoid_vars->unk24C = random_float_4318(-puffoid_chase_heading_offset_limit_degrees_gp, puffoid_chase_heading_offset_limit_degrees_gp) * 0.017453292f;
             moby->state = 4;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
@@ -3405,7 +3405,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_CHASE_TARGET:
-        if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < D_L11_001622E4) {
+        if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < puffoid_spray_target_distance_metric_threshold_gp) {
             moby->state = 5;
             if (moby->prev_seq != 2) {
                 set_anim_4318(moby, 2, 0, frames_4318(10));
@@ -3440,7 +3440,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_SPRAY_ATTACK:
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
-        if ((moby->anim_flags & 2) && D_L11_001622E4 < vector_distance_4318(&moby->pos, &target->pos)) {
+        if ((moby->anim_flags & 2) && puffoid_spray_target_distance_metric_threshold_gp < vector_distance_4318(&moby->pos, &target->pos)) {
             moby->state = 4;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
@@ -3459,7 +3459,7 @@ void puffoid_update(struct Moby *moby) {
                 set_anim_4318(moby, 0, 0, frames_4318(10));
             }
         } else if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
+            puffoid_vars->unk24C = random_float_4318(-puffoid_chase_heading_offset_limit_degrees_gp, puffoid_chase_heading_offset_limit_degrees_gp) * 0.017453292f;
             moby->state = 4;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
@@ -3559,7 +3559,7 @@ void puffoid_update(struct Moby *moby) {
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         if (puffoid_vars->unk214 != 2) {
-            puffoid_vars->unk24C = random_float_4318(-D_L11_001622E8, D_L11_001622E8) * 0.017453292f;
+            puffoid_vars->unk24C = random_float_4318(-puffoid_chase_heading_offset_limit_degrees_gp, puffoid_chase_heading_offset_limit_degrees_gp) * 0.017453292f;
             moby->state = 0xF;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
@@ -3570,7 +3570,7 @@ void puffoid_update(struct Moby *moby) {
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
-        if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < D_L11_001622E4) {
+        if ((moby->anim_flags & 2) && vector_distance_4318(&moby->pos, &target->pos) < puffoid_spray_target_distance_metric_threshold_gp) {
             moby->state = 0x10;
             if (moby->prev_seq != 2) {
                 set_anim_4318(moby, 2, 0, frames_4318(10));
@@ -3584,7 +3584,7 @@ void puffoid_update(struct Moby *moby) {
         follow_carrier_4318(moby, D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8), &moby->pos, &moby->rot,
                             &moby->pos, &moby->rot);
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
-        if ((moby->anim_flags & 2) && D_L11_001622E4 < vector_distance_4318(&moby->pos, &target->pos)) {
+        if ((moby->anim_flags & 2) && puffoid_spray_target_distance_metric_threshold_gp < vector_distance_4318(&moby->pos, &target->pos)) {
             moby->state = 0xF;
             if (moby->prev_seq != 1) {
                 set_anim_4318(moby, 1, 0, frames_4318(10));
