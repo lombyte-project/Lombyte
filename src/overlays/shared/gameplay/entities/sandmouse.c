@@ -1520,7 +1520,7 @@ extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
 void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) __asm__("FUN_L01_00315358");
 
-void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
+void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_update) {
     float camera_goal[4];
     float look_offset[4];
     float look_dir[4];
@@ -1530,11 +1530,11 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
     float rail_point[4];
     int segment;
     float fraction;
-    Data_316730 *data = cam->data;
+    Data_316730 *data = camera_to_update->data;
     SubA_316730 *look = &data->a;
     SubB_316730 *follow = &data->b;
     SubC_316730 *progress = &data->c;
-    Parm_316730 *params = D_L01_0015EF50_c[cam->unk84].unk1C;
+    Parm_316730 *params = D_L01_0015EF50_c[camera_to_update->unk84].unk1C;
     float rate = 0.01f;
     int mode = params->unk30;
     int path_index = params->unk20;
@@ -1558,9 +1558,9 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
         subtract_vector_xyz(delta, &path->nodes[segment + 1], &path->nodes[segment]);
         normalize_vector_xyz(look_target, delta, dist);
         add_vector_xyz(rail_point, &path->nodes[segment], look_target);
-        cam->pos[0] = cam_interp_values(cam->pos[0], rail_point[0], &data->vel[0], rate, 0.175f, 0.0f);
-        cam->pos[1] = cam_interp_values(cam->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
-        cam->pos[2] = cam_interp_values(cam->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
+        camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0], rail_point[0], &data->vel[0], rate, 0.175f, 0.0f);
+        camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
+        camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path_316730 *pathA = D_L01_001B0C30_316730[path_index];
         Path_316730 *pathD = D_L01_0015F70C_c[params->unk24].unk10;
@@ -1631,9 +1631,9 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
         } else {
             data->unk10 = data->unk10 - 0.00015f;
         }
-        cam->pos[0] = cam_interp_values(cam->pos[0], look_target[0], &data->vel[0], data->unk10, 0.175f, 0.0f);
-        cam->pos[1] = cam_interp_values(cam->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
-        cam->pos[2] = cam_interp_values(cam->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
+        camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0], look_target[0], &data->vel[0], data->unk10, 0.175f, 0.0f);
+        camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
+        camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
     } else {
         Path_316730 *path = D_L01_001B0C30_316730[path_index];
 
@@ -1657,9 +1657,9 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
             sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
             FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
-        cam->pos[0] = cam_interp_values(cam->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
-        cam->pos[1] = cam_interp_values(cam->pos[1], camera_goal[1], &data->vel[1], rate, 0.175f, 0.0f);
-        cam->pos[2] = cam_interp_values(cam->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
+        camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
+        camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], camera_goal[1], &data->vel[1], rate, 0.175f, 0.0f);
+        camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
     if (params->unk24 < 0) {
         Path_316730 *path = D_L01_001B0C30_316730[params->unk20];
@@ -1682,11 +1682,11 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
     }
     normalize_vector_xyz(look_offset, D_L01_001672B0, follow->unk4C);
     add_vector_xyz(path_point, look_offset, look_target);
-    subtract_vector_xyz(look_dir, path_point, cam->pos);
+    subtract_vector_xyz(look_dir, path_point, camera_to_update->pos);
     look_length = vector_length_xyz(look_dir);
     if (look_length != 0.0f) {
         scale_vector_xyz(look_dir, look_dir, 1.0f / look_length);
-        pitch_error = 1.5707964f - approximate_arcsine(dot_vectors_xyz(look_dir, cam->unk0));
+        pitch_error = 1.5707964f - approximate_arcsine(dot_vectors_xyz(look_dir, camera_to_update->unk0));
     } else {
         pitch_error = 0.0f;
     }
@@ -1698,13 +1698,13 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) {
         look->unk20 = look->unk20 - 0.00015f;
     }
     pitch_step = rope_spring_turn(&look->unk34, 0.0f, pitch_error, look->unk20, 0.175f, 0.0f);
-    cross_vectors_xyz(delta, look_dir, cam->unk40);
-    build_look_at_matrix(cam->unk0, cam->unk40, delta, pitch_step);
-    normalize_vector_xyz(cam->unk40, cam->unk0, 1.0f);
-    normalize_vector_xyz(cam->unk0, cam->unk0, 1.0f);
-    cross_vectors_xyz(cam->unk10, cam->unk0, D_L01_001672B0);
-    normalize_vector_xyz(cam->unk10, cam->unk10, 1.0f);
-    cross_vectors_xyz(cam->unk20, cam->unk10, cam->unk0);
+    cross_vectors_xyz(delta, look_dir, camera_to_update->unk40);
+    build_look_at_matrix(camera_to_update->unk0, camera_to_update->unk40, delta, pitch_step);
+    normalize_vector_xyz(camera_to_update->unk40, camera_to_update->unk0, 1.0f);
+    normalize_vector_xyz(camera_to_update->unk0, camera_to_update->unk0, 1.0f);
+    cross_vectors_xyz(camera_to_update->unk10, camera_to_update->unk0, D_L01_001672B0);
+    normalize_vector_xyz(camera_to_update->unk10, camera_to_update->unk10, 1.0f);
+    cross_vectors_xyz(camera_to_update->unk20, camera_to_update->unk10, camera_to_update->unk0);
 }
 extern Camera *D_L01_00167284 __attribute__((section(".data")));
 extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
