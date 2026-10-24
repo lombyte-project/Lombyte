@@ -427,8 +427,8 @@ extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];
-extern s32 D_L06_00162414 __attribute__((sda));
-extern s32 D_L06_00162418 __attribute__((sda));
+extern s32 projected_quad_texture_selector __asm__("D_L06_00162414") __attribute__((sda));
+extern s32 projected_quad_base_radius __asm__("D_L06_00162418") __attribute__((sda));
 extern s32 D_L06_0016241C __attribute__((sda));
 extern s32 D_L06_00162420 __attribute__((sda));
 extern s32 D_L06_00162424 __attribute__((sda));
@@ -474,7 +474,7 @@ void draw_projected_fading_quad(char *moby) {
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    radius = truncate_float_to_s32((float)(D_L06_00162418 << 4) * size);
+    radius = truncate_float_to_s32((float)(projected_quad_base_radius << 4) * size);
     corners[3] = 0xfffff080008000LL;
     corners[2] = 0xfffff080008000LL;
     corners[1] = 0xfffff080008000LL;
@@ -487,7 +487,7 @@ void draw_projected_fading_quad(char *moby) {
     corners[2] += x + radius;
     corners[3] += (y + radius) << 16;
     corners[3] += x - radius;
-    texture = get_effect_texture(D_L06_00162414);
+    texture = get_effect_texture(projected_quad_texture_selector);
     FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);
 }
