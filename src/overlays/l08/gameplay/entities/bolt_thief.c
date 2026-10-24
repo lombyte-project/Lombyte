@@ -1091,8 +1091,8 @@ extern float falling_debris_burst_secondary_planar_scale __asm__("D_L08_00161C18
 extern int falling_debris_burst_frame_count_random_min __asm__("D_L08_00161C1C") __attribute__((sda));
 extern int D_L08_00161C20 __attribute__((sda));
 extern int D_L08_00161C24 __attribute__((sda));
-extern float D_L08_00161C28 __attribute__((sda));
-extern float D_L08_00161C2C __attribute__((sda));
+extern float falling_debris_burst_primary_vector_w __asm__("D_L08_00161C28") __attribute__((sda));
+extern float falling_debris_burst_secondary_vector_w __asm__("D_L08_00161C2C") __attribute__((sda));
 extern int spawn_spark() __asm__("FUN_00218888");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1169,8 +1169,8 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                 particle_secondary_vector[2] = falling_debris_burst_secondary_vertical_scale * D_0015ED6C_gp;
                 particle_secondary_vector[0] += fast_cos(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
                 particle_secondary_vector[1] += fast_sin(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
-                particle_primary_vector[3] = D_L08_00161C28;
-                particle_secondary_vector[3] = D_L08_00161C2C;
+                particle_primary_vector[3] = falling_debris_burst_primary_vector_w;
+                particle_secondary_vector[3] = falling_debris_burst_secondary_vector_w;
                 burst_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_frame_count_random_min, (float)(falling_debris_burst_frame_count_random_min * 2))));
                 c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
                 c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
