@@ -280,7 +280,9 @@ extern struct {
     int pad1[81];
     int tbl[3];
 } D_L17_0016D160;
-void FUN_L17_002f2e78(struct Moby *moby) {
+void update_fleet_guarded_moby_effects(struct Moby *moby) __asm__("FUN_L17_002f2e78");
+
+void update_fleet_guarded_moby_effects(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_GUARDED_TABLE_CALL = 1
