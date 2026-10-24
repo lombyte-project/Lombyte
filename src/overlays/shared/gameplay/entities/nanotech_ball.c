@@ -2092,7 +2092,7 @@ extern int func_L00_001F2BE8_DD3D8(float, void *, int, void *, void *) __asm__("
 
 void spawn_suck_cannon_projectile_explosion(char *self, char *q) __asm__("FUN_L00_002dbf28");
 
-void spawn_suck_cannon_projectile_explosion(char *self, char *q) {
+void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction_record) {
     B50_DD3D8 blk;
     float to_camera[4];
     float spray_bias_vector[4];
