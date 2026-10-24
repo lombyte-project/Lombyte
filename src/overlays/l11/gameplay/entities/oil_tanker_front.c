@@ -2083,12 +2083,12 @@ extern s32 D_L11_00215220[];
 extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
-extern float D_L11_001625B8 __attribute__((sda));
-extern float D_L11_001625BC;
-extern float D_L11_001625C0;
+extern float distance_faded_effect_position_x __asm__("D_L11_001625B8") __attribute__((sda));
+extern float distance_faded_effect_position_y __asm__("D_L11_001625BC");
+extern float distance_faded_effect_position_z __asm__("D_L11_001625C0");
 extern float D_L11_001625C4;
 extern char D_L11_00167680[];
-extern int D_L11_001625FC __attribute__((sda));
+extern int distance_faded_effect_color_tables_initialized __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
@@ -2116,11 +2116,11 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
 
     switch (moby->state) {
     case EFFECT_INITIALIZE:
-        if (D_L11_001625FC == 0) {
+        if (distance_faded_effect_color_tables_initialized == 0) {
             scale_rgba_tables(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             scale_rgba_tables(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L11_002078D8, 9, D_L11_00200728, 0.25f, 0.25f, 0.25f, 0.7f, 1);
-            D_L11_001625FC = 1;
+            distance_faded_effect_color_tables_initialized = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -2142,17 +2142,17 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         reference_position_base = D_L11_00167680;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
-        effect_bounds[0] = D_L11_001625B8;
-        effect_bounds[1] = D_L11_001625BC;
-        effect_bounds[2] = D_L11_001625C0;
+        effect_bounds[0] = distance_faded_effect_position_x;
+        effect_bounds[1] = distance_faded_effect_position_y;
+        effect_bounds[2] = distance_faded_effect_position_z;
         effect_bounds[3] = D_L11_001625C4;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
-        effect_to_reference_delta[0] = D_L11_001625B8;
-        effect_to_reference_delta[1] = D_L11_001625BC;
-        effect_to_reference_delta[2] = D_L11_001625C0;
+        effect_to_reference_delta[0] = distance_faded_effect_position_x;
+        effect_to_reference_delta[1] = distance_faded_effect_position_y;
+        effect_to_reference_delta[2] = distance_faded_effect_position_z;
         effect_to_reference_delta[3] = 1.0f;
         subtract_vector_xyz(effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
         effect_distance = vector_length_xyz(effect_to_reference_delta);
