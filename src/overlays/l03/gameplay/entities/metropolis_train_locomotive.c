@@ -798,7 +798,7 @@ void moving_platform_small_update(char *moby) {
     int count;
     int next_path_node_byte_offset;
     int node_off;
-    signed char dir;
+    signed char path_node_step;
     float speed;
     float base;
     float d;
@@ -880,10 +880,10 @@ void moving_platform_small_update(char *moby) {
     case PLATFORM_FOLLOW_PATH_NODES:
         pc = data + 0xB0;
         path = *(int **)(pc + 0x10);
-        dir = pc[4];
+        path_node_step = pc[4];
         count = *path;
-        end = dir < 0 ? 0 : count - 1;
-        next = (*(int *)(data + 0xB0) + count + dir) % count;
+        end = path_node_step < 0 ? 0 : count - 1;
+        next = (*(int *)(data + 0xB0) + count + path_node_step) % count;
         node_off = next * 0x10;
         pos = moby + 0x10;
         subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), pos);
