@@ -711,7 +711,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         char *seg;
         int *tab;
         float t;
-        int dir;
+        int rejoin_path_loop_enabled;
 
         FUN_L14_002aea08_c618(moby);
         source_segment_index = *(int *)(moby_vars + 0x84);
@@ -723,10 +723,10 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         source_path_distance += *(float *)(moby_vars + 0x1CC);
         tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
         t = source_path_distance / *(float *)(moby_vars + 0x16C) * *(float *)(moby_vars + 0x190);
-        dir = *(s16 *)(moby_vars + 0x8A);
+        rejoin_path_loop_enabled = *(s16 *)(moby_vars + 0x8A);
         path_seg = 0;
         path_t = 0.0f;
-        FUN_L00_0025d808_c618(tab, vector_scratch, &path_seg, &path_t, dir, t);
+        FUN_L00_0025d808_c618(tab, vector_scratch, &path_seg, &path_t, rejoin_path_loop_enabled, t);
         ease_c618(&moby->pos.x, vector_scratch[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
         ease_c618(&moby->pos.y, vector_scratch[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
         ease_c618(&moby->pos.z, vector_scratch[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
