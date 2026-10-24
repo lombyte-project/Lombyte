@@ -151,10 +151,10 @@ extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern int D_L14_001620BC __attribute__((sda));
-extern int D_L14_001620C0 __attribute__((sda));
-extern float D_L14_001620FC __attribute__((sda));
-extern float D_L14_00162100 __attribute__((sda));
+extern int vendor_beam_min_pulse_duration_frames __asm__("D_L14_001620BC") __attribute__((sda));
+extern int vendor_beam_max_pulse_duration_frames __asm__("D_L14_001620C0") __attribute__((sda));
+extern float vendor_beam_displacement_radius __asm__("D_L14_001620FC") __attribute__((sda));
+extern float vendor_beam_max_point_speed __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
 extern float D_L14_00162114 __attribute__((sda));
@@ -191,11 +191,11 @@ void start_vendor_beam_pulse(char *moby) {
 
     frame = (VendorBeamFrame *)((beam->frame << 7) + (int)D_L14_001600EC);
     {
-        int ticks = D_L14_001620BC;
+        int ticks = vendor_beam_min_pulse_duration_frames;
         frame->origin.f[3] = 1.0f;
         low = scale_game_frames(ticks);
     }
-    high = scale_game_frames(D_L14_001620C0);
+    high = scale_game_frames(vendor_beam_max_pulse_duration_frames);
     duration = random_integer_between(low, high);
     beam->countdown = (short)duration;
     beam->duration = (short)duration;
@@ -212,8 +212,8 @@ void start_vendor_beam_pulse(char *moby) {
             clear_u64_value(&path[i]);
             clear_u64_value(&path_steps[i]);
         } else {
-            set_vector_xyz(&path[i], 0.0f, D_L14_001620FC);
-            set_vector_xyz(&path_steps[i], 0.0f, D_L14_00162100 * frame_time);
+            set_vector_xyz(&path[i], 0.0f, vendor_beam_displacement_radius);
+            set_vector_xyz(&path_steps[i], 0.0f, vendor_beam_max_point_speed * frame_time);
         }
         y = path[i].f[1];
         path[i].f[3] = 1.0f;
@@ -236,7 +236,7 @@ void start_vendor_beam_pulse(char *moby) {
 
     for (branch = 0; branch < 4; branch++) {
         int start;
-        float spread = D_L14_001620FC;
+        float spread = vendor_beam_displacement_radius;
         set_vector_xyz(&work, spread, spread);
         start = truncate_float_to_s32(random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) + 4;
         beam->branch_start[branch] = (unsigned char)start;
@@ -244,7 +244,7 @@ void start_vendor_beam_pulse(char *moby) {
         qcopy(&beam->branch_steps[0][branch], &beam->point_steps[start]);
         for (k = 1; k < 4; k++) {
             set_vector_xyz(&delta, 0.1f, 0.1f);
-            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, D_L14_00162100 * frame_time);
+            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed * frame_time);
             add_vector_xyz(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
             add_vector_xyz(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
