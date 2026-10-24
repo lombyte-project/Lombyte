@@ -370,7 +370,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
 typedef f32 V4[4] __attribute__((aligned(16)));
 extern V4 D_L00_001E3CA0[];
 extern V4 D_L00_001E3D20[];
-extern f32 D_L00_001619F0 __attribute__((sda));
+extern f32 nanotech_ball_slot_offset_transform_amount __asm__("D_L00_001619F0") __attribute__((sda));
 extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
@@ -381,7 +381,7 @@ void update_nanotech_ball_slot_offsets(void) {
     s32 i;
     for (i = 0; i < 8; i++) {
         build_look_at_matrix(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i],
-                             D_L00_001619F0);
+                             nanotech_ball_slot_offset_transform_amount);
         FUN_001f9bf8(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14_gp);
     }
 }
