@@ -2343,7 +2343,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 #include "rnc/data_labels.h"
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float D_L10_00161E48 __attribute__((sda));
+extern float toxic_crab_group_approach_angle_limit_degrees __asm__("D_L10_00161E48") __attribute__((sda));
 float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
     float hi, lo, owner_to_self_angle, owner_to_self_distance, translated_radial_point[3];
@@ -2352,8 +2352,8 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) {
         return fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
                             self->pos.y - *(float *)(owner + 0x14));
     }
-    lo = -(D_L10_00161E48 * DEG_TO_RAD);
-    hi = D_L10_00161E48 * DEG_TO_RAD;
+    lo = -(toxic_crab_group_approach_angle_limit_degrees * DEG_TO_RAD);
+    hi = toxic_crab_group_approach_angle_limit_degrees * DEG_TO_RAD;
     owner_to_self_angle = fast_arc_tan(self->pos.x - *(float *)(owner + 0x10),
                        self->pos.y - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, &self->pos);
