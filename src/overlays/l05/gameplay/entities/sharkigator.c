@@ -469,7 +469,7 @@ void spawn_sharkigator_surface_effects(char *moby) {
 /* Spawns a burst of particles and a ring of sparks around a position. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D3220), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float);
@@ -494,7 +494,7 @@ void spawn_sharkigator_splash_effects(int unused, char *position) {
     int i;
     char *base;
     int random_spawn_value;
-    spawned_object = FUN_L00_002d7e90(position, 3.0f);
+    spawned_object = spawn_burst_moby(position, 3.0f);
     if (spawned_object)
         spawned_object[0x23] = 0x70;
     for (base = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {

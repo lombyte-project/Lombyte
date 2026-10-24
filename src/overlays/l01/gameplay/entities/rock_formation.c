@@ -1702,7 +1702,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00301198), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
@@ -1752,7 +1752,7 @@ void update_falling_splash_moby(struct Moby *moby) {
             effect_pos[0] = moby->pos.x;
             effect_pos[1] = moby->pos.y;
             effect_pos[2] = D_L01_001742E8;
-            effect = FUN_L00_002d7e90(effect_pos, 2.0f);
+            effect = spawn_burst_moby(effect_pos, 2.0f);
             if (effect != 0) {
                 effect[0x23] = 0x70;
             }

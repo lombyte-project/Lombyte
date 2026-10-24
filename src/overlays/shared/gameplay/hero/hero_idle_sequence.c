@@ -2487,7 +2487,7 @@ extern float D_0015ED6C;
 extern f32 random_float_between(f32 a, f32 b) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 FUN_L00_00257b90(s32, s32);
-extern void FUN_L00_002d7e90(Vec4 *, f32);
+extern void spawn_burst_moby(Vec4 *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(Vec4 *, f32 *, s32, f32, f32) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
 
@@ -2510,7 +2510,7 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
     if (flash) {
         qcopy(&effect_vector, &hero.motion.pos);
         effect_vector.f[2] = hero.water_surface_z;
-        FUN_L00_002d7e90(&effect_vector, 2.25f);
+        spawn_burst_moby(&effect_vector, 2.25f);
     }
     for (j = 0; j < puffs; j++) {
         effect_vector.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);

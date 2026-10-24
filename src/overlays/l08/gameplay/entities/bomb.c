@@ -1367,7 +1367,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L08_002da0d0(void *);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1406,7 +1406,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
     }
     qcopy(&pos, &hero.motion.pos);
     pos.f[2] = D_L08_001D7060[2];
-    water_entry_moby = FUN_L00_002d7e90(&pos, 3.0f);
+    water_entry_moby = spawn_burst_moby(&pos, 3.0f);
     if (water_entry_moby)
         water_entry_moby[0x23] = 0x70;
     for (i = 0; i < 16; i++) {

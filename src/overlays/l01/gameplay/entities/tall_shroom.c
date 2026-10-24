@@ -435,7 +435,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
-extern char *spawn_burst(void *, f32) __asm__("FUN_L00_002d7e90");
+extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_debris_chunk(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");
 extern FxSpark *spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
@@ -504,7 +504,7 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                 if (fx_cutscene.scene == 1 && fx_cutscene.frame == scale_game_frames(472) && fx_cutscene.slot[0] != 0) {
                     moby_point_position(fx_cutscene.slot[0], 1, &effect_position_or_motion_delta);
                     {
-                        char *burst = spawn_burst(&effect_position_or_motion_delta, 3.0f);
+                        char *burst = spawn_burst_moby(&effect_position_or_motion_delta, 3.0f);
 
                         if (burst != 0) {
                             burst[0x23] = 0x70;

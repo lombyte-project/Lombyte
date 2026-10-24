@@ -154,7 +154,7 @@ extern M910 *D_L00_00173E58 __attribute__((section(".data")));
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *mine_debris(char *, char *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char D_L00_00173E70[];
 extern s16 D_L00_001B07B0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -364,7 +364,7 @@ void mine_update(M910 *mine_moby) {
                         t[0] = mine_moby->pos.f[0];
                         t[1] = mine_moby->pos.f[1];
                         t[2] = D_L00_00173E68[0];
-                        p = FUN_L00_002d7e90(t, 2.0f);
+                        p = spawn_burst_moby(t, 2.0f);
                         if (p != 0) {
                             p[0x23] = 0x70;
                         }
@@ -1585,7 +1585,7 @@ extern void FUN_L00_002a3ec8_2adb30(int, int, int, float, float, float, float) _
 extern int FUN_L00_002ad410_2adb30(void *, void *, int) __asm__("FUN_L00_002ad410");
 extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
-extern char *FUN_L00_002d7e90_2adb30(void *, float) __asm__("FUN_L00_002d7e90");
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char *FUN_L00_002df808_2adb30(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
 void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
 extern int D_L00_00160770;
@@ -1734,7 +1734,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     p.f[0] = bomb_moby->pos.f[0];
                     p.f[1] = bomb_moby->pos.f[1];
                     p.f[2] = D_L00_00173E68_2adb30[0];
-                    s = FUN_L00_002d7e90_2adb30(&p, 2.0f);
+                    s = spawn_burst_moby(&p, 2.0f);
                     if (s != 0) {
                         s[0x23] = 0x70;
                     }

@@ -3743,8 +3743,8 @@ void FUN_L00_0025d1b8(unsigned char *);
 void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 float random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002d7e90(u128 *v, float s);
-unsigned char *FUN_L00_002d7e90(u128 *spawn_position, float scale_multiplier) {
+unsigned char *spawn_burst_moby(u128 *v, float s) __asm__("FUN_L00_002d7e90");
+unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
     unsigned char *spawned_moby = create_moby(0x307);
     if (spawned_moby) {
         FUN_L00_0025d1b8(spawned_moby);

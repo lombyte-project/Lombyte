@@ -157,7 +157,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
 extern Vec4 D_L00_00173E70;
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -235,7 +235,7 @@ int mine_fall(char *moby, char *motion_state) {
         if (*(float *)(motion_state + 0x5C) == 0.0f && f21 <= height_probe_position[2] && height_probe_position[2] + *(float *)(motion_state + 0x8) < f21) {
             *(float *)(motion_state + 0x5C) = 1.0f;
             height_probe_position[2] = f21;
-            FUN_L00_002d7e90(height_probe_position, 3.0f);
+            spawn_burst_moby(height_probe_position, 3.0f);
         }
         f21 = func_L00_0025A748_f((moby + 0x10));
     } else {
