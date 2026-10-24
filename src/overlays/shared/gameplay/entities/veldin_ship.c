@@ -2264,8 +2264,8 @@ extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 /* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
 void horny_toad_update(Moby *moby) __asm__("FUN_L00_002d4610");
 extern float D_L00_0016196C __attribute__((sda));
-extern float D_L00_00161980 __attribute__((sda));
-extern float D_L00_00161984 __attribute__((sda));
+extern float horny_toad_target_approach_distance_threshold __asm__("D_L00_00161980") __attribute__((sda));
+extern float horny_toad_target_animation_start_index __asm__("D_L00_00161984") __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
     enum {
@@ -2394,10 +2394,10 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case HORNY_TOAD_APPROACH_AND_FACE_TARGET:
-        if (move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
+        if (move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f) < horny_toad_target_approach_distance_threshold
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
-            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984, scale_game_frames(10));
+            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)horny_toad_target_animation_start_index, scale_game_frames(10));
         } else if (data->unk1C4 == 2) {
             moby->state = 8;
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
