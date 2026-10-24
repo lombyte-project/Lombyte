@@ -698,7 +698,7 @@ void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00
 extern void func_00215C00_57_q(float, float, float, void *) __asm__("FUN_00214db0");
 extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
 
-extern float D_L16_001618E8 __attribute__((sda));
+extern float reposition_effect_velocity_elevation_degrees __asm__("D_L16_001618E8") __attribute__((sda));
 extern float reposition_effect_velocity_scale_range_start __asm__("D_L16_001618EC") __attribute__((sda));
 extern float reposition_effect_velocity_scale_range_end __asm__("D_L16_001618F0") __attribute__((sda));
 extern float reposition_effect_spawn_z_offset __asm__("D_L16_001618F4") __attribute__((sda));
@@ -736,7 +736,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
             speed = random_float_between_alt_q(reposition_effect_velocity_scale_range_start * D_0015ED6C,
                                                reposition_effect_velocity_scale_range_end * D_0015ED6C);
             random_effect_angle = random_angle_radians_q();
-            func_00215C00_57_q(speed, random_effect_angle, D_L16_001618E8 * DEG_TO_RAD,
+            func_00215C00_57_q(speed, random_effect_angle, reposition_effect_velocity_elevation_degrees * DEG_TO_RAD,
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
             effect_velocity[2] = speed * D_0015ED6C;
