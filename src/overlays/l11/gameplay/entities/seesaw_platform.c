@@ -265,13 +265,13 @@ extern void FUN_L00_00250df8(void *);
 extern float D_L11_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_globals.h"
 extern float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") __attribute__((sda));
-extern float D_L11_00161EB0 __attribute__((sda));
+extern float child_set_child_axis2_offset_length_gp __asm__("D_L11_00161EB0") __attribute__((sda));
 extern float D_L11_00161EB4 __attribute__((sda));
-extern float D_L11_00161EB8 __attribute__((sda));
+extern float child_set_fold_rotation_x_degrees_gp __asm__("D_L11_00161EB8") __attribute__((sda));
 extern float child_set_base_rotation_y_degrees_gp __asm__("D_L11_00161EBC") __attribute__((sda));
-extern float D_L11_00161EFC __attribute__((sda));
-extern float D_L11_00161F00 __attribute__((sda));
-extern float D_L11_00161F04 __attribute__((sda));
+extern float attached_child_source_axis2_offset_length_gp __asm__("D_L11_00161EFC") __attribute__((sda));
+extern float attached_child_source_axis1_offset_length_gp __asm__("D_L11_00161F00") __attribute__((sda));
+extern float attached_child_rotation_y_degrees_gp __asm__("D_L11_00161F04") __attribute__((sda));
 extern float final_child_set_z_offset_gp __asm__("D_L11_00161F08") __attribute__((sda));
 extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
@@ -288,7 +288,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
 
     for (i = 0; i < 6; i++) {
         int s = (i >= 3) ? 1 : -1;
-        float ang = (float)(i % 3) * 0.5235988f - (D_L11_00161EB8 * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
+        float ang = (float)(i % 3) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
         qcopy_nc(&D_L11_001DA710[i]->rot, &parent_moby->rot);
         D_L11_001DA710[i]->rot.z = fast_add_rotations(D_L11_001DA710[i]->rot.z, (float)s * 1.5707964f);
         D_L11_001DA710[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
@@ -298,7 +298,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
         child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, child_set_child_axis2_offset_length_gp);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
@@ -308,7 +308,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
     for (j = 0; j < 4; j++) {
         int s = (j >= 2) ? 1 : -1;
         int k = (j & 1) ? -1 : 1;
-        float ang = (float)(j % 2) * 0.5235988f - (D_L11_00161EB8 * (1.0f - D_L11_00161EC4) + 15.0f) * 0.017453292f;
+        float ang = (float)(j % 2) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp * (1.0f - D_L11_00161EC4) + 15.0f) * 0.017453292f;
         float r;
         qcopy_nc(&D_L11_00161F20[j]->rot, &parent_moby->rot);
         D_L11_00161F20[j]->rot.z = fast_add_rotations(D_L11_00161F20[j]->rot.z, (float)s * 1.5707964f);
@@ -319,7 +319,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
         child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, child_set_child_axis2_offset_length_gp);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
@@ -332,14 +332,14 @@ void update_child_set_poses(struct Moby *parent_moby) {
     }
     for (n = 0; n < 4; n++) {
         float rotation_y_progress;
-        normalize_vector_xyz(&child_placement_vector_scratch, &D_L11_00161F20[n]->rot_row2, D_L11_00161EFC);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[n]->rot_row1, D_L11_00161F00);
+        normalize_vector_xyz(&child_placement_vector_scratch, &D_L11_00161F20[n]->rot_row2, attached_child_source_axis2_offset_length_gp);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[n]->rot_row1, attached_child_source_axis1_offset_length_gp);
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &child_position_scratch);
         add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &child_placement_vector_scratch);
         qcopy(&D_L11_00161F30[n]->rot, &D_L11_00161F20[n]->rot);
         rotation_y_progress = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
         D_L11_00161F30[n]->rot.y = fast_add_rotations(D_L11_00161F30[n]->rot.y,
-            -(D_L11_00161F04 * 0.017453292f) * rotation_y_progress);
+            -(attached_child_rotation_y_degrees_gp * 0.017453292f) * rotation_y_progress);
         FUN_L00_00250df8(D_L11_00161F30[n]);
     }
     for (q = 0; q < 4; q++) {
