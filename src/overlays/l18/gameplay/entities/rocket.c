@@ -2605,8 +2605,8 @@ extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm_
 
 extern float D_L18_00161ED0 __attribute__((sda));
 extern float D_L18_00161ED4 __attribute__((sda));
-extern float D_L18_00161ED8 __attribute__((sda));
-extern float D_L18_00161EE0 __attribute__((sda));
+extern float electric_arc_endpoint_radius_scale __asm__("D_L18_00161ED8") __attribute__((sda));
+extern float target_travel_speed __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
 
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
@@ -2631,12 +2631,12 @@ void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
         float ground_position[4];
         float *position = &moby->pos.x;
         float *arc_endpoint_position = moby_vars + 4;
-        float movement_step_length = D_L18_00161EE0 * frame_time;
+        float movement_step_length = target_travel_speed * frame_time;
         float target_distance;
         subtract_vector_xyz(target_displacement, moby_vars, position);
         target_distance = vector_length_xyz(target_displacement);
         FUN_L18_002ea598_c(moby);
-        FUN_L00_00257d78(arc_endpoint_position, D_L18_00161ED8 * moby_vars[9], D_L18_00161ED8 * moby_vars[9]);
+        FUN_L00_00257d78(arc_endpoint_position, electric_arc_endpoint_radius_scale * moby_vars[9], electric_arc_endpoint_radius_scale * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         initialize_electric_bolt_effect_if_requested(moby);
         update_electric_bolt_geometry_and_particles(moby);
