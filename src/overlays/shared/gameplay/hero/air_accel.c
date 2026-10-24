@@ -1654,7 +1654,9 @@ void select_hero_locomotion_state(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002490E0), where it is exact; names translated to the US level program. */
 
-void FUN_L01_002488e8(void) {
+void set_hero_moby_flag_bit_zero(void) __asm__("FUN_L01_002488e8");
+
+void set_hero_moby_flag_bit_zero(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) |= 1;
 }
 void FUN_L01_00248900(void) {
