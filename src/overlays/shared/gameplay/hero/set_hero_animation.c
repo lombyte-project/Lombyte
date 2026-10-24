@@ -827,29 +827,29 @@ float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
 float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 
 float compute_hero_ground_aligned_heading(void) {
-    float m[16] __attribute__((aligned(16)));
+    float heading_rotation_matrix[16] __attribute__((aligned(16)));
     Vec4_2332d0 heading_direction, z_rotation_angles, y_rotation_angles, y_alignment_reference_vector;
     struct Hero *P;
     heading_direction.f[0] = FUN_001f9dc8_002332d0(0.0f);
     heading_direction.f[1] = FUN_001f9de0_002332d0(0.0f);
     heading_direction.f[2] = 0.0f;
-    FUN_001fa050_002332d0(m, &hero.motion.rot);
+    FUN_001fa050_002332d0(heading_rotation_matrix, &hero.motion.rot);
     P = &hero;
-    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
     if (P->unk270.f[0] != 0.0f || P->unk270.f[1] != 0.0f) {
         y_alignment_reference_vector.q = P->unk270.q;
         FUN_001f99f8_002332d0(&z_rotation_angles);
         FUN_001f99f8_002332d0(&y_rotation_angles);
         z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->unk270.f[0], P->unk270.f[1]);
-        FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
-        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
+        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, heading_rotation_matrix);
         y_rotation_angles.f[1] = -FUN_001f9e90_002332d0(y_alignment_reference_vector.f[2], y_alignment_reference_vector.f[0]);
-        FUN_001fa050_002332d0(m, &y_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &y_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
         z_rotation_angles.f[2] = -z_rotation_angles.f[2];
-        FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
     }
     return FUN_001f9e90_002332d0(heading_direction.f[0], heading_direction.f[1]);
 }
