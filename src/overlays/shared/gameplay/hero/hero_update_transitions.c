@@ -185,7 +185,7 @@ void hero_update_transitions(void) {
     float alt_ledge_positive_shimmy_probe_yaw;
     float alt_ledge_negative_shimmy_probe_yaw;
     float alt_ledge_shimmy_continuation_probe_yaw;
-    int sp74;
+    int jump_apex_steps;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -2804,8 +2804,8 @@ void hero_update_transitions(void) {
                         break;
                     }
                     if (hero.state_timer == hero.takeoff_frame + scale_game_frames(1)) {
-                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp74, hero.jump_gravity);
-                        adjust_hero_animation_speed_for_target_frame(hero.apex_anim_frame, sp74, hero.jump_anim_retime_scale, -1.0f);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &jump_apex_steps, hero.jump_gravity);
+                        adjust_hero_animation_speed_for_target_frame(hero.apex_anim_frame, jump_apex_steps, hero.jump_anim_retime_scale, -1.0f);
                         break;
                     }
                     if (hero.rail_land_frames != 0) {
