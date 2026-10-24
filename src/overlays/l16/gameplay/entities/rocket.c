@@ -1748,7 +1748,7 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int *D_L16_001ABCC0_c2[] __asm__("D_L16_001ABCC0");
-extern float D_L16_001619DC;
+extern float test_dummy_glow_phase_rate_degrees __asm__("D_L16_001619DC");
 extern void draw_test_dummy_group_glows() __asm__("FUN_L16_002cef60");
 
 void update_test_dummy_group_glow_phases(struct Moby *moby) __asm__("FUN_L16_002cee70");
@@ -1759,7 +1759,7 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
     char *group_moby;
     char *data;
     if (moby->group != 0xFF) {
-        angle_increment = D_L16_001619DC * DEG_TO_RAD * D_0015ED6C;
+        angle_increment = test_dummy_glow_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C;
         group_entry = (short *)D_L16_001ABCC0_c2[moby->group];
         do {
         again:
