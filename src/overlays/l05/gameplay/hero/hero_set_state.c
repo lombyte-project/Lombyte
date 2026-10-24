@@ -304,7 +304,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)t);
         break;
     }
-    case 0x37: {
+    case HERO_STATE_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
