@@ -1181,7 +1181,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     V_2bc1a0 scaled_corner;
     V_2bc1a0 scaled_basis_offset;
     V_2bc1a0 camera_facing_offset;
-    unsigned int c;
+    unsigned int uniform_vertex_color;
     int i;
     FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, moby_bytes + 0xD0);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &scaled_basis_offset, moby_bytes + 0x10);
@@ -1198,15 +1198,15 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4))
-        c = D_L00_001616C4;
+        uniform_vertex_color = D_L00_001616C4;
     else
-        c = D_L00_001616C0;
-    c = (c & 0xFFFFFF) |
-        (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_00161660_f[29]) << 24);
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+        uniform_vertex_color = D_L00_001616C0;
+    uniform_vertex_color = (uniform_vertex_color & 0xFFFFFF) |
+        (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)uniform_vertex_color >> 24) * D_L00_00161660_f[29]) << 24);
+    quad.color[3] = uniform_vertex_color;
+    quad.color[2] = uniform_vertex_color;
+    quad.color[1] = uniform_vertex_color;
+    quad.color[0] = uniform_vertex_color;
     FUN_001f9a28_2bc1a0(&camera_facing_offset, &(*(V_2bc1a0 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2bc1a0(&camera_facing_transform[0], &camera_facing_offset, 1.0f);
     FUN_001f9ad8_2bc1a0(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2bc1a0 *)D_0013F5E0));
