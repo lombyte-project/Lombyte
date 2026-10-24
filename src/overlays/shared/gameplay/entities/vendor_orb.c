@@ -2281,10 +2281,10 @@ typedef struct {
     u8 p[0x70];
     u8 *m;
 } O002e5730;
-extern f32 D_L00_00161D28 __attribute__((sda));
-extern f32 D_L00_00161D2C __attribute__((sda));
-extern f32 D_L00_00161D30 __attribute__((sda));
-extern f32 D_L00_00161D34 __attribute__((sda));
+extern f32 follow_camera_position_default_stiffness __asm__("D_L00_00161D28") __attribute__((sda));
+extern f32 follow_camera_position_default_damping __asm__("D_L00_00161D2C") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_stiffness __asm__("D_L00_00161D30") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_damping __asm__("D_L00_00161D34") __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
@@ -2301,11 +2301,11 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     compute_follow_camera_target_position(camera, input_offset, &target_position, attach_state->xc4);
     attach_mode = attach_state->xc4;
     if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 || attach_mode == 1) {
-        x = D_L00_00161D30 + (D_L00_00161D28 - D_L00_00161D30) * k;
-        y = D_L00_00161D34 + (D_L00_00161D2C - D_L00_00161D34) * k;
+        x = follow_camera_position_transition_end_stiffness + (follow_camera_position_default_stiffness - follow_camera_position_transition_end_stiffness) * k;
+        y = follow_camera_position_transition_end_damping + (follow_camera_position_default_damping - follow_camera_position_transition_end_damping) * k;
     } else {
-        x = D_L00_00161D28;
-        y = D_L00_00161D2C;
+        x = follow_camera_position_default_stiffness;
+        y = follow_camera_position_default_damping;
     }
     interpolate_follow_camera_position(camera, attach_state->x90, &target_position, x, y, 0.0f);
 }
