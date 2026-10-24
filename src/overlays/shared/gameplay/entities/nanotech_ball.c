@@ -291,7 +291,9 @@ extern s32 D_L00_00161A88 __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
 extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
-s32 FUN_L00_002d8510(M_2d8510 *moby) {
+s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) __asm__("FUN_L00_002d8510");
+
+s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
     O_2d8510 *effect_data;
     V_2d8510 effect_position, effect_position_step;
     s32 i, any_effect_timer_above_threshold, c, hi, al;
