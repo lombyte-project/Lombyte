@@ -492,9 +492,9 @@ typedef struct {
 } RT_2baae0;
 
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
-extern int D_L00_00161638 __attribute__((sda));
-extern int D_L00_0016163C __attribute__((sda));
-extern int D_L00_001615F4 __attribute__((sda));
+extern int beam_and_arc_first_pass_texture_index_gp __asm__("D_L00_00161638") __attribute__((sda));
+extern int beam_and_arc_second_pass_texture_index_gp __asm__("D_L00_0016163C") __attribute__((sda));
+extern int beam_and_arc_first_pass_base_vertex_color_gp __asm__("D_L00_001615F4") __attribute__((sda));
 extern int D_L00_001615F8 __attribute__((sda));
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern long tex_2baae0(int) __asm__("FUN_001f44b8");
@@ -514,9 +514,9 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RT_2baae0 u;
     RW_2baae0 camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
-    float len, len0, segment_start_camera_distance, segment_end_camera_distance, l2;
-    first_pass_render_attributes.q0 = tex_2baae0(D_L00_00161638);
-    col0 = D_L00_001615F4 | (first_pass_alpha << 24);
+    float first_pass_side_normalization_factor, initial_first_pass_side_normalization_factor, segment_start_camera_distance, segment_end_camera_distance, second_pass_side_normalization_factor;
+    first_pass_render_attributes.q0 = tex_2baae0(beam_and_arc_first_pass_texture_index_gp);
+    col0 = beam_and_arc_first_pass_base_vertex_color_gp | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
     first_pass_render_attributes.q1 = 0xFF9000000260L;
     first_pass_render_attributes.z4 = 0;
@@ -524,7 +524,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.c[2] = col0;
     first_pass_render_attributes.c[1] = col0;
     first_pass_render_attributes.c[0] = col0;
-    u.q0 = tex_2baae0(D_L00_0016163C);
+    u.q0 = tex_2baae0(beam_and_arc_second_pass_texture_index_gp);
     col1 = D_L00_001615F8 | (second_pass_alpha << 24);
     u.q2 = first_pass_render_attributes.q2;
     u.q1 = first_pass_render_attributes.q1;
@@ -552,28 +552,28 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     fast_vec_sub(first_pass_point_camera_offset, point_bytes, g_debug_camera);
     fast_vec_sub(segment_delta, point_bytes + 0x10, point_bytes);
     fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
-    len0 = fast_vec_length(camera_facing_side_vector);
-    if (len0 != 0)
-        len0 = 1.0f / len0;
-    fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len0, camera_facing_side_vector, camera_facing_side_vector);
+    initial_first_pass_side_normalization_factor = fast_vec_length(camera_facing_side_vector);
+    if (initial_first_pass_side_normalization_factor != 0)
+        initial_first_pass_side_normalization_factor = 1.0f / initial_first_pass_side_normalization_factor;
+    fast_vec_scale(beam_and_arc_first_pass_half_width_gp * initial_first_pass_side_normalization_factor, camera_facing_side_vector, camera_facing_side_vector);
     fast_vec_add(first_pass_corners[0], point_bytes, camera_facing_side_vector);
     fast_vec_sub(first_pass_corners[1], point_bytes, camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
         fast_vec_sub(first_pass_point_camera_offset, v[i], g_debug_camera);
         fast_vec_sub(segment_delta, v[i + 1], v[i]);
         fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
-        len = fast_vec_length(camera_facing_side_vector);
-        if (len != 0)
-            len = 1.0f / len;
-        fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len, camera_facing_side_vector, camera_facing_side_vector);
+        first_pass_side_normalization_factor = fast_vec_length(camera_facing_side_vector);
+        if (first_pass_side_normalization_factor != 0)
+            first_pass_side_normalization_factor = 1.0f / first_pass_side_normalization_factor;
+        fast_vec_scale(beam_and_arc_first_pass_half_width_gp * first_pass_side_normalization_factor, camera_facing_side_vector, camera_facing_side_vector);
         fast_vec_add(first_pass_corners[2], v[i], camera_facing_side_vector);
         fast_vec_sub(first_pass_corners[3], v[i], camera_facing_side_vector);
         if (i == 1) {
-            first_pass_render_attributes.c[1] = D_L00_001615F4;
-            first_pass_render_attributes.c[0] = D_L00_001615F4;
+            first_pass_render_attributes.c[1] = beam_and_arc_first_pass_base_vertex_color_gp;
+            first_pass_render_attributes.c[0] = beam_and_arc_first_pass_base_vertex_color_gp;
         } else if (i == point_count - 2) {
-            first_pass_render_attributes.c[3] = D_L00_001615F4;
-            first_pass_render_attributes.c[2] = D_L00_001615F4;
+            first_pass_render_attributes.c[3] = beam_and_arc_first_pass_base_vertex_color_gp;
+            first_pass_render_attributes.c[2] = beam_and_arc_first_pass_base_vertex_color_gp;
         } else if (i == 2) {
             first_pass_render_attributes.c[1] = col0;
             first_pass_render_attributes.c[0] = col0;
@@ -606,10 +606,10 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         fast_vec_add(adjusted_segment_end, adjusted_segment_end, s1B0);
         fast_vec_sub(s1A0, g_debug_camera, adjusted_segment_start);
         fast_vec_cross(camera_facing_side_vector, s1A0, segment_delta);
-        l2 = fast_vec_length(camera_facing_side_vector);
-        if (l2 != 0)
-            l2 = 1.0f / l2;
-        fast_vec_scale(sy * l2, second_pass_width_offset, camera_facing_side_vector);
+        second_pass_side_normalization_factor = fast_vec_length(camera_facing_side_vector);
+        if (second_pass_side_normalization_factor != 0)
+            second_pass_side_normalization_factor = 1.0f / second_pass_side_normalization_factor;
+        fast_vec_scale(sy * second_pass_side_normalization_factor, second_pass_width_offset, camera_facing_side_vector);
         fast_vec_add(q2[0], adjusted_segment_start, second_pass_width_offset);
         fast_vec_sub(q2[1], adjusted_segment_start, second_pass_width_offset);
         fast_vec_add(q2[2], adjusted_segment_end, second_pass_width_offset);
