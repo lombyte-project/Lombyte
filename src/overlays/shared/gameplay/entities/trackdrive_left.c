@@ -6,9 +6,9 @@
 
 extern u8 D_L02_001CB9C0[];
 extern s32 scaled_table_header_leading_word __asm__("D_L02_001612A0") __attribute__((sda));
-extern s32 D_L02_001612A4;
-extern s32 D_L02_001612A8;
-extern s32 D_L02_001612AC;
+extern s32 scaled_table_header_second_word __asm__("D_L02_001612A4");
+extern s32 scaled_table_header_third_word __asm__("D_L02_001612A8");
+extern s32 scaled_table_header_final_word __asm__("D_L02_001612AC");
 
 extern float D_L02_001CB500[];
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
@@ -20,9 +20,9 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     float *base;
     value_target[0x3F] = val;
     *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word;
-    *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
-    *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
-    *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
+    *(s32 *)(D_L02_001CB9C0 + 0x4) = scaled_table_header_second_word;
+    *(s32 *)(D_L02_001CB9C0 + 0x8) = scaled_table_header_third_word;
+    *(s32 *)(D_L02_001CB9C0 + 0xC) = scaled_table_header_final_word;
     destination = (float *)(D_L02_001CB9C0 + 0x10);
     base = D_L02_001CB500;
     source = base + 4;
