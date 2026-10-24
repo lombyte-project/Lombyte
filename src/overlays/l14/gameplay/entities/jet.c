@@ -3635,9 +3635,9 @@ typedef struct {
     s32 timer;   /* 0xC */
 } FlyerVars;
 
-extern s32 D_L14_00161FB0 __attribute__((sda));
-extern f32 D_L14_00161FA8 __attribute__((sda));
-extern f32 D_L14_00161FAC __attribute__((sda));
+extern s32 rocket_initial_timer_frames __asm__("D_L14_00161FB0") __attribute__((sda));
+extern f32 rocket_travel_speed __asm__("D_L14_00161FA8") __attribute__((sda));
+extern f32 rocket_steering_blend_fraction __asm__("D_L14_00161FAC") __attribute__((sda));
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -3670,7 +3670,7 @@ void rocket_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->pos.z += 1.5f;
         vars->sound = -1;
-        vars->timer = scale_game_frames(D_L14_00161FB0);
+        vars->timer = scale_game_frames(rocket_initial_timer_frames);
         return;
     case ROCKET_STATE_IDLE:
         return;
@@ -3678,7 +3678,7 @@ void rocket_update(struct Moby *moby) {
         fast_vec_sub(&destination_delta, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
         distance_to_destination = fast_vec_length(&destination_delta);
         fast_dec_timer(&vars->timer);
-        speed = D_L14_00161FA8 * frame_time;
+        speed = rocket_travel_speed * frame_time;
         if (distance_to_destination < speed || distance_to_destination <= 0.0f) {
             if (vars->sound != -1) {
                 slot = D_0013E550 + vars->sound * 0x70;
@@ -3700,8 +3700,8 @@ void rocket_update(struct Moby *moby) {
             return;
         }
         moby->rot.x = fast_add_rotations(moby->rot.x, 2.0f * DEG_TO_RAD);
-        moby->rot.y = interpolate_angle(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), D_L14_00161FAC);
-        moby->rot.z = interpolate_angle(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), D_L14_00161FAC);
+        moby->rot.y = interpolate_angle(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), rocket_steering_blend_fraction);
+        moby->rot.z = interpolate_angle(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), rocket_steering_blend_fraction);
         fast_vec_scale(&step, &moby->rot_row0, speed);
         add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
         spawn_moby_offset_puffs(moby);
