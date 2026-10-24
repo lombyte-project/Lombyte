@@ -2773,7 +2773,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int D_L08_00161A34 __attribute__((sda));
 extern int D_L08_00161A38 __attribute__((sda));
 extern int D_L08_00161A3C __attribute__((sda));
-extern float D_L08_00161A40 __attribute__((sda));
+extern float class_1b3_projectile_scale_multiplier __asm__("D_L08_00161A40") __attribute__((sda));
 
 struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) __asm__("FUN_L08_002de3e0");
 
@@ -2795,7 +2795,7 @@ struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *ve
         *(volatile float *)&moby->rot.z = fast_arc_tan(reference[80] - moby->pos.x,
                                                         reference[81] - moby->pos.y);
         scale = moby->pclass->scale;
-        scale *= D_L08_00161A40;
+        scale *= class_1b3_projectile_scale_multiplier;
         moby->update_dist = 0xFF;
         moby->visible = 1;
         *(volatile u8 *)&moby->state = 1;
