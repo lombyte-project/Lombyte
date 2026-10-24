@@ -42,11 +42,11 @@ typedef struct Part_2FF358 {
 } Part_2FF358;
 
 extern float D_L14_0015F580;
-extern float D_L14_00161F90 __attribute__((sda));
-extern float D_L14_00161F94 __attribute__((sda));
-extern float D_L14_00161F98 __attribute__((sda));
-extern float D_L14_00161F9C __attribute__((sda));
-extern float D_L14_00161FA0 __attribute__((sda));
+extern float bolt_thief_puff_initial_right_offset __asm__("D_L14_00161F90") __attribute__((sda));
+extern float bolt_thief_puff_forward_offset __asm__("D_L14_00161F94") __attribute__((sda));
+extern float bolt_thief_puff_up_offset __asm__("D_L14_00161F98") __attribute__((sda));
+extern float bolt_thief_puff_middle_right_offset_delta __asm__("D_L14_00161F9C") __attribute__((sda));
+extern float bolt_thief_puff_final_right_offset __asm__("D_L14_00161FA0") __attribute__((sda));
 int D_L14_00161FA4 = 0x7f204080;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -68,12 +68,12 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
     float puff_size;
 
-    scale_vector_xyz(A, source_moby->right, D_L14_00161F90);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_initial_right_offset);
     add_vector_xyz(B, source_moby->pos, A);
-    scale_vector_xyz(A, source_moby->up, D_L14_00161F98);
+    scale_vector_xyz(A, source_moby->up, bolt_thief_puff_up_offset);
     add_vector_xyz(B, B, A);
     qcopy(C, B);
-    scale_vector_xyz(A, source_moby->fwd, D_L14_00161F94);
+    scale_vector_xyz(A, source_moby->fwd, bolt_thief_puff_forward_offset);
     add_vector_xyz(B, B, A);
     for (i = 1; i >= 0; i--) {
         puff_signed_amount = func_002140B0_2FF358(0x10);
@@ -88,7 +88,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
             f->bB = puff->life;
         }
     }
-    scale_vector_xyz(A, source_moby->right, D_L14_00161F9C);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_middle_right_offset_delta);
     puff_size = 100000.0f;
     add_vector_xyz(B, B, A);
     puff_signed_amount = 0x10;
@@ -109,7 +109,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
         puff_size = puff_size - 20000.0f;
     }
     puff_size = 300000.0f;
-    scale_vector_xyz(A, source_moby->right, D_L14_00161FA0);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_final_right_offset);
     add_vector_xyz(B, C, A);
     col = random_int_between(0x40, 0x80);
     k = (col << 8) | 0x7F000000;
