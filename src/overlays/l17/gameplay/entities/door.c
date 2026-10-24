@@ -1181,11 +1181,11 @@ extern float D_L17_0016202C __attribute__((sda));
 extern float D_L17_00162030 __attribute__((sda));
 extern float fighter_jet_camera_base_offset_x_gp __asm__("D_L17_00162034") __attribute__((sda));
 extern float fighter_jet_camera_base_offset_z_gp __asm__("D_L17_00162038") __attribute__((sda));
-extern float D_L17_0016203C __attribute__((sda));
-extern float D_L17_00162040 __attribute__((sda));
+extern float fighter_jet_camera_secondary_offset_x_gp __asm__("D_L17_0016203C") __attribute__((sda));
+extern float fighter_jet_camera_secondary_offset_z_gp __asm__("D_L17_00162040") __attribute__((sda));
 extern float D_L17_00162044 __attribute__((sda));
 extern float D_L17_00162048 __attribute__((sda));
-extern float D_L17_0016204C __attribute__((sda));
+extern float fighter_jet_camera_pitch_bias_gp __asm__("D_L17_0016204C") __attribute__((sda));
 extern float D_L17_0016205C __attribute__((sda));
 extern float fighter_jet_collision_damage_gp __asm__("D_L17_00162060") __attribute__((sda));
 extern float D_L17_0016208C __attribute__((sda));
@@ -1442,8 +1442,8 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             (fighter_jet_camera_base_offset_x_gp - ship_vars->f70 * D_L17_00162138 - ratio * D_L17_00162140) * D_L17_0016209C;
         wr.e[0].v[1] = ship_vars->f6C * D_L17_00162090 * D_L17_0016209C;
         wr.e[0].v[2] = (fighter_jet_camera_base_offset_z_gp + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
-        wr.e[1].v[0] = D_L17_0016203C * D_L17_0016209C;
-        wr.e[1].v[2] = D_L17_00162040 * D_L17_0016209C;
+        wr.e[1].v[0] = fighter_jet_camera_secondary_offset_x_gp * D_L17_0016209C;
+        wr.e[1].v[2] = fighter_jet_camera_secondary_offset_z_gp * D_L17_0016209C;
         camera_offset_targets.e[0].q = wr.e[0].q;
         camera_offset_targets.e[1].q = wr.e[1].q;
         vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
@@ -1461,7 +1461,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         add_vector_xyz(wr.e[0].v, ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rotations(ship_vars->f30 * D_L17_00162048, ship_vars->f6C * D_L17_00162044);
-        wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, D_L17_0016204C),
+        wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, fighter_jet_camera_pitch_bias_gp),
                                                ship_vars->f70 * D_L17_00162024);
         wr.e[1].v[2] = ship_vars->f38;
         FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
