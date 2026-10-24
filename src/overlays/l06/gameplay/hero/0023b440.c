@@ -154,7 +154,7 @@ void update_hero_state_machine(void) {
     float ledge_negative_side_probe_yaw;
     float ledge_shimmy_probe_yaw;
     int jump_prediction_steps;
-    int sp58;
+    int jump_press_age_frames;
     int trajectory_prediction_steps;
     float alt_ledge_hang_probe_yaw;
     float alt_ledge_positive_side_probe_yaw;
@@ -1875,8 +1875,8 @@ void update_hero_state_machine(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp58)) {
-                                    if (sp58 < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_age_frames)) {
+                                    if (jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
