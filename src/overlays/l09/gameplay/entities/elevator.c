@@ -1449,9 +1449,9 @@ typedef struct {
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
-extern float D_L09_00161DC4 __attribute__((sda));
-extern float D_L09_00161DC8 __attribute__((sda));
-extern float D_L09_00161DCC __attribute__((sda));
+extern float floating_ship_piece_hero_offset_tilt_gain __asm__("D_L09_00161DC4") __attribute__((sda));
+extern float floating_ship_piece_sink_speed __asm__("D_L09_00161DC8") __attribute__((sda));
+extern float floating_ship_piece_height_return_rate __asm__("D_L09_00161DCC") __attribute__((sda));
 extern float D_L09_00161DD4 __attribute__((sda));
 extern float D_L09_00161DD8 __attribute__((sda));
 extern float D_L09_00161DDC __attribute__((sda));
@@ -1562,7 +1562,7 @@ void update_floating_ship_piece(char *moby) {
             deg_to_rad = 0.0174532924f;
             side_dot = fast_vec_dot(hero_offset, moby + 0xC0);
             front_dot = fast_vec_dot(hero_offset, moby + 0xD0);
-            tilt = D_L09_00161DC4;
+            tilt = floating_ship_piece_hero_offset_tilt_gain;
             pitch_target = tilt * side_dot;
             *(u128_30A560 *)old_angles = *(u128_30A560 *)(data + 0x60);
             *(u128_30A560 *)old_pos = *(u128_30A560 *)(moby + 0x10);
@@ -1574,7 +1574,7 @@ void update_floating_ship_piece(char *moby) {
                               D_L09_00161DD4 * deg_to_rad * frame_time_sq,
                               D_L09_00161DD8 * frame_scale_sq,
                               D_L09_00161DDC * deg_to_rad * frame_time);
-            new_z = *(float *)(moby + 0x18) - D_L09_00161DC8 * frame_time;
+            new_z = *(float *)(moby + 0x18) - floating_ship_piece_sink_speed * frame_time;
             *(float *)(moby + 0x18) = new_z;
             if (sink_level < old_z && new_z <= sink_level) {
                 func_0022ED80_30A560(1, 0, moby);
@@ -1584,7 +1584,7 @@ void update_floating_ship_piece(char *moby) {
             ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] = ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
         } else {
             float rise;
-            ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + (rise = D_L09_00161DCC * frame_time) * (*(float *)(data + 0x84) - ((Mpos_30A560 *)moby)->z);
+            ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + (rise = floating_ship_piece_height_return_rate * frame_time) * (*(float *)(data + 0x84) - ((Mpos_30A560 *)moby)->z);
             if (((Mpos_30A560 *)moby)->z < *(float *)(data + 0x84) - 2.0f) {
                 float deg_to_rad;
                 ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + rise;
