@@ -2217,16 +2217,16 @@ extern char D_L14_001FBF48[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
-extern float D_L14_00161568 __attribute__((sda));
+extern float minibomber_bomb_gravity __asm__("D_L14_00161568") __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
 extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161554 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_0016155C __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_00161560 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_00161564 __attribute__((sda)); /* no foreign declaration */
+extern int minibomber_bomb_aim_duration_frames __asm__("D_L14_0016155C") __attribute__((sda)); /* no foreign declaration */
+extern int minibomber_aim_return_duration_frames __asm__("D_L14_00161560") __attribute__((sda)); /* no foreign declaration */
+extern int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_0016156C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161570 __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_path_traversal_trigger_distance __asm__("D_L14_00161570") __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161574 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161578 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_0016157C __attribute__((sda)); /* no foreign declaration */
@@ -2438,9 +2438,9 @@ void minibomber_update(Moby_2B5938 *moby) {
     }
     case MINIBOMBER_STATE_HOLD_AT_PATH_END:
         tg = 0.0f;
-        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_00161560)));
+        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(minibomber_aim_return_duration_frames)));
         FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
-        if (vector_distance(moby->pos, d->fB0->pos) < D_L14_00161570) {
+        if (vector_distance(moby->pos, d->fB0->pos) < minibomber_path_traversal_trigger_distance) {
             if (d->f10C == 0) {
                 d->fE8 = 0;
                 d->fEC = 0.0f;
@@ -2459,7 +2459,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         } else if (FUN_001f9770_c(&d->f102) != 0) {
             if (moby->f53 != 2) {
                 moby->state = 5;
-                d->f102 = scale_game_frames_c(D_L14_0016155C);
+                d->f102 = scale_game_frames_c(minibomber_bomb_aim_duration_frames);
                 d->f104 = 0.0f;
                 d->f100 = 0;
             }
@@ -2502,11 +2502,11 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
         PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
-        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(D_L14_0016155C)));
+        blended_aim_angle = blend_scalar_alt(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(minibomber_bomb_aim_duration_frames)));
         FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
         if (moby->f53 == 2) {
             moby->state = 4;
-            d->f102 = scale_game_frames_c(D_L14_00161560);
+            d->f102 = scale_game_frames_c(minibomber_aim_return_duration_frames);
         } else if (FUN_001f9770_c(&d->f102) != 0) {
             d->f104 = blended_aim_angle;
             moby->state = 6;
@@ -2517,13 +2517,13 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_RELEASE_BOMB:
         if (is_value_within_interpolated_window(moby, 3.0f) != 0) {
             PathNode_2B5938 *q;
-            n = (float)scale_game_frames_c(D_L14_00161564);
+            n = (float)scale_game_frames_c(minibomber_bomb_flight_duration_frames);
             FUN_L00_001fff28(d->f120, 2, d->f104);
             moby_point_position(moby, 1, v);
             subtract_vector_xyz_c(v + 4, D_L14_001B0F30_2B5938[d->fD8] + (d->f100 + 1), v);
             v[6] = 0.0f;
             scale_vector_xyz_c(v + 4, v + 4, 1.0f / n);
-            bomb_gravity = D_L14_00161568 * frame_time_sq;
+            bomb_gravity = minibomber_bomb_gravity * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
             func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(D_L14_0016156C));
@@ -2531,9 +2531,9 @@ void minibomber_update(Moby_2B5938 *moby) {
             d->f100++;
             if (d->f100 >= D_L14_001B0F30_2B5938[d->fD8]->n) {
                 moby->state = 4;
-                d->f102 = scale_game_frames_c(D_L14_00161560);
+                d->f102 = scale_game_frames_c(minibomber_aim_return_duration_frames);
             } else {
-                d->f102 = scale_game_frames_c(D_L14_0016155C);
+                d->f102 = scale_game_frames_c(minibomber_bomb_aim_duration_frames);
                 moby->state = 5;
             }
         }
