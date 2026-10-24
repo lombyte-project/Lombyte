@@ -112,7 +112,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
     };
     float c[4];
     float beam_vector_scratch[4];
-    float b[4];
+    float beam_geometry_scratch[4];
     float hero_offset[4];
     float axis_aligned_hero_offset[4];
     float beam_endpoint_position_scratch[4];
@@ -153,13 +153,13 @@ void update_fleet_beam(struct Moby *beam_moby) {
         *(OvlQuad *)beam_vector_scratch = 0;
         beam_vector_scratch[0] = 13.0f;
         transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-        add_vector_xyz(b, &beam_moby->pos, beam_vector_scratch);
-        *(OvlQuad *)c = *(OvlQuad *)b;
+        add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
+        *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
         if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
             *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
         }
-        subtract_vector_xyz(b, c, &beam_moby->pos);
-        *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)b;
+        subtract_vector_xyz(beam_geometry_scratch, c, &beam_moby->pos);
+        *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         break;
     case BEAM_UPDATE_STATIONARY:
         if (*(int *)(beam_vars + 0x40) == -1 ||
@@ -188,30 +188,30 @@ void update_fleet_beam(struct Moby *beam_moby) {
             *(OvlQuad *)beam_vector_scratch = 0;
             beam_vector_scratch[0] = 13.0f;
             transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-            add_vector_xyz(b, &beam_moby->pos, beam_vector_scratch);
-            *(OvlQuad *)c = *(OvlQuad *)b;
+            add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
+            *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
             if (collision_line(&beam_moby->pos, c, 2, 0, 0)) {
                 *(OvlQuad *)c = *(OvlQuad *)D_L17_00174760;
             }
             flag = 1;
-            subtract_vector_xyz(b, c, &beam_moby->pos);
-            *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)b;
+            subtract_vector_xyz(beam_geometry_scratch, c, &beam_moby->pos);
+            *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         }
         break;
     }
     *(OvlQuad *)beam_vector_scratch = 0;
     beam_vector_scratch[0] = 12.0f;
     transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-    add_vector_xyz(b, &beam_moby->pos, beam_vars + 0x30);
-    *(OvlQuad *)c = *(OvlQuad *)b;
+    add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vars + 0x30);
+    *(OvlQuad *)c = *(OvlQuad *)beam_geometry_scratch;
     if (*(int *)(beam_vars + 0x60) != 0) {
         normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&D_L17_00161498 - 0.2f));
         normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&D_L17_00161498);
-        add_vector_xyz(b, beam_vars + 0x20, c);
+        add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, c);
         e = *(char **)(beam_vars + 0x60);
-        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)b;
-        add_vector_xyz(b, e + 0x10, c);
-        *(OvlQuad *)(e + 0x10) = *(OvlQuad *)b;
+        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
+        add_vector_xyz(beam_geometry_scratch, e + 0x10, c);
+        *(OvlQuad *)(e + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)c;
     }
@@ -226,9 +226,9 @@ void update_fleet_beam(struct Moby *beam_moby) {
         subtract_vector_xyz(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars + 0x10);
         *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)beam_endpoint_position_scratch;
         signed_beam_length = vector_length_xyz(beam_vars + 0x30);
-        lerp_vector(b, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
-        b[3] = signed_beam_length * 0.5f;
-        if (fast_bsphere_check((char *)b, 32.0f) != -1) {
+        lerp_vector(beam_geometry_scratch, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
+        beam_geometry_scratch[3] = signed_beam_length * 0.5f;
+        if (fast_bsphere_check((char *)beam_geometry_scratch, 32.0f) != -1) {
             subtract_vector_xyz(hero_offset, &hero.motion.pos, &beam_moby->pos);
             normalize_vector_xyz(axis_aligned_hero_offset, &beam_moby->rot_row0, dot_vectors_xyz(&beam_moby->rot_row0, hero_offset));
             subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
