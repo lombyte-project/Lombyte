@@ -1782,7 +1782,9 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
 extern int D_L04_0015F5C4;
-void FUN_L04_002e1d00(char *moby) {
+void update_suck_cannon_particles(char *moby) __asm__("FUN_L04_002e1d00");
+
+void update_suck_cannon_particles(char *moby) {
     L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
