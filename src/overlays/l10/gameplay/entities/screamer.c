@@ -344,7 +344,9 @@ extern void hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int
 extern void play_sound_2DFC38(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_2DFC38(int, int, int) __asm__("FUN_0022db10");
 
-void FUN_L10_002dfc38(struct Moby *moby) {
+void update_screamer_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002dfc38");
+
+void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     MobyData_2DFC38 *data = (MobyData_2DFC38 *)moby->pvars;
     Hit_2DFC38 *hit_record;
     float relative_offset[4];
