@@ -473,9 +473,9 @@ extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00305b18");
 
 extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18");
-extern f32 D_L14_001621E8 __attribute__((sda));
-extern f32 D_L14_001621EC __attribute__((sda));
-extern f32 D_L14_001621F0 __attribute__((sda));
+extern f32 morphoray_ground_height_offset __asm__("D_L14_001621E8") __attribute__((sda));
+extern f32 morphoray_yaw_step __asm__("D_L14_001621EC") __attribute__((sda));
+extern f32 morphoray_position_offset_scale __asm__("D_L14_001621F0") __attribute__((sda));
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -512,14 +512,14 @@ void morphoray_update(struct Moby *moby) {
         probe_ground_height(moby_bytes + 0x10, 0, 0.5f);
         moby->rot.x = 0.0f;
         moby->rot.y = -1.5707964f;
-        moby->pos.z = D_L14_00174568[0] + D_L14_001621E8;
+        moby->pos.z = D_L14_00174568[0] + morphoray_ground_height_offset;
         qcopy(morphoray_pvars, moby_bytes + 0x10);
         moby->state = 1;
         break;
     case MORPHORAY_WAIT_FOR_HERO:
-        *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), D_L14_001621EC);
+        *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), morphoray_yaw_step);
         qcopy(moby_bytes + 0x10, morphoray_pvars);
-        scale_vector_xyz(position_offset, moby_bytes + 0xd0, D_L14_001621F0);
+        scale_vector_xyz(position_offset, moby_bytes + 0xd0, morphoray_position_offset_scale);
         add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, position_offset);
         update_morphoray_particles(moby);
         if (D_L14_0015F5CC % 10 != 0)
