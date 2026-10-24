@@ -458,7 +458,7 @@ void update_level01_cutscene_effects(struct Moby *moby) {
     };
     FxVec effect_position_or_motion_delta;
     FxVec debris_vector_or_effect_position;
-    FxVec c;
+    FxVec primary_trail_position;
     FxVec secondary_effect_position;
     struct Moby *cutscene_moby;
     char *splash;
@@ -563,22 +563,22 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     }
                     if (fx_cutscene.frame == scale_game_frames(118)) {
-                        clear_vector(&c);
-                        spawn_explosion(cutscene_moby, &c, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
+                        clear_vector(&primary_trail_position);
+                        spawn_explosion(cutscene_moby, &primary_trail_position, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
                         qcopy(&secondary_effect_position, &debris_vector_or_effect_position);
                         secondary_effect_position.f[2] = secondary_effect_position.f[2] - 1.0f;
-                        spawn_explosion(cutscene_moby, &c, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
+                        spawn_explosion(cutscene_moby, &primary_trail_position, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
                     enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
-                    moby_point_position(cutscene_moby, 1, &c);
+                    moby_point_position(cutscene_moby, 1, &primary_trail_position);
                     moby_point_position(cutscene_moby, 2, &secondary_effect_position);
-                    subtract_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                    subtract_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
                     subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     scale_vector_xyz(&effect_position_or_motion_delta, &effect_position_or_motion_delta, 0.25f);
                     for (step = 0; step < 4; step++) {
-                        draw_trail(&c, &c, &D_L01_0015F580, 150000.0f, 60000.0f);
+                        draw_trail(&primary_trail_position, &primary_trail_position, &D_L01_0015F580, 150000.0f, 60000.0f);
                         draw_trail(&secondary_effect_position, &secondary_effect_position, &D_L01_0015F580, 150000.0f, 60000.0f);
-                        add_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                        add_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
                         add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     }
                 }
