@@ -1159,7 +1159,9 @@ int D_L16_001CEFD0[196] = RIBBON_COLORS;
 int D_L17_001CF850[196] = RIBBON_COLORS;
 int D_L18_001CF550[196] = RIBBON_COLORS;
 /* Draws the moby's beam: orients the moby along its child's two joints, draws three quads and a ribbon of 196 points. */
-void FUN_L00_002b3628(struct Moby *beam_moby) {
+void draw_joint_aligned_beam_effect(struct Moby *beam_moby) __asm__("FUN_L00_002b3628");
+
+void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     Quad_2b3628 pk;
     Vec4A_2b3628 mtx[4];
     Vec4A_2b3628 out[2];
