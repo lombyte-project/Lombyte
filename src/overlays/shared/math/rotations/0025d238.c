@@ -579,15 +579,15 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     }
     for (i = 0; i < burst_particle_count; i++) {
         {
-        Q_25e450 dir;
+        Q_25e450 burst_particle_vector;
         float a;
         float b;
         a = random_float_between_25e450(0.2617994f, 1.3962634f);
         b = random_angle_radians_25e450();
-        build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
-        dir.f[2] += frame_time_macro * 3.0f;
+        build_spherical_offset_25e450(&burst_particle_vector, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+        burst_particle_vector.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
-        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &dir, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &burst_particle_vector, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
