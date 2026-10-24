@@ -1265,22 +1265,22 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_
 
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     Q_e3388 geometry_quad;
-    f32 a[4] __attribute__((aligned(16)));
-    f32 b[4] __attribute__((aligned(16)));
-    f32 c[4] __attribute__((aligned(16)));
-    f32 d[4] __attribute__((aligned(16)));
-    f32 e[4] __attribute__((aligned(16)));
+    f32 endpoint_to_camera_axis[4] __attribute__((aligned(16)));
+    f32 endpoint_quad_side_axis[4] __attribute__((aligned(16)));
+    f32 endpoint_quad_up_axis[4] __attribute__((aligned(16)));
+    f32 quad_endpoint_position[4] __attribute__((aligned(16)));
+    f32 core_quad_jitter_offset[4] __attribute__((aligned(16)));
     f32 quad_scale;
     s32 i;
     s32 j;
 
-    qcopy(d, &D_L00_001E6D50_e3388[beam_slot]);
-    d[3] = 1.0f;
-    FUN_001f9a28_e3388(a, g_debug_camera, d);
-    FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
-    FUN_001f9bf8_e3388(b, b, -1.0f);
-    FUN_001f9ad8_e3388(c, b, a);
+    qcopy(quad_endpoint_position, &D_L00_001E6D50_e3388[beam_slot]);
+    quad_endpoint_position[3] = 1.0f;
+    FUN_001f9a28_e3388(endpoint_to_camera_axis, g_debug_camera, quad_endpoint_position);
+    FUN_001f9bf8_e3388(endpoint_to_camera_axis, endpoint_to_camera_axis, 1.0f);
+    FUN_001f9ad8_e3388(endpoint_quad_side_axis, endpoint_to_camera_axis, &hero.gravity_dir);
+    FUN_001f9bf8_e3388(endpoint_quad_side_axis, endpoint_quad_side_axis, -1.0f);
+    FUN_001f9ad8_e3388(endpoint_quad_up_axis, endpoint_quad_side_axis, endpoint_to_camera_axis);
     geometry_quad.r78 = get_effect_texture(0xB);
     geometry_quad.r88 = 0xFF00000044;
     geometry_quad.r80 = 0xFF9000000260;
@@ -1298,13 +1298,13 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.uv[3][0] = 1.0f;
     geometry_quad.uv[3][1] = 1.0f;
     quad_scale = FUN_002132a8_e3388(0.3f, 0.325f);
-    e[0] = spread_k(0.0f, 0.05f);
-    e[1] = spread_k(0.0f, 0.05f);
-    e[2] = spread_k(0.0f, 0.05f);
+    core_quad_jitter_offset[0] = spread_k(0.0f, 0.05f);
+    core_quad_jitter_offset[1] = spread_k(0.0f, 0.05f);
+    core_quad_jitter_offset[2] = spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
-        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
-        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], e);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
+        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
     geometry_quad.r88 = 0xFF00000048;
@@ -1314,15 +1314,15 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[0] = 0x607F4040;
     for (j = 0; j < 4; j++) {
         FUN_001f9a68_e3388(geometry_quad.v[j], D_L00_001E6CE0[j], quad_scale * 3.0f);
-        transform_vector(geometry_quad.v[j], geometry_quad.v[j], a);
+        transform_vector(geometry_quad.v[j], geometry_quad.v[j], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
-    qcopy(d, D_L00_001E6E10_e3388[beam_slot]);
-    FUN_001f9a28_e3388(a, g_debug_camera, d);
-    FUN_001f9bf8_e3388(a, a, 1.0f);
-    FUN_001f9ad8_e3388(b, a, &hero.gravity_dir);
-    FUN_001f9bf8_e3388(b, b, -1.0f);
-    FUN_001f9ad8_e3388(c, b, a);
+    qcopy(quad_endpoint_position, D_L00_001E6E10_e3388[beam_slot]);
+    FUN_001f9a28_e3388(endpoint_to_camera_axis, g_debug_camera, quad_endpoint_position);
+    FUN_001f9bf8_e3388(endpoint_to_camera_axis, endpoint_to_camera_axis, 1.0f);
+    FUN_001f9ad8_e3388(endpoint_quad_side_axis, endpoint_to_camera_axis, &hero.gravity_dir);
+    FUN_001f9bf8_e3388(endpoint_quad_side_axis, endpoint_quad_side_axis, -1.0f);
+    FUN_001f9ad8_e3388(endpoint_quad_up_axis, endpoint_quad_side_axis, endpoint_to_camera_axis);
     quad_scale = FUN_002132a8_e3388(0.2f, 0.225f);
     geometry_quad.r88 = 0xFF00000044;
     geometry_quad.col[3] = -1;
@@ -1331,8 +1331,8 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[0] = -1;
     for (i = 0; i < 4; i++) {
         FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
-        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
-        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], e);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
+        FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
     geometry_quad.r88 = 0xFF00000048;
@@ -1342,7 +1342,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[0] = 0x607F4040;
     for (i = 0; i < 4; i++) {
         FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale * 3.0f);
-        transform_vector(geometry_quad.v[i], geometry_quad.v[i], a);
+        transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
 }
