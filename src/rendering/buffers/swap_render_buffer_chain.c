@@ -2,7 +2,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
-extern s32 D_00160F04;
+extern s32 previous_render_packet_cursor __asm__("D_00160F04");
 void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 
 void swap_render_buffer_chain(void) {
@@ -12,7 +12,7 @@ void swap_render_buffer_chain(void) {
 
     next_index = 1 - D_00160F10;
     next_buffer = D_00160EF8[next_index];
-    D_00160F04 = render_packet_cursor.addr;
+    previous_render_packet_cursor = render_packet_cursor.addr;
     D_00160F10 = next_index;
     buffer_limit = (next_buffer + current_vu_chain) - D_0015F5B8;
     render_packet_cursor.addr = next_buffer;
