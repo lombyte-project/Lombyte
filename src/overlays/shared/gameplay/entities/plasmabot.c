@@ -1222,10 +1222,10 @@ typedef struct {
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001D8890[4][4];
-extern float D_L14_001614F8 __attribute__((sda));
-extern float D_L14_001614FC __attribute__((sda));
-extern float D_L14_00161500 __attribute__((sda));
-extern u32 D_L14_00161504 __attribute__((sda));
+extern float plasmabot_glow_quad_scale __asm__("D_L14_001614F8") __attribute__((sda));
+extern float plasmabot_glow_camera_pull_distance_limit __asm__("D_L14_001614FC") __attribute__((sda));
+extern float plasmabot_glow_camera_clearance_distance __asm__("D_L14_00161500") __attribute__((sda));
+extern u32 plasmabot_glow_vertex_color __asm__("D_L14_00161504") __attribute__((sda));
 extern float vector_length_xyz(void *a);
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
@@ -1257,8 +1257,8 @@ void draw_plasmabot_glow_quad(char *m) {
     subtract_vector_xyz(camera_displacement, ((char *)&D_L14_001674C0), glow_position);
     camera_to_glow_distance = vector_length_xyz(camera_displacement);
     if (0.0f < camera_to_glow_distance) {
-        float position_offset_distance = D_L14_001614FC;
-        float unclamped_offset_distance = camera_to_glow_distance - D_L14_00161500;
+        float position_offset_distance = plasmabot_glow_camera_pull_distance_limit;
+        float unclamped_offset_distance = camera_to_glow_distance - plasmabot_glow_camera_clearance_distance;
         if (unclamped_offset_distance < position_offset_distance) {
             position_offset_distance = unclamped_offset_distance;
             if (unclamped_offset_distance < 0.0f)
@@ -1275,13 +1275,13 @@ void draw_plasmabot_glow_quad(char *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    col = D_L14_00161504;
+    col = plasmabot_glow_vertex_color;
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
-        scale_vector_xyz(pk.m[j], D_L14_001D8890[j], D_L14_001614F8);
+        scale_vector_xyz(pk.m[j], D_L14_001D8890[j], plasmabot_glow_quad_scale);
         add_vector_xyz(pk.m[j], pk.m[j], glow_position);
     }
     draw_geometry_quad(&pk, 0, 0);
