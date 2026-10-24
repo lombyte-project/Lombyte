@@ -234,7 +234,9 @@ extern int D_L00_00161A6C __attribute__((sda));
 extern int D_L00_00161A70 __attribute__((sda));
 extern float D_L00_00161A74 __attribute__((sda));
 extern float D_L00_00161A78 __attribute__((sda));
-void FUN_L00_002d8418(char *moby) {
+void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
+
+void spawn_nanotech_ball_collection_effect_pair(char *moby) {
     Vec4_002d8418 to_camera;
     Vec4_002d8418 scaled_gravity_vector;
     Vec4_002d8418 effect_vector;
