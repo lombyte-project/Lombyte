@@ -987,7 +987,7 @@ extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
-extern float D_L18_00162600 __attribute__((sda));
+extern float gadgebot_sequence_2_start_frame_gp __asm__("D_L18_00162600") __attribute__((sda));
 extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
@@ -1094,7 +1094,7 @@ void gadgebot_update(unsigned char *moby) {
         if (target_distance < 1.5f) {
             moby[0x20] = 4;
             if (moby[0x53] != 2) {
-                int animation_frame_index = (int)D_L18_00162600;
+                int animation_frame_index = (int)gadgebot_sequence_2_start_frame_gp;
                 blend_moby_animation(moby, 2, animation_frame_index, scale_game_frames(5));
             }
         }
