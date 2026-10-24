@@ -3311,8 +3311,8 @@ extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern float D_L18_001623B0 __attribute__((sda));
 extern short D_L18_001623B4 __attribute__((sda));
-extern float D_L18_001623B8 __attribute__((sda));
-extern float D_L18_001623BC __attribute__((sda));
+extern float drek_boss_scalar_blend_min_hero_distance_gp __asm__("D_L18_001623B8") __attribute__((sda));
+extern float drek_boss_scalar_blend_max_hero_distance_gp __asm__("D_L18_001623BC") __attribute__((sda));
 extern float D_L18_001623C0 __attribute__((sda));
 extern float D_L18_001623C4 __attribute__((sda));
 extern float D_L18_001623C8 __attribute__((sda));
@@ -3320,7 +3320,7 @@ extern float D_L18_001623D0 __attribute__((sda));
 extern float D_L18_001623D4 __attribute__((sda));
 extern float D_L18_001623D8 __attribute__((sda));
 extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
-extern float D_L18_001623E0 __attribute__((sda));
+extern float drek_boss_follow_camera_distance_target_gp __asm__("D_L18_001623E0") __attribute__((sda));
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
@@ -3337,7 +3337,7 @@ extern float advance_accelerated_scalar_7288(float *, float, float *, float, flo
     __asm__("FUN_00213f38");
 
 extern float D_L18_001623CC __attribute__((sda));
-extern float D_L18_001623E4 __attribute__((sda));
+extern float drek_boss_follow_camera_height_target_gp __asm__("D_L18_001623E4") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void update_drek_boss_state_dependent_scalars(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
@@ -3353,13 +3353,13 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
 
     fast_dec_timer((int *)(boss_data + 0x360));
     f = vector_distance(hero.motion.pos.f, boss_data + 0x3c0);
-    if (f > D_L18_001623BC) {
-        f = D_L18_001623BC;
-    } else if (f < D_L18_001623B8) {
-        f = D_L18_001623B8;
+    if (f > drek_boss_scalar_blend_max_hero_distance_gp) {
+        f = drek_boss_scalar_blend_max_hero_distance_gp;
+    } else if (f < drek_boss_scalar_blend_min_hero_distance_gp) {
+        f = drek_boss_scalar_blend_min_hero_distance_gp;
     }
-    f = f - D_L18_001623B8;
-    f = f / (D_L18_001623BC - D_L18_001623B8);
+    f = f - drek_boss_scalar_blend_min_hero_distance_gp;
+    f = f / (drek_boss_scalar_blend_max_hero_distance_gp - drek_boss_scalar_blend_min_hero_distance_gp);
     x = (D_L18_001623C0 - D_L18_001623C8) * f + D_L18_001623C8;
     y = (D_L18_001623C4 - D_L18_001623CC) * f + D_L18_001623CC;
     boss_state = *(unsigned char *)(moby + 0x20);
@@ -3386,8 +3386,8 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
             }
         }
     } else if (boss_state == 9 || boss_state == 6) {
-        x = D_L18_001623E0;
-        y = D_L18_001623E4;
+        x = drek_boss_follow_camera_distance_target_gp;
+        y = drek_boss_follow_camera_height_target_gp;
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
         first_scalar_update_state = (float *)(boss_data + 0x378);
@@ -3422,8 +3422,8 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                             q = D_L18_00167680;
                             follow_camera_gate_record = *(char **)(q + 0x180);
                             if (follow_camera_gate_record != 0 && *(short *)(follow_camera_gate_record + 0x86) == 0) {
-                                follow_camera_set_distance(D_L18_001623E0, 0.003f, 0);
-                                follow_camera_set_height(D_L18_001623E4, 0.003f);
+                                follow_camera_set_distance(drek_boss_follow_camera_distance_target_gp, 0.003f, 0);
+                                follow_camera_set_height(drek_boss_follow_camera_height_target_gp, 0.003f);
                             }
                         }
                     }
