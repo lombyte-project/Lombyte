@@ -587,7 +587,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x34, 0);
                     }
                     break;
-                case 117:
+                case HERO_STATE_WATER_SURFACE_HURT:
                     if (hero.health.hp <= 0) {
                         hero_set_state(0x6A, 1);
                         set_hero_animation(0x5F, 0x25, scale_game_frames(0x12));
@@ -745,7 +745,7 @@ void update_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_RUN:
                 case 47:
-                case 115:
+                case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
                         (moby->anim_time > 0.9f || moby->seq != 0xFF)) {
