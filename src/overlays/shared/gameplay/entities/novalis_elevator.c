@@ -2574,9 +2574,9 @@ extern f32 amoeboid_burst_downward_velocity_adjustment_factor_gp __asm__("D_L01_
 extern f32 D_L01_00161A14 __attribute__((sda));
 extern f32 D_L01_00161A18 __attribute__((sda));
 extern s32 amoeboid_burst_spark_spawn_color_randomization_start_gp __asm__("D_L01_00161A1C") __attribute__((sda));
-extern s32 D_L01_00161A20 __attribute__((sda));
+extern s32 amoeboid_burst_spark_secondary_color_randomization_start_gp __asm__("D_L01_00161A20") __attribute__((sda));
 extern s32 amoeboid_burst_spark_spawn_color_randomization_end_gp __asm__("D_L01_00161A24") __attribute__((sda));
-extern s32 D_L01_00161A28 __attribute__((sda));
+extern s32 amoeboid_burst_spark_secondary_color_randomization_end_gp __asm__("D_L01_00161A28") __attribute__((sda));
 extern s32 D_L01_00161A2C __attribute__((sda));
 extern s32 D_L01_00161A30 __attribute__((sda));
 extern s32 amoeboid_burst_spark_duration_base_gp __asm__("D_L01_00161A34") __attribute__((sda));
@@ -2629,7 +2629,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             add_random_offset_to_vector_xyz(spawn_position, amoeboid_burst_spark_position_jitter_bound_gp);
             add_random_offset_to_vector_xyz(velocity, amoeboid_burst_spark_velocity_jitter_bound_gp * frame_time_gp);
             lower = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_spawn_color_randomization_start_gp, amoeboid_burst_spark_spawn_color_randomization_end_gp);
-            upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A20, D_L01_00161A28);
+            upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_secondary_color_randomization_start_gp, amoeboid_burst_spark_secondary_color_randomization_end_gp);
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)amoeboid_burst_spark_duration_base_gp * 0.5f, (f32)amoeboid_burst_spark_duration_base_gp * 2.5f)));
