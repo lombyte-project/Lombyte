@@ -2103,7 +2103,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x66:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&spatial_scratch_or_hit_descriptor, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&spatial_scratch_or_hit_descriptor, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);
