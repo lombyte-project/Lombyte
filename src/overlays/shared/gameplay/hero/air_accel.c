@@ -1659,6 +1659,8 @@ void set_hero_moby_flag_bit_zero(void) __asm__("FUN_L01_002488e8");
 void set_hero_moby_flag_bit_zero(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) |= 1;
 }
-void FUN_L01_00248900(void) {
+void clear_hero_moby_flag_bit_zero(void) __asm__("FUN_L01_00248900");
+
+void clear_hero_moby_flag_bit_zero(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) &= ~1;
 }
