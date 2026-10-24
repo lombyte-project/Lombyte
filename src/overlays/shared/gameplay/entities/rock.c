@@ -1154,7 +1154,9 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("FUN_001f5450");
 
-void FUN_L01_00302438(struct Moby *moby) {
+void draw_visibomb_outside_zone_overlay(struct Moby *moby) __asm__("FUN_L01_00302438");
+
+void draw_visibomb_outside_zone_overlay(struct Moby *moby) {
     s32 *vars = (s32 *)moby->pvars;
     s32 row_count;
     s32 column_count;
