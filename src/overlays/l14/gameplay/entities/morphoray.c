@@ -1187,7 +1187,9 @@ extern float atan2_7620(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 
-int FUN_L14_00307620(struct Moby *moby) {
+int update_flying_car_path_motion(struct Moby *moby) __asm__("FUN_L14_00307620");
+
+int update_flying_car_path_motion(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *flying_car_data = (char *)moby->pvars;
