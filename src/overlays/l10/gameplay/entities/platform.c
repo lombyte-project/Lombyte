@@ -2085,7 +2085,7 @@ typedef int u128_c __attribute__((mode(TI)));
 
 typedef int OvlQuad_c __attribute__((mode(TI)));
 
-extern f32 D_L10_00161D60;
+extern f32 data_processor_linked_effect_row_uv_phase_step __asm__("D_L10_00161D60");
 extern f32 D_L10_001D9FF0[];
 extern f32 D_L10_001DA010[];
 extern s32 D_L10_00161D64;
@@ -2095,8 +2095,8 @@ extern int D_L10_00161C70 __attribute__((sda));
 extern int D_L10_00161C74 __attribute__((sda));
 extern int D_L10_00161C78 __attribute__((sda));
 extern int D_L10_00161C7C __attribute__((sda));
-extern int D_L10_00161C90 __attribute__((sda));
-extern int D_L10_00161C94 __attribute__((sda));
+extern int data_processor_linked_effect_color_at_zero_progress __asm__("D_L10_00161C90") __attribute__((sda));
+extern int data_processor_linked_effect_color_at_full_progress __asm__("D_L10_00161C94") __attribute__((sda));
 
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b48");
 extern void rotation_matrix_y(void *, f32) __asm__("FUN_001f9ff8");
@@ -2178,7 +2178,7 @@ void render_data_processor_linked_effect(u8 *moby) {
         row = 0;
         do {
             int next;
-            phase += D_L10_00161D60;
+            phase += data_processor_linked_effect_row_uv_phase_step;
             if (phase > 1.0f) phase -= 1.0f;
             next_row = row + 1;
             for (j = 0; j < 4; j++) {
@@ -2203,7 +2203,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     progress = 1.0f - convert_integer_to_float(age) /
                                convert_integer_to_float(D_L10_00161D68);
                 }
-                color = fast_tween_color(D_L10_00161C90, D_L10_00161C94, progress);
+                color = fast_tween_color(data_processor_linked_effect_color_at_zero_progress, data_processor_linked_effect_color_at_full_progress, progress);
                 color = (color & 0xffffff) +
                         (truncate_float_to_s32_da690(fade * fade *
                          convert_integer_to_float((int)color >> 24)) << 24);
