@@ -175,14 +175,14 @@ extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_L08_00162364;
+extern float ground_particle_scatter_spawn_vector_y_bias __asm__("D_L08_00162364");
 extern float D_L08_00160260 __attribute__((sda));
-extern float D_L08_00162340 __attribute__((sda));
-extern float D_L08_00162344 __attribute__((sda));
-extern float D_L08_00162348 __attribute__((sda));
-extern float D_L08_00162354 __attribute__((sda));
-extern int D_L08_00162358 __attribute__((sda));
-extern float D_L08_0016235C __attribute__((sda));
+extern float ground_particle_scatter_minimum_z_scale __asm__("D_L08_00162340") __attribute__((sda));
+extern float ground_particle_scatter_reference_height_offset __asm__("D_L08_00162344") __attribute__((sda));
+extern float ground_particle_scatter_xy_offset_random_range __asm__("D_L08_00162348") __attribute__((sda));
+extern float ground_particle_scatter_minimum_z_scale_override __asm__("D_L08_00162354") __attribute__((sda));
+extern int ground_particle_scatter_distant_spawn_argument __asm__("D_L08_00162358") __attribute__((sda));
+extern float ground_particle_scatter_ground_height_floor_offset __asm__("D_L08_0016235C") __attribute__((sda));
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
@@ -253,11 +253,11 @@ void scatter_ground_particles(Moby *moby) {
         }
         fall = 0.15f;
         hi = 18.0f;
-        lo = D_L08_00162340;
+        lo = ground_particle_scatter_minimum_z_scale;
         break;
     }
     {
-        float k = D_L08_00162354;
+        float k = ground_particle_scatter_minimum_z_scale_override;
         zero = 0.0f;
         if (zero <= k) lo = k;
     }
@@ -276,7 +276,7 @@ void scatter_ground_particles(Moby *moby) {
         pass_attempt_count = ground_particle_scatter_base_attempt_count;
         func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
             ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
+        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
@@ -286,17 +286,17 @@ void scatter_ground_particles(Moby *moby) {
                 float u;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                 w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
-                w = w * func_002140F8_3091B0(0.0f, D_L08_00162348);
+                w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range);
                 pt.x += w;
                 w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
-                w = w * func_002140F8_3091B0(0.0f, D_L08_00162348);
+                w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range);
                 pt.y += w;
                 func_001F9BF0_3091B0(po, &pt, D_L08_00167640_3091B0);
                 origin_distance_xy = func_001F9CE8_3091B0(po);
                 if (origin_distance_xy <= 8.0f) {
                     w = -spread;
                     par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
-                    par.y = D_L08_00162364 + func_002140F8_3091B0(w, spread);
+                    par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
                     par.z = -(hi * frame_time);
                     par.w = 0.0f;
                 } else {
@@ -306,13 +306,13 @@ void scatter_ground_particles(Moby *moby) {
                     w = spread;
                     w = -w;
                     par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
-                    par.y = D_L08_00162364 + func_002140F8_3091B0(w, spread);
+                    par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
                     par.z = -(h * frame_time);
                     par.w = 0.0f;
                 }
-                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_0016235C;
+                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset;
                 ground_height = func_L00_002644E0_3091B0(&pt);
-                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344) {
+                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset) {
                     void *distance_selected_spawn_argument;
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
@@ -320,7 +320,7 @@ void scatter_ground_particles(Moby *moby) {
                         w = ground_height;
                     }
                     distance_selected_spawn_argument = 0;
-                    if (8.0f < origin_distance_xy) distance_selected_spawn_argument = D_L08_00162358;
+                    if (8.0f < origin_distance_xy) distance_selected_spawn_argument = ground_particle_scatter_distant_spawn_argument;
                     if (flag == 0) func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                     if (flag == 1) func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                 }
@@ -328,7 +328,7 @@ void scatter_ground_particles(Moby *moby) {
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
+        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
             remaining_pass_attempts = pass_attempt_count;
@@ -340,7 +340,7 @@ void scatter_ground_particles(Moby *moby) {
                 t = hi * frame_time;
                 *(int *)&origin_delta_or_spawn_vector.w = 0;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
-                origin_delta_or_spawn_vector.y = D_L08_00162364 + u;
+                origin_delta_or_spawn_vector.y = ground_particle_scatter_spawn_vector_y_bias + u;
                 origin_delta_or_spawn_vector.z = -t;
                 w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
@@ -348,9 +348,9 @@ void scatter_ground_particles(Moby *moby) {
                 w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
-                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_0016235C;
+                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset;
                 ground_height = func_L00_002644E0_3091B0(&pt);
-                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344) {
+                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset) {
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
                     } else {
@@ -369,7 +369,7 @@ void scatter_ground_particles(Moby *moby) {
             func_L00_00263D68_3091B0(&base, &base, w, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
                 ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
             sign = pass_attempt_count >> 31;
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
+            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset;
             if (pass_attempt_count > 0) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
@@ -386,7 +386,7 @@ void scatter_ground_particles(Moby *moby) {
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
             func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
                 ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_00162344;
+            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
                         remaining_pass_attempts = h;
@@ -446,7 +446,7 @@ void spawn_moby_radial_particles(char *moby) {
             subtract_vector_xyz(reference_to_spawn_delta, range_check_delta_or_spawn_position, D_L08_001675C0);
             if (!(vector_length_xy(reference_to_spawn_delta) <= *(float *)(moby_data + 0x10))) {
                 randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
-                randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[1] = ground_particle_scatter_spawn_vector_y_bias + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;
