@@ -603,7 +603,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern float D_L14_00161AFC __attribute__((sda));
+extern float unused_platform_tilt_argument __asm__("D_L14_00161AFC") __attribute__((sda));
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
@@ -627,7 +627,7 @@ void update_tilting_platform(struct Moby *moby) {
     } else {
         rotation = &moby->rot;
     }
-    FUN_L14_002de2b8_call(moby, D_L14_00161AFC, 8.0f);
+    FUN_L14_002de2b8_call(moby, unused_platform_tilt_argument, 8.0f);
     update_entity_matrix(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
