@@ -90,7 +90,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
-extern float D_L08_0016144C __attribute__((sda));
+extern float bolt_pickup_collision_clearance_distance_gp __asm__("D_L08_0016144C") __attribute__((sda));
 extern float bolt_pickup_collision_stop_speed_threshold_gp __asm__("D_L08_00161458") __attribute__((sda));
 extern float bolt_pickup_collision_speed_reduction_gp __asm__("D_L08_0016145C") __attribute__((sda));
 extern int bolt_pickup_bob_period_ticks_gp __asm__("D_L08_00161460") __attribute__((sda));
@@ -154,14 +154,14 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         qcopy(P, moby->pos);
         moby_data->vel[2] = moby_data->vel[2] - D_0015ED70 * 9.8f;
         f20 = fast_vec_length(moby_data->vel);
-        if (D_L08_0016144C * 1.8f * frame_scale < f20) {
-            fast_vec_normalize(moby_data->vel, moby_data->vel, D_L08_0016144C * 1.8f * frame_scale);
-            f20 = D_L08_0016144C * 1.8f * frame_scale;
+        if (bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale < f20) {
+            fast_vec_normalize(moby_data->vel, moby_data->vel, bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale);
+            f20 = bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale;
         }
         add_vector_xyz(A, P, moby_data->vel);
-        fast_vec_normalize(B, moby_data->vel, D_L08_0016144C);
+        fast_vec_normalize(B, moby_data->vel, bolt_pickup_collision_clearance_distance_gp);
         subtract_vector_xyz(B, P, B);
-        fast_vec_normalize(C, moby_data->vel, f20 + D_L08_0016144C);
+        fast_vec_normalize(C, moby_data->vel, f20 + bolt_pickup_collision_clearance_distance_gp);
         add_vector_xyz(C, C, P);
         if (D_L08_0015F5CC % 2 == (((char *)moby - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
@@ -171,7 +171,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                     ok = 0;
                 } else {
                     subtract_vector_xyz(E, P, (D_L08_001746D8_2B94B0 + 8));
-                    fast_vec_normalize(E, E, D_L08_0016144C);
+                    fast_vec_normalize(E, E, bolt_pickup_collision_clearance_distance_gp);
                     add_vector_xyz(P, (D_L08_001746D8_2B94B0 + 8), E);
                 }
                 if (ok != 0) {
@@ -181,7 +181,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                 } else {
                     clear_u64_value(moby_data->vel);
                     qcopy(P, (D_L08_001746D8_2B94B0 + 8));
-                    P[2] = P[2] + D_L08_0016144C;
+                    P[2] = P[2] + bolt_pickup_collision_clearance_distance_gp;
                     if (*(int *)D_L08_001746D8_2B94B0 == 0) {
                         clear_u64_value(moby_data->vel);
                         moby->state = 2;
