@@ -1620,7 +1620,7 @@ extern float rocket_trail_spark_third_frame_count_range_end __asm__("D_L15_00161
 extern float rocket_trail_spark_first_noise_radius_factor __asm__("D_L15_00161440") __attribute__((sda));
 extern float rocket_trail_spark_second_noise_radius_factor __asm__("D_L15_00161444") __attribute__((sda));
 extern float rocket_trail_spark_second_velocity_scale __asm__("D_L15_0016144C") __attribute__((sda));
-extern int D_L15_00161454 __attribute__((sda));
+extern int rocket_trail_spark_lookup_index_and_flags __asm__("D_L15_00161454") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -1652,7 +1652,7 @@ void spawn_rocket_trail_spark(char *moby) {
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(rocket_trail_spark_third_frame_count_range_start, rocket_trail_spark_third_frame_count_range_end)));
     spawn_spark(moby + 0x10, spark_a, spark_b, D_L15_00161418, D_L15_0016141C, frame_count, second_frame_count, third_frame_count,
-                 D_L15_00161454);
+                 rocket_trail_spark_lookup_index_and_flags);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
