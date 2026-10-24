@@ -1112,8 +1112,8 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
 extern int D_L08_001618EC __attribute__((sda));
 extern int D_L08_001618F0 __attribute__((sda));
 extern int D_L08_001618F4 __attribute__((sda));
-extern float D_L08_001618F8 __attribute__((sda));
-extern float D_L08_001618FC __attribute__((sda));
+extern float bomber_tank_joint_particle_velocity_w_gp __asm__("D_L08_001618F8") __attribute__((sda));
+extern float bomber_tank_joint_particle_spread_vector_w_gp __asm__("D_L08_001618FC") __attribute__((sda));
 extern int FUN_L00_0024f7c8();
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -1179,8 +1179,8 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
             spread_vector[1] = spread_vector[1] + offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         }
-        velocity[3] = D_L08_001618F8;
-        spread_vector[3] = D_L08_001618FC;
+        velocity[3] = bomber_tank_joint_particle_velocity_w_gp;
+        spread_vector[3] = bomber_tank_joint_particle_spread_vector_w_gp;
         frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
         frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
         frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
