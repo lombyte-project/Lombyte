@@ -147,13 +147,13 @@ void update_hero_state_machine(void) {
     int new_seg;
     int new_t;
     int new_loop;
-    int sp3C;
-    int sp40;
+    int grind_jump_prediction_steps;
+    int grind_recovery_prediction_steps;
     float ledge_hang_probe_yaw;
     float ledge_positive_side_probe_yaw;
     float ledge_negative_side_probe_yaw;
     float ledge_shimmy_probe_yaw;
-    int sp54;
+    int jump_prediction_steps;
     int sp58;
     int sp5C;
     float alt_ledge_hang_probe_yaw;
@@ -538,7 +538,7 @@ void update_hero_state_machine(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -614,7 +614,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -1185,9 +1185,9 @@ void update_hero_state_machine(void) {
                         if (!(hero.state_timer < hero.unk420 + scale_game_frames(1)) &&
                             hero.state_timer < hero.unk420 + scale_game_frames(9) &&
                             hero.unk41E == 0 && hero.unkA9C == 0) {
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp3C,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &grind_jump_prediction_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp3C, 0.5f, frame_scale_sq * 0.25f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, grind_jump_prediction_steps, 0.5f, frame_scale_sq * 0.25f);
                             if (hero.unk590 != 0) {
                                 if (hero.anim_speed > 2.0f) {
                                     hero.anim_speed = 2.0f;
@@ -1246,9 +1246,9 @@ void update_hero_state_machine(void) {
                         }
                     } else if (hero.state.current == 0x42) {
                         if (hero.motion.velocity.f[2] > 0.0f) {
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp40,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &grind_recovery_prediction_steps,
                                              frame_time_sq * 23.0f);
-                            adjust_hero_animation_speed_for_target_frame(9.0f, sp40, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(9.0f, grind_recovery_prediction_steps, 0.5f, -1.0f);
                         }
                         if (hero.unkA98 & 2) {
                             hero_set_state(HERO_STATE_GRIND, 1);
@@ -1746,9 +1746,9 @@ void update_hero_state_machine(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp54,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &jump_prediction_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp54, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, jump_prediction_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
@@ -2288,7 +2288,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x4B, 1);
                     }
                     break;
-                case 75:
+                case HERO_STATE_ALT_LEDGE_HANG:
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
                     alt_ledge_hang_probe_yaw = hero.motion.rot.f[2];
@@ -2338,8 +2338,8 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 77:
-                case 78: {
+                case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90:
+                case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -2528,7 +2528,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
