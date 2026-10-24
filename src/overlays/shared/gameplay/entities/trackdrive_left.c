@@ -460,7 +460,7 @@ void FUN_L00_002eac18(int mode);
 void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
-void FUN_L02_002d93e8(char *moby);
+void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int func_001F9850_2D9F08(int) __asm__("FUN_001f96f8");
@@ -1571,7 +1571,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 #define draw_tresspasser_puzzle_arrow ((void (*)(u64, int, int, float, float))draw_tresspasser_puzzle_arrow)
 #define draw_tresspasser_puzzle_radial_strip ((void (*)(u64, f32, f32, f32, s32))draw_tresspasser_puzzle_radial_strip)
 
-void FUN_L02_002d93e8(char *moby) {
+void draw_tresspasser_puzzle(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
     struct { char pad0[0x78]; u64 texture; char pad80[0x10]; } ctx;
     int first_step, second_step;
