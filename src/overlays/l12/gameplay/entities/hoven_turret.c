@@ -49,7 +49,7 @@ extern int D_L12_00161DEC __attribute__((sda));
 extern int D_L12_00161DF0 __attribute__((sda));
 extern float D_L12_00161DF4 __attribute__((sda));
 extern float D_L12_00161DF8 __attribute__((sda));
-extern int D_L12_00161E04;
+extern int oscillating_link_strip_reset_ticks __asm__("D_L12_00161E04");
 extern int D_L12_00161E08;
 extern int euler_rotation_matrix() __asm__("FUN_001fa050");
 extern int multiply_matrix() __asm__("FUN_001fa378");
@@ -113,7 +113,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     }
     for (ring = 0; ring < 4; ring++) {
         if (D_L12_00161E08 < data->phase[ring]) {
-            fade = func_001FA888_303CA8(data->phase[ring] - D_L12_00161E08) / func_001FA888_303CA8(D_L12_00161E04 - D_L12_00161E08);
+            fade = func_001FA888_303CA8(data->phase[ring] - D_L12_00161E08) / func_001FA888_303CA8(oscillating_link_strip_reset_ticks - D_L12_00161E08);
         } else {
             fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(D_L12_00161E08);
         }
@@ -196,7 +196,7 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     points += 4;
                 } while (count < *(int *)(data + 0x232c) - 1);
             }
-            *(int *)(timers + (strip << 2)) = D_L12_00161E04;
+            *(int *)(timers + (strip << 2)) = oscillating_link_strip_reset_ticks;
         } else {
             for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
                 float *point = (float *)(data + strip * 0x460 + i * 16);
@@ -299,7 +299,7 @@ void update_oscillating_target_link(Moby *moby) {
     switch (moby->state) {
     case TARGET_TRACKING_STATE_INITIALIZE:
         D_L12_00161E08 = 0x16;
-        D_L12_00161E04 = 0x2D;
+        oscillating_link_strip_reset_ticks = 0x2D;
         data->f231C = -1;
         data->f2304 = 0xB;
         data->f2308 = 0x17;
