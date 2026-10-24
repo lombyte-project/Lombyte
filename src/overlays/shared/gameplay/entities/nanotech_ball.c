@@ -3304,7 +3304,9 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
 int get_first_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002591d0");
 int get_next_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void draw_offset_textured_effect_quad(void *, void *, f32, f32) __asm__("FUN_L00_00263618");
-void FUN_L00_002df3d8(u8 *reference_moby) {
+void draw_red_orb_group_effect_quads(u8 *reference_moby) __asm__("FUN_L00_002df3d8");
+
+void draw_red_orb_group_effect_quads(u8 *reference_moby) {
     u8 *it[2] __attribute__((aligned(16)));
     f32 quad_scale = 1.2f;
     if (current_level_index == 0 || current_level_index == 0x12) {
