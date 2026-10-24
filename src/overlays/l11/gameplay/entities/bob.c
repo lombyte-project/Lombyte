@@ -1490,7 +1490,9 @@ int D_L11_00161930 = 0x13;
 extern unsigned int D_L11_00161934 __attribute__((sda));
 extern float D_L11_00161938 __attribute__((sda));
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
-void FUN_L11_002f2d58(struct Moby *moby) {
+void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
+
+void draw_teleporter_ring(struct Moby *moby) {
     QuadPacket_2f2d58 quad;
     float matrix[16];
     char *data = (char *)moby->pvars;
