@@ -315,7 +315,7 @@ extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
-extern float D_L14_00162098 __attribute__((sda));
+extern float spark_initial_moby_value_multiplier __asm__("D_L14_00162098") __attribute__((sda));
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
 
 char *create_bouncing_spark(int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
@@ -339,7 +339,7 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         initial_yaw = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
-        scaled_moby_value = *(float *)(moby + 0x2C) * D_L14_00162098;
+        scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier;
         *(float *)(moby + 0x48) = initial_yaw;
         *(float *)(moby + 0x2C) = scaled_moby_value;
         FUN_L00_00250df8_f(moby);
