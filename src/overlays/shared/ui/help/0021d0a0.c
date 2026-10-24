@@ -448,7 +448,7 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     V_2291d0 primary_vector_origin, primary_vector_endpoint, b, secondary_vector_endpoint;
     char *vector_origin_base;
     P_2291d0 *g;
-    f32 primary_origin_z_offset, k, secondary_vector_scale, ang, negative_horizontal_dot;
+    f32 primary_origin_z_offset, k, secondary_vector_scale, primary_probe_result_angle, negative_horizontal_dot;
     int r;
 
     if (P.h308 != 0)
@@ -490,10 +490,10 @@ void adjust_hero_velocity_from_collision_probes(int force) {
     r = -1;
     if (FUN_001efa68_2291d0(&b, &secondary_vector_endpoint, 4, P.p2080, 0) && D_L06_001745DC > 0)
         r = FUN_001f0b58_2291d0();
-    ang = 0.0f;
+    primary_probe_result_angle = 0.0f;
     if (FUN_001efa68_2291d0(&primary_vector_origin, &primary_vector_endpoint, 4, P.p2080, 0) && X.i1C > 0)
-        ang = FUN_001f9e90_2291d0(X.v40.f[2], FUN_001f9b20_2291d0(&X.v40));
-    if (0.8726646304130554f <= ang || r == 8 || r == 12) {
+        primary_probe_result_angle = FUN_001f9e90_2291d0(X.v40.f[2], FUN_001f9b20_2291d0(&X.v40));
+    if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_2291d0(&X.v40, &X.v40);
