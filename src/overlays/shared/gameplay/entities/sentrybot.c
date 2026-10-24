@@ -1612,8 +1612,8 @@ extern float rocket_trail_spark_frame_count_range_start_gp __asm__("D_L15_001614
 extern float rocket_trail_spark_third_frame_count_range_start_gp __asm__("D_L15_00161438") __attribute__((sda));
 extern float rocket_trail_spark_first_velocity_scale_gp __asm__("D_L15_00161448") __attribute__((sda));
 extern int rocket_trail_spark_second_configuration_word_gp __asm__("D_L15_0016141C") __attribute__((sda));
-extern float D_L15_00161420 __attribute__((sda));
-extern float D_L15_00161424 __attribute__((sda));
+extern float rocket_trail_spark_first_vector_fourth_component_gp __asm__("D_L15_00161420") __attribute__((sda));
+extern float rocket_trail_spark_second_vector_fourth_component_gp __asm__("D_L15_00161424") __attribute__((sda));
 extern float rocket_trail_spark_frame_count_range_end_gp __asm__("D_L15_0016142C") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_start_gp __asm__("D_L15_00161430") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_end_gp __asm__("D_L15_00161434") __attribute__((sda));
@@ -1644,8 +1644,8 @@ void spawn_rocket_trail_spark(char *moby) {
     scale_vector_xyz(spark_b, data, rocket_trail_spark_second_velocity_scale_gp);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_b, spark_b, noise);
-    spark_a[3] = D_L15_00161420;
-    spark_b[3] = D_L15_00161424;
+    spark_a[3] = rocket_trail_spark_first_vector_fourth_component_gp;
+    spark_b[3] = rocket_trail_spark_second_vector_fourth_component_gp;
     frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(rocket_trail_spark_frame_count_range_start_gp, rocket_trail_spark_frame_count_range_end_gp)));
     second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
