@@ -2981,21 +2981,21 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float D_L08_00161A48 __attribute__((sda));
-extern float D_L08_00161A4C __attribute__((sda));
-extern float D_L08_00161A50 __attribute__((sda));
-extern int D_L08_00161A54 __attribute__((sda));
-extern int D_L08_00161A58 __attribute__((sda));
-extern int D_L08_00161A5C __attribute__((sda));
-extern float D_L08_00161A60 __attribute__((sda));
+extern float moby_motion_spark_first_displacement_scale __asm__("D_L08_00161A48") __attribute__((sda));
+extern float moby_motion_spark_second_displacement_scale __asm__("D_L08_00161A4C") __attribute__((sda));
+extern float moby_motion_spark_jitter_magnitude_range_end __asm__("D_L08_00161A50") __attribute__((sda));
+extern int moby_motion_spark_frame_count_random_span __asm__("D_L08_00161A54") __attribute__((sda));
+extern int moby_motion_spark_second_frame_count_base __asm__("D_L08_00161A58") __attribute__((sda));
+extern int moby_motion_spark_third_frame_count_base __asm__("D_L08_00161A5C") __attribute__((sda));
+extern float moby_motion_spark_frame_count_variation_extent __asm__("D_L08_00161A60") __attribute__((sda));
 extern float D_L08_00161A64 __attribute__((sda));
 extern float D_L08_00161A68 __attribute__((sda));
 extern float D_L08_00161A6C __attribute__((sda));
 extern float D_L08_00161A70 __attribute__((sda));
-extern int D_L08_00161A74 __attribute__((sda));
-extern int D_L08_00161A78 __attribute__((sda));
-extern int D_L08_00161A7C __attribute__((sda));
-extern int D_L08_00161A80 __attribute__((sda));
+extern int moby_motion_spark_initial_color_start __asm__("D_L08_00161A74") __attribute__((sda));
+extern int moby_motion_spark_initial_color_end __asm__("D_L08_00161A78") __attribute__((sda));
+extern int moby_motion_spark_second_color_start __asm__("D_L08_00161A7C") __attribute__((sda));
+extern int moby_motion_spark_second_color_end __asm__("D_L08_00161A80") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -3018,24 +3018,24 @@ void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
     local_spawn_offset[2] = 0.3f;
     transform_vector_by_basis(spark_position, local_spawn_offset, &moby->rot_row0);
     add_vector_xyz(spark_position, spark_position, &moby->pos);
-    scale_vector_xyz(scaled_displacement_vector, frame_displacement, D_L08_00161A48);
-    scale_vector_xyz(jittered_displacement_vector, frame_displacement, D_L08_00161A4C);
-    random_vector(random_jitter, 0.0f, D_L08_00161A50 * frame_time);
+    scale_vector_xyz(scaled_displacement_vector, frame_displacement, moby_motion_spark_first_displacement_scale);
+    scale_vector_xyz(jittered_displacement_vector, frame_displacement, moby_motion_spark_second_displacement_scale);
+    random_vector(random_jitter, 0.0f, moby_motion_spark_jitter_magnitude_range_end * frame_time);
     add_vector_xyz(jittered_displacement_vector, jittered_displacement_vector, random_jitter);
     scaled_displacement_vector[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
     jittered_displacement_vector[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
-    initial_spark_color = fast_tween_color(D_L08_00161A74, D_L08_00161A78,
+    initial_spark_color = fast_tween_color(moby_motion_spark_initial_color_start, moby_motion_spark_initial_color_end,
                      random_float_between(0.0f, 1.0f));
-    second_spark_color = fast_tween_color(D_L08_00161A7C, D_L08_00161A80,
+    second_spark_color = fast_tween_color(moby_motion_spark_second_color_start, moby_motion_spark_second_color_end,
                      random_float_between(0.0f, 1.0f));
     frame_count = func_001FA898_r(
-        multiply_global_factor_ed64((float)D_L08_00161A54 * random_float_between(0.0f, 1.0f) + 1.0f));
+        multiply_global_factor_ed64((float)moby_motion_spark_frame_count_random_span * random_float_between(0.0f, 1.0f) + 1.0f));
     second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        (float)D_L08_00161A58 *
-        (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
+        (float)moby_motion_spark_second_frame_count_base *
+        (random_float_between(-moby_motion_spark_frame_count_variation_extent, moby_motion_spark_frame_count_variation_extent) + 1.0f)));
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        (float)D_L08_00161A5C *
-        (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
+        (float)moby_motion_spark_third_frame_count_base *
+        (random_float_between(-moby_motion_spark_frame_count_variation_extent, moby_motion_spark_frame_count_variation_extent) + 1.0f)));
     spawned_spark = spawn_spark(spark_position, scaled_displacement_vector, jittered_displacement_vector, initial_spark_color, second_spark_color, frame_count, second_frame_count, third_frame_count, -1);
     if (spawned_spark != 0) {
         spawned_spark[9] = func_001FA898_r(8.0f) - 0x70;
