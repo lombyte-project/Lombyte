@@ -2275,7 +2275,7 @@ void update_vendor_menu(void) {
         VENDOR_MENU_EXIT_CUTSCENE = 3
     };
     Vec4 position_scratch;
-    Vec4 b;
+    Vec4 position_contribution_scratch;
     f32 camera_rotation_matrix[4][4];
     s32 vendor_menu_state;
     s32 ok;
@@ -2416,9 +2416,9 @@ void update_vendor_menu(void) {
             FUN_00212f90(&vendor_menu.f20[1], 1, 0, 8);
         }
         FUN_L00_00250df8(&vendor_menu.f20[1]);
-        b.q = 0;
-        b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        position_scratch.q = b.q;
+        position_contribution_scratch.q = 0;
+        position_contribution_scratch.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
+        position_scratch.q = position_contribution_scratch.q;
         add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[2].pos, &position_scratch, vendor_menu.f1c->mtx);
@@ -2427,9 +2427,9 @@ void update_vendor_menu(void) {
         vendor_menu.f20[2].rot.f[1] = D_L00_001C8FF0[CUR_ITEM.fD0].f14;
         vendor_menu.f20[2].rot.f[2] = D_L00_00161E24;
         FUN_L00_00250df8(&vendor_menu.f20[2]);
-        b.q = 0;
-        b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        position_scratch.q = b.q;
+        position_contribution_scratch.q = 0;
+        position_contribution_scratch.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
+        position_scratch.q = position_contribution_scratch.q;
         add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
@@ -2442,12 +2442,12 @@ void update_vendor_menu(void) {
             FUN_00212f90(&vendor_menu.f20[3], 1, 0, 8);
         }
         FUN_L00_00250df8(&vendor_menu.f20[3]);
-        b.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
-        b.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
-        b.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
+        position_contribution_scratch.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
+        position_contribution_scratch.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
+        position_contribution_scratch.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
         euler_rotation_basis(vendor_menu.f20[3].mtx, &vendor_menu.f20[3].rot);
-        transform_vector_by_basis(&b, &b, vendor_menu.f20[3].mtx);
-        add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &b);
+        transform_vector_by_basis(&position_contribution_scratch, &position_contribution_scratch, vendor_menu.f20[3].mtx);
+        add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &position_contribution_scratch);
         vendor_menu.f4++;
         if (vendor_menu.f5c == 0 && D_L00_00161E18 == 0) {
             if (vendor_menu.f210 < 8) {
@@ -2656,8 +2656,8 @@ void update_vendor_menu(void) {
             }
             keys = mb->keys;
             fast_vec_scale(&position_scratch, &keys[mb->frame], 1.0f - mb->blend);
-            fast_vec_scale(&b, &keys[mb->next_frame], mb->blend);
-            add_vector_xyz(&mb->pos, &position_scratch, &b);
+            fast_vec_scale(&position_contribution_scratch, &keys[mb->next_frame], mb->blend);
+            add_vector_xyz(&mb->pos, &position_scratch, &position_contribution_scratch);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.f80);
             add_vector_xyz(&mb->pos, &mb->pos, &vendor_menu.fC0);
             mb->rot.f[2] = vendor_menu.f80[3].f[2];
