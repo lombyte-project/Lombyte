@@ -485,7 +485,7 @@ extern char D_0013D388[] __attribute__((section(".data")));
 extern s32 D_001413D0[];
 extern const float D_L08_001618CC __attribute__((sda));
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float D_L08_001618A8 __attribute__((sda));
+extern float bomber_tank_projectile_speed __asm__("D_L08_001618A8") __attribute__((sda));
 extern float D_L08_001618D0 __attribute__((sda));
 extern int D_L08_001B0CB0[];
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
@@ -682,7 +682,7 @@ void update_bomber_tank(Moby *moby) {
             } else {
                 moby_point_position(moby, 2, muzzle);
             }
-            shot_speed = D_L08_001618A8 * frame_time;
+            shot_speed = bomber_tank_projectile_speed * frame_time;
             velocity[0] = fast_cos(fast_add_rotations(vars->yaw, moby->rot.z)) * (fast_cos(vars->pitch) * shot_speed);
             velocity[1] = fast_sin(fast_add_rotations(vars->yaw, moby->rot.z)) * (fast_cos(vars->pitch) * shot_speed);
             velocity[2] = 0.0f;
