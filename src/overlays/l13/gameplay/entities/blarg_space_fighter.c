@@ -979,7 +979,9 @@ extern char D_00140940[];
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 
-int FUN_L13_002c3fc0(struct Moby *moby, char *vars, int aim) {
+int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int aim) __asm__("FUN_L13_002c3fc0");
+
+int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int aim) {
     char *path = D_L13_001B07B0[*(int *)(vars + 0xA0)];
     char *linked;
     char *veh;
@@ -1176,7 +1178,7 @@ extern float D_0015ED60;
 extern float D_L13_0015F5D0;
 extern float D_L13_0015F5D4;
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int FUN_L13_002c3fc0();
+extern int update_blarg_space_fighter_path_following();
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
