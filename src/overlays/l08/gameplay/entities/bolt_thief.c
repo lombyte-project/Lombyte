@@ -603,7 +603,7 @@ typedef struct Hero52_2E16A0 {
 typedef struct CannonCamera52_2E16A0 { char pad0[0x160]; float mag0; int pad164, timer0, pad16C; float mag1; int pad174, timer1; } CannonCamera52_2E16A0;
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
-char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value);
+char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
 extern char *D_L08_0015FFD8;
 extern char D_0013CAE0[];
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");

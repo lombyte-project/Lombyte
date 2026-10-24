@@ -553,7 +553,7 @@ extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L08_002e7eb0(void *, void *, void *, int);
+extern void create_moby_with_particles(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
 extern void update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
 extern void FUN_L12_00304218_c() __asm__("FUN_L12_00304218");
 extern void FUN_L12_00304d98_c() __asm__("FUN_L12_00304d98");
@@ -775,7 +775,7 @@ void hoven_turret_update(struct Moby *moby) {
                 add_vector_xyz(muz, muz, dir);
                 add_vector_xyz(muz, muz, dir);
                 add_vector_xyz(muz, muz, dir);
-                FUN_L08_002e7eb0(moby, muz, dir, 0);
+                create_moby_with_particles(moby, muz, dir, 0);
                 allocate_voice_for_target_entry_alt(0, 0, (int)moby);
                 ((Cam_304920 *)D_L12_00167180_304920)->f160 = 0.03f;
                 ((Cam_304920 *)D_L12_00167180_304920)->f168 = scale_game_frames_alt(0xA);

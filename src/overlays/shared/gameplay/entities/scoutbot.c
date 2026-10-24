@@ -693,7 +693,9 @@ extern int D_L08_00161CFC __attribute__((sda));
 extern float D_L08_00161D04 __attribute__((sda));
 extern float D_L08_00161D14 __attribute__((sda));
 extern float D_L08_00161D18 __attribute__((sda));
-char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
+char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
+
+char *create_moby_with_particles(int owner, float *position, float *rotation, int value) {
     float position_copy[4] __attribute__((aligned(16)));
     float rotation_copy[4] __attribute__((aligned(16)));
     float matrix[4][4] __attribute__((aligned(16)));
