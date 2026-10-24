@@ -1919,7 +1919,7 @@ void handle_moby_destruction(char *moby) {
     unsigned short id = *(unsigned short *)(moby + 0xB2);
     int debris_loop_countdown;
     int k;
-    int c16;
+    int debris_initial_timer;
     int debris_option_roll;
     float debris_gravity_multiplier, debris_scale_multiplier;
 
@@ -1950,10 +1950,10 @@ void handle_moby_destruction(char *moby) {
             if (random_integer_below(1) == 0)
                 k = 0x70E;
             debris_scale_multiplier = random_float_between(0.5f, 1.0f);
-            c16 = random_int_between(0x3C, 0x78);
+            debris_initial_timer = random_int_between(0x3C, 0x78);
             debris_gravity_multiplier = random_float_between(2.0f, 3.0f);
             debris_option_roll = random_integer_below(4);
-            spawn_debris_chunk(&transformed_offset, &debris_vector, k, debris_scale_multiplier, c16, debris_gravity_multiplier, 1.0f, 3.0f, debris_option_roll == 0);
+            spawn_debris_chunk(&transformed_offset, &debris_vector, k, debris_scale_multiplier, debris_initial_timer, debris_gravity_multiplier, 1.0f, 3.0f, debris_option_roll == 0);
         } while (debris_loop_countdown >= 0);
         transformed_offset.q = 0;
         transformed_offset.f[0] = 2.8599999f;
