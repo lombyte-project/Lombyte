@@ -434,7 +434,9 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-char *FUN_L09_002ea528(struct Moby *owner, float *inherited_velocity) {
+char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) __asm__("FUN_L09_002ea528");
+
+char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
     char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = *(char **)(moby + 0x78);
