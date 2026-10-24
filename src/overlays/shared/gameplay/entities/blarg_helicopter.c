@@ -377,6 +377,7 @@ void spawner_update(struct Moby *moby) {
         SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED_ALIAS = 2,
         SPAWNER_ACTIVATION_SET_SPAWN_ENABLED = 3,
         SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY = 4,
+        SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY_ALIAS = 5,
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
     int used[4];
@@ -504,7 +505,7 @@ void spawner_update(struct Moby *moby) {
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY:
                 moby->state = 5;
                 break;
-            case 5:
+            case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY_ALIAS:
                 moby->state = 5;
                 break;
             case SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT:
