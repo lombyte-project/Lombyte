@@ -658,7 +658,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     for (i = 0; i < k9; i++) {
         S6_25e450 c0 = D_L00_001E9030_25e450;
         S6_25e450 c1 = D_L00_001E9048_25e450;
-        Q_25e450 vel;
+        Q_25e450 randomized_particle_vector;
         Q_25e450 rnd;
         int first_packed_color;
         int second_packed_color;
@@ -666,11 +666,11 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
-        *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
-        normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
+        *(u128_25e450 *)&randomized_particle_vector = *(u128_25e450 *)&rnd;
+        normalize_vector_xyz_25e450(&randomized_particle_vector, &randomized_particle_vector, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
         first_packed_color = swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag);
         second_packed_color = swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag);
-        func_L00_0026B368_25e450(explosion_position, &vel, first_packed_color, second_packed_color,
+        func_L00_0026B368_25e450(explosion_position, &randomized_particle_vector, first_packed_color, second_packed_color,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }
