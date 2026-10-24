@@ -38,14 +38,14 @@ extern s32 D_L00_0015F4D4 __attribute__((sda));
 extern s32 D_L00_0015F4D8 __attribute__((sda));
 extern s32 D_L00_0015F4DC __attribute__((sda));
 extern s32 dialog_frame_pulse_period __asm__("D_L00_0015F4E0") __attribute__((sda));
-extern s32 D_L00_0015F4E4 __attribute__((sda));
-extern s32 D_L00_0015F4E8 __attribute__((sda));
-extern s32 D_L00_0015F4EC __attribute__((sda));
-extern s32 D_L00_0015F4F0 __attribute__((sda));
-extern s32 D_L00_0015F4F4 __attribute__((sda));
-extern s32 D_L00_0015F4F8 __attribute__((sda));
-extern s32 D_L00_0015F4FC __attribute__((sda));
-extern s32 D_L00_0015F500 __attribute__((sda));
+extern s32 dialog_frame_pulse_start_color __asm__("D_L00_0015F4E4") __attribute__((sda));
+extern s32 dialog_frame_pulse_end_color __asm__("D_L00_0015F4E8") __attribute__((sda));
+extern s32 results_label_tween_start_color __asm__("D_L00_0015F4EC") __attribute__((sda));
+extern s32 results_label_tween_end_color __asm__("D_L00_0015F4F0") __attribute__((sda));
+extern s32 first_place_or_record_tween_start_color __asm__("D_L00_0015F4F4") __attribute__((sda));
+extern s32 first_place_or_record_tween_end_color __asm__("D_L00_0015F4F8") __attribute__((sda));
+extern s32 other_place_or_no_record_tween_start_color __asm__("D_L00_0015F4FC") __attribute__((sda));
+extern s32 other_place_or_no_record_tween_end_color __asm__("D_L00_0015F500") __attribute__((sda));
 extern char D_L00_0015F508[];
 extern char D_L00_0015F510[];
 extern char D_L00_0015F520[];
@@ -355,7 +355,7 @@ void level_draw_dialog_text(void) {
         f32 scale;
         f32 color_blend_factor;
 
-        pulse = fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+        pulse = fast_tween_color(dialog_frame_pulse_start_color, dialog_frame_pulse_end_color,
                              fast_sin((f32)(D_L00_0015F3F8 % dialog_frame_pulse_period) / convert_integer_to_float(dialog_frame_pulse_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
@@ -365,9 +365,9 @@ void level_draw_dialog_text(void) {
         } else if (scale < 0.1f) {
             scale = 0.1f;
         }
-        results_label_color = D_L00_0015F4EC;
-        first_place_or_record_color = D_L00_0015F4F4;
-        other_place_or_no_record_color = D_L00_0015F4FC;
+        results_label_color = results_label_tween_start_color;
+        first_place_or_record_color = first_place_or_record_tween_start_color;
+        other_place_or_no_record_color = other_place_or_no_record_tween_start_color;
         if (D_L00_00173040.unk24 != 0) {
             color_blend_factor = (f32)D_L00_00173040.unk24 * 0.125f;
             if (color_blend_factor > 1.0f) {
@@ -375,9 +375,9 @@ void level_draw_dialog_text(void) {
             } else if (color_blend_factor < 0.0f) {
                 color_blend_factor = 0.0f;
             }
-            results_label_color = fast_tween_color(D_L00_0015F4EC, D_L00_0015F4F0, color_blend_factor);
-            first_place_or_record_color = fast_tween_color(D_L00_0015F4F4, D_L00_0015F4F8, color_blend_factor);
-            other_place_or_no_record_color = fast_tween_color(D_L00_0015F4FC, D_L00_0015F500, color_blend_factor);
+            results_label_color = fast_tween_color(results_label_tween_start_color, results_label_tween_end_color, color_blend_factor);
+            first_place_or_record_color = fast_tween_color(first_place_or_record_tween_start_color, first_place_or_record_tween_end_color, color_blend_factor);
+            other_place_or_no_record_color = fast_tween_color(other_place_or_no_record_tween_start_color, other_place_or_no_record_tween_end_color, color_blend_factor);
         }
         if (hero.race_lap < 3) {
             draw_outlined_rect(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
@@ -441,7 +441,7 @@ void level_draw_dialog_text(void) {
     }
     case MESSAGE_BOX_TITLE_ONLY:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
-                     fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+                     fast_tween_color(dialog_frame_pulse_start_color, dialog_frame_pulse_end_color,
                                   fast_sin((f32)(D_L00_0015F3F8 % dialog_frame_pulse_period) / convert_integer_to_float(dialog_frame_pulse_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
@@ -452,7 +452,7 @@ void level_draw_dialog_text(void) {
         MessageBox *mb = &D_L00_00173040;
         s32 pulse;
 
-        pulse = fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+        pulse = fast_tween_color(dialog_frame_pulse_start_color, dialog_frame_pulse_end_color,
                                   fast_sin((f32)(D_L00_0015F3F8 % dialog_frame_pulse_period) / convert_integer_to_float(dialog_frame_pulse_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
