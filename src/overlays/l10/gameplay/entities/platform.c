@@ -269,7 +269,7 @@ extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void FUN_L00_00284e50_p(void *, void *) __asm__("FUN_L00_00284e50");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-extern int D_L10_0015F640;
+extern int dialogue_message_duration __asm__("D_L10_0015F640");
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
 void magnetboots_update(struct Moby *moby) {
     enum {
@@ -305,7 +305,7 @@ void magnetboots_update(struct Moby *moby) {
     case MAGNETBOOTS_STATE_WAIT_FOR_SCENE_EXIT:
         if (D_L10_0015F5C4_vendor != 2) {
             queue_dialogue_message(0x271B, -1);
-            D_L10_0015F640 = 0xB4;
+            dialogue_message_duration = 0xB4;
             grant_inventory_item(0x1C, 1);
             if (*(int *)(pickup_vars + 4) != -1) {
                 char *linked_moby = D_L10_0015FFD8_p + (*(int *)(pickup_vars + 4) << 8);
