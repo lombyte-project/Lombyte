@@ -70,19 +70,19 @@ float compute_walker_time_to_landing(char *walker_moby, char *gait_data) {
     float gap = *(float *)(walker_moby + 0x18) - *(float *)(gait_data + 0x68);
     float root_numerator_base = *(float *)(gait_data + 0xD8) + root_denominator * 0.5f;
     float discriminant_or_root = root_numerator_base * root_numerator_base + (root_denominator + root_denominator) * gap;
-    float res;
+    float time_to_landing;
     if (discriminant_or_root > 0.0f) {
         discriminant_or_root = square_root(discriminant_or_root);
         if (discriminant_or_root <= root_numerator_base) {
-            res = root_numerator_base - discriminant_or_root;
+            time_to_landing = root_numerator_base - discriminant_or_root;
         } else {
-            res = root_numerator_base + discriminant_or_root;
+            time_to_landing = root_numerator_base + discriminant_or_root;
         }
-        res = res / *(float *)(gait_data + 0xDC);
+        time_to_landing = time_to_landing / *(float *)(gait_data + 0xDC);
     } else {
-        res = 100000.0f;
+        time_to_landing = 100000.0f;
     }
-    return res;
+    return time_to_landing;
 }
 /* Steps the walk cycle state machine: picks the next walk, run, turn, jump or landing sequence from speed, heading and foot height. */
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2900), where it is exact; names translated to the US level program. */
