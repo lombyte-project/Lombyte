@@ -1037,7 +1037,7 @@ typedef struct {
 } PathJunctionVars;
 
 extern PathLink *D_L18_0015F70C;
-extern s32 D_L18_0015F710;
+extern s32 path_link_count __asm__("D_L18_0015F710");
 extern char *D_L18_001600EC;
 extern float FUN_001f9b48(void *, void *);
 extern char *create_class_326_moby(void *vector) __asm__("FUN_L18_002e22c0");
@@ -1062,13 +1062,13 @@ void update_path_junction_selection(struct Moby *moby) {
         moby->update_dist = 0xFF;
         pair_or_node_index = 0;
         do {
-            for (i = 0; i < D_L18_0015F710; i++) {
+            for (i = 0; i < path_link_count; i++) {
                 if (D_L18_0015F70C[i].weight == 0.0f) {
                     continue;
                 }
                 vars->pair[pair_or_node_index].first = &D_L18_0015F70C[i];
                 vars->weight[pair_or_node_index].first = D_L18_0015F70C[i].weight;
-                for (j = 0; j < D_L18_0015F710; j++) {
+                for (j = 0; j < path_link_count; j++) {
                     if (D_L18_0015F70C[j].weight == 0.0f) {
                         continue;
                     }
