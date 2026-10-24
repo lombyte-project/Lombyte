@@ -2496,8 +2496,8 @@ extern u32 D_0013C940[];
 extern u32 D_0013CAE0[];
 extern u8 D_0013E550[];
 extern Ring D_00141680;
-extern s32 D_L00_001614CC;
-extern s32 D_L00_001614D4;
+extern s32 taunter_effect_reset_pending __asm__("D_L00_001614CC");
+extern s32 taunter_effect_emission_disabled __asm__("D_L00_001614D4");
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F5CC;
 extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
@@ -2618,11 +2618,11 @@ void taunter_update(Moby *taunter_moby) {
         taunter_vars->radius = 30.0f;
     if (taunter_moby->type == 2)
         taunter_moby->state = 3;
-    D_L00_001614D4 = 1;
+    taunter_effect_emission_disabled = 1;
     if (taunter_moby->state == 0) {
         taunter_vars->anim = -1;
         taunter_moby->state++;
-        D_L00_001614CC = 1;
+        taunter_effect_reset_pending = 1;
     }
     taunter_state = taunter_moby->state;
     if ((u8)taunter_state == 1) {
@@ -2635,7 +2635,7 @@ void taunter_update(Moby *taunter_moby) {
     if ((u8)taunter_state != 2)
         goto end;
     if (taunter_moby->type == 3 && hero.unk20AC == 0) {
-        D_L00_001614D4 = 0;
+        taunter_effect_emission_disabled = 0;
         taunter_vars->cnt18++;
     } else {
         taunter_vars->cnt18 = 0;
@@ -2722,11 +2722,11 @@ extern E8690 D_L00_001DB440[];
 extern int D_L00_001614D0;
 extern float D_L00_001614DC;
 extern char D_L00_001614E0[] __attribute__((section(".sdata")));
-extern int D_L00_001614B0 __attribute__((sda));
-extern float D_L00_001614B4 __attribute__((sda));
-extern float D_L00_001614B8 __attribute__((sda));
+extern int taunter_effect_spawn_interval_frames __asm__("D_L00_001614B0") __attribute__((sda));
+extern float taunter_effect_travel_distance __asm__("D_L00_001614B4") __attribute__((sda));
+extern float taunter_effect_travel_speed __asm__("D_L00_001614B8") __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
-extern int D_L00_001614D8;
+extern int taunter_effect_lifetime_frames __asm__("D_L00_001614D8");
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -2742,22 +2742,22 @@ void update_taunter_effect_slots(void *source_moby) {
     unsigned short av;
     int i;
     int effect_lifetime_frames;
-    if (D_L00_001614CC != 0) {
+    if (taunter_effect_reset_pending != 0) {
         for (i = 9; i >= 0; i--)
             D_L00_001DB440[i].c = 0;
-        D_L00_001614CC = 0;
+        taunter_effect_reset_pending = 0;
         D_L00_001614D0 = 0;
-        effect_lifetime_frames = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * frame_time));
-        D_L00_001614D8 = effect_lifetime_frames;
+        effect_lifetime_frames = f_to_int(taunter_effect_travel_distance / (taunter_effect_travel_speed * frame_time));
+        taunter_effect_lifetime_frames = effect_lifetime_frames;
         D_L00_001614DC = 1.0f / convert_integer_to_float(effect_lifetime_frames);
     }
-    if (D_L00_001614D4 == 0) {
+    if (taunter_effect_emission_disabled == 0) {
         if (tick_countdown_32(&D_L00_001614D0) != 0) {
             i = 0;
             do {
                 effect_slot = &D_L00_001DB440[i];
                 if (effect_slot->c == 0) {
-                    D_L00_001614D0 = scale_game_frames(D_L00_001614B0);
+                    D_L00_001614D0 = scale_game_frames(taunter_effect_spawn_interval_frames);
                     av = *(unsigned short *)&D_L00_001614D0_e[2];
                     effect_slot->b = D_L00_001614BC;
                     effect_slot->c = 1;
@@ -2774,7 +2774,7 @@ void update_taunter_effect_slots(void *source_moby) {
             if (fast_dec_timer_s16(&effect_slot->a) != 0)
                 effect_slot->c = 0;
             else
-                effect_slot->f += D_L00_001614B8 * frame_time;
+                effect_slot->f += taunter_effect_travel_speed * frame_time;
         }
     }
     moby_point_position(source_moby, 0, D_L00_001614E0);
