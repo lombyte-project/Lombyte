@@ -396,15 +396,15 @@ typedef struct {
     u8 pad[0x3E];
     s16 h3E;
 } S2ba970;
-extern f32 D_L00_001615EC __attribute__((sda));
-extern f32 D_L00_001615F0 __attribute__((sda));
-extern s32 D_L00_001615D4 __attribute__((sda));
-extern s32 D_L00_001615DC __attribute__((sda));
-extern f32 D_L00_001615FC __attribute__((sda));
-extern f32 D_L00_00161600 __attribute__((sda));
+extern f32 beam_first_pass_texture_u_offset __asm__("D_L00_001615EC") __attribute__((sda));
+extern f32 beam_first_pass_texture_u_scroll_speed __asm__("D_L00_001615F0") __attribute__((sda));
+extern s32 primary_beam_first_pass_alpha __asm__("D_L00_001615D4") __attribute__((sda));
+extern s32 primary_beam_second_pass_alpha __asm__("D_L00_001615DC") __attribute__((sda));
+extern f32 beam_and_arc_first_pass_half_width __asm__("D_L00_001615FC") __attribute__((sda));
+extern f32 primary_beam_second_pass_half_width __asm__("D_L00_00161600") __attribute__((sda));
 extern f32 D_L00_00161630 __attribute__((sda));
-extern s32 D_L00_00161604 __attribute__((sda));
-extern s32 D_L00_00161608 __attribute__((sda));
+extern s32 secondary_beam_first_pass_alpha __asm__("D_L00_00161604") __attribute__((sda));
+extern s32 secondary_beam_second_pass_alpha __asm__("D_L00_00161608") __attribute__((sda));
 extern f32 D_L00_0016160C __attribute__((sda));
 extern f32 D_L00_00161610 __attribute__((sda));
 extern f32 D_L00_00161634 __attribute__((sda));
@@ -422,13 +422,13 @@ void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
 
 void draw_beam_and_arc_effects(u8 *moby) {
     S2ba970 *moby_vars = *(S2ba970 **)(moby + 0x78);
-    D_L00_001615EC -= D_L00_001615F0 * frame_scale;
-    if (D_L00_001615EC <= -8.0f) {
-        D_L00_001615EC += 8.0f;
+    beam_first_pass_texture_u_offset -= beam_first_pass_texture_u_scroll_speed * frame_scale;
+    if (beam_first_pass_texture_u_offset <= -8.0f) {
+        beam_first_pass_texture_u_offset += 8.0f;
     }
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, D_L00_001615D4, D_L00_001615DC, moby_vars->h3E, D_L00_001615FC,
-                     D_L00_00161600, D_L00_00161630);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, moby_vars->h3E, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, primary_beam_first_pass_alpha, primary_beam_second_pass_alpha, moby_vars->h3E, beam_and_arc_first_pass_half_width,
+                     primary_beam_second_pass_half_width, D_L00_00161630);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, secondary_beam_first_pass_alpha, secondary_beam_second_pass_alpha, moby_vars->h3E, D_L00_0016160C,
                      D_L00_00161610, D_L00_00161634);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
@@ -502,13 +502,13 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     u.f[5] = 0;
     u.f[6] = 1.0f;
     u.f[7] = 1.0f;
-    first_pass_render_attributes.f[0] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[0] = beam_first_pass_texture_u_offset + 0;
     first_pass_render_attributes.f[1] = 0;
-    first_pass_render_attributes.f[2] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[2] = beam_first_pass_texture_u_offset + 0;
     first_pass_render_attributes.f[3] = 1.0f;
-    first_pass_render_attributes.f[4] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[4] = beam_first_pass_texture_u_offset + 1.0f;
     first_pass_render_attributes.f[5] = 0;
-    first_pass_render_attributes.f[6] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[6] = beam_first_pass_texture_u_offset + 1.0f;
     first_pass_render_attributes.f[7] = 1.0f;
     fast_vec_sub(first_pass_point_camera_offset, point_bytes, g_debug_camera);
     fast_vec_sub(segment_delta, point_bytes + 0x10, point_bytes);
@@ -516,7 +516,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     len0 = fast_vec_length(camera_facing_side_vector);
     if (len0 != 0)
         len0 = 1.0f / len0;
-    fast_vec_scale(D_L00_001615FC * len0, camera_facing_side_vector, camera_facing_side_vector);
+    fast_vec_scale(beam_and_arc_first_pass_half_width * len0, camera_facing_side_vector, camera_facing_side_vector);
     fast_vec_add(first_pass_corners[0], point_bytes, camera_facing_side_vector);
     fast_vec_sub(first_pass_corners[1], point_bytes, camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
@@ -526,7 +526,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         len = fast_vec_length(camera_facing_side_vector);
         if (len != 0)
             len = 1.0f / len;
-        fast_vec_scale(D_L00_001615FC * len, camera_facing_side_vector, camera_facing_side_vector);
+        fast_vec_scale(beam_and_arc_first_pass_half_width * len, camera_facing_side_vector, camera_facing_side_vector);
         fast_vec_add(first_pass_corners[2], v[i], camera_facing_side_vector);
         fast_vec_sub(first_pass_corners[3], v[i], camera_facing_side_vector);
         if (i == 1) {
