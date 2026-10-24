@@ -2989,7 +2989,7 @@ void FUN_001f9bf8_0026fc38(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026fc38(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_001fa6d0_0026fc38(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026fc38(void *) __asm__("FUN_L00_00267a08");
-extern f32 D_L00_00160200 __attribute__((sda));
+extern f32 animated_offset_particle_scalar __asm__("D_L00_00160200") __attribute__((sda));
 extern s32 animated_offset_particle_packed_color __asm__("D_L00_00160204") __attribute__((sda));
 extern f32 animated_offset_particle_offset_distance __asm__("D_L00_00160208") __attribute__((sda));
 extern u8 animated_offset_particle_rotation_step __asm__("D_L00_0016020C") __attribute__((sda));
@@ -2999,7 +2999,7 @@ void update_animated_offset_effect_particle(O0026fc38 *particle) __asm__("FUN_L0
 void update_animated_offset_effect_particle(O0026fc38 *particle) {
     V0026fc38 position_offset;
     S0026fc38 *s = &particle->s;
-    particle->xc = D_L00_00160200;
+    particle->xc = animated_offset_particle_scalar;
     particle->x4 = animated_offset_particle_packed_color;
     particle->x8 += animated_offset_particle_rotation_step;
     FUN_001f9a28_0026fc38(&position_offset, s->x4 + 0x10, D_L00_00166DC0_0026fc38);
