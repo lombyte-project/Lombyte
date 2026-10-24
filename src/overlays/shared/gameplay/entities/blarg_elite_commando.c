@@ -124,8 +124,8 @@ void rocket_update(char *rocket_moby) {
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern float D_L16_001613E0 __attribute__((sda));
-extern float D_L16_001613E4 __attribute__((sda));
+extern float class_32_symmetric_angle_bound_degrees __asm__("D_L16_001613E0") __attribute__((sda));
+extern float class_32_zero_based_angle_bound_degrees __asm__("D_L16_001613E4") __attribute__((sda));
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
@@ -147,10 +147,10 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spaw
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
         initial_movement_length = fast_vec_length(initial_movement_vector);
-        x = D_L16_001613E0;
+        x = class_32_symmetric_angle_bound_degrees;
         *(float *)(moby_data + 0x24) = initial_movement_length;
         random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
-        y = D_L16_001613E4;
+        y = class_32_zero_based_angle_bound_degrees;
         *(float *)(moby_data + 0x28) = random_angle_radians;
         *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(moby_data + 0x34) = 0;
