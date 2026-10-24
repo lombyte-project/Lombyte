@@ -804,8 +804,8 @@ extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float D_L11_001613D0 __attribute__((sda));
-extern float D_L11_001613D4 __attribute__((sda));
+extern float resort_owner_follow_hero_speed __asm__("D_L11_001613D0") __attribute__((sda));
+extern float resort_owner_distant_follow_and_path_speed __asm__("D_L11_001613D4") __attribute__((sda));
 float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
@@ -833,13 +833,13 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, scale_game_frames(0x14));
-        *(float *)(moby_vars + 0x154) = D_L11_001613D0 * frame_time;
+        *(float *)(moby_vars + 0x154) = resort_owner_follow_hero_speed * frame_time;
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         if (moby->prev_seq != 3)
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
-        *(float *)(moby_vars + 0x154) = D_L11_001613D4 * frame_time;
+        *(float *)(moby_vars + 0x154) = resort_owner_distant_follow_and_path_speed * frame_time;
         break;
     case RESORT_OWNER_JUMP_TO_TARGET:
         if (moby->prev_seq != 4)
