@@ -567,7 +567,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-extern float D_L17_001623E8 __attribute__((sda));
+extern float blarg_ship_firing_speed __asm__("D_L17_001623E8") __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -739,7 +739,7 @@ void blarg_ship_update(struct Moby *moby) {
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
                 subtract_vector_xyz(firing_target_delta, sB0, sA0);
-                normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
+                normalize_vector_xyz(firing_direction, firing_target_delta, blarg_ship_firing_speed * frame_time);
                 add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
                 firing_moby = spawn_class_3f9_moby((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (firing_moby) {
