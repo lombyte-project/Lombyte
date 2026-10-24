@@ -444,23 +444,23 @@ extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_00161
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
-extern s32 D_L14_001613D0 __attribute__((sda));
-extern s32 D_L14_001613D4 __attribute__((sda));
+extern s32 blarg_heavy_interceptor_target_tracking_duration_frames_gp __asm__("D_L14_001613D0") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_death_fall_duration_frames_gp __asm__("D_L14_001613D4") __attribute__((sda));
 extern f32 D_L14_001613D8 __attribute__((sda));
 extern f32 D_L14_001613DC __attribute__((sda));
 extern f32 D_L14_001613E0 __attribute__((sda));
 extern f32 D_L14_001613E4 __attribute__((sda));
-extern f32 D_L14_001613E8 __attribute__((sda));
-extern f32 D_L14_001613EC __attribute__((sda));
-extern f32 D_L14_001613F0 __attribute__((sda));
-extern f32 D_L14_001613F4 __attribute__((sda));
-extern f32 D_L14_001613F8 __attribute__((sda));
-extern s32 D_L14_00161400 __attribute__((sda));
-extern s32 D_L14_00161404 __attribute__((sda));
-extern s32 D_L14_00161408 __attribute__((sda));
-extern s32 D_L14_0016140C __attribute__((sda));
-extern s32 D_L14_00161410 __attribute__((sda));
-extern s32 D_L14_00161414 __attribute__((sda));
+extern f32 blarg_heavy_interceptor_death_fall_gravity_gp __asm__("D_L14_001613E8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp __asm__("D_L14_001613EC") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp __asm__("D_L14_001613F0") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp __asm__("D_L14_001613F4") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp __asm__("D_L14_001613F8") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_patrol_glow_red_gp __asm__("D_L14_00161400") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_patrol_glow_green_gp __asm__("D_L14_00161404") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_patrol_glow_blue_gp __asm__("D_L14_00161408") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp __asm__("D_L14_0016140C") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp __asm__("D_L14_00161410") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp __asm__("D_L14_00161414") __attribute__((sda));
 extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
@@ -568,10 +568,10 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         int found;
         int hit;
 
-        moby->glow_color = 0xFF000000 | (D_L14_00161408 << 16) | (D_L14_00161404 << 8) | D_L14_00161400;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_patrol_glow_blue_gp << 16) | (blarg_heavy_interceptor_patrol_glow_green_gp << 8) | blarg_heavy_interceptor_patrol_glow_red_gp;
         if (is_turret_group_activated_or_empty(*(int *)(moby_vars + 0x70))) {
             moby->state = 3;
-            *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
+            *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         }
         *(s16 *)(moby_vars + 0x202) = 0;
         *(s16 *)(moby_vars + 0x200) = 1;
@@ -612,11 +612,11 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         *(s32 *)(moby_vars + 0x1D0) = -1;
         activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         moby->state = 3;
-        *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
+        *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         break;
     }
     case INTERCEPTOR_STATE_TRACK_TARGET:
-        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) | (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) | blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         if (*(struct Moby **)(moby_vars + 0x18C) != 0) {
             *(s16 *)(moby_vars + 0x200) = 1;
             *(s16 *)(moby_vars + 0x202) = 1;
@@ -647,7 +647,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             moby->state = 4;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
-        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) | (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) | blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         qcopy(vector_scratch, &moby->pos);
         vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
         if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
@@ -665,7 +665,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             if (moby->prev_seq == 0) {
                 blend_moby_animation_c618(moby, 2, 0, 5);
             }
-            update_blarg_heavy_interceptor_return_path_position(moby, D_L14_001613F8, D_L14_001613F4, 1.0f);
+            update_blarg_heavy_interceptor_return_path_position(moby, blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp, blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp, 1.0f);
             if (*(float *)(moby_vars + 0x1C0) != 0.0f || *(float *)(moby_vars + 0x1BC) != 0.0f) {
                 ease_c618((f32 *)(moby_vars + 0x1C0), 0.0f, (f32 *)(moby_vars + 0x1C8), 0.004f, 0.2f, 0.0f);
                 ease_c618((f32 *)(moby_vars + 0x1BC), 0.0f, (f32 *)(moby_vars + 0x1C4), 0.004f, 0.2f, 0.0f);
@@ -745,7 +745,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         s32 voice;
         float death_launch_angle;
 
-        *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(D_L14_001613D4);
+        *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(blarg_heavy_interceptor_death_fall_duration_frames_gp);
         activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         voice = *(s32 *)(moby_vars + 0x1D0);
         if (voice != -1) {
@@ -781,16 +781,16 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         int i;
 
         add_vector_c618(&moby->pos, &moby->pos, moby_vars + 0x1E0);
-        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E0) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E0) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E4) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E4) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
         if (*(float *)(moby_vars + 0x1E8) > 0.0f) {
-            *(float *)(moby_vars + 0x1E8) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+            *(float *)(moby_vars + 0x1E8) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        *(float *)(moby_vars + 0x1E8) -= D_L14_001613E8 * frame_scale_sq;
+        *(float *)(moby_vars + 0x1E8) -= blarg_heavy_interceptor_death_fall_gravity_gp * frame_scale_sq;
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(moby_vars + 0x1FC));
         *(float *)(moby_vars + 0x140) = 10.0f;
         *(float *)(moby_vars + 0x144) = 10.0f;
