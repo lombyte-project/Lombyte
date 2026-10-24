@@ -387,7 +387,9 @@ void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026f548_2e01b0(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
-void FUN_L00_002e01b0(char *moby) {
+void emit_hydrodisplacer_effect(char *moby) __asm__("FUN_L00_002e01b0");
+
+void emit_hydrodisplacer_effect(char *moby) {
     V_2e01b0 effect_position, v;
     char *moby_data = *(char **)(moby + 0x78);
     struct Hero *player;
