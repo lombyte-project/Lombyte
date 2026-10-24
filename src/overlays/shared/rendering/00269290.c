@@ -880,11 +880,11 @@ extern float D_0015ED70;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float D_L00_001601B8 __attribute__((sda));
-extern float D_L00_001601BC __attribute__((sda));
+extern float spinning_particle_default_final_size __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8 __attribute__((sda));
-extern float D_L00_001601DC __attribute__((sda));
+extern float spinning_particle_alternate_final_size __asm__("D_L00_001601DC") __attribute__((sda));
 extern float D_L00_001601E8 __attribute__((sda));
-extern float D_L00_001601EC __attribute__((sda));
+extern float spinning_particle_vertical_step_scale __asm__("D_L00_001601EC") __attribute__((sda));
 extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -904,13 +904,13 @@ void update_spinning_and_fading_effect_particle(unsigned char *particle) {
     negated_particle_speed = -fast_vec_length_c(particle_data);
     advance_accelerated_scalar((float *)(particle + 0x30), &negated_particle_speed, 0.0f, 0.0f, D_L00_001601E8 * D_0015ED70, negated_particle_speed);
     fast_vec_normalize_c(particle_data, particle_data, -negated_particle_speed);
-    *(float *)(particle + 0x18) = *(float *)(particle + 0x18) + D_L00_001601EC * D_0015ED6C;
+    *(float *)(particle + 0x18) = *(float *)(particle + 0x18) + spinning_particle_vertical_step_scale * D_0015ED6C;
     ratio = convert_integer_to_float(*(short *)(particle + 0xA)) / convert_integer_to_float(particle_data[0x1D]);
     if (particle_data[0x1F] & 1) {
-        float lo = D_L00_001601DC * size_endpoint_scale;
+        float lo = spinning_particle_alternate_final_size * size_endpoint_scale;
         *(float *)(particle + 0xC) = ((D_L00_001601D8 - lo) * ratio + lo) * 210000.0f;
     } else {
-        float lo = D_L00_001601BC * size_endpoint_scale;
+        float lo = spinning_particle_default_final_size * size_endpoint_scale;
         *(float *)(particle + 0xC) = ((D_L00_001601B8 - lo) * ratio + lo) * 210000.0f;
     }
     *(int *)(particle + 4) = fast_tween_color_c(*(int *)(particle_data + 0x18), *(int *)(particle_data + 0x14), ratio);
