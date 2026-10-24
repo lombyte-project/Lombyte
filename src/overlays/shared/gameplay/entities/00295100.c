@@ -1810,7 +1810,7 @@ extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f
 
 extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
-extern int D_L00_00161090 __attribute__((sda));
+extern int vendor_selected_item_local_offset __asm__("D_L00_00161090") __attribute__((sda));
 void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 
 void initialize_vendor_selected_item_mobys(void) {
@@ -1829,7 +1829,7 @@ void initialize_vendor_selected_item_mobys(void) {
     FUN_0020c5f0_29b680(P.p20 + 0x100, id);
     *(short *)(P.p20 + 0x132) = 0x40;
     *(int *)(P.p20 + 0x194) = 0;
-    FUN_001f9a10_29b680(item_local_position, &D_L00_00161090, D_L00_001C8920[P.ent[P.i58].k]);
+    FUN_001f9a10_29b680(item_local_position, &vendor_selected_item_local_offset, D_L00_001C8920[P.ent[P.i58].k]);
     if (P.ent[P.i58].f == 0) {
         float item_z_offset = D_L00_001C8920[P.ent[P.i58].k][3];
         item_local_position[2] += item_z_offset;
