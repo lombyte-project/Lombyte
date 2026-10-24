@@ -643,10 +643,10 @@ void update_mine(struct Moby *mine_moby) {
                     break;
                 case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                     int debris_spawn_color = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
-                    int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
+                    int debris_grayscale_color = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
 
                     mine_spherical_offset(debris_velocity, mine_rand(0.0f, 1.0f) * frame_time, debris_azimuth, mine_rand_angle());
-                    mine_debris(debris_vector_scratch, debris_velocity, debris_spawn_color, c2, mine_rand(200000.0f, 300000.0f),
+                    mine_debris(debris_vector_scratch, debris_velocity, debris_spawn_color, debris_grayscale_color, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xF0), mine_frames(0x12C)), 3);
                     break;
                 }
