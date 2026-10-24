@@ -1334,7 +1334,9 @@ extern char D_0013F3D0[];
 extern int D_0015ED84;
 extern char *D_L05_001B0930[];
 
-void FUN_L05_00254358(float *out, float *out_rotation) {
+void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) __asm__("FUN_L05_00254358");
+
+void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) {
     char *hero_base = (char *)((char *)((char *)&hero));
     char *path_owner_moby = *(char **)(hero_base + 0x86C);
     char *path;

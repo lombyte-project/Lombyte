@@ -96,7 +96,7 @@ extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
-extern int FUN_L05_00254358(float *, float *);
+extern int compute_hero_hoverboard_respawn_transform(float *, float *) __asm__("FUN_L05_00254358");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int FUN_L05_002551d0(void);
 extern int FUN_L05_00255208(void);
@@ -2370,7 +2370,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
@@ -2378,14 +2378,14 @@ void update_hero_state_transitions(void) {
                 case 110:
                     if (5.0f > hero.motion.pos.f[0] || 5.0f > hero.motion.pos.f[1] ||
                         hero.state_timer > hero.unk8BE) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 111:
                     if (hero.unkA98 & 2) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }

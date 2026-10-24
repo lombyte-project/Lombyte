@@ -168,7 +168,7 @@ extern void smooth_and_clamp_value_pair(void *, void *, f32) __asm__("FUN_L05_00
 extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
-extern void FUN_L05_00254358(void *, void *);
+extern void compute_hero_hoverboard_respawn_transform(void *, void *) __asm__("FUN_L05_00254358");
 extern void FUN_L00_00216f90(void *, void *, s32, s32);
 extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
@@ -861,7 +861,7 @@ void update_hero_motion_by_state(void) {
         s32 n;
         f32 an;
         if (hero.motion.pos.f[0] < 5.0f || hero.motion.pos.f[1] < 5.0f) {
-            FUN_L05_00254358(&vector_and_hit_scratch, &v10);
+            compute_hero_hoverboard_respawn_transform(&vector_and_hit_scratch, &v10);
             hero.unk874 = v10.f[2];
             FUN_L00_00216f90(&vector_and_hit_scratch, &v10, 0x6B, 1);
         }
