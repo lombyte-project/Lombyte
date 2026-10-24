@@ -2709,12 +2709,12 @@ extern char D_L11_001677C0[];
 extern char D_L11_0021B610[];
 extern char D_L11_0021B648[];
 extern int D_L11_0015F608;
-extern float D_L11_00161FD0 __attribute__((sda));
-extern float D_L11_00161FD4 __attribute__((sda));
-extern float D_L11_00162048 __attribute__((sda));
+extern float jet_fighter_boarding_distance_gp __asm__("D_L11_00161FD0") __attribute__((sda));
+extern float jet_fighter_initial_flight_speed_gp __asm__("D_L11_00161FD4") __attribute__((sda));
+extern float jet_fighter_initial_health_gp __asm__("D_L11_00162048") __attribute__((sda));
 extern unsigned char D_L11_00162054 __attribute__((sda));
 extern unsigned char D_L11_00162058 __attribute__((sda));
-extern float D_L11_00162074 __attribute__((sda));
+extern float jet_fighter_max_health_gp __asm__("D_L11_00162074") __attribute__((sda));
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
@@ -2800,7 +2800,7 @@ void jet_fighter_update(struct Moby *moby) {
             struct Hero *g = &hero;
             if (g->ship_moby == moby) {
                 g->ship_flags &= ~2;
-                g->ship_hp_percent = g->ship_hp / D_L11_00162074 * 200.0f;
+                g->ship_hp_percent = g->ship_hp / jet_fighter_max_health_gp * 200.0f;
             }
         }
         switch (moby->state) {
@@ -2834,7 +2834,7 @@ void jet_fighter_update(struct Moby *moby) {
             break;
         case JET_FIGHTER_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
-            if (jet_distance(moby, g->moby) < D_L11_00161FD0) {
+            if (jet_distance(moby, g->moby) < jet_fighter_boarding_distance_gp) {
                 if (item_available[7] != 0) {
                     try_set_help_message(7, 0x2B09);
                 } else {
@@ -2881,10 +2881,10 @@ void jet_fighter_update(struct Moby *moby) {
                 g->unk160E = 1;
                 g->ship_ammo_max = D_L11_00162058;
                 g->unk15F8 = D_L11_00162058;
-                g->ship_hp = D_L11_00162048;
+                g->ship_hp = jet_fighter_initial_health_gp;
                 ship_vars->shown_hp = 0.0f;
                 ship_vars->hp_bar_fill = 0xFF;
-                g->ship_hp_max = D_L11_00162074;
+                g->ship_hp_max = jet_fighter_max_health_gp;
                 g->unk1604 = 100.0f;
                 g->unk15F9 = 3;
                 g->unk15FA = 3;
@@ -2892,7 +2892,7 @@ void jet_fighter_update(struct Moby *moby) {
                 g->ship_flags = 0;
                 jet_mount(D_L11_001677C0, D_L11_001677C0 + 0x10, 1, 0, 0);
                 ship_vars->count = 0;
-                ship_vars->speed = D_L11_00161FD4;
+                ship_vars->speed = jet_fighter_initial_flight_speed_gp;
                 ship_vars->f6C = 0.0f;
                 ship_vars->f70 = 0.0f;
                 ship_vars->i84 = 0;
