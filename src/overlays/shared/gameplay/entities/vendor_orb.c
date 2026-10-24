@@ -1736,25 +1736,25 @@ void apply_follow_camera_translation(char *camera) {
     char *camera_view = D_L00_00166E10;
     char *camera_state = *(char **)(camera + 0x70);
     char *attach_state = camera_state + 0x40;
-    char *g, *g3;
+    char *ground_check_hero, *state_check_hero;
     qcopy(&translation_delta, D_0013E533 + 0xF5D);
     FUN_001f9a10_c(camera + 0x30, &translation_delta, camera + 0x30);
     FUN_001f9a10_c(camera_state + 0xA0, &translation_delta, camera_state + 0xA0);
     FUN_001f9a10_c(attach_state, &translation_delta, attach_state);
     FUN_001f9a10_c(camera_state + 0xD0, &translation_delta, camera_state + 0xD0);
     FUN_001f9a10_c(camera_state, &translation_delta, camera_state);
-    g = D_0013E533 + 0xE1D;
-    if (*(short *)(g + 0x308) == 0) {
-        char *ground_moby = *(char **)(g + 0x2FC);
+    ground_check_hero = D_0013E533 + 0xE1D;
+    if (*(short *)(ground_check_hero + 0x308) == 0) {
+        char *ground_moby = *(char **)(ground_check_hero + 0x2FC);
         char *q;
         if (ground_moby == 0 || *(short *)(ground_moby + 0xA6) != 0x22D ||
             ((q = camera_view - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
-            char *g2 = D_0013E533 + 0xE1D;
-            *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
+            char *translation_source_hero = D_0013E533 + 0xE1D;
+            *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(translation_source_hero + 0x14C);
         }
     }
-    g3 = D_0013E533 + 0xE1D;
-    if ((unsigned)(*(int *)(g3 + 0x2084) - 0xB) < 2) {
+    state_check_hero = D_0013E533 + 0xE1D;
+    if ((unsigned)(*(int *)(state_check_hero + 0x2084) - 0xB) < 2) {
         char *reloaded_camera_state = *(char **)(camera + 0x70);
         char *camera_up_axis = camera_view + 0x30;
         float translation_up_component;
