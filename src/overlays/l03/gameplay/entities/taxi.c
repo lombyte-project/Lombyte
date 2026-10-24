@@ -42,11 +42,11 @@ void request_taxi_return_help_message(void *taxi_moby, int mode) {
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
-extern float D_L03_00161AF0 __attribute__((sda));
-extern float D_L03_00161AF4 __attribute__((sda));
-extern float D_L03_00161AF8 __attribute__((sda));
-extern float D_L03_00161AFC __attribute__((sda));
-extern float D_L03_00161B00 __attribute__((sda));
+extern float taxi_bobbing_amplitude __asm__("D_L03_00161AF0") __attribute__((sda));
+extern float taxi_bobbing_phase_rate_degrees __asm__("D_L03_00161AF4") __attribute__((sda));
+extern float taxi_rocking_amplitude __asm__("D_L03_00161AF8") __attribute__((sda));
+extern float taxi_rocking_first_phase_rate_degrees __asm__("D_L03_00161AFC") __attribute__((sda));
+extern float taxi_rocking_second_phase_rate_degrees __asm__("D_L03_00161B00") __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
@@ -54,11 +54,11 @@ void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) __asm__("FUN_L03_00
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
     char *moby_vars = (char *)taxi_moby->pvars;
-    update_moby_vertical_oscillation(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
+    update_moby_vertical_oscillation(taxi_bobbing_amplitude, taxi_bobbing_phase_rate_degrees * DEG_TO_RAD * frame_time, taxi_moby,
                      (float *)(moby_vars + 0xEC), (float *)(moby_vars + 0xE8));
-    update_moby_rotation_oscillation(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
-                     D_L03_00161AFC * DEG_TO_RAD * frame_time,
-                     D_L03_00161B00 * DEG_TO_RAD * frame_time);
+    update_moby_rotation_oscillation(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, taxi_rocking_amplitude,
+                     taxi_rocking_first_phase_rate_degrees * DEG_TO_RAD * frame_time,
+                     taxi_rocking_second_phase_rate_degrees * DEG_TO_RAD * frame_time);
 }
 #include "rnc/gameplay/hero.h"
 #include "qcopy.h"
