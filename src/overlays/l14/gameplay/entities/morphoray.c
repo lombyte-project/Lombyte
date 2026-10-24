@@ -318,7 +318,7 @@ extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((
 extern float D_L14_00162098 __attribute__((sda));
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
 
-char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) {
+char *create_bouncing_spark(int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
     char *moby = FUN_0020c4f8_c(0x4A9);
     float initial_yaw, scaled_moby_value;
     unsigned short initial_trail_timer;
@@ -329,7 +329,7 @@ char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int 
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(int *)(spark_data + 0x24) = owner;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         qcopy(spark_data + 0x10, initial_velocity);
         initial_trail_timer = D_L14_0016208C_g;
         *(float *)(spark_data + 0x1C) = gravity;
