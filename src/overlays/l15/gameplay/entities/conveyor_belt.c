@@ -2160,14 +2160,14 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern char *D_L15_0015EF50;
-extern float D_L15_0015F3FC;
+extern float codebot_slot_effect_spawn_gate __asm__("D_L15_0015F3FC");
 
 int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
     slot_state_data = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
-    if (*(short *)(slot_state_data + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
+    if (*(short *)(slot_state_data + 0x14) == 1 && codebot_slot_effect_spawn_gate != 0.0f)
         return 1;
     return *(short *)(slot_state_data + 0x14) == 3;
 }
