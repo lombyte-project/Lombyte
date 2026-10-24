@@ -2243,8 +2243,8 @@ void rocket_update(char *rocket_moby) {
     fast_vec_normalize(&z, &forward_step, random_float_between_c(0.0f, 1.0f) * *(float *)(rocket_vars + 0x30));
     add_vector_xyz(&z, &z, rocket_moby + 0x10);
     {
-        int c1 = scale_game_frames_c(FUN_L00_00257b90_c(0x1C, 0x28));
-        FUN_L00_00269958(&z, &u.v.a, 0x6F00AFFF, 0x100000FF, c1, 0x28, FUN_L00_00257b90_c(0x28, 0x46), 1);
+        int particle_duration_frames = scale_game_frames_c(FUN_L00_00257b90_c(0x1C, 0x28));
+        FUN_L00_00269958(&z, &u.v.a, 0x6F00AFFF, 0x100000FF, particle_duration_frames, 0x28, FUN_L00_00257b90_c(0x28, 0x46), 1);
     }
     qcopy(&previous_position, rocket_moby + 0x10);
     add_vector_xyz(rocket_vars + 0x10, rocket_vars + 0x10, &forward_step);
