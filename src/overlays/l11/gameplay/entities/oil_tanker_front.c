@@ -773,7 +773,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
 }
 extern char D_00141C18[];
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
-extern float D_L11_00162330 __attribute__((sda));
+extern float oil_tanker_head_fragment_velocity_scale __asm__("D_L11_00162330") __attribute__((sda));
 extern struct Moby *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -836,7 +836,7 @@ void process_oil_tanker_damage_and_destruction(struct Moby *moby) {
             char *head_position = (char *)&moby->pos;
             float *dv;
             char *head_rotation;
-            fast_vec_scale(fragment_initial_velocity, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, D_L11_00162330 * frame_scale));
+            fast_vec_scale(fragment_initial_velocity, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, oil_tanker_head_fragment_velocity_scale * frame_scale));
             fragment_initial_velocity[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
             cart_burst(moby, head_position, -1, 3.0f, 13.0f);
