@@ -1402,7 +1402,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_L02_0015F580[] __attribute__((section(".sdata")));
 extern int D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
-extern float D_L02_00161A80 __attribute__((sda));
+extern float level02_bot_attack_shot_nominal_length_gp __asm__("D_L02_00161A80") __attribute__((sda));
 extern float level02_bot_gravity_gp __asm__("D_L02_00161A84") __attribute__((sda));
 int D_L02_00161A88 = 0x40808080;
 int D_L02_00161A90 = 0x3c;
@@ -1686,7 +1686,7 @@ void update_level02_bot(struct Moby *moby) {
         direction[0] = fast_cos_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[1] = fast_sin_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[2] = -0.1f;
-        effect_slots_fire(data->shots, position, direction, D_L02_00161A80);
+        effect_slots_fire(data->shots, position, direction, level02_bot_attack_shot_nominal_length_gp);
         direction[3] = 5627.925f;
         direction[2] = 1.0f;
         make_hit_descriptor(shot, (int)moby, 0x10001, direction, 1.0f);
