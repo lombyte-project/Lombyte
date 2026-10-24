@@ -1225,7 +1225,7 @@ extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) __asm__("FUN_L00_002da360");
 
 void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
-    u8 buf[0x10] __attribute__((aligned(16)));
+    u8 cannon_suction_origin[0x10] __attribute__((aligned(16)));
     V_da360 raised_candidate_position;
     f32 suction_yaw, suction_pitch;
     M_da360 *candidate_moby;
@@ -1233,8 +1233,8 @@ void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
     f32 distance_xy, thr, target_pitch_or_angle_difference;
     s32 stored_moby_count;
 
-    FUN_L00_002da250_c(cannon_moby, &suction_yaw, &suction_pitch, buf);
-    FUN_L00_002ddf60(cannon_moby, buf);
+    FUN_L00_002da250_c(cannon_moby, &suction_yaw, &suction_pitch, cannon_suction_origin);
+    FUN_L00_002ddf60(cannon_moby, cannon_suction_origin);
     for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
         if (candidate_moby->a6 != 0 && (candidate_moby->f34 & 0x1000) &&
             *(void **)*(u8 **)(candidate_moby->p24 + 0x2c) != (void *)FUN_L00_002db848) {
@@ -1256,7 +1256,7 @@ void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
                             target_pitch_or_angle_difference = fast_arc_tan(distance_xy, raised_candidate_position.z - *(f32 *)(cannon_moby + 0x18));
                             target_pitch_or_angle_difference = fast_difference_between_rotations(suction_pitch, target_pitch_or_angle_difference);
                             if (target_pitch_or_angle_difference * target_pitch_or_angle_difference < thr) {
-                                if (!FUN_001efa68_c(buf, &raised_candidate_position, 2, candidate_moby, 0))
+                                if (!FUN_001efa68_c(cannon_suction_origin, &raised_candidate_position, 2, candidate_moby, 0))
                                     goto hit;
                                 if (suction_record->h68 > 0)
                                     FUN_L00_002da1e0_c(candidate_moby);
@@ -1266,7 +1266,7 @@ void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) {
                             FUN_L00_002da1e0_c(candidate_moby);
                     } else if (suction_record->h68 < 4) {
                     hit:
-                        process_suck_cannon_suction_candidate(cannon_moby, cannon_data, candidate_moby, suction_record, buf);
+                        process_suck_cannon_suction_candidate(cannon_moby, cannon_data, candidate_moby, suction_record, cannon_suction_origin);
                     }
                 } else if (suction_record->h68 != 0)
                     FUN_L00_002da1e0_c(candidate_moby);
