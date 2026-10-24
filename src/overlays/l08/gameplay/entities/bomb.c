@@ -1432,7 +1432,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
 }
 extern float line_puff_initial_z_velocity_range_end __asm__("D_L08_00161998") __attribute__((sda));
 extern float line_puff_position_jitter_range_end __asm__("D_L08_001619A0") __attribute__((sda));
-extern u16 D_L08_001619A8 __attribute__((sda));
+extern u16 line_puff_duration_frames __asm__("D_L08_001619A8") __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1480,10 +1480,10 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
                 grey |= (grey << 16) | (grey << 8);
                 *(u32 *)(puff + 4) = (alpha << 24) | grey;
             }
-            *(u16 *)(puff + 0xA) = D_L08_001619A8;
+            *(u16 *)(puff + 0xA) = line_puff_duration_frames;
             *(s32 *)(tail + 4) = 2;
             tail[0xA] = alpha;
-            tail[0xB] = D_L08_001619A8;
+            tail[0xB] = line_puff_duration_frames;
         }
     }
     effect_initial_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
