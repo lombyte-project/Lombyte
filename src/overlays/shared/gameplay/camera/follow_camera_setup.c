@@ -29,6 +29,8 @@ float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_globals.h"
+extern float follow_camera_orbit_distance_damping_gp __asm__("D_L00_00161D04") __attribute__((sda));
+extern float follow_camera_orbit_height_damping_gp __asm__("D_L00_00161D08") __attribute__((sda));
 void follow_camera_approach(unsigned char *moby)
 {
     unsigned char *init, *camera_state, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
@@ -46,14 +48,14 @@ void follow_camera_approach(unsigned char *moby)
     default_orbit = defaults + 0x130;
     default_target = defaults + 0x40;
     if (*(short *)(orbit + 0x3C)) {
-        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping_gp, *(float *)(init + 0x1C));
     } else {
-        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping_gp, *(float *)(init + 0x1C));
     }
     if (*(short *)(orbit + 0x3E)) {
-        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping_gp, 0.0f);
     } else {
-        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping_gp, 0.0f);
     }
     if (*(short *)(target + 0xDA)) {
         *(float *)(target + 0xB0) = cam_interp_values(target + 0xBC, *(float *)(target + 0xB0), *(float *)(target + 0xB4), *(float *)(target + 0xB8), 0.2f, 0.0f);
@@ -115,6 +117,9 @@ extern f32 D_L00_0015EF40;
 extern s32 D_L00_00161D94 __attribute__((sda));
 extern f32 D_L00_00161D84 __attribute__((sda));
 extern f32 D_L00_00161D88 __attribute__((sda));
+extern f32 follow_camera_vehicle_offset_scale_gp __asm__("D_L00_00161D98") __attribute__((sda));
+extern f32 follow_camera_vehicle_orbit_distance_gp __asm__("D_L00_00161D9C") __attribute__((sda));
+extern f32 follow_camera_vehicle_orbit_height_gp __asm__("D_L00_00161DA0") __attribute__((sda));
 extern f32 D_L00_00161DA4 __attribute__((sda));
 extern f32 D_L00_00161DA8 __attribute__((sda));
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -194,9 +199,9 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     }
     if (hero.vehicle_mode == 2) {
         if (camera_override_state->i10 < 2) {
-            follow_camera_set_offset_scale(0, follow_camera_vehicle_offset_scale, 0.005f);
-            follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance, 0.003f);
-            follow_camera_set_height(follow_camera_vehicle_orbit_height, 0.003f);
+            follow_camera_set_offset_scale(0, follow_camera_vehicle_offset_scale_gp, 0.005f);
+            follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance_gp, 0.003f);
+            follow_camera_set_height(follow_camera_vehicle_orbit_height_gp, 0.003f);
         }
         FUN_L00_002e8620();
         camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
@@ -806,6 +811,7 @@ void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
 float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
+extern float follow_camera_collision_retraction_rate_gp __asm__("D_L00_00161CB8") __attribute__((sda));
 int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void *candidate_camera_position, int skip_previous_length_clamp, int sphere_collision_found) __asm__("FUN_L00_002e7138");
 
 int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void *candidate_camera_position, int skip_previous_length_clamp, int sphere_collision_found) {
@@ -823,7 +829,7 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void 
     }
     adjusted_orbit_length = FUN_001f9af0_2e7138(A);
     if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_2e7138) > 0.05f && sphere_collision_found) {
-        adjusted_orbit_length -= follow_camera_collision_retraction_rate * frame_scale;
+        adjusted_orbit_length -= follow_camera_collision_retraction_rate_gp * frame_scale;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
     k = D_L00_00161CC8_gp;
@@ -1122,7 +1128,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
                             float minimum_orbit_distance;
                             float cf;
                             int collision_hold_frames = scale_game_frames(0x884);
-                            float retraction_increment = follow_camera_collision_retraction_rate * frame_scale;
+                            float retraction_increment = follow_camera_collision_retraction_rate_gp * frame_scale;
                             minimum_orbit_distance = D_L00_00161CC8_gp;
                             *(short *)(camera_collision_state + 0x34) = collision_hold_frames;
                             *(float *)(camera_collision_state + 0x30) += retraction_increment;
@@ -1172,6 +1178,7 @@ extern u8 D_L00_00166E10_2e7d20[] __asm__("D_L00_00166E10") __attribute__((secti
 extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
 extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
 extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
+extern f32 follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L00_00161CD0") __attribute__((sda));
 typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
 extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
@@ -1287,8 +1294,8 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     hit = FUN_L00_002e7520_2e7d20(camera_moby) == 0 ? hit : 1;
     hit = FUN_L00_002e7318_2e7d20(camera_moby) == 0 ? hit : 1;
     orbit_distance = AF_2e7d20(0x2C);
-    if (orbit_distance - BF_2e7d20(0x30) < follow_camera_minimum_retracted_orbit_distance) {
-        BF_2e7d20(0x30) = orbit_distance - follow_camera_minimum_retracted_orbit_distance;
+    if (orbit_distance - BF_2e7d20(0x30) < follow_camera_minimum_retracted_orbit_distance_gp) {
+        BF_2e7d20(0x30) = orbit_distance - follow_camera_minimum_retracted_orbit_distance_gp;
         BH_2e7d20(0x34) = FUN_001f96f8_2e7d20(2000);
     }
     if (BH_2e7d20(0x3A) != 0) {

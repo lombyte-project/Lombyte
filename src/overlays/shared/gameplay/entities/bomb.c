@@ -1571,6 +1571,8 @@ void FUN_L00_00250df8_2cbf68(void *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 #include "rnc/overlay/shared/gameplay/entities/bomb_globals.h"
+extern int feather_base_lifetime_gp __asm__("D_L00_001618A4") __attribute__((sda));
+extern float feather_scale_multiplier_gp __asm__("D_L00_001618A0") __attribute__((sda));
 unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initial_velocity) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
@@ -1604,14 +1606,14 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
         *(float *)(moby_vars + 0x10) = rnda_2cbf68();
         {
             float initial_random_angle = rnda_2cbf68();
-            float base_lifetime = (float)feather_base_lifetime;
+            float base_lifetime = (float)feather_base_lifetime_gp;
             *(float *)(moby_vars + 0x14) = initial_random_angle;
             lifetime_lower_bound = rf_2cbf68(base_lifetime * 0.7f);
         }
-        lifetime_upper_bound = rf_2cbf68((float)feather_base_lifetime * 1.2f);
+        lifetime_upper_bound = rf_2cbf68((float)feather_base_lifetime_gp * 1.2f);
         *(int *)(moby_vars + 0x1C) = fr_2cbf68(rndi_2cbf68(lifetime_lower_bound, lifetime_upper_bound));
         {
-            float k = feather_scale_multiplier;
+            float k = feather_scale_multiplier_gp;
             *(float *)(spawned_moby + 0x2C) *= k;
         }
         if (D_0013E535_2cbf68)
@@ -1630,6 +1632,7 @@ int FUN_001f9740_2cc210(void *) __asm__("FUN_001f9740");
 void FUN_0020c828_2cc210(void *) __asm__("FUN_0020c828");
 int FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 int FUN_L00_001fefc8_2cc210(void *) __asm__("FUN_L00_001fefc8");
+extern float falling_moby_horizontal_velocity_scale_gp __asm__("D_L00_001618A8") __attribute__((sda));
 void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
 
 void update_damped_falling_moby(unsigned char *updated_moby) {
@@ -1637,7 +1640,7 @@ void update_damped_falling_moby(unsigned char *updated_moby) {
     float sc;
     FUN_001f9a10_2cc210(updated_moby + 0x10, updated_moby + 0x10, moby_vars);
     moby_vars[2] -= D_0015ED70_lui * 15.0f;
-    sc = falling_moby_horizontal_velocity_scale;
+    sc = falling_moby_horizontal_velocity_scale_gp;
     moby_vars[0] *= sc;
     moby_vars[1] *= sc;
     if (moby_vars[2] < moby_vars[8])

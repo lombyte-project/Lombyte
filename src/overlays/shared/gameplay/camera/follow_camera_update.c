@@ -158,6 +158,10 @@ extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_update_globals.h"
+extern float orbit_distance_default_stiffness_gp __asm__("D_L00_00161CEC") __attribute__((sda));
+extern float orbit_distance_default_damping_gp __asm__("D_L00_00161CF0") __attribute__((sda));
+extern float orbit_distance_pull_back_stiffness_gp __asm__("D_L00_00161D14") __attribute__((sda));
+extern float orbit_distance_pull_back_damping_gp __asm__("D_L00_00161D18") __attribute__((sda));
 void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -180,8 +184,8 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             if (pull_back_state->f8 < interpolated_pull_back_value)
                 pull_back_state->f8 = interpolated_pull_back_value;
             pitch_s(0, pull_back_state->f8, 0.003f);
-            *x = orbit_distance_default_stiffness + (orbit_distance_pull_back_stiffness - orbit_distance_default_stiffness) * k;
-            *y = orbit_distance_default_damping + (orbit_distance_pull_back_damping - orbit_distance_default_damping) * k;
+            *x = orbit_distance_default_stiffness_gp + (orbit_distance_pull_back_stiffness_gp - orbit_distance_default_stiffness_gp) * k;
+            *y = orbit_distance_default_damping_gp + (orbit_distance_pull_back_damping_gp - orbit_distance_default_damping_gp) * k;
             return;
         }
     }
@@ -189,8 +193,8 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
         pull_back_state->h4 = 0;
         pull_back_state->f8 = *(float *)(reference_orbit_state + 0x58);
     }
-    *x = orbit_distance_default_stiffness;
-    *y = orbit_distance_default_damping;
+    *x = orbit_distance_default_stiffness_gp;
+    *y = orbit_distance_default_damping_gp;
 }
 #define NOT_SDA
 
@@ -470,6 +474,11 @@ typedef struct {
 extern C940 D_0013C940;
 extern G680 D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern int D_0015EDDC;
+extern float hero_aligned_camera_rotation_gain_at_zero_input_gp __asm__("D_L00_00161DC0") __attribute__((sda));
+extern float hero_aligned_camera_rotation_gain_at_unit_input_gp __asm__("D_L00_00161DC4") __attribute__((sda));
+extern float hero_aligned_camera_input_stiffness_gp __asm__("D_L00_00161DC8") __attribute__((sda));
+extern float hero_aligned_camera_input_damping_gp __asm__("D_L00_00161DCC") __attribute__((sda));
+extern float hero_aligned_camera_input_step_limit_gp __asm__("D_L00_00161DD0") __attribute__((sda));
 void FUN_L00_002e9cc0_c(void *) __asm__("FUN_L00_002e9cc0");
 void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -502,8 +511,8 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     if (rotation_input_target == 0.0f)
         rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
     rotation_input_scratch = FUN_001f99c0(camera_rotation_state->a);
-    k = hero_aligned_camera_rotation_gain_at_zero_input + (hero_aligned_camera_rotation_gain_at_unit_input - hero_aligned_camera_rotation_gain_at_zero_input) * rotation_input_scratch;
-    camera_rotation_state->a = rotation_input_scratch = FUN_001ebd78(camera_rotation_state->a, rotation_input_target, hero_aligned_camera_input_stiffness, hero_aligned_camera_input_damping, hero_aligned_camera_input_step_limit, &camera_rotation_state->va);
+    k = hero_aligned_camera_rotation_gain_at_zero_input_gp + (hero_aligned_camera_rotation_gain_at_unit_input_gp - hero_aligned_camera_rotation_gain_at_zero_input_gp) * rotation_input_scratch;
+    camera_rotation_state->a = rotation_input_scratch = FUN_001ebd78(camera_rotation_state->a, rotation_input_target, hero_aligned_camera_input_stiffness_gp, hero_aligned_camera_input_damping_gp, hero_aligned_camera_input_step_limit_gp, &camera_rotation_state->va);
     if (rotation_input_scratch != 0.0f)
         build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
     if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
@@ -520,8 +529,8 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     if (D_0015EDDC == 0)
         rotation_input_target = -rotation_input_target;
     rotation_input_scratch = FUN_001f99c0(camera_rotation_state->b);
-    k = hero_aligned_camera_rotation_gain_at_zero_input + (hero_aligned_camera_rotation_gain_at_unit_input - hero_aligned_camera_rotation_gain_at_zero_input) * rotation_input_scratch;
-    camera_rotation_state->b = FUN_001ebd78(camera_rotation_state->b, rotation_input_target, hero_aligned_camera_input_stiffness, hero_aligned_camera_input_damping, hero_aligned_camera_input_step_limit, &camera_rotation_state->vb);
+    k = hero_aligned_camera_rotation_gain_at_zero_input_gp + (hero_aligned_camera_rotation_gain_at_unit_input_gp - hero_aligned_camera_rotation_gain_at_zero_input_gp) * rotation_input_scratch;
+    camera_rotation_state->b = FUN_001ebd78(camera_rotation_state->b, rotation_input_target, hero_aligned_camera_input_stiffness_gp, hero_aligned_camera_input_damping_gp, hero_aligned_camera_input_step_limit_gp, &camera_rotation_state->vb);
     if (camera_rotation_state->b != 0.0f) {
         float a, prospective_pitch_angle, z;
         fast_vec_cross(&side, camera_object, &up);

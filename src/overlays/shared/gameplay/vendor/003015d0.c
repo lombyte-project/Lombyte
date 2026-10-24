@@ -60,6 +60,7 @@ extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 #include "rnc/overlay/shared/gameplay/vendor/003015d0_globals.h"
+extern int vendor_beam_damage_disabled_gp __asm__("D_L14_001620D8") __attribute__((sda));
 void update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
 
 void update_vendor_beam(unsigned char *moby) {
@@ -122,7 +123,7 @@ void update_vendor_beam(unsigned char *moby) {
         }
         break;
     }
-    if (vendor_beam_damage_disabled == 0) {
+    if (vendor_beam_damage_disabled_gp == 0) {
         if (vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f) {
             apply_vendor_beam_damage((char *)moby);
         }
@@ -151,6 +152,10 @@ extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __attribute__((sda));
+extern int vendor_beam_max_pulse_duration_frames_gp __asm__("D_L14_001620C0") __attribute__((sda));
+extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attribute__((sda));
+extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
 extern float D_L14_00162114 __attribute__((sda));
@@ -187,11 +192,11 @@ void start_vendor_beam_pulse(char *moby) {
 
     frame = (VendorBeamFrame *)((beam->frame << 7) + (int)D_L14_001600EC);
     {
-        int ticks = vendor_beam_min_pulse_duration_frames;
+        int ticks = vendor_beam_min_pulse_duration_frames_gp;
         frame->origin.f[3] = 1.0f;
         low = scale_game_frames(ticks);
     }
-    high = scale_game_frames(vendor_beam_max_pulse_duration_frames);
+    high = scale_game_frames(vendor_beam_max_pulse_duration_frames_gp);
     duration = random_integer_between(low, high);
     beam->countdown = (short)duration;
     beam->duration = (short)duration;
@@ -208,8 +213,8 @@ void start_vendor_beam_pulse(char *moby) {
             clear_u64_value(&path[i]);
             clear_u64_value(&path_steps[i]);
         } else {
-            set_vector_xyz(&path[i], 0.0f, vendor_beam_displacement_radius);
-            set_vector_xyz(&path_steps[i], 0.0f, vendor_beam_max_point_speed * frame_time);
+            set_vector_xyz(&path[i], 0.0f, vendor_beam_displacement_radius_gp);
+            set_vector_xyz(&path_steps[i], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
         }
         y = path[i].f[1];
         path[i].f[3] = 1.0f;
@@ -232,7 +237,7 @@ void start_vendor_beam_pulse(char *moby) {
 
     for (branch = 0; branch < 4; branch++) {
         int start;
-        float spread = vendor_beam_displacement_radius;
+        float spread = vendor_beam_displacement_radius_gp;
         set_vector_xyz(&work, spread, spread);
         start = truncate_float_to_s32(random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) + 4;
         beam->branch_start[branch] = (unsigned char)start;
@@ -240,7 +245,7 @@ void start_vendor_beam_pulse(char *moby) {
         qcopy(&beam->branch_steps[0][branch], &beam->point_steps[start]);
         for (k = 1; k < 4; k++) {
             set_vector_xyz(&delta, 0.1f, 0.1f);
-            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed * frame_time);
+            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
             add_vector_xyz(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
             add_vector_xyz(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
@@ -276,6 +281,10 @@ void start_vendor_beam_pulse(char *moby) {
         }
     }
 }
+extern int vendor_beam_color_transition_countdown_gp __asm__("D_L14_001620C4") __attribute__((sda));
+extern int vendor_beam_initial_color_gp __asm__("D_L14_001620F0") __attribute__((sda));
+extern int vendor_beam_transition_color_gp __asm__("D_L14_001620F4") __attribute__((sda));
+extern int vendor_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -315,14 +324,14 @@ void update_vendor_beam_animation(char *moby) {
             } while (copy_i < 4);
         }
     }
-    if (*(s16 *)(vars + 0x12) > vendor_beam_color_transition_countdown) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - vendor_beam_color_transition_countdown) /
-            convert_integer_to_float(*(int *)(vars + 0x620) - vendor_beam_color_transition_countdown);
-        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_transition_color, vendor_beam_initial_color, fraction);
+    if (*(s16 *)(vars + 0x12) > vendor_beam_color_transition_countdown_gp) {
+        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - vendor_beam_color_transition_countdown_gp) /
+            convert_integer_to_float(*(int *)(vars + 0x620) - vendor_beam_color_transition_countdown_gp);
+        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_transition_color_gp, vendor_beam_initial_color_gp, fraction);
     } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
         fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
-            convert_integer_to_float(vendor_beam_color_transition_countdown - D_L14_001620C8);
-        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_final_color, vendor_beam_transition_color, fraction);
+            convert_integer_to_float(vendor_beam_color_transition_countdown_gp - D_L14_001620C8);
+        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_final_color_gp, vendor_beam_transition_color_gp, fraction);
     } else {
         *(int *)(vars + 0x14) = 0;
     }
@@ -347,6 +356,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
 extern int D_L14_001620E0 __attribute__((sda));
 extern int D_L14_001620E4 __attribute__((sda));
 extern int D_L14_001620E8 __attribute__((sda));
@@ -381,7 +391,7 @@ void draw_vendor_beam(char *moby) {
     qcopy_nc(&world[12], &D_L14_001600EC[beam->frame].origin);
     subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
     transform_vector_xyz(camera, camera, inverse);
-    texture = get_effect_texture(vendor_beam_effect_texture_index);
+    texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
     gs_state = (u64)D_L14_001620E0 | ((u64)D_L14_001620E4 << 2) | ((u64)D_L14_001620E8 << 4)
                | ((u64)D_L14_001620EC << 6) | (0x8000ULL << 24);
     packet[2].texture_state = 0xFF9000000260ULL;

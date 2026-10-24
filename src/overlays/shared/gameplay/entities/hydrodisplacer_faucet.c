@@ -533,6 +533,13 @@ extern float D_L05_001D67D0[][4];
 extern float D_L05_001D6810[][4];
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
 #include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_globals.h"
+extern int wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") __attribute__((sda));
+extern int wobble_quad_blend_b_selector_gp __asm__("D_L05_00161CF8") __attribute__((sda));
+extern int wobble_quad_blend_c_selector_gp __asm__("D_L05_00161CFC") __attribute__((sda));
+extern int wobble_quad_blend_d_selector_gp __asm__("D_L05_00161D00") __attribute__((sda));
+extern int wobble_quad_start_color_gp __asm__("D_L05_00161D04") __attribute__((sda));
+extern int wobble_quad_end_color_gp __asm__("D_L05_00161D08") __attribute__((sda));
+extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__((sda));
 
 typedef struct {
     float vertex[4][4];
@@ -574,11 +581,11 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     cross_vector_xyz_30c220(direction, up, side);
     qcopy(matrix + 12, position);
 
-    texture = get_effect_texture_30c220(wobble_quad_texture_index);
-    flags = (u64)(s64)wobble_quad_blend_a_selector |
-            ((u64)(s64)wobble_quad_blend_b_selector << 2) |
-            ((u64)(s64)wobble_quad_blend_c_selector << 4) |
-            ((u64)(s64)wobble_quad_blend_d_selector << 6) |
+    texture = get_effect_texture_30c220(wobble_quad_texture_index_gp);
+    flags = (u64)(s64)wobble_quad_blend_a_selector_gp |
+            ((u64)(s64)wobble_quad_blend_b_selector_gp << 2) |
+            ((u64)(s64)wobble_quad_blend_c_selector_gp << 4) |
+            ((u64)(s64)wobble_quad_blend_d_selector_gp << 6) |
             0x8000000000ULL;
     quad_b.control[0] = 0;
     quad_b.control[2] = 0xff9000000260ULL;
@@ -606,7 +613,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            quad_a.color[j] = quad_b.color[j] = fast_tween_color(wobble_quad_start_color, wobble_quad_end_color, phase);
+            quad_a.color[j] = quad_b.color[j] = fast_tween_color(wobble_quad_start_color_gp, wobble_quad_end_color_gp, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;

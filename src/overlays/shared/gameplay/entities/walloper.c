@@ -397,7 +397,18 @@ typedef struct {
     s16 h3E;
 } S2ba970;
 #include "rnc/overlay/shared/gameplay/entities/walloper_globals.h"
+extern f32 beam_first_pass_texture_u_offset_gp __asm__("D_L00_001615EC") __attribute__((sda));
+extern f32 beam_first_pass_texture_u_scroll_speed_gp __asm__("D_L00_001615F0") __attribute__((sda));
+extern s32 primary_beam_first_pass_alpha_gp __asm__("D_L00_001615D4") __attribute__((sda));
+extern s32 primary_beam_second_pass_alpha_gp __asm__("D_L00_001615DC") __attribute__((sda));
+extern f32 beam_and_arc_first_pass_half_width_gp __asm__("D_L00_001615FC") __attribute__((sda));
+extern f32 primary_beam_second_pass_half_width_gp __asm__("D_L00_00161600") __attribute__((sda));
+extern f32 primary_beam_second_pass_segment_extension_factor_gp __asm__("D_L00_00161630") __attribute__((sda));
+extern s32 secondary_beam_first_pass_alpha_gp __asm__("D_L00_00161604") __attribute__((sda));
+extern s32 secondary_beam_second_pass_alpha_gp __asm__("D_L00_00161608") __attribute__((sda));
 extern f32 D_L00_0016160C __attribute__((sda));
+extern f32 secondary_beam_and_arc_second_pass_half_width_gp __asm__("D_L00_00161610") __attribute__((sda));
+extern f32 secondary_beam_second_pass_segment_extension_factor_gp __asm__("D_L00_00161634") __attribute__((sda));
 extern s16 D_L00_00161660;
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
@@ -409,22 +420,22 @@ void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
 
 void draw_beam_and_arc_effects(u8 *moby) {
     S2ba970 *moby_vars = *(S2ba970 **)(moby + 0x78);
-    beam_first_pass_texture_u_offset -= beam_first_pass_texture_u_scroll_speed * frame_scale;
-    if (beam_first_pass_texture_u_offset <= -8.0f) {
-        beam_first_pass_texture_u_offset += 8.0f;
+    beam_first_pass_texture_u_offset_gp -= beam_first_pass_texture_u_scroll_speed_gp * frame_scale;
+    if (beam_first_pass_texture_u_offset_gp <= -8.0f) {
+        beam_first_pass_texture_u_offset_gp += 8.0f;
     }
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, primary_beam_first_pass_alpha, primary_beam_second_pass_alpha, moby_vars->h3E, beam_and_arc_first_pass_half_width,
-                     primary_beam_second_pass_half_width, primary_beam_second_pass_segment_extension_factor);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, secondary_beam_first_pass_alpha, secondary_beam_second_pass_alpha, moby_vars->h3E, D_L00_0016160C,
-                     secondary_beam_and_arc_second_pass_half_width, secondary_beam_second_pass_segment_extension_factor);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, primary_beam_first_pass_alpha_gp, primary_beam_second_pass_alpha_gp, moby_vars->h3E, beam_and_arc_first_pass_half_width_gp,
+                     primary_beam_second_pass_half_width_gp, primary_beam_second_pass_segment_extension_factor_gp);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, secondary_beam_first_pass_alpha_gp, secondary_beam_second_pass_alpha_gp, moby_vars->h3E, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width_gp, secondary_beam_second_pass_segment_extension_factor_gp);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
-                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0x50, beam_arc_second_row_alpha, beam_arc_second_row_alpha, 5, D_L00_0016160C,
-                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xA0, beam_arc_third_row_alpha, beam_arc_third_row_alpha, 5, D_L00_0016160C,
-                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xF0, beam_arc_fourth_row_alpha, beam_arc_fourth_row_alpha, 5, D_L00_0016160C,
-                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
     draw_beam_anchor_camera_facing_quads(moby);
 }
 
@@ -489,13 +500,13 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     u.f[5] = 0;
     u.f[6] = 1.0f;
     u.f[7] = 1.0f;
-    first_pass_render_attributes.f[0] = beam_first_pass_texture_u_offset + 0;
+    first_pass_render_attributes.f[0] = beam_first_pass_texture_u_offset_gp + 0;
     first_pass_render_attributes.f[1] = 0;
-    first_pass_render_attributes.f[2] = beam_first_pass_texture_u_offset + 0;
+    first_pass_render_attributes.f[2] = beam_first_pass_texture_u_offset_gp + 0;
     first_pass_render_attributes.f[3] = 1.0f;
-    first_pass_render_attributes.f[4] = beam_first_pass_texture_u_offset + 1.0f;
+    first_pass_render_attributes.f[4] = beam_first_pass_texture_u_offset_gp + 1.0f;
     first_pass_render_attributes.f[5] = 0;
-    first_pass_render_attributes.f[6] = beam_first_pass_texture_u_offset + 1.0f;
+    first_pass_render_attributes.f[6] = beam_first_pass_texture_u_offset_gp + 1.0f;
     first_pass_render_attributes.f[7] = 1.0f;
     fast_vec_sub(first_pass_point_camera_offset, point_bytes, g_debug_camera);
     fast_vec_sub(segment_delta, point_bytes + 0x10, point_bytes);
@@ -503,7 +514,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     len0 = fast_vec_length(camera_facing_side_vector);
     if (len0 != 0)
         len0 = 1.0f / len0;
-    fast_vec_scale(beam_and_arc_first_pass_half_width * len0, camera_facing_side_vector, camera_facing_side_vector);
+    fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len0, camera_facing_side_vector, camera_facing_side_vector);
     fast_vec_add(first_pass_corners[0], point_bytes, camera_facing_side_vector);
     fast_vec_sub(first_pass_corners[1], point_bytes, camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
@@ -513,7 +524,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         len = fast_vec_length(camera_facing_side_vector);
         if (len != 0)
             len = 1.0f / len;
-        fast_vec_scale(beam_and_arc_first_pass_half_width * len, camera_facing_side_vector, camera_facing_side_vector);
+        fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len, camera_facing_side_vector, camera_facing_side_vector);
         fast_vec_add(first_pass_corners[2], v[i], camera_facing_side_vector);
         fast_vec_sub(first_pass_corners[3], v[i], camera_facing_side_vector);
         if (i == 1) {
@@ -602,6 +613,8 @@ long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float rnd_2bb0b0(float, float) __asm__("FUN_L00_00257c48");
 void draw_2bb0b0(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int D_L00_00161640 __attribute__((sda));
+extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
+extern float beam_anchor_second_pass_base_corner_scale_gp __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
 extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
 void draw_beam_anchor_camera_facing_quads(void *mv) {
@@ -629,7 +642,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
     quad.color[0] = quad_color;
-    corner_scale = beam_anchor_first_pass_base_corner_scale + rnd_2bb0b0(0.0f, 0.025f);
+    corner_scale = beam_anchor_first_pass_base_corner_scale_gp + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
@@ -642,7 +655,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
     quad.color[0] = quad_color;
-    corner_scale = beam_anchor_second_pass_base_corner_scale + rnd_2bb0b0(0.0f, 0.05f);
+    corner_scale = beam_anchor_second_pass_base_corner_scale_gp + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
@@ -954,6 +967,8 @@ void walloper_update(char *m) {
     enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
+extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
+extern f32 walloper_arc_second_pass_half_width_gp __asm__("D_L00_00161694") __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
@@ -968,7 +983,7 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
             arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, walloper_arc_first_pass_half_width, walloper_arc_second_pass_half_width, 0.2f);
+            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, walloper_arc_first_pass_half_width_gp, walloper_arc_second_pass_half_width_gp, 0.2f);
         }
     }
     draw_walloper_camera_facing_quad(moby);
@@ -1151,6 +1166,9 @@ int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
+extern float walloper_quad_basis_offset_scale_gp __asm__("D_L00_001616BC") __attribute__((sda));
+extern float walloper_quad_corner_scale_gp __asm__("D_L00_001616B8") __attribute__((sda));
+extern int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
@@ -1163,9 +1181,9 @@ void draw_walloper_camera_facing_quad(void *mv) {
     V_2bc1a0 camera_facing_offset;
     unsigned int uniform_vertex_color;
     int i;
-    FUN_001f9a68_2bc1a0(walloper_quad_basis_offset_scale, &scaled_basis_offset, moby_bytes + 0xD0);
+    FUN_001f9a68_2bc1a0(walloper_quad_basis_offset_scale_gp, &scaled_basis_offset, moby_bytes + 0xD0);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &scaled_basis_offset, moby_bytes + 0x10);
-    quad.tex = FUN_001f44b8_2bc1a0(walloper_quad_texture_index);
+    quad.tex = FUN_001f44b8_2bc1a0(walloper_quad_texture_index_gp);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -1195,7 +1213,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     FUN_001f9a68_2bc1a0(0.2f, &camera_facing_offset, &camera_facing_transform[0]);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &camera_facing_transform[3], &camera_facing_offset);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2bc1a0(walloper_quad_corner_scale, &scaled_corner, &D_L00_001DBB60[3 - i]);
+        FUN_001f9a68_2bc1a0(walloper_quad_corner_scale_gp, &scaled_corner, &D_L00_001DBB60[3 - i]);
         FUN_001f9d20_2bc1a0(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2bc1a0(&quad, 0, 0);
@@ -1390,6 +1408,7 @@ extern float D_0015ED6C;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141680;
 extern int D_0015EEA4;
+extern float morphoray_base_drain_rate_gp __asm__("D_L00_001616E0") __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
 extern int D_L00_001617BC;
 extern int D_L00_001617C8;
@@ -1561,7 +1580,7 @@ void morphoray_update(Moby *moby) {
         }
             {
                 float level_bonus = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
-                float remaining = data->left - morphoray_base_drain_rate * D_0015ED6C * level_bonus;
+                float remaining = data->left - morphoray_base_drain_rate_gp * D_0015ED6C * level_bonus;
                 data->left = remaining;
                 if (remaining < 0.0f) {
                     data->left = 0.0f;
@@ -2288,6 +2307,7 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF958). */
 #include "rnc/rendering/geometry_quad.h"
+extern int beam_pulse_default_rgb_gp __asm__("D_L00_00161760") __attribute__((sda));
 extern int D_L00_00161764 __attribute__((sda));
 extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
 extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
@@ -2315,7 +2335,7 @@ void draw_beam_pulse_quads(void *unused) {
     quad.texture_coordinates[3][0] = 1.0f;
     quad.texture_coordinates[3][1] = 1.0f;
     {
-        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : beam_pulse_default_rgb;
+        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : beam_pulse_default_rgb_gp;
         color = selected_color & 0xFFFFFF;
     }
     origin = &position;
@@ -2364,6 +2384,10 @@ void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
+extern float beam_origin_quad_basis_offset_length_gp __asm__("D_L00_001617B4") __attribute__((sda));
+extern float beam_origin_quad_first_pass_corner_scale_gp __asm__("D_L00_001617AC") __attribute__((sda));
+extern float beam_origin_quad_second_pass_corner_scale_gp __asm__("D_L00_001617B0") __attribute__((sda));
+extern int beam_origin_quad_first_pass_vertex_color_gp __asm__("D_L00_001617B8") __attribute__((sda));
 void draw_beam_origin_camera_facing_quads(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;
@@ -2373,7 +2397,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     int first_pass_vertex_color;
     int i, j;
     quad.tex = FUN_001f44b8_2be890(11);
-    first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color;
+    first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color_gp;
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -2389,7 +2413,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length);
+    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);
     FUN_001f9a10_2be890(&camera_facing_transform[3], &D_L00_001DBF60_2be890, &offset_vector);
     FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2be890(&camera_facing_transform[0], &offset_vector, 1.0f);
@@ -2397,7 +2421,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     FUN_001f9bf8_2be890(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
     FUN_001f9ad8_2be890(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2be890(beam_origin_quad_first_pass_corner_scale, &scaled_corner, &D_L00_001DBF20[3 - i]);
+        FUN_001f9a68_2be890(beam_origin_quad_first_pass_corner_scale_gp, &scaled_corner, &D_L00_001DBF20[3 - i]);
         FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
@@ -2406,7 +2430,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.color[1] = -1;
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
-        FUN_001f9a68_2be890(beam_origin_quad_second_pass_corner_scale, &scaled_corner, &D_L00_001DBF20[3 - j]);
+        FUN_001f9a68_2be890(beam_origin_quad_second_pass_corner_scale_gp, &scaled_corner, &D_L00_001DBF20[3 - j]);
         FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);

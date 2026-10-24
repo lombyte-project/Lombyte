@@ -174,6 +174,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00250df8(void *);
 
 #include "rnc/overlay/l08/gameplay/entities/bolt_thief_globals.h"
+extern float shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") __attribute__((sda));
 void update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 
 void update_shrub_parts(struct Moby *parent_moby) {
@@ -196,7 +197,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
         char *spinning_part_moby = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
             *(float *)(spinning_part_moby + 0x40),
-            shrub_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
+            shrub_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
@@ -208,6 +209,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
 
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
+extern float commando_part_spin_speed_degrees_gp __asm__("D_L08_00161D38") __attribute__((sda));
 void update_commando_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e9a18");
 
 void update_commando_parts(struct Moby *parent_moby) {
@@ -232,7 +234,7 @@ void update_commando_parts(struct Moby *parent_moby) {
     if (*(char **)(data + 0x90) != 0) {
         *(float *)(*(char **)(data + 0x90) + 0x40) =
             fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
-                               commando_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
+                               commando_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     part_entry_cursor = parts + 0x10;
     for (i = 0; i < 16; i++) {
@@ -1277,6 +1279,7 @@ void spawn_gunship_parts(struct Moby *moby) {
     }
 }
 #include "rnc/gameplay/hero.h"
+extern float gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161C3C") __attribute__((sda));
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
 typedef struct {
@@ -1314,13 +1317,13 @@ void update_linked_moby_parts(struct Moby *moby) {
         }
     }
     if (linked_parts_vars->links[7].part != 0) {
-        linked_parts_vars->links[7].part->rot.x = fast_add_rotations(linked_parts_vars->links[7].part->rot.x, gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
+        linked_parts_vars->links[7].part->rot.x = fast_add_rotations(linked_parts_vars->links[7].part->rot.x, gunship_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     if (linked_parts_vars->links[8].part != 0) {
-        linked_parts_vars->links[8].part->rot.x = fast_add_rotations(linked_parts_vars->links[8].part->rot.x, -(gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C));
+        linked_parts_vars->links[8].part->rot.x = fast_add_rotations(linked_parts_vars->links[8].part->rot.x, -(gunship_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C));
     }
     if (linked_parts_vars->links[9].part != 0) {
-        linked_parts_vars->links[9].part->rot.x = fast_add_rotations(linked_parts_vars->links[9].part->rot.x, gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
+        linked_parts_vars->links[9].part->rot.x = fast_add_rotations(linked_parts_vars->links[9].part->rot.x, gunship_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     if (linked_parts_vars->links[3].part != 0) {
         linked_parts_vars->links[3].part->rot.z = fast_arc_tan(hero.motion.pos.f[0] - linked_parts_vars->links[3].part->pos.x, hero.motion.pos.f[1] - linked_parts_vars->links[3].part->pos.y);
@@ -1419,6 +1422,10 @@ typedef struct {
     s16 sound;                   /* 0x28E */
 } GunshipVars;
 
+extern s32 gunship_updates_disabled_gp __asm__("D_L08_00161C4C") __attribute__((sda));
+extern f32 gunship_path_speed_gp __asm__("D_L08_00161C38") __attribute__((sda));
+extern f32 gunship_turn_acceleration_degrees_gp __asm__("D_L08_00161C44") __attribute__((sda));
+extern f32 gunship_max_turn_speed_degrees_gp __asm__("D_L08_00161C48") __attribute__((sda));
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
@@ -1478,7 +1485,7 @@ void update_gunship(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (gunship_updates_disabled != 0) {
+    if (gunship_updates_disabled_gp != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -1514,8 +1521,8 @@ void update_gunship(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > gunship_path_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, gunship_path_speed * frame_time);
+        if (vector_length_xyz(&step) > gunship_path_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, gunship_path_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (moby->command == 0) {
@@ -1536,7 +1543,7 @@ void update_gunship(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (gunship_path_speed + gunship_path_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (gunship_path_speed_gp + gunship_path_speed_gp) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -1564,15 +1571,15 @@ void update_gunship(struct Moby *moby) {
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
         approach_angle(&moby->rot.z, &vars->turn_speed, heading,
-                         gunship_turn_acceleration_degrees * DEG_TO_RAD * frame_time_sq, gunship_turn_acceleration_degrees * DEG_TO_RAD * frame_time_sq,
-                         gunship_max_turn_speed_degrees * DEG_TO_RAD * frame_time);
+                         gunship_turn_acceleration_degrees_gp * DEG_TO_RAD * frame_time_sq, gunship_turn_acceleration_degrees_gp * DEG_TO_RAD * frame_time_sq,
+                         gunship_max_turn_speed_degrees_gp * DEG_TO_RAD * frame_time);
         qcopy(&point, &follower->path->points[next]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > gunship_path_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, gunship_path_speed * frame_time);
+        if (vector_length_xyz(&step) > gunship_path_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, gunship_path_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_linked_moby_parts(moby);
@@ -1583,7 +1590,7 @@ void update_gunship(struct Moby *moby) {
         moby_point_position(vars->links[4].part, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (gunship_path_speed + gunship_path_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (gunship_path_speed_gp + gunship_path_speed_gp) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->links[4].part->rot.z;
@@ -1648,6 +1655,7 @@ void build_bolt_thief_target_list(struct Moby *moby) {
 }
 extern float D_0013F3D4;
 extern float D_0015ED6C;
+extern float bolt_thief_waypoint_speed_gp __asm__("D_L08_00161C50") __attribute__((sda));
 extern char D_001413D0[];
 extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L00_0025a120(struct Moby *);
@@ -1788,7 +1796,7 @@ void bolt_thief_update(struct Moby *moby) {
             }
         } else {
             subtract_vector_xyz(&step, &point, &moby->pos);
-            normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
+            normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed_gp * D_0015ED6C);
             add_vector_xyz(&moby->pos, &moby->pos, &step);
             if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
                 follower->point = next;
@@ -1884,7 +1892,7 @@ void bolt_thief_update(struct Moby *moby) {
             return;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
+        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed_gp * D_0015ED6C);
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
@@ -1902,7 +1910,7 @@ void bolt_thief_update(struct Moby *moby) {
         FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         subtract_vector_xyz(&step, &point, &moby->pos);
-        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
+        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed_gp * D_0015ED6C);
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
@@ -2516,9 +2524,18 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float bolt_pickup_default_surface_base_tilt_degrees_gp __asm__("D_L08_00161C64") __attribute__((sda));
+extern float bolt_pickup_default_surface_planar_offset_per_scale_gp __asm__("D_L08_00161C7C") __attribute__((sda));
+extern float five_bolt_pickup_surface_planar_offset_per_scale_gp __asm__("D_L08_00161C80") __attribute__((sda));
+extern float ten_bolt_pickup_surface_normal_offset_per_scale_gp __asm__("D_L08_00161C78") __attribute__((sda));
 extern float D_L08_00161CB8 __attribute__((sda));
 extern float D_L08_00161CBC __attribute__((sda));
+extern float ten_bolt_pickup_surface_planar_offset_per_scale_gp __asm__("D_L08_00161C84") __attribute__((sda));
+extern float five_bolt_pickup_surface_base_tilt_degrees_gp __asm__("D_L08_00161C68") __attribute__((sda));
+extern float ten_bolt_pickup_surface_base_tilt_degrees_gp __asm__("D_L08_00161C6C") __attribute__((sda));
 extern float D_L08_00161CB4 __attribute__((sda));
+extern float bolt_pickup_default_surface_normal_offset_per_scale_gp __asm__("D_L08_00161C70") __attribute__((sda));
+extern float five_bolt_pickup_surface_normal_offset_per_scale_gp __asm__("D_L08_00161C74") __attribute__((sda));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2542,19 +2559,19 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby, float *out, flo
     float basis_tilt_radians;
     switch (moby->oclass) {
     case MOBY_CLASS_FIVE_BOLT_PICKUP:
-        sx = five_bolt_pickup_surface_base_tilt_degrees * D_L08_00161CB8;
-        sy = five_bolt_pickup_surface_normal_offset_per_scale * D_L08_00161CB8;
-        sz = five_bolt_pickup_surface_planar_offset_per_scale * D_L08_00161CB8;
+        sx = five_bolt_pickup_surface_base_tilt_degrees_gp * D_L08_00161CB8;
+        sy = five_bolt_pickup_surface_normal_offset_per_scale_gp * D_L08_00161CB8;
+        sz = five_bolt_pickup_surface_planar_offset_per_scale_gp * D_L08_00161CB8;
         break;
     case MOBY_CLASS_TEN_BOLT_PICKUP:
-        sx = ten_bolt_pickup_surface_base_tilt_degrees * D_L08_00161CBC;
-        sy = ten_bolt_pickup_surface_normal_offset_per_scale * D_L08_00161CBC;
-        sz = ten_bolt_pickup_surface_planar_offset_per_scale * D_L08_00161CBC;
+        sx = ten_bolt_pickup_surface_base_tilt_degrees_gp * D_L08_00161CBC;
+        sy = ten_bolt_pickup_surface_normal_offset_per_scale_gp * D_L08_00161CBC;
+        sz = ten_bolt_pickup_surface_planar_offset_per_scale_gp * D_L08_00161CBC;
         break;
     default:
-        sx = bolt_pickup_default_surface_base_tilt_degrees * D_L08_00161CB4;
-        sy = bolt_pickup_default_surface_normal_offset_per_scale * D_L08_00161CB4;
-        sz = bolt_pickup_default_surface_planar_offset_per_scale * D_L08_00161CB4;
+        sx = bolt_pickup_default_surface_base_tilt_degrees_gp * D_L08_00161CB4;
+        sy = bolt_pickup_default_surface_normal_offset_per_scale_gp * D_L08_00161CB4;
+        sz = bolt_pickup_default_surface_planar_offset_per_scale_gp * D_L08_00161CB4;
         break;
     }
     euler_rotation_matrix(base_rotation_matrix, (float *)(data + 0x10));
@@ -2765,6 +2782,8 @@ typedef struct {
     s16 sound;                   /* 0x13E */
 } SwarmVars;
 
+extern s32 shrub_updates_disabled_gp __asm__("D_L08_00161D30") __attribute__((sda));
+extern f32 shrub_path_speed_gp __asm__("D_L08_00161D24") __attribute__((sda));
 extern s32 D_L08_0015F5C4;
 extern s64 D_L08_0016D090 __attribute__((section(".data")));
 extern u8 D_0014C050[];
@@ -2825,7 +2844,7 @@ void shrub_update(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (shrub_updates_disabled != 0) {
+    if (shrub_updates_disabled_gp != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -2861,8 +2880,8 @@ void shrub_update(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > shrub_path_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, shrub_path_speed * frame_time);
+        if (vector_length_xyz(&step) > shrub_path_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, shrub_path_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (moby->command == 0) {
@@ -2879,7 +2898,7 @@ void shrub_update(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (shrub_path_speed + shrub_path_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (shrub_path_speed_gp + shrub_path_speed_gp) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -2914,8 +2933,8 @@ void shrub_update(struct Moby *moby) {
             follower->point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > shrub_path_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, shrub_path_speed * frame_time);
+        if (vector_length_xyz(&step) > shrub_path_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, shrub_path_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_shrub_parts((char *)moby);
@@ -2926,7 +2945,7 @@ void shrub_update(struct Moby *moby) {
         moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (shrub_path_speed + shrub_path_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (shrub_path_speed_gp + shrub_path_speed_gp) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;

@@ -1355,6 +1355,8 @@ extern int D_L00_00161908 __attribute__((sda));
 extern int D_L00_0016190C __attribute__((sda));
 extern int D_L00_00161910 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
+extern int metal_detector_trail_initial_quad_color_gp __asm__("D_L00_00161914") __attribute__((sda));
+extern int metal_detector_trail_texture_selector_gp __asm__("D_L00_00161918") __attribute__((sda));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1374,8 +1376,8 @@ void draw_metal_detector_trail(Moby_2D3F40 *moby) {
     int col;
     int trail_quad_texture;
 
-    trail_quad_texture = func_001F4868_2D3F40(metal_detector_trail_texture_selector);
-    q.c[0] = q.c[1] = q.c[2] = q.c[3] = metal_detector_trail_initial_quad_color;
+    trail_quad_texture = func_001F4868_2D3F40(metal_detector_trail_texture_selector_gp);
+    q.c[0] = q.c[1] = q.c[2] = q.c[3] = metal_detector_trail_initial_quad_color_gp;
     q.g[1] = trail_quad_texture;
     q.g[2] = 0xFF9000000260L;
     q.g[0] = 4;
@@ -2263,6 +2265,8 @@ extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 /* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
 void horny_toad_update(Moby *moby) __asm__("FUN_L00_002d4610");
 extern float D_L00_0016196C __attribute__((sda));
+extern float horny_toad_target_approach_distance_threshold_gp __asm__("D_L00_00161980") __attribute__((sda));
+extern float horny_toad_target_animation_start_index_gp __asm__("D_L00_00161984") __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
     enum {
@@ -2391,10 +2395,10 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case HORNY_TOAD_APPROACH_AND_FACE_TARGET:
-        if (move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f) < horny_toad_target_approach_distance_threshold
+        if (move_horny_toad_toward_position((unsigned char *)moby, data->unk180, 0.5f) < horny_toad_target_approach_distance_threshold_gp
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
-            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)horny_toad_target_animation_start_index, scale_game_frames(10));
+            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)horny_toad_target_animation_start_index_gp, scale_game_frames(10));
         } else if (data->unk1C4 == 2) {
             moby->state = 8;
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
@@ -3388,6 +3392,7 @@ s16 D_L01_001D5BC0[1200] = {0};
 s16 D_L14_001D5E40[1200] = {0};
 extern float D_L00_001619B4 __attribute__((sda));
 extern float D_L00_001619B8 __attribute__((sda));
+extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC") __attribute__((sda));
 extern int D_L00_001619C0 __attribute__((sda));
 extern int D_L00_001619C4 __attribute__((sda));
 extern int D_L00_001619C8 __attribute__((sda));
@@ -3471,7 +3476,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         if (fast_bsphere_check(&culling_sphere, D_L00_001619E0) < 0)
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
-            for (particle_end_or_emission_index = 0; particle_end_or_emission_index < smoke_fire_emission_attempts_per_update; particle_end_or_emission_index++) {
+            for (particle_end_or_emission_index = 0; particle_end_or_emission_index < smoke_fire_emission_attempts_per_update_gp; particle_end_or_emission_index++) {
                 particle_vector.x = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.z = 1.0f;
@@ -3513,6 +3518,7 @@ extern float D_L00_00161374;
 extern float D_L00_00161384;
 extern float D_L00_0016138C;
 extern unsigned short D_L00_00161388_gp __asm__("D_L00_00161388") __attribute__((sda));
+extern int smoke_fire_particle_steady_alpha_gp __asm__("D_L00_00161998") __attribute__((sda));
 extern float D_L00_0016199C __attribute__((sda));
 extern u8 D_L00_001619A0[4] __attribute__((sda));
 extern u8 D_L00_001619A8[8] __attribute__((sda));
@@ -3620,7 +3626,7 @@ void draw_smoke_fire_spawner(P *spawner) {
                 if (fast_dec_timer_s16(&D_L00_001D6A00[i])) {
                     D_L00_001D60A0[i] = D_L00_00161388_gp;
                 }
-                alpha = smoke_fire_particle_steady_alpha;
+                alpha = smoke_fire_particle_steady_alpha_gp;
             }
             alpha <<= 24;
             quad.primitive = 0x8000000048L;

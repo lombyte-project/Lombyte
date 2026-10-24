@@ -16,6 +16,7 @@ typedef struct {
     u8 *tint;
 } LevelFx;
 #include "rnc/overlay/l02/gameplay/entities/constructorbot_globals.h"
+extern f32 shard_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58") __attribute__((sda));
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx D_L02_001B2680;
@@ -56,7 +57,7 @@ void update_shard_debris(struct Moby *moby) {
         return;
     }
     vec_add(&moby->pos, &moby->pos, &shard_vars->vel);
-    approach_value(&shard_vars->vel.z, 0.0f, shard_vertical_velocity_approach_scale * frame_time_sq);
+    approach_value(&shard_vars->vel.z, 0.0f, shard_vertical_velocity_approach_scale_gp * frame_time_sq);
     moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&shard_vars->vel), shard_vars->vel.z);
     qcopy(&trail_position, &moby->pos);
     vec_scale(&half, &shard_vars->vel, 0.5f);
@@ -422,6 +423,8 @@ s32 D_L02_001620FC = 0x804080ff;
 s32 D_L02_00162100 = 0x8040ffff;
 s32 D_L02_00162104 = 0x80204040;
 s32 D_L02_00162108 = 0x80204080;
+extern s32 view_gated_smoke_burst_interval_min_gp __asm__("D_L02_0016210C") __attribute__((sda));
+extern s32 view_gated_smoke_burst_interval_max_gp __asm__("D_L02_00162110") __attribute__((sda));
 s32 D_L02_00162114 = 0x10019;
 extern f32 D_L02_00162118 __attribute__((sda));
 extern f32 D_L02_0016211C __attribute__((sda));
@@ -440,6 +443,8 @@ s32 D_L02_0016214C = 0x804080ff;
 s32 D_L02_00162150 = 0x8040ffff;
 s32 D_L02_00162154 = 0x80204040;
 s32 D_L02_00162158 = 0x80204080;
+extern s32 alternating_smoke_burst_interval_min_gp __asm__("D_L02_0016215C") __attribute__((sda));
+extern s32 alternating_smoke_burst_interval_max_gp __asm__("D_L02_00162160") __attribute__((sda));
 s32 D_L02_00162164 = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
@@ -494,7 +499,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)view_gated_smoke_burst_interval_min, (f32)view_gated_smoke_burst_interval_max)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)view_gated_smoke_burst_interval_min_gp, (f32)view_gated_smoke_burst_interval_max_gp)));
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_001620D8 * frame_time);
@@ -546,7 +551,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)alternating_smoke_burst_interval_min, (f32)alternating_smoke_burst_interval_max)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)alternating_smoke_burst_interval_min_gp, (f32)alternating_smoke_burst_interval_max_gp)));
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_00162128 * frame_time);

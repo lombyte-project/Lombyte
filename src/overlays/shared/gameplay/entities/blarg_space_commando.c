@@ -72,7 +72,10 @@ typedef struct {
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/blarg_space_commando_globals.h"
+extern s32 ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") __attribute__((sda));
+extern f32 melee_attack_distance_threshold_gp __asm__("D_L06_00161FC4") __attribute__((sda));
 extern f32 D_L06_00161FC8 __attribute__((sda));
+extern f32 vehicle_melee_windup_animation_speed_gp __asm__("D_L06_00161FCC") __attribute__((sda));
 extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
@@ -180,7 +183,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
-            if (melee_attack_distance_threshold < vector_distance(&moby->pos, &target->pos)) {
+            if (melee_attack_distance_threshold_gp < vector_distance(&moby->pos, &target->pos)) {
                 if (fast_difference_between_rotations(
                         moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y)) <
                     0.17453292f) {
@@ -251,7 +254,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
-                vars->timer = scale_game_frames(ranged_attack_cooldown_frames);
+                vars->timer = scale_game_frames(ranged_attack_cooldown_frames_gp);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
@@ -270,7 +273,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
             }
-        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold) {
+        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold_gp) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -291,7 +294,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         movement_input_or_output_or_melee_origin.f[2] += 0.3f;
         cur_frame = compute_interpolated_record_value(moby);
         if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
-            moby->anim_speed = vehicle_melee_windup_animation_speed;
+            moby->anim_speed = vehicle_melee_windup_animation_speed_gp;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
             movement_output_or_hit_vector_or_path_point.f[0] = fast_cos(moby->rot.z);
@@ -341,7 +344,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold) {
+        } else if (vector_distance(&moby->pos, &target->pos) < melee_attack_distance_threshold_gp) {
             moby->state = 12;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -632,6 +635,8 @@ extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
+extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
+extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
 void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
 void initialize_blarg_space_commando_beam(char *moby) {
@@ -644,7 +649,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
     *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
-        angle_offset = angle_offset * (beam_spread_degrees * 0.017453292f);
+        angle_offset = angle_offset * (beam_spread_degrees_gp * 0.017453292f);
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[2] = 0.15f;
@@ -656,7 +661,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
             *(float *)(vars + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(vars + 0x21C) = (float)scale_game_frames(beam_duration_frames);
+    *(float *)(vars + 0x21C) = (float)scale_game_frames(beam_duration_frames_gp);
 }
 /* Shared moby update: steps the timer at 0x21C, spaces 16 entries, and runs the pair checks. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_003006F8), where it is exact; names translated to the US level program. */
@@ -677,6 +682,7 @@ typedef struct {
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern float approach_value(float *, float, float);
 extern int collision_line(void *, void *, int, void *, void *);
+extern f32 beam_point_horizontal_speed_gp __asm__("D_L06_00161FD0") __attribute__((sda));
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
@@ -718,9 +724,9 @@ void update_blarg_space_commando_beam(void *owner_moby) {
     for (i = 0; i < 16; i++) {
         char *entry;
         if (hero.vehicle_mode == 1) {
-            step = (beam_point_horizontal_speed * frame_time) * 0.5f;
+            step = (beam_point_horizontal_speed_gp * frame_time) * 0.5f;
         } else {
-            step = beam_point_horizontal_speed * frame_time;
+            step = beam_point_horizontal_speed_gp * frame_time;
         }
         subtract_vector_xyz(point, &data->pts[i], &data->base);
         point[2] = 0.0f;
@@ -786,6 +792,11 @@ extern s32 D_L06_00161FE0 __attribute__((sda));
 extern s32 D_L06_00161FE4 __attribute__((sda));
 extern s32 D_L06_00161FE8 __attribute__((sda));
 extern s32 D_L06_00161FEC __attribute__((sda));
+extern s32 beam_effect_texture_index_gp __asm__("D_L06_00161FF0") __attribute__((sda));
+extern s32 beam_outer_corner_color_at_zero_weight_gp __asm__("D_L06_00161FF4") __attribute__((sda));
+extern s32 beam_outer_corner_color_at_unit_weight_gp __asm__("D_L06_00161FF8") __attribute__((sda));
+extern s32 beam_inset_corner_color_at_zero_weight_gp __asm__("D_L06_00161FFC") __attribute__((sda));
+extern s32 beam_inset_corner_color_at_unit_weight_gp __asm__("D_L06_00162000") __attribute__((sda));
 /* Scrolling texture coordinates of the four corners. */
 extern f32 D_L06_001F2E90[4][2];
 
@@ -813,8 +824,8 @@ void draw_blarg_space_commando_beam(char *moby) {
 
     vu1_add_gs_register(0x47, 0x5380B);
     i = 0;
-    pk[0].tag[1] = get_effect_texture(beam_effect_texture_index);
-    pk[1].tag[1] = get_effect_texture(beam_effect_texture_index);
+    pk[0].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
+    pk[1].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
     regs = D_L06_00161FDC;
     regs |= (u64)D_L06_00161FE0 << 2;
     regs |= (u64)D_L06_00161FE4 << 4;
@@ -843,11 +854,11 @@ void draw_blarg_space_commando_beam(char *moby) {
                 normalize_vector_xyz(corner_inset_vector, corner_inset_vector, 0.5f);
                 subtract_vector_xyz(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_inset_corner_color_at_zero_weight,
-                                                beam_inset_corner_color_at_unit_weight);
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_inset_corner_color_at_zero_weight_gp,
+                                                beam_inset_corner_color_at_unit_weight_gp);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_outer_corner_color_at_zero_weight,
-                                                beam_outer_corner_color_at_unit_weight);
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_outer_corner_color_at_zero_weight_gp,
+                                                beam_outer_corner_color_at_unit_weight_gp);
             }
             pk[0].uv[j][0] = D_L06_001F2E90[j][0];
             pk[0].uv[j][1] = D_L06_001F2E90[j][1];
@@ -878,6 +889,19 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int D_L06_00162004 __attribute__((sda));
 extern int D_L06_00162008 __attribute__((sda));
+extern float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") __attribute__((sda));
+extern float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") __attribute__((sda));
+extern float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") __attribute__((sda));
+extern float beam_spark_frame_count_range_end_gp __asm__("D_L06_00162018") __attribute__((sda));
+extern float beam_spark_second_frame_count_range_start_gp __asm__("D_L06_0016201C") __attribute__((sda));
+extern float beam_spark_second_frame_count_range_end_gp __asm__("D_L06_00162020") __attribute__((sda));
+extern float beam_spark_third_frame_count_range_start_gp __asm__("D_L06_00162024") __attribute__((sda));
+extern float beam_spark_third_frame_count_range_end_gp __asm__("D_L06_00162028") __attribute__((sda));
+extern float beam_spark_horizontal_scale_range_start_gp __asm__("D_L06_0016202C") __attribute__((sda));
+extern float beam_spark_horizontal_scale_range_end_gp __asm__("D_L06_00162030") __attribute__((sda));
+extern float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") __attribute__((sda));
+extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attribute__((sda));
+extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
 extern int D_L06_00162040 __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -898,33 +922,33 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
             *(float *)(data - (-(next_point_index * 16)) + 0x23C) < 0.99f) {
             continue;
         }
-        if (beam_spark_spawn_probability < random_float_between(0.0f, 1.0f)) {
+        if (beam_spark_spawn_probability_gp < random_float_between(0.0f, 1.0f)) {
             continue;
         }
         first_vector_angle = random_angle_radians();
         second_vector_angle = random_angle_radians();
         first_spark_vector[0] = fast_cos(first_vector_angle) *
-               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
+               random_float_between(beam_spark_horizontal_scale_range_start_gp, beam_spark_horizontal_scale_range_end_gp);
         first_spark_vector[1] = fast_sin(first_vector_angle) *
-               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
+               random_float_between(beam_spark_horizontal_scale_range_start_gp, beam_spark_horizontal_scale_range_end_gp);
         first_spark_vector[2] = 0;
         second_spark_vector[0] = fast_cos(second_vector_angle) *
-               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
+               random_float_between(beam_spark_horizontal_scale_range_start_gp, beam_spark_horizontal_scale_range_end_gp);
         second_spark_vector[1] = fast_sin(second_vector_angle) *
-               random_float_between(beam_spark_horizontal_scale_range_start, beam_spark_horizontal_scale_range_end);
+               random_float_between(beam_spark_horizontal_scale_range_start_gp, beam_spark_horizontal_scale_range_end_gp);
         second_spark_vector[2] = 0;
-        first_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start, beam_spark_vector_z_range_end);
-        second_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start, beam_spark_vector_z_range_end);
+        first_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start_gp, beam_spark_vector_z_range_end_gp);
+        second_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start_gp, beam_spark_vector_z_range_end_gp);
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(beam_spark_frame_count_range_start, beam_spark_frame_count_range_end)));
+            random_float_between(beam_spark_frame_count_range_start_gp, beam_spark_frame_count_range_end_gp)));
         second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(beam_spark_second_frame_count_range_start, beam_spark_second_frame_count_range_end)));
+            random_float_between(beam_spark_second_frame_count_range_start_gp, beam_spark_second_frame_count_range_end_gp)));
         third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(beam_spark_third_frame_count_range_start, beam_spark_third_frame_count_range_end)));
+            random_float_between(beam_spark_third_frame_count_range_start_gp, beam_spark_third_frame_count_range_end_gp)));
         scale_vector_xyz(first_spark_vector, first_spark_vector, 1.0f / (float)frame_count);
-        first_spark_vector[3] = beam_spark_first_vector_w;
+        first_spark_vector[3] = beam_spark_first_vector_w_gp;
         scale_vector_xyz(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
-        second_spark_vector[3] = beam_spark_second_vector_w;
+        second_spark_vector[3] = beam_spark_second_vector_w_gp;
         spark_source_point = data + (current_point_byte_offset + 0x230);
         lerp_vector(spark_position, spark_source_point, spark_source_point, random_float_between(0.0f, 1.0f));
         spawn_spark(spark_position, first_spark_vector, second_spark_vector, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,

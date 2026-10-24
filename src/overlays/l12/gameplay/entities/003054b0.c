@@ -573,6 +573,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 extern float D_L12_00161F28 __attribute__((sda));
 extern float D_L12_00161F2C __attribute__((sda));
+extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L12_00161F30") __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -693,7 +694,7 @@ void planetbuster_maximus_part_update(char *moby) {
                               D_0015ED64 * 0.03f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 2.7f);
         }
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude_gp,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
@@ -713,7 +714,7 @@ void planetbuster_maximus_part_update(char *moby) {
         int nx;
         float target_yaw;
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude_gp,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(moby_data + 0x5C0)];
@@ -748,7 +749,7 @@ void planetbuster_maximus_part_update(char *moby) {
         D_L12_00161F34++;
         FUN_L00_0025bc98(moby + 0x48, 3.0543261f, moby_data + 0x5F4, -1, D_0015ED64 * 0.0015f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 0.17453292f);
         update_moby_vertical_oscillation(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(moby_data + 0x5CC), (float *)(moby_data + 0x5C8));
-        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude,
+        update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude_gp,
                           D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
                           D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
@@ -1086,6 +1087,16 @@ typedef struct {
     long gs_state;
 } VendorDrawPacket;
 
+extern int hoven_jittered_first_packet_vertex_color_gp __asm__("D_L12_00161F90") __attribute__((sda));
+extern int hoven_jittered_second_packet_vertex_color_gp __asm__("D_L12_00161F94") __attribute__((sda));
+extern int hoven_jittered_first_packet_blend_minuend_selector_gp __asm__("D_L12_00161FBC") __attribute__((sda));
+extern int hoven_jittered_first_packet_blend_subtrahend_selector_gp __asm__("D_L12_00161FC0") __attribute__((sda));
+extern int hoven_jittered_first_packet_blend_alpha_factor_selector_gp __asm__("D_L12_00161FC4") __attribute__((sda));
+extern int hoven_jittered_first_packet_blend_addend_selector_gp __asm__("D_L12_00161FC8") __attribute__((sda));
+extern int hoven_jittered_second_packet_blend_minuend_selector_gp __asm__("D_L12_00161FCC") __attribute__((sda));
+extern int hoven_jittered_second_packet_blend_subtrahend_selector_gp __asm__("D_L12_00161FD0") __attribute__((sda));
+extern int hoven_jittered_second_packet_blend_alpha_factor_selector_gp __asm__("D_L12_00161FD4") __attribute__((sda));
+extern int hoven_jittered_second_packet_blend_addend_selector_gp __asm__("D_L12_00161FD8") __attribute__((sda));
 extern float D_L12_001FB6D0[4][2];
 extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
 extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
@@ -1106,13 +1117,13 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
     matrix[15] = 1.0f;
     texture = get_effect_texture(0xE);
     packets[0].texture = packets[1].texture = texture;
-    first_color = hoven_jittered_first_packet_vertex_color;
-    second_color = hoven_jittered_second_packet_vertex_color;
+    first_color = hoven_jittered_first_packet_vertex_color_gp;
+    second_color = hoven_jittered_second_packet_vertex_color_gp;
     packets[0].texture_state = packets[1].texture_state = 0xFF9000000260L;
-    packets[0].gs_state = (long)hoven_jittered_first_packet_blend_minuend_selector | ((long)hoven_jittered_first_packet_blend_subtrahend_selector << 2) | ((long)hoven_jittered_first_packet_blend_alpha_factor_selector << 4)
-                          | ((long)hoven_jittered_first_packet_blend_addend_selector << 6) | (0x8000L << 24);
-    packets[1].gs_state = (long)hoven_jittered_second_packet_blend_minuend_selector | ((long)hoven_jittered_second_packet_blend_subtrahend_selector << 2) | ((long)hoven_jittered_second_packet_blend_alpha_factor_selector << 4)
-                          | ((long)hoven_jittered_second_packet_blend_addend_selector << 6) | (0x8000L << 24);
+    packets[0].gs_state = (long)hoven_jittered_first_packet_blend_minuend_selector_gp | ((long)hoven_jittered_first_packet_blend_subtrahend_selector_gp << 2) | ((long)hoven_jittered_first_packet_blend_alpha_factor_selector_gp << 4)
+                          | ((long)hoven_jittered_first_packet_blend_addend_selector_gp << 6) | (0x8000L << 24);
+    packets[1].gs_state = (long)hoven_jittered_second_packet_blend_minuend_selector_gp | ((long)hoven_jittered_second_packet_blend_subtrahend_selector_gp << 2) | ((long)hoven_jittered_second_packet_blend_alpha_factor_selector_gp << 4)
+                          | ((long)hoven_jittered_second_packet_blend_addend_selector_gp << 6) | (0x8000L << 24);
     packets[0].color[0] = packets[0].color[1] = packets[0].color[2] = packets[0].color[3] = first_color;
     packets[0].tag = packets[1].tag = 0;
     packets[1].color[0] = packets[1].color[1] = packets[1].color[2] = packets[1].color[3] = second_color;
@@ -1308,6 +1319,7 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     FUN_L08_002f0c18(1);
 }
 /* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
+extern int hoven_scrolling_color_tables_initialized_gp __asm__("D_L12_001620F0") __attribute__((sda));
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
 extern float D_L12_001620E0[1] __attribute__((sda));
 extern float D_L12_001620D8[2] __attribute__((sda));
@@ -1336,34 +1348,34 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
     int i;
     switch (moby->state) {
     case INITIALIZE_SCROLL_PHASES:
-        if (hoven_scrolling_color_tables_initialized == 0) {
+        if (hoven_scrolling_color_tables_initialized_gp == 0) {
             scale_rgba_tables(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
             scale_rgba_tables(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
-            hoven_scrolling_color_tables_initialized = 1;
+            hoven_scrolling_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
         for (i = 0; i < 2; i++) {
-            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] = 0.0f;
-            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] = 0.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] = 0.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] = 0.0f;
         }
         break;
     case UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW:
         for (i = 0; i < 2; i++) {
-            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
-            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] > 1.0f) {
-                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] -= 1.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
+            if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] > 1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] -= 1.0f;
             }
-            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] < -1.0f) {
-                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] += 1.0f;
+            if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] < -1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] += 1.0f;
             }
-            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
-            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] > 1.0f) {
-                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] -= 1.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
+            if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] > 1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] -= 1.0f;
             }
-            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] < -1.0f) {
-                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] += 1.0f;
+            if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] < -1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] += 1.0f;
             }
         }
         D_L12_00162108[0] += D_L12_001620D8[0] * frame_delta_time;

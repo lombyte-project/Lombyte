@@ -164,6 +164,11 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
 #include "rnc/overlay/quad.h"
 extern void FUN_L06_00307578(char *moby);
 #include "rnc/overlay/shared/gameplay/entities/bot_door_lock_globals.h"
+extern float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") __attribute__((sda));
+extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attribute__((sda));
+extern float bot_door_lock_color_pulse_period_gp __asm__("D_L06_001622E4") __attribute__((sda));
+extern float bot_door_lock_number_color_pulse_amplitude_gp __asm__("D_L06_001622E8") __attribute__((sda));
+extern float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622EC") __attribute__((sda));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
@@ -198,7 +203,7 @@ void bot_door_lock_update(char *moby) {
     int i;
 
     if (*(int *)data == -1) return;
-    data[10] = fast_add_rotations(data[10], (360.0f / bot_door_lock_color_pulse_period) * 0.017453292f * frame_time);
+    data[10] = fast_add_rotations(data[10], (360.0f / bot_door_lock_color_pulse_period_gp) * 0.017453292f * frame_time);
     *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
@@ -206,23 +211,23 @@ void bot_door_lock_update(char *moby) {
         data[6] = random_angle_radians();
         data[10] = random_angle_radians();
         moby[0x20] = 1;
-        data[9] = bot_door_lock_max_effect_horizontal_scale;
+        data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)(moby + 0x10);
         number_anchor_position[2] += 2.75f;
         if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
             data[9] += frame_time + frame_time;
-            if (bot_door_lock_max_effect_horizontal_scale < data[9]) data[9] = bot_door_lock_max_effect_horizontal_scale;
+            if (bot_door_lock_max_effect_horizontal_scale_gp < data[9]) data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         } else if (36.0f < FUN_001f9b48(D_L06_00167540, moby + 0x10)) {
             data[9] -= frame_time + frame_time;
             if (data[9] < 0.0f) data[9] = 0.0f;
         }
         if (0.0f < data[9]) {
             enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
-            data[6] = fast_add_rotations(data[6], (360.0f / bot_door_lock_number_bob_period) * 0.017453292f * frame_time);
-            number_anchor_position[2] += bot_door_lock_number_bob_amplitude * fast_cos(data[6]);
-            value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude * fast_cos(data[10]));
+            data[6] = fast_add_rotations(data[6], (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
+            number_anchor_position[2] += bot_door_lock_number_bob_amplitude_gp * fast_cos(data[6]);
+            value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude_gp * fast_cos(data[10]));
             color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
             color = (value / 3 + 13) * 0x10000 | color_channels | (value + 150U);
             if (D_001413F4 == 1) {
@@ -423,6 +428,12 @@ extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];
+extern s32 projected_quad_texture_selector_gp __asm__("D_L06_00162414") __attribute__((sda));
+extern s32 projected_quad_base_radius_gp __asm__("D_L06_00162418") __attribute__((sda));
+extern s32 projected_quad_top_right_uv_gp __asm__("D_L06_0016241C") __attribute__((sda));
+extern s32 projected_quad_top_left_uv_gp __asm__("D_L06_00162420") __attribute__((sda));
+extern s32 projected_quad_bottom_right_uv_gp __asm__("D_L06_00162424") __attribute__((sda));
+extern s32 projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") __attribute__((sda));
 
 /* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void draw_projected_fading_quad(char *moby) {
@@ -455,16 +466,16 @@ void draw_projected_fading_quad(char *moby) {
     y = truncate_float_to_s32(screen[1] - screen_offset);
     x = raw_x - 0x1000;
     y -= 0x1000;
-    uvs[0] = projected_quad_top_right_uv;
-    uvs[1] = projected_quad_top_left_uv;
-    uvs[2] = projected_quad_bottom_right_uv;
-    uvs[3] = projected_quad_bottom_left_uv;
+    uvs[0] = projected_quad_top_right_uv_gp;
+    uvs[1] = projected_quad_top_left_uv_gp;
+    uvs[2] = projected_quad_bottom_right_uv_gp;
+    uvs[3] = projected_quad_bottom_left_uv_gp;
     color = fast_tween_color(fade, *(s32 *)&effect_data[2], *(s32 *)&effect_data[3]);
     colors[3] = color;
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    radius = truncate_float_to_s32((float)(projected_quad_base_radius << 4) * size);
+    radius = truncate_float_to_s32((float)(projected_quad_base_radius_gp << 4) * size);
     corners[3] = 0xfffff080008000LL;
     corners[2] = 0xfffff080008000LL;
     corners[1] = 0xfffff080008000LL;
@@ -477,7 +488,7 @@ void draw_projected_fading_quad(char *moby) {
     corners[2] += x + radius;
     corners[3] += (y + radius) << 16;
     corners[3] += x - radius;
-    texture = get_effect_texture(projected_quad_texture_selector);
+    texture = get_effect_texture(projected_quad_texture_selector_gp);
     FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);
 }

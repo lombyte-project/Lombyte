@@ -369,6 +369,7 @@ struct HeroExtraManipulators { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pa
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern f32 D_0015EE18 __asm__("D_0015EE18");
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence_globals.h"
+extern s32 hero_extra_manipulator_attachment_indices_gp __asm__("D_L00_0015F6F8") __attribute__((sda));
 extern u128 D_L00_0017C1E0[];
 extern u128 D_L00_0017C220[];
 extern u128 D_L00_0017C260[];
@@ -474,7 +475,7 @@ void update_hero_glow_and_extra_manipulators(void) {
         s32 j;
         for (i = 0; i < 4; i++) {
             if (EXTRA_MANIPS[i].attached == 0) {
-                attach_manipulator((s32)moby, ((s32 *)&hero_extra_manipulator_attachment_indices)[i], &EXTRA_MANIPS[i]);
+                attach_manipulator((s32)moby, ((s32 *)&hero_extra_manipulator_attachment_indices_gp)[i], &EXTRA_MANIPS[i]);
                 EXTRA_MANIPS[i].unk3 = 1;
                 qcopy(&EXTRA_MANIPS[i].quat, &D_L00_0017C1E0[i]);
                 qcopy(&EXTRA_MANIPS[i].scale3, &D_L00_0017C220[i]);
@@ -1506,21 +1507,24 @@ void apply_hero_and_item_scale_sequence(void) {
         }
     }
 }
+extern int hero_scalar_pulse_active_gp __asm__("D_L00_0015F680") __attribute__((sda));
+extern int hero_scalar_pulse_phase_gp __asm__("D_L00_0015F684") __attribute__((sda));
+extern float hero_scalar_pulse_step_gp __asm__("D_L00_0015F67C") __attribute__((sda));
 extern float D_L00_0015F3FC;
 float FUN_00213ed8(float *, float, float);
 void update_hero_scalar_pulse(void) {
-    if (hero_scalar_pulse_active == 0)
+    if (hero_scalar_pulse_active_gp == 0)
         return;
-    if (hero_scalar_pulse_phase == 0) {
-        FUN_00213ed8(&D_L00_0015F3FC, 1.0f, hero_scalar_pulse_step);
+    if (hero_scalar_pulse_phase_gp == 0) {
+        FUN_00213ed8(&D_L00_0015F3FC, 1.0f, hero_scalar_pulse_step_gp);
         if (D_L00_0015F3FC == 1.0f)
-            hero_scalar_pulse_phase = 1;
-    } else if (hero_scalar_pulse_phase == 1) {
-        hero_scalar_pulse_phase = 2;
-    } else if (hero_scalar_pulse_phase == 2) {
-        FUN_00213ed8(&D_L00_0015F3FC, 0.0f, hero_scalar_pulse_step);
+            hero_scalar_pulse_phase_gp = 1;
+    } else if (hero_scalar_pulse_phase_gp == 1) {
+        hero_scalar_pulse_phase_gp = 2;
+    } else if (hero_scalar_pulse_phase_gp == 2) {
+        FUN_00213ed8(&D_L00_0015F3FC, 0.0f, hero_scalar_pulse_step_gp);
         if (D_L00_0015F3FC == 0.0f)
-            hero_scalar_pulse_active = 0;
+            hero_scalar_pulse_active_gp = 0;
     }
 }
 #define NOT_SDA

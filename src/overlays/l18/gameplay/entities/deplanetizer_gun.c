@@ -44,12 +44,19 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float
 extern struct Moby *D_L18_0015FFE4;
 extern struct Moby *D_L18_00162528;
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_globals.h"
+extern float deplanetizer_camera_quad_scale_ramp_start_value_gp __asm__("D_L18_00162490") __attribute__((sda));
+extern float deplanetizer_camera_quad_scale_ramp_end_value_gp __asm__("D_L18_00162494") __attribute__((sda));
+extern int deplanetizer_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_0016249C") __attribute__((sda));
+extern int deplanetizer_camera_quad_end_frame_gp __asm__("D_L18_001624A0") __attribute__((sda));
 extern int D_L18_001624A4 __attribute__((sda));
 extern int D_L18_001624A8 __attribute__((sda));
 extern int D_L18_001624AC __attribute__((sda));
 extern int D_L18_001624B0 __attribute__((sda));
 extern int D_L18_001624B4 __attribute__((sda));
 extern int D_L18_001624B8 __attribute__((sda));
+extern int deplanetizer_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624C0") __attribute__((sda));
+extern int deplanetizer_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624C4") __attribute__((sda));
+extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624C8") __attribute__((sda));
 extern float D_L18_001624D0 __attribute__((sda));
 /* First component of the vector passed at gp - 0x4720. */
 extern float D_L18_001624E0 __attribute__((sda));
@@ -70,6 +77,8 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void rotate_vector_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
+extern int deplanetizer_camera_quad_start_frame_gp __asm__("D_L18_00162498") __attribute__((sda));
+extern int deplanetizer_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624BC") __attribute__((sda));
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
@@ -89,12 +98,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
 
     switch (moby->state) {
     case INITIALIZE_EFFECT_TIMING:
-        deplanetizer_camera_quad_start_frame = 355;
-        deplanetizer_camera_quad_scale_ramp_end_frame = 365;
-        deplanetizer_glow_alpha_ramp_start_frame = 60;
-        deplanetizer_glow_alpha_ramp_end_frame = 200;
-        deplanetizer_three_quad_scale_ramp_start_frame = 190;
-        deplanetizer_three_quad_scale_ramp_end_frame = 365;
+        deplanetizer_camera_quad_start_frame_gp = 355;
+        deplanetizer_camera_quad_scale_ramp_end_frame_gp = 365;
+        deplanetizer_glow_alpha_ramp_start_frame_gp = 60;
+        deplanetizer_glow_alpha_ramp_end_frame_gp = 200;
+        deplanetizer_three_quad_scale_ramp_start_frame_gp = 190;
+        deplanetizer_three_quad_scale_ramp_end_frame_gp = 365;
         moby->update_dist = 255;
         moby->state = 1;
         return;
@@ -186,45 +195,45 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             func_L00_0025F4A8_alt(moby, &scratch.vectors.velocity, &scratch.vectors.pos, 0.0f, 0.0f, 300, 200, 200,
                 12.0f, 6.0f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
         }
-        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_glow_alpha_ramp_start_frame));
-            denominator = convert_integer_to_float(frames_9780(deplanetizer_glow_alpha_ramp_end_frame - deplanetizer_glow_alpha_ramp_start_frame));
+        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp));
+            denominator = convert_integer_to_float(frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp));
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
-        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_three_quad_scale_ramp_start_frame));
-            denominator = convert_integer_to_float(frames_9780(deplanetizer_three_quad_scale_ramp_end_frame - deplanetizer_three_quad_scale_ramp_start_frame));
+        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp));
+            denominator = convert_integer_to_float(frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp - deplanetizer_three_quad_scale_ramp_start_frame_gp));
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
             deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
-        if (frames_9780(deplanetizer_camera_quad_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame)) {
+        if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
-            if (D_L18_0016D260_update.n >= frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame)) {
+            if (D_L18_0016D260_update.n >= frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame_gp)) {
                 deplanetizer_camera_quad_base_scale = 10.0f;
             } else {
-                numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_camera_quad_start_frame));
-                denominator = convert_integer_to_float(frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame - deplanetizer_camera_quad_start_frame));
+                numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_camera_quad_start_frame_gp));
+                denominator = convert_integer_to_float(frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame_gp - deplanetizer_camera_quad_start_frame_gp));
                 numerator = numerator / denominator;
-                deplanetizer_camera_quad_base_scale = deplanetizer_camera_quad_scale_ramp_start_value + (deplanetizer_camera_quad_scale_ramp_end_value - deplanetizer_camera_quad_scale_ramp_start_value) * numerator;
+                deplanetizer_camera_quad_base_scale = deplanetizer_camera_quad_scale_ramp_start_value_gp + (deplanetizer_camera_quad_scale_ramp_end_value_gp - deplanetizer_camera_quad_scale_ramp_start_value_gp) * numerator;
             }
         }
     }
     if (D_L18_0016D260_update.state == 7) {
         if (D_L18_0016D260_update.n == 1) {
-            deplanetizer_glow_alpha_ramp_start_frame = D_L18_001624A4;
-            deplanetizer_glow_alpha_ramp_end_frame = D_L18_001624A8;
-            deplanetizer_three_quad_scale_ramp_start_frame = D_L18_001624AC;
-            deplanetizer_three_quad_scale_ramp_end_frame = D_L18_001624B0;
-            deplanetizer_camera_quad_start_frame = D_L18_001624B4;
-            deplanetizer_camera_quad_scale_ramp_end_frame = D_L18_001624B8;
+            deplanetizer_glow_alpha_ramp_start_frame_gp = D_L18_001624A4;
+            deplanetizer_glow_alpha_ramp_end_frame_gp = D_L18_001624A8;
+            deplanetizer_three_quad_scale_ramp_start_frame_gp = D_L18_001624AC;
+            deplanetizer_three_quad_scale_ramp_end_frame_gp = D_L18_001624B0;
+            deplanetizer_camera_quad_start_frame_gp = D_L18_001624B4;
+            deplanetizer_camera_quad_scale_ramp_end_frame_gp = D_L18_001624B8;
             {
                 struct Moby *target;
                 for (target = D_L18_0015FFE4; target; target = target->next) {
@@ -235,34 +244,34 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                 }
             }
         }
-        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_glow_alpha_ramp_start_frame);
-            denominator = convert_integer_to_float(deplanetizer_glow_alpha_ramp_end_frame - deplanetizer_glow_alpha_ramp_start_frame);
+        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_glow_alpha_ramp_start_frame_gp);
+            denominator = convert_integer_to_float(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp);
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
-        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_three_quad_scale_ramp_start_frame);
-            denominator = convert_integer_to_float(deplanetizer_three_quad_scale_ramp_end_frame - deplanetizer_three_quad_scale_ramp_start_frame);
+        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_three_quad_scale_ramp_start_frame_gp);
+            denominator = convert_integer_to_float(deplanetizer_three_quad_scale_ramp_end_frame_gp - deplanetizer_three_quad_scale_ramp_start_frame_gp);
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
             deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
-        if (frames_9780(deplanetizer_camera_quad_start_frame) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame)) {
+        if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
-            if (D_L18_0016D260_update.n >= deplanetizer_camera_quad_scale_ramp_end_frame) {
+            if (D_L18_0016D260_update.n >= deplanetizer_camera_quad_scale_ramp_end_frame_gp) {
                 deplanetizer_camera_quad_base_scale = 10.0f;
             } else {
-                numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_camera_quad_start_frame);
-                denominator = convert_integer_to_float(deplanetizer_camera_quad_scale_ramp_end_frame - deplanetizer_camera_quad_start_frame);
+                numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_camera_quad_start_frame_gp);
+                denominator = convert_integer_to_float(deplanetizer_camera_quad_scale_ramp_end_frame_gp - deplanetizer_camera_quad_start_frame_gp);
                 numerator = numerator / denominator;
-                deplanetizer_camera_quad_base_scale = deplanetizer_camera_quad_scale_ramp_start_value + (deplanetizer_camera_quad_scale_ramp_end_value - deplanetizer_camera_quad_scale_ramp_start_value) * numerator;
+                deplanetizer_camera_quad_base_scale = deplanetizer_camera_quad_scale_ramp_start_value_gp + (deplanetizer_camera_quad_scale_ramp_end_value_gp - deplanetizer_camera_quad_scale_ramp_start_value_gp) * numerator;
             }
         }
     }
@@ -374,6 +383,8 @@ extern float D_L18_00162550;
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
 extern float D_L18_0016255C;
+extern int deplanetizer_camera_quad_first_color_gp __asm__("D_L18_001624F8") __attribute__((sda));
+extern int deplanetizer_camera_quad_smaller_color_gp __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
     {0.0f, -1.0f, 1.0f, 1.0f},
     {0.0f, -1.0f, -1.0f, 1.0f},
@@ -389,7 +400,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     float tilt;
     char *target;
 
-    if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame + 1)) {
+    if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame_gp + 1)) {
         D_L18_00162550 = 1.0f;
         D_L18_00162554 = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
@@ -426,7 +437,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    color = deplanetizer_camera_quad_first_color;
+    color = deplanetizer_camera_quad_first_color_gp;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
@@ -436,7 +447,7 @@ void draw_three_scaled_camera_facing_quads(void) {
         xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
-    color = deplanetizer_camera_quad_smaller_color;
+    color = deplanetizer_camera_quad_smaller_color_gp;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
@@ -522,6 +533,10 @@ extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int deplanetizer_glow_first_quad_base_tint_gp __asm__("D_L18_00162504") __attribute__((sda));
+extern float deplanetizer_glow_first_quad_scale_gp __asm__("D_L18_00162508") __attribute__((sda));
+extern float deplanetizer_glow_second_quad_scale_gp __asm__("D_L18_0016250C") __attribute__((sda));
+extern int deplanetizer_glow_second_quad_base_tint_gp __asm__("D_L18_00162510") __attribute__((sda));
 void draw_moby_two_tint_glow_quads(struct Moby *m) {
     Pk_9c20 pk;
     float quad_transform[4][4];
@@ -529,7 +544,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     int c;
     int second_quad_color;
     int i;
-    if (D_L18_0016D260_9c20.n == frames_9c20(deplanetizer_glow_alpha_ramp_start_frame + 1)) {
+    if (D_L18_0016D260_9c20.n == frames_9c20(deplanetizer_glow_alpha_ramp_start_frame_gp + 1)) {
         deplanetizer_glow_local_offset_z = -45.0f;
         deplanetizer_glow_local_offset_w = 1.0f;
         deplanetizer_glow_local_offset_x = 0;
@@ -551,7 +566,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     cross_9c20(quad_transform[1], quad_transform[0], up);
     norm_9c20(quad_transform[1], quad_transform[1], 1.0f);
     cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
-    c = deplanetizer_glow_first_quad_base_tint | (deplanetizer_glow_quad_alpha << 24);
+    c = deplanetizer_glow_first_quad_base_tint_gp | (deplanetizer_glow_quad_alpha << 24);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -565,22 +580,25 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     pk.col[1] = c;
     pk.col[0] = c;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_first_quad_scale);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_first_quad_scale_gp);
         xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
-    second_quad_color = deplanetizer_glow_second_quad_base_tint | (deplanetizer_glow_quad_alpha << 24);
+    second_quad_color = deplanetizer_glow_second_quad_base_tint_gp | (deplanetizer_glow_quad_alpha << 24);
     pk.col[3] = second_quad_color;
     pk.col[2] = second_quad_color;
     pk.col[1] = second_quad_color;
     pk.col[0] = second_quad_color;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_second_quad_scale);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_second_quad_scale_gp);
         xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
 }
 
+extern float deplanetizer_first_quad_local_z_scale_gp __asm__("D_L18_00162514") __attribute__((sda));
+extern float deplanetizer_second_quad_local_z_scale_gp __asm__("D_L18_00162518") __attribute__((sda));
+extern float deplanetizer_third_quad_local_z_scale_gp __asm__("D_L18_0016251C") __attribute__((sda));
 extern float D_L18_001DFBD0[4][4];
 void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     Pk_9c20 pk;
@@ -607,7 +625,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     norm_9c20(quad_transform[2], quad_transform[2], 1.0f);
     cross_9c20(quad_transform[1], quad_transform[0], quad_transform[2]);
 
-    color = deplanetizer_glow_first_quad_base_tint | 0xFF000000;
+    color = deplanetizer_glow_first_quad_base_tint_gp | 0xFF000000;
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -625,7 +643,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= deplanetizer_first_quad_local_z_scale;
+            vertices[i].f[2] *= deplanetizer_first_quad_local_z_scale_gp;
             vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
@@ -635,7 +653,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = deplanetizer_glow_second_quad_base_tint | 0x7F000000;
+    pk.col[3] = deplanetizer_glow_second_quad_base_tint_gp | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
@@ -643,7 +661,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= deplanetizer_second_quad_local_z_scale;
+            vertices[i].f[2] *= deplanetizer_second_quad_local_z_scale_gp;
             vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
@@ -653,7 +671,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = deplanetizer_glow_second_quad_base_tint | 0x7F000000;
+    pk.col[3] = deplanetizer_glow_second_quad_base_tint_gp | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
@@ -661,7 +679,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= deplanetizer_third_quad_local_z_scale;
+            vertices[i].f[2] *= deplanetizer_third_quad_local_z_scale_gp;
             vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
@@ -1191,7 +1209,12 @@ typedef struct {
     float spin;                /* 0x1F8 */
 } SentryVars_c100;
 
+extern int gadgebot_joint_glows_last_queued_frame_gp __asm__("D_L18_00162604") __attribute__((sda));
+extern int gadgebot_glow_tint_start_gp __asm__("D_L18_0016260C") __attribute__((sda));
+extern int gadgebot_glow_tint_end_gp __asm__("D_L18_00162610") __attribute__((sda));
 extern float D_L18_001625FC __attribute__((sda));
+extern float gadgebot_glow_default_phase_speed_degrees_per_second_gp __asm__("D_L18_00162614") __attribute__((sda));
+extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm__("D_L18_00162618") __attribute__((sda));
 extern float D_L18_0016261C __attribute__((sda));
 extern float D_L18_00162620 __attribute__((sda));
 extern float D_L18_00162624 __attribute__((sda));
@@ -1211,16 +1234,16 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     if (moby->state == 0 || moby->state == 8) {
         return;
     }
-    if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame) {
-        gadgebot_joint_glows_last_queued_frame = game_frame;
+    if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
+        gadgebot_joint_glows_last_queued_frame_gp = game_frame;
         enqueue_callback_list_1(draw_group_class_0772_joint_glows, moby);
     }
-    speed = gadgebot_glow_default_phase_speed_degrees_per_second;
+    speed = gadgebot_glow_default_phase_speed_degrees_per_second_gp;
     if (moby->state == 4 || moby->state == 5) {
-        speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second;
+        speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp;
     }
     sentry_vars->spin = fast_add_rotations_c100(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
-    moby->glow_color = tween_color_c100(gadgebot_glow_tint_start, gadgebot_glow_tint_end,
+    moby->glow_color = tween_color_c100(gadgebot_glow_tint_start_gp, gadgebot_glow_tint_end_gp,
                                 fast_sin_c100(sentry_vars->spin) * 0.5f + 0.5f);
     if (moby->pos.z < 100.0f && moby->state != 7) {
         moby->state = 6;
@@ -1422,6 +1445,16 @@ extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
 extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int gadgebot_launch_glow_blend_minuend_selector_gp __asm__("D_L18_0016262C") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_subtrahend_selector_gp __asm__("D_L18_00162630") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_alpha_factor_selector_gp __asm__("D_L18_00162634") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_addend_selector_gp __asm__("D_L18_00162638") __attribute__((sda));
+extern int gadgebot_launch_glow_tint_start_gp __asm__("D_L18_0016263C") __attribute__((sda));
+extern int gadgebot_launch_glow_tint_end_gp __asm__("D_L18_00162640") __attribute__((sda));
+extern int gadgebot_launch_glow_texture_index_gp __asm__("D_L18_00162644") __attribute__((sda));
+extern float gadgebot_launch_glow_z_offset_gp __asm__("D_L18_00162648") __attribute__((sda));
+extern float gadgebot_launch_glow_vertical_scale_adjustment_gp __asm__("D_L18_0016264C") __attribute__((sda));
+extern float gadgebot_launch_glow_horizontal_scale_adjustment_gp __asm__("D_L18_00162650") __attribute__((sda));
 extern float D_L18_001EFCD0[4][2];
 void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -1432,10 +1465,10 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     int c;
     int i;
     float *quad_vertex;
-    vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + gadgebot_launch_glow_vertical_scale_adjustment;
-    horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + gadgebot_launch_glow_horizontal_scale_adjustment;
+    vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + gadgebot_launch_glow_vertical_scale_adjustment_gp;
+    horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + gadgebot_launch_glow_horizontal_scale_adjustment_gp;
     qcopy(quad_transform[3], &m->pos);
-    quad_transform[3][2] -= gadgebot_launch_glow_z_offset;
+    quad_transform[3][2] -= gadgebot_launch_glow_z_offset_gp;
     clear_g(quad_transform[2]);
     quad_transform[2][2] = vertical_axis_scale;
     sub_g(quad_transform[0], D_L18_001677C0_g, &m->pos);
@@ -1443,12 +1476,12 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     cross_g(quad_transform[0], quad_transform[1], quad_transform[2]);
     norm_g(quad_transform[0], quad_transform[0], horizontal_axis_scale);
     norm_g(quad_transform[1], quad_transform[1], horizontal_axis_scale);
-    pk.b = tex_g(gadgebot_launch_glow_texture_index);
+    pk.b = tex_g(gadgebot_launch_glow_texture_index_gp);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
-    pk.d = (unsigned long)gadgebot_launch_glow_blend_minuend_selector | ((unsigned long)gadgebot_launch_glow_blend_subtrahend_selector << 2) | ((unsigned long)gadgebot_launch_glow_blend_alpha_factor_selector << 4) |
-           ((unsigned long)gadgebot_launch_glow_blend_addend_selector << 6) | 0x8000000000ULL;
-    c = fast_tween_color(gadgebot_launch_glow_tint_start, gadgebot_launch_glow_tint_end, *(float *)(d + 0x1F4));
+    pk.d = (unsigned long)gadgebot_launch_glow_blend_minuend_selector_gp | ((unsigned long)gadgebot_launch_glow_blend_subtrahend_selector_gp << 2) | ((unsigned long)gadgebot_launch_glow_blend_alpha_factor_selector_gp << 4) |
+           ((unsigned long)gadgebot_launch_glow_blend_addend_selector_gp << 6) | 0x8000000000ULL;
+    c = fast_tween_color(gadgebot_launch_glow_tint_start_gp, gadgebot_launch_glow_tint_end_gp, *(float *)(d + 0x1F4));
     for (i = 0; i < 4; i++) {
         pk.uv[i][0] = D_L18_001EFCD0[i][0];
         pk.uv[i][1] = D_L18_001EFCD0[i][1];

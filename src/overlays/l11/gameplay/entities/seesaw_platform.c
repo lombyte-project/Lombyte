@@ -264,12 +264,15 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
 extern float D_L11_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_globals.h"
+extern float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") __attribute__((sda));
 extern float D_L11_00161EB0 __attribute__((sda));
 extern float D_L11_00161EB4 __attribute__((sda));
 extern float D_L11_00161EB8 __attribute__((sda));
+extern float child_set_base_rotation_y_degrees_gp __asm__("D_L11_00161EBC") __attribute__((sda));
 extern float D_L11_00161EFC __attribute__((sda));
 extern float D_L11_00161F00 __attribute__((sda));
 extern float D_L11_00161F04 __attribute__((sda));
+extern float final_child_set_z_offset_gp __asm__("D_L11_00161F08") __attribute__((sda));
 extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
@@ -288,12 +291,12 @@ void update_child_set_poses(struct Moby *parent_moby) {
         float ang = (float)(i % 3) * 0.5235988f - (D_L11_00161EB8 * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
         qcopy_nc(&D_L11_001DA710[i]->rot, &parent_moby->rot);
         D_L11_001DA710[i]->rot.z = fast_add_rotations(D_L11_001DA710[i]->rot.z, (float)s * 1.5707964f);
-        D_L11_001DA710[i]->rot.y = child_set_base_rotation_y_degrees * 0.017453292f;
+        D_L11_001DA710[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
         D_L11_001DA710[i]->rot.x = ang;
         euler_rotation_basis(&D_L11_001DA710[i]->rot_row0, &D_L11_001DA710[i]->rot);
         zero_vector_d1b0(&child_placement_vector_scratch);
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
-        child_placement_vector_scratch.z += child_set_base_z_offset;
+        child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
@@ -309,12 +312,12 @@ void update_child_set_poses(struct Moby *parent_moby) {
         float r;
         qcopy_nc(&D_L11_00161F20[j]->rot, &parent_moby->rot);
         D_L11_00161F20[j]->rot.z = fast_add_rotations(D_L11_00161F20[j]->rot.z, (float)s * 1.5707964f);
-        D_L11_00161F20[j]->rot.y = child_set_base_rotation_y_degrees * 0.017453292f;
+        D_L11_00161F20[j]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
         D_L11_00161F20[j]->rot.x = ang;
         euler_rotation_basis(&D_L11_00161F20[j]->rot_row0, &D_L11_00161F20[j]->rot);
         zero_vector_d1b0(&child_placement_vector_scratch);
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
-        child_placement_vector_scratch.z += child_set_base_z_offset;
+        child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
         normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[j]->rot_row2, D_L11_00161EB0);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
@@ -352,7 +355,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
         }
         signed_axis0_offset *= sgn;
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
-        child_placement_vector_scratch.z = final_child_set_z_offset;
+        child_placement_vector_scratch.z = final_child_set_z_offset_gp;
         add_vector_xyz(&D_L11_00161F10[q]->pos, &child_placement_vector_scratch, &parent_moby->pos);
         qcopy_nc(&D_L11_00161F10[q]->rot, &parent_moby->rot);
         FUN_L00_00250df8(D_L11_00161F10[q]);
@@ -372,6 +375,9 @@ typedef struct {
 extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
 int D_L11_00161F54 = 0;
+extern float child_grid_pose_blend_acceleration_gp __asm__("D_L11_00161F58") __attribute__((sda));
+extern float child_grid_pose_blend_deceleration_gp __asm__("D_L11_00161F5C") __attribute__((sda));
+extern float child_grid_pose_blend_max_speed_gp __asm__("D_L11_00161F60") __attribute__((sda));
 extern float D_L11_0015F3FC;
 extern struct Moby *create_moby_d800(int) __asm__("FUN_0020c4f8");
 extern void FUN_0022da68_d800(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -457,8 +463,8 @@ void update_child_grid_controller(struct Moby *grid_controller) {
         break;
     case CHILD_GRID_STATE_BLEND_POINT_POSES:
         grid_controller_vars->prev = grid_controller_vars->t;
-        approach_d800(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, child_grid_pose_blend_acceleration * frame_time_sq, child_grid_pose_blend_deceleration * frame_time_sq,
-                      child_grid_pose_blend_max_speed * frame_time);
+        approach_d800(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, child_grid_pose_blend_acceleration_gp * frame_time_sq, child_grid_pose_blend_deceleration_gp * frame_time_sq,
+                      child_grid_pose_blend_max_speed_gp * frame_time);
         lerp_vector_d800(&pos, (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7)) + 0x30,
                          (char *)(D_L11_001600EC_d800 + (grid_controller_vars->to << 7)) + 0x30, grid_controller_vars->t);
         clear_u64_value(&rot);
@@ -501,6 +507,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sub_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
+extern float child_grid_parent_axis0_offset_length_gp __asm__("D_L11_00161F40") __attribute__((sda));
+extern float child_grid_parent_axis1_offset_length_gp __asm__("D_L11_00161F44") __attribute__((sda));
+extern float child_grid_child_axis1_offset_length_gp __asm__("D_L11_00161F48") __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
 void update_child_grid_poses(struct Moby *grid_controller) {
@@ -519,8 +528,8 @@ void update_child_grid_poses(struct Moby *grid_controller) {
 
     data = grid_controller->pvars;
     grid = (struct Moby *(*)[6])data;
-    normalize_vector_xyz(&parent_axis0_offset, &grid_controller->rot_row0, child_grid_parent_axis0_offset_length);
-    normalize_vector_xyz(&parent_axis1_offset, &grid_controller->rot_row1, child_grid_parent_axis1_offset_length);
+    normalize_vector_xyz(&parent_axis0_offset, &grid_controller->rot_row0, child_grid_parent_axis0_offset_length_gp);
+    normalize_vector_xyz(&parent_axis1_offset, &grid_controller->rot_row1, child_grid_parent_axis1_offset_length_gp);
     progress = *(float *)(data + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
@@ -561,7 +570,7 @@ void update_child_grid_poses(struct Moby *grid_controller) {
             }
             grid[row][col]->rot.z = fast_add_rotations(grid[row][col]->rot.z, angle);
             euler_rotation_basis(&grid[row][col]->rot_row0, &grid[row][col]->rot);
-            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -child_grid_child_axis1_offset_length);
+            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -child_grid_child_axis1_offset_length_gp);
             if (row & 1) {
                 add_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             } else {
@@ -907,6 +916,14 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
         break;
     }
 }
+extern float seesaw_hero_local_x_scale_gp __asm__("D_L11_00161F68") __attribute__((sda));
+extern float seesaw_tilt_feedback_scale_gp __asm__("D_L11_00161F6C") __attribute__((sda));
+extern float seesaw_spin_feedback_scale_gp __asm__("D_L11_00161F70") __attribute__((sda));
+extern float seesaw_rider_spin_change_bias_degrees_gp __asm__("D_L11_00161F74") __attribute__((sda));
+extern float seesaw_rider_spin_change_gain_degrees_gp __asm__("D_L11_00161F78") __attribute__((sda));
+extern float seesaw_tilt_feedback_gain_degrees_gp __asm__("D_L11_00161F7C") __attribute__((sda));
+extern float seesaw_spin_feedback_gain_degrees_gp __asm__("D_L11_00161F80") __attribute__((sda));
+extern float seesaw_fall_tilt_threshold_degrees_gp __asm__("D_L11_00161F84") __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -943,24 +960,24 @@ void seesaw_platform_update(struct Moby *platform) {
     platform_vars->unk5C = 1;
     spin = platform_vars->spin;
     /* two separate updates (not one sum): gives retail's FP register allocation */
-    platform_vars->spin = spin + seesaw_tilt_feedback_gain_degrees * 0.017453292f * frame_time_sq * (seesaw_tilt_feedback_scale * platform->rot.y);
-    platform_vars->spin = platform_vars->spin + seesaw_spin_feedback_gain_degrees * 0.017453292f * frame_time_sq * (seesaw_spin_feedback_scale * spin);
+    platform_vars->spin = spin + seesaw_tilt_feedback_gain_degrees_gp * 0.017453292f * frame_time_sq * (seesaw_tilt_feedback_scale_gp * platform->rot.y);
+    platform_vars->spin = platform_vars->spin + seesaw_spin_feedback_gain_degrees_gp * 0.017453292f * frame_time_sq * (seesaw_spin_feedback_scale_gp * spin);
     if (hero.ground_moby == platform && hero.air_frames.s == 0) {
         subtract_vector_xyz(&hero_local_offset, &hero.motion.pos, &platform->pos);
         transpose_rotation_matrix(matrix, &platform->rot_row0);
         transform_vector(&hero_local_offset, &hero_local_offset, matrix);
-        scaled = seesaw_hero_local_x_scale * hero_local_offset.x;
-        change = seesaw_rider_spin_change_gain_degrees * 0.017453292f * frame_time_sq * scaled;
+        scaled = seesaw_hero_local_x_scale_gp * hero_local_offset.x;
+        change = seesaw_rider_spin_change_gain_degrees_gp * 0.017453292f * frame_time_sq * scaled;
         if (platform_vars->spin * change < 0.0f && platform->rot.y * change < 0.0f) {
             change += change;
         }
         if (change < 0.0f) {
-            change -= seesaw_rider_spin_change_bias_degrees * 0.017453292f * frame_time_sq;
+            change -= seesaw_rider_spin_change_bias_degrees_gp * 0.017453292f * frame_time_sq;
         } else {
-            change += seesaw_rider_spin_change_bias_degrees * 0.017453292f * frame_time_sq;
+            change += seesaw_rider_spin_change_bias_degrees_gp * 0.017453292f * frame_time_sq;
         }
         platform_vars->spin = platform_vars->spin + change;
-        if (absolute_float_eb90(platform->rot.y) > seesaw_fall_tilt_threshold_degrees * 0.017453292f &&
+        if (absolute_float_eb90(platform->rot.y) > seesaw_fall_tilt_threshold_degrees_gp * 0.017453292f &&
             (u32)hero.state.control_mode < 2) {
             hero_set_state(HERO_STATE_FALL, 1);
         }
@@ -1467,6 +1484,8 @@ struct PokiPathVars {
 extern struct Moby *D_001413D0 __attribute__((section(".data")));
 extern char D_L11_001677C0[];
 extern s32 *D_L11_001B0EB0[];
+extern float psytcopus_projectile_forward_offset_length_gp __asm__("D_L11_00161FC8") __attribute__((sda));
+extern float psytcopus_projectile_z_offset_gp __asm__("D_L11_00161FCC") __attribute__((sda));
 void handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
 extern void FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_0180(void *, void *) __asm__("FUN_001f9b48");
@@ -1576,9 +1595,9 @@ void psytcopus_update(struct Moby *psytcopus) {
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (in_window_0180(psytcopus, 15.0f) != 0) {
-            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length);
+            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length_gp);
             add_0180(&projectile_vector_scratch, &projectile_vector_scratch, &psytcopus->pos);
-            projectile_vector_scratch.z += psytcopus_projectile_z_offset;
+            projectile_vector_scratch.z += psytcopus_projectile_z_offset_gp;
             psytcopus_vars->unk160 = spawn_class_511_moby_with_sparks(psytcopus, &projectile_vector_scratch, 5);
             break;
         }
@@ -1674,9 +1693,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
     FUN_001f9740_p(&psytcopus_vars->unk158);
     psytcopus->scale = psytcopus->pclass->scale * D_L11_00161F9C;
     if (psytcopus_vars->unk160 != 0) {
-        normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length);
+        normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length_gp);
         add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
-        projectile_and_hit_vector_scratch.z += psytcopus_projectile_z_offset;
+        projectile_and_hit_vector_scratch.z += psytcopus_projectile_z_offset_gp;
         set_moby_position_and_refresh_removal_timer(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;

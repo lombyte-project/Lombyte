@@ -608,6 +608,7 @@ extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 #include "rnc/overlay/l13/gameplay/entities/elevator_globals.h"
+extern float blarg_turret_launch_displacement_scale_gp __asm__("D_L13_00161388") __attribute__((sda));
 int D_L13_0016138C = 2;
 void fire_blarg_turret_projectile(struct Moby *moby) __asm__("FUN_L13_002b47a0");
 
@@ -623,8 +624,8 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
         x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
         projectile_yaw = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        horizontal_offset[0] = fast_cos(projectile_yaw) * (blarg_turret_launch_displacement_scale * frame_time);
-        horizontal_offset[1] = fast_sin(projectile_yaw) * (blarg_turret_launch_displacement_scale * frame_time);
+        horizontal_offset[0] = fast_cos(projectile_yaw) * (blarg_turret_launch_displacement_scale_gp * frame_time);
+        horizontal_offset[1] = fast_sin(projectile_yaw) * (blarg_turret_launch_displacement_scale_gp * frame_time);
         horizontal_offset[2] = 0;
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
         spawn_gemlik_projectile(*(float *)(data + 0x68), projectile_spawn_position, horizontal_offset, moby);
@@ -1113,6 +1114,9 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L13_0015F62C;
 extern float D_L13_0015F630;
+extern float robosquawker_damage_knockback_vertical_speed_gp __asm__("D_L13_00161390") __attribute__((sda));
+extern float robosquawker_damage_knockback_horizontal_speed_gp __asm__("D_L13_00161394") __attribute__((sda));
+extern float robosquawker_home_hop_horizontal_speed_gp __asm__("D_L13_00161398") __attribute__((sda));
 extern float D_L13_0016139C __attribute__((sda));
 extern float D_L13_001670C0[];
 extern float FUN_L04_001f1978(float);
@@ -1258,8 +1262,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_vars->f20 -= hit->f2C;
             robosquawker_vars->f130 = 0.0055f;
             robosquawker_vars->f134 = 0.0011f;
-            robosquawker_vars->f138 = robosquawker_damage_knockback_horizontal_speed * frame_time;
-            robosquawker_vars->f13C = robosquawker_damage_knockback_vertical_speed * frame_time;
+            robosquawker_vars->f138 = robosquawker_damage_knockback_horizontal_speed_gp * frame_time;
+            robosquawker_vars->f13C = robosquawker_damage_knockback_vertical_speed_gp * frame_time;
             robosquawker_vars->w144 = 9;
             robosquawker_vars->b15D = 0;
             if (robosquawker_vars->f20 <= 0.0f) {
@@ -1609,8 +1613,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
             robosquawker_vars->f134 = 0.0f;
             robosquawker_vars->f130 = D_L13_0016139C;
-            robosquawker_vars->f138 = robosquawker_home_hop_horizontal_speed * frame_time;
-            robosquawker_vars->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &robosquawker_vars->v1D0, &out, robosquawker_home_hop_horizontal_speed * frame_time, -D_L13_0016139C);
+            robosquawker_vars->f138 = robosquawker_home_hop_horizontal_speed_gp * frame_time;
+            robosquawker_vars->f13C = FUN_L00_0025abf0(&robosquawker_moby->pos, &robosquawker_vars->v1D0, &out, robosquawker_home_hop_horizontal_speed_gp * frame_time, -D_L13_0016139C);
             robosquawker_vars->w144 = 0xD;
             robosquawker_vars->b15D = 0;
             trooper_start_knockback(robosquawker_moby, robosquawker_vars->x120, robosquawker_moby->rot.f[2], (rand() & 1) + 9, 1, 0);

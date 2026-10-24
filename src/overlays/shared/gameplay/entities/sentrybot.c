@@ -1296,6 +1296,7 @@ void update_sentrybot_joint_aim(void *mv) {
     update_joint_animation(moby, moby_data + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
 }
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
+extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
 extern float D_L15_001613F0 __attribute__((sda));
 extern float D_L15_001613F4 __attribute__((sda));
 extern float D_L15_001613F8 __attribute__((sda));
@@ -1353,7 +1354,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
 
     if (moby[0x20] == 0)
         return;
-    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * sentrybot_class_scale_multiplier;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * sentrybot_class_scale_multiplier_gp;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     code = fun_00213928(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
@@ -1606,8 +1607,21 @@ extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
+extern int rocket_trail_spark_initial_configuration_word_gp __asm__("D_L15_00161418") __attribute__((sda));
+extern float rocket_trail_spark_frame_count_range_start_gp __asm__("D_L15_00161428") __attribute__((sda));
+extern float rocket_trail_spark_third_frame_count_range_start_gp __asm__("D_L15_00161438") __attribute__((sda));
+extern float rocket_trail_spark_first_velocity_scale_gp __asm__("D_L15_00161448") __attribute__((sda));
+extern int rocket_trail_spark_second_configuration_word_gp __asm__("D_L15_0016141C") __attribute__((sda));
 extern float D_L15_00161420 __attribute__((sda));
 extern float D_L15_00161424 __attribute__((sda));
+extern float rocket_trail_spark_frame_count_range_end_gp __asm__("D_L15_0016142C") __attribute__((sda));
+extern float rocket_trail_spark_second_frame_count_range_start_gp __asm__("D_L15_00161430") __attribute__((sda));
+extern float rocket_trail_spark_second_frame_count_range_end_gp __asm__("D_L15_00161434") __attribute__((sda));
+extern float rocket_trail_spark_third_frame_count_range_end_gp __asm__("D_L15_0016143C") __attribute__((sda));
+extern float rocket_trail_spark_first_noise_radius_factor_gp __asm__("D_L15_00161440") __attribute__((sda));
+extern float rocket_trail_spark_second_noise_radius_factor_gp __asm__("D_L15_00161444") __attribute__((sda));
+extern float rocket_trail_spark_second_velocity_scale_gp __asm__("D_L15_0016144C") __attribute__((sda));
+extern int rocket_trail_spark_lookup_index_and_flags_gp __asm__("D_L15_00161454") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -1620,40 +1634,42 @@ void spawn_rocket_trail_spark(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float noise_radius;
     int frame_count, second_frame_count, third_frame_count;
-    noise_radius = rocket_trail_spark_first_noise_radius_factor;
+    noise_radius = rocket_trail_spark_first_noise_radius_factor_gp;
     noise_radius *= D_0015ED6C;
-    scale_vector_xyz(spark_a, data, rocket_trail_spark_first_velocity_scale);
+    scale_vector_xyz(spark_a, data, rocket_trail_spark_first_velocity_scale_gp);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_a, spark_a, noise);
-    noise_radius = rocket_trail_spark_second_noise_radius_factor;
+    noise_radius = rocket_trail_spark_second_noise_radius_factor_gp;
     noise_radius *= D_0015ED6C;
-    scale_vector_xyz(spark_b, data, rocket_trail_spark_second_velocity_scale);
+    scale_vector_xyz(spark_b, data, rocket_trail_spark_second_velocity_scale_gp);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_b, spark_b, noise);
     spark_a[3] = D_L15_00161420;
     spark_b[3] = D_L15_00161424;
     frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(rocket_trail_spark_frame_count_range_start, rocket_trail_spark_frame_count_range_end)));
+        random_float_between_alt(rocket_trail_spark_frame_count_range_start_gp, rocket_trail_spark_frame_count_range_end_gp)));
     second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(rocket_trail_spark_second_frame_count_range_start, rocket_trail_spark_second_frame_count_range_end)));
+        random_float_between_alt(rocket_trail_spark_second_frame_count_range_start_gp, rocket_trail_spark_second_frame_count_range_end_gp)));
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(rocket_trail_spark_third_frame_count_range_start, rocket_trail_spark_third_frame_count_range_end)));
-    spawn_spark(moby + 0x10, spark_a, spark_b, rocket_trail_spark_initial_configuration_word, rocket_trail_spark_second_configuration_word, frame_count, second_frame_count, third_frame_count,
-                 rocket_trail_spark_lookup_index_and_flags);
+        random_float_between_alt(rocket_trail_spark_third_frame_count_range_start_gp, rocket_trail_spark_third_frame_count_range_end_gp)));
+    spawn_spark(moby + 0x10, spark_a, spark_b, rocket_trail_spark_initial_configuration_word_gp, rocket_trail_spark_second_configuration_word_gp, frame_count, second_frame_count, third_frame_count,
+                 rocket_trail_spark_lookup_index_and_flags_gp);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
+extern float rocket_detonation_glow_scale_gp __asm__("D_L15_00161458") __attribute__((sda));
+extern int rocket_detonation_glow_lifetime_frames_gp __asm__("D_L15_0016145C") __attribute__((sda));
 extern unsigned char D_L15_00161460 __attribute__((sda));
 extern unsigned char D_L15_00161464 __attribute__((sda));
 extern unsigned char D_L15_00161468 __attribute__((sda));
 extern unsigned char D_L15_0016146C __attribute__((sda));
 void spawn_rocket_detonation_glow(char *moby) {
     char *glow_spawn_position = moby + 0x10;
-    int scaled_frame_count = scale_game_frames(rocket_detonation_glow_lifetime_frames);
-    spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, rocket_detonation_glow_scale,
+    int scaled_frame_count = scale_game_frames(rocket_detonation_glow_lifetime_frames_gp);
+    spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, rocket_detonation_glow_scale_gp,
                      D_L15_00161464, D_L15_00161468, D_L15_0016146C, D_L15_00161460);
 }
 /* update of moby class 256: a homing missile that leads its target, trails smoke and explodes on contact */
@@ -2408,6 +2424,11 @@ extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declarati
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern float group_moby_seeking_speed_gp __asm__("D_L15_001614B4") __attribute__((sda));
+extern int group_moby_particle_color_gp __asm__("D_L15_001614B8") __attribute__((sda));
+extern float group_moby_particle_scale_gp __asm__("D_L15_001614BC") __attribute__((sda));
+extern int group_moby_particle_lifetime_frames_gp __asm__("D_L15_001614C0") __attribute__((sda));
+extern float group_moby_effect_z_offset_gp __asm__("D_L15_001614C4") __attribute__((sda));
 extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
@@ -2448,16 +2469,16 @@ void update_hero_seeking_group_moby(char *moby) {
     if (((unsigned char *)moby)[0x20] != 1) {
         random_vector(va, 0.0f, D_0015ED6C + D_0015ED6C);
         qcopy(pb, moby + 0x10);
-        pb[2] = pb[2] + *(float *)&group_moby_effect_z_offset;
+        pb[2] = pb[2] + *(float *)&group_moby_effect_z_offset_gp;
         if (D_L15_00161AB8_lui == 0) {
             ((unsigned char *)moby)[0x20] = 1;
             goto tailA;
         }
-        particle_lifetime_frames = scale_game_frames_alt(group_moby_particle_lifetime_frames);
+        particle_lifetime_frames = scale_game_frames_alt(group_moby_particle_lifetime_frames_gp);
         converted_particle_lifetime_frames = func_001FA898_r((float)particle_lifetime_frames);
         life = (unsigned char)converted_particle_lifetime_frames;
         particle_initial_rotation = random_integer_below_c(0xFF);
-        spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, group_moby_particle_color, life, (unsigned char)particle_initial_rotation, 0, *(float *)&group_moby_particle_scale);
+        spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, group_moby_particle_color_gp, life, (unsigned char)particle_initial_rotation, 0, *(float *)&group_moby_particle_scale_gp);
         callback_frame_stamp = *(char **)(data + 0x6C);
         if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
             if (callback_frame_stamp != 0) {
@@ -2494,9 +2515,9 @@ s3:
     yaw = fast_add_rotations_c(*(float *)(data + 0x64), fast_arc_tan(fa, fb));
     target_z = *(float *)(hero_base + 0xC8);
     yaw_cosine = fast_cos_c(yaw);
-    va[0] = yaw_cosine * (*(float *)&group_moby_seeking_speed * D_0015ED6C);
+    va[0] = yaw_cosine * (*(float *)&group_moby_seeking_speed_gp * D_0015ED6C);
     yaw_sine = fast_sin_c(yaw);
-    va[1] = yaw_sine * (*(float *)&group_moby_seeking_speed * D_0015ED6C);
+    va[1] = yaw_sine * (*(float *)&group_moby_seeking_speed_gp * D_0015ED6C);
     va[2] = 0.0f;
     fd = *(float *)(moby + 0x18) - target_z;
     if (0.6f < fd) {
@@ -2574,6 +2595,7 @@ typedef struct {
 
 extern float D_L15_001CE110[4][4][4];
 extern float D_L15_001CE210[8];
+extern int group_moby_effect_first_quad_color_gp __asm__("D_L15_001614C8") __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
@@ -2618,11 +2640,11 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
                                     D_L15_00167280.position[2] - MOBY(other)->pos.z);
             rotation_matrix_from_euler(rotation, angles);
             qcopy(position, &MOBY(other)->pos);
-            position[2] += group_moby_effect_z_offset;
+            position[2] += group_moby_effect_z_offset_gp;
             position[3] = 1.0f;
             for (i = 0; i < 4; i++) {
                 int *colors = effect_quad.col;
-                int color = (&group_moby_effect_first_quad_color)[i];
+                int color = (&group_moby_effect_first_quad_color_gp)[i];
                 for (j = 0; j < 4; j++) {
                     colors[j] = color;
                     qcopy(effect_quad.v[j], D_L15_001CE110[i][j]);
@@ -2977,6 +2999,9 @@ extern float fast_add_rotations_c2(float, float) __asm__("func_001FA580");
 extern s32 rand(void);
 extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
+extern int spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") __attribute__((sda));
+extern float spiderbot_effect_scale_gp __asm__("D_L15_0016155C") __attribute__((sda));
+extern float spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") __attribute__((sda));
 extern u8 D_L15_00174460[];
 extern void FUN_L15_002a7628_c() __asm__("FUN_L15_002a7628");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -3113,14 +3138,14 @@ void spiderbot_update(unsigned char *moby) {
         } else {
             *(u128_2A8090 *)(moby_data + 0x10) = *(u128_2A8090 *)A;
         }
-        for (i = 0; i < spiderbot_effect_spawn_count; i++) {
+        for (i = 0; i < spiderbot_effect_spawn_count_gp; i++) {
             float effect_direction_sign;
             float effect_segment_length;
             int k;
             unsigned char life;
             effect_direction_sign = -1.0f;
             if (rand() & 1) effect_direction_sign = 1.0f;
-            k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(spiderbot_effect_lifetime_range_end * 0.5f, spiderbot_effect_lifetime_range_end)));
+            k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(spiderbot_effect_lifetime_range_end_gp * 0.5f, spiderbot_effect_lifetime_range_end_gp)));
             subtract_vector_xyz_c3(T2, moby_data + 0x10, moby + 0x10);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
             fast_vec_scale(B, B, effect_direction_sign);
@@ -3130,7 +3155,7 @@ void spiderbot_update(unsigned char *moby) {
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
             FUN_L00_001ff290(T2, A, B);
             fast_vec_normalize(B, B, random_float_between(D_0015ED6C * 10.0f, effect_segment_length / convert_integer_to_float_c3(k * 4)));
-            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, spiderbot_effect_scale);
+            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, spiderbot_effect_scale_gp);
         }
     }
     enqueue_callback_list_1_alt(FUN_L15_002a7628_c, moby);
@@ -3551,6 +3576,7 @@ extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
+extern int sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") __attribute__((sda));
 extern short D_L15_00161AC8 __attribute__((sda));
 void update_sentrybot_alarm_effect(void *moby) {
     struct Hero *base = &hero;
@@ -3565,16 +3591,16 @@ void update_sentrybot_alarm_effect(void *moby) {
     }
     if (*(float *)&D_L15_00161ABC_gp != 0.0f) {
         *(int *)&D_L15_00161AC0_gp = 1;
-        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index) == 0) {
-            sentrybot_alarm_voice_slot_index = allocate_voice_for_target_entry(5, 0x11, (int)moby);
+        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index_gp) == 0) {
+            sentrybot_alarm_voice_slot_index_gp = allocate_voice_for_target_entry(5, 0x11, (int)moby);
             *(void **)&D_L15_00161AC8 = moby;
         }
         enqueue_callback_list_1_alt(emit_sine_modulated_rgba_draw_packet, moby);
     } else {
-        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index) != 0) {
-            release_voice_slot(sentrybot_alarm_voice_slot_index);
+        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index_gp) != 0) {
+            release_voice_slot(sentrybot_alarm_voice_slot_index_gp);
             *(int *)&D_L15_00161AC8 = 0;
-            sentrybot_alarm_voice_slot_index = -1;
+            sentrybot_alarm_voice_slot_index_gp = -1;
         }
         *(int *)&D_L15_00161AC0_gp = 0;
     }

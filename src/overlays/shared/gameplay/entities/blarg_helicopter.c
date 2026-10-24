@@ -994,6 +994,7 @@ extern int D_0015ED68_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")
 extern float blarg_helicopter_bob_period __asm__("D_L03_00161994") __attribute__((sda)); /* no foreign declaration */
 extern float blarg_helicopter_bob_amplitude __asm__("D_L03_00161998") __attribute__((sda)); /* no foreign declaration */
 #include "rnc/overlay/shared/gameplay/entities/blarg_helicopter_globals.h"
+extern float blarg_helicopter_path_min_speed_gp __asm__("D_L03_0016199C") __attribute__((sda));
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int FUN_L00_001fff28();
 extern int FUN_L00_00258110();
@@ -1156,16 +1157,16 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         distance=func_001F9D10_2CDDC8(moby->position,(char*)path+(path->count<<4));
         step=D_0015ED70*10.0f;
         if (distance<=data->speed*data->speed/(step+step)) {
-            float speed=data->speed-step; limit=blarg_helicopter_path_min_speed*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
+            float speed=data->speed-step; limit=blarg_helicopter_path_min_speed_gp*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
         } else { float speed=data->speed+step; limit=D_0015ED6C*20.0f; data->speed=speed; if (limit<speed) data->speed=limit; }
         work.segment_a=func_001FA898_2CDDC8(progress/path->points[0].length);
         work.fraction_a=(progress-func_001FA888_2CDDC8(work.segment_a)*path->points[0].length)/path->points[0].length;
         if (work.segment_a>=path->count-1) {
-            if (data->route_a.path_id!=-1 && data->speed<=blarg_helicopter_path_min_speed*D_0015ED6C) {
+            if (data->route_a.path_id!=-1 && data->speed<=blarg_helicopter_path_min_speed_gp*D_0015ED6C) {
                 data->alternate=0; qcopy(moby->position,data->route_a.path->points); data->route_a.index=1;
                 moby->previous_state=2; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
             }
-            if (data->speed<=blarg_helicopter_path_min_speed*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
+            if (data->speed<=blarg_helicopter_path_min_speed_gp*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
             work.segment_a=path->count-2; work.fraction_a=1.0f;
         }
         fast_vec_sub(work.projected,&path->points[work.segment_a+1],&path->points[work.segment_a]);
@@ -1271,17 +1272,17 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         progress=func_001FA888_2CDDC8(work.segment_b)*path->points[0].length+work.fraction_b+2.0f;
         distance=func_001F9D10_2CDDC8(moby->position,(char*)path+(path->count<<4)); step=D_0015ED70*10.0f;
         if (distance<=data->speed*data->speed/(step+step)) {
-            float speed=data->speed-step; limit=blarg_helicopter_path_min_speed*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
+            float speed=data->speed-step; limit=blarg_helicopter_path_min_speed_gp*D_0015ED6C; data->speed=speed; if (speed<limit) data->speed=limit;
         } else { float speed=data->speed+step; limit=D_0015ED6C*20.0f; data->speed=speed; if (limit<speed) data->speed=limit; }
         work.segment_b=func_001FA898_2CDDC8(progress/path->points[0].length);
         work.fraction_b=(progress-func_001FA888_2CDDC8(work.segment_b)*path->points[0].length)/path->points[0].length;
         if (work.segment_b>=path->count-1) {
-            if (data->other_exit_path!=-1 && data->route_b.path_id!=-1 && data->speed<=blarg_helicopter_path_min_speed*D_0015ED6C) {
+            if (data->other_exit_path!=-1 && data->route_b.path_id!=-1 && data->speed<=blarg_helicopter_path_min_speed_gp*D_0015ED6C) {
                 HRoute49_2CDDC8 *route; data->alternate^=1; route=data->alternate ? &data->route_b : &data->route_a;
                 qcopy(moby->position,route->path->points); route->index=1;
                 moby->previous_state=2; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
             }
-            if (data->speed<=blarg_helicopter_path_min_speed*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
+            if (data->speed<=blarg_helicopter_path_min_speed_gp*D_0015ED6C) { func_001F9978_2CDDC8(); return; }
             work.segment_b=path->count-2; work.fraction_b=1.0f;
         }
         fast_vec_sub(work.projected,&path->points[work.segment_b+1],&path->points[work.segment_b]);
@@ -1533,6 +1534,7 @@ extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") __attribute__((sda));
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -1607,7 +1609,7 @@ void update_homing_spark_projectile(Moby *moby) {
         }
         heading = fast_arc_tan(data->vel.x, data->vel.y);
         if (fast_difference_between_rotations_c(heading, fast_arc_tan(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y)) < 1.5707964f) {
-            step_angle_toward_target(&heading, 0, fast_arc_tan(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y), homing_spark_turn_rate_degrees * 0.017453292f * D_0015ED6C_c);
+            step_angle_toward_target(&heading, 0, fast_arc_tan(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y), homing_spark_turn_rate_degrees_gp * 0.017453292f * D_0015ED6C_c);
             data->vel.x = fast_cos_c2(heading) * vector_length_xy(data);
             data->vel.y = fast_sin_c2(heading) * vector_length_xy(data);
         }

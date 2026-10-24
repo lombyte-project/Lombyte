@@ -311,7 +311,11 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char D_L11_00174880[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
+extern int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") __attribute__((sda));
+extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
+extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -344,11 +348,11 @@ void update_projectile_with_trail(char *moby) {
     if (data == 0) return;
     moby_position = moby + 0x10;
     qcopy(old, moby_position);
-    trail_color = fast_tween_color(projectile_trail_color_start, projectile_trail_color_end, random_float_between(0.0f, 1.0f));
+    trail_color = fast_tween_color(projectile_trail_color_start_gp, projectile_trail_color_end_gp, random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
     add_vector_xyz(trail_position, trail_position, moby_position);
-    scale_vector_xyz(trail_velocity, data, projectile_trail_velocity_scale);
-    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(projectile_trail_frame_count), (float)D_L11_00161DCC);
+    scale_vector_xyz(trail_velocity, data, projectile_trail_velocity_scale_gp);
+    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(projectile_trail_frame_count_gp), (float)D_L11_00161DCC);
     add_vector_xyz(moby_position, moby_position, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, moby_position, 0, *(void **)(data + 0x1C), hit)) {

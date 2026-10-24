@@ -344,6 +344,7 @@ void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *D_L00_001B2148[];
 #include "rnc/overlay/shared/rendering/002712b8_globals.h"
+extern float height_culled_particle_size_rate_gp __asm__("D_L00_00160210") __attribute__((sda));
 void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
 
 void update_moving_height_culled_particle(unsigned char *particle) {
@@ -354,7 +355,7 @@ void update_moving_height_culled_particle(unsigned char *particle) {
     FUN_001f9a10_00271df8(particle + 0x10, particle + 0x10, particle_data);
     particle[8] += particle_data[0x14];
     if (particle[2] == D_L00_001B2148[0][0]) {
-        *(float *)(particle + 0xC) += height_culled_particle_size_rate * frame_time * 210000.0f;
+        *(float *)(particle + 0xC) += height_culled_particle_size_rate_gp * frame_time * 210000.0f;
     }
     if (*(float *)(particle + 0x18) < *(float *)(particle_data + 0x10)) {
         FUN_L00_00267a08_00271df8(particle);
@@ -1179,6 +1180,7 @@ extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary
                                        int h) __asm__("FUN_L00_0026bb70");
 extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
+extern u32 large_floor_burst_random_limit_plus_one_gp __asm__("D_L00_00160228") __attribute__((sda));
 
 void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__("FUN_L00_00273a68");
 
@@ -1198,7 +1200,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
     cr = ember_particle->color & 0xFF;
     cg = (ember_particle->color & 0xFF00) >> 8;
     cb = ((u32)ember_particle->color >> 16) & 0xFF;
-    if (!random_integer_below(large_floor_burst_random_limit_plus_one - 1)) {
+    if (!random_integer_below(large_floor_burst_random_limit_plus_one_gp - 1)) {
         ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] *= random_float_between(1.0f, 3.5f);
         m->vel.f[1] *= random_float_between(1.0f, 3.5f);
@@ -1971,6 +1973,7 @@ void update_gravity_damped_resizing_particle(unsigned char *particle) {
         free_effect_particle(particle);
     }
 }
+extern int timed_particle_alpha_decrement_gp __asm__("D_L00_00160240") __attribute__((sda));
 void decrement_packed_countdown() __asm__("FUN_L00_00259430");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle() __asm__("FUN_L00_00267a08");
@@ -1978,7 +1981,7 @@ void free_effect_particle() __asm__("FUN_L00_00267a08");
 void update_timed_alpha_fade_particle(char *particle) __asm__("FUN_L00_00275810");
 
 void update_timed_alpha_fade_particle(char *particle) {
-    decrement_packed_countdown(particle + 4, timed_particle_alpha_decrement);
+    decrement_packed_countdown(particle + 4, timed_particle_alpha_decrement_gp);
     if (fast_dec_timer_s16(particle + 0xA))
         free_effect_particle(particle);
 }

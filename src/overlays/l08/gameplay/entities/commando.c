@@ -27,6 +27,8 @@ typedef struct {
 } SwarmVars;
 
 #include "rnc/overlay/l08/gameplay/entities/commando_globals.h"
+extern s32 swarm_update_disabled_gp __asm__("D_L08_00161D40") __attribute__((sda));
+extern f32 swarm_path_movement_speed_gp __asm__("D_L08_00161D34") __attribute__((sda));
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
@@ -86,7 +88,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (swarm_update_disabled != 0) {
+    if (swarm_update_disabled_gp != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -120,8 +122,8 @@ void update_path_following_moby_swarm(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > swarm_path_movement_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, swarm_path_movement_speed * frame_time);
+        if (vector_length_xyz(&step) > swarm_path_movement_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, swarm_path_movement_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         process_linked_moby_part_hits(moby);
@@ -140,7 +142,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed + swarm_path_movement_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed_gp + swarm_path_movement_speed_gp) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -169,8 +171,8 @@ void update_path_following_moby_swarm(struct Moby *moby) {
             vars->follow[1].point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > swarm_path_movement_speed * frame_time) {
-            normalize_vector_xyz(&step, &step, swarm_path_movement_speed * frame_time);
+        if (vector_length_xyz(&step) > swarm_path_movement_speed_gp * frame_time) {
+            normalize_vector_xyz(&step, &step, swarm_path_movement_speed_gp * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_commando_parts(moby);
@@ -181,7 +183,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
         moby_point_position(vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed + swarm_path_movement_speed) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (swarm_path_movement_speed_gp + swarm_path_movement_speed_gp) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
@@ -344,6 +346,9 @@ void update_swing_gate_from_driver(struct Moby *moby) {
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
+extern int scrolled_mesh_unscaled_fixed_alpha_gp __asm__("D_L08_00161DD0") __attribute__((sda));
+extern int offset_mesh_first_pass_fixed_alpha_gp __asm__("D_L08_00161DF0") __attribute__((sda));
+extern int pair_offset_mesh_fixed_alpha_gp __asm__("D_L08_00161E00") __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -361,7 +366,7 @@ void draw_layered_mesh_effect(void) {
     vu1_add_g_sregister(0x47, 0x513F1);
     font_queue_vu_state();
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
-    vu1_add_g_sregister(0x42, (long)scrolled_mesh_unscaled_fixed_alpha << 32 | 0x44);
+    vu1_add_g_sregister(0x42, (long)scrolled_mesh_unscaled_fixed_alpha_gp << 32 | 0x44);
     draw_scrolled_mesh_batch(0);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
     vu1_add_g_sregister(0x42, (long)((scrolled_mesh_subtractive_base_fixed_alpha * D_L08_00161E08_u) >> 8) << 32 | 0x62);
@@ -369,12 +374,12 @@ void draw_layered_mesh_effect(void) {
     vu1_add_g_sregister(0x42, (long)((scrolled_mesh_additive_base_fixed_alpha * D_L08_00161E08_u) >> 8) << 32 | 0x68);
     draw_scrolled_mesh_batch(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
-    vu1_add_g_sregister(0x42, (long)offset_mesh_first_pass_fixed_alpha << 32 | 0x48);
+    vu1_add_g_sregister(0x42, (long)offset_mesh_first_pass_fixed_alpha_gp << 32 | 0x48);
     FUN_L08_002f0c18(0);
     vu1_add_g_sregister(0x42, (long)offset_mesh_second_pass_fixed_alpha << 32 | 0x48);
     FUN_L08_002f0c18(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
-    vu1_add_g_sregister(0x42, (long)pair_offset_mesh_fixed_alpha << 32 | 0x48);
+    vu1_add_g_sregister(0x42, (long)pair_offset_mesh_fixed_alpha_gp << 32 | 0x48);
     emit_pair_offset_render_batch(0);
 }
 
@@ -499,6 +504,7 @@ extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __as
 extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
+extern f32 path_follower_y_rotation_rate_degrees_gp __asm__("D_L08_00161F70") __attribute__((sda));
 void update_path_following_moby_with_fade(struct Moby *moby) __asm__("FUN_L08_002f44c0");
 
 void update_path_following_moby_with_fade(struct Moby *moby)
@@ -548,7 +554,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
             mark_moby_for_removal_44c0(moby);
             return;
         }
-        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, path_follower_y_rotation_rate_degrees * 0.017453292f * frame_time);
+        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, path_follower_y_rotation_rate_degrees_gp * 0.017453292f * frame_time);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if (distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) {
             clear_u64_value_44c0(&velocity);
@@ -1175,6 +1181,7 @@ typedef struct {
 } WD8;
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
+extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -1203,9 +1210,9 @@ void commando_update(WM *moby) {
     int tracking;
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->opacity) {
-        if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)commando_height_probe_distance_limit) {
+        if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)commando_height_probe_distance_limit_gp) {
             FUN_L00_0025a120(moby);
-            moby->b7F = (commando_height_probe_distance_limit * 13) >> 4;
+            moby->b7F = (commando_height_probe_distance_limit_gp * 13) >> 4;
         }
     }
     switch (moby->state) {

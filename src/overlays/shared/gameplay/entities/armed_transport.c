@@ -379,6 +379,7 @@ extern float func_00214D88_path42_q(float, float, float, float, float *,
                                     float *) __asm__("FUN_00213f38");
 
 #include "rnc/overlay/shared/gameplay/entities/armed_transport_globals.h"
+extern float armed_transport_path_acceleration_coefficient_gp __asm__("D_L16_00161D84") __attribute__((sda));
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
     char *transport_data = *(char **)(transport_moby + 0x78);
     float progress = (float)*(int *)(transport_data + 0x168) + *(float *)(transport_data + 0x16C) +
@@ -395,7 +396,7 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) {
         *(float *)(transport_data + 0x194) = *(float *)(transport_moby + 0x18);
         speed = 0.0f;
         distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
-        rate = armed_transport_path_acceleration_coefficient * *(float *)&D_0015ED70_u;
+        rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&D_0015ED70_u;
         func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * frame_time,
                                &speed, (float *)(transport_data + 0x170));
         return 0;

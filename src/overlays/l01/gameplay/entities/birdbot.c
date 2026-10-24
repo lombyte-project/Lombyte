@@ -3292,6 +3292,11 @@ typedef struct {
 
 
 #include "rnc/overlay/l01/gameplay/entities/birdbot_globals.h"
+extern f32 water_lily_spring_velocity_adjustment_scale_gp __asm__("D_L01_00161BF0") __attribute__((sda));
+extern f32 water_lily_spring_damping_gp __asm__("D_L01_00161BF4") __attribute__((sda));
+extern f32 water_lily_hero_separation_radius_gp __asm__("D_L01_00161BF8") __attribute__((sda));
+extern f32 water_lily_max_horizontal_speed_gp __asm__("D_L01_00161BFC") __attribute__((sda));
+extern f32 water_lily_collision_radius_gp __asm__("D_L01_00161C00") __attribute__((sda));
 extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f99c0(f32);
@@ -3330,28 +3335,28 @@ void water_lily_update(HoverMoby *water_lily) {
         water_lily->state = 1;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
-        spring_axis_to(&water_lily->pos.v.x, v->home_x, &v->vel_x, water_lily_spring_velocity_adjustment_scale * frame_time_sq,
-                       water_lily_spring_damping, 3.0f);
-        spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, water_lily_spring_velocity_adjustment_scale * frame_time_sq,
-                       water_lily_spring_damping, 3.0f);
-        if (vector_distance(&water_lily->pos, &hero.motion.pos) < water_lily_hero_separation_radius) {
+        spring_axis_to(&water_lily->pos.v.x, v->home_x, &v->vel_x, water_lily_spring_velocity_adjustment_scale_gp * frame_time_sq,
+                       water_lily_spring_damping_gp, 3.0f);
+        spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, water_lily_spring_velocity_adjustment_scale_gp * frame_time_sq,
+                       water_lily_spring_damping_gp, 3.0f);
+        if (vector_distance(&water_lily->pos, &hero.motion.pos) < water_lily_hero_separation_radius_gp) {
             if (FUN_001f99c0(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
                 hero_separation_angle = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
                                    water_lily->pos.v.y - hero.motion.pos.f[1]);
-                water_lily->pos.v.x = fast_cos(hero_separation_angle) * water_lily_hero_separation_radius;
-                water_lily->pos.v.y = fast_sin(hero_separation_angle) * water_lily_hero_separation_radius;
+                water_lily->pos.v.x = fast_cos(hero_separation_angle) * water_lily_hero_separation_radius_gp;
+                water_lily->pos.v.y = fast_sin(hero_separation_angle) * water_lily_hero_separation_radius_gp;
                 water_lily->pos.v.x += hero.motion.pos.f[0];
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
         }
-        FUN_L00_00258490(water_lily, &collision_adjusted_position, &water_lily->pos, 3, 0.1f, water_lily_collision_radius, 600.0f, 1.5707964f);
+        FUN_L00_00258490(water_lily, &collision_adjusted_position, &water_lily->pos, 3, 0.1f, water_lily_collision_radius_gp, 600.0f, 1.5707964f);
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = old.v.z;
-        if (FUN_001f9b48(&old, &water_lily->pos) > water_lily_max_horizontal_speed * frame_time_macro) {
+        if (FUN_001f9b48(&old, &water_lily->pos) > water_lily_max_horizontal_speed_gp * frame_time_macro) {
             fast_vec_sub(&vector_scratch, &water_lily->pos, &old);
             step.q = vector_scratch.q;
-            fast_vec_normalize(&step, &step, water_lily_max_horizontal_speed * frame_time_macro);
+            fast_vec_normalize(&step, &step, water_lily_max_horizontal_speed_gp * frame_time_macro);
             fast_vec_add(&vector_scratch, &old, &step);
             water_lily->pos.q = vector_scratch.q;
         }
@@ -3482,6 +3487,11 @@ typedef struct {
 } Obj;
 
 extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
+extern f32 falling_rock_camera_rotation_angle_gp __asm__("D_L01_00161C28") __attribute__((sda));
+extern f32 falling_rock_camera_distance_gp __asm__("D_L01_00161C2C") __attribute__((sda));
+extern f32 falling_rock_camera_height_gp __asm__("D_L01_00161C30") __attribute__((sda));
+extern f32 falling_rock_camera_offset_scale_gp __asm__("D_L01_00161C34") __attribute__((sda));
+extern f32 falling_rock_camera_override_companion_value_gp __asm__("D_L01_00161C38") __attribute__((sda));
 
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
@@ -3497,11 +3507,11 @@ void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) {
     u8 *camera_record;
 
     camera_record = D_L01_001600EC_u + falling_rock_moby->sub->idx * 128;
-    build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, falling_rock_camera_rotation_angle);
+    build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, falling_rock_camera_rotation_angle_gp);
     set_follow_camera_angle_blend_from_direction(rotated_vector, 0.13962634f, 0.0f);
-    follow_camera_set_distance(0, falling_rock_camera_distance, falling_rock_camera_override_companion_value);
-    follow_camera_set_height(falling_rock_camera_height, falling_rock_camera_override_companion_value);
-    follow_camera_set_offset_scale(0, falling_rock_camera_offset_scale, falling_rock_camera_override_companion_value);
+    follow_camera_set_distance(0, falling_rock_camera_distance_gp, falling_rock_camera_override_companion_value_gp);
+    follow_camera_set_height(falling_rock_camera_height_gp, falling_rock_camera_override_companion_value_gp);
+    follow_camera_set_offset_scale(0, falling_rock_camera_offset_scale_gp, falling_rock_camera_override_companion_value_gp);
 }
 typedef union {
     u128 q;

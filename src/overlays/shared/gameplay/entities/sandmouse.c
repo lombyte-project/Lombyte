@@ -168,6 +168,8 @@ extern GlowVec_bfa8 D_L01_0020B9D0[4];
 extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
 #include "rnc/overlay/shared/gameplay/entities/sandmouse_globals.h"
+extern f32 moby_quad_c0_offset_scale_gp __asm__("D_L01_00162064") __attribute__((sda));
+extern f32 moby_quad_e0_offset_scale_gp __asm__("D_L01_0016206C") __attribute__((sda));
 extern s64 get_effect_texture_bfa8(s32) __asm__("FUN_001f44b8");
 extern void add_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -215,8 +217,8 @@ void draw_moby_offset_textured_quad(char *moby) {
     local.quad.unk68 = one;
     local.quad.unk6C = one;
 
-    scale_vector_xyz_bfa8(&local.basis.offset, moby + 0xc0, moby_quad_c0_offset_scale);
-    scale_vector_xyz_bfa8(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale);
+    scale_vector_xyz_bfa8(&local.basis.offset, moby + 0xc0, moby_quad_c0_offset_scale_gp);
+    scale_vector_xyz_bfa8(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale_gp);
     add_vector_xyz_bfa8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
     basis_axis_or_source_corner = &local.basis.mat0;
     add_vector_xyz_bfa8(&local.basis.point, &local.basis.offset, moby + 0x10);
@@ -502,6 +504,11 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
+extern float sandmouse_projectile_target_range_gp __asm__("D_L01_00162084") __attribute__((sda));
+extern float sandmouse_projectile_target_yaw_limit_degrees_gp __asm__("D_L01_00162088") __attribute__((sda));
+extern float sandmouse_projectile_target_pitch_limit_degrees_gp __asm__("D_L01_0016208C") __attribute__((sda));
+extern float sandmouse_projectile_spawn_offset_distance_gp __asm__("D_L01_00162090") __attribute__((sda));
+extern float sandmouse_projectile_fallback_aim_height_gp __asm__("D_L01_00162094") __attribute__((sda));
 extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 
 typedef union {
@@ -523,8 +530,8 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
         return;
     moby_point_position(moby, (state[0x56] & 1) + 1, &spawn_position);
     state[0x56] = state[0x56] ^ 1;
-    target_moby = select_sandmouse_projectile_target(moby, &spawn_position, moby + 0x40, sandmouse_projectile_target_yaw_limit_degrees * DEG_TO_RAD,
-                         sandmouse_projectile_target_pitch_limit_degrees * DEG_TO_RAD, sandmouse_projectile_target_range, 2.0f, 3.1415927f,
+    target_moby = select_sandmouse_projectile_target(moby, &spawn_position, moby + 0x40, sandmouse_projectile_target_yaw_limit_degrees_gp * DEG_TO_RAD,
+                         sandmouse_projectile_target_pitch_limit_degrees_gp * DEG_TO_RAD, sandmouse_projectile_target_range_gp, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
         *(char **)(state + 0x60) = target_moby;
@@ -539,9 +546,9 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                     if (target_aim_height_data != 0)
                         target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(target_aim_height_data + 0x10);
                     else
-                        target_aim_position.f[2] = target_aim_position.f[2] + sandmouse_projectile_fallback_aim_height;
+                        target_aim_position.f[2] = target_aim_position.f[2] + sandmouse_projectile_fallback_aim_height_gp;
                     fast_vec_sub(&spawn_offset, &target_aim_position, &spawn_position);
-                    fast_vec_normalize(&spawn_offset, &spawn_offset, sandmouse_projectile_spawn_offset_distance);
+                    fast_vec_normalize(&spawn_offset, &spawn_offset, sandmouse_projectile_spawn_offset_distance_gp);
                     fast_vec_add(&spawn_position, &spawn_position, &spawn_offset);
                     target_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
                     spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
@@ -589,7 +596,13 @@ struct HoverTuning {
 
 extern struct HoverTuning D_L01_001DEB38;
 extern f32 D_L01_001DEB4C NOT_SDA;
+extern f32 sandmouse_target_yaw_spring_strength_degrees_gp __asm__("D_L01_001620C4") __attribute__((sda));
+extern f32 sandmouse_target_yaw_damping_degrees_gp __asm__("D_L01_001620C8") __attribute__((sda));
+extern f32 sandmouse_target_yaw_turn_limit_degrees_gp __asm__("D_L01_001620CC") __attribute__((sda));
 extern f32 D_L01_001620D0 __attribute__((sda));
+extern f32 sandmouse_hover_velocity_to_rotation_y_scale_gp __asm__("D_L01_001620D4") __attribute__((sda));
+extern f32 sandmouse_hover_rotation_x_blend_factor_gp __asm__("D_L01_001620D8") __attribute__((sda));
+extern f32 sandmouse_hover_rotation_y_blend_factor_gp __asm__("D_L01_001620DC") __attribute__((sda));
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -639,8 +652,8 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         } else {
             bearing_yaw = fast_arc_tan(hover_vars->target->pos.x - moby->pos.x, hover_vars->target->pos.y - moby->pos.y);
             FUN_L00_00258278(moby, &D_L01_001DEB4C, bearing_yaw,
-                             sandmouse_target_yaw_spring_strength_degrees * DEG_TO_RAD * frame_time_sq, sandmouse_target_yaw_damping_degrees * DEG_TO_RAD * frame_time_sq,
-                             sandmouse_target_yaw_turn_limit_degrees * DEG_TO_RAD * frame_time);
+                             sandmouse_target_yaw_spring_strength_degrees_gp * DEG_TO_RAD * frame_time_sq, sandmouse_target_yaw_damping_degrees_gp * DEG_TO_RAD * frame_time_sq,
+                             sandmouse_target_yaw_turn_limit_degrees_gp * DEG_TO_RAD * frame_time);
         }
         fast_vec_scale(&steering_correction, &steering_correction, frame_scale * 0.04f);
         fast_vec_sub(&steering_correction, &steering_correction, &hover_vars->vel);
@@ -681,8 +694,8 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         break;
     }
     hover_tuning = &D_L01_001DEB38;
-    moby->rot.x += (normalize_angle(hover_tuning->yaw_speed * D_L01_001620D0) - moby->rot.x) * sandmouse_hover_rotation_x_blend_factor;
-    moby->rot.y += (normalize_angle(fast_vec_length(&hover_vars->vel) * sandmouse_hover_velocity_to_rotation_y_scale) - moby->rot.y) * sandmouse_hover_rotation_y_blend_factor;
+    moby->rot.x += (normalize_angle(hover_tuning->yaw_speed * D_L01_001620D0) - moby->rot.x) * sandmouse_hover_rotation_x_blend_factor_gp;
+    moby->rot.y += (normalize_angle(fast_vec_length(&hover_vars->vel) * sandmouse_hover_velocity_to_rotation_y_scale_gp) - moby->rot.y) * sandmouse_hover_rotation_y_blend_factor_gp;
 }
 #include "sda.h"
 

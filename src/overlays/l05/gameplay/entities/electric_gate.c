@@ -753,6 +753,9 @@ extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern float D_L05_00161DD8 __attribute__((sda));
 #include "rnc/overlay/l05/gameplay/entities/electric_gate_globals.h"
+extern float drain_cover_tilt_acceleration_gp __asm__("D_L05_00161DDC") __attribute__((sda));
+extern float drain_cover_tilt_deceleration_gp __asm__("D_L05_00161DE0") __attribute__((sda));
+extern float drain_cover_tilt_max_speed_gp __asm__("D_L05_00161DE4") __attribute__((sda));
 extern float approach_angle(float *, float, float *, float, float,
                             float) __asm__("FUN_L00_0025be00");
 
@@ -790,14 +793,14 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     angle1 = fast_sin(*(float *)(data + 0x9c));
     target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
-    rate0 = drain_cover_tilt_acceleration * speed_scale * 0.017453292f * frame_time_sq;
-    rate1 = drain_cover_tilt_deceleration * speed_scale * 0.017453292f * frame_time_sq;
-    limit = drain_cover_tilt_max_speed * 0.017453292f * frame_time;
+    rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
+    rate1 = drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
+    limit = drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time;
     approach_angle(&MOBY(moby)->rot.x, target0, (float *)(data + 0x90), rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y, target1, (float *)(data + 0x94),
-                   drain_cover_tilt_acceleration * speed_scale * 0.017453292f * frame_time_sq,
-                   drain_cover_tilt_deceleration * speed_scale * 0.017453292f * frame_time_sq,
-                   drain_cover_tilt_max_speed * 0.017453292f * frame_time);
+                   drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
+                   drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
+                   drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time);
 }
 extern void *hit_by_f5c8(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern struct Moby *spawn_moby_f5c8(int) __asm__("FUN_0020c4f8");
@@ -919,6 +922,12 @@ struct GateVars {
     f32 swingSpeed;
 };
 
+extern float gate_rise_acceleration_gp __asm__("D_L05_00161E80") __attribute__((sda));
+extern float gate_rise_deceleration_gp __asm__("D_L05_00161E84") __attribute__((sda));
+extern float gate_rise_max_speed_gp __asm__("D_L05_00161E88") __attribute__((sda));
+extern float gate_swing_acceleration_gp __asm__("D_L05_00161E8C") __attribute__((sda));
+extern float gate_swing_deceleration_gp __asm__("D_L05_00161E90") __attribute__((sda));
+extern float gate_swing_max_speed_gp __asm__("D_L05_00161E94") __attribute__((sda));
 extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -959,16 +968,16 @@ void update_triggered_gate_motion(struct Moby *gate_moby) {
         break;
     case GATE_RAISE_AND_SWING:
         if (gate_tick_314eb0(&gate_vars->riseTimer)) {
-            advance_accelerated_scalar(gate_vars->topZ, gate_rise_acceleration * frame_time_sq, gate_rise_deceleration * frame_time_sq,
-                                       gate_rise_max_speed * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
+            advance_accelerated_scalar(gate_vars->topZ, gate_rise_acceleration_gp * frame_time_sq, gate_rise_deceleration_gp * frame_time_sq,
+                                       gate_rise_max_speed_gp * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
             if (gate_moby->oclass == 0x355 && FUN_001f99c0(gate_moby->pos.z - gate_vars->topZ) < 3.0f &&
                 3.0f < FUN_001f99c0(gate_vars->topZ - gate_moby->pos.z + gate_vars->riseSpeed))
                 func_0022ED80_i(0, 0, gate_moby);
         }
         if (gate_tick_314eb0(&gate_vars->swingTimer)) {
-            FUN_L00_0025be00(&gate_moby->rot.y, &gate_vars->swingSpeed, 0.0f, gate_swing_acceleration * 0.017453292f * frame_time_sq,
-                             gate_swing_deceleration * 0.017453292f * frame_time_sq,
-                             gate_swing_max_speed * 0.017453292f * frame_time);
+            FUN_L00_0025be00(&gate_moby->rot.y, &gate_vars->swingSpeed, 0.0f, gate_swing_acceleration_gp * 0.017453292f * frame_time_sq,
+                             gate_swing_deceleration_gp * 0.017453292f * frame_time_sq,
+                             gate_swing_max_speed_gp * 0.017453292f * frame_time);
             if (gate_moby->rot.y == 0.0f)
                 gate_moby->state = 3;
         } else if (gate_vars->swingTimer == 1 && gate_moby->oclass == 0x354) {

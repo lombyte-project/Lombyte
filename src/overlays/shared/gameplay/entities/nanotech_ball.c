@@ -230,9 +230,13 @@ int FUN_00213260_002d8418(int) __asm__("FUN_00213260");
 void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int, int, int, int,
                                float) __asm__("FUN_L00_002730e0");
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_globals.h"
+extern float nanotech_ball_collection_gravity_scale_range_start_gp __asm__("D_L00_00161A60") __attribute__((sda));
+extern float nanotech_ball_collection_gravity_scale_range_end_gp __asm__("D_L00_00161A64") __attribute__((sda));
 extern unsigned char D_L00_00161A68 __attribute__((sda));
 extern int D_L00_00161A6C __attribute__((sda));
 extern int D_L00_00161A70 __attribute__((sda));
+extern float nanotech_ball_collection_first_particle_scale_factor_gp __asm__("D_L00_00161A74") __attribute__((sda));
+extern float nanotech_ball_collection_second_particle_scale_factor_gp __asm__("D_L00_00161A78") __attribute__((sda));
 void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
 
 void spawn_nanotech_ball_collection_effect_pair(char *moby) {
@@ -242,13 +246,13 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
     char *moby_position = moby + 0x10;
     fast_vec_sub(&to_camera, g_debug_camera, moby_position);
     fast_vec_scale(&scaled_gravity_vector, &hero.gravity_dir,
-                          FUN_002132a8_002d8418(nanotech_ball_collection_gravity_scale_range_start * frame_time,
-                                                nanotech_ball_collection_gravity_scale_range_end * frame_time));
+                          FUN_002132a8_002d8418(nanotech_ball_collection_gravity_scale_range_start_gp * frame_time,
+                                                nanotech_ball_collection_gravity_scale_range_end_gp * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
     spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
-                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_first_particle_scale_factor);
+                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_first_particle_scale_factor_gp);
     spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A70, D_L00_00161A68,
-                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_second_particle_scale_factor);
+                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_second_particle_scale_factor_gp);
 }
 typedef struct {
     f32 x, y, z, w;
@@ -281,6 +285,8 @@ s32 FUN_001fa6d0_2d8510(f32) __asm__("FUN_001fa6d0");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
+extern s32 nanotech_ball_collection_color_range_start_gp __asm__("D_L00_00161A7C") __attribute__((sda));
+extern s32 nanotech_ball_collection_color_range_end_gp __asm__("D_L00_00161A80") __attribute__((sda));
 extern s32 D_L00_00161A84 __attribute__((sda));
 extern s32 D_L00_00161A88 __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
@@ -313,7 +319,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             effect_data->f60[i] = unwrapped_effect_value + 255.0f;
         color_progress_or_size_factor = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
         color_progress_or_size_factor = color_progress_or_size_factor / (f32)FUN_001f96f8_2d8510(0xFF);
-        c = FUN_001fa6e0_2d8510(nanotech_ball_collection_color_range_start, nanotech_ball_collection_color_range_end,
+        c = FUN_001fa6e0_2d8510(nanotech_ball_collection_color_range_start_gp, nanotech_ball_collection_color_range_end_gp,
                                 absolute_float(0.5f - color_progress_or_size_factor));
         hi = c >> 24;
         color_progress_or_size_factor = 1.0f - effect_data->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
@@ -365,6 +371,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
 typedef f32 V4[4] __attribute__((aligned(16)));
 extern V4 D_L00_001E3CA0[];
 extern V4 D_L00_001E3D20[];
+extern f32 nanotech_ball_slot_offset_transform_amount_gp __asm__("D_L00_001619F0") __attribute__((sda));
 extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
@@ -375,7 +382,7 @@ void update_nanotech_ball_slot_offsets(void) {
     s32 i;
     for (i = 0; i < 8; i++) {
         build_look_at_matrix(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i],
-                             nanotech_ball_slot_offset_transform_amount);
+                             nanotech_ball_slot_offset_transform_amount_gp);
         FUN_001f9bf8(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14_gp);
     }
 }
@@ -444,12 +451,17 @@ extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
 extern int D_L00_00161A00 __attribute__((sda));
+extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribute__((sda));
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
+extern int nanotech_ball_collection_lifetime_frames_gp __asm__("D_L00_00161A3C") __attribute__((sda));
 extern int D_L00_00161A40 __attribute__((sda));
+extern int nanotech_ball_slot_collection_min_frames_gp __asm__("D_L00_00161A44") __attribute__((sda));
+extern int nanotech_ball_slot_collection_max_frames_gp __asm__("D_L00_00161A48") __attribute__((sda));
 extern float D_L00_00161A50 __attribute__((sda));
 extern float D_L00_00161A54 __attribute__((sda));
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
+extern float nanotech_ball_slot_scale_pulse_amplitude_gp __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
 extern int free_effect_particle() __asm__("FUN_L00_00267a08");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
@@ -599,7 +611,7 @@ void nanotech_ball_update(Moby *moby) {
             for (i = 0; i < 8; i++) {
                 if (data->slots[i] != 0) {
                     Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
-                    ext->u.s.scale = nanotech_ball_slot_scale_pulse_amplitude * func_001F9FA8_2D9EA0(ext->u.s.ang) + D_L00_00161A14_gp;
+                    ext->u.s.scale = nanotech_ball_slot_scale_pulse_amplitude_gp * func_001F9FA8_2D9EA0(ext->u.s.ang) + D_L00_00161A14_gp;
                     ext->u.s.ang = func_001FA748_2D9EA0(ext->u.s.ang, D_L00_001E17F0_2D9EA0[i]);
                 }
             }
@@ -616,7 +628,7 @@ void nanotech_ball_update(Moby *moby) {
                 moby->state = 3;
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
-                data->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames);
+                data->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -D_L00_00161A54);
                 func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &player->motion.pos, &collection_target_or_end_tangent);
                 func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &player->gravity_dir, -D_L00_00161A50);
@@ -645,13 +657,13 @@ void nanotech_ball_update(Moby *moby) {
                             dst->y = src->y;
                             dst->z = src->z;
                         }
-                        ext->h1E = ext->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(nanotech_ball_slot_collection_min_frames, nanotech_ball_slot_collection_max_frames));
+                        ext->h1E = ext->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(nanotech_ball_slot_collection_min_frames_gp, nanotech_ball_slot_collection_max_frames_gp));
                     }
                 }
             }
         }
         data->bob_offset = D_L00_00161A10_gp * func_001F9FA8_2D9EA0(data->bob_phase);
-        data->bob_phase = func_001FA748_2D9EA0(data->bob_phase, nanotech_ball_bob_phase_step);
+        data->bob_phase = func_001FA748_2D9EA0(data->bob_phase, nanotech_ball_bob_phase_step_gp);
         if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         qcopy(&slot_rotation_basis_or_cull_position_or_start_tangent, &moby->pos);
         slot_rotation_basis_or_cull_position_or_start_tangent.z += 0.5f;
@@ -3360,6 +3372,9 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
+extern int red_orb_pulse_color_start_gp __asm__("D_L00_00161B90") __attribute__((sda));
+extern int red_orb_pulse_color_end_gp __asm__("D_L00_00161B94") __attribute__((sda));
+extern float red_orb_pulse_angular_speed_degrees_gp __asm__("D_L00_00161B98") __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
 void red_orb_update(char *moby) {
     enum {
@@ -3377,10 +3392,10 @@ void red_orb_update(char *moby) {
         break;
     case RED_ORB_STATE_PULSE_COLOR:
         pulse_phase_or_sine = fast_add_rotations(*(float *)orb_data,
-                               red_orb_pulse_angular_speed_degrees * DEG_TO_RAD * frame_time);
+                               red_orb_pulse_angular_speed_degrees_gp * DEG_TO_RAD * frame_time);
         *(float *)orb_data = pulse_phase_or_sine;
         pulse_phase_or_sine = fast_sin(pulse_phase_or_sine);
-        tweened_color = fast_tween_color(red_orb_pulse_color_start, red_orb_pulse_color_end, pulse_phase_or_sine * 0.5f + 0.5f);
+        tweened_color = fast_tween_color(red_orb_pulse_color_start_gp, red_orb_pulse_color_end_gp, pulse_phase_or_sine * 0.5f + 0.5f);
         b = (tweened_color >> 16) & 0xFF;
         g = (tweened_color >> 8) & 0xFF;
         r = tweened_color & 0xFF;

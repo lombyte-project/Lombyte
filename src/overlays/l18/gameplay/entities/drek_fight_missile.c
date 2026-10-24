@@ -288,6 +288,13 @@ void select_drek_fight_missile_wander_target(char *moby, void *out) {
 }
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_globals.h"
+extern int drek_missile_trail_draw_disabled_gp __asm__("D_L18_0016223C") __attribute__((sda));
+extern int drek_missile_trail_blend_minuend_selector_gp __asm__("D_L18_00162240") __attribute__((sda));
+extern int drek_missile_trail_blend_subtrahend_selector_gp __asm__("D_L18_00162244") __attribute__((sda));
+extern int drek_missile_trail_blend_factor_selector_gp __asm__("D_L18_00162248") __attribute__((sda));
+extern int drek_missile_trail_blend_addend_selector_gp __asm__("D_L18_0016224C") __attribute__((sda));
+extern int drek_missile_trail_blend_start_color_gp __asm__("D_L18_00162250") __attribute__((sda));
+extern int drek_missile_trail_blend_end_color_gp __asm__("D_L18_00162254") __attribute__((sda));
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern float D_L18_001DA2F0[4][2];
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -321,8 +328,8 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
         quads[i].texture = get_effect_texture(19);
         quads[i].reserved.value = 0;
         quads[i].texture_state = 0xFF9000000260ULL;
-        quads[i].primitive = (u64)drek_missile_trail_blend_minuend_selector | ((u64)drek_missile_trail_blend_subtrahend_selector << 2) | ((u64)drek_missile_trail_blend_factor_selector << 4) |
-                             ((u64)drek_missile_trail_blend_addend_selector << 6) | 0x8000000000ULL;
+        quads[i].primitive = (u64)drek_missile_trail_blend_minuend_selector_gp | ((u64)drek_missile_trail_blend_subtrahend_selector_gp << 2) | ((u64)drek_missile_trail_blend_factor_selector_gp << 4) |
+                             ((u64)drek_missile_trail_blend_addend_selector_gp << 6) | 0x8000000000ULL;
         offset = convert_integer_to_float_group_quad((game_frame + 3) & 3) * 0.0625f;
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
@@ -333,7 +340,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
             } else if (color_blend_factor < 0.0f) {
                 color_blend_factor = 0.0f;
             }
-            quads[i].colors[j] = interpolate_color(drek_missile_trail_blend_start_color, drek_missile_trail_blend_end_color, color_blend_factor);
+            quads[i].colors[j] = interpolate_color(drek_missile_trail_blend_start_color_gp, drek_missile_trail_blend_end_color_gp, color_blend_factor);
         }
     }
     clear_memory(extra, 0, 0x20);
@@ -349,7 +356,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
         data = (char *)missile_moby->pvars;
         for (trail_segment_index = 0; trail_segment_index < *(short *)(data + 0x164); trail_segment_index++) {
             base = (*(short *)(data + 0x166) - trail_segment_index + 15) & 15;
-            if (drek_missile_trail_draw_disabled == 0) {
+            if (drek_missile_trail_draw_disabled_gp == 0) {
                 for (k = 0; k < 4; k++) {
                     add_vector_xyz(&quads[trail_segment_index].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
                                    extra + ((k & 1) << 2));
@@ -371,6 +378,12 @@ extern void FUN_001f9a10_c7(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern float FUN_001fa580_c7(float, float) __asm__("FUN_001fa580");
 
+extern float drek_missile_moving_effect_phase_rate_degrees_gp __asm__("D_L18_00162258") __attribute__((sda));
+extern float drek_missile_wait_to_explode_effect_phase_rate_degrees_gp __asm__("D_L18_0016225C") __attribute__((sda));
+extern int drek_missile_effect_blend_start_color_gp __asm__("D_L18_00162260") __attribute__((sda));
+extern int drek_missile_effect_blend_end_color_gp __asm__("D_L18_00162264") __attribute__((sda));
+extern float drek_missile_effect_quad_scale_gp __asm__("D_L18_00162268") __attribute__((sda));
+extern float drek_missile_effect_position_offset_length_gp __asm__("D_L18_0016226C") __attribute__((sda));
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) __asm__("FUN_L18_002f06c0");
 
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
@@ -385,24 +398,24 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
         return;
     }
     group_entry = D_L18_001AC240_c7[group_moby->group];
-    moving_phase_step = drek_missile_moving_effect_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C_c7;
-    wait_to_explode_phase_step = drek_missile_wait_to_explode_effect_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C_c7;
+    moving_phase_step = drek_missile_moving_effect_phase_rate_degrees_gp * DEG_TO_RAD * D_0015ED6C_c7;
+    wait_to_explode_phase_step = drek_missile_wait_to_explode_effect_phase_rate_degrees_gp * DEG_TO_RAD * D_0015ED6C_c7;
     do {
         missile_moby = D_L18_0015FFD8_c7 + ((*group_entry & 0x7FFF) << 8);
         if (*(short *)(missile_moby + 0xA6) == 0x54B) {
             missile_vars = *(char **)(missile_moby + 0x78);
             phase_blended_color = FUN_001fa6e0_c7(FUN_001f9de0_c7(*(float *)(missile_vars + 0x168)) * 0.5f + 0.5f,
-                                drek_missile_effect_blend_start_color, drek_missile_effect_blend_end_color);
-            FUN_001f9bf8_c7(effect_world_position, missile_moby + 0xC0, drek_missile_effect_position_offset_length);
+                                drek_missile_effect_blend_start_color_gp, drek_missile_effect_blend_end_color_gp);
+            FUN_001f9bf8_c7(effect_world_position, missile_moby + 0xC0, drek_missile_effect_position_offset_length_gp);
             FUN_001f9a10_c7(effect_world_position, effect_world_position, missile_moby + 0x10);
             switch (missile_moby[0x20]) {
             case DREK_MISSILE_WANDER:
             case DREK_MISSILE_DIVE:
-                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale_gp, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), moving_phase_step);
                 break;
             case DREK_MISSILE_WAIT_TO_EXPLODE:
-                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale, 0.0f);
+                draw_offset_textured_effect_quad(effect_world_position, phase_blended_color, drek_missile_effect_quad_scale_gp, 0.0f);
                 *(float *)(missile_vars + 0x168) = FUN_001fa580_c7(*(float *)(missile_vars + 0x168), wait_to_explode_phase_step);
                 break;
             }
@@ -836,10 +849,14 @@ extern int blend_color_1fd8(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
+extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
 extern int D_L18_001622E4 __attribute__((sda));
 extern int D_L18_001622E8 __attribute__((sda));
 extern int D_L18_001622EC __attribute__((sda));
 extern int D_L18_001622F0 __attribute__((sda));
+extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
+extern int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") __attribute__((sda));
+extern f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") __attribute__((sda));
 extern f32 D_L18_001622D4 __attribute__((sda));
 f32 D_L18_001DA350[4][2] = {
     {0.0f, 0.0f},
@@ -865,7 +882,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
     copy_matrix_1fd8(matrix, &moby->rot_row0);
     qcopy(matrix[3], &moby->pos);
     matrix[3][3] = 1.0f;
-    vars->scroll += glow_moby_phase_rate * D_0015ED6C;
+    vars->scroll += glow_moby_phase_rate_gp * D_0015ED6C;
     if (1.0f < vars->scroll) {
         vars->scroll -= 1.0f;
     }
@@ -884,7 +901,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
                              ((u64)D_L18_001622F0 << 6) | 0x8000000000ULL;
         phase = vars->scroll + i * step;
         phase = phase - (float)truncate_1fd8(phase);
-        color = blend_color_1fd8(glow_moby_phase_blend_start_color, glow_moby_phase_blend_end_color, phase);
+        color = blend_color_1fd8(glow_moby_phase_blend_start_color_gp, glow_moby_phase_blend_end_color_gp, phase);
         color = blend_color_1fd8(color & 0xFFFFFF, color, alpha);
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA350[j][0] + i * step;
@@ -899,7 +916,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
         }
     }
     for (pass = 2; pass >= 0; pass--) {
-        matrix[3][2] += glow_moby_layer_z_step;
+        matrix[3][2] += glow_moby_layer_z_step_gp;
         draw_quad_1fd8(&quads[0], matrix, 0);
         draw_quad_1fd8(&quads[1], matrix, 0);
         draw_quad_1fd8(&quads[2], matrix, 0);
@@ -925,6 +942,9 @@ void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
 extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
+extern int lift_alternate_height_requested_gp __asm__("D_L18_001622FC") __attribute__((sda));
+extern int next_lift_instance_index_gp __asm__("D_L18_001622F8") __attribute__((sda));
+extern float lift_texture_u_scroll_rate_gp __asm__("D_L18_0016230C") __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
@@ -945,10 +965,10 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     int initial_height_selector;
     switch (lift_moby->state) {
     case LIFT_INITIALIZE:
-        if (lift_alternate_height_requested != 0) {
-            D_00141400 = *(unsigned char *)&lift_alternate_height_requested;
+        if (lift_alternate_height_requested_gp != 0) {
+            D_00141400 = *(unsigned char *)&lift_alternate_height_requested_gp;
         }
-        *(int *)(lift_vars + 0x1C) = next_lift_instance_index++;
+        *(int *)(lift_vars + 0x1C) = next_lift_instance_index_gp++;
         lift_moby->update_dist = 0xFF;
         lift_moby->state = 1;
         ((M_2310 *)lift_moby)->h34 |= 1;
@@ -960,7 +980,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
             *(int *)(lift_vars + 8) = (*(int *)(lift_vars + 8) + 1) & 1;
         }
         initial_height_selector = *(int *)(lift_vars + 8);
-        next_lift_instance_index = 0;
+        next_lift_instance_index_gp = 0;
         if (initial_height_selector != 0 && D_00141400 == 0) {
             lift_moby->state = 2;
             lift_moby->pos.z = *(float *)(lift_vars + 0);
@@ -971,7 +991,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
         break;
     case LIFT_APPROACH_ALTERNATE_HEIGHT:
         if (lift_moby->command & 4) {
-            lift_alternate_height_requested = 0;
+            lift_alternate_height_requested_gp = 0;
             lift_moby->state = 2;
             if (*(int *)(lift_vars + 8) == 0) {
                 D_0013D406 = 1;
@@ -985,7 +1005,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     case LIFT_APPROACH_BASE_HEIGHT:
         if (lift_moby->command & 8) {
             lift_moby->state = 3;
-            lift_alternate_height_requested = 1;
+            lift_alternate_height_requested_gp = 1;
         }
         lift_moby->command = 2;
         synchronize_lift_group_height(lift_moby);
@@ -995,7 +1015,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     }
     switch (*(int *)(lift_vars + 0x14)) {
     case LIFT_DRAW_25_QUAD_MESH:
-        D_L18_00162308_gp = D_L18_00162308_gp + lift_texture_u_scroll_rate * D_0015ED6C_2310;
+        D_L18_00162308_gp = D_L18_00162308_gp + lift_texture_u_scroll_rate_gp * D_0015ED6C_2310;
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }

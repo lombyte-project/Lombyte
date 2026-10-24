@@ -44,11 +44,12 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 #include "rnc/overlay/l05/gameplay/entities/sharkigator_globals.h"
+extern float scenery_ship_path_advance_scale_gp __asm__("D_L05_001613D0") __attribute__((sda));
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 
 void advance_scenery_ship_along_path(char *moby, int *path) {
     float *moby_data = *(float **)(moby + 0x78);
-    moby_data[2] = moby_data[2] + scenery_ship_path_advance_scale * frame_time / moby_data[3];
+    moby_data[2] = moby_data[2] + scenery_ship_path_advance_scale_gp * frame_time / moby_data[3];
     if ((float)path[0] < moby_data[2]) {
         moby_data[2] = moby_data[2] - (float)path[0];
     }
@@ -603,6 +604,8 @@ int D_L05_001613D8 = 0x80000080;
 int D_L05_001613DC = 0x80202020;
 float D_L05_001613E0 = 5.0f;
 int D_L05_001613E4 = 1;
+extern float scenery_ship_removal_effect_basis_scale_gp __asm__("D_L05_001613E8") __attribute__((sda));
+extern float scenery_ship_removal_effect_z_addend_gp __asm__("D_L05_001613EC") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -771,8 +774,8 @@ void scenery_ship_update(char *moby) {
         tab = (float *)D_L05_0015F580_macro;
         effect_origin_position = (float *)(moby + 0x10);
         effect_origin_rotation = (float *)(moby + 0x40);
-        func_001F9C30_2D8388(&left_offset, moby + 0xC0, scenery_ship_removal_effect_basis_scale * frame_scale);
-        left_offset.f[2] = left_offset.f[2] + scenery_ship_removal_effect_z_addend * frame_scale;
+        func_001F9C30_2D8388(&left_offset, moby + 0xC0, scenery_ship_removal_effect_basis_scale_gp * frame_scale);
+        left_offset.f[2] = left_offset.f[2] + scenery_ship_removal_effect_z_addend_gp * frame_scale;
         lifetime = func_001F9850_2D8388(0x5A);
         func_L00_00265050_2D8388(moby, 0x72E, effect_origin_position, effect_origin_rotation, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
         lifetime = func_001F9850_2D8388(0x5A);
@@ -2064,19 +2067,26 @@ extern int D_L05_00161B10 __attribute__((sda));
 extern float D_L05_00161B14 __attribute__((sda));
 extern float D_L05_00161B18 __attribute__((sda));
 extern float D_L05_00161B1C __attribute__((sda));
+extern float extermitank_tracked_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B20") __attribute__((sda));
 extern float D_L05_00161B24 __attribute__((sda));
+extern float extermitank_tracked_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B28") __attribute__((sda));
 extern float D_L05_00161B2C __attribute__((sda));
 extern float D_L05_00161B30 __attribute__((sda));
 extern float D_L05_00161B34 __attribute__((sda));
+extern float extermitank_tracked_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B38") __attribute__((sda));
 extern int D_L05_00161B3C __attribute__((sda));
 extern int D_L05_00161B40 __attribute__((sda));
 extern float D_L05_00161B44 __attribute__((sda));
 extern float D_L05_00161B48 __attribute__((sda));
 extern float D_L05_00161B4C __attribute__((sda));
+extern float extermitank_secondary_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B50") __attribute__((sda));
 extern float D_L05_00161B54 __attribute__((sda));
+extern float extermitank_secondary_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B58") __attribute__((sda));
 extern float D_L05_00161B5C __attribute__((sda));
 extern float D_L05_00161B60 __attribute__((sda));
 extern float D_L05_00161B64 __attribute__((sda));
+extern float extermitank_secondary_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B68") __attribute__((sda));
+extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("D_L05_00161B6C") __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));
 extern float D_L05_00161B7C __attribute__((sda));
 extern void FUN_L00_001fff28(void *, int, float);
@@ -2273,13 +2283,13 @@ void extermitank_update(unsigned char *moby) {
             working_position[0] += random_float_between_c4(-0.065f, 0.065f);
             working_position[1] += random_float_between_c4(-0.065f, 0.065f);
             working_position[2] += random_float_between_c4(-0.065f, 0.065f);
-            particle_vector_a[0] = fast_cos_c5(*(float *)(data + 0x194)) * (extermitank_tracked_particle_vector_a_xy_scale * D_0015ED6C_gp);
-            particle_vector_a[1] = fast_sin_c7(*(float *)(data + 0x194)) * (extermitank_tracked_particle_vector_a_xy_scale * D_0015ED6C_gp);
+            particle_vector_a[0] = fast_cos_c5(*(float *)(data + 0x194)) * (extermitank_tracked_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
+            particle_vector_a[1] = fast_sin_c7(*(float *)(data + 0x194)) * (extermitank_tracked_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[2] = 0.0f;
             particle_vector_a[2] = random_float_between_c4(D_L05_00161B24 * D_0015ED6C_gp * 0.9f, D_L05_00161B24 * D_0015ED6C_gp * 1.1f);
-            ang = random_float_between_c4(-extermitank_tracked_particle_vector_b_spread_degrees, extermitank_tracked_particle_vector_b_spread_degrees) * 0.017453292f;
-            particle_vector_b[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_tracked_particle_vector_b_xy_scale * D_0015ED6C_gp);
-            particle_vector_b[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_tracked_particle_vector_b_xy_scale * D_0015ED6C_gp);
+            ang = random_float_between_c4(-extermitank_tracked_particle_vector_b_spread_degrees_gp, extermitank_tracked_particle_vector_b_spread_degrees_gp) * 0.017453292f;
+            particle_vector_b[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_tracked_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
+            particle_vector_b[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_tracked_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[2] = 0.0f;
             particle_vector_b[2] = random_float_between_c4(D_L05_00161B2C * D_0015ED6C_gp * 0.9f, D_L05_00161B2C * D_0015ED6C_gp * 1.1f);
             a = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B14, D_L05_00161B14 + D_L05_00161B14)));
@@ -2307,14 +2317,14 @@ void extermitank_update(unsigned char *moby) {
             working_position[0] += random_float_between_c4(-0.2f, 0.2f);
             working_position[1] += random_float_between_c4(-0.2f, 0.2f);
             working_position[2] += random_float_between_c4(-0.2f, 0.2f);
-            ang = random_float_between_c4(-extermitank_secondary_particle_vector_a_spread_degrees, extermitank_secondary_particle_vector_a_spread_degrees) * 0.017453292f;
-            particle_vector_a[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_a_xy_scale * D_0015ED6C_gp);
-            particle_vector_a[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_a_xy_scale * D_0015ED6C_gp);
+            ang = random_float_between_c4(-extermitank_secondary_particle_vector_a_spread_degrees_gp, extermitank_secondary_particle_vector_a_spread_degrees_gp) * 0.017453292f;
+            particle_vector_a[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
+            particle_vector_a[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_a_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_a[2] = 0.0f;
             particle_vector_a[2] = random_float_between_c4(D_L05_00161B54 * D_0015ED6C_gp * 0.7f, D_L05_00161B54 * D_0015ED6C_gp * 1.5f);
-            ang = random_float_between_c4(-extermitank_secondary_particle_vector_b_spread_degrees, extermitank_secondary_particle_vector_b_spread_degrees) * 0.017453292f;
-            particle_vector_b[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_b_xy_scale * D_0015ED6C_gp);
-            particle_vector_b[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_b_xy_scale * D_0015ED6C_gp);
+            ang = random_float_between_c4(-extermitank_secondary_particle_vector_b_spread_degrees_gp, extermitank_secondary_particle_vector_b_spread_degrees_gp) * 0.017453292f;
+            particle_vector_b[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
+            particle_vector_b[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (extermitank_secondary_particle_vector_b_xy_scale_gp * D_0015ED6C_gp);
             particle_vector_b[2] = 0.0f;
             particle_vector_b[2] = random_float_between_c4(D_L05_00161B5C * D_0015ED6C_gp * 0.7f, D_L05_00161B5C * D_0015ED6C_gp * 1.5f);
             a = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B44, D_L05_00161B44 + D_L05_00161B44)));
@@ -2373,7 +2383,9 @@ extern void finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 extern float D_0013F3D0[];
 
 int D_L05_00161B74 = 5;
+extern float extermitank_child_animation_speed_divisor_gp __asm__("D_L05_00161AF0") __attribute__((sda));
 extern const float frame_time_const __asm__("D_0015ED6C");
+extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00161AF4") __attribute__((sda));
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -2481,8 +2493,8 @@ mark_children:
         char *first;
         float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= extermitank_child_animation_speed_divisor * frame_time_const;
-        offset_scale = extermitank_child_animation_speed_offset_scale;
+        speed /= extermitank_child_animation_speed_divisor_gp * frame_time_const;
+        offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
             *(float *)(data + 0x84) * offset_scale;
@@ -2494,8 +2506,8 @@ mark_children:
         char *second;
         float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= extermitank_child_animation_speed_divisor * frame_time_const;
-        offset_scale = extermitank_child_animation_speed_offset_scale;
+        speed /= extermitank_child_animation_speed_divisor_gp * frame_time_const;
+        offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=
             *(float *)(data + 0x84) * offset_scale;
@@ -3046,6 +3058,12 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
+extern float floating_platform_rotation_y_phase_rate_degrees_gp __asm__("D_L05_00161CD4") __attribute__((sda));
+extern float floating_platform_rotation_x_phase_rate_degrees_gp __asm__("D_L05_00161CD8") __attribute__((sda));
+extern float floating_platform_rotation_y_amplitude_degrees_gp __asm__("D_L05_00161CDC") __attribute__((sda));
+extern float floating_platform_rotation_x_amplitude_degrees_gp __asm__("D_L05_00161CE0") __attribute__((sda));
+extern int floating_platform_voice_interval_min_gp __asm__("D_L05_00161CE4") __attribute__((sda));
+extern int floating_platform_voice_interval_max_gp __asm__("D_L05_00161CE8") __attribute__((sda));
 void floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 void floating_platform_update(unsigned char *moby) {
     enum {
@@ -3064,7 +3082,7 @@ void floating_platform_update(unsigned char *moby) {
     switch (moby[0x20]) {
     case FLOATING_PLATFORM_INITIALIZE:
         *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-            (float)floating_platform_voice_interval_min, (float)floating_platform_voice_interval_max)));
+            (float)floating_platform_voice_interval_min_gp, (float)floating_platform_voice_interval_max_gp)));
         *(float *)(data + 0x60) = random_angle_radians();
         *(float *)(data + 0x6C) = random_angle_radians();
         moby[0x20] = 1;
@@ -3073,7 +3091,7 @@ void floating_platform_update(unsigned char *moby) {
         if (fast_dec_timer((int *)(data + 0x78))) {
             allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-                (float)floating_platform_voice_interval_min, (float)floating_platform_voice_interval_max)));
+                (float)floating_platform_voice_interval_min_gp, (float)floating_platform_voice_interval_max_gp)));
         }
         position = (char *)moby + 0x10;
         qcopy(previous_position, position);
@@ -3081,14 +3099,14 @@ void floating_platform_update(unsigned char *moby) {
         current_rotation = (char *)moby + 0x40;
         qcopy(previous_rotation_ptr, current_rotation);
         rotation_y_phase = fast_add_rotations(*(float *)(data + 0x60),
-                               floating_platform_rotation_y_phase_rate_degrees * DEG_TO_RAD * frame_time);
-        k = floating_platform_rotation_x_phase_rate_degrees * DEG_TO_RAD * frame_time;
+                               floating_platform_rotation_y_phase_rate_degrees_gp * DEG_TO_RAD * frame_time);
+        k = floating_platform_rotation_x_phase_rate_degrees_gp * DEG_TO_RAD * frame_time;
         *(float *)(data + 0x60) = rotation_y_phase;
         *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
         *(float *)(moby + 0x44) =
-            floating_platform_rotation_y_amplitude_degrees * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
+            floating_platform_rotation_y_amplitude_degrees_gp * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
         *(float *)(moby + 0x40) =
-            floating_platform_rotation_x_amplitude_degrees * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
+            floating_platform_rotation_x_amplitude_degrees_gp * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
         subtract_vector_xyz(position_delta, position, previous_position);
         update_entity_matrix(data + 0x20, position_delta, previous_rotation_ptr, current_rotation);
         break;

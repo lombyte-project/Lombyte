@@ -1660,6 +1660,9 @@ typedef struct {
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern float D_0015ED70;
+extern float platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") __attribute__((sda));
+extern float platform_sink_speed_gp __asm__("D_L09_001619F8") __attribute__((sda));
+extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribute__((sda));
 extern float D_L09_00161A04 __attribute__((sda));
 extern float D_L09_00161A08 __attribute__((sda));
 extern float D_L09_00161A0C __attribute__((sda));
@@ -1734,7 +1737,7 @@ void platform_update(Moby *moby)
         deg_to_rad = 0.01745329238474369f;
         side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row0));
         front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row1));
-        tilt = platform_hero_offset_tilt_gain;
+        tilt = platform_hero_offset_tilt_gain_gp;
         pitch_target = tilt * side_dot;
         *(u128 *)&old_angles = *(u128 *)&data->ang;
         *(u128 *)&old_pos = *(u128 *)&moby->pos;
@@ -1746,7 +1749,7 @@ void platform_update(Moby *moby)
             D_L09_00161A04 * deg_to_rad * D_0015ED70,
             D_L09_00161A08 * frame_scale_sq,
             D_L09_00161A0C * deg_to_rad * D_0015ED6C_c2);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - platform_sink_speed * D_0015ED6C_c2;
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - platform_sink_speed_gp * D_0015ED6C_c2;
         if (sink_level < old_z && (*(Vec_2F9A50 *)&moby->pos).z <= sink_level) {
             func_0022ED80_2F9A50(1, 0, moby);
         }
@@ -1764,7 +1767,7 @@ void platform_update(Moby *moby)
             D_L09_00161A10 * deg_to_rad * D_0015ED70,
             D_L09_00161A14 * frame_scale_sq,
             D_L09_00161A18 * deg_to_rad * D_0015ED6C_c2);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + platform_height_return_gain * D_0015ED6C_c2 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + platform_height_return_gain_gp * D_0015ED6C_c2 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
         if (data->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
             (*(Vec_2F9A50 *)&moby->pos).z = data->baseZ;
         }

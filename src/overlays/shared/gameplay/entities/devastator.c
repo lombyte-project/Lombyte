@@ -495,6 +495,8 @@ int FUN_L00_0025a420_2b3458(void *, int, int) __asm__("FUN_L00_0025a420");
 int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 #include "rnc/overlay/shared/gameplay/entities/devastator_globals.h"
+extern int linked_moby_selection_delay_gp __asm__("D_L00_00161478") __attribute__((sda));
+extern int owned_record_cooldown_gp __asm__("D_L00_00161480") __attribute__((sda));
 void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
 
 void update_linked_moby_states(unsigned char *source_moby) {
@@ -507,7 +509,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
     switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
         source_moby[0x20] = 1;
-        moby_vars->w4 = linked_moby_selection_delay;
+        moby_vars->w4 = linked_moby_selection_delay_gp;
         moby_vars->w8 = 3;
         moby_vars->p[0] = D_L00_0015FFD8 + (moby_vars->idx[0] << 8);
         moby_vars->p[1] = D_L00_0015FFD8 + (moby_vars->idx[1] << 8);
@@ -519,7 +521,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         FUN_001f9740_2b3458(&moby_vars->wC);
         if (matching_owned_record && moby_vars->wC == 0) {
             source_moby[0xA4] = 0xFF;
-            moby_vars->wC = owned_record_cooldown;
+            moby_vars->wC = owned_record_cooldown_gp;
             if (--moby_vars->w8 <= 0) {
                 FUN_0020c828_2b3458(source_moby);
                 return;
@@ -538,7 +540,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         if (moby_vars->p[0][0x20] == 0x50 || moby_vars->p[1][0x20] == 0x50 || moby_vars->p[2][0x20] == 0x50 ||
             moby_vars->p[3][0x20] == 0x50) {
             if (FUN_001f9740_2b3458(&moby_vars->w4)) {
-                moby_vars->w4 = linked_moby_selection_delay;
+                moby_vars->w4 = linked_moby_selection_delay_gp;
                 for (i = 0; i < 4; i++) {
                     if (moby_vars->p[i][0x20] == 0x50)
                         goto found;
@@ -1955,6 +1957,7 @@ void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 
 extern int D_L00_0017E508 __attribute__((section(".data")));
 extern int D_L00_0015F608;
+extern float visibomb_missile_default_speed_gp __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
@@ -1996,7 +1999,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
             int r = FUN_L00_002bb360_2b58d8(spawned_moby);
-            float k = visibomb_missile_default_speed * D_0015ED6C_2b58d8;
+            float k = visibomb_missile_default_speed_gp * D_0015ED6C_2b58d8;
             *(int *)(spawned_moby_vars + 0x20) = r;
             *(float *)(spawned_moby_vars + 0x48) = k;
         }
@@ -2240,6 +2243,9 @@ extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025
 
 extern int D_L00_0015F458 __attribute__((sda));
 extern float D_L00_00161498 __attribute__((sda));
+extern float visibomb_missile_max_speed_gp __asm__("D_L00_001614A0") __attribute__((sda));
+extern float visibomb_missile_speed_target_blend_factor_gp __asm__("D_L00_001614A4") __attribute__((sda));
+extern float visibomb_missile_speed_blend_factor_gp __asm__("D_L00_001614A8") __attribute__((sda));
 extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
@@ -2291,14 +2297,14 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         return;
     }
     {
-        float t = visibomb_missile_default_speed * D_0015ED6C_2b6140;
-        if (controller_state.held & 0x40) t = visibomb_missile_max_speed * D_0015ED6C_2b6140;
-        missile_vars->f48 += (t - missile_vars->f48) * visibomb_missile_speed_target_blend_factor;
-        missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * visibomb_missile_speed_blend_factor;
-        if (visibomb_missile_max_speed * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed * D_0015ED6C_2b6140;
+        float t = visibomb_missile_default_speed_gp * D_0015ED6C_2b6140;
+        if (controller_state.held & 0x40) t = visibomb_missile_max_speed_gp * D_0015ED6C_2b6140;
+        missile_vars->f48 += (t - missile_vars->f48) * visibomb_missile_speed_target_blend_factor_gp;
+        missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * visibomb_missile_speed_blend_factor_gp;
+        if (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed_gp * D_0015ED6C_2b6140;
     }
-    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - visibomb_missile_default_speed * D_0015ED6C_2b6140
-        / (visibomb_missile_max_speed * D_0015ED6C_2b6140 - visibomb_missile_default_speed * D_0015ED6C_2b6140)) * D_L00_00161498));
+    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140
+        / (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140)) * D_L00_00161498));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
             float steered_pitch;
@@ -2715,6 +2721,9 @@ extern E8690 D_L00_001DB440[];
 extern int D_L00_001614D0;
 extern float D_L00_001614DC;
 extern char D_L00_001614E0[] __attribute__((section(".sdata")));
+extern int taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") __attribute__((sda));
+extern float taunter_effect_travel_distance_gp __asm__("D_L00_001614B4") __attribute__((sda));
+extern float taunter_effect_travel_speed_gp __asm__("D_L00_001614B8") __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
@@ -2736,7 +2745,7 @@ void update_taunter_effect_slots(void *source_moby) {
             D_L00_001DB440[i].c = 0;
         taunter_effect_reset_pending = 0;
         D_L00_001614D0 = 0;
-        effect_lifetime_frames = f_to_int(taunter_effect_travel_distance / (taunter_effect_travel_speed * frame_time));
+        effect_lifetime_frames = f_to_int(taunter_effect_travel_distance_gp / (taunter_effect_travel_speed_gp * frame_time));
         taunter_effect_lifetime_frames = effect_lifetime_frames;
         D_L00_001614DC = 1.0f / convert_integer_to_float(effect_lifetime_frames);
     }
@@ -2746,7 +2755,7 @@ void update_taunter_effect_slots(void *source_moby) {
             do {
                 effect_slot = &D_L00_001DB440[i];
                 if (effect_slot->c == 0) {
-                    D_L00_001614D0 = scale_game_frames(taunter_effect_spawn_interval_frames);
+                    D_L00_001614D0 = scale_game_frames(taunter_effect_spawn_interval_frames_gp);
                     av = *(unsigned short *)&D_L00_001614D0_e[2];
                     effect_slot->b = D_L00_001614BC;
                     effect_slot->c = 1;
@@ -2763,7 +2772,7 @@ void update_taunter_effect_slots(void *source_moby) {
             if (fast_dec_timer_s16(&effect_slot->a) != 0)
                 effect_slot->c = 0;
             else
-                effect_slot->f += taunter_effect_travel_speed * frame_time;
+                effect_slot->f += taunter_effect_travel_speed_gp * frame_time;
         }
     }
     moby_point_position(source_moby, 0, D_L00_001614E0);
@@ -2804,6 +2813,9 @@ extern f32 itof_2b7568(s32) __asm__("FUN_001fa6c0");
 extern s32 ftoi_2b7568(f32) __asm__("FUN_001fa6d0");
 extern void draw_2b7568(void *, void *, int) __asm__("FUN_001f7d30");
 extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
+extern f32 taunter_effect_quad_final_scale_gp __asm__("D_L00_001614C8") __attribute__((sda));
+extern f32 taunter_effect_quad_initial_scale_gp __asm__("D_L00_001614C4") __attribute__((sda));
+extern u32 taunter_effect_quad_rgb_gp __asm__("D_L00_001614C0") __attribute__((sda));
 void draw_taunter_effect_quads(u8 *source_moby) __asm__("FUN_L00_002b7568");
 
 void draw_taunter_effect_quads(u8 *source_moby) {
@@ -2845,8 +2857,8 @@ void draw_taunter_effect_quads(u8 *source_moby) {
         fade_factor = itof_2b7568(D_L00_001DB440_2b7568[i].alpha) * D_L00_001614DC;
         if (1.0f < fade_factor)
             fade_factor = 1.0f;
-        sz = taunter_effect_quad_final_scale + (taunter_effect_quad_initial_scale - taunter_effect_quad_final_scale) * fade_factor;
-        col = (taunter_effect_quad_rgb & 0xFFFFFF) |
+        sz = taunter_effect_quad_final_scale_gp + (taunter_effect_quad_initial_scale_gp - taunter_effect_quad_final_scale_gp) * fade_factor;
+        col = (taunter_effect_quad_rgb_gp & 0xFFFFFF) |
               (ftoi_2b7568((itof_2b7568(D_L00_001614BC_2b7568) - 0.0f) * fade_factor + 0.0f) << 24);
         quad.color[3] = col;
         quad.color[2] = col;
@@ -3641,6 +3653,7 @@ extern void vadd_2b9310(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vzero_2b9310(void *) __asm__("FUN_001f99f8");
 
 extern int D_L00_0016167C __attribute__((sda));
+extern int tesla_beam_initial_frame_count_gp __asm__("D_L00_00161624") __attribute__((sda));
 extern float D_L00_00161594 __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668;
@@ -3667,7 +3680,7 @@ void initialize_tesla_claw_beam(char *moby) {
     }
     D_L00_00161590_gp = 0;
     D_L00_0016167C = 0;
-    tesla_beam_scaled_initial_frame_count = frames_2b9310(tesla_beam_initial_frame_count);
+    tesla_beam_scaled_initial_frame_count = frames_2b9310(tesla_beam_initial_frame_count_gp);
     D_L00_001615F8 = 0x7F2020;
     vsub_2b9310(&beam_endpoint_delta, data + 0x10, data);
     vscale_2b9310(&step, &beam_endpoint_delta, D_L00_00161594 / 20.0f);

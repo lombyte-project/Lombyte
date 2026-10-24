@@ -124,6 +124,7 @@ extern int D_L10_001DA250[];
 extern int D_L10_001DA2B0[][2];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
 extern int D_L10_00161F48[2] __attribute__((sda));
 extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));
@@ -175,7 +176,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         second_src++;
         second_dst += 4;
     }
-    for (pass = 0; pass < quad_layer_count; pass++) {
+    for (pass = 0; pass < quad_layer_count_gp; pass++) {
         int parity = pass & 1;
         int shade;
         first.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],

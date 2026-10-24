@@ -6,6 +6,7 @@
 
 extern u8 D_L02_001CB9C0[];
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
+extern s32 scaled_table_header_leading_word_gp __asm__("D_L02_001612A0") __attribute__((sda));
 
 extern float D_L02_001CB500[];
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
@@ -16,7 +17,7 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     float *source;
     float *base;
     value_target[0x3F] = val;
-    *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word;
+    *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word_gp;
     *(s32 *)(D_L02_001CB9C0 + 0x4) = scaled_table_header_second_word;
     *(s32 *)(D_L02_001CB9C0 + 0x8) = scaled_table_header_third_word;
     *(s32 *)(D_L02_001CB9C0 + 0xC) = scaled_table_header_final_word;
@@ -713,6 +714,10 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern int tresspasser_ring_arc_first_vertex_uv_gp __asm__("D_L02_00161B0C") __attribute__((sda));
+extern int tresspasser_ring_arc_second_vertex_uv_gp __asm__("D_L02_00161B10") __attribute__((sda));
+extern int tresspasser_ring_arc_third_vertex_uv_gp __asm__("D_L02_00161B14") __attribute__((sda));
+extern int tresspasser_ring_arc_fourth_vertex_uv_gp __asm__("D_L02_00161B18") __attribute__((sda));
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -724,10 +729,10 @@ void draw_tresspasser_puzzle_ring_arc(int texture, u32 color, float start_angle,
     int uvs[4];
     float angle_step = fast_subtract_rotations(end_angle, start_angle) / 5.0f;
     int i;
-    uvs[0] = tresspasser_ring_arc_first_vertex_uv;
-    uvs[1] = tresspasser_ring_arc_second_vertex_uv;
-    uvs[2] = tresspasser_ring_arc_third_vertex_uv;
-    uvs[3] = tresspasser_ring_arc_fourth_vertex_uv;
+    uvs[0] = tresspasser_ring_arc_first_vertex_uv_gp;
+    uvs[1] = tresspasser_ring_arc_second_vertex_uv_gp;
+    uvs[2] = tresspasser_ring_arc_third_vertex_uv_gp;
+    uvs[3] = tresspasser_ring_arc_fourth_vertex_uv_gp;
     colors[3] = color;
     colors[2] = color;
     colors[1] = color;
@@ -763,7 +768,20 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L02_001D33B0[4][4];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern int tresspasser_arrow_newly_reached_first_vertex_uv_gp __asm__("D_L02_00161ABC") __attribute__((sda));
+extern int tresspasser_arrow_newly_reached_second_vertex_uv_gp __asm__("D_L02_00161AC0") __attribute__((sda));
+extern int tresspasser_arrow_newly_reached_third_vertex_uv_gp __asm__("D_L02_00161AC4") __attribute__((sda));
+extern int tresspasser_arrow_newly_reached_fourth_vertex_uv_gp __asm__("D_L02_00161AC8") __attribute__((sda));
+extern int tresspasser_arrow_occupied_first_vertex_uv_gp __asm__("D_L02_00161ACC") __attribute__((sda));
+extern int tresspasser_arrow_occupied_second_vertex_uv_gp __asm__("D_L02_00161AD0") __attribute__((sda));
+extern int tresspasser_arrow_occupied_third_vertex_uv_gp __asm__("D_L02_00161AD4") __attribute__((sda));
+extern int tresspasser_arrow_occupied_fourth_vertex_uv_gp __asm__("D_L02_00161AD8") __attribute__((sda));
+extern int tresspasser_arrow_lit_first_vertex_uv_gp __asm__("D_L02_00161ADC") __attribute__((sda));
+extern int tresspasser_arrow_lit_second_vertex_uv_gp __asm__("D_L02_00161AE0") __attribute__((sda));
+extern int tresspasser_arrow_lit_third_vertex_uv_gp __asm__("D_L02_00161AE4") __attribute__((sda));
+extern int tresspasser_arrow_lit_fourth_vertex_uv_gp __asm__("D_L02_00161AE8") __attribute__((sda));
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
+extern int tresspasser_arrow_vertex_color_gp __asm__("D_L02_00161B9C") __attribute__((sda));
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
@@ -788,29 +806,29 @@ void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int
     s64 texture_tex0;
     switch (sel) {
     case ARROW_STYLE_NEWLY_REACHED:
-        uv[0] = tresspasser_arrow_newly_reached_first_vertex_uv;
-        uv[1] = tresspasser_arrow_newly_reached_second_vertex_uv;
-        uv[2] = tresspasser_arrow_newly_reached_third_vertex_uv;
-        uv[3] = tresspasser_arrow_newly_reached_fourth_vertex_uv;
+        uv[0] = tresspasser_arrow_newly_reached_first_vertex_uv_gp;
+        uv[1] = tresspasser_arrow_newly_reached_second_vertex_uv_gp;
+        uv[2] = tresspasser_arrow_newly_reached_third_vertex_uv_gp;
+        uv[3] = tresspasser_arrow_newly_reached_fourth_vertex_uv_gp;
         break;
     case ARROW_STYLE_OCCUPIED:
-        uv[0] = tresspasser_arrow_occupied_first_vertex_uv;
-        uv[1] = tresspasser_arrow_occupied_second_vertex_uv;
-        uv[2] = tresspasser_arrow_occupied_third_vertex_uv;
-        uv[3] = tresspasser_arrow_occupied_fourth_vertex_uv;
+        uv[0] = tresspasser_arrow_occupied_first_vertex_uv_gp;
+        uv[1] = tresspasser_arrow_occupied_second_vertex_uv_gp;
+        uv[2] = tresspasser_arrow_occupied_third_vertex_uv_gp;
+        uv[3] = tresspasser_arrow_occupied_fourth_vertex_uv_gp;
         break;
     case ARROW_STYLE_LIT:
     default:
-        uv[0] = tresspasser_arrow_lit_first_vertex_uv;
-        uv[1] = tresspasser_arrow_lit_second_vertex_uv;
-        uv[2] = tresspasser_arrow_lit_third_vertex_uv;
-        uv[3] = tresspasser_arrow_lit_fourth_vertex_uv;
+        uv[0] = tresspasser_arrow_lit_first_vertex_uv_gp;
+        uv[1] = tresspasser_arrow_lit_second_vertex_uv_gp;
+        uv[2] = tresspasser_arrow_lit_third_vertex_uv_gp;
+        uv[3] = tresspasser_arrow_lit_fourth_vertex_uv_gp;
         break;
     }
-    col[3] = tresspasser_arrow_vertex_color;
-    col[2] = tresspasser_arrow_vertex_color;
-    col[1] = tresspasser_arrow_vertex_color;
-    col[0] = tresspasser_arrow_vertex_color;
+    col[3] = tresspasser_arrow_vertex_color_gp;
+    col[2] = tresspasser_arrow_vertex_color_gp;
+    col[1] = tresspasser_arrow_vertex_color_gp;
+    col[0] = tresspasser_arrow_vertex_color_gp;
     y = func_001FA898_r(fast_sin(angle) * radial_distance * 16.0f);
     x = func_001FA898_r(fast_cos(angle) * radial_distance * 16.0f);
     packed_arrow_center = (long)y + 0xFFFFF080000000L;
@@ -978,6 +996,11 @@ extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 D_L02_001D3310[];
+extern int tresspasser_textured_quad_color_gp __asm__("D_L02_00161B94") __attribute__((sda));
+extern int tresspasser_quad_first_vertex_uv_gp __asm__("D_L02_00161AAC") __attribute__((sda));
+extern int tresspasser_quad_second_vertex_uv_gp __asm__("D_L02_00161AB0") __attribute__((sda));
+extern int tresspasser_quad_third_vertex_uv_gp __asm__("D_L02_00161AB4") __attribute__((sda));
+extern int tresspasser_quad_fourth_vertex_uv_gp __asm__("D_L02_00161AB8") __attribute__((sda));
 void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 
 void draw_tresspasser_puzzle_textured_quads(void) {
@@ -987,16 +1010,19 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
     int i;
     for (i = 3; i >= 0; i--) {
-        vertex_uvs[0] = tresspasser_quad_first_vertex_uv;
-        vertex_uvs[1] = tresspasser_quad_second_vertex_uv;
-        vertex_uvs[2] = tresspasser_quad_third_vertex_uv;
-        vertex_uvs[3] = tresspasser_quad_fourth_vertex_uv;
-        vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = tresspasser_textured_quad_color;
+        vertex_uvs[0] = tresspasser_quad_first_vertex_uv_gp;
+        vertex_uvs[1] = tresspasser_quad_second_vertex_uv_gp;
+        vertex_uvs[2] = tresspasser_quad_third_vertex_uv_gp;
+        vertex_uvs[3] = tresspasser_quad_fourth_vertex_uv_gp;
+        vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = tresspasser_textured_quad_color_gp;
         packed_vertices = *vertex_quad_cursor++;
         f20bc88_2dae88(&packed_vertices, vertex_uvs, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
     }
 }
 
+extern int escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") __attribute__((sda));
+extern float escalator_target_speed_gp __asm__("D_L02_00161C14") __attribute__((sda));
+extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void vec_clear_2dc6b0(void *) __asm__("FUN_001f99f8");
 extern int scale_game_frames_2dc6b0(int) __asm__("FUN_001f96f8");
@@ -1026,7 +1052,7 @@ void escalator_update(char *moby) {
     goto move;
 state0:
         vec_clear_2dc6b0(data + 0x40);
-        *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
+        *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames_gp);
         *(u32 *)(data + 0x9c) |= 4;
         if (*(int *)(data + 0xa4) != 0) *(u8 *)(moby + 0x20) = 3;
         else *(u8 *)(moby + 0x20) = 1;
@@ -1036,9 +1062,9 @@ state1: {
 
         *(float *)(moby + 0x58) = 1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = fast_vec_length(data + 0x40) - escalator_acceleration * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - escalator_acceleration_gp * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
-                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
+                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames_gp);
                 *(u8 *)(moby + 0x20) = 2;
             } else {
                 *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -speed;
@@ -1048,14 +1074,14 @@ state1: {
             }
         } else {
             speed = fast_vec_length(data + 0x40);
-            limit = absolute_float(escalator_target_speed * frame_time);
+            limit = absolute_float(escalator_target_speed_gp * frame_time);
             /* Retail loads frame_time_sq through its absolute EE address here. */
-            if (speed < limit) speed += escalator_acceleration * (*(float *)0x0015ED70);
+            if (speed < limit) speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -speed;
             *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / (escalator_target_speed * frame_time);
+        *(float *)(moby + 0x58) = speed / (escalator_target_speed_gp * frame_time);
         goto move;
 }
 state2: {
@@ -1063,9 +1089,9 @@ state2: {
 
         *(float *)(moby + 0x58) = -1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = fast_vec_length(data + 0x40) - escalator_acceleration * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - escalator_acceleration_gp * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
-                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
+                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames_gp);
                 *(u8 *)(moby + 0x20) = 1;
             } else {
                 *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * speed;
@@ -1074,18 +1100,18 @@ state2: {
             }
         } else {
             speed = fast_vec_length(data + 0x40);
-            limit = absolute_float(escalator_target_speed * frame_time);
-            if (speed < limit) speed += escalator_acceleration * (*(float *)0x0015ED70);
+            limit = absolute_float(escalator_target_speed_gp * frame_time);
+            if (speed < limit) speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * speed;
             *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / -(escalator_target_speed * frame_time);
+        *(float *)(moby + 0x58) = speed / -(escalator_target_speed_gp * frame_time);
         goto move;
 }
 state3:
-        *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed * frame_time);
-        *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed * frame_time);
+        *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed_gp * frame_time);
+        *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed_gp * frame_time);
         *(int *)(data + 0x48) = 0;
 move:
     FUN_L00_00260738_2dc6b0(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
@@ -1107,6 +1133,9 @@ extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int approach_angle() __asm__("FUN_L00_0025be00");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern float versatarget_particle_base_lifetime_gp __asm__("D_L02_00161CB0") __attribute__((sda));
+extern int versatarget_particle_color_gp __asm__("D_L02_00161CB4") __attribute__((sda));
+extern float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") __attribute__((sda));
 extern float D_L02_00161CBC;
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
@@ -1161,12 +1190,12 @@ void swingshot_versatarget_update(char *moby) {
                     if (D_L02_0015F5CC & 4)
                         direction_sign = -1.0f;
                     normalize_vector_xyz(particle_position, moby + 0xD0, direction_sign * D_L02_00161CBC);
-                    normalize_vector_xyz(particle_velocity, particle_position, -2.0f / multiply_global_factor_ed64(versatarget_particle_base_lifetime));
+                    normalize_vector_xyz(particle_velocity, particle_position, -2.0f / multiply_global_factor_ed64(versatarget_particle_base_lifetime_gp));
                     add_vector_xyz(particle_position, particle_position, moby + 0x10);
-                    particle_lifetime = truncate_float_to_s32(multiply_global_factor_ed64(versatarget_particle_base_lifetime)) & 0xFF;
-                    spawn_moving_hero_relative_alpha_fade_particle(particle_position, particle_velocity, versatarget_particle_color, particle_lifetime,
+                    particle_lifetime = truncate_float_to_s32(multiply_global_factor_ed64(versatarget_particle_base_lifetime_gp)) & 0xFF;
+                    spawn_moving_hero_relative_alpha_fade_particle(particle_position, particle_velocity, versatarget_particle_color_gp, particle_lifetime,
                                      random_integer_below(0xFF) & 0xFF, 0,
-                                     versatarget_particle_scale);
+                                     versatarget_particle_scale_gp);
                 }
             }
         }

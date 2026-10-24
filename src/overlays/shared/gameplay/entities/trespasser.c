@@ -1152,6 +1152,7 @@ void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
 extern const float D_L00_00161828 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
+extern float trespasser_pickup_z_rotation_step_gp __asm__("D_L00_00161830") __attribute__((sda));
 void update_trespasser_pickup(void *mv) {
     enum {
         TRESPASSER_INITIALIZE = 0,
@@ -1169,7 +1170,7 @@ void update_trespasser_pickup(void *mv) {
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
-        float updated_z_rotation = FUN_001fa580_2c1778(*(float *)(trespasser_moby + 0x48), trespasser_pickup_z_rotation_step);
+        float updated_z_rotation = FUN_001fa580_2c1778(*(float *)(trespasser_moby + 0x48), trespasser_pickup_z_rotation_step_gp);
         int proximity_check_counter = D_L00_0015F5CC_2c1778[0];
         *(float *)(trespasser_moby + 0x48) = updated_z_rotation;
         if (proximity_check_counter % 10 == 0) {

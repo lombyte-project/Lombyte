@@ -19,7 +19,9 @@ extern char *path_table[] __asm__("D_L11_001B0EB0");
 extern float D_L11_001622CC __attribute__((sda));
 extern float D_L11_001622D0 __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
+extern float puffoid_hit_knockback_vertical_scale_gp __asm__("D_L11_001622D4") __attribute__((sda));
 extern float D_L11_001622D8 __attribute__((sda));
+extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC") __attribute__((sda));
 extern float D_L11_001622E0 __attribute__((sda));
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
@@ -170,7 +172,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
                 patrol_vars->unk138 = D_L11_001622D8 * frame_time;
-                patrol_vars->unk13C = puffoid_hit_knockback_vertical_scale * frame_time;
+                patrol_vars->unk13C = puffoid_hit_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
@@ -191,7 +193,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 moby->flags &= ~0x1000;
                 patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
                 patrol_vars->unk138 = D_L11_001622E0 * frame_time;
-                patrol_vars->unk13C = puffoid_death_knockback_vertical_scale * frame_time;
+                patrol_vars->unk13C = puffoid_death_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
@@ -367,6 +369,9 @@ void *FUN_L11_00316210(struct Moby *arg) {
 
 #include "qcopy.h"
 
+extern float gate_door_z_offset_gp __asm__("D_L11_00162308") __attribute__((sda));
+extern float gate_door_x_rotation_degrees_gp __asm__("D_L11_0016230C") __attribute__((sda));
+extern float gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") __attribute__((sda));
 extern struct Moby *spawn_moby_class(s32) __asm__("FUN_0020c4f8");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern s32 FUN_00214720(void *, s32);
@@ -417,8 +422,8 @@ void update_two_door_gate(struct Moby *moby) {
         door_moby->pos.z -= 4.0f;
         door_rotation_target = gate_vars->left;
         qcopy(&door_rotation_target->rot, &moby->rot);
-        door_rotation_target->rot.x = -(gate_door_x_rotation_degrees * 0.017453292f);
-        gate_vars->left->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
+        door_rotation_target->rot.x = -(gate_door_x_rotation_degrees_gp * 0.017453292f);
+        gate_vars->left->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
         door_vars = gate_vars->left->pvars;
         *(u8 **)(door_vars + 8) = door_vars + 0x20;
         *(u32 *)(door_vars + 0x5C) |= 1;
@@ -432,8 +437,8 @@ void update_two_door_gate(struct Moby *moby) {
         door_moby->pos.z -= 4.0f;
         door_rotation_target = gate_vars->right;
         qcopy(&door_rotation_target->rot, &moby->rot);
-        door_rotation_target->rot.x = gate_door_x_rotation_degrees * 0.017453292f;
-        gate_vars->right->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
+        door_rotation_target->rot.x = gate_door_x_rotation_degrees_gp * 0.017453292f;
+        gate_vars->right->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
         door_vars = gate_vars->right->pvars;
         *(u8 **)(door_vars + 8) = door_vars + 0x20;
         *(u32 *)(door_vars + 0x5C) |= 1;
@@ -467,7 +472,7 @@ void update_two_door_gate(struct Moby *moby) {
         float a;
         advance_accelerated_scalar(&gate_vars->t, &gate_vars->speed, 1.0f, frame_time_sq * 10.0f, frame_time_sq * 20.0f,
                                    frame_time * 10.0f);
-        a = (1.0f - gate_vars->t) * (gate_door_y_rotation_degrees * 0.017453292f);
+        a = (1.0f - gate_vars->t) * (gate_door_y_rotation_degrees_gp * 0.017453292f);
         gate_vars->left->rot.y = a;
         gate_vars->right->rot.y = a;
         FUN_L00_00250df8(gate_vars->left);
@@ -500,14 +505,14 @@ void update_two_door_gate(struct Moby *moby) {
     case GATE_APPLY_CONFIGURED_DOOR_POSE:
         fast_vec_normalize(door_position_offset, &moby->rot_row0, 0.5f);
         fast_vec_add(&gate_vars->left->pos, &moby->pos, door_position_offset);
-        gate_vars->left->pos.z = moby->pos.z + gate_door_z_offset;
-        gate_vars->left->rot.x = -(gate_door_x_rotation_degrees * 0.017453292f);
-        gate_vars->left->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
+        gate_vars->left->pos.z = moby->pos.z + gate_door_z_offset_gp;
+        gate_vars->left->rot.x = -(gate_door_x_rotation_degrees_gp * 0.017453292f);
+        gate_vars->left->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
         FUN_L00_00250df8(gate_vars->left);
         fast_vec_add(&gate_vars->right->pos, &moby->pos, door_position_offset);
-        gate_vars->right->pos.z = moby->pos.z + gate_door_z_offset;
-        gate_vars->right->rot.x = gate_door_x_rotation_degrees * 0.017453292f;
-        gate_vars->right->rot.y = gate_door_y_rotation_degrees * 0.017453292f;
+        gate_vars->right->pos.z = moby->pos.z + gate_door_z_offset_gp;
+        gate_vars->right->rot.x = gate_door_x_rotation_degrees_gp * 0.017453292f;
+        gate_vars->right->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
         FUN_L00_00250df8(gate_vars->right);
         break;
     }
@@ -532,6 +537,7 @@ struct L11ChainVars {
     s32 sound;               /* 0xF4 */
 };
 
+extern float oil_tanker_path_progress_step_gp __asm__("D_L11_00162320") __attribute__((sda));
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
@@ -609,7 +615,7 @@ void oil_tanker_front_update(struct Moby *moby) {
     case OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE: {
         int i;
 
-        chain_vars->t += oil_tanker_path_progress_step;
+        chain_vars->t += oil_tanker_path_progress_step_gp;
         if (chain_vars->t > 1.0f) {
             chain_vars->t -= 1.0f;
             chain_vars->point = (chain_vars->point + 1) % *(s32 *)chain_vars->path;
@@ -768,6 +774,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
 }
 extern char D_00141C18[];
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
+extern float oil_tanker_head_fragment_velocity_scale_gp __asm__("D_L11_00162330") __attribute__((sda));
 extern struct Moby *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -830,7 +837,7 @@ void process_oil_tanker_damage_and_destruction(struct Moby *moby) {
             char *head_position = (char *)&moby->pos;
             float *dv;
             char *head_rotation;
-            fast_vec_scale(fragment_initial_velocity, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, oil_tanker_head_fragment_velocity_scale * frame_scale));
+            fast_vec_scale(fragment_initial_velocity, &moby->rot_row0, (dv = D_L11_0015F580, head_rotation = (char *)&moby->rot, oil_tanker_head_fragment_velocity_scale_gp * frame_scale));
             fragment_initial_velocity[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
             cart_burst(moby, head_position, -1, 3.0f, 13.0f);
@@ -1829,6 +1836,9 @@ void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index)
         FUN_L00_001fde98(element_counts[i], triple_word_source_tables[i], word_source_tables[i], D_L11_001FF770, 1);
     }
 }
+extern int layered_effect_texture_2c_fixed_alpha_gp __asm__("D_L11_001624F8") __attribute__((sda));
+extern int layered_effect_texture_2a_pair_zero_fixed_alpha_gp __asm__("D_L11_00162518") __attribute__((sda));
+extern int layered_effect_texture_2b_fixed_alpha_gp __asm__("D_L11_00162528") __attribute__((sda));
 extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
 extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
@@ -1848,7 +1858,7 @@ void draw_level11_layered_effect_batches(void) {
     vu1_add_g_sregister_31db50(0x47, 0x513F1);
     FUN_001f76a0_31db50();
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2C));
-    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2c_fixed_alpha << 32 | 0x44);
+    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2c_fixed_alpha_gp << 32 | 0x44);
     emit_level11_layered_effect_batches_with_pair_offset(0);
     if (D_L11_0016258C[4] != 0) {
         vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x29));
@@ -1860,12 +1870,12 @@ void draw_level11_layered_effect_batches(void) {
         emit_level11_layered_effect_batches_with_pair_offset(2);
     }
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2A));
-    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2a_pair_zero_fixed_alpha << 32 | 0x48);
+    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2a_pair_zero_fixed_alpha_gp << 32 | 0x48);
     emit_pair_offset_render_batch(0);
     vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2a_pair_one_fixed_alpha << 32 | 0x48);
     emit_pair_offset_render_batch(1);
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2B));
-    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2b_fixed_alpha << 32 | 0x48);
+    vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2b_fixed_alpha_gp << 32 | 0x48);
     FUN_L08_002f0c18(0);
     vu1_add_g_sregister_31db50(0x47, 0x5360B);
 }
@@ -1891,8 +1901,10 @@ extern char D_L11_00162570[4] __attribute__((sda));
 extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
+extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
 extern float D_L11_001624F4;
 extern char D_L11_00167680[];
+extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
@@ -1920,11 +1932,11 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
 
     switch (moby->state) {
     case EFFECT_INITIALIZE:
-        if (layered_effect_color_tables_initialized == 0) {
+        if (layered_effect_color_tables_initialized_gp == 0) {
             scale_rgba_tables(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             scale_rgba_tables(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L11_001FF730, 8, D_L11_001F9A78, 0.25f, 0.25f, 0.25f, 0.7f, 1);
-            layered_effect_color_tables_initialized = 1;
+            layered_effect_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -1946,7 +1958,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         reference_position_base = D_L11_00167680;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
-        effect_bounds[0] = layered_effect_position_x;
+        effect_bounds[0] = layered_effect_position_x_gp;
         effect_bounds[1] = layered_effect_position_y;
         effect_bounds[2] = layered_effect_position_z;
         effect_bounds[3] = D_L11_001624F4;
@@ -1954,7 +1966,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
-        effect_to_reference_delta[0] = layered_effect_position_x;
+        effect_to_reference_delta[0] = layered_effect_position_x_gp;
         effect_to_reference_delta[1] = layered_effect_position_y;
         effect_to_reference_delta[2] = layered_effect_position_z;
         effect_to_reference_delta[3] = 1.0f;
@@ -2066,8 +2078,10 @@ extern s32 D_L11_00215220[];
 extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
+extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
 extern float D_L11_001625C4;
 extern char D_L11_00167680[];
+extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
@@ -2095,11 +2109,11 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
 
     switch (moby->state) {
     case EFFECT_INITIALIZE:
-        if (distance_faded_effect_color_tables_initialized == 0) {
+        if (distance_faded_effect_color_tables_initialized_gp == 0) {
             scale_rgba_tables(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             scale_rgba_tables(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L11_002078D8, 9, D_L11_00200728, 0.25f, 0.25f, 0.25f, 0.7f, 1);
-            distance_faded_effect_color_tables_initialized = 1;
+            distance_faded_effect_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -2121,7 +2135,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         reference_position_base = D_L11_00167680;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
-        effect_bounds[0] = distance_faded_effect_position_x;
+        effect_bounds[0] = distance_faded_effect_position_x_gp;
         effect_bounds[1] = distance_faded_effect_position_y;
         effect_bounds[2] = distance_faded_effect_position_z;
         effect_bounds[3] = D_L11_001625C4;
@@ -2129,7 +2143,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
-        effect_to_reference_delta[0] = distance_faded_effect_position_x;
+        effect_to_reference_delta[0] = distance_faded_effect_position_x_gp;
         effect_to_reference_delta[1] = distance_faded_effect_position_y;
         effect_to_reference_delta[2] = distance_faded_effect_position_z;
         effect_to_reference_delta[3] = 1.0f;

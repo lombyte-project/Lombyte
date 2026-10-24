@@ -235,6 +235,9 @@ typedef struct {
 } BlobHitInfo;
 
 #include "rnc/overlay/l01/gameplay/entities/tall_shroom_globals.h"
+extern f32 explosive_moby_gravity_coefficient_gp __asm__("D_L01_00162058") __attribute__((sda));
+extern f32 explosive_moby_velocity_multiplier_gp __asm__("D_L01_0016205C") __attribute__((sda));
+extern f32 explosive_moby_horizontal_damping_threshold_gp __asm__("D_L01_00162060") __attribute__((sda));
 extern BlobHitInfo D_L01_001742C0;
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
@@ -274,16 +277,16 @@ void update_explosive_moby(struct Moby *moby) {
         enqueue_callback_list_1(draw_moby_offset_textured_quad, moby);
     }
     add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
-    if (FUN_001f99c0(blob_vars->vel.x) > explosive_moby_horizontal_damping_threshold * frame_scale) {
-        blob_vars->vel.x *= (explosive_moby_velocity_multiplier - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.x) > explosive_moby_horizontal_damping_threshold_gp * frame_scale) {
+        blob_vars->vel.x *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
-    if (FUN_001f99c0(blob_vars->vel.y) > explosive_moby_horizontal_damping_threshold * frame_scale) {
-        blob_vars->vel.y *= (explosive_moby_velocity_multiplier - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.y) > explosive_moby_horizontal_damping_threshold_gp * frame_scale) {
+        blob_vars->vel.y *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
     if (blob_vars->vel.z > 0.0f) {
-        blob_vars->vel.z *= (explosive_moby_velocity_multiplier - 1.0f) * frame_scale + 1.0f;
+        blob_vars->vel.z *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
-    blob_vars->vel.z -= explosive_moby_gravity_coefficient * frame_time_sq;
+    blob_vars->vel.z -= explosive_moby_gravity_coefficient_gp * frame_time_sq;
     moby->rot.x = fast_add_rotations(moby->rot.x, blob_vars->spin.x);
     moby->rot.y = fast_add_rotations(moby->rot.y, blob_vars->spin.y);
     moby->rot.z = fast_add_rotations(moby->rot.z, blob_vars->spin.z);

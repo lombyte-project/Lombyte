@@ -938,6 +938,8 @@ typedef struct {
 extern struct Moby *sound_probe_ignore[] __asm__("D_0013E5BC");
 extern s32 D_0015EDDC;
 #include "rnc/overlay/l09/gameplay/entities/elevator_globals.h"
+extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute__((sda));
+extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
 extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
@@ -1193,8 +1195,8 @@ void turret_update(struct Moby *moby) {
             moby->flags |= 4;
             FUN_L08_00313ba8();
             moby_point_position(moby, 0, &work_vector);
-            build_spherical_offset(&shot, turret_camera_offset_length, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
-            shot.f[2] += turret_camera_z_offset;
+            build_spherical_offset(&shot, turret_camera_offset_length_gp, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
+            shot.f[2] += turret_camera_z_offset_gp;
             add_vector_xyz(&muzzle, &work_vector, &shot);
             FUN_L00_002ea9d8(&muzzle);
             firing_vector_or_camera_rotation.f[0] = 0.0f;
@@ -1447,6 +1449,9 @@ typedef struct {
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
+extern float floating_ship_piece_hero_offset_tilt_gain_gp __asm__("D_L09_00161DC4") __attribute__((sda));
+extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attribute__((sda));
+extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC") __attribute__((sda));
 extern float D_L09_00161DD4 __attribute__((sda));
 extern float D_L09_00161DD8 __attribute__((sda));
 extern float D_L09_00161DDC __attribute__((sda));
@@ -1557,7 +1562,7 @@ void update_floating_ship_piece(char *moby) {
             deg_to_rad = 0.0174532924f;
             side_dot = fast_vec_dot(hero_offset, moby + 0xC0);
             front_dot = fast_vec_dot(hero_offset, moby + 0xD0);
-            tilt = floating_ship_piece_hero_offset_tilt_gain;
+            tilt = floating_ship_piece_hero_offset_tilt_gain_gp;
             pitch_target = tilt * side_dot;
             *(u128_30A560 *)old_angles = *(u128_30A560 *)(data + 0x60);
             *(u128_30A560 *)old_pos = *(u128_30A560 *)(moby + 0x10);
@@ -1569,7 +1574,7 @@ void update_floating_ship_piece(char *moby) {
                               D_L09_00161DD4 * deg_to_rad * frame_time_sq,
                               D_L09_00161DD8 * frame_scale_sq,
                               D_L09_00161DDC * deg_to_rad * frame_time);
-            new_z = *(float *)(moby + 0x18) - floating_ship_piece_sink_speed * frame_time;
+            new_z = *(float *)(moby + 0x18) - floating_ship_piece_sink_speed_gp * frame_time;
             *(float *)(moby + 0x18) = new_z;
             if (sink_level < old_z && new_z <= sink_level) {
                 func_0022ED80_30A560(1, 0, moby);
@@ -1579,7 +1584,7 @@ void update_floating_ship_piece(char *moby) {
             ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] = ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
         } else {
             float rise;
-            ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + (rise = floating_ship_piece_height_return_rate * frame_time) * (*(float *)(data + 0x84) - ((Mpos_30A560 *)moby)->z);
+            ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + (rise = floating_ship_piece_height_return_rate_gp * frame_time) * (*(float *)(data + 0x84) - ((Mpos_30A560 *)moby)->z);
             if (((Mpos_30A560 *)moby)->z < *(float *)(data + 0x84) - 2.0f) {
                 float deg_to_rad;
                 ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + rise;

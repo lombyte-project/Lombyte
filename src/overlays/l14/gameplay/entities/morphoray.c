@@ -102,6 +102,9 @@ extern Coll_0e00 D_L14_00174540;
 extern int D_L14_00174558 __attribute__((section(".data")));
 extern int D_L14_0016208C_0e00 __asm__("D_L14_0016208C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/morphoray_globals.h"
+extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__((sda));
+extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
+extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
 extern float D_L14_001620A4 __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
@@ -201,9 +204,9 @@ void update_bouncing_spark(struct Moby *spark_moby)
       {
         qcopy(&spark_moby->pos, &next);
       }
-      if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, spark_contact_clearance) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
+      if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, spark_contact_clearance_gp) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
       {
-        normalize_0e00(&position_scratch, &D_L14_00174540.normal, spark_contact_clearance);
+        normalize_0e00(&position_scratch, &D_L14_00174540.normal, spark_contact_clearance_gp);
         add_0e00(&spark_moby->pos, &D_L14_00174540.hit, &position_scratch);
         reflect_0e00(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
         sound_0e00(1, 0, spark_moby);
@@ -218,9 +221,9 @@ void update_bouncing_spark(struct Moby *spark_moby)
           else
           {
             scale_0e00(&from, &spark_data->vel, D_L14_001620A0);
-            if (length_0e00(&from) < (spark_minimum_speed * frame_time))
+            if (length_0e00(&from) < (spark_minimum_speed_gp * frame_time))
             {
-              cap_0e00(&spark_data->vel, &spark_data->vel, spark_minimum_speed * frame_time);
+              cap_0e00(&spark_data->vel, &spark_data->vel, spark_minimum_speed_gp * frame_time);
               spark_data->vel.z *= D_L14_001620A0;
             }
             else
@@ -236,7 +239,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
           spark_data->vel.z = 0.0f;
           spark_data->vel.w = length_0e00(&spark_data->vel);
           spark_data->vel.w *= D_L14_001620A0;
-          min = spark_minimum_speed * frame_time;
+          min = spark_minimum_speed_gp * frame_time;
           if (spark_data->vel.w < min)
           {
             spark_data->vel.w = min;
@@ -262,8 +265,8 @@ void update_bouncing_spark(struct Moby *spark_moby)
       b = ftoi_0e00(((((Rgb_0e00 *) (&next))->b - 0.0f) * fade_fraction) + 0.0f);
       spark_moby->glow_color = 0xFF000000;
       spark_moby->glow_color = (((b << 16) | spark_moby->glow_color) | (g << 8)) | r;
-      min = spark_minimum_speed * frame_time;
-      spark_data->vel.w *= ((spark_rolling_speed_factor - 1.0f) * frame_scale) + 1.0f;
+      min = spark_minimum_speed_gp * frame_time;
+      spark_data->vel.w *= ((spark_rolling_speed_factor_gp - 1.0f) * frame_scale) + 1.0f;
       if (spark_data->vel.w < min)
       {
         spark_data->vel.w = min;
@@ -313,6 +316,7 @@ extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
+extern float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") __attribute__((sda));
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
 
 char *create_bouncing_spark(int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
@@ -336,7 +340,7 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         initial_yaw = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
-        scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier;
+        scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier_gp;
         *(float *)(moby + 0x48) = initial_yaw;
         *(float *)(moby + 0x2C) = scaled_moby_value;
         FUN_L00_00250df8_f(moby);
@@ -470,6 +474,9 @@ extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00305b18");
 
 extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18");
+extern f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") __attribute__((sda));
+extern f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") __attribute__((sda));
+extern f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") __attribute__((sda));
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -506,14 +513,14 @@ void morphoray_update(struct Moby *moby) {
         probe_ground_height(moby_bytes + 0x10, 0, 0.5f);
         moby->rot.x = 0.0f;
         moby->rot.y = -1.5707964f;
-        moby->pos.z = D_L14_00174568[0] + morphoray_ground_height_offset;
+        moby->pos.z = D_L14_00174568[0] + morphoray_ground_height_offset_gp;
         qcopy(morphoray_pvars, moby_bytes + 0x10);
         moby->state = 1;
         break;
     case MORPHORAY_WAIT_FOR_HERO:
-        *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), morphoray_yaw_step);
+        *(f32 *)(moby_bytes + 0x48) = fast_add_rotations(*(f32 *)(moby_bytes + 0x48), morphoray_yaw_step_gp);
         qcopy(moby_bytes + 0x10, morphoray_pvars);
-        scale_vector_xyz(position_offset, moby_bytes + 0xd0, morphoray_position_offset_scale);
+        scale_vector_xyz(position_offset, moby_bytes + 0xd0, morphoray_position_offset_scale_gp);
         add_vector_xyz(moby_bytes + 0x10, moby_bytes + 0x10, position_offset);
         update_morphoray_particles(moby);
         if (D_L14_0015F5CC % 10 != 0)
@@ -964,6 +971,7 @@ extern void FUN_L14_003135b8_6ee0(void *) __asm__("FUN_L14_003135b8");
 extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
+extern int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") __attribute__((sda));
 extern float D_L14_00162290 __attribute__((sda));
 extern float D_L14_00162294 __attribute__((sda));
 extern float D_L14_00162298 __attribute__((sda));
@@ -1021,7 +1029,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
         flying_car_moby->update_dist = 0xFF;
         flying_car_moby->draw_dist = 0xFF;
         flying_car_data->sound = -1;
-        flying_car_data->timer = scale_ticks_6ee0(flying_car_path_reset_delay_frames);
+        flying_car_data->timer = scale_ticks_6ee0(flying_car_path_reset_delay_frames_gp);
         flying_car_data->fB0 = 0;
         flying_car_data->fB4 = 0;
         flying_car_data->fBC = 0;
@@ -1097,7 +1105,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
             FUN_L00_002502f0_6ee0(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
             flying_car_moby->flags &= 0xFFBE;
             flying_car_moby->collision = flying_car_moby->pclass->collision;
-            flying_car_data->timer = scale_ticks_6ee0(flying_car_path_reset_delay_frames);
+            flying_car_data->timer = scale_ticks_6ee0(flying_car_path_reset_delay_frames_gp);
             flying_car_moby->state = 2;
             flying_car_data->f70 = 0;
             flying_car_data->f74 = 0;

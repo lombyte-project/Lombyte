@@ -26,6 +26,7 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("F
 extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 
 #include "rnc/overlay/l12/gameplay/entities/platform_globals.h"
+extern int next_water_tile_index_gp __asm__("D_L12_00151388") __attribute__((sda));
 extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void slot_limit_c(int) __asm__("FUN_001e93b0");
@@ -71,8 +72,8 @@ void update_level_12_water_tile(struct Moby *moby) {
     int i;
     switch (state) {
     case SLOT_INITIALIZE:
-        i = (data[3] = next_water_tile_index) + 1;
-        next_water_tile_index = i;
+        i = (data[3] = next_water_tile_index_gp) + 1;
+        next_water_tile_index_gp = i;
         if (i > 0x7f) {
             slot_limit_c((int)D_L12_0020BC90);
         }
@@ -125,7 +126,7 @@ void update_level_12_water_tile(struct Moby *moby) {
         moby->state = 1;
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
-        next_water_tile_index = 0;
+        next_water_tile_index_gp = 0;
         initialize_level_12_slot_grid_neighbors(data[3]);
         moby->state = 2;
         *(float *)(data + 4) = moby->pos.z;
@@ -353,6 +354,20 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern float spark_scatter_vertical_z_range_start_gp __asm__("D_L12_00161888") __attribute__((sda));
+extern float spark_scatter_vertical_z_range_end_gp __asm__("D_L12_0016188C") __attribute__((sda));
+extern float spark_scatter_radial_z_range_start_gp __asm__("D_L12_00161890") __attribute__((sda));
+extern float spark_scatter_radial_z_range_end_gp __asm__("D_L12_00161894") __attribute__((sda));
+extern float spark_scatter_radial_xy_scale_range_start_gp __asm__("D_L12_00161898") __attribute__((sda));
+extern float spark_scatter_radial_xy_scale_range_end_gp __asm__("D_L12_0016189C") __attribute__((sda));
+extern float spark_scatter_vertical_vector_w_gp __asm__("D_L12_001618A0") __attribute__((sda));
+extern float spark_scatter_radial_vector_w_gp __asm__("D_L12_001618A4") __attribute__((sda));
+extern int spark_scatter_frame_count_range_start_gp __asm__("D_L12_001618AC") __attribute__((sda));
+extern int spark_scatter_frame_count_range_end_gp __asm__("D_L12_001618B0") __attribute__((sda));
+extern int spark_scatter_second_frame_count_range_start_gp __asm__("D_L12_001618B4") __attribute__((sda));
+extern int spark_scatter_second_frame_count_range_end_gp __asm__("D_L12_001618B8") __attribute__((sda));
+extern int spark_scatter_third_frame_count_range_start_gp __asm__("D_L12_001618BC") __attribute__((sda));
+extern int spark_scatter_third_frame_count_range_end_gp __asm__("D_L12_001618C0") __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
@@ -375,25 +390,25 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
         spark_position[0] = spark_position[0] + random_float_between_alt(-0.25f, 0.25f);
         spark_position[1] = spark_position[1] + random_float_between_alt(-0.25f, 0.25f);
         clear_u64_value(vertical_spark_vector);
-        radial_spark_vector[0] = fast_cos(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start,
-                                                        spark_scatter_radial_xy_scale_range_end) *
+        radial_spark_vector[0] = fast_cos(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start_gp,
+                                                        spark_scatter_radial_xy_scale_range_end_gp) *
                                frame_time);
-        radial_spark_vector[1] = fast_sin(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start,
-                                                        spark_scatter_radial_xy_scale_range_end) *
+        radial_spark_vector[1] = fast_sin(radial_angle_radians) * (random_float_between_alt(spark_scatter_radial_xy_scale_range_start_gp,
+                                                        spark_scatter_radial_xy_scale_range_end_gp) *
                                frame_time);
         *(int *)&radial_spark_vector[2] = 0;
-        vertical_spark_vector[2] = random_float_between_alt(spark_scatter_vertical_z_range_start, spark_scatter_vertical_z_range_end) *
+        vertical_spark_vector[2] = random_float_between_alt(spark_scatter_vertical_z_range_start_gp, spark_scatter_vertical_z_range_end_gp) *
                 frame_time;
-        radial_spark_vector[2] = random_float_between_alt(spark_scatter_radial_z_range_start, spark_scatter_radial_z_range_end) *
+        radial_spark_vector[2] = random_float_between_alt(spark_scatter_radial_z_range_start_gp, spark_scatter_radial_z_range_end_gp) *
                 frame_time;
-        vertical_spark_vector[3] = spark_scatter_vertical_vector_w;
-        radial_spark_vector[3] = spark_scatter_radial_vector_w;
-        frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_frame_count_range_start,
-                                                     (float)spark_scatter_frame_count_range_end));
-        second_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_second_frame_count_range_start,
-                                                     (float)spark_scatter_second_frame_count_range_end));
-        third_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_third_frame_count_range_start,
-                                                     (float)spark_scatter_third_frame_count_range_end));
+        vertical_spark_vector[3] = spark_scatter_vertical_vector_w_gp;
+        radial_spark_vector[3] = spark_scatter_radial_vector_w_gp;
+        frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_frame_count_range_start_gp,
+                                                     (float)spark_scatter_frame_count_range_end_gp));
+        second_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_second_frame_count_range_start_gp,
+                                                     (float)spark_scatter_second_frame_count_range_end_gp));
+        third_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_third_frame_count_range_start_gp,
+                                                     (float)spark_scatter_third_frame_count_range_end_gp));
         spawn_spark(spark_position, vertical_spark_vector, radial_spark_vector, D_L12_001618C4, D_L12_001618C8, frame_count, second_frame_count, third_frame_count,
                      D_L12_001618CC);
     } while (--i >= 0);
@@ -461,6 +476,8 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c2(void *, int, float) __asm__("func_00213508");
+extern float hoven_anklebiter_leap_launch_speed_gp __asm__("D_L12_001618D8") __attribute__((sda));
+extern float hoven_anklebiter_leap_gravity_gp __asm__("D_L12_001618DC") __attribute__((sda));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00259740(void *, void *, int);
 extern int FUN_L00_002dc9f0();
@@ -680,8 +697,8 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         if((fast_vec_length(work.v0)<data->range&&func_001F9B88_2E2EF0(data->home[2]-target->pos[2])<8.0f)||moby->proximity==2) {
             if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,2);
             moby->joints=0x40; data->zero=0.0f;
-            data->gravity=hoven_anklebiter_leap_gravity*D_0015ED70; data->launch_speed=hoven_anklebiter_leap_launch_speed*D_0015ED6C;
-            data->launch_time=func_L00_0025BC48_2E2EF0(moby->pos,data->home,&trajectory,data->launch_speed,-hoven_anklebiter_leap_gravity);
+            data->gravity=hoven_anklebiter_leap_gravity_gp*D_0015ED70; data->launch_speed=hoven_anklebiter_leap_launch_speed_gp*D_0015ED6C;
+            data->launch_time=func_L00_0025BC48_2E2EF0(moby->pos,data->home,&trajectory,data->launch_speed,-hoven_anklebiter_leap_gravity_gp);
             data->fall_mode=5; data->falling=0;
             setup_fall54(moby->rot[2],(char *)moby,data->fall,8,1,0);
             data->fall_a=5.0f; data->fall_b=10.0f; moby->state=12; moby->flags|=0x1000;
@@ -1154,6 +1171,7 @@ extern void appr_k(void *, float, float) __asm__("FUN_00213ed8");
 extern float turn_k(float *, float, float *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
+extern float platform_tilt_approach_divisor_gp __asm__("D_L12_00161918") __attribute__((sda));
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) {
@@ -1181,8 +1199,8 @@ void steer_platform_toward_target(char *moby, float *target_angles, void *target
             speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
     }
     norm_k(moby_vars + 0x40, target_offset, speed);
-    appr_k(moby + 0x40, target_angles[0], diff_k(target_angles[0], *(float *)(moby + 0x40)) / platform_tilt_approach_divisor);
-    appr_k(moby + 0x44, target_angles[1], diff_k(target_angles[1], *(float *)(moby + 0x44)) / platform_tilt_approach_divisor);
+    appr_k(moby + 0x40, target_angles[0], diff_k(target_angles[0], *(float *)(moby + 0x40)) / platform_tilt_approach_divisor_gp);
+    appr_k(moby + 0x44, target_angles[1], diff_k(target_angles[1], *(float *)(moby + 0x44)) / platform_tilt_approach_divisor_gp);
     turn_k((float *)(moby + 0x48), target_angles[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
            D_0015ED6C_k * yaw_angular_velocity_limit);
     add_k(moby + 0x10, moby + 0x10, moby_vars + 0x40);
@@ -1196,6 +1214,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
+extern float platform_tilt_offset_divisor_gp __asm__("D_L12_00161914") __attribute__((sda));
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
 
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
@@ -1210,7 +1229,7 @@ void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
         inverse_yaw_angles[2] = -moby->rot.z;
         euler_rotation_matrix(inverse_yaw_matrix, inverse_yaw_angles);
         transform_vector(reference_offset, reference_offset, inverse_yaw_matrix);
-        offset_scale_divisor = platform_tilt_offset_divisor;
+        offset_scale_divisor = platform_tilt_offset_divisor_gp;
         out[1] = reference_offset[0] / offset_scale_divisor;
         out[0] = -reference_offset[1] / offset_scale_divisor;
     } else {
@@ -3118,6 +3137,7 @@ void edwina_update(L16WatchMoby *moby) {
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
 extern char D_0013D408[];
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern int helicopter_help_message_hit_count_gp __asm__("D_0015EE04") __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -3135,8 +3155,8 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
     unsigned char *help_message_state;
     if (find_moby_hit(moby, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
-            helicopter_help_message_hit_count += 1;
-            if (helicopter_help_message_hit_count >= 5) {
+            helicopter_help_message_hit_count_gp += 1;
+            if (helicopter_help_message_hit_count_gp >= 5) {
                 help_message_state = (unsigned char *)(D_0013D408);
                 if (help_message_state[0x15] == 0) {
                     help_message_state[0x15] = 1;
@@ -3184,7 +3204,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
 extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
 
+extern float helicopter_path_speed_gp __asm__("D_L12_001619A8") __attribute__((sda));
 extern float D_L12_001619AC __attribute__((sda));
+extern float helicopter_rotation_smoothing_divisor_gp __asm__("D_L12_001619B0") __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
 void helicopter_update(char *moby) {
     enum {
@@ -3242,8 +3264,8 @@ void helicopter_update(char *moby) {
             segment_heading_delta = fast_subtract_rotations(segment_heading_delta, fast_arc_tan(B[0], B[1]));
             segment_heading_delta_per_distance = segment_heading_delta / vector_length_xyz_c(A);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40),
-                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / helicopter_rotation_smoothing_divisor);
-            if (distance_xyz(moby + 0x10, C) < helicopter_path_speed * D_0015ED6C) {
+                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / helicopter_rotation_smoothing_divisor_gp);
+            if (distance_xyz(moby + 0x10, C) < helicopter_path_speed_gp * D_0015ED6C) {
                 char *path;
                 *(int *)(moby_vars + 0x60) = next;
                 path = *(char **)(path_state + 0x10);
@@ -3252,10 +3274,10 @@ void helicopter_update(char *moby) {
                 }
             }
             subtract_vector_xyz_c(E, C, moby + 0x10);
-            normalize_vector_xyz(E, E, helicopter_path_speed * D_0015ED6C);
+            normalize_vector_xyz(E, E, helicopter_path_speed_gp * D_0015ED6C);
             add_vector_xyz_c2(moby + 0x10, moby + 0x10, E);
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48),
-                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / helicopter_rotation_smoothing_divisor);
+                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / helicopter_rotation_smoothing_divisor_gp);
             *(float *)(moby + 0x44) = 0.52359879f;
             break;
         }

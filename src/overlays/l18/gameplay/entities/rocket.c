@@ -117,6 +117,8 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 #include "rnc/overlay/l18/gameplay/entities/rocket_globals.h"
+extern float floating_platform_bob_amplitude_gp __asm__("D_L18_00161A48") __attribute__((sda));
+extern float floating_platform_bob_phase_rate_gp __asm__("D_L18_00161A4C") __attribute__((sda));
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
@@ -143,9 +145,9 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
         }
     }
     *(float *)(data + 0x74) = fast_add_rotations(*(float *)(data + 0x74),
-                                           floating_platform_bob_phase_rate * DEG_TO_RAD * frame_time);
+                                           floating_platform_bob_phase_rate_gp * DEG_TO_RAD * frame_time);
     moby->pos.z = *(float *)(data + 0x64) +
-                              floating_platform_bob_amplitude * fast_sin(*(float *)(data + 0x74));
+                              floating_platform_bob_amplitude_gp * fast_sin(*(float *)(data + 0x74));
 }
 #define NOT_SDA
 
@@ -185,6 +187,7 @@ extern void draw_class_274_ring_effect() __asm__("FUN_L18_002dc4b8");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
+extern float class_274_ring_phase_rate_gp __asm__("D_L18_00161CA0") __attribute__((sda));
 void update_class_274_ring_effect(struct Moby *moby) __asm__("FUN_L18_002dc260");
 
 void update_class_274_ring_effect(struct Moby *moby) {
@@ -210,7 +213,7 @@ void update_class_274_ring_effect(struct Moby *moby) {
         record_moby_hit(*(int *)(target_position + 0x2000), hit_descriptor);
     }
     flag = game_frame & 4;
-    moby_vars[1] = moby_vars[1] + class_274_ring_phase_rate * frame_time;
+    moby_vars[1] = moby_vars[1] + class_274_ring_phase_rate_gp * frame_time;
     if (flag == 0) {
         play_entity_sound(*(int *)(moby_vars + 3), moby_vars[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
     }
@@ -558,6 +561,7 @@ void update_rocket_moby(struct Moby *moby) {
     }
 }
 /* Spawns a moby that travels along a path, with its heading set from the direction vector. */
+extern float rocket_spawn_scale_multiplier_gp __asm__("D_L18_00161960") __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
@@ -572,7 +576,7 @@ char *create_rocket_moby(float *rocket_spawn_position, float *initial_movement_s
         moby[0x31] = 1;
         moby[0x20] = 0;
         set_moby_color(moby, 0xC0, 0xC0, 0xC0);
-        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * rocket_spawn_scale_multiplier;
+        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * rocket_spawn_scale_multiplier_gp;
         qcopy(moby + 0x10, rocket_spawn_position);
         data = *(char **)(moby + 0x78);
         qcopy(data, initial_movement_step);
@@ -638,6 +642,7 @@ typedef struct {
     float v[4];
 } __attribute__((aligned(16))) QVec;
 
+extern float rocket_explosion_hit_priority_gp __asm__("D_L18_0016196C") __attribute__((sda));
 
 void spawn_rocket_explosion(void *moby_object, void *movement_step) {
     char *moby = moby_object;
@@ -655,7 +660,7 @@ void spawn_rocket_explosion(void *moby_object, void *movement_step) {
                           0, -1, 0);
     if (hit_radius != 0.0f) {
         if (hero.vehicle_mode == 2) {
-            play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, rocket_explosion_hit_priority, 1.0f, 0, 1,
+            play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, rocket_explosion_hit_priority_gp, 1.0f, 0, 1,
                              0);
         }
     }
@@ -684,13 +689,15 @@ extern int D_L18_00161970 __attribute__((sda));
 extern int D_L18_00161974 __attribute__((sda));
 extern int D_L18_00161978 __attribute__((sda));
 extern int D_L18_0016197C __attribute__((sda));
+extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
+extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
     Pk_d5768 pk;
     char *d = (char *)m->pvars;
     unsigned int col;
     int i;
     col = fast_tween_color((fast_sin(fast_normalize_angle((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
-                          rocket_target_pulse_color_start, rocket_target_pulse_color_end);
+                          rocket_target_pulse_color_start_gp, rocket_target_pulse_color_end_gp);
     pk.b = get_effect_texture(0xD);
     pk.d = (unsigned long long)D_L18_00161970 | ((unsigned long long)D_L18_00161974 << 2) |
            ((unsigned long long)D_L18_00161978 << 4) | ((unsigned long long)D_L18_0016197C << 6) |
@@ -1166,6 +1173,8 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 void mmr_q(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L18_00161998 __attribute__((sda));
+extern float thruster_pack_lock_green_active_height_offset_gp __asm__("D_L18_0016199C") __attribute__((sda));
+extern float thruster_pack_lock_green_rest_height_offset_gp __asm__("D_L18_001619A0") __attribute__((sda));
 void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
 void thruster_pack_lock_green_update(char *moby) {
     enum {
@@ -1221,7 +1230,7 @@ void thruster_pack_lock_green_update(char *moby) {
         ((unsigned char *)moby)[0x20] = 1;
         {
             float base_height = *(float *)(moby + 0x18);
-            float u = thruster_pack_lock_green_rest_height_offset;
+            float u = thruster_pack_lock_green_rest_height_offset_gp;
             moby_vars->f10 = base_height;
             moby_vars->f34 = u;
         }
@@ -1263,12 +1272,12 @@ void thruster_pack_lock_green_update(char *moby) {
                                (*(float *)&D_L18_00161A6C) * 4.0f);
             } else {
                 float k = D_0015EE70;
-                advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_active_height_offset, k * 16.0f, k * 4.0f,
+                advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_active_height_offset_gp, k * 16.0f, k * 4.0f,
                                (*(float *)&D_L18_00161A6C) * 8.0f);
             }
-        } else if (moby_vars->f34 != thruster_pack_lock_green_rest_height_offset) {
+        } else if (moby_vars->f34 != thruster_pack_lock_green_rest_height_offset_gp) {
             float k = D_0015EE70;
-            advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_rest_height_offset, k * 16.0f, k * 4.0f,
+            advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_rest_height_offset_gp, k * 16.0f, k * 4.0f,
                            (*(float *)&D_L18_00161A6C) * 8.0f);
         } else {
             advance_accelerated_scalar(&moby_vars->f20, &moby_vars->f28, moby_vars->f24, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f,
@@ -1517,6 +1526,7 @@ extern float D_L18_00161A40 __attribute__((sda));
 extern float D_L18_00161A44 __attribute__((sda));
 extern float D_L18_00161A50 __attribute__((sda));
 extern float D_L18_00161A58 __attribute__((sda));
+extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C") __attribute__((sda));
 extern float D_L18_00161A60 __attribute__((sda));
 extern float D_L18_00161A64 __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
@@ -1600,7 +1610,7 @@ void floating_platform_update(struct Moby *moby) {
         if (*(int *)(data + 0x80) == 0) {
             break;
         }
-        if (vector_distance(&moby->pos, &hero.motion.pos) < floating_platform_sink_trigger_distance) {
+        if (vector_distance(&moby->pos, &hero.motion.pos) < floating_platform_sink_trigger_distance_gp) {
             moby->state = 5;
             *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
@@ -1759,6 +1769,9 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_p() __asm__("FUN_001fa6d0");
 extern short D_L18_00161BFC __attribute__((sda));
+extern int ballistic_ring_glow_color_end_gp __asm__("D_L18_00161C00") __attribute__((sda));
+extern float ballistic_ring_trail_spark_gravity_gp __asm__("D_L18_00161C04") __attribute__((sda));
+extern float ballistic_ring_trail_movement_step_scale_gp __asm__("D_L18_00161C08") __attribute__((sda));
 extern float D_L18_00161C0C __attribute__((sda));
 extern int D_L18_00161C10 __attribute__((sda));
 extern int D_L18_00161C14 __attribute__((sda));
@@ -1768,6 +1781,10 @@ extern float D_L18_00161C20 __attribute__((sda));
 extern float D_L18_00161C24;
 extern float D_L18_00161C28 __attribute__((sda));
 extern float D_L18_00161C2C __attribute__((sda));
+extern int ballistic_ring_trail_initial_color_start_gp __asm__("D_L18_00161C30") __attribute__((sda));
+extern int ballistic_ring_trail_second_color_start_gp __asm__("D_L18_00161C38") __attribute__((sda));
+extern int ballistic_ring_trail_second_color_end_gp __asm__("D_L18_00161C3C") __attribute__((sda));
+extern int ballistic_ring_trail_sparks_per_update_gp __asm__("D_L18_00161C40") __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
@@ -1804,9 +1821,9 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
     case STATE_BALLISTIC_FLIGHT: {
         float *cc;
         i = 0;
-        for (; i < ballistic_ring_trail_sparks_per_update; i++) {
+        for (; i < ballistic_ring_trail_sparks_per_update_gp; i++) {
             cc = spark_vector_offset;
-            scale_vector_xyz(first_spark_vector, moby_vars, ballistic_ring_trail_movement_step_scale);
+            scale_vector_xyz(first_spark_vector, moby_vars, ballistic_ring_trail_movement_step_scale_gp);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
             add_vector_xyz(first_spark_vector, cc, first_spark_vector);
             FUN_L00_00257d78(spark_spawn_position, 0.0f, 0.5f);
@@ -1814,9 +1831,9 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
             clear_vector(second_spark_vector);
             first_spark_vector[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
             second_spark_vector[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
-            i0 = FUN_001fa6e0(ballistic_ring_trail_initial_color_start, ballistic_ring_trail_initial_color_end,
+            i0 = FUN_001fa6e0(ballistic_ring_trail_initial_color_start_gp, ballistic_ring_trail_initial_color_end,
                               random_float_between(0.0f, 1.0f));
-            i1 = FUN_001fa6e0(ballistic_ring_trail_second_color_start, ballistic_ring_trail_second_color_end,
+            i1 = FUN_001fa6e0(ballistic_ring_trail_second_color_start_gp, ballistic_ring_trail_second_color_end_gp,
                               random_float_between(0.0f, 1.0f));
             i2 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C10 * random_float_between(0.0f, 1.0f) + 1.0f));
@@ -1828,12 +1845,12 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
                 (float)D_L18_00161C18 *
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
-            second_spark_vector[2] = second_spark_vector[2] - ballistic_ring_trail_spark_gravity * frame_time_sq * (float)i3;
+            second_spark_vector[2] = second_spark_vector[2] - ballistic_ring_trail_spark_gravity_gp * frame_time_sq * (float)i3;
             spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
-            int col = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end,
+            int col = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end_gp,
                                    (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
             float k = frame_time_sq * 10.0f;
             moby->glow_color = col;
@@ -1859,7 +1876,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
     }
     case STATE_GROUND_IMPACT_DELAY:
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
-        moby->glow_color = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end,
+        moby->glow_color = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end_gp,
                                              (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
         if (tick_countdown_32((int *)(moby_vars + 11))) {
             trooper_play_sound(0xF, 0, (int)moby, 0x58E);
@@ -1953,7 +1970,12 @@ extern int D_L18_00161C48 __attribute__((sda));
 extern int D_L18_00161C4C __attribute__((sda));
 extern int D_L18_00161C50 __attribute__((sda));
 extern int D_L18_00161C54 __attribute__((sda));
+extern int expanding_projectile_ring_color_start_gp __asm__("D_L18_00161C5C") __attribute__((sda));
+extern int expanding_projectile_ring_color_end_gp __asm__("D_L18_00161C60") __attribute__((sda));
+extern float expanding_projectile_ring_segment_angle_degrees_gp __asm__("D_L18_00161C64") __attribute__((sda));
+extern float expanding_projectile_ring_draw_height_offset_gp __asm__("D_L18_00161C68") __attribute__((sda));
 extern float D_L18_00161C6C __attribute__((sda));
+extern float expanding_projectile_ring_layer_radius_offset_gp __asm__("D_L18_00161C70") __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
 extern float D_L18_00161C7C __attribute__((sda));
@@ -1968,7 +1990,7 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
 
     unit_matrix_dba20(draw_matrix);
     qcopy(&draw_matrix[3], &moby->pos);
-    draw_matrix[3].f[2] += expanding_projectile_ring_draw_height_offset;
+    draw_matrix[3].f[2] += expanding_projectile_ring_draw_height_offset_gp;
     draw_matrix[3].f[3] = 1.0f;
     for (j = 0; j < 4; j++) {
         float fj;
@@ -1978,9 +2000,9 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         quad_packets[j].unk80 = 0xFF9000000260L;
         quad_packets[j].unk88 = (long)D_L18_00161C48 | ((long)D_L18_00161C4C << 2) | ((long)D_L18_00161C50 << 4) | ((long)D_L18_00161C54 << 6) | 0x8000000000L;
         layer_phase = moby_vars->f24 * D_L18_00161C74 + (float)j * 0.25f;
-        rad = moby_vars->f24 + expanding_projectile_ring_layer_radius_offset * (float)j;
+        rad = moby_vars->f24 + expanding_projectile_ring_layer_radius_offset_gp * (float)j;
         layer_phase = layer_phase - (float)truncate_dba20(layer_phase);
-        col = tween_color_dba20(expanding_projectile_ring_color_start, expanding_projectile_ring_color_end, layer_phase);
+        col = tween_color_dba20(expanding_projectile_ring_color_start_gp, expanding_projectile_ring_color_end_gp, layer_phase);
         color_fade_weight = layer_phase * D_L18_00161C78;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         col = tween_color_dba20(col & 0xFFFFFF, col, color_fade_weight);
@@ -2001,8 +2023,8 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
             } else {
                 quad_packets[j].corner[k].f[2] = -layer_phase * D_L18_00161C6C;
             }
-            corner_angle = add_rotations_dba20((float)(k >> 1) * (expanding_projectile_ring_segment_angle_degrees * 0.017453292f) - 3.14159f,
-                              expanding_projectile_ring_segment_angle_degrees * 0.25f * fj * 0.017453292f);
+            corner_angle = add_rotations_dba20((float)(k >> 1) * (expanding_projectile_ring_segment_angle_degrees_gp * 0.017453292f) - 3.14159f,
+                              expanding_projectile_ring_segment_angle_degrees_gp * 0.25f * fj * 0.017453292f);
             quad_packets[j].corner[k].f[0] = cos_dba20(corner_angle) * rad;
             quad_packets[j].corner[k].f[1] = sin_dba20(corner_angle) * rad;
             quad_packets[j].corner[k].f[3] = 1.0f;
@@ -2010,9 +2032,9 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         }
     }
     clear_vector_dba20(&rv);
-    rv.f[2] = expanding_projectile_ring_segment_angle_degrees * 0.017453292f;
+    rv.f[2] = expanding_projectile_ring_segment_angle_degrees_gp * 0.017453292f;
     euler_basis_dba20(segment_rotation_basis, &rv);
-    for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / expanding_projectile_ring_segment_angle_degrees; ring_segment_index++) {
+    for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / expanding_projectile_ring_segment_angle_degrees_gp; ring_segment_index++) {
         draw_quad_dba20(&quad_packets[0], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[1], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[2], draw_matrix, 0);
@@ -2069,6 +2091,13 @@ extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
+extern float ring_segment_particle_cull_depth_limit_gp __asm__("D_L18_00161BF4") __attribute__((sda));
+extern int ring_segment_particle_color_start_gp __asm__("D_L18_00161C80") __attribute__((sda));
+extern int ring_segment_particle_color_end_gp __asm__("D_L18_00161C84") __attribute__((sda));
+extern float ring_segment_particle_scale_gp __asm__("D_L18_00161C88") __attribute__((sda));
+extern int ring_segment_radial_particle_lifetime_frames_gp __asm__("D_L18_00161C8C") __attribute__((sda));
+extern int ring_segment_horizontal_particle_lifetime_frames_gp __asm__("D_L18_00161C90") __attribute__((sda));
+extern float ring_segment_particle_spawn_probability_gp __asm__("D_L18_00161C98") __attribute__((sda));
 void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_start, void *segment_end) __asm__("FUN_L18_002dc0c8");
 
 void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_start, void *segment_end) {
@@ -2080,20 +2109,20 @@ void spawn_expanding_ring_segment_particles(struct Moby *moby, void *segment_sta
 
     lerp_vector(segment_bounding_sphere, segment_start, segment_end, 0.5f);
     segment_bounding_sphere[3] = FUN_001f9b48(segment_start, segment_end) * 0.5f;
-    if (fast_bsphere_check((char *)segment_bounding_sphere, ring_segment_particle_cull_depth_limit) == -1) {
+    if (fast_bsphere_check((char *)segment_bounding_sphere, ring_segment_particle_cull_depth_limit_gp) == -1) {
         return;
     }
-    if (random_float_between(0.0f, 1.0f) < ring_segment_particle_spawn_probability) {
+    if (random_float_between(0.0f, 1.0f) < ring_segment_particle_spawn_probability_gp) {
         lerp_vector(particle_spawn_position, segment_start, segment_end, random_float_between(0.0f, 1.0f));
         fast_vec_sub(particle_velocity, particle_spawn_position, &moby->pos);
         fast_vec_normalize(particle_velocity, particle_velocity, *(float *)(moby_vars + 0x20));
-        col = FUN_001fa6e0(ring_segment_particle_color_start, ring_segment_particle_color_end,
+        col = FUN_001fa6e0(ring_segment_particle_color_start_gp, ring_segment_particle_color_end_gp,
                            random_float_between(0.0f, 1.0f));
-        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(ring_segment_radial_particle_lifetime_frames) & 0xFF,
-                         random_integer_below(0xFF) & 0xFF, 0, ring_segment_particle_scale);
+        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(ring_segment_radial_particle_lifetime_frames_gp) & 0xFF,
+                         random_integer_below(0xFF) & 0xFF, 0, ring_segment_particle_scale_gp);
         particle_velocity[2] = 0.0f;
-        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(ring_segment_horizontal_particle_lifetime_frames) & 0xFF,
-                         random_integer_below(0xFF) & 0xFF, 0, ring_segment_particle_scale);
+        spawn_moving_hero_relative_alpha_fade_particle(particle_spawn_position, particle_velocity, col, scale_game_frames(ring_segment_horizontal_particle_lifetime_frames_gp) & 0xFF,
+                         random_integer_below(0xFF) & 0xFF, 0, ring_segment_particle_scale_gp);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD848), where it is exact; names translated to the US level program. */
@@ -2142,7 +2171,12 @@ extern int D_L18_00161CA4 __attribute__((sda));
 extern int D_L18_00161CA8 __attribute__((sda));
 extern int D_L18_00161CAC __attribute__((sda));
 extern int D_L18_00161CB0 __attribute__((sda));
+extern int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
+extern int class_274_ring_color_end_gp __asm__("D_L18_00161CBC") __attribute__((sda));
+extern float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") __attribute__((sda));
+extern float class_274_ring_draw_height_offset_gp __asm__("D_L18_00161CC4") __attribute__((sda));
 extern float D_L18_00161CC8 __attribute__((sda));
+extern float class_274_ring_layer_radius_offset_gp __asm__("D_L18_00161CCC") __attribute__((sda));
 extern float D_L18_00161CD4 __attribute__((sda));
 void draw_class_274_ring_effect(char *moby) {
     Q_dc4b8 quad[4];
@@ -2157,11 +2191,11 @@ void draw_class_274_ring_effect(char *moby) {
     moby_vars = *(float **)(moby + 0x78);
     unit_matrix_dc4b8(quad_draw_transform);
     qcopy(&quad_draw_transform[3], moby + 0x10);
-    quad_draw_transform[3].f[2] = quad_draw_transform[3].f[2] + class_274_ring_draw_height_offset;
+    quad_draw_transform[3].f[2] = quad_draw_transform[3].f[2] + class_274_ring_draw_height_offset_gp;
     quad_draw_transform[3].f[3] = 1.0f;
     for (i = 0; i < 4; i++) {
         quad[i].tex = get_effect_texture_dc4b8(14);
-        gi = class_274_ring_layer_radius_offset * (float)i;
+        gi = class_274_ring_layer_radius_offset_gp * (float)i;
         quad[i].unk70 = 0;
         quad[i].unk80 = 0xFF9000000260L;
         quad[i].unk88 = (long)D_L18_00161CA4 | ((long)D_L18_00161CA8 << 2) |
@@ -2169,7 +2203,7 @@ void draw_class_274_ring_effect(char *moby) {
         layer_phase = moby_vars[1] + (float)i * 0.25f;
         r = moby_vars[0] + gi;
         layer_phase = layer_phase - (float)truncate_dc4b8(layer_phase);
-        layer_color = tween_color_dc4b8(class_274_ring_color_start, class_274_ring_color_end, layer_phase);
+        layer_color = tween_color_dc4b8(class_274_ring_color_start_gp, class_274_ring_color_end_gp, layer_phase);
         color_fade_weight = layer_phase * D_L18_00161CD4;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
@@ -2186,8 +2220,8 @@ void draw_class_274_ring_effect(char *moby) {
             quad[i].uv[j].u = D_L18_001D4330[j * 2];
             quad[i].uv[j].v = D_L18_001D4330[j * 2 + 1];
             quad[i].corner[j].f[2] = (j & 1) ? layer_phase * D_L18_00161CC8 : -layer_phase * D_L18_00161CC8;
-            corner_angle = add_rotations_dc4b8((float)(j >> 1) * (class_274_ring_segment_angle_degrees * 0.017453292f) - 3.14159f,
-                              class_274_ring_segment_angle_degrees * 0.25f * (float)i * 0.017453292f);
+            corner_angle = add_rotations_dc4b8((float)(j >> 1) * (class_274_ring_segment_angle_degrees_gp * 0.017453292f) - 3.14159f,
+                              class_274_ring_segment_angle_degrees_gp * 0.25f * (float)i * 0.017453292f);
             quad[i].corner[j].f[0] = cos_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[1] = sin_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[3] = 1.0f;
@@ -2195,9 +2229,9 @@ void draw_class_274_ring_effect(char *moby) {
         }
     }
     clear_vector_dc4b8(&ring_segment_rotation_angles);
-    ring_segment_rotation_angles.f[2] = class_274_ring_segment_angle_degrees * 0.017453292f;
+    ring_segment_rotation_angles.f[2] = class_274_ring_segment_angle_degrees_gp * 0.017453292f;
     euler_basis_dc4b8(&ring_segment_rotation_basis[0], &ring_segment_rotation_angles);
-    for (k = 0; (float)k < 360.0f / class_274_ring_segment_angle_degrees; k++) {
+    for (k = 0; (float)k < 360.0f / class_274_ring_segment_angle_degrees_gp; k++) {
         draw_quad_dc4b8(&quad[0], quad_draw_transform, 0);
         draw_quad_dc4b8(&quad[1], quad_draw_transform, 0);
         draw_quad_dc4b8(&quad[2], quad_draw_transform, 0);
@@ -2568,6 +2602,8 @@ extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm_
 
 extern float D_L18_00161ED0 __attribute__((sda));
 extern float D_L18_00161ED4 __attribute__((sda));
+extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __attribute__((sda));
+extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
 
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
@@ -2592,12 +2628,12 @@ void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
         float ground_position[4];
         float *position = &moby->pos.x;
         float *arc_endpoint_position = moby_vars + 4;
-        float movement_step_length = target_travel_speed * frame_time;
+        float movement_step_length = target_travel_speed_gp * frame_time;
         float target_distance;
         subtract_vector_xyz(target_displacement, moby_vars, position);
         target_distance = vector_length_xyz(target_displacement);
         FUN_L18_002ea598_c(moby);
-        FUN_L00_00257d78(arc_endpoint_position, electric_arc_endpoint_radius_scale * moby_vars[9], electric_arc_endpoint_radius_scale * moby_vars[9]);
+        FUN_L00_00257d78(arc_endpoint_position, electric_arc_endpoint_radius_scale_gp * moby_vars[9], electric_arc_endpoint_radius_scale_gp * moby_vars[9]);
         add_vector_xyz(arc_endpoint_position, arc_endpoint_position, position);
         initialize_electric_bolt_effect_if_requested(moby);
         update_electric_bolt_geometry_and_particles(moby);
@@ -2787,8 +2823,13 @@ void spawn_sparks_along_target_direction(struct Moby *moby) {
 extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char *spawn_glow_particle(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002ac910");
+extern int explosion_burst_spark_count_gp __asm__("D_L18_00161F6C") __attribute__((sda));
 extern int D_L18_00161F78 __attribute__((sda));
 extern int D_L18_00161F7C __attribute__((sda));
+extern int explosion_burst_spark_frame_count_gp __asm__("D_L18_00161F80") __attribute__((sda));
+extern int explosion_burst_spark_second_frame_count_gp __asm__("D_L18_00161F84") __attribute__((sda));
+extern int explosion_burst_spark_third_frame_count_gp __asm__("D_L18_00161F88") __attribute__((sda));
+extern int explosion_burst_particle_count_gp __asm__("D_L18_00161F98") __attribute__((sda));
 extern int D_L18_00161FAC __attribute__((sda));
 extern int D_L18_00161FB0 __attribute__((sda));
 extern int D_L18_00161FB4 __attribute__((sda));
@@ -2796,12 +2837,20 @@ extern int D_L18_00161FB8 __attribute__((sda));
 extern int D_L18_00161FC4 __attribute__((sda));
 extern int D_L18_00161FD0 __attribute__((sda));
 extern int D_L18_00161FDC __attribute__((sda));
+extern int explosion_burst_camera_shake_duration_frames_gp __asm__("D_L18_00161FE8") __attribute__((sda));
+extern float explosion_burst_spark_speed_min_gp __asm__("D_L18_00161F70") __attribute__((sda));
+extern float explosion_burst_spark_speed_max_gp __asm__("D_L18_00161F74") __attribute__((sda));
 extern float D_L18_00161F8C __attribute__((sda));
 extern float D_L18_00161F90 __attribute__((sda));
+extern float explosion_burst_spark_second_vector_scale_gp __asm__("D_L18_00161F94") __attribute__((sda));
+extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __attribute__((sda));
+extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
 extern float D_L18_00161FA8 __attribute__((sda));
+extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
 extern float D_L18_00161FC0 __attribute__((sda));
 extern float D_L18_00161FCC __attribute__((sda));
 extern float D_L18_00161FD8 __attribute__((sda));
+extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4") __attribute__((sda));
 extern int D_L18_001D9C70[];
 extern int D_L18_001D9C88[];
 extern unsigned char D_L18_00161FC8 __attribute__((sda));
@@ -2823,44 +2872,44 @@ void spawn_explosion_burst(void *source_moby) {
     *(Q128 *)velocity = *(Q128 *)&moby->pos;
     spawn_timed_projected_sprite_effect(velocity, scale_ticks(30), 0x80806060, 0x801010);
     trooper_play_sound(0x10, 0, (int)source_moby, 0x58E);
-    if (i < explosion_burst_spark_count) {
+    if (i < explosion_burst_spark_count_gp) {
         int a, b, third_spark_frame_count;
         float angle, elevation, scale, speed;
         do {
             ++i;
             elevation = random_float_between(-0.34906584f, 0.34906584f);
             angle = random_angle_radians();
-            speed = random_float_between(explosion_burst_spark_speed_min, explosion_burst_spark_speed_max);
+            speed = random_float_between(explosion_burst_spark_speed_min_gp, explosion_burst_spark_speed_max_gp);
             build_spherical_offset(velocity, speed * frame_time, angle, elevation);
-            scale_vector_xyz(offset, velocity, explosion_burst_spark_second_vector_scale);
+            scale_vector_xyz(offset, velocity, explosion_burst_spark_second_vector_scale_gp);
             scale = random_float_between(0.8f, 1.2f);
             offset[3] = velocity[3] = D_L18_00161F8C;
             offset[2] += D_L18_00161F90 * scale * frame_time;
             scale = random_float_between(0.8f, 1.2f);
-            a = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_frame_count) * scale);
-            b = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_second_frame_count) * scale);
-            third_spark_frame_count = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_third_frame_count) * scale);
+            a = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_frame_count_gp) * scale);
+            b = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_second_frame_count_gp) * scale);
+            third_spark_frame_count = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_third_frame_count_gp) * scale);
             spawn_spark(&moby->pos, velocity, offset, D_L18_00161F78, D_L18_00161F7C, a, b, third_spark_frame_count, *(int *)&D_L18_00161F68);
-        } while (i < explosion_burst_spark_count);
+        } while (i < explosion_burst_spark_count_gp);
     }
     j = 0;
-    if (explosion_burst_particle_count > 0) {
+    if (explosion_burst_particle_count_gp > 0) {
         int a, b, color1, color2;
         float offset_x, offset_y;
         float angle, elevation, scale, speed;
         do {
             ++j;
-            speed = random_float_between(explosion_burst_particle_speed_min, explosion_burst_particle_speed_max) * frame_time;
+            speed = random_float_between(explosion_burst_particle_speed_min_gp, explosion_burst_particle_speed_max_gp) * frame_time;
             elevation = random_float_between(1.0471976f, 1.3962634f);
             angle = random_angle_radians();
             build_spherical_offset(velocity, speed, angle, elevation);
             angle = random_angle_radians();
             offset_x = fast_cos(angle);
-            offset[0] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit);
+            offset[0] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
             offset_x *= offset[0];
             offset[0] = offset_x;
             offset_y = fast_sin(angle);
-            offset[1] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit);
+            offset[1] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
             offset_y *= offset[1];
             offset[1] = offset_y;
             offset[2] = 0.0f;
@@ -2871,7 +2920,7 @@ void spawn_explosion_burst(void *source_moby) {
             a = scale_ticks(random_int_between(D_L18_00161FAC, D_L18_00161FB0));
             b = scale_ticks(random_int_between(D_L18_00161FB4, D_L18_00161FB8));
             spawn_particle(offset, velocity, color1, color2, scale, a, b, speed, 0, 0);
-        } while (j < explosion_burst_particle_count);
+        } while (j < explosion_burst_particle_count_gp);
     }
     if (D_L18_00161FC0 > 0.0f) {
         void *pos = &moby->pos;
@@ -2888,10 +2937,10 @@ void spawn_explosion_burst(void *source_moby) {
         int duration = scale_ticks(D_L18_00161FDC);
         spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FD8, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
     }
-    if (explosion_burst_camera_shake_amplitude > 0.0f) {
+    if (explosion_burst_camera_shake_amplitude_gp > 0.0f) {
         camera = &D_L18_00167680;
-        camera->shake_amplitude = explosion_burst_camera_shake_amplitude;
-        camera->shake_frames = scale_ticks(explosion_burst_camera_shake_duration_frames);
+        camera->shake_amplitude = explosion_burst_camera_shake_amplitude_gp;
+        camera->shake_frames = scale_ticks(explosion_burst_camera_shake_duration_frames_gp);
     }
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
@@ -2910,6 +2959,7 @@ extern int D_L18_001DA110_q[] __asm__("D_L18_001DA110");
 extern int scale_frames_q(int) __asm__("FUN_001f96f8");
 extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
+extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
 extern float D_L18_00161FF0 __attribute__((sda));
 extern int D_L18_00162080 __attribute__((sda));
 extern short D_L18_001620CA;
@@ -2926,8 +2976,8 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
     float step[4];
     int i;
     int j;
-    if (electric_bolt_initialization_requested != 0) {
-        electric_bolt_initialization_requested = 0;
+    if (electric_bolt_initialization_requested_gp != 0) {
+        electric_bolt_initialization_requested_gp = 0;
         D_L18_001620DC = 0;
         D_L18_001620D8 = scale_frames_q(D_L18_00162080);
         D_L18_00162054_q = 0x7F2020;
@@ -2984,13 +3034,24 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L18_0015F580; /* no foreign declaration */
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern float primary_bolt_z_phase_step_gp __asm__("D_L18_00161FFC") __attribute__((sda));
+extern float primary_bolt_z_amplitude_start_gp __asm__("D_L18_00162000") __attribute__((sda));
+extern float primary_bolt_z_amplitude_end_gp __asm__("D_L18_00162004") __attribute__((sda));
 extern s32 D_L18_00162008 __attribute__((sda));
+extern float primary_bolt_z_phase_increment_gp __asm__("D_L18_0016200C") __attribute__((sda));
 extern s32 D_L18_00162010 __attribute__((sda));
+extern float secondary_bolt_orbit_phase_decrement_gp __asm__("D_L18_00162014") __attribute__((sda));
+extern float secondary_bolt_orbit_phase_step_gp __asm__("D_L18_00162018") __attribute__((sda));
+extern float secondary_bolt_z_amplitude_gp __asm__("D_L18_0016201C") __attribute__((sda));
+extern float secondary_bolt_lateral_amplitude_gp __asm__("D_L18_00162020") __attribute__((sda));
 extern s32 D_L18_00162024 __attribute__((sda));
+extern float secondary_bolt_z_phase_increment_gp __asm__("D_L18_00162028") __attribute__((sda));
+extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribute__((sda));
 extern float D_L18_00162040 __attribute__((sda));
 extern float D_L18_00162044 __attribute__((sda));
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
 extern float D_L18_00162084 __attribute__((sda));
+extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));
 extern short D_L18_001620C0[] __attribute__((section(".sdata")));
 extern short D_L18_001620C8[] __attribute__((section(".sdata")));
@@ -3014,9 +3075,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
     float rotation_angle_or_particle_scale;
     int r;
 
-    *(float *)&D_L18_00162008 = fast_add_rotations(*(float *)&D_L18_00162008, *(float *)&primary_bolt_z_phase_increment);
-    *(float *)&D_L18_00162010 = fast_subtract_rotations(*(float *)&D_L18_00162010, *(float *)&secondary_bolt_orbit_phase_decrement);
-    *(float *)&D_L18_00162024 = fast_add_rotations(*(float *)&D_L18_00162024, *(float *)&secondary_bolt_z_phase_increment);
+    *(float *)&D_L18_00162008 = fast_add_rotations(*(float *)&D_L18_00162008, *(float *)&primary_bolt_z_phase_increment_gp);
+    *(float *)&D_L18_00162010 = fast_subtract_rotations(*(float *)&D_L18_00162010, *(float *)&secondary_bolt_orbit_phase_decrement_gp);
+    *(float *)&D_L18_00162024 = fast_add_rotations(*(float *)&D_L18_00162024, *(float *)&secondary_bolt_z_phase_increment_gp);
     scale = distance_xyz((char *)moby + 0x10, data + 0x10) * 0.05f;
     if (flag) {
         *(int *)&D_L18_00162054_c = 0x7F2040;
@@ -3036,9 +3097,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         float blended_step_length;
         float azimuth_angle;
         float b;
-        primary_bolt_z_offset = *(float *)&primary_bolt_z_amplitude_start
-              + (*(float *)&primary_bolt_z_amplitude_end - *(float *)&primary_bolt_z_amplitude_start) * (convert_integer_to_float(i) * 0.05f);
-        primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&primary_bolt_z_phase_step));
+        primary_bolt_z_offset = *(float *)&primary_bolt_z_amplitude_start_gp
+              + (*(float *)&primary_bolt_z_amplitude_end_gp - *(float *)&primary_bolt_z_amplitude_start_gp) * (convert_integer_to_float(i) * 0.05f);
+        primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&primary_bolt_z_phase_step_gp));
         primary_bolt_z_offset = primary_bolt_z_offset + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = primary_bolt_z_offset;
@@ -3046,7 +3107,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         b = random_angle_radians_c();
         build_spherical_offset(&scratch_vectors[1], scale, azimuth_angle, b);
         scratch_vectors[1].f[2] = scratch_vectors[1].f[2] * 0.5f;
-        lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&primary_bolt_random_step_blend_weight);
+        lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&primary_bolt_random_step_blend_weight_gp);
         blended_step_length = vector_length_xyz(&scratch_vectors[2]);
         if (blended_step_length == 0.0f) {
             qcopy(&D_L18_001D9D00[0][i], &D_L18_001D9D00[0][i - 1]);
@@ -3078,15 +3139,15 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             float secondary_bolt_z_offset;
             float secondary_bolt_lateral_angle;
             float secondary_bolt_lateral_offset;
-            g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&secondary_bolt_orbit_phase_step);
-            secondary_bolt_z_offset = *(float *)&secondary_bolt_z_amplitude
-                * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&secondary_bolt_z_phase_step));
+            g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&secondary_bolt_orbit_phase_step_gp);
+            secondary_bolt_z_offset = *(float *)&secondary_bolt_z_amplitude_gp
+                * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&secondary_bolt_z_phase_step_gp));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
             secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
             D_L18_001DA110[i] = secondary_bolt_z_offset;
             secondary_bolt_lateral_angle = fast_add_rotations(fast_arc_tan(scratch_vectors[1].f[0], scratch_vectors[1].f[1]), 1.5707964f);
-            secondary_bolt_lateral_offset = *(float *)&secondary_bolt_lateral_amplitude * fast_cos_c(g);
+            secondary_bolt_lateral_offset = *(float *)&secondary_bolt_lateral_amplitude_gp * fast_cos_c(g);
             scratch_vectors[4].f[0] = fast_cos_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
             scratch_vectors[4].f[1] = fast_sin_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
             scratch_vectors[4].f[2] = 0.0f;

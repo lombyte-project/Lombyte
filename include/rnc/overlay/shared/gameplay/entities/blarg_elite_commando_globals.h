@@ -4,9 +4,10 @@
 #include "types.h"
 
 /* Scalar data read by src/overlays/shared/gameplay/entities/blarg_elite_commando.c. */
-extern float class_32_symmetric_angle_bound_degrees __asm__("D_L16_001613E0") __attribute__((sda));
-extern float class_32_zero_based_angle_bound_degrees __asm__("D_L16_001613E4") __attribute__((sda));
-extern int blarg_elite_commando_reward_kill_count __asm__("D_0015EE10") __attribute__((sda));
+/* Explicit _gp views stay in the source at their assembler declaration sites. */
+extern float class_32_symmetric_angle_bound_degrees __asm__("D_L16_001613E0");
+extern float class_32_zero_based_angle_bound_degrees __asm__("D_L16_001613E4");
+extern int blarg_elite_commando_reward_kill_count __asm__("D_0015EE10");
 extern float blarg_elite_commando_extra_glow_gate __asm__("D_L16_0015F5D0");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_BLARG_ELITE_COMMANDO_GLOBALS_H */

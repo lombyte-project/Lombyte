@@ -536,6 +536,7 @@ float FUN_001fa580_0026a6f0(float, float) __asm__("FUN_001fa580");
 int FUN_001fa6d0_0026a6f0(float) __asm__("FUN_001fa6d0");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
 #include "rnc/overlay/shared/rendering/00269290_globals.h"
+extern int rotating_grayscale_particle_fade_reference_duration_gp __asm__("D_L00_001601A4") __attribute__((sda));
 void update_rotating_grayscale_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a6f0");
 
 void update_rotating_grayscale_effect_particle(unsigned char *particle) {
@@ -547,11 +548,11 @@ void update_rotating_grayscale_effect_particle(unsigned char *particle) {
     }
     *(float *)&particle_data[3] = FUN_001fa580_0026a6f0(*(float *)&particle_data[3], *(float *)&particle_data[2]);
     particle[8] = FUN_001fa6d0_0026a6f0(*(float *)&particle_data[3] * 128.0f / 3.1415927f) - 0x80;
-    if (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) * 3 / 4 < particle_data[0]) {
-        int scaled_fade_duration = FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration);
-        faded_alpha = particle_data[4] * (scaled_fade_duration - particle_data[0]) / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4);
-    } else if (particle_data[0] < FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4) {
-        faded_alpha = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4);
+    if (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration_gp) * 3 / 4 < particle_data[0]) {
+        int scaled_fade_duration = FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration_gp);
+        faded_alpha = particle_data[4] * (scaled_fade_duration - particle_data[0]) / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration_gp) / 4);
+    } else if (particle_data[0] < FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration_gp) / 4) {
+        faded_alpha = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration_gp) / 4);
     } else {
         faded_alpha = particle_data[4];
     }
@@ -788,8 +789,20 @@ extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribut
 
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 
+extern int spinning_particle_default_initial_color_blend_source_gp __asm__("D_L00_001601A8") __attribute__((sda));
+extern int spinning_particle_default_initial_color_blend_target_gp __asm__("D_L00_001601AC") __attribute__((sda));
+extern int spinning_particle_default_final_color_blend_source_gp __asm__("D_L00_001601B0") __attribute__((sda));
+extern int spinning_particle_default_final_color_blend_target_gp __asm__("D_L00_001601B4") __attribute__((sda));
 extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
+extern int spinning_particle_default_lifetime_lower_bound_gp __asm__("D_L00_001601C0") __attribute__((sda));
+extern int spinning_particle_default_lifetime_upper_bound_gp __asm__("D_L00_001601C4") __attribute__((sda));
+extern int spinning_particle_alternate_initial_color_blend_source_gp __asm__("D_L00_001601C8") __attribute__((sda));
+extern int spinning_particle_alternate_initial_color_blend_target_gp __asm__("D_L00_001601CC") __attribute__((sda));
+extern int spinning_particle_alternate_final_color_blend_source_gp __asm__("D_L00_001601D0") __attribute__((sda));
+extern int spinning_particle_alternate_final_color_blend_target_gp __asm__("D_L00_001601D4") __attribute__((sda));
 extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
+extern int spinning_particle_alternate_lifetime_lower_bound_gp __asm__("D_L00_001601E0") __attribute__((sda));
+extern int spinning_particle_alternate_lifetime_upper_bound_gp __asm__("D_L00_001601E4") __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
 unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) __asm__("FUN_L00_0026b230");
 
@@ -804,16 +817,16 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601D8_gp;
-            float hi = (float)spinning_particle_alternate_lifetime_upper_bound;
-            float lo = (float)spinning_particle_alternate_lifetime_lower_bound;
-            *(int *)(particle + 4) = spinning_particle_alternate_initial_color_blend_source;
+            float hi = (float)spinning_particle_alternate_lifetime_upper_bound_gp;
+            float lo = (float)spinning_particle_alternate_lifetime_lower_bound_gp;
+            *(int *)(particle + 4) = spinning_particle_alternate_initial_color_blend_source_gp;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
                 FUN_002132a8_26b230(lo, hi)));
-            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_alternate_initial_color_blend_source, spinning_particle_alternate_initial_color_blend_target,
+            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_alternate_initial_color_blend_source_gp, spinning_particle_alternate_initial_color_blend_target_gp,
                                                           FUN_002132a8_26b230(zero, one));
-            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_alternate_final_color_blend_source,
-                                                          spinning_particle_alternate_final_color_blend_target,
+            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_alternate_final_color_blend_source_gp,
+                                                          spinning_particle_alternate_final_color_blend_target_gp,
                                                           FUN_002132a8_26b230(zero, one));
             { unsigned char texture = *D_L00_001B20E0;
               particle[3] = 0x48;
@@ -823,16 +836,16 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601B8_gp;
-            float hi = (float)spinning_particle_default_lifetime_upper_bound;
-            float lo = (float)spinning_particle_default_lifetime_lower_bound;
-            *(int *)(particle + 4) = spinning_particle_default_initial_color_blend_source;
+            float hi = (float)spinning_particle_default_lifetime_upper_bound_gp;
+            float lo = (float)spinning_particle_default_lifetime_lower_bound_gp;
+            *(int *)(particle + 4) = spinning_particle_default_initial_color_blend_source_gp;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
                 FUN_002132a8_26b230(lo, hi)));
-            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_default_initial_color_blend_source, spinning_particle_default_initial_color_blend_target,
+            *(int *)(motion + 0x14) = FUN_001fa6e0_26b230(spinning_particle_default_initial_color_blend_source_gp, spinning_particle_default_initial_color_blend_target_gp,
                                                           FUN_002132a8_26b230(zero, one));
-            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_default_final_color_blend_source,
-                                                          spinning_particle_default_final_color_blend_target,
+            *(int *)(motion + 0x18) = FUN_001fa6e0_26b230(spinning_particle_default_final_color_blend_source_gp,
+                                                          spinning_particle_default_final_color_blend_target_gp,
                                                           FUN_002132a8_26b230(zero, one));
             if (flags & 4) {
                 offset = 8;
@@ -868,8 +881,11 @@ extern float D_0015ED70;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float D_L00_001601B8 __attribute__((sda));
+extern float spinning_particle_default_final_size_gp __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8 __attribute__((sda));
+extern float spinning_particle_alternate_final_size_gp __asm__("D_L00_001601DC") __attribute__((sda));
 extern float D_L00_001601E8 __attribute__((sda));
+extern float spinning_particle_vertical_step_scale_gp __asm__("D_L00_001601EC") __attribute__((sda));
 extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -889,13 +905,13 @@ void update_spinning_and_fading_effect_particle(unsigned char *particle) {
     negated_particle_speed = -fast_vec_length_c(particle_data);
     advance_accelerated_scalar((float *)(particle + 0x30), &negated_particle_speed, 0.0f, 0.0f, D_L00_001601E8 * D_0015ED70, negated_particle_speed);
     fast_vec_normalize_c(particle_data, particle_data, -negated_particle_speed);
-    *(float *)(particle + 0x18) = *(float *)(particle + 0x18) + spinning_particle_vertical_step_scale * D_0015ED6C;
+    *(float *)(particle + 0x18) = *(float *)(particle + 0x18) + spinning_particle_vertical_step_scale_gp * D_0015ED6C;
     ratio = convert_integer_to_float(*(short *)(particle + 0xA)) / convert_integer_to_float(particle_data[0x1D]);
     if (particle_data[0x1F] & 1) {
-        float lo = spinning_particle_alternate_final_size * size_endpoint_scale;
+        float lo = spinning_particle_alternate_final_size_gp * size_endpoint_scale;
         *(float *)(particle + 0xC) = ((D_L00_001601D8 - lo) * ratio + lo) * 210000.0f;
     } else {
-        float lo = spinning_particle_default_final_size * size_endpoint_scale;
+        float lo = spinning_particle_default_final_size_gp * size_endpoint_scale;
         *(float *)(particle + 0xC) = ((D_L00_001601B8 - lo) * ratio + lo) * 210000.0f;
     }
     *(int *)(particle + 4) = fast_tween_color_c(*(int *)(particle_data + 0x18), *(int *)(particle_data + 0x14), ratio);
@@ -2454,6 +2470,8 @@ extern void vsub_26eb88(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26eb88(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vadd_26eb88(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_26eb88(void *, void *) __asm__("FUN_001f9b48");
+extern float two_point_particle_first_point_target_offset_scale_gp __asm__("D_L00_001601F4") __attribute__((sda));
+extern float two_point_particle_second_point_target_offset_scale_gp __asm__("D_L00_001601F8") __attribute__((sda));
 void update_target_relative_two_point_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026eb88");
 
 void update_target_relative_two_point_effect_particle(unsigned char *particle) {
@@ -2466,12 +2484,12 @@ void update_target_relative_two_point_effect_particle(unsigned char *particle) {
     }
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x10);
     target_offset_scratch[0] = position_scratch;
-    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_first_point_target_offset_scale - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_first_point_target_offset_scale_gp - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x10) = position_scratch;
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x20);
     target_offset_scratch[0] = position_scratch;
-    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_second_point_target_offset_scale - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_second_point_target_offset_scale_gp - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x20) = position_scratch;
     if (dist_26eb88(particle + 0x10, particle + 0x20) < 0.1f ||
@@ -2972,17 +2990,21 @@ void FUN_001f9bf8_0026fc38(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026fc38(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_001fa6d0_0026fc38(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026fc38(void *) __asm__("FUN_L00_00267a08");
+extern f32 animated_offset_particle_scalar_gp __asm__("D_L00_00160200") __attribute__((sda));
+extern s32 animated_offset_particle_packed_color_gp __asm__("D_L00_00160204") __attribute__((sda));
+extern f32 animated_offset_particle_offset_distance_gp __asm__("D_L00_00160208") __attribute__((sda));
+extern u8 animated_offset_particle_rotation_step_gp __asm__("D_L00_0016020C") __attribute__((sda));
 extern u8 *D_L00_001B211C __attribute__((section(".data")));
 void update_animated_offset_effect_particle(O0026fc38 *particle) __asm__("FUN_L00_0026fc38");
 
 void update_animated_offset_effect_particle(O0026fc38 *particle) {
     V0026fc38 position_offset;
     S0026fc38 *s = &particle->s;
-    particle->xc = animated_offset_particle_scalar;
-    particle->x4 = animated_offset_particle_packed_color;
-    particle->x8 += animated_offset_particle_rotation_step;
+    particle->xc = animated_offset_particle_scalar_gp;
+    particle->x4 = animated_offset_particle_packed_color_gp;
+    particle->x8 += animated_offset_particle_rotation_step_gp;
     FUN_001f9a28_0026fc38(&position_offset, s->x4 + 0x10, D_L00_00166DC0_0026fc38);
-    FUN_001f9bf8_0026fc38(&position_offset, &position_offset, animated_offset_particle_offset_distance);
+    FUN_001f9bf8_0026fc38(&position_offset, &position_offset, animated_offset_particle_offset_distance_gp);
     FUN_001f9a10_0026fc38(particle->p10, s->x4 + 0x10, &position_offset);
     particle->x2 = D_L00_001B211C[FUN_001fa6d0_0026fc38((f32)(s->x8 / 2))];
     s->x8++;

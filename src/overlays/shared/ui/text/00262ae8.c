@@ -70,6 +70,7 @@ extern s32 D_L05_0015FAF8 __attribute__((section(".sdata")));
 extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section(".sdata")));
 extern s32 D_L05_0015FB00;
 #include "rnc/overlay/shared/ui/text/00262ae8_globals.h"
+extern u8 trick_combo_hud_delay_reload_gp __asm__("D_L05_0015F87C") __attribute__((sda));
 
 void update_trick_combo_hud(HudCounter *element) __asm__("FUN_L05_00262b58");
 
@@ -107,7 +108,7 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         state_bytes[2] = 1;
-        state_bytes[1] = trick_combo_hud_delay_reload;
+        state_bytes[1] = trick_combo_hud_delay_reload_gp;
         state_bytes[0] = 0;
         break;
     }
@@ -131,7 +132,7 @@ void update_trick_combo_hud(HudCounter *element) {
         player = &hero;
         if (D_L05_0015FAD4 < player->unk70C) {
             D_L05_0015FAD4 = player->unk70C;
-            state_bytes[1] = trick_combo_hud_delay_reload;
+            state_bytes[1] = trick_combo_hud_delay_reload_gp;
         }
         if (player->grounded_frames == 0) {
             if (!(player->state.current >= 0x6D && player->state.current <= 0x6F)) {
@@ -162,11 +163,11 @@ void update_trick_combo_hud(HudCounter *element) {
                 D_L05_0015FAF0 = -1;
             }
             state_bytes[2] = 3;
-            state_bytes[1] = trick_combo_hud_delay_reload;
+            state_bytes[1] = trick_combo_hud_delay_reload_gp;
             state_bytes[0] = scale_game_frames(0x78);
         } else {
             state_bytes[2] = 2;
-            state_bytes[1] = trick_combo_hud_delay_reload;
+            state_bytes[1] = trick_combo_hud_delay_reload_gp;
             state_bytes[0] = scale_game_frames(0x3C);
         }
         break;
@@ -222,8 +223,17 @@ extern char D_L05_0015F8E8[];
 extern char D_L05_00216C50[];
 extern s32 D_L05_0015F894 __attribute__((sda));
 extern s32 D_L05_0015F898 __attribute__((sda));
+extern s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") __attribute__((sda));
+extern s32 trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") __attribute__((sda));
+extern s32 trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") __attribute__((sda));
 extern s32 D_L05_0015F8AC __attribute__((sda));
 extern s32 D_L05_0015F8B0 __attribute__((sda));
+extern s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") __attribute__((sda));
+extern s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") __attribute__((sda));
+extern s32 trick_combo_pose_count_center_x_gp __asm__("D_L05_0015F8BC") __attribute__((sda));
+extern s32 trick_combo_pose_count_y_gp __asm__("D_L05_0015F8C0") __attribute__((sda));
+extern s32 trick_combo_reward_text_x_gp __asm__("D_L05_0015F8C4") __attribute__((sda));
+extern s32 trick_combo_reward_label_y_gp __asm__("D_L05_0015F8C8") __attribute__((sda));
 
 s32 draw_trick_combo_hud(char *element) __asm__("FUN_L05_00262f50");
 
@@ -247,21 +257,21 @@ s32 draw_trick_combo_hud(char *element) {
     if (state_bytes[2] != 0) {
         sprintf_alt(text, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         delay_left = convert_integer_to_float(state_bytes[1]);
-        delay_total = scale_game_frames(*(s32 *)&trick_combo_hud_delay_reload);
+        delay_total = scale_game_frames(*(s32 *)&trick_combo_hud_delay_reload_gp);
         blend = delay_left / (f32)delay_total;
         if (state_bytes[2] == 1 || state_bytes[2] == 3) {
             color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, blend);
         } else {
-            color = trick_combo_result_text_color;
+            color = trick_combo_result_text_color_gp;
         }
         shadow_color = truncate_float_to_s32(fade * 128.0f) << 24;
         color += shadow_color;
         if (state_bytes[2] == 1 || state_bytes[2] == 2) {
-            font_print_center_large(trick_combo_rotation_text_center_x + 1, trick_combo_rotation_text_y + 1, shadow_color, text, -1);
-            font_print_center_large(trick_combo_rotation_text_center_x, trick_combo_rotation_text_y, color, text, -1);
+            font_print_center_large(trick_combo_rotation_text_center_x_gp + 1, trick_combo_rotation_text_y_gp + 1, shadow_color, text, -1);
+            font_print_center_large(trick_combo_rotation_text_center_x_gp, trick_combo_rotation_text_y_gp, color, text, -1);
             sprintf_alt(text, D_L05_0015F8D0, D_L05_0015FAD8);
-            font_print_center_large(trick_combo_pose_count_center_x + 1, trick_combo_pose_count_y + 1, shadow_color, text, -1);
-            font_print_center_large(trick_combo_pose_count_center_x, trick_combo_pose_count_y, color, text, -1);
+            font_print_center_large(trick_combo_pose_count_center_x_gp + 1, trick_combo_pose_count_y_gp + 1, shadow_color, text, -1);
+            font_print_center_large(trick_combo_pose_count_center_x_gp, trick_combo_pose_count_y_gp, color, text, -1);
         } else if (state_bytes[2] == 3) {
             trick = -1;
             if (D_L05_0015FAD8 == 3) {
@@ -294,9 +304,9 @@ s32 draw_trick_combo_hud(char *element) {
                 }
                 D_L05_0015FB00 = D_L05_0015FB00 / repeats;
                 sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
-                draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y - 0x18, color, text);
+                draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
                 sprintf_alt(text, D_L05_0015F8E0, get_help_message_text(trick_index + 0x5092));
-                draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y, color, text);
+                draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
             } else if (D_L05_0015FAD8 > 0) {
                 s32 count = 0;
                 s32 pose;
@@ -309,16 +319,16 @@ s32 draw_trick_combo_hud(char *element) {
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
                     sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y - 0x18, color, text);
+                    draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
                     sprintf_alt(text, D_L05_0015F8E8, get_help_message_text(pose_ids[0] + 0x517E), D_L05_0015FAD4);
-                    draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y, color, text);
+                    draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
                 } else {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 20;
                     sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
-                    draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y - 0x18, color, text);
+                    draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
                     sprintf_alt(text, D_L05_00216C50, get_help_message_text(pose_ids[0] + 0x517E),
                                 get_help_message_text(pose_ids[1] + 0x517E), D_L05_0015FAD4);
-                    draw_framed_text(trick_combo_reward_text_x, trick_combo_reward_label_y, color, text);
+                    draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
                 }
             }
         }
@@ -342,8 +352,8 @@ s32 draw_trick_combo_hud(char *element) {
         pulse = fast_sin(pulse * 6.283180236816406f - 3.141590118408203f);
         blink_color = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
         sprintf_alt(text, get_help_message_text(0x531A));
-        draw_framed_text(trick_combo_pulsing_label_x + 1, trick_combo_pulsing_label_y + 1, 0x80000000, text);
-        draw_framed_text(trick_combo_pulsing_label_x, trick_combo_pulsing_label_y, blink_color, text);
+        draw_framed_text(trick_combo_pulsing_label_x_gp + 1, trick_combo_pulsing_label_y_gp + 1, 0x80000000, text);
+        draw_framed_text(trick_combo_pulsing_label_x_gp, trick_combo_pulsing_label_y_gp, blink_color, text);
     }
     return *(s32 *)(element + 0x58);
 }

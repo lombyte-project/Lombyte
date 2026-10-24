@@ -114,6 +114,8 @@ extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/002d6810_globals.h"
+extern float electric_water_on_duration_seconds_gp __asm__("D_L15_00161BC8") __attribute__((sda));
+extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __attribute__((sda));
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
@@ -223,7 +225,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         vars->light = -1;
@@ -236,7 +238,7 @@ void electric_water_update(struct Moby *moby) {
         inside = 0;
         wet = FUN_L15_002d6770();
         if (fast_dec_timer_s16(&vars->on_timer) != 0) {
-            vars->off_timer = truncate_float_to_s32(scale_time(electric_water_off_duration_seconds * 60.0f));
+            vars->off_timer = truncate_float_to_s32(scale_time(electric_water_off_duration_seconds_gp * 60.0f));
             moby->state = 2;
             if (vars->owner != 0) {
                 if (vars->voice1 != -1) {
@@ -426,7 +428,7 @@ void electric_water_update(struct Moby *moby) {
             vars->voice1 = FUN_L00_0028dc90(1, 5, vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&vars->off_timer) != 0 && moby->state == 2) {
-            vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
+            vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
             vars->off_timer = scale_game_frames(200);
             vars->shock_count = 0;
             moby->state = 1;
@@ -511,7 +513,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[i]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         moby->state = 1;
@@ -595,6 +597,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
+extern int electric_water_bolt_init_requested_gp __asm__("D_L15_00161BF8") __attribute__((sda));
+extern float electric_water_bolt_initial_length_scale_gp __asm__("D_L15_00161BFC") __attribute__((sda));
+extern int electric_water_bolt_initial_frame_count_gp __asm__("D_L15_00161C8C") __attribute__((sda));
 extern short D_L15_00161CD2;
 extern short D_L15_00161CD4;
 extern short D_L15_00161CD6;
@@ -608,13 +613,13 @@ void initialize_electric_water_bolt_effect(char *moby) {
     float step[4];
     int i;
     int j;
-    if (electric_water_bolt_init_requested != 0) {
-        electric_water_bolt_init_requested = 0;
+    if (electric_water_bolt_init_requested_gp != 0) {
+        electric_water_bolt_init_requested_gp = 0;
         D_L15_00161CE4 = 0;
-        electric_water_bolt_initial_scaled_frame_count = scale_frames_r(electric_water_bolt_initial_frame_count);
+        electric_water_bolt_initial_scaled_frame_count = scale_frames_r(electric_water_bolt_initial_frame_count_gp);
         D_L15_00161C60_r = 0x7F2020;
         fast_vec_sub(bolt_displacement, moby_vars + 0x100, moby_vars + 0xF0);
-        fast_vec_normalize(step, bolt_displacement, electric_water_bolt_initial_length_scale / 20.0f);
+        fast_vec_normalize(step, bolt_displacement, electric_water_bolt_initial_length_scale_gp / 20.0f);
         qcopy(D_L15_001D3750_r, moby_vars + 0xF0);
         for (i = 1; i < 20; i++) {
             fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);

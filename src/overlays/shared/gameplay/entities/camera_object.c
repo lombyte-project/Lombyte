@@ -152,11 +152,14 @@ void update_ambience_target_cycle(void) {
 }
 extern int D_L00_00161390;
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
+extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
+extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
 extern int D_L00_00161370 __attribute__((sda));
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
 extern float D_L00_00161374_gp __asm__("D_L00_00161374") __attribute__((sda));
+extern float wrapped_value_decrement_rate_gp __asm__("D_L00_00161378") __attribute__((sda));
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
@@ -177,8 +180,8 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         state_object[0x20] = 1;
         state_object[0x30] = 0xFF;
         one = 1.0f;
-        D_L00_0016137C_gp = scale_game_frames(configured_unscaled_frame_count);
-        scaled_frame_count = scale_game_frames(configured_reciprocal_frame_count);
+        D_L00_0016137C_gp = scale_game_frames(configured_unscaled_frame_count_gp);
+        scaled_frame_count = scale_game_frames(configured_reciprocal_frame_count_gp);
         D_L00_00161380 = scaled_frame_count;
         D_L00_00161384_gp = one / convert_integer_to_float(scaled_frame_count);
         scaled_frame_count = scale_game_frames(D_L00_00161370);
@@ -186,7 +189,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         D_L00_0016138C_gp = one / (float)scaled_frame_count;
         break;
     case UPDATE_WRAPPED_VALUE:
-        D_L00_00161374_gp -= wrapped_value_decrement_rate * frame_scale;
+        D_L00_00161374_gp -= wrapped_value_decrement_rate_gp * frame_scale;
         if (D_L00_00161374_gp <= -8.0f)
             D_L00_00161374_gp += 8.0f;
         break;
@@ -1275,6 +1278,8 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
+extern int last_bolt_attraction_sound_frame_gp __asm__("D_L00_001613AC") __attribute__((sda));
+extern float bolt_spin_angle_limit_degrees_gp __asm__("D_L00_001613A8") __attribute__((sda));
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) __asm__("FUN_L00_002a7210");
 
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {
@@ -1289,10 +1294,10 @@ int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float 
         return 0;
     }
     sound_cooldown_frames = fr_2a7210(3);
-    last = last_bolt_attraction_sound_frame;
+    last = last_bolt_attraction_sound_frame_gp;
     now = D_15F5CC_2a7210;
     if (last + sound_cooldown_frames < now || now < last) {
-        last_bolt_attraction_sound_frame = now;
+        last_bolt_attraction_sound_frame_gp = now;
         allocate_voice_for_target_entry(0, 0x20, bolt_moby);
     } else {
         if (attraction_yaw_angle == 0.0f)
@@ -1312,7 +1317,7 @@ int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float 
         subtract_vector_xyz(attraction_geometry_scratch[1], target_moby + 0x10, bolt_moby + 0x10);
         cross_vectors_xyz(attraction_geometry_scratch[0], bolt_vars + 0x20, attraction_geometry_scratch[1]);
         normalize_vector_xyz(bolt_vars + 0x30, attraction_geometry_scratch[0], 1.0f);
-        k = rndf_2a7210(bolt_spin_angle_limit_degrees * 0.333000004f, bolt_spin_angle_limit_degrees) * DEG_TO_RAD;
+        k = rndf_2a7210(bolt_spin_angle_limit_degrees_gp * 0.333000004f, bolt_spin_angle_limit_degrees_gp) * DEG_TO_RAD;
         build_quaternion_from_axis_angle(bolt_vars + 0x30, bolt_vars + 0x30, k * D_15ED6C_2a7210);
     }
     *(unsigned char *)(bolt_moby + 0x20) = 4;
@@ -1418,7 +1423,7 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
         bolt_vars->unk50 = random_angle_radians();
         bolt_vars->unk58 = random_angle_radians();
         bolt_vars->start_z = spawned_bolt->pos.z;
-        spin = random_float_between(0.0f, bolt_spin_angle_limit_degrees) * 0.017453292f * D_0015ED6C;
+        spin = random_float_between(0.0f, bolt_spin_angle_limit_degrees_gp) * 0.017453292f * D_0015ED6C;
         subtract_vector_xyz(bolt_to_source_offset, &bolt_source->pos, &spawned_bolt->pos);
         cross_vectors_xyz(spin_axis, bolt_vars->vel, bolt_to_source_offset);
         FUN_L00_001ff500(bolt_vars->spin, spin_axis, 1.0f);

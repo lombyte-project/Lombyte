@@ -440,6 +440,7 @@ typedef struct {
 extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_globals.h"
+extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_0016139C") __attribute__((sda));
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
@@ -648,7 +649,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         qcopy(vector_scratch, &moby->pos);
-        vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius;
+        vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
         if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
             float *p;
 
@@ -919,6 +920,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 }
 /* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
  * vertices through it and draws them, then flips the matrix and draws the back face. */
+extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418") __attribute__((sda));
 extern float D_L14_001D7A60[][3];
 extern s32 D_L14_001D80C8[];
 extern char D_L14_001D7E38[];
@@ -964,7 +966,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     sreg_r(0x47, 0x50000);
     sreg_r(0x4A, 0);
     font_queue_vu_state();
-    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count; i++) {
+    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
         float *s = D_L14_001D7A60[i];
         float *o = f.verts[i];
         ring_vertex_scratch[0] = s[0];
@@ -980,13 +982,13 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         }
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
     }
     scale_r(f.mat[1], f.mat[1], -1.0f);
     scale_r(f.mat[2], f.mat[2], -1.0f);
-    for (j = 0; j < blarg_heavy_interceptor_light_ring_vertex_count; j++) {
+    for (j = 0; j < blarg_heavy_interceptor_light_ring_vertex_count_gp; j++) {
         float *o = f.verts[j];
         float *s = D_L14_001D7A60[j];
         ring_vertex_scratch[0] = s[0];
@@ -999,9 +1001,9 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[2] = ring_vertex_scratch[2];
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
     }
 }
 /* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
@@ -1013,6 +1015,18 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2add48;
 
+extern float blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp __asm__("D_L14_00161434") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp __asm__("D_L14_00161438") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp __asm__("D_L14_0016143C") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp __asm__("D_L14_00161440") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_red_gp __asm__("D_L14_00161444") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_green_gp __asm__("D_L14_00161448") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_blue_gp __asm__("D_L14_0016144C") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_alpha_gp __asm__("D_L14_00161450") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair_gp __asm__("D_L14_00161454") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair_gp __asm__("D_L14_00161458") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair_gp __asm__("D_L14_0016145C") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair_gp __asm__("D_L14_00161460") __attribute__((sda));
 extern char D_L14_001674C0_b[] __asm__("D_L14_001674C0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1085,12 +1099,12 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    size = blarg_heavy_interceptor_spinning_beam_initial_quad_scale;
-    step = blarg_heavy_interceptor_spinning_beam_initial_offset_scale;
-    r = blarg_heavy_interceptor_spinning_beam_initial_red;
-    g = blarg_heavy_interceptor_spinning_beam_initial_green;
-    b = blarg_heavy_interceptor_spinning_beam_initial_blue;
-    a = blarg_heavy_interceptor_spinning_beam_initial_alpha;
+    size = blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp;
+    step = blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp;
+    r = blarg_heavy_interceptor_spinning_beam_initial_red_gp;
+    g = blarg_heavy_interceptor_spinning_beam_initial_green_gp;
+    b = blarg_heavy_interceptor_spinning_beam_initial_blue_gp;
+    a = blarg_heavy_interceptor_spinning_beam_initial_alpha_gp;
     sreg_b(0x47, 0x51001);
     for (i = 0; i < 16; i++) {
         col = (a << 24) | (b << 16) | (g << 8) | r;
@@ -1110,12 +1124,12 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
             add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
         draw_b(&pk, 0, 0);
-        r -= blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair;
-        g -= blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair;
-        b -= blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair;
-        a -= blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair;
-        size += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair;
-        step += blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair;
+        r -= blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair_gp;
+        g -= blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair_gp;
+        b -= blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair_gp;
+        a -= blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair_gp;
+        size += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp;
+        step += blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp;
         if (r < 0)
             r = 0;
         if (g < 0)
@@ -1146,6 +1160,8 @@ extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
 
+extern float blarg_heavy_interceptor_glow_quad_scale_gp __asm__("D_L14_00161474") __attribute__((sda));
+extern float blarg_heavy_interceptor_glow_position_offset_scale_gp __asm__("D_L14_00161478") __attribute__((sda));
 void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     char *d = (char *)m->pvars;
     float glow_quad_transform[4][4];
@@ -1157,7 +1173,7 @@ void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     int i;
     qcopy(glow_quad_transform[3], d + 0xD0);
     glow_quad_transform[3][3] = 1.0f;
-    scale_e(glow_position_offset, d + 0xA0, blarg_heavy_interceptor_glow_position_offset_scale);
+    scale_e(glow_position_offset, d + 0xA0, blarg_heavy_interceptor_glow_position_offset_scale_gp);
     add_e(glow_quad_transform[3], glow_quad_transform[3], glow_position_offset);
     pk.b = tex_e(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -1191,7 +1207,7 @@ void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
         pk.col[0] = col;
     }
     for (i = 0; i < 4; i++) {
-        scale_e(pk.m[i], D_L14_001D8600[i], blarg_heavy_interceptor_glow_quad_scale);
+        scale_e(pk.m[i], D_L14_001D8600[i], blarg_heavy_interceptor_glow_quad_scale_gp);
         xform_e(pk.m[i], pk.m[i], glow_quad_transform);
     }
     draw_e(&pk, 0, 0);
@@ -1430,6 +1446,16 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
 }
+extern f32 blarg_heavy_interceptor_vertical_oscillation_amplitude_gp __asm__("D_L14_001613A8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp __asm__("D_L14_001613AC") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_amplitude_gp __asm__("D_L14_001613B0") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp __asm__("D_L14_001613B4") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp __asm__("D_L14_001613B8") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp __asm__("D_L14_001613BC") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_offset_magnitude_gp __asm__("D_L14_001613C0") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_error_gain_gp __asm__("D_L14_001613C4") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_damping_coefficient_gp __asm__("D_L14_001613C8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_snap_threshold_scale_gp __asm__("D_L14_001613CC") __attribute__((sda));
 extern void update_moby_vertical_oscillation(f32, f32, u8 *, f32 *, f32 *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L00_00262b80");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
@@ -1448,20 +1474,20 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) __a
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     f32 heading_offset;
-    update_moby_vertical_oscillation(blarg_heavy_interceptor_vertical_oscillation_amplitude, blarg_heavy_interceptor_vertical_oscillation_phase_increment, moby, (f32 *)(data + 0x1A0),
+    update_moby_vertical_oscillation(blarg_heavy_interceptor_vertical_oscillation_amplitude_gp, blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp, moby, (f32 *)(data + 0x1A0),
                      (f32 *)(data + 0x1A4));
-    update_moby_rotation_oscillation(moby, data + 0x1A8, data + 0x1AC, blarg_heavy_interceptor_rotation_oscillation_amplitude, blarg_heavy_interceptor_rotation_oscillation_first_phase_increment,
-                     blarg_heavy_interceptor_rotation_oscillation_second_phase_increment);
+    update_moby_rotation_oscillation(moby, data + 0x1A8, data + 0x1AC, blarg_heavy_interceptor_rotation_oscillation_amplitude_gp, blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp,
+                     blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp);
     if (*(u8 *)(moby + 0x20) == 1) {
         if (fast_dec_timer_s16((s16 *)(data + 0x1B4))) {
-            *(s16 *)(data + 0x1B4) = scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames);
-            heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude;
+            *(s16 *)(data + 0x1B4) = scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp);
+            heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude_gp;
             if (random_integer_below(2))
                 heading_offset = -heading_offset;
             *(f32 *)(data + 0x1B0) = fast_add_rotations(*(f32 *)(moby + 0x48), heading_offset);
         }
         vendor_spring((f32 *)(moby + 0x48), (f32 *)(data + 0x1B8), *(f32 *)(data + 0x1B0),
-                         blarg_heavy_interceptor_patrol_heading_error_gain, blarg_heavy_interceptor_patrol_heading_damping_coefficient, blarg_heavy_interceptor_patrol_heading_snap_threshold_scale);
+                         blarg_heavy_interceptor_patrol_heading_error_gain_gp, blarg_heavy_interceptor_patrol_heading_damping_coefficient_gp, blarg_heavy_interceptor_patrol_heading_snap_threshold_scale_gp);
     }
 }
 extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
@@ -1484,7 +1510,7 @@ void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
     f32 bounding_sphere[4];
     if (random_integer_below(5)) {
         qcopy(bounding_sphere, moby + 0x10);
-        bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius;
+        bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
         if (fast_bsphere_check((u8 *)bounding_sphere, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
             bone_transform = data + 0xA0;
             build_moby_bone_transform(moby, 1, bone_transform);
@@ -1562,7 +1588,7 @@ void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) {
     step = truncate_float_to_s32(advanced_blink_phase);
     if (1.0f <= *(f32 *)(data + 0x164))
         *(s32 *)(data + 0x164) = 0;
-    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count; i++) {
+    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
         s32 light_fade_value = D_L14_001D8210[i];
         if (light_fade_value != 0) {
             light_fade_value += step;
@@ -2192,6 +2218,7 @@ extern char D_L14_001FBF48[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
+extern float minibomber_bomb_gravity_gp __asm__("D_L14_00161568") __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
 extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
@@ -2497,7 +2524,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             subtract_vector_xyz_c(v + 4, D_L14_001B0F30_2B5938[d->fD8] + (d->f100 + 1), v);
             v[6] = 0.0f;
             scale_vector_xyz_c(v + 4, v + 4, 1.0f / n);
-            bomb_gravity = minibomber_bomb_gravity * frame_time_sq;
+            bomb_gravity = minibomber_bomb_gravity_gp * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
             func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(D_L14_0016156C));
@@ -2977,6 +3004,9 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
 /* Flying debris: moves by its velocity under drag and gravity; while it is airborne it tumbles and trails
  * smoke, sparks and a light. When it hits the world or reaches the hero it explodes; once its timer runs out
  * or it leaves the level box it is removed. */
+extern f32 flying_debris_gravity_gp __asm__("D_L14_001615D0") __attribute__((sda));
+extern f32 flying_debris_velocity_retention_factor_gp __asm__("D_L14_001615D4") __attribute__((sda));
+extern f32 flying_debris_horizontal_drag_speed_threshold_gp __asm__("D_L14_001615D8") __attribute__((sda));
 extern char D_L14_001809C0[];
 extern int tick_countdown_16_d(void *) __asm__("FUN_001f9770");
 extern void add_d(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3021,13 +3051,13 @@ void update_flying_debris(struct Moby *moby) {
     if (tick_countdown_16_d(debris_vars + 0x10) != 0)
         { remove_flying_debris((u8 *)moby); return; }
     add_d(&moby->pos, &moby->pos, debris_vars);
-    if (abs_d(*(float *)(debris_vars + 0x0)) > flying_debris_horizontal_drag_speed_threshold * frame_scale)
-        *(float *)(debris_vars + 0x0) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
-    if (abs_d(*(float *)(debris_vars + 0x4)) > flying_debris_horizontal_drag_speed_threshold * frame_scale)
-        *(float *)(debris_vars + 0x4) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(debris_vars + 0x0)) > flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
+        *(float *)(debris_vars + 0x0) *= (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
+    if (abs_d(*(float *)(debris_vars + 0x4)) > flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
+        *(float *)(debris_vars + 0x4) *= (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
     if (*(float *)(debris_vars + 0x8) > 0.0f)
-        *(float *)(debris_vars + 0x8) *= (flying_debris_velocity_retention_factor - 1.0f) * frame_scale + 1.0f;
-    *(float *)(debris_vars + 0x8) -= flying_debris_gravity * frame_scale_sq;
+        *(float *)(debris_vars + 0x8) *= (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
+    *(float *)(debris_vars + 0x8) -= flying_debris_gravity_gp * frame_scale_sq;
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f || moby->pos.z < 2.0f ||
         moby->pos.z > 1021.0f)
         { remove_flying_debris((u8 *)moby); return; }
@@ -3190,6 +3220,7 @@ struct L14RaceState {
 
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
+extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
 extern s32 D_L14_00161A34 __attribute__((sda));
 extern s32 D_L14_00161A5C __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
@@ -3263,7 +3294,7 @@ void update_level14_racer(struct Moby *racer_moby) {
         racer_moby->state = 3;
         set_moby_animation(racer_moby, 2, 0);
         racer_moby->anim_speed = 0.5f;
-        racer_vars->timer = scale_game_frames(level14_racer_start_interpolation_duration_frames);
+        racer_vars->timer = scale_game_frames(level14_racer_start_interpolation_duration_frames_gp);
         racer_vars->inv_time = 1.0f / convert_integer_to_float(racer_vars->timer);
         qcopy(&racer_moby->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:

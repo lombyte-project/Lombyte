@@ -125,6 +125,8 @@ void rocket_update(char *rocket_moby) {
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 #include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_globals.h"
+extern float class_32_symmetric_angle_bound_degrees_gp __asm__("D_L16_001613E0") __attribute__((sda));
+extern float class_32_zero_based_angle_bound_degrees_gp __asm__("D_L16_001613E4") __attribute__((sda));
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
@@ -146,10 +148,10 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spaw
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
         initial_movement_length = fast_vec_length(initial_movement_vector);
-        x = class_32_symmetric_angle_bound_degrees;
+        x = class_32_symmetric_angle_bound_degrees_gp;
         *(float *)(moby_data + 0x24) = initial_movement_length;
         random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
-        y = class_32_zero_based_angle_bound_degrees;
+        y = class_32_zero_based_angle_bound_degrees_gp;
         *(float *)(moby_data + 0x28) = random_angle_radians;
         *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(moby_data + 0x34) = 0;
@@ -552,6 +554,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern int blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -646,8 +649,8 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         case HIT_RESPONSE_FATAL_FALL: {
             char *source;
             if (current_level_index == 18 && commando_data->reward_hits) {
-                ++*(int *)&blarg_elite_commando_reward_kill_count;
-                if (*(int *)&blarg_elite_commando_reward_kill_count >= 10) {
+                ++*(int *)&blarg_elite_commando_reward_kill_count_gp;
+                if (*(int *)&blarg_elite_commando_reward_kill_count_gp >= 10) {
                     if (D_0013D408[0x1D] == 0) {
                         D_0013D408[0x1D] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);

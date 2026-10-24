@@ -1616,12 +1616,16 @@ extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
 extern char D_L17_001E6E00[];
 char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
 #include "rnc/overlay/l17/gameplay/entities/door_globals.h"
+extern float fighter_jet_boarding_distance_limit_gp __asm__("D_L17_00161FE0") __attribute__((sda));
+extern float fighter_jet_initial_flight_speed_gp __asm__("D_L17_00161FE4") __attribute__((sda));
 extern float D_L17_00162054 __attribute__((sda));
+extern float fighter_jet_starting_hp_gp __asm__("D_L17_00162058") __attribute__((sda));
 /* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
    the load after the stores to the ship vars like retail. */
 extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
 extern unsigned char D_L17_00162064 __attribute__((sda));
 extern unsigned char D_L17_00162068 __attribute__((sda));
+extern float fighter_jet_max_hp_gp __asm__("D_L17_00162084") __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;
 char *hp_bar_clut __asm__("D_L17_00162180") = 0;
@@ -1754,7 +1758,7 @@ void fighter_jet_update(ShipMoby *moby) {
             struct Hero *g = &hero;
             if (g->ship_moby == (struct Moby *)moby) {
                 g->ship_hp_percent =
-                    g->ship_hp / fighter_jet_max_hp * 200.0f;
+                    g->ship_hp / fighter_jet_max_hp_gp * 200.0f;
             }
         }
         switch (moby->state) {
@@ -1792,7 +1796,7 @@ void fighter_jet_update(ShipMoby *moby) {
             break;
         case FIGHTER_JET_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
-            board = jet_distance(moby, (ShipCamera *)g->moby) < fighter_jet_boarding_distance_limit &&
+            board = jet_distance(moby, (ShipCamera *)g->moby) < fighter_jet_boarding_distance_limit_gp &&
                     FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
@@ -1816,10 +1820,10 @@ void fighter_jet_update(ShipMoby *moby) {
                 g->unk160E = 1;
                 g->ship_ammo_max = D_L17_00162068;
                 g->unk15F8 = D_L17_00162068;
-                g->ship_hp = fighter_jet_starting_hp;
+                g->ship_hp = fighter_jet_starting_hp_gp;
                 ship_vars->iF0 = 0;
                 ship_vars->iF4 = 0xFF;
-                g->ship_hp_max = fighter_jet_max_hp;
+                g->ship_hp_max = fighter_jet_max_hp_gp;
                 g->unk1604 = 100.0f;
                 g->unk15F9 = 3;
                 g->unk15FA = 3;
@@ -1836,7 +1840,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 FUN_L17_0021e530(50, 1);
                 jet_mount(moby->pos, moby->rot, 1, 0, 0);
                 ship_vars->s68 = 0;
-                ship_vars->speed = fighter_jet_initial_flight_speed;
+                ship_vars->speed = fighter_jet_initial_flight_speed_gp;
                 ship_vars->f6C = 0.0f;
                 ship_vars->f70 = 0.0f;
                 ship_vars->i84 = 0;
@@ -1848,7 +1852,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->fBC = D_L17_00162038 * D_L17_0016209C;
                 ship_vars->fB8 = 0.0f;
                 ((ShipCamera *)g->moby)->unk98 = -1;
-                spherical_offset_ed(ship_vars->dir, fighter_jet_initial_flight_speed, ship_vars->rot[2], -ship_vars->rot[1]);
+                spherical_offset_ed(ship_vars->dir, fighter_jet_initial_flight_speed_gp, ship_vars->rot[2], -ship_vars->rot[1]);
                 if (ship_vars->i11C > 0) {
                     jet_group_state(ship_vars->i11C, 1, 1, 1);
                 }
@@ -3183,7 +3187,11 @@ extern float wrap_angle(float);
 int D_L17_00162248 = 128;
 int D_L17_0016224C = 45;
 int D_L17_00162250 = 64;
+extern float ripple_pair_radial_phase_distance_scale_gp __asm__("D_L17_00162254") __attribute__((sda));
+extern float ripple_pair_phase_period_gp __asm__("D_L17_00162258") __attribute__((sda));
+extern float ripple_pair_z_amplitude_gp __asm__("D_L17_0016225C") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern float ripple_pair_uv_scroll_rate_gp __asm__("D_L17_00162260") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
@@ -3215,25 +3223,25 @@ void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) {
     int color;
     int i, j, uv_strip_index, uv_vertex_index, draw_strip_index;
 
-    scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_pair_uv_scroll_rate * frame_time);
+    scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_pair_uv_scroll_rate_gp * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_0016224C));
     vu1_add_g_sregister(0x42, ((long)D_L17_00162248 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     ripple_vars->f0 = ripple_vars->f4;
     ripple_vars->f4 = fast_add_rotations(ripple_vars->f4,
-                               360.0f / multiply_global_factor_ed64(ripple_pair_phase_period) * DEG_TO_RAD * frame_time);
+                               360.0f / multiply_global_factor_ed64(ripple_pair_phase_period_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L17_00162250 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 2; i++) {
         for (j = 0; j < D_L17_00162210[i]; j++) {
             int *template_vertex_array_slot = D_L17_00162230 + i;
             float *p = (float *)(*template_vertex_array_slot + j * 12);
-            float t = ripple_pair_z_amplitude *
+            float t = ripple_pair_z_amplitude_gp *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
-                                                      ripple_pair_radial_phase_distance_scale) *
-                                     6.2831855f / ripple_pair_radial_phase_distance_scale),
+                                                      ripple_pair_radial_phase_distance_scale_gp) *
+                                     6.2831855f / ripple_pair_radial_phase_distance_scale_gp),
                           ripple_vars->f4));
             *(float *)(j * 12 + D_L17_00162218[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + D_L17_00162218[i] + 4) = p[1] + moby->pos.y;
@@ -3375,6 +3383,7 @@ typedef struct {
 Quad4 D_L17_00162390 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float ripple_uv_scroll_rate_gp __asm__("D_L17_0016238C") __attribute__((sda));
 float D_L17_001DD760[135] = {-7.788906f, -7.788906f, 0.005259f, -7.788906f, -3.894453f, 0.005259f, -3.894453f, -7.788906f, 0.005259f, -3.894453f, -3.894453f, 0.005259f, 0.0f, -7.788906f, 0.005259f, 0.0f, -3.894453f, 0.005259f, 3.894453f, -7.788906f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 7.788906f, -7.788906f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 7.788906f, -3.894453f, 0.005259f, 3.894453f, 0.0f, 0.005259f, 7.788906f, 0.0f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 7.788906f, 3.894453f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 7.788906f, 7.788906f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 3.894453f, 7.788906f, 0.005259f, 0.0f, 3.894453f, 0.005259f, 0.0f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -3.894453f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -7.788906f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -7.788906f, 3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -7.788906f, 0.0f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -7.788906f, -3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -3.894453f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 0.0f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, 0.0f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 0.0f, 3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -3.894453f, 3.894453f, 0.005259f};
 float D_L17_001DD980[45][2] = {
     {0.0f, 0.0f},
@@ -3438,6 +3447,9 @@ int D_L17_00162370[1] = {(int)D_L17_001DDF28};
 int D_L17_00162374 = 128;
 int D_L17_00162378 = 45;
 int D_L17_0016237C = 64;
+extern float ripple_radial_phase_distance_scale_gp __asm__("D_L17_00162380") __attribute__((sda));
+extern float ripple_phase_period_gp __asm__("D_L17_00162384") __attribute__((sda));
+extern float ripple_z_amplitude_gp __asm__("D_L17_00162388") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -3461,13 +3473,13 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     float scale;
     Quad4 *v_scroll_factors;
     float *output_vertex;
-    scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_uv_scroll_rate * frame_time);
+    scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_uv_scroll_rate_gp * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_00162378));
     vu1_add_g_sregister(0x42, ((long)D_L17_00162374 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(ripple_phase_period) *
+    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(ripple_phase_period_gp) *
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
@@ -3479,12 +3491,12 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
-        float radial_phase_input = FUN_L00_00200260(rad, ripple_radial_phase_distance_scale);
-        float w = wrap_angle(radial_phase_input * 6.2831855f / ripple_radial_phase_distance_scale);
+        float radial_phase_input = FUN_L00_00200260(rad, ripple_radial_phase_distance_scale_gp);
+        float w = wrap_angle(radial_phase_input * 6.2831855f / ripple_radial_phase_distance_scale_gp);
         float z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
         *(float *)((char *)D_L17_001DDBA0 + 4 + output_vertex_byte_offset) = template_vertex[1] + moby->pos.y;
-        output_vertex[2] = template_vertex[2] + moby->pos.z + ripple_z_amplitude * z;
+        output_vertex[2] = template_vertex[2] + moby->pos.z + ripple_z_amplitude_gp * z;
         D_L17_001DDF28[i] = color;
         i++;
         output_vertex_byte_offset += 12;

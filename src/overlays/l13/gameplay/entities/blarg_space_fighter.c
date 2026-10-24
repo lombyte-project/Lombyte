@@ -432,6 +432,7 @@ extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_00305
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
 #include "rnc/overlay/l13/gameplay/entities/blarg_space_fighter_globals.h"
+extern float hovering_rocket_attacker_launch_vector_speed_gp __asm__("D_L13_0016149C") __attribute__((sda));
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -541,7 +542,7 @@ void update_hovering_rocket_attacker(unsigned char *moby) {
                 if (*(int *)(moby_data + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
                 else moby_point_position(moby, 0, scratch_vector);
                 subtract_vector_xyz(shot_direction_vector, target + 0x10, scratch_vector);
-                normalize_vector_xyz(shot_direction_vector, shot_direction_vector, hovering_rocket_attacker_launch_vector_speed * frame_time);
+                normalize_vector_xyz(shot_direction_vector, shot_direction_vector, hovering_rocket_attacker_launch_vector_speed_gp * frame_time);
                 if (*(int *)(moby_data + 0xF4) != 0) {
                     if (*(void **)(moby_data + 0xF8)) {
                         launch_attached_rocket(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
@@ -629,6 +630,7 @@ extern float FUN_001f99c0(float);
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
+extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490") __attribute__((sda));
 
 void update_hovering_rocket_attacker_common(unsigned char *moby) {
     enum {
@@ -690,7 +692,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         rb = FUN_L00_00257b90(0xA, 0xF);
         FUN_L00_00269958(point_3_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
     }
-    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * hovering_rocket_attacker_scale_multiplier;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * hovering_rocket_attacker_scale_multiplier_gp;
     damage_amount = 0.0f;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
     hit_reaction_code = FUN_L13_002c2d30_collision(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);

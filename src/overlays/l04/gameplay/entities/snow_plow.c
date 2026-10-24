@@ -44,6 +44,7 @@ extern char D_L04_001DBE10[];
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
+extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -284,7 +285,7 @@ void snow_plow_update(struct Moby *moby) {
     }
 hit:
     if (find_moby_hit(moby, 0x210000, 0)) {
-        if (++snow_plow_hit_count >= 10) {
+        if (++snow_plow_hit_count_gp >= 10) {
             unsigned char *flags = D_0013D408;
             if (flags[6] == 0) {
                 flags[6] = 1;

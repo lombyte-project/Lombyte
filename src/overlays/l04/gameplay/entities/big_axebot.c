@@ -196,6 +196,7 @@ extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void 
 extern PathPoints_eb20 *D_L04_001b0630[];
 f32 D_L04_00166130[8] __attribute__((section(".bss")));
 #include "rnc/overlay/l04/gameplay/entities/big_axebot_globals.h"
+extern s32 swarm_motion_parameters_initialized_gp __asm__("D_L04_001513C0") __attribute__((sda));
 
 /* Variables of a swarm child (class 0x55). */
 typedef struct SwarmPartVars_29ecf8 {
@@ -248,14 +249,14 @@ void update_class_55_swarm_controller(struct Moby *moby) {
     f32 average;
     f32 effect[8];
 
-    if (swarm_motion_parameters_initialized == 0) {
+    if (swarm_motion_parameters_initialized_gp == 0) {
         f32 *effect_dest = D_L04_00166130;
         memset(effect, 0, 0x20);
         effect[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
         effect[3] = 2.0f;
         effect[4] = 1.0f;
         effect[5] = 1.0f;
-        swarm_motion_parameters_initialized = 1;
+        swarm_motion_parameters_initialized_gp = 1;
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
     if (data->initialized == 0) {
@@ -1287,6 +1288,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
+extern float circular_saw_flock_separation_weight_gp __asm__("D_L04_00161884") __attribute__((sda));
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) __asm__("FUN_L04_002c1fb8");
 
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
@@ -1315,9 +1317,9 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
         if (other == moby || *(short *)(other + 0xA6) != moby->oclass) continue;
         if (vector_distance((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
             subtract_vector_xyz_c(away, &moby->pos, other + 0x10);
-            scale_vector_xyz(away, away, circular_saw_flock_separation_weight);
+            scale_vector_xyz(away, away, circular_saw_flock_separation_weight_gp);
             add_vector_xyz_c(out, out, away);
-            weight += circular_saw_flock_separation_weight;
+            weight += circular_saw_flock_separation_weight_gp;
         }
         if (vector_distance((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }
@@ -2211,6 +2213,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
+extern f32 smoke_trail_puff_vertical_velocity_scale_gp __asm__("D_L04_001618B4") __attribute__((sda));
 extern f32 D_L04_001618BC __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
@@ -2240,7 +2243,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *
         add_vector_xyz(&at, from, &at);
         particle_spawn_velocity.f[0] = randf_sym(0.0f, 0.005f);
         particle_spawn_velocity.f[1] = randf_sym(0.0f, 0.005f);
-        particle_spawn_velocity.f[2] = random_float_between(smoke_trail_puff_vertical_velocity_scale * 0.1f, smoke_trail_puff_vertical_velocity_scale);
+        particle_spawn_velocity.f[2] = random_float_between(smoke_trail_puff_vertical_velocity_scale_gp * 0.1f, smoke_trail_puff_vertical_velocity_scale_gp);
         tint = random_int_between(0x40, 0x70);
         grey = random_int_between(0x40, 0x7F);
         grey = grey | (grey << 16 | grey << 8);

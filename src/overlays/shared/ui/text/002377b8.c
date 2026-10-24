@@ -134,6 +134,7 @@ typedef struct {
 extern s32 D_L00_0015FA90;
 extern void *D_L00_0015FAC0;
 #include "rnc/overlay/shared/ui/text/002377b8_globals.h"
+extern s32 eight_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F738") __attribute__((sda));
 extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
@@ -149,7 +150,7 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     s32 *item_id_cursor;
     E00237ae8 *tab;
     D_L00_0015FA90 = 8;
-    D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer;
+    D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer_gp;
     hud_element->x48 = 0;
     hud_element->x4a = 0;
     hud_element->x58 = D_L00_0015F718_gp;
@@ -199,6 +200,7 @@ extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
 extern int D_L00_0015FA90;
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
+extern int saved_hud_selector_slot_index_gp __asm__("D_L00_0015FA9C") __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern int D_L00_0017DC38 __attribute__((section(".data")));
 extern int D_L00_0017DC3C __attribute__((section(".data")));
@@ -222,6 +224,8 @@ typedef struct {
 } Progress;
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_00141622[] __attribute__((section(".data")));
+extern float hud_item_selector_even_slot_edge_fraction_gp __asm__("D_L00_0015F788") __attribute__((sda));
+extern float hud_item_selector_slot_angle_offset_gp __asm__("D_L00_0015F784") __attribute__((sda));
 extern int D_L00_0017DC18 __attribute__((section(".data")));
 extern int D_L00_0017DC1C __attribute__((section(".data")));
 extern int D_L00_0017DC20 __attribute__((section(".data")));
@@ -271,14 +275,14 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)FUN_001fa6d0(slot_position);
-                    if (fr > 1.0f - hud_item_selector_even_slot_edge_fraction) stick_slot_index++;
-                    else if (fr < hud_item_selector_even_slot_edge_fraction) stick_slot_index--;
+                    if (fr > 1.0f - hud_item_selector_even_slot_edge_fraction_gp) stick_slot_index++;
+                    else if (fr < hud_item_selector_even_slot_edge_fraction_gp) stick_slot_index--;
                     stick_slot_index = (stick_slot_index + D_L00_0015FA90) % D_L00_0015FA90;
                 }
                 hud_element->w74 = stick_slot_index;
                 slot_step = -1;
-                hud_item_selector_slot_angle_offset = fast_normalize_angle(a - ((float)stick_slot_index * 0.7853982f + 0.39269909f));
-                if (hud_item_selector_slot_angle_offset > 0.0f) slot_step = 1;
+                hud_item_selector_slot_angle_offset_gp = fast_normalize_angle(a - ((float)stick_slot_index * 0.7853982f + 0.39269909f));
+                if (hud_item_selector_slot_angle_offset_gp > 0.0f) slot_step = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
             int pad_slot_index;
@@ -322,7 +326,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         {
             int a = hud_element->w78;
             int selected_slot_snapshot = hud_element->w74;
-            saved_hud_selector_slot_index = selected_slot_snapshot;
+            saved_hud_selector_slot_index_gp = selected_slot_snapshot;
             D_L00_0015FA98 = a;
         }
         remove_hud_item(hud_element->w64);
@@ -526,13 +530,14 @@ extern void *D_L00_0015FAC0;
 extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
+extern int four_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F740") __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
 
 void initialize_four_slot_hud_selector(char *hud_element) {
     int element_width, element_height;
     D_L00_0015FA90 = 4;
-    D_L00_0015FAC0 = &four_slot_hud_selector_table_pointer;
+    D_L00_0015FAC0 = &four_slot_hud_selector_table_pointer_gp;
     element_width = D_L00_0015F718_gp;
     element_height = D_L00_0015F71C_gp;
     *(short *)(hud_element + 0x48) = 0;
@@ -628,7 +633,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
         {
             int selection_state_snapshot = hud_element->w78;
             int selected_slot_snapshot = hud_element->w74;
-            saved_hud_selector_slot_index = selected_slot_snapshot;
+            saved_hud_selector_slot_index_gp = selected_slot_snapshot;
             D_L00_0015FA98 = selection_state_snapshot;
         }
         remove_hud_item(hud_element->w64);
@@ -1139,8 +1144,12 @@ extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
 
+extern s32 bolt_count_text_x_offset_gp __asm__("D_L00_0015F834") __attribute__((sda));
+extern s32 bolt_count_text_y_offset_gp __asm__("D_L00_0015F838") __attribute__((sda));
 extern s32 D_L00_0015F83C __attribute__((sda));
 extern s32 D_L00_0015F840 __attribute__((sda));
+extern s32 bolt_dot_separator_x_offset_gp __asm__("D_L00_0015F844") __attribute__((sda));
+extern s32 bolt_dot_separator_y_offset_gp __asm__("D_L00_0015F848") __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
 int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
@@ -1198,15 +1207,15 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element)
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
     shadow = fast_tween_color(0, 0x80000000, text);
     sprintf_alt(bolt_display_text, bolt_count_format, current_bolt_count);
-    font_print_right(x + bolt_count_text_x_offset + 1, y + bolt_count_text_y_offset + 1, shadow, bolt_display_text, -1);
-    font_print_right(x + bolt_count_text_x_offset, y + bolt_count_text_y_offset, color, bolt_display_text, -1);
+    font_print_right(x + bolt_count_text_x_offset_gp + 1, y + bolt_count_text_y_offset_gp + 1, shadow, bolt_display_text, -1);
+    font_print_right(x + bolt_count_text_x_offset_gp, y + bolt_count_text_y_offset_gp, color, bolt_display_text, -1);
 
     /* thousands separators */
     if (game_language != 3)
         apostrophe = game_language != 5;
     sprintf_alt(bolt_display_text, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
-    dy = apostrophe ? D_L00_0015F840 : bolt_dot_separator_y_offset;
-    dx = apostrophe ? D_L00_0015F83C : bolt_dot_separator_x_offset;
+    dy = apostrophe ? D_L00_0015F840 : bolt_dot_separator_y_offset_gp;
+    dx = apostrophe ? D_L00_0015F83C : bolt_dot_separator_x_offset_gp;
     for (i = 3; i < digits; i += 3) {
         sx = x + dx;
         sy = y + dy;
@@ -1247,6 +1256,14 @@ void update_hud_panel_visibility(u8 *hud_element) {
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
+extern s32 bolt_exclamation_panel_max_alpha_gp __asm__("D_L00_0015F8F8") __attribute__((sda));
+extern s32 bolt_exclamation_panel_open_slide_distance_gp __asm__("D_L00_0015F8FC") __attribute__((sda));
+extern s32 bolt_exclamation_panel_right_x_offset_gp __asm__("D_L00_0015F900") __attribute__((sda));
+extern s32 bolt_exclamation_label_x_offset_gp __asm__("D_L00_0015F904") __attribute__((sda));
+extern s32 bolt_exclamation_label_y_offset_gp __asm__("D_L00_0015F908") __attribute__((sda));
+extern s32 bolt_exclamation_label_color_from_gp __asm__("D_L00_0015F90C") __attribute__((sda));
+extern s32 bolt_exclamation_label_color_to_gp __asm__("D_L00_0015F910") __attribute__((sda));
+extern s32 bolt_exclamation_label_pulse_base_period_frames_gp __asm__("D_L00_0015F914") __attribute__((sda));
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
@@ -1289,9 +1306,9 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
         text = 0.0f;
 
     text_alpha = truncate_float_to_s32(text * 128.0f);
-    alpha = truncate_float_to_s32((f32)bolt_exclamation_panel_max_alpha * open);
-    panel_right = x + bolt_exclamation_panel_right_x_offset;
-    slide = truncate_float_to_s32((f32)bolt_exclamation_panel_open_slide_distance * open);
+    alpha = truncate_float_to_s32((f32)bolt_exclamation_panel_max_alpha_gp * open);
+    panel_right = x + bolt_exclamation_panel_right_x_offset_gp;
+    slide = truncate_float_to_s32((f32)bolt_exclamation_panel_open_slide_distance_gp * open);
     draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
     panel_left = panel_right - slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
@@ -1299,16 +1316,16 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
     draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
     sprintf_alt(formatted_label_text, D_L00_0015F918);
-    text_x = x + bolt_exclamation_label_x_offset;
-    text_y = y + bolt_exclamation_label_y_offset;
-    period = scale_game_frames(bolt_exclamation_label_pulse_base_period_frames);
+    text_x = x + bolt_exclamation_label_x_offset_gp;
+    text_y = y + bolt_exclamation_label_y_offset_gp;
+    period = scale_game_frames(bolt_exclamation_label_pulse_base_period_frames_gp);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
     if (pulse < 0.0f)
         pulse = 0.0f;
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
-    color = fast_tween_color(bolt_exclamation_label_color_from, bolt_exclamation_label_color_to, scaled_text);
+    color = fast_tween_color(bolt_exclamation_label_color_from_gp, bolt_exclamation_label_color_to_gp, scaled_text);
     print_text_with_texture_3(text_x + 1, text_y + 1, shadow, formatted_label_text, -1);
     print_text_with_texture_3(text_x, text_y, color, formatted_label_text, -1);
 out:

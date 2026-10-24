@@ -309,6 +309,8 @@ extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 SubtractIntegerWithClamp(s32);
 
 #include "rnc/overlay/l16/gameplay/entities/rocket_globals.h"
+extern float test_dummy_door_height_offset_gp __asm__("D_L16_00161A84") __attribute__((sda));
+extern int last_test_dummy_door_sound_request_frame_gp __asm__("D_L16_00161A88") __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
     enum {
@@ -326,14 +328,14 @@ void test_dummy_door_update(struct Moby *moby) {
         float target_height;
         if (timer_result != 0) {
             if (timer_result == 2) {
-                if (SubtractIntegerWithClamp(last_test_dummy_door_sound_request_frame - D_L16_0015F5CC) >= 4) {
-                    last_test_dummy_door_sound_request_frame = D_L16_0015F5CC;
+                if (SubtractIntegerWithClamp(last_test_dummy_door_sound_request_frame_gp - D_L16_0015F5CC) >= 4) {
+                    last_test_dummy_door_sound_request_frame_gp = D_L16_0015F5CC;
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
             }
             target_height = *(float *)data;
         } else {
-            target_height = *(float *)data + test_dummy_door_height_offset;
+            target_height = *(float *)data + test_dummy_door_height_offset_gp;
         }
         advance_accelerated_scalar(target_height, frame_time_sq * 10.0f, frame_time_sq * 10.0f, D_0015ED6C * 10.0f,
                                    &moby->pos.z, (float *)(data + 4));
@@ -697,6 +699,12 @@ void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00
 extern void func_00215C00_57_q(float, float, float, void *) __asm__("FUN_00214db0");
 extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
 
+extern float reposition_effect_velocity_elevation_degrees_gp __asm__("D_L16_001618E8") __attribute__((sda));
+extern float reposition_effect_velocity_scale_range_start_gp __asm__("D_L16_001618EC") __attribute__((sda));
+extern float reposition_effect_velocity_scale_range_end_gp __asm__("D_L16_001618F0") __attribute__((sda));
+extern float reposition_effect_spawn_z_offset_gp __asm__("D_L16_001618F4") __attribute__((sda));
+extern float reposition_effect_radius_range_start_gp __asm__("D_L16_001618F8") __attribute__((sda));
+extern float reposition_effect_radius_range_end_gp __asm__("D_L16_001618FC") __attribute__((sda));
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) __asm__("FUN_L16_002c44f0");
 
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) {
@@ -719,17 +727,17 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
         float *effectVelocity = effect_velocity;
         i = 3;
         do {
-            radius = random_float_between_alt_q(reposition_effect_radius_range_start,
-                                                reposition_effect_radius_range_end);
+            radius = random_float_between_alt_q(reposition_effect_radius_range_start_gp,
+                                                reposition_effect_radius_range_end_gp);
             effect_position_angle = random_angle_radians_q();
             random_effect_angle = random_angle_radians_q();
             func_00215C00_57_q(radius, effect_position_angle, random_effect_angle, effectPosition);
-            out[2] += reposition_effect_spawn_z_offset;
+            out[2] += reposition_effect_spawn_z_offset_gp;
             add_vector_xyz_q(effectPosition, effectPosition, &moby->pos);
-            speed = random_float_between_alt_q(reposition_effect_velocity_scale_range_start * D_0015ED6C,
-                                               reposition_effect_velocity_scale_range_end * D_0015ED6C);
+            speed = random_float_between_alt_q(reposition_effect_velocity_scale_range_start_gp * D_0015ED6C,
+                                               reposition_effect_velocity_scale_range_end_gp * D_0015ED6C);
             random_effect_angle = random_angle_radians_q();
-            func_00215C00_57_q(speed, random_effect_angle, reposition_effect_velocity_elevation_degrees * DEG_TO_RAD,
+            func_00215C00_57_q(speed, random_effect_angle, reposition_effect_velocity_elevation_degrees_gp * DEG_TO_RAD,
                                effectVelocity);
             speed = random_float_between_alt_q(3.5f, 5.5f);
             effect_velocity[2] = speed * D_0015ED6C;
@@ -926,6 +934,7 @@ void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
+extern float conveyor_belt_base_speed_gp __asm__("D_L16_0016198C") __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *moby) {
     enum {
@@ -950,7 +959,7 @@ void conveyor_belt_update(struct Moby *moby) {
         *(int *)(conveyor_data + 0x74) = -1;
         break;
     case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
-        target = -(conveyor_belt_base_speed * D_0015ED6C);
+        target = -(conveyor_belt_base_speed_gp * D_0015ED6C);
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
@@ -961,7 +970,7 @@ void conveyor_belt_update(struct Moby *moby) {
         enqueue_callback_list_1_alt(draw_conveyor_belt_strips, moby);
         break;
     case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
-        target = conveyor_belt_base_speed * D_0015ED6C;
+        target = conveyor_belt_base_speed_gp * D_0015ED6C;
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
@@ -1054,10 +1063,15 @@ extern float D_L16_001D32C0[][2], D_L16_001D3010[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D32E0[][2], D_L16_001D3030[][4];
 extern float vector_length_xyz(void *a);
 extern int D_L16_0015F5CC;
+extern int conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") __attribute__((sda));
+extern int conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") __attribute__((sda));
 extern int D_L16_00161998 __attribute__((sda));
 extern int D_L16_0016199C __attribute__((sda));
 extern int D_L16_001619A0 __attribute__((sda));
 extern int D_L16_001619A4 __attribute__((sda));
+extern int conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") __attribute__((sda));
+extern int conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") __attribute__((sda));
+extern int conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") __attribute__((sda));
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int FUN_001fa6e0(float, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1089,14 +1103,14 @@ void draw_conveyor_belt_strips(char *moby) {
     phase = convert_integer_to_float(D_L16_0015F5CC % period);
     phase = phase / convert_integer_to_float(period);
     phase = fast_sin(phase * 6.28318f - 3.14159f) * 0.5f + 0.5f;
-    tint = func_001FA8A8_caa18(conveyor_belt_pulse_color_start, conveyor_belt_pulse_color_end, phase);
-    color = conveyor_belt_scrolling_vertex_color;
-    packets[0].texture = get_effect_texture(conveyor_belt_pulse_texture_id);
+    tint = func_001FA8A8_caa18(conveyor_belt_pulse_color_start_gp, conveyor_belt_pulse_color_end_gp, phase);
+    color = conveyor_belt_scrolling_vertex_color_gp;
+    packets[0].texture = get_effect_texture(conveyor_belt_pulse_texture_id_gp);
     packets[0].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
                       ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
     packets[0].flags = flags;
     packets[0].zero = 0;
-    packets[1].texture = get_effect_texture(conveyor_belt_scrolling_texture_id);
+    packets[1].texture = get_effect_texture(conveyor_belt_scrolling_texture_id_gp);
     packets[1].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
                       ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
     packets[1].flags = flags;
@@ -1215,6 +1229,7 @@ extern float vector_length_xyz(void *a);
 extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
+extern float test_dummy_bomb_horizontal_launch_speed_gp __asm__("D_L16_001619CC") __attribute__((sda));
 extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -1372,7 +1387,7 @@ void test_dummy_update(unsigned char *moby) {
             qcopy(position_or_delta.f, dummy_data->target);
         }
         if (is_value_within_interpolated_window(moby, 15.0f) && dummy_data->child) {
-            float speed = test_dummy_bomb_horizontal_launch_speed * D_0015ED6C;
+            float speed = test_dummy_bomb_horizontal_launch_speed_gp * D_0015ED6C;
             float gravity = frame_time_sq * 10.0f;
             position_or_delta.f[2] = probe_ground_height(position_or_delta.f, 0, 0.5f);
             moby_point_position(dummy_data->child, 0, position_or_direction.f);
@@ -1779,6 +1794,8 @@ float D_L16_001D3130[4][4] = {
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
 extern char D_L16_001671C0[];
+extern int test_dummy_glow_pulse_color_start_gp __asm__("D_L16_001619E0") __attribute__((sda));
+extern int test_dummy_glow_pulse_color_end_gp __asm__("D_L16_001619E4") __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern float fast_sin_alt(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -1811,7 +1828,7 @@ void draw_test_dummy_group_glows(char *moby) {
     group_entry = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
     for (;; group_entry++) {
         group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
-        color = fast_tween_color(test_dummy_glow_pulse_color_start, test_dummy_glow_pulse_color_end,
+        color = fast_tween_color(test_dummy_glow_pulse_color_start_gp, test_dummy_glow_pulse_color_end_gp,
                                (fast_sin_alt(*(float *)(*(char **)(group_moby + 0x78) + 0x11C)) + 1.0f) * 0.5f);
         glow_quad.rgba[3] = color;
         glow_quad.rgba[2] = color;
@@ -2397,6 +2414,7 @@ void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
+extern int hoverboard_dummy_spray_initial_color_gp __asm__("D_L16_00161A08") __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {
@@ -2655,7 +2673,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (*(short *)(hoverboard_dummy_data + 0x2F6) == 0) {
             int ticks = random_int_between(scale_game_frames(10), scale_game_frames(13));
 
-            FUN_L00_00269958(impact, spray, hoverboard_dummy_spray_initial_color, D_L16_00161A0C, ticks, 15, 15, 1);
+            FUN_L00_00269958(impact, spray, hoverboard_dummy_spray_initial_color_gp, D_L16_00161A0C, ticks, 15, 15, 1);
         } else {
             int ticks;
 
@@ -2663,7 +2681,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             ticks = random_int_between(scale_game_frames(15), scale_game_frames(18));
             FUN_L00_00269958(impact, dust, 0x5032F0D2, D_L16_00161A0C, ticks, 30, 20, 1);
             ticks = random_int_between(scale_game_frames(8), scale_game_frames(17));
-            FUN_L00_0026cbb0(impact, spray, hoverboard_dummy_spray_initial_color, D_L16_00161A0C, ticks, 1,
+            FUN_L00_0026cbb0(impact, spray, hoverboard_dummy_spray_initial_color_gp, D_L16_00161A0C, ticks, 1,
                              15000.0f);
         }
         break;
@@ -2724,6 +2742,7 @@ extern char *D_L16_0015FFD8;
 extern char D_L16_001671C0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
+extern float class_0287_group_activation_value_gp __asm__("D_L16_00161A80") __attribute__((sda));
 
 void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5ad0");
 
@@ -2748,7 +2767,7 @@ void *set_class_0287_group_activation_and_find_nearest(int index, int secondary)
         }
         data = *(float **)(moby + 0x78);
         moby[0x20] = 1;
-        activation_value = class_0287_group_activation_value;
+        activation_value = class_0287_group_activation_value_gp;
         data[5] = activation_value;
         if (secondary)
             data[6] = activation_value;
@@ -2831,8 +2850,8 @@ extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
 void refresh_test_dummy_door_timer(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     if (*(int *)(moby_data + 8) == 0) {
-        if (FUN_001f99a8_5e80(last_test_dummy_door_sound_request_frame - D_L16_0015F5CC) >= 4) {
-            last_test_dummy_door_sound_request_frame = D_L16_0015F5CC;
+        if (FUN_001f99a8_5e80(last_test_dummy_door_sound_request_frame_gp - D_L16_0015F5CC) >= 4) {
+            last_test_dummy_door_sound_request_frame_gp = D_L16_0015F5CC;
             FUN_0022da68_5e80(0, 0, moby);
         }
     }
@@ -2984,6 +3003,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
+extern float triggered_scene_rotation_y_gp __asm__("D_L16_00161A8C") __attribute__((sda));
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) __asm__("FUN_L16_002d6260");
 
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) {
@@ -2999,7 +3019,7 @@ void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out
                                (float *)(data + 0x20));
     lerp_vector(out1, position_path + 0x10, position_path + 0x20, *(float *)(data + 0x1C));
     clear_u64_value(out2);
-    out2[1] = triggered_scene_rotation_y;
+    out2[1] = triggered_scene_rotation_y_gp;
     out2[2] = moby->rot.z;
 }
 

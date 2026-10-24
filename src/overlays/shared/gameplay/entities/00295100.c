@@ -45,6 +45,7 @@ void FUN_L00_00297e30(void) {
 #include "rnc/gameplay/state/usage_stats.h"
 extern struct PadStateWords D_0013C940;
 #include "rnc/overlay/shared/gameplay/entities/00295100_globals.h"
+extern int controller_idle_frames_gp __asm__("D_L00_00160FF0") __attribute__((sda));
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
@@ -55,14 +56,14 @@ void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 void update_game_frame_and_idle_counters(void) {
     if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
         D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
-        controller_idle_frames = 0;
+        controller_idle_frames_gp = 0;
     } else {
-        controller_idle_frames++;
+        controller_idle_frames_gp++;
     }
     D_L00_0015F5CC++;
     D_0015EEA4++;
     if (D_L00_0015F598) {
-        if (controller_idle_frames < (int)((float)scale_game_frames(15) * 60.0f)) {
+        if (controller_idle_frames_gp < (int)((float)scale_game_frames(15) * 60.0f)) {
             D_0015EE28++;
         }
     }
@@ -1380,6 +1381,7 @@ extern void attach_manipulator(char *, s32, void *) __asm__("FUN_0020cb10");
 
 typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
+extern f32 vendor_camera_eye_local_offset_x_gp __asm__("D_L00_00161060") __attribute__((sda));
 extern Vec4 D_L00_00180250;
 extern f32 D_L00_001610D0 __attribute__((sda));
 extern f32 D_L00_001610E0 __attribute__((sda));
@@ -1400,7 +1402,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     if (vendor_moby == 0) {
         vendor_moby = create_moby(0xB);
         *(s16 *)((char *)vendor_moby + 0x32) = 0x40;
-        *(f32 *)((char *)vendor_moby + 0x10) = D_L00_00166C80_29a6b0.x + vendor_camera_eye_local_offset_x;
+        *(f32 *)((char *)vendor_moby + 0x10) = D_L00_00166C80_29a6b0.x + vendor_camera_eye_local_offset_x_gp;
         *(f32 *)((char *)vendor_moby + 0x14) = D_L00_00166C80_29a6b0.y;
         *(f32 *)((char *)vendor_moby + 0x18) = D_L00_00166C80_29a6b0.z - vendor_camera_eye_local_offset_z;
         clear_vec_29a6b0(&vendor_moby->rot);
@@ -1465,7 +1467,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     }
     vendor_moby->f58 = frame_scale_macro * 0.5f;
     if (vendor_29a6b0.mode == 0) {
-        FUN_001f9cf8_29a6b0(&vendor_29a6b0.eye, &vendor_camera_eye_local_offset_x, vendor_29a6b0.moby + 0xC0);
+        FUN_001f9cf8_29a6b0(&vendor_29a6b0.eye, &vendor_camera_eye_local_offset_x_gp, vendor_29a6b0.moby + 0xC0);
         add_vec_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.eye, vendor_29a6b0.moby + 0x10);
         vendor_29a6b0.look.f[2] = add_angles_29a6b0(*(f32 *)(vendor_29a6b0.moby + 0x48), 3.1415927f);
         FUN_L00_002eaaa0_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.look, 1, 0, 0);
@@ -1522,6 +1524,7 @@ extern void f20c828_29ab70(void *) __asm__("FUN_0020c828");
 extern void f12e418_29ab70(int) __asm__("FUN_0012e418");
 extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
+extern int vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
 void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
 
 void close_vendor_menu(int exit_cutscene_completed) {
@@ -1541,7 +1544,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     hero.unk20A5 = 0;
     f2330d0_29ab70();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
-        f1f9cf8_29ab70(&world_position, &vendor_close_hero_local_offset, *(char **)(vendor_state_base + 0x1C) + 0xC0);
+        f1f9cf8_29ab70(&world_position, &vendor_close_hero_local_offset_gp, *(char **)(vendor_state_base + 0x1C) + 0xC0);
         f1f9a10_29ab70(&world_position, &world_position, *(char **)(vendor_state_base + 0x1C) + 0x10);
         euler_rotation.x = 0.0f;
         euler_rotation.y = 0.0f;
@@ -1570,6 +1573,8 @@ extern s32 D_L00_001CA020[];
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
+extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
+extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
 extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
@@ -1613,7 +1618,7 @@ void start_vendor_exit_cutscene(void) {
     vendor_state->f0 = 3;
     vendor_state->f4 = 0;
     cutscene_world_origin = (f32 *)((char *)vendor_state + 0xC0);
-    f1f9cf8_29ad08(cutscene_world_origin, &vendor_exit_cutscene_local_offset, vendor_state->moby + 0xC0);
+    f1f9cf8_29ad08(cutscene_world_origin, &vendor_exit_cutscene_local_offset_gp, vendor_state->moby + 0xC0);
     moby = (VendorMoby_29a6b0 *)vendor_state->moby;
     f1f9a10_29ad08(cutscene_world_origin, cutscene_world_origin, (char *)moby + 0x10);
     *(f32 *)((char *)vendor_state + 0xC8) += 2.0f;
@@ -1681,7 +1686,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     hero.unk20A5 = 0;
     FUN_L00_002330d0();
     vendor_state_base = D_L00_001CA4C0_u;
-    transform_vector_by_basis(&world_position, &vendor_exit_hero_local_offset, *(char **)(vendor_state_base + 0x28) + 0xC0);
+    transform_vector_by_basis(&world_position, &vendor_exit_hero_local_offset_gp, *(char **)(vendor_state_base + 0x28) + 0xC0);
     add_vector_xyz(&world_position, &world_position, *(char **)(vendor_state_base + 0x28) + 0x10);
     euler_rotation.f[0] = 0.0f;
     euler_rotation.f[1] = 0.0f;
@@ -1804,6 +1809,7 @@ extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f
 
 extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
+extern int vendor_selected_item_local_offset_gp __asm__("D_L00_00161090") __attribute__((sda));
 void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 
 void initialize_vendor_selected_item_mobys(void) {
@@ -1822,7 +1828,7 @@ void initialize_vendor_selected_item_mobys(void) {
     FUN_0020c5f0_29b680(P.p20 + 0x100, id);
     *(short *)(P.p20 + 0x132) = 0x40;
     *(int *)(P.p20 + 0x194) = 0;
-    FUN_001f9a10_29b680(item_local_position, &vendor_selected_item_local_offset, D_L00_001C8920[P.ent[P.i58].k]);
+    FUN_001f9a10_29b680(item_local_position, &vendor_selected_item_local_offset_gp, D_L00_001C8920[P.ent[P.i58].k]);
     if (P.ent[P.i58].f == 0) {
         float item_z_offset = D_L00_001C8920[P.ent[P.i58].k][3];
         item_local_position[2] += item_z_offset;
@@ -2024,6 +2030,8 @@ extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8 D_00141345[];
+extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
+extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
 extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E34;
 extern void FUN_0020c5f0_2ba78(void *, int) __asm__("FUN_0020c5f0");
@@ -2061,7 +2069,7 @@ void update_vendor_purchase(void) {
     }
     if (purchase_state == 1) {
         D_L00_00161E34 = 1;
-        vendor_purchase_confirmed = 0;
+        vendor_purchase_confirmed_gp = 0;
         FUN_0020c5f0_2ba78(&vendor_menu.f20[4], 0x471);
         vendor_menu.f20[4].h32 = 0x40;
         lv = 0;
@@ -2078,7 +2086,7 @@ void update_vendor_purchase(void) {
         }
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         FUN_0020d4f0_2ba78(&vendor_menu.f20[4], 0x101010, 0xE, 0xE, 0);
-        vendor_ammo_quantity_adjustment_enabled = 0;
+        vendor_ammo_quantity_adjustment_enabled_gp = 0;
         if (CUR_ITEM.fD4 == 1 && !(weapon_ammo_counts[CUR_ITEM.fD0] < CUR_TB.hE)) {
             FUN_0022da68_2ba78(2, 0, vendor_menu.f1c);
         } else if (CUR_ITEM.fD4 == 1) {
@@ -2086,7 +2094,7 @@ void update_vendor_purchase(void) {
             if (D_0015ED98 < nn) {
                 FUN_0022da68_2ba78(2, 0, vendor_menu.f1c);
             } else {
-                vendor_ammo_quantity_adjustment_enabled = 1;
+                vendor_ammo_quantity_adjustment_enabled_gp = 1;
             }
         } else {
             s32 nn = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
@@ -2098,7 +2106,7 @@ void update_vendor_purchase(void) {
         return;
     }
     if (purchase_state == 2) {
-        if (vendor_ammo_quantity_adjustment_enabled == 1) {
+        if (vendor_ammo_quantity_adjustment_enabled_gp == 1) {
             if (pad_state.held_unmasked & 0x8000) {
                 vendor_ammo_decrease_held_frames++;
             } else {
@@ -2137,7 +2145,7 @@ void update_vendor_purchase(void) {
         if (pad_state.pressed_unmasked & 0x10) {
             if (!(D_L00_00161E30 & 0x10)) {
                 vendor_menu.f5c = 3;
-                vendor_purchase_confirmed = 0;
+                vendor_purchase_confirmed_gp = 0;
                 FUN_00212f90_2ba78(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 1);
                 FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
                 return;
@@ -2146,7 +2154,7 @@ void update_vendor_purchase(void) {
         if (pad_state.pressed_unmasked & 0x40) {
             if (!(D_L00_00161E30 & 0x40)) {
                 vendor_menu.f5c = 3;
-                vendor_purchase_confirmed = 1;
+                vendor_purchase_confirmed_gp = 1;
                 FUN_00212f90_2ba78(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 8);
                 FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
                 return;
@@ -2173,10 +2181,10 @@ void update_vendor_purchase(void) {
     }
     advance_moby_animation(&vendor_menu.f20[4]);
     if (vendor_menu.f20[4].b70 & 2) {
-        if (vendor_purchase_confirmed == 1) {
+        if (vendor_purchase_confirmed_gp == 1) {
             s32 need;
 
-            if (CUR_ITEM.fD4 == vendor_purchase_confirmed) {
+            if (CUR_ITEM.fD4 == vendor_purchase_confirmed_gp) {
                 need = vendor_menu.f40 ? CUR_TB.hA * D_L00_00161E34 : CUR_TB.h8 * D_L00_00161E34;
             } else if (D_0013D4E3[0]) {
                 need = CUR_TB.f4;

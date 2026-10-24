@@ -8,6 +8,7 @@
 #include "rnc/overlay/quad.h"
 
 #include "rnc/overlay/shared/gameplay/entities/vendor_orb_globals.h"
+extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -28,7 +29,7 @@ void vendor_orb_update(unsigned char *moby) {
         attach_manipulator(moby, 1, manipulator);
         break;
     case VENDOR_ORB_ROTATE:
-        rotation_step_radians = vendor_orb_rotation_rate_degrees * DEG_TO_RAD * frame_time;
+        rotation_step_radians = vendor_orb_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time;
         *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), rotation_step_radians);
         *(float *)(manipulator + 0x40) = fast_add_rotations(*(float *)(manipulator + 0x40), rotation_step_radians * -2.0f);
         FUN_L00_001fff28(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
@@ -1360,6 +1361,8 @@ float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
+extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
+extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 void pterodactyl_update(unsigned char *moby) {
     enum {
@@ -1378,12 +1381,12 @@ void pterodactyl_update(unsigned char *moby) {
         {
             float first_segment_length = distance_xyz(path + 4, path + 8);
             float first_to_last_distance = distance_xyz(path + 4, path + *path * 4);
-            moby_data->f74 = pterodactyl_path_speed * D_0015ED6C_2e3a88 / first_segment_length;
+            moby_data->f74 = pterodactyl_path_speed_gp * D_0015ED6C_2e3a88 / first_segment_length;
             moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         moby[0x20] = 1;
-        *(float *)(moby + 0x2C) *= pterodactyl_scale_multiplier;
+        *(float *)(moby + 0x2C) *= pterodactyl_scale_multiplier_gp;
         moby[0x30] = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = *(float *)(moby + 0x18);
@@ -2279,6 +2282,10 @@ typedef struct {
     u8 p[0x70];
     u8 *m;
 } O002e5730;
+extern f32 follow_camera_position_default_stiffness_gp __asm__("D_L00_00161D28") __attribute__((sda));
+extern f32 follow_camera_position_default_damping_gp __asm__("D_L00_00161D2C") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_stiffness_gp __asm__("D_L00_00161D30") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_damping_gp __asm__("D_L00_00161D34") __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
@@ -2295,11 +2302,11 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     compute_follow_camera_target_position(camera, input_offset, &target_position, attach_state->xc4);
     attach_mode = attach_state->xc4;
     if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 || attach_mode == 1) {
-        x = follow_camera_position_transition_end_stiffness + (follow_camera_position_default_stiffness - follow_camera_position_transition_end_stiffness) * k;
-        y = follow_camera_position_transition_end_damping + (follow_camera_position_default_damping - follow_camera_position_transition_end_damping) * k;
+        x = follow_camera_position_transition_end_stiffness_gp + (follow_camera_position_default_stiffness_gp - follow_camera_position_transition_end_stiffness_gp) * k;
+        y = follow_camera_position_transition_end_damping_gp + (follow_camera_position_default_damping_gp - follow_camera_position_transition_end_damping_gp) * k;
     } else {
-        x = follow_camera_position_default_stiffness;
-        y = follow_camera_position_default_damping;
+        x = follow_camera_position_default_stiffness_gp;
+        y = follow_camera_position_default_damping_gp;
     }
     interpolate_follow_camera_position(camera, attach_state->x90, &target_position, x, y, 0.0f);
 }
