@@ -2691,9 +2691,9 @@ extern void FUN_0022da68(int, int, char *);
 
 int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) __asm__("FUN_L01_002f1d18");
 
-int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) {
+int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int launch_data_source, int position_source_moby, float position_z_offset) {
     char *callback_record = get_moby_suck_cannon_record(moby);
-    int projectile_launch_result = launch_suck_cannon_projectile(moby, a, position_source_moby, position_z_offset);
+    int projectile_launch_result = launch_suck_cannon_projectile(moby, launch_data_source, position_source_moby, position_z_offset);
     if (projectile_launch_result != 0) {
         moby[0x20] = 7;
     } else if ((unsigned char)moby[0x20] == 7) {
