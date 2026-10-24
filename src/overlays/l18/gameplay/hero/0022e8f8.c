@@ -176,7 +176,7 @@ void process_hero_state_transitions(void) {
     float shimmy_probe_yaw;
     int jump_apex_steps;
     int repeat_jump_press_age_frames;
-    int sp60;
+    int vehicle_jump_apex_steps;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -2279,8 +2279,8 @@ void process_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp60, hero.unk4A0);
-                        adjust_hero_animation_speed_for_target_frame(hero.unk440, sp60, hero.unk494, -1.0f);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &vehicle_jump_apex_steps, hero.unk4A0);
+                        adjust_hero_animation_speed_for_target_frame(hero.unk440, vehicle_jump_apex_steps, hero.unk494, -1.0f);
                         break;
                     }
                     if (hero.unk418 != 0) {
