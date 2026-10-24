@@ -254,10 +254,10 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         } else if (walker_moby->b52 == gait_data->anim[gait_animation_index]->id) {
             float t = (gait_data->anim[7]->f08 + gait_data->anim[0]->f08) * 0.375f;
             if (speed > t && gait_data->fC0 > t && !(gait_data->bB6 & 0x3A)) {
-                float cur = compute_interpolated_record_value(walker_moby);
-                int r1 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f48 - cur + gait_data->anim[gait_animation_index]->f10) %
+                float current_animation_position = compute_interpolated_record_value(walker_moby);
+                int r1 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f48 - current_animation_position + gait_data->anim[gait_animation_index]->f10) %
                          truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
-                int r2 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f4C - cur + gait_data->anim[gait_animation_index]->f10) %
+                int r2 = truncate_float_to_s32(gait_data->anim[gait_animation_index]->f4C - current_animation_position + gait_data->anim[gait_animation_index]->f10) %
                          truncate_float_to_s32(gait_data->anim[gait_animation_index]->f10);
                 int x;
                 int bl;
