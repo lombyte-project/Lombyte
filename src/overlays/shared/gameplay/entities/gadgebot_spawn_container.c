@@ -2679,8 +2679,8 @@ typedef struct {
 } Best_2f34d8;
 extern char *D_L06_001AC180_2f34d8[] __asm__("D_L06_001AC180");
 
-extern s32 D_L06_00161CE8 __attribute__((sda));
-extern s32 D_L06_00161CE4 __attribute__((sda));
+extern s32 gadgebot_target_cache_frame __asm__("D_L06_00161CE8") __attribute__((sda));
+extern s32 cached_gadgebot_target_count __asm__("D_L06_00161CE4") __attribute__((sda));
 extern char *D_L06_001DAE60[];
 /* Picks the best target for moby among this frame's live class-0x359 mobys and the hero
  * (current is the target it has now), and stores it in *current. */
@@ -2689,20 +2689,20 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
     Best_2f34d8 best;
     char *candidate_moby;
     s32 i;
-    if (D_L06_00161CE8 != level_frame_count) {
-        D_L06_00161CE8 = level_frame_count;
-        D_L06_00161CE4 = 0;
+    if (gadgebot_target_cache_frame != level_frame_count) {
+        gadgebot_target_cache_frame = level_frame_count;
+        cached_gadgebot_target_count = 0;
         for (i = 0; (candidate_moby = D_L06_001AC180_2f34d8[i]) != 0; i++) {
             if (*(s16 *)(candidate_moby + 0xA6) == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
-                s32 candidate_slot_index = D_L06_00161CE4;
-                D_L06_00161CE4 = candidate_slot_index + 1;
+                s32 candidate_slot_index = cached_gadgebot_target_count;
+                cached_gadgebot_target_count = candidate_slot_index + 1;
                 D_L06_001DAE60[candidate_slot_index] = candidate_moby;
             }
         }
     }
     best.score = 999999.0f;
     best.moby = 0;
-    for (i = 0; i < D_L06_00161CE4; i++) {
+    for (i = 0; i < cached_gadgebot_target_count; i++) {
         consider_moby_target_candidate(moby, *current, D_L06_001DAE60[i], (int *)&best.moby, &best.score, range);
     }
     consider_moby_target_candidate(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
