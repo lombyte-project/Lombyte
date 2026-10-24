@@ -1956,7 +1956,7 @@ void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 
 extern int D_L00_0017E508 __attribute__((section(".data")));
 extern int D_L00_0015F608;
-extern float D_L00_0016149C __attribute__((sda));
+extern float visibomb_missile_default_speed __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
@@ -1998,7 +1998,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
             int r = FUN_L00_002bb360_2b58d8(spawned_moby);
-            float k = D_L00_0016149C * D_0015ED6C_2b58d8;
+            float k = visibomb_missile_default_speed * D_0015ED6C_2b58d8;
             *(int *)(spawned_moby_vars + 0x20) = r;
             *(float *)(spawned_moby_vars + 0x48) = k;
         }
@@ -2242,9 +2242,9 @@ extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025
 
 extern int D_L00_0015F458 __attribute__((sda));
 extern float D_L00_00161498 __attribute__((sda));
-extern float D_L00_001614A0 __attribute__((sda));
-extern float D_L00_001614A4 __attribute__((sda));
-extern float D_L00_001614A8 __attribute__((sda));
+extern float visibomb_missile_max_speed __asm__("D_L00_001614A0") __attribute__((sda));
+extern float visibomb_missile_speed_target_blend_factor __asm__("D_L00_001614A4") __attribute__((sda));
+extern float visibomb_missile_speed_blend_factor __asm__("D_L00_001614A8") __attribute__((sda));
 extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
@@ -2296,14 +2296,14 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         return;
     }
     {
-        float t = D_L00_0016149C * D_0015ED6C_2b6140;
-        if (controller_state.held & 0x40) t = D_L00_001614A0 * D_0015ED6C_2b6140;
-        missile_vars->f48 += (t - missile_vars->f48) * D_L00_001614A4;
-        missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * D_L00_001614A8;
-        if (D_L00_001614A0 * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = D_L00_001614A0 * D_0015ED6C_2b6140;
+        float t = visibomb_missile_default_speed * D_0015ED6C_2b6140;
+        if (controller_state.held & 0x40) t = visibomb_missile_max_speed * D_0015ED6C_2b6140;
+        missile_vars->f48 += (t - missile_vars->f48) * visibomb_missile_speed_target_blend_factor;
+        missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * visibomb_missile_speed_blend_factor;
+        if (visibomb_missile_max_speed * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed * D_0015ED6C_2b6140;
     }
-    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - D_L00_0016149C * D_0015ED6C_2b6140
-        / (D_L00_001614A0 * D_0015ED6C_2b6140 - D_L00_0016149C * D_0015ED6C_2b6140)) * D_L00_00161498));
+    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - visibomb_missile_default_speed * D_0015ED6C_2b6140
+        / (visibomb_missile_max_speed * D_0015ED6C_2b6140 - visibomb_missile_default_speed * D_0015ED6C_2b6140)) * D_L00_00161498));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
             float steered_pitch;
