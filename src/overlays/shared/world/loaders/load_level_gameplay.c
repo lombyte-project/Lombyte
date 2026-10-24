@@ -1725,21 +1725,21 @@ extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L00_001827C0[3];
 extern u64 D_L00_001827D8[3];
 extern u64 D_L00_001827F0[3];
-extern s32 D_L00_00160F54;
+extern s32 tfrag_texture_ref_count __asm__("D_L00_00160F54");
 extern s32 D_L00_001C4A00[];
 extern s32 texture_count __asm__("D_L00_0015FFC8");
 extern u32 D_L00_00199A80[];
 extern u8 D_L00_001AEBC0[];
-extern s32 D_L00_00160FD4;
+extern s32 tie_texture_ref_count __asm__("D_L00_00160FD4");
 extern s32 D_L00_001C6700[];
-extern s32 D_L00_001604AC;
+extern s32 shrub_texture_ref_count __asm__("D_L00_001604AC");
 extern s32 D_L00_001BC5B0[];
 extern char *D_L00_0015F600_244110 __asm__("D_L00_0015F600");
 extern s32 D_L00_0016051C;
 extern Class244110 *D_L00_00197300[];
 extern s32 D_L00_0016000C;
 extern s32 D_L00_00160010;
-extern s32 D_L00_00160008;
+extern s32 moby_class_reference_count __asm__("D_L00_00160008");
 extern s32 D_L00_001AFBC0[];
 extern char *D_L00_001AFC20[];
 extern s32 D_L00_001AFC80[];
@@ -1758,7 +1758,7 @@ extern s32 D_L00_0015FCA8;
 extern char *D_L00_0015F604;
 extern Slot244110 *D_L00_0015F5F4;
 extern s32 D_L00_0015F5F0;
-extern s32 D_L00_0015FFC0;
+extern s32 moby_class_count __asm__("D_L00_0015FFC0");
 extern s16 D_L00_00197A00[];
 extern u16 D_L00_001AFE60[][16];
 extern char D_L00_001E8780[], D_L00_001E87A0[], D_L00_001E87D0[], D_L00_001E87E8[],
@@ -1890,8 +1890,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         D_L00_001827F0[2] = 0x0040000400004000;
 
         tfrag_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xD]);
-        D_L00_00160F54 = core_header[0xC];
-        for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < D_L00_00160F54; tfrag_texture_ref_index++)
+        tfrag_texture_ref_count = core_header[0xC];
+        for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < tfrag_texture_ref_count; tfrag_texture_ref_index++)
             D_L00_001C4A00[tfrag_texture_ref_index] = D_L00_0015F40C + tfrag_texture_refs[tfrag_texture_ref_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_ref_index].kind) << 28);
         moby_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xF]);
         texture_count = core_header[0xE];
@@ -1899,12 +1899,12 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             D_L00_00199A80[moby_texture_ref_index] = D_L00_0015F40C + moby_texture_refs[moby_texture_ref_index].offset + (log2dim(moby_texture_refs[moby_texture_ref_index].kind) << 28);
         fast_mem_copy(D_L00_001AEBC0, moby_texture_refs, texture_count * 16);
         tie_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x11]);
-        D_L00_00160FD4 = core_header[0x10];
-        for (tie_texture_ref_index = 0; tie_texture_ref_index < D_L00_00160FD4; tie_texture_ref_index++)
+        tie_texture_ref_count = core_header[0x10];
+        for (tie_texture_ref_index = 0; tie_texture_ref_index < tie_texture_ref_count; tie_texture_ref_index++)
             D_L00_001C6700[tie_texture_ref_index] = D_L00_0015F40C + tie_texture_refs[tie_texture_ref_index].offset + (log2dim(tie_texture_refs[tie_texture_ref_index].kind) << 28);
         shrub_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x13]);
-        D_L00_001604AC = core_header[0x12];
-        for (shrub_texture_ref_index = 0; shrub_texture_ref_index < D_L00_001604AC; shrub_texture_ref_index++)
+        shrub_texture_ref_count = core_header[0x12];
+        for (shrub_texture_ref_index = 0; shrub_texture_ref_index < shrub_texture_ref_count; shrub_texture_ref_index++)
             D_L00_001BC5B0[shrub_texture_ref_index] = D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset + (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
 
         initialize_tfrag_render_data(base + core_header[2], (char *)core_header + core_header[0xD]);
@@ -1929,7 +1929,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         D_L00_0016000C = -1;
         moby_class_reference_cursor = (char *)core_header + core_header[0x21];
         D_L00_00160010 = 0;
-        D_L00_00160008 = core_header[0x20];
+        moby_class_reference_count = core_header[0x20];
         for (moby_class_reference_index = 0; moby_class_reference_index < core_header[0x20]; moby_class_reference_index++, moby_class_reference_cursor += 0x10) {
             D_L00_001AFBC0[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 4);
             D_L00_001AFC20[moby_class_reference_index] = base + *(s32 *)moby_class_reference_cursor;
@@ -1991,13 +1991,13 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         }
         end = free + 0x3F;
         span++;
-        for (ci = 0; ci < D_L00_0015FFC0; ci++, span++) {
+        for (ci = 0; ci < moby_class_count; ci++, span++) {
             Class244110 *moby_class = D_L00_00197300[ci];
             if (moby_class == 0) {
-                for (j = 0; j < D_L00_00160008; j++)
+                for (j = 0; j < moby_class_reference_count; j++)
                     if (D_L00_001AFBC0[j] == D_L00_00197A00[ci])
                         break;
-                if (j < D_L00_00160008) {
+                if (j < moby_class_reference_count) {
                     fill_transfer_words(D_L00_001AFE60[j], -1, 0x20);
                     sound_reference_cursor = sound_table_base + span->off;
                     for (k = 0; k < span->count && k < 15; k++, sound_reference_cursor += 4)
