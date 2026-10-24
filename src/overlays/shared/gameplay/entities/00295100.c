@@ -1385,7 +1385,7 @@ typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
 extern f32 vendor_camera_eye_local_offset_x_gp __asm__("D_L00_00161060") __attribute__((sda));
 extern Vec4 D_L00_00180250;
-extern f32 D_L00_001610D0 __attribute__((sda));
+extern f32 vendor_basis_local_vector_x_gp __asm__("D_L00_001610D0") __attribute__((sda));
 extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -1477,7 +1477,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
         FUN_L00_002eaa30_29a6b0(&vendor_29a6b0.look);
     }
     vector_destination_cursor = &D_L00_00180250;
-    FUN_001f9cf8_29a6b0(vector_destination_cursor, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
+    FUN_001f9cf8_29a6b0(vector_destination_cursor, &vendor_basis_local_vector_x_gp, vendor_29a6b0.moby + 0xC0);
     qcopy(vector_destination_cursor - 1, &D_L00_001610E0);
     vector_destination_cursor += 2;
     qzero(vector_destination_cursor);
