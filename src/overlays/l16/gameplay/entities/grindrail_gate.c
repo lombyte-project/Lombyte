@@ -2339,9 +2339,9 @@ extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L16_0015F5CC;
 extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
-extern float D_L16_00161EC4 __attribute__((sda));
-extern float D_L16_00161EC8 __attribute__((sda));
-extern float D_L16_00161EE8 __attribute__((sda));
+extern float elevator_ring_outer_radius __asm__("D_L16_00161EC4") __attribute__((sda));
+extern float elevator_ring_half_height __asm__("D_L16_00161EC8") __attribute__((sda));
+extern float elevator_ring_segment_angle_degrees __asm__("D_L16_00161EE8") __attribute__((sda));
 int D_L16_00161ECC = 0;
 int D_L16_00161ED0 = 2;
 int D_L16_00161ED4 = 0;
@@ -2392,15 +2392,15 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
         *u = (*uv)[0];
         *v = (*uv)[1];
         if (i & 1) {
-            (*point)[2] = D_L16_00161EC8;
-            radius = D_L16_00161EC4;
+            (*point)[2] = elevator_ring_half_height;
+            radius = elevator_ring_outer_radius;
         } else {
-            (*point)[2] = -D_L16_00161EC8;
-            radius = D_L16_00161EC4 - 0.05f;
+            (*point)[2] = -elevator_ring_half_height;
+            radius = elevator_ring_outer_radius - 0.05f;
         }
         index = (float)(i >> 1);
-        (*point)[0] = fast_cos(index * (D_L16_00161EE8 * DEG_TO_RAD)) * radius;
-        (*point)[1] = fast_sin(index * (D_L16_00161EE8 * DEG_TO_RAD)) * radius;
+        (*point)[0] = fast_cos(index * (elevator_ring_segment_angle_degrees * DEG_TO_RAD)) * radius;
+        (*point)[1] = fast_sin(index * (elevator_ring_segment_angle_degrees * DEG_TO_RAD)) * radius;
         (*point)[3] = 1.0f;
         v += 2;
         u += 2;
@@ -2414,16 +2414,16 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
         do {
             phase = (float)(D_L16_0015F5CC % period) * 0.02617991715669632f;
             sign = -sign;
-            for (j = 0; (float)j < 360.0f / D_L16_00161EE8; j++) {
+            for (j = 0; (float)j < 360.0f / elevator_ring_segment_angle_degrees; j++) {
                 matrix.basis[0][0] = fast_cos(
-                    wrap_angle((D_L16_00161EE8 * DEG_TO_RAD) * (float)j + phase * (float)sign));
+                    wrap_angle((elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + phase * (float)sign));
                 matrix.basis[0][1] = fast_sin(
-                    wrap_angle((D_L16_00161EE8 * DEG_TO_RAD) * (float)j + phase * (float)sign));
+                    wrap_angle((elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + phase * (float)sign));
                 matrix.basis[0][2] = 0.0f;
                 matrix.basis[1][0] = fast_cos(wrap_angle(
-                    (D_L16_00161EE8 * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
+                    (elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
                 matrix.basis[1][1] = fast_sin(wrap_angle(
-                    (D_L16_00161EE8 * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
+                    (elevator_ring_segment_angle_degrees * DEG_TO_RAD) * (float)j + 1.5707964f + phase * (float)sign));
                 matrix.basis[1][2] = 0.0f;
                 matrix.basis[2][2] = 1.0f;
                 packet.color[3] = color;
