@@ -379,7 +379,7 @@ extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L18_00162550;
+extern float deplanetizer_camera_quad_local_offset_x __asm__("D_L18_00162550");
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
 extern float D_L18_0016255C;
@@ -401,7 +401,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     char *target;
 
     if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame_gp + 1)) {
-        D_L18_00162550 = 1.0f;
+        deplanetizer_camera_quad_local_offset_x = 1.0f;
         D_L18_00162554 = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
             tilt = -0.15f;
@@ -417,7 +417,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.a = 0;
     gs_9780(0x4A, 0);
     gs_9780(0x47, 0x51001);
-    rot_9780(quad_transform[3], &D_L18_00162550, D_L18_001679D0);
+    rot_9780(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, D_L18_001679D0);
     target = D_L18_001679D0;
     target -= 0x210;
     add_9780(quad_transform[3], quad_transform[3], target);
