@@ -681,7 +681,7 @@ typedef struct {
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern float approach_value(float *, float, float);
 extern int collision_line(void *, void *, int, void *, void *);
-extern f32 D_L06_00161FD0 __attribute__((sda));
+extern f32 beam_point_horizontal_speed __asm__("D_L06_00161FD0") __attribute__((sda));
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
@@ -723,9 +723,9 @@ void update_blarg_space_commando_beam(void *owner_moby) {
     for (i = 0; i < 16; i++) {
         char *entry;
         if (hero.vehicle_mode == 1) {
-            step = (D_L06_00161FD0 * frame_time) * 0.5f;
+            step = (beam_point_horizontal_speed * frame_time) * 0.5f;
         } else {
-            step = D_L06_00161FD0 * frame_time;
+            step = beam_point_horizontal_speed * frame_time;
         }
         subtract_vector_xyz(point, &data->pts[i], &data->base);
         point[2] = 0.0f;
