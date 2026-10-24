@@ -942,12 +942,12 @@ extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30")
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
 extern int pal_mode __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
-extern s32 D_L00_0015F808 __attribute__((sda));
+extern s32 health_hud_base_y_offset __asm__("D_L00_0015F808") __attribute__((sda));
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
-extern s32 D_L00_0015F820 __attribute__((sda));
-extern s32 D_L00_0015F810 __attribute__((sda));
-extern s32 D_L00_0015F80C __attribute__((sda));
-extern s32 D_L00_0015F81C __attribute__((sda));
+extern s32 health_hud_panel_max_alpha __asm__("D_L00_0015F820") __attribute__((sda));
+extern s32 health_hud_panel_y_offset __asm__("D_L00_0015F810") __attribute__((sda));
+extern s32 health_hud_panel_row_y_step __asm__("D_L00_0015F80C") __attribute__((sda));
+extern s32 health_hud_panel_cap_size __asm__("D_L00_0015F81C") __attribute__((sda));
 extern s32 D_L00_0015F7F8[1] __attribute__((sda));
 extern Pt D_L00_0017E478[];
 extern Pt D_L00_0017E460[];
@@ -983,9 +983,9 @@ s32 draw_health_hud_panel(Hud *hud_element) {
         goto out;
     x = hud_element->x;
     if (pal_mode != 0)
-        y = D_L00_0015F808 + 10;
+        y = health_hud_base_y_offset + 10;
     else
-        y = D_L00_0015F808 + 0x12;
+        y = health_hud_base_y_offset + 0x12;
     cnt = hud_element->cnt;
     visibility_counters = hud_element->ab;
     if (visibility_counters[0] == 0)
@@ -1001,7 +1001,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     else if (ratio_y < 0.0f)
         ratio_y = 0.0f;
     alpha = truncate_float_to_s32(ratio_y * 128.0f);
-    panel_alpha = truncate_float_to_s32((f32)D_L00_0015F820 * ratio_x);
+    panel_alpha = truncate_float_to_s32((f32)health_hud_panel_max_alpha * ratio_x);
     p = hud_element->p;
     sel = p[0] >> 1;
     mode = hero_max_health;
@@ -1022,18 +1022,18 @@ s32 draw_health_hud_panel(Hud *hud_element) {
         tab = (Pt *)D_L00_0015F7F8;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     }
-    yy = y + D_L00_0015F810;
+    yy = y + health_hud_panel_y_offset;
     panel_cap_frame_index = FUN_001ff960_c(0x7580, 1);
     panel_middle_frame_index = FUN_001ff960_c(0x7580, 0);
-    draw_hud_sprite_flipped(panel_cap_frame_index, x + first_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
-    FUN_001ffc30_c(panel_middle_frame_index, x - first_panel_half_width, yy, first_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
-    FUN_001ffc30_c(panel_cap_frame_index, x - first_panel_half_width - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+    draw_hud_sprite_flipped(panel_cap_frame_index, x + first_panel_half_width, yy, health_hud_panel_cap_size, health_hud_panel_cap_size, panel_alpha);
+    FUN_001ffc30_c(panel_middle_frame_index, x - first_panel_half_width, yy, first_panel_half_width * 2, health_hud_panel_cap_size, panel_alpha);
+    FUN_001ffc30_c(panel_cap_frame_index, x - first_panel_half_width - health_hud_panel_cap_size, yy, health_hud_panel_cap_size, health_hud_panel_cap_size, panel_alpha);
     if (second_panel_half_width != 0) {
-        yy += D_L00_0015F80C;
-        draw_hud_sprite_flipped(panel_cap_frame_index, x + second_panel_half_width, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+        yy += health_hud_panel_row_y_step;
+        draw_hud_sprite_flipped(panel_cap_frame_index, x + second_panel_half_width, yy, health_hud_panel_cap_size, health_hud_panel_cap_size, panel_alpha);
         x0 = x - second_panel_half_width;
-        FUN_001ffc30_c(panel_middle_frame_index, x0, yy, second_panel_half_width * 2, D_L00_0015F81C, panel_alpha);
-        FUN_001ffc30_c(panel_cap_frame_index, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, panel_alpha);
+        FUN_001ffc30_c(panel_middle_frame_index, x0, yy, second_panel_half_width * 2, health_hud_panel_cap_size, panel_alpha);
+        FUN_001ffc30_c(panel_cap_frame_index, x0 - health_hud_panel_cap_size, yy, health_hud_panel_cap_size, health_hud_panel_cap_size, panel_alpha);
     }
     for (i = 0; i < mode; i++) {
         health_icon_frame_index = FUN_001ff960_c(0x7536, sel);
