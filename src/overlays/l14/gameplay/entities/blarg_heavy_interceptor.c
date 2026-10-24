@@ -1014,18 +1014,18 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2add48;
 
-extern float D_L14_00161434 __attribute__((sda));
-extern float D_L14_00161438 __attribute__((sda));
-extern float D_L14_0016143C __attribute__((sda));
-extern float D_L14_00161440 __attribute__((sda));
-extern int D_L14_00161444 __attribute__((sda));
-extern int D_L14_00161448 __attribute__((sda));
-extern int D_L14_0016144C __attribute__((sda));
-extern int D_L14_00161450 __attribute__((sda));
-extern int D_L14_00161454 __attribute__((sda));
-extern int D_L14_00161458 __attribute__((sda));
-extern int D_L14_0016145C __attribute__((sda));
-extern int D_L14_00161460 __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_initial_offset_scale __asm__("D_L14_00161434") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair __asm__("D_L14_00161438") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_initial_quad_scale __asm__("D_L14_0016143C") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair __asm__("D_L14_00161440") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_red __asm__("D_L14_00161444") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_green __asm__("D_L14_00161448") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_blue __asm__("D_L14_0016144C") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_initial_alpha __asm__("D_L14_00161450") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair __asm__("D_L14_00161454") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair __asm__("D_L14_00161458") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair __asm__("D_L14_0016145C") __attribute__((sda));
+extern int blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair __asm__("D_L14_00161460") __attribute__((sda));
 extern char D_L14_001674C0_b[] __asm__("D_L14_001674C0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1098,12 +1098,12 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    size = D_L14_0016143C;
-    step = D_L14_00161434;
-    r = D_L14_00161444;
-    g = D_L14_00161448;
-    b = D_L14_0016144C;
-    a = D_L14_00161450;
+    size = blarg_heavy_interceptor_spinning_beam_initial_quad_scale;
+    step = blarg_heavy_interceptor_spinning_beam_initial_offset_scale;
+    r = blarg_heavy_interceptor_spinning_beam_initial_red;
+    g = blarg_heavy_interceptor_spinning_beam_initial_green;
+    b = blarg_heavy_interceptor_spinning_beam_initial_blue;
+    a = blarg_heavy_interceptor_spinning_beam_initial_alpha;
     sreg_b(0x47, 0x51001);
     for (i = 0; i < 16; i++) {
         col = (a << 24) | (b << 16) | (g << 8) | r;
@@ -1123,12 +1123,12 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
             add_b(pk.m[j], pk.m[j], quad_translation_offset);
         }
         draw_b(&pk, 0, 0);
-        r -= D_L14_00161454;
-        g -= D_L14_00161458;
-        b -= D_L14_0016145C;
-        a -= D_L14_00161460;
-        size += D_L14_00161440;
-        step += D_L14_00161438;
+        r -= blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair;
+        g -= blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair;
+        b -= blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair;
+        a -= blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair;
+        size += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair;
+        step += blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair;
         if (r < 0)
             r = 0;
         if (g < 0)
