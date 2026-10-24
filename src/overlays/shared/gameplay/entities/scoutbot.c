@@ -692,8 +692,8 @@ extern int D_L08_00161CF4 __attribute__((sda));
 extern int D_L08_00161CF8 __attribute__((sda));
 extern int D_L08_00161CFC __attribute__((sda));
 extern float moby_creation_particle_spread_speed_base_gp __asm__("D_L08_00161D04") __attribute__((sda));
-extern float D_L08_00161D14 __attribute__((sda));
-extern float D_L08_00161D18 __attribute__((sda));
+extern float moby_creation_particle_primary_motion_w_gp __asm__("D_L08_00161D14") __attribute__((sda));
+extern float moby_creation_particle_secondary_motion_w_gp __asm__("D_L08_00161D18") __attribute__((sda));
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
 
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) {
@@ -749,8 +749,8 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
                 normalize_vector_xyz_002e7eb0(offset_ptr, matrix_row_ptr, magnitude * fast_sin_002e7eb0(angle));
                 add_vector_xyz_002e7eb0(velocity_ptr, velocity_ptr, offset_ptr);
                 qcopy(offset_ptr, velocity_ptr);
-                velocity[3] = D_L08_00161D14;
-                offset[3] = D_L08_00161D18;
+                velocity[3] = moby_creation_particle_primary_motion_w_gp;
+                offset[3] = moby_creation_particle_secondary_motion_w_gp;
                 i++;
                 spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8, D_L08_00161CFC,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
