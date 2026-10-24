@@ -1076,7 +1076,9 @@ extern int FUN_L00_002e7618_2e7a30(void *, void *, int, float, float) __asm__("F
 extern float FUN_001f9ab0_2e7a30(void *, void *) __asm__("FUN_001f9ab0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-int FUN_L00_002e7a30(unsigned char *camera_moby) {
+int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) __asm__("FUN_L00_002e7a30");
+
+int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     OvlQuad initial_orbit_vector[1];
     V_2e7a30 probe_position;
     V_2e7a30 ndir;
