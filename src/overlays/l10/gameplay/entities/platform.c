@@ -1145,7 +1145,7 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
 int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) {
     float collision_start_position[4] __attribute__((aligned(16)));
     float world_up[4] __attribute__((aligned(16)));
-    float v20[4] __attribute__((aligned(16)));
+    float scaled_collision_response[4] __attribute__((aligned(16)));
     float collision_alignment_vector[4] __attribute__((aligned(16)));
     float yaw_relative_collision_vector[4] __attribute__((aligned(16)));
     char *collision_result;
@@ -1165,12 +1165,12 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
         if (hit_moby_address != 0) {
             subtract_vector_xyz(collision_result + 0x40, moby + 0x10, (void *)(hit_moby_address + 0x10));
             qcopy(moby + 0x10, collision_result + 0x20);
-            normalize_vector_xyz(v20, collision_result + 0x40, D_0015ED70 * 9.7f);
-            add_vector_xyz(moby + 0x10, moby + 0x10, v20);
+            normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, D_0015ED70 * 9.7f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, scaled_collision_response);
             FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.35f);
-            normalize_vector_xyz(v20, collision_result + 0x40, one);
-            dot_vectors_xyz(v20, world_up);
+            normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, one);
+            dot_vectors_xyz(scaled_collision_response, world_up);
             qcopy(collision_alignment_vector, collision_result + 0x40);
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
@@ -1191,12 +1191,12 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
         }
         if (*(int *)(collision_result + 0x1C) > 0) {
             qcopy(moby + 0x10, collision_result + 0x20);
-            normalize_vector_xyz(v20, collision_result + 0x40, D_0015ED70 * 9.7f);
-            add_vector_xyz(moby + 0x10, moby + 0x10, v20);
+            normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, D_0015ED70 * 9.7f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, scaled_collision_response);
             FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.5f);
-            normalize_vector_xyz(v20, collision_result + 0x40, one);
-            if (0.707f < dot_vectors_xyz(v20, world_up)) {
+            normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, one);
+            if (0.707f < dot_vectors_xyz(scaled_collision_response, world_up)) {
                 collision_xz_length_or_ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
                 if (*(float *)(moby + 0x18) < collision_xz_length_or_ground_height) *(float *)(moby + 0x18) = collision_xz_length_or_ground_height;
                 if (*(float *)(motion_data + 0x8) < 0.0f) *(float *)(motion_data + 0x8) = *(float *)(motion_data + 0x8) * -0.4f;
