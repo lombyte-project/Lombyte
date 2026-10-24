@@ -1295,7 +1295,7 @@ void update_sentrybot_joint_aim(void *mv) {
     }
     update_joint_animation(moby, moby_data + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
 }
-extern float D_L15_001613EC __attribute__((sda));
+extern float sentrybot_class_scale_multiplier __asm__("D_L15_001613EC") __attribute__((sda));
 extern float D_L15_001613F0 __attribute__((sda));
 extern float D_L15_001613F4 __attribute__((sda));
 extern float D_L15_001613F8 __attribute__((sda));
@@ -1353,7 +1353,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
 
     if (moby[0x20] == 0)
         return;
-    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L15_001613EC;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * sentrybot_class_scale_multiplier;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     code = fun_00213928(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
