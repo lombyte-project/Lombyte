@@ -2079,8 +2079,8 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim
             s32 animation_sequence_index = *(u8 *)((u8 *)hero_moby + 0x53);
             u8 *arr = *(u8 **)((u8 *)hero_moby + 0x24);
             void *entry = *(void **)(arr + (animation_sequence_index << 2) + 0x48);
-            s32 cnt = *(u8 *)((u8 *)entry + 0x10);
-            step = target_anim_frame + (rate * (f32)cnt - thresh);
+            s32 sequence_wrap_count = *(u8 *)((u8 *)entry + 0x10);
+            step = target_anim_frame + (rate * (f32)sequence_wrap_count - thresh);
         }
     }
 
