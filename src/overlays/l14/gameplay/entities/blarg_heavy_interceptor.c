@@ -1051,7 +1051,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) __asm__("FUN_L14_002
 
 void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     char *d = *(char **)(moby + 0x78);
-    float src[4][4];
+    float beam_placement_scratch[4][4];
     Pk_2add48 pk;
     float beam_quad_transform[4][4];
     float quad_translation_offset[4];
@@ -1067,20 +1067,20 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     float *beam_origin;
 
     beam_origin = (float *)(d + 0x1D4);
-    src[3][0] = beam_origin[0];
-    src[3][1] = beam_origin[1];
-    src[3][2] = beam_origin[2] + 0.125f;
-    src[3][3] = 1.0f;
-    src[0][0] = fast_cos(*(float *)(d + 0x160));
-    src[0][1] = fast_sin(*(float *)(d + 0x160));
-    src[0][2] = 0.0f;
+    beam_placement_scratch[3][0] = beam_origin[0];
+    beam_placement_scratch[3][1] = beam_origin[1];
+    beam_placement_scratch[3][2] = beam_origin[2] + 0.125f;
+    beam_placement_scratch[3][3] = 1.0f;
+    beam_placement_scratch[0][0] = fast_cos(*(float *)(d + 0x160));
+    beam_placement_scratch[0][1] = fast_sin(*(float *)(d + 0x160));
+    beam_placement_scratch[0][2] = 0.0f;
     *(float *)(d + 0x160) = fast_add_rotations(*(float *)(d + 0x160), -0.06981317f);
     pk.b = tex_b(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    qcopy(beam_offset_direction, src[0]);
-    qcopy(beam_quad_transform[3], src[3]);
+    qcopy(beam_offset_direction, beam_placement_scratch[0]);
+    qcopy(beam_quad_transform[3], beam_placement_scratch[3]);
     beam_quad_transform[3][3] = 1.0f;
     sub_b(beam_to_camera_vector, D_L14_001674C0_b, beam_quad_transform[3]);
     camera_facing_angles[2] = atan2_b(beam_to_camera_vector[0], beam_to_camera_vector[1]);
