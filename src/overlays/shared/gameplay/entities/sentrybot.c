@@ -2066,10 +2066,10 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                     Cols_29E8A0 c2 = D_L15_001E2678;
                     int *p1 = &c1.c[random_integer_below_c3(6)];
                     int *p2 = &c2.c[random_integer_below_c3(6)];
-                    int l1 = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+                    int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
                     int l2 = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E));
                     int l3, l4;
-                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, *p1, *p2, 400000.0f, l1, l2, sz, 0, 0);
+                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, *p1, *p2, 400000.0f, colored_burst_effect_frame_count, l2, sz, 0, 0);
                     l3 = FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(0xA));
                     l4 = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
                     FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, 0x7FFFFFFF, 0xFFFFFF, 400000.0f, l3, l4, sz * 0.5f, 0, 0);
