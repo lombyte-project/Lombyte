@@ -105,7 +105,7 @@ void update_drifting_effect_particle_with_distance_fade(char *particle) {
     float position_scratch[4];
     float reference_distance, reference_angle_delta;
     int collision_check_counter, remaining_lifetime, k;
-    float *g;
+    float *drift_parameters;
     char *reference_position;
     char *B;
     char *particle_position;
@@ -127,9 +127,9 @@ void update_drifting_effect_particle_with_distance_fade(char *particle) {
         *(int *)(particle_data + 0x1C) = collision_check_counter + 1;
     }
     if (*(int *)(particle_data + 0x1C) >= 0) {
-        g = D_L00_001CB7C0;
-        *(float *)particle_data = fast_cos(g[1]) * g[5] / 2.5f;
-        *(float *)(particle_data + 4) = fast_sin(g[1]) * g[5] / 2.5f;
+        drift_parameters = D_L00_001CB7C0;
+        *(float *)particle_data = fast_cos(drift_parameters[1]) * drift_parameters[5] / 2.5f;
+        *(float *)(particle_data + 4) = fast_sin(drift_parameters[1]) * drift_parameters[5] / 2.5f;
         *(int *)(particle_data + 8) = 0;
         fast_vec_add(particle_position, particle_position, particle_data);
     }
