@@ -3003,7 +3003,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-extern float D_L16_00161A8C __attribute__((sda));
+extern float triggered_scene_rotation_y __asm__("D_L16_00161A8C") __attribute__((sda));
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) __asm__("FUN_L16_002d6260");
 
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) {
@@ -3019,7 +3019,7 @@ void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out
                                (float *)(data + 0x20));
     lerp_vector(out1, position_path + 0x10, position_path + 0x20, *(float *)(data + 0x1C));
     clear_u64_value(out2);
-    out2[1] = D_L16_00161A8C;
+    out2[1] = triggered_scene_rotation_y;
     out2[2] = moby->rot.z;
 }
 
