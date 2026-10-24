@@ -456,7 +456,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x82: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
