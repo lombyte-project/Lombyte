@@ -480,7 +480,7 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_L04_001f1978(float);
 extern int D_L18_0015F5C4;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern float D_L18_00161964;
+extern float rocket_target_pulse_lead_time __asm__("D_L18_00161964");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -554,7 +554,7 @@ void update_rocket_moby(struct Moby *moby) {
             mark_moby_for_removal(moby);
         } else if (moby_vars->flags & 2) {
             pitch_angle_or_remaining_frames = (float)(moby_vars->end - moby_vars->c);
-            if (pitch_angle_or_remaining_frames <= FUN_L04_001f1978(D_L18_00161964)) {
+            if (pitch_angle_or_remaining_frames <= FUN_L04_001f1978(rocket_target_pulse_lead_time)) {
                 enqueue_callback_list_1(draw_rocket_target_pulse_quad, moby);
             }
         }
