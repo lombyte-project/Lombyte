@@ -355,7 +355,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     V_20a328 offset_position, primary_endpoint, b, secondary_endpoint;
     char *hero_position;
     P_20a328 *g;
-    f32 position_z_offset, k, secondary_offset_scale, ang, negative_xy_dot_product;
+    f32 position_z_offset, k, secondary_offset_scale, primary_probe_result_angle, negative_xy_dot_product;
     int r;
 
     if (P.h308 != 0)
@@ -397,10 +397,10 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     r = -1;
     if (FUN_001efa68_20a328(&b, &secondary_endpoint, 4, P.p2080, 0) && D_L15_0017445C > 0)
         r = FUN_001f0b58_20a328();
-    ang = 0.0f;
+    primary_probe_result_angle = 0.0f;
     if (FUN_001efa68_20a328(&offset_position, &primary_endpoint, 4, P.p2080, 0) && X.i1C > 0)
-        ang = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
-    if (0.8726646304130554f <= ang || r == 8 || r == 12) {
+        primary_probe_result_angle = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
+    if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_20a328(&X.v40, &X.v40);
