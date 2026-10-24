@@ -692,8 +692,8 @@ extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section("
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
-int FUN_L00_002e2040(int id);
-int FUN_L00_002e2040(int id) {
+int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
+int release_beam_slot_by_id(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
         if (D_L00_00161C88_c[i] == id) {

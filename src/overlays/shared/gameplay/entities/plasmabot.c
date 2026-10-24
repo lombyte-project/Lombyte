@@ -269,7 +269,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
-extern int FUN_L00_002e2040(char *);
+extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern int set_beam_origin_transform_and_endpoint(void *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -353,7 +353,7 @@ void update_plasmabot(char *moby) {
             *(unsigned short *)(moby + 0x34) |= 0x41;
             *(int *)(moby + 0x94) = 0;
             if (((unsigned char *)moby)[0x53] == 5) {
-                FUN_L00_002e2040(moby);
+                release_beam_slot_by_id(moby);
                 FUN_L00_00257470(moby, 0, -1);
                 { call_D678(moby); return; }
             }
@@ -561,7 +561,7 @@ void update_plasmabot(char *moby) {
             }
             *(float *)(data + 0x27C) = -1.0f;
             *(float *)(data + 0x254) = *(float *)(data + 0x258) = *(float *)(data + 0x25C) = 0.0f;
-            FUN_L00_002e2040(moby);
+            release_beam_slot_by_id(moby);
             break;
         }
         if (fast_dec_timer_s16(data + 0x260) == 0) break;
@@ -637,7 +637,7 @@ void update_plasmabot(char *moby) {
         if (fast_dec_timer_s16(data + 0x262) != 0) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 7;
-            FUN_L00_002e2040(moby);
+            release_beam_slot_by_id(moby);
         }
         break;
     }
@@ -663,7 +663,7 @@ void update_plasmabot(char *moby) {
     }
     case PLASMABOT_FALL_THEN_EXPLODE: {
         if ((mine_fall(moby, data + 0x60) & 0x160) == 0) return;
-        FUN_L00_002e2040(moby);
+        release_beam_slot_by_id(moby);
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
         spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         call_F4A8(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
@@ -679,7 +679,7 @@ void update_plasmabot(char *moby) {
         spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         status = 0;
         ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(moby, &status, 1);
-        FUN_L00_002e2040(moby);
+        release_beam_slot_by_id(moby);
         call_D678(moby);
         return;
     }
@@ -993,7 +993,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L00_002e2040(char *);
+extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L14_001614C8 __attribute__((sda));
@@ -1039,7 +1039,7 @@ void process_plasmabot_hit_reaction(char *moby) {
             char *reaction_motion_state = state + 0x60;
             int stagger_duration_frames;
             float frame_duration, stagger_motion_z, k;
-            FUN_L00_002e2040(moby);
+            release_beam_slot_by_id(moby);
             moby[0x20] = 0xA;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;

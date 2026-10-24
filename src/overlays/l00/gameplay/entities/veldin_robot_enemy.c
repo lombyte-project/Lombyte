@@ -476,7 +476,7 @@ extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d4
 extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 FUN_L00_0025fcb8(ElectroidMoby *, f32, void *);
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
-extern void FUN_L00_002e2040(ElectroidMoby *);
+extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern f32 D_L00_00161BD0 __attribute__((sda));
 extern f32 D_L00_00161BD4 __attribute__((sda));
 extern f32 D_L00_00161BD8 __attribute__((sda));
@@ -546,7 +546,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             vars->unk26 = scale_game_frames(0x3C);
             trooper_anim_update(moby, anim);
         }
-        FUN_L00_002e2040(moby);
+        release_beam_slot_by_id(moby);
     }
     moby->unkA4 = 0xFF;
     trooper_anim_finish(moby, anim);
