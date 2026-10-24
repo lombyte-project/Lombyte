@@ -1612,7 +1612,7 @@ void sand_mouse_update(struct Moby *moby) {
             int cg;
             int cb;
             int col;
-            int dir;
+            int particle_random_remainder;
             int particle_random_integer;
             float particle_random_float;
             *(u128_2e3f20 *)vb = 0;
@@ -1622,13 +1622,13 @@ void sand_mouse_update(struct Moby *moby) {
             cg = (random_integer_3830() + 0x20) & 0x3F;
             cb = random_integer_3830() & 0x2F;
             col = cr | (cg << 8) | (cb << 16) | (D_L01_0016193C << 24);
-            dir = random_integer_3830() % 2;
+            particle_random_remainder = random_integer_3830() % 2;
             if (sand_mouse_vars->timer & 1) {
-                dir = -dir;
+                particle_random_remainder = -particle_random_remainder;
             }
             particle_random_integer = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
             particle_random_float = random_float_between_alt(D_L01_00161934, D_L01_00161938);
-            spawn_particle_2e3f20(va, particle_random_integer, col, 2, dir, vb, particle_random_float, 0.001f, D_L01_00161940 * frame_time_sq);
+            spawn_particle_2e3f20(va, particle_random_integer, col, 2, particle_random_remainder, vb, particle_random_float, 0.001f, D_L01_00161940 * frame_time_sq);
             moby->flags |= 0x200;
             moby->alpha -= 0x80 / D_L01_00161924;
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
