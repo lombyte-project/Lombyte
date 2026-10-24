@@ -400,7 +400,7 @@ void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
 void FUN_001fa070_28b1a0(void *, void *) __asm__("FUN_001fa070");
 void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 
-extern float D_L00_001604C0 __attribute__((sda));
+extern float sky_shell_rotation_phase_step __asm__("D_L00_001604C0") __attribute__((sda));
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
 void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 
@@ -427,26 +427,26 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         case SKY_SHELL_TRIPLE_SCALE:
             sky_shell_transform_rotation_angles[1] = 0.02f;
             k = 3.0f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.55f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step * 0.55f;
             break;
         case SKY_SHELL_TWO_AND_A_HALF_SCALE:
             sky_shell_transform_rotation_angles[1] = -0.02f;
             k = 2.5f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.6f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step * 0.6f;
             break;
         case SKY_SHELL_DOUBLE_SCALE:
             sky_shell_transform_rotation_angles[1] = 0.01f;
             k = 2.0f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.7f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step * 0.7f;
             break;
         case SKY_SHELL_ONE_AND_A_HALF_SCALE:
             sky_shell_transform_rotation_angles[1] = -0.01f;
             k = 1.5f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.75f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step * 0.75f;
             break;
         case SKY_SHELL_ONE_AND_A_QUARTER_SCALE:
             k = 1.25f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.8f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step * 0.8f;
             break;
         default:
             FUN_001f9fc8_28b1a0(D_L00_001BD7E0_28b1a0);
