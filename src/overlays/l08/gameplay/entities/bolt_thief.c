@@ -1654,7 +1654,7 @@ void build_bolt_thief_target_list(struct Moby *moby) {
 }
 extern float D_0013F3D4;
 extern float D_0015ED6C;
-extern float D_L08_00161C50 __attribute__((sda));
+extern float bolt_thief_waypoint_speed __asm__("D_L08_00161C50") __attribute__((sda));
 extern char D_001413D0[];
 extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L00_0025a120(struct Moby *);
@@ -1795,7 +1795,7 @@ void bolt_thief_update(struct Moby *moby) {
             }
         } else {
             subtract_vector_xyz(&step, &point, &moby->pos);
-            normalize_vector_xyz(&step, &step, D_L08_00161C50 * D_0015ED6C);
+            normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
             add_vector_xyz(&moby->pos, &moby->pos, &step);
             if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
                 follower->point = next;
@@ -1891,7 +1891,7 @@ void bolt_thief_update(struct Moby *moby) {
             return;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        normalize_vector_xyz(&step, &step, D_L08_00161C50 * D_0015ED6C);
+        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
@@ -1909,7 +1909,7 @@ void bolt_thief_update(struct Moby *moby) {
         FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         subtract_vector_xyz(&step, &point, &moby->pos);
-        normalize_vector_xyz(&step, &step, D_L08_00161C50 * D_0015ED6C);
+        normalize_vector_xyz(&step, &step, bolt_thief_waypoint_speed * D_0015ED6C);
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
