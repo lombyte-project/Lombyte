@@ -166,19 +166,19 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern float D_L10_00161FBC __attribute__((sda));
-extern float D_L10_00161FC0 __attribute__((sda));
-extern float D_L10_00161FC4 __attribute__((sda));
+extern float timed_spark_vertical_vector_z_scale __asm__("D_L10_00161FBC") __attribute__((sda));
+extern float timed_spark_random_vector_z_bias_scale __asm__("D_L10_00161FC0") __attribute__((sda));
+extern float timed_spark_random_vector_radius_scale __asm__("D_L10_00161FC4") __attribute__((sda));
 extern float D_L10_00161FC8 __attribute__((sda));
 extern float D_L10_00161FCC __attribute__((sda));
 extern float D_L10_00161FD0 __attribute__((sda));
 extern float D_L10_00161FD4 __attribute__((sda));
-extern int D_L10_00161FD8 __attribute__((sda));
-extern int D_L10_00161FDC __attribute__((sda));
-extern int D_L10_00161FE0 __attribute__((sda));
-extern float D_L10_00161FE4 __attribute__((sda));
-extern int D_L10_00161FF8 __attribute__((sda));
-extern int D_L10_00161FFC __attribute__((sda));
+extern int timed_spark_base_frame_count __asm__("D_L10_00161FD8") __attribute__((sda));
+extern int timed_spark_base_second_frame_count __asm__("D_L10_00161FDC") __attribute__((sda));
+extern int timed_spark_base_third_frame_count __asm__("D_L10_00161FE0") __attribute__((sda));
+extern float timed_spark_frame_count_scale_spread __asm__("D_L10_00161FE4") __attribute__((sda));
+extern int timed_spark_timer_reset_min __asm__("D_L10_00161FF8") __attribute__((sda));
+extern int timed_spark_timer_reset_max __asm__("D_L10_00161FFC") __attribute__((sda));
 int D_L10_00161FE8 = 0x400080ff;
 int D_L10_00161FEC = 0x4010ffff;
 int D_L10_00161FF0 = 0x2000c0ff;
@@ -203,20 +203,20 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
     if (!fast_dec_timer_s16(timer))
         return;
     clear_u64_value(spark_vertical_vector);
-    spark_vertical_vector[2] = D_L10_00161FBC * frame_time;
-    random_vector(acc, 0.0f, D_L10_00161FC4 * frame_time);
-    acc[2] += D_L10_00161FC0 * frame_time;
+    spark_vertical_vector[2] = timed_spark_vertical_vector_z_scale * frame_time;
+    random_vector(acc, 0.0f, timed_spark_random_vector_radius_scale * frame_time);
+    acc[2] += timed_spark_random_vector_z_bias_scale * frame_time;
     spark_vertical_vector[3] = random_float_between(D_L10_00161FC8, D_L10_00161FCC);
     acc[3] = random_float_between(D_L10_00161FD0, D_L10_00161FD4);
-    frame_count_scale = random_float_between(1.0f - D_L10_00161FE4, D_L10_00161FE4 + 1.0f);
-    frame_count = func_001FA898_r((float)D_L10_00161FD8 * frame_count_scale);
-    second_frame_count = func_001FA898_r((float)D_L10_00161FDC * frame_count_scale);
-    third_frame_count = func_001FA898_r((float)D_L10_00161FE0 * frame_count_scale);
+    frame_count_scale = random_float_between(1.0f - timed_spark_frame_count_scale_spread, timed_spark_frame_count_scale_spread + 1.0f);
+    frame_count = func_001FA898_r((float)timed_spark_base_frame_count * frame_count_scale);
+    second_frame_count = func_001FA898_r((float)timed_spark_base_second_frame_count * frame_count_scale);
+    third_frame_count = func_001FA898_r((float)timed_spark_base_third_frame_count * frame_count_scale);
     initial_spark_color = fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position, spark_vertical_vector, acc, initial_spark_color,
                  fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), frame_count,
                  second_frame_count, third_frame_count, -1);
-    *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
+    *timer = func_001FA898_r(random_float_between((float)timed_spark_timer_reset_min, (float)timed_spark_timer_reset_max));
 }
 
 
