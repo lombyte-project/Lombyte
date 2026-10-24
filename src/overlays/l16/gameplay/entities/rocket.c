@@ -893,14 +893,14 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) __asm__("FUN_L16_002c9
 void emit_moby_sprite_effect_particles(struct Moby *moby) {
     L16SpriteData *sprite_data = (L16SpriteData *)moby->pvars;
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float elapsed_cycle_fraction;
 
     moby->pos.z += 0.1f;
     fast_vec_sub(d, D_L16_001671C0, &moby->pos);
     fast_vec_normalize(d, d, -0.3f);
-    fast_vec_normalize(e, d, 0.1f);
+    fast_vec_normalize(particle_position_step, d, 0.1f);
     fast_vec_add(d, d, &moby->pos);
     moby->pos.z -= 0.1f;
     for (i = 0; i < 4; i++) {
@@ -918,7 +918,7 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) {
         elapsed_cycle_fraction = elapsed_cycle_fraction / (float)scale_game_frames(0xFF);
         col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_cycle_fraction));
         FUN_L00_00272f68(d, col, func_001FA898_caa18(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0, sprite_data->d[i]);
-        fast_vec_add(d, d, e);
+        fast_vec_add(d, d, particle_position_step);
     }
 }
 /* Updates a linked moby's movement and follows it while its state is active. */
