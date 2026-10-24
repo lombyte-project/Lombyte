@@ -894,7 +894,7 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     P002e7318 *active_camera_state;
     f32 collision_probe_radius;
     f32 direction_alignment;
-    s32 w;
+    s32 sphere_collision_flags;
     s32 i;
     s32 ha = 0;
     s32 hb = 0;
@@ -904,14 +904,14 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     add_vector_xyz(&candidate_camera_position, b + 0x90, camera_orbit_state);
     x->s38 = 2;
     active_camera_state = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
-    w = x->i48;
+    sphere_collision_flags = x->i48;
     collision_probe_radius = follow_cam_min_distance_gp + active_camera_state->c * active_camera_state->a * (active_camera_state->b - 1.0f);
     i = 0;
     while (i < 3) {
         if (compute_follow_camera_radial_collision_positions(&candidate_camera_position, collision_probe_radius)) {
             ha = 1;
         } else {
-            if (!coll_sphere(&candidate_camera_position, collision_probe_radius, w, g->i114))
+            if (!coll_sphere(&candidate_camera_position, collision_probe_radius, sphere_collision_flags, g->i114))
                 break;
             hb = 1;
         }
