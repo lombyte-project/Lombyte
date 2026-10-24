@@ -2372,12 +2372,12 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int D_L11_00161FF0 = 120;
 int D_L11_00162004 = 5;
 int D_L11_0016214C = 10;
-extern float D_L11_00161FE8 __attribute__((sda));
-extern float D_L11_00161FEC __attribute__((sda));
+extern float jet_fighter_startup_speed_increment_gp __asm__("D_L11_00161FE8") __attribute__((sda));
+extern float jet_fighter_cruise_speed_increment_gp __asm__("D_L11_00161FEC") __attribute__((sda));
 extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
-extern float D_L11_00161FF8 __attribute__((sda));
-extern float D_L11_00161FFC __attribute__((sda));
-extern float D_L11_00162000 __attribute__((sda));
+extern float jet_fighter_boost_speed_limit_gp __asm__("D_L11_00161FF8") __attribute__((sda));
+extern float jet_fighter_boost_speed_increment_gp __asm__("D_L11_00161FFC") __attribute__((sda));
+extern float jet_fighter_cruise_speed_relaxation_factor_gp __asm__("D_L11_00162000") __attribute__((sda));
 extern float jet_fighter_yaw_deflection_scale_gp __asm__("D_L11_00162008") __attribute__((sda));
 extern float jet_fighter_pitch_deflection_scale_gp __asm__("D_L11_0016200C") __attribute__((sda));
 extern float D_L11_00162014 __attribute__((sda));
@@ -2386,13 +2386,13 @@ extern float D_L11_0016201C __attribute__((sda));
 extern float D_L11_00162020 __attribute__((sda));
 extern float jet_fighter_camera_base_local_x_offset_gp __asm__("D_L11_00162024") __attribute__((sda));
 extern float jet_fighter_camera_base_local_z_offset_gp __asm__("D_L11_00162028") __attribute__((sda));
-extern float D_L11_0016202C __attribute__((sda));
-extern float D_L11_00162030 __attribute__((sda));
+extern float jet_fighter_alternate_camera_local_x_offset_gp __asm__("D_L11_0016202C") __attribute__((sda));
+extern float jet_fighter_alternate_camera_local_z_offset_gp __asm__("D_L11_00162030") __attribute__((sda));
 extern float D_L11_00162034 __attribute__((sda));
 extern float D_L11_00162038 __attribute__((sda));
-extern float D_L11_0016203C __attribute__((sda));
+extern float jet_fighter_camera_pitch_offset_radians_gp __asm__("D_L11_0016203C") __attribute__((sda));
 extern float D_L11_0016204C __attribute__((sda));
-extern float D_L11_00162050 __attribute__((sda));
+extern float jet_fighter_collision_damage_gp __asm__("D_L11_00162050") __attribute__((sda));
 extern float D_L11_0016207C __attribute__((sda));
 extern float D_L11_00162080 __attribute__((sda));
 extern float D_L11_0016208C __attribute__((sda));
@@ -2429,8 +2429,8 @@ extern float D_L11_00162124 __attribute__((sda));
 extern float D_L11_00162128 __attribute__((sda));
 extern float D_L11_0016212C __attribute__((sda));
 extern float D_L11_00162130 __attribute__((sda));
-extern float D_L11_00162134 __attribute__((sda));
-extern float D_L11_00162138 __attribute__((sda));
+extern float jet_fighter_cruise_camera_fov_radians_gp __asm__("D_L11_00162134") __attribute__((sda));
+extern float jet_fighter_boost_camera_fov_radians_gp __asm__("D_L11_00162138") __attribute__((sda));
 extern float D_L11_00162150 __attribute__((sda));
 extern float D_L11_00162154 __attribute__((sda));
 extern float D_L11_00162158 __attribute__((sda));
@@ -2506,26 +2506,26 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             }
             usage_stats.stat[28].level_mask =
                 usage_stats.stat[28].level_mask | (1 << current_level_index) | 0x80000000;
-            accelerated_speed = ship_vars->speed + D_L11_00161FFC * D_L11_00162090_gp;
-            max = D_L11_00161FF8 * D_L11_00162090_gp;
+            accelerated_speed = ship_vars->speed + jet_fighter_boost_speed_increment_gp * D_L11_00162090_gp;
+            max = jet_fighter_boost_speed_limit_gp * D_L11_00162090_gp;
             ship_vars->speed = accelerated_speed;
             if (max < accelerated_speed) {
                 ship_vars->speed = max;
             }
         } else {
             float hi = D_L11_00161FF4_gp * D_L11_00162090_gp;
-            float step = D_L11_00161FEC * D_L11_00162090_gp;
+            float step = jet_fighter_cruise_speed_increment_gp * D_L11_00162090_gp;
             float current_speed = ship_vars->speed;
             if (current_speed < hi - step) {
                 ship_vars->speed = current_speed + step;
             } else if (hi < current_speed) {
-                ship_vars->speed = current_speed + (hi - current_speed) * D_L11_00162000;
+                ship_vars->speed = current_speed + (hi - current_speed) * jet_fighter_cruise_speed_relaxation_factor_gp;
             } else {
                 ship_vars->speed = hi;
             }
         }
     } else {
-        ship_vars->speed += D_L11_00161FE8 * D_L11_00162090_gp;
+        ship_vars->speed += jet_fighter_startup_speed_increment_gp * D_L11_00162090_gp;
         ship_vars->count += 1;
     }
 
@@ -2563,7 +2563,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     fast_vec_add(&ship_moby->pos, &ship_moby->pos, ship_movement_vector);
     {
         float lo = D_L11_00161FF4_gp;
-        float range = D_L11_00161FF8 - lo;
+        float range = jet_fighter_boost_speed_limit_gp - lo;
         float sp = ship_vars->speed - lo;
         if (sp < 0.0f) {
             ratio = 0.0f / range;
@@ -2582,8 +2582,8 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
             (jet_fighter_camera_base_local_x_offset_gp - ship_vars->f70 * D_L11_00162128 - ratio * D_L11_00162130) * D_L11_0016208C;
         wr.e[0].v[1] = ship_vars->f6C * D_L11_00162080 * D_L11_0016208C;
         wr.e[0].v[2] = (jet_fighter_camera_base_local_z_offset_gp + ship_vars->f70 * D_L11_0016212C) * D_L11_0016208C;
-        wr.e[1].v[0] = D_L11_0016202C * D_L11_0016208C;
-        wr.e[1].v[2] = D_L11_00162030 * D_L11_0016208C;
+        wr.e[1].v[0] = jet_fighter_alternate_camera_local_x_offset_gp * D_L11_0016208C;
+        wr.e[1].v[2] = jet_fighter_alternate_camera_local_z_offset_gp * D_L11_0016208C;
         camera_offset_targets.e[0].q = wr.e[0].q;
         camera_offset_targets.e[1].q = wr.e[1].q;
         vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L11_00162104, D_L11_00162108,
@@ -2601,7 +2601,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         fast_vec_add(wr.e[0].v, &ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rot_2838(ship_vars->f30 * D_L11_00162038, ship_vars->f6C * D_L11_00162034);
-        wr.e[1].v[1] = fast_sub_rot_2838(fast_add_rot_2838(ship_vars->f34, D_L11_0016203C),
+        wr.e[1].v[1] = fast_sub_rot_2838(fast_add_rot_2838(ship_vars->f34, jet_fighter_camera_pitch_offset_radians_gp),
                                          ship_vars->f70 * D_L11_00162014);
         wr.e[1].v[2] = ship_vars->f38;
         FUN_L00_0025bc98(&ship_vars->f20, &ship_vars->fA0, 0, wr.e[1].v[0], D_L11_001620E0, D_L11_001620E4,
@@ -2616,9 +2616,9 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     camera_rotation[1] = fast_sub_rot_2838(ship_vars->f24, ship_vars->fD8);
     FUN_L00_002eaa30(camera_rotation);
     if (controller_state.raw_held & PAD_CROSS) {
-        fov = D_L11_00162138;
+        fov = jet_fighter_boost_camera_fov_radians_gp;
     } else {
-        fov = D_L11_00162134;
+        fov = jet_fighter_cruise_camera_fov_radians_gp;
     }
     approach_2838(&ship_vars->fB0, &ship_vars->fC0, fov,
                   frame_time_sq + frame_time_sq, frame_time_sq + frame_time_sq,
@@ -2655,7 +2655,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                 ship_vars->f34 = collision_adjusted_pitch;
                 ship_vars->speed = k;
                 if (ship_vars->iDC == 0) {
-                    hero.ship_hp = hero.ship_hp - D_L11_00162050;
+                    hero.ship_hp = hero.ship_hp - jet_fighter_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_2838(side, collision_result + 0x50, collision_result + 0x60);
                         fast_vec_normalize(side, side, 1.0f);
