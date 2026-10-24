@@ -343,7 +343,7 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
 void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *D_L00_001B2148[];
-extern float D_L00_00160210 __attribute__((sda));
+extern float height_culled_particle_size_rate __asm__("D_L00_00160210") __attribute__((sda));
 void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
 
 void update_moving_height_culled_particle(unsigned char *particle) {
@@ -354,7 +354,7 @@ void update_moving_height_culled_particle(unsigned char *particle) {
     FUN_001f9a10_00271df8(particle + 0x10, particle + 0x10, particle_data);
     particle[8] += particle_data[0x14];
     if (particle[2] == D_L00_001B2148[0][0]) {
-        *(float *)(particle + 0xC) += D_L00_00160210 * frame_time * 210000.0f;
+        *(float *)(particle + 0xC) += height_culled_particle_size_rate * frame_time * 210000.0f;
     }
     if (*(float *)(particle + 0x18) < *(float *)(particle_data + 0x10)) {
         FUN_L00_00267a08_00271df8(particle);
