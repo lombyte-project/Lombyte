@@ -2519,17 +2519,17 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data"
 extern float moby_spark_first_batch_frame_count_base_gp __asm__("D_L13_00161F18") __attribute__((sda));
 extern float moby_spark_first_batch_second_frame_count_base_gp __asm__("D_L13_00161F1C") __attribute__((sda));
 extern float moby_spark_first_batch_third_frame_count_base_gp __asm__("D_L13_00161F20") __attribute__((sda));
-extern float D_L13_00161F24 __attribute__((sda));
-extern float D_L13_00161F28 __attribute__((sda));
+extern float moby_spark_first_batch_horizontal_acceleration_gp __asm__("D_L13_00161F24") __attribute__((sda));
+extern float moby_spark_first_batch_vertical_acceleration_base_gp __asm__("D_L13_00161F28") __attribute__((sda));
 extern float D_L13_00161F2C __attribute__((sda));
-extern float D_L13_00161F30 __attribute__((sda));
+extern float moby_spark_first_batch_vertical_velocity_base_gp __asm__("D_L13_00161F30") __attribute__((sda));
 extern float moby_spark_second_batch_frame_count_base_gp __asm__("D_L13_00161F34") __attribute__((sda));
 extern float moby_spark_second_batch_second_frame_count_base_gp __asm__("D_L13_00161F38") __attribute__((sda));
 extern float moby_spark_second_batch_third_frame_count_base_gp __asm__("D_L13_00161F3C") __attribute__((sda));
 extern float D_L13_00161F40 __attribute__((sda));
-extern float D_L13_00161F44 __attribute__((sda));
-extern float D_L13_00161F48 __attribute__((sda));
-extern float D_L13_00161F4C __attribute__((sda));
+extern float moby_spark_second_batch_vertical_velocity_base_gp __asm__("D_L13_00161F44") __attribute__((sda));
+extern float moby_spark_second_batch_horizontal_acceleration_gp __asm__("D_L13_00161F48") __attribute__((sda));
+extern float moby_spark_second_batch_vertical_acceleration_base_gp __asm__("D_L13_00161F4C") __attribute__((sda));
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
 extern float D_L13_00161F58 __attribute__((sda));
@@ -2569,16 +2569,16 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             position.f[2] += random_float_between_alt(-0.065f, 0.065f);
             qzero(&velocity);
             i++;
-            velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
-                                                       D_L13_00161F30 * frame_time * 1.1f);
+            velocity.f[2] = random_float_between_alt(moby_spark_first_batch_vertical_velocity_base_gp * frame_time * 0.9f,
+                                                       moby_spark_first_batch_vertical_velocity_base_gp * frame_time * 1.1f);
             angle = random_float_between_alt(-moby_spark_first_batch_spread_degrees_gp, moby_spark_first_batch_spread_degrees_gp) * 0.017453292f;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
-            acceleration.f[0] = fast_cos(direction) * (D_L13_00161F24 * frame_time);
+            acceleration.f[0] = fast_cos(direction) * (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
-            acceleration.f[1] = fast_sin(direction) * (D_L13_00161F24 * frame_time);
+            acceleration.f[1] = fast_sin(direction) * (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
-            acceleration.f[2] = random_float_between_alt(D_L13_00161F28 * frame_time * 0.9f,
-                                                          D_L13_00161F28 * frame_time * 1.1f);
+            acceleration.f[2] = random_float_between_alt(moby_spark_first_batch_vertical_acceleration_base_gp * frame_time * 0.9f,
+                                                          moby_spark_first_batch_vertical_acceleration_base_gp * frame_time * 1.1f);
             spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_frame_count_base_gp,
                                                                      moby_spark_first_batch_frame_count_base_gp + moby_spark_first_batch_frame_count_base_gp)));
             second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_second_frame_count_base_gp,
@@ -2600,18 +2600,18 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             random_float_between_alt(-D_L13_00161F58, D_L13_00161F58);
             qzero(&velocity);
             i--;
-            velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
-                                                       D_L13_00161F44 * frame_time * 1.5f);
+            velocity.f[2] = random_float_between_alt(moby_spark_second_batch_vertical_velocity_base_gp * frame_time * 0.7f,
+                                                       moby_spark_second_batch_vertical_velocity_base_gp * frame_time * 1.5f);
             angle = random_float_between_alt(-moby_spark_second_batch_spread_degrees_gp, moby_spark_second_batch_spread_degrees_gp) * amount;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)),
                                       angle);
-            acceleration.f[0] = fast_cos(direction) * (D_L13_00161F48 * frame_time);
+            acceleration.f[0] = fast_cos(direction) * (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)),
                                       angle);
-            acceleration.f[1] = fast_sin(direction) * (D_L13_00161F48 * frame_time);
+            acceleration.f[1] = fast_sin(direction) * (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
-            acceleration.f[2] = random_float_between_alt(D_L13_00161F4C * frame_time * 0.7f,
-                                                          D_L13_00161F4C * frame_time * 1.5f);
+            acceleration.f[2] = random_float_between_alt(moby_spark_second_batch_vertical_acceleration_base_gp * frame_time * 0.7f,
+                                                          moby_spark_second_batch_vertical_acceleration_base_gp * frame_time * 1.5f);
             spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_frame_count_base_gp,
                                                                      moby_spark_second_batch_frame_count_base_gp + moby_spark_second_batch_frame_count_base_gp)));
             second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_second_frame_count_base_gp,
