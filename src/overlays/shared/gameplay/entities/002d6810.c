@@ -598,14 +598,14 @@ extern void zero_r(void *) __asm__("FUN_001f99f8");
 
 extern int electric_water_bolt_init_requested __asm__("D_L15_00161BF8") __attribute__((sda));
 extern float electric_water_bolt_initial_length_scale __asm__("D_L15_00161BFC") __attribute__((sda));
-extern int D_L15_00161C8C __attribute__((sda));
+extern int electric_water_bolt_initial_frame_count __asm__("D_L15_00161C8C") __attribute__((sda));
 extern short D_L15_00161CD2;
 extern short D_L15_00161CD4;
 extern short D_L15_00161CD6;
 extern short D_L15_00161CDA;
 extern short D_L15_00161CDC;
 extern short D_L15_00161CDE;
-extern int D_L15_00161CE0;
+extern int electric_water_bolt_initial_scaled_frame_count __asm__("D_L15_00161CE0");
 extern int D_L15_00161CE4;
 void initialize_electric_water_bolt_effect(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -616,7 +616,7 @@ void initialize_electric_water_bolt_effect(char *moby) {
     if (electric_water_bolt_init_requested != 0) {
         electric_water_bolt_init_requested = 0;
         D_L15_00161CE4 = 0;
-        D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
+        electric_water_bolt_initial_scaled_frame_count = scale_frames_r(electric_water_bolt_initial_frame_count);
         D_L15_00161C60_r = 0x7F2020;
         fast_vec_sub(bolt_displacement, moby_vars + 0x100, moby_vars + 0xF0);
         fast_vec_normalize(step, bolt_displacement, electric_water_bolt_initial_length_scale / 20.0f);
