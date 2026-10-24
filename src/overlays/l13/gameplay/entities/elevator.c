@@ -2466,10 +2466,10 @@ void draw_fighter_jet_hud(char *moby) {
     unsigned char *base;
     unsigned char *player_ammo_state;
     unsigned char *player_health_state;
-    unsigned char *b;
+    unsigned char *health_warning_player_state;
     int target_screen_x;
     int target_screen_y;
-    int tex;
+    int aim_reticle_texture;
     int i;
     unsigned char ammo_icon_count;
     unsigned char c;
@@ -2528,12 +2528,12 @@ void draw_fighter_jet_hud(char *moby) {
     }
     ex = *(int *)(moby_vars + 0xE0);
     ey = *(int *)(moby_vars + 0xE4);
-    tex = get_effect_texture_c(0x11);
-    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    aim_reticle_texture = get_effect_texture_c(0x11);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, aim_reticle_texture, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, get_effect_texture_c(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, get_effect_texture_c(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    b = D_0013F350;
-    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (frame_count / 90) & 1) {
+    health_warning_player_state = D_0013F350;
+    if (*(float *)(health_warning_player_state + 0x15FC) < *(float *)(health_warning_player_state + 0x1600) / 10.0f && (frame_count / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     player_health_state = D_0013F350;
