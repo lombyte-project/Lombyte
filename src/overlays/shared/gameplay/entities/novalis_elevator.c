@@ -1116,12 +1116,12 @@ extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void *select_sand_mouse_spawn_target(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
 extern void spawn_sandmouse_projectile(void *, void *, float, float, float, float) __asm__("FUN_L01_0030c898");
 
-extern float D_L01_00161904 __attribute__((sda));
-extern float D_L01_00161908 __attribute__((sda));
-extern float D_L01_0016190C __attribute__((sda));
-extern float D_L01_00161910 __attribute__((sda));
-extern float D_L01_00161914 __attribute__((sda));
-extern int D_L01_00161900 __attribute__((sda));
+extern float sand_mouse_spawn_target_range __asm__("D_L01_00161904") __attribute__((sda));
+extern float sand_mouse_spawn_target_yaw_limit_degrees __asm__("D_L01_00161908") __attribute__((sda));
+extern float sand_mouse_spawn_target_pitch_limit_degrees __asm__("D_L01_0016190C") __attribute__((sda));
+extern float sand_mouse_spawn_offset_toward_target_distance __asm__("D_L01_00161910") __attribute__((sda));
+extern float sand_mouse_spawn_and_fallback_aim_height_offset __asm__("D_L01_00161914") __attribute__((sda));
+extern int sand_mouse_projectile_spawn_interval_frames __asm__("D_L01_00161900") __attribute__((sda));
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 
 typedef union {
@@ -1142,9 +1142,9 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
         return;
     qzero(&spawn_position);
     fast_vec_add(&spawn_position, &spawn_position, moby + 0x10);
-    spawn_position.f[2] = spawn_position.f[2] + D_L01_00161914;
-    target_moby = select_sand_mouse_spawn_target(moby, &spawn_position, moby + 0x40, D_L01_00161908 * DEG_TO_RAD,
-                         D_L01_0016190C * DEG_TO_RAD, D_L01_00161904, 2.0f, 3.1415927f,
+    spawn_position.f[2] = spawn_position.f[2] + sand_mouse_spawn_and_fallback_aim_height_offset;
+    target_moby = select_sand_mouse_spawn_target(moby, &spawn_position, moby + 0x40, sand_mouse_spawn_target_yaw_limit_degrees * DEG_TO_RAD,
+                         sand_mouse_spawn_target_pitch_limit_degrees * DEG_TO_RAD, sand_mouse_spawn_target_range, 2.0f, 3.1415927f,
                          3.1415927f);
     if (target_moby != 0) {
         *(char **)(state + 0x68) = target_moby;
@@ -1159,9 +1159,9 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                     if (target_aim_data != 0)
                         target_aim_position.f[2] = target_aim_position.f[2] + *(float *)(target_aim_data + 0x10);
                     else
-                        target_aim_position.f[2] = target_aim_position.f[2] + D_L01_00161914;
+                        target_aim_position.f[2] = target_aim_position.f[2] + sand_mouse_spawn_and_fallback_aim_height_offset;
                     fast_vec_sub(&spawn_offset, &target_aim_position, &spawn_position);
-                    fast_vec_normalize(&spawn_offset, &spawn_offset, D_L01_00161910);
+                    fast_vec_normalize(&spawn_offset, &spawn_offset, sand_mouse_spawn_offset_toward_target_distance);
                     fast_vec_add(&spawn_position, &spawn_position, &spawn_offset);
                     aim_yaw = fast_arc_tan(target_aim_position.f[0] - spawn_position.f[0], target_aim_position.f[1] - spawn_position.f[1]);
                     spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
@@ -1170,7 +1170,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                     spawn_to_target_distance = vector_distance(&spawn_position, &target_aim_position);
                     initial_pitch = -fast_arc_tan(spawn_to_target_distance, target_aim_position.f[2] - spawn_position.f[2]);
                     spawn_sandmouse_projectile(moby, &spawn_position, aim_yaw, aim_pitch, initial_yaw, initial_pitch);
-                    *(short *)(state + 0x4E) = scale_game_frames(D_L01_00161900);
+                    *(short *)(state + 0x4E) = scale_game_frames(sand_mouse_projectile_spawn_interval_frames);
                     *(int *)(state + 0x64) = *(int *)(state + 0x64) + 1;
                 }
             }
