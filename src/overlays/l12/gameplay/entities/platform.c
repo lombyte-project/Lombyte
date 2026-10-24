@@ -25,7 +25,7 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("F
 
 extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 
-extern int D_L12_00151388 __attribute__((sda));
+extern int next_water_tile_index __asm__("D_L12_00151388") __attribute__((sda));
 extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void slot_limit_c(int) __asm__("FUN_001e93b0");
@@ -71,8 +71,8 @@ void update_level_12_water_tile(struct Moby *moby) {
     int i;
     switch (state) {
     case SLOT_INITIALIZE:
-        i = (data[3] = D_L12_00151388) + 1;
-        D_L12_00151388 = i;
+        i = (data[3] = next_water_tile_index) + 1;
+        next_water_tile_index = i;
         if (i > 0x7f) {
             slot_limit_c((int)D_L12_0020BC90);
         }
@@ -125,7 +125,7 @@ void update_level_12_water_tile(struct Moby *moby) {
         moby->state = 1;
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
-        D_L12_00151388 = 0;
+        next_water_tile_index = 0;
         initialize_level_12_slot_grid_neighbors(data[3]);
         moby->state = 2;
         *(float *)(data + 4) = moby->pos.z;
