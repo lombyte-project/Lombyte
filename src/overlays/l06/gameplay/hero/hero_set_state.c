@@ -1781,7 +1781,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(get_hero_help_value(0), 0, -1.0f);
         break;
     }
-    case 0x78: {
+    case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
