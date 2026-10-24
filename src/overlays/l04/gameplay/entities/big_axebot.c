@@ -1287,7 +1287,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
-extern float D_L04_00161884 __attribute__((sda));
+extern float circular_saw_flock_separation_weight __asm__("D_L04_00161884") __attribute__((sda));
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) __asm__("FUN_L04_002c1fb8");
 
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
@@ -1316,9 +1316,9 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
         if (other == moby || *(short *)(other + 0xA6) != moby->oclass) continue;
         if (vector_distance((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
             subtract_vector_xyz_c(away, &moby->pos, other + 0x10);
-            scale_vector_xyz(away, away, D_L04_00161884);
+            scale_vector_xyz(away, away, circular_saw_flock_separation_weight);
             add_vector_xyz_c(out, out, away);
-            weight += D_L04_00161884;
+            weight += circular_saw_flock_separation_weight;
         }
         if (vector_distance((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }
