@@ -1,0 +1,136 @@
+diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
+index 57ee269..e617bde 100644
+--- a/gcc/config/mips/mips.c
++++ b/gcc/config/mips/mips.c
+@@ -5683,6 +5696,8 @@ mips_declare_object (stream, name, init_string, final_string, size)
+ /* Output a double precision value to the assembler.  If both the
+    host and target are IEEE, emit the values in hex.  */
+ 
++static char *sn_format_g PROTO ((char *, int, double));
++
+ void
+ mips_output_double (stream, value)
+      FILE *stream;
+@@ -5692,13 +5707,108 @@ mips_output_double (stream, value)
+   long value_long[2];
+   REAL_VALUE_TO_TARGET_DOUBLE (value, value_long);
+ 
+-  fprintf (stream, "\t.word\t0x%08lx\t\t# %.20g\n\t.word\t0x%08lx\n",
+-	   value_long[0], value, value_long[1]);
++  char buf[64];
++
++  fprintf (stream, "\t.word\t0x%08lx\t\t# %s\n\t.word\t0x%08lx\n",
++	   value_long[0], sn_format_g (buf, 20, value), value_long[1]);
+ #else
+   fprintf (stream, "\t.double\t%.20g\n", value);
+ #endif
+ }
+ 
++/* Format VALUE with %.<PREC>g the way the msvcrt printf of the SN
++   host does: 1.#INF for infinities, 17 significant digits rounded
++   half up to PREC, and three exponent digits.  */
++
++static char *
++sn_format_g (buf, prec, value)
++     char *buf;
++     int prec;
++     double value;
++{
++  char digits[32], *p, *q;
++  int exp, i, n;
++
++  if (value != value)
++    {
++      strcpy (buf, "-1.#IND");
++      return buf;
++    }
++  if (value != 0 && value * 0.5 == value)
++    {
++      strcpy (buf, value < 0 ? "-1.#INF" : "1.#INF");
++      return buf;
++    }
++
++  p = buf;
++  if (value < 0)
++    *p++ = '-', value = -value;
++
++  /* 17 significant digits, then round half up to PREC.  */
++  sprintf (digits, "%.16e", value);
++  exp = atoi (digits + 19);
++  digits[1] = digits[0];
++  q = digits + 1;
++  q[17] = 0;
++  n = prec < 17 ? prec : 17;
++  if (n < 17 && q[n] >= '5')
++    {
++      for (i = n - 1; i >= 0 && q[i] == '9'; i--)
++	q[i] = '0';
++      if (i < 0)
++	{
++	  q[0] = '1';
++	  exp++;
++	}
++      else
++	q[i]++;
++    }
++  q[n] = 0;
++  while (n < prec && n < 31)
++    q[n++] = '0';
++  q[n] = 0;
++
++  /* Drop trailing zeros, as %g does.  */
++  while (n > 1 && q[n - 1] == '0')
++    q[--n] = 0;
++
++  if (value == 0)
++    exp = 0;
++  if (exp < -4 || exp >= prec)
++    {
++      *p++ = q[0];
++      if (n > 1)
++	{
++	  *p++ = '.';
++	  for (i = 1; i < n; i++)
++	    *p++ = q[i];
++	}
++      sprintf (p, "e%c%03d", exp < 0 ? '-' : '+', exp < 0 ? -exp : exp);
++    }
++  else if (exp < 0)
++    {
++      *p++ = '0', *p++ = '.';
++      for (i = -1; i > exp; i--)
++	*p++ = '0';
++      for (i = 0; i < n; i++)
++	*p++ = q[i];
++      *p = 0;
++    }
++  else
++    {
++      for (i = 0; i <= exp; i++)
++	*p++ = i < n ? q[i] : '0';
++      if (n > exp + 1)
++	{
++	  *p++ = '.';
++	  for (i = exp + 1; i < n; i++)
++	    *p++ = q[i];
++	}
++      *p = 0;
++    }
++  return buf;
++}
++
+ /* Output a single precision value to the assembler.  If both the
+    host and target are IEEE, emit the values in hex.  */
+ 
+@@ -5711,7 +5821,10 @@ mips_output_float (stream, value)
+   long value_long;
+   REAL_VALUE_TO_TARGET_SINGLE (value, value_long);
+ 
+-  fprintf (stream, "\t.word\t0x%08lx\t\t# %.12g (float)\n", value_long, value);
++  char buf[64];
++
++  fprintf (stream, "\t.word\t0x%08lx\t\t# %s (float)\n", value_long,
++	   sn_format_g (buf, 12, value));
+ #else
+   fprintf (stream, "\t.float\t%.12g\n", value);
+ #endif

@@ -9,6 +9,8 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/rendering/geometry_quad.h"
+#include "eetypes.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -156,11 +158,6 @@ void electric_gate_update(char *gate_moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
-#else
-#include "rnc/rendering/geometry_quad.h"
-#include "eetypes.h"
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float angle_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -182,8 +179,6 @@ extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
-/* Near miss, 2 words: retail loads 0x90 twice for the two i * 0x90 products; reload here
- * copies the second from $v1. */
 void FUN_L05_0030de90(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
@@ -242,7 +237,6 @@ void FUN_L05_0030de90(char *moby) {
         list = next;
     } while (id >= 0);
 }
-#endif
 
 /* Fog zone: switches the level fog between its two settings when the hero enters either trigger volume, and
  * tints a colour by the hero's side of a gate while inside the third. */

@@ -1,0 +1,239 @@
+diff --git a/gcc/config/mips/mips.h b/gcc/config/mips/mips.h
+index 62bf7c6..fa0735b 100644
+--- a/gcc/config/mips/mips.h
++++ b/gcc/config/mips/mips.h
+@@ -732,6 +732,11 @@ do									\
+ 	fixed_regs[LO1_REGNUM] = 0;					\
+ 	fixed_regs[HILO1_REGNUM] = 0;					\
+       }									\
++    {									\
++      int regno;							\
++      for (regno = 80; regno <= 110; regno++)				\
++	fixed_regs[regno] = call_used_regs[regno] = 1;			\
++    }									\
+     SUBTARGET_CONDITIONAL_REGISTER_USAGE				\
+   }									\
+ while (0)
+@@ -1622,7 +1627,7 @@ extern int mips_max_skip_funcs;
+ #define FIRST_PSEUDO_REGISTER 76
+ 
+ #undef FIRST_PSEUDO_REGISTER
+-#define FIRST_PSEUDO_REGISTER 79
++#define FIRST_PSEUDO_REGISTER 111
+ 
+ /* 1 for registers that have pervasive standard uses
+    and are not available for the register allocator.
+@@ -1637,6 +1642,7 @@ extern int mips_max_skip_funcs;
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1					\
+   , 1, 1, 1                                                             \
++  , 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 \
+ }
+ 
+ 
+@@ -1655,6 +1661,7 @@ extern int mips_max_skip_funcs;
+   1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1					\
+   , 1, 1, 1                                                             \
++  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 \
+ }
+ 
+ 
+@@ -1892,6 +1899,8 @@ enum reg_class
+   LO01_AND_GR_REGS,
+   HILO01_AND_GR_REGS,
+   ST_REGS,			/* status registers (fp status) */
++  VU_REGS,			/* vu0 macro mode registers */
++  TI_REGS,			/* integer and vu0 registers */
+   ALL_REGS,			/* all registers */
+   LIM_REG_CLASSES		/* max value + 1 */
+ };
+@@ -1935,6 +1944,8 @@ enum reg_class
+   "LO01_AND_GR_REGS",							\
+   "HILO01_AND_GR_REGS",							\
+   "ST_REGS",								\
++  "VU_REGS",								\
++  "TI_REGS",								\
+   "ALL_REGS"								\
+ }
+ 
+@@ -1980,7 +1991,9 @@ enum reg_class
+   { 0xffffffff, 0x00000000, 0x00002002 },				\
+   { 0xffffffff, 0x00000000, 0x00004004 },				\
+   { 0x00000000, 0x00000000, 0x000007f8 },	/* status registers */	\
+-  { 0xffffffff, 0xffffffff, 0x000078ff }	/* all registers */	\
++  { 0x00000000, 0x00000000, 0xffff8000, 0x00007fff },	/* vu0 registers */	\
++  { 0xffffffff, 0x00000000, 0xffff8000, 0x00007fff },	/* integer and vu0 */	\
++  { 0xffffffff, 0xffffffff, 0xffffffff, 0x00007fff }	/* all registers */	\
+ }
+ 
+ 
+@@ -2031,6 +2044,7 @@ extern enum reg_class mips_regno_to_class[];
+   48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,	\
+   64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75			\
+   , 76, 77, 78								\
++  , 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110 \
+ }
+ 
+ /* ORDER_REGS_FOR_LOCAL_ALLOC is a macro which permits reg_alloc_order
+@@ -4118,6 +4132,38 @@ while (0)
+   &mips_reg_names[76][0],						\
+   &mips_reg_names[77][0],						\
+   &mips_reg_names[78][0],						\
++  &mips_reg_names[79][0],						\
++  &mips_reg_names[80][0],						\
++  &mips_reg_names[81][0],						\
++  &mips_reg_names[82][0],						\
++  &mips_reg_names[83][0],						\
++  &mips_reg_names[84][0],						\
++  &mips_reg_names[85][0],						\
++  &mips_reg_names[86][0],						\
++  &mips_reg_names[87][0],						\
++  &mips_reg_names[88][0],						\
++  &mips_reg_names[89][0],						\
++  &mips_reg_names[90][0],						\
++  &mips_reg_names[91][0],						\
++  &mips_reg_names[92][0],						\
++  &mips_reg_names[93][0],						\
++  &mips_reg_names[94][0],						\
++  &mips_reg_names[95][0],						\
++  &mips_reg_names[96][0],						\
++  &mips_reg_names[97][0],						\
++  &mips_reg_names[98][0],						\
++  &mips_reg_names[99][0],						\
++  &mips_reg_names[100][0],						\
++  &mips_reg_names[101][0],						\
++  &mips_reg_names[102][0],						\
++  &mips_reg_names[103][0],						\
++  &mips_reg_names[104][0],						\
++  &mips_reg_names[105][0],						\
++  &mips_reg_names[106][0],						\
++  &mips_reg_names[107][0],						\
++  &mips_reg_names[108][0],						\
++  &mips_reg_names[109][0],						\
++  &mips_reg_names[110][0],						\
+ }
+ 
+ /* print-rtl.c can't use REGISTER_NAMES, since it depends on mips.c.
+@@ -4135,6 +4181,38 @@ while (0)
+   "hi",   "lo",   "accum","$fcc0","$fcc1","$fcc2","$fcc3","$fcc4",	\
+   "$fcc5","$fcc6","$fcc7","$rap"					\
+   , "hi1",  "lo1",  "accum1"						\
++  , "vf0"							\
++  , "vf1"							\
++  , "vf2"							\
++  , "vf3"							\
++  , "vf4"							\
++  , "vf5"							\
++  , "vf6"							\
++  , "vf7"							\
++  , "vf8"							\
++  , "vf9"							\
++  , "vf10"							\
++  , "vf11"							\
++  , "vf12"							\
++  , "vf13"							\
++  , "vf14"							\
++  , "vf15"							\
++  , "vf16"							\
++  , "vf17"							\
++  , "vf18"							\
++  , "vf19"							\
++  , "vf20"							\
++  , "vf21"							\
++  , "vf22"							\
++  , "vf23"							\
++  , "vf24"							\
++  , "vf25"							\
++  , "vf26"							\
++  , "vf27"							\
++  , "vf28"							\
++  , "vf29"							\
++  , "vf30"							\
++  , "vf31"							\
+ }
+ 
+ /* If defined, a C initializer for an array of structures
+diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
+index 57ee269..e617bde 100644
+--- a/gcc/config/mips/mips.c
++++ b/gcc/config/mips/mips.c
+@@ -348,7 +348,7 @@ char mips_reg_names[][8] =
+  "$f24", "$f25", "$f26", "$f27", "$f28", "$f29", "$f30", "$f31",
+  "hi",   "lo",   "accum","$fcc0","$fcc1","$fcc2","$fcc3","$fcc4",
+  "$fcc5","$fcc6","$fcc7","$rap"
+- , "hi1",  "lo1",  "accum1"
++ , "hi1",  "lo1",  "accum1", "vf0", "vf1", "vf2", "vf3", "vf4", "vf5", "vf6", "vf7", "vf8", "vf9", "vf10", "vf11", "vf12", "vf13", "vf14", "vf15", "vf16", "vf17", "vf18", "vf19", "vf20", "vf21", "vf22", "vf23", "vf24", "vf25", "vf26", "vf27", "vf28", "vf29", "vf30", "vf31"
+ };
+ 
+ /* Mips software names for the registers, used to overwrite the
+@@ -366,7 +366,7 @@ char mips_sw_reg_names[][8] =
+   "$f24", "$f25", "$f26", "$f27", "$f28", "$f29", "$f30", "$f31",
+   "hi",   "lo",   "accum","$fcc0","$fcc1","$fcc2","$fcc3","$fcc4",
+   "$fcc5","$fcc6","$fcc7","$rap"
+-  , "hi1",  "lo1",  "accum1"
++  , "hi1",  "lo1",  "accum1", "vf0", "vf1", "vf2", "vf3", "vf4", "vf5", "vf6", "vf7", "vf8", "vf9", "vf10", "vf11", "vf12", "vf13", "vf14", "vf15", "vf16", "vf17", "vf18", "vf19", "vf20", "vf21", "vf22", "vf23", "vf24", "vf25", "vf26", "vf27", "vf28", "vf29", "vf30", "vf31"
+ };
+ 
+ /* Map hard register number to register class */
+@@ -392,6 +392,7 @@ enum reg_class mips_regno_to_class[] =
+   ST_REGS,	ST_REGS,	ST_REGS,	ST_REGS,
+   ST_REGS,	ST_REGS,	ST_REGS,	GR_REGS
+   , HI1_REG,	LO1_REG,	HILO1_REG
++  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS  , VU_REGS
+ };
+ 
+ /* Map register constraint character to register class.  */
+@@ -4584,6 +4599,7 @@ override_options ()
+   mips_char_to_class['b'] = ALL_REGS;
+   mips_char_to_class['y'] = GR_REGS;
+   mips_char_to_class['z'] = ST_REGS;
++  mips_char_to_class['j'] = VU_REGS;
+ 
+   /* Set up array to map GCC register number to debug register number.
+      Ignore the special purpose register numbers.  */
+diff --git a/gcc/config/mips/mips.md b/gcc/config/mips/mips.md
+index e9eda13..043f425 100644
+--- a/gcc/config/mips/mips.md
++++ b/gcc/config/mips/mips.md
+@@ -5405,8 +5405,8 @@ move\\t%0,%z4\\n\\
+ }")
+ 
+ (define_insn "movti_internal"
+-  [(set (match_operand:TI 0 "nonimmediate_operand" "=d,d,d,R,m,d,d,d,d,d")
+-	(match_operand:TI 1 "movti_operand"         "d,R,m,d,d,J,K,L,M,i"))]
++  [(set (match_operand:TI 0 "nonimmediate_operand" "=d,j,j,d,d,d,R,m,j,j,R,m,d,d,d,d,d")
++	(match_operand:TI 1 "movti_operand"         "d,j,d,j,R,m,d,d,R,m,j,j,J,K,L,M,i"))]
+   "TARGET_MIPS5900
+    && (register_operand (operands[0], TImode)
+        || se_register_operand (operands[1], TImode)
+@@ -5414,20 +5414,27 @@ move\\t%0,%z4\\n\\
+        || operands[1] == CONST0_RTX (TImode))"
+   "@
+   por %0,$0,%1
++  vmove %0,%1
++  qmtc2 %1, %0
++  qmfc2 %0, %1
+   lq %0,%1
+   lq %0,%1
+   sq %1,%0
+   sq %1,%0
++  lqc2 %0,%1
++  lqc2 %0,%1
++  sqc2 %1,%0
++  sqc2 %1,%0
+   por %0,%.,%.
+   por\\t%0,%.,%.\;li\\t%0,%1 \\t\\t\\t# ori
+   por\\t%0,%.,%.\;li\\t%0,%1 \\t\\t\\t# lui
+   por\\t%0,%.,%.\;dli\\t%0,%1 \\t\\t\\t# general li macro
+   dli\\t%0,%M1\;pcpyld\\t%0,%0,%.\;dli\\t%0,%L1"
+-  [(set_attr "type"	"move,load,load,store,store,move,move,move,move,move")
++  [(set_attr "type"	"move,move,xfer,xfer,load,load,store,store,load,load,store,store,move,move,move,move,move")
+ ;; Really DI, but not important for the cases we care about.
+    (set_attr "mode"	"DI")
+ ;; The general li macro on a 64 bit machine can be up to 7 instructions long.
+-   (set_attr "length"	"1,1,1,1,1,1,2,2,8,15")])
++   (set_attr "length"	"1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,8,15")])
+ 
+ 
+ ;; 64-bit integer moves
