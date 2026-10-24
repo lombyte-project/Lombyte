@@ -850,10 +850,10 @@ extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
 extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
-extern int D_L18_001622E4 __attribute__((sda));
-extern int D_L18_001622E8 __attribute__((sda));
-extern int D_L18_001622EC __attribute__((sda));
-extern int D_L18_001622F0 __attribute__((sda));
+extern int glow_moby_blend_minuend_selector_gp __asm__("D_L18_001622E4") __attribute__((sda));
+extern int glow_moby_blend_subtrahend_selector_gp __asm__("D_L18_001622E8") __attribute__((sda));
+extern int glow_moby_blend_factor_selector_gp __asm__("D_L18_001622EC") __attribute__((sda));
+extern int glow_moby_blend_addend_selector_gp __asm__("D_L18_001622F0") __attribute__((sda));
 extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
 extern int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") __attribute__((sda));
 extern f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") __attribute__((sda));
@@ -897,8 +897,8 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
         quads[i].texture = get_effect_texture_1fd8(0xE);
         quads[i].reserved.value = 0;
         quads[i].texture_state = 0xFF9000000260ULL;
-        quads[i].primitive = (u64)D_L18_001622E4 | ((u64)D_L18_001622E8 << 2) | ((u64)D_L18_001622EC << 4) |
-                             ((u64)D_L18_001622F0 << 6) | 0x8000000000ULL;
+        quads[i].primitive = (u64)glow_moby_blend_minuend_selector_gp | ((u64)glow_moby_blend_subtrahend_selector_gp << 2) | ((u64)glow_moby_blend_factor_selector_gp << 4) |
+                             ((u64)glow_moby_blend_addend_selector_gp << 6) | 0x8000000000ULL;
         phase = vars->scroll + i * step;
         phase = phase - (float)truncate_1fd8(phase);
         color = blend_color_1fd8(glow_moby_phase_blend_start_color_gp, glow_moby_phase_blend_end_color_gp, phase);
