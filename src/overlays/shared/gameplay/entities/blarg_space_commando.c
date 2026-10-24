@@ -791,7 +791,7 @@ extern s32 D_L06_00161FE0 __attribute__((sda));
 extern s32 D_L06_00161FE4 __attribute__((sda));
 extern s32 D_L06_00161FE8 __attribute__((sda));
 extern s32 D_L06_00161FEC __attribute__((sda));
-extern s32 D_L06_00161FF0 __attribute__((sda));
+extern s32 beam_effect_texture_index __asm__("D_L06_00161FF0") __attribute__((sda));
 extern s32 D_L06_00161FF4 __attribute__((sda));
 extern s32 D_L06_00161FF8 __attribute__((sda));
 extern s32 D_L06_00161FFC __attribute__((sda));
@@ -823,8 +823,8 @@ void draw_blarg_space_commando_beam(char *moby) {
 
     vu1_add_gs_register(0x47, 0x5380B);
     i = 0;
-    pk[0].tag[1] = get_effect_texture(D_L06_00161FF0);
-    pk[1].tag[1] = get_effect_texture(D_L06_00161FF0);
+    pk[0].tag[1] = get_effect_texture(beam_effect_texture_index);
+    pk[1].tag[1] = get_effect_texture(beam_effect_texture_index);
     regs = D_L06_00161FDC;
     regs |= (u64)D_L06_00161FE0 << 2;
     regs |= (u64)D_L06_00161FE4 << 4;
