@@ -968,7 +968,7 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     Q2d8e48 quad;
     V2d8e48 quad_transform[4];
     V2d8e48 *bolt_start_position;
-    unsigned int c;
+    unsigned int uniform_quad_color;
     float quad_scale;
     int i;
     bolt_start_position = *(V2d8e48 **)((char *)mv + 0x78);
@@ -986,11 +986,11 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     fast_vec_cross(&quad_transform[1], &quad_transform[0], (V2d8e48 *)&hero.gravity_dir);
     vscl_2d8e48(&quad_transform[1], &quad_transform[1], -1.0f);
     fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    c = D_L15_00161CAC;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L15_00161CAC;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     quad_scale = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
@@ -999,11 +999,11 @@ void draw_electric_water_bolt_start_quads(void *mv) {
         quad.uv[i].v = D_L15_001D3730[i].v;
     }
     draw_2d8e48(&quad, 0, 0);
-    c = D_L15_00161C60;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L15_00161C60;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     quad_scale = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
