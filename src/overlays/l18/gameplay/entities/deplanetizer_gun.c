@@ -535,9 +535,9 @@ extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern int D_L18_00162560;
-extern int D_L18_00162564;
-extern float D_L18_00162568;
+extern int deplanetizer_glow_local_offset_x __asm__("D_L18_00162560");
+extern int deplanetizer_glow_local_offset_y __asm__("D_L18_00162564");
+extern float deplanetizer_glow_local_offset_z __asm__("D_L18_00162568");
 extern float D_L18_0016256C;
 extern int deplanetizer_glow_first_quad_base_tint __asm__("D_L18_00162504") __attribute__((sda));
 extern float deplanetizer_glow_first_quad_scale __asm__("D_L18_00162508") __attribute__((sda));
@@ -551,10 +551,10 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     int second_quad_color;
     int i;
     if (D_L18_0016D260_9c20.n == frames_9c20(deplanetizer_glow_alpha_ramp_start_frame + 1)) {
-        D_L18_00162568 = -45.0f;
+        deplanetizer_glow_local_offset_z = -45.0f;
         D_L18_0016256C = 1.0f;
-        D_L18_00162560 = 0;
-        D_L18_00162564 = 0;
+        deplanetizer_glow_local_offset_x = 0;
+        deplanetizer_glow_local_offset_y = 0;
     }
     pk.b = tex_9c20(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -562,7 +562,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(quad_transform[3], &D_L18_00162560, &m->rot_row0);
+    rot_9c20(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
     add_9c20(quad_transform[3], quad_transform[3], &m->pos);
     sub_9c20(quad_transform[0], quad_transform[3], D_L18_001677C0_9c20);
     norm_9c20(quad_transform[0], quad_transform[0], 1.0f);
@@ -620,7 +620,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(quad_transform[3], &D_L18_00162560, &m->rot_row0);
+    rot_9c20(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
     add_9c20(quad_transform[3], quad_transform[3], &m->pos);
     *(u128_9c20 *)up = 0;
     up[2] = -1.0f;
