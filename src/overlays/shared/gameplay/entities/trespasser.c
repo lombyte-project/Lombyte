@@ -335,7 +335,7 @@ void draw_swingshot_cable(char *moby) __asm__("FUN_L00_002c5dc8");
 
 void draw_swingshot_cable(char *moby) {
     Quad_2c5dc8 segment_quad;
-    V_2c5dc8 b, segment_center, attachment_position, segment_direction, f, g, wobble_vector_scratch, segment_to_reference, k;
+    V_2c5dc8 previous_segment_center, segment_center, attachment_position, segment_direction, f, g, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
     unsigned int col;
     float half = 0.05f;
@@ -363,17 +363,17 @@ void draw_swingshot_cable(char *moby) {
     segment_quad.uv[3].u = 1.0f;
     segment_quad.uv[3].v = 1.0f;
     pos_2c5dc8(moby, 0, &attachment_position);
-    qcopy(&b, v->x14 + 0x10);
-    qcopy(&segment_center, &b);
-    sub_2c5dc8(&segment_direction, &attachment_position, &b);
+    qcopy(&previous_segment_center, v->x14 + 0x10);
+    qcopy(&segment_center, &previous_segment_center);
+    sub_2c5dc8(&segment_direction, &attachment_position, &previous_segment_center);
     distance_along_span = 0.0f;
     span_length = len_2c5dc8(&segment_direction);
     qcopy(&wobble_vector_scratch, &segment_direction);
     wobble_vector_scratch.f[2] -= 0.1f;
     cross_2c5dc8(&f, &segment_direction, &wobble_vector_scratch);
     cross_2c5dc8(&g, &segment_direction, &f);
-    qcopy(&segment_quad.corner[0], &b);
-    qcopy(&segment_quad.corner[2], &b);
+    qcopy(&segment_quad.corner[0], &previous_segment_center);
+    qcopy(&segment_quad.corner[2], &previous_segment_center);
     segment_quad.corner[0].f[2] -= half;
     segment_quad.corner[2].f[2] += half;
     wob = f9dc8_2c5dc8(fa610_2c5dc8(v->x18));
@@ -398,7 +398,7 @@ void draw_swingshot_cable(char *moby) {
         add_2c5dc8(&segment_quad.corner[1], &segment_quad.corner[1], &wobble_vector_scratch);
         add_2c5dc8(&segment_quad.corner[3], &segment_quad.corner[3], &wobble_vector_scratch);
         draw_2c5dc8(&segment_quad, 0, 1);
-        qcopy(&b, &segment_center);
+        qcopy(&previous_segment_center, &segment_center);
         qcopy(&segment_quad.corner[0], &segment_quad.corner[1]);
         qcopy(&segment_quad.corner[2], &segment_quad.corner[3]);
     }
