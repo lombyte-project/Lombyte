@@ -1681,7 +1681,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     float up[4];
     char *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
     char *path;
-    char *tbl;
+    char *path_record_table;
     char *camera_saved_state;
     float *camera_parameters;
     int *camera_state_block;
@@ -1692,11 +1692,11 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     float hero_heading_radians;
     int i;
 
-    tbl = D_L14_0015F70C_59d8;
+    path_record_table = D_L14_0015F70C_59d8;
     *(int *)(rec + 0x20) = 2;
     *(short *)(rec + 0x30) = 0;
     *(short *)(rec + 0x32) = 0;
-    path = *(char **)(tbl + *(int *)(rec + 0x34) * 32 + 0x10);
+    path = *(char **)(path_record_table + *(int *)(rec + 0x34) * 32 + 0x10);
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
         D_L14_001F6C80[0][i] = sum;
