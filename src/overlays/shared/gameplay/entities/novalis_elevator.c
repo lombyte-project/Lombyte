@@ -3018,7 +3018,7 @@ typedef struct {
     u16 kind;
 } HitInfo;
 
-extern s32 D_L01_00161B00;
+extern s32 gunship_path_updates_disabled __asm__("D_L01_00161B00");
 extern char D_L01_0020B3E0[];
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
@@ -3097,7 +3097,7 @@ void gunship_follow_path(struct Moby *moby) {
     if (moby->oclass != 0x336) {
         frozen = check_scaled_vector_bsphere(moby, FUN_001fa6c0(moby->draw_dist)) == -1;
     }
-    if (v == 0 || D_L01_00161B00 != 0) {
+    if (v == 0 || gunship_path_updates_disabled != 0) {
         return;
     }
     path_cursor = &v->path;
