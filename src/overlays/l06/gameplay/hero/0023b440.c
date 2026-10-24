@@ -149,17 +149,17 @@ void update_hero_state_machine(void) {
     int new_loop;
     int sp3C;
     int sp40;
-    float sp44;
-    float sp48;
-    float sp4C;
-    float sp50;
+    float ledge_hang_probe_yaw;
+    float ledge_positive_side_probe_yaw;
+    float ledge_negative_side_probe_yaw;
+    float ledge_shimmy_probe_yaw;
     int sp54;
     int sp58;
     int sp5C;
-    float sp60;
-    float sp64;
-    float sp68;
-    float sp6C;
+    float alt_ledge_hang_probe_yaw;
+    float alt_ledge_positive_side_probe_yaw;
+    float alt_ledge_negative_side_probe_yaw;
+    float alt_ledge_shimmy_probe_yaw;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -1271,8 +1271,8 @@ void update_hero_state_machine(void) {
                     }
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
-                    sp44 = hero.motion.rot.f[2];
-                    if (probe_hero_ledge_edge(v0, &sp44) == 0) {
+                    ledge_hang_probe_yaw = hero.motion.rot.f[2];
+                    if (probe_hero_ledge_edge(v0, &ledge_hang_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -1297,8 +1297,8 @@ void update_hero_state_machine(void) {
                         qcopy(v1, hero.motion.pos.f);
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        sp48 = hero.motion.rot.f[2];
-                        if (probe_hero_ledge_edge(v1, &sp48)) {
+                        ledge_positive_side_probe_yaw = hero.motion.rot.f[2];
+                        if (probe_hero_ledge_edge(v1, &ledge_positive_side_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1312,8 +1312,8 @@ void update_hero_state_machine(void) {
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        sp4C = hero.motion.rot.f[2];
-                        if (probe_hero_ledge_edge(v1, &sp4C)) {
+                        ledge_negative_side_probe_yaw = hero.motion.rot.f[2];
+                        if (probe_hero_ledge_edge(v1, &ledge_negative_side_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1329,13 +1329,13 @@ void update_hero_state_machine(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
-                    sp50 = hero.motion.rot.f[2];
+                    ledge_shimmy_probe_yaw = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        probe_hero_ledge_edge(v0, &sp50) == 0) {
+                        probe_hero_ledge_edge(v0, &ledge_shimmy_probe_yaw) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -2291,8 +2291,8 @@ void update_hero_state_machine(void) {
                 case 75:
                     stick_target(0, 1.0f);
                     qcopy(v0, hero.motion.pos.f);
-                    sp60 = hero.motion.rot.f[2];
-                    if (probe_hero_ledge_edge(v0, &sp60) == 0) {
+                    alt_ledge_hang_probe_yaw = hero.motion.rot.f[2];
+                    if (probe_hero_ledge_edge(v0, &alt_ledge_hang_probe_yaw) == 0) {
                         hero_set_state(0x45, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -2317,8 +2317,8 @@ void update_hero_state_machine(void) {
                         qcopy(v1, hero.motion.pos.f);
                         v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        sp64 = hero.motion.rot.f[2];
-                        if (probe_hero_ledge_edge(v1, &sp64)) {
+                        alt_ledge_positive_side_probe_yaw = hero.motion.rot.f[2];
+                        if (probe_hero_ledge_edge(v1, &alt_ledge_positive_side_probe_yaw)) {
                             hero_set_state(0x4D, 1);
                         }
                         break;
@@ -2332,8 +2332,8 @@ void update_hero_state_machine(void) {
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        sp68 = hero.motion.rot.f[2];
-                        if (probe_hero_ledge_edge(v1, &sp68)) {
+                        alt_ledge_negative_side_probe_yaw = hero.motion.rot.f[2];
+                        if (probe_hero_ledge_edge(v1, &alt_ledge_negative_side_probe_yaw)) {
                             hero_set_state(0x4E, 1);
                         }
                     }
@@ -2349,13 +2349,13 @@ void update_hero_state_machine(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
-                    sp6C = hero.motion.rot.f[2];
+                    alt_ledge_shimmy_probe_yaw = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.unk229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        probe_hero_ledge_edge(v0, &sp6C) == 0) {
+                        probe_hero_ledge_edge(v0, &alt_ledge_shimmy_probe_yaw) == 0) {
                         if (hero.unkA98 & 2) {
                             hero_set_state(0x4B, 1);
                             break;
