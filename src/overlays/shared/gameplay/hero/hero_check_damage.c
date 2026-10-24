@@ -2562,7 +2562,7 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern s32 D_0013DFD8[];
 extern s32 D_0014E990[][16];
-extern s32 D_L00_0015F5A4;
+extern s32 level_15_class_4d_respawn_flag __asm__("D_L00_0015F5A4");
 void hero_respawn(void) {
     s32 lvl = current_level_index;
     char *damage_source_moby;
@@ -2571,7 +2571,7 @@ void hero_respawn(void) {
     D_0015EEAC++;
     if (((char *)hero.unk2280) != 0 && *(s16 *)(((char *)hero.unk2280) + 0xA6) == 0x4D &&
         lvl == 15) {
-        D_L00_0015F5A4 = 1;
+        level_15_class_4d_respawn_flag = 1;
     }
     clear_help_record_high_bits();
     damage_source_moby = ((char *)hero.unk2280);
