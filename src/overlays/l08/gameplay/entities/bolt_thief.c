@@ -1421,10 +1421,10 @@ typedef struct {
     s16 sound;                   /* 0x28E */
 } GunshipVars;
 
-extern s32 D_L08_00161C4C __attribute__((sda));
-extern f32 D_L08_00161C38 __attribute__((sda));
-extern f32 D_L08_00161C44 __attribute__((sda));
-extern f32 D_L08_00161C48 __attribute__((sda));
+extern s32 gunship_updates_disabled __asm__("D_L08_00161C4C") __attribute__((sda));
+extern f32 gunship_path_speed __asm__("D_L08_00161C38") __attribute__((sda));
+extern f32 gunship_turn_acceleration_degrees __asm__("D_L08_00161C44") __attribute__((sda));
+extern f32 gunship_max_turn_speed_degrees __asm__("D_L08_00161C48") __attribute__((sda));
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
@@ -1484,7 +1484,7 @@ void update_gunship(struct Moby *moby) {
     f32 pitch;
     f32 yaw;
 
-    if (D_L08_00161C4C != 0) {
+    if (gunship_updates_disabled != 0) {
         return;
     }
     if (!voice_is_playing(moby, vars->sound)) {
@@ -1520,8 +1520,8 @@ void update_gunship(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161C38 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161C38 * frame_time);
+        if (vector_length_xyz(&step) > gunship_path_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, gunship_path_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         if (moby->command == 0) {
@@ -1542,7 +1542,7 @@ void update_gunship(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161C38 + D_L08_00161C38) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (gunship_path_speed + gunship_path_speed) * frame_time);
         shot = spawn_class_1b3_projectile(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars *)target->pvars;
@@ -1570,15 +1570,15 @@ void update_gunship(struct Moby *moby) {
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
         approach_angle(&moby->rot.z, &vars->turn_speed, heading,
-                         D_L08_00161C44 * DEG_TO_RAD * frame_time_sq, D_L08_00161C44 * DEG_TO_RAD * frame_time_sq,
-                         D_L08_00161C48 * DEG_TO_RAD * frame_time);
+                         gunship_turn_acceleration_degrees * DEG_TO_RAD * frame_time_sq, gunship_turn_acceleration_degrees * DEG_TO_RAD * frame_time_sq,
+                         gunship_max_turn_speed_degrees * DEG_TO_RAD * frame_time);
         qcopy(&point, &follower->path->points[next]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {
             follower->point = next;
         }
         subtract_vector_xyz(&step, &point, &moby->pos);
-        if (vector_length_xyz(&step) > D_L08_00161C38 * frame_time) {
-            normalize_vector_xyz(&step, &step, D_L08_00161C38 * frame_time);
+        if (vector_length_xyz(&step) > gunship_path_speed * frame_time) {
+            normalize_vector_xyz(&step, &step, gunship_path_speed * frame_time);
         }
         add_vector_xyz(&moby->pos, &moby->pos, &step);
         update_linked_moby_parts(moby);
@@ -1589,7 +1589,7 @@ void update_gunship(struct Moby *moby) {
         moby_point_position(vars->links[4].part, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
-        normalize_vector_xyz(&velocity, &step, (D_L08_00161C38 + D_L08_00161C38) * frame_time);
+        normalize_vector_xyz(&velocity, &step, (gunship_path_speed + gunship_path_speed) * frame_time);
         bolt = spawn_class_1b3_projectile(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
             bolt->rot.z = vars->links[4].part->rot.z;
