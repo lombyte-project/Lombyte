@@ -712,7 +712,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float,
                                  int) __asm__("FUN_L00_0026d000");
 
-void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) {
+void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float first_effect_size, float second_effect_size) {
     char first_effect_position[16];
     char second_effect_position[16];
     int i;
@@ -725,7 +725,7 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
     for (i = 1; i >= 0; i--) {
         random_magnitude_or_effect = (char *)random_integer_below(16);
         random_magnitude_or_effect = func_L00_0026DEA0_c(first_effect_position, random_integer_below(2) ? -(int)random_magnitude_or_effect : (int)random_magnitude_or_effect, effect_velocity_source, 0.0f, 1.0f, 0.9f,
-                                f0, 0x7F204080);
+                                first_effect_size, 0x7F204080);
         effect_data = random_magnitude_or_effect + 0x20;
         if (random_magnitude_or_effect) {
             *(short *)(random_magnitude_or_effect + 0xA) = scale_game_frames(15);
@@ -742,7 +742,7 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
     do {
         int y = x;
         x = -x;
-        random_magnitude_or_effect = func_L00_0026DEA0_c(second_effect_position, y, effect_velocity_source, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
+        random_magnitude_or_effect = func_L00_0026DEA0_c(second_effect_position, y, effect_velocity_source, 0.0f, 1.0f, 0.97f, second_effect_size, 0x7FFFFFFF);
         effect_data = random_magnitude_or_effect + 0x20;
         if (random_magnitude_or_effect) {
             random_magnitude_or_effect[9] = func_001FA898_r(4.0f) + 0x40;
