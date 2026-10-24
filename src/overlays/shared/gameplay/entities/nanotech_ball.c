@@ -3371,9 +3371,9 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
-extern int D_L00_00161B90 __attribute__((sda));
-extern int D_L00_00161B94 __attribute__((sda));
-extern float D_L00_00161B98 __attribute__((sda));
+extern int red_orb_pulse_color_start __asm__("D_L00_00161B90") __attribute__((sda));
+extern int red_orb_pulse_color_end __asm__("D_L00_00161B94") __attribute__((sda));
+extern float red_orb_pulse_angular_speed_degrees __asm__("D_L00_00161B98") __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
 void red_orb_update(char *moby) {
     enum {
@@ -3391,10 +3391,10 @@ void red_orb_update(char *moby) {
         break;
     case RED_ORB_STATE_PULSE_COLOR:
         pulse_phase_or_sine = fast_add_rotations(*(float *)orb_data,
-                               D_L00_00161B98 * DEG_TO_RAD * frame_time);
+                               red_orb_pulse_angular_speed_degrees * DEG_TO_RAD * frame_time);
         *(float *)orb_data = pulse_phase_or_sine;
         pulse_phase_or_sine = fast_sin(pulse_phase_or_sine);
-        tweened_color = fast_tween_color(D_L00_00161B90, D_L00_00161B94, pulse_phase_or_sine * 0.5f + 0.5f);
+        tweened_color = fast_tween_color(red_orb_pulse_color_start, red_orb_pulse_color_end, pulse_phase_or_sine * 0.5f + 0.5f);
         b = (tweened_color >> 16) & 0xFF;
         g = (tweened_color >> 8) & 0xFF;
         r = tweened_color & 0xFF;
