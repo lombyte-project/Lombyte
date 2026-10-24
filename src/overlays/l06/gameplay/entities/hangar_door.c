@@ -203,7 +203,7 @@ float compute_alien_snapper_target_gap_angle(char *self) __asm__("FUN_L06_002f96
 
 float compute_alien_snapper_target_gap_angle(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
-    float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, v[3];
+    float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, translated_owner_to_self_vector[3];
     short *moby_index_cursor;
     if ((unsigned char)self[0x21] == 0xFF) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
@@ -214,10 +214,10 @@ float compute_alien_snapper_target_gap_angle(char *self) {
     owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, self + 0x10);
-    v[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
-    v[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
-    v[2] = 0.0f;
-    fast_vec_add(v, v, D_0013E533 + 0xE9D);
+    translated_owner_to_self_vector[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
+    translated_owner_to_self_vector[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
+    translated_owner_to_self_vector[2] = 0.0f;
+    fast_vec_add(translated_owner_to_self_vector, translated_owner_to_self_vector, D_0013E533 + 0xE9D);
     moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
     if (moby_index_cursor == 0) {
         return 0.0f;
