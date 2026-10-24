@@ -290,16 +290,16 @@ void update_hero_planar_distance_spring_motion(void) {
     float xy_distance;
     float xy_distance_threshold;
     float spring_projection_yaw;
-    int s;
+    int control_mode_or_timer_frames;
 
     if (*(unsigned char *)(hero_check_base + 0x257) != 0 && *(float *)(hero_check_base + 0x2DC) > 0.0f &&
         *(float *)(hero_check_base + 0x160) < frame_time * 3.0f && fast_vec_length(hero_check_base + 0xE0) < frame_time * 3.0f &&
         *(float *)(hero_check_base + 0x229C) < 0.2f) {
-        s = *(int *)(hero_check_base + 0x208C);
-        if (s == 0 || s == 2 || s == 4 || s == 10 || s == 1) {
-            s = scale_game_frames(5);
+        control_mode_or_timer_frames = *(int *)(hero_check_base + 0x208C);
+        if (control_mode_or_timer_frames == 0 || control_mode_or_timer_frames == 2 || control_mode_or_timer_frames == 4 || control_mode_or_timer_frames == 10 || control_mode_or_timer_frames == 1) {
+            control_mode_or_timer_frames = scale_game_frames(5);
             hero_timer_base = (char *)D_0013E533 + 0xE1D;
-            *(short *)(hero_timer_base + 0x1EA) = s;
+            *(short *)(hero_timer_base + 0x1EA) = control_mode_or_timer_frames;
         }
     }
     hero_base = (char *)D_0013E533 + 0xE1D;
