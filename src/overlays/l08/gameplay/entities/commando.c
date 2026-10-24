@@ -636,7 +636,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
 /* Builds the animated grid, draws its quads, and updates attached effects. */
 /* Ported from rac1-decomp (nonmatching/l08_batalia/func_L08_002F7318.c: func_L08_002F7318). */
 
-typedef float V45[4] __attribute__((aligned(16)));
+typedef float Vec_5e58[4] __attribute__((aligned(16)));
 
 typedef struct {
     float width,height;
@@ -648,8 +648,8 @@ typedef struct {
     unsigned char blend0,blend1,blend2,blend3;
     float u_rate,u_amp,u_phase,v_rate,v_amp,v_phase;
     float noise_amp,noise_speed,phase0,phase1,phase0_end,phase1_end;
-    float tex_u_scale,tex_v_scale,normal_u,normal_v;
-    float z0,z1,noise_range,noise_rate;
+    float texture_w_count,texture_h_count,normal_u,normal_v;
+    float z0,z1,jitter,noise_rate;
     float noise[8],goal[8],noise_u,noise_v,noise_bias;
     float particle_xy,particle_z,particle_size0,particle_size1;
     unsigned char particle_r,particle_g,particle_b,particle_a;
@@ -659,63 +659,57 @@ typedef struct {
     unsigned char puff_c0[4],puff_c1[4]; short puff_life0,puff_life1;
     unsigned char puff_count,puff_ticks; short puff_timer;
     float puff_range,puff_blend,puff_offset,puff_height;
-    char pad134[3]; unsigned char sound_value,pad138,sound_range_x,sound_range_y;
-    signed char sound_index; float sound_speed;
-    V45 sound_position;
-    char pad150[4]; float alpha_scale,alpha_u,alpha_v;
-} Grid45;
+    char pad134[3]; unsigned char radius,pad138,light_range_x,light_range_y;
+    signed char light; float light_speed;
+    Vec_5e58 light_pos;
+    char pad150[4]; float intensity,alpha_u,alpha_v;
+} FlickerMesh_5e58;
 
 typedef struct {
-    char pad0[0x10]; V45 position;
+    char pad0[0x10]; Vec_5e58 position;
     char pad20[3]; unsigned char alpha;
-    char pad24[0x1C]; V45 rotation;
-    char pad50[0x28]; Grid45 *data;
-} M45;
+    char pad24[0x1C]; Vec_5e58 rotation;
+    char pad50[0x28]; FlickerMesh_5e58 *data;
+} Moby_5e58;
 
 typedef struct {
-    V45 vertex[4]; unsigned int color[4]; float uv[8]; long gs[4];
-} Quad45;
+    Vec_5e58 vertex[4]; unsigned int color[4]; float uv[8]; long gs[4];
+} Quad_5e58;
 
-typedef struct { char pad0[0x10]; V45 position; } Sound45;
+typedef struct { char pad0[0x10]; Vec_5e58 position; } PointLight_5e58;
 
-extern float sample_ring_45(char *, float) __asm__("FUN_L08_002f5d98");
-extern Sound45 D_L08_00180AC0_45[] __asm__("D_L08_00180AC0");
+extern float interpolate_sample_ring_5e58(char *, float) __asm__("FUN_L08_002f5d98");
+extern PointLight_5e58 point_lights_5e58[] __asm__("D_L08_00180AC0");
 extern float D_0015ED60;
 extern int D_L08_0015F3F8;
-extern f32 fast_cos_45(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin_45(f32) __asm__("FUN_001f9de0");
-extern f32 vector_distance_45(void *, void *) __asm__("FUN_001f9b48");
-extern f32 square_root_45(f32) __asm__("FUN_001f9988");
-extern f32 split_float_fraction_45(void *, f32) __asm__("FUN_L00_00200228");
-extern s32 random_integer_between_45(s32, s32) __asm__("FUN_L00_00257b90");
-extern f32 normalize_angle_45(f32) __asm__("FUN_L00_0025e310");
-extern int get_effect_texture_45(int) __asm__("FUN_001f44b8");
-extern s32 tick_countdown_16_45(s16 *) __asm__("FUN_001f9770");
-extern s32 tick_countdown_32_45(s32 *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames_45(s32) __asm__("FUN_001f96f8");
-extern void add_vector_xyz_45(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz_45(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void cross_vectors_xyz_45(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void euler_rotation_matrix_45(void *, void *) __asm__("FUN_001fa050");
-extern void fast_draw_quad_45(void *, void *, int) __asm__("FUN_001f7d30");
-extern void normalize_vector_xyz_45(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale_45(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void transform_vector_45(void *, void *, void *) __asm__("FUN_001f9d20");
-extern unsigned char *spawn_colored_effect_45(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
-extern void spawn_puff_effect_45(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
+extern f32 fast_cos_5e58(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_5e58(f32) __asm__("FUN_001f9de0");
+extern f32 vector_distance_5e58(void *, void *) __asm__("FUN_001f9b48");
+extern f32 square_root_5e58(f32) __asm__("FUN_001f9988");
+extern f32 split_float_fraction_5e58(void *, f32) __asm__("FUN_L00_00200228");
+extern s32 random_integer_between_5e58(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 normalize_angle_5e58(f32) __asm__("FUN_L00_0025e310");
+extern s32 tick_countdown_16_5e58(s16 *) __asm__("FUN_001f9770");
+extern s32 scale_game_frames_5e58(s32) __asm__("FUN_001f96f8");
+extern void subtract_vector_xyz_5e58(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_vectors_xyz_5e58(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_draw_quad_5e58(void *, void *, int) __asm__("FUN_001f7d30");
+extern void fast_vec_scale_5e58(void *, void *, f32) __asm__("FUN_001f9a68");
+extern unsigned char *spawn_colored_effect_5e58(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
+extern void spawn_puff_effect_5e58(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 void FUN_L08_002f5e58(struct Moby *m) {
-    M45 *moby = (M45 *)m;
-    V45 corner[4],step,left_step,right_step,left,right,point,edge,normal;
+    Moby_5e58 *moby = (Moby_5e58 *)m;
+    Vec_5e58 corner[4],step,left_step,right_step,left,right,point,edge,normal;
     float matrix[16];
-    Quad45 quad;
-    V45 scratch[5];
+    Quad_5e58 quad;
+    Vec_5e58 scratch[5];
     float fraction;
-    Grid45 *data;
+    FlickerMesh_5e58 *data;
     if (!moby || !(data=moby->data)) return;
     {
-        int row_bytes=(data->nx+1)*sizeof(V45);
-        V45 grid[data->ny+1][data->nx+1];
+        int row_bytes=(data->nx+1)*sizeof(Vec_5e58);
+        Vec_5e58 grid[data->ny+1][data->nx+1];
         unsigned char *points=(unsigned char*)grid;
         int remaining;
         float inv_x,inv_y;
@@ -733,20 +727,20 @@ void FUN_L08_002f5e58(struct Moby *m) {
         time=convert_integer_to_float(D_L08_0015F3F8);
         for (remaining=7;remaining>=0;goal++,remaining--,noise++) {
             if (*noise<*goal) {
-                *noise+=data->noise_range*data->noise_rate;
+                *noise+=data->jitter*data->noise_rate;
                 if (!(*goal<=*noise)) continue;
             } else {
-                *noise-=data->noise_range*data->noise_rate;
+                *noise-=data->jitter*data->noise_rate;
                 if (!(*noise<=*goal)) continue;
             }
-            *goal=random_float_between(1.0f-data->noise_range,1.0f);
+            *goal=random_float_between(1.0f-data->jitter,1.0f);
         }
-        alpha=func_001FA898_r(data->alpha_scale*convert_integer_to_float(data->alpha)*convert_integer_to_float(moby->alpha)*0.0078125f)&0xFF;
+        alpha=func_001FA898_r(data->intensity*convert_integer_to_float(data->alpha)*convert_integer_to_float(moby->alpha)*0.0078125f)&0xFF;
         frame=D_L08_0015F3F8;
         if (data->frames) { frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
         else data->current=data->texture;
-        if (data->flags&1) quad.gs[1]=get_effect_texture_45(data->current);
-        else quad.gs[1]=get_effect_texture_45(data->current+0x28);
+        if (data->flags&1) quad.gs[1]=get_effect_texture_alt(data->current);
+        else quad.gs[1]=get_effect_texture_alt(data->current+0x28);
         quad.gs[0]=0;
         quad.gs[2]=0xFF9000000260L;
         quad.gs[3]=(long)data->blend0|((long)data->blend1<<2)|((long)data->blend2<<4)|((long)data->blend3<<6)|((long)data->alpha<<32);
@@ -759,24 +753,24 @@ void FUN_L08_002f5e58(struct Moby *m) {
         corner[0][0]=corner[2][0]=-half_width;
         }
         corner[0][2]=data->z0+0.01f; corner[1][2]=data->z1+0.01f;
-        euler_rotation_matrix_45(matrix,&moby->rotation);
-        transform_vector_45(&corner[0],&corner[0],matrix);
-        transform_vector_45(&corner[1],&corner[1],matrix);
-        transform_vector_45(&corner[2],&corner[2],matrix);
-        transform_vector_45(&corner[3],&corner[3],matrix);
-        subtract_vector_xyz_45(&left_step,&corner[2],&corner[0]);
-        fast_vec_scale_45(&left_step,&left_step,inv_y);
-        subtract_vector_xyz_45(&right_step,&corner[3],&corner[1]);
-        fast_vec_scale_45(&right_step,&right_step,inv_y);
+        euler_rotation_matrix(matrix,&moby->rotation);
+        transform_vector(&corner[0],&corner[0],matrix);
+        transform_vector(&corner[1],&corner[1],matrix);
+        transform_vector(&corner[2],&corner[2],matrix);
+        transform_vector(&corner[3],&corner[3],matrix);
+        subtract_vector_xyz_5e58(&left_step,&corner[2],&corner[0]);
+        fast_vec_scale_5e58(&left_step,&left_step,inv_y);
+        subtract_vector_xyz_5e58(&right_step,&corner[3],&corner[1]);
+        fast_vec_scale_5e58(&right_step,&right_step,inv_y);
         phase_step=(data->phase_end-data->phase_start)*inv_y;
         amp_step=(data->amp_end-data->amp_start)*inv_y;
         amp2_step=(data->amp2_end-data->amp2_start)*inv_y;
         phase0_step=(data->phase0_end-data->phase0)*inv_x;
         phase1_step=(data->phase1_end-data->phase1)*inv_y;
         z0=data->height-data->z0; z1=data->height-data->z1;
-        subtract_vector_xyz_45(&edge,&corner[1],&corner[0]);
-        cross_vectors_xyz_45(&normal,&edge,&left_step);
-        normalize_vector_xyz_45(&normal,&normal,1.0f);
+        subtract_vector_xyz_5e58(&edge,&corner[1],&corner[0]);
+        cross_vectors_xyz_5e58(&normal,&edge,&left_step);
+        normalize_vector_xyz(&normal,&normal,1.0f);
         qcopy(&left,&corner[0]); qcopy(&right,&corner[1]);
         bias=data->noise[0];
         phase=data->phase_start; amp=data->amp_start; amp2=data->amp2_start;
@@ -788,47 +782,47 @@ void FUN_L08_002f5e58(struct Moby *m) {
             float y=convert_integer_to_float(i)/convert_integer_to_float(data->ny);
             qcopy_nc(&point,&left);
             j=0;
-            subtract_vector_xyz_45(&step,&right,&left);
-            fast_vec_scale_45(&step,&step,inv_x);
-            row_noise=sample_ring_45((char*)data,y);
+            subtract_vector_xyz_5e58(&step,&right,&left);
+            fast_vec_scale_5e58(&step,&step,inv_x);
+            row_noise=interpolate_sample_ring_5e58((char*)data,y);
             for (;j<=data->nx;j++) {
                 float x=convert_integer_to_float(j)/convert_integer_to_float(data->nx);
                 float theta=x*3.1415927f;
-                float wave=time*phase+data->noise_amp*fast_sin_45(normalize_angle_45(data->noise_speed*time));
-                float noise=sample_ring_45((char*)data,x);
+                float wave=time*phase+data->noise_amp*fast_sin_5e58(normalize_angle_5e58(data->noise_speed*time));
+                float noise=interpolate_sample_ring_5e58((char*)data,x);
                 float angle0,angle1,shape,drop,a,b,normal_angle0,normal_angle1;
                 wave+=noise*data->noise_u+row_noise*data->noise_v+bias*data->noise_bias;
                 drop=z0*x+z1*(1.0f-x);
-                angle0=normalize_angle_45(wave+phase0+data->wave_u*x+data->wave2_v*y);
-                angle1=normalize_angle_45(wave+phase1+data->wave_v*y+data->wave2_u*x);
-                shape=fast_sin_45(theta);
-                shape=square_root_45(shape);
+                angle0=normalize_angle_5e58(wave+phase0+data->wave_u*x+data->wave2_v*y);
+                angle1=normalize_angle_5e58(wave+phase1+data->wave_v*y+data->wave2_u*x);
+                shape=fast_sin_5e58(theta);
+                shape=square_root_5e58(shape);
                 drop*=shape;
                 drop*=1.0f-y;
-                normalize_vector_xyz_45(&scratch[0],&step,amp*fast_cos_45(angle0)*shape*noise);
-                normalize_vector_xyz_45(&scratch[1],&left_step,amp2*fast_sin_45(angle1)*shape*noise);
-                a=fast_sin_45(y*3.1415927f); b=fast_sin_45(theta);
-                normal_angle0=fast_sin_45(normalize_angle_45(wave+data->wave_u*x));
-                normal_angle1=fast_sin_45(normalize_angle_45(wave+data->wave2_v*y));
-                normalize_vector_xyz_45(&scratch[3],&normal,a*b*(data->normal_u*normal_angle0+data->normal_v*normal_angle1));
-                normalize_vector_xyz_45(&scratch[4],&left_step,drop);
-                add_vector_xyz_45(&scratch[2],&scratch[0],&scratch[1]);
-                add_vector_xyz_45(&scratch[2],&scratch[2],&scratch[3]);
-                subtract_vector_xyz_45(&scratch[2],&scratch[2],&scratch[4]);
-                add_vector_xyz_45((V45*)(points+i*row_bytes)+j,&point,&scratch[2]);
-                *(float*)(points+(i*row_bytes+j*sizeof(V45))+12)=1.0f/((1.0f-data->alpha_u+data->alpha_u*shape*shape*shape)*(1.0f-data->alpha_v+data->alpha_v*y));
-                add_vector_xyz_45(&point,&point,&step);
+                normalize_vector_xyz(&scratch[0],&step,amp*fast_cos_5e58(angle0)*shape*noise);
+                normalize_vector_xyz(&scratch[1],&left_step,amp2*fast_sin_5e58(angle1)*shape*noise);
+                a=fast_sin_5e58(y*3.1415927f); b=fast_sin_5e58(theta);
+                normal_angle0=fast_sin_5e58(normalize_angle_5e58(wave+data->wave_u*x));
+                normal_angle1=fast_sin_5e58(normalize_angle_5e58(wave+data->wave2_v*y));
+                normalize_vector_xyz(&scratch[3],&normal,a*b*(data->normal_u*normal_angle0+data->normal_v*normal_angle1));
+                normalize_vector_xyz(&scratch[4],&left_step,drop);
+                add_vector_xyz(&scratch[2],&scratch[0],&scratch[1]);
+                add_vector_xyz(&scratch[2],&scratch[2],&scratch[3]);
+                subtract_vector_xyz_5e58(&scratch[2],&scratch[2],&scratch[4]);
+                add_vector_xyz((Vec_5e58*)(points+i*row_bytes)+j,&point,&scratch[2]);
+                *(float*)(points+(i*row_bytes+j*sizeof(Vec_5e58))+12)=1.0f/((1.0f-data->alpha_u+data->alpha_u*shape*shape*shape)*(1.0f-data->alpha_v+data->alpha_v*y));
+                add_vector_xyz(&point,&point,&step);
             }
-            add_vector_xyz_45(&left,&left,&left_step);
-            add_vector_xyz_45(&right,&right,&right_step);
+            add_vector_xyz(&left,&left,&left_step);
+            add_vector_xyz(&right,&right,&right_step);
         }
         }
         {
             int i;
-            float f=split_float_fraction_45(&fraction,time*data->u_rate+data->u_amp*fast_sin_45(normalize_angle_45(time*data->u_phase)));
-            for (i=0;i<=data->nx;i++) { u[i]=f; f+=inv_x/data->tex_u_scale; }
-            f=split_float_fraction_45(&fraction,time*data->v_rate+data->v_amp*fast_sin_45(normalize_angle_45(time*data->v_phase)));
-            for (i=0;i<=data->ny;i++) { v[i]=f; f+=inv_y/data->tex_v_scale; }
+            float f=split_float_fraction_5e58(&fraction,time*data->u_rate+data->u_amp*fast_sin_5e58(normalize_angle_5e58(time*data->u_phase)));
+            for (i=0;i<=data->nx;i++) { u[i]=f; f+=inv_x/data->texture_w_count; }
+            f=split_float_fraction_5e58(&fraction,time*data->v_rate+data->v_amp*fast_sin_5e58(normalize_angle_5e58(time*data->v_phase)));
+            for (i=0;i<=data->ny;i++) { v[i]=f; f+=inv_y/data->texture_h_count; }
         }
         {
         int i;
@@ -838,28 +832,28 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 int j1=j+1;
                 int i1=i+1;
                 float *vi=&v[i],*vi1=&v[i1];
-                Quad45 *q=&quad;
+                Quad_5e58 *q=&quad;
                 int row_offset=i*row_bytes,next_offset=i1*row_bytes;
-                V45 *row=(V45*)(points+row_offset),*next_row=(V45*)(points+next_offset);
+                Vec_5e58 *row=(Vec_5e58*)(points+row_offset),*next_row=(Vec_5e58*)(points+next_offset);
                 quad.uv[0]=u[j]; quad.uv[1]=*vi;
                 quad.uv[2]=u[j1]; quad.uv[3]=*vi;
                 quad.uv[4]=u[j]; quad.uv[5]=*vi1;
                 quad.uv[6]=u[j1]; quad.uv[7]=*vi1;
-                add_vector_xyz_45(&q->vertex[0],&row[j],&moby->position);
-                add_vector_xyz_45(&quad.vertex[1],&row[j+1],&moby->position);
-                add_vector_xyz_45(&quad.vertex[2],&next_row[j],&moby->position);
-                add_vector_xyz_45(&quad.vertex[3],&next_row[j+1],&moby->position);
-                quad.color[0]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+(j)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                fast_draw_quad_45(q,0,0);
+                add_vector_xyz(&q->vertex[0],&row[j],&moby->position);
+                add_vector_xyz(&quad.vertex[1],&row[j+1],&moby->position);
+                add_vector_xyz(&quad.vertex[2],&next_row[j],&moby->position);
+                add_vector_xyz(&quad.vertex[3],&next_row[j+1],&moby->position);
+                quad.color[0]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+(j)*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                fast_draw_quad_5e58(q,0,0);
             }
         }
         }
         if (data->flags&2) {
-            if (tick_countdown_32_45(&data->particle_timer)) {
-                data->particle_timer=scale_game_frames_45(data->particle_ticks);
+            if (tick_countdown_32_alt(&data->particle_timer)) {
+                data->particle_timer=scale_game_frames_5e58(data->particle_ticks);
                 for (i=0;i<data->particle_count;i++) {
                     float width=data->width*0.5f;
                     float x=random_float_between(-1.0f,1.0f)*data->particle_range;
@@ -867,58 +861,58 @@ void FUN_L08_002f5e58(struct Moby *m) {
                     float size;
                     short life;
                     int r,g,b,a;
-                    normalize_vector_xyz_45(&scratch[2],&left_step,-(data->particle_offset+square_root_45(fast_cos_45(fraction*3.1415927f))*data->particle_height));
-                    normalize_vector_xyz_45(&scratch[1],&step,fraction*width);
-                    add_vector_xyz_45(&scratch[1],&scratch[1],&moby->position);
-                    add_vector_xyz_45(&scratch[1],&scratch[1],&scratch[2]);
+                    normalize_vector_xyz(&scratch[2],&left_step,-(data->particle_offset+square_root_5e58(fast_cos_5e58(fraction*3.1415927f))*data->particle_height));
+                    normalize_vector_xyz(&scratch[1],&step,fraction*width);
+                    add_vector_xyz(&scratch[1],&scratch[1],&moby->position);
+                    add_vector_xyz(&scratch[1],&scratch[1],&scratch[2]);
                     scratch[0][0]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
                     scratch[0][1]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
                     scratch[0][2]=random_float_between(0.0f,data->particle_z)*D_0015ED60;
                     size=random_float_between(data->particle_size0,data->particle_size1);
-                    life=scale_game_frames_45(data->particle_life);
+                    life=scale_game_frames_5e58(data->particle_life);
                     r=data->particle_r; g=data->particle_g; b=data->particle_b;
                     a=func_001FA898_r(convert_integer_to_float(data->particle_a)*fraction);
-                    spawn_colored_effect_45(moby,&scratch[1],&scratch[0],size,life,r,g,b,a);
+                    spawn_colored_effect_5e58(moby,&scratch[1],&scratch[0],size,life,r,g,b,a);
                 }
             }
-            if (tick_countdown_16_45(&data->puff_timer)) {
-                data->puff_timer=scale_game_frames_45(data->puff_ticks);
+            if (tick_countdown_16_5e58(&data->puff_timer)) {
+                data->puff_timer=scale_game_frames_5e58(data->puff_ticks);
                 for (i=0;i<data->puff_count;i++) {
                     int c0=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
                     int c1=(data->puff_c1[3]<<24)|(data->puff_c1[2]<<16)|(data->puff_c1[1]<<8)|data->puff_c1[0];
                     float width=data->width*0.5f;
                     float size=random_float_between(data->puff_size0,data->puff_size1);
-                    int life=scale_game_frames_45(random_integer_between_45(data->puff_life0,data->puff_life1));
+                    int life=scale_game_frames_5e58(random_integer_between_5e58(data->puff_life0,data->puff_life1));
                     float fraction=random_float_between(-1.0f,1.0f)*data->puff_range;
                     float shape;
                     fraction=random_float_between(-fraction,fraction);
-                    shape=square_root_45(fast_cos_45(fraction*3.1415927f));
-                    normalize_vector_xyz_45(&scratch[2],&left_step,-(data->puff_offset+shape*data->puff_height));
-                    normalize_vector_xyz_45(&scratch[1],&step,fraction*width);
-                    add_vector_xyz_45(&scratch[1],&scratch[1],&moby->position);
-                    add_vector_xyz_45(&scratch[1],&scratch[1],&scratch[2]);
+                    shape=square_root_5e58(fast_cos_5e58(fraction*3.1415927f));
+                    normalize_vector_xyz(&scratch[2],&left_step,-(data->puff_offset+shape*data->puff_height));
+                    normalize_vector_xyz(&scratch[1],&step,fraction*width);
+                    add_vector_xyz(&scratch[1],&scratch[1],&moby->position);
+                    add_vector_xyz(&scratch[1],&scratch[1],&scratch[2]);
                     scratch[0][0]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
                     scratch[0][1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
                     scratch[0][2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
-                    fast_vec_scale_45(&scratch[0],&scratch[0],1.0f-data->puff_blend+shape*data->puff_blend);
-                    spawn_puff_effect_45(&scratch[1],&scratch[0],c0,c1,size,life);
+                    fast_vec_scale_5e58(&scratch[0],&scratch[0],1.0f-data->puff_blend+shape*data->puff_blend);
+                    spawn_puff_effect_5e58(&scratch[1],&scratch[0],c0,c1,size,life);
                 }
             }
-            if (data->sound_index!=-1) {
-                Sound45 *sound=&D_L08_00180AC0_45[data->sound_index];
-                if (vector_distance_45(&data->sound_position,&sound->position)<data->sound_speed*D_0015ED60) {
-                    float x=(random_float_between(-(int)data->sound_range_x,data->sound_range_x)+data->width)*0.5f;
-                    float y=(random_float_between(-(int)data->sound_range_y,data->sound_range_y)+data->height)*0.5f;
-                    normalize_vector_xyz_45(&scratch[0],&step,x);
-                    normalize_vector_xyz_45(&scratch[1],&left_step,-y);
-                    add_vector_xyz_45(&data->sound_position,&scratch[0],&scratch[1]);
-                    add_vector_xyz_45(&data->sound_position,&data->sound_position,&corner[0]);
-                    add_vector_xyz_45(&data->sound_position,&data->sound_position,&moby->position);
+            if (data->light!=-1) {
+                PointLight_5e58 *light=&point_lights_5e58[data->light];
+                if (vector_distance_5e58(&data->light_pos,&light->position)<data->light_speed*D_0015ED60) {
+                    float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->width)*0.5f;
+                    float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->height)*0.5f;
+                    normalize_vector_xyz(&scratch[0],&step,x);
+                    normalize_vector_xyz(&scratch[1],&left_step,-y);
+                    add_vector_xyz(&data->light_pos,&scratch[0],&scratch[1]);
+                    add_vector_xyz(&data->light_pos,&data->light_pos,&corner[0]);
+                    add_vector_xyz(&data->light_pos,&data->light_pos,&moby->position);
                 } else {
-                    subtract_vector_xyz_45(&scratch[0],&data->sound_position,&sound->position);
-                    normalize_vector_xyz_45(&scratch[0],&scratch[0],data->sound_speed*D_0015ED60);
-                    add_vector_xyz_45(&sound->position,&sound->position,&scratch[0]);
-                    sound->position[3]=convert_integer_to_float(data->sound_value);
+                    subtract_vector_xyz_5e58(&scratch[0],&data->light_pos,&light->position);
+                    normalize_vector_xyz(&scratch[0],&scratch[0],data->light_speed*D_0015ED60);
+                    add_vector_xyz(&light->position,&light->position,&scratch[0]);
+                    light->position[3]=convert_integer_to_float(data->radius);
                 }
             }
             data->flags^=2;
@@ -934,8 +928,8 @@ typedef struct {
     u16 pad8;
     u16 flags;           /* 0xA: bit 2 = cast light; bit 1 set every update */
     u8 padC[0x64];
-    f32 period_a;        /* 0x70: must be in (0, 8] */
-    f32 period_b;        /* 0x74: must be in (0, 8] */
+    f32 texture_w_count; /* 0x70: must be in (0, 8] */
+    f32 texture_h_count; /* 0x74: must be in (0, 8] */
     u8 pad78[0x10];
     f32 jitter;          /* 0x88: lower bound of the random flicker levels */
     u8 pad8C[4];
@@ -999,17 +993,17 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         light_vars->light = -1;
         light_vars->unkF8 = light_vars->unkF3;
         qcopy(&light_vars->light_pos, at);
-        if (light_vars->period_a == 0.0f) {
+        if (light_vars->texture_w_count == 0.0f) {
             DebugPrint(D_L08_001FC220);
-            light_vars->period_a = 1.0f;
-        } else if (8.0f < light_vars->period_b) {
-            DebugPrint(D_L08_001FC250, light_vars->period_b);
+            light_vars->texture_w_count = 1.0f;
+        } else if (8.0f < light_vars->texture_h_count) {
+            DebugPrint(D_L08_001FC250, light_vars->texture_h_count);
         }
-        if (light_vars->period_b == 0.0f) {
+        if (light_vars->texture_h_count == 0.0f) {
             DebugPrint(D_L08_001FC2A0);
-            light_vars->period_b = 1.0f;
-        } else if (8.0f < light_vars->period_a) {
-            DebugPrint(D_L08_001FC2D0, light_vars->period_a);
+            light_vars->texture_h_count = 1.0f;
+        } else if (8.0f < light_vars->texture_w_count) {
+            DebugPrint(D_L08_001FC2D0, light_vars->texture_w_count);
         }
         for (i = 0; i < 8; i++) {
             light_vars->levels_a[i] = random_float_between(light_vars->jitter, 1.0f);
