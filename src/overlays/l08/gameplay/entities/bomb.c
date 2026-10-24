@@ -2770,9 +2770,9 @@ extern float D_L08_001675C0[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern int D_L08_00161A34 __attribute__((sda));
-extern int D_L08_00161A38 __attribute__((sda));
-extern int D_L08_00161A3C __attribute__((sda));
+extern int class_1b3_projectile_color_red __asm__("D_L08_00161A34") __attribute__((sda));
+extern int class_1b3_projectile_color_green __asm__("D_L08_00161A38") __attribute__((sda));
+extern int class_1b3_projectile_color_blue __asm__("D_L08_00161A3C") __attribute__((sda));
 extern float class_1b3_projectile_scale_multiplier __asm__("D_L08_00161A40") __attribute__((sda));
 
 struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) __asm__("FUN_L08_002de3e0");
@@ -2801,7 +2801,7 @@ struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *ve
         *(volatile u8 *)&moby->state = 1;
         moby->draw_dist = 0xFF;
         moby->scale = scale;
-        set_moby_color(moby, D_L08_00161A34, D_L08_00161A38, D_L08_00161A3C);
+        set_moby_color(moby, class_1b3_projectile_color_red, class_1b3_projectile_color_green, class_1b3_projectile_color_blue);
         *(float *)(data + 0x40) = pitch;
         *(float *)(data + 0x48) = 70.0f;
         *(float *)(data + 0x44) = yaw;
