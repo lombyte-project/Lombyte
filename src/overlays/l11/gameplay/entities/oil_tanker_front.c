@@ -1784,7 +1784,9 @@ extern short D_L11_00162448 __attribute__((sda));
 extern short D_L11_0016244C __attribute__((sda));
 extern short D_L11_00162450 __attribute__((sda));
 extern short D_L11_00162454 __attribute__((sda));
-void FUN_L11_0031b098(struct Moby *source_moby) {
+void spawn_bubble_spark(struct Moby *source_moby) __asm__("FUN_L11_0031b098");
+
+void spawn_bubble_spark(struct Moby *source_moby) {
     float randomized_velocity[4];
     float vertical_spark_vector[4];
     char *moby_vars;
