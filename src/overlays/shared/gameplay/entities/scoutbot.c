@@ -684,13 +684,13 @@ extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
-extern float D_L08_00161CD8 __attribute__((sda));
-extern float D_L08_00161CE0 __attribute__((sda));
+extern float moby_creation_default_timer_frames __asm__("D_L08_00161CD8") __attribute__((sda));
+extern float moby_creation_particle_count_limit __asm__("D_L08_00161CE0") __attribute__((sda));
 extern int D_L08_00161CF0 __attribute__((sda));
 extern int D_L08_00161CF4 __attribute__((sda));
 extern int D_L08_00161CF8 __attribute__((sda));
 extern int D_L08_00161CFC __attribute__((sda));
-extern float D_L08_00161D04 __attribute__((sda));
+extern float moby_creation_particle_spread_speed_base __asm__("D_L08_00161D04") __attribute__((sda));
 extern float D_L08_00161D14 __attribute__((sda));
 extern float D_L08_00161D18 __attribute__((sda));
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
@@ -732,7 +732,7 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
             *(volatile int *)(data + 0x1c) = -1;
         make_matrix_002e7eb0(matrix, moby + 0x40);
         i = 0;
-        if ((float)i < D_L08_00161CE0) {
+        if ((float)i < moby_creation_particle_count_limit) {
             /* Retail intentionally uses the matrix third row as the particle input. */
             particle_position_ptr = matrix[2];
             velocity_ptr = velocity;
@@ -741,7 +741,7 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
             do {
                 angle = random_angle_002e7eb0();
                 {
-                    float spread = D_L08_00161D04;
+                    float spread = moby_creation_particle_spread_speed_base;
                     magnitude = random_float_between_002e7eb0(spread, spread + spread) * frame_time;
                 }
                 normalize_vector_xyz_002e7eb0(velocity_ptr, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
@@ -757,12 +757,12 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
                 particle_second_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
                 particle_third_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
                 FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0, D_L08_00161CF4, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
-            } while ((float)i < D_L08_00161CE0);
+            } while ((float)i < moby_creation_particle_count_limit);
         }
         if (current_level_index == 12)
             *(int *)(data + 0x18) = scale_game_frames_int_002e7eb0(120);
         else
-            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(D_L08_00161CD8));
+            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(moby_creation_default_timer_frames));
         update_moby_002e7eb0(moby);
     }
     return moby;
