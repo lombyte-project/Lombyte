@@ -2865,9 +2865,6 @@ void FUN_L00_002b7568(u8 *source_moby) {
         draw_2b7568(&quad, 0, 0);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b77f0.s", FUN_L00_002b77f0);
-#else
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002B8AE8.c: func_L00_002B8AE8). */
 typedef struct PyrocitorVars_2b77f0 {
     struct Moby *other;
@@ -2890,7 +2887,7 @@ typedef struct FlameHit_2b77f0 {
 } FlameHit_2b77f0;
 
 typedef Vec_2b2100 Vec_2b77f0;
-extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
 extern f32 D_L00_001614F0 __attribute__((sda));
 extern f32 D_L00_00161500 __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));
@@ -2920,7 +2917,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
-extern void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8_2b77f0(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Fakematch: a second name for the pad state makes the button tests rebuild its address as retail does. */
 extern struct PadState controller_state_lui __asm__("D_0013C940");
@@ -2931,12 +2928,13 @@ void pyrocitor_update(struct Moby *moby) {
     FlameHit_2b77f0 hit;
     f32 pos_out, vel_out;
     f32 speed, length, accel, damping;
-    s32 gate, initial_count, extra;
+    s32 gate;
     s32 i;
     s32 fl;
     void *effect;
     s32 ready;
     s32 h;
+    struct Moby *other;
 
     update_pyrocitor_usage_and_cleanup((unsigned char *)moby);
     FUN_L00_0024f7c8_2b2100(moby, 0, &pos);
@@ -3024,24 +3022,27 @@ void pyrocitor_update(struct Moby *moby) {
         damping = D_L00_00161514 * frame_time;
         advance_accelerated_scalar(&pos_out, &vel_out, length, 1.0f, accel, damping);
         normalize_vector_xyz(&dir, &dir, vel_out);
-        initial_count = D_L00_00161518;
-        extra = D_L00_0016151C;
-        if (length < 4.0f || (moby->flags & 1))
-            initial_count = 1;
-        for (i = 0; i < extra + initial_count; i++) {
-            FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
-                ((D_L00_00161524 - D_L00_00161528) * (length / (D_L00_00161520 + speed)) + D_L00_00161528) *
-                    frame_time);
-            add_vector_xyz_2b2100(&random_vec, &random_vec, &dir);
-            scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.0f, 1.0f));
-            add_vector_xyz_2b2100(&particle_pos, &particle_pos, &scratch);
-            if (i < initial_count)
-                fl = 1;
-            else
-                fl = 0;
-            effect = spawn_spinning_and_fading_effect_particle(&particle_pos, &random_vec, fl | 4, length);
-            if (i == 2 && gate)
-                FUN_L00_002b8798_2b77f0(moby, effect);
+        {
+            s32 initial_count, extra;
+            initial_count = D_L00_00161518;
+            extra = D_L00_0016151C;
+            if (length < 4.0f || (moby->flags & 1))
+                initial_count = 1;
+            for (i = 0; i < extra + initial_count; i++) {
+                FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
+                    ((D_L00_00161524 - D_L00_00161528) * (length / (D_L00_00161520 + speed)) + D_L00_00161528) *
+                        frame_time);
+                add_vector_xyz_2b2100(&random_vec, &random_vec, &dir);
+                scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.0f, 1.0f));
+                add_vector_xyz_2b2100(&particle_pos, &particle_pos, &scratch);
+                if (i < initial_count)
+                    fl = 1;
+                else
+                    fl = 0;
+                effect = spawn_spinning_and_fading_effect_particle(&particle_pos, &random_vec, fl | 4, length);
+                if (i == 2 && gate)
+                    FUN_L00_002b8798_2b77f0(moby, effect);
+            }
         }
         particle_pos.q = 0;
         particle_pos.f.x = -0.3f;
@@ -3092,12 +3093,12 @@ void pyrocitor_update(struct Moby *moby) {
     if (v->other) {
         FUN_001fa030_2b77f0(&v->other->rot_row0, &v->other->rot);
         FUN_001fa328_2b77f0(&v->other->rot_row0, &moby->rot_row0, &v->other->rot_row0);
-        qcopy(&v->other->pos, &pos);
-        FUN_L00_00250df8_2b77f0();
+        other = v->other;
+        qcopy(&other->pos, &pos);
+        FUN_L00_00250df8_2b77f0(other);
     }
     update_pyrocitor_flame_effect_slots((char *)moby);
 }
-#endif
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
