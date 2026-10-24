@@ -1260,7 +1260,9 @@ void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern f32 D_L00_001E6CE0[4][4];
-void FUN_L00_002e3388(s32 unused, s32 beam_slot) {
+void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_L00_002e3388");
+
+void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     Q_e3388 geometry_quad;
     f32 a[4] __attribute__((aligned(16)));
     f32 b[4] __attribute__((aligned(16)));
