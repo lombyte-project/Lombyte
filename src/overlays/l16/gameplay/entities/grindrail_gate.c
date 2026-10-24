@@ -1370,18 +1370,18 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     char *moby = m_v;
     float *target_position = t_v;
     char *moby_data = *(char **)(moby + 0x78);
-    float vel;
+    float interpolated_travel_distance;
     float movement_delta[4];
     float distance_to_target;
     float oldz;
     float target_yaw = FUN_001f9e90_c(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
     target_yaw = fast_add_rotations(target_yaw, *(float *)(moby_data + 0x1F8));
     oldz = *(float *)(moby + 0x18);
-    vel = 0.0f;
+    interpolated_travel_distance = 0.0f;
     distance_to_target = FUN_001f9b48(moby + 0x10, target_position);
     FUN_L00_0025be00_c((float *)(moby + 0x48), (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
                        D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
-    func_00214D88_7890(&vel, distance_to_target, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
+    func_00214D88_7890(&interpolated_travel_distance, distance_to_target, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
                        (float *)(moby_data + 0x204));
     normalize_vector_xyz(movement_delta, moby + 0xC0, *(float *)(moby_data + 0x204));
     movement_delta[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
