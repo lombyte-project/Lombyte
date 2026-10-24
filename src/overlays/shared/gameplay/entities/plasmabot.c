@@ -721,10 +721,10 @@ typedef struct {
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
-extern f32 D_L14_001614A8 __attribute__((sda));
-extern f32 D_L14_001614B0 __attribute__((sda));
-extern f32 D_L14_001614B4 __attribute__((sda));
-extern f32 D_L14_001614B8 __attribute__((sda));
+extern f32 plasmabot_nozzle_bone_x_offset_gp __asm__("D_L14_001614A8") __attribute__((sda));
+extern f32 plasmabot_beam_bone_x_offset_gp __asm__("D_L14_001614B0") __attribute__((sda));
+extern f32 plasmabot_beam_endpoint_bone_y_offset_gp __asm__("D_L14_001614B4") __attribute__((sda));
+extern f32 plasmabot_beam_bone_z_offset_gp __asm__("D_L14_001614B8") __attribute__((sda));
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
@@ -790,12 +790,12 @@ void update_plasmabot_visual_effects(struct Moby *moby)
     }
     moby_point_position(moby, 6, &effect_positions->joint6);
     build_moby_bone_transform(moby, 7, bone_transform_scratch);
-    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614A8);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], plasmabot_nozzle_bone_x_offset_gp);
     fast_vec_add(&effect_positions->nozzle, &bone_transform_scratch[3], &dx);
     build_moby_bone_transform(moby, 2, bone_transform_scratch);
-    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614B0);
-    fast_vec_scale(&dy, &bone_transform_scratch[1], D_L14_001614B4);
-    fast_vec_scale(&dz, &bone_transform_scratch[2], D_L14_001614B8);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], plasmabot_beam_bone_x_offset_gp);
+    fast_vec_scale(&dy, &bone_transform_scratch[1], plasmabot_beam_endpoint_bone_y_offset_gp);
+    fast_vec_scale(&dz, &bone_transform_scratch[2], plasmabot_beam_bone_z_offset_gp);
     fast_vec_add(&effect_positions->beam_start, &bone_transform_scratch[3], &dx);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dy);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dz);
