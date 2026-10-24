@@ -96,7 +96,7 @@ extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void FUN_L00_002a09d8(s32);
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
-extern void FUN_L00_002a08c8(void);
+extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 extern void apply_group_entry_adjustment(s32) __asm__("FUN_L00_00235310");
 extern Ent *delete_moby(Ent *) __asm__("FUN_00225530");
@@ -440,7 +440,7 @@ void close_pause_menu(void) {
             s32 *table = (s32 *)((u8 *)&D_L00_00173E40_lui);
             table[4] &= 0x7fffffff;
         }
-        FUN_L00_002a08c8();
+        vu1_send_chain_render_buffer();
         FUN_L00_002a09d8(1);
     }
 }

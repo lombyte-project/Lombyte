@@ -289,7 +289,7 @@ extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 extern void FUN_L00_002a09d8(s32);
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
-extern void FUN_L00_002a08c8(void);
+extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void capture_draw_buffer(s32) __asm__("FUN_L00_001f99c0");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
@@ -346,7 +346,7 @@ void draw_vendor_screen(void) {
         FUN_L00_002a09d8(1);
         sce_gs_sync_v(0);
         D_L00_0015F3F8_s = D_L00_0015F3F8_v[0] + 1;
-        FUN_L00_002a08c8();
+        vu1_send_chain_render_buffer();
         swap_render_buffer_chain();
         D_L00_001611CC = 0x60000;
         capture_draw_buffer(p->f10);

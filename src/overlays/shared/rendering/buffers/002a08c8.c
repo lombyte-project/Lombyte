@@ -13,7 +13,9 @@ extern u32 D_L00_001611B8[] __attribute__((section(".data")));
 extern int D_L00_001611D0;
 extern int D_L00_001611D4;
 extern char D_L00_001E9530[];
-void FUN_L00_002a08c8(void) {
+void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
+
+void vu1_send_chain_render_buffer(void) {
     int buffer_limit_exceeded;
     int buffer_used_bytes;
     u32 *flag_word;
