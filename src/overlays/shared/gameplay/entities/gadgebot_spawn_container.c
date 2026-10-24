@@ -3263,9 +3263,9 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern float D_L06_00161E74 __attribute__((sda));
-extern float D_L06_00161E78 __attribute__((sda));
-extern float D_L06_00161E7C __attribute__((sda));
+extern float energy_sphere_rotation_rate_x_degrees __asm__("D_L06_00161E74") __attribute__((sda));
+extern float energy_sphere_rotation_rate_y_degrees __asm__("D_L06_00161E78") __attribute__((sda));
+extern float energy_sphere_rotation_rate_z_degrees __asm__("D_L06_00161E7C") __attribute__((sda));
 extern float D_L06_00161E80 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_energy_sphere_destruction_particles(char *m) __asm__("FUN_L06_002f7c68");
@@ -3303,13 +3303,13 @@ void energy_sphere_update(struct Moby *sphere_moby) {
         sphere_moby->flags |= 0x20;
         *(int *)(sphere_vars + 0x60) = -1;
     case ENERGY_SPHERE_UPDATE_ROTATION: {
-        float rotation_delta_x = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
+        float rotation_delta_x = energy_sphere_rotation_rate_x_degrees * DEG_TO_RAD * D_0015ED6C;
         float rotation_delta_y, rotation_delta_z;
         float x = fast_add_rotations(sphere_moby->rot.x, rotation_delta_x);
-        rotation_delta_y = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
+        rotation_delta_y = energy_sphere_rotation_rate_y_degrees * DEG_TO_RAD * D_0015ED6C;
         sphere_moby->rot.x = x;
         x = fast_add_rotations(sphere_moby->rot.y, rotation_delta_y);
-        rotation_delta_z = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
+        rotation_delta_z = energy_sphere_rotation_rate_z_degrees * DEG_TO_RAD * D_0015ED6C;
         sphere_moby->rot.y = x;
         sphere_moby->rot.z = fast_add_rotations(sphere_moby->rot.z, rotation_delta_z);
     }
