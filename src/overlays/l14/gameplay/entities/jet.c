@@ -3436,11 +3436,11 @@ void update_enemy_fighter_921(struct Moby *moby) {
     if (moby->state != 0 && moby->state != 3 && moby->state != 1 && voice_is_playing(moby, moby_vars->sound) == 0)
         moby_vars->sound = tram_sound(0, 4, moby);
 }
-extern f32 D_L14_00161F60 __attribute__((sda));
-extern f32 D_L14_00161F64 __attribute__((sda));
-extern f32 D_L14_00161F68 __attribute__((sda));
-extern f32 D_L14_00161F6C __attribute__((sda));
-extern f32 D_L14_00161F70 __attribute__((sda));
+extern f32 moby_exhaust_base_row0_offset __asm__("D_L14_00161F60") __attribute__((sda));
+extern f32 moby_exhaust_paired_emitter_offset __asm__("D_L14_00161F64") __attribute__((sda));
+extern f32 moby_exhaust_base_row2_offset __asm__("D_L14_00161F68") __attribute__((sda));
+extern f32 moby_exhaust_ring_row0_offset __asm__("D_L14_00161F6C") __attribute__((sda));
+extern f32 moby_exhaust_grey_puff_row0_offset __asm__("D_L14_00161F70") __attribute__((sda));
 extern s32 D_L14_00161F74 __attribute__((sda));
 extern int FUN_L00_00257b90(int, int);
 
@@ -3459,12 +3459,12 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
 
     if (moby->state == 0 || moby->state == 3 || moby->state == 1)
         return;
-    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F60);
+    exhaust_scale(&step, &moby->rot_row0, moby_exhaust_base_row0_offset);
     exhaust_add(&pos, &moby->pos, &step);
-    exhaust_scale(&step, &moby->rot_row2, D_L14_00161F68);
+    exhaust_scale(&step, &moby->rot_row2, moby_exhaust_base_row2_offset);
     exhaust_add(&pos, &pos, &step);
     qcopy(&base, &pos);
-    exhaust_scale(&step, &moby->rot_row1, D_L14_00161F64);
+    exhaust_scale(&step, &moby->rot_row1, moby_exhaust_paired_emitter_offset);
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3478,7 +3478,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
         }
     }
     size = 100000.0f;
-    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F6C);
+    exhaust_scale(&step, &moby->rot_row0, moby_exhaust_ring_row0_offset);
     exhaust_add(&pos, &pos, &step);
     spin = 16;
     life = exhaust_frames(2);
@@ -3497,7 +3497,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
         size -= 20000.0f;
     }
     size = 300000.0f;
-    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F70);
+    exhaust_scale(&step, &moby->rot_row0, moby_exhaust_grey_puff_row0_offset);
     exhaust_add(&pos, &base, &step);
     grey = FUN_L00_00257b90(0x40, 0x80);
     grey = 0x7F000000 | grey << 16 | grey << 8 | grey;
@@ -3515,7 +3515,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
             tail->fade = exhaust_frames(60);
         }
     }
-    exhaust_scale(&step, &moby->rot_row1, D_L14_00161F64);
+    exhaust_scale(&step, &moby->rot_row1, moby_exhaust_paired_emitter_offset);
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3529,7 +3529,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
         }
     }
     size = 100000.0f;
-    exhaust_scale(&step, &moby->rot_row0, D_L14_00161F6C);
+    exhaust_scale(&step, &moby->rot_row0, moby_exhaust_ring_row0_offset);
     exhaust_add(&pos, &pos, &step);
     spin = 16;
     life = exhaust_frames(2);
