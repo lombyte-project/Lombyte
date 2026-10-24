@@ -444,7 +444,7 @@ void update_hero_state_transitions(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
