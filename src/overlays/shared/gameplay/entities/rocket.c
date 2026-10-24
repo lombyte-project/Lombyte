@@ -28,14 +28,14 @@ void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 void emit_moby_sprite_particles(char *moby) {
     L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float color_blend_offset;
 
     *(float *)(moby + 0x18) += 0.5f;
     func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
-    func_L00_001FF4B0_298940(e, d, 0.1f);
+    func_L00_001FF4B0_298940(particle_position_step, d, 0.1f);
     func_001F9BD8_298940(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
@@ -54,7 +54,7 @@ void emit_moby_sprite_particles(char *moby) {
         col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - color_blend_offset));
         func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                  sprite_data->d[i]);
-        func_001F9BD8_298940(d, d, e);
+        func_001F9BD8_298940(d, d, particle_position_step);
     }
 }
 #include "sda.h"
