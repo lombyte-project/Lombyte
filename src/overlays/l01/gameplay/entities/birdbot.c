@@ -261,7 +261,9 @@ extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
-void FUN_L01_002e6518(SplashMoby_u *moby, u128 *origin) {
+void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) __asm__("FUN_L01_002e6518");
+
+void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) {
     SplashVec base;
     SplashVec world_motion_delta;
     SplashVec vector_scratch;
