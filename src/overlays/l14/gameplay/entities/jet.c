@@ -2607,7 +2607,7 @@ struct TaggedVars {
     s16 tag;   /* 0xB4 */
 };
 
-extern s32 D_L14_0015FFF4;
+extern s32 moby_group_index_limit __asm__("D_L14_0015FFF4");
 extern u16 *D_L14_001ABF40[];
 extern struct Moby *D_L14_0015FFD8_12f0 __asm__("D_L14_0015FFD8");
 
@@ -2616,7 +2616,7 @@ struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) {
     struct Moby *pool;
     int group_moby_index;
 
-    if (moby->group < D_L14_0015FFF4 && (group_entry_cursor = D_L14_001ABF40[moby->group]) != 0) {
+    if (moby->group < moby_group_index_limit && (group_entry_cursor = D_L14_001ABF40[moby->group]) != 0) {
         pool = D_L14_0015FFD8_12f0;
         do {
             group_moby_index = *group_entry_cursor & 0x7FFF;
