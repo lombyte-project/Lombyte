@@ -1966,7 +1966,9 @@ void machinegun_turret_update(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 
-void FUN_L14_002b4340(struct Moby *moby) {
+void process_machinegun_turret_hit_reactions(struct Moby *moby) __asm__("FUN_L14_002b4340");
+
+void process_machinegun_turret_hit_reactions(struct Moby *moby) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
