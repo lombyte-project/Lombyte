@@ -1227,7 +1227,9 @@ extern void add_vector_xyz_8d10(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
-void FUN_L13_00308d10(struct Moby *moby) {
+void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) __asm__("FUN_L13_00308d10");
+
+void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) {
     enum {
         HIT_RESULT_NONE = 0,
         HIT_RESULT_DEATH = 1,
