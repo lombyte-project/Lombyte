@@ -945,8 +945,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int uid;
             int bolts;
             int bolts2;
-            int b1;
-            int b2;
+            int selected_bolt_count;
+            int adjusted_bolt_count;
             unsigned char vis = 0xFE;
             int skip = 0;
 
@@ -962,8 +962,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 4;
             bolts2 = *(int *)p;
             p += 4;
-            b1 = bolts;
-            b2 = b1;
+            selected_bolt_count = bolts;
+            adjusted_bolt_count = selected_bolt_count;
             if (flags != 0) {
                 level_or_group_scratch = D_0015ED84; /* read before the test: see the group loop */
                 if (flags & 0x10) {
@@ -976,11 +976,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 } else if (flags & 3) {
                     if (mission_state[mission] == 0xFF) {
                         if (flags & 2) {
-                            b1 = bolts2;
+                            selected_bolt_count = bolts2;
                             if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {
-                                b2 = (b1 + 1) / 2;
+                                adjusted_bolt_count = (selected_bolt_count + 1) / 2;
                             } else {
-                                b2 = b1;
+                                adjusted_bolt_count = selected_bolt_count;
                             }
                         } else {
                             skip = 1;
@@ -988,7 +988,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     } else {
                         if (flags & 1) {
                             if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
-                                b2 = (bolts + 1) / 2;
+                                adjusted_bolt_count = (bolts + 1) / 2;
                             }
                         } else {
                             skip = 1;
@@ -1026,8 +1026,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 m->fB1 = vis;
                 m->fB2 = uid;
                 m->fB0 = mission;
-                m->fB4 = b2;
-                m->fB6 = b1;
+                m->fB4 = adjusted_bolt_count;
+                m->fB6 = selected_bolt_count;
                 if (m->f24 != 0) {
                     m->f2C = m->f24->f24 * *(float *)p;
                 }
@@ -1474,16 +1474,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
             }
         }
         if (D_0013E030.f0 == 0) {
-            float rot;
+            float ship_spawn_rotation;
 
             m = func_0020D348_m(first_class_ids[D_0013E030.f26]);
             m->f10 = ship[0];
             m->f14 = ship[1];
             m->f18 = ship[2];
-            rot = ship[3];
+            ship_spawn_rotation = ship[3];
             m->f74 = update_moby_proximity_interaction;
             m->f32 = 0xFF;
-            m->f48 = rot;
+            m->f48 = ship_spawn_rotation;
             m->f30 = 0x10;
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
