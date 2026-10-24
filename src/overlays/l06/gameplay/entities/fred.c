@@ -25,11 +25,11 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Packet_2fd1a0;
 
-extern int D_L06_00161F7C __attribute__((sda));
-extern int D_L06_00161F80 __attribute__((sda));
-extern int D_L06_00161F84 __attribute__((sda));
-extern int D_L06_00161F88 __attribute__((sda));
-extern int D_L06_00161F8C __attribute__((sda));
+extern int dual_texture_mesh_blend_color_a_selector_gp __asm__("D_L06_00161F7C") __attribute__((sda));
+extern int dual_texture_mesh_blend_color_b_selector_gp __asm__("D_L06_00161F80") __attribute__((sda));
+extern int dual_texture_mesh_blend_alpha_c_selector_gp __asm__("D_L06_00161F84") __attribute__((sda));
+extern int dual_texture_mesh_blend_color_d_selector_gp __asm__("D_L06_00161F88") __attribute__((sda));
+extern int dual_texture_mesh_blend_fixed_alpha_gp __asm__("D_L06_00161F8C") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
 extern unsigned int D_L06_00161F94 __attribute__((sda));
@@ -519,11 +519,11 @@ void draw_dual_texture_50_quad_mesh(void) {
     second.tex = texture_2fd1a0(0x2a);
     second.unk80 = 0xFF9000000260L;
     first.unk80 = 0xFF9000000260L;
-    flags = (long)D_L06_00161F7C;
-    flags |= (long)D_L06_00161F80 << 2;
-    flags |= (long)D_L06_00161F84 << 4;
-    flags |= (long)D_L06_00161F88 << 6;
-    flags |= (long)D_L06_00161F8C << 32;
+    flags = (long)dual_texture_mesh_blend_color_a_selector_gp;
+    flags |= (long)dual_texture_mesh_blend_color_b_selector_gp << 2;
+    flags |= (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4;
+    flags |= (long)dual_texture_mesh_blend_color_d_selector_gp << 6;
+    flags |= (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
     second.unk88 = flags;
     first.unk88 = flags;
     second.unk70 = 0;
@@ -1041,9 +1041,9 @@ void draw_dual_texture_58_quad_mesh(void) {
     first.tex = texture_2fd1a0(dual_texture_mesh_first_pass_texture_index_gp);
     second.tex = texture_2fd1a0(0x2a);
     matrix_ptr = matrix;
-    flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
-            (long)D_L06_00161F84 << 4 | (long)D_L06_00161F88 << 6 |
-            (long)D_L06_00161F8C << 32;
+    flags = (long)dual_texture_mesh_blend_color_a_selector_gp | (long)dual_texture_mesh_blend_color_b_selector_gp << 2 |
+            (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 | (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
+            (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
     second.unk88 = flags;
     first.unk88 = flags;
     second.unk80 = 0xFF9000000260L;
@@ -5546,9 +5546,9 @@ void draw_dual_texture_864_quad_mesh(void) {
     first.tex = texture_2fd1a0(dual_texture_mesh_first_pass_texture_index_gp);
     second.tex = texture_2fd1a0(0x2a);
     matrix_ptr = matrix;
-    flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
-            (long)D_L06_00161F84 << 4 | (long)D_L06_00161F88 << 6 |
-            (long)D_L06_00161F8C << 32;
+    flags = (long)dual_texture_mesh_blend_color_a_selector_gp | (long)dual_texture_mesh_blend_color_b_selector_gp << 2 |
+            (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 | (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
+            (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
     second.unk88 = flags;
     first.unk88 = flags;
     second.unk80 = 0xFF9000000260L;
