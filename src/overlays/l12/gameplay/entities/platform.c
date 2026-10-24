@@ -1034,7 +1034,7 @@ extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538")
 extern void FUN_L12_002e3098(struct Moby *);
 
 extern f32 hoven_anklebiter_nonlethal_knockback_z_scale_gp __asm__("D_L12_001618D0") __attribute__((sda));
-extern f32 D_L12_001618D4 __attribute__((sda));
+extern f32 hoven_anklebiter_nonlethal_knockback_scale_gp __asm__("D_L12_001618D4") __attribute__((sda));
 /* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");
@@ -1080,7 +1080,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
             vars->health -= dmg;
             vars->unk130 = 0.008f;
             vars->unk134 = 0.0005f;
-            vars->unk138 = D_L12_001618D4 * D_0015ED6C_e3528;
+            vars->unk138 = hoven_anklebiter_nonlethal_knockback_scale_gp * D_0015ED6C_e3528;
             vars->unk13C = hoven_anklebiter_nonlethal_knockback_z_scale_gp * D_0015ED6C_e3528;
             vars->unk15D = 0;
             vars->unk144 = 9;
