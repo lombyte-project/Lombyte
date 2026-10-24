@@ -158,7 +158,7 @@ extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attr
 extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
-extern float D_L14_00162114 __attribute__((sda));
+extern float vendor_beam_spark_step_w_gp __asm__("D_L14_00162114") __attribute__((sda));
 extern int D_L14_0016211C __attribute__((sda));
 extern int vendor_beam_branch_end_spark_color_gp __asm__("D_L14_00162120") __attribute__((sda));
 
@@ -261,7 +261,7 @@ void start_vendor_beam_pulse(char *moby) {
             int frames;
             transform_vector(&work, &beam->points[point], matrix);
             qcopy(&delta, &beam->point_steps[point]);
-            delta.f[3] = D_L14_00162114;
+            delta.f[3] = vendor_beam_spark_step_w_gp;
             color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
             spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C, point >> 1, 15, frames, color);
@@ -270,7 +270,7 @@ void start_vendor_beam_pulse(char *moby) {
             int frames, unused_color;
             transform_vector(&work, &beam->branches[3][k], matrix);
             qcopy(&delta, &beam->branch_steps[3][k]);
-            delta.f[3] = D_L14_00162114;
+            delta.f[3] = vendor_beam_spark_step_w_gp;
             unused_color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
             /* Fakematch: a never-taken exit keeps the spark arguments in their own block until
