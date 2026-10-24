@@ -3049,12 +3049,12 @@ typedef struct {
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 D_L18_00162350 __attribute__((sda));
-extern f32 D_L18_00162354 __attribute__((sda));
-extern f32 D_L18_00162358 __attribute__((sda));
-extern f32 D_L18_0016235C __attribute__((sda));
-extern f32 D_L18_00162370 __attribute__((sda));
-extern f32 D_L18_00162374 __attribute__((sda));
+extern f32 drek_boss_circling_default_near_hero_speed_gp __asm__("D_L18_00162350") __attribute__((sda));
+extern f32 drek_boss_circling_default_far_hero_speed_gp __asm__("D_L18_00162354") __attribute__((sda));
+extern f32 drek_boss_circling_base_far_hero_distance_gp __asm__("D_L18_00162358") __attribute__((sda));
+extern f32 drek_boss_circling_base_near_hero_distance_gp __asm__("D_L18_0016235C") __attribute__((sda));
+extern f32 drek_boss_circle_and_fire_radius_gp __asm__("D_L18_00162370") __attribute__((sda));
+extern f32 drek_boss_default_circling_radius_gp __asm__("D_L18_00162374") __attribute__((sda));
 
 /* Steers the boss around its node on the far side from the hero (at most 10
  * degrees per step), faster the closer the hero is, and eases it to the
@@ -3083,22 +3083,22 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
         circling_goal_angle = -0.17453292f;
     circling_goal_angle = fast_add_rotations(circling_goal_angle, self_ang);
     if (moby->state == 2) {
-        goal.f[0] = fast_cos(circling_goal_angle) * D_L18_00162370;
-        goal.f[1] = fast_sin(circling_goal_angle) * D_L18_00162370;
+        goal.f[0] = fast_cos(circling_goal_angle) * drek_boss_circle_and_fire_radius_gp;
+        goal.f[1] = fast_sin(circling_goal_angle) * drek_boss_circle_and_fire_radius_gp;
         goal.f[2] = 0.0f;
     } else {
-        goal.f[0] = fast_cos(circling_goal_angle) * D_L18_00162374;
-        goal.f[1] = fast_sin(circling_goal_angle) * D_L18_00162374;
+        goal.f[0] = fast_cos(circling_goal_angle) * drek_boss_default_circling_radius_gp;
+        goal.f[1] = fast_sin(circling_goal_angle) * drek_boss_default_circling_radius_gp;
         goal.f[2] = 0.0f;
     }
     add_vector_xyz(&goal, &goal, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center);
-    if (vector_distance(&boss_circle_vars->pos, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center) > D_L18_00162374 + 1.0f) {
+    if (vector_distance(&boss_circle_vars->pos, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center) > drek_boss_default_circling_radius_gp + 1.0f) {
         speed = 10.0f;
     } else if (hero.state.control_mode != 0xF) {
-        near = D_L18_0016235C;
-        far = D_L18_00162358;
-        slow = D_L18_00162354;
-        fast = D_L18_00162350;
+        near = drek_boss_circling_base_near_hero_distance_gp;
+        far = drek_boss_circling_base_far_hero_distance_gp;
+        slow = drek_boss_circling_default_far_hero_speed_gp;
+        fast = drek_boss_circling_default_near_hero_speed_gp;
         if (moby->state == 0xD) {
             slow = 2.0f;
             fast = 5.5f;
