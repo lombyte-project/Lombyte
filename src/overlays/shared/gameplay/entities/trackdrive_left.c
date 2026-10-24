@@ -795,7 +795,9 @@ extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da6c0(int unused_texture, int unused_parameter, int sel, float angle, float radial_distance) {
+void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int sel, float angle, float radial_distance) __asm__("FUN_L02_002da6c0");
+
+void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int sel, float angle, float radial_distance) {
     enum {
         ARROW_STYLE_NEWLY_REACHED = 0,
         ARROW_STYLE_OCCUPIED = 1,
@@ -1559,14 +1561,14 @@ extern int D_L02_00161BBC __attribute__((sda));
 extern int D_L02_00161BC0 __attribute__((sda));
 extern int D_L02_00161BC4 __attribute__((sda));
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
-extern void FUN_L02_002da6c0_c(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
+extern void draw_tresspasser_puzzle_arrow(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void draw_tresspasser_puzzle_radial_strip(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
 extern void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 #define get_effect_texture ((u64 (*)(int))get_effect_texture)
 #define draw_tresspasser_puzzle_ring_arc ((void (*)(u64, float, float, float, float, u32))draw_tresspasser_puzzle_ring_arc)
-#define FUN_L02_002da6c0_c ((void (*)(u64, int, int, float, float))FUN_L02_002da6c0_c)
+#define draw_tresspasser_puzzle_arrow ((void (*)(u64, int, int, float, float))draw_tresspasser_puzzle_arrow)
 #define draw_tresspasser_puzzle_radial_strip ((void (*)(u64, f32, f32, f32, s32))draw_tresspasser_puzzle_radial_strip)
 
 void FUN_L02_002d93e8(char *moby) {
@@ -1731,12 +1733,12 @@ void FUN_L02_002d93e8(char *moby) {
         draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B4C, (float)D_L02_00161B48, color);
         if (first->slot[(i + *(int *)(data + 0x14)) % 12] != 0) {
             if (first->slot[(i + *(int *)(data + 0x14)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
                 first->slot[(i + *(int *)(data + 0x14)) % 12] = 2;
             } else if (first->slot[(i + *(int *)(data + 0x14)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
             }
         }
     }
@@ -1756,12 +1758,12 @@ void FUN_L02_002d93e8(char *moby) {
         draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B40, (float)D_L02_00161B3C, color);
         if (second->slot[(i + *(int *)(data + 0x18)) % 12] != 0) {
             if (second->slot[(i + *(int *)(data + 0x18)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
                 second->slot[(i + *(int *)(data + 0x18)) % 12] = 2;
             } else if (second->slot[(i + *(int *)(data + 0x18)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
             }
         }
     }
@@ -1781,12 +1783,12 @@ void FUN_L02_002d93e8(char *moby) {
         draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B34, (float)D_L02_00161B30, color);
         if (third->slot[(i + *(int *)(data + 0x1c)) % 12] != 0) {
             if (third->slot[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
                 third->slot[(i + *(int *)(data + 0x1c)) % 12] = 2;
             } else if (third->slot[(i + *(int *)(data + 0x1c)) % 12] == 2) {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
             } else {
-                FUN_L02_002da6c0_c(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
             }
         }
     }
