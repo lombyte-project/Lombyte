@@ -930,7 +930,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         BOBBING_INITIALIZE = 0,
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1
     };
-    float v[4];
+    float zero_vector[4];
     float hit_descriptor[12];
     float pos[4];
     float surface_query_scratch[4];
@@ -942,11 +942,11 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     struct Hero *hero_contact_context;
     float yy;
     int i;
-    clear_vector(v);
+    clear_vector(zero_vector);
     hit_record = find_moby_hit(moby, 0x230000, 0);
     hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
-        func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
+        func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
         mark_moby_for_removal_u(moby);
         return;
@@ -961,14 +961,14 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         update_moby_vertical_oscillation(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
-        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, v);
+        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, zero_vector);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
         hero_contact_context = &hero;
         if (((char *)hero_contact_context->coll_hit_moby) == moby || ((char *)hero_contact_context->unk240) == moby ||
             func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
-                func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
+                func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
                 moby->pos.z = moby->pos.z + 1.0f;
                 yy = resolve_camera_surface_height(&moby->pos.x, surface_query_scratch);
