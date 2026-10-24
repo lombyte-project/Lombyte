@@ -59,7 +59,7 @@ extern int D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
 extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
-extern int D_L14_001620D8 __attribute__((sda));
+extern int vendor_beam_damage_disabled __asm__("D_L14_001620D8") __attribute__((sda));
 void update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
 
 void update_vendor_beam(unsigned char *moby) {
@@ -70,13 +70,13 @@ void update_vendor_beam(unsigned char *moby) {
         BEAM_STATE_REPEAT_PULSES = 3
     };
     D1224 *beam_vars = *(D1224 **)(moby + 0x78);
-    float v[4] __attribute__((aligned(16)));
+    float beam_culling_sphere[4] __attribute__((aligned(16)));
     int beam_state;
     int phase_duration_frames;
     if (moby[0x20] != 0) {
-        qcopy(v, moby + 0x10);
-        v[3] = beam_vars->f624;
-        if (fast_bsphere_check(v, 52.0f) < 0) {
+        qcopy(beam_culling_sphere, moby + 0x10);
+        beam_culling_sphere[3] = beam_vars->f624;
+        if (fast_bsphere_check(beam_culling_sphere, 52.0f) < 0) {
             return;
         }
     }
@@ -122,7 +122,7 @@ void update_vendor_beam(unsigned char *moby) {
         }
         break;
     }
-    if (D_L14_001620D8 == 0) {
+    if (vendor_beam_damage_disabled == 0) {
         if (vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f) {
             apply_vendor_beam_damage((char *)moby);
         }
