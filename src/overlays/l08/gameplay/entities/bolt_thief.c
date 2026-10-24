@@ -378,7 +378,9 @@ extern int D_L08_00161BE4 __asm__("D_L08_00161BE4");
 extern int D_L08_00161BE8 __asm__("D_L08_00161BE8");
 extern int D_L08_00161BEC __asm__("D_L08_00161BEC");
 
-void FUN_L08_002deee0(Moby *moby) {
+void draw_batalia_cannon_hud(Moby *moby) __asm__("FUN_L08_002deee0");
+
+void draw_batalia_cannon_hud(Moby *moby) {
     long xy[4];
     int color_words[4], uv_words[4];
     float relative[4];
