@@ -1485,7 +1485,9 @@ extern u8 *FUN_0026d000_2cbcc0(f32, f32, f32, f32, void *, s32, void *, u32) __a
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern float D_0015ED60;
 
-void FUN_L00_002cbcc0(u8 *shot_moby, s32 enabled)
+void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled) __asm__("FUN_L00_002cbcc0");
+
+void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled)
 {
     s32 i;
     s32 j;
