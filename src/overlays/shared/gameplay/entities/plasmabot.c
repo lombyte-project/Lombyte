@@ -1961,7 +1961,7 @@ typedef struct {
 } MobyHit_ff640;
 
 extern char *D_L14_0015FFDC;
-extern float D_L14_00162000 __attribute__((sda));
+extern float floating_mine_glow_phase_step_gp __asm__("D_L14_00162000") __attribute__((sda));
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -2060,7 +2060,7 @@ void update_floating_mine(struct Moby *moby) {
         break;
     }
     }
-    vars->phase = add_rotations_ff640(vars->phase, D_L14_00162000);
+    vars->phase = add_rotations_ff640(vars->phase, floating_mine_glow_phase_step_gp);
     glow_pulse_sine = sin_ff640(vars->phase);
     glow_red_intensity = ftoi_ff640(glow_pulse_sine * 48.0f) + 0xCF;
     glow_green_blue_intensity = ftoi_ff640(glow_pulse_sine * 32.0f) + 0x30;
