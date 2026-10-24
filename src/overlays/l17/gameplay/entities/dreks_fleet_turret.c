@@ -830,9 +830,9 @@ extern float fleet_radial_uv_scroll_rate_gp __asm__("D_L17_00161BBC") __attribut
 extern float FUN_L00_00200260(float, float);
 extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
 extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribute__((sda));
-extern int D_L17_00161B9C __attribute__((sda));
-extern int D_L17_00161BA0 __attribute__((sda));
-extern int D_L17_00161BA4 __attribute__((sda));
+extern int fleet_radial_blend_subtract_color_selector __asm__("D_L17_00161B9C") __attribute__((sda));
+extern int fleet_radial_blend_alpha_factor_selector __asm__("D_L17_00161BA0") __attribute__((sda));
+extern int fleet_radial_blend_add_color_selector __asm__("D_L17_00161BA4") __attribute__((sda));
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
 extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -857,8 +857,8 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     moby_transform_matrix[15] = 1.0f;
     quad_primitive.tex = get_effect_texture(0x28);
     quad_primitive.q80 = 0xFF9000000260L;
-    quad_primitive.alpha = (long)fleet_radial_alpha_base_value_gp | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
-              ((long)D_L17_00161BA4 << 6) | 0x8000000000L;
+    quad_primitive.alpha = (long)fleet_radial_alpha_base_value_gp | ((long)fleet_radial_blend_subtract_color_selector << 2) | ((long)fleet_radial_blend_alpha_factor_selector << 4) |
+              ((long)fleet_radial_blend_add_color_selector << 6) | 0x8000000000L;
     quad_primitive.z70 = 0;
     for (pass = 0; pass < 2; pass++) {
         for (k = 0; k < 4; k++) {
