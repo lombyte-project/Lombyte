@@ -2379,20 +2379,20 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     if ((P->h1E ^ 1) & 1) {
         O_26e670_26e670 *linked_particle = P->link;
         P_26e670_26e670 *linked_particle_data = 0;
-        f32 k = 2.0f, g;
+        f32 k = 2.0f, linked_velocity_scale_scratch;
         if (linked_particle)
             linked_particle_data = &linked_particle->p;
         FUN_001f99f8_x(&acc);
-        g = 0.15f;
+        linked_velocity_scale_scratch = 0.15f;
         if (P->h1C == 0 && linked_particle != 0 && !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
-            f32 c02 = 0.2f, c1 = 1.0f, c999 = 0.999f;
+            f32 linked_displacement_strength = 0.2f, c1 = 1.0f, per_link_gain_decay = 0.999f;
             do {
                 kk = k * k;
                 FUN_001f9a28_x(&next_position, &linked_particle->pos, &particle->pos);
                 k += c1;
-                g *= c999;
-                FUN_001f9bf8_x(&next_position, &next_position, c02 / kk);
+                linked_velocity_scale_scratch *= per_link_gain_decay;
+                FUN_001f9bf8_x(&next_position, &next_position, linked_displacement_strength / kk);
                 FUN_001f9a10_x(&acc, &acc, &next_position);
                 linked_particle = linked_particle_data->link;
                 if (linked_particle)
@@ -2401,13 +2401,13 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
                     break;
             } while (!(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL));
         }
-        g = (0.15f - g) + 1.07f;
+        linked_velocity_scale_scratch = (0.15f - linked_velocity_scale_scratch) + 1.07f;
         if (linked_particle_data == 0 || linked_particle_data->h1C == 0)
             FUN_001f9a10_x(P, P, &acc);
         else
             FUN_001f9a68_x(P, P, 0.5f);
         if (P->link)
-            FUN_001f9a68_x(P, P, g);
+            FUN_001f9a68_x(P, P, linked_velocity_scale_scratch);
         else
             FUN_001f9a68_x(P, P, 0.97f);
         P->f08 -= frame_scale_sq * 0.02f;
