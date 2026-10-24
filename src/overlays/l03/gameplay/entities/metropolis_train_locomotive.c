@@ -788,7 +788,7 @@ void moving_platform_small_update(char *moby) {
     char *pc;
     char *initial_path_position;
     int *path;
-    char *pos;
+    char *platform_position;
     char *vel;
     char *target;
     int voice_slot_index;
@@ -885,8 +885,8 @@ void moving_platform_small_update(char *moby) {
         end = path_node_step < 0 ? 0 : count - 1;
         next = (*(int *)(data + 0xB0) + count + path_node_step) % count;
         node_off = next * 0x10;
-        pos = moby + 0x10;
-        subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), pos);
+        platform_position = moby + 0x10;
+        subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), platform_position);
         next_path_node_byte_offset = node_off;
         target = *(char **)(pc + 0x10) + 0x10;
         if (*(int *)(data + 0x108) != 0) {
@@ -895,7 +895,7 @@ void moving_platform_small_update(char *moby) {
             target += end * 0x10;
             node_off = 0; /* dead store: unused afterwards, but needed for the retail register allocation */
         }
-        if (FUN_001f9b48(pos, target) < *(float *)(data + 0xF4)) {
+        if (FUN_001f9b48(platform_position, target) < *(float *)(data + 0xF4)) {
             approach_value((float *)(data + 0xE4), frame_time * 0.5f,
                            *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
         } else {
