@@ -775,8 +775,8 @@ void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
-extern int D_L14_00161C10 __attribute__((sda));
-extern int D_L14_00161C2C __attribute__((sda));
+extern int wind_spark_peak_alpha __asm__("D_L14_00161C10") __attribute__((sda));
+extern int wind_spark_fade_in_frames __asm__("D_L14_00161C2C") __attribute__((sda));
 void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float spark_travel_direction[4];
@@ -804,13 +804,13 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                 initialize_wind_spark(wind_control_moby, i, spark_travel_direction);
             }
         } else {
-            opacity = D_L14_00161C10;
-            if (spark_vars->n380[i] - D_L14_00161C2C < spark_vars->n320[i]) {
+            opacity = wind_spark_peak_alpha;
+            if (spark_vars->n380[i] - wind_spark_fade_in_frames < spark_vars->n320[i]) {
                 first = spark_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
-                first = first / spark_integer_to_float(D_L14_00161C2C);
+                first = first / spark_integer_to_float(wind_spark_fade_in_frames);
             } else {
                 first = spark_integer_to_float(spark_vars->n320[i]);
-                first = first / spark_integer_to_float(spark_vars->n380[i] - D_L14_00161C2C);
+                first = first / spark_integer_to_float(spark_vars->n380[i] - wind_spark_fade_in_frames);
             }
             {
                 int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * first + 0.0f);
