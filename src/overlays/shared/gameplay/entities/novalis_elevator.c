@@ -2504,8 +2504,8 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
 }
 #include "rnc/gameplay/entities/moby.h"
 #define MOBY(p) ((struct Moby *)(p))
-extern int D_L01_001619E0 __attribute__((sda));
-extern int D_L01_001619E4 __attribute__((sda));
+extern int amoeboid_first_movement_particle_spawn_gate_modulus_plus_one __asm__("D_L01_001619E0") __attribute__((sda));
+extern int amoeboid_second_movement_particle_spawn_gate_modulus_plus_one __asm__("D_L01_001619E4") __attribute__((sda));
 extern float amoeboid_movement_particle_max_spawn_radius __asm__("D_L01_001619E8") __attribute__((sda));
 extern float amoeboid_first_movement_particle_base_scale_max __asm__("D_L01_001619B8") __attribute__((sda));
 extern float D_L01_001619BC __attribute__((sda));
@@ -2532,7 +2532,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
     int time;
     if (MOBY(moby)->visible == 0)
         return;
-    if (random_integer_below(D_L01_001619E0 - 1) == 0) {
+    if (random_integer_below(amoeboid_first_movement_particle_spawn_gate_modulus_plus_one - 1) == 0) {
         angle = random_angle_radians();
         radius = random_float_between_alt(0.0f, amoeboid_movement_particle_max_spawn_radius);
         lower = random_float_between_alt(0.0f, amoeboid_first_movement_particle_base_scale_max) * *(float *)(data + 0x250);
@@ -2545,7 +2545,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         spawn_type_52_particle(pos, lower, upper, D_L01_001619B0, D_L01_001619B4,
                          scale_game_frames(time));
     }
-    if (random_integer_below(D_L01_001619E4 - 1) == 0) {
+    if (random_integer_below(amoeboid_second_movement_particle_spawn_gate_modulus_plus_one - 1) == 0) {
         angle = random_angle_radians();
         radius = random_float_between_alt(0.0f, amoeboid_movement_particle_max_spawn_radius);
         lower = random_float_between_alt(0.0f, amoeboid_second_movement_particle_base_scale_max) * *(float *)(data + 0x250);
