@@ -35,12 +35,12 @@ extern int D_L12_001619DC __attribute__((sda));
 extern float water_reservoir_effect_delta_fourth_component_range_start_gp __asm__("D_L12_001619E0") __attribute__((sda));
 extern float water_reservoir_effect_delta_fourth_component_range_end_gp __asm__("D_L12_001619E4") __attribute__((sda));
 int D_L12_001619E8 = 1;
-extern int D_L12_001619EC __attribute__((sda));
+extern int water_reservoir_effect_delta_scale_divisor_gp __asm__("D_L12_001619EC") __attribute__((sda));
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
 int D_L12_001619F8 = 0x10022;
 extern float water_reservoir_unmirrored_effect_spawn_z_offset_gp __asm__("D_L12_001619FC") __attribute__((sda));
-extern float D_L12_00161A00 __attribute__((sda));
+extern float water_reservoir_effect_delta_z_reference_gp __asm__("D_L12_00161A00") __attribute__((sda));
 extern float water_reservoir_mirrored_effect_spawn_z_offset_gp __asm__("D_L12_00161A04") __attribute__((sda));
 extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
 
@@ -87,10 +87,10 @@ update:
                 random_vector_72(offset0, 0.0f, water_reservoir_random_offset_radius_gp);
                 random_vector_72(offset1, 0.0f, water_reservoir_random_offset_radius_gp);
                 subtract_vector_72(pos_offset_delta, pos, offset0);
-                pos_offset_delta[2] += D_L12_00161A00 - water_reservoir_unmirrored_effect_spawn_z_offset_gp;
+                pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp - water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 subtract_vector_72(offset_pair_delta, offset0, offset1);
-                offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp - D_L12_00161A00;
-                scaled = D_L12_001619EC;
+                offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp - water_reservoir_effect_delta_z_reference_gp;
+                scaled = water_reservoir_effect_delta_scale_divisor_gp;
                 scale_vector_72(pos_offset_delta, pos_offset_delta, 2.0f / (float)scaled);
                 scale_vector_72(offset_pair_delta, offset_pair_delta, 2.0f / (float)scaled);
                 add_vector_72(pos, pos, (float *)&moby->pos);
@@ -104,7 +104,7 @@ update:
                 pos_offset_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
                 offset_pair_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
                 FUN_00218888_72(pos, pos_offset_delta, offset_pair_delta, D_L12_001619F4, D_L12_001619F4,
-                                  D_L12_001619E8, scale_game_frames_72(D_L12_001619EC),
+                                  D_L12_001619E8, scale_game_frames_72(water_reservoir_effect_delta_scale_divisor_gp),
                                   D_L12_001619F0, D_L12_001619F8);
             }
         }
