@@ -1003,11 +1003,11 @@ extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 D_L02_001D3310[];
-extern int D_L02_00161B94 __attribute__((sda));
-extern int D_L02_00161AAC __attribute__((sda));
-extern int D_L02_00161AB0 __attribute__((sda));
-extern int D_L02_00161AB4 __attribute__((sda));
-extern int D_L02_00161AB8 __attribute__((sda));
+extern int tresspasser_textured_quad_color __asm__("D_L02_00161B94") __attribute__((sda));
+extern int tresspasser_quad_first_vertex_uv __asm__("D_L02_00161AAC") __attribute__((sda));
+extern int tresspasser_quad_second_vertex_uv __asm__("D_L02_00161AB0") __attribute__((sda));
+extern int tresspasser_quad_third_vertex_uv __asm__("D_L02_00161AB4") __attribute__((sda));
+extern int tresspasser_quad_fourth_vertex_uv __asm__("D_L02_00161AB8") __attribute__((sda));
 void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 
 void draw_tresspasser_puzzle_textured_quads(void) {
@@ -1017,11 +1017,11 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
     int i;
     for (i = 3; i >= 0; i--) {
-        vertex_uvs[0] = D_L02_00161AAC;
-        vertex_uvs[1] = D_L02_00161AB0;
-        vertex_uvs[2] = D_L02_00161AB4;
-        vertex_uvs[3] = D_L02_00161AB8;
-        vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = D_L02_00161B94;
+        vertex_uvs[0] = tresspasser_quad_first_vertex_uv;
+        vertex_uvs[1] = tresspasser_quad_second_vertex_uv;
+        vertex_uvs[2] = tresspasser_quad_third_vertex_uv;
+        vertex_uvs[3] = tresspasser_quad_fourth_vertex_uv;
+        vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] = tresspasser_textured_quad_color;
         packed_vertices = *vertex_quad_cursor++;
         f20bc88_2dae88(&packed_vertices, vertex_uvs, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
     }
