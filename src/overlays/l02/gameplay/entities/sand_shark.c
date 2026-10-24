@@ -3144,7 +3144,7 @@ extern f32 rocket_launcher_yaw_acceleration_gp __asm__("D_L02_00161C70") __attri
 extern f32 rocket_launcher_max_yaw_speed_gp __asm__("D_L02_00161C74") __attribute__((sda));
 s32 D_L02_00161C78 = 0x800000ff;
 s32 D_L02_00161C7C = 0x80329600;
-extern f32 D_L02_00161C84 __attribute__((sda));
+extern f32 rocket_launcher_shot_sound_initial_distance_gp __asm__("D_L02_00161C84") __attribute__((sda));
 void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
 
 extern void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
@@ -3205,7 +3205,7 @@ void rocket_launcher_update(struct Moby *moby) {
             }
             rocket_launcher_vars->voice = -1;
             turret_play_sound(3, 0, moby);
-            rocket_launcher_vars->recoil = D_L02_00161C84;
+            rocket_launcher_vars->recoil = rocket_launcher_shot_sound_initial_distance_gp;
             moby->state = 2;
             if (moby->prev_seq != 1)
                 turret_blend_anim(moby, 1, 0, 1);
