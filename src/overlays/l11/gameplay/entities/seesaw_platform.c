@@ -2384,8 +2384,8 @@ extern float D_L11_00162014 __attribute__((sda));
 extern float D_L11_00162018 __attribute__((sda));
 extern float D_L11_0016201C __attribute__((sda));
 extern float D_L11_00162020 __attribute__((sda));
-extern float D_L11_00162024 __attribute__((sda));
-extern float D_L11_00162028 __attribute__((sda));
+extern float jet_fighter_camera_base_local_x_offset_gp __asm__("D_L11_00162024") __attribute__((sda));
+extern float jet_fighter_camera_base_local_z_offset_gp __asm__("D_L11_00162028") __attribute__((sda));
 extern float D_L11_0016202C __attribute__((sda));
 extern float D_L11_00162030 __attribute__((sda));
 extern float D_L11_00162034 __attribute__((sda));
@@ -2579,9 +2579,9 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         wr.e[0].q = 0;
         wr.e[1].q = 0;
         wr.e[0].v[0] =
-            (D_L11_00162024 - ship_vars->f70 * D_L11_00162128 - ratio * D_L11_00162130) * D_L11_0016208C;
+            (jet_fighter_camera_base_local_x_offset_gp - ship_vars->f70 * D_L11_00162128 - ratio * D_L11_00162130) * D_L11_0016208C;
         wr.e[0].v[1] = ship_vars->f6C * D_L11_00162080 * D_L11_0016208C;
-        wr.e[0].v[2] = (D_L11_00162028 + ship_vars->f70 * D_L11_0016212C) * D_L11_0016208C;
+        wr.e[0].v[2] = (jet_fighter_camera_base_local_z_offset_gp + ship_vars->f70 * D_L11_0016212C) * D_L11_0016208C;
         wr.e[1].v[0] = D_L11_0016202C * D_L11_0016208C;
         wr.e[1].v[2] = D_L11_00162030 * D_L11_0016208C;
         camera_offset_targets.e[0].q = wr.e[0].q;
@@ -2901,8 +2901,8 @@ void jet_fighter_update(struct Moby *moby) {
                 ship_vars->fD8 = 0.0f;
                 moby->draw_dist = 0xFF;
                 moby->update_dist = 0xFF;
-                ship_vars->fB4 = D_L11_00162024 * D_L11_0016208C;
-                ship_vars->fBC = D_L11_00162028 * D_L11_0016208C;
+                ship_vars->fB4 = jet_fighter_camera_base_local_x_offset_gp * D_L11_0016208C;
+                ship_vars->fBC = jet_fighter_camera_base_local_z_offset_gp * D_L11_0016208C;
                 ship_vars->fB8 = 0.0f;
                 g->moby->collision_disable = -1;
                 moby->scale = *(float *)((char *)moby->pclass + 0x24) * D_L11_0016208C;
