@@ -5887,7 +5887,7 @@ extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
-extern float D_L06_0016204C __attribute__((sda));
+extern float moby_breakup_z_offset __asm__("D_L06_0016204C") __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */
 void spawn_moby_breakup_effect(char *source_moby) {
@@ -5916,7 +5916,7 @@ void spawn_moby_breakup_effect(char *source_moby) {
         fragment_velocity[1] = sin_300278(fragment_angle) * 2.0f;
         fragment_velocity[2] = 0.0f;
         vadd_300278(fragment_position, source_moby + 0x10, fragment_velocity);
-        fragment_position[2] += rand_range_300278(D_L06_0016204C + 0.5f, D_L06_0016204C + 4.5f);
+        fragment_position[2] += rand_range_300278(moby_breakup_z_offset + 0.5f, moby_breakup_z_offset + 4.5f);
         vnorm_300278(fragment_velocity, fragment_velocity, fragment_step_length);
         spawn_spinning_moby_fragment(source_moby, fragment_position, fragment_velocity);
     }
@@ -5973,7 +5973,7 @@ void FUN_L06_003003f0(void) {
     quad.unk70 = 0;
     init_3003f0(&buf);
     c = D_L06_0016206C;
-    buf.f38 = D_L06_0016204C;
+    buf.f38 = moby_breakup_z_offset;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
@@ -6031,7 +6031,7 @@ void FUN_L06_00300720(void) {
     pkt[3] |= (long)D_L06_00162068 << 32;
     pkt[0] = 0;
     init_3003f0(mp);
-    mat[3][2] = D_L06_0016204C;
+    mat[3][2] = moby_breakup_z_offset;
     colors[3] = D_L06_0016206C;
     colors[2] = D_L06_0016206C;
     colors[1] = D_L06_0016206C;
