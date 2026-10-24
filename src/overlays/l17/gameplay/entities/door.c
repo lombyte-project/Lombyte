@@ -283,7 +283,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
     };
     float a[4];
     float b[4];
-    float c[4];
+    float flight_offset_scratch[4];
     float lowered_hero_position[4];
     float movement_midpoint[4];
     float hit_descriptor[12];
@@ -311,14 +311,14 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
                                FUN_001f9e90_q(*(float *)(drone_vars + 0x10) - moby->pos.x,
                                               *(float *)(drone_vars + 0x14) - moby->pos.y)) <
                 0.7853982f) {
-                subtract_vector_xyz_q(c, target_position, &moby->pos);
-                normalize_vector_xyz_q(drone_vars, c, *(float *)(drone_vars + 0x40));
+                subtract_vector_xyz_q(flight_offset_scratch, target_position, &moby->pos);
+                normalize_vector_xyz_q(drone_vars, flight_offset_scratch, *(float *)(drone_vars + 0x40));
             }
         }
-        scale_vector_xyz_q(c, drone_vars, -20.0f);
+        scale_vector_xyz_q(flight_offset_scratch, drone_vars, -20.0f);
         step = 0;
         add_vector_xyz_q(a, &moby->pos, drone_vars);
-        add_vector_xyz_q(b, &moby->pos, c);
+        add_vector_xyz_q(b, &moby->pos, flight_offset_scratch);
         FUN_001f9a40_q(movement_midpoint, a, &moby->pos, 0.5f);
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
