@@ -485,7 +485,9 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 
-char *FUN_L09_002ea778(void) {
+char *spawn_falling_asteroid(void) __asm__("FUN_L09_002ea778");
+
+char *spawn_falling_asteroid(void) {
     float target_position[4];
     char *moby = func_0020D348_m(random_integer_below_c(4) + 0x107);
     if (moby != 0) {
