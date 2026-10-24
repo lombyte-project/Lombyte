@@ -1709,7 +1709,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
 
 extern int D_L00_0015F3F8;
 extern int D_L00_00161188;
-extern int D_L00_00161190;
+extern int vendor_auxiliary_reaction_started __asm__("D_L00_00161190");
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1745,7 +1745,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
                     *(int *)(vendor_state_base + 0x30) = D_L00_0015F3F8;
                     selection_variant_index = random_integer_below(2);
                     *(int *)(vendor_state_base + 0x3C) = selection_variant_index;
-                    D_L00_00161190 = 1;
+                    vendor_auxiliary_reaction_started = 1;
                     D_L00_00161194 = 0;
                     *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
@@ -1756,7 +1756,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
     case VENDOR_AUXILIARY_MOBY_READY:
         ready_variant_index = random_integer_below(2);
         *(int *)(vendor_state_base + 0x3C) = ready_variant_index;
-        D_L00_00161190 = vendor_event;
+        vendor_auxiliary_reaction_started = vendor_event;
         D_L00_00161194 = 0;
         *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
