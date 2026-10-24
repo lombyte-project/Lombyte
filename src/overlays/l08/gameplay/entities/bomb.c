@@ -1109,7 +1109,7 @@ extern int bomber_tank_joint_particle_second_color_gp __asm__("D_L08_001618D8") 
 extern float bomber_tank_joint_particle_jitter_magnitude_base_gp __asm__("D_L08_001618DC") __attribute__((sda));
 extern float bomber_tank_joint_particle_vertical_spread_gp __asm__("D_L08_001618E0") __attribute__((sda));
 extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("D_L08_001618E8") __attribute__((sda));
-extern int D_L08_001618EC __attribute__((sda));
+extern int bomber_tank_joint_particle_duration_frames_range_start_gp __asm__("D_L08_001618EC") __attribute__((sda));
 extern int D_L08_001618F0 __attribute__((sda));
 extern int D_L08_001618F4 __attribute__((sda));
 extern float bomber_tank_joint_particle_velocity_w_gp __asm__("D_L08_001618F8") __attribute__((sda));
@@ -1181,7 +1181,7 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
         }
         velocity[3] = bomber_tank_joint_particle_velocity_w_gp;
         spread_vector[3] = bomber_tank_joint_particle_spread_vector_w_gp;
-        frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
+        frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_duration_frames_range_start_gp, (float)bomber_tank_joint_particle_duration_frames_range_start_gp * 1.2f)));
         frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
         frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
         func_00219780_2D6C58(joint_pos, velocity, spread_vector, bomber_tank_joint_particle_initial_color_gp, bomber_tank_joint_particle_second_color_gp, frames1, frames2, frames3, -1);
