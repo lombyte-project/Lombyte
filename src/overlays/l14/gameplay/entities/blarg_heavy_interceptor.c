@@ -2948,7 +2948,9 @@ extern void scale_x(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_x(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
-void FUN_L14_002b5dd8(struct Moby *moby) {
+void emit_minibomber_exhaust_puffs(struct Moby *moby) __asm__("FUN_L14_002b5dd8");
+
+void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     float exhaust_position_offset[4];
     float pos[4];
     int i;
