@@ -1163,13 +1163,13 @@ extern float interpolate_value_with_repeated_squaring(int, int, float, float, fl
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-extern float D_L17_00161FF8 __attribute__((sda));
-extern float D_L17_00161FFC __attribute__((sda));
+extern float fighter_jet_startup_speed_step_gp __asm__("D_L17_00161FF8") __attribute__((sda));
+extern float fighter_jet_cruise_speed_step_gp __asm__("D_L17_00161FFC") __attribute__((sda));
 int D_L17_00162000 = 120;
-extern float D_L17_00162004 __attribute__((sda));
-extern float D_L17_00162008 __attribute__((sda));
-extern float D_L17_0016200C __attribute__((sda));
-extern float D_L17_00162010 __attribute__((sda));
+extern float fighter_jet_cruise_speed_gp __asm__("D_L17_00162004") __attribute__((sda));
+extern float fighter_jet_boost_speed_limit_gp __asm__("D_L17_00162008") __attribute__((sda));
+extern float fighter_jet_boost_speed_step_gp __asm__("D_L17_0016200C") __attribute__((sda));
+extern float fighter_jet_cruise_speed_return_factor_gp __asm__("D_L17_00162010") __attribute__((sda));
 int D_L17_00162014 = 5;
 extern float fighter_jet_impact_yaw_response_scale_gp __asm__("D_L17_00162018") __attribute__((sda));
 extern float fighter_jet_impact_pitch_response_scale_gp __asm__("D_L17_0016201C") __attribute__((sda));
@@ -1185,7 +1185,7 @@ extern float D_L17_00162044 __attribute__((sda));
 extern float D_L17_00162048 __attribute__((sda));
 extern float D_L17_0016204C __attribute__((sda));
 extern float D_L17_0016205C __attribute__((sda));
-extern float D_L17_00162060 __attribute__((sda));
+extern float fighter_jet_collision_damage_gp __asm__("D_L17_00162060") __attribute__((sda));
 extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
@@ -1222,8 +1222,8 @@ extern float D_L17_00162134 __attribute__((sda));
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
-extern float D_L17_00162144 __attribute__((sda));
-extern float D_L17_00162148 __attribute__((sda));
+extern float fighter_jet_cruise_fov_gp __asm__("D_L17_00162144") __attribute__((sda));
+extern float fighter_jet_boost_fov_gp __asm__("D_L17_00162148") __attribute__((sda));
 extern float D_L17_0016214C __attribute__((sda));
 extern float D_L17_00162150 __attribute__((sda));
 extern float D_L17_00162154 __attribute__((sda));
@@ -1273,7 +1273,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     UQ_c4 movement_delta;
     W4 side;
     UQ_c4 up;
-    W4 ang;
+    W4 camera_rotation;
     W4 target;
     W4 diff;
     float horizontal_steering_input;
@@ -1327,26 +1327,26 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             }
             pad = (char *)((char *)&D_0013C940);
             if (*(int *)(pad + 0x1B0) & 0x40) {
-                float accelerated_speed = ship_vars->speed + D_L17_0016200C * D_L17_001620A0_gp;
-                float max = D_L17_00162008 * D_L17_001620A0_gp;
+                float accelerated_speed = ship_vars->speed + fighter_jet_boost_speed_step_gp * D_L17_001620A0_gp;
+                float max = fighter_jet_boost_speed_limit_gp * D_L17_001620A0_gp;
                 ship_vars->speed = accelerated_speed;
                 if (max < accelerated_speed) {
                     ship_vars->speed = max;
                 }
             } else {
-                float hi = D_L17_00162004 * D_L17_001620A0_gp;
-                float step = D_L17_00161FFC * D_L17_001620A0_gp;
+                float hi = fighter_jet_cruise_speed_gp * D_L17_001620A0_gp;
+                float step = fighter_jet_cruise_speed_step_gp * D_L17_001620A0_gp;
                 float current_speed = ship_vars->speed;
                 if (current_speed < hi - step) {
                     ship_vars->speed = current_speed + step;
                 } else if (hi < current_speed) {
-                    ship_vars->speed = current_speed + (hi - current_speed) * D_L17_00162010;
+                    ship_vars->speed = current_speed + (hi - current_speed) * fighter_jet_cruise_speed_return_factor_gp;
                 } else {
                     ship_vars->speed = hi;
                 }
             }
         } else {
-            ship_vars->speed += D_L17_00161FF8 * D_L17_001620A0_gp;
+            ship_vars->speed += fighter_jet_startup_speed_step_gp * D_L17_001620A0_gp;
             ship_vars->count += 1;
         }
     } else {
@@ -1420,9 +1420,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         add_vector_xyz(ship_moby->pos, ship_moby->pos, movement_delta.v);
     }
     {
-        float lo = D_L17_00162004;
+        float lo = fighter_jet_cruise_speed_gp;
         float sp = ship_vars->speed - lo;
-        float range = D_L17_00162008 - lo;
+        float range = fighter_jet_boost_speed_limit_gp - lo;
         if (sp < 0.0f) {
             ratio = 0.0f / range;
         } else {
@@ -1431,7 +1431,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     }
     ship_vars->fC4 = ratio;
     {
-        T2_c4 tbl;
+        T2_c4 camera_offset_targets;
         T2_c4 wr;
         float ship_rotation_basis[12];
         wr.e[0].q = 0;
@@ -1442,13 +1442,13 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         wr.e[0].v[2] = (fighter_jet_camera_base_offset_z_gp + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
         wr.e[1].v[0] = D_L17_0016203C * D_L17_0016209C;
         wr.e[1].v[2] = D_L17_00162040 * D_L17_0016209C;
-        tbl.e[0].q = wr.e[0].q;
-        tbl.e[1].q = wr.e[1].q;
-        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, tbl.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
+        camera_offset_targets.e[0].q = wr.e[0].q;
+        camera_offset_targets.e[1].q = wr.e[1].q;
+        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
                          D_L17_0016211C);
-        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, tbl.e[ship_vars->sel].v[1], D_L17_00162120, D_L17_00162124,
+        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], D_L17_00162120, D_L17_00162124,
                          D_L17_00162128);
-        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, tbl.e[ship_vars->sel].v[2], D_L17_0016212C, D_L17_00162130,
+        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], D_L17_0016212C, D_L17_00162130,
                          D_L17_00162134);
         diff[0] = ship_vars->fB4;
         diff[1] = ship_vars->fB8;
@@ -1469,11 +1469,11 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], D_L17_00162108,
                          D_L17_0016210C, D_L17_00162110);
     }
-    ang[0] = ship_vars->f20;
-    ang[2] = ship_vars->f28;
-    ang[1] = ship_vars->f24;
-    FUN_L00_002eaa30(ang);
-    vendor_spring(&ship_vars->fB0, &ship_vars->fC0, D_L17_00162144 + (D_L17_00162148 - D_L17_00162144) * ratio,
+    camera_rotation[0] = ship_vars->f20;
+    camera_rotation[2] = ship_vars->f28;
+    camera_rotation[1] = ship_vars->f24;
+    FUN_L00_002eaa30(camera_rotation);
+    vendor_spring(&ship_vars->fB0, &ship_vars->fC0, fighter_jet_cruise_fov_gp + (fighter_jet_boost_fov_gp - fighter_jet_cruise_fov_gp) * ratio,
                      D_L17_0016214C, D_L17_00162150, D_L17_00162154);
     half_fov = ship_vars->fB0 * 0.5f;
     tn = fast_sin(half_fov) / fast_cos(half_fov);
@@ -1501,7 +1501,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             ship_vars->speed = k;
             if (*(char **)(collision_result + 0x18) != 0 && *(short *)(*(char **)(collision_result + 0x18) + 0xA6) != 0x15B) {
                 if (ship_vars->iDC == 0) {
-                    hero.ship_hp = hero.ship_hp - D_L17_00162060;
+                    hero.ship_hp = hero.ship_hp - fighter_jet_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_xyz(side, collision_result + 0x50, collision_result + 0x60);
                         normalize_vector_xyz(side, side, 1.0f);
