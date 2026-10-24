@@ -413,68 +413,68 @@ extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void set_hero_animation(int a0, int a1, float t) __asm__("FUN_L00_002323b8");
-void set_hero_animation(int a0, int a1, float t) {
+void set_hero_animation(int requested_animation_id, int starting_frame_index, float t) {
     struct Hero *g2;
     struct Hero *g3;
     struct Hero *g1 = &hero;
-    char *obj = ((char *)g1->moby);
+    char *hero_animation_moby = ((char *)g1->moby);
     int slot;
-    int o;
+    int sequence_pointer_byte_offset;
     char *e;
 
     if (g1->anim_flags & 2) {
-        *(int *)(obj + 0x54) = 0;
+        *(int *)(hero_animation_moby + 0x54) = 0;
     }
     if (D_0015EDB4_m[1] != 0) {
-        if (a0 == 0x31) {
-            a0 = 0x32;
-        } else if (a0 == 0x32) {
-            a0 = 0x31;
+        if (requested_animation_id == 0x31) {
+            requested_animation_id = 0x32;
+        } else if (requested_animation_id == 0x32) {
+            requested_animation_id = 0x31;
         }
     }
-    slot = FUN_L00_0024f698(obj);
+    slot = FUN_L00_0024f698(hero_animation_moby);
     if (slot >= 0) {
-        FUN_L00_00251ce8(obj, slot | 0x300);
+        FUN_L00_00251ce8(hero_animation_moby, slot | 0x300);
         FlushCache(0);
         e = D_L00_00196D00 + slot * 16;
-        qcopy(e, obj);
-        if (*(unsigned char *)(obj + 0x52) != 0xFF) {
-            *(unsigned char *)(obj + 0xA5) = *(unsigned char *)(obj + 0x52);
+        qcopy(e, hero_animation_moby);
+        if (*(unsigned char *)(hero_animation_moby + 0x52) != 0xFF) {
+            *(unsigned char *)(hero_animation_moby + 0xA5) = *(unsigned char *)(hero_animation_moby + 0x52);
         }
-        qcopy(e, obj + 0xF0);
-        *(unsigned char *)(obj + 0x52) = 0xFF;
-        *(unsigned char *)(obj + 0x50) = slot;
+        qcopy(e, hero_animation_moby + 0xF0);
+        *(unsigned char *)(hero_animation_moby + 0x52) = 0xFF;
+        *(unsigned char *)(hero_animation_moby + 0x50) = slot;
     }
-    *(unsigned char *)(obj + 0x51) = a1;
-    *(unsigned char *)(obj + 0x53) = a0;
-    update_moby_animation_state(obj);
+    *(unsigned char *)(hero_animation_moby + 0x51) = starting_frame_index;
+    *(unsigned char *)(hero_animation_moby + 0x53) = requested_animation_id;
+    update_moby_animation_state(hero_animation_moby);
     g2 = &hero;
     g2->anim_speed = 1.0f;
     if (t > 0.0f) {
         g2->anim_frame_rate = 1.0f / t;
-        *(float *)(obj + 0x54) = 0.0f;
+        *(float *)(hero_animation_moby + 0x54) = 0.0f;
         g2->anim_blend_curve = -1;
     } else {
         g2->anim_frame_rate = 1.0f;
         g2->anim_blend_curve = truncate_float_to_s32(-t) - 1;
         g2->anim_blend_step = 0;
-        *(float *)(obj + 0x54) = 0.0f;
+        *(float *)(hero_animation_moby + 0x54) = 0.0f;
     }
     clear_hero_queued_animation();
     g3 = &hero;
-    o = a0 * 4;
-    *(unsigned char *)(obj + 0x7C) =
-        *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
+    sequence_pointer_byte_offset = requested_animation_id * 4;
+    *(unsigned char *)(hero_animation_moby + 0x7C) =
+        *(unsigned char *)(*(int *)(*(int *)(hero_animation_moby + 0x24) + sequence_pointer_byte_offset + 0x48) + 0x11);
     g3->anim_changing = 1;
     if (t < 0.0f) {
         t = *(int *)((char *)&D_L00_0015F6E0 + g3->anim_blend_curve * 4);
     }
     if (g3->vehicle_mode == 0) {
-        blend_hero_slot3_mapped_animation_pair(a0, a1, t);
+        blend_hero_slot3_mapped_animation_pair(requested_animation_id, starting_frame_index, t);
     }
     clear_hero_mapped_moby_animation_state();
     if (((int)g3->unk2278) != 0) {
-        blend_hero_mapped_moby_animation(a0, a1, t);
+        blend_hero_mapped_moby_animation(requested_animation_id, starting_frame_index, t);
     }
 }
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
