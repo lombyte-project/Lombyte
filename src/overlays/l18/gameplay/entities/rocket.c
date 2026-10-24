@@ -745,7 +745,7 @@ void update_class_238_moby(struct Moby *moby) {
         STATE_WAIT_TO_RESUME_APPROACH = 4
     };
     char *data = (char *)moby->pvars;
-    float v[4];
+    float settling_displacement_or_steering_increment[4];
     update_class_238_detonation(moby);
     switch (moby->state) {
     case STATE_INITIALIZE:
@@ -767,10 +767,10 @@ void update_class_238_moby(struct Moby *moby) {
     case STATE_POST_FLIGHT_SETTLING: {
         float settling_motion_step = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
         moby->rot.y += settling_motion_step;
-        v[0] = fast_cos(moby->rot.z) * settling_motion_step;
-        v[1] = fast_sin(moby->rot.z) * settling_motion_step;
-        v[2] = 0.0f;
-        add_vector_xyz(&moby->pos, &moby->pos, v);
+        settling_displacement_or_steering_increment[0] = fast_cos(moby->rot.z) * settling_motion_step;
+        settling_displacement_or_steering_increment[1] = fast_sin(moby->rot.z) * settling_motion_step;
+        settling_displacement_or_steering_increment[2] = 0.0f;
+        add_vector_xyz(&moby->pos, &moby->pos, settling_displacement_or_steering_increment);
         if (*(float *)(data + 0x188) == 0.0f) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation_alt(moby, 1, 0, scale_game_frames_i(12));
@@ -800,13 +800,13 @@ void update_class_238_moby(struct Moby *moby) {
                 float movement_step_limit = *(float *)&D_L18_00161A6C * 3.0f;
                 float horizontal_steering_increment_limit = frame_time_sq * 6.0f;
                 qcopy(previous_position, &moby->pos);
-                subtract_vector_xyz(v, *(char **)(target_search_output + 0x40) + 0x10, &moby->pos);
-                v[2] = -(D_0015EE70 * 10.0f);
-                if (horizontal_steering_increment_limit < vector_length_xy(v)) {
-                    set_vector_length_xy(v, v, horizontal_steering_increment_limit);
+                subtract_vector_xyz(settling_displacement_or_steering_increment, *(char **)(target_search_output + 0x40) + 0x10, &moby->pos);
+                settling_displacement_or_steering_increment[2] = -(D_0015EE70 * 10.0f);
+                if (horizontal_steering_increment_limit < vector_length_xy(settling_displacement_or_steering_increment)) {
+                    set_vector_length_xy(settling_displacement_or_steering_increment, settling_displacement_or_steering_increment, horizontal_steering_increment_limit);
                 }
                 movement_step = data + 0x40;
-                add_vector_xyz(movement_step, movement_step, v);
+                add_vector_xyz(movement_step, movement_step, settling_displacement_or_steering_increment);
                 if (movement_step_limit < vector_length_xy(movement_step)) {
                     set_vector_length_xy(movement_step, movement_step, movement_step_limit);
                 }
