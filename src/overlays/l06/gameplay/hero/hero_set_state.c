@@ -1459,7 +1459,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7C: {
+    case HERO_STATE_DEATH_DESCENT: {
         if (current_level_index == 6) {
             int c0;
             int c1;
