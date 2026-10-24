@@ -1179,7 +1179,7 @@ extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary
                                        int h) __asm__("FUN_L00_0026bb70");
 extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
-extern u32 D_L00_00160228 __attribute__((sda));
+extern u32 large_floor_burst_random_limit_plus_one __asm__("D_L00_00160228") __attribute__((sda));
 
 void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__("FUN_L00_00273a68");
 
@@ -1199,7 +1199,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
     cr = ember_particle->color & 0xFF;
     cg = (ember_particle->color & 0xFF00) >> 8;
     cb = ((u32)ember_particle->color >> 16) & 0xFF;
-    if (!random_integer_below(D_L00_00160228 - 1)) {
+    if (!random_integer_below(large_floor_burst_random_limit_plus_one - 1)) {
         ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] *= random_float_between(1.0f, 3.5f);
         m->vel.f[1] *= random_float_between(1.0f, 3.5f);
