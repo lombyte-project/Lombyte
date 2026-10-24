@@ -2629,7 +2629,9 @@ extern float D_L08_00161C5C __attribute__((sda));
 extern float D_L08_00161C60 __attribute__((sda));
 extern char D_L08_0016D240[] __attribute__((section(".data")));
 
-void FUN_L08_002e5188(struct Moby *moby) {
+void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) __asm__("FUN_L08_002e5188");
+
+void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     Quad_5188 quad;
     float pos[4];
