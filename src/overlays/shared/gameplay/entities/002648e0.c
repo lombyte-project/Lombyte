@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "rnc/gameplay/entities/moby.h"
+#include "moby_call.h"
 
 typedef struct {
     s32 count;

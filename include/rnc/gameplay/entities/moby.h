@@ -91,15 +91,4 @@ struct Moby {
     u8 padF0[0x10];
 };
 
-/* Calls a moby's update the way the moby loops do: retail leaves both delay slots
- * around the jalr empty and keeps the pointer out of $v0, which no C call gives. */
-#define moby_call_update(update, moby)                                                             \
-    __asm__ volatile("move $4, %1\n\tjalr %0"                                                     \
-                     : "+r"(update)                                                                \
-                     : "r"(moby)                                                                   \
-                     : "$1", "$2", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13",  \
-                       "$14", "$15", "$24", "$25", "$31", "hi", "lo", "$f0", "$f1", "$f2", "$f3",  \
-                       "$f4", "$f5", "$f6", "$f7", "$f8", "$f9", "$f10", "$f11", "$f12", "$f13",   \
-                       "$f14", "$f15", "$f16", "$f17", "$f18", "$f19", "memory")
-
 #endif /* LOMBYTE_RNC_GAMEPLAY_ENTITIES_MOBY_H */

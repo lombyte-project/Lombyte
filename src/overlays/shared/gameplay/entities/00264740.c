@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "rnc/gameplay/entities/moby.h"
+#include "moby_call.h"
 extern struct Moby *D_L00_0015FFD8;
 extern struct Moby *D_L00_0015FFE4;
 extern void *active_mobies[] __asm__("D_L00_001ABA00");
