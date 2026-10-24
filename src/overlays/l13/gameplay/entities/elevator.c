@@ -2989,7 +2989,7 @@ extern JetTransition D_001516D0[];
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013A4E0[];
 extern float fighter_jet_frame_scale __asm__("D_L13_0015ED60");
-extern int D_L13_0015ED84;
+extern int persistence_table_row_index __asm__("D_L13_0015ED84");
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
 int hp_bar_saved __asm__("D_L13_001613C4") = 0;
@@ -3108,7 +3108,7 @@ void fighter_jet_update(Jet *jet_moby) {
         hp_bar_clut[0]=palette;
         if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
         hp_bar_saved=1; jet_data->wait_timer=1; jet_data->energy=1;
-        if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(D_L13_0015ED84<<4)]==0xFF) jet_moby->state=9;
+        if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(persistence_table_row_index<<4)]==0xFF) jet_moby->state=9;
         if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
         if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
         jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
@@ -3117,7 +3117,7 @@ void fighter_jet_update(Jet *jet_moby) {
     }
     case FIGHTER_JET_STATE_WAIT_FOR_ENTRY: {
         short enter=0;
-        if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(D_L13_0015ED84<<4)]==0xFF) jet_moby->state=9;
+        if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(persistence_table_row_index<<4)]==0xFF) jet_moby->state=9;
         else if (jet_data->trigger!=-1 && jet_check_trigger(D_0013F3D0,jet_data->trigger)) { jet_data->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
         else if (jet_distance(jet_moby,((JetPlayer*)(&jet_player47))->moby)<2.0f) {
             int pressed=jet_try_help(7,0x53E4)!=0;
