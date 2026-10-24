@@ -183,8 +183,8 @@ typedef struct {
     int pad[3];
 } Ray_67e8;
 int D_L14_00161A3C = 0x8c;
-extern float D_L14_00161A40 __attribute__((sda));
-extern float D_L14_00161A44 __attribute__((sda));
+extern float weapon_aim_final_path_step __asm__("D_L14_00161A40") __attribute__((sda));
+extern float muzzle_flash_joint_axis_offset __asm__("D_L14_00161A44") __attribute__((sda));
 extern float D_L14_00161A48 __attribute__((sda));
 extern float D_L14_00161A4C __attribute__((sda));
 extern float D_L14_00161A50 __attribute__((sda));
@@ -296,7 +296,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         joint_matrix_67e8(racer_moby, 0, moby_data + 0xA0);
         blend = 1.0f;
         aim_timer_fraction = itof_67e8(*(int *)(moby_data + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C));
-        k = D_L14_00161A40;
+        k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
         track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
@@ -388,7 +388,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             char *muzzle_flash_particle;
             float r;
             char *muzzle = moby_data + 0xD0;
-            scale_67e8(&ray, moby_data + 0xA0, D_L14_00161A44);
+            scale_67e8(&ray, moby_data + 0xA0, muzzle_flash_joint_axis_offset);
             add_67e8(&ray, &ray, muzzle);
             muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
