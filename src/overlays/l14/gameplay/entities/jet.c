@@ -1297,8 +1297,8 @@ extern f32 lightning_arc_alpha_pulse_angle_step_gp __asm__("D_L14_00161C68") __a
 extern f32 lightning_arc_alpha_pulse_sweep_gp __asm__("D_L14_00161C6C") __attribute__((sda));
 extern s32 D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern f32 lightning_main_arc_point_spacing_gp __asm__("D_L14_00161C74") __attribute__((sda));
-extern f32 D_L14_00161C8C __attribute__((sda));
-extern f32 D_L14_00161C90 __attribute__((sda));
+extern f32 lightning_main_arc_z_step_range_start_gp __asm__("D_L14_00161C8C") __attribute__((sda));
+extern f32 lightning_main_arc_z_step_range_end_gp __asm__("D_L14_00161C90") __attribute__((sda));
 extern f32 lightning_main_arc_z_displacement_limit_gp __asm__("D_L14_00161C94") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
@@ -1365,7 +1365,7 @@ void update_branched_lightning_arc(char *moby) {
             main_arc_point[3] = 1.0f;
             main_arc_point[0] = lightning_main_arc_point_spacing_gp * (float)i;
             if (i < 39) {
-                main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
+                main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(lightning_main_arc_z_step_range_start_gp, lightning_main_arc_z_step_range_end_gp);
                 if (lightning_main_arc_z_displacement_limit_gp < (*&main_arc_point)[2]) {
                     main_arc_point[2] = lightning_main_arc_z_displacement_limit_gp;
                 } else if (main_arc_point[2] < -lightning_main_arc_z_displacement_limit_gp) {
