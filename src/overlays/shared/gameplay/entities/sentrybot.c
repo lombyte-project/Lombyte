@@ -2423,10 +2423,10 @@ extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declarati
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern float D_L15_001614B4 __attribute__((sda));
-extern int D_L15_001614B8 __attribute__((sda));
-extern float D_L15_001614BC __attribute__((sda));
-extern int D_L15_001614C0 __attribute__((sda));
+extern float group_moby_seeking_speed __asm__("D_L15_001614B4") __attribute__((sda));
+extern int group_moby_particle_color __asm__("D_L15_001614B8") __attribute__((sda));
+extern float group_moby_particle_scale __asm__("D_L15_001614BC") __attribute__((sda));
+extern int group_moby_particle_lifetime_frames __asm__("D_L15_001614C0") __attribute__((sda));
 extern float group_moby_effect_z_offset __asm__("D_L15_001614C4") __attribute__((sda));
 extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
@@ -2473,11 +2473,11 @@ void update_hero_seeking_group_moby(char *moby) {
             ((unsigned char *)moby)[0x20] = 1;
             goto tailA;
         }
-        particle_lifetime_frames = scale_game_frames_alt(D_L15_001614C0);
+        particle_lifetime_frames = scale_game_frames_alt(group_moby_particle_lifetime_frames);
         converted_particle_lifetime_frames = func_001FA898_r((float)particle_lifetime_frames);
         life = (unsigned char)converted_particle_lifetime_frames;
         particle_initial_rotation = random_integer_below_c(0xFF);
-        spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, D_L15_001614B8, life, (unsigned char)particle_initial_rotation, 0, *(float *)&D_L15_001614BC);
+        spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, group_moby_particle_color, life, (unsigned char)particle_initial_rotation, 0, *(float *)&group_moby_particle_scale);
         callback_frame_stamp = *(char **)(data + 0x6C);
         if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
             if (callback_frame_stamp != 0) {
@@ -2514,9 +2514,9 @@ s3:
     yaw = fast_add_rotations_c(*(float *)(data + 0x64), fast_arc_tan(fa, fb));
     target_z = *(float *)(hero_base + 0xC8);
     yaw_cosine = fast_cos_c(yaw);
-    va[0] = yaw_cosine * (*(float *)&D_L15_001614B4 * D_0015ED6C);
+    va[0] = yaw_cosine * (*(float *)&group_moby_seeking_speed * D_0015ED6C);
     yaw_sine = fast_sin_c(yaw);
-    va[1] = yaw_sine * (*(float *)&D_L15_001614B4 * D_0015ED6C);
+    va[1] = yaw_sine * (*(float *)&group_moby_seeking_speed * D_0015ED6C);
     va[2] = 0.0f;
     fd = *(float *)(moby + 0x18) - target_z;
     if (0.6f < fd) {
