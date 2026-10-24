@@ -31,12 +31,12 @@ extern s32 D_L00_0015F4B8 __attribute__((sda));
 extern s32 D_L00_0015F4BC __attribute__((sda));
 extern s32 D_L00_0015F4C0 __attribute__((sda));
 extern s32 D_L00_0015F4C4 __attribute__((sda));
-extern s32 D_L00_0015F4C8 __attribute__((sda));
+extern s32 results_fixed_labels_base_y __asm__("D_L00_0015F4C8") __attribute__((sda));
 extern s32 D_L00_0015F4CC __attribute__((sda));
 extern s32 D_L00_0015F4D0 __attribute__((sda));
 extern s32 D_L00_0015F4D4 __attribute__((sda));
 extern s32 D_L00_0015F4D8 __attribute__((sda));
-extern s32 D_L00_0015F4DC __attribute__((sda));
+extern s32 results_rank_and_records_base_y __asm__("D_L00_0015F4DC") __attribute__((sda));
 extern s32 dialog_frame_pulse_period __asm__("D_L00_0015F4E0") __attribute__((sda));
 extern s32 dialog_frame_pulse_start_color __asm__("D_L00_0015F4E4") __attribute__((sda));
 extern s32 dialog_frame_pulse_end_color __asm__("D_L00_0015F4E8") __attribute__((sda));
@@ -384,9 +384,9 @@ void level_draw_dialog_text(void) {
                          D_L00_0015F4BC + truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
                          D_L00_0015F4B8 - truncate_float_to_s32((f32)D_L00_0015F4C0 * scale),
                          D_L00_0015F4B8 + truncate_float_to_s32((f32)D_L00_0015F4C0 * scale), pulse);
-            font_print_center(0x100, D_L00_0015F4C8, results_label_color, get_help_message_text(0x4F6E), -1);
-            font_print_center(0x100, D_L00_0015F4C8 + 0x18, results_label_color, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_L00_0015F4C8 + 0x30, results_label_color, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, results_fixed_labels_base_y, results_label_color, get_help_message_text(0x4F6E), -1);
+            font_print_center(0x100, results_fixed_labels_base_y + 0x18, results_label_color, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, results_fixed_labels_base_y + 0x30, results_label_color, get_help_message_text(0x5248), -1);
         } else {
             draw_outlined_rect(D_L00_0015F4D0 - truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
                          D_L00_0015F4D0 + truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
@@ -404,9 +404,9 @@ void level_draw_dialog_text(void) {
             }
             line[3] = ' ';
             if (hero.race_position == 1) {
-                font_print_center(0x100, D_L00_0015F4DC, first_place_or_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y, first_place_or_record_color, line, -1);
             } else {
-                font_print_center(0x100, D_L00_0015F4DC, other_place_or_no_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y, other_place_or_no_record_color, line, -1);
             }
             best = freeze_stats_time_ref[(current_level_index ^ 0x10) ? 0 : 1];
             if (best == hero.race_time_frames) {
@@ -417,25 +417,25 @@ void level_draw_dialog_text(void) {
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A3));
-                font_print_center(0x100, D_L00_0015F4DC + 0x26, first_place_or_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x26, first_place_or_record_color, line, -1);
                 sprintf(line, D_L00_0015F550, min, sec, hund);
-                font_print_center(0x100, D_L00_0015F4DC + 0x3A, first_place_or_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x3A, first_place_or_record_color, line, -1);
             } else {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A2));
-                font_print_center(0x100, D_L00_0015F4DC + 0x30, other_place_or_no_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x30, other_place_or_no_record_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.race_score) {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
-                font_print_center(0x100, D_L00_0015F4DC + 0x56, first_place_or_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x56, first_place_or_record_color, line, -1);
                 sprintf(line, D_L00_0015F560, hero.race_score);
-                font_print_center(0x100, D_L00_0015F4DC + 0x6A, first_place_or_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x6A, first_place_or_record_color, line, -1);
             } else {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A4));
-                font_print_center(0x100, D_L00_0015F4DC + 0x60, other_place_or_no_record_color, line, -1);
+                font_print_center(0x100, results_rank_and_records_base_y + 0x60, other_place_or_no_record_color, line, -1);
             }
-            font_print_center(0x100, D_L00_0015F4DC + 0x90, results_label_color, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_L00_0015F4DC + 0xA8, results_label_color, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, results_rank_and_records_base_y + 0x90, results_label_color, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, results_rank_and_records_base_y + 0xA8, results_label_color, get_help_message_text(0x5248), -1);
         }
         break;
     }
