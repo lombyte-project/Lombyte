@@ -1328,7 +1328,7 @@ void red_ship_1_update(char *moby) {
     char *data;
     char *pm;
     char *cur;
-    char *cur0;
+    char *initial_path_tangent;
     char *moby_position;
     char *path_node_base;
     char *group_member_data;
@@ -1428,14 +1428,14 @@ void red_ship_1_update(char *moby) {
             *(int *)(pm + 0x8) = 0;
             *(int *)(pm + 0x1C) = 0;
         }
-        cur0 = data + 0xA0;
+        initial_path_tangent = data + 0xA0;
         *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
         *(float *)(data + 0x100) = 1.0f;
-        compute_path_node_tangent(cur0, (int *)pm, 0, *(float *)(data + 0x104), *(float *)(data + 0x108));
+        compute_path_node_tangent(initial_path_tangent, (int *)pm, 0, *(float *)(data + 0x104), *(float *)(data + 0x108));
         *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0) =
             *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
         *(float *)(moby + 0x40) = 0.0f;
-        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(cur0), *(float *)(data + 0xA8));
+        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(initial_path_tangent), *(float *)(data + 0xA8));
         *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(data + 0xA0) - zero[0], *(float *)(data + 0xA4) - zero[1]);
         *(float *)(data + 0x114) = 0.0f;
         *(float *)(data + 0x11C) = 0.0f;
