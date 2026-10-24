@@ -1015,8 +1015,8 @@ extern struct FloorRow *D_L05_001612D0;
 extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
 extern int D_L05_00161E98 __attribute__((sda));
 extern int D_L05_00161E9C __attribute__((sda));
-extern float D_L05_00161EA0 __attribute__((sda));
-extern float D_L05_00161EA4 __attribute__((sda));
+extern float spray_big_particle_base_scale_gp __asm__("D_L05_00161EA0") __attribute__((sda));
+extern float spray_small_particle_base_scale_gp __asm__("D_L05_00161EA4") __attribute__((sda));
 extern float spray_particle_speed_upper_bound_gp __asm__("D_L05_00161EA8") __attribute__((sda));
 extern float spray_big_particle_speed_lower_bound_gp __asm__("D_L05_00161EAC") __attribute__((sda));
 extern float spray_small_particle_speed_lower_bound_gp __asm__("D_L05_00161EB0") __attribute__((sda));
@@ -1108,11 +1108,11 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
             }
             fast_vec_normalize(particle_velocity, &emitter_moby->rot_row0, particle_speed * frame_time);
             if (big) {
-                scale = D_L05_00161EA0;
+                scale = spray_big_particle_base_scale_gp;
                 kind = D_L05_00161E98;
                 v[2] += D_L05_00161EB4 - scale + random_float_between(-0.4f, 0.4f);
             } else {
-                scale = D_L05_00161EA4;
+                scale = spray_small_particle_base_scale_gp;
                 kind = D_L05_00161E9C;
                 v[2] += D_L05_00161EB4 - scale + 0.4f;
             }
