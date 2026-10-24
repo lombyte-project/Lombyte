@@ -1311,9 +1311,9 @@ extern void FUN_L01_00308380_f(struct Moby *) __asm__("FUN_L01_00308380");
 extern void FUN_L01_003087e0_f(struct Moby *) __asm__("FUN_L01_003087e0");
 extern void FUN_L01_003089f0_f(struct Moby *) __asm__("FUN_L01_003089f0");
 
-extern f32 D_L01_00161F20 __attribute__((sda));
-extern f32 D_L01_00161F24 __attribute__((sda));
-extern f32 D_L01_00161F28 __attribute__((sda));
+extern f32 gold_bolt_spin_x_degrees_per_second __asm__("D_L01_00161F20") __attribute__((sda));
+extern f32 gold_bolt_spin_y_degrees_per_second __asm__("D_L01_00161F24") __attribute__((sda));
+extern f32 gold_bolt_spin_z_degrees_per_second __asm__("D_L01_00161F28") __attribute__((sda));
 void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 void gold_bolt_update(struct Moby *moby) {
     enum {
@@ -1340,18 +1340,18 @@ void gold_bolt_update(struct Moby *moby) {
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
         moby->rot.w = random_angle_radians();
-        vars->unk68 = D_L01_00161F20 * 0.017453292f * D_0015ED6C_f;
-        vars->unk64 = D_L01_00161F24 * 0.017453292f * D_0015ED6C_f;
-        vars->unk60 = D_L01_00161F28 * 0.017453292f * D_0015ED6C_f;
+        vars->unk68 = gold_bolt_spin_x_degrees_per_second * 0.017453292f * D_0015ED6C_f;
+        vars->unk64 = gold_bolt_spin_y_degrees_per_second * 0.017453292f * D_0015ED6C_f;
+        vars->unk60 = gold_bolt_spin_z_degrees_per_second * 0.017453292f * D_0015ED6C_f;
         moby->state = 1;
         initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
         moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
-        moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20 * 0.017453292f * D_0015ED6C_f);
-        moby->rot.y = FUN_001fa580_c(moby->rot.y, D_L01_00161F24 * 0.017453292f * D_0015ED6C_f);
-        moby->rot.z = FUN_001fa580_c(moby->rot.z, D_L01_00161F28 * 0.017453292f * D_0015ED6C_f);
+        moby->rot.x = FUN_001fa580_c(moby->rot.x, gold_bolt_spin_x_degrees_per_second * 0.017453292f * D_0015ED6C_f);
+        moby->rot.y = FUN_001fa580_c(moby->rot.y, gold_bolt_spin_y_degrees_per_second * 0.017453292f * D_0015ED6C_f);
+        moby->rot.z = FUN_001fa580_c(moby->rot.z, gold_bolt_spin_z_degrees_per_second * 0.017453292f * D_0015ED6C_f);
         moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_gp * 0.017453292f * D_0015ED6C_f);
         FUN_L01_00308550_f(moby);
         if (!random_integer_below(D_L01_00161F50_gp)) {
