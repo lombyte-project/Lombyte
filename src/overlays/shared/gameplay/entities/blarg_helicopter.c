@@ -1540,7 +1540,7 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00259888(void *, void *, int, float, void *);
-extern void FUN_L03_0024e830(void *, void *, float);
+extern void select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
 extern char D_0013E550[];
@@ -1574,7 +1574,7 @@ void update_homing_spark_projectile(Moby *moby) {
     float max_climb;
     float target_distance;
 
-    FUN_L03_0024e830(moby, &target_info, 20.0f);
+    select_moby_target_with_hero_fallback(moby, &target_info, 20.0f);
     if (data->target->oclass == 0x277) {
         voice_slot = (int *)(((char *)data->target->pvars) + 0x250);
     } else if (data->target->oclass == 0xE9) {

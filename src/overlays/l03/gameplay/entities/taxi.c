@@ -147,7 +147,7 @@ extern f32 D_L03_00161920 __attribute__((sda));
 extern f32 D_L03_00161910 __attribute__((sda));
 extern f32 D_L03_00161914 __attribute__((sda));
 extern char D_L03_00166EC0[];
-extern void FUN_L03_0024e830(void *, void *, f32);
+extern void select_moby_target_with_hero_fallback(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
 void handle_mine_layer_damage(struct Moby *damaged_moby) __asm__("FUN_L03_002ca808");
 
@@ -206,7 +206,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     s32 patrol_point_index;
     s32 i;
 
-    FUN_L03_0024e830(mine_layer_moby, &target, 100.0f);
+    select_moby_target_with_hero_fallback(mine_layer_moby, &target, 100.0f);
     sight = 14.0f;
     FUN_L00_00263ac8(mine_layer_moby, 0, mine_layer_vars->unk160, 4.5f);
     handle_mine_layer_damage(mine_layer_moby);
@@ -1101,7 +1101,7 @@ typedef struct {
 } RocketHit;
 
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void FUN_L03_0024e830(void *, void *, f32);
+extern void select_moby_target_with_hero_fallback(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1148,7 +1148,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
     case ROCKET_FLY:
         pos = &rocket_moby->pos;
         range = convert_integer_to_float(rocket_vars->timer * 2) * rocket_vars->speed;
-        FUN_L03_0024e830(rocket_moby, &target, range);
+        select_moby_target_with_hero_fallback(rocket_moby, &target, range);
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, rocket_vars);
         trail_vector_offset.q = D_0013F490_v.q;

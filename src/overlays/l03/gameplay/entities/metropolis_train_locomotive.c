@@ -1630,7 +1630,7 @@ extern int FUN_L00_00259028(char *m, char *p, char *pos, char *v);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int FUN_L00_002dc9f0(void *, void *);
-extern int FUN_L03_0024e830(char *, char *, float);
+extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c6ca0");
 extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -1685,7 +1685,7 @@ void robot_dog_update(char *moby) {
     float initialization_multiplier_or_desired_heading;
 
     data = *(Data2c5bb8 **)(moby + 0x78);
-    FUN_L03_0024e830(moby, (char *)&selected_target, data->f230);
+    select_moby_target_with_hero_fallback(moby, (char *)&selected_target, data->f230);
     FUN_L00_00263ac8_c5bb8(moby, 0, data->m280, 2.1f);
     update_robot_dog_hit_reaction((struct Moby *)moby);
     fast_dec_timer(&data->i244);
@@ -3326,7 +3326,7 @@ void FUN_L03_002c95a8(Moby2C8398 *moby) {
     moby->bA4 = 0xFF;
     trooper_anim_finish(moby, (char *)moby_data + 0x60);
 }
-extern int FUN_L03_0024e830(char *, char *, float);
+extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
@@ -3350,7 +3350,7 @@ void FUN_L03_002c9ca0(Moby2C8398 *moby) {
     best_ang = 0.0f;
     pf = &moby_data->pf;
     best_dist = best_ang;
-    FUN_L03_0024e830((char *)moby, (char *)&target, moby_data->f270);
+    select_moby_target_with_hero_fallback((char *)moby, (char *)&target, moby_data->f270);
     seg = pf->idx;
     FUN_L00_0025df68(pf->path, moby->pos, near, &seg, &path_fraction_or_node_target_distance, 0, 999.0f, 5.0f, 0.0f);
     pf->idx = 0;
