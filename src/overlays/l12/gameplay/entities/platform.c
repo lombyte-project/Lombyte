@@ -1170,7 +1170,7 @@ extern void appr_k(void *, float, float) __asm__("FUN_00213ed8");
 extern float turn_k(float *, float, float *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float D_L12_00161918 __attribute__((sda));
+extern float platform_tilt_approach_divisor __asm__("D_L12_00161918") __attribute__((sda));
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) {
@@ -1179,7 +1179,7 @@ void steer_platform_toward_target(char *moby, float *target_angles, void *target
     float target_distance;
     float speed;
     float acc;
-    float lim = 1.9198622f;
+    float yaw_angular_velocity_limit = 1.9198622f;
     sub_k(target_offset, target, moby + 0x10);
     target_distance = len_k(target_offset);
     speed = len_k(moby_vars + 0x40);
@@ -1198,10 +1198,10 @@ void steer_platform_toward_target(char *moby, float *target_angles, void *target
             speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
     }
     norm_k(moby_vars + 0x40, target_offset, speed);
-    appr_k(moby + 0x40, target_angles[0], diff_k(target_angles[0], *(float *)(moby + 0x40)) / D_L12_00161918);
-    appr_k(moby + 0x44, target_angles[1], diff_k(target_angles[1], *(float *)(moby + 0x44)) / D_L12_00161918);
+    appr_k(moby + 0x40, target_angles[0], diff_k(target_angles[0], *(float *)(moby + 0x40)) / platform_tilt_approach_divisor);
+    appr_k(moby + 0x44, target_angles[1], diff_k(target_angles[1], *(float *)(moby + 0x44)) / platform_tilt_approach_divisor);
     turn_k((float *)(moby + 0x48), target_angles[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
-           D_0015ED6C_k * lim);
+           D_0015ED6C_k * yaw_angular_velocity_limit);
     add_k(moby + 0x10, moby + 0x10, moby_vars + 0x40);
 }
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
