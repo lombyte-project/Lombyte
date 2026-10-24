@@ -87,7 +87,7 @@ extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char D_L02_0016D040[];
-extern int D_L02_0015F458;
+extern int textured_grid_fog_source_mode __asm__("D_L02_0015F458");
 extern float textured_grid_saved_fog_near_distance __asm__("D_L02_001612F8");
 extern float textured_grid_saved_fog_far_distance __asm__("D_L02_001612FC");
 extern float textured_grid_saved_fog_near_intensity __asm__("D_L02_00161300");
@@ -133,7 +133,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     textured_grid_saved_fog_far_distance = ((QuadCamera *)D_L02_0016D040)->f21C;
     textured_grid_saved_fog_near_intensity = ((QuadCamera *)D_L02_0016D040)->f228;
     textured_grid_saved_fog_far_intensity = ((QuadCamera *)D_L02_0016D040)->f22C;
-    if (D_L02_0015F458 != 1) {
+    if (textured_grid_fog_source_mode != 1) {
         ((QuadCamera *)D_L02_0016D040)->f218 = draw_parameters->f20;
         ((QuadCamera *)D_L02_0016D040)->f21C = draw_parameters->f24;
         ((QuadCamera *)D_L02_0016D040)->f228 = draw_parameters->f28;
@@ -211,7 +211,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
     color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
-    if (D_L02_0015F458 == 1) {
+    if (textured_grid_fog_source_mode == 1) {
         color = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
             | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
     }
