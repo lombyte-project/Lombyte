@@ -2141,7 +2141,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1, float f2, float f3,
                                 float f4) __asm__("FUN_L07_0030dbb0");
 
-unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1, float f2, float f3,
+unsigned char *spawn_moby_class_1046(int a, void *spawn_position, int b, float f0, float f1, float f2, float f3,
                                 float f4) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x416);
     if (moby != 0) {
@@ -2152,7 +2152,7 @@ unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1
         moby[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         *(int *)(data + 0x14) = a;
         *(float *)(data + 4) = f1;
         *(float *)(data + 0x10) = f2;
