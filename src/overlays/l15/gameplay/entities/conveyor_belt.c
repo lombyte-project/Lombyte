@@ -909,11 +909,11 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) __asm__("FUN_L15_002eb9e0");
 
 char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
-    char tmp[32] __attribute__((aligned(16)));
-    char *saved_position = tmp;
+    char saved_spawn_position_and_rotation[32] __attribute__((aligned(16)));
+    char *saved_position = saved_spawn_position_and_rotation;
     char *spawned_moby;
-    *(OvlQuad *)tmp = *(OvlQuad *)spawn_position;
-    *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)spawn_rotation;
+    *(OvlQuad *)saved_spawn_position_and_rotation = *(OvlQuad *)spawn_position;
+    *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10) = *(OvlQuad *)spawn_rotation;
     spawned_moby = func_0020D348_c(0x594);
     if (spawned_moby != 0) {
         func_L00_0025E210_u(spawned_moby);
@@ -921,7 +921,7 @@ char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         qcopy(spawned_moby + 0x10, saved_position);
-        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(tmp + 0x10);
+        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10);
         upd_a(spawned_moby);
     }
     return spawned_moby;
