@@ -113,8 +113,8 @@ void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_heig
 void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int *coordinate_offsets;
-    G_23bac0 *g = &D_L00_0017E4D8_23bac0;
-    R_23bac0 *image_page = &g->rec[g->tab[id].k];
+    G_23bac0 *sprite_render_data = &D_L00_0017E4D8_23bac0;
+    R_23bac0 *image_page = &sprite_render_data->rec[sprite_render_data->tab[id].k];
     int ww = 1 << image_page->lw;
     int hh = 1 << image_page->lh;
     *(int *)(D_L00_001611C0_23bac0 + 0) = 0x10000007;
@@ -131,18 +131,18 @@ void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_heig
     packet_words[5] = ww << 4;
     coordinate_offsets = D_0013E500_23bac0;
     packet_words[6] = (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
-           ((u64_23bac0)g->zc << 32);
+           ((u64_23bac0)sprite_render_data->zc << 32);
     packet_words[7] = (hh << 20) + (ww << 4);
     packet_words[8] = (u64_23bac0)((((x + draw_width) << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)((y << 4) + coordinate_offsets[5] - 8)) << 16)) |
-           ((u64_23bac0)g->zc << 32);
+           ((u64_23bac0)sprite_render_data->zc << 32);
     packet_words[9] = 0;
     packet_words[10] =
         (u64_23bac0)(((x << 4) + coordinate_offsets[4] - 8) | (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
-        ((u64_23bac0)g->zc << 32);
+        ((u64_23bac0)sprite_render_data->zc << 32);
     packet_words[11] = hh << 20;
     packet_words[12] = (u64_23bac0)((((x + draw_width) << 4) + coordinate_offsets[4] - 8) |
                          (((u64_23bac0)(((y + draw_height) << 4) + coordinate_offsets[5] - 8)) << 16)) |
-            ((u64_23bac0)g->zc << 32);
+            ((u64_23bac0)sprite_render_data->zc << 32);
     packet_words[13] = 0;
     *(char *volatile *)&D_L00_001611C0_23bac0 += 0x70;
 }
