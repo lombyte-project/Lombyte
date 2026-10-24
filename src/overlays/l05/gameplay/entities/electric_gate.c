@@ -1190,7 +1190,7 @@ typedef struct {
 
 extern LiftVoicePool voice_pool __asm__("D_0013E550");
 extern u16 D_0014162A __attribute__((section(".data")));
-extern f32 D_L05_0015F3FC;
+extern f32 elevator_camera_transition_fade __asm__("D_L05_0015F3FC");
 extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1251,7 +1251,7 @@ void elevator_with_button_update(struct Moby *moby) {
     case ELEVATOR_FADE_BEFORE_CAMERA_MOUNT:
         D_0014162A = vars->marker;
         approach_value(&vars->fade, 1.0f, 0.133f);
-        D_L05_0015F3FC = vars->fade;
+        elevator_camera_transition_fade = vars->fade;
         if (vars->fade == 1.0f) {
             lift_camera_view(moby, &eye, &look);
             jet_mount(&eye, &look, 1, 0, 0);
@@ -1267,7 +1267,7 @@ void elevator_with_button_update(struct Moby *moby) {
         if (moby->command) {
             D_0014162A = vars->marker;
             approach_value(&vars->fade, 0.0f, 0.133f);
-            D_L05_0015F3FC = vars->fade;
+            elevator_camera_transition_fade = vars->fade;
             lift_camera_view(moby, &eye, &look);
             FUN_L00_002ea9d8(&eye);
             FUN_L00_002eaa30(&look);
