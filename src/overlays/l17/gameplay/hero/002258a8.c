@@ -725,7 +725,7 @@ void update_hero_state_transitions(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -1727,7 +1727,7 @@ void update_hero_state_transitions(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case HERO_STATE_FALL:
-                case 45:
+                case HERO_STATE_ITEM_RELEASE_FALL:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
                             hero.ground_distance > 1.75f) {
@@ -1996,7 +1996,7 @@ void update_hero_state_transitions(void) {
                 case 18:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
-                case 105:
+                case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();
                         if (t > 0 && (hero.state_timer < t || hero.rail_land_frames != 0) &&
