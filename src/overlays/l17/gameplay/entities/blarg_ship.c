@@ -450,8 +450,8 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern float D_L17_001623D0 __attribute__((sda));
-extern float D_L17_001623D8 __attribute__((sda));
+extern float backdrop_shared_radius_numerator __asm__("D_L17_001623D0") __attribute__((sda));
+extern float backdrop_offset_radius_divisor __asm__("D_L17_001623D8") __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -460,7 +460,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 extern float D_L17_001DDFE0[];
 extern float D_L17_001DE058[];
 extern float D_L17_001DE070[];
-extern float D_L17_001623D4 __attribute__((sda));
+extern float backdrop_heading_radius_numerator_addend __asm__("D_L17_001623D4") __attribute__((sda));
 void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
 
 void update_fleet_backdrop_animation(struct Moby *moby) {
@@ -488,9 +488,9 @@ done:
         }
         qcopy(moby_pvars, &moby->pos);
         build_spherical_offset(
-            offset_accumulator, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
+            offset_accumulator, (backdrop_heading_radius_numerator_addend + backdrop_shared_radius_numerator) / backdrop_offset_radius_divisor,
             moby->rot.z, 0.0f);
-        build_spherical_offset(pvar_angle_offset, D_L17_001623D0 / D_L17_001623D8,
+        build_spherical_offset(pvar_angle_offset, backdrop_shared_radius_numerator / backdrop_offset_radius_divisor,
                                *(float *)(moby_pvars + 0x44), 0.0f);
         add_vector_xyz(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
