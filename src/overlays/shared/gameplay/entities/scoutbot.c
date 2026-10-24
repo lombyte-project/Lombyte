@@ -1054,18 +1054,18 @@ extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __
 
 extern s32 D_L08_00161F74 __attribute__((sda));
 extern s32 D_L08_00161F78 __attribute__((sda));
-extern f32 D_L08_00161F7C __attribute__((sda));
-extern f32 D_L08_00161F80 __attribute__((sda));
-extern f32 D_L08_00161F84 __attribute__((sda));
-extern f32 D_L08_00161F88 __attribute__((sda));
+extern f32 spark_emitter_default_primary_z_increment_base __asm__("D_L08_00161F7C") __attribute__((sda));
+extern f32 spark_emitter_default_primary_magnitude_base __asm__("D_L08_00161F80") __attribute__((sda));
+extern f32 spark_emitter_default_secondary_z_increment_base __asm__("D_L08_00161F84") __attribute__((sda));
+extern f32 spark_emitter_default_secondary_magnitude_base __asm__("D_L08_00161F88") __attribute__((sda));
 extern s32 D_L08_00161F8C __attribute__((sda));
 extern s32 D_L08_00161F90 __attribute__((sda));
 extern s32 D_L08_00161F94 __attribute__((sda));
-extern s32 D_L08_00161F98 __attribute__((sda));
+extern s32 spark_emitter_default_timer_reset __asm__("D_L08_00161F98") __attribute__((sda));
 extern f32 D_L08_00161F9C __attribute__((sda));
 extern f32 D_L08_00161FA0 __attribute__((sda));
-extern f32 D_L08_00161FA4 __attribute__((sda));
-extern f32 D_L08_00161FA8 __attribute__((sda));
+extern f32 spark_emitter_default_primary_spread_limit __asm__("D_L08_00161FA4") __attribute__((sda));
+extern f32 spark_emitter_default_secondary_spread_limit __asm__("D_L08_00161FA8") __attribute__((sda));
 
 void update_spark_emitter(char *moby) __asm__("FUN_L08_002f5830");
 
@@ -1078,7 +1078,7 @@ void update_spark_emitter(char *moby) {
     if (fast_dec_timer((int *)(spark_data + 0x3C)) == 0)
         return;
     if (*(s32 *)(spark_data + 0x38) != 0) {
-        *(s32 *)(spark_data + 0x3C) = D_L08_00161F98;
+        *(s32 *)(spark_data + 0x3C) = spark_emitter_default_timer_reset;
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
         qcopy(spark_position, moby + 0x10);
         spark_position[0] += random_float_between(-0.05f, 0.05f);
@@ -1086,16 +1086,16 @@ void update_spark_emitter(char *moby) {
         spark_position[0] += random_float_between(-0.05f, 0.05f);
         random_float_between(-0.17453292f, 0.17453292f);
         fast_vec_normalize(spark_motion_primary, spark_rotation_matrix,
-                     random_float_between(D_L08_00161F80, D_L08_00161F80 * 1.2f) * frame_time);
-        fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4, random_float_between(-D_L08_00161FA4, D_L08_00161FA4) * frame_time);
+                     random_float_between(spark_emitter_default_primary_magnitude_base, spark_emitter_default_primary_magnitude_base * 1.2f) * frame_time);
+        fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4, random_float_between(-spark_emitter_default_primary_spread_limit, spark_emitter_default_primary_spread_limit) * frame_time);
         fast_vec_add(spark_motion_primary, spark_motion_primary, spark_motion_offset);
-        spark_motion_primary[2] += random_float_between(D_L08_00161F7C, D_L08_00161F7C * 1.2f) * frame_time;
+        spark_motion_primary[2] += random_float_between(spark_emitter_default_primary_z_increment_base, spark_emitter_default_primary_z_increment_base * 1.2f) * frame_time;
         qcopy(spark_motion_secondary, spark_motion_primary);
         fast_vec_normalize(spark_motion_secondary, spark_rotation_matrix,
-                     random_float_between(D_L08_00161F88, D_L08_00161F88 * 1.5f) * frame_time);
-        fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4, random_float_between(-D_L08_00161FA8, D_L08_00161FA8) * frame_time);
+                     random_float_between(spark_emitter_default_secondary_magnitude_base, spark_emitter_default_secondary_magnitude_base * 1.5f) * frame_time);
+        fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4, random_float_between(-spark_emitter_default_secondary_spread_limit, spark_emitter_default_secondary_spread_limit) * frame_time);
         fast_vec_add(spark_motion_secondary, spark_motion_secondary, spark_motion_offset);
-        spark_motion_secondary[2] += random_float_between(D_L08_00161F84, D_L08_00161F84 * 1.5f) * frame_time;
+        spark_motion_secondary[2] += random_float_between(spark_emitter_default_secondary_z_increment_base, spark_emitter_default_secondary_z_increment_base * 1.5f) * frame_time;
         spark_motion_primary[3] = D_L08_00161F9C;
         spark_motion_secondary[3] = D_L08_00161FA0;
         spark_frame_count = truncate_float_to_s32(
