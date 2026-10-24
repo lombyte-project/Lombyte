@@ -2407,16 +2407,16 @@ extern float jet_fighter_vertical_steering_snap_threshold_scale_gp __asm__("D_L1
 extern float jet_fighter_l3_vertical_steering_snap_threshold_scale_gp __asm__("D_L11_001620B8") __attribute__((sda));
 extern float D_L11_001620BC __attribute__((sda));
 extern float D_L11_001620C0 __attribute__((sda));
-extern float D_L11_001620C4 __attribute__((sda));
+extern float jet_fighter_rotation_x_snap_threshold_scale_gp __asm__("D_L11_001620C4") __attribute__((sda));
 extern float D_L11_001620E0 __attribute__((sda));
 extern float D_L11_001620E4 __attribute__((sda));
-extern float D_L11_001620E8 __attribute__((sda));
+extern float jet_fighter_camera_rotation_x_snap_threshold_scale_gp __asm__("D_L11_001620E8") __attribute__((sda));
 extern float D_L11_001620EC __attribute__((sda));
 extern float D_L11_001620F0 __attribute__((sda));
-extern float D_L11_001620F4 __attribute__((sda));
+extern float jet_fighter_camera_rotation_y_snap_threshold_scale_gp __asm__("D_L11_001620F4") __attribute__((sda));
 extern float D_L11_001620F8 __attribute__((sda));
 extern float D_L11_001620FC __attribute__((sda));
-extern float D_L11_00162100 __attribute__((sda));
+extern float jet_fighter_camera_rotation_z_snap_threshold_scale_gp __asm__("D_L11_00162100") __attribute__((sda));
 extern float D_L11_00162104 __attribute__((sda));
 extern float D_L11_00162108 __attribute__((sda));
 extern float jet_fighter_camera_local_x_snap_threshold_scale_gp __asm__("D_L11_0016210C") __attribute__((sda));
@@ -2547,7 +2547,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L11_0016209C, D_L11_001620A0, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L11_001620AC, D_L11_001620B0, kb);
         FUN_L00_0025bc98(&ship_vars->f30, &ship_vars->f98, 0, ship_vars->f6C * D_L11_0016207C, D_L11_001620BC,
-                         D_L11_001620C0, D_L11_001620C4);
+                         D_L11_001620C0, jet_fighter_rotation_x_snap_threshold_scale_gp);
         ship_vars->f34 = fast_sub_rot_2838(ship_vars->f34, ship_vars->f70 * D_L11_00162014);
         if (ship_vars->f34 > 1.3962634f) {
             ship_vars->f34 = 1.3962634f;
@@ -2605,11 +2605,11 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                                          ship_vars->f70 * D_L11_00162014);
         wr.e[1].v[2] = ship_vars->f38;
         FUN_L00_0025bc98(&ship_vars->f20, &ship_vars->fA0, 0, wr.e[1].v[0], D_L11_001620E0, D_L11_001620E4,
-                         D_L11_001620E8);
+                         jet_fighter_camera_rotation_x_snap_threshold_scale_gp);
         FUN_L00_0025bc98(&ship_vars->f24, &ship_vars->fA4, 0, wr.e[1].v[1], D_L11_001620EC, D_L11_001620F0,
-                         D_L11_001620F4);
+                         jet_fighter_camera_rotation_y_snap_threshold_scale_gp);
         FUN_L00_0025bc98(&ship_vars->f28, &ship_vars->fA8, 0, wr.e[1].v[2], D_L11_001620F8, D_L11_001620FC,
-                         D_L11_00162100);
+                         jet_fighter_camera_rotation_z_snap_threshold_scale_gp);
     }
     camera_rotation[0] = ship_vars->f20;
     camera_rotation[2] = fast_sub_rot_2838(ship_vars->f28, ship_vars->fD4);
