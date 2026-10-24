@@ -1212,7 +1212,7 @@ extern float D_L14_00161CC0[] __attribute__((section(".sdata")));
 extern float D_L14_00161CD0[];
 extern float FUN_L00_00257c48(float, float);
 extern int D_L14_0015F5C4;
-extern int D_L14_00161CB4;
+extern int lightning_arc_remaining_frames __asm__("D_L14_00161CB4");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -1229,10 +1229,10 @@ extern void FUN_L01_002a2480(void);
 extern void update_branched_lightning_arc(char *) __asm__("FUN_L14_002ed530");
 extern int *D_L14_001B0F30_ee[] __asm__("D_L14_001B0BB0");
 extern float D_L14_00161CD0_f __asm__("D_L14_00161CD0");
-extern float D_L14_00161CD4;
-extern float D_L14_00161CD8;
+extern float lightning_displaced_endpoint_y __asm__("D_L14_00161CD4");
+extern float lightning_displaced_endpoint_z __asm__("D_L14_00161CD8");
 
-extern float D_L14_00161CCC;
+extern float lightning_path_endpoint_w __asm__("D_L14_00161CCC");
 void update_path_lightning_controller(struct Moby *moby) __asm__("FUN_L14_002ed280");
 
 void update_path_lightning_controller(struct Moby *moby) {
@@ -1281,16 +1281,16 @@ void update_path_lightning_controller(struct Moby *moby) {
         if (visible_point_count > 0) {
             int k = random_integer_below(visible_point_count);
             qcopy(D_L14_00161CC0, (char *)path + visible_path_point_indices[k] * 16 + 0x10);
-            D_L14_00161CCC = 1.0f;
+            lightning_path_endpoint_w = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
-            D_L14_00161CD8 = *(float *)&D_L14_00161C5C;
+            lightning_displaced_endpoint_z = *(float *)&D_L14_00161C5C;
             D_L14_00161CD0_f += FUN_L00_00257c48(0.0f, 20.0f);
-            D_L14_00161CD4 += FUN_L00_00257c48(0.0f, 20.0f);
+            lightning_displaced_endpoint_y += FUN_L00_00257c48(0.0f, 20.0f);
             qcopy(&moby->pos, D_L14_00161CC0);
         }
     }
     update_branched_lightning_arc(moby);
-    if (D_L14_00161CB4 == 0) {
+    if (lightning_arc_remaining_frames == 0) {
         *(int *)&D_L14_00161C50 = scale_game_frames(*(int *)&D_L14_00161C54);
         *(int *)&D_L14_00161C58 = 0;
     }
@@ -1385,8 +1385,8 @@ void update_branched_lightning_arc(char *moby) {
         }
         arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
         sign = -1.0f;
-        D_L14_00161CB4 = D_L14_00161CEC = arc_frames(FUN_L00_00257b90_d530(D_L14_00161C98, D_L14_00161C9C));
-        D_L14_00161CF0 = 1.0f / arc_itof(D_L14_00161CB4 - arc_frames(D_L14_00161C70_gp));
+        lightning_arc_remaining_frames = D_L14_00161CEC = arc_frames(FUN_L00_00257b90_d530(D_L14_00161C98, D_L14_00161C9C));
+        D_L14_00161CF0 = 1.0f / arc_itof(lightning_arc_remaining_frames - arc_frames(D_L14_00161C70_gp));
         if (arc_rand(2) != 0) {
             sign = 1.0f;
         }
@@ -1422,7 +1422,7 @@ void update_branched_lightning_arc(char *moby) {
         }
     }
     if (moby == D_L14_00161CE8) {
-        arc_tick(&D_L14_00161CB4);
+        arc_tick(&lightning_arc_remaining_frames);
         for (i = 0; i < 40; i++) {
             s16 v = ++D_L14_001E0000[i];
             if (arc_frames(D_L14_00161C70_gp) < v) {
@@ -1445,7 +1445,7 @@ void update_branched_lightning_arc(char *moby) {
                 }
             }
         }
-        if (D_L14_00161CB4 < D_L14_00161CEC - arc_frames(D_L14_00161C70_gp)) {
+        if (lightning_arc_remaining_frames < D_L14_00161CEC - arc_frames(D_L14_00161C70_gp)) {
             if (arc_frames(60) < D_L14_00161CEC) {
                 if (D_L14_00161C6C < 6.2831855f) {
                     D_L14_00161CE2 = arc_ftoi(arc_sin(D_L14_00161CE4) * 128.0f);
@@ -1457,7 +1457,7 @@ void update_branched_lightning_arc(char *moby) {
             } else {
                 D_L14_00161CE2 = 0;
             }
-            D_L14_00161CE0_d530 = (u8)D_L14_00161CE2 + arc_ftoi(arc_itof(D_L14_00161CB4) * D_L14_00161CF0 * -255.0f + 255.0f);
+            D_L14_00161CE0_d530 = (u8)D_L14_00161CE2 + arc_ftoi(arc_itof(lightning_arc_remaining_frames) * D_L14_00161CF0 * -255.0f + 255.0f);
             if (D_L14_00161CF4 != 0) {
                 allocate_voice_for_group_entry(0, 0, moby);
                 D_L14_00161CF4 = 0;
