@@ -335,7 +335,7 @@ void draw_swingshot_cable(char *moby) __asm__("FUN_L00_002c5dc8");
 
 void draw_swingshot_cable(char *moby) {
     Quad_2c5dc8 segment_quad;
-    V_2c5dc8 previous_segment_center, segment_center, attachment_position, segment_direction, f, g, wobble_vector_scratch, segment_to_reference, k;
+    V_2c5dc8 previous_segment_center, segment_center, attachment_position, segment_direction, f, unused_span_perpendicular, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
     unsigned int col;
     float half = 0.05f;
@@ -371,7 +371,7 @@ void draw_swingshot_cable(char *moby) {
     qcopy(&wobble_vector_scratch, &segment_direction);
     wobble_vector_scratch.f[2] -= 0.1f;
     cross_2c5dc8(&f, &segment_direction, &wobble_vector_scratch);
-    cross_2c5dc8(&g, &segment_direction, &f);
+    cross_2c5dc8(&unused_span_perpendicular, &segment_direction, &f);
     qcopy(&segment_quad.corner[0], &previous_segment_center);
     qcopy(&segment_quad.corner[2], &previous_segment_center);
     segment_quad.corner[0].f[2] -= half;
