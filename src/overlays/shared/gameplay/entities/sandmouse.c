@@ -595,13 +595,13 @@ struct HoverTuning {
 
 extern struct HoverTuning D_L01_001DEB38;
 extern f32 D_L01_001DEB4C NOT_SDA;
-extern f32 D_L01_001620C4 __attribute__((sda));
-extern f32 D_L01_001620C8 __attribute__((sda));
-extern f32 D_L01_001620CC __attribute__((sda));
+extern f32 sandmouse_target_yaw_spring_strength_degrees __asm__("D_L01_001620C4") __attribute__((sda));
+extern f32 sandmouse_target_yaw_damping_degrees __asm__("D_L01_001620C8") __attribute__((sda));
+extern f32 sandmouse_target_yaw_turn_limit_degrees __asm__("D_L01_001620CC") __attribute__((sda));
 extern f32 D_L01_001620D0 __attribute__((sda));
-extern f32 D_L01_001620D4 __attribute__((sda));
-extern f32 D_L01_001620D8 __attribute__((sda));
-extern f32 D_L01_001620DC __attribute__((sda));
+extern f32 sandmouse_hover_velocity_to_rotation_y_scale __asm__("D_L01_001620D4") __attribute__((sda));
+extern f32 sandmouse_hover_rotation_x_blend_factor __asm__("D_L01_001620D8") __attribute__((sda));
+extern f32 sandmouse_hover_rotation_y_blend_factor __asm__("D_L01_001620DC") __attribute__((sda));
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -651,8 +651,8 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         } else {
             bearing_yaw = fast_arc_tan(hover_vars->target->pos.x - moby->pos.x, hover_vars->target->pos.y - moby->pos.y);
             FUN_L00_00258278(moby, &D_L01_001DEB4C, bearing_yaw,
-                             D_L01_001620C4 * DEG_TO_RAD * frame_time_sq, D_L01_001620C8 * DEG_TO_RAD * frame_time_sq,
-                             D_L01_001620CC * DEG_TO_RAD * frame_time);
+                             sandmouse_target_yaw_spring_strength_degrees * DEG_TO_RAD * frame_time_sq, sandmouse_target_yaw_damping_degrees * DEG_TO_RAD * frame_time_sq,
+                             sandmouse_target_yaw_turn_limit_degrees * DEG_TO_RAD * frame_time);
         }
         fast_vec_scale(&steering_correction, &steering_correction, frame_scale * 0.04f);
         fast_vec_sub(&steering_correction, &steering_correction, &hover_vars->vel);
@@ -693,8 +693,8 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         break;
     }
     hover_tuning = &D_L01_001DEB38;
-    moby->rot.x += (normalize_angle(hover_tuning->yaw_speed * D_L01_001620D0) - moby->rot.x) * D_L01_001620D8;
-    moby->rot.y += (normalize_angle(fast_vec_length(&hover_vars->vel) * D_L01_001620D4) - moby->rot.y) * D_L01_001620DC;
+    moby->rot.x += (normalize_angle(hover_tuning->yaw_speed * D_L01_001620D0) - moby->rot.x) * sandmouse_hover_rotation_x_blend_factor;
+    moby->rot.y += (normalize_angle(fast_vec_length(&hover_vars->vel) * sandmouse_hover_velocity_to_rotation_y_scale) - moby->rot.y) * sandmouse_hover_rotation_y_blend_factor;
 }
 #include "sda.h"
 
