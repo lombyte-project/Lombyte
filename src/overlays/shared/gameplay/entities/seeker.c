@@ -50,7 +50,7 @@ typedef struct {
 } VoiceSlot;
 
 extern u8 D_0013E550[];
-extern s32 D_L09_0015F5C4;
+extern s32 seeker_state_dispatch_mode __asm__("D_L09_0015F5C4");
 extern Vec4f D_L09_00166F40;
 extern u8 D_L09_00208320[];
 
@@ -116,7 +116,7 @@ void seeker_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;
     }
-    mode = D_L09_0015F5C4;
+    mode = seeker_state_dispatch_mode;
     if (mode == 2) {
         return;
     }
