@@ -359,8 +359,8 @@ extern float spark_scatter_radial_z_range_start __asm__("D_L12_00161890") __attr
 extern float spark_scatter_radial_z_range_end __asm__("D_L12_00161894") __attribute__((sda));
 extern float spark_scatter_radial_xy_scale_range_start __asm__("D_L12_00161898") __attribute__((sda));
 extern float spark_scatter_radial_xy_scale_range_end __asm__("D_L12_0016189C") __attribute__((sda));
-extern float D_L12_001618A0 __attribute__((sda));
-extern float D_L12_001618A4 __attribute__((sda));
+extern float spark_scatter_vertical_vector_w __asm__("D_L12_001618A0") __attribute__((sda));
+extern float spark_scatter_radial_vector_w __asm__("D_L12_001618A4") __attribute__((sda));
 extern int spark_scatter_frame_count_range_start __asm__("D_L12_001618AC") __attribute__((sda));
 extern int spark_scatter_frame_count_range_end __asm__("D_L12_001618B0") __attribute__((sda));
 extern int spark_scatter_second_frame_count_range_start __asm__("D_L12_001618B4") __attribute__((sda));
@@ -400,8 +400,8 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
                 frame_time;
         radial_spark_vector[2] = random_float_between_alt(spark_scatter_radial_z_range_start, spark_scatter_radial_z_range_end) *
                 frame_time;
-        vertical_spark_vector[3] = D_L12_001618A0;
-        radial_spark_vector[3] = D_L12_001618A4;
+        vertical_spark_vector[3] = spark_scatter_vertical_vector_w;
+        radial_spark_vector[3] = spark_scatter_radial_vector_w;
         frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_frame_count_range_start,
                                                      (float)spark_scatter_frame_count_range_end));
         second_frame_count = func_001FA898_r(random_float_between_alt((float)spark_scatter_second_frame_count_range_start,
