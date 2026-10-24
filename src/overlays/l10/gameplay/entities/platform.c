@@ -460,9 +460,9 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L10_0015F5CC;
-extern int D_L10_001618A0 __attribute__((sda));
-extern int D_L10_001618A4 __attribute__((sda));
-extern int D_L10_001618A8;
+extern int gadgebot_telepot_camera_effect_duration_frames __asm__("D_L10_001618A0") __attribute__((sda));
+extern int gadgebot_telepot_camera_spring_decay_frames __asm__("D_L10_001618A4") __attribute__((sda));
+extern int gadgebot_telepot_camera_effect_remaining_frames __asm__("D_L10_001618A8");
 extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -516,9 +516,9 @@ void gadgebot_telepot_pad_update(char *moby)
     char *hero_bytes;
     int life;
     if (*(unsigned char *)(moby + 0x20) == 0) {
-        D_L10_001618A8 = 0;
-        D_L10_001618A4 = func_001F9850_2BFBB8(D_L10_001618A4);
-        D_L10_001618A0 = func_001F9850_2BFBB8(D_L10_001618A0);
+        gadgebot_telepot_camera_effect_remaining_frames = 0;
+        gadgebot_telepot_camera_spring_decay_frames = func_001F9850_2BFBB8(gadgebot_telepot_camera_spring_decay_frames);
+        gadgebot_telepot_camera_effect_duration_frames = func_001F9850_2BFBB8(gadgebot_telepot_camera_effect_duration_frames);
         *(unsigned char *)(moby + 0x20) = 1;
     }
     hero_bytes = D_0013F350;
@@ -558,7 +558,7 @@ void gadgebot_telepot_pad_update(char *moby)
         {
             char *table = D_L10_00167100;
             char *effect = *(char **)(table + 0x180);
-            D_L10_001618A8 = D_L10_001618A0;
+            gadgebot_telepot_camera_effect_remaining_frames = gadgebot_telepot_camera_effect_duration_frames;
             if (*(short *)(effect + 0x86) == 0) {
                 char *current = *(char **)(table + 0x180);
                 short *timer = (short *)(*(char **)(current + 0x70) + 0x20);
@@ -617,10 +617,10 @@ void gadgebot_telepot_pad_update(char *moby)
     }
     if (3.1415927f < angle) angle -= 6.2831855f;
     *(unsigned int *)(moby + 0x90) = func_001FA8A8_2BFBB8(0x80464646, 0x80828282, (func_001F9FA8_2BFBB8(angle) + 1.0f) * 0.5f);
-    func_001F9908_2BFBB8(&D_L10_001618A8);
-    if (D_L10_001618A8 != 0) {
-        if (D_L10_001618A4 < D_L10_001618A8) angle = 0.002f;
-        else angle = func_001FA888_2BFBB8(D_L10_001618A8) / func_001FA888_2BFBB8(D_L10_001618A4) * 0.007999999f + 0.002f;
+    func_001F9908_2BFBB8(&gadgebot_telepot_camera_effect_remaining_frames);
+    if (gadgebot_telepot_camera_effect_remaining_frames != 0) {
+        if (gadgebot_telepot_camera_spring_decay_frames < gadgebot_telepot_camera_effect_remaining_frames) angle = 0.002f;
+        else angle = func_001FA888_2BFBB8(gadgebot_telepot_camera_effect_remaining_frames) / func_001FA888_2BFBB8(gadgebot_telepot_camera_spring_decay_frames) * 0.007999999f + 0.002f;
         func_L00_002E9A40_2BFBB8(angle, 0.2f);
         func_L00_002E9B30_2BFBB8();
         func_L00_002E9AF8_2BFBB8();
