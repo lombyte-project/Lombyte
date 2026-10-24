@@ -276,7 +276,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x2F:
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
     case 0x3F:
     case 0x73: {
         struct Hero *p = &hero;
