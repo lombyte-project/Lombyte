@@ -2531,8 +2531,8 @@ extern float D_L13_00161F40 __attribute__((sda));
 extern float D_L13_00161F44 __attribute__((sda));
 extern float D_L13_00161F48 __attribute__((sda));
 extern float D_L13_00161F4C __attribute__((sda));
-extern float D_L13_00161F50 __attribute__((sda));
-extern float D_L13_00161F54 __attribute__((sda));
+extern float moby_spark_first_batch_spread_degrees __asm__("D_L13_00161F50") __attribute__((sda));
+extern float moby_spark_second_batch_spread_degrees __asm__("D_L13_00161F54") __attribute__((sda));
 extern float D_L13_00161F58 __attribute__((sda));
 extern float D_L13_00161F5C __attribute__((sda));
 extern float D_L13_00161F60 __attribute__((sda));
@@ -2572,7 +2572,7 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             i++;
             velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
                                                        D_L13_00161F30 * frame_time * 1.1f);
-            angle = random_float_between_alt(-D_L13_00161F50, D_L13_00161F50) * 0.017453292f;
+            angle = random_float_between_alt(-moby_spark_first_batch_spread_degrees, moby_spark_first_batch_spread_degrees) * 0.017453292f;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
             acceleration.f[0] = fast_cos(direction) * (D_L13_00161F24 * frame_time);
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
@@ -2603,7 +2603,7 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             i--;
             velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
                                                        D_L13_00161F44 * frame_time * 1.5f);
-            angle = random_float_between_alt(-D_L13_00161F54, D_L13_00161F54) * amount;
+            angle = random_float_between_alt(-moby_spark_second_batch_spread_degrees, moby_spark_second_batch_spread_degrees) * amount;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)),
                                       angle);
             acceleration.f[0] = fast_cos(direction) * (D_L13_00161F48 * frame_time);
