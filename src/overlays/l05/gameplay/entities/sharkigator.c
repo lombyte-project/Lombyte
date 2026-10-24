@@ -3057,12 +3057,12 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern float D_L05_00161CD4 __attribute__((sda));
-extern float D_L05_00161CD8 __attribute__((sda));
-extern float D_L05_00161CDC __attribute__((sda));
-extern float D_L05_00161CE0 __attribute__((sda));
-extern int D_L05_00161CE4 __attribute__((sda));
-extern int D_L05_00161CE8 __attribute__((sda));
+extern float floating_platform_rotation_y_phase_rate_degrees __asm__("D_L05_00161CD4") __attribute__((sda));
+extern float floating_platform_rotation_x_phase_rate_degrees __asm__("D_L05_00161CD8") __attribute__((sda));
+extern float floating_platform_rotation_y_amplitude_degrees __asm__("D_L05_00161CDC") __attribute__((sda));
+extern float floating_platform_rotation_x_amplitude_degrees __asm__("D_L05_00161CE0") __attribute__((sda));
+extern int floating_platform_voice_interval_min __asm__("D_L05_00161CE4") __attribute__((sda));
+extern int floating_platform_voice_interval_max __asm__("D_L05_00161CE8") __attribute__((sda));
 void floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 void floating_platform_update(unsigned char *moby) {
     enum {
@@ -3081,7 +3081,7 @@ void floating_platform_update(unsigned char *moby) {
     switch (moby[0x20]) {
     case FLOATING_PLATFORM_INITIALIZE:
         *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-            (float)D_L05_00161CE4, (float)D_L05_00161CE8)));
+            (float)floating_platform_voice_interval_min, (float)floating_platform_voice_interval_max)));
         *(float *)(data + 0x60) = random_angle_radians();
         *(float *)(data + 0x6C) = random_angle_radians();
         moby[0x20] = 1;
@@ -3090,7 +3090,7 @@ void floating_platform_update(unsigned char *moby) {
         if (fast_dec_timer((int *)(data + 0x78))) {
             allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             *(int *)(data + 0x78) = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-                (float)D_L05_00161CE4, (float)D_L05_00161CE8)));
+                (float)floating_platform_voice_interval_min, (float)floating_platform_voice_interval_max)));
         }
         position = (char *)moby + 0x10;
         qcopy(previous_position, position);
@@ -3098,14 +3098,14 @@ void floating_platform_update(unsigned char *moby) {
         current_rotation = (char *)moby + 0x40;
         qcopy(previous_rotation_ptr, current_rotation);
         rotation_y_phase = fast_add_rotations(*(float *)(data + 0x60),
-                               D_L05_00161CD4 * DEG_TO_RAD * frame_time);
-        k = D_L05_00161CD8 * DEG_TO_RAD * frame_time;
+                               floating_platform_rotation_y_phase_rate_degrees * DEG_TO_RAD * frame_time);
+        k = floating_platform_rotation_x_phase_rate_degrees * DEG_TO_RAD * frame_time;
         *(float *)(data + 0x60) = rotation_y_phase;
         *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
         *(float *)(moby + 0x44) =
-            D_L05_00161CDC * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
+            floating_platform_rotation_y_amplitude_degrees * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
         *(float *)(moby + 0x40) =
-            D_L05_00161CE0 * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
+            floating_platform_rotation_x_amplitude_degrees * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
         subtract_vector_xyz(position_delta, position, previous_position);
         update_entity_matrix(data + 0x20, position_delta, previous_rotation_ptr, current_rotation);
         break;
