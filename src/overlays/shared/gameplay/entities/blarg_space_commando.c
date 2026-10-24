@@ -447,11 +447,11 @@ extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
-extern float D_L06_00161FAC __attribute__((sda));
-extern float D_L06_00161FB0 __attribute__((sda));
-extern float D_L06_00161FB4 __attribute__((sda));
-extern float D_L06_00161FB8 __attribute__((sda));
-extern float D_L06_00161FBC __attribute__((sda));
+extern float base_home_distance_limit_gp __asm__("D_L06_00161FAC") __attribute__((sda));
+extern float nonfatal_knockback_horizontal_speed_gp __asm__("D_L06_00161FB0") __attribute__((sda));
+extern float nonfatal_knockback_vertical_speed_gp __asm__("D_L06_00161FB4") __attribute__((sda));
+extern float fatal_knockback_horizontal_speed_gp __asm__("D_L06_00161FB8") __attribute__((sda));
+extern float fatal_knockback_vertical_speed_gp __asm__("D_L06_00161FBC") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -535,8 +535,8 @@ void process_blarg_space_commando_hits(char *moby) {
             moby[0x20] = 0xF;
             q = vars + 0x60;
             knockback_frames = scale_game_frames_c(0x3C);
-            a = D_L06_00161FB0 * D_0015ED6C;
-            b = D_L06_00161FB4 * D_0015ED6C;
+            a = nonfatal_knockback_horizontal_speed_gp * D_0015ED6C;
+            b = nonfatal_knockback_vertical_speed_gp * D_0015ED6C;
             *(short *)(vars + 0x26) = knockback_frames;
             *(float *)(vars + 0x7C) = b;
             *(float *)(vars + 0x78) = a;
@@ -553,8 +553,8 @@ void process_blarg_space_commando_hits(char *moby) {
             float a, b;
             moby[0x20] = 0x10;
             q = vars + 0x60;
-            a = D_L06_00161FB8 * D_0015ED6C;
-            b = D_L06_00161FBC * D_0015ED6C;
+            a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
+            b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
             *(float *)(vars + 0x78) = a;
             *(float *)(vars + 0x7C) = b;
@@ -604,9 +604,9 @@ void process_blarg_space_commando_hits(char *moby) {
     *(unsigned char *)(moby + 0xA4) = 0xFF;
     trooper_anim_finish(moby, vars + 0x110);
     if (*(int *)(vars + 0x188) != 0) {
-        *(float *)(vars + 0x198) = D_L06_00161FAC + 6.0f;
+        *(float *)(vars + 0x198) = base_home_distance_limit_gp + 6.0f;
     } else {
-        *(float *)(vars + 0x198) = D_L06_00161FAC;
+        *(float *)(vars + 0x198) = base_home_distance_limit_gp;
     }
     {
     char *q = vars + 0x120;
