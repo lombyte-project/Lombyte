@@ -1149,7 +1149,9 @@ typedef struct {
 } __attribute__((aligned(16))) V_002da250;
 void FUN_L00_0024f7c8_002da250(void *, s32, f32 *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9cf8_002da250(V_002da250 *, V_002da250 *, void *) __asm__("FUN_001f9cf8");
-void FUN_L00_002da250(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
+void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) __asm__("FUN_L00_002da250");
+
+void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
     FUN_L00_0024f7c8_002da250(cannon_moby, 0, out_suction_origin);
     if (hero_data.state.current == 1 || hero_data.state.current == 0x1E) {
         V_002da250 suction_origin_offset;
