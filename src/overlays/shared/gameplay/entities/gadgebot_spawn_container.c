@@ -1050,7 +1050,7 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) {
     Vec4 pos;
     Vec4 burst_spark_velocity;
-    Vec4 accel;
+    Vec4 jittered_spark_velocity;
     int i;
     int j;
 
@@ -1072,8 +1072,8 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
         burst_spark_velocity.f[0] += fast_cos(angle) * (speed * frame_time);
         burst_spark_velocity.f[1] += fast_sin(angle) * (speed * frame_time);
         burst_spark_velocity.f[2] += rise * frame_time;
-        qcopy(&accel, &burst_spark_velocity);
-        accel.f[2] -= D_L06_00161C3C * frame_time_sq * (float)scale_game_frames(D_L06_00161C5C);
+        qcopy(&jittered_spark_velocity, &burst_spark_velocity);
+        jittered_spark_velocity.f[2] -= D_L06_00161C3C * frame_time_sq * (float)scale_game_frames(D_L06_00161C5C);
         for (j = 0; j < D_L06_00161C1C; j++) {
             float size = random_float_between(0.5f, 1.5f);
             int color0;
@@ -1082,15 +1082,15 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
             int fade;
             float third_frame_count_base;
             burst_spark_velocity.f[3] = size * D_L06_00161C40;
-            accel.f[3] = size * D_L06_00161C44;
+            jittered_spark_velocity.f[3] = size * D_L06_00161C44;
             add_random_offset_to_vector_xyz(&pos, D_L06_00161C24);
-            add_random_offset_to_vector_xyz(&accel, D_L06_00161C28 * frame_time);
+            add_random_offset_to_vector_xyz(&jittered_spark_velocity, D_L06_00161C28 * frame_time);
             color0 = fast_tween_color(D_L06_00161C48, D_L06_00161C50, random_float_between(0.0f, 1.0f));
             color1 = fast_tween_color(D_L06_00161C4C, D_L06_00161C54, random_float_between(0.0f, 1.0f));
             life = scale_game_frames(D_L06_00161C58);
             fade = scale_game_frames(D_L06_00161C5C);
             third_frame_count_base = (float)D_L06_00161C60;
-            spawn_spark(&pos, &burst_spark_velocity, &accel, color0, color1, life, fade,
+            spawn_spark(&pos, &burst_spark_velocity, &jittered_spark_velocity, color0, color1, life, fade,
                         truncate_float_to_s32(scale_time(random_float_between(third_frame_count_base * 0.5f, third_frame_count_base * 2.5f))), -1);
         }
     }
