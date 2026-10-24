@@ -787,11 +787,11 @@ typedef struct {
     u64 tag[4];
 } QuadPacket_f680;
 
-extern s32 D_L06_00161FDC __attribute__((sda));
-extern s32 D_L06_00161FE0 __attribute__((sda));
-extern s32 D_L06_00161FE4 __attribute__((sda));
-extern s32 D_L06_00161FE8 __attribute__((sda));
-extern s32 D_L06_00161FEC __attribute__((sda));
+extern s32 beam_blend_minuend_selector_gp __asm__("D_L06_00161FDC") __attribute__((sda));
+extern s32 beam_blend_subtrahend_selector_gp __asm__("D_L06_00161FE0") __attribute__((sda));
+extern s32 beam_blend_alpha_multiplier_selector_gp __asm__("D_L06_00161FE4") __attribute__((sda));
+extern s32 beam_blend_addend_selector_gp __asm__("D_L06_00161FE8") __attribute__((sda));
+extern s32 beam_blend_fixed_alpha_gp __asm__("D_L06_00161FEC") __attribute__((sda));
 extern s32 beam_effect_texture_index_gp __asm__("D_L06_00161FF0") __attribute__((sda));
 extern s32 beam_outer_corner_color_at_zero_weight_gp __asm__("D_L06_00161FF4") __attribute__((sda));
 extern s32 beam_outer_corner_color_at_unit_weight_gp __asm__("D_L06_00161FF8") __attribute__((sda));
@@ -826,11 +826,11 @@ void draw_blarg_space_commando_beam(char *moby) {
     i = 0;
     pk[0].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
     pk[1].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
-    regs = D_L06_00161FDC;
-    regs |= (u64)D_L06_00161FE0 << 2;
-    regs |= (u64)D_L06_00161FE4 << 4;
-    regs |= (u64)D_L06_00161FE8 << 6;
-    regs |= (u64)D_L06_00161FEC << 32;
+    regs = beam_blend_minuend_selector_gp;
+    regs |= (u64)beam_blend_subtrahend_selector_gp << 2;
+    regs |= (u64)beam_blend_alpha_multiplier_selector_gp << 4;
+    regs |= (u64)beam_blend_addend_selector_gp << 6;
+    regs |= (u64)beam_blend_fixed_alpha_gp << 32;
     /* Store order is load-bearing: it sets which register keeps regs. */
     pk[1].tag[2] = 0x0000FF9000000260ULL;
     pk[0].tag[2] = 0x0000FF9000000260ULL;
