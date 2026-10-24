@@ -1219,7 +1219,9 @@ float FUN_001f9e90_2eb648(float, float) __asm__("FUN_001f9e90");
 float FUN_001fa688_2eb648(float, float) __asm__("FUN_001fa688");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_L00_00161DD4 __attribute__((section(".data")));
-int FUN_L00_002eb648(char *camera_object, char *target_moby) {
+int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) __asm__("FUN_L00_002eb648");
+
+int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) {
     u128 v[1];
     u128 target_orbit_origin[1];
     char *camera_state;

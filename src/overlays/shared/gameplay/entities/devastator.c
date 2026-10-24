@@ -2209,7 +2209,7 @@ extern float D_0015ED60_2b6140 __asm__("D_0015ED60") __attribute__((section(".sd
 extern void func_L00_00204130_2b6140(void) __asm__("FUN_L00_00203b18");
 extern int force_help_message_2b6140(int, int) __asm__("FUN_002151d8");
 extern int scale_game_frames_2b6140(int) __asm__("FUN_001f96f8");
-extern int func_L00_002ECAF8_2b6140(void *, void *) __asm__("FUN_L00_002eb648");
+extern int update_orbit_camera_from_target_moby(void *, void *) __asm__("FUN_L00_002eb648");
 extern void func_L00_002B6AE0_2b6140(void *, int) __asm__("FUN_L00_002b57f0");
 extern void func_L00_002B6E90_2b6140(void *, void *) __asm__("FUN_L00_002b5ba0");
 extern void func_L00_002B6E10_2b6140(void *, void *) __asm__("FUN_L00_002b5b20");
@@ -2286,7 +2286,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         return;
     }
     if (missile_vars->f10 < 0) {
-        if (missile_vars->f14 != 0) func_L00_002ECAF8_2b6140(missile_vars->f14, missile_moby);
+        if (missile_vars->f14 != 0) update_orbit_camera_from_target_moby(missile_vars->f14, missile_moby);
         func_L00_002B6AE0_2b6140(missile_moby, 0);
         func_L00_002B6E90_2b6140(missile_moby, missile_vars);
         return;
@@ -2437,7 +2437,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         v50.x = 0.0f;
         missile_moby->command = 0;
     }
-    if (missile_vars->f14 != 0) func_L00_002ECAF8_2b6140(missile_vars->f14, missile_moby);
+    if (missile_vars->f14 != 0) update_orbit_camera_from_target_moby(missile_vars->f14, missile_moby);
 }
 typedef struct {
     f32 x;
