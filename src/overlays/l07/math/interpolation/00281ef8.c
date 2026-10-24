@@ -12,7 +12,9 @@
 extern void get_first_moby_in_group(int *) __asm__("FUN_L00_002591d0");
 
 /* Returns whether the current id equals id. */
-int FUN_L07_00281ef8(int id) {
+int matches_first_moby_in_group(int id) __asm__("FUN_L07_00281ef8");
+
+int matches_first_moby_in_group(int id) {
     int current;
     get_first_moby_in_group(&current);
     return current == id;
