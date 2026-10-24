@@ -331,7 +331,9 @@ void gadgebot_spawn_pad_update(char *moby) {
 
 extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 
-void FUN_L06_002e6148(char *moby) {
+void initialize_moby_particle_effect_state(char *moby) __asm__("FUN_L06_002e6148");
+
+void initialize_moby_particle_effect_state(char *moby) {
     moby[0x20] = 2;
     *(unsigned short *)(moby + 0x34) &= 0xFFBE;
     initialize_moby_particle_effect(moby);

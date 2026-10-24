@@ -6804,7 +6804,7 @@ extern void FUN_L00_002eaa30_302578(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_00216f90_302578(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void vu_euler_rotation_basis_302578(void *, void *) __asm__("FUN_001fa030");
 extern float fast_add_rotations_302578(float, float) __asm__("FUN_001fa580");
-extern void FUN_L06_002e6148_302578(void *) __asm__("FUN_L06_002e6148");
+extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
 extern void FUN_L00_002eac18_302578(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L00_00298840_302578(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002607d0_302578(int) __asm__("FUN_L00_002607d0");
@@ -7014,7 +7014,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_00216f90_302578(b, rot, 0, 0);
             if (shuttle_vars->f114 != 0) {
                 D_0013D3AC_302578[5] = 1;
-                FUN_L06_002e6148_302578(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
+                initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
                 shuttle_vars->f114 = 0;
                 moby->state = 6;
                 if (moby->prev_seq != 2) {

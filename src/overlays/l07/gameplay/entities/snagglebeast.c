@@ -745,7 +745,7 @@ extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern char *spawn_on_path(void *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void FUN_L06_002e6148(char *);
+extern void initialize_moby_particle_effect_state(char *) __asm__("FUN_L06_002e6148");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *);
 extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
@@ -1751,7 +1751,7 @@ void snagglebeast_update(unsigned char *moby) {
             position.f[2] = *(float *)(data + 0x1B8) + 1.0f;
             spawn_explosion(moby, data + 0x100, &position, 0.0f, 0.0f, 0x14, 0xC, 0x40, 7.0f, 5.0f, 10.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
             *(unsigned short *)(moby + 0x34) |= 0x41;
-            if (*(int *)(data + 0x1CC) != -1) FUN_L06_002e6148(level_mobys + (*(int *)(data + 0x1CC) << 8));
+            if (*(int *)(data + 0x1CC) != -1) initialize_moby_particle_effect_state(level_mobys + (*(int *)(data + 0x1CC) << 8));
             moby[0x20] = 0x10;
             *(float *)(moby + 0x18) = 20.0f;
         }
