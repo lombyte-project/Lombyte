@@ -1972,7 +1972,7 @@ int D_L16_00161E98 = 0x60d0d080;
 int D_L16_00161E9C = 0x801000;
 extern float path_walker_particle_movement_velocity_scale __asm__("D_L16_00161EA0") __attribute__((sda));
 extern float path_walker_particle_random_velocity_scale __asm__("D_L16_00161EA4") __attribute__((sda));
-extern float D_L16_00161EA8 __attribute__((sda));
+extern float path_walker_particle_target_scalar_scale __asm__("D_L16_00161EA8") __attribute__((sda));
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
     float offset[4];
@@ -1996,7 +1996,7 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     second_random_offset_angle = random_angle_radians();
     build_spherical_offset_u(velocity, size, random_offset_angle, second_random_offset_angle);
     add_vector_xyz(velocity, velocity, out);
-    final_size = D_L16_00161EA8;
+    final_size = path_walker_particle_target_scalar_scale;
     final_size *= 210000.0f;
     func_L00_0026DD70_emit(offset, velocity, D_L16_00161E98, D_L16_00161E9C,
                            final_size, scale_game_frames(0x23));
