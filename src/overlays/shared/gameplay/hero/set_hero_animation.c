@@ -1674,7 +1674,7 @@ void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
 
-void apply_hero_moby_scale(void *a) {
+void apply_hero_moby_scale(void *scale_owner_moby) {
     f32 scale_factor = D_0015EE14;
     A_00234b38 *scale_state;
     s32 level_index;
@@ -1682,7 +1682,7 @@ void apply_hero_moby_scale(void *a) {
         scale_factor = 1.33f;
     scale_state = &D_L00_0017C340_00234b38;
     if (scale_state->b1 == 0) {
-        FUN_0020cb10_00234b38(a, 0x18, scale_state);
+        FUN_0020cb10_00234b38(scale_owner_moby, 0x18, scale_state);
         scale_state->f20 = scale_factor;
         scale_state->f24 = scale_factor;
         scale_state->f28 = scale_factor;
@@ -1701,7 +1701,7 @@ void apply_hero_moby_scale(void *a) {
             }
         }
     }
-    FUN_L00_00234a50_00234b38(a);
+    FUN_L00_00234a50_00234b38(scale_owner_moby);
 }
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];
