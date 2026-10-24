@@ -3972,7 +3972,9 @@ extern short D_L18_00162480 __attribute__((sda));
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L18_002f8658(struct Moby *moby) {
+void update_rocket_tank_path_movement(struct Moby *moby) __asm__("FUN_L18_002f8658");
+
+void update_rocket_tank_path_movement(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[4];
     float movement_step[4];
