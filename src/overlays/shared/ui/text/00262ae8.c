@@ -69,7 +69,7 @@ extern s32 D_L05_0015FAF4 __attribute__((section(".sdata")));
 extern s32 D_L05_0015FAF8 __attribute__((section(".sdata")));
 extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section(".sdata")));
 extern s32 D_L05_0015FB00;
-extern u8 D_L05_0015F87C __attribute__((sda));
+extern u8 trick_combo_hud_delay_reload __asm__("D_L05_0015F87C") __attribute__((sda));
 
 void update_trick_combo_hud(HudCounter *element) __asm__("FUN_L05_00262b58");
 
@@ -107,7 +107,7 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         state_bytes[2] = 1;
-        state_bytes[1] = D_L05_0015F87C;
+        state_bytes[1] = trick_combo_hud_delay_reload;
         state_bytes[0] = 0;
         break;
     }
@@ -131,7 +131,7 @@ void update_trick_combo_hud(HudCounter *element) {
         player = &hero;
         if (D_L05_0015FAD4 < player->unk70C) {
             D_L05_0015FAD4 = player->unk70C;
-            state_bytes[1] = D_L05_0015F87C;
+            state_bytes[1] = trick_combo_hud_delay_reload;
         }
         if (player->grounded_frames == 0) {
             if (!(player->state.current >= 0x6D && player->state.current <= 0x6F)) {
@@ -162,11 +162,11 @@ void update_trick_combo_hud(HudCounter *element) {
                 D_L05_0015FAF0 = -1;
             }
             state_bytes[2] = 3;
-            state_bytes[1] = D_L05_0015F87C;
+            state_bytes[1] = trick_combo_hud_delay_reload;
             state_bytes[0] = scale_game_frames(0x78);
         } else {
             state_bytes[2] = 2;
-            state_bytes[1] = D_L05_0015F87C;
+            state_bytes[1] = trick_combo_hud_delay_reload;
             state_bytes[0] = scale_game_frames(0x3C);
         }
         break;
@@ -256,7 +256,7 @@ s32 draw_trick_combo_hud(char *element) {
     if (state_bytes[2] != 0) {
         sprintf_alt(text, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         delay_left = convert_integer_to_float(state_bytes[1]);
-        delay_total = scale_game_frames(*(s32 *)&D_L05_0015F87C);
+        delay_total = scale_game_frames(*(s32 *)&trick_combo_hud_delay_reload);
         blend = delay_left / (f32)delay_total;
         if (state_bytes[2] == 1 || state_bytes[2] == 3) {
             color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, blend);
