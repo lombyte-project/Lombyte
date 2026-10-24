@@ -1027,9 +1027,9 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RT first_pass_render_attributes;
     RW q2[4];
     RT second_pass_render_attributes;
-    RW w120, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
+    RW arc_camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
-    float len, len0, segment_start_camera_distance, segment_end_camera_distance;
+    float side_vector_normalization_factor, initial_side_vector_normalization_factor, segment_start_camera_distance, segment_end_camera_distance;
     first_pass_render_attributes.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
     col0 = *(int *)&D_L00_00161680 | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
@@ -1066,23 +1066,23 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.f[7] = 1.0f;
     subtract_vector_xyz(first_pass_point_camera_offset, point_bytes, D_L00_00166DC0);
     subtract_vector_xyz(segment_delta, point_bytes + 0x10, point_bytes);
-    cross_vectors_xyz(w120, segment_delta, first_pass_point_camera_offset);
-    len0 = vector_length_xyz(w120);
-    if (len0 != 0)
-        len0 = 1.0f / len0;
-    scale_vector_xyz(w120, w120, sx * len0);
-    add_vector_xyz(first_pass_corners[0], point_bytes, w120);
-    subtract_vector_xyz(first_pass_corners[1], point_bytes, w120);
+    cross_vectors_xyz(arc_camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+    initial_side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+    if (initial_side_vector_normalization_factor != 0)
+        initial_side_vector_normalization_factor = 1.0f / initial_side_vector_normalization_factor;
+    scale_vector_xyz(arc_camera_facing_side_vector, arc_camera_facing_side_vector, sx * initial_side_vector_normalization_factor);
+    add_vector_xyz(first_pass_corners[0], point_bytes, arc_camera_facing_side_vector);
+    subtract_vector_xyz(first_pass_corners[1], point_bytes, arc_camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
         subtract_vector_xyz(first_pass_point_camera_offset, point_bytes + i * 16, D_L00_00166DC0);
         subtract_vector_xyz(segment_delta, point_bytes + i * 16 + 16, point_bytes + i * 16);
-        cross_vectors_xyz(w120, segment_delta, first_pass_point_camera_offset);
-        len = vector_length_xyz(w120);
-        if (len != 0)
-            len = 1.0f / len;
-        scale_vector_xyz(w120, w120, sx * len);
-        add_vector_xyz(first_pass_corners[2], point_bytes + i * 16, w120);
-        subtract_vector_xyz(first_pass_corners[3], point_bytes + i * 16, w120);
+        cross_vectors_xyz(arc_camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+        side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+        if (side_vector_normalization_factor != 0)
+            side_vector_normalization_factor = 1.0f / side_vector_normalization_factor;
+        scale_vector_xyz(arc_camera_facing_side_vector, arc_camera_facing_side_vector, sx * side_vector_normalization_factor);
+        add_vector_xyz(first_pass_corners[2], point_bytes + i * 16, arc_camera_facing_side_vector);
+        subtract_vector_xyz(first_pass_corners[3], point_bytes + i * 16, arc_camera_facing_side_vector);
         if (i == 1) {
             first_pass_render_attributes.c[1] = *(int *)&D_L00_00161680;
             first_pass_render_attributes.c[0] = *(int *)&D_L00_00161680;
@@ -1120,11 +1120,11 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         subtract_vector_xyz(adjusted_segment_start, adjusted_segment_start, s1B0);
         add_vector_xyz(adjusted_segment_end, adjusted_segment_end, s1B0);
         subtract_vector_xyz(s1A0, D_L00_00166DC0, adjusted_segment_start);
-        cross_vectors_xyz(w120, s1A0, segment_delta);
-        len = vector_length_xyz(w120);
-        if (len != 0)
-            len = 1.0f / len;
-        scale_vector_xyz(second_pass_width_offset, w120, sy * len);
+        cross_vectors_xyz(arc_camera_facing_side_vector, s1A0, segment_delta);
+        side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+        if (side_vector_normalization_factor != 0)
+            side_vector_normalization_factor = 1.0f / side_vector_normalization_factor;
+        scale_vector_xyz(second_pass_width_offset, arc_camera_facing_side_vector, sy * side_vector_normalization_factor);
         add_vector_xyz(q2[0], adjusted_segment_start, second_pass_width_offset);
         subtract_vector_xyz(q2[1], adjusted_segment_start, second_pass_width_offset);
         add_vector_xyz(q2[2], adjusted_segment_end, second_pass_width_offset);
