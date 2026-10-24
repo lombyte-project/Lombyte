@@ -583,6 +583,7 @@ void big_axebot_update(M_B7B0 *moby) {
     enum {
         BIG_AXEBOT_HIT_REACTION_NONE = 0,
         BIG_AXEBOT_HIT_REACTION_FATAL = 1,
+        BIG_AXEBOT_HIT_REACTION_SKIP_ADDITIONAL_RESPONSE = 2,
         BIG_AXEBOT_HIT_REACTION_CONDITIONAL_HIT_RECOVERY = 3,
         BIG_AXEBOT_HIT_REACTION_RETURN_TO_IDLE = 4,
         BIG_AXEBOT_HIT_REACTION_IDLE_RECOVERY = 5,
@@ -753,7 +754,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     trooper_anim_update(moby, (short *)data->fB0);
                     FUN_L00_00257470(moby, 0, -1);
                     break;
-                case 2:
+                case BIG_AXEBOT_HIT_REACTION_SKIP_ADDITIONAL_RESPONSE:
                 case BIG_AXEBOT_HIT_REACTION_NO_ADDITIONAL_RESPONSE:
                 case BIG_AXEBOT_HIT_REACTION_NO_FURTHER_RESPONSE:
                 case BIG_AXEBOT_HIT_REACTION_IGNORED:
