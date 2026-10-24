@@ -2072,8 +2072,8 @@ extern float extermitank_tracked_particle_vector_a_xy_scale_gp __asm__("D_L05_00
 extern float extermitank_tracked_particle_vector_a_z_scale_gp __asm__("D_L05_00161B24") __attribute__((sda));
 extern float extermitank_tracked_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B28") __attribute__((sda));
 extern float extermitank_tracked_particle_vector_b_z_scale_gp __asm__("D_L05_00161B2C") __attribute__((sda));
-extern float D_L05_00161B30 __attribute__((sda));
-extern float D_L05_00161B34 __attribute__((sda));
+extern float extermitank_tracked_particle_vector_a_w_gp __asm__("D_L05_00161B30") __attribute__((sda));
+extern float extermitank_tracked_particle_vector_b_w_gp __asm__("D_L05_00161B34") __attribute__((sda));
 extern float extermitank_tracked_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B38") __attribute__((sda));
 extern int D_L05_00161B3C __attribute__((sda));
 extern int D_L05_00161B40 __attribute__((sda));
@@ -2084,8 +2084,8 @@ extern float extermitank_secondary_particle_vector_a_xy_scale_gp __asm__("D_L05_
 extern float extermitank_secondary_particle_vector_a_z_scale_gp __asm__("D_L05_00161B54") __attribute__((sda));
 extern float extermitank_secondary_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B58") __attribute__((sda));
 extern float extermitank_secondary_particle_vector_b_z_scale_gp __asm__("D_L05_00161B5C") __attribute__((sda));
-extern float D_L05_00161B60 __attribute__((sda));
-extern float D_L05_00161B64 __attribute__((sda));
+extern float extermitank_secondary_particle_vector_a_w_gp __asm__("D_L05_00161B60") __attribute__((sda));
+extern float extermitank_secondary_particle_vector_b_w_gp __asm__("D_L05_00161B64") __attribute__((sda));
 extern float extermitank_secondary_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B68") __attribute__((sda));
 extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("D_L05_00161B6C") __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));
@@ -2273,8 +2273,8 @@ void extermitank_update(unsigned char *moby) {
             }
             *(int *)pp = idx;
         }
-        particle_vector_a[3] = D_L05_00161B30;
-        particle_vector_b[3] = D_L05_00161B34;
+        particle_vector_a[3] = extermitank_tracked_particle_vector_a_w_gp;
+        particle_vector_b[3] = extermitank_tracked_particle_vector_b_w_gp;
         FUN_L00_0024f7c8(moby, 2, origin_position);
         for (i = 0; i < 2; i++) {
             int a, b, e;
@@ -2309,8 +2309,8 @@ void extermitank_update(unsigned char *moby) {
                 }
             }
         }
-        particle_vector_a[3] = D_L05_00161B60;
-        particle_vector_b[3] = D_L05_00161B64;
+        particle_vector_a[3] = extermitank_secondary_particle_vector_a_w_gp;
+        particle_vector_b[3] = extermitank_secondary_particle_vector_b_w_gp;
         for (k = 1; k >= 0; k--) {
             int a, b, e;
             float ang;
