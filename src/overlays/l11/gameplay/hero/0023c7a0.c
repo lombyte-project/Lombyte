@@ -584,7 +584,7 @@ void update_hero_motion_by_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
+    case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
@@ -1663,8 +1663,8 @@ void update_hero_motion_by_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.unk4E4, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
