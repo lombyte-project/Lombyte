@@ -183,9 +183,9 @@ extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 #include "rnc/gameplay/state/options.h"
-extern int D_L16_00161A74 __attribute__((sda));
-extern int D_L16_00161A78 __attribute__((sda));
-extern int D_L16_00161A7C __attribute__((sda));
+extern int blarg_elite_commando_bobbing_and_voice_enabled_gp __asm__("D_L16_00161A74") __attribute__((sda));
+extern int blarg_elite_commando_joint_aim_enabled_gp __asm__("D_L16_00161A78") __attribute__((sda));
+extern int blarg_elite_commando_joint_sparks_enabled_gp __asm__("D_L16_00161A7C") __attribute__((sda));
 extern int D_L16_0015F5C4;
 extern int D_L16_0016CC90 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -457,7 +457,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     default:
         break;
     }
-    if (D_L16_00161A74) {
+    if (blarg_elite_commando_bobbing_and_voice_enabled_gp) {
         *(float *)(commando_data + 0x2BC) = *(float *)(commando_moby + 0x18);
         if (((unsigned char *)commando_moby)[0x20] != 0 && ((unsigned char *)commando_moby)[0x20] != 10) {
             approach_value((float *)(commando_data + 0x2EC), 0.25f, frame_time * 0.25f);
@@ -478,9 +478,9 @@ void blarg_elite_commando_update(char *commando_moby) {
             !voice_is_playing(commando_moby, *(int *)(commando_data + 0x304)))
             *(int *)(commando_data + 0x304) = func_0022ED80_update(7, 4, commando_moby);
     }
-    if (D_L16_00161A78)
+    if (blarg_elite_commando_joint_aim_enabled_gp)
         update_blarg_elite_commando_joint_aim(commando_moby);
-    if (D_L16_00161A7C && D_001413DC != 22)
+    if (blarg_elite_commando_joint_sparks_enabled_gp && D_001413DC != 22)
         emit_blarg_elite_commando_joint_sparks(commando_moby);
     if (current_level_index == 18 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
         mark_moby_for_removal(commando_moby);
