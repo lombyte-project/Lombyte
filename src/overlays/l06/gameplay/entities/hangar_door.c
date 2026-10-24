@@ -3080,7 +3080,9 @@ extern char *D_L06_001600EC;
 extern int *D_L06_001B0C30[];
 
 /* Updates the object's health, hit response, recovery timer and path motion. */
-void FUN_L06_002fa9c0(char *moby) {
+void update_alien_queen_hit_response_and_recovery(char *moby) __asm__("FUN_L06_002fa9c0");
+
+void update_alien_queen_hit_response_and_recovery(char *moby) {
     enum {
         HIT_RESPONSE_SKIP_REACTION = 0,
         HIT_RESPONSE_DEATH = 1,
