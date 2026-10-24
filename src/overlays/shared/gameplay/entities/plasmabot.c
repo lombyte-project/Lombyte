@@ -85,11 +85,11 @@ void initialize_plasmabot_path_state(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
 
 
-extern float D_L14_001614DC __attribute__((sda));
+extern float plasmabot_planar_velocity_base_scale __asm__("D_L14_001614DC") __attribute__((sda));
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 
 void scale_and_apply_plasmabot_planar_velocity(char *moby) {
-    float planar_velocity_scale = (D_L14_001614DC - 1.0f) * frame_scale + 1.0f;
+    float planar_velocity_scale = (plasmabot_planar_velocity_base_scale - 1.0f) * frame_scale + 1.0f;
     char *moby_vars = *(char **)(moby + 0x78);
     *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x254) * planar_velocity_scale;
     *(float *)(moby_vars + 0x258) = *(float *)(moby_vars + 0x258) * planar_velocity_scale;
