@@ -671,7 +671,9 @@ void white_flower_update(char *moby) {
 
 extern char *D_L02_00167400;
 
-void FUN_L02_002f6570(int value) {
+void set_follow_camera_control_word(int value) __asm__("FUN_L02_002f6570");
+
+void set_follow_camera_control_word(int value) {
     char *moby = D_L02_00167400;
     if (*(short *)(moby + 0x86) == 0) {
         char *data = *(char **)(moby + 0x70);
@@ -1125,7 +1127,7 @@ void apply_moby_camera_control(char *moby) {
             *(short *)(data + 0x20) = frames;
         }
     } else if ((unsigned short)(*(short *)(data + 0x3c) - 1) < 2) {
-        FUN_L02_002f6570(176);
+        set_follow_camera_control_word(176);
         set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
         if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
             *(short *)(data + 0x20) = duration;
@@ -1212,7 +1214,7 @@ void apply_moby_camera_control(char *moby) {
                     FUN_L00_002e8450(0, 8.0f, 0.003f);
             }
         }
-        FUN_L02_002f6570(176);
+        set_follow_camera_control_word(176);
     }
     return;
 }
