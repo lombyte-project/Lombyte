@@ -449,7 +449,7 @@ void update_hero_timers_and_auxiliary_state(void) __asm__("FUN_L15_00215e58");
 
 void update_hero_timers_and_auxiliary_state(void) {
     Vec4 sum;
-    Vec4 d;
+    Vec4 sample_delta;
     struct Moby *spawned_moby;
     s32 i;
     s32 sample_index_base;
@@ -541,9 +541,9 @@ void update_hero_timers_and_auxiliary_state(void) {
             {
                 s32 wrapped_sample_index = (sample_index_base + 0x1F) % 32;
                 s32 previous_sample_index = (sample_index_base + 0x1E) % 32;
-                FUN_001f9a28_215e58(&d, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[previous_sample_index]);
+                FUN_001f9a28_215e58(&sample_delta, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[previous_sample_index]);
             }
-            FUN_001f9a10_215e58(&sum, &sum, &d);
+            FUN_001f9a10_215e58(&sum, &sum, &sample_delta);
         }
         FUN_001f9a68_215e58(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_215e58(&sum) < frame_time) {
