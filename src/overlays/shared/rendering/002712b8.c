@@ -2025,13 +2025,13 @@ extern unsigned char *D_L00_001B21B8 __attribute__((section(".data")));
 unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *pos, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,
                                 float x, float y) __asm__("FUN_L00_00275910");
 
-unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *pos, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,
+unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *initial_position, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,
                                 float x, float y) {
     unsigned char *particle = p27fe00_alloc(0x4E);
     if (particle) {
         float *particle_velocity;
         unsigned char *particle_data = particle + 0x20;
-        qcopy(particle + 0x10, pos);
+        qcopy(particle + 0x10, initial_position);
         *(int *)(particle + 4) = col;
         particle[3] = 0x48;
         particle[9] = FUN_001fa6d0_275910(4.0f) + 0x20;
