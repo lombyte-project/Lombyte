@@ -1445,16 +1445,16 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
 }
-extern f32 D_L14_001613A8 __attribute__((sda));
-extern f32 D_L14_001613AC __attribute__((sda));
-extern f32 D_L14_001613B0 __attribute__((sda));
-extern f32 D_L14_001613B4 __attribute__((sda));
-extern f32 D_L14_001613B8 __attribute__((sda));
-extern s32 D_L14_001613BC __attribute__((sda));
-extern f32 D_L14_001613C0 __attribute__((sda));
-extern f32 D_L14_001613C4 __attribute__((sda));
-extern f32 D_L14_001613C8 __attribute__((sda));
-extern f32 D_L14_001613CC __attribute__((sda));
+extern f32 blarg_heavy_interceptor_vertical_oscillation_amplitude __asm__("D_L14_001613A8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_vertical_oscillation_phase_increment __asm__("D_L14_001613AC") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_amplitude __asm__("D_L14_001613B0") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_first_phase_increment __asm__("D_L14_001613B4") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_rotation_oscillation_second_phase_increment __asm__("D_L14_001613B8") __attribute__((sda));
+extern s32 blarg_heavy_interceptor_patrol_heading_change_interval_frames __asm__("D_L14_001613BC") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_offset_magnitude __asm__("D_L14_001613C0") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_error_gain __asm__("D_L14_001613C4") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_damping_coefficient __asm__("D_L14_001613C8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_patrol_heading_snap_threshold_scale __asm__("D_L14_001613CC") __attribute__((sda));
 extern void update_moby_vertical_oscillation(f32, f32, u8 *, f32 *, f32 *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L00_00262b80");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
@@ -1473,20 +1473,20 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) __a
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
     f32 heading_offset;
-    update_moby_vertical_oscillation(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0),
+    update_moby_vertical_oscillation(blarg_heavy_interceptor_vertical_oscillation_amplitude, blarg_heavy_interceptor_vertical_oscillation_phase_increment, moby, (f32 *)(data + 0x1A0),
                      (f32 *)(data + 0x1A4));
-    update_moby_rotation_oscillation(moby, data + 0x1A8, data + 0x1AC, D_L14_001613B0, D_L14_001613B4,
-                     D_L14_001613B8);
+    update_moby_rotation_oscillation(moby, data + 0x1A8, data + 0x1AC, blarg_heavy_interceptor_rotation_oscillation_amplitude, blarg_heavy_interceptor_rotation_oscillation_first_phase_increment,
+                     blarg_heavy_interceptor_rotation_oscillation_second_phase_increment);
     if (*(u8 *)(moby + 0x20) == 1) {
         if (fast_dec_timer_s16((s16 *)(data + 0x1B4))) {
-            *(s16 *)(data + 0x1B4) = scale_game_frames(D_L14_001613BC);
-            heading_offset = D_L14_001613C0;
+            *(s16 *)(data + 0x1B4) = scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames);
+            heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude;
             if (random_integer_below(2))
                 heading_offset = -heading_offset;
             *(f32 *)(data + 0x1B0) = fast_add_rotations(*(f32 *)(moby + 0x48), heading_offset);
         }
         vendor_spring((f32 *)(moby + 0x48), (f32 *)(data + 0x1B8), *(f32 *)(data + 0x1B0),
-                         D_L14_001613C4, D_L14_001613C8, D_L14_001613CC);
+                         blarg_heavy_interceptor_patrol_heading_error_gain, blarg_heavy_interceptor_patrol_heading_damping_coefficient, blarg_heavy_interceptor_patrol_heading_snap_threshold_scale);
     }
 }
 extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
