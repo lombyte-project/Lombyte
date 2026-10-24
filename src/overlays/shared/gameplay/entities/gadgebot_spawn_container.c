@@ -2892,7 +2892,7 @@ extern float D_0015ED70;
 extern float D_L06_00161D38 __attribute__((sda));
 extern float D_L06_00161D40 __attribute__((sda));
 extern float D_L06_00161D44 __attribute__((sda));
-extern float D_L06_00161D48 __attribute__((sda));
+extern float rotation_group_position_offset_distance __asm__("D_L06_00161D48") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
@@ -2942,7 +2942,7 @@ void update_moby_rotation_group(Moby *moby) {
         moby_vars->unk10 = (*(float (*)[4])&moby->rot)[0];
         qcopy(moby_vars->pos, (*(float (*)[4])&moby->pos));
         moby->state = 3;
-        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), D_L06_00161D48);
+        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), rotation_group_position_offset_distance);
         add_vector_xyz((*(float (*)[4])&moby->pos), position_offset, moby_vars);
         break;
     case WAIT_FOR_TRIGGER_AND_CHILDREN:
@@ -2981,7 +2981,7 @@ void update_moby_rotation_group(Moby *moby) {
             }
         }
     case UPDATE_POSITION_FROM_BASE:
-        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), D_L06_00161D48);
+        normalize_vector_xyz(position_offset, (*(float (*)[4])&moby->rot_row2), rotation_group_position_offset_distance);
         add_vector_xyz((*(float (*)[4])&moby->pos), position_offset, moby_vars);
         break;
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
