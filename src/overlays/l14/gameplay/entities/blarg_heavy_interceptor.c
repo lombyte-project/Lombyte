@@ -439,7 +439,7 @@ typedef struct {
 } LockOn_c618;
 extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
-extern f32 D_L14_0016139C __attribute__((sda));
+extern f32 blarg_heavy_interceptor_culling_sphere_radius __asm__("D_L14_0016139C") __attribute__((sda));
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
@@ -648,7 +648,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
         qcopy(vector_scratch, &moby->pos);
-        vector_scratch[3] = D_L14_0016139C;
+        vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius;
         if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
             float *p;
 
@@ -1509,7 +1509,7 @@ void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
     f32 bounding_sphere[4];
     if (random_integer_below(5)) {
         qcopy(bounding_sphere, moby + 0x10);
-        bounding_sphere[3] = D_L14_0016139C;
+        bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius;
         if (fast_bsphere_check((u8 *)bounding_sphere, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
             bone_transform = data + 0xA0;
             build_moby_bone_transform(moby, 1, bone_transform);
