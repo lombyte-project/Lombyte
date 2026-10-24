@@ -1527,7 +1527,7 @@ extern float D_L18_00161A40 __attribute__((sda));
 extern float D_L18_00161A44 __attribute__((sda));
 extern float D_L18_00161A50 __attribute__((sda));
 extern float D_L18_00161A58 __attribute__((sda));
-extern float D_L18_00161A5C __attribute__((sda));
+extern float floating_platform_sink_trigger_distance __asm__("D_L18_00161A5C") __attribute__((sda));
 extern float D_L18_00161A60 __attribute__((sda));
 extern float D_L18_00161A64 __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
@@ -1611,7 +1611,7 @@ void floating_platform_update(struct Moby *moby) {
         if (*(int *)(data + 0x80) == 0) {
             break;
         }
-        if (vector_distance(&moby->pos, &hero.motion.pos) < D_L18_00161A5C) {
+        if (vector_distance(&moby->pos, &hero.motion.pos) < floating_platform_sink_trigger_distance) {
             moby->state = 5;
             *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
