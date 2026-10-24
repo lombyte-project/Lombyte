@@ -1231,7 +1231,7 @@ extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
 extern float test_dummy_bomb_horizontal_launch_speed_gp __asm__("D_L16_001619CC") __attribute__((sda));
-extern float D_L16_001619D0 __attribute__((sda));
+extern float test_dummy_path_movement_speed_limit_gp __asm__("D_L16_001619D0") __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) __asm__("FUN_L16_002ced20");
@@ -1425,7 +1425,7 @@ void test_dummy_update(unsigned char *moby) {
             char *position = (char *)moby + 16;
             struct Hero *player;
             subtract_vector_xyz(position_or_delta.f, path + (dummy_data->node * 16 + 16), position);
-            FUN_L00_0025f730(position_or_delta.f, D_L16_001619D0 * D_0015ED6C);
+            FUN_L00_0025f730(position_or_delta.f, test_dummy_path_movement_speed_limit_gp * D_0015ED6C);
             add_vector_xyz(position, position, position_or_delta.f);
             moby_point_position(moby, D_L16_001619C8_gp, position_or_direction.f);
             func_L00_0025A8E8_2cf180(moby, 0.333f, position_or_direction.f, 1, 1.0f, 1.0f, 0, 1, 0);
