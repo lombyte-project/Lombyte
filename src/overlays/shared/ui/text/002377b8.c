@@ -1259,14 +1259,14 @@ void update_hud_panel_visibility(u8 *hud_element) {
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
-extern s32 D_L00_0015F8F8 __attribute__((sda));
-extern s32 D_L00_0015F8FC __attribute__((sda));
-extern s32 D_L00_0015F900 __attribute__((sda));
-extern s32 D_L00_0015F904 __attribute__((sda));
-extern s32 D_L00_0015F908 __attribute__((sda));
-extern s32 D_L00_0015F90C __attribute__((sda));
-extern s32 D_L00_0015F910 __attribute__((sda));
-extern s32 D_L00_0015F914 __attribute__((sda));
+extern s32 bolt_exclamation_panel_max_alpha __asm__("D_L00_0015F8F8") __attribute__((sda));
+extern s32 bolt_exclamation_panel_open_slide_distance __asm__("D_L00_0015F8FC") __attribute__((sda));
+extern s32 bolt_exclamation_panel_right_x_offset __asm__("D_L00_0015F900") __attribute__((sda));
+extern s32 bolt_exclamation_label_x_offset __asm__("D_L00_0015F904") __attribute__((sda));
+extern s32 bolt_exclamation_label_y_offset __asm__("D_L00_0015F908") __attribute__((sda));
+extern s32 bolt_exclamation_label_color_from __asm__("D_L00_0015F90C") __attribute__((sda));
+extern s32 bolt_exclamation_label_color_to __asm__("D_L00_0015F910") __attribute__((sda));
+extern s32 bolt_exclamation_label_pulse_base_period_frames __asm__("D_L00_0015F914") __attribute__((sda));
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
@@ -1309,9 +1309,9 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
         text = 0.0f;
 
     text_alpha = truncate_float_to_s32(text * 128.0f);
-    alpha = truncate_float_to_s32((f32)D_L00_0015F8F8 * open);
-    panel_right = x + D_L00_0015F900;
-    slide = truncate_float_to_s32((f32)D_L00_0015F8FC * open);
+    alpha = truncate_float_to_s32((f32)bolt_exclamation_panel_max_alpha * open);
+    panel_right = x + bolt_exclamation_panel_right_x_offset;
+    slide = truncate_float_to_s32((f32)bolt_exclamation_panel_open_slide_distance * open);
     draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
     panel_left = panel_right - slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
@@ -1319,16 +1319,16 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
     draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
     sprintf_alt(formatted_label_text, D_L00_0015F918);
-    text_x = x + D_L00_0015F904;
-    text_y = y + D_L00_0015F908;
-    period = scale_game_frames(D_L00_0015F914);
+    text_x = x + bolt_exclamation_label_x_offset;
+    text_y = y + bolt_exclamation_label_y_offset;
+    period = scale_game_frames(bolt_exclamation_label_pulse_base_period_frames);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
     if (pulse < 0.0f)
         pulse = 0.0f;
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
-    color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
+    color = fast_tween_color(bolt_exclamation_label_color_from, bolt_exclamation_label_color_to, scaled_text);
     print_text_with_texture_3(text_x + 1, text_y + 1, shadow, formatted_label_text, -1);
     print_text_with_texture_3(text_x, text_y, color, formatted_label_text, -1);
 out:
