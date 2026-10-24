@@ -3191,11 +3191,11 @@ extern float wrap_angle(float);
 int D_L17_00162248 = 128;
 int D_L17_0016224C = 45;
 int D_L17_00162250 = 64;
-extern float D_L17_00162254 __attribute__((sda));
-extern float D_L17_00162258 __attribute__((sda));
-extern float D_L17_0016225C __attribute__((sda));
+extern float ripple_pair_radial_phase_distance_scale __asm__("D_L17_00162254") __attribute__((sda));
+extern float ripple_pair_phase_period __asm__("D_L17_00162258") __attribute__((sda));
+extern float ripple_pair_z_amplitude __asm__("D_L17_0016225C") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float D_L17_00162260 __attribute__((sda));
+extern float ripple_pair_uv_scroll_rate __asm__("D_L17_00162260") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
@@ -3227,25 +3227,25 @@ void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) {
     int color;
     int i, j, uv_strip_index, uv_vertex_index, draw_strip_index;
 
-    scale = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_00162260 * frame_time);
+    scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_pair_uv_scroll_rate * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_0016224C));
     vu1_add_g_sregister(0x42, ((long)D_L17_00162248 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     ripple_vars->f0 = ripple_vars->f4;
     ripple_vars->f4 = fast_add_rotations(ripple_vars->f4,
-                               360.0f / multiply_global_factor_ed64(D_L17_00162258) * DEG_TO_RAD * frame_time);
+                               360.0f / multiply_global_factor_ed64(ripple_pair_phase_period) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L17_00162250 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 2; i++) {
         for (j = 0; j < D_L17_00162210[i]; j++) {
             int *template_vertex_array_slot = D_L17_00162230 + i;
             float *p = (float *)(*template_vertex_array_slot + j * 12);
-            float t = D_L17_0016225C *
+            float t = ripple_pair_z_amplitude *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
-                                                      D_L17_00162254) *
-                                     6.2831855f / D_L17_00162254),
+                                                      ripple_pair_radial_phase_distance_scale) *
+                                     6.2831855f / ripple_pair_radial_phase_distance_scale),
                           ripple_vars->f4));
             *(float *)(j * 12 + D_L17_00162218[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + D_L17_00162218[i] + 4) = p[1] + moby->pos.y;
