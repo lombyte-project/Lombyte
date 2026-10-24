@@ -280,10 +280,10 @@ void start_vendor_beam_pulse(char *moby) {
         }
     }
 }
-extern int D_L14_001620C4 __attribute__((sda));
-extern int D_L14_001620F0 __attribute__((sda));
-extern int D_L14_001620F4 __attribute__((sda));
-extern int D_L14_001620F8 __attribute__((sda));
+extern int vendor_beam_color_transition_countdown __asm__("D_L14_001620C4") __attribute__((sda));
+extern int vendor_beam_initial_color __asm__("D_L14_001620F0") __attribute__((sda));
+extern int vendor_beam_transition_color __asm__("D_L14_001620F4") __attribute__((sda));
+extern int vendor_beam_final_color __asm__("D_L14_001620F8") __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -323,14 +323,14 @@ void update_vendor_beam_animation(char *moby) {
             } while (copy_i < 4);
         }
     }
-    if (*(s16 *)(vars + 0x12) > D_L14_001620C4) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C4) /
-            convert_integer_to_float(*(int *)(vars + 0x620) - D_L14_001620C4);
-        *(int *)(vars + 0x14) = fast_tween_color(D_L14_001620F4, D_L14_001620F0, fraction);
+    if (*(s16 *)(vars + 0x12) > vendor_beam_color_transition_countdown) {
+        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - vendor_beam_color_transition_countdown) /
+            convert_integer_to_float(*(int *)(vars + 0x620) - vendor_beam_color_transition_countdown);
+        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_transition_color, vendor_beam_initial_color, fraction);
     } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
         fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
-            convert_integer_to_float(D_L14_001620C4 - D_L14_001620C8);
-        *(int *)(vars + 0x14) = fast_tween_color(D_L14_001620F8, D_L14_001620F4, fraction);
+            convert_integer_to_float(vendor_beam_color_transition_countdown - D_L14_001620C8);
+        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_final_color, vendor_beam_transition_color, fraction);
     } else {
         *(int *)(vars + 0x14) = 0;
     }
