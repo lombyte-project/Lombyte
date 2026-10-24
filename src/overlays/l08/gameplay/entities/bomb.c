@@ -2528,10 +2528,10 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_L08_00161A00 __attribute__((sda));
-extern float D_L08_00161A04 __attribute__((sda));
-extern float D_L08_00161A08 __attribute__((sda));
-extern float D_L08_00161A0C __attribute__((sda));
-extern float D_L08_00161A14 __attribute__((sda));
+extern float rocket_guidance_velocity_correction_limit __asm__("D_L08_00161A04") __attribute__((sda));
+extern float rocket_route_speed __asm__("D_L08_00161A08") __attribute__((sda));
+extern float rocket_target_hit_distance __asm__("D_L08_00161A0C") __attribute__((sda));
+extern float rocket_effect_radial_speed_range_end __asm__("D_L08_00161A14") __attribute__((sda));
 extern float D_L08_00161A24 __attribute__((sda));
 extern float D_L08_00161A28 __attribute__((sda));
 extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
@@ -2610,13 +2610,13 @@ void update_rocket(M46 *moby) {
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
         subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
-        FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_L08_00161A04*frame_time_sq_macro);
+        FUN_L00_0025f730(velocity_correction_or_effect_velocity,rocket_guidance_velocity_correction_limit*frame_time_sq_macro);
         add_vector_xyz(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-fast_arc_tan(vector_length_xy(data->velocity),data->velocity[2]);
         moby->rotation[2]=fast_arc_tan(data->velocity[0],data->velocity[1]);
         if (fast_difference_between_rotations_c(yaw,data->yaw)<0.08726646f && fast_difference_between_rotations_c(pitch,data->pitch)<0.08726646f) moby->state=2;
-        radius=random_float_between_c2(0.0f,D_L08_00161A14)*D_0015ED6C;
+        radius=random_float_between_c2(0.0f,rocket_effect_radial_speed_range_end)*D_0015ED6C;
         angle=random_angle_radians_c2();
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
@@ -2638,15 +2638,15 @@ void update_rocket(M46 *moby) {
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
         subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
-        FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_L08_00161A04*4.0f*frame_time_sq_macro);
+        FUN_L00_0025f730(velocity_correction_or_effect_velocity,rocket_guidance_velocity_correction_limit*4.0f*frame_time_sq_macro);
         add_vector_xyz(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-fast_arc_tan(vector_length_xy(data->velocity),data->velocity[2]);
         moby->rotation[2]=fast_arc_tan(data->velocity[0],data->velocity[1]);
-        if (distance_xyz_c(moby->position,data->target->position)<D_L08_00161A0C) {
+        if (distance_xyz_c(moby->position,data->target->position)<rocket_target_hit_distance) {
             target_data->health-=60; clear_u64_value(data->velocity); allocate_voice_for_target_entry_alt(0,0,moby); moby->state=6;
         }
-        radius=random_float_between_c2(0.0f,D_L08_00161A14)*D_0015ED6C;
+        radius=random_float_between_c2(0.0f,rocket_effect_radial_speed_range_end)*D_0015ED6C;
         angle=random_angle_radians_c2();
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
@@ -2679,7 +2679,7 @@ void update_rocket(M46 *moby) {
         if (route->waypoint!=route->path->count-1) {
             int life0,life1,size1;
             subtract_vector_xyz(delta,target,moby->position);
-            normalize_vector_xyz(delta,delta,D_L08_00161A08*D_0015ED6C);
+            normalize_vector_xyz(delta,delta,rocket_route_speed*D_0015ED6C);
             add_vector_xyz(moby->position,moby->position,delta);
             if (distance_xyz_c(moby->position,target)<0.5f) route->waypoint=next;
             *(Q46*)effect=(Q46)0;
