@@ -1483,8 +1483,8 @@ struct PokiPathVars {
 extern struct Moby *D_001413D0 __attribute__((section(".data")));
 extern char D_L11_001677C0[];
 extern s32 *D_L11_001B0EB0[];
-extern float D_L11_00161FC8 __attribute__((sda));
-extern float D_L11_00161FCC __attribute__((sda));
+extern float psytcopus_projectile_forward_offset_length __asm__("D_L11_00161FC8") __attribute__((sda));
+extern float psytcopus_projectile_z_offset __asm__("D_L11_00161FCC") __attribute__((sda));
 void handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
 extern void FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_0180(void *, void *) __asm__("FUN_001f9b48");
@@ -1594,9 +1594,9 @@ void psytcopus_update(struct Moby *psytcopus) {
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
         }
         if (in_window_0180(psytcopus, 15.0f) != 0) {
-            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
+            normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length);
             add_0180(&projectile_vector_scratch, &projectile_vector_scratch, &psytcopus->pos);
-            projectile_vector_scratch.z += D_L11_00161FCC;
+            projectile_vector_scratch.z += psytcopus_projectile_z_offset;
             psytcopus_vars->unk160 = spawn_class_511_moby_with_sparks(psytcopus, &projectile_vector_scratch, 5);
             break;
         }
@@ -1692,9 +1692,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
     FUN_001f9740_p(&psytcopus_vars->unk158);
     psytcopus->scale = psytcopus->pclass->scale * D_L11_00161F9C;
     if (psytcopus_vars->unk160 != 0) {
-        normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
+        normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, psytcopus_projectile_forward_offset_length);
         add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
-        projectile_and_hit_vector_scratch.z += D_L11_00161FCC;
+        projectile_and_hit_vector_scratch.z += psytcopus_projectile_z_offset;
         set_moby_position_and_refresh_removal_timer(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;
