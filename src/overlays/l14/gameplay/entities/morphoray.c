@@ -1485,7 +1485,7 @@ typedef struct {
 extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
 extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
-extern s32 D_L14_0015F404;
+extern s32 path_camera_active __asm__("D_L14_0015F404");
 extern char D_L14_001676D0[];
 extern float D_L14_001675D8 __attribute__((section(".data")));
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
@@ -1526,7 +1526,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
     if (camera_run->started == 0) {
         char *pa = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
         char *pb = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
-        D_L14_0015F404 = 1;
+        path_camera_active = 1;
         camera_run->started = 1;
         qcopy(&path_camera->pos, pa + 0x10);
         if (*(int *)(rec + 0x28) >= 0) {
@@ -1564,7 +1564,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         update_view_context();
         D_L14_001675D8 = 0.25f;
         path_camera->transition_state = 4;
-        D_L14_0015F404 = 0;
+        path_camera_active = 0;
         mb = D_L14_0015FFD8_5290;
         reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
         hp = (char *)hero.unk560;
