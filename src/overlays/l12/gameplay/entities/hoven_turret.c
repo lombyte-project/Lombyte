@@ -48,7 +48,7 @@ extern int D_L12_00161DD8 __attribute__((sda));
 extern int D_L12_00161DEC __attribute__((sda));
 extern int D_L12_00161DF0 __attribute__((sda));
 extern float D_L12_00161DF4 __attribute__((sda));
-extern float D_L12_00161DF8 __attribute__((sda));
+extern float oscillating_link_strip_scroll_phase __asm__("D_L12_00161DF8") __attribute__((sda));
 extern int oscillating_link_strip_reset_ticks __asm__("D_L12_00161E04");
 extern int D_L12_00161E08;
 extern int euler_rotation_matrix() __asm__("FUN_001fa050");
@@ -125,7 +125,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
                 scroll = scroll - 1.0f;
             }
             for (uv_index = 0; uv_index < 4; uv_index++) {
-                quad[1].uv[uv_index * 2] = D_L12_001FB7D0_303CA8[uv_index * 2] + scroll + D_L12_00161DF8;
+                quad[1].uv[uv_index * 2] = D_L12_001FB7D0_303CA8[uv_index * 2] + scroll + oscillating_link_strip_scroll_phase;
             }
             for (vertex = 0; vertex < 4; vertex++) {
                 func_001F9BD8_303CA8(&quad[1].v[vertex * 4], D_L12_001FB530[vertex], data->ring[ring][segment + (vertex >> 1)]);
@@ -143,18 +143,18 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern float D_L12_00161DFC __attribute__((sda));
-extern float D_L12_00161E00 __attribute__((sda));
+extern float oscillating_link_strip_scroll_rate __asm__("D_L12_00161DFC") __attribute__((sda));
+extern float oscillating_link_strip_random_delta_magnitude_rate __asm__("D_L12_00161E00") __attribute__((sda));
 extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 
 void update_oscillating_target_link_strips(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    float cycle = D_L12_00161DF8 + D_L12_00161DFC * frame_time;
+    float cycle = oscillating_link_strip_scroll_phase + oscillating_link_strip_scroll_rate * frame_time;
     int strip;
-    D_L12_00161DF8 = cycle;
-    if (cycle > 1.0f) D_L12_00161DF8 = cycle - 1.0f;
+    oscillating_link_strip_scroll_phase = cycle;
+    if (cycle > 1.0f) oscillating_link_strip_scroll_phase = cycle - 1.0f;
     for (strip = 0; strip < 4; strip++) {
         int count;
         int i;
@@ -177,7 +177,7 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     vector_count_float = (float)*(int *)(data + 0x232c);
                     length = *(float *)(data + 0x2324);
                     index = (float)i;
-                    rate = D_L12_00161E00 * frame_time;
+                    rate = oscillating_link_strip_random_delta_magnitude_rate * frame_time;
                     points[3] = 1.0f;
                     points[0] = index * (length / vector_count_float);
                     random_vector(intermediate + i * 4, 0.0f, rate);
