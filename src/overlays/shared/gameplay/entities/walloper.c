@@ -2107,13 +2107,13 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Quad;
 extern u8 D_0013E535 __attribute__((section(".data")));
-extern float D_L00_00161710 __attribute__((sda));
-extern float D_L00_00161714 __attribute__((sda));
+extern float beam_ring_band_texture_u_step_gp __asm__("D_L00_00161710") __attribute__((sda));
+extern float beam_ring_face_texture_v_step_gp __asm__("D_L00_00161714") __attribute__((sda));
 extern float D_L00_00161718 __attribute__((sda));
-extern float D_L00_0016171C __attribute__((sda));
+extern float beam_ring_texture_u_scroll_speed_gp __asm__("D_L00_0016171C") __attribute__((sda));
 extern float D_L00_00161720 __attribute__((sda));
 extern float D_L00_00161724 __attribute__((sda));
-extern float D_L00_00161728 __attribute__((sda));
+extern float beam_ring_texture_v_scroll_speed_gp __asm__("D_L00_00161728") __attribute__((sda));
 extern int D_L00_0016176C __attribute__((sda));
 extern int D_L00_00161770 __attribute__((sda));
 extern float D_L00_00161774 __attribute__((sda));
@@ -2123,9 +2123,9 @@ extern int D_L00_00161784 __attribute__((sda));
 extern int D_L00_00161788 __attribute__((sda));
 extern float D_L00_0016178C __attribute__((sda));
 extern float D_L00_00161790 __attribute__((sda));
-extern int D_L00_00161794 __attribute__((sda));
+extern int beam_ring_default_vertex_color_gp __asm__("D_L00_00161794") __attribute__((sda));
 extern int D_L00_00161798 __attribute__((sda));
-extern int D_L00_0016179C __attribute__((sda));
+extern int beam_ring_texture_index_gp __asm__("D_L00_0016179C") __attribute__((sda));
 extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
@@ -2159,8 +2159,8 @@ void draw_beam_ring_and_rail_effects(void *moby) {
     draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
-    c = k ? D_L00_00161798 : D_L00_00161794;
-    quad.tex = FUN_001f44b8(D_L00_0016179C);
+    c = k ? D_L00_00161798 : beam_ring_default_vertex_color_gp;
+    quad.tex = FUN_001f44b8(beam_ring_texture_index_gp);
     quad.unk80 = 0xFF9000000260L;
     quad.unk88 = 0x8000000048L;
     quad.unk70 = 0;
@@ -2169,9 +2169,9 @@ void draw_beam_ring_and_rail_effects(void *moby) {
     quad.color[1] = c;
     quad.color[0] = c;
     y = D_L00_00161718;
-    D_L00_00161718 = y - D_L00_0016171C * frame_scale;
+    D_L00_00161718 = y - beam_ring_texture_u_scroll_speed_gp * frame_scale;
     if (D_L00_00161718 <= -8.0f) D_L00_00161718 += 8.0f;
-    texture_scroll_step = D_L00_00161728 * frame_scale;
+    texture_scroll_step = beam_ring_texture_v_scroll_speed_gp * frame_scale;
     D_L00_00161720 = D_L00_00161720 - texture_scroll_step;
     if (D_L00_00161720 <= -7.0f) D_L00_00161720 += 7.0f;
     D_L00_00161724 = D_L00_00161724 + texture_scroll_step;
@@ -2189,35 +2189,35 @@ void draw_beam_ring_and_rail_effects(void *moby) {
             fast_vec_cross(&face_normal, &edge_to_corner2, &edge_to_corner0);
             fast_vec_sub(&camera_to_corner1, &quad.corner[1], &(*(OvlVec4 *)g_debug_camera));
             if (fast_vec_dot(&face_normal, &camera_to_corner1) >= 0.0f) {
-                first_pass_v += D_L00_00161714;
-                second_pass_v += D_L00_00161714;
+                first_pass_v += beam_ring_face_texture_v_step_gp;
+                second_pass_v += beam_ring_face_texture_v_step_gp;
             } else {
                 if (i == 11) {
-                    quad.color[0] = quad.color[1] = D_L00_00161794 & 0xFFFFFF;
+                    quad.color[0] = quad.color[1] = beam_ring_default_vertex_color_gp & 0xFFFFFF;
                 }
                 quad.uv[5] = first_pass_v;
                 quad.uv[1] = first_pass_v;
-                quad.uv[3] = first_pass_v + D_L00_00161714;
-                quad.uv[4] = y - D_L00_00161710;
+                quad.uv[3] = first_pass_v + beam_ring_face_texture_v_step_gp;
+                quad.uv[4] = y - beam_ring_band_texture_u_step_gp;
                 quad.uv[0] = y;
                 quad.uv[2] = y;
-                quad.uv[7] = first_pass_v + D_L00_00161714;
-                quad.uv[6] = y - D_L00_00161710;
-                first_pass_v = first_pass_v + D_L00_00161714;
+                quad.uv[7] = first_pass_v + beam_ring_face_texture_v_step_gp;
+                quad.uv[6] = y - beam_ring_band_texture_u_step_gp;
+                first_pass_v = first_pass_v + beam_ring_face_texture_v_step_gp;
                 fast_draw_quad_real(&quad, 0, 0);
                 quad.uv[0] = y;
                 quad.uv[1] = second_pass_v;
                 quad.uv[2] = y;
-                quad.uv[3] = second_pass_v + D_L00_00161714;
+                quad.uv[3] = second_pass_v + beam_ring_face_texture_v_step_gp;
                 quad.uv[5] = second_pass_v;
-                quad.uv[4] = y - D_L00_00161710;
-                quad.uv[6] = y - D_L00_00161710;
-                quad.uv[7] = second_pass_v + D_L00_00161714;
-                second_pass_v = second_pass_v + D_L00_00161714;
+                quad.uv[4] = y - beam_ring_band_texture_u_step_gp;
+                quad.uv[6] = y - beam_ring_band_texture_u_step_gp;
+                quad.uv[7] = second_pass_v + beam_ring_face_texture_v_step_gp;
+                second_pass_v = second_pass_v + beam_ring_face_texture_v_step_gp;
                 fast_draw_quad_real(&quad, 0, 0);
             }
         }
-        y += D_L00_00161710;
+        y += beam_ring_band_texture_u_step_gp;
     }
 }
 extern int D_L00_00161780 __attribute__((sda));
