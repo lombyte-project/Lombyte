@@ -369,7 +369,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x75:
-    case 0x76: {
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
         p->state.control_mode = 7;
