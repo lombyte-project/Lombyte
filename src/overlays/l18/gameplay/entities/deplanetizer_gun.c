@@ -78,7 +78,7 @@ extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002
 
 extern int D_L18_00162498 __attribute__((sda));
 extern int D_L18_001624BC __attribute__((sda));
-extern int D_L18_00162524;
+extern int deplanetizer_glow_quad_alpha __asm__("D_L18_00162524");
 extern float D_L18_00162520;
 extern float D_L18_0016252C;
 extern char D_L18_001679D0[];
@@ -202,7 +202,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_001624BC));
             denominator = convert_integer_to_float(frames_9780(D_L18_001624C0 - D_L18_001624BC));
             numerator = numerator / denominator;
-            D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
+            deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
@@ -251,7 +251,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_001624BC);
             denominator = convert_integer_to_float(D_L18_001624C0 - D_L18_001624BC);
             numerator = numerator / denominator;
-            D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
+            deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
@@ -539,10 +539,10 @@ extern int D_L18_00162560;
 extern int D_L18_00162564;
 extern float D_L18_00162568;
 extern float D_L18_0016256C;
-extern int D_L18_00162504 __attribute__((sda));
-extern float D_L18_00162508 __attribute__((sda));
-extern float D_L18_0016250C __attribute__((sda));
-extern int D_L18_00162510 __attribute__((sda));
+extern int deplanetizer_glow_first_quad_base_tint __asm__("D_L18_00162504") __attribute__((sda));
+extern float deplanetizer_glow_first_quad_scale __asm__("D_L18_00162508") __attribute__((sda));
+extern float deplanetizer_glow_second_quad_scale __asm__("D_L18_0016250C") __attribute__((sda));
+extern int deplanetizer_glow_second_quad_base_tint __asm__("D_L18_00162510") __attribute__((sda));
 void draw_moby_two_tint_glow_quads(struct Moby *m) {
     Pk_9c20 pk;
     float quad_transform[4][4];
@@ -572,7 +572,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     cross_9c20(quad_transform[1], quad_transform[0], up);
     norm_9c20(quad_transform[1], quad_transform[1], 1.0f);
     cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
-    c = D_L18_00162504 | (D_L18_00162524 << 24);
+    c = deplanetizer_glow_first_quad_base_tint | (deplanetizer_glow_quad_alpha << 24);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -586,17 +586,17 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     pk.col[1] = c;
     pk.col[0] = c;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_00162508);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_first_quad_scale);
         xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
-    second_quad_color = D_L18_00162510 | (D_L18_00162524 << 24);
+    second_quad_color = deplanetizer_glow_second_quad_base_tint | (deplanetizer_glow_quad_alpha << 24);
     pk.col[3] = second_quad_color;
     pk.col[2] = second_quad_color;
     pk.col[1] = second_quad_color;
     pk.col[0] = second_quad_color;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_0016250C);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_second_quad_scale);
         xform_9c20(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9c20(&pk, 0, 0);
@@ -631,7 +631,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     norm_9c20(quad_transform[2], quad_transform[2], 1.0f);
     cross_9c20(quad_transform[1], quad_transform[0], quad_transform[2]);
 
-    color = D_L18_00162504 | 0xFF000000;
+    color = deplanetizer_glow_first_quad_base_tint | 0xFF000000;
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -659,7 +659,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = D_L18_00162510 | 0x7F000000;
+    pk.col[3] = deplanetizer_glow_second_quad_base_tint | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
@@ -677,7 +677,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = D_L18_00162510 | 0x7F000000;
+    pk.col[3] = deplanetizer_glow_second_quad_base_tint | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
