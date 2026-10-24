@@ -12,9 +12,9 @@
 # Nothing proprietary is shipped with this repository. The script downloads
 # the toolchain from public mirrors used by the PS2 decompilation community,
 # checks every file against a pinned SHA-256, builds the game compiler from
-# its GPL source and patch stack (patches/sce-991111b), and takes the retail
-# boot ELF and level overlays only from a disc image or file you provide, into
-# gitignored paths.
+# its GPL source and patch stack (patches/sce-991111b), the same for SN's cc1
+# (patches/sn-2.95.2), and takes the retail boot ELF and level overlays only
+# from a disc image or file you provide, into gitignored paths.
 set -Eeuo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
@@ -219,6 +219,7 @@ check_installed() {
     LABEL="game compiler (tools/compilers/game-compiler)";      check test -x "$COMPILERS/game-compiler/cc1" -a -x "$COMPILERS/game-compiler/as" -a -x "$COMPILERS/game-compiler/sdk-as" -a -f "$COMPILERS/game-compiler/include/stdarg.h"
     LABEL="SDK compiler (tools/compilers/sdk-compiler)";        check test -x "$COMPILERS/sdk-compiler/bin/ee-gcc"
     LABEL="SN compiler (tools/compilers/sn-compiler)";         check test -f "$COMPILERS/sn-compiler/bin/ee-gcc.exe"
+    LABEL="SN cc1 from source (tools/compilers/sn-cc1)";      check sn_cc1_current
     LABEL="SN assembler ps2eeas 1.9.25.758 (no divbug, 64 MiB stack)";        check sha_ok "$COMPILERS/sn-compiler/ee/bin/Ps2EeAs.exe" "$SN_AS_PATCHED_SHA"
     LABEL="SN GCC 2.95.2 headers";                              check sha_ok "$COMPILERS/sn-compiler/lib/gcc-lib/ee/2.95.2/include/stdarg.h" "$SDK_MIRROR_STDARG_SHA"
     LABEL="R5900 binutils (tools/binutils-mips-ps2-decompals)"; check test -x "$TOOLS/binutils-mips-ps2-decompals/mips-ps2-decompals-ld"
@@ -353,10 +354,8 @@ install_sn_compiler() {
     replace_dir "$target" "$STAGE/sn"
 }
 
-game_compiler_current() {
-    local target="$COMPILERS/game-compiler"
-    [[ -x "$target/cc1" && -x "$target/as" && -x "$target/sdk-as" && -x "$target/ee-gcc" && -f "$target/provenance.json" ]] || return 1
-    python3 - "$target/provenance.json" "$ROOT/patches/sce-991111b" <<'EOF'
+patches_current() { # provenance.json patch-folder: the recorded patches are unchanged
+    python3 - "$1" "$2" <<'EOF'
 import hashlib, json, pathlib, sys
 prov = json.load(open(sys.argv[1]))
 patches = pathlib.Path(sys.argv[2])
@@ -369,12 +368,32 @@ sys.exit(0 if want else 1)
 EOF
 }
 
+game_compiler_current() {
+    local target="$COMPILERS/game-compiler"
+    [[ -x "$target/cc1" && -x "$target/as" && -x "$target/sdk-as" && -x "$target/ee-gcc" && -f "$target/provenance.json" ]] || return 1
+    patches_current "$target/provenance.json" "$ROOT/patches/sce-991111b"
+}
+
+sn_cc1_current() {
+    local target="$COMPILERS/sn-cc1"
+    [[ -x "$target/cc1" && -f "$target/provenance.json" ]] || return 1
+    patches_current "$target/provenance.json" "$ROOT/patches"
+}
+
 install_game_compiler() {
     if game_compiler_current; then
         return
     fi
     say "building the game compiler from source (patches/sce-991111b, about a minute)"
     python3 scripts/build-game-compiler.py --output "$COMPILERS/game-compiler"
+}
+
+install_sn_cc1() {
+    if sn_cc1_current; then
+        return
+    fi
+    say "building SN cc1 from source (patches/sn-2.95.2, under a minute)"
+    python3 scripts/build-sn-compiler.py --output "$COMPILERS/sn-cc1"
 }
 
 install_python() {
@@ -476,6 +495,7 @@ install_objdiff
 install_sdk_compiler
 install_sn_compiler
 install_game_compiler
+install_sn_cc1
 install_python
 install_elf
 rm -rf -- "$STAGE"

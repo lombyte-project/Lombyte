@@ -2937,7 +2937,7 @@ void pyrocitor_update(struct Moby *moby) {
     FlameHit_2b77f0 hit;
     f32 pos_out, vel_out;
     f32 speed, length, accel, damping;
-    s32 gate, initial_count, extra, count;
+    s32 gate, initial_count, extra;
     s32 i;
     s32 fl;
     void *effect;
@@ -3034,8 +3034,7 @@ void pyrocitor_update(struct Moby *moby) {
         extra = D_L00_0016151C;
         if (length < 4.0f || (moby->flags & 1))
             initial_count = 1;
-        count = extra + initial_count;
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < extra + initial_count; i++) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
                 ((D_L00_00161524 - D_L00_00161528) * (length / (D_L00_00161520 + speed)) + D_L00_00161528) *
                     frame_time);

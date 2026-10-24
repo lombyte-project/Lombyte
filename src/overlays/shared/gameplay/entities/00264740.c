@@ -46,6 +46,8 @@ void FUN_L00_00264740(void)
                 FUN_L00_00250480(current);
                 update = current->update;
             }
+            /* Near miss, 3 words: retail leaves the beqz and jalr delay slots empty and calls
+               through v1; a C call here always fills one slot. */
             for (; update != 0; update = 0) {
                 update(current);
             }

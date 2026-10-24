@@ -1520,14 +1520,10 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
     }
     matrix_to_euler(vv, out);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f580.s", FUN_L00_0020f580);
-#else
+#include "rnc/overlay/hero_tables.h"
 extern s32 D_L00_0015F5C4_f580 __asm__("D_L00_0015F5C4");
 extern s32 D_L00_0015F5CC_f580 __asm__("D_L00_0015F5CC");
-extern u8 D_00179AC0_f580[] __asm__("D_L00_00179AC0");
 extern u8 D_0013FE10_f580[] __asm__("D_0013FE10");
-extern u8 D_0013FE40_f580[] __asm__("D_0013FE40");
 extern u8 D_0017A5C0_f580[] __asm__("D_L00_0017A5C0");
 extern u8 D_L00_0017A608[] __asm__("D_L00_0017A608");
 extern u8 D_0017A650_f580[] __asm__("D_L00_0017A650");
@@ -1538,10 +1534,8 @@ extern u8 D_0017C880_f580[] __asm__("D_L00_0017C880");
 extern u8 D_0017C980_f580[] __asm__("D_L00_0017C980");
 extern u8 D_0017A960_f580[] __asm__("D_L00_0017A960");
 extern u8 D_L00_0015F6A8[] __asm__("D_L00_0015F6A8");
-extern s32 D_001404DC_f580 __asm__("D_001404DC");
-extern u8 D_001410D0_f580[] __asm__("D_001410D0");
 extern u8 opt_mirror_anim __asm__("D_0015EDB5");
-extern s32 large_font_height __asm__("D_L00_0015F690");
+extern s32 large_font_height __asm__("D_L00_0015F690") __attribute__((sda));
 extern void FUN_00250480_f580(void *) __asm__("FUN_0020d580");
 extern void FUN_00250df8_f580(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_001ffcd8_f580(void *, void *) __asm__("FUN_001fa2b8");
@@ -1561,157 +1555,202 @@ extern f32 FUN_00200240_f580(s32) __asm__("FUN_001fa6c0");
 extern f32 FUN_001ff800_f580(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_00200250_f580(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_L00_0020d540_f580(s32) __asm__("FUN_L00_0020d540");
+extern HeroAnimRow item_defs_f580[] __asm__("D_L00_00179AC0");
+extern struct HeroEase hero_eases_f580[] __asm__("D_L00_0017A680");
 
 void FUN_L00_0020f580(void)
 {
-    union { f32 direction[4]; u8 saved[0x20]; } scratch __attribute__((aligned(16)));
-    struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
-    s32 i, j, index, offset, first, second, third, random_range;
-    u8 *definition;
-    s32 color_red, color_green, color_blue;
-    u8 *moby, *effect;
-    u8 *volatile source;
+    union
+    {
+        f32 direction[4];
+        u128 saved[2];
+    } scratch __attribute__((aligned(16)));
+    f32 mtx[4][4] __attribute__((aligned(16)));
+    s32 i;
+    s32 j;
+    s32 joint;
+    s32 first;
+    s32 second;
+    s32 third;
+    s32 random_range;
+    s32 item_id;
+    u8 *slot_vec;
+    u8 *joint_mtx;
+    s32 color_red;
+    s32 red;
+    s32 color_green;
+    s32 color_blue;
+    u8 *moby;
+    s32 slot_offset;
     u8 *slot;
+    u8 *effect;
+    u8 *created;
     f32 angle;
-
-    i = 0;
-    do {
-        if ((D_L00_0015F5C4_f580 != 2 && D_L00_0015F5C4_f580 != 6) || i == 4 || i == 5) {
-            offset = i * 0x50;
-            source = transform.position;
-            slot = (u8 *)&hero + offset;
-            j = 0;
-            do {
-                moby = *(u8 **)(slot + 0x1090);
-                if (j == 1) moby = *(u8 **)(slot + 0x1094);
-                if (moby != 0) {
-                    *(u64 *)(moby + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
-                    definition = D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c;
-                    index = *(s32 *)(definition + 0xc);
-                    if (i == 1 && j == 1) index = 3;
-                    if (*(u8 *)(slot + 0x10aa) != 0) {
-                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
-                        FUN_0025d330_f580(D_0013FE10_f580 + index * 0x40, (u8 *)&hero + offset + 0x1080);
-                        FUN_00250480_f580(moby);
+    for (i = 0; i < 7; i++)
+    {
+        if (((D_L00_0015F5C4_f580 == 2) || (D_L00_0015F5C4_f580 == 6)) && (i != 4) && (i != 5))
+            continue;
+        slot_offset = i * 0x50;
+        /* Fakematch: holding the joint matrices in a local set once per slot keeps their
+         * address out of the slot loop's preheader, which gives retail's registers there. */
+        joint_mtx = D_0013FE10_f580;
+        for (j = 0; j < 2; j++)
+        {
+            if ((j > 0) && (i != 1) && (i != 3) && (i != 4))
+                break;
+            slot = ((u8 *) (&hero)) + slot_offset;
+            moby = *((u8 **) (slot + 0x1090));
+            if (j == 1)
+                moby = *((u8 **) (slot + 0x1094));
+            if (moby != 0)
+            {
+                *((u64 *) (moby + 0x38)) = *((u64 *) (((u8 *) hero.moby) + 0x38));
+                item_id = *((s32 *) (slot + 0x10b8));
+                joint = item_defs_f580[item_id].joint;
+                if ((i == 1) && (j == 1))
+                    joint = 3;
+                if ((*((u8 *) (slot + 0x10aa))) != 0)
+                {
+                    slot_vec = (((u8 *) (&hero)) + 0x1070) + slot_offset;
+                    qcopy(slot_vec, hero.joint_matrices[joint][3]);
+                    slot_vec = (((u8 *) (&hero)) + 0x1080) + slot_offset;
+                    FUN_0025d330_f580(D_0013FE10_f580 + (joint * 0x40), slot_vec);
+                    FUN_00250480_f580(moby);
+                    FUN_00250df8_f580(moby);
+                    *((u16 *) (moby + 0x34)) &= 0xfffb;
+                }
+                else
+                {
+                    qcopy(moby + 0x10, (((u8 *) (&hero)) + 0xaf0) + (joint * 0x40));
+                    if ((large_font_height == 0) || (item_defs_f580[item_id].unk18 == 0))
+                    {
+                        first = is_hero_slot_item_id_10_17_20_or_25(i);
+                        second = is_hero_slot_item_id_5_to_7(i);
+                        third = FUN_L00_0020d540_f580(i);
+                        if (((first == 0) && (second == 0)) && (third == 0))
+                            FUN_00250480_f580(moby);
                         FUN_00250df8_f580(moby);
-                        *(u16 *)(moby + 0x34) &= 0xfffb;
-                    } else {
-                        *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
-                        if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
-                            first = is_hero_slot_item_id_10_17_20_or_25(i);
-                            second = is_hero_slot_item_id_5_to_7(i);
-                            third = FUN_L00_0020d540_f580(i);
-                            if (first == 0 && second == 0 && third == 0) FUN_00250480_f580(moby);
-                            FUN_00250df8_f580(moby);
-                            FUN_001ffcd8_f580(moby + 0xc0, D_0013FE10_f580 + index * 0x40);
-                            if (first == 0 && second == 0 && third == 0) FUN_0025c170_f580(moby + 0xc0);
-                            scratch.direction[0] = 1.0f;
-                            scratch.direction[1] = 0.0f;
-                            scratch.direction[2] = 0.0f;
-                            FUN_001ff6d0_f580(scratch.direction, scratch.direction, moby + 0xc0);
-                            *(f32 *)(moby + 0x44) = -FUN_001ff8b0_f580(FUN_001ff408_f580(scratch.direction), scratch.direction[2]);
-                            *(f32 *)(moby + 0x48) = FUN_001ff8b0_f580(scratch.direction[0], scratch.direction[1]);
-                            FUN_00250f98_f580(moby);
-                            *(u16 *)(moby + 0x34) |= 6;
-                            if (first != 0) {
-                                FUN_L00_002092c8_f580(D_0017A5C0_f580, D_0017C480_f580, *(s32 *)(moby + 0x24), 0, 0);
-                                *(s32 *)(moby + 0x54) = 0;
-                                *(s32 *)(moby + 0x50) = 0;
-                                *(void **)(moby + 0x68) = D_0017C480_f580;
-                                *(void **)(moby + 0x6c) = D_0017C480_f580;
-                            } else if (second != 0) {
-                                if (*(s16 *)(moby + 0xa6) == 0x1b1)
-                                    FUN_L00_002092c8_f580(D_L00_0017A608, D_L00_0017C680, *(s32 *)(moby + 0x24), 6, 0);
-                                else
-                                    FUN_L00_002092c8_f580(D_L00_0015F6A8, D_L00_0017C680, *(s32 *)(moby + 0x24), 0, 0);
-                                *(s32 *)(moby + 0x54) = 0;
-                                *(void **)(moby + 0x68) = D_L00_0017C680;
-                                *(void **)(moby + 0x6c) = D_L00_0017C680;
-                                *(s32 *)(moby + 0x50) = 0;
-                            } else if (third != 0) {
-                                *(u128 *)scratch.saved = *(u128 *)D_0017A960_f580;
-                                *(u128 *)(scratch.saved + 0x10) = *(u128 *)(D_0017A960_f580 + 0xb0);
-                                *(f32 *)(D_0017A960_f580 + 0) = 1.0f;
-                                *(f32 *)(D_0017A960_f580 + 4) = 1.0f;
-                                *(f32 *)(D_0017A960_f580 + 8) = 1.0f;
-                                *(f32 *)(D_0017A960_f580 + 0xb0) = 1.0f;
-                                *(f32 *)(D_0017A960_f580 + 0xb4) = 1.0f;
-                                *(f32 *)(D_0017A960_f580 + 0xb8) = 1.0f;
-                                if (j != 0) {
-                                    FUN_L00_002092c8_f580(D_0017A668_f580, D_0017C980_f580, *(s32 *)(moby + 0x24), 0, 0);
-                                    *(void **)(moby + 0x68) = D_0017C980_f580;
-                                    *(void **)(moby + 0x6c) = D_0017C980_f580;
-                                } else {
-                                    FUN_L00_002092c8_f580(D_0017A650_f580, D_0017C880_f580, *(s32 *)(moby + 0x24), 0, 0);
-                                    *(void **)(moby + 0x68) = D_0017C880_f580;
-                                    *(void **)(moby + 0x6c) = D_0017C880_f580;
-                                }
-                                *(s32 *)(moby + 0x54) = 0;
-                                *(s32 *)(moby + 0x50) = 0;
-                                *(u128 *)D_0017A960_f580 = *(u128 *)scratch.saved;
-                                *(u128 *)(D_0017A960_f580 + 0xb0) = *(u128 *)(scratch.saved + 0x10);
-                            }
-                            goto after_moby;
-                        }
-                        FUN_00250480_f580(moby);
-                        if (large_font_height == 0 || i != 0)
-                            FUN_0025d330_f580(D_0013FE10_f580 + index * 0x40, moby + 0x40);
-                        else
-                            update_hero_item_rotation_from_history(moby, D_0013FE10_f580 + index * 0x40);
-                        FUN_00250df8_f580(moby);
-                        if (opt_mirror_anim) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
+                        FUN_001ffcd8_f580(moby + 0xc0, D_0013FE10_f580 + (joint * 0x40));
+                        if (((first == 0) && (second == 0)) && (third == 0))
+                            FUN_0025c170_f580(moby + 0xc0);
+                        scratch.direction[0] = 1.0f;
+                        scratch.direction[1] = 0.0f;
+                        scratch.direction[2] = 0.0f;
+                        FUN_001ff6d0_f580(scratch.direction, scratch.direction, moby + 0xc0);
+                        *((f32 *) (moby + 0x44)) = -FUN_001ff8b0_f580(FUN_001ff408_f580(scratch.direction), scratch.direction[2]);
+                        *((f32 *) (moby + 0x48)) = FUN_001ff8b0_f580(scratch.direction[0], scratch.direction[1]);
                         FUN_00250f98_f580(moby);
-                        *(u16 *)(moby + 0x34) |= 6;
-                    }
-                }
-after_moby:
-                if (i == 3 && j == 1 && moby != 0) {
-                    if (*(s32 *)((u8 *)&hero + 0x118c) == 0) {
-                        *(s32 *)((u8 *)&hero + 0x118c) = (s32)FUN_0024e838_f580(0x4b4);
-                        if (*(s32 *)((u8 *)&hero + 0x118c) != 0) {
-                            effect = (u8 *)*(s32 *)((u8 *)&hero + 0x118c);
-                            *(u32 *)(effect + 0x90) = 0x801432d7;
-                            qcopy(effect + 0x10, &hero.motion.pos);
-                            qcopy(effect + 0x40, &hero.motion.rot);
-                            *(u16 *)(effect + 0x32) = 0x40;
-                            *(u8 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x31) = 1;
-                            *(u8 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x30) = 0;
-                            *(u16 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x34) = 0;
-                            *(f32 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x2c) *= 1.3f;
-                            FUN_00250df8_f580((u8 *)*(s32 *)((u8 *)&hero + 0x118c));
+                        *((u16 *) (moby + 0x34)) |= 6;
+                        if (first != 0)
+                        {
+                            FUN_L00_002092c8_f580(D_0017A5C0_f580, D_0017C480_f580, *((s32 *) (moby + 0x24)), 0, 0);
+                            *((s32 *) (moby + 0x54)) = 0;
+                            *((s32 *) (moby + 0x50)) = 0;
+                            *((void **) (moby + 0x68)) = D_0017C480_f580;
+                            *((void **) (moby + 0x6c)) = D_0017C480_f580;
+                        }
+                        else if (second != 0)
+                        {
+                            if ((*((s16 *) (moby + 0xa6))) == 0x1b1)
+                                FUN_L00_002092c8_f580(D_L00_0017A608, D_L00_0017C680, *((s32 *) (moby + 0x24)), 6, 0);
+                            else
+                                FUN_L00_002092c8_f580(D_L00_0015F6A8, D_L00_0017C680, *((s32 *) (moby + 0x24)), 0, 0);
+                            *((s32 *) (moby + 0x54)) = 0;
+                            *((void **) (moby + 0x68)) = D_L00_0017C680;
+                            *((void **) (moby + 0x6c)) = D_L00_0017C680;
+                            *((s32 *) (moby + 0x50)) = 0;
+                        }
+                        else if (third != 0)
+                        {
+                            scratch.saved[0] = *((u128 *) D_0017A960_f580);
+                            scratch.saved[1] = *((u128 *) (D_0017A960_f580 + 0xb0));
+                            hero_eases_f580[4].scale3.f[0] = 1.0f;
+                            hero_eases_f580[4].scale3.f[1] = 1.0f;
+                            hero_eases_f580[4].scale3.f[2] = 1.0f;
+                            hero_eases_f580[5].scale3.f[0] = 1.0f;
+                            hero_eases_f580[5].scale3.f[1] = 1.0f;
+                            hero_eases_f580[5].scale3.f[2] = 1.0f;
+                            if (j == 0)
+                            {
+                                FUN_L00_002092c8_f580(D_0017A650_f580, D_0017C880_f580, *((s32 *) (moby + 0x24)), 0, 0);
+                                *((void **) (moby + 0x68)) = D_0017C880_f580;
+                                *((void **) (moby + 0x6c)) = D_0017C880_f580;
+                            }
+                            else
+                            {
+                                FUN_L00_002092c8_f580(D_0017A668_f580, D_0017C980_f580, *((s32 *) (moby + 0x24)), 0, 0);
+                                *((void **) (moby + 0x68)) = D_0017C980_f580;
+                                *((void **) (moby + 0x6c)) = D_0017C980_f580;
+                            }
+                            *((s32 *) (moby + 0x54)) = 0;
+                            *((s32 *) (moby + 0x50)) = 0;
+                            *((u128 *) D_0017A960_f580) = scratch.saved[0];
+                            *((u128 *) (D_0017A960_f580 + 0xb0)) = scratch.saved[1];
                         }
                     }
-                    if (*(s32 *)((u8 *)&hero + 0x118c) != 0) {
-                        effect = (u8 *)*(s32 *)((u8 *)&hero + 0x118c);
-                        if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
-                            FUN_0024f728_f580(moby, 6, source);
-                            *(u128 *)((u8 *)&hero + 0x1d80) = *(u128 *)(source + 0x30);
-                            enqueue_hero_glow_draw_callback_once();
-                            *(u128 *)(effect + 0x10) = *(u128 *)(source + 0x30);
-                            FUN_001ffcd8_f580(effect + 0xc0, source);
-                            FUN_00250df8_f580(effect);
-                            *(u64 *)(effect + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
-                            random_range = FUN_001fef20_f580(0x78);
-                            angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f + -3.1415927f);
-                            color_red = FUN_00200250_f580(angle * 90.0f);
-                            color_green = FUN_00200250_f580(angle * 50.0f);
-                            color_blue = FUN_00200250_f580(angle * 10.0f);
-                            color_blue += 0x14;
-                            color_green += 0x32;
-                            color_red += 0xd7;
-                            if (color_red > 0xff) color_red = 0xff;
-                            *(u16 *)(effect + 0x34) |= 0x10;
-                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
-                        }
+                    else
+                    {
+                        FUN_00250480_f580(moby);
+                        if ((large_font_height == 0) || (i != 0))
+                            FUN_0025d330_f580(D_0013FE10_f580 + (joint * 0x40), moby + 0x40);
+                        else
+                            update_hero_item_rotation_from_history(moby, (u8 *) ((joint * 0x40) + ((s32) joint_mtx)));
+                        FUN_00250df8_f580(moby);
+                        if (opt_mirror_anim)
+                            FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
+                        FUN_00250f98_f580(moby);
+                        *((u16 *) (moby + 0x34)) |= 6;
                     }
                 }
-                j++;
-            } while ((j < 1 || i == 1 || i == 3 || i == 4) && j < 2);
+            }
+            if ((i == 3) && (j == 1) && (moby != 0))
+            {
+                struct Hero *p = &hero;
+                if ((*((s32 *) (((u8 *) p) + 0x118c))) == 0)
+                {
+                    *((s32 *) (((u8 *) p) + 0x118c)) = (s32) FUN_0024e838_f580(0x4b4);
+                    if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                    {
+                    *((u32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x90)) = 0x801432d7;
+                    created = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
+                    qcopy(created + 0x10, &p->motion.pos);
+                    qcopy(created + 0x40, &p->motion.rot);
+                    *((u16 *) (created + 0x32)) = 0x40;
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x31)) = 1;
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x30)) = 0;
+                    *((u16 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x34)) = 0;
+                    *((f32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x2c)) *= 1.3f;
+                    FUN_00250df8_f580((u8 *) (*((s32 *) (((u8 *) p) + 0x118c))));
+                    }
+                }
+                if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                {
+                    effect = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
+                    if ((((*((u16 *) (effect + 0x34))) ^ 1) & 1) != 0)
+                    {
+                        FUN_0024f728_f580(moby, 6, mtx);
+                        qcopy(((u8 *) p) + 0x1d80, mtx[3]);
+                        enqueue_hero_glow_draw_callback_once();
+                        qcopy(effect + 0x10, mtx[3]);
+                        FUN_001ffcd8_f580(effect + 0xc0, mtx);
+                        FUN_00250df8_f580(effect);
+                        *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) p->moby) + 0x38));
+                        random_range = FUN_001fef20_f580(0x78);
+                        angle = FUN_001ff800_f580((((((f32) (D_L00_0015F5CC_f580 % random_range)) / FUN_00200240_f580(random_range)) * 2.0f) * 3.1415927f) + (-3.1415927f));
+                        color_red = FUN_00200250_f580(angle * 90.0f);
+                        color_green = FUN_00200250_f580(angle * 50.0f);
+                        color_blue = FUN_00200250_f580(angle * 10.0f);
+                        red = color_red + 0xd7;
+                        if (red > 0xff)
+                            red = 0xff;
+                        *((u16 *) (effect + 0x34)) |= 0x10;
+                        *((u32 *) (effect + 0x90)) = (((color_blue + 0x14) << 16) | (0x80000000 | ((color_green + 0x32) << 8))) | red;
+                    }
+                }
+            }
         }
-        i++;
-    } while (i < 7);
+    }
 }
-#endif /* NON_MATCHING */
 typedef struct {
     char pad[0x20];
     unsigned char t;

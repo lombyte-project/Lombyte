@@ -2228,9 +2228,6 @@ void render_data_processor_linked_effect(u8 *moby) {
         group = next_group;
     } while (group < 4);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
-#else
 extern unsigned char D_001413F4[];
 extern int D_L10_00161D64;
 extern int D_L10_00161D68;
@@ -2306,7 +2303,6 @@ void FUN_L10_002dcc58(struct Moby *moby) {
     }
     }
 }
-#endif
 
 /* Spawns a moby at a spot, fills its data block and starts its fade and sound. */
 extern float D_0015ED6C_dd __asm__("D_0015ED6C");

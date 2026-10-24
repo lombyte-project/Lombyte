@@ -1,0 +1,101 @@
+diff --git a/gcc/configure.in b/gcc/configure.in
+index e43c157..9c056d7 100644
+--- a/gcc/configure.in
++++ b/gcc/configure.in
+@@ -2625,6 +2625,16 @@ changequote([,])dnl
+ 		tm_file="mips/elf64.h"
+ 		tmake_file=mips/t-elf
+ 		;;
++	mips64r5900*-*-elf*)
++		target_cpu_default="MASK_SINGLE_FLOAT | MASK_MIPS5900"
++		tm_file="mips/elf5900.h libgloss.h"
++		tmake_file=mips/t-r5900
++		if test x$host != x$target
++		then
++			target_requires_64bit_host_wide_int=yes
++		fi
++		use_collect2=yes
++		;;
+ 	mips64orion-*-elf*)
+ 		tm_file="mips/elforion.h mips/elf64.h libgloss.h"
+ 		tmake_file=mips/t-elf
+diff --git a/gcc/configure b/gcc/configure
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -4940,6 +4940,16 @@
+ 		tm_file="mips/elf64.h"
+ 		tmake_file=mips/t-elf
+ 		;;
++	mips64r5900*-*-elf*)
++		target_cpu_default="MASK_SINGLE_FLOAT | MASK_MIPS5900"
++		tm_file="mips/elf5900.h libgloss.h"
++		tmake_file=mips/t-r5900
++		if test x$host != x$target
++		then
++			target_requires_64bit_host_wide_int=yes
++		fi
++		use_collect2=yes
++		;;
+ 	mips64orion-*-elf*)
+ 		tm_file="mips/elforion.h mips/elf64.h libgloss.h"
+ 		tmake_file=mips/t-elf
+diff --git a/gcc/expr.c b/gcc/expr.c
+index 812e1fb..18d89c0 100644
+--- a/gcc/expr.c
++++ b/gcc/expr.c
+@@ -5439,9 +5439,13 @@ void
+ check_max_integer_computation_mode (exp)
+     tree exp;
+ {
+-  enum tree_code code = TREE_CODE (exp);
++  enum tree_code code;
+   enum machine_mode mode;
+ 
++  /* Strip any NOPs that don't change the mode.  */
++  STRIP_NOPS (exp);
++  code = TREE_CODE (exp);
++
+   /* We must allow conversions of constants to MAX_INTEGER_COMPUTATION_MODE.  */
+   if (code == NOP_EXPR
+       && TREE_CODE (TREE_OPERAND (exp, 0)) == INTEGER_CST)
+@@ -5620,7 +5624,12 @@ expand_expr (exp, target, tmode, modifier)
+     }
+ 
+ #ifdef MAX_INTEGER_COMPUTATION_MODE
++  /* Only check stuff here if the mode we want is different from the mode
++     of the expression; if it's the same, check_max_integer_computiation_mode
++     will handle it.  Do we really need to check this stuff at all?  */
++
+   if (target
++      && GET_MODE (target) != mode
+       && TREE_CODE (exp) != INTEGER_CST
+       && TREE_CODE (exp) != PARM_DECL
+       && TREE_CODE (exp) != ARRAY_REF
+@@ -5628,7 +5637,8 @@ expand_expr (exp, target, tmode, modifier)
+       && TREE_CODE (exp) != BIT_FIELD_REF
+       && TREE_CODE (exp) != INDIRECT_REF
+       && TREE_CODE (exp) != CALL_EXPR
+-      && TREE_CODE (exp) != VAR_DECL)
++      && TREE_CODE (exp) != VAR_DECL
++      && TREE_CODE (exp) != RTL_EXPR)
+     {
+       enum machine_mode mode = GET_MODE (target);
+ 
+@@ -5637,7 +5647,8 @@ expand_expr (exp, target, tmode, modifier)
+ 	fatal ("unsupported wide integer operation");
+     }
+ 
+-  if (TREE_CODE (exp) != INTEGER_CST
++  if (tmode != mode
++      && TREE_CODE (exp) != INTEGER_CST
+       && TREE_CODE (exp) != PARM_DECL
+       && TREE_CODE (exp) != ARRAY_REF
+       && TREE_CODE (exp) != COMPONENT_REF
+@@ -5645,6 +5656,7 @@ expand_expr (exp, target, tmode, modifier)
+       && TREE_CODE (exp) != INDIRECT_REF
+       && TREE_CODE (exp) != VAR_DECL
+       && TREE_CODE (exp) != CALL_EXPR
++      && TREE_CODE (exp) != RTL_EXPR
+       && GET_MODE_CLASS (tmode) == MODE_INT
+       && tmode > MAX_INTEGER_COMPUTATION_MODE)
+     fatal ("unsupported wide integer operation");

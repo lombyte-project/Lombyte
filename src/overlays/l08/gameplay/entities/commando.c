@@ -6,6 +6,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
 #include "qcopy.h"
+#include "qzero.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
@@ -624,9 +625,304 @@ float interpolate_sample_ring(float x, char *sample_ring_data) {
     samples_base = sample_ring_data + 0x90;
     return *(float *)(samples_base - (-(i * 4))) * (1.0f - fr) + *(float *)(samples_base - (-(j * 4))) * fr;
 }
+/* A point light slot, 0x20 bytes apart. */
+typedef struct {
+    f32 red;
+    f32 green;
+    f32 blue;
+    u8 padC[4];
+    Vec4 pos;
+} PointLight;
+
+extern PointLight D_L08_00180AC0[];
+
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
 #else
+/* Builds the animated grid, draws its quads, and updates attached effects. */
+/* Ported from rac1-decomp (nonmatching/l08_batalia/func_L08_002F7318.c: func_L08_002F7318). */
+
+typedef float Vec_5e58[4] __attribute__((aligned(16)));
+
+typedef struct {
+    float width,height;
+    unsigned char nx,ny; unsigned short flags;
+    unsigned char texture,frames,frame_ticks,current;
+    unsigned char red,blue,green,alpha;
+    float phase_start,phase_end,amp_start,amp2_start,amp_end,amp2_end;
+    float wave_u,wave_v,wave2_v,wave2_u;
+    unsigned char blend0,blend1,blend2,blend3;
+    float u_rate,u_amp,u_phase,v_rate,v_amp,v_phase;
+    float noise_amp,noise_speed,phase0,phase1,phase0_end,phase1_end;
+    float texture_w_count,texture_h_count,normal_u,normal_v;
+    float z0,z1,jitter,noise_rate;
+    float noise[8],goal[8],noise_u,noise_v,noise_bias;
+    float particle_xy,particle_z,particle_size0,particle_size1;
+    unsigned char particle_r,particle_g,particle_b,particle_a;
+    short particle_life; unsigned char particle_count,particle_ticks;
+    float particle_range; int particle_timer;
+    float particle_offset,particle_height,puff_xy,puff_z,puff_size0,puff_size1;
+    unsigned char puff_c0[4],puff_c1[4]; short puff_life0,puff_life1;
+    unsigned char puff_count,puff_ticks; short puff_timer;
+    float puff_range,puff_blend,puff_offset,puff_height;
+    char pad134[3]; unsigned char radius,pad138,light_range_x,light_range_y;
+    signed char light; float light_speed;
+    Vec_5e58 light_pos;
+    char pad150[4]; float intensity,alpha_u,alpha_v;
+} FlickerMesh_5e58;
+
+typedef struct {
+    char pad0[0x10]; Vec_5e58 position;
+    char pad20[3]; unsigned char alpha;
+    char pad24[0x1C]; Vec_5e58 rotation;
+    char pad50[0x28]; FlickerMesh_5e58 *data;
+} Moby_5e58;
+
+typedef struct {
+    Vec_5e58 vertex[4]; unsigned int color[4]; float uv[8]; long gs[4];
+} Quad_5e58;
+
+extern float interpolate_sample_ring_5e58(char *, float) __asm__("FUN_L08_002f5d98");
+extern float D_0015ED60;
+extern int D_L08_0015F3F8;
+extern f32 fast_cos_5e58(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_5e58(f32) __asm__("FUN_001f9de0");
+extern f32 vector_distance_5e58(void *, void *) __asm__("FUN_001f9b48");
+extern f32 square_root_5e58(f32) __asm__("FUN_001f9988");
+extern f32 split_float_fraction_5e58(void *, f32) __asm__("FUN_L00_00200228");
+extern s32 random_integer_between_5e58(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 normalize_angle_5e58(f32) __asm__("FUN_L00_0025e310");
+extern s32 tick_countdown_16_5e58(s16 *) __asm__("FUN_001f9770");
+extern s32 scale_game_frames_5e58(s32) __asm__("FUN_001f96f8");
+extern void subtract_vector_xyz_5e58(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_vectors_xyz_5e58(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_draw_quad_5e58(void *, void *, int) __asm__("FUN_001f7d30");
+extern void fast_vec_scale_5e58(void *, void *, f32) __asm__("FUN_001f9a68");
+extern unsigned char *spawn_colored_effect_5e58(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
+extern void spawn_puff_effect_5e58(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
+
+void FUN_L08_002f5e58(struct Moby *m) {
+    Moby_5e58 *moby = (Moby_5e58 *)m;
+    Vec_5e58 corner[4],step,left_step,right_step,left,right,point,edge,normal;
+    float matrix[16];
+    Quad_5e58 quad;
+    Vec_5e58 scratch[5];
+    float fraction;
+    FlickerMesh_5e58 *data;
+    if (!moby || !(data=moby->data)) return;
+    {
+        int row_bytes=(data->nx+1)*sizeof(Vec_5e58);
+        Vec_5e58 grid[data->ny+1][data->nx+1];
+        unsigned char *points=(unsigned char*)grid;
+        int remaining;
+        float inv_x,inv_y;
+        inv_x=1.0f/convert_integer_to_float(data->nx);
+        inv_y=1.0f/convert_integer_to_float(data->ny);
+        {
+        float u[data->nx+1],v[data->ny+1];
+        float phase,phase_step,amp,amp_step,amp2,amp2_step;
+        float phase0_step,phase1_step,time,z0,z1,bias;
+        int alpha,frame;
+        float row_noise,phase0,phase1;
+        int i,j;
+        unsigned int color;
+        float *noise=data->noise,*goal=data->goal;
+        time=convert_integer_to_float(D_L08_0015F3F8);
+        for (remaining=7;remaining>=0;goal++,remaining--,noise++) {
+            if (*noise<*goal) {
+                *noise+=data->jitter*data->noise_rate;
+                if (!(*goal<=*noise)) continue;
+            } else {
+                *noise-=data->jitter*data->noise_rate;
+                if (!(*noise<=*goal)) continue;
+            }
+            *goal=random_float_between(1.0f-data->jitter,1.0f);
+        }
+        alpha=func_001FA898_r(data->intensity*convert_integer_to_float(data->alpha)*convert_integer_to_float(moby->alpha)*0.0078125f)&0xFF;
+        frame=D_L08_0015F3F8;
+        if (data->frames) { frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
+        else data->current=data->texture;
+        if (data->flags&1) quad.gs[1]=get_effect_texture_alt(data->current);
+        else quad.gs[1]=get_effect_texture_alt(data->current+0x28);
+        quad.gs[0]=0;
+        quad.gs[2]=0xFF9000000260L;
+        quad.gs[3]=(long)data->blend0|((long)data->blend1<<2)|((long)data->blend2<<4)|((long)data->blend3<<6)|((long)data->alpha<<32);
+        color=(data->alpha<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+        quad.color[0]=color; quad.color[1]=color; quad.color[2]=color; quad.color[3]=color;
+        qzero(&corner[0]); qzero(&corner[1]); qzero(&corner[2]); qzero(&corner[3]);
+        {
+        float half_width=data->width*0.5f;
+        corner[1][0]=corner[3][0]=half_width;
+        corner[0][0]=corner[2][0]=-half_width;
+        }
+        corner[0][2]=data->z0+0.01f; corner[1][2]=data->z1+0.01f;
+        euler_rotation_matrix(matrix,&moby->rotation);
+        transform_vector(&corner[0],&corner[0],matrix);
+        transform_vector(&corner[1],&corner[1],matrix);
+        transform_vector(&corner[2],&corner[2],matrix);
+        transform_vector(&corner[3],&corner[3],matrix);
+        subtract_vector_xyz_5e58(&left_step,&corner[2],&corner[0]);
+        fast_vec_scale_5e58(&left_step,&left_step,inv_y);
+        subtract_vector_xyz_5e58(&right_step,&corner[3],&corner[1]);
+        fast_vec_scale_5e58(&right_step,&right_step,inv_y);
+        phase_step=(data->phase_end-data->phase_start)*inv_y;
+        amp_step=(data->amp_end-data->amp_start)*inv_y;
+        amp2_step=(data->amp2_end-data->amp2_start)*inv_y;
+        phase0_step=(data->phase0_end-data->phase0)*inv_x;
+        phase1_step=(data->phase1_end-data->phase1)*inv_y;
+        z0=data->height-data->z0; z1=data->height-data->z1;
+        subtract_vector_xyz_5e58(&edge,&corner[1],&corner[0]);
+        cross_vectors_xyz_5e58(&normal,&edge,&left_step);
+        normalize_vector_xyz(&normal,&normal,1.0f);
+        qcopy(&left,&corner[0]); qcopy(&right,&corner[1]);
+        bias=data->noise[0];
+        phase=data->phase_start; amp=data->amp_start; amp2=data->amp2_start;
+        phase0=data->phase0; phase1=data->phase1;
+        {
+        int i;
+        register int j;
+        for (i=0;i<=data->ny;phase+=phase_step,amp+=amp_step,amp2+=amp2_step,phase0+=phase0_step,phase1+=phase1_step,i++) {
+            float y=convert_integer_to_float(i)/convert_integer_to_float(data->ny);
+            qcopy_nc(&point,&left);
+            j=0;
+            subtract_vector_xyz_5e58(&step,&right,&left);
+            fast_vec_scale_5e58(&step,&step,inv_x);
+            row_noise=interpolate_sample_ring_5e58((char*)data,y);
+            for (;j<=data->nx;j++) {
+                float x=convert_integer_to_float(j)/convert_integer_to_float(data->nx);
+                float theta=x*3.1415927f;
+                float wave=time*phase+data->noise_amp*fast_sin_5e58(normalize_angle_5e58(data->noise_speed*time));
+                float noise=interpolate_sample_ring_5e58((char*)data,x);
+                float angle0,angle1,shape,drop,a,b,normal_angle0,normal_angle1;
+                wave+=noise*data->noise_u+row_noise*data->noise_v+bias*data->noise_bias;
+                drop=z0*x+z1*(1.0f-x);
+                angle0=normalize_angle_5e58(wave+phase0+data->wave_u*x+data->wave2_v*y);
+                angle1=normalize_angle_5e58(wave+phase1+data->wave_v*y+data->wave2_u*x);
+                shape=fast_sin_5e58(theta);
+                shape=square_root_5e58(shape);
+                drop*=shape;
+                drop*=1.0f-y;
+                normalize_vector_xyz(&scratch[0],&step,amp*fast_cos_5e58(angle0)*shape*noise);
+                normalize_vector_xyz(&scratch[1],&left_step,amp2*fast_sin_5e58(angle1)*shape*noise);
+                a=fast_sin_5e58(y*3.1415927f); b=fast_sin_5e58(theta);
+                normal_angle0=fast_sin_5e58(normalize_angle_5e58(wave+data->wave_u*x));
+                normal_angle1=fast_sin_5e58(normalize_angle_5e58(wave+data->wave2_v*y));
+                normalize_vector_xyz(&scratch[3],&normal,a*b*(data->normal_u*normal_angle0+data->normal_v*normal_angle1));
+                normalize_vector_xyz(&scratch[4],&left_step,drop);
+                add_vector_xyz(&scratch[2],&scratch[0],&scratch[1]);
+                add_vector_xyz(&scratch[2],&scratch[2],&scratch[3]);
+                subtract_vector_xyz_5e58(&scratch[2],&scratch[2],&scratch[4]);
+                add_vector_xyz((Vec_5e58*)(points+i*row_bytes)+j,&point,&scratch[2]);
+                *(float*)(points+(i*row_bytes+j*sizeof(Vec_5e58))+12)=1.0f/((1.0f-data->alpha_u+data->alpha_u*shape*shape*shape)*(1.0f-data->alpha_v+data->alpha_v*y));
+                add_vector_xyz(&point,&point,&step);
+            }
+            add_vector_xyz(&left,&left,&left_step);
+            add_vector_xyz(&right,&right,&right_step);
+        }
+        }
+        {
+            int i;
+            float f=split_float_fraction_5e58(&fraction,time*data->u_rate+data->u_amp*fast_sin_5e58(normalize_angle_5e58(time*data->u_phase)));
+            for (i=0;i<=data->nx;i++) { u[i]=f; f+=inv_x/data->texture_w_count; }
+            f=split_float_fraction_5e58(&fraction,time*data->v_rate+data->v_amp*fast_sin_5e58(normalize_angle_5e58(time*data->v_phase)));
+            for (i=0;i<=data->ny;i++) { v[i]=f; f+=inv_y/data->texture_h_count; }
+        }
+        {
+        int i;
+        for (i=0;i<data->ny;i++) {
+            int j;
+            for (j=0;j<data->nx;j++) {
+                int j1=j+1;
+                int i1=i+1;
+                float *vi=&v[i],*vi1=&v[i1];
+                Quad_5e58 *q=&quad;
+                int row_offset=i*row_bytes,next_offset=i1*row_bytes;
+                Vec_5e58 *row=(Vec_5e58*)(points+row_offset),*next_row=(Vec_5e58*)(points+next_offset);
+                quad.uv[0]=u[j]; quad.uv[1]=*vi;
+                quad.uv[2]=u[j1]; quad.uv[3]=*vi;
+                quad.uv[4]=u[j]; quad.uv[5]=*vi1;
+                quad.uv[6]=u[j1]; quad.uv[7]=*vi1;
+                add_vector_xyz(&q->vertex[0],&row[j],&moby->position);
+                add_vector_xyz(&quad.vertex[1],&row[j+1],&moby->position);
+                add_vector_xyz(&quad.vertex[2],&next_row[j],&moby->position);
+                add_vector_xyz(&quad.vertex[3],&next_row[j+1],&moby->position);
+                quad.color[0]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+(j)*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(Vec_5e58))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                fast_draw_quad_5e58(q,0,0);
+            }
+        }
+        }
+        if (data->flags&2) {
+            if (tick_countdown_32_alt(&data->particle_timer)) {
+                data->particle_timer=scale_game_frames_5e58(data->particle_ticks);
+                for (i=0;i<data->particle_count;i++) {
+                    float width=data->width*0.5f;
+                    float x=random_float_between(-1.0f,1.0f)*data->particle_range;
+                    float fraction=random_float_between(0.0f,x);
+                    float size;
+                    short life;
+                    int r,g,b,a;
+                    normalize_vector_xyz(&scratch[2],&left_step,-(data->particle_offset+square_root_5e58(fast_cos_5e58(fraction*3.1415927f))*data->particle_height));
+                    normalize_vector_xyz(&scratch[1],&step,fraction*width);
+                    add_vector_xyz(&scratch[1],&scratch[1],&moby->position);
+                    add_vector_xyz(&scratch[1],&scratch[1],&scratch[2]);
+                    scratch[0][0]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
+                    scratch[0][1]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
+                    scratch[0][2]=random_float_between(0.0f,data->particle_z)*D_0015ED60;
+                    size=random_float_between(data->particle_size0,data->particle_size1);
+                    life=scale_game_frames_5e58(data->particle_life);
+                    r=data->particle_r; g=data->particle_g; b=data->particle_b;
+                    a=func_001FA898_r(convert_integer_to_float(data->particle_a)*fraction);
+                    spawn_colored_effect_5e58(moby,&scratch[1],&scratch[0],size,life,r,g,b,a);
+                }
+            }
+            if (tick_countdown_16_5e58(&data->puff_timer)) {
+                data->puff_timer=scale_game_frames_5e58(data->puff_ticks);
+                for (i=0;i<data->puff_count;i++) {
+                    int c0=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
+                    int c1=(data->puff_c1[3]<<24)|(data->puff_c1[2]<<16)|(data->puff_c1[1]<<8)|data->puff_c1[0];
+                    float width=data->width*0.5f;
+                    float size=random_float_between(data->puff_size0,data->puff_size1);
+                    int life=scale_game_frames_5e58(random_integer_between_5e58(data->puff_life0,data->puff_life1));
+                    float fraction=random_float_between(-1.0f,1.0f)*data->puff_range;
+                    float shape;
+                    fraction=random_float_between(-fraction,fraction);
+                    shape=square_root_5e58(fast_cos_5e58(fraction*3.1415927f));
+                    normalize_vector_xyz(&scratch[2],&left_step,-(data->puff_offset+shape*data->puff_height));
+                    normalize_vector_xyz(&scratch[1],&step,fraction*width);
+                    add_vector_xyz(&scratch[1],&scratch[1],&moby->position);
+                    add_vector_xyz(&scratch[1],&scratch[1],&scratch[2]);
+                    scratch[0][0]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
+                    scratch[0][1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
+                    scratch[0][2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
+                    fast_vec_scale_5e58(&scratch[0],&scratch[0],1.0f-data->puff_blend+shape*data->puff_blend);
+                    spawn_puff_effect_5e58(&scratch[1],&scratch[0],c0,c1,size,life);
+                }
+            }
+            if (data->light!=-1) {
+                PointLight *light=&D_L08_00180AC0[data->light];
+                if (vector_distance_5e58(&data->light_pos,&light->pos)<data->light_speed*D_0015ED60) {
+                    float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->width)*0.5f;
+                    float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->height)*0.5f;
+                    normalize_vector_xyz(&scratch[0],&step,x);
+                    normalize_vector_xyz(&scratch[1],&left_step,-y);
+                    add_vector_xyz(&data->light_pos,&scratch[0],&scratch[1]);
+                    add_vector_xyz(&data->light_pos,&data->light_pos,&corner[0]);
+                    add_vector_xyz(&data->light_pos,&data->light_pos,&moby->position);
+                } else {
+                    subtract_vector_xyz_5e58(&scratch[0],&data->light_pos,&light->pos);
+                    normalize_vector_xyz(&scratch[0],&scratch[0],data->light_speed*D_0015ED60);
+                    add_vector_xyz(&light->pos,&light->pos,&scratch[0]);
+                    light->pos.f[3]=convert_integer_to_float(data->radius);
+                }
+            }
+            data->flags^=2;
+        }
+        }
+    }
+}
 #endif
 /* Pvars of a flickering point light. */
 typedef struct {
@@ -635,8 +931,8 @@ typedef struct {
     u16 pad8;
     u16 flags;           /* 0xA: bit 2 = cast light; bit 1 set every update */
     u8 padC[0x64];
-    f32 period_a;        /* 0x70: must be in (0, 8] */
-    f32 period_b;        /* 0x74: must be in (0, 8] */
+    f32 texture_w_count; /* 0x70: must be in (0, 8] */
+    f32 texture_h_count; /* 0x74: must be in (0, 8] */
     u8 pad78[0x10];
     f32 jitter;          /* 0x88: lower bound of the random flicker levels */
     u8 pad8C[4];
@@ -660,15 +956,6 @@ typedef struct {
     f32 intensity;       /* 0x154 */
 } FlickerLightVars;
 
-/* A point light slot, 0x20 bytes apart. */
-typedef struct {
-    f32 red;
-    f32 green;
-    f32 blue;
-    u8 padC[0x14];
-} PointLight;
-
-extern PointLight D_L08_00180AC0[];
 extern char D_L08_001FC220[];
 char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max texture tile count (8)\n";
 extern char D_L08_001FC2A0[];
@@ -677,333 +964,6 @@ extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void FUN_L08_002f5e58(struct Moby *m);
-#ifdef NON_MATCHING
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern s32 D_L08_0015F3F8;
-extern s32 D_L08_0015F3F8_gp __asm__("D_L08_0015f3f8") __attribute__((sda));
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
-extern f32 split_float_fraction(f32, void *) __asm__("FUN_L00_00200228");
-extern s32 tick_countdown_16(s16 *) __asm__("FUN_001f9770");
-extern s32 random_integer_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
-extern void spawn_colored_effect(struct Moby *, void *, void *, s32, s32, s32, s32, s32, f32) __asm__("FUN_L08_0027b450");
-
-/* The draw helper reads this contiguous 0x90-byte packet. */
-typedef struct {
-    Vec4 points[4];
-    u32 color[4];
-    f32 uv[4][2];
-    u64 gs[4];
-} FlickerDrawPacket;
-
-void FUN_L08_002f5e58(struct Moby *m) {
-    FlickerLightVars *d;
-    u8 *b;
-    f32 *f;
-    Vec4 corners[4], across, down[2], edge[2], point, width, normal, mat[4];
-    FlickerDrawPacket packet;
-    Vec4 velocity, offset, position, wave, sag;
-    s32 stride;
-    Vec4 *grid;
-    f32 *weight;
-    f32 inv_x, inv_y;
-    f32 *u, *v;
-    f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
-    f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
-    f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
-    s32 alpha, i, j, timer, count, k;
-    s16 lifetime;
-    u32 color_a, color_b;
-    s32 temp;
-    s32 next_i;
-    u8 red, green, blue;
-    s8 light;
-    Vec4 *at;
-    void *mat_rot;
-    if (m == NULL) return;
-    d = (FlickerLightVars *)m->pvars;
-    if (d == NULL) return;
-    b = (u8 *)d;
-    f = (f32 *)d;
-    mat_rot = &m->rot;
-    stride = (b[8] + 1) * 16;
-    grid = __builtin_alloca((((u32)(b[8] + 1) << 7) * (b[9] + 1)) >> 3);
-    inv_x = 1.0f / convert_integer_to_float(b[8]);
-    inv_y = 1.0f / convert_integer_to_float(b[9]);
-    u = __builtin_alloca((b[8] * 4 + 0x13) & 0x7f0);
-    v = __builtin_alloca((b[9] * 4 + 0x13) & 0x7f0);
-    time = convert_integer_to_float(D_L08_0015F3F8);
-    {
-        f32 *target = d->levels_b;
-        f32 *current = d->levels_a;
-        s32 i = 7;
-        do {
-            f32 value = *current;
-            if (value < *target) {
-                f32 t = value + f[0x22] * f[0x23];
-                *current = t;
-                if (*target <= t) *target = random_float_between(1.0f-f[0x22], 1.0f);
-            } else {
-                f32 t = value - f[0x22] * f[0x23];
-                *current = t;
-                if (t <= *target) *target = random_float_between(1.0f-f[0x22], 1.0f);
-            }
-            target++;
-            i--;
-            current++;
-        } while (i >= 0);
-    }
-    {
-        f32 a, c;
-        a = convert_integer_to_float(b[0x13]);
-        c = convert_integer_to_float(m->alpha);
-        alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
-    }
-    if (b[0xd] != 0) b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
-    else b[0xf] = b[0xc];
-    temp = b[0xf];
-    if (!(d->flags & 1)) temp += 0x28;
-    packet.gs[1] = get_effect_texture(temp);
-    packet.gs[0] = 0;
-    packet.gs[2] = 0xff9000000260ULL;
-    packet.gs[3] = (u64)b[0x3c] | (u64)b[0x3d] << 2 | (u64)b[0x3e] << 4 |
-                   (u64)b[0x3f] << 6 | (u64)b[0x13] << 32;
-    packet.color[3] = (u32)b[0x13] << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-    packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3];
-    corners[0].q = corners[1].q = corners[2].q = corners[3].q = 0;
-    {
-        f32 t = d->size_x * 0.5f;
-        corners[1].f[0] = corners[3].f[0] = t;
-        corners[0].f[0] = corners[2].f[0] = -t;
-    }
-    corners[0].f[2] = f[0x20] + 0.01f;
-    corners[1].f[2] = f[0x21] + 0.01f;
-    euler_rotation_matrix(mat, mat_rot);
-    transform_vector(&corners[0], &corners[0], mat);
-    transform_vector(&corners[1], &corners[1], mat);
-    transform_vector(&corners[2], &corners[2], mat);
-    transform_vector(&corners[3], &corners[3], mat);
-    subtract_vector_xyz(&down[0], &corners[2], &corners[0]);
-    fast_vec_scale(&down[0], &down[0], inv_y);
-    subtract_vector_xyz(&down[1], &corners[3], &corners[1]);
-    fast_vec_scale(&down[1], &down[1], inv_y);
-    phase_step = (f[6] - f[5]) * inv_y;
-    amp_step_a = (f[9] - f[7]) * inv_y;
-    amp_step_b = (f[10] - f[8]) * inv_y;
-    step_a = (f[0x1a] - f[0x18]) * inv_x;
-    height_a = d->size_y - f[0x20];
-    height_b = d->size_y - f[0x21];
-    step_b = (f[0x1b] - f[0x19]) * inv_y;
-    subtract_vector_xyz(&width, &corners[1], &corners[0]);
-    fast_vec_cross(&normal, &width, &down[0]);
-    normalize_vector_xyz(&normal, &normal, 1.0f);
-    qcopy(&edge[0], &corners[0]);
-    qcopy(&edge[1], &corners[1]);
-    bend = d->levels_a[0];
-    phase = f[5]; amp_a = f[7]; amp_b = f[8];
-    phase_a = f[0x18]; phase_b = f[0x19];
-    {
-        s32 i;
-        for (i = 0; i <= b[9]; i = next_i) {
-            f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
-            f32 noise_y;
-            y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
-            qcopy(&point, &edge[0]);
-            next_i = i + 1;
-            next_phase = phase + phase_step;
-            next_amp_b = amp_b + amp_step_b;
-            next_a = phase_a + step_a;
-            next_amp_a = amp_a + amp_step_a;
-            next_b = phase_b + step_b;
-            subtract_vector_xyz(&across, &edge[1], &edge[0]);
-            fast_vec_scale(&across, &across, inv_x);
-            noise_y = interpolate_sample_ring(y, (char *)d);
-            k = i * stride;
-            weight = (f32 *)((char *)grid + k + 12);
-            for (j = 0; j <= b[8]; j++) {
-                f32 a, c, t, base, angle, shape;
-                x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
-                a = normalize_angle(f[0x17] * time);
-                angle = x * 3.1415927f;
-                c = fast_sin(a);
-                t = f[0x16] * c;
-                base = time * phase + t;
-                noise_x = interpolate_sample_ring(x, (char *)d);
-                base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
-                shape = height_a * x + height_b * (1.0f-x);
-                a = normalize_angle(base + phase_a + f[0xb] * x + f[0xd] * y);
-                c = normalize_angle(base + phase_b + f[0xc] * y + f[0xe] * x);
-                sine = square_root(fast_sin(angle));
-                shape = shape * sine;
-                shape = shape * (1.0f-y);
-                t = fast_cos(a);
-                normalize_vector_xyz(&velocity, &across, amp_a * t * sine * noise_x);
-                t = fast_sin(c);
-                normalize_vector_xyz(&offset, &down[0], amp_b * t * sine * noise_x);
-                a = fast_sin(y * 3.1415927f);
-                c = fast_sin(angle);
-                t = fast_sin(normalize_angle(base + f[0xb] * x));
-                base = fast_sin(normalize_angle(base + f[0xd] * y));
-                normalize_vector_xyz(&wave, &normal, a * c * (f[0x1e] * t + f[0x1f] * base));
-                normalize_vector_xyz(&sag, &down[0], shape);
-                add_vector_xyz(&position, &velocity, &offset);
-                add_vector_xyz(&position, &position, &wave);
-                subtract_vector_xyz(&position, &position, &sag);
-                add_vector_xyz((char *)grid + k + j*16, &point, &position);
-                *weight = 1.0f /
-                    (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
-                add_vector_xyz(&point, &point, &across);
-                weight += 4;
-            }
-            add_vector_xyz(&edge[0], &edge[0], &down[0]);
-            phase = next_phase; amp_a = next_amp_a;
-            add_vector_xyz(&edge[1], &edge[1], &down[1]);
-            amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
-        }
-    }
-    {
-        f32 a;
-        s32 count;
-        f32 *weight;
-        a = fast_sin(normalize_angle(time * f[0x12]));
-        a = split_float_fraction(time*f[0x10] + f[0x11]*a, &temp);
-        count = 0;
-        if (count <= b[8]) {
-            weight = u;
-            do {
-                *weight++ = a;
-                a = a + inv_x / d->period_a;
-                count++;
-            } while (count <= b[8]);
-        }
-        a = fast_sin(normalize_angle(time * f[0x15]));
-        a = split_float_fraction(time*f[0x13] + f[0x14]*a, &temp);
-        count = 0;
-        if (count <= b[9]) {
-            weight = v;
-            do {
-                *weight++ = a;
-                a = a + inv_y / d->period_b;
-                count++;
-            } while (count <= b[9]);
-        }
-    }
-    for (i=0; i<b[9]; i++) {
-        {
-            Vec4 *current;
-            Vec4 *target;
-            f32 *current_v = v + i;
-            f32 *target_v = v + i + 1;
-            if (b[8]) {
-                k = i * stride;
-                count = (i + 1) * stride;
-                current = (Vec4 *)((char *)grid + k);
-                target = (Vec4 *)((char *)grid + count);
-                for (j=0; j<b[8]; j++) {
-                    packet.uv[0][0] = u[j]; packet.uv[0][1] = *current_v;
-                    packet.uv[1][0] = u[j+1]; packet.uv[1][1] = *current_v;
-                    packet.uv[2][0] = u[j]; packet.uv[2][1] = *target_v;
-                    packet.uv[3][0] = u[j+1]; packet.uv[3][1] = *target_v;
-                    add_vector_xyz(&packet.points[0], &current[j], &m->pos);
-                    add_vector_xyz(&packet.points[1], &current[j+1], &m->pos);
-                    add_vector_xyz(&packet.points[2], &target[j], &m->pos);
-                    add_vector_xyz(&packet.points[3], &target[j+1], &m->pos);
-                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + k + j*16))[3]);
-                    packet.color[0] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + k + (j+1)*16))[3]);
-                    packet.color[1] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + count + j*16))[3]);
-                    packet.color[2] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + count + (j+1)*16))[3]);
-                    packet.color[3] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    fast_draw_quad_real(&packet, NULL, 0);
-                }
-            }
-        }
-    }
-    if (!(d->flags & 2)) return;
-    if (tick_countdown_32_alt((s32 *)(b+0xf8))) {
-        *(s32 *)(b+0xf8) = scale_game_frames(b[0xf3]);
-        i=0;
-        if (b[0xf2]) do {
-            f32 t;
-            t = d->size_x * 0.5f;
-            i++;
-            a = random_float_between(-1.0f, 1.0f);
-            a = random_float_between(0.0f, a*f[0x3d]);
-            c = square_root(fast_cos(a*3.1415927f));
-            normalize_vector_xyz(&position, &down[0], -(f[0x3f]+c*f[0x40]));
-            normalize_vector_xyz(&offset, &across, a*t);
-            add_vector_xyz(&offset, &offset, &m->pos);
-            add_vector_xyz(&offset, &offset, &position);
-            velocity.f[0] = random_float_between(-f[0x37], f[0x37]) * frame_scale;
-            velocity.f[1] = random_float_between(-f[0x37], f[0x37]) * frame_scale;
-            velocity.f[2] = random_float_between(0.0f, f[0x38]) * frame_scale;
-            t = random_float_between(f[0x39], f[0x3a]);
-            lifetime = (s16)scale_game_frames(*(s16 *)(b+0xf0));
-            red = b[0xec]; green = b[0xed]; blue = b[0xee];
-            {
-                s32 temp = (u8)truncate_float_to_s32_u(convert_integer_to_float(b[0xef])*a);
-                spawn_colored_effect(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
-            }
-        } while (i < b[0xf2]);
-    }
-    if (tick_countdown_16((s16 *)(b+0x122))) {
-        *(s16 *)(b+0x122) = scale_game_frames(b[0x121]);
-        i=0;
-        if (b[0x120]) do {
-            s32 lifetime;
-            f32 a;
-            i++;
-            color_a = (u32)b[0x117]<<24 | (u32)b[0x116]<<16 | (u32)b[0x115]<<8 | b[0x114];
-            color_b = (u32)b[0x11b]<<24 | (u32)b[0x11a]<<16 | (u32)b[0x119]<<8 | b[0x118];
-            t = d->size_x * 0.5f;
-            c = random_float_between(f[0x43], f[0x44]);
-            lifetime = scale_game_frames(random_integer_between(*(s16 *)(b+0x11c), *(s16 *)(b+0x11e)));
-            a = random_float_between(-1.0f, 1.0f);
-            a = a*f[0x49];
-            a = random_float_between(-a, a);
-            shape = square_root(fast_cos(a*3.1415927f));
-            normalize_vector_xyz(&position, &down[0], -(f[0x4b]+shape*f[0x4c]));
-            normalize_vector_xyz(&offset, &across, a*t);
-            add_vector_xyz(&offset, &offset, &m->pos);
-            add_vector_xyz(&offset, &offset, &position);
-            velocity.f[0] = random_float_between(-f[0x41], f[0x41])*frame_scale;
-            velocity.f[1] = random_float_between(-f[0x41], f[0x41])*frame_scale;
-            velocity.f[2] = random_float_between(0.0f, f[0x42])*frame_scale;
-            fast_vec_scale(&velocity, &velocity, (1.0f-f[0x4a])+shape*f[0x4a]);
-            spawn_effect_particle_with_target_scalar(&offset, &velocity, color_a, color_b, lifetime, c);
-        } while (i < b[0x120]);
-    }
-    light = d->light;
-    if (light != -1) {
-        at = (Vec4 *)((char *)&D_L08_00180AC0[light]+0x10);
-        if (FUN_001f9b48(&d->light_pos, at) < f[0x4f]*frame_scale) {
-            a = random_float_between((f32)-(s32)b[0x139], (f32)b[0x139]);
-            a = (a+d->size_x)*0.5f;
-            c = random_float_between((f32)-(s32)b[0x13a], (f32)b[0x13a]);
-            normalize_vector_xyz(&velocity, &across, a);
-            a = (c+d->size_y)*0.5f;
-            normalize_vector_xyz(&offset, &down[0], -a);
-            add_vector_xyz(&d->light_pos, &velocity, &offset);
-            add_vector_xyz(&d->light_pos, &d->light_pos, &corners[0]);
-            add_vector_xyz(&d->light_pos, &d->light_pos, &m->pos);
-        } else {
-            subtract_vector_xyz(&velocity, &d->light_pos, at);
-            normalize_vector_xyz(&velocity, &velocity, f[0x4f]*frame_scale);
-            add_vector_xyz(at, at, &velocity);
-            at->f[3] = convert_integer_to_float(d->radius);
-        }
-    }
-    d->flags ^= 2;
-}
-#endif
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 
@@ -1027,17 +987,17 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         light_vars->light = -1;
         light_vars->unkF8 = light_vars->unkF3;
         qcopy(&light_vars->light_pos, at);
-        if (light_vars->period_a == 0.0f) {
+        if (light_vars->texture_w_count == 0.0f) {
             DebugPrint(D_L08_001FC220);
-            light_vars->period_a = 1.0f;
-        } else if (8.0f < light_vars->period_b) {
-            DebugPrint(D_L08_001FC250, light_vars->period_b);
+            light_vars->texture_w_count = 1.0f;
+        } else if (8.0f < light_vars->texture_h_count) {
+            DebugPrint(D_L08_001FC250, light_vars->texture_h_count);
         }
-        if (light_vars->period_b == 0.0f) {
+        if (light_vars->texture_h_count == 0.0f) {
             DebugPrint(D_L08_001FC2A0);
-            light_vars->period_b = 1.0f;
-        } else if (8.0f < light_vars->period_a) {
-            DebugPrint(D_L08_001FC2D0, light_vars->period_a);
+            light_vars->texture_h_count = 1.0f;
+        } else if (8.0f < light_vars->texture_w_count) {
+            DebugPrint(D_L08_001FC2D0, light_vars->texture_w_count);
         }
         for (i = 0; i < 8; i++) {
             light_vars->levels_a[i] = random_float_between(light_vars->jitter, 1.0f);

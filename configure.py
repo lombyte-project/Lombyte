@@ -43,10 +43,13 @@ ROOT = Path.cwd()
 #   sn-compiler       SN EE-GCC 2.95.2 and its Ps2EeAs assembler (all game
 #                     code is assembled by Ps2EeAs; ROUTE_EXCEPTIONS units also
 #                     compile with it)
+#   sn-cc1            SN's cc1 rebuilt from source (patches/sn-2.95.2), for
+#                     OVERLAY_SN_UNITS
 COMPILERS = ROOT / "tools/compilers"
 GAME_COMPILER = COMPILERS / "game-compiler"
 SDK_COMPILER = "sdk-compiler"
 SN_COMPILER = COMPILERS / "sn-compiler"
+SN_CC1 = COMPILERS / "sn-cc1/cc1"
 
 # decomp.me id of the SDK compiler, for the permuter settings.
 SDK_COMPILER_DECOMPME = "ee-gcc2.9-991111-01"
@@ -2022,20 +2025,24 @@ def build_overlays() -> Path:
         ),
     )
 
-    # Level code the game compiler does not reproduce but SN cc1 2.95.2 does
-    # (OVERLAY_SN_UNITS): SN cc1, its externs ordered for Ps2EeAs, then the
-    # same Ps2EeAs + padless finish as overlay-game.
+    # Level code the game compiler does not reproduce but SN 2.95.2 does
+    # (OVERLAY_SN_UNITS): SN's preprocessor, SN cc1 rebuilt from source
+    # (scripts/build-sn-compiler.py), its externs ordered for Ps2EeAs, then
+    # the same Ps2EeAs + padless finish as overlay-game.
     sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc295.exe"))
-    # -B pins specs and cc1 to this toolchain (as in cc_sn): a GCC_EXEC_PREFIX
+    # -B pins specs and cpp to this toolchain (as in cc_sn): a GCC_EXEC_PREFIX
     # left in the shell would otherwise win over the driver's own lib/.
     sn_lib = str(sn_root / "lib/gcc-lib/ee/2.95.2")
+    # What SN's driver passes its cc1; SN's cc1.exe has -mgas and
+    # -msplit-addresses on by default, ours takes them as flags.
+    sn_cc1 = f"{SN_CC1} -mgas -msplit-addresses cand.i -quiet -dumpbase cand.c -O2 -o cand.s"
     ninja.rule(
         "overlay-sn",
         description="overlay-sn $in",
         command=(
             f"mkdir -p {work} && cp $in {work}/cand.c && "
-            f"cd {work} && {sn_driver} -S '-B{sn_lib}\\' -I{ROOT}/src -I{ROOT}/include "
-            f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.s && cd - >/dev/null && "
+            f"cd {work} && {sn_driver} -E '-B{sn_lib}\\' -I{ROOT}/src -I{ROOT}/include "
+            f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.i && {sn_cc1} && cd - >/dev/null && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
             f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
             f"{ee_assembler} -o {work}/cand-padded.o {work}/cand-final.s && "
@@ -2047,7 +2054,8 @@ def build_overlays() -> Path:
     sn_units = overlay_sn_units()
 
     def game_edge(out: str, src: str, rule: str = "overlay-game") -> None:
-        ninja.build(outputs=[out], rule=rule, inputs=[src], implicit=["padless-asm.py"])
+        implicit = ["padless-asm.py"] + ([str(SN_CC1)] if rule == "overlay-sn" else [])
+        ninja.build(outputs=[out], rule=rule, inputs=[src], implicit=implicit)
 
     objects = []
     for src in sources:

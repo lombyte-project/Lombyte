@@ -64,6 +64,8 @@ void FUN_L00_002648e0(void) {
                 FUN_L00_00250480(moby);
                 update = moby->update;
             }
+            /* Near miss, 3 words: retail leaves the beqz and jalr delay slots empty and calls
+               through v1; a C call here always fills one slot. */
             if (update != 0) {
                 update = moby->update;
                 update(moby);

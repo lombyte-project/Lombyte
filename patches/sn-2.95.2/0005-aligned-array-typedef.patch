@@ -1,0 +1,26 @@
+diff --git a/gcc/c-common.c b/gcc/c-common.c
+index 59dd407..1f96bb2 100644
+--- a/gcc/c-common.c
++++ b/gcc/c-common.c
+@@ -697,7 +697,20 @@ decl_attributes (node, attributes, prefix_attributes)
+ 	    if (exact_log2 (align) == -1)
+ 	      error ("requested alignment is not a power of 2");
+ 	    else if (is_type)
+-	      TYPE_ALIGN (type) = align;
++	      {
++		if (decl && TREE_CODE (decl) == TYPE_DECL
++		    && TREE_CODE (type) == ARRAY_TYPE
++		    && TYPE_MAIN_VARIANT (type) == type)
++		  {
++		    type = copy_node (type);
++		    TYPE_MAIN_VARIANT (type) = type;
++		    TYPE_NEXT_VARIANT (type) = 0;
++		    TYPE_POINTER_TO (type) = 0;
++		    TYPE_REFERENCE_TO (type) = 0;
++		    TREE_TYPE (decl) = type;
++		  }
++		TYPE_ALIGN (type) = align;
++	      }
+ 	    else if (TREE_CODE (decl) != VAR_DECL
+ 		     && TREE_CODE (decl) != FIELD_DECL)
+ 	      error_with_decl (decl,
