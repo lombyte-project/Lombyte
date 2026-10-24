@@ -80,7 +80,7 @@ extern int D_L18_00162498 __attribute__((sda));
 extern int D_L18_001624BC __attribute__((sda));
 extern int deplanetizer_glow_quad_alpha __asm__("D_L18_00162524");
 extern float deplanetizer_camera_quad_base_scale __asm__("D_L18_00162520");
-extern float D_L18_0016252C;
+extern float deplanetizer_three_quad_local_x_scale __asm__("D_L18_0016252C");
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
@@ -212,7 +212,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
-            D_L18_0016252C = numerator;
+            deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
@@ -261,7 +261,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
-            D_L18_0016252C = numerator;
+            deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
         }
         if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
@@ -602,9 +602,9 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     draw_9c20(&pk, 0, 0);
 }
 
-extern float D_L18_00162514 __attribute__((sda));
-extern float D_L18_00162518 __attribute__((sda));
-extern float D_L18_0016251C __attribute__((sda));
+extern float deplanetizer_first_quad_local_z_scale __asm__("D_L18_00162514") __attribute__((sda));
+extern float deplanetizer_second_quad_local_z_scale __asm__("D_L18_00162518") __attribute__((sda));
+extern float deplanetizer_third_quad_local_z_scale __asm__("D_L18_0016251C") __attribute__((sda));
 extern float D_L18_001DFBD0[4][4];
 void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     Pk_9c20 pk;
@@ -649,8 +649,8 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_00162514;
-            vertices[i].f[0] *= D_L18_0016252C;
+            vertices[i].f[2] *= deplanetizer_first_quad_local_z_scale;
+            vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
     } while (i < 4);
@@ -667,8 +667,8 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_00162518;
-            vertices[i].f[0] *= D_L18_0016252C;
+            vertices[i].f[2] *= deplanetizer_second_quad_local_z_scale;
+            vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
     } while (i < 4);
@@ -685,8 +685,8 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     do {
         qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_0016251C;
-            vertices[i].f[0] *= D_L18_0016252C;
+            vertices[i].f[2] *= deplanetizer_third_quad_local_z_scale;
+            vertices[i].f[0] *= deplanetizer_three_quad_local_x_scale;
         }
         i++;
     } while (i < 4);
