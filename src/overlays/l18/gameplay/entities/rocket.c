@@ -1780,7 +1780,7 @@ extern float ballistic_ring_trail_vector_offset_rate_gp __asm__("D_L18_00161C0C"
 extern int D_L18_00161C10 __attribute__((sda));
 extern int D_L18_00161C14 __attribute__((sda));
 extern int D_L18_00161C18 __attribute__((sda));
-extern float D_L18_00161C1C __attribute__((sda));
+extern float ballistic_ring_trail_spark_relative_variation_limit_gp __asm__("D_L18_00161C1C") __attribute__((sda));
 extern float D_L18_00161C20 __attribute__((sda));
 extern float D_L18_00161C24;
 extern float D_L18_00161C28 __attribute__((sda));
@@ -1843,11 +1843,11 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
                 (float)D_L18_00161C10 * random_float_between(0.0f, 1.0f) + 1.0f));
             i3 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C14 *
-                (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
+                (random_float_between(-ballistic_ring_trail_spark_relative_variation_limit_gp, ballistic_ring_trail_spark_relative_variation_limit_gp) +
                  1.0f)));
             i4 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C18 *
-                (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
+                (random_float_between(-ballistic_ring_trail_spark_relative_variation_limit_gp, ballistic_ring_trail_spark_relative_variation_limit_gp) +
                  1.0f)));
             second_spark_vector[2] = second_spark_vector[2] - ballistic_ring_trail_spark_gravity_gp * frame_time_sq * (float)i3;
             spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
