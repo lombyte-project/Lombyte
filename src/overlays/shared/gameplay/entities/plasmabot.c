@@ -1884,7 +1884,7 @@ extern float particle_pair_moby_c0_offset_scale __asm__("D_L14_00161FCC") __attr
 extern float particle_pair_moby_e0_offset_scale __asm__("D_L14_00161FD0") __attribute__((sda));
 extern float particle_trio_moby_c0_offset_scale __asm__("D_L14_00161FD4") __attribute__((sda));
 extern float particle_trio_moby_e0_offset_scale __asm__("D_L14_00161FD8") __attribute__((sda));
-extern int D_L14_00161FE4 __attribute__((sda));
+extern int particle_pair_color __asm__("D_L14_00161FE4") __attribute__((sda));
 void emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
 
 void emit_moby_offset_particles(unsigned char *moby) {
@@ -1903,7 +1903,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
         P_eca8 *part;
         T_eca8 *tail;
         signed_particle_variation = below_y(0x10);
-        part = puff_y(particle_spawn_position, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, D_L14_00161FE4);
+        part = puff_y(particle_spawn_position, 0.2f, 1.0f, 0.9f, below_y(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, particle_pair_color);
         if (part) {
             tail = &part->tail;
             part->hA = frames_y(0xC);
