@@ -1278,7 +1278,7 @@ void spawn_gunship_parts(struct Moby *moby) {
     }
 }
 #include "rnc/gameplay/hero.h"
-extern float D_L08_00161C3C __attribute__((sda));
+extern float gunship_part_spin_speed_degrees __asm__("D_L08_00161C3C") __attribute__((sda));
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
 typedef struct {
@@ -1316,13 +1316,13 @@ void update_linked_moby_parts(struct Moby *moby) {
         }
     }
     if (linked_parts_vars->links[7].part != 0) {
-        linked_parts_vars->links[7].part->rot.x = fast_add_rotations(linked_parts_vars->links[7].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
+        linked_parts_vars->links[7].part->rot.x = fast_add_rotations(linked_parts_vars->links[7].part->rot.x, gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
     }
     if (linked_parts_vars->links[8].part != 0) {
-        linked_parts_vars->links[8].part->rot.x = fast_add_rotations(linked_parts_vars->links[8].part->rot.x, -(D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C));
+        linked_parts_vars->links[8].part->rot.x = fast_add_rotations(linked_parts_vars->links[8].part->rot.x, -(gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C));
     }
     if (linked_parts_vars->links[9].part != 0) {
-        linked_parts_vars->links[9].part->rot.x = fast_add_rotations(linked_parts_vars->links[9].part->rot.x, D_L08_00161C3C * DEG_TO_RAD * D_0015ED6C);
+        linked_parts_vars->links[9].part->rot.x = fast_add_rotations(linked_parts_vars->links[9].part->rot.x, gunship_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
     }
     if (linked_parts_vars->links[3].part != 0) {
         linked_parts_vars->links[3].part->rot.z = fast_arc_tan(hero.motion.pos.f[0] - linked_parts_vars->links[3].part->pos.x, hero.motion.pos.f[1] - linked_parts_vars->links[3].part->pos.y);
