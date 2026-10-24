@@ -538,7 +538,7 @@ extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
 extern int deplanetizer_glow_local_offset_x __asm__("D_L18_00162560");
 extern int deplanetizer_glow_local_offset_y __asm__("D_L18_00162564");
 extern float deplanetizer_glow_local_offset_z __asm__("D_L18_00162568");
-extern float D_L18_0016256C;
+extern float deplanetizer_glow_local_offset_w __asm__("D_L18_0016256C");
 extern int deplanetizer_glow_first_quad_base_tint __asm__("D_L18_00162504") __attribute__((sda));
 extern float deplanetizer_glow_first_quad_scale __asm__("D_L18_00162508") __attribute__((sda));
 extern float deplanetizer_glow_second_quad_scale __asm__("D_L18_0016250C") __attribute__((sda));
@@ -552,7 +552,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     int i;
     if (D_L18_0016D260_9c20.n == frames_9c20(deplanetizer_glow_alpha_ramp_start_frame + 1)) {
         deplanetizer_glow_local_offset_z = -45.0f;
-        D_L18_0016256C = 1.0f;
+        deplanetizer_glow_local_offset_w = 1.0f;
         deplanetizer_glow_local_offset_x = 0;
         deplanetizer_glow_local_offset_y = 0;
     }
