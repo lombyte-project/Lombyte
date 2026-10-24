@@ -1505,7 +1505,7 @@ extern void FUN_L00_00257470_p(struct Moby *, int, int) __asm__("FUN_L00_0025747
 extern void FUN_L00_0025f3e8_p(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void remove_0180(struct Moby *) __asm__("FUN_0020c828");
 
-extern float D_L11_00161F88 __attribute__((sda));
+extern float psytcopus_knockback_base_gravity_gp __asm__("D_L11_00161F88") __attribute__((sda));
 extern float psytcopus_hurt_knockback_base_vertical_speed_gp __asm__("D_L11_00161F8C") __attribute__((sda));
 extern float psytcopus_hurt_knockback_base_horizontal_speed_gp __asm__("D_L11_00161F90") __attribute__((sda));
 extern float psytcopus_death_knockback_base_vertical_speed_gp __asm__("D_L11_00161F94") __attribute__((sda));
@@ -1708,7 +1708,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         }
         psytcopus_vars->unk90 = random_int_0180(512.0f);
         psytcopus_vars->unk98 = 0.5f;
-        psytcopus_vars->unk80 = D_L11_00161F88 * frame_time_sq;
+        psytcopus_vars->unk80 = psytcopus_knockback_base_gravity_gp * frame_time_sq;
         psytcopus_vars->unk84 = 0.0005f;
         psytcopus_vars->unk94 = 9;
         psytcopus_vars->unkAD = 0;
@@ -1747,7 +1747,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
             psytcopus->flags &= 0xEFFF;
-            psytcopus_vars->unk80 = D_L11_00161F88 * frame_time_sq;
+            psytcopus_vars->unk80 = psytcopus_knockback_base_gravity_gp * frame_time_sq;
             psytcopus_vars->unk88 = psytcopus_death_knockback_base_horizontal_speed_gp * frame_time;
             psytcopus_vars->unk8C = psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 4.0f;
