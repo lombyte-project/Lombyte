@@ -385,7 +385,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
     };
     char *data = *(char **)(moby + 0x78);
     float v[4];
-    float pos;
+    float slide_step_distance;
     float speed;
     char *pose_entry;
     float remaining_slide_distance;
@@ -417,7 +417,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
     case MOBY_SLIDE_TO_END_POINT:
         pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         reach = *(float *)(data + 0x18) * 3.0f;
-        pos = 0.0f;
+        slide_step_distance = 0.0f;
         fast_vec_normalize(v, pose_entry + 0x10, reach);
         if (*(int *)(data + 0x1C) != 0) {
             fast_vec_scale(v, v, -1.0f);
@@ -427,7 +427,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         remaining_slide_distance = vector_length_xyz(v);
         speed = vector_length_xyz(data);
         advance_accelerated_scalar(remaining_slide_distance, frame_time_sq * 20.0f, frame_time_sq * 30.0f,
-                                   frame_time * 10.0f, &pos, &speed);
+                                   frame_time * 10.0f, &slide_step_distance, &speed);
         fast_vec_normalize(data, v, speed);
         add_vector_xyz(moby + 0x10, moby + 0x10, data);
         if (vector_length_xyz(v) < 0.01f) {
