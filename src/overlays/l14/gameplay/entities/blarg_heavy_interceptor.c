@@ -1159,8 +1159,8 @@ extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
 
-extern float D_L14_00161474 __attribute__((sda));
-extern float D_L14_00161478 __attribute__((sda));
+extern float blarg_heavy_interceptor_glow_quad_scale __asm__("D_L14_00161474") __attribute__((sda));
+extern float blarg_heavy_interceptor_glow_position_offset_scale __asm__("D_L14_00161478") __attribute__((sda));
 void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     char *d = (char *)m->pvars;
     float glow_quad_transform[4][4];
@@ -1172,7 +1172,7 @@ void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     int i;
     qcopy(glow_quad_transform[3], d + 0xD0);
     glow_quad_transform[3][3] = 1.0f;
-    scale_e(glow_position_offset, d + 0xA0, D_L14_00161478);
+    scale_e(glow_position_offset, d + 0xA0, blarg_heavy_interceptor_glow_position_offset_scale);
     add_e(glow_quad_transform[3], glow_quad_transform[3], glow_position_offset);
     pk.b = tex_e(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -1206,7 +1206,7 @@ void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
         pk.col[0] = col;
     }
     for (i = 0; i < 4; i++) {
-        scale_e(pk.m[i], D_L14_001D8600[i], D_L14_00161474);
+        scale_e(pk.m[i], D_L14_001D8600[i], blarg_heavy_interceptor_glow_quad_scale);
         xform_e(pk.m[i], pk.m[i], glow_quad_transform);
     }
     draw_e(&pk, 0, 0);
