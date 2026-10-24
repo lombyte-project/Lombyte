@@ -1838,11 +1838,11 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
 extern float D_L16_00161E68 __attribute__((sda));
 extern float D_L16_00161E6C __attribute__((sda));
-extern float D_L16_00161E70 __attribute__((sda));
-extern float D_L16_00161E74 __attribute__((sda));
+extern float path_walker_speed_range_start __asm__("D_L16_00161E70") __attribute__((sda));
+extern float path_walker_speed_range_end __asm__("D_L16_00161E74") __attribute__((sda));
 extern float D_L16_00161E78 __attribute__((sda));
-extern float D_L16_00161E7C __attribute__((sda));
-extern float D_L16_00161E80 __attribute__((sda));
+extern float path_walker_height_range_start __asm__("D_L16_00161E7C") __attribute__((sda));
+extern float path_walker_height_range_end __asm__("D_L16_00161E80") __attribute__((sda));
 extern float D_L16_00161E8C __attribute__((sda));
 extern int D_L16_00161E90 __attribute__((sda));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -1921,7 +1921,7 @@ void update_path_walker(unsigned char *walker_moby) {
         }
         if (walker_moby[0x31] == 0 && blocked == 0) {
             if (gap > D_L16_00161E6C + 1.0f) {
-                height = random_float_between(D_L16_00161E7C, D_L16_00161E80);
+                height = random_float_between(path_walker_height_range_start, path_walker_height_range_end);
                 if (walker_data->owner[0x31] != 0 && walker_data->countdown != 0) {
                     next = other->parameter - random_float_between(D_L16_00161E68, D_L16_00161E6C);
                     walker_data->countdown--;
@@ -1935,7 +1935,7 @@ void update_path_walker(unsigned char *walker_moby) {
                 trial[2] += height;
                 trial[3] = 2.0f;
                 if (fast_bsphere_check((char *)trial, (float)D_L16_00161E90) == -1) {
-                    float random = random_float_between(D_L16_00161E70, D_L16_00161E74);
+                    float random = random_float_between(path_walker_speed_range_start, path_walker_speed_range_end);
 
                     walker_data->parameter = next;
                     walker_data->height_step = height;
@@ -2079,8 +2079,8 @@ void initialize_path_walker_group(struct Moby *moby) {
         data->owner = previous;
         data->period = period;
         previous = current;
-        data->height_step = random_float_between(D_L16_00161E7C, D_L16_00161E80);
-        data->speed = random_float_between(D_L16_00161E70, D_L16_00161E74) * frame_time;
+        data->height_step = random_float_between(path_walker_height_range_start, path_walker_height_range_end);
+        data->speed = random_float_between(path_walker_speed_range_start, path_walker_speed_range_end) * frame_time;
         data->target_speed = data->speed;
         current[0x20] = 1;
         rank--;
