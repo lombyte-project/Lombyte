@@ -1222,7 +1222,7 @@ extern float D_L00_00161DD4 __attribute__((section(".data")));
 int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) __asm__("FUN_L00_002eb648");
 
 int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) {
-    u128 v[1];
+    u128 target_orbit_origin_offset[1];
     u128 target_orbit_origin[1];
     char *camera_state;
     float *camera_initialization_values;
@@ -1237,12 +1237,12 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     camera_initialization_values = (float *)(camera_state + 0x64);
     if (!target_moby)
         goto one;
-    v[0] = 0;
-    ((float *)v)[2] = 0.12f;
-    ((float *)v)[0] = D_L00_00161DD4;
+    target_orbit_origin_offset[0] = 0;
+    ((float *)target_orbit_origin_offset)[2] = 0.12f;
+    ((float *)target_orbit_origin_offset)[0] = D_L00_00161DD4;
     target_private_data = *(char **)(target_moby + 0x78);
-    FUN_001f9cf8_2eb648(v, v, target_moby + 0xC0);
-    FUN_001f9a10_2eb648(target_orbit_origin, target_moby + 0x10, v);
+    FUN_001f9cf8_2eb648(target_orbit_origin_offset, target_orbit_origin_offset, target_moby + 0xC0);
+    FUN_001f9a10_2eb648(target_orbit_origin, target_moby + 0x10, target_orbit_origin_offset);
     pw = target_orbit_origin;
     if (*(int *)(target_private_data + 0x10) == -1) {
         FUN_L00_001eb0c8_2eb648(camera_initialization_values, camera_object + 0x50, 0.0f);
