@@ -1267,8 +1267,8 @@ typedef struct DrawbridgeVars {
 
 extern char D_L06_00161D50[4] __attribute__((sda));
 extern char D_L06_00161D60[4] __attribute__((sda));
-extern float D_L06_00161D70 __attribute__((sda));
-extern float D_L06_00161D74 __attribute__((sda));
+extern float drawbridge_min_segment_distance_base __asm__("D_L06_00161D70") __attribute__((sda));
+extern float drawbridge_min_segment_distance_step __asm__("D_L06_00161D74") __attribute__((sda));
 extern float D_L06_00161D78 __attribute__((sda));
 extern float D_L06_00161D7C __attribute__((sda));
 extern float D_L06_00161D80 __attribute__((sda));
@@ -1306,7 +1306,7 @@ void update_drawbridge_segment_transforms(Moby *moby)
     }
 
     for (j = 0; j < 10; j++) {
-        min_length = D_L06_00161D70 + (float)(4 - j) * D_L06_00161D74;
+        min_length = drawbridge_min_segment_distance_base + (float)(4 - j) * drawbridge_min_segment_distance_step;
         length = D_L06_00161D78 - j * 2.0f;
         right = length - 1.0f;
         if (length < min_length) length = min_length;
