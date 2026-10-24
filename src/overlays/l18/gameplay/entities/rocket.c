@@ -1982,7 +1982,7 @@ extern float D_L18_00161C6C __attribute__((sda));
 extern float expanding_projectile_ring_layer_radius_offset_gp __asm__("D_L18_00161C70") __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
-extern float D_L18_00161C7C __attribute__((sda));
+extern float expanding_projectile_ring_fade_duration_input_gp __asm__("D_L18_00161C7C") __attribute__((sda));
 void draw_expanding_projectile_ring(M_dba20 *moby) {
     Q_dba20 quad_packets[4];
     V_dba20 draw_matrix[4];
@@ -2010,7 +2010,7 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         color_fade_weight = layer_phase * D_L18_00161C78;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         col = tween_color_dba20(col & 0xFFFFFF, col, color_fade_weight);
-        color_fade_weight = (moby_vars->f28 - moby_vars->f24) / (moby_vars->f20 * scale_time_dba20(D_L18_00161C7C));
+        color_fade_weight = (moby_vars->f28 - moby_vars->f24) / (moby_vars->f20 * scale_time_dba20(expanding_projectile_ring_fade_duration_input_gp));
         if (color_fade_weight > 1.0f) {
             color_fade_weight = 1.0f;
         } else if (color_fade_weight < 0.0f) {
