@@ -2912,7 +2912,7 @@ extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
-void FUN_L00_0020a228(float a, float b);
+void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");
 void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
 void update_hero_target_tracking(void) {
@@ -3012,7 +3012,7 @@ void update_hero_target_tracking(void) {
             yaw_delta = -0.296705961f;
         pitch = 0.0f;
     }
-    FUN_L00_0020a228(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
+    set_fourth_hero_easing_parameters(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
     manipulator_table = D_L00_0017A780;
     *(float *)(manipulator_table + 0x274) = pitch;
     *(float *)(manipulator_table + 0x278) = yaw_delta * 0.7f;
