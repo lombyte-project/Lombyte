@@ -2399,7 +2399,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
     s32 candidate_aim_record_address;
     s32 i;
     s32 flag;
-    f32 best, yaw, pitch, candidate_aim_distance, ang, z, angh, angv;
+    f32 best, yaw, pitch, candidate_aim_distance, aim_angle_limit_or_asin_numerator, z, angh, angv;
     char *spos;
     char *opos;
     struct Hero *hero_context;
@@ -2459,14 +2459,14 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         }
         if (best < candidate_aim_distance)
             goto next;
-        ang = convert_integer_to_float(D_0013E520_u.bB) * 0.6981317f;
+        aim_angle_limit_or_asin_numerator = convert_integer_to_float(D_0013E520_u.bB) * 0.6981317f;
         FUN_00214db0(&lv, candidate_aim_distance, yaw, pitch + hero_context->ground_pitch.f * 0.5f);
         fast_vec_add(&lv, &lv, spos);
         z = fast_arc_sin(FUN_001f9b48(&lv, &candidate_aim_position) / (candidate_aim_distance + candidate_aim_distance));
-        ang = ang + 1.5707964f;
-        if (ang < z + z && candidate_aim_record_address != 0) {
-            ang = convert_integer_to_float(*(u8 *)(candidate_aim_record_address + 0xA) << 3) * 0.125f;
-            fast_arc_sin(ang / candidate_aim_distance);
+        aim_angle_limit_or_asin_numerator = aim_angle_limit_or_asin_numerator + 1.5707964f;
+        if (aim_angle_limit_or_asin_numerator < z + z && candidate_aim_record_address != 0) {
+            aim_angle_limit_or_asin_numerator = convert_integer_to_float(*(u8 *)(candidate_aim_record_address + 0xA) << 3) * 0.125f;
+            fast_arc_sin(aim_angle_limit_or_asin_numerator / candidate_aim_distance);
         }
         flag = 1;
         if (FUN_001efa68_u(D_L00_00166DC0, &candidate_aim_position, 6, self, 0) != 0) {
