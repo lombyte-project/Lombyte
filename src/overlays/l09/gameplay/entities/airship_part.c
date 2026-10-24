@@ -87,7 +87,7 @@ extern float airship_part_initial_downward_acceleration_range_start_gp __asm__("
 extern float airship_part_initial_downward_acceleration_range_end_gp __asm__("D_L09_0016139C") __attribute__((sda));
 extern float airship_part_downward_acceleration_override_range_start_gp __asm__("D_L09_001613A0") __attribute__((sda));
 extern float airship_part_downward_acceleration_override_range_end_gp __asm__("D_L09_001613A4") __attribute__((sda));
-extern float D_L09_001613A8 __attribute__((sda));
+extern float airship_part_breakup_offset_velocity_scale_gp __asm__("D_L09_001613A8") __attribute__((sda));
 extern float D_L09_001613AC __attribute__((sda));
 extern float airship_part_initial_tumble_x_speed_limit_degrees_gp __asm__("D_L09_001613B0") __attribute__((sda));
 extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09_001613B4") __attribute__((sda));
@@ -208,7 +208,7 @@ void update_airship_part(struct Moby *moby) {
         }
         FUN_L00_0024f7c8_2c26c8(moby, 0, point_offset_and_effect_scratch);
         FUN_001f9a28_2c26c8(part_vars->vel, ((f32 *)&moby->pos), point_offset_and_effect_scratch);
-        FUN_001f9a68_2c26c8(part_vars->vel, part_vars->vel, D_L09_001613A8 * frame_time / 20.0f);
+        FUN_001f9a68_2c26c8(part_vars->vel, part_vars->vel, airship_part_breakup_offset_velocity_scale_gp * frame_time / 20.0f);
         FUN_001f9a28_2c26c8(transform_and_effect_scratch.m[0], point_offset_and_effect_scratch, &hero.motion.pos);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
             FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], D_L09_001613B8 * frame_time);
