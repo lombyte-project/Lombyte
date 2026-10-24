@@ -79,7 +79,7 @@ extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002
 extern int D_L18_00162498 __attribute__((sda));
 extern int D_L18_001624BC __attribute__((sda));
 extern int deplanetizer_glow_quad_alpha __asm__("D_L18_00162524");
-extern float D_L18_00162520;
+extern float deplanetizer_camera_quad_base_scale __asm__("D_L18_00162520");
 extern float D_L18_0016252C;
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
@@ -219,12 +219,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
             if (D_L18_0016D260_update.n >= frames_9780(D_L18_0016249C)) {
-                D_L18_00162520 = 10.0f;
+                deplanetizer_camera_quad_base_scale = 10.0f;
             } else {
                 numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_00162498));
                 denominator = convert_integer_to_float(frames_9780(D_L18_0016249C - D_L18_00162498));
                 numerator = numerator / denominator;
-                D_L18_00162520 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
+                deplanetizer_camera_quad_base_scale = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
             }
         }
     }
@@ -268,12 +268,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
             if (D_L18_0016D260_update.n >= D_L18_0016249C) {
-                D_L18_00162520 = 10.0f;
+                deplanetizer_camera_quad_base_scale = 10.0f;
             } else {
                 numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_00162498);
                 denominator = convert_integer_to_float(D_L18_0016249C - D_L18_00162498);
                 numerator = numerator / denominator;
-                D_L18_00162520 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
+                deplanetizer_camera_quad_base_scale = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
             }
         }
     }
@@ -385,8 +385,8 @@ extern float D_L18_00162550;
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
 extern float D_L18_0016255C;
-extern int D_L18_001624F8 __attribute__((sda));
-extern int D_L18_001624FC __attribute__((sda));
+extern int deplanetizer_camera_quad_first_color __asm__("D_L18_001624F8") __attribute__((sda));
+extern int deplanetizer_camera_quad_smaller_color __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
     {0.0f, -1.0f, 1.0f, 1.0f},
     {0.0f, -1.0f, -1.0f, 1.0f},
@@ -439,28 +439,28 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    color = D_L18_001624F8;
+    color = deplanetizer_camera_quad_first_color;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale);
         xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
-    color = D_L18_001624FC;
+    color = deplanetizer_camera_quad_smaller_color;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.75f);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.75f);
         xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.5f);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.5f);
         xform_9780(pk.m[i], pk.m[i], quad_transform);
     }
     draw_9780(&pk, 0, 0);
