@@ -1024,7 +1024,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 104:
+                case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN:
                     if (hero.sink_jump_count < 2) {
                         if (scale_game_frames(0xF) + hero.sink_jump_count * scale_game_frames(0x19) <
                             hero.state_timer) {
@@ -1039,7 +1039,7 @@ void hero_update_transitions(void) {
                         return;
                     }
                     break;
-                case 123:
+                case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
                     if (hero.sink_surface_z - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -2927,7 +2927,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x5A, 1);
                     }
                     break;
-                case 95:
+                case HERO_STATE_WAIT_FOR_CIRCLE_RELEASE_AND_ANIMATION:
                     if (controller_state.held & 0x20) {
                         break;
                     }
@@ -3029,7 +3029,7 @@ void hero_update_transitions(void) {
                     }
                     hero_set_state(0x53, 1);
                     break;
-                case 89:
+                case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
                     if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
@@ -3102,7 +3102,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
