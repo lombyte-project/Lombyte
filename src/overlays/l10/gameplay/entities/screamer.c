@@ -1112,7 +1112,7 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
 /* Stores a value into each table entry listed for this moby's index. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
-extern int D_L10_00161E00 __attribute__((sda));
+extern int moby_group_command_frames __asm__("D_L10_00161E00") __attribute__((sda));
 void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");
 
 void set_moby_group_command_frames(struct Moby *moby) {
@@ -1123,7 +1123,7 @@ void set_moby_group_command_frames(struct Moby *moby) {
             do {
                 int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
                 ((char *)D_L10_0015FFD0_e[2])[(listed_entity_index << 8) + 0xBC] =
-                    scale_game_frames(D_L10_00161E00);
+                    scale_game_frames(moby_group_command_frames);
             } while (*group_entry++ >= 0);
         }
     }
