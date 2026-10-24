@@ -1848,7 +1848,7 @@ extern float D_L14_00162494 __attribute__((sda));
 extern float D_L14_00162498 __attribute__((sda));
 extern float D_L14_0016249C __attribute__((sda));
 extern float D_L14_001624A0 __attribute__((sda));
-extern float D_L14_001624A4 __attribute__((sda));
+extern float path_key_camera_heading_blend_step_factor __asm__("D_L14_001624A4") __attribute__((sda));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
 extern float D_L14_001F6C38[][3];
@@ -2055,16 +2055,16 @@ void update_path_key_camera(char *path_key_camera) {
     }
     if (heading_blend_target == 0.0f && current_key_heading_override == 0.0f) {
         heading_blend_target = (st->fC != 0.0f) ? st->fC : st->f8;
-        st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+        st->f10 += (0.0f - st->f10) * path_key_camera_heading_blend_step_factor;
         camera_placement_heading = interpolate_angle(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
     } else {
         if (heading_blend_target != 0.0f) {
-            st->f10 += (1.0f - st->f10) * D_L14_001624A4;
+            st->f10 += (1.0f - st->f10) * path_key_camera_heading_blend_step_factor;
             camera_placement_heading = interpolate_angle(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
             st->fC = heading_blend_target;
         } else {
-            st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+            st->f10 += (0.0f - st->f10) * path_key_camera_heading_blend_step_factor;
             camera_placement_heading = interpolate_angle(camera_placement_heading, current_key_heading_override, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
             st->fC = heading_blend_target;
