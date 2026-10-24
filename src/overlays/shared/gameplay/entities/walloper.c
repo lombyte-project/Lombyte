@@ -1244,7 +1244,9 @@ extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch) {
+char *select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) __asm__("FUN_L00_002bc3b0");
+
+char *select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) {
     float start[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float target[4] __attribute__((aligned(16)));
