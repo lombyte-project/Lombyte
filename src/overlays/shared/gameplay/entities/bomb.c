@@ -2424,7 +2424,9 @@ extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-char *FUN_L00_002cdf28(char *search_position, int *excl) {
+char *select_nearest_drone_target(char *search_position, int *excl) __asm__("FUN_L00_002cdf28");
+
+char *select_nearest_drone_target(char *search_position, int *excl) {
     char *result = 0;
     char *candidate_moby;
     float best = 1e9f;
