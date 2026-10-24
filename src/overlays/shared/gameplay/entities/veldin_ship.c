@@ -294,9 +294,9 @@ u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
 extern T_2d0538 D_L00_001E9E30;
-extern f32 D_L00_001618C8 __attribute__((sda));
-extern f32 D_L00_001618CC __attribute__((sda));
-extern f32 D_L00_001618D0 __attribute__((sda));
+extern f32 crate_drop_horizontal_launch_speed_max_gp __asm__("D_L00_001618C8") __attribute__((sda));
+extern f32 crate_drop_vertical_launch_speed_min_gp __asm__("D_L00_001618CC") __attribute__((sda));
+extern f32 crate_drop_vertical_launch_speed_max_gp __asm__("D_L00_001618D0") __attribute__((sda));
 void crate_drop_bolts(u8 *crate_moby) {
     enum {
         CRATE_DROP_AUTO_SELECT = 0,
@@ -384,12 +384,12 @@ void crate_drop_bolts(u8 *crate_moby) {
             spawned_vars = *(u8 **)(spawned_moby + 0x78);
             *(s16 *)(spawned_vars + 4) = *(s16 *)(crate_vars + 0xC4);
             launch_angle = FUN_00213308_2d0538();
-            horizontal_launch_speed = FUN_002132a8_2d0538(0.0f, D_L00_001618C8) * D_0015ED6C_2d0538;
+            horizontal_launch_speed = FUN_002132a8_2d0538(0.0f, crate_drop_horizontal_launch_speed_max_gp) * D_0015ED6C_2d0538;
             *(f32 *)(spawned_vars + 0x10) = fast_cos(launch_angle) * horizontal_launch_speed;
             {
                 f32 sn = fast_sin(launch_angle) * horizontal_launch_speed;
                 {
-                    f32 hi = D_L00_001618D0, lo = D_L00_001618CC;
+                    f32 hi = crate_drop_vertical_launch_speed_max_gp, lo = crate_drop_vertical_launch_speed_min_gp;
                     *(f32 *)(spawned_vars + 0x18) = 0.0f;
                     *(f32 *)(spawned_vars + 0x14) = sn;
                     *(f32 *)(spawned_vars + 0x18) = FUN_002132a8_2d0538(lo, hi) * D_0015ED6C_2d0538;
