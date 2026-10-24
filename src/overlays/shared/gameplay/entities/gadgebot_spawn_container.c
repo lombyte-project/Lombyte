@@ -2891,7 +2891,7 @@ extern float approach_angle(float *, float *, float, float, float, float) __asm_
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern float D_L06_00161D38 __attribute__((sda));
-extern float D_L06_00161D40 __attribute__((sda));
+extern float rotation_group_max_angular_speed_degrees_gp __asm__("D_L06_00161D40") __attribute__((sda));
 extern float D_L06_00161D44 __attribute__((sda));
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2990,7 +2990,7 @@ void update_moby_rotation_group(Moby *moby) {
         approach_angle(&moby_vars->unk14, &moby_vars->unk20, 1.0471976f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
-                          D_L06_00161D40 * 0.017453292f * D_0015ED6C);
+                          rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
         if (moby_vars->unk14 >= 1.0471976f) {
             moby->flags |= 1;
@@ -3007,7 +3007,7 @@ void update_moby_rotation_group(Moby *moby) {
         approach_angle(&moby_vars->unk14, &moby_vars->unk20, 0.0f,
                           D_L06_00161D38 * 0.017453292f * D_0015ED70,
                           D_L06_00161D3C * 0.017453292f * D_0015ED70,
-                          D_L06_00161D40 * 0.017453292f * D_0015ED6C);
+                          rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float (*)[4])&moby->rot)[0] = fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
         if (moby_vars->unk14 <= 0.0f) {
             if (moby->state == 8) {
