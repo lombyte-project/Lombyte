@@ -2612,7 +2612,7 @@ extern int FUN_L00_00263d40_c() __asm__("FUN_L00_00263d40");
 extern s32 queue_animation_update() __asm__("func_001FF308");
 extern short D_L06_00161EF0 __attribute__((sda));
 extern short D_L06_00161EF4 __attribute__((sda));
-extern f32 D_L06_00161EFC __attribute__((sda));
+extern f32 alien_queen_movement_acceleration __asm__("D_L06_00161EFC") __attribute__((sda));
 extern short D_L06_00161F00 __attribute__((sda));
 extern short D_L06_00161F04 __attribute__((sda));
 extern short D_L06_00161F08 __attribute__((sda));
@@ -2854,10 +2854,10 @@ void alien_queen_update(unsigned char *moby)
                             frame_time_q * 3.1415927f);
         if (turn < 0.7853982f && *(float *)&D_L06_00161F00 < dist) {
             func_00214D28_q((float *)(data + 0xE8), *(float *)&D_L06_00161EF4 * frame_time_q,
-                            D_L06_00161EFC * frame_time_sq_q);
+                            alien_queen_movement_acceleration * frame_time_sq_q);
         } else if (dist < *(float *)&D_L06_00161F04) {
             func_00214D28_q((float *)(data + 0xE8), -(*(float *)&D_L06_00161EF4 * frame_time_q),
-                            D_L06_00161EFC * frame_time_sq_q);
+                            alien_queen_movement_acceleration * frame_time_sq_q);
         } else {
             func_00214D28_q((float *)(data + 0xE8), 0.0f, frame_time_sq_q * 8.0f);
         }
@@ -3287,7 +3287,7 @@ typedef struct {
     s32 ground;           /* 0xEC */
 } CirclerVars;
 
-extern f32 D_L06_00161EF8 __attribute__((sda));
+extern f32 alien_queen_orbit_speed __asm__("D_L06_00161EF8") __attribute__((sda));
 extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 circler_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -3324,9 +3324,9 @@ void update_alien_queen_orbit_movement(struct Moby *moby) {
                            &circler_vars->yaw_vel, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                            frame_time * 3.1415927f);
     if (circler_dist(&moby->pos, &goal) > 1.0f && vector_distance(&moby->pos, &hero.motion.pos) < 16.0f)
-        approach_value(&circler_vars->speed, D_L06_00161EF8 * frame_time, D_L06_00161EFC * frame_time_sq);
+        approach_value(&circler_vars->speed, alien_queen_orbit_speed * frame_time, alien_queen_movement_acceleration * frame_time_sq);
     else
-        approach_value(&circler_vars->speed, 0.0f, D_L06_00161EFC * frame_time_sq);
+        approach_value(&circler_vars->speed, 0.0f, alien_queen_movement_acceleration * frame_time_sq);
     if (circler_vars->speed == 0.0f) {
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(20));
