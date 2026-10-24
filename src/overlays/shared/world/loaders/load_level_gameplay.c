@@ -1720,7 +1720,7 @@ extern u8 D_0014C050[];
 extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
-extern s32 D_L00_00160004;
+extern s32 saved_sound_bank_handle __asm__("D_L00_00160004");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L00_001827C0[3];
 extern u64 D_L00_001827D8[3];
@@ -1871,7 +1871,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         D_L00_0015F40C = 0;
         FUN_001f9838_244110(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), core_header[0], (char *)core_header + core_header[1]);
-        D_L00_00160004 = sound_bank_handle;
+        saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
         used = FUN_L00_0024d8d0_244110((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         D_L00_0015F40C = (s32)(base + core_header[0x18]);
