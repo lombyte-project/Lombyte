@@ -610,8 +610,8 @@ void FUN_001f9d20_002d4108(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
-extern float D_L08_00161898 __attribute__((sda));
-extern float D_L08_0016189C __attribute__((sda));
+extern float scoutbot_glow_position_offset_scale __asm__("D_L08_00161898") __attribute__((sda));
+extern float scoutbot_glow_quad_vertex_scale __asm__("D_L08_0016189C") __attribute__((sda));
 void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -644,7 +644,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);
     fast_vec_cross(M[2], M[1], M[0]);
-    fast_vec_scale(position_offset, M[0], D_L08_00161898);
+    fast_vec_scale(position_offset, M[0], scoutbot_glow_position_offset_scale);
     fast_vec_add(M[3], M[3], position_offset);
     col = (*(u32 *)(moby + 0x90) & 0xFFFFFF) | 0x40000000;
     pk.col[3] = col;
@@ -652,7 +652,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(pk.m[i], D_L08_001D1D80[i], D_L08_0016189C);
+        fast_vec_scale(pk.m[i], D_L08_001D1D80[i], scoutbot_glow_quad_vertex_scale);
         FUN_001f9d20_002d4108(pk.m[i], pk.m[i], M);
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
