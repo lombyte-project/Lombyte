@@ -408,7 +408,7 @@ void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003078C8), where it is exact; names translated to the US level program. */
 
 extern float D_L12_00161F40;
-extern float D_L12_00161F50;
+extern float planetbuster_maximus_detached_owner_rotation __asm__("D_L12_00161F50");
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
@@ -440,12 +440,12 @@ void update_planetbuster_maximus_detached_parts(char *moby) {
             position_or_vertical_step = D_L12_00161F40;
             if (position_or_vertical_step == -1.0f) {
                 qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
-                qcopy((char *)&D_L12_00161F50, slot_moby + 0x40);
+                qcopy((char *)&planetbuster_maximus_detached_owner_rotation, slot_moby + 0x40);
             }
             qcopy((char *)&D_L12_00161F60, slot_moby + 0x10);
             qcopy((char *)&D_L12_00161F70, slot_moby + 0x40);
             qcopy(slot_moby + 0x10, (char *)&D_L12_00161F40);
-            qcopy(slot_moby + 0x40, (char *)&D_L12_00161F50);
+            qcopy(slot_moby + 0x40, (char *)&planetbuster_maximus_detached_owner_rotation);
             position_or_vertical_step = *(float *)(slot_moby + 0x18);
         } else {
             position_or_vertical_step = *(float *)(slot_moby + 0x18);
@@ -479,7 +479,7 @@ void update_planetbuster_maximus_detached_parts(char *moby) {
         }
         if (i == last) {
             qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
-            qcopy((char *)&D_L12_00161F50, slot_moby + 0x40);
+            qcopy((char *)&planetbuster_maximus_detached_owner_rotation, slot_moby + 0x40);
         }
         FUN_L00_00250df8_c(slot_moby);
     }
