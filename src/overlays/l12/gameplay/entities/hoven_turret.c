@@ -523,13 +523,13 @@ extern float hoven_turret_destruction_view_offset_distance_min __asm__("D_L12_00
 extern float hoven_turret_destruction_view_offset_distance_max __asm__("D_L12_00161E64") __attribute__((sda));
 extern float hoven_turret_pitch_min __asm__("D_L12_00161EA8") __attribute__((sda));
 extern float hoven_turret_pitch_max __asm__("D_L12_00161EAC") __attribute__((sda));
-extern float D_L12_00161ED0 __attribute__((sda));
-extern float D_L12_00161ED4 __attribute__((sda));
-extern float D_L12_00161ED8 __attribute__((sda));
-extern float D_L12_00161EDC __attribute__((sda));
-extern float D_L12_00161EE0 __attribute__((sda));
-extern float D_L12_00161EE4 __attribute__((sda));
-extern float D_L12_00161EE8 __attribute__((sda));
+extern float hoven_turret_yaw_input_rate __asm__("D_L12_00161ED0") __attribute__((sda));
+extern float hoven_turret_pitch_input_rate __asm__("D_L12_00161ED4") __attribute__((sda));
+extern float hoven_turret_yaw_acceleration_rate __asm__("D_L12_00161ED8") __attribute__((sda));
+extern float hoven_turret_pitch_acceleration_rate __asm__("D_L12_00161EDC") __attribute__((sda));
+extern float hoven_turret_yaw_braking_rate __asm__("D_L12_00161EE0") __attribute__((sda));
+extern float hoven_turret_pitch_braking_rate __asm__("D_L12_00161EE4") __attribute__((sda));
+extern float hoven_turret_firing_offset_rate __asm__("D_L12_00161EE8") __attribute__((sda));
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
@@ -732,18 +732,18 @@ void hoven_turret_update(struct Moby *moby) {
                 y = -y;
             }
             joy[1] = y;
-            target_yaw_step = D_L12_00161ED0 * 0.017453292f * D_0015ED6C_gp * -joy[0];
+            target_yaw_step = hoven_turret_yaw_input_rate * 0.017453292f * D_0015ED6C_gp * -joy[0];
             if ((data->f7C >= 0.0f && data->f7C < target_yaw_step) || (data->f7C <= 0.0f && target_yaw_step < data->f7C)) {
-                approach_value(&data->f7C, target_yaw_step, D_L12_00161ED8 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f7C, target_yaw_step, hoven_turret_yaw_acceleration_rate * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f7C, target_yaw_step, D_L12_00161EE0 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f7C, target_yaw_step, hoven_turret_yaw_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
             moby->rot.z = fast_add_rotations_c3(moby->rot.z, data->f7C);
-            target_pitch_step = -(D_L12_00161ED4 * 0.017453292f * D_0015ED6C_gp) * -joy[1];
+            target_pitch_step = -(hoven_turret_pitch_input_rate * 0.017453292f * D_0015ED6C_gp) * -joy[1];
             if ((data->f78 >= 0.0f && data->f78 < target_pitch_step) || (data->f78 <= 0.0f && target_pitch_step < data->f78)) {
-                approach_value(&data->f78, target_pitch_step, D_L12_00161EDC * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f78, target_pitch_step, hoven_turret_pitch_acceleration_rate * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f78, target_pitch_step, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f78, target_pitch_step, hoven_turret_pitch_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
             data->f74 = fast_add_rotations_c3(data->f74, data->f78);
             if (data->f74 > hoven_turret_pitch_max) {
@@ -765,7 +765,7 @@ void hoven_turret_update(struct Moby *moby) {
 
                 blend_moby_animation_c(moby, data->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations_c3(moby->rot.z, 1.5707964f);
-                build_spherical_offset(firing_offset, D_L12_00161EE8 * D_0015ED6C_gp, yaw, data->f74);
+                build_spherical_offset(firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, data->f74);
                 if (data->f80 == 1) {
                     data->f80 = 0;
                     FUN_L00_0024f7c8(moby, 2, muz);
