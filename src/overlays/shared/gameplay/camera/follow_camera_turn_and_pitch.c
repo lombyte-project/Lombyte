@@ -85,8 +85,8 @@ extern float FUN_001fa580_2e8bb8(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_2e8bb8(float, float) __asm__("FUN_001fa5c8");
 
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
-extern float D_L00_00161CAC __attribute__((sda));
-extern float D_L00_00161CB0 __attribute__((sda));
+extern float follow_camera_input_stiffness __asm__("D_L00_00161CAC") __attribute__((sda));
+extern float follow_camera_input_damping __asm__("D_L00_00161CB0") __attribute__((sda));
 extern float D_L00_00161CBC __attribute__((sda));
 extern float D_L00_00161CC0 __attribute__((sda));
 extern float D_L00_00161CC4 __attribute__((sda));
@@ -108,8 +108,8 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     base = D_L00_00166E10_2e8bb8;
     turn_pitch_state = camera_data + 0x1A8;
     turn_pitch_vector = camera_data + 0x130;
-    smoothed_turn_input = FUN_001ebd78_2e8bb8(camera_data + 0x1AC, *(float *)(camera_data + 0x1A8), k, D_L00_00161CAC,
-                            D_L00_00161CB0, 0.0f);
+    smoothed_turn_input = FUN_001ebd78_2e8bb8(camera_data + 0x1AC, *(float *)(camera_data + 0x1A8), k, follow_camera_input_stiffness,
+                            follow_camera_input_damping, 0.0f);
     *(float *)(camera_data + 0x1A8) = smoothed_turn_input;
     *(float *)(turn_pitch_vector + 0x34) = *(float *)(turn_pitch_state + 0x14) * smoothed_turn_input;
     if (in < -0.3f) {
@@ -131,8 +131,8 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     } else {
         sel = D_L00_00161CBC;
     }
-    *(float *)(turn_pitch_state + 8) = FUN_001ebd78_2e8bb8(turn_pitch_state + 0xC, *(float *)(turn_pitch_state + 8), in, D_L00_00161CAC,
-                                            D_L00_00161CB0, sel);
+    *(float *)(turn_pitch_state + 8) = FUN_001ebd78_2e8bb8(turn_pitch_state + 0xC, *(float *)(turn_pitch_state + 8), in, follow_camera_input_stiffness,
+                                            follow_camera_input_damping, sel);
     target_pitch_angle = *(float *)(turn_pitch_state + 8) * 0.69813168f;
     if (k == 0.0f) {
         FUN_00214890_2e8bb8(turn_pitch_vector, turn_pitch_vector, base + 0x20, *(float *)(turn_pitch_state + 0x20));
