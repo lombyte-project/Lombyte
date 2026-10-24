@@ -553,7 +553,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern int D_0015EE10 __attribute__((sda));
+extern int blarg_elite_commando_reward_kill_count __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -648,8 +648,8 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         case HIT_RESPONSE_FATAL_FALL: {
             char *source;
             if (current_level_index == 18 && commando_data->reward_hits) {
-                ++*(int *)&D_0015EE10;
-                if (*(int *)&D_0015EE10 >= 10) {
+                ++*(int *)&blarg_elite_commando_reward_kill_count;
+                if (*(int *)&blarg_elite_commando_reward_kill_count >= 10) {
                     if (D_0013D408[0x1D] == 0) {
                         D_0013D408[0x1D] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
