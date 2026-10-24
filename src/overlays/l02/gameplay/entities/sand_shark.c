@@ -2673,7 +2673,7 @@ void transport_pod_update(unsigned char *moby) {
     float s;
     OvlVec4 delta;
     OvlVec4 previous_rotation;
-    OvlVec4 a;
+    OvlVec4 path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target;
     OvlVec4 camera_target_or_hero_position_or_rotation;
     OvlVec4 camera_position_or_stop_look;
     OvlVec4 initial_camera_rotation;
@@ -2682,8 +2682,8 @@ void transport_pod_update(unsigned char *moby) {
     qcopy(&previous_rotation, moby + 0x40);
     if (transport_pod_path_markers_enabled_gp != 0.0f) {
         for (i = 0; i < *D_L02_001B0AB0_dc88[transport_pod_vars->path]; i++) {
-            qcopy(&a, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + i * 0x10 + 0x10);
-            path_marker_dc88(&a, moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.1f);
+            qcopy(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + i * 0x10 + 0x10);
+            path_marker_dc88(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.1f);
         }
     }
     switch (moby[0x20]) {
@@ -2721,18 +2721,18 @@ void transport_pod_update(unsigned char *moby) {
         break;
     case TRANSPORT_POD_TIMED_GEAR_MOVEMENT:
         s = D_0015ED6C * 5.0f;
-        fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8) + 0xC0, -s);
+        fast_vec_normalize(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8) + 0xC0, -s);
         fast_vec_add((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8) + 0x10,
-                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8) + 0x10, &a);
-        fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8) + 0xC0, s);
+                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8) + 0x10, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target);
+        fast_vec_normalize(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8) + 0xC0, s);
         fast_vec_add((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8) + 0x10,
-                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8) + 0x10, &a);
-        fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8) + 0xC0, -s);
+                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8) + 0x10, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target);
+        fast_vec_normalize(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8) + 0xC0, -s);
         fast_vec_add((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8) + 0x10,
-                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8) + 0x10, &a);
-        fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8) + 0xC0, s);
+                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8) + 0x10, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target);
+        fast_vec_normalize(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8) + 0xC0, s);
         fast_vec_add((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8) + 0x10,
-                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8) + 0x10, &a);
+                     (char *)D_L02_0015FFD8 + (transport_pod_vars->gear[3] << 8) + 0x10, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target);
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[0] << 8));
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[1] << 8));
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (transport_pod_vars->gear[2] << 8));
@@ -2788,7 +2788,7 @@ void transport_pod_update(unsigned char *moby) {
             if (moby[0xBC] == 0) {
                 transport_pod_vars->cam_goal = 0;
                 transport_pod_vars->cam_pos = (float)(*D_L02_001B0AB0_dc88[transport_pod_vars->path] - 1);
-                qcopy_nc(&a, D_L02_001600EC_n[transport_pod_vars->node_a].look);
+                qcopy_nc(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, D_L02_001600EC_n[transport_pod_vars->node_a].look);
                 qcopy(&camera_position_or_stop_look, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + trunc_d57f8(transport_pod_vars->cam_pos) * 0x10 + 0x10);
                 clear_vec_d57f8(&initial_camera_rotation);
                 initial_camera_rotation.f[2] = fast_arc_tan(camera_target_or_hero_position_or_rotation.f[0] - camera_position_or_stop_look.f[0], camera_target_or_hero_position_or_rotation.f[1] - camera_position_or_stop_look.f[1]);
@@ -2796,7 +2796,7 @@ void transport_pod_update(unsigned char *moby) {
             } else {
                 transport_pod_vars->cam_goal = *D_L02_001B0AB0_dc88[transport_pod_vars->path] - 1;
                 transport_pod_vars->cam_pos = 0.0f;
-                qcopy_nc(&a, D_L02_001600EC_n[transport_pod_vars->node_b].look);
+                qcopy_nc(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, D_L02_001600EC_n[transport_pod_vars->node_b].look);
                 qcopy(&camera_position_or_stop_look, (char *)D_L02_001B0AB0_dc88[transport_pod_vars->path] + trunc_d57f8(transport_pod_vars->cam_pos) * 0x10 + 0x10);
                 clear_vec_d57f8(&initial_camera_rotation);
                 initial_camera_rotation.f[2] = fast_arc_tan(camera_target_or_hero_position_or_rotation.f[0] - camera_position_or_stop_look.f[0], camera_target_or_hero_position_or_rotation.f[1] - camera_position_or_stop_look.f[1]);
@@ -2804,7 +2804,7 @@ void transport_pod_update(unsigned char *moby) {
             }
             moby[0x20] = 6;
             transport_pod_vars->ride_timer = scale_ticks(0xB4);
-            request_hero_target_pose(moby + 0x10, 0, a.f[2]);
+            request_hero_target_pose(moby + 0x10, 0, path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target.f[2]);
             jet_mount(D_L02_001673C0, D_L02_001673C0 + 0x10, 3, scale_ticks(0xF0), 0);
             set_selected_object_float_triplets(D_L02_00161C48, D_L02_00161C4C, D_L02_00161C50, D_L02_00161C54, D_L02_00161C58,
                              D_L02_00161C60);
@@ -2848,15 +2848,15 @@ void transport_pod_update(unsigned char *moby) {
                 moby[0xBC] = 1;
                 qcopy_nc(moby + 0x10, D_L02_001600EC_n[transport_pod_vars->node_b].pos);
                 qcopy_nc(&camera_position_or_stop_look, D_L02_001600EC_n[transport_pod_vars->node_b].look);
-                fast_vec_sub(&a, D_L02_001600EC_n[transport_pod_vars->node_b].pos, D_L02_001600EC_n[transport_pod_vars->node_a].pos);
+                fast_vec_sub(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, D_L02_001600EC_n[transport_pod_vars->node_b].pos, D_L02_001600EC_n[transport_pod_vars->node_a].pos);
             } else {
                 moby[0xBC] = 0;
                 qcopy_nc(moby + 0x10, D_L02_001600EC_n[transport_pod_vars->node_a].pos);
                 qcopy_nc(&camera_position_or_stop_look, D_L02_001600EC_n[transport_pod_vars->node_a].look);
-                fast_vec_sub(&a, D_L02_001600EC_n[transport_pod_vars->node_a].pos, D_L02_001600EC_n[transport_pod_vars->node_b].pos);
+                fast_vec_sub(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, D_L02_001600EC_n[transport_pod_vars->node_a].pos, D_L02_001600EC_n[transport_pod_vars->node_b].pos);
             }
             ((struct Moby *)moby)->pos.z -= 6.0f;
-            fast_vec_add(&camera_target_or_hero_position_or_rotation, &hero.motion.pos, &a);
+            fast_vec_add(&camera_target_or_hero_position_or_rotation, &hero.motion.pos, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target);
             FUN_L00_00216f90(&camera_target_or_hero_position_or_rotation, &camera_position_or_stop_look, 0x72, 0);
             transport_pod_vars->speed = -transport_pod_vars->speed;
             moby[0x20] = 9;
@@ -2869,11 +2869,11 @@ void transport_pod_update(unsigned char *moby) {
             moby[0x20] = 10;
         }
         sample_camera_path(D_L02_001B0AB0_dc88[transport_pod_vars->path], 0, &camera_position_or_stop_look, &camera_target_or_hero_position_or_rotation, 0, transport_pod_vars->cam_pos);
-        qcopy(&a, moby + 0x10);
-        a.f[2] += 8.0f;
+        qcopy(&path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target, moby + 0x10);
+        path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target.f[2] += 8.0f;
         clear_vec_d57f8(&camera_target_or_hero_position_or_rotation);
-        camera_target_or_hero_position_or_rotation.f[2] = fast_arc_tan(a.f[0] - camera_position_or_stop_look.f[0], a.f[1] - camera_position_or_stop_look.f[1]);
-        camera_target_or_hero_position_or_rotation.f[1] = -fast_arc_tan(vector_distance(&camera_position_or_stop_look, &a), a.f[2] - camera_position_or_stop_look.f[2]);
+        camera_target_or_hero_position_or_rotation.f[2] = fast_arc_tan(path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target.f[0] - camera_position_or_stop_look.f[0], path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target.f[1] - camera_position_or_stop_look.f[1]);
+        camera_target_or_hero_position_or_rotation.f[1] = -fast_arc_tan(vector_distance(&camera_position_or_stop_look, &path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target), path_point_or_gear_step_or_stop_look_or_transfer_delta_or_camera_target.f[2] - camera_position_or_stop_look.f[2]);
         FUN_L00_002ea9d8(&camera_position_or_stop_look);
         FUN_L00_002eaa30(&camera_target_or_hero_position_or_rotation);
         break;
