@@ -521,7 +521,9 @@ extern float adiff_20d6b0(float, float) __asm__("FUN_001fa688");
 extern float hdist_20d6b0(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 
-float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
+float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) __asm__("FUN_L00_0020d6b0");
+
+float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
     float v[4] __attribute__((aligned(16)));
     struct Hero *hero_state;
     float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, target_score;
@@ -563,7 +565,7 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
 }
 extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
-float FUN_L00_0020d6b0(char *, float, float, float, float, int *);
+float score_hero_target_candidate(char *, float, float, float, float, int *) __asm__("FUN_L00_0020d6b0");
 char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) __asm__("FUN_L00_0020d8f8");
 
 char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) {
@@ -575,7 +577,7 @@ char *find_best_hero_heading_target(float range_limit, float reference_yaw, floa
         float *candidate_eligibility_value = FUN_002141f8_20d8f8(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             int out;
-            float candidate_score = FUN_L00_0020d6b0(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
+            float candidate_score = score_hero_target_candidate(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
             if (out == 0 && candidate_score < bd) {
                 bd = candidate_score;
                 best = candidate_moby;

@@ -485,7 +485,7 @@ void select_hero_grapple_swing_target(void) {
 
 extern char *D_L00_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_L00_0020d6b0(void *, int *, float, float, float, float);
+extern float score_hero_target_candidate(void *, int *, float, float, float, float) __asm__("FUN_L00_0020d6b0");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
@@ -536,7 +536,7 @@ int select_hero_grapple_target(void) {
         max_target_distance = 30.0f;
         if (*(float *)(candidate_data + 0x20) != 0.0f)
             max_target_distance = *(float *)(candidate_data + 0x20);
-        target_score = FUN_L00_0020d6b0(candidate_moby, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
+        target_score = score_hero_target_candidate(candidate_moby, &out, x, max_target_distance, target_angle_limit, target_elevation_angle_limit);
         if (out != 0)
             continue;
         gb += 0x80;
