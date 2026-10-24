@@ -1296,22 +1296,22 @@ void update_path_lightning_controller(struct Moby *moby) {
     }
 }
 /* Arc state shared by FUN_L14_002ed530 and its draw callback FUN_L14_002edc18. */
-extern f32 D_L14_00161C68 __attribute__((sda));
-extern f32 D_L14_00161C6C __attribute__((sda));
+extern f32 lightning_arc_alpha_pulse_angle_step __asm__("D_L14_00161C68") __attribute__((sda));
+extern f32 lightning_arc_alpha_pulse_sweep __asm__("D_L14_00161C6C") __attribute__((sda));
 extern s32 D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
-extern f32 D_L14_00161C74 __attribute__((sda));
+extern f32 lightning_main_arc_point_spacing __asm__("D_L14_00161C74") __attribute__((sda));
 extern f32 D_L14_00161C8C __attribute__((sda));
 extern f32 D_L14_00161C90 __attribute__((sda));
-extern f32 D_L14_00161C94 __attribute__((sda));
-extern s32 D_L14_00161C98 __attribute__((sda));
-extern s32 D_L14_00161C9C __attribute__((sda));
+extern f32 lightning_main_arc_z_displacement_limit __asm__("D_L14_00161C94") __attribute__((sda));
+extern s32 lightning_arc_lifetime_range_start __asm__("D_L14_00161C98") __attribute__((sda));
+extern s32 lightning_arc_lifetime_range_end __asm__("D_L14_00161C9C") __attribute__((sda));
 extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
-extern s16 D_L14_00161CE2;
-extern f32 D_L14_00161CE4;
+extern s16 lightning_arc_alpha_pulse_offset __asm__("D_L14_00161CE2");
+extern f32 lightning_arc_alpha_pulse_phase __asm__("D_L14_00161CE4");
 extern char *D_L14_00161CE8;
-extern s32 D_L14_00161CEC;
-extern f32 D_L14_00161CF0;
-extern s32 D_L14_00161CF4;
+extern s32 lightning_arc_initial_lifetime_frames __asm__("D_L14_00161CEC");
+extern f32 lightning_arc_inverse_fade_duration __asm__("D_L14_00161CF0");
+extern s32 lightning_arc_sound_pending __asm__("D_L14_00161CF4");
 extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
 extern s16 D_L14_001E0000[40];
@@ -1357,27 +1357,27 @@ void update_branched_lightning_arc(char *moby) {
 
     if (*(int *)&D_L14_00161C58 == 0) {
         *(int *)&D_L14_00161C58 = 1;
-        D_L14_00161CF4 = 1;
+        lightning_arc_sound_pending = 1;
         D_L14_00161CE8 = moby;
         i = 0;
         starts = D_L14_00161CF8_macro;
-        *(int *)&D_L14_00161C6C = 0;
+        *(int *)&lightning_arc_alpha_pulse_sweep = 0;
         arc_sub(&delta, D_L14_00161CD0_d530, D_L14_00161CC0);
         arc_endpoint_distance = arc_length(&delta);
-        D_L14_00161C74 = arc_endpoint_distance / arc_itof(40);
+        lightning_main_arc_point_spacing = arc_endpoint_distance / arc_itof(40);
         D_L14_00161CE0_d530 = 0;
         for (; i < 40; i++) {
             main_arc_age = &D_L14_001E0000[i];
             main_arc_point = D_L14_001DFD80_d530[i];
             main_arc_point[1] = main_arc_point[2] = 0.0f;
             main_arc_point[3] = 1.0f;
-            main_arc_point[0] = D_L14_00161C74 * (float)i;
+            main_arc_point[0] = lightning_main_arc_point_spacing * (float)i;
             if (i < 39) {
                 main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
-                if (D_L14_00161C94 < (*&main_arc_point)[2]) {
-                    main_arc_point[2] = D_L14_00161C94;
-                } else if (main_arc_point[2] < -D_L14_00161C94) {
-                    main_arc_point[2] = -D_L14_00161C94;
+                if (lightning_main_arc_z_displacement_limit < (*&main_arc_point)[2]) {
+                    main_arc_point[2] = lightning_main_arc_z_displacement_limit;
+                } else if (main_arc_point[2] < -lightning_main_arc_z_displacement_limit) {
+                    main_arc_point[2] = -lightning_main_arc_z_displacement_limit;
                 }
             }
             path_fraction = arc_itof(i) / arc_itof(40);
@@ -1385,8 +1385,8 @@ void update_branched_lightning_arc(char *moby) {
         }
         arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
         sign = -1.0f;
-        lightning_arc_remaining_frames = D_L14_00161CEC = arc_frames(FUN_L00_00257b90_d530(D_L14_00161C98, D_L14_00161C9C));
-        D_L14_00161CF0 = 1.0f / arc_itof(lightning_arc_remaining_frames - arc_frames(D_L14_00161C70_gp));
+        lightning_arc_remaining_frames = lightning_arc_initial_lifetime_frames = arc_frames(FUN_L00_00257b90_d530(lightning_arc_lifetime_range_start, lightning_arc_lifetime_range_end));
+        lightning_arc_inverse_fade_duration = 1.0f / arc_itof(lightning_arc_remaining_frames - arc_frames(D_L14_00161C70_gp));
         if (arc_rand(2) != 0) {
             sign = 1.0f;
         }
@@ -1445,22 +1445,22 @@ void update_branched_lightning_arc(char *moby) {
                 }
             }
         }
-        if (lightning_arc_remaining_frames < D_L14_00161CEC - arc_frames(D_L14_00161C70_gp)) {
-            if (arc_frames(60) < D_L14_00161CEC) {
-                if (D_L14_00161C6C < 6.2831855f) {
-                    D_L14_00161CE2 = arc_ftoi(arc_sin(D_L14_00161CE4) * 128.0f);
-                    D_L14_00161CE4 = arc_add_rot(D_L14_00161CE4, D_L14_00161C68);
-                    D_L14_00161C6C += D_L14_00161C68 * frame_scale;
+        if (lightning_arc_remaining_frames < lightning_arc_initial_lifetime_frames - arc_frames(D_L14_00161C70_gp)) {
+            if (arc_frames(60) < lightning_arc_initial_lifetime_frames) {
+                if (lightning_arc_alpha_pulse_sweep < 6.2831855f) {
+                    lightning_arc_alpha_pulse_offset = arc_ftoi(arc_sin(lightning_arc_alpha_pulse_phase) * 128.0f);
+                    lightning_arc_alpha_pulse_phase = arc_add_rot(lightning_arc_alpha_pulse_phase, lightning_arc_alpha_pulse_angle_step);
+                    lightning_arc_alpha_pulse_sweep += lightning_arc_alpha_pulse_angle_step * frame_scale;
                 } else {
-                    D_L14_00161CE2 = 0;
+                    lightning_arc_alpha_pulse_offset = 0;
                 }
             } else {
-                D_L14_00161CE2 = 0;
+                lightning_arc_alpha_pulse_offset = 0;
             }
-            D_L14_00161CE0_d530 = (u8)D_L14_00161CE2 + arc_ftoi(arc_itof(lightning_arc_remaining_frames) * D_L14_00161CF0 * -255.0f + 255.0f);
-            if (D_L14_00161CF4 != 0) {
+            D_L14_00161CE0_d530 = (u8)lightning_arc_alpha_pulse_offset + arc_ftoi(arc_itof(lightning_arc_remaining_frames) * lightning_arc_inverse_fade_duration * -255.0f + 255.0f);
+            if (lightning_arc_sound_pending != 0) {
                 allocate_voice_for_group_entry(0, 0, moby);
-                D_L14_00161CF4 = 0;
+                lightning_arc_sound_pending = 0;
             }
             if (D_L14_00161CE0_d530 < 50) {
                 spawn_lightning_arc_particle_pairs(D_L14_00161CC0, 3);
