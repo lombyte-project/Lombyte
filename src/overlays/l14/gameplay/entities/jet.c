@@ -3043,7 +3043,7 @@ extern f32 enemy_fighter_exhaust_base_row0_offset_gp __asm__("D_L14_00161F30") _
 extern f32 enemy_fighter_exhaust_paired_emitter_offset_gp __asm__("D_L14_00161F34") __attribute__((sda));
 extern f32 enemy_fighter_exhaust_base_row2_offset_gp __asm__("D_L14_00161F38") __attribute__((sda));
 extern f32 enemy_fighter_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F3C") __attribute__((sda));
-extern s32 D_L14_00161F44 __attribute__((sda));
+extern s32 enemy_fighter_exhaust_paired_puff_color_gp __asm__("D_L14_00161F44") __attribute__((sda));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern void exhaust_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3077,7 +3077,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, enemy_fighter_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = exhaust_frames(12);
@@ -3111,7 +3111,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, enemy_fighter_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
