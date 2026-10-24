@@ -6515,7 +6515,7 @@ extern void FUN_L00_002eac18(int);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
-extern float D_L06_0015F400;
+extern float linked_sequence_exit_ramp_progress __asm__("D_L06_0015F400");
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
@@ -6653,12 +6653,12 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
     case RAMP_SHARED_VALUE_AFTER_DELAY:
         if (*(float *)(moby_vars + 0xB8) == 1.0f) {
             FUN_L00_00211250();
-            D_L06_0015F400 = 0.0f;
+            linked_sequence_exit_ramp_progress = 0.0f;
             return;
         }
         if (fast_dec_timer(moby_vars + 0xBC) == 0) return;
         approach_value((float *)(moby_vars + 0xB8), 1.0f, frame_time * 6.0f);
-        D_L06_0015F400 = *(float *)(moby_vars + 0xB8);
+        linked_sequence_exit_ramp_progress = *(float *)(moby_vars + 0xB8);
         return;
     }
 }
