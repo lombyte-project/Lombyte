@@ -346,8 +346,8 @@ void update_swing_gate_from_driver(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
 extern int scrolled_mesh_unscaled_fixed_alpha __asm__("D_L08_00161DD0") __attribute__((sda));
-extern int D_L08_00161DD4;
-extern int D_L08_00161DD8;
+extern int scrolled_mesh_subtractive_base_fixed_alpha __asm__("D_L08_00161DD4");
+extern int scrolled_mesh_additive_base_fixed_alpha __asm__("D_L08_00161DD8");
 extern int D_L08_00161DF0 __attribute__((sda));
 extern int D_L08_00161DF4;
 extern int pair_offset_mesh_fixed_alpha __asm__("D_L08_00161E00") __attribute__((sda));
@@ -371,9 +371,9 @@ void draw_layered_mesh_effect(void) {
     vu1_add_g_sregister(0x42, (long)scrolled_mesh_unscaled_fixed_alpha << 32 | 0x44);
     draw_scrolled_mesh_batch(0);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
-    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD4 * D_L08_00161E08_u) >> 8) << 32 | 0x62);
+    vu1_add_g_sregister(0x42, (long)((scrolled_mesh_subtractive_base_fixed_alpha * D_L08_00161E08_u) >> 8) << 32 | 0x62);
     draw_scrolled_mesh_batch(1);
-    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD8 * D_L08_00161E08_u) >> 8) << 32 | 0x68);
+    vu1_add_g_sregister(0x42, (long)((scrolled_mesh_additive_base_fixed_alpha * D_L08_00161E08_u) >> 8) << 32 | 0x68);
     draw_scrolled_mesh_batch(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)D_L08_00161DF0 << 32 | 0x48);
