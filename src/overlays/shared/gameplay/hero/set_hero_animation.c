@@ -1036,7 +1036,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *flattened_vector, float *input_vector) {
     struct Hero *base = &hero;
-    float n[4] __attribute__((aligned(16)));
+    float gravity_axis_projection[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
     case HERO_GRAVITY_WORLD_DOWN:
@@ -1044,13 +1044,13 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         flattened_vector[2] = 0.0f;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        fast_vec_normalize(n, &base->unk270, 1.0f);
-        scale_vector_xyz(n, n, dot_vectors_xyz(n, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, n);
+        fast_vec_normalize(gravity_axis_projection, &base->unk270, 1.0f);
+        scale_vector_xyz(gravity_axis_projection, gravity_axis_projection, dot_vectors_xyz(gravity_axis_projection, input_vector));
+        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, n);
+        scale_vector_xyz(gravity_axis_projection, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, input_vector));
+        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
         break;
     }
 }
