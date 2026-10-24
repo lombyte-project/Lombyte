@@ -271,7 +271,7 @@ extern float D_L11_00161EBC __attribute__((sda));
 extern float D_L11_00161EFC __attribute__((sda));
 extern float D_L11_00161F00 __attribute__((sda));
 extern float D_L11_00161F04 __attribute__((sda));
-extern float D_L11_00161F08 __attribute__((sda));
+extern float final_child_set_z_offset __asm__("D_L11_00161F08") __attribute__((sda));
 extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
@@ -354,7 +354,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
         }
         signed_axis0_offset *= sgn;
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
-        child_placement_vector_scratch.z = D_L11_00161F08;
+        child_placement_vector_scratch.z = final_child_set_z_offset;
         add_vector_xyz(&D_L11_00161F10[q]->pos, &child_placement_vector_scratch, &parent_moby->pos);
         qcopy_nc(&D_L11_00161F10[q]->rot, &parent_moby->rot);
         FUN_L00_00250df8(D_L11_00161F10[q]);
