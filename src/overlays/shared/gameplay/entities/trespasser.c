@@ -606,7 +606,7 @@ void spawn_moby_collision_particles(unsigned char *moby) {
     enum {
         COLLISION_MATERIAL_WATER = 0
     };
-    float v[4] __attribute__((aligned(16)));
+    float particle_spawn_position[4] __attribute__((aligned(16)));
     int i;
     int r, g;
     unsigned char b;
@@ -620,15 +620,15 @@ void spawn_moby_collision_particles(unsigned char *moby) {
     case 12:
     case 13:
         for (i = 0; i < 20; i++) {
-            qcopy(v, moby + 0x10);
-            v[0] += random_float_between(-0.3f, 0.3f);
-            v[1] += random_float_between(-0.3f, 0.3f);
-            v[2] += random_float_between(-0.3f, 0.3f);
+            qcopy(particle_spawn_position, moby + 0x10);
+            particle_spawn_position[0] += random_float_between(-0.3f, 0.3f);
+            particle_spawn_position[1] += random_float_between(-0.3f, 0.3f);
+            particle_spawn_position[2] += random_float_between(-0.3f, 0.3f);
             r = (rand() + 0x30) & 0x3F;
             g = (rand() + 0x20) & 0x3F;
             b = rand() & 0x2F;
             randomized_particle_scalar = random_float_between(100000.0f, 800000.0f);
-            FUN_L00_00269b70(v, r, g, b, randomized_particle_scalar, 0.0f, scale_game_frames(rand() % 40 + 10));
+            FUN_L00_00269b70(particle_spawn_position, r, g, b, randomized_particle_scalar, 0.0f, scale_game_frames(rand() % 40 + 10));
         }
         moby[0x20] = 4;
         break;
