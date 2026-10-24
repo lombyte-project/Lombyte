@@ -1572,9 +1572,9 @@ typedef struct {
     f32 velocity[3];
 } Data_dfd10;
 
-extern f32 D_L14_00161B40 __attribute__((sda));
-extern f32 D_L14_00161B44 __attribute__((sda));
-extern f32 D_L14_00161B48 __attribute__((sda));
+extern f32 ballistic_debris_gravity __asm__("D_L14_00161B40") __attribute__((sda));
+extern f32 ballistic_debris_velocity_base_scale __asm__("D_L14_00161B44") __attribute__((sda));
+extern f32 ballistic_debris_planar_damping_speed_threshold __asm__("D_L14_00161B48") __attribute__((sda));
 /* A piece of debris: follows its race path until its timer runs out, then flies, spins and falls until it hits something or leaves the map. */
 void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
 
@@ -1608,14 +1608,14 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     velocity = data->velocity;
     add_vector_xyz_dfd10(&moby->pos, &moby->pos, velocity);
     speed = fabsf_dfd10(data->velocity[0]);
-    if (D_L14_00161B48 * frame_scale < speed)
-        data->velocity[0] *= (D_L14_00161B44 - 1.0f) * frame_scale + 1.0f;
+    if (ballistic_debris_planar_damping_speed_threshold * frame_scale < speed)
+        data->velocity[0] *= (ballistic_debris_velocity_base_scale - 1.0f) * frame_scale + 1.0f;
     speed = fabsf_dfd10(data->velocity[1]);
-    if (D_L14_00161B48 * frame_scale < speed)
-        data->velocity[1] *= (D_L14_00161B44 - 1.0f) * frame_scale + 1.0f;
+    if (ballistic_debris_planar_damping_speed_threshold * frame_scale < speed)
+        data->velocity[1] *= (ballistic_debris_velocity_base_scale - 1.0f) * frame_scale + 1.0f;
     if (data->velocity[2] > 0.0f)
-        data->velocity[2] *= (D_L14_00161B44 - 1.0f) * frame_scale + 1.0f;
-    data->velocity[2] -= D_L14_00161B40 * frame_scale_sq;
+        data->velocity[2] *= (ballistic_debris_velocity_base_scale - 1.0f) * frame_scale + 1.0f;
+    data->velocity[2] -= ballistic_debris_gravity * frame_scale_sq;
     moby->rot.x = fast_add_rotations_dfd10(moby->rot.x, data->spin_x);
     moby->rot.y = fast_add_rotations_dfd10(moby->rot.y, data->spin_y);
     moby->rot.z = fast_add_rotations_dfd10(moby->rot.z, data->spin_z);
