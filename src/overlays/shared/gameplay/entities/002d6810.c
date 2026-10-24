@@ -962,7 +962,9 @@ extern long tex_2d8e48(int) __asm__("FUN_001f44b8");
 extern float rnd_2d8e48(float, float) __asm__("FUN_L00_00257c48");
 extern void draw_2d8e48(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L15_002d8e48(void *mv) {
+void draw_electric_water_bolt_start_quads(void *mv) __asm__("FUN_L15_002d8e48");
+
+void draw_electric_water_bolt_start_quads(void *mv) {
     Q2d8e48 quad;
     V2d8e48 quad_transform[4];
     V2d8e48 *bolt_start_position;
