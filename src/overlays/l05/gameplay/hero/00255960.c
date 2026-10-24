@@ -684,7 +684,7 @@ void update_hero_state_machine(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -747,7 +747,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -1247,7 +1247,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case HERO_STATE_FALL:
-                case 45:
+                case HERO_STATE_ITEM_RELEASE_FALL:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
                             hero.ground_distance > 1.75f) {
@@ -2153,7 +2153,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
