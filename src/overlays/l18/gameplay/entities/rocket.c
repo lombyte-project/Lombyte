@@ -116,8 +116,8 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) {
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
-extern float D_L18_00161A48 __attribute__((sda));
-extern float D_L18_00161A4C __attribute__((sda));
+extern float floating_platform_bob_amplitude __asm__("D_L18_00161A48") __attribute__((sda));
+extern float floating_platform_bob_phase_rate __asm__("D_L18_00161A4C") __attribute__((sda));
 void update_floating_platform_tilt_and_bob(struct Moby *moby) __asm__("FUN_L18_002d8710");
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
@@ -144,9 +144,9 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
         }
     }
     *(float *)(data + 0x74) = fast_add_rotations(*(float *)(data + 0x74),
-                                           D_L18_00161A4C * DEG_TO_RAD * frame_time);
+                                           floating_platform_bob_phase_rate * DEG_TO_RAD * frame_time);
     moby->pos.z = *(float *)(data + 0x64) +
-                              D_L18_00161A48 * fast_sin(*(float *)(data + 0x74));
+                              floating_platform_bob_amplitude * fast_sin(*(float *)(data + 0x74));
 }
 #define NOT_SDA
 
