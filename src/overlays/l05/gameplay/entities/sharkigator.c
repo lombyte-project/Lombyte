@@ -2072,7 +2072,7 @@ extern float D_L05_00161B28 __attribute__((sda));
 extern float D_L05_00161B2C __attribute__((sda));
 extern float D_L05_00161B30 __attribute__((sda));
 extern float D_L05_00161B34 __attribute__((sda));
-extern float D_L05_00161B38 __attribute__((sda));
+extern float extermitank_tracked_particle_vector_b_spread_degrees __asm__("D_L05_00161B38") __attribute__((sda));
 extern int D_L05_00161B3C __attribute__((sda));
 extern int D_L05_00161B40 __attribute__((sda));
 extern float D_L05_00161B44 __attribute__((sda));
@@ -2286,7 +2286,7 @@ void extermitank_update(unsigned char *moby) {
             particle_vector_a[1] = fast_sin_c7(*(float *)(data + 0x194)) * (D_L05_00161B20 * D_0015ED6C_gp);
             particle_vector_a[2] = 0.0f;
             particle_vector_a[2] = random_float_between_c4(D_L05_00161B24 * D_0015ED6C_gp * 0.9f, D_L05_00161B24 * D_0015ED6C_gp * 1.1f);
-            ang = random_float_between_c4(-D_L05_00161B38, D_L05_00161B38) * 0.017453292f;
+            ang = random_float_between_c4(-extermitank_tracked_particle_vector_b_spread_degrees, extermitank_tracked_particle_vector_b_spread_degrees) * 0.017453292f;
             particle_vector_b[0] = fast_cos_c5(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (D_L05_00161B28 * D_0015ED6C_gp);
             particle_vector_b[1] = fast_sin_c7(fast_add_rotations_c5(*(float *)(data + 0x194), ang)) * (D_L05_00161B28 * D_0015ED6C_gp);
             particle_vector_b[2] = 0.0f;
