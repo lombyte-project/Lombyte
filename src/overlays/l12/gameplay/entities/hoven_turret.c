@@ -145,7 +145,9 @@ extern float D_L12_00161DFC __attribute__((sda));
 extern float D_L12_00161E00 __attribute__((sda));
 extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
-void FUN_L12_00302c58(struct Moby *moby) {
+void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
+
+void update_oscillating_target_link_strips(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float cycle = D_L12_00161DF8 + D_L12_00161DFC * frame_time;
     int strip;
@@ -254,7 +256,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b);
-void FUN_L12_00302c58(struct Moby *moby);
+void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 extern float func_L00_001FF860_304310(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9D10_304310(void *, void *) __asm__("FUN_001f9b48");
 extern float func_001FA748_304310(float, float) __asm__("FUN_001fa580");
