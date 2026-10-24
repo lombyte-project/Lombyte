@@ -348,8 +348,8 @@ void update_swing_gate_from_driver(struct Moby *moby) {
 extern int scrolled_mesh_unscaled_fixed_alpha __asm__("D_L08_00161DD0") __attribute__((sda));
 extern int scrolled_mesh_subtractive_base_fixed_alpha __asm__("D_L08_00161DD4");
 extern int scrolled_mesh_additive_base_fixed_alpha __asm__("D_L08_00161DD8");
-extern int D_L08_00161DF0 __attribute__((sda));
-extern int D_L08_00161DF4;
+extern int offset_mesh_first_pass_fixed_alpha __asm__("D_L08_00161DF0") __attribute__((sda));
+extern int offset_mesh_second_pass_fixed_alpha __asm__("D_L08_00161DF4");
 extern int pair_offset_mesh_fixed_alpha __asm__("D_L08_00161E00") __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
@@ -376,9 +376,9 @@ void draw_layered_mesh_effect(void) {
     vu1_add_g_sregister(0x42, (long)((scrolled_mesh_additive_base_fixed_alpha * D_L08_00161E08_u) >> 8) << 32 | 0x68);
     draw_scrolled_mesh_batch(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
-    vu1_add_g_sregister(0x42, (long)D_L08_00161DF0 << 32 | 0x48);
+    vu1_add_g_sregister(0x42, (long)offset_mesh_first_pass_fixed_alpha << 32 | 0x48);
     FUN_L08_002f0c18(0);
-    vu1_add_g_sregister(0x42, (long)D_L08_00161DF4 << 32 | 0x48);
+    vu1_add_g_sregister(0x42, (long)offset_mesh_second_pass_fixed_alpha << 32 | 0x48);
     FUN_L08_002f0c18(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)pair_offset_mesh_fixed_alpha << 32 | 0x48);
