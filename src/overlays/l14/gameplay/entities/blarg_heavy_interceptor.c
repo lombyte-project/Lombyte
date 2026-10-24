@@ -2647,7 +2647,9 @@ extern short D_L14_00161538 __attribute__((sda));
 extern short D_L14_0016153C __attribute__((sda));
 extern short D_L14_00161544 __attribute__((sda));
 extern short D_L14_00161548 __attribute__((sda));
-void FUN_L14_002b5428(struct Moby *moby) {
+void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428");
+
+void update_minibomber_oscillation(struct Moby *moby) {
     int raw = moby->state;
     unsigned char state = raw;
     char *data = (char *)moby->pvars;
