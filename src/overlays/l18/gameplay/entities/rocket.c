@@ -2965,7 +2965,7 @@ extern int scale_frames_q(int) __asm__("FUN_001f96f8");
 extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
-extern float D_L18_00161FF0 __attribute__((sda));
+extern float electric_bolt_initial_length_scale_gp __asm__("D_L18_00161FF0") __attribute__((sda));
 extern int D_L18_00162080 __attribute__((sda));
 extern short D_L18_001620CA;
 extern short D_L18_001620CC;
@@ -2987,7 +2987,7 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
         D_L18_001620D8 = scale_frames_q(D_L18_00162080);
         D_L18_00162054_q = 0x7F2020;
         subtract_vector_xyz(arc_endpoint_displacement, moby_vars + 0x10, &moby->pos);
-        norm_q(step, arc_endpoint_displacement, D_L18_00161FF0 / 20.0f);
+        norm_q(step, arc_endpoint_displacement, electric_bolt_initial_length_scale_gp / 20.0f);
         qcopy(D_L18_001D9D00_q, &moby->pos);
         for (i = 1; i < 20; i++) {
             add_vector_xyz(D_L18_001D9D00_q[i], D_L18_001D9CF0_q[i], step);
