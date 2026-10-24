@@ -953,7 +953,9 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
 }
 
 typedef struct {
-    u8 p0[0x18];
+    u8 p0[0xC];
+    s32 joint;             /* hero.joint_matrices index the item moby follows */
+    u8 p10[0x18 - 0x10];
     s32 unk18;             /* copied to hero.unk20AB; 2 animates both item slots */
     u8 p1[0x24 - 0x1C];
     s32 unk24;
@@ -1550,7 +1552,6 @@ extern f32 FUN_00200240_f580(s32) __asm__("FUN_001fa6c0");
 extern f32 FUN_001ff800_f580(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_00200250_f580(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_L00_0020d540_f580(s32) __asm__("FUN_L00_0020d540");
-extern HeroAnimRow item_defs_f580[] __asm__("D_L00_00179AC0");
 extern struct HeroEase hero_eases_f580[] __asm__("D_L00_0017A680");
 
 void FUN_L00_0020f580(void)
@@ -1601,7 +1602,7 @@ void FUN_L00_0020f580(void)
             {
                 *((u64 *) (moby + 0x38)) = *((u64 *) (((u8 *) hero.moby) + 0x38));
                 item_id = *((s32 *) (slot + 0x10b8));
-                joint = item_defs_f580[item_id].joint;
+                joint = D_L00_00179AC0_c[item_id].joint;
                 if ((i == 1) && (j == 1))
                     joint = 3;
                 if ((*((u8 *) (slot + 0x10aa))) != 0)
@@ -1617,7 +1618,7 @@ void FUN_L00_0020f580(void)
                 else
                 {
                     qcopy(moby + 0x10, (((u8 *) (&hero)) + 0xaf0) + (joint * 0x40));
-                    if ((large_font_height == 0) || (item_defs_f580[item_id].unk18 == 0))
+                    if ((large_font_height == 0) || (D_L00_00179AC0_c[item_id].unk18 == 0))
                     {
                         first = is_hero_slot_item_id_10_17_20_or_25(i);
                         second = is_hero_slot_item_id_5_to_7(i);
