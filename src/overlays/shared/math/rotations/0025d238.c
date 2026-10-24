@@ -475,7 +475,9 @@ f32 normalize_angle(f32 angle_radians) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int FUN_L00_0025e368(char *moby) {
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) __asm__("FUN_L00_0025e368");
+
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) {
     int predicate_result;
     if (moby == 0) {
         predicate_result = 0;
