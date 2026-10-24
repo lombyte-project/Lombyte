@@ -2080,7 +2080,7 @@ typedef struct { char p0[0x11]; unsigned char b11; } Flags_2E52B0;
 extern char *FUN_L00_0025a420(void *,int,int);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float dot_vectors_xyz(float) __asm__("FUN_001f9ab0");
-extern float D_L10_00161E2C __attribute__((sda));
+extern float toxic_crab_hit_knockback_gravity __asm__("D_L10_00161E2C") __attribute__((sda));
 extern float D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
@@ -2244,7 +2244,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
             moby->state = 10;
             moby_data->h26 = func_001F9850_2E52B0(60);
-            moby_data->f80 = D_L10_00161E2C * D_0015ED70;
+            moby_data->f80 = toxic_crab_hit_knockback_gravity * D_0015ED70;
             trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
             moby_data->fC0 = 8.0f;
             moby_data->fC4 = 10.0f;
@@ -2259,7 +2259,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             float knockback_strength;
             moby->state = 10;
             moby_data->h26 = func_001F9850_2E52B0(60);
-            moby_data->f80 = D_L10_00161E2C * D_0015ED70;
+            moby_data->f80 = toxic_crab_hit_knockback_gravity * D_0015ED70;
             knockback_strength = ((Hero *)(((char *)&hero)))->vehicle_mode == 1 ? 1.0f : 3.0f;
             trooper_set_knockback(moby_data->a70, knockback_strength, 0.5f);
             moby_data->fC0 = 3.5f;
