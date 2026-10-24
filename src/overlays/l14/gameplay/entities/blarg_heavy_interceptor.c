@@ -2220,9 +2220,9 @@ extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
 extern float minibomber_bomb_gravity_gp __asm__("D_L14_00161568") __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
-extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161554 __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_intro_exit_path_step_distance_gp __asm__("D_L14_0016154C") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_traversal_path_step_distance_gp __asm__("D_L14_00161550") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_retrace_path_step_distance_gp __asm__("D_L14_00161554") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_bomb_aim_duration_frames __asm__("D_L14_0016155C") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_aim_return_duration_frames __asm__("D_L14_00161560") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") __attribute__((sda)); /* no foreign declaration */
@@ -2395,7 +2395,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 == 2) {
             moby->state = 3;
         } else if (FUN_L14_002b5730_c((char *)moby, (char *)path, (int)&d->fE8, (int)&d->fEC, d->fF0, &d->fE4,
-                                     D_L14_0016154C * D_0015ED60, D_L14_00161574, D_L14_00161578, D_L14_0016157C,
+                                     minibomber_intro_exit_path_step_distance_gp * D_0015ED60, D_L14_00161574, D_L14_00161578, D_L14_0016157C,
                                      D_L14_00161580, D_L14_00161584, D_L14_00161588) != 0) {
             qcopy(d->f180, path + path->n);
             path = D_L14_001B0F30_2B5938[d->fDC];
@@ -2430,7 +2430,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 != 2) {
             moby->state = 2;
         } else if (FUN_L14_002b5730_c((char *)moby, (char *)path, (int)&d->fE8, (int)&d->fEC, d->fF0, &d->fE4,
-                                     -(D_L14_00161554 * D_0015ED60), D_L14_0016158C, D_L14_00161578, D_L14_0016157C,
+                                     -(minibomber_retrace_path_step_distance_gp * D_0015ED60), D_L14_0016158C, D_L14_00161578, D_L14_0016157C,
                                      D_L14_00161590, D_L14_00161584, D_L14_00161588) != 0) {
             moby->state = 1;
             FUN_L14_002b5c98_c((char *)moby);
@@ -2467,7 +2467,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     case MINIBOMBER_STATE_TRAVERSE_PATH:
-        spd = D_L14_00161550 * D_0015ED60;
+        spd = minibomber_traversal_path_step_distance_gp * D_0015ED60;
         if (d->f10C == 1) {
             spd = -spd;
         }
