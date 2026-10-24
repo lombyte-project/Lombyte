@@ -2223,7 +2223,7 @@ extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
-extern int D_L15_00161484; /* no foreign declaration */
+extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign declaration */
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -2354,8 +2354,8 @@ void update_charged_blast(Moby29FF90 *moby) {
             || (FUN_L00_001ff290(temporary_position, moby->pos, moby_data), moby->pos[0] < 2.0f) || moby->pos[0] > 1021.0f
             || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f
             || moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
-            mark_moby_for_removal_c2(D_L15_00161484);
-            D_L15_00161484 = 0;
+            mark_moby_for_removal_c2(charged_blast_removal_target);
+            charged_blast_removal_target = 0;
             return;
         }
         n = func_L00_001F2BE8_29FF90(moby->pos, r, 0x10, moby, 0);
