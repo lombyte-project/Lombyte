@@ -313,7 +313,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern int projectile_trail_color_start __asm__("D_L11_00161DC0") __attribute__((sda));
 extern int projectile_trail_color_end __asm__("D_L11_00161DC4") __attribute__((sda));
-extern int D_L11_00161DC8 __attribute__((sda));
+extern int projectile_trail_frame_count __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
 extern float projectile_trail_velocity_scale __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -352,7 +352,7 @@ void update_projectile_with_trail(char *moby) {
     random_vector(trail_position, 0.0f, 0.1f);
     add_vector_xyz(trail_position, trail_position, moby_position);
     scale_vector_xyz(trail_velocity, data, projectile_trail_velocity_scale);
-    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(projectile_trail_frame_count), (float)D_L11_00161DCC);
     add_vector_xyz(moby_position, moby_position, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, moby_position, 0, *(void **)(data + 0x1C), hit)) {
