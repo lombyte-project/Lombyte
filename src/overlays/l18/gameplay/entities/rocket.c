@@ -2256,7 +2256,7 @@ extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
-extern int D_L18_0015F404;
+extern int position_and_rotation_transition_active __asm__("D_L18_0015F404");
 extern int D_L18_00179E10[] __attribute__((section(".data")));
 extern int D_L18_0017EF08 __attribute__((section(".data")));
 void update_position_and_rotation_transition(struct Moby *moby) __asm__("FUN_L18_002df608");
@@ -2285,7 +2285,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
                 D_L18_0015F3FC_d = t;
             }
             if (1.0f <= t) {
-                D_L18_0015F404 = 1;
+                position_and_rotation_transition_active = 1;
                 clear_u64_value(transition_scratch_vectors);
                 transition_scratch_vectors[2] = *(float *)(data + 0x4C);
                 FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors, 0x72, 1);
@@ -2321,7 +2321,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
             float transition_progress = *(float *)(data + 0x60);
             D_L18_0015F3FC_d = *(float *)(data + 0x6C);
             if (1.0f <= transition_progress) {
-                D_L18_0015F404 = 0;
+                position_and_rotation_transition_active = 0;
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(data + 0x4C);
                 FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0, 0);
@@ -2359,7 +2359,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
             t = *(float *)(data + 0x6C);
             D_L18_0015F3FC_d = t;
             if (1.0f <= t) {
-                D_L18_0015F404 = 0;
+                position_and_rotation_transition_active = 0;
                 *(float *)(data + 0x60) = 1.0f;
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(data + 0x4C);
