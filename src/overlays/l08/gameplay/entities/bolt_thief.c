@@ -2528,18 +2528,18 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L08_00161C64 __attribute__((sda));
-extern float D_L08_00161C7C __attribute__((sda));
-extern float D_L08_00161C80 __attribute__((sda));
-extern float D_L08_00161C78 __attribute__((sda));
+extern float bolt_pickup_default_surface_base_tilt_degrees __asm__("D_L08_00161C64") __attribute__((sda));
+extern float bolt_pickup_default_surface_planar_offset_per_scale __asm__("D_L08_00161C7C") __attribute__((sda));
+extern float five_bolt_pickup_surface_planar_offset_per_scale __asm__("D_L08_00161C80") __attribute__((sda));
+extern float ten_bolt_pickup_surface_normal_offset_per_scale __asm__("D_L08_00161C78") __attribute__((sda));
 extern float D_L08_00161CB8 __attribute__((sda));
 extern float D_L08_00161CBC __attribute__((sda));
-extern float D_L08_00161C84 __attribute__((sda));
-extern float D_L08_00161C68 __attribute__((sda));
-extern float D_L08_00161C6C __attribute__((sda));
+extern float ten_bolt_pickup_surface_planar_offset_per_scale __asm__("D_L08_00161C84") __attribute__((sda));
+extern float five_bolt_pickup_surface_base_tilt_degrees __asm__("D_L08_00161C68") __attribute__((sda));
+extern float ten_bolt_pickup_surface_base_tilt_degrees __asm__("D_L08_00161C6C") __attribute__((sda));
 extern float D_L08_00161CB4 __attribute__((sda));
-extern float D_L08_00161C70 __attribute__((sda));
-extern float D_L08_00161C74 __attribute__((sda));
+extern float bolt_pickup_default_surface_normal_offset_per_scale __asm__("D_L08_00161C70") __attribute__((sda));
+extern float five_bolt_pickup_surface_normal_offset_per_scale __asm__("D_L08_00161C74") __attribute__((sda));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2563,19 +2563,19 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby, float *out, flo
     float basis_tilt_radians;
     switch (moby->oclass) {
     case MOBY_CLASS_FIVE_BOLT_PICKUP:
-        sx = D_L08_00161C68 * D_L08_00161CB8;
-        sy = D_L08_00161C74 * D_L08_00161CB8;
-        sz = D_L08_00161C80 * D_L08_00161CB8;
+        sx = five_bolt_pickup_surface_base_tilt_degrees * D_L08_00161CB8;
+        sy = five_bolt_pickup_surface_normal_offset_per_scale * D_L08_00161CB8;
+        sz = five_bolt_pickup_surface_planar_offset_per_scale * D_L08_00161CB8;
         break;
     case MOBY_CLASS_TEN_BOLT_PICKUP:
-        sx = D_L08_00161C6C * D_L08_00161CBC;
-        sy = D_L08_00161C78 * D_L08_00161CBC;
-        sz = D_L08_00161C84 * D_L08_00161CBC;
+        sx = ten_bolt_pickup_surface_base_tilt_degrees * D_L08_00161CBC;
+        sy = ten_bolt_pickup_surface_normal_offset_per_scale * D_L08_00161CBC;
+        sz = ten_bolt_pickup_surface_planar_offset_per_scale * D_L08_00161CBC;
         break;
     default:
-        sx = D_L08_00161C64 * D_L08_00161CB4;
-        sy = D_L08_00161C70 * D_L08_00161CB4;
-        sz = D_L08_00161C7C * D_L08_00161CB4;
+        sx = bolt_pickup_default_surface_base_tilt_degrees * D_L08_00161CB4;
+        sy = bolt_pickup_default_surface_normal_offset_per_scale * D_L08_00161CB4;
+        sz = bolt_pickup_default_surface_planar_offset_per_scale * D_L08_00161CB4;
         break;
     }
     euler_rotation_matrix(base_rotation_matrix, (float *)(data + 0x10));
