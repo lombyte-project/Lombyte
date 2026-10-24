@@ -2242,7 +2242,7 @@ s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *ou
     u8 *camera = mm;
     s32 attach_mode_return_flag = 1;
     u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;
-    f32 t[4] __attribute__((aligned(16)));
+    f32 hero_base_position[4] __attribute__((aligned(16)));
     switch (k) {
     case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
@@ -2256,8 +2256,8 @@ s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *ou
         attach_mode_return_flag = 0;
         break;
     case CAM_ATTACH_HERO_POSITION_BASE:
-        follow_camera_hero_target((int)camera, t);
-        fast_vec_add(out_target_position, input_offset, t);
+        follow_camera_hero_target((int)camera, hero_base_position);
+        fast_vec_add(out_target_position, input_offset, hero_base_position);
         break;
     case CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY:
     default:
