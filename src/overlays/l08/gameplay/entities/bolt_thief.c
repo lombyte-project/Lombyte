@@ -2623,8 +2623,8 @@ extern float add_angle_5188(float, float) __asm__("FUN_001fa580");
 extern void vu1_add_g_sregister_5188(int, u64) __asm__("FUN_00233980");
 extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
-extern float D_L08_00161C5C __attribute__((sda));
-extern float D_L08_00161C60 __attribute__((sda));
+extern float bolt_pickup_quad_center_offset_along_moby_e0 __asm__("D_L08_00161C5C") __attribute__((sda));
+extern float bolt_pickup_quad_center_offset_along_moby_c0 __asm__("D_L08_00161C60") __attribute__((sda));
 extern char D_L08_0016D240[] __attribute__((section(".data")));
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) __asm__("FUN_L08_002e5188");
@@ -2645,9 +2645,9 @@ void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
     if (*(short *)(data + 0x6c) == 0) return;
 
     qcopy(pos, &moby->pos);
-    normalize_vector_xyz_5188(direction, (char *)moby + 0xe0, D_L08_00161C5C);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xe0, bolt_pickup_quad_center_offset_along_moby_e0);
     add_vector_xyz_5188(pos, pos, direction);
-    normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, D_L08_00161C60);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, bolt_pickup_quad_center_offset_along_moby_c0);
     add_vector_xyz_5188(pos, pos, direction);
     fast_vec_sub(pos, pos, D_L08_001675C0);
     length = vector_length_5188(pos);
