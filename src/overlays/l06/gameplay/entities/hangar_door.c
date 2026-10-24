@@ -1752,11 +1752,11 @@ void draw_beam_barrier_segments(char *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 
-extern f32 D_L06_00161E10 __attribute__((sda));
-extern f32 D_L06_00161E00 __attribute__((sda));
-extern f32 D_L06_00161E14 __attribute__((sda));
+extern f32 beam_barrier_rotation_x_speed_degrees __asm__("D_L06_00161E10") __attribute__((sda));
+extern f32 beam_barrier_render_phase_speed __asm__("D_L06_00161E00") __attribute__((sda));
+extern f32 beam_barrier_class_scale_multiplier __asm__("D_L06_00161E14") __attribute__((sda));
 extern f32 D_L06_00161E08 __attribute__((sda));
-extern f32 D_L06_00161E04 __attribute__((sda));
+extern f32 beam_barrier_strand_jitter_max_speed __asm__("D_L06_00161E04") __attribute__((sda));
 extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
 extern int D_L06_00161E50;
 Vec4 D_L06_001DB870[4][30] = {0};
@@ -1776,9 +1776,9 @@ void animate_beam_barrier_strands(struct Moby *moby) {
     int j;
     int k;
 
-    moby->rot.x = fast_add_rotations(moby->rot.x, D_L06_00161E10 * DEG_TO_RAD * frame_time);
-    phase = D_L06_00161DFC + D_L06_00161E00 * frame_time;
-    moby->scale = *(f32 *)((char *)moby->pclass + 0x24) * D_L06_00161E14;
+    moby->rot.x = fast_add_rotations(moby->rot.x, beam_barrier_rotation_x_speed_degrees * DEG_TO_RAD * frame_time);
+    phase = D_L06_00161DFC + beam_barrier_render_phase_speed * frame_time;
+    moby->scale = *(f32 *)((char *)moby->pclass + 0x24) * beam_barrier_class_scale_multiplier;
     D_L06_00161DFC = phase;
     if (phase > 1.0f) {
         D_L06_00161DFC = phase - 1.0f;
@@ -1790,7 +1790,7 @@ void animate_beam_barrier_strands(struct Moby *moby) {
             for (k = 0; k < 30; k++) {
                 FUN_L06_00217300(&D_L06_001DB0F0[i][k]);
                 D_L06_001DB0F0[i][k].f[1] = y;
-                random_vector(&jitter[k], 0.0f, D_L06_00161E04 * frame_time);
+                random_vector(&jitter[k], 0.0f, beam_barrier_strand_jitter_max_speed * frame_time);
                 y += step;
             }
             for (k = 1; k < 29; k++) {
