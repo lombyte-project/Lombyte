@@ -2173,12 +2173,12 @@ extern int D_L18_00161CA4 __attribute__((sda));
 extern int D_L18_00161CA8 __attribute__((sda));
 extern int D_L18_00161CAC __attribute__((sda));
 extern int D_L18_00161CB0 __attribute__((sda));
-extern int D_L18_00161CB8 __attribute__((sda));
-extern int D_L18_00161CBC __attribute__((sda));
-extern float D_L18_00161CC0 __attribute__((sda));
-extern float D_L18_00161CC4 __attribute__((sda));
+extern int class_274_ring_color_start __asm__("D_L18_00161CB8") __attribute__((sda));
+extern int class_274_ring_color_end __asm__("D_L18_00161CBC") __attribute__((sda));
+extern float class_274_ring_segment_angle_degrees __asm__("D_L18_00161CC0") __attribute__((sda));
+extern float class_274_ring_draw_height_offset __asm__("D_L18_00161CC4") __attribute__((sda));
 extern float D_L18_00161CC8 __attribute__((sda));
-extern float D_L18_00161CCC __attribute__((sda));
+extern float class_274_ring_layer_radius_offset __asm__("D_L18_00161CCC") __attribute__((sda));
 extern float D_L18_00161CD4 __attribute__((sda));
 void draw_class_274_ring_effect(char *moby) {
     Q_dc4b8 quad[4];
@@ -2193,11 +2193,11 @@ void draw_class_274_ring_effect(char *moby) {
     moby_vars = *(float **)(moby + 0x78);
     unit_matrix_dc4b8(quad_draw_transform);
     qcopy(&quad_draw_transform[3], moby + 0x10);
-    quad_draw_transform[3].f[2] = quad_draw_transform[3].f[2] + D_L18_00161CC4;
+    quad_draw_transform[3].f[2] = quad_draw_transform[3].f[2] + class_274_ring_draw_height_offset;
     quad_draw_transform[3].f[3] = 1.0f;
     for (i = 0; i < 4; i++) {
         quad[i].tex = get_effect_texture_dc4b8(14);
-        gi = D_L18_00161CCC * (float)i;
+        gi = class_274_ring_layer_radius_offset * (float)i;
         quad[i].unk70 = 0;
         quad[i].unk80 = 0xFF9000000260L;
         quad[i].unk88 = (long)D_L18_00161CA4 | ((long)D_L18_00161CA8 << 2) |
@@ -2205,7 +2205,7 @@ void draw_class_274_ring_effect(char *moby) {
         layer_phase = moby_vars[1] + (float)i * 0.25f;
         r = moby_vars[0] + gi;
         layer_phase = layer_phase - (float)truncate_dc4b8(layer_phase);
-        layer_color = tween_color_dc4b8(D_L18_00161CB8, D_L18_00161CBC, layer_phase);
+        layer_color = tween_color_dc4b8(class_274_ring_color_start, class_274_ring_color_end, layer_phase);
         color_fade_weight = layer_phase * D_L18_00161CD4;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
@@ -2222,8 +2222,8 @@ void draw_class_274_ring_effect(char *moby) {
             quad[i].uv[j].u = D_L18_001D4330[j * 2];
             quad[i].uv[j].v = D_L18_001D4330[j * 2 + 1];
             quad[i].corner[j].f[2] = (j & 1) ? layer_phase * D_L18_00161CC8 : -layer_phase * D_L18_00161CC8;
-            corner_angle = add_rotations_dc4b8((float)(j >> 1) * (D_L18_00161CC0 * 0.017453292f) - 3.14159f,
-                              D_L18_00161CC0 * 0.25f * (float)i * 0.017453292f);
+            corner_angle = add_rotations_dc4b8((float)(j >> 1) * (class_274_ring_segment_angle_degrees * 0.017453292f) - 3.14159f,
+                              class_274_ring_segment_angle_degrees * 0.25f * (float)i * 0.017453292f);
             quad[i].corner[j].f[0] = cos_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[1] = sin_dc4b8(corner_angle) * r;
             quad[i].corner[j].f[3] = 1.0f;
@@ -2231,9 +2231,9 @@ void draw_class_274_ring_effect(char *moby) {
         }
     }
     clear_vector_dc4b8(&ring_segment_rotation_angles);
-    ring_segment_rotation_angles.f[2] = D_L18_00161CC0 * 0.017453292f;
+    ring_segment_rotation_angles.f[2] = class_274_ring_segment_angle_degrees * 0.017453292f;
     euler_basis_dc4b8(&ring_segment_rotation_basis[0], &ring_segment_rotation_angles);
-    for (k = 0; (float)k < 360.0f / D_L18_00161CC0; k++) {
+    for (k = 0; (float)k < 360.0f / class_274_ring_segment_angle_degrees; k++) {
         draw_quad_dc4b8(&quad[0], quad_draw_transform, 0);
         draw_quad_dc4b8(&quad[1], quad_draw_transform, 0);
         draw_quad_dc4b8(&quad[2], quad_draw_transform, 0);
