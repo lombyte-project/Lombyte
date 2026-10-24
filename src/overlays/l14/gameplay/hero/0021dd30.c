@@ -847,7 +847,7 @@ void update_hero_motion_by_state(void) {
         subtract_vector_xyz(&hero.motion.velocity, &vector_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
