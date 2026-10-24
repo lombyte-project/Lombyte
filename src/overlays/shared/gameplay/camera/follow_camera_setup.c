@@ -28,8 +28,8 @@ typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd_
 float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
-extern float D_L00_00161D04 __attribute__((sda));
-extern float D_L00_00161D08 __attribute__((sda));
+extern float follow_camera_orbit_distance_damping __asm__("D_L00_00161D04") __attribute__((sda));
+extern float follow_camera_orbit_height_damping __asm__("D_L00_00161D08") __attribute__((sda));
 void follow_camera_approach(unsigned char *moby)
 {
     unsigned char *init, *camera_state, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
@@ -47,14 +47,14 @@ void follow_camera_approach(unsigned char *moby)
     default_orbit = defaults + 0x130;
     default_target = defaults + 0x40;
     if (*(short *)(orbit + 0x3C)) {
-        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(orbit + 0x40), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping, *(float *)(init + 0x1C));
     } else {
-        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), D_L00_00161D04, *(float *)(init + 0x1C));
+        *(float *)(orbit + 0x2C) = cam_interp_values(camera_state + 0x174, *(float *)(orbit + 0x2C), *(float *)(default_orbit + 0x2C), *(float *)(orbit + 0x48), follow_camera_orbit_distance_damping, *(float *)(init + 0x1C));
     }
     if (*(short *)(orbit + 0x3E)) {
-        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), D_L00_00161D08, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(orbit + 0x4C), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping, 0.0f);
     } else {
-        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), D_L00_00161D08, 0.0f);
+        *(float *)(orbit + 0x30) = cam_interp_values(orbit + 0x50, *(float *)(orbit + 0x30), *(float *)(default_orbit + 0x30), *(float *)(orbit + 0x54), follow_camera_orbit_height_damping, 0.0f);
     }
     if (*(short *)(target + 0xDA)) {
         *(float *)(target + 0xB0) = cam_interp_values(target + 0xBC, *(float *)(target + 0xB0), *(float *)(target + 0xB4), *(float *)(target + 0xB8), 0.2f, 0.0f);
