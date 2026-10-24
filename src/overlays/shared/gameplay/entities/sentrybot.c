@@ -1659,16 +1659,16 @@ void spawn_rocket_trail_spark(char *moby) {
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
-extern float D_L15_00161458 __attribute__((sda));
-extern int D_L15_0016145C __attribute__((sda));
+extern float rocket_detonation_glow_scale __asm__("D_L15_00161458") __attribute__((sda));
+extern int rocket_detonation_glow_lifetime_frames __asm__("D_L15_0016145C") __attribute__((sda));
 extern unsigned char D_L15_00161460 __attribute__((sda));
 extern unsigned char D_L15_00161464 __attribute__((sda));
 extern unsigned char D_L15_00161468 __attribute__((sda));
 extern unsigned char D_L15_0016146C __attribute__((sda));
 void spawn_rocket_detonation_glow(char *moby) {
     char *glow_spawn_position = moby + 0x10;
-    int scaled_frame_count = scale_game_frames(D_L15_0016145C);
-    spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, D_L15_00161458,
+    int scaled_frame_count = scale_game_frames(rocket_detonation_glow_lifetime_frames);
+    spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, rocket_detonation_glow_scale,
                      D_L15_00161464, D_L15_00161468, D_L15_0016146C, D_L15_00161460);
 }
 /* update of moby class 256: a homing missile that leads its target, trails smoke and explodes on contact */
