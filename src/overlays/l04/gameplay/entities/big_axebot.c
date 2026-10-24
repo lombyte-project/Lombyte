@@ -2212,7 +2212,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
-extern f32 D_L04_001618B4 __attribute__((sda));
+extern f32 smoke_trail_puff_vertical_velocity_scale __asm__("D_L04_001618B4") __attribute__((sda));
 extern f32 D_L04_001618BC __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
@@ -2242,7 +2242,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *
         add_vector_xyz(&at, from, &at);
         particle_spawn_velocity.f[0] = randf_sym(0.0f, 0.005f);
         particle_spawn_velocity.f[1] = randf_sym(0.0f, 0.005f);
-        particle_spawn_velocity.f[2] = random_float_between(D_L04_001618B4 * 0.1f, D_L04_001618B4);
+        particle_spawn_velocity.f[2] = random_float_between(smoke_trail_puff_vertical_velocity_scale * 0.1f, smoke_trail_puff_vertical_velocity_scale);
         tint = random_int_between(0x40, 0x70);
         grey = random_int_between(0x40, 0x7F);
         grey = grey | (grey << 16 | grey << 8);
