@@ -1815,7 +1815,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     int r2;
                     int g2;
                     int b2;
-                    int cnt;
+                    int blast_effect_count;
                     {
                         int k;
                         for (k = 0; k < 4; k++) {
@@ -1846,15 +1846,15 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     FUN_001f9c90_2adb30(&v, &v, D_0015ED6C_2adb30 * 10.0f);
                     FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                     if (camera_distance < 6.0f) {
-                        cnt = FUN_001fa6d0_2adb30(camera_distance) + 1;
+                        blast_effect_count = FUN_001fa6d0_2adb30(camera_distance) + 1;
                     } else {
-                        cnt = 4;
+                        blast_effect_count = 4;
                     }
                     g = 0.0f;
                     if (camera_distance < 7.0f) {
                         g = 7.0f - camera_distance;
                     }
-                    for (i = 0; i < cnt; i++) {
+                    for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
                         Colors6_2adb30 c1 = D_L00_001E9920;
                         Colors6_2adb30 c2 = D_L00_001E9938;
