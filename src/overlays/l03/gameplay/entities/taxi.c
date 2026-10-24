@@ -362,9 +362,9 @@ typedef struct {
 
 extern f32 mine_layer_lethal_knockback_speed_scale_gp __asm__("D_L03_001618F8") __attribute__((sda));
 extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC") __attribute__((sda));
-extern f32 D_L03_00161900 __attribute__((sda));
+extern f32 mine_layer_nonlethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161900") __attribute__((sda));
 extern f32 D_L03_00161904 __attribute__((sda));
-extern f32 D_L03_00161908 __attribute__((sda));
+extern f32 mine_layer_lethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161908") __attribute__((sda));
 extern f32 D_L03_0016190C __attribute__((sda));
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
@@ -412,7 +412,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
             trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_nonlethal_knockback_horizontal_speed_scale_gp, D_L03_00161904);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
@@ -426,7 +426,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
             trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_nonlethal_knockback_horizontal_speed_scale_gp, D_L03_00161904);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
@@ -439,7 +439,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             break;
         case TROOPER_DAMAGE_LETHAL:
             trooper_vars->kb_speed = mine_layer_lethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161908, D_L03_0016190C);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_lethal_knockback_horizontal_speed_scale_gp, D_L03_0016190C);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
