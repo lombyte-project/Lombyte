@@ -46,7 +46,7 @@ extern S17AF00 D_L08_0017AE80;
 extern S17C638 D_L08_0017C5B8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L08_0015F638;
+extern float hero_fatal_fall_z_threshold __asm__("D_L08_0015F638");
 extern float D_L08_001675D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
@@ -228,7 +228,7 @@ void update_hero_state_transitions(void) {
                     }
                 }
             }
-            if (D_L08_0015F638 > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
+            if (hero_fatal_fall_z_threshold > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
                 hero.vehicle_mode != 2 && hero.state.current != 0x77) {
                 hero_set_state(0x77, 1);
             } else {
