@@ -3290,7 +3290,7 @@ void update_infobot_particle_effect(char *moby) {
         float f[4];
     } v;
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float f;
 
@@ -3301,7 +3301,7 @@ void update_infobot_particle_effect(char *moby) {
     v.f[2] += 0.333000004f;
     fast_vec_sub(d, camera_position, moby + 0x10);
     ff500_2d6cd0(d, d, -0.3f);
-    ff500_2d6cd0(e, d, 0.1f);
+    ff500_2d6cd0(particle_position_step, d, 0.1f);
     add_vector_xyz(d, d, moby + 0x10);
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
@@ -3323,7 +3323,7 @@ void update_infobot_particle_effect(char *moby) {
         if (D_15F5C4_2d6cd0 != 2) {
             FUN_L00_00272f68(d, col, f2i_2d6cd0(vars->a[i]) & 0xFF, 0x35, 1, 2, 0, vars->d[i]);
         }
-        add_vector_xyz(d, d, e);
+        add_vector_xyz(d, d, particle_position_step);
     }
 }
 typedef struct {
