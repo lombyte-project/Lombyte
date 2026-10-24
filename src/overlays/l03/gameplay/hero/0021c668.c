@@ -146,7 +146,7 @@ void update_hero_state_machine(void) {
     float negative_shimmy_probe_yaw;
     float shimmy_probe_yaw;
     int predicted_trajectory_steps;
-    int sp38;
+    int jump_press_history_age;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -1721,8 +1721,8 @@ void update_hero_state_machine(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp38)) {
-                                    if (sp38 < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_history_age)) {
+                                    if (jump_press_history_age < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
