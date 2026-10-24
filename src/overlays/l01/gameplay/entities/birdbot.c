@@ -1498,8 +1498,8 @@ typedef struct {
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern f32 D_L01_00161A60 __attribute__((sda));
 extern f32 D_L01_00161A64 __attribute__((sda));
-extern f32 D_L01_00161A68 __attribute__((sda));
-extern f32 D_L01_00161A6C __attribute__((sda));
+extern f32 peckbot_home_knockback_speed_gp __asm__("D_L01_00161A68") __attribute__((sda));
+extern f32 peckbot_home_knockback_acceleration_gp __asm__("D_L01_00161A6C") __attribute__((sda));
 s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
@@ -1830,9 +1830,9 @@ void peckbot_update(Mob577 *self) {
             }
             SET_ANIM(self, 6, 0, scale_game_frames(3));
             peckbot_vars->x134 = 0.0f;
-            peckbot_vars->x130 = D_L01_00161A6C;
-            peckbot_vars->x138 = D_L01_00161A68 * frame_time;
-            peckbot_vars->x13C = FUN_L00_0025abf0(&self->pos, &peckbot_vars->home, &knockback_travel_time, peckbot_vars->x138, -D_L01_00161A6C);
+            peckbot_vars->x130 = peckbot_home_knockback_acceleration_gp;
+            peckbot_vars->x138 = peckbot_home_knockback_speed_gp * frame_time;
+            peckbot_vars->x13C = FUN_L00_0025abf0(&self->pos, &peckbot_vars->home, &knockback_travel_time, peckbot_vars->x138, -peckbot_home_knockback_acceleration_gp);
             peckbot_vars->x144 = 13;
             peckbot_vars->x15D = 0;
             trooper_start_knockback(self, peckbot_vars->knock, 6, 1, 0, self->rot.f[2]);
