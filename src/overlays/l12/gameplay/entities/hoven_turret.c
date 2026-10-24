@@ -45,8 +45,8 @@ extern int D_L12_00161DCC __attribute__((sda));
 extern int D_L12_00161DD0 __attribute__((sda));
 extern int D_L12_00161DD4 __attribute__((sda));
 extern int D_L12_00161DD8 __attribute__((sda));
-extern int D_L12_00161DEC __attribute__((sda));
-extern int D_L12_00161DF0 __attribute__((sda));
+extern int oscillating_link_strip_fade_source_color __asm__("D_L12_00161DEC") __attribute__((sda));
+extern int oscillating_link_strip_fade_target_color __asm__("D_L12_00161DF0") __attribute__((sda));
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase_gp __asm__("D_L12_00161DF8") __attribute__((sda));
@@ -116,7 +116,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         } else {
             fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(oscillating_link_strip_fade_pivot_ticks);
         }
-        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, fade);
+        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(oscillating_link_strip_fade_source_color, oscillating_link_strip_fade_target_color, fade);
         scroll = 0.0f;
         for (segment = 0; segment < data->count - 1; segment++) {
             scroll = scroll + oscillating_link_strip_segment_u_step_gp;
