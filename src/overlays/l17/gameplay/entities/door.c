@@ -1271,7 +1271,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) __asm__("FUN_L17
 
 void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     W4 old;
-    W4 vel;
+    W4 death_explosion_velocity;
     UQ_c4 movement_delta;
     W4 side;
     UQ_c4 up;
@@ -1303,7 +1303,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     movement_delta.v[2] = frame_time * 8.0f * D_L17_001620A0_gp;
     up.v[2] = 1.0f;
     ship_moby->flags &= 0xFEFF;
-    *(Q_c4 *)vel = movement_delta.q;
+    *(Q_c4 *)death_explosion_velocity = movement_delta.q;
     if (ship_moby->bc == 0) {
         if (D_L17_00162000 < ship_vars->count) {
             pad = (char *)((char *)&D_0013C940);
@@ -1507,10 +1507,10 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_xyz(side, collision_result + 0x50, collision_result + 0x60);
                         normalize_vector_xyz(side, side, 1.0f);
-                        FUN_L00_001ff660(vel, movement_delta.v, collision_result + 0x40);
-                        normalize_vector_xyz(vel, vel, frame_time + frame_time);
+                        FUN_L00_001ff660(death_explosion_velocity, movement_delta.v, collision_result + 0x40);
+                        normalize_vector_xyz(death_explosion_velocity, death_explosion_velocity, frame_time + frame_time);
                         normalize_vector_xyz(up.v, collision_result + 0x40, 1.0f);
-                        func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
+                        func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                                               9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
                         ship_moby->state = 7;
                     }
@@ -1518,7 +1518,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
-                func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
+                func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
                                       1.0f, -1, 50.0f, 1, 1, -1, 0);
                 ship_vars->s62 = D_L17_0016217C;
                 ship_moby->state = 7;
