@@ -538,7 +538,7 @@ void update_mine(struct Moby *mine_moby) {
     MineVec vector_scratch;
     MineVars *mine_vars = (MineVars *)mine_moby->pvars;
     struct Moby *target_moby;
-    float dist;
+    float explosion_reference_distance;
     int nearby_moby_count;
     int i;
     int k;
@@ -599,11 +599,11 @@ void update_mine(struct Moby *mine_moby) {
     case MINE_EXPLODE_AND_REMOVE: {
         int debris_spawn_count;
 
-        dist = mine_dist(&mine_moby->pos, D_L03_00166EC0);
+        explosion_reference_distance = mine_dist(&mine_moby->pos, D_L03_00166EC0);
         nearby_moby_count = mine_find_mobys(&mine_moby->pos, 0x10, mine_moby, 0, 2.0f);
         *(OvlQuad *)vector_scratch = *(OvlQuad *)&mine_moby->pos;
         mine_blast_mobys(mine_moby, vector_scratch, D_L03_00178000, nearby_moby_count, 0, 0x810001, 4, 1, 3.0f, 0.25f, 1.5f);
-        debris_spawn_count = mine_ftoi(dist * 15.0f);
+        debris_spawn_count = mine_ftoi(explosion_reference_distance * 15.0f);
         for (i = 0; i < debris_spawn_count; i++) {
             int kind = mine_rand_below(4);
 
@@ -653,7 +653,7 @@ void update_mine(struct Moby *mine_moby) {
             }
         }
         mine_sound(0, 0, mine_moby);
-        D_L03_00166D80_cbea8.shake = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
+        D_L03_00166D80_cbea8.shake = explosion_reference_distance < 20.0f ? 0.4f - explosion_reference_distance * 0.0175f : 0.050000012f;
         D_L03_00166D80_cbea8.shake_frames = mine_frames(0x19);
         mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
         mine_spawn_drops(mine_moby, D_L03_001B08B0);
