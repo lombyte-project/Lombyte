@@ -455,11 +455,11 @@ extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribu
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 extern int nanotech_ball_collection_lifetime_frames_gp __asm__("D_L00_00161A3C") __attribute__((sda));
-extern int D_L00_00161A40 __attribute__((sda));
+extern int nanotech_ball_full_health_invulnerable_collection_min_frames_gp __asm__("D_L00_00161A40") __attribute__((sda));
 extern int nanotech_ball_slot_collection_min_frames_gp __asm__("D_L00_00161A44") __attribute__((sda));
 extern int nanotech_ball_slot_collection_max_frames_gp __asm__("D_L00_00161A48") __attribute__((sda));
-extern float D_L00_00161A50 __attribute__((sda));
-extern float D_L00_00161A54 __attribute__((sda));
+extern float nanotech_ball_collection_curve_radius_gp __asm__("D_L00_00161A50") __attribute__((sda));
+extern float nanotech_ball_collection_target_gravity_offset_gp __asm__("D_L00_00161A54") __attribute__((sda));
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float nanotech_ball_slot_scale_pulse_amplitude_gp __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
@@ -629,15 +629,15 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
-                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -D_L00_00161A54);
+                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -nanotech_ball_collection_target_gravity_offset_gp);
                 func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &player->motion.pos, &collection_target_or_end_tangent);
-                func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &player->gravity_dir, -D_L00_00161A50);
+                func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &player->gravity_dir, -nanotech_ball_collection_curve_radius_gp);
                 func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
                 fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &slot_rotation_basis_or_cull_position_or_start_tangent);
                 fast_vec_cross(&slot_rotation_basis_or_cull_position_or_start_tangent, &cross_product_or_particle_midpoint, &v20);
                 func_002156E0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, -1.5707964f, &v20);
-                func_L00_001FF4B0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, D_L00_00161A50);
+                func_L00_001FF4B0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, nanotech_ball_collection_curve_radius_gp);
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
@@ -709,7 +709,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         if (data->h56 != 0) {
-            func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
+            func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
             moby->rot.w = 0.52359879f;
             if (func_L00_002D99C0_2D9EA0(moby) != 0 && func_002140B0_2D9EA0(5) == 0) func_L00_002D98C8_2D9EA0(moby);
@@ -719,7 +719,7 @@ void nanotech_ball_update(Moby *moby) {
             int max_hp = hero_max_health;
             if (player->vehicle_mode == 1) max_hp = 4;
             if (player->health.hp == max_hp && player->invulnerable_frames != 0 && D_0015EDB6 != 0) {
-                int duration = func_001F9850_2D9EA0(D_L00_00161A40);
+                int duration = func_001F9850_2D9EA0(nanotech_ball_full_health_invulnerable_collection_min_frames_gp);
                 if (data->h54 < duration) {
                     int i;
                     data->h54 = duration;
@@ -739,7 +739,7 @@ void nanotech_ball_update(Moby *moby) {
             else func_0020D678_2D9EA0(moby);
         } else {
             int i;
-            func_001F9C30_2D9EA0(&v20, D_0013F5E0, -D_L00_00161A54);
+            func_001F9C30_2D9EA0(&v20, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&v20, D_0013F5E0 - 0x210, &v20);
             for (i = 0; i < 8; i++) {
                 Part_2D9EA0 *part = data->slots[i];
