@@ -191,9 +191,9 @@ typedef struct {
     s32 unk90;
 } ElectroidProbe;
 
-extern f32 D_L00_00161BE4 __attribute__((sda));
+extern f32 veldin_robot_probe_length __asm__("D_L00_00161BE4") __attribute__((sda));
 s32 D_L00_00161BE8 = 3;
-extern f32 D_L00_00161BEC __attribute__((sda));
+extern f32 veldin_robot_probe_heading_offset __asm__("D_L00_00161BEC") __attribute__((sda));
 extern Vec4 D_L00_00166DC0;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
@@ -369,15 +369,15 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
 
         desired_heading = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
         if (moby->flags & 0x8000) {
-            desired_heading = fast_add_rotations(desired_heading, D_L00_00161BEC);
+            desired_heading = fast_add_rotations(desired_heading, veldin_robot_probe_heading_offset);
         } else {
-            desired_heading = fast_subtract_rotations(desired_heading, D_L00_00161BEC);
+            desired_heading = fast_subtract_rotations(desired_heading, veldin_robot_probe_heading_offset);
         }
         ELECTROID_TURN(moby, vars, desired_heading, 1.5707964f);
         build_moby_bone_transform(moby, 0, mtx);
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
-        fast_vec_normalize(&delta, &delta, D_L00_00161BE4);
+        fast_vec_normalize(&delta, &delta, veldin_robot_probe_length);
         add_vector_xyz(&dir, &mtx[3], &delta);
         hit = 0;
         query.flags = 0x10000;
