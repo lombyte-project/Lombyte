@@ -1139,8 +1139,8 @@ typedef struct {
 
 extern float sand_shark_death_knockback_vertical_speed_gp __asm__("D_L02_00161908") __attribute__((sda));
 extern float sand_shark_death_knockback_horizontal_speed_gp __asm__("D_L02_0016190C") __attribute__((sda));
-extern float D_L02_00161914 __attribute__((sda));
-extern float D_L02_00161918 __attribute__((sda));
+extern float sand_shark_death_knockback_gravity_gp __asm__("D_L02_00161914") __attribute__((sda));
+extern float sand_shark_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161918") __attribute__((sda));
 extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1210,8 +1210,8 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
         if (moby_vars->hp <= 0.0f) {
             moby_vars->hp -= dmg;
             moby_vars->i140 = 0x200;
-            moby_vars->f130 = D_L02_00161914 * frame_time_sq;
-            moby_vars->f134 = D_L02_00161918 * frame_time_sq;
+            moby_vars->f130 = sand_shark_death_knockback_gravity_gp * frame_time_sq;
+            moby_vars->f134 = sand_shark_death_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
             moby_vars->f138 = sand_shark_death_knockback_horizontal_speed_gp * D_0015ED6C;
             moby_vars->f13C = sand_shark_death_knockback_vertical_speed_gp * D_0015ED6C;
             moby_vars->b15D = 0;
