@@ -1289,7 +1289,7 @@ void update_moby_pulsing_glow_effects(char *moby) {
         OvlQuad q;
         float f[4];
     } v;
-    int k, r, green_glow_offset;
+    int k, red_glow_offset, green_glow_offset;
     float f, glow_wave, red_blue_swing;
     unsigned char *manipulator;
 
@@ -1298,12 +1298,12 @@ void update_moby_pulsing_glow_effects(char *moby) {
     f = convert_integer_to_float(k);
     glow_wave = fast_sin((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
     red_blue_swing = glow_wave * 24.0f;
-    r = f2i_207430(red_blue_swing);
+    red_glow_offset = f2i_207430(red_blue_swing);
     green_glow_offset = f2i_207430(glow_wave * 52.0f);
     {
         int glow_color = ((f2i_207430(red_blue_swing) + 0x4C) << 16) | 0x80000000;
         glow_color |= (green_glow_offset + 0xA2) << 8;
-        glow_color |= r + 0x44;
+        glow_color |= red_glow_offset + 0x44;
         *(int *)(moby + 0x90) = glow_color;
     }
     if (*(short *)(moby + 0xA6) == 0x1A3) {
