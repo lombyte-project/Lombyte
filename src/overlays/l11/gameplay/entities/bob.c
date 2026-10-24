@@ -548,9 +548,9 @@ extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
 extern int D_L11_0015FFD8;
 extern int D_001413D4_14b0 __asm__("D_001413D4") __attribute__((section(".data")));
 extern char D_L11_0016D270[];
-extern float D_L11_00161410 __attribute__((sda));
-extern float D_L11_00161414 __attribute__((sda));
-extern float D_L11_00161418 __attribute__((sda));
+extern float resort_owner_gate_jump_target_local_z_offset __asm__("D_L11_00161410") __attribute__((sda));
+extern float resort_owner_gate_jump_target_local_y_offset __asm__("D_L11_00161414") __attribute__((sda));
+extern float resort_owner_gate_jump_target_local_x_offset __asm__("D_L11_00161418") __attribute__((sda));
 
 /* Pvars of the path-walking NPC run by resort_owner_update. */
 struct PokKeeperVars {
@@ -693,11 +693,11 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8));
                 qcopy(&moby_vars->target, &o->pos);
-                scale_vector_14b0(position_scratch, &o->rot_row0, D_L11_00161418);
+                scale_vector_14b0(position_scratch, &o->rot_row0, resort_owner_gate_jump_target_local_x_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                scale_vector_14b0(position_scratch, &o->rot_row1, D_L11_00161414);
+                scale_vector_14b0(position_scratch, &o->rot_row1, resort_owner_gate_jump_target_local_y_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                scale_vector_14b0(position_scratch, &o->rot_row2, D_L11_00161410);
+                scale_vector_14b0(position_scratch, &o->rot_row2, resort_owner_gate_jump_target_local_z_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
@@ -706,11 +706,11 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             case RESORT_OWNER_SECOND_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[1] << 8));
                 qcopy(&moby_vars->target, &o->pos);
-                scale_vector_14b0(position_scratch, &o->rot_row0, D_L11_00161418);
+                scale_vector_14b0(position_scratch, &o->rot_row0, resort_owner_gate_jump_target_local_x_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                scale_vector_14b0(position_scratch, &o->rot_row1, -D_L11_00161414);
+                scale_vector_14b0(position_scratch, &o->rot_row1, -resort_owner_gate_jump_target_local_y_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                scale_vector_14b0(position_scratch, &o->rot_row2, D_L11_00161410);
+                scale_vector_14b0(position_scratch, &o->rot_row2, resort_owner_gate_jump_target_local_z_offset);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 path_points_14b0[moby_vars->unk110].pos.z += 500.0f;
                 moby_vars->next_state = 8;
