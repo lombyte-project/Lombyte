@@ -1169,7 +1169,9 @@ extern float turn_k(float *, float, float *, int, float, float, float) __asm__("
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern float D_L12_00161918 __attribute__((sda));
-void FUN_L12_002e3c08(char *moby, float *target_angles, void *target, int unused, int brake) {
+void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
+
+void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) {
     char *moby_vars = *(char **)(moby + 0x78);
     float target_offset[4];
     float target_distance;
