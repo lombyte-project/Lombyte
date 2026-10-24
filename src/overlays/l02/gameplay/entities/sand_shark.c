@@ -1406,7 +1406,7 @@ extern float D_L02_00161A84 __attribute__((sda));
 int D_L02_00161A88 = 0x40808080;
 int D_L02_00161A90 = 0x3c;
 int D_L02_00161A94 = 0x78;
-extern float D_L02_00161A98 __attribute__((sda));
+extern float level02_bot_wake_spray_planar_magnitude_max __asm__("D_L02_00161A98") __attribute__((sda));
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -1630,7 +1630,7 @@ void update_level02_bot(struct Moby *moby) {
     case L02_BOT_WAIT_FOR_WAKE_TRIGGER_BEFORE_GROUND_ALIGNMENT:
     case L02_BOT_WAIT_FOR_WAKE_TRIGGER_WITH_ALTERNATE_WAKE_ANIMATION:
         if (!(D_L02_0015F5CC_i & 3) && moby->visible != 0) {
-            spray_radius = random_float_between(0.0f, D_L02_00161A98) * D_0015ED6C;
+            spray_radius = random_float_between(0.0f, level02_bot_wake_spray_planar_magnitude_max) * D_0015ED6C;
             spray_heading = random_angle_radians();
             direction[0] = fast_cos_c(spray_heading) * spray_radius;
             direction[1] = fast_sin_c(spray_heading) * spray_radius;
