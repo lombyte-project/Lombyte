@@ -227,7 +227,7 @@ typedef struct {
 } SoundSlot_2A48B0;
 
 extern float D_0015ED6C;
-extern float D_L15_001614F8 __attribute__((sda));
+extern float vertical_gate_travel_distance __asm__("D_L15_001614F8") __attribute__((sda));
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -263,7 +263,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             gate_moby->f30 = 0xFF;
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
-            gate_moby->pos.z = gate_moby->pos.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_moby->pos.z - vertical_gate_travel_distance;
             gate_moby->state = 5;
         }
         break;
@@ -288,12 +288,12 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             }
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
-            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance;
             gate_moby->state = 5;
         }
         break;
     case GATE_OPENING:
-        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        step = (vertical_gate_travel_distance / 0.6f) * D_0015ED6C;
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
@@ -301,14 +301,14 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
-        if (D_L15_001614F8 < (gate_vars->travel = gate_vars->travel + step)) {
+        if (vertical_gate_travel_distance < (gate_vars->travel = gate_vars->travel + step)) {
             if (gate_vars->sound != -1 &&
                 ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
                 ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->sound = -1;
-            gate_vars->travel = D_L15_001614F8;
+            gate_vars->travel = vertical_gate_travel_distance;
             gate_moby->state = 3;
         }
         {
@@ -339,7 +339,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         }
         break;
     case GATE_CLOSING:
-        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        step = (vertical_gate_travel_distance / 0.6f) * D_0015ED6C;
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
@@ -380,7 +380,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         break;
     case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
-            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance;
             D_L15_00184B28_2A48B0 = 1;
         } else {
             if (D_001413F4[0] == 2) {
