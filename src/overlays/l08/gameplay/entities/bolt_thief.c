@@ -173,7 +173,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-extern float D_L08_00161D28 __attribute__((sda));
+extern float shrub_part_spin_speed_degrees __asm__("D_L08_00161D28") __attribute__((sda));
 void update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 
 void update_shrub_parts(struct Moby *parent_moby) {
@@ -196,7 +196,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
         char *spinning_part_moby = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
             *(float *)(spinning_part_moby + 0x40),
-            D_L08_00161D28 * DEG_TO_RAD * D_0015ED6C);
+            shrub_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
