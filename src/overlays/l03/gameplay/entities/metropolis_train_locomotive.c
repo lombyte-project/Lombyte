@@ -3080,10 +3080,10 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             pf = &moby_data->pf;
             if ((short)other->cls == 0x335 || (short)other->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
-                    float tmp[4];
-                    *(OvlQuad *)tmp = 0;
-                    probe_ground_height_cf((int)m, (char *)other, pf->path + 0x10 + i * 0x10, tmp,
-                                           pf->path + 0x10 + i * 0x10, tmp);
+                    float path_node_rotation[4];
+                    *(OvlQuad *)path_node_rotation = 0;
+                    probe_ground_height_cf((int)m, (char *)other, pf->path + 0x10 + i * 0x10, path_node_rotation,
+                                           pf->path + 0x10 + i * 0x10, path_node_rotation);
                 }
             }
             probe_ground_height_cf((int)m, (char *)other, (char *)m->pos, m->rot, (char *)m->pos,
