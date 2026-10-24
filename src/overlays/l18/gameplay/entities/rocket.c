@@ -1789,7 +1789,7 @@ extern int ballistic_ring_trail_initial_color_start_gp __asm__("D_L18_00161C30")
 extern int ballistic_ring_trail_second_color_start_gp __asm__("D_L18_00161C38") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_end_gp __asm__("D_L18_00161C3C") __attribute__((sda));
 extern int ballistic_ring_trail_sparks_per_update_gp __asm__("D_L18_00161C40") __attribute__((sda));
-extern int D_L18_00161C44 __attribute__((sda));
+extern int ballistic_ring_trail_spark_resource_selector_gp __asm__("D_L18_00161C44") __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
@@ -1850,7 +1850,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
                 (random_float_between(-ballistic_ring_trail_spark_relative_variation_limit_gp, ballistic_ring_trail_spark_relative_variation_limit_gp) +
                  1.0f)));
             second_spark_vector[2] = second_spark_vector[2] - ballistic_ring_trail_spark_gravity_gp * frame_time_sq * (float)i3;
-            spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, D_L18_00161C44);
+            spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, ballistic_ring_trail_spark_resource_selector_gp);
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
