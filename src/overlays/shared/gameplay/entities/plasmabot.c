@@ -1880,10 +1880,10 @@ extern P_eca8 *puff_y(void *, float, float, float, int, void *, float, int) __as
 extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
 
-extern float D_L14_00161FCC __attribute__((sda));
-extern float D_L14_00161FD0 __attribute__((sda));
-extern float D_L14_00161FD4 __attribute__((sda));
-extern float D_L14_00161FD8 __attribute__((sda));
+extern float particle_pair_moby_c0_offset_scale __asm__("D_L14_00161FCC") __attribute__((sda));
+extern float particle_pair_moby_e0_offset_scale __asm__("D_L14_00161FD0") __attribute__((sda));
+extern float particle_trio_moby_c0_offset_scale __asm__("D_L14_00161FD4") __attribute__((sda));
+extern float particle_trio_moby_e0_offset_scale __asm__("D_L14_00161FD8") __attribute__((sda));
 extern int D_L14_00161FE4 __attribute__((sda));
 void emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
 
@@ -1895,9 +1895,9 @@ void emit_moby_offset_particles(unsigned char *moby) {
     int signed_particle_variation;
     int life;
     float size;
-    scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FCC);
+    scale_y(emission_position_offset, moby + 0xC0, particle_pair_moby_c0_offset_scale);
     add_y(particle_spawn_position, moby + 0x10, emission_position_offset);
-    scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD0);
+    scale_y(emission_position_offset, moby + 0xE0, particle_pair_moby_e0_offset_scale);
     add_y(particle_spawn_position, particle_spawn_position, emission_position_offset);
     for (i = 0; i < 2; i++) {
         P_eca8 *part;
@@ -1912,9 +1912,9 @@ void emit_moby_offset_particles(unsigned char *moby) {
             tail->bB = part->hA;
         }
     }
-    scale_y(emission_position_offset, moby + 0xC0, D_L14_00161FD4);
+    scale_y(emission_position_offset, moby + 0xC0, particle_trio_moby_c0_offset_scale);
     add_y(particle_spawn_position, moby + 0x10, emission_position_offset);
-    scale_y(emission_position_offset, moby + 0xE0, D_L14_00161FD8);
+    scale_y(emission_position_offset, moby + 0xE0, particle_trio_moby_e0_offset_scale);
     add_y(particle_spawn_position, particle_spawn_position, emission_position_offset);
     signed_particle_variation = 0x10;
     life = frames_y(2);
