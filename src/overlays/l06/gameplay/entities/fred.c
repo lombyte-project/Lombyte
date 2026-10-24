@@ -6822,7 +6822,7 @@ extern int D_L06_0015FDF8;
 extern float shuttle_second_stop_ride_scale_multiplier_gp __asm__("D_L06_001620F4") __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
 extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attribute__((sda));
-extern int D_L06_00162104 __attribute__((sda));
+extern int class_076a_moby_spawn_requested_gp __asm__("D_L06_00162104") __attribute__((sda));
 extern int D_L06_00162108 __attribute__((sda));
 extern int D_L06_0016210C __attribute__((sda));
 extern int D_L06_00162110 __attribute__((sda));
@@ -6856,8 +6856,8 @@ void shuttle_update(struct Moby *moby) {
     qcopy(old_pos, ((float *)&moby->pos));
     qcopy(old_rot, ((float *)&moby->rot));
     moby->scale = moby->pclass->scale * D_L06_001620F8;
-    if (D_L06_00162104 != 0) {
-        D_L06_00162104 = 0;
+    if (class_076a_moby_spawn_requested_gp != 0) {
+        class_076a_moby_spawn_requested_gp = 0;
         *(u128_302578 *)b = *(u128_302578 *)((char *)&hero.motion.pos + 0x50);
         FUN_L06_0030bef8_302578((char *)b, scale_game_frames_302578(D_L06_00162108), D_L06_0016210C, D_L06_00162110);
     }
