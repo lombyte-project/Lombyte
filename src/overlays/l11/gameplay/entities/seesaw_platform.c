@@ -506,9 +506,9 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sub_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
-extern float D_L11_00161F40 __attribute__((sda));
-extern float D_L11_00161F44 __attribute__((sda));
-extern float D_L11_00161F48 __attribute__((sda));
+extern float child_grid_parent_axis0_offset_length __asm__("D_L11_00161F40") __attribute__((sda));
+extern float child_grid_parent_axis1_offset_length __asm__("D_L11_00161F44") __attribute__((sda));
+extern float child_grid_child_axis1_offset_length __asm__("D_L11_00161F48") __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
 void update_child_grid_poses(struct Moby *grid_controller) {
@@ -527,8 +527,8 @@ void update_child_grid_poses(struct Moby *grid_controller) {
 
     data = grid_controller->pvars;
     grid = (struct Moby *(*)[6])data;
-    normalize_vector_xyz(&parent_axis0_offset, &grid_controller->rot_row0, D_L11_00161F40);
-    normalize_vector_xyz(&parent_axis1_offset, &grid_controller->rot_row1, D_L11_00161F44);
+    normalize_vector_xyz(&parent_axis0_offset, &grid_controller->rot_row0, child_grid_parent_axis0_offset_length);
+    normalize_vector_xyz(&parent_axis1_offset, &grid_controller->rot_row1, child_grid_parent_axis1_offset_length);
     progress = *(float *)(data + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
@@ -569,7 +569,7 @@ void update_child_grid_poses(struct Moby *grid_controller) {
             }
             grid[row][col]->rot.z = fast_add_rotations(grid[row][col]->rot.z, angle);
             euler_rotation_basis(&grid[row][col]->rot_row0, &grid[row][col]->rot);
-            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -D_L11_00161F48);
+            normalize_vector_xyz(&child_position_offset, &grid[row][col]->rot_row1, -child_grid_child_axis1_offset_length);
             if (row & 1) {
                 add_vector_xyz(&child_position_offset, &child_position_offset, &parent_axis1_offset);
             } else {
