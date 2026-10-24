@@ -2082,7 +2082,7 @@ extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
 extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
-extern float D_L11_001625C4;
+extern float distance_faded_effect_bounds_radius __asm__("D_L11_001625C4");
 extern char D_L11_00167680[];
 extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
@@ -2141,7 +2141,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         effect_bounds[0] = distance_faded_effect_position_x_gp;
         effect_bounds[1] = distance_faded_effect_position_y;
         effect_bounds[2] = distance_faded_effect_position_z;
-        effect_bounds[3] = D_L11_001625C4;
+        effect_bounds[3] = distance_faded_effect_bounds_radius;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
