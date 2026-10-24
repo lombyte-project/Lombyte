@@ -24,7 +24,7 @@ void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 void adjust_hero_pose_targets_from_motion(void) {
     f32 run_step_pose_input, nv, k, run_pose_magnitude, motion_correction_scale, relative_displacement_angle;
     f32 run_pose_weight, nw;
-    f32 scaled_pose_input, c1, c2, unclamped_pose_magnitude;
+    f32 scaled_pose_input, unclamped_opposing_pose_target, unclamped_amplified_pose_target, unclamped_pose_magnitude;
     f32 x;
 
     if (hero.state.current == HERO_STATE_RUN) {
@@ -81,16 +81,16 @@ void adjust_hero_pose_targets_from_motion(void) {
             if (1.1f < scaled_pose_input) scaled_pose_input = 1.1f;
             else if (scaled_pose_input < -1.1f) scaled_pose_input = -1.1f;
         }
-        c1 = -scaled_pose_input * 0.52f;
-        TF(0x60) = c1;
-        if (0.28f < c1) TF(0x60) = 0.28f;
-        else if (c1 < -0.28f) TF(0x60) = -0.28f;
-        c2 = scaled_pose_input * 1.2f;
-        TF(0x278) = c2;
+        unclamped_opposing_pose_target = -scaled_pose_input * 0.52f;
+        TF(0x60) = unclamped_opposing_pose_target;
+        if (0.28f < unclamped_opposing_pose_target) TF(0x60) = 0.28f;
+        else if (unclamped_opposing_pose_target < -0.28f) TF(0x60) = -0.28f;
+        unclamped_amplified_pose_target = scaled_pose_input * 1.2f;
+        TF(0x278) = unclamped_amplified_pose_target;
         TF(0x118) = scaled_pose_input * 0.58f;
         TF(0x1C0) = scaled_pose_input * -0.28f;
-        if (0.6f < c2) TF(0x278) = 0.6f;
-        else if (c2 < -0.6f) TF(0x278) = -0.6f;
+        if (0.6f < unclamped_amplified_pose_target) TF(0x278) = 0.6f;
+        else if (unclamped_amplified_pose_target < -0.6f) TF(0x278) = -0.6f;
         unclamped_pose_magnitude = absolute_float(scaled_pose_input) * 0.2f;
         TF(0x274) = unclamped_pose_magnitude;
         if (0.2f < unclamped_pose_magnitude) TF(0x274) = 0.2f;
