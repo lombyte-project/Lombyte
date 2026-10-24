@@ -2999,7 +2999,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002dec90(struct Moby *moby, char *pos) {
+void spawn_moby_motion_spark(struct Moby *moby, char *pos) __asm__("FUN_L08_002dec90");
+
+void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
     float scaled_displacement_vector[4];
     float jittered_displacement_vector[4];
     float frame_displacement[4];
