@@ -935,7 +935,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&spatial_scratch_or_hit_descriptor, &MV(hero.unk964)->u10.v10);
@@ -980,7 +980,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
