@@ -1671,7 +1671,7 @@ int D_L06_00161DD8 = 0;
 int D_L06_00161DDC = 1;
 int D_L06_00161DF0 = 0x80c04070;
 int D_L06_00161DF4 = 0xff0000;
-extern float D_L06_00161DF8 __attribute__((sda));
+extern float beam_barrier_texture_u_step __asm__("D_L06_00161DF8") __attribute__((sda));
 float D_L06_00161DFC = 0;
 extern int D_L06_00161E50;
 extern int D_L06_00161E54;
@@ -1732,7 +1732,7 @@ void draw_beam_barrier_segments(char *moby) {
     points = (int *)D_L06_001DB0F0;
     second = D_L06_00161E54;
     fourth = D_L06_00161DF4;
-    seventh = D_L06_00161DF8;
+    seventh = beam_barrier_texture_u_step;
     eighth = D_L06_00161DFC;
     sequence = D_L06_00161E40;
     params[0] = first;
