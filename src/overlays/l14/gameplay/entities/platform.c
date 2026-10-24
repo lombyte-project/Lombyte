@@ -227,7 +227,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     V_67e8 near;
-    V_67e8 v[4];
+    V_67e8 joint_transform_and_aim_vectors[4];
     V_67e8 ma[4];
     V_67e8 mb[4];
     V_67e8 mc[4];
@@ -277,7 +277,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         *(int *)(moby_data + 0x1C0) = frames_67e8(D_L14_00161A3C);
         *(int *)(moby_data + 0x1C4) = 0;
         racer_moby->command = 2;
-        joint_matrix_67e8(racer_moby, 4, v);
+        joint_matrix_67e8(racer_moby, 4, joint_transform_and_aim_vectors);
         joint_matrix_67e8(racer_moby, 5, ma);
         normalize_67e8(&ma[0], &ma[0], 1.0f);
         normalize_67e8(&ma[1], &ma[1], 1.0f);
@@ -285,7 +285,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         invert_67e8(mb, ma);
         mb[3].w = 1.0f;
         mb[3].x = mb[3].y = mb[3].z = 0.0f;
-        matmul_67e8(mc, mb, v);
+        matmul_67e8(mc, mb, joint_transform_and_aim_vectors);
         to_quat_67e8(moby_data + 0x1D0, mc);
     }
     yaw = racer_moby->rot.z;
@@ -299,10 +299,10 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
-        track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
-        qcopy(moby_data + 0x1E0, &v[0]);
-        sub_67e8(&v[1], &v[0], &racer_moby->pos);
-        yaw = atan2_67e8(v[1].x, v[1].y);
+        track_67e8(path, &joint_transform_and_aim_vectors[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
+        qcopy(moby_data + 0x1E0, &joint_transform_and_aim_vectors[0]);
+        sub_67e8(&joint_transform_and_aim_vectors[1], &joint_transform_and_aim_vectors[0], &racer_moby->pos);
+        yaw = atan2_67e8(joint_transform_and_aim_vectors[1].x, joint_transform_and_aim_vectors[1].y);
         turn = sub_rot_67e8(yaw, racer_moby->rot.z);
         if (turn > 1.2217305f) {
             turn = 1.2217305f;
@@ -328,12 +328,12 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             turn = (turn - 0.0f) * blend + 0.0f;
         }
         FUN_L00_001fff28(moby_data + 0x150, 2, turn);
-        joint_pos_67e8(racer_moby, 4, &v[2]);
-        *(u128_67e8 *)&v[3] = 0;
-        v[3].z = 1.0f;
-        v[3].w = 1.0f;
-        normalize_67e8(&ma[1], &v[1], 1.0f);
-        cross_67e8(&ma[2], &ma[1], &v[3]);
+        joint_pos_67e8(racer_moby, 4, &joint_transform_and_aim_vectors[2]);
+        *(u128_67e8 *)&joint_transform_and_aim_vectors[3] = 0;
+        joint_transform_and_aim_vectors[3].z = 1.0f;
+        joint_transform_and_aim_vectors[3].w = 1.0f;
+        normalize_67e8(&ma[1], &joint_transform_and_aim_vectors[1], 1.0f);
+        cross_67e8(&ma[2], &ma[1], &joint_transform_and_aim_vectors[3]);
         normalize_67e8(&ma[2], &ma[2], 1.0f);
         cross_67e8(&ma[0], &ma[2], &ma[1]);
         ma[3].x = ma[3].y = ma[3].z = 0.0f;
@@ -424,8 +424,8 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         release_point_light_slot(*(int *)(moby_data + 0xF0));
         *(int *)(moby_data + 0xF0) = -1;
     }
-    sub_67e8(&v[0], &D_0013F3D0_67e8, &racer_moby->pos);
-    target_yaw_offset = sub_rot_67e8(atan2_67e8(v[0].x, v[0].y), yaw);
+    sub_67e8(&joint_transform_and_aim_vectors[0], &D_0013F3D0_67e8, &racer_moby->pos);
+    target_yaw_offset = sub_rot_67e8(atan2_67e8(joint_transform_and_aim_vectors[0].x, joint_transform_and_aim_vectors[0].y), yaw);
     if (target_yaw_offset > 1.2217305f) {
         target_yaw_offset = 1.2217305f;
     } else if (target_yaw_offset < -1.2217305f) {
