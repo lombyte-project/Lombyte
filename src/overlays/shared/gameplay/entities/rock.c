@@ -782,7 +782,7 @@ extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
 extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-extern float D_L01_00161D30 __attribute__((sda));
+extern float cutscene_big_head_scale __asm__("D_L01_00161D30") __attribute__((sda));
 void attach_cutscene_big_head_manipulator(char *class_reference_moby) __asm__("FUN_L01_002ff028");
 
 void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
@@ -795,9 +795,9 @@ void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
                 unsigned char *manipulator_record = D_L01_0017C8C0_q;
                 if (manipulator_record[1] == 0) {
                     attach_manipulator_q(moby, 0, manipulator_record);
-                    *(float *)(manipulator_record + 0x20) = D_L01_00161D30;
-                    *(float *)(manipulator_record + 0x24) = D_L01_00161D30;
-                    *(float *)(manipulator_record + 0x28) = D_L01_00161D30;
+                    *(float *)(manipulator_record + 0x20) = cutscene_big_head_scale;
+                    *(float *)(manipulator_record + 0x24) = cutscene_big_head_scale;
+                    *(float *)(manipulator_record + 0x28) = cutscene_big_head_scale;
                 }
             }
         }
