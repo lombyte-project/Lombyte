@@ -421,15 +421,15 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 
 void spawn_moby_radial_particles(char *moby) {
-    float v[4];
+    float range_check_delta_or_spawn_position[4];
     float spawn_center_position[4];
     float reference_to_spawn_delta[4];
     float randomized_spawn_vector[4];
     char *moby_data = *(char **)(moby + 0x78);
     int i;
-    subtract_vector_xyz(v, D_L08_001675C0, moby + 0x10);
-    v[2] = 0.0f;
-    if (dot_vectors_xyz(v, v) < *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
+    subtract_vector_xyz(range_check_delta_or_spawn_position, D_L08_001675C0, moby + 0x10);
+    range_check_delta_or_spawn_position[2] = 0.0f;
+    if (dot_vectors_xyz(range_check_delta_or_spawn_position, range_check_delta_or_spawn_position) < *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
         float angle_start_radians, angle_end_radians, xy_random_range;
         i = 0;
         xy_random_range = *(float *)(moby_data + 0x24) * frame_time;
@@ -438,19 +438,19 @@ void spawn_moby_radial_particles(char *moby) {
         angle_end_radians = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
         for (; i < *(int *)(moby_data + 0x14); i++) {
             float spawn_angle_radians, rad;
-            *(OvlQuad *)v = *(OvlQuad *)spawn_center_position;
+            *(OvlQuad *)range_check_delta_or_spawn_position = *(OvlQuad *)spawn_center_position;
             spawn_angle_radians = random_float_between_alt(angle_start_radians, angle_end_radians);
             rad = random_float_between_alt(*(float *)(moby_data + 0xC), *(float *)(moby_data + 8));
-            v[0] = v[0] + fast_cos(spawn_angle_radians) * rad;
-            v[1] = v[1] + fast_sin(spawn_angle_radians) * rad;
-            subtract_vector_xyz(reference_to_spawn_delta, v, D_L08_001675C0);
+            range_check_delta_or_spawn_position[0] = range_check_delta_or_spawn_position[0] + fast_cos(spawn_angle_radians) * rad;
+            range_check_delta_or_spawn_position[1] = range_check_delta_or_spawn_position[1] + fast_sin(spawn_angle_radians) * rad;
+            subtract_vector_xyz(reference_to_spawn_delta, range_check_delta_or_spawn_position, D_L08_001675C0);
             if (!(vector_length_xy(reference_to_spawn_delta) <= *(float *)(moby_data + 0x10))) {
                 randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;
-                spawn_span_particle(v, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
+                spawn_span_particle(range_check_delta_or_spawn_position, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
             }
         }
     }
