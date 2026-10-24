@@ -163,11 +163,11 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
 }
 #include "rnc/overlay/quad.h"
 extern void FUN_L06_00307578(char *moby);
-extern float D_L06_001622DC __attribute__((sda));
-extern float D_L06_001622E0 __attribute__((sda));
-extern float D_L06_001622E4 __attribute__((sda));
-extern float D_L06_001622E8 __attribute__((sda));
-extern float D_L06_001622EC __attribute__((sda));
+extern float bot_door_lock_number_bob_amplitude __asm__("D_L06_001622DC") __attribute__((sda));
+extern float bot_door_lock_number_bob_period __asm__("D_L06_001622E0") __attribute__((sda));
+extern float bot_door_lock_color_pulse_period __asm__("D_L06_001622E4") __attribute__((sda));
+extern float bot_door_lock_number_color_pulse_amplitude __asm__("D_L06_001622E8") __attribute__((sda));
+extern float bot_door_lock_max_effect_horizontal_scale __asm__("D_L06_001622EC") __attribute__((sda));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
@@ -202,7 +202,7 @@ void bot_door_lock_update(char *moby) {
     int i;
 
     if (*(int *)data == -1) return;
-    data[10] = fast_add_rotations(data[10], (360.0f / D_L06_001622E4) * 0.017453292f * frame_time);
+    data[10] = fast_add_rotations(data[10], (360.0f / bot_door_lock_color_pulse_period) * 0.017453292f * frame_time);
     *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
@@ -210,23 +210,23 @@ void bot_door_lock_update(char *moby) {
         data[6] = random_angle_radians();
         data[10] = random_angle_radians();
         moby[0x20] = 1;
-        data[9] = D_L06_001622EC;
+        data[9] = bot_door_lock_max_effect_horizontal_scale;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)(moby + 0x10);
         number_anchor_position[2] += 2.75f;
         if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
             data[9] += frame_time + frame_time;
-            if (D_L06_001622EC < data[9]) data[9] = D_L06_001622EC;
+            if (bot_door_lock_max_effect_horizontal_scale < data[9]) data[9] = bot_door_lock_max_effect_horizontal_scale;
         } else if (36.0f < FUN_001f9b48(D_L06_00167540, moby + 0x10)) {
             data[9] -= frame_time + frame_time;
             if (data[9] < 0.0f) data[9] = 0.0f;
         }
         if (0.0f < data[9]) {
             enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
-            data[6] = fast_add_rotations(data[6], (360.0f / D_L06_001622E0) * 0.017453292f * frame_time);
-            number_anchor_position[2] += D_L06_001622DC * fast_cos(data[6]);
-            value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
+            data[6] = fast_add_rotations(data[6], (360.0f / bot_door_lock_number_bob_period) * 0.017453292f * frame_time);
+            number_anchor_position[2] += bot_door_lock_number_bob_amplitude * fast_cos(data[6]);
+            value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude * fast_cos(data[10]));
             color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
             color = (value / 3 + 13) * 0x10000 | color_channels | (value + 150U);
             if (D_001413F4 == 1) {
