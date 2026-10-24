@@ -48,12 +48,12 @@ extern float deplanetizer_camera_quad_scale_ramp_start_value_gp __asm__("D_L18_0
 extern float deplanetizer_camera_quad_scale_ramp_end_value_gp __asm__("D_L18_00162494") __attribute__((sda));
 extern int deplanetizer_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_0016249C") __attribute__((sda));
 extern int deplanetizer_camera_quad_end_frame_gp __asm__("D_L18_001624A0") __attribute__((sda));
-extern int D_L18_001624A4 __attribute__((sda));
-extern int D_L18_001624A8 __attribute__((sda));
-extern int D_L18_001624AC __attribute__((sda));
-extern int D_L18_001624B0 __attribute__((sda));
-extern int D_L18_001624B4 __attribute__((sda));
-extern int D_L18_001624B8 __attribute__((sda));
+extern int deplanetizer_state_7_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624A4") __attribute__((sda));
+extern int deplanetizer_state_7_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624A8") __attribute__((sda));
+extern int deplanetizer_state_7_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624AC") __attribute__((sda));
+extern int deplanetizer_state_7_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B0") __attribute__((sda));
+extern int deplanetizer_state_7_camera_quad_start_frame_gp __asm__("D_L18_001624B4") __attribute__((sda));
+extern int deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B8") __attribute__((sda));
 extern int deplanetizer_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624C0") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624C4") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624C8") __attribute__((sda));
@@ -228,12 +228,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     }
     if (D_L18_0016D260_update.state == 7) {
         if (D_L18_0016D260_update.n == 1) {
-            deplanetizer_glow_alpha_ramp_start_frame_gp = D_L18_001624A4;
-            deplanetizer_glow_alpha_ramp_end_frame_gp = D_L18_001624A8;
-            deplanetizer_three_quad_scale_ramp_start_frame_gp = D_L18_001624AC;
-            deplanetizer_three_quad_scale_ramp_end_frame_gp = D_L18_001624B0;
-            deplanetizer_camera_quad_start_frame_gp = D_L18_001624B4;
-            deplanetizer_camera_quad_scale_ramp_end_frame_gp = D_L18_001624B8;
+            deplanetizer_glow_alpha_ramp_start_frame_gp = deplanetizer_state_7_glow_alpha_ramp_start_frame_gp;
+            deplanetizer_glow_alpha_ramp_end_frame_gp = deplanetizer_state_7_glow_alpha_ramp_end_frame_gp;
+            deplanetizer_three_quad_scale_ramp_start_frame_gp = deplanetizer_state_7_three_quad_scale_ramp_start_frame_gp;
+            deplanetizer_three_quad_scale_ramp_end_frame_gp = deplanetizer_state_7_three_quad_scale_ramp_end_frame_gp;
+            deplanetizer_camera_quad_start_frame_gp = deplanetizer_state_7_camera_quad_start_frame_gp;
+            deplanetizer_camera_quad_scale_ramp_end_frame_gp = deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp;
             {
                 struct Moby *target;
                 for (target = D_L18_0015FFE4; target; target = target->next) {
