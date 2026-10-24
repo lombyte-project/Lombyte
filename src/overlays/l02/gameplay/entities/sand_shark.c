@@ -1913,11 +1913,11 @@ typedef struct {
 } L16PlatformMoby;
 
 extern char *D_L02_001600FC;
-extern float D_L02_00161BD0 __attribute__((sda));
+extern float level02_elevator_stop_height_offset __asm__("D_L02_00161BD0") __attribute__((sda));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
-extern float D_L02_00161BDC __attribute__((sda));
-extern float D_L02_00161BE0 __attribute__((sda));
+extern float level02_elevator_max_vertical_speed __asm__("D_L02_00161BDC") __attribute__((sda));
+extern float level02_elevator_vertical_acceleration __asm__("D_L02_00161BE0") __attribute__((sda));
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L02_002dc2c8");
@@ -1950,7 +1950,7 @@ void elevator_update(L16PlatformMoby *moby) {
             elevator_vars->particle = -1;
             transform_vector_by_basis(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
             elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+            moby->position[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset;
             moby->reverse = 1;
             if (elevator_vars->stop) {
                 moby->state = 2;
@@ -1971,7 +1971,7 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_vars->goal = motion.v[2];
@@ -1989,7 +1989,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
                 transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset;
                 elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2004,7 +2004,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
                 transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + D_L02_00161BD0;
+                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset;
                 elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2016,12 +2016,12 @@ void elevator_update(L16PlatformMoby *moby) {
                 || absolute_float(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_vars->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, elevator_vars->goal,
-                                      D_L02_00161BE0 * frame_time_sq, D_L02_00161BE0 * frame_time_sq,
-                                      D_L02_00161BDC * D_0015ED6C);
+                                      level02_elevator_vertical_acceleration * frame_time_sq, level02_elevator_vertical_acceleration * frame_time_sq,
+                                      level02_elevator_max_vertical_speed * D_0015ED6C);
             } else {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, moby->position[2],
-                                      D_L02_00161BE0 * 4.0f * frame_time_sq, D_L02_00161BE0 * 4.0f * frame_time_sq,
-                                      D_L02_00161BDC * D_0015ED6C);
+                                      level02_elevator_vertical_acceleration * 4.0f * frame_time_sq, level02_elevator_vertical_acceleration * 4.0f * frame_time_sq,
+                                      level02_elevator_max_vertical_speed * D_0015ED6C);
             }
             clear_u64_value(motion.v);
             motion.v[2] = speed;
@@ -2114,7 +2114,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     lower += translation;
     color =
         fast_tween_color(D_L02_00161C04, D_L02_00161C08,
-                     absolute_float((*(float *)((char *)moby_vars + 0xB0))) / (D_L02_00161BDC * D_0015ED6C));
+                     absolute_float((*(float *)((char *)moby_vars + 0xB0))) / (level02_elevator_max_vertical_speed * D_0015ED6C));
     copy_matrix_rotation(&matrix, &moby->rot_row0);
     qcopy(matrix.position, &moby->pos);
     matrix.position[2] = lower;
