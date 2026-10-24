@@ -649,7 +649,7 @@ extern char D_L13_00178200[];
 extern int poison_vessel_blast_duration_frames __asm__("D_L13_00161E2C") __attribute__((sda));
 extern f32 poison_vessel_blast_start_radius __asm__("D_L13_00161E30") __attribute__((sda));
 extern f32 poison_vessel_blast_end_radius __asm__("D_L13_00161E34") __attribute__((sda));
-extern f32 D_L13_00161E38 __attribute__((sda));
+extern f32 poison_vessel_blast_damage __asm__("D_L13_00161E38") __attribute__((sda));
 extern struct BlastHit *find_moby_hit_7b10(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fptodp_7b10(float) __asm__("FUN_00120478");
 extern void debug_print_7b10() __asm__("FUN_001e93b0");
@@ -742,7 +742,7 @@ void poison_vessel_update(struct Moby *moby) {
                                               int_to_float_7b10(vars->timer) /
                                                   int_to_float_7b10(scale_game_frames_7b10(poison_vessel_blast_duration_frames))),
                                     pos, 0x10, moby, 0);
-        blast_mobys_7b10(moby, pos, D_L13_00178200, hits, 0, 0x830001, 2, 1, D_L13_00161E38, 1.0f, 1.0f);
+        blast_mobys_7b10(moby, pos, D_L13_00178200, hits, 0, 0x830001, 2, 1, poison_vessel_blast_damage, 1.0f, 1.0f);
         if (vars->timer > scale_time_7b10((float)poison_vessel_blast_duration_frames * 0.5f)) {
             moby->flags |= 0x41;
             spawn_type_52_particle_near_moby(moby);
