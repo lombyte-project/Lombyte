@@ -158,7 +158,7 @@ void process_hero_state_transitions(void) {
     int prevSub;
     int prevState;
     int prevAnim;
-    float v0[4] __attribute__((aligned(16)));
+    float temporary_position[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
     int respawn_jump_press_age_frames;
@@ -1232,13 +1232,13 @@ void process_hero_state_transitions(void) {
                             int ok = 1;
 
                             if (current_level_index != 0x10) {
-                                qcopy(v0, hero.rail_point.f);
-                                v0[2] += 2.0f;
+                                qcopy(temporary_position, hero.rail_point.f);
+                                temporary_position[2] += 2.0f;
                                 v1[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
                                 v1[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
                                 v1[2] = 0.0f;
-                                add_vector_xyz(v1, v1, v0);
-                                if (collision_line(v0, v1, 2, 0, 0)) {
+                                add_vector_xyz(v1, v1, temporary_position);
+                                if (collision_line(temporary_position, v1, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }
@@ -1279,11 +1279,11 @@ void process_hero_state_transitions(void) {
                         int can = 1;
 
                         if (current_level_index == 8) {
-                            *(OvlQuad *)v0 = 0;
-                            v0[0] = 342.0f;
-                            v0[1] = 111.1f;
-                            v0[2] = 42.0f;
-                            if (FUN_001f9b48(hero.motion.pos.f, v0) < 7.0f) {
+                            *(OvlQuad *)temporary_position = 0;
+                            temporary_position[0] = 342.0f;
+                            temporary_position[1] = 111.1f;
+                            temporary_position[2] = 42.0f;
+                            if (FUN_001f9b48(hero.motion.pos.f, temporary_position) < 7.0f) {
                                 can = 0;
                                 hero.move_lock_timer = scale_game_frames(0x64);
                             }
@@ -1331,9 +1331,9 @@ void process_hero_state_transitions(void) {
                                 initial_jump_velocity_z = FUN_L00_0025abf0(hero.motion.pos.f, hero.jump_target_pos.f, 0,
                                                      hero.motion.flat_speed, -hero.jump_gravity);
                                 *(OvlQuad *)v1 = 0;
-                                *(OvlQuad *)v0 = 0;
+                                *(OvlQuad *)temporary_position = 0;
                                 v1[2] = initial_jump_velocity_z;
-                                t = calculate_triangular_corrected_scalar(v0, v1, 0, hero.jump_gravity);
+                                t = calculate_triangular_corrected_scalar(temporary_position, v1, 0, hero.jump_gravity);
                                 hero.unk48C = t + 0.05f;
                                 hero.unk430 = t;
                                 hero.jump_gravity = hero.rail_jump_gravity;
@@ -1400,20 +1400,20 @@ void process_hero_state_transitions(void) {
                                 for (; f <= max; f += step) {
                                     float d = hero.motion.speed_xy * (float)scale_game_frames(0);
 
-                                    qcopy(v0, hero.motion.pos.f);
+                                    qcopy(temporary_position, hero.motion.pos.f);
                                     path_seg = hero.rail_segment;
                                     path_t = hero.rail_seg_frac;
                                     /* Step a copy of the hero position along its current path. */
-                                    if (sample_path((int *)hero.rail_spline, v0, &path_seg,
+                                    if (sample_path((int *)hero.rail_spline, temporary_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, d)) {
                                         scale_vector_xyz(v1, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(v0, hero.motion.pos.f, v1);
+                                        add_vector_xyz(temporary_position, hero.motion.pos.f, v1);
                                     }
-                                    v0[0] += fast_cos(ang) * f;
-                                    v0[1] += fast_sin(ang) * f;
+                                    temporary_position[0] += fast_cos(ang) * f;
+                                    temporary_position[1] += fast_sin(ang) * f;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (nearest_rail_point(v0, &new_path, v1, &new_seg, &new_t,
+                                    if (nearest_rail_point(temporary_position, &new_path, v1, &new_seg, &new_t,
                                                          &new_loop, hero.rail_spline, 0)) {
                                         hero.transfer_from_spline = hero.rail_spline;
                                         hero.prev_rail_segment = hero.rail_segment;
@@ -1527,9 +1527,9 @@ void process_hero_state_transitions(void) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
                     stick_target(0, 1.0f);
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(temporary_position, hero.motion.pos.f);
                     hang_probe_yaw = hero.motion.rot.f[2];
-                    if (test_hero_ledge_ahead(v0, &hang_probe_yaw) == 0) {
+                    if (test_hero_ledge_ahead(temporary_position, &hang_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.ledge_probe_cooldown = scale_game_frames(0xA);
                         break;
@@ -1579,20 +1579,20 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(temporary_position, hero.motion.pos.f);
                     ang = 1.5707964f;
                     if (hero.state.current == 0x1B) {
                         ang = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
+                    temporary_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
+                    temporary_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
                     shimmy_probe_yaw = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.stick_magnitude < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        test_hero_ledge_ahead(v0, &shimmy_probe_yaw) == 0) {
+                        test_hero_ledge_ahead(temporary_position, &shimmy_probe_yaw) == 0) {
                         if (hero.anim_flags & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -2270,9 +2270,9 @@ void process_hero_state_transitions(void) {
                     break;
                 case 94:
                     if (hero.past_jump_apex != 0) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] -= 1.0f;
-                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, v0, 0x30000, 40.0f, 1.0f, 0,
+                        qcopy(temporary_position, hero.motion.pos.f);
+                        temporary_position[2] -= 1.0f;
+                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, temporary_position, 0x30000, 40.0f, 1.0f, 0,
                                          1, 0);
                     }
                     if (!(hero.state_timer > hero.takeoff_frame)) {
@@ -2323,9 +2323,9 @@ void process_hero_state_transitions(void) {
                         }
                     }
                     if (hero.rail_land_frames == 1) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] = hero.ground_z.f + 0.2f;
-                        spawn_class_593_moby((int)((unsigned char *)hero.moby), v0, scale_game_frames(0x19), 2.0f,
+                        qcopy(temporary_position, hero.motion.pos.f);
+                        temporary_position[2] = hero.ground_z.f + 0.2f;
+                        spawn_class_593_moby((int)((unsigned char *)hero.moby), temporary_position, scale_game_frames(0x19), 2.0f,
                                          frame_time * 15.0f, 40.0f);
                     }
                     if (hero.rail_land_frames != 0 && hero.move_lock_timer == 0) {
@@ -2354,9 +2354,9 @@ void process_hero_state_transitions(void) {
                     break;
                 case 92:
                     if (hero.past_jump_apex != 0) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] -= 1.0f;
-                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, v0, 0x30000, 1.0f, 1.0f, 0, 1,
+                        qcopy(temporary_position, hero.motion.pos.f);
+                        temporary_position[2] -= 1.0f;
+                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, temporary_position, 0x30000, 1.0f, 1.0f, 0, 1,
                                          0);
                     }
                     if (hero.air_frames.s != 0) {
