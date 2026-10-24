@@ -2015,7 +2015,9 @@ extern void FUN_L08_002f0c18(int);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
-void FUN_L11_0031e930(struct Moby *moby) {
+void draw_level11_distance_faded_effect_batches(struct Moby *moby) __asm__("FUN_L11_0031e930");
+
+void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     int flag = 0;
     char *reference_position_base;
