@@ -649,7 +649,7 @@ int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
 extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
-extern float D_L15_00162164 __attribute__((sda));
+extern float ripple_mesh_phase_advance_divisor_gp __asm__("D_L15_00162164") __attribute__((sda));
 extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -678,7 +678,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_gs_register(8, 0);
     vu1_add_gs_register(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(D_L15_00162164) *
+    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(ripple_mesh_phase_advance_divisor_gp) *
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
