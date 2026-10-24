@@ -1906,9 +1906,9 @@ void update_animated_point_light_moby(unsigned char *moby) {
         *(float *)(vars + 0x54) = convert_integer_to_float_c(vars[0x25]) / 100.0f;
         *(float *)(vars + 0x58) = convert_integer_to_float_c(vars[0x2A]) / 100.0f;
         {
-            float f5 = convert_integer_to_float_c(vars[0x2F]) / 100.0f;
+            float initial_color_channel_value = convert_integer_to_float_c(vars[0x2F]) / 100.0f;
             *(float *)(vars + 0x60) = *(float *)(vars + 0x34);
-            *(float *)(vars + 0x5C) = f5;
+            *(float *)(vars + 0x5C) = initial_color_channel_value;
         }
         if (*(int *)(vars + 0x64) != -1) {
             *(char **)(vars + 0x20) = moby_table + (*(int *)(vars + 0x64) << 8);
