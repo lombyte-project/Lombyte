@@ -933,7 +933,7 @@ void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-extern float D_L16_0016198C __attribute__((sda));
+extern float conveyor_belt_base_speed __asm__("D_L16_0016198C") __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *moby) {
     enum {
@@ -958,7 +958,7 @@ void conveyor_belt_update(struct Moby *moby) {
         *(int *)(conveyor_data + 0x74) = -1;
         break;
     case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
-        target = -(D_L16_0016198C * D_0015ED6C);
+        target = -(conveyor_belt_base_speed * D_0015ED6C);
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
@@ -969,7 +969,7 @@ void conveyor_belt_update(struct Moby *moby) {
         enqueue_callback_list_1_alt(draw_conveyor_belt_strips, moby);
         break;
     case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
-        target = D_L16_0016198C * D_0015ED6C;
+        target = conveyor_belt_base_speed * D_0015ED6C;
         if (*(float *)(conveyor_data + 0x6C) != target) {
             approach_value((float *)(conveyor_data + 0x6C), target, D_0015ED70_c * 12.0f);
             normalize_vector_xyz(conveyor_motion_vector, &moby->rot_row0, *(float *)(conveyor_data + 0x6C));
