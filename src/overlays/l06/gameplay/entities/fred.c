@@ -5723,9 +5723,9 @@ extern void FUN_L06_003003f0(void);
 
 extern int D_L06_0015F404;
 extern int D_L06_0015F408;
-extern float D_L06_00162048 __attribute__((sda));
+extern float camera_sequence_moby_scale_multiplier __asm__("D_L06_00162048") __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
-extern float D_L06_00162050 __attribute__((sda));
+extern float camera_sequence_rotation_x_degrees __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
 void update_moby_camera_sequence_and_draw_selection(char *moby) {
@@ -5740,7 +5740,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
     float camera_position[4], camera_setup_rotation_or_position_target[4], from[4], target[4], offset[4];
     int base;
     int state;
-    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162048;
+    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * camera_sequence_moby_scale_multiplier;
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_DRAW_SELECTION:
         data[1] = 1;
@@ -5841,7 +5841,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(from, (void *)(state + base + 0x70));
             }
-            from[0] = D_L06_00162050 * 0.017453292f;
+            from[0] = camera_sequence_rotation_x_degrees * 0.017453292f;
             qcopy(camera_setup_rotation_or_position_target, D_0013F3D0);
             qcopy(target, D_0013F3D0 + 16);
             /* Retail takes this component from the camera rotation, not the hero position. */
