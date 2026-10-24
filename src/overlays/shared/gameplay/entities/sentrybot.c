@@ -1301,10 +1301,10 @@ extern float sentrybot_knockback_gravity_gp __asm__("D_L15_001613F0") __attribut
 extern float sentrybot_death_knockback_gravity_gp __asm__("D_L15_001613F4") __attribute__((sda));
 extern float sentrybot_recoverable_knockback_vertical_speed_gp __asm__("D_L15_001613F8") __attribute__((sda));
 extern float sentrybot_recoverable_knockback_horizontal_speed_gp __asm__("D_L15_001613FC") __attribute__((sda));
-extern float D_L15_00161400 __attribute__((sda));
+extern float sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_00161400") __attribute__((sda));
 extern float sentrybot_death_knockback_vertical_speed_gp __asm__("D_L15_00161404") __attribute__((sda));
 extern float sentrybot_death_knockback_horizontal_speed_gp __asm__("D_L15_00161408") __attribute__((sda));
-extern float D_L15_0016140C __attribute__((sda));
+extern float sentrybot_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_0016140C") __attribute__((sda));
 extern char D_001413F4[];
 extern short D_0013F658[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
@@ -1400,7 +1400,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 fall_speed = fall_speed * step_sq;
                 forward = sentrybot_recoverable_knockback_horizontal_speed_gp * step;
                 lateral = sentrybot_recoverable_knockback_vertical_speed_gp * step;
-                vz = D_L15_00161400 * step;
+                vz = sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp * step;
                 *(float *)(data + 0x80) = fall_speed;
                 *(float *)(data + 0x88) = forward;
                 *(float *)(data + 0x8C) = lateral;
@@ -1435,7 +1435,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 fall_speed = fall_speed * step_sq;
                 forward = sentrybot_death_knockback_horizontal_speed_gp * step;
                 lateral = sentrybot_death_knockback_vertical_speed_gp * step;
-                vz = D_L15_0016140C * step;
+                vz = sentrybot_death_knockback_horizontal_speed_approach_rate_gp * step;
                 *(unsigned short *)(moby + 0x34) &= 0xEFFF;
                 *(float *)(data + 0x80) = fall_speed;
                 *(float *)(data + 0x88) = forward;
