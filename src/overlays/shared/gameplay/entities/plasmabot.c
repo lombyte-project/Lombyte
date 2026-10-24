@@ -830,7 +830,9 @@ extern float D_L14_001614AC_lui __asm__("D_L14_001614AC");
 extern float D_L14_001614BC_lui __asm__("D_L14_001614BC");
 extern float D_L14_001614C0_lui __asm__("D_L14_001614C0");
 
-void FUN_L14_002b2928(char *moby) {
+void draw_plasmabot_effect_quads(char *moby) __asm__("FUN_L14_002b2928");
+
+void draw_plasmabot_effect_quads(char *moby) {
     char *data = *(char **)(moby + 0x78);
     struct {
         Vec4_2b2928 o[4];
