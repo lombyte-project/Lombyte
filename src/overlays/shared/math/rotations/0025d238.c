@@ -15,12 +15,12 @@ void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
 
-void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) {
+void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *inout_vector) {
     V0025d238 source_copy, scaled_delta;
     f32 *inout_component, *source_component, *delta_component;
     V0025d238 *source_copy_ptr = &source_copy, *scaled_delta_ptr = &scaled_delta;
     s32 i;
-    source_copy.q = src->q;
+    source_copy.q = segment_start->q;
     source_component = source_copy.f;
     inout_component = inout_vector->f;
     delta_component = scaled_delta.f;
