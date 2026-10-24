@@ -559,7 +559,7 @@ typedef struct {
 
 Quad4 D_L15_00162170 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L15_0016216C __attribute__((sda));
+extern float ripple_mesh_uv_scroll_rate __asm__("D_L15_0016216C") __attribute__((sda));
 float D_L15_001DDBA0[204] = {3.485078f, 4.343359f, 0.0f, 5.279609f, 3.600078f, 0.0f, 2.980781f, 2.623281f, 0.0f, 4.615703f, 1.997344f, 0.0f, 2.298828f, 0.976816f, 0.0f, 3.933828f, 0.351152f, 0.0f, 1.616797f, -0.669707f, 0.0f, 3.237344f, -1.330234f, 0.0f, 0.850156f, -2.520547f, 0.0f, 2.454375f, -3.220508f, 0.0f, -0.025f, -4.63334f, 0.0f, 1.594062f, -5.297578f, 0.0f, -0.025f, -4.63334f, 0.0f, 0.733984f, -7.373926f, -5e-06f, -0.025f, -4.63334f, 0.0f, -1.060508f, -6.630625f, 0.0f, -1.641797f, -3.963652f, 0.0f, -2.49957f, -6.034551f, 0.0f, -3.258633f, -3.293945f, 0.0f, -3.938672f, -5.438457f, 0.0f, -3.258633f, -3.293945f, 0.0f, -5.733164f, -4.695137f, 0.0f, -3.258633f, -3.293945f, 0.0f, -4.873164f, -2.618789f, 0.0f, -2.383437f, -1.181152f, 0.0f, -4.012774f, -0.541719f, 0.0f, -1.616797f, 0.669688f, 0.0f, -3.229805f, 1.348555f, 0.0f, -0.934805f, 2.316172f, 0.0f, -2.53332f, 3.029922f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.851445f, 4.676094f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.187617f, 6.278828f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.606953f, 5.535547f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.046016f, 4.939453f, 0.0f, 1.363984f, 3.292969f, 0.0f, 3.485078f, 4.343359f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.980781f, 2.623281f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.298828f, 0.976816f, 0.0f, 1.363984f, 3.292969f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.934805f, 2.316172f, 0.0f, 0.681953f, 1.646484f, 0.0f, -1.616797f, 0.669688f, 0.0f, 0.681953f, 1.646484f, 0.0f, 0.0f, 0.0f, 0.0f, 2.298828f, 0.976816f, 0.0f, 0.0f, 0.0f, 0.0f, 1.616797f, -0.669707f, 0.0f, -0.766641f, -1.85084f, 0.0f, 0.850156f, -2.520547f, 0.0f, -0.766641f, -1.85084f, 0.0f, -0.025f, -4.63334f, 0.0f, -0.766641f, -1.85084f, 0.0f, -1.641797f, -3.963652f, 0.0f, -0.766641f, -1.85084f, 0.0f, -3.258633f, -3.293945f, 0.0f, -0.766641f, -1.85084f, 0.0f, -2.383437f, -1.181152f, 0.0f, 0.0f, 0.0f, 0.0f, -1.616797f, 0.669688f, 0.0f};
 float D_L15_001DDED0[68][2] = {
     {2.945454f, -1.355928f},
@@ -647,9 +647,9 @@ int D_L15_00162150[1] = {(int)D_L15_001DE750};
 int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
-extern float D_L15_00162160 __attribute__((sda));
+extern float ripple_mesh_radial_wavelength __asm__("D_L15_00162160") __attribute__((sda));
 extern float D_L15_00162164 __attribute__((sda));
-extern float D_L15_00162168 __attribute__((sda));
+extern float ripple_mesh_z_amplitude __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -671,7 +671,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     float scale;
     Quad4 *v_scroll_factors;
     float *output_vertex;
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (ripple_mesh_uv_scroll_rate * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_00162158));
     vu1_add_gs_register(0x42, ((long)D_L15_00162154 << 32) | 0x44);
     vu1_add_gs_register(8, 0);
@@ -689,12 +689,12 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
-        float radius_remainder = FUN_L00_00200260(rad, D_L15_00162160);
-        float w = wrap_angle(radius_remainder * 6.2831855f / D_L15_00162160);
+        float radius_remainder = FUN_L00_00200260(rad, ripple_mesh_radial_wavelength);
+        float w = wrap_angle(radius_remainder * 6.2831855f / ripple_mesh_radial_wavelength);
         float z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
         *(float *)((char *)D_L15_001DE200 + 4 + output_vertex_byte_offset) = template_vertex[1] + moby->pos.y;
-        output_vertex[2] = template_vertex[2] + moby->pos.z + D_L15_00162168 * z;
+        output_vertex[2] = template_vertex[2] + moby->pos.z + ripple_mesh_z_amplitude * z;
         D_L15_001DE750[i] = color;
         i++;
         output_vertex_byte_offset += 12;
