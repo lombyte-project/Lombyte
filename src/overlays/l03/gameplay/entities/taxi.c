@@ -1519,7 +1519,7 @@ extern float itof_2db020(int) __asm__("FUN_001fa6c0");
 extern void kill_2db020(char *) __asm__("FUN_0020c828");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-extern float D_L03_00161BC0;
+extern float path_mover_distance_step __asm__("D_L03_00161BC0");
 /* Moves the moby along its path: advances the distance, places it on the
  * current segment, and dies at the end of the path. */
 void update_path_mover(struct Moby *path_moby) __asm__("FUN_L03_002db020");
@@ -1535,7 +1535,7 @@ void update_path_mover(struct Moby *path_moby) {
 
     *(OvlQuad *)old = *(OvlQuad *)&path_moby->pos;
     path_moby_vars = (char *)path_moby->pvars;
-    *(float *)(path_moby_vars + 0x64) += D_L03_00161BC0;
+    *(float *)(path_moby_vars + 0x64) += path_mover_distance_step;
     movement_scratch[0] = cos_2db020(path_moby->rot.z) * *(float *)(path_moby_vars + 0x64);
     movement_scratch[1] = sin_2db020(path_moby->rot.z) * *(float *)(path_moby_vars + 0x64);
     *(int *)&movement_scratch[2] = 0;
@@ -1628,7 +1628,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
             return;
         }
         path = D_L03_001B05B0[vars->path];
-        D_L03_00161BC0 = frame_time * 3.0f;
+        path_mover_distance_step = frame_time * 3.0f;
         for (i = 0; i < path->count - 2; i++)
             path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[i + 1]);
         vars->timer = 0;
@@ -1639,7 +1639,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
         moby->unk30 = 0x60;
     }
     if (fast_dec_timer(&vars->timer)) {
-        vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0);
+        vars->timer = ftoi_2db020(2.9f / path_mover_distance_step);
         spawn_path_mover(D_L03_001B05B0[vars->path], 0.0f);
     }
     if (!voice_is_playing(moby, vars->voice))
