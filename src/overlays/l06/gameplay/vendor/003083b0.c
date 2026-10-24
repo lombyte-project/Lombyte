@@ -118,7 +118,7 @@ extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern float D_L06_001622F0 __attribute__((sda));
 extern float D_L06_001622F4 __attribute__((sda));
 extern float D_L06_001622F8 __attribute__((sda));
-extern float D_L06_001622FC __attribute__((sda));
+extern float spark_burst_vector_scale_variation __asm__("D_L06_001622FC") __attribute__((sda));
 extern int D_L06_00162300 __attribute__((sda));
 extern int D_L06_00162304 __attribute__((sda));
 extern int D_L06_00162308 __attribute__((sda));
@@ -133,8 +133,8 @@ int D_L06_00162328 = 0x20c08080;
 int D_L06_0016232C = 0x20c0c080;
 extern float D_L06_00162330 __attribute__((sda));
 extern float D_L06_00162334 __attribute__((sda));
-extern float D_L06_00162338 __attribute__((sda));
-extern float D_L06_0016233C __attribute__((sda));
+extern float spark_spray_z_subtraction_rate __asm__("D_L06_00162338") __attribute__((sda));
+extern float spark_spray_vector_scale_variation __asm__("D_L06_0016233C") __attribute__((sda));
 extern float D_L06_00162340 __attribute__((sda));
 extern int D_L06_00162344 __attribute__((sda));
 extern int D_L06_00162348 __attribute__((sda));
@@ -148,8 +148,8 @@ int D_L06_00162364 = 0x804080ff;
 int D_L06_00162368 = 0x8040ffff;
 int D_L06_0016236C = 0x80204040;
 int D_L06_00162370 = 0x80204080;
-extern int D_L06_00162374 __attribute__((sda));
-extern int D_L06_00162378 __attribute__((sda));
+extern int spark_spray_timer_range_start __asm__("D_L06_00162374") __attribute__((sda));
+extern int spark_spray_timer_range_end __asm__("D_L06_00162378") __attribute__((sda));
 int D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -208,8 +208,8 @@ void update_spark_emitter(struct Moby *emitter) {
         for (k = 0; k < spark_count; k++) {
                 int c19, c18, c17, c16, c2;
                 float z;
-                normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro);
-                z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro;
+                normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_001622F0 * (random_float_between_alt(-spark_burst_vector_scale_variation, spark_burst_vector_scale_variation) + 1.0f) * frame_time_macro);
+                z = D_L06_001622F4 * (random_float_between_alt(-spark_burst_vector_scale_variation, spark_burst_vector_scale_variation) + 1.0f) * frame_time_macro;
                 clear_u64_value(&z_adjusted_spark_vector);
                 z_adjusted_spark_vector.z = z;
                 normalize_vector_xyz(&spark_vector_offset, &*(SparkVector *)&emitter->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * frame_time_macro);
@@ -229,15 +229,15 @@ void update_spark_emitter(struct Moby *emitter) {
         if (timer_step(&emitter_data->f20)) {
             int spray_spark_count;
             int k;
-            emitter_data->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
+            emitter_data->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)spark_spray_timer_range_start, (float)spark_spray_timer_range_end)));
             spray_spark_count = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
             for (k = 0; k < spray_spark_count; k++) {
                     int c19, c18, c17, c16, c2;
                     random_vector(&spark_vector_offset, 0.0f, D_L06_00162340 * frame_time_macro);
-                    normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
+                    normalize_vector_xyz(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, D_L06_00162330 * (random_float_between_alt(-spark_spray_vector_scale_variation, spark_spray_vector_scale_variation) + 1.0f) * frame_time_macro);
                     add_vector_xyz(&rotation_based_spark_vector, &rotation_based_spark_vector, &spark_vector_offset);
-                    normalize_vector_xyz(&z_adjusted_spark_vector, &rotation_based_spark_vector, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
-                    z_adjusted_spark_vector.z = z_adjusted_spark_vector.z - D_L06_00162338 * frame_time_macro;
+                    normalize_vector_xyz(&z_adjusted_spark_vector, &rotation_based_spark_vector, D_L06_00162334 * (random_float_between_alt(-spark_spray_vector_scale_variation, spark_spray_vector_scale_variation) + 1.0f) * frame_time_macro);
+                    z_adjusted_spark_vector.z = z_adjusted_spark_vector.z - spark_spray_z_subtraction_rate * frame_time_macro;
                     rotation_based_spark_vector.w = random_float_between_alt(D_L06_00162354, D_L06_00162358);
                     z_adjusted_spark_vector.w = random_float_between_alt(D_L06_0016235C, D_L06_00162360);
                     c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between_alt(0.0f, 1.0f));
