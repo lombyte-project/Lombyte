@@ -2877,7 +2877,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int D_001413D4 __attribute__((section(".data")));
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern float D_L08_00161A44 __attribute__((sda));
+extern float path_following_moby_speed_gp __asm__("D_L08_00161A44") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
 extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
@@ -2909,7 +2909,7 @@ void update_path_following_moby(char *moby) {
         {
             float first_path_segment_length = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
             distance_xyz((char *)path + 0x10, (char *)path + (*path << 4));
-            *(float *)(moby_vars + 8) = D_L08_00161A44 * D_0015ED6C / first_path_segment_length;
+            *(float *)(moby_vars + 8) = path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
             *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) * (float)*path;
             *(float *)(moby_vars + 0xC) = randf_sym(0.0f, 5.0f);
         }
