@@ -2988,10 +2988,10 @@ extern int moby_motion_spark_frame_count_random_span __asm__("D_L08_00161A54") _
 extern int moby_motion_spark_second_frame_count_base __asm__("D_L08_00161A58") __attribute__((sda));
 extern int moby_motion_spark_third_frame_count_base __asm__("D_L08_00161A5C") __attribute__((sda));
 extern float moby_motion_spark_frame_count_variation_extent __asm__("D_L08_00161A60") __attribute__((sda));
-extern float D_L08_00161A64 __attribute__((sda));
-extern float D_L08_00161A68 __attribute__((sda));
-extern float D_L08_00161A6C __attribute__((sda));
-extern float D_L08_00161A70 __attribute__((sda));
+extern float moby_motion_spark_first_vector_w_range_start __asm__("D_L08_00161A64") __attribute__((sda));
+extern float moby_motion_spark_first_vector_w_range_end __asm__("D_L08_00161A68") __attribute__((sda));
+extern float moby_motion_spark_second_vector_w_range_start __asm__("D_L08_00161A6C") __attribute__((sda));
+extern float moby_motion_spark_second_vector_w_range_end __asm__("D_L08_00161A70") __attribute__((sda));
 extern int moby_motion_spark_initial_color_start __asm__("D_L08_00161A74") __attribute__((sda));
 extern int moby_motion_spark_initial_color_end __asm__("D_L08_00161A78") __attribute__((sda));
 extern int moby_motion_spark_second_color_start __asm__("D_L08_00161A7C") __attribute__((sda));
@@ -3022,8 +3022,8 @@ void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
     scale_vector_xyz(jittered_displacement_vector, frame_displacement, moby_motion_spark_second_displacement_scale);
     random_vector(random_jitter, 0.0f, moby_motion_spark_jitter_magnitude_range_end * frame_time);
     add_vector_xyz(jittered_displacement_vector, jittered_displacement_vector, random_jitter);
-    scaled_displacement_vector[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
-    jittered_displacement_vector[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
+    scaled_displacement_vector[3] = random_float_between(moby_motion_spark_first_vector_w_range_start, moby_motion_spark_first_vector_w_range_end);
+    jittered_displacement_vector[3] = random_float_between(moby_motion_spark_second_vector_w_range_start, moby_motion_spark_second_vector_w_range_end);
     initial_spark_color = fast_tween_color(moby_motion_spark_initial_color_start, moby_motion_spark_initial_color_end,
                      random_float_between(0.0f, 1.0f));
     second_spark_color = fast_tween_color(moby_motion_spark_second_color_start, moby_motion_spark_second_color_end,
