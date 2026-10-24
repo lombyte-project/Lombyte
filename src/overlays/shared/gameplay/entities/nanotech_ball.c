@@ -284,8 +284,8 @@ s32 FUN_001fa6d0_2d8510(f32) __asm__("FUN_001fa6d0");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
-extern s32 D_L00_00161A7C __attribute__((sda));
-extern s32 D_L00_00161A80 __attribute__((sda));
+extern s32 nanotech_ball_collection_color_range_start __asm__("D_L00_00161A7C") __attribute__((sda));
+extern s32 nanotech_ball_collection_color_range_end __asm__("D_L00_00161A80") __attribute__((sda));
 extern s32 D_L00_00161A84 __attribute__((sda));
 extern s32 D_L00_00161A88 __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
@@ -318,7 +318,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             effect_data->f60[i] = unwrapped_effect_value + 255.0f;
         color_progress_or_size_factor = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
         color_progress_or_size_factor = color_progress_or_size_factor / (f32)FUN_001f96f8_2d8510(0xFF);
-        c = FUN_001fa6e0_2d8510(D_L00_00161A7C, D_L00_00161A80,
+        c = FUN_001fa6e0_2d8510(nanotech_ball_collection_color_range_start, nanotech_ball_collection_color_range_end,
                                 absolute_float(0.5f - color_progress_or_size_factor));
         hi = c >> 24;
         color_progress_or_size_factor = 1.0f - effect_data->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
