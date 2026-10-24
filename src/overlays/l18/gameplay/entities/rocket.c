@@ -2171,10 +2171,10 @@ extern void euler_basis_dc4b8(void *, void *) __asm__("FUN_001fa030");
 extern float D_L18_001D4330[];
 extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
 
-extern int D_L18_00161CA4 __attribute__((sda));
-extern int D_L18_00161CA8 __attribute__((sda));
-extern int D_L18_00161CAC __attribute__((sda));
-extern int D_L18_00161CB0 __attribute__((sda));
+extern int class_274_ring_blend_minuend_selector_gp __asm__("D_L18_00161CA4") __attribute__((sda));
+extern int class_274_ring_blend_subtrahend_selector_gp __asm__("D_L18_00161CA8") __attribute__((sda));
+extern int class_274_ring_blend_alpha_factor_selector_gp __asm__("D_L18_00161CAC") __attribute__((sda));
+extern int class_274_ring_blend_addend_selector_gp __asm__("D_L18_00161CB0") __attribute__((sda));
 extern int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
 extern int class_274_ring_color_end_gp __asm__("D_L18_00161CBC") __attribute__((sda));
 extern float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") __attribute__((sda));
@@ -2202,8 +2202,8 @@ void draw_class_274_ring_effect(char *moby) {
         gi = class_274_ring_layer_radius_offset_gp * (float)i;
         quad[i].unk70 = 0;
         quad[i].unk80 = 0xFF9000000260L;
-        quad[i].unk88 = (long)D_L18_00161CA4 | ((long)D_L18_00161CA8 << 2) |
-                        ((long)D_L18_00161CAC << 4) | ((long)D_L18_00161CB0 << 6) | 0x8000000000L;
+        quad[i].unk88 = (long)class_274_ring_blend_minuend_selector_gp | ((long)class_274_ring_blend_subtrahend_selector_gp << 2) |
+                        ((long)class_274_ring_blend_alpha_factor_selector_gp << 4) | ((long)class_274_ring_blend_addend_selector_gp << 6) | 0x8000000000L;
         layer_phase = moby_vars[1] + (float)i * 0.25f;
         r = moby_vars[0] + gi;
         layer_phase = layer_phase - (float)truncate_dc4b8(layer_phase);
