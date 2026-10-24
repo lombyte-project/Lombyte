@@ -429,10 +429,10 @@ extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];
 extern s32 projected_quad_texture_selector __asm__("D_L06_00162414") __attribute__((sda));
 extern s32 projected_quad_base_radius __asm__("D_L06_00162418") __attribute__((sda));
-extern s32 D_L06_0016241C __attribute__((sda));
-extern s32 D_L06_00162420 __attribute__((sda));
-extern s32 D_L06_00162424 __attribute__((sda));
-extern s32 D_L06_00162428 __attribute__((sda));
+extern s32 projected_quad_top_right_uv __asm__("D_L06_0016241C") __attribute__((sda));
+extern s32 projected_quad_top_left_uv __asm__("D_L06_00162420") __attribute__((sda));
+extern s32 projected_quad_bottom_right_uv __asm__("D_L06_00162424") __attribute__((sda));
+extern s32 projected_quad_bottom_left_uv __asm__("D_L06_00162428") __attribute__((sda));
 
 /* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void draw_projected_fading_quad(char *moby) {
@@ -465,10 +465,10 @@ void draw_projected_fading_quad(char *moby) {
     y = truncate_float_to_s32(screen[1] - screen_offset);
     x = raw_x - 0x1000;
     y -= 0x1000;
-    uvs[0] = D_L06_0016241C;
-    uvs[1] = D_L06_00162420;
-    uvs[2] = D_L06_00162424;
-    uvs[3] = D_L06_00162428;
+    uvs[0] = projected_quad_top_right_uv;
+    uvs[1] = projected_quad_top_left_uv;
+    uvs[2] = projected_quad_bottom_right_uv;
+    uvs[3] = projected_quad_bottom_left_uv;
     color = fast_tween_color(fade, *(s32 *)&effect_data[2], *(s32 *)&effect_data[3]);
     colors[3] = color;
     colors[2] = color;
