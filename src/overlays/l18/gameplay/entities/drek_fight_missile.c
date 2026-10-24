@@ -942,8 +942,8 @@ void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
 extern int D_L18_001622FC __attribute__((sda));
-extern int D_L18_001622F8 __attribute__((sda));
-extern float D_L18_0016230C __attribute__((sda));
+extern int next_lift_instance_index __asm__("D_L18_001622F8") __attribute__((sda));
+extern float lift_texture_u_scroll_rate __asm__("D_L18_0016230C") __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
@@ -967,7 +967,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
         if (D_L18_001622FC != 0) {
             D_00141400 = *(unsigned char *)&D_L18_001622FC;
         }
-        *(int *)(lift_vars + 0x1C) = D_L18_001622F8++;
+        *(int *)(lift_vars + 0x1C) = next_lift_instance_index++;
         lift_moby->update_dist = 0xFF;
         lift_moby->state = 1;
         ((M_2310 *)lift_moby)->h34 |= 1;
@@ -979,7 +979,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
             *(int *)(lift_vars + 8) = (*(int *)(lift_vars + 8) + 1) & 1;
         }
         initial_height_selector = *(int *)(lift_vars + 8);
-        D_L18_001622F8 = 0;
+        next_lift_instance_index = 0;
         if (initial_height_selector != 0 && D_00141400 == 0) {
             lift_moby->state = 2;
             lift_moby->pos.z = *(float *)(lift_vars + 0);
@@ -1014,7 +1014,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     }
     switch (*(int *)(lift_vars + 0x14)) {
     case LIFT_DRAW_25_QUAD_MESH:
-        D_L18_00162308_gp = D_L18_00162308_gp + D_L18_0016230C * D_0015ED6C_2310;
+        D_L18_00162308_gp = D_L18_00162308_gp + lift_texture_u_scroll_rate * D_0015ED6C_2310;
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }
