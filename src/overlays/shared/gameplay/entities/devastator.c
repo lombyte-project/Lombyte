@@ -2815,9 +2815,9 @@ extern f32 itof_2b7568(s32) __asm__("FUN_001fa6c0");
 extern s32 ftoi_2b7568(f32) __asm__("FUN_001fa6d0");
 extern void draw_2b7568(void *, void *, int) __asm__("FUN_001f7d30");
 extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
-extern f32 D_L00_001614C8 __attribute__((sda));
-extern f32 D_L00_001614C4 __attribute__((sda));
-extern u32 D_L00_001614C0 __attribute__((sda));
+extern f32 taunter_effect_quad_final_scale __asm__("D_L00_001614C8") __attribute__((sda));
+extern f32 taunter_effect_quad_initial_scale __asm__("D_L00_001614C4") __attribute__((sda));
+extern u32 taunter_effect_quad_rgb __asm__("D_L00_001614C0") __attribute__((sda));
 void draw_taunter_effect_quads(u8 *source_moby) __asm__("FUN_L00_002b7568");
 
 void draw_taunter_effect_quads(u8 *source_moby) {
@@ -2859,8 +2859,8 @@ void draw_taunter_effect_quads(u8 *source_moby) {
         fade_factor = itof_2b7568(D_L00_001DB440_2b7568[i].alpha) * D_L00_001614DC;
         if (1.0f < fade_factor)
             fade_factor = 1.0f;
-        sz = D_L00_001614C8 + (D_L00_001614C4 - D_L00_001614C8) * fade_factor;
-        col = (D_L00_001614C0 & 0xFFFFFF) |
+        sz = taunter_effect_quad_final_scale + (taunter_effect_quad_initial_scale - taunter_effect_quad_final_scale) * fade_factor;
+        col = (taunter_effect_quad_rgb & 0xFFFFFF) |
               (ftoi_2b7568((itof_2b7568(D_L00_001614BC_2b7568) - 0.0f) * fade_factor + 0.0f) << 24);
         quad.color[3] = col;
         quad.color[2] = col;
