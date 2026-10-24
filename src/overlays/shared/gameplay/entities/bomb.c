@@ -1675,7 +1675,10 @@ extern float dist_2cc360(void *, void *) __asm__("FUN_001f9b80");
 extern float atan_2cc360(float, float) __asm__("FUN_001f9e90");
 extern float diffrot_2cc360(float, float) __asm__("FUN_001fa688");
 extern int coll_2cc360(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-M_2cc360 *FUN_L00_002cc360(float *pos, float *aim_rotation, M_2cc360 **excl, float maxYaw, float maxPitch,
+M_2cc360 *select_ryno_target(float *pos, float *aim_rotation, M_2cc360 **excl, float maxYaw, float maxPitch,
+                           float maxDist) __asm__("FUN_L00_002cc360");
+
+M_2cc360 *select_ryno_target(float *pos, float *aim_rotation, M_2cc360 **excl, float maxYaw, float maxPitch,
                            float maxDist) {
     M_2cc360 *best = 0;
     float bestScore = 1.0e9f;
