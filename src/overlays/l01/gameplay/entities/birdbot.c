@@ -1496,8 +1496,8 @@ typedef struct {
 } Mob577Target;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern f32 D_L01_00161A60 __attribute__((sda));
-extern f32 D_L01_00161A64 __attribute__((sda));
+extern f32 peckbot_nonfatal_knockback_vertical_speed_gp __asm__("D_L01_00161A60") __attribute__((sda));
+extern f32 peckbot_nonfatal_knockback_horizontal_speed_gp __asm__("D_L01_00161A64") __attribute__((sda));
 extern f32 peckbot_home_knockback_speed_gp __asm__("D_L01_00161A68") __attribute__((sda));
 extern f32 peckbot_home_knockback_acceleration_gp __asm__("D_L01_00161A6C") __attribute__((sda));
 s32 D_L01_00161A70 = 0x9020202;
@@ -1655,8 +1655,8 @@ void peckbot_update(Mob577 *self) {
             hp = peckbot_vars->health - hit->dmg;
             peckbot_vars->x130 = 0.008f;
             peckbot_vars->x134 = 0.0005f;
-            peckbot_vars->x138 = D_L01_00161A64 * frame_time;
-            peckbot_vars->x13C = D_L01_00161A60 * frame_time;
+            peckbot_vars->x138 = peckbot_nonfatal_knockback_horizontal_speed_gp * frame_time;
+            peckbot_vars->x13C = peckbot_nonfatal_knockback_vertical_speed_gp * frame_time;
             peckbot_vars->x144 = 9;
             peckbot_vars->health = hp;
             peckbot_vars->x15D = 0;
