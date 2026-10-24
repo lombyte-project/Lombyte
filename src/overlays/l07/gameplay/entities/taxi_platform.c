@@ -1451,7 +1451,7 @@ extern float D_L07_00161214;
 extern int D_L07_00161208;
 extern void *D_L07_001612D4;
 extern int D_L07_001612D8; /* no foreign declaration */
-extern int D_L07_00161B30 __attribute__((sda)); /* no foreign declaration */
+extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda)); /* no foreign declaration */
 extern unsigned short D_L07_00161B34 __attribute__((sda)); /* no foreign declaration */
 extern int D_L07_00161B38 __attribute__((sda)); /* no foreign declaration */
 extern int D_L07_00204700[][4];
@@ -1670,7 +1670,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         FUN_L01_002b7fe0_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
         enqueue_callback_list_1_c(render_level07_water_grids, water_moby);
     }
-    if (water_data->idx == D_L07_00161B30) {
+    if (water_data->idx == water_grid_override_index) {
         D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00161B34;
         D_L07_00204680[water_data->idx] = D_L07_00161B34;
     }
