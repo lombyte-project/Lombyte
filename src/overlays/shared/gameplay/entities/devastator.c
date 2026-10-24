@@ -1953,7 +1953,9 @@ void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 extern int D_L00_0017E508 __attribute__((section(".data")));
 extern int D_L00_0015F608;
 extern float D_L00_0016149C __attribute__((sda));
-unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
+unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
+
+unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
     unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
     if (spawned_moby) {
         unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
