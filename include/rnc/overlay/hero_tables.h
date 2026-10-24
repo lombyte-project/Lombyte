@@ -32,7 +32,9 @@ typedef struct HeroTableEntry70 {
  * hero_slot_item_id(0); the hero plays anim when its moby is not already in it.
  */
 typedef struct HeroAnimRow {
-    u8 pad_0[0x18];
+    u8 pad_0[0xC];
+    s32 joint;           /* hero.joint_matrices index the item moby follows */
+    u8 pad_10[0x8];
     s32 unk18;           /* tested != 0 */
     u8 pad_1C[0x8];
     s32 anim;            /* animation id, compared with moby+0x53 */
