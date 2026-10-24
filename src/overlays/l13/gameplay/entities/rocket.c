@@ -2532,7 +2532,7 @@ extern float moby_spark_second_batch_horizontal_acceleration_gp __asm__("D_L13_0
 extern float moby_spark_second_batch_vertical_acceleration_base_gp __asm__("D_L13_00161F4C") __attribute__((sda));
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
-extern float D_L13_00161F58 __attribute__((sda));
+extern float moby_spark_second_batch_discarded_random_bound_gp __asm__("D_L13_00161F58") __attribute__((sda));
 extern float D_L13_00161F5C __attribute__((sda));
 extern float D_L13_00161F60 __attribute__((sda));
 extern float D_L13_00161F64 __attribute__((sda));
@@ -2597,7 +2597,7 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             second_pos.f[0] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[1] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[2] += random_float_between_alt(-0.1f, 0.1f);
-            random_float_between_alt(-D_L13_00161F58, D_L13_00161F58);
+            random_float_between_alt(-moby_spark_second_batch_discarded_random_bound_gp, moby_spark_second_batch_discarded_random_bound_gp);
             qzero(&velocity);
             i--;
             velocity.f[2] = random_float_between_alt(moby_spark_second_batch_vertical_velocity_base_gp * frame_time * 0.7f,
