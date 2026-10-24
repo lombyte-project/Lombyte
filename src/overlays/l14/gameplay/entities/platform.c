@@ -539,7 +539,7 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern float D_L14_00161A60 __attribute__((sda));
+extern float joint_light_position_w __asm__("D_L14_00161A60") __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
@@ -564,12 +564,12 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
     if ((unsigned int)(moby->state - 3) < 3) {
         joint_position[2] += 1.0f;
         if (*(int *)(moby_data + 0xF0) == -1) {
-            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, joint_light_position_w, 0.0f, 0.5f, 0.5f, 1.0f);
         }
         if (*(int *)(moby_data + 0xF0) >= 0) {
             char *e = D_L14_001809C0 + *(int *)(moby_data + 0xF0) * 32;
             qcopy(e + 0x10, joint_position);
-            *(float *)(e + 0x1C) = D_L14_00161A60;
+            *(float *)(e + 0x1C) = joint_light_position_w;
         }
         joint_position[2] -= 1.0f;
     }
