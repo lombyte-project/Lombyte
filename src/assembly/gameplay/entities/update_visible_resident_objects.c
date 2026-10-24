@@ -1,6 +1,10 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/entities/update_visible_resident_objects/FUN_00212e28.s", FUN_00212e28);
+#else
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
-#include "moby_call.h"
 
 /* Moby.flags bits this loop tests. */
 #define MOBY_SKIP_ANIMATION 0x40
@@ -27,9 +31,11 @@ void update_visible_resident_objects(void) {
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_ANIMATION)) {
                 advance_resident_object_animation(moby);
             }
+            /* Near miss, 6 rows: retail keeps the update in v1 and leaves the jalr delay
+               slot empty; the moby argument is set just before the jalr. */
             callback = moby->update;
             if (callback != 0) {
-                moby_call_update(callback, moby);
+                callback(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_BOUNDS)) {
                 refresh_resident_object_spatial_bounds(moby);
@@ -41,3 +47,5 @@ void update_visible_resident_objects(void) {
 
 extern __typeof__(update_visible_resident_objects) func_00212E28
     __attribute__((alias("FUN_00212e28")));
+
+#endif /* NON_MATCHING */

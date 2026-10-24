@@ -1510,7 +1510,7 @@ segments:
           - [0x113cdc, textbin, text_gap_00212d5c_before_fun_00212d68]
           - [0x113ce8, c, gameplay/entities/assign_moby_class_data]
           - [0x113d9c, textbin, text_gap_00212e1c_before_fun_00212e28]
-          - [0x113da8, c, gameplay/entities/update_visible_resident_objects]
+          - [0x113da8, c, assembly/gameplay/entities/update_visible_resident_objects]
           - [0x113e3c, textbin, text_gap_00212ebc_after_fun_00212e28]
           - [0x113e58, c, gameplay/animation/set_moby_animation]
           - [0x113f10, c, gameplay/animation/blend_moby_animation]
