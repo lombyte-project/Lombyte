@@ -3080,7 +3080,7 @@ void gunship_follow_path(struct Moby *moby) {
     QVec zero;
     QVec previous_rotation;
     QVec previous_position;
-    QVec off[4];
+    QVec attachment_and_hit_vectors[4];
     QVec dA0;
     struct Moby *it;
     Vars *v;
@@ -3222,10 +3222,10 @@ void gunship_follow_path(struct Moby *moby) {
                 if (c == 0 || (cv = (ChildVars *)c->pvars) == 0)
                     continue;
                 cv->unk70 |= 0x1000;
-                FUN_L00_0024f7c8(moby, i, &off[i]);
-                FUN_001f9a28(&dA0, &off[i], &moby->pos);
+                FUN_L00_0024f7c8(moby, i, &attachment_and_hit_vectors[i]);
+                FUN_001f9a28(&dA0, &attachment_and_hit_vectors[i], &moby->pos);
                 FUN_001f9bf8(&dA0, &dA0, 1.0f);
-                *(u128 *)&c->pos = off[i].q;
+                *(u128 *)&c->pos = attachment_and_hit_vectors[i].q;
                 cv->unk80.q = dA0.q;
             }
         }
@@ -3328,9 +3328,9 @@ void gunship_follow_path(struct Moby *moby) {
         for (i = 0; i < 5; i++) {
             if (!((v->unk120 >> i) & 1))
                 continue;
-            FUN_L00_0024f7c8(moby, attachment_point_index, &off[0]);
+            FUN_L00_0024f7c8(moby, attachment_point_index, &attachment_and_hit_vectors[0]);
             attachment_point_index++;
-            FUN_001f9a28(&off[1], &off[0], &moby->pos);
+            FUN_001f9a28(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[0], &moby->pos);
             if (!(v->unk120 & 1)) {
                 struct Moby *c;
                 ChildVars *cv;
@@ -3339,15 +3339,15 @@ void gunship_follow_path(struct Moby *moby) {
                 c = (struct Moby *)D_L01_0015FFD8 + v->unk140[i - 1];
                 if (c == 0 || (cv = (ChildVars *)c->pvars) == 0)
                     continue;
-                FUN_001f9bf8(&off[1], &off[1], 1.0f);
+                FUN_001f9bf8(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], 1.0f);
                 cv->unk70 |= 0x1000;
-                *(u128 *)&c->pos = off[0].q;
-                cv->unk80.q = off[1].q;
+                *(u128 *)&c->pos = attachment_and_hit_vectors[0].q;
+                cv->unk80.q = attachment_and_hit_vectors[1].q;
             } else if (v->unk121 == 0) {
-                FUN_001f9bf8(&off[1], &off[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
-                spawn_type_10_particle(&off[0], &off[1]);
-                FUN_001f9bf8(&off[1], &off[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
-                spawn_type_10_particle(&off[0], &off[1]);
+                FUN_001f9bf8(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
+                spawn_type_10_particle(&attachment_and_hit_vectors[0], &attachment_and_hit_vectors[1]);
+                FUN_001f9bf8(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
+                spawn_type_10_particle(&attachment_and_hit_vectors[0], &attachment_and_hit_vectors[1]);
             }
         }
         if (v->unk121 == 0)
@@ -3362,19 +3362,19 @@ void gunship_follow_path(struct Moby *moby) {
             QVec *current_position;
             s32 k;
             QVec *dir;
-            FUN_001f99f8(&off[0]);
+            FUN_001f99f8(&attachment_and_hit_vectors[0]);
             if (moby->oclass == 0x33) {
-                off[0].v.x = FUN_001f9dc8(moby->rot.z) * -2.7470f;
-                off[0].v.y = FUN_001f9de0(moby->rot.z) * -2.7470f;
-                *(s32 *)&off[0].v.z = 0;
+                attachment_and_hit_vectors[0].v.x = FUN_001f9dc8(moby->rot.z) * -2.7470f;
+                attachment_and_hit_vectors[0].v.y = FUN_001f9de0(moby->rot.z) * -2.7470f;
+                *(s32 *)&attachment_and_hit_vectors[0].v.z = 0;
             }
             current_position = (QVec *)&moby->pos;
-            FUN_001f9a28(&off[2], current_position, &previous_position);
-            off[1].q = off[2].q;
-            FUN_001f9a68(&off[1], &off[1], 0.5f);
-            FUN_001f9a10(&off[0], &off[0], current_position);
+            FUN_001f9a28(&attachment_and_hit_vectors[2], current_position, &previous_position);
+            attachment_and_hit_vectors[1].q = attachment_and_hit_vectors[2].q;
+            FUN_001f9a68(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], 0.5f);
+            FUN_001f9a10(&attachment_and_hit_vectors[0], &attachment_and_hit_vectors[0], current_position);
             v->unk13A = FUN_001f96f8(600);
-            dir = &off[1];
+            dir = &attachment_and_hit_vectors[1];
             /* Fakematch: the never-taken call keeps gcse from propagating &off[1] into the call, so dir
                gets a1 before the class tests and &off[1] gets s0, as in retail. */
             if (never)
@@ -3382,7 +3382,7 @@ void gunship_follow_path(struct Moby *moby) {
             k = -1;
             if (moby->oclass == 0x532 || moby->oclass == 0x53B || moby->oclass == 0x53C)
                 k = 1;
-            FUN_L00_0025e450(moby, dir, &off[0], 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, k, 15.0f, 1,
+            FUN_L00_0025e450(moby, dir, &attachment_and_hit_vectors[0], 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, k, 15.0f, 1,
                              1, -1, 0);
         }
     }
