@@ -199,7 +199,9 @@ extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern short D_L06_00161ED8 __attribute__((sda));
-float FUN_L06_002f96f8(char *self) {
+float compute_alien_snapper_target_gap_angle(char *self) __asm__("FUN_L06_002f96f8");
+
+float compute_alien_snapper_target_gap_angle(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
     float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, v[3];
     short *moby_index_cursor;
