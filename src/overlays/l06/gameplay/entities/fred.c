@@ -6824,7 +6824,7 @@ extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
 extern float D_L06_001620F4 __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
-extern int D_L06_00162100 __attribute__((sda));
+extern int shuttle_forced_return_requested __asm__("D_L06_00162100") __attribute__((sda));
 extern int D_L06_00162104 __attribute__((sda));
 extern int D_L06_00162108 __attribute__((sda));
 extern int D_L06_0016210C __attribute__((sda));
@@ -6890,15 +6890,15 @@ void shuttle_update(struct Moby *moby) {
             }
         }
         if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->f2FC == moby && ((Hero_302578 *)((char *)&hero))->f30E == 0)
-            || D_L06_00162100 != 0) {
+            || shuttle_forced_return_requested != 0) {
             update_shuttle_route_selection_and_prompt((char *)moby);
-            now = D_L06_00162100;
+            now = shuttle_forced_return_requested;
             if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594 == 10 && shuttle_vars->f9C >= 0)) {
                 shuttle_vars->go = 1;
                 D_L06_0015FDF8 = 0;
                 if (now != 0) {
                     shuttle_vars->f9C = 2;
-                    D_L06_00162100 = 0;
+                    shuttle_forced_return_requested = 0;
                 }
                 switch (shuttle_vars->f9C) {
                 case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
