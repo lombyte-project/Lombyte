@@ -1284,7 +1284,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
 extern float D_L04_00161884 __attribute__((sda));
-float FUN_L04_002c1fb8(struct Moby *moby, void *out, float speed) {
+float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) __asm__("FUN_L04_002c1fb8");
+
+float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
     float away[4];
     float target[4];
     float pad[4][4];
