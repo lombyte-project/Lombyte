@@ -793,8 +793,8 @@ extern float homing_projectile_trail_spread_speed_limit_gp __asm__("D_L08_00161D
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
 extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
-extern float D_L08_00161D1C __attribute__((sda));
-extern float D_L08_00161D20 __attribute__((sda));
+extern float homing_projectile_trail_primary_motion_w_gp __asm__("D_L08_00161D1C") __attribute__((sda));
+extern float homing_projectile_trail_secondary_motion_w_gp __asm__("D_L08_00161D20") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
 
 extern float D_L08_00174660[4];
@@ -833,8 +833,8 @@ void update_homing_projectile(char *moby) {
         normalize_vector_xyz_002e8210(offset, moby + 0xd0, magnitude * fast_sin_002e8210(angle));
         add_vector_xyz(velocity, velocity, offset);
         qcopy(offset, offset);
-        velocity[3] = D_L08_00161D1C;
-        offset[3] = D_L08_00161D20;
+        velocity[3] = homing_projectile_trail_primary_motion_w_gp;
+        offset[3] = homing_projectile_trail_secondary_motion_w_gp;
         i++;
         particle_frame_count = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
             (float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
