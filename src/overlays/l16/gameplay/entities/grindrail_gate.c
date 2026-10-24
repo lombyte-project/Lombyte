@@ -1286,7 +1286,7 @@ typedef struct {
 
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float D_L16_00161E58 __attribute__((sda));
+extern float chomper_knockback_horizontal_speed_approach_rate __asm__("D_L16_00161E58") __attribute__((sda));
 extern float D_0015EE70;
 extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
 extern float chomper_knockback_gravity __asm__("D_L16_00161E54") __attribute__((sda));
@@ -1316,7 +1316,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
         pursuit_data->flags = reaction_flags_or_path_entry_address;
         pursuit_data->strength = 0.5f;
         pursuit_data->speed = chomper_knockback_gravity * frame_time_sq;
-        pursuit_data->acceleration = D_L16_00161E58 * frame_time_sq;
+        pursuit_data->acceleration = chomper_knockback_horizontal_speed_approach_rate * frame_time_sq;
         pursuit_data->jump_speed = chomper_knockback_horizontal_speed * frame_time;
         pursuit_data->turn_speed = chomper_knockback_vertical_speed * frame_time;
         reaction_kind_or_path_address = 0x29;
