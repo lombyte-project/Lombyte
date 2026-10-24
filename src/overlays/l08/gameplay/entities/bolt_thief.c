@@ -2024,12 +2024,12 @@ extern float D_L08_00161C88_gp __asm__("D_L08_00161C88") __attribute__((sda));
 extern float D_L08_00161C8C_gp __asm__("D_L08_00161C8C") __attribute__((sda));
 extern float D_L08_00161C94_gp __asm__("D_L08_00161C94") __attribute__((sda));
 extern float D_L08_00161C98_gp __asm__("D_L08_00161C98") __attribute__((sda));
-extern float D_L08_00161C9C;
+extern float bolt_pickup_default_surface_orbit_speed_degrees __asm__("D_L08_00161C9C");
 extern float D_L08_00161CA0_gp __asm__("D_L08_00161CA0") __attribute__((sda));
 extern float D_L08_00161CA4_gp __asm__("D_L08_00161CA4") __attribute__((sda));
-extern float D_L08_00161CA8;
+extern float five_bolt_pickup_surface_roll_speed_degrees __asm__("D_L08_00161CA8");
 extern float D_L08_00161CAC_gp __asm__("D_L08_00161CAC") __attribute__((sda));
-extern float D_L08_00161CB0;
+extern float ten_bolt_pickup_surface_roll_speed_degrees __asm__("D_L08_00161CB0");
 extern float D_L08_00161CB4_gp __asm__("D_L08_00161CB4") __attribute__((sda));
 extern float D_L08_00161CB8;
 extern float D_L08_00161CBC_gp __asm__("D_L08_00161CBC") __attribute__((sda));
@@ -2038,9 +2038,9 @@ extern float FUN_L04_001f1978(float);
 extern float step_angle_toward_target(float *, float, float, int) __asm__("FUN_L00_0025bc00");
 extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
-extern int D_L08_00161CC0;
+extern int bolt_pickup_collection_alpha_fade_enabled __asm__("D_L08_00161CC0");
 extern int D_L08_00161CC4_gp __asm__("D_L08_00161CC4") __attribute__((sda));
-extern int D_L08_00161CC8;
+extern int bolt_pickup_rotating_quad_enabled __asm__("D_L08_00161CC8");
 extern int D_L08_00161CCC_gp __asm__("D_L08_00161CCC") __attribute__((sda));
 extern int D_L08_00161CD4_gp __asm__("D_L08_00161CD4") __attribute__((sda));
 extern int D_L08_00174658;
@@ -2181,14 +2181,14 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         switch (moby->oclass) {
         case MOBY_CLASS_TEN_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CAC_gp * 0.017453292f * frame_time);
-            vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CB0 * 0.017453292f * frame_time);
+            vars->f64 = fast_add_rotations_c4(vars->f64, ten_bolt_pickup_surface_roll_speed_degrees * 0.017453292f * frame_time);
             break;
         case MOBY_CLASS_FIVE_BOLT_PICKUP:
             vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161CA4_gp * 0.017453292f * frame_time);
-            vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CA8 * 0.017453292f * frame_time);
+            vars->f64 = fast_add_rotations_c4(vars->f64, five_bolt_pickup_surface_roll_speed_degrees * 0.017453292f * frame_time);
             break;
         default:
-            vars->f60 = fast_add_rotations_c4(vars->f60, D_L08_00161C9C * 0.017453292f * frame_time);
+            vars->f60 = fast_add_rotations_c4(vars->f60, bolt_pickup_default_surface_orbit_speed_degrees * 0.017453292f * frame_time);
             vars->f64 = fast_add_rotations_c4(vars->f64, D_L08_00161CA0_gp * 0.017453292f * frame_time);
             break;
         }
@@ -2203,7 +2203,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             if (tick_countdown_32_alt(&vars->u70.i) != 0) {
                 vars->s6C = 0;
                 vars->u70.i = truncate_float_to_s32_c5(random_float_between_c5((float)scale_game_frames_c(300), (float)scale_game_frames_c(600)));
-            } else if (moby->visible != 0 && D_L08_00161CC8 != 0) {
+            } else if (moby->visible != 0 && bolt_pickup_rotating_quad_enabled != 0) {
                 func_001F49B0_2E16A0(FUN_L08_002e5188_c, moby);
                 return;
             }
@@ -2303,7 +2303,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         fade_range = vars->f74 * (float)scale_game_frames_c(20);
         if (collection_target_distance < fade_range) {
             if (fast_vec_dist(point, &moby->pos) > 0.52f) {
-                if (D_L08_00161CC0 != 0) {
+                if (bolt_pickup_collection_alpha_fade_enabled != 0) {
                     moby->alpha = (fast_vec_dist(point, &moby->pos) + fade_range) * 128.0f / (fade_range + fade_range);
                 }
                 if (D_L08_00161CC4_gp != 0) {
