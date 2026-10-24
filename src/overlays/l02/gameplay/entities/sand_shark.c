@@ -331,6 +331,7 @@ void sand_shark_update(struct Moby *moby) {
         SAND_SHARK_CLOSE_RANGE_ATTACK = 6,
         SAND_SHARK_RETURN_HOME = 7,
         SAND_SHARK_KNOCKBACK_UNTIL_LANDING = 8,
+        SAND_SHARK_SUCK_CANNON_INTERACTION = 9,
         SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER = 12,
         SAND_SHARK_BALLISTIC_FLIGHT = 13,
         SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK = 14,
@@ -778,7 +779,7 @@ void sand_shark_update(struct Moby *moby) {
             return;
         }
         break;
-    case 9:
+    case SAND_SHARK_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0_e50(moby, vars->unk120)) {
             moby->state = 1;
             vars->unkC8 = 0;
