@@ -718,9 +718,9 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
             segment_end_distance = FUN_001f9b48(&chain_path->pts[segment_end_index], spacing_reference_position);
         }
         {
-            float *q = (float *)(path + segment_start_index * 16);
+            float *segment_start_marker_base = (float *)(path + segment_start_index * 16);
 
-            if (q[7] == 42.0f) {
+            if (segment_start_marker_base[7] == 42.0f) {
                 u8 *lv = chain_vars->links[i]->pvars;
                 if (*(s32 *)(lv + 0x28) == 0) {
                     if (D_L11_0015F5C4 == 0) {
