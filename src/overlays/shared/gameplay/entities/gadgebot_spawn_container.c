@@ -203,7 +203,7 @@ static inline void transform_point(float *dst, float *src, float (*m)[4]) {
 void draw_gadgebot_spawn_container(char *moby) {
     L06BackdropQuad quad;
     float matrix[3][4] __attribute__((aligned(16)));
-    float pos[4] __attribute__((aligned(16)));
+    float container_position_snapshot[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
     float facePos[4] __attribute__((aligned(16)));
     float normal[4] __attribute__((aligned(16)));
@@ -214,12 +214,12 @@ void draw_gadgebot_spawn_container(char *moby) {
     qcopy(matrix[0], moby + 0xc0);
     qcopy(matrix[1], moby + 0xd0);
     qcopy(matrix[2], moby + 0xe0);
-    pos[0] = *(float *)(moby + 0x10);
-    pos[1] = *(float *)(moby + 0x14);
-    pos[2] = *(float *)(moby + 0x18);
-    pos[3] = 1.0f;
+    container_position_snapshot[0] = *(float *)(moby + 0x10);
+    container_position_snapshot[1] = *(float *)(moby + 0x14);
+    container_position_snapshot[2] = *(float *)(moby + 0x18);
+    container_position_snapshot[3] = 1.0f;
     near = 0;
-    if (absolute_float(referencePosition.position[0] - pos[0]) < 16.0f &&
+    if (absolute_float(referencePosition.position[0] - container_position_snapshot[0]) < 16.0f &&
         absolute_float(referencePosition.position[1] - *(float *)(moby + 0x14)) < 16.0f) {
         near = 1;
     }
