@@ -913,11 +913,11 @@ void sentrybot_update(unsigned char *moby) {
                  -3.1415927f);
     {
         int color_pulse_red_offset = func_001FA898_r(color_pulse_sine * 20.0f);
-        int g0 = func_001FA898_r(color_pulse_sine * 70.0f);
-        int b0 = func_001FA898_r(color_pulse_sine * 10.0f);
+        int color_pulse_green_offset = func_001FA898_r(color_pulse_sine * 70.0f);
+        int color_pulse_blue_offset = func_001FA898_r(color_pulse_sine * 10.0f);
         int cr = color_pulse_red_offset + 0x32;
-        int cb = b0 + 0x14;
-        int cg = g0 + 0xB4;
+        int cb = color_pulse_blue_offset + 0x14;
+        int cg = color_pulse_green_offset + 0xB4;
         if (cr > 0xFF)
             cr = 0xFF;
         if (cg > 0xFF)
