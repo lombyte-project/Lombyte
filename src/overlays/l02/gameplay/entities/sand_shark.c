@@ -86,7 +86,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
 }
 #include "rnc/overlay/quad.h"
 extern float sand_shark_dust_vertical_velocity_scale __asm__("D_L02_001619D4") __attribute__((sda));
-extern float D_L02_001619DC __attribute__((sda));
+extern float sand_shark_dust_position_jitter_radius __asm__("D_L02_001619DC") __attribute__((sda));
 extern unsigned short D_L02_001619E0 __attribute__((sda));
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -131,7 +131,7 @@ void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, v
         dust_puff_velocity[0] = randf_sym(0.0f, 0.0025f);
         dust_puff_velocity[1] = randf_sym(0.0f, 0.0025f);
         dust_puff_velocity[2] = random_float_between_alt(sand_shark_dust_vertical_velocity_scale * 0.1f, sand_shark_dust_vertical_velocity_scale);
-        dust_puff = FUN_L00_0026d000(dust_puff_position, D_L02_001619DC, 1.0f, scale, spin, dust_puff_velocity, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
+        dust_puff = FUN_L00_0026d000(dust_puff_position, sand_shark_dust_position_jitter_radius, 1.0f, scale, spin, dust_puff_velocity, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
         if (dust_puff) {
             dust_puff_extension = dust_puff + 0x20;
             if (random_integer_below(2)) {
