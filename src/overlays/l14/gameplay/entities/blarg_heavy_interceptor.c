@@ -3222,7 +3222,7 @@ extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sd
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
 extern s32 level14_racer_path_follow_initial_timer_frames_gp __asm__("D_L14_00161A34") __attribute__((sda));
-extern s32 D_L14_00161A5C __attribute__((sda));
+extern s32 level14_racer_exit_debris_path_initialization_scale_gp __asm__("D_L14_00161A5C") __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
@@ -3328,7 +3328,7 @@ void update_level14_racer(struct Moby *racer_moby) {
                 sv[0] = spawned_object_planar_velocity[0];
                 sv[1] = spawned_object_planar_velocity[1];
             }
-            spawn_path_or_ballistic_debris(racer_moby, &D_L14_00161A5C, 0);
+            spawn_path_or_ballistic_debris(racer_moby, &level14_racer_exit_debris_path_initialization_scale_gp, 0);
             spawn_explosion(racer_moby, &racer_vars->trail, &racer_moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
                              15.0f, 1, 5, -1, 0);
             FUN_0020c828(racer_moby);
