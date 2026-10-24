@@ -2271,8 +2271,8 @@ void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *parti
 void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) {
     E_26e3a8 *e;
     f32 alpha_reversal_threshold;
-    f32 a[4] __attribute__((aligned(16)));
-    f32 v[4] __attribute__((aligned(16)));
+    f32 source_attachment_position[4] __attribute__((aligned(16)));
+    f32 attachment_position_offset[4] __attribute__((aligned(16)));
     if (particle == 0) {
         return;
     }
@@ -2322,10 +2322,10 @@ void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *parti
     particle->w4 = (particle->w4 & 0xFFFFFF) + (trunc_26e3a8(e->f4 * 256.0f) << 24);
     e->f14 += (1.0f - e->f14) * (D_0015ED60 * 0.175f);
     if (e->hE != -1) {
-        pos_26e3a8(e->m, e->hE, a);
-        vsub_26e3a8(v, org_26e3a8, a);
-        vscl_26e3a8(v, v, e->f14);
-        vadd_26e3a8(particle->pos, a, v);
+        pos_26e3a8(e->m, e->hE, source_attachment_position);
+        vsub_26e3a8(attachment_position_offset, org_26e3a8, source_attachment_position);
+        vscl_26e3a8(attachment_position_offset, attachment_position_offset, e->f14);
+        vadd_26e3a8(particle->pos, source_attachment_position, attachment_position_offset);
     }
 }
 typedef union {
