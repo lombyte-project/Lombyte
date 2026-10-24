@@ -531,16 +531,16 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
 extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") __attribute__((section(".sdata")));
-extern int D_L18_00162288 __attribute__((sda));
-extern float D_L18_00162290 __attribute__((sda));
-extern float D_L18_00162294 __attribute__((sda));
-extern float D_L18_00162298 __attribute__((sda));
-extern float D_L18_0016229C __attribute__((sda));
-extern float D_L18_001622A0 __attribute__((sda));
-extern float D_L18_001622A4 __attribute__((sda));
-extern float D_L18_001622B4 __attribute__((sda));
-extern float D_L18_001622B8 __attribute__((sda));
-extern int D_L18_001622BC __attribute__((sda));
+extern int group_transform_advance_enabled_gp __asm__("D_L18_00162288") __attribute__((sda));
+extern float group_transform_initial_acceleration_gp __asm__("D_L18_00162290") __attribute__((sda));
+extern float group_transform_initial_braking_gp __asm__("D_L18_00162294") __attribute__((sda));
+extern float group_transform_initial_maximum_speed_gp __asm__("D_L18_00162298") __attribute__((sda));
+extern float group_transform_later_acceleration_gp __asm__("D_L18_0016229C") __attribute__((sda));
+extern float group_transform_later_braking_gp __asm__("D_L18_001622A0") __attribute__((sda));
+extern float group_transform_later_maximum_speed_gp __asm__("D_L18_001622A4") __attribute__((sda));
+extern float group_transform_fall_progress_threshold_gp __asm__("D_L18_001622B4") __attribute__((sda));
+extern float group_transform_debris_start_progress_threshold_gp __asm__("D_L18_001622B8") __attribute__((sda));
+extern int group_transform_debris_initial_random_bound_gp __asm__("D_L18_001622BC") __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
@@ -562,12 +562,12 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
     };
     VData *moby_vars = (VData *)moby->pvars;
     if (moby_vars) {
-        float initial_acceleration_step = D_L18_00162290 * frame_time_sq;
-        float initial_braking_step = D_L18_00162294 * frame_time_sq;
-        float initial_maximum_speed = D_L18_00162298 * frame_time;
-        float later_acceleration_step = D_L18_0016229C * frame_time_sq;
-        float later_braking_step = D_L18_001622A0 * frame_time_sq;
-        float later_maximum_speed = D_L18_001622A4 * frame_time;
+        float initial_acceleration_step = group_transform_initial_acceleration_gp * frame_time_sq;
+        float initial_braking_step = group_transform_initial_braking_gp * frame_time_sq;
+        float initial_maximum_speed = group_transform_initial_maximum_speed_gp * frame_time;
+        float later_acceleration_step = group_transform_later_acceleration_gp * frame_time_sq;
+        float later_braking_step = group_transform_later_braking_gp * frame_time_sq;
+        float later_maximum_speed = group_transform_later_maximum_speed_gp * frame_time;
         switch (moby->state) {
         case MOBY_INITIALIZE: {
             short **tp;
@@ -600,17 +600,17 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
             int hero_on_group_or_class_764_moby;
             int i;
             unsigned char *hero_ground_moby;
-            if (D_L18_00162288 != 0) {
+            if (group_transform_advance_enabled_gp != 0) {
                 if (moby_vars->f330 < 1.5f) {
                     advance_accelerated_scalar(1.5f, initial_acceleration_step, initial_braking_step, initial_maximum_speed, &moby_vars->f330, &moby_vars->f334);
                 } else {
                     advance_accelerated_scalar(2.0f, later_acceleration_step, later_braking_step, later_maximum_speed, &moby_vars->f330, &moby_vars->f334);
                 }
             }
-            if (moby_vars->f330 > D_L18_001622B8 && moby_vars->f344 == 0.0f) {
-                moby_vars->f344 = *(int *)&D_L18_001622BC;
+            if (moby_vars->f330 > group_transform_debris_start_progress_threshold_gp && moby_vars->f344 == 0.0f) {
+                moby_vars->f344 = *(int *)&group_transform_debris_initial_random_bound_gp;
             }
-            if (moby_vars->f330 > D_L18_001622B4 && moby_vars->i8 != 0) {
+            if (moby_vars->f330 > group_transform_fall_progress_threshold_gp && moby_vars->i8 != 0) {
                 moby->state = 4;
             }
             hero_on_group_or_class_764_moby = 0;
