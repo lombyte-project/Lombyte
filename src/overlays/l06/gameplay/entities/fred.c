@@ -1029,7 +1029,7 @@ void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
 void draw_dual_texture_58_quad_mesh(void) {
     Packet_2fd460 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec2[4] __attribute__((aligned(16)));
+    float quad_facing_unit_direction[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
     void *matrix_ptr;
     float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
@@ -1063,10 +1063,10 @@ void draw_dual_texture_58_quad_mesh(void) {
     do {
         transform_2fd1a0(vec1, D_L06_001F0560[i], dual_texture_mesh_position_scale_gp);
         multiply_2fd1a0(vec1, vec1, matrix);
-        subtract_2fd1a0(vec2, vec1, D_L06_00167540);
-        normalize_2fd1a0(vec2, vec2, 1.0f);
+        subtract_2fd1a0(quad_facing_unit_direction, vec1, D_L06_00167540);
+        normalize_2fd1a0(quad_facing_unit_direction, quad_facing_unit_direction, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001EFBE0[i], matrix_ptr);
-        facing = normalize_other_2fd1a0(vec2, vec1);
+        facing = normalize_other_2fd1a0(quad_facing_unit_direction, vec1);
         if (facing > 0.0f) goto next;
         {
             j = 0;
