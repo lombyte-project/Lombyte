@@ -308,7 +308,7 @@ extern int D_L16_0015F5CC;
 extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 SubtractIntegerWithClamp(s32);
 
-extern float D_L16_00161A84 __attribute__((sda));
+extern float test_dummy_door_height_offset __asm__("D_L16_00161A84") __attribute__((sda));
 extern int last_test_dummy_door_sound_request_frame __asm__("D_L16_00161A88") __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
@@ -334,7 +334,7 @@ void test_dummy_door_update(struct Moby *moby) {
             }
             target_height = *(float *)data;
         } else {
-            target_height = *(float *)data + D_L16_00161A84;
+            target_height = *(float *)data + test_dummy_door_height_offset;
         }
         advance_accelerated_scalar(target_height, frame_time_sq * 10.0f, frame_time_sq * 10.0f, D_0015ED6C * 10.0f,
                                    &moby->pos.z, (float *)(data + 4));
