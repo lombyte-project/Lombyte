@@ -69,7 +69,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
         MOBY_UPDATE_INITIALIZE = 0,
         MOBY_UPDATE_ACTIVE = 1
     };
-    float v[4] __attribute__((aligned(16)));
+    float hero_point_local_offset[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
     char *player;
     unsigned int update_state = moby[0x20];
@@ -82,16 +82,16 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
         if (FUN_001f9b48(moby + 0x10, player) < 8.0f) {
-            subtract_vector_xyz(v, player + 0x50, moby + 0x10);
+            subtract_vector_xyz(hero_point_local_offset, player + 0x50, moby + 0x10);
             transpose_rotation_matrix(mtx, moby + 0xC0);
-            transform_vector(v, v, mtx);
-            if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
-                if (v[1] < 0.5f) {
+            transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
+            if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f && 0.0f < hero_point_local_offset[2] && hero_point_local_offset[2] < 8.0f) {
+                if (hero_point_local_offset[1] < 0.5f) {
                     player[0x224B] = 1;
                 } else {
                     player[0x224B] = 0;
                 }
-            } else if (0.0f < v[1]) {
+            } else if (0.0f < hero_point_local_offset[1]) {
                 hero.unk22CB = 0;
             }
         }
