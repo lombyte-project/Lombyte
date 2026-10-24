@@ -3289,25 +3289,25 @@ void gunship_follow_path(struct Moby *moby) {
     }
     if (!frozen) {
         f32 k = 0.017453292f;
-        f32 a;
+        f32 steering_angle;
         f32 turn;
         f32 yaw_offset_radians = (f32)v->unk122 * k;
         FUN_001fa5c8(moby->rot.z, yaw_offset_radians);
-        a = FUN_001f9e90(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
-        a = FUN_001fa580(a, yaw_offset_radians);
-        a = FUN_001fa5c8(a, moby->rot.z);
-        turn = a * (1.0f / v->unk110 * D_0015ED60);
+        steering_angle = FUN_001f9e90(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
+        steering_angle = FUN_001fa580(steering_angle, yaw_offset_radians);
+        steering_angle = FUN_001fa5c8(steering_angle, moby->rot.z);
+        turn = steering_angle * (1.0f / v->unk110 * D_0015ED60);
         moby->rot.z = FUN_001fa580(turn, moby->rot.z);
         FUN_001f9a28(&path_displacement, &v->unkD0, &v->unkE0);
-        a = -FUN_001f9e90(FUN_001f9b20(&path_displacement), path_displacement.v.z);
-        moby->rot.y = FUN_L00_00258110(&v->unk10C, moby->rot.y, a,
+        steering_angle = -FUN_001f9e90(FUN_001f9b20(&path_displacement), path_displacement.v.z);
+        moby->rot.y = FUN_L00_00258110(&v->unk10C, moby->rot.y, steering_angle,
                                             v->unk108 * 10.0f * k * D_0015ED70,
                                             v->unk108 * 5.0f * k * D_0015ED70,
                                             v->unk108 * k * D_0015ED6C);
-        a = FUN_L00_0025e310(turn * v->unk114);
-        a = FUN_001fa5c8(moby->rot.x, a);
-        a = FUN_L00_0025e310(a * v->unk118);
-        moby->rot.x = FUN_L00_00258110(&v->unk104, moby->rot.x, a,
+        steering_angle = FUN_L00_0025e310(turn * v->unk114);
+        steering_angle = FUN_001fa5c8(moby->rot.x, steering_angle);
+        steering_angle = FUN_L00_0025e310(steering_angle * v->unk118);
+        moby->rot.x = FUN_L00_00258110(&v->unk104, moby->rot.x, steering_angle,
                                             v->unk100 * 10.0f * k * D_0015ED70,
                                             v->unk100 * 5.0f * k * D_0015ED70,
                                             v->unk100 * k * D_0015ED6C);
