@@ -1278,7 +1278,7 @@ extern int D_L00_00173E40[];
 extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int fun_002141f8(char *) __asm__("FUN_002141f8");
 extern float D_L00_001616DC __attribute__((sda));
-extern float D_L00_001616D8 __attribute__((sda));
+extern float morphoray_target_angle_threshold_degrees_gp __asm__("D_L00_001616D8") __attribute__((sda));
 extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -1357,7 +1357,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
         add_vector_xyz_c4(offset, offset, position);
         apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
-        if (D_L00_001616D8 * 0.017453292f < apparentAngle) {
+        if (morphoray_target_angle_threshold_degrees_gp * 0.017453292f < apparentAngle) {
             data = (char *)fun_002141f8(candidate);
             if (data) {
                 radius = convert_integer_to_float(*(unsigned char *)(data + 10)) * 0.125f;
@@ -1369,7 +1369,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
                 }
             }
         }
-        if (apparentAngle < D_L00_001616D8 * 0.017453292f) {
+        if (apparentAngle < morphoray_target_angle_threshold_degrees_gp * 0.017453292f) {
             int valid = 1;
             if (collision_line((Vec4f *)position, (Vec4f *)target, 6, self, 0)) {
                 if (!D_L00_00173E40[6] || (char *)D_L00_00173E40[6] != candidate)
