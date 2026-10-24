@@ -915,10 +915,10 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
         break;
     }
 }
-extern float D_L11_00161F68 __attribute__((sda));
-extern float D_L11_00161F6C __attribute__((sda));
-extern float D_L11_00161F70 __attribute__((sda));
-extern float D_L11_00161F74 __attribute__((sda));
+extern float seesaw_hero_local_x_scale __asm__("D_L11_00161F68") __attribute__((sda));
+extern float seesaw_tilt_feedback_scale __asm__("D_L11_00161F6C") __attribute__((sda));
+extern float seesaw_spin_feedback_scale __asm__("D_L11_00161F70") __attribute__((sda));
+extern float seesaw_rider_spin_change_bias_degrees __asm__("D_L11_00161F74") __attribute__((sda));
 extern float D_L11_00161F78 __attribute__((sda));
 extern float D_L11_00161F7C __attribute__((sda));
 extern float D_L11_00161F80 __attribute__((sda));
@@ -959,21 +959,21 @@ void seesaw_platform_update(struct Moby *platform) {
     platform_vars->unk5C = 1;
     spin = platform_vars->spin;
     /* two separate updates (not one sum): gives retail's FP register allocation */
-    platform_vars->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (D_L11_00161F6C * platform->rot.y);
-    platform_vars->spin = platform_vars->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (D_L11_00161F70 * spin);
+    platform_vars->spin = spin + D_L11_00161F7C * 0.017453292f * frame_time_sq * (seesaw_tilt_feedback_scale * platform->rot.y);
+    platform_vars->spin = platform_vars->spin + D_L11_00161F80 * 0.017453292f * frame_time_sq * (seesaw_spin_feedback_scale * spin);
     if (hero.ground_moby == platform && hero.air_frames.s == 0) {
         subtract_vector_xyz(&hero_local_offset, &hero.motion.pos, &platform->pos);
         transpose_rotation_matrix(matrix, &platform->rot_row0);
         transform_vector(&hero_local_offset, &hero_local_offset, matrix);
-        scaled = D_L11_00161F68 * hero_local_offset.x;
+        scaled = seesaw_hero_local_x_scale * hero_local_offset.x;
         change = D_L11_00161F78 * 0.017453292f * frame_time_sq * scaled;
         if (platform_vars->spin * change < 0.0f && platform->rot.y * change < 0.0f) {
             change += change;
         }
         if (change < 0.0f) {
-            change -= D_L11_00161F74 * 0.017453292f * frame_time_sq;
+            change -= seesaw_rider_spin_change_bias_degrees * 0.017453292f * frame_time_sq;
         } else {
-            change += D_L11_00161F74 * 0.017453292f * frame_time_sq;
+            change += seesaw_rider_spin_change_bias_degrees * 0.017453292f * frame_time_sq;
         }
         platform_vars->spin = platform_vars->spin + change;
         if (absolute_float_eb90(platform->rot.y) > seesaw_fall_tilt_threshold_degrees * 0.017453292f &&
