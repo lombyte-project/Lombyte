@@ -1556,7 +1556,7 @@ void update_hero_motion_by_state(void) {
     case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
-    case 0x2B:
+    case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
         s32 flag;
