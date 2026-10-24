@@ -602,7 +602,7 @@ void update_moby_trail_points(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int D_0015EE00;
+extern int level_11_class_ac_hit_count __asm__("D_0015EE00");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D408[];
@@ -637,7 +637,7 @@ void update_moby_hit_stats_and_state(char *moby) {
         *(int *)(collection_stats_base + 0x157EC) = *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
         if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
             *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
-            if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
+            if (++level_11_class_ac_hit_count >= 3 && D_0013D408[0x12] == 0) {
                 D_0013D408[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
