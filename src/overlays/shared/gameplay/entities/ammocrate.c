@@ -429,17 +429,17 @@ void update_ship_rocket(Moby *rocket) {
     V4_2E8040 hitpos;
     V4_2E8040 effect_scratch_vector;
     V4_2E8040 particle_velocity;
-    V4_2E8040 dir;
+    V4_2E8040 trail_direction;
     unsigned char *spawned_effect;
     float trail_segment_fraction;
 
     qcopy(&old, &*(V4_2E8040 *)&rocket->pos);
     rocket->scale += (((Cls_2E8040 *)rocket->pclass)->scale - rocket->scale) * 0.1f;
-    *(Q_2E8040 *)&dir = 0;
-    dir.x = func_002140F8_2E8040(-1.0f, 1.0f);
-    dir.y = func_002140F8_2E8040(-1.0f, 1.0f);
-    dir.z = func_002140F8_2E8040(-1.0f, 1.0f);
-    *(Q_2E8040 *)&particle_velocity = *(Q_2E8040 *)&dir;
+    *(Q_2E8040 *)&trail_direction = 0;
+    trail_direction.x = func_002140F8_2E8040(-1.0f, 1.0f);
+    trail_direction.y = func_002140F8_2E8040(-1.0f, 1.0f);
+    trail_direction.z = func_002140F8_2E8040(-1.0f, 1.0f);
+    *(Q_2E8040 *)&particle_velocity = *(Q_2E8040 *)&trail_direction;
     func_L00_001FF4B0_2E8040(&particle_velocity, &particle_velocity, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
     func_L00_001FF4B0_2E8040(&effect_scratch_vector, rocket_data, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
     func_001F9BD8_2E8040(&particle_velocity, &particle_velocity, &effect_scratch_vector);
@@ -456,11 +456,11 @@ void update_ship_rocket(Moby *rocket) {
             spawned_effect[2] = *tex->p5C;
             spawned_effect[3] = 0x48;
         }
-        *(Q_2E8040 *)&dir = 0;
-        dir.z = 0.02f;
-        func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0);
-        func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
-        spawned_effect = spawn_burst(&effect_scratch_vector, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
+        *(Q_2E8040 *)&trail_direction = 0;
+        trail_direction.z = 0.02f;
+        func_001F9EC0_2E8040(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0);
+        func_002156E0_2E8040(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
+        spawned_effect = spawn_burst(&effect_scratch_vector, &trail_direction, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
         if (spawned_effect != 0) {
             spawned_effect[3] = 0x48;
         }
