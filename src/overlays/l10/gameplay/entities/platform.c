@@ -1696,22 +1696,22 @@ void update_path_spark_emitter(char *moby) {
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
-extern float D_L10_00161C0C __attribute__((sda));
-extern float D_L10_00161C10 __attribute__((sda));
+extern float lab_door_local_y_half_extent __asm__("D_L10_00161C0C") __attribute__((sda));
+extern float lab_door_local_x_half_extent __asm__("D_L10_00161C10") __attribute__((sda));
 int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) __asm__("FUN_L10_002d9000");
 
 int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) {
-    float a[4] __attribute__((aligned(16)));
-    float t10[16] __attribute__((aligned(16)));
-    float t50[4] __attribute__((aligned(16)));
-    float t60[4] __attribute__((aligned(16)));
-    *(OvlQuad *)a = *(OvlQuad *)world_point;
-    transpose_rotation_matrix(t10, &moby->rot_row0);
-    subtract_vector_xyz(t60, a, &moby->pos);
-    *(OvlQuad *)t50 = *(OvlQuad *)t60;
-    transform_vector(t50, t50, t10);
-    if (absolute_float(t50[0]) < D_L10_00161C10) {
-        return absolute_float(t50[1]) < D_L10_00161C0C;
+    float tested_world_point[4] __attribute__((aligned(16)));
+    float door_world_to_local_rotation[16] __attribute__((aligned(16)));
+    float door_local_point_offset[4] __attribute__((aligned(16)));
+    float point_offset_from_door[4] __attribute__((aligned(16)));
+    *(OvlQuad *)tested_world_point = *(OvlQuad *)world_point;
+    transpose_rotation_matrix(door_world_to_local_rotation, &moby->rot_row0);
+    subtract_vector_xyz(point_offset_from_door, tested_world_point, &moby->pos);
+    *(OvlQuad *)door_local_point_offset = *(OvlQuad *)point_offset_from_door;
+    transform_vector(door_local_point_offset, door_local_point_offset, door_world_to_local_rotation);
+    if (absolute_float(door_local_point_offset[0]) < lab_door_local_x_half_extent) {
+        return absolute_float(door_local_point_offset[1]) < lab_door_local_y_half_extent;
     }
     return 0;
 }
