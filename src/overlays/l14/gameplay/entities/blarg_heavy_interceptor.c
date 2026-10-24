@@ -2693,7 +2693,9 @@ void update_minibomber_target(struct Moby *moby) {
 
 extern float FUN_001f9b48(void *, void *);
 
-void FUN_L14_002b55b0(struct Moby *moby) {
+void initialize_minibomber_path_segment_lengths(struct Moby *moby) __asm__("FUN_L14_002b55b0");
+
+void initialize_minibomber_path_segment_lengths(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *path;
     int i;
