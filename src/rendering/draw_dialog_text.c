@@ -74,12 +74,12 @@ extern s32 D_0015F518 __attribute__((sda));
 extern s32 freeze_stats_text __asm__("D_0015F51C") __attribute__((sda));
 extern s32 D_0015F524 __attribute__((sda));
 extern s32 D_0015F528 __attribute__((sda));
-extern s32 D_0015F52C __attribute__((sda));
-extern s32 D_0015F530 __attribute__((sda));
-extern s32 D_0015F534 __attribute__((sda));
-extern s32 D_0015F538 __attribute__((sda));
-extern s32 D_0015F53C __attribute__((sda));
-extern s32 D_0015F540 __attribute__((sda));
+extern s32 freeze_shared_dialog_text_base_color __asm__("D_0015F52C") __attribute__((sda));
+extern s32 freeze_shared_dialog_text_blend_target_color __asm__("D_0015F530") __attribute__((sda));
+extern s32 freeze_matched_record_text_base_color __asm__("D_0015F534") __attribute__((sda));
+extern s32 freeze_matched_record_text_blend_target_color __asm__("D_0015F538") __attribute__((sda));
+extern s32 freeze_unmatched_record_text_base_color __asm__("D_0015F53C") __attribute__((sda));
+extern s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540") __attribute__((sda));
 extern char D_0015F568[];
 extern char D_0015F570[];
 extern char D_0015F578[];
@@ -365,9 +365,9 @@ void draw_dialog_text(void) {
         } else if (scale < 0.1f) {
             scale = 0.1f;
         }
-        shared_dialog_text_color = D_0015F52C;
-        matched_record_text_color = D_0015F534;
-        unmatched_record_text_color = D_0015F53C;
+        shared_dialog_text_color = freeze_shared_dialog_text_base_color;
+        matched_record_text_color = freeze_matched_record_text_base_color;
+        unmatched_record_text_color = freeze_unmatched_record_text_base_color;
         if (freeze.unk24 != 0) {
             color_blend_fraction = (f32)freeze.unk24 * 0.125f;
             if (color_blend_fraction > 1.0f) {
@@ -375,9 +375,9 @@ void draw_dialog_text(void) {
             } else if (color_blend_fraction < 0.0f) {
                 color_blend_fraction = 0.0f;
             }
-            shared_dialog_text_color = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
-            matched_record_text_color = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
-            unmatched_record_text_color = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
+            shared_dialog_text_color = fast_tween_color(freeze_shared_dialog_text_base_color, freeze_shared_dialog_text_blend_target_color, color_blend_fraction);
+            matched_record_text_color = fast_tween_color(freeze_matched_record_text_base_color, freeze_matched_record_text_blend_target_color, color_blend_fraction);
+            unmatched_record_text_color = fast_tween_color(freeze_unmatched_record_text_base_color, freeze_unmatched_record_text_blend_target_color, color_blend_fraction);
         }
         if (hero.race_lap < 3) {
             draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((f32)D_0015F504 * scale),
