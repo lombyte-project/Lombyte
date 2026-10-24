@@ -1794,8 +1794,8 @@ float D_L16_001D3130[4][4] = {
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
 extern char D_L16_001671C0[];
-extern int D_L16_001619E0 __attribute__((sda));
-extern int D_L16_001619E4 __attribute__((sda));
+extern int test_dummy_glow_pulse_color_start __asm__("D_L16_001619E0") __attribute__((sda));
+extern int test_dummy_glow_pulse_color_end __asm__("D_L16_001619E4") __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern float fast_sin_alt(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -1804,7 +1804,7 @@ extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_test_dummy_group_glows(char *moby) {
     GlowQuad glow_quad;
-    float mat[4][4] __attribute__((aligned(16)));
+    float glow_facing_transform[4][4] __attribute__((aligned(16)));
     short *group_entry;
     char *group_moby;
     int color;
@@ -1828,7 +1828,7 @@ void draw_test_dummy_group_glows(char *moby) {
     group_entry = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
     for (;; group_entry++) {
         group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
-        color = fast_tween_color(D_L16_001619E0, D_L16_001619E4,
+        color = fast_tween_color(test_dummy_glow_pulse_color_start, test_dummy_glow_pulse_color_end,
                                (fast_sin_alt(*(float *)(*(char **)(group_moby + 0x78) + 0x11C)) + 1.0f) * 0.5f);
         glow_quad.rgba[3] = color;
         glow_quad.rgba[2] = color;
@@ -1837,15 +1837,15 @@ void draw_test_dummy_group_glows(char *moby) {
         if (group_moby != 0 && *(short *)(group_moby + 0xA6) == 0x21D && (unsigned char)group_moby[0x20] != 0xFE &&
             (unsigned char)group_moby[0x20] != 0xFD) {
             /* basis facing the camera, origin just above the part */
-            qcopy(mat[3], group_moby + 0x10);
-            mat[3][2] += 0.2f;
-            mat[3][3] = 1.0f;
-            subtract_vector_xyz(mat[0], D_L16_001671C0, mat[3]);
-            normalize_vector_xyz(mat[0], mat[0], 1.0f);
-            cross_vectors_xyz(mat[1], mat[0], (u8 *)&hero.gravity_dir);
-            normalize_vector_xyz(mat[1], mat[1], -1.0f);
-            cross_vectors_xyz(mat[2], mat[1], mat[0]);
-            draw_geometry_quad_alt(&glow_quad, mat, 0);
+            qcopy(glow_facing_transform[3], group_moby + 0x10);
+            glow_facing_transform[3][2] += 0.2f;
+            glow_facing_transform[3][3] = 1.0f;
+            subtract_vector_xyz(glow_facing_transform[0], D_L16_001671C0, glow_facing_transform[3]);
+            normalize_vector_xyz(glow_facing_transform[0], glow_facing_transform[0], 1.0f);
+            cross_vectors_xyz(glow_facing_transform[1], glow_facing_transform[0], (u8 *)&hero.gravity_dir);
+            normalize_vector_xyz(glow_facing_transform[1], glow_facing_transform[1], -1.0f);
+            cross_vectors_xyz(glow_facing_transform[2], glow_facing_transform[1], glow_facing_transform[0]);
+            draw_geometry_quad_alt(&glow_quad, glow_facing_transform, 0);
         }
         /* a negative entry ends the group */
         if (*group_entry < 0)
