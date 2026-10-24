@@ -1354,11 +1354,11 @@ extern int D_0015ED84;
 extern int sand_mouse_follow_duration_frames_gp __asm__("D_L01_00161918") __attribute__((sda));
 extern int sand_mouse_follow_projectile_count_limit_gp __asm__("D_L01_0016191C") __attribute__((sda));
 extern int sand_mouse_fade_duration_frames_gp __asm__("D_L01_00161924") __attribute__((sda));
-extern int D_L01_00161928 __attribute__((sda));
-extern int D_L01_0016192C __attribute__((sda));
+extern int sand_mouse_fade_particle_random_integer_min_gp __asm__("D_L01_00161928") __attribute__((sda));
+extern int sand_mouse_fade_particle_random_integer_max_gp __asm__("D_L01_0016192C") __attribute__((sda));
 extern float sand_mouse_fade_particle_position_jitter_gp __asm__("D_L01_00161930") __attribute__((sda));
-extern float D_L01_00161934 __attribute__((sda));
-extern float D_L01_00161938 __attribute__((sda));
+extern float sand_mouse_fade_particle_random_float_range_start_gp __asm__("D_L01_00161934") __attribute__((sda));
+extern float sand_mouse_fade_particle_random_float_range_end_gp __asm__("D_L01_00161938") __attribute__((sda));
 extern int sand_mouse_fade_particle_color_alpha_gp __asm__("D_L01_0016193C") __attribute__((sda));
 extern float D_L01_00161940 __attribute__((sda));
 extern char D_L01_0020AE80[];
@@ -1628,8 +1628,8 @@ void sand_mouse_update(struct Moby *moby) {
             if (sand_mouse_vars->timer & 1) {
                 particle_random_remainder = -particle_random_remainder;
             }
-            particle_random_integer = FUN_L00_00257b90(D_L01_00161928, D_L01_0016192C);
-            particle_random_float = random_float_between_alt(D_L01_00161934, D_L01_00161938);
+            particle_random_integer = FUN_L00_00257b90(sand_mouse_fade_particle_random_integer_min_gp, sand_mouse_fade_particle_random_integer_max_gp);
+            particle_random_float = random_float_between_alt(sand_mouse_fade_particle_random_float_range_start_gp, sand_mouse_fade_particle_random_float_range_end_gp);
             spawn_particle_2e3f20(va, particle_random_integer, col, 2, particle_random_remainder, vb, particle_random_float, 0.001f, D_L01_00161940 * frame_time_sq);
             moby->flags |= 0x200;
             moby->alpha -= 0x80 / sand_mouse_fade_duration_frames_gp;
