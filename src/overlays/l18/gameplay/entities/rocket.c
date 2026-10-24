@@ -1970,10 +1970,10 @@ extern void matrix_mul_dba20(void *, void *, void *) __asm__("FUN_001fa328");
 
 extern float D_L18_001D4310[];
 
-extern int D_L18_00161C48 __attribute__((sda));
-extern int D_L18_00161C4C __attribute__((sda));
-extern int D_L18_00161C50 __attribute__((sda));
-extern int D_L18_00161C54 __attribute__((sda));
+extern int expanding_projectile_ring_blend_minuend_selector_gp __asm__("D_L18_00161C48") __attribute__((sda));
+extern int expanding_projectile_ring_blend_subtrahend_selector_gp __asm__("D_L18_00161C4C") __attribute__((sda));
+extern int expanding_projectile_ring_blend_alpha_factor_selector_gp __asm__("D_L18_00161C50") __attribute__((sda));
+extern int expanding_projectile_ring_blend_addend_selector_gp __asm__("D_L18_00161C54") __attribute__((sda));
 extern int expanding_projectile_ring_color_start_gp __asm__("D_L18_00161C5C") __attribute__((sda));
 extern int expanding_projectile_ring_color_end_gp __asm__("D_L18_00161C60") __attribute__((sda));
 extern float expanding_projectile_ring_segment_angle_degrees_gp __asm__("D_L18_00161C64") __attribute__((sda));
@@ -2002,7 +2002,7 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         quad_packets[j].tex = get_effect_texture_dba20(0xE);
         quad_packets[j].unk70 = 0;
         quad_packets[j].unk80 = 0xFF9000000260L;
-        quad_packets[j].unk88 = (long)D_L18_00161C48 | ((long)D_L18_00161C4C << 2) | ((long)D_L18_00161C50 << 4) | ((long)D_L18_00161C54 << 6) | 0x8000000000L;
+        quad_packets[j].unk88 = (long)expanding_projectile_ring_blend_minuend_selector_gp | ((long)expanding_projectile_ring_blend_subtrahend_selector_gp << 2) | ((long)expanding_projectile_ring_blend_alpha_factor_selector_gp << 4) | ((long)expanding_projectile_ring_blend_addend_selector_gp << 6) | 0x8000000000L;
         layer_phase = moby_vars->f24 * D_L18_00161C74 + (float)j * 0.25f;
         rad = moby_vars->f24 + expanding_projectile_ring_layer_radius_offset_gp * (float)j;
         layer_phase = layer_phase - (float)truncate_dba20(layer_phase);
