@@ -431,7 +431,7 @@ extern void update_hovering_rocket_attacker_common(unsigned char *) __asm__("FUN
 extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_003058a8");
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
-extern float D_L13_0016149C __attribute__((sda));
+extern float hovering_rocket_attacker_launch_vector_speed __asm__("D_L13_0016149C") __attribute__((sda));
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -541,7 +541,7 @@ void update_hovering_rocket_attacker(unsigned char *moby) {
                 if (*(int *)(moby_data + 0xF4) != 0) moby_point_position(moby, 1, scratch_vector);
                 else moby_point_position(moby, 0, scratch_vector);
                 subtract_vector_xyz(shot_direction_vector, target + 0x10, scratch_vector);
-                normalize_vector_xyz(shot_direction_vector, shot_direction_vector, D_L13_0016149C * frame_time);
+                normalize_vector_xyz(shot_direction_vector, shot_direction_vector, hovering_rocket_attacker_launch_vector_speed * frame_time);
                 if (*(int *)(moby_data + 0xF4) != 0) {
                     if (*(void **)(moby_data + 0xF8)) {
                         launch_attached_rocket(*(void **)(moby_data + 0xF8), shot_direction_vector, target, *(float *)(moby_data + 0xEC));
