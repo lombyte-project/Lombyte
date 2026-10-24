@@ -1118,7 +1118,7 @@ extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern float D_L03_00161B28 __attribute__((sda));
+extern float rocket_trail_offset_z_scale __asm__("D_L03_00161B28") __attribute__((sda));
 extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
@@ -1152,7 +1152,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, rocket_vars);
         trail_vector_offset.q = D_0013F490_v.q;
-        trail_vector_offset.f[2] *= D_L03_00161B28;
+        trail_vector_offset.f[2] *= rocket_trail_offset_z_scale;
         FUN_L00_001ff290(&trail, pos, &trail_vector_offset);
         rocket_moby->rot.z = rocket_vars->heading;
         rocket_moby->rot.x = fast_add_rotations(rocket_moby->rot.x, frame_time * 6.2831855f);
