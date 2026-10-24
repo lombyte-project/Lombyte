@@ -3039,10 +3039,10 @@ typedef struct {
     L14PuffTail tail; /* 0x20 */
 } L14Puff;
 
-extern f32 D_L14_00161F30 __attribute__((sda));
-extern f32 D_L14_00161F34 __attribute__((sda));
-extern f32 D_L14_00161F38 __attribute__((sda));
-extern f32 D_L14_00161F3C __attribute__((sda));
+extern f32 enemy_fighter_exhaust_base_row0_offset_gp __asm__("D_L14_00161F30") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_paired_emitter_offset_gp __asm__("D_L14_00161F34") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_base_row2_offset_gp __asm__("D_L14_00161F38") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F3C") __attribute__((sda));
 extern s32 D_L14_00161F44 __attribute__((sda));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern void exhaust_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -3068,12 +3068,12 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
 
     if (emitter_moby->state == 0 || emitter_moby->state == 2 || emitter_moby->visible == 0)
         return;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F30);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_base_row0_offset_gp);
     exhaust_add(&pos, &emitter_moby->pos, &step);
-    exhaust_scale(&step, &emitter_moby->rot_row2, D_L14_00161F38);
+    exhaust_scale(&step, &emitter_moby->rot_row2, enemy_fighter_exhaust_base_row2_offset_gp);
     exhaust_add(&pos, &pos, &step);
     qcopy(&base, &pos);
-    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3089,7 +3089,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
@@ -3107,7 +3107,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         life *= 2;
         size -= 20000.0f;
     }
-    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
@@ -3123,7 +3123,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
