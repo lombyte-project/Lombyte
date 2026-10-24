@@ -1003,8 +1003,8 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
     E_273448 *e;
     f32 alpha_reversal_threshold;
-    f32 a[4] __attribute__((aligned(16)));
-    f32 v[4] __attribute__((aligned(16)));
+    f32 attachment_world_position[4] __attribute__((aligned(16)));
+    f32 camera_directed_offset[4] __attribute__((aligned(16)));
     if (particle == 0) {
         return;
     }
@@ -1053,10 +1053,10 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
     }
     particle->w4 = (particle->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->unk4 * 256.0f) << 24);
     e->unk14 += (1.0f - e->unk14) * (frame_scale * 0.175f);
-    pos_273448(e->m, e->hE, a);
-    subtract_vector_xyz(v, g_debug_camera, a);
-    vscl_273448(v, v, e->unk14);
-    vadd_273448(particle->pos, a, v);
+    pos_273448(e->m, e->hE, attachment_world_position);
+    subtract_vector_xyz(camera_directed_offset, g_debug_camera, attachment_world_position);
+    vscl_273448(camera_directed_offset, camera_directed_offset, e->unk14);
+    vadd_273448(particle->pos, attachment_world_position, camera_directed_offset);
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
 
