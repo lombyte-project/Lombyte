@@ -1988,7 +1988,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
-extern float D_L10_00161C98 __attribute__((sda));
+extern float data_processor_linked_effect_fade_duration_seconds __asm__("D_L10_00161C98") __attribute__((sda));
 void update_data_processor_linked_effect(struct Moby *moby) __asm__("FUN_L10_002da2c8");
 
 void update_data_processor_linked_effect(struct Moby *moby) {
@@ -2034,7 +2034,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             moby->update_dist = 0x60;
             moby->state = 1;
-            timer = D_L10_00161C98 * 60.0f;
+            timer = data_processor_linked_effect_fade_duration_seconds * 60.0f;
             moby->rot.z = new_rotation;
             *(int *)(data + 0x30) = -1;
             *(int *)(data + 0x34) = scale_game_frames(FUN_001fa6d0(timer));
@@ -2209,7 +2209,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                          convert_integer_to_float((int)color >> 24)) << 24);
                 if (moby[0x20] == 2) {
                     float alpha = convert_integer_to_float(*(int *)(data + 0x34));
-                    float duration = multiply_global_factor(D_L10_00161C98 * 60.0f);
+                    float duration = multiply_global_factor(data_processor_linked_effect_fade_duration_seconds * 60.0f);
                     color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
                 }
                 vertex = 0;
