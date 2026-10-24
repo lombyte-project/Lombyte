@@ -1017,12 +1017,12 @@ extern int D_L05_00161E98 __attribute__((sda));
 extern int D_L05_00161E9C __attribute__((sda));
 extern float D_L05_00161EA0 __attribute__((sda));
 extern float D_L05_00161EA4 __attribute__((sda));
-extern float D_L05_00161EA8 __attribute__((sda));
+extern float spray_particle_speed_upper_bound_gp __asm__("D_L05_00161EA8") __attribute__((sda));
 extern float D_L05_00161EAC __attribute__((sda));
 extern float D_L05_00161EB0 __attribute__((sda));
 extern float D_L05_00161EB4 __attribute__((sda));
-extern float D_L05_00161EB8 __attribute__((sda));
-extern float D_L05_00161EBC __attribute__((sda));
+extern float spray_particle_count_limit_per_update_gp __asm__("D_L05_00161EB8") __attribute__((sda));
+extern float spray_big_particle_selection_threshold_percent_gp __asm__("D_L05_00161EBC") __attribute__((sda));
 
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
@@ -1085,9 +1085,9 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
         if (emitter_moby->pos.z < floor) {
             emitter_moby->state = 3;
         }
-        for (i = 0; (float)i < D_L05_00161EB8; i++) {
+        for (i = 0; (float)i < spray_particle_count_limit_per_update_gp; i++) {
             big = 1;
-            if (D_L05_00161EBC < random_float_between(0.0f, 100.0f)) {
+            if (spray_big_particle_selection_threshold_percent_gp < random_float_between(0.0f, 100.0f)) {
                 big = 0;
             }
             minimum_particle_speed = D_L05_00161EAC;
@@ -1097,9 +1097,9 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
             qcopy(v, &emitter_moby->pos);
             fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
             add_vector_xyz(v, v, u);
-            particle_speed = random_float_between(minimum_particle_speed, D_L05_00161EA8);
-            second_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
-            third_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
+            particle_speed = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
+            second_particle_speed_sample = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
+            third_particle_speed_sample = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
             if (particle_speed < second_particle_speed_sample) {
                 particle_speed = second_particle_speed_sample;
             }
