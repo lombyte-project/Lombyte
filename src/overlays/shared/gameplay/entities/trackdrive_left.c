@@ -1457,14 +1457,14 @@ void update_collectible_sprite_effect(char *moby) __asm__("FUN_L02_002ea8b0");
 void update_collectible_sprite_effect(char *moby) {
     L02SpriteData_ea8b0 *sprite_data = *(L02SpriteData_ea8b0 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float sprite_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float timer_elapsed_fraction;
 
     *(float *)(moby + 0x18) += 0.5f;
     func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
-    fast_vec_normalize(e, d, 0.1f);
+    fast_vec_normalize(sprite_position_step, d, 0.1f);
     func_001F9BD8_ea8b0(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
@@ -1483,7 +1483,7 @@ void update_collectible_sprite_effect(char *moby) {
         col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - timer_elapsed_fraction));
         func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                 sprite_data->d[i]);
-        func_001F9BD8_ea8b0(d, d, e);
+        func_001F9BD8_ea8b0(d, d, sprite_position_step);
     }
 }
 
