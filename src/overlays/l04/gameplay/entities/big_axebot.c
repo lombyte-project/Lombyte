@@ -344,7 +344,9 @@ void update_class_55_swarm_controller(struct Moby *moby) {
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
-void FUN_L04_002ba448(char *moby, float animation_speed) {
+void set_big_axebot_and_axe_animation_speed(char *moby, float animation_speed) __asm__("FUN_L04_002ba448");
+
+void set_big_axebot_and_axe_animation_speed(char *moby, float animation_speed) {
     char *data = *(char **)(moby + 0x78);
     *(float *)(moby + 0x58) = animation_speed;
     if (*(char **)(data + 0x424) != 0) {
