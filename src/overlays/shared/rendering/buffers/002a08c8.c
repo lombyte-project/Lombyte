@@ -10,8 +10,8 @@ u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
 void FUN_00118a80_002a08c8(int) __asm__("FUN_00118a80");
 void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
 extern u32 D_L00_001611B8[] __attribute__((section(".data")));
-extern int D_L00_001611D0;
-extern int D_L00_001611D4;
+extern int selected_render_buffer_index __asm__("D_L00_001611D0");
+extern int render_buffer_high_water_bytes __asm__("D_L00_001611D4");
 extern char D_L00_001E9530[];
 void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 
@@ -19,11 +19,11 @@ void vu1_send_chain_render_buffer(void) {
     int buffer_limit_exceeded;
     int buffer_used_bytes;
     u32 *flag_word;
-    buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[D_L00_001611D0];
+    buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[selected_render_buffer_index];
     D_L00_001611A0_002a08c8 |= 0x1F;
     buffer_limit_exceeded = 0;
-    if (D_L00_001611D4 < buffer_used_bytes) {
-        D_L00_001611D4 = buffer_used_bytes;
+    if (render_buffer_high_water_bytes < buffer_used_bytes) {
+        render_buffer_high_water_bytes = buffer_used_bytes;
         if (D_L00_001611CC < buffer_used_bytes) {
             FUN_001e93b0_002a08c8(D_L00_001E9530);
             buffer_limit_exceeded = 1;
@@ -40,7 +40,7 @@ void vu1_send_chain_render_buffer(void) {
         flag_word = FUN_00122fe0_002a08c8(1);
         *flag_word |= 0xC0;
         FUN_00118a80_002a08c8(0);
-        FUN_001232c8_002a08c8(flag_word, D_L00_001611B8[D_L00_001611D0]);
+        FUN_001232c8_002a08c8(flag_word, D_L00_001611B8[selected_render_buffer_index]);
     } else {
         D_L00_001611A0_002a08c8 = 0;
     }
