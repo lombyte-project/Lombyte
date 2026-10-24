@@ -182,8 +182,8 @@ void initialize_moby_path_state(char *moby) {
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-extern float D_L14_00161FC4 __attribute__((sda));
-extern float D_L14_00161FC8 __attribute__((sda));
+extern float linked_moby_initial_offset_length __asm__("D_L14_00161FC4") __attribute__((sda));
+extern float linked_moby_additional_offset_length __asm__("D_L14_00161FC8") __attribute__((sda));
 void update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
 
 void update_linked_moby_position(char *moby) {
@@ -191,9 +191,9 @@ void update_linked_moby_position(char *moby) {
     float position_offset[4];
     if (*(char **)(data + 0xF4) != 0) {
         char *linked_position;
-        fast_vec_normalize(position_offset, moby + 0xC0, D_L14_00161FC4);
+        fast_vec_normalize(position_offset, moby + 0xC0, linked_moby_initial_offset_length);
         fast_vec_add(*(char **)(data + 0xF4) + 0x10, moby + 0x10, position_offset);
-        fast_vec_normalize(position_offset, moby + 0xE0, D_L14_00161FC8);
+        fast_vec_normalize(position_offset, moby + 0xE0, linked_moby_additional_offset_length);
         linked_position = *(char **)(data + 0xF4) + 0x10;
         fast_vec_add(linked_position, linked_position, position_offset);
     }
