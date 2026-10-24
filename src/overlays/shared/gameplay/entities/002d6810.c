@@ -908,9 +908,9 @@ extern void draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float
                                   float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
-extern int D_L15_00161CCA;
-extern int D_L15_00161CCC;
-extern int D_L15_00161CCE;
+extern int second_side_arc_fade_level __asm__("D_L15_00161CCA");
+extern int third_side_arc_fade_level __asm__("D_L15_00161CCC");
+extern int fourth_side_arc_fade_level __asm__("D_L15_00161CCE");
 void draw_electric_water_bolt_effect(char *moby) {
     float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = decremented_accumulator;
@@ -925,14 +925,14 @@ void draw_electric_water_bolt_effect(char *moby) {
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710,
                           *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA,
-                          *(short *)&D_L15_00161CCA, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0x50, *(short *)&second_side_arc_fade_level,
+                          *(short *)&second_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC,
-                          *(short *)&D_L15_00161CCC, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xA0, *(short *)&third_side_arc_fade_level,
+                          *(short *)&third_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE,
-                          *(short *)&D_L15_00161CCE, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xF0, *(short *)&fourth_side_arc_fade_level,
+                          *(short *)&fourth_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
     FUN_L15_002d8e48_8710(moby);
 }
