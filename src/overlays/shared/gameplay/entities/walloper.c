@@ -1168,9 +1168,9 @@ int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L00_001616BC __attribute__((sda));
-extern float D_L00_001616B8 __attribute__((sda));
-extern int D_L00_001616C8 __attribute__((sda));
+extern float walloper_quad_basis_offset_scale __asm__("D_L00_001616BC") __attribute__((sda));
+extern float walloper_quad_corner_scale __asm__("D_L00_001616B8") __attribute__((sda));
+extern int walloper_quad_texture_index __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
@@ -1183,9 +1183,9 @@ void draw_walloper_camera_facing_quad(void *mv) {
     V_2bc1a0 camera_facing_offset;
     unsigned int uniform_vertex_color;
     int i;
-    FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, moby_bytes + 0xD0);
+    FUN_001f9a68_2bc1a0(walloper_quad_basis_offset_scale, &scaled_basis_offset, moby_bytes + 0xD0);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &scaled_basis_offset, moby_bytes + 0x10);
-    quad.tex = FUN_001f44b8_2bc1a0(D_L00_001616C8);
+    quad.tex = FUN_001f44b8_2bc1a0(walloper_quad_texture_index);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -1215,7 +1215,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     FUN_001f9a68_2bc1a0(0.2f, &camera_facing_offset, &camera_facing_transform[0]);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &camera_facing_transform[3], &camera_facing_offset);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2bc1a0(D_L00_001616B8, &scaled_corner, &D_L00_001DBB60[3 - i]);
+        FUN_001f9a68_2bc1a0(walloper_quad_corner_scale, &scaled_corner, &D_L00_001DBB60[3 - i]);
         FUN_001f9d20_2bc1a0(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2bc1a0(&quad, 0, 0);
