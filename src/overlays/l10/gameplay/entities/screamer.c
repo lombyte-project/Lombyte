@@ -2808,8 +2808,8 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         *(int *)(pvars + 0x110) = (int)hero.moby;
     }
 }
-extern s32 D_L10_00161EF0 __attribute__((sda));
-extern s32 D_L10_00161EF4 __attribute__((sda));
+extern s32 directional_particle_color_range_start __asm__("D_L10_00161EF0") __attribute__((sda));
+extern s32 directional_particle_color_range_end __asm__("D_L10_00161EF4") __attribute__((sda));
 extern f32 directional_particle_speed_range_end __asm__("D_L10_00161EF8") __attribute__((sda));
 extern f32 directional_particle_speed_range_start __asm__("D_L10_00161EFC") __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
@@ -2878,10 +2878,10 @@ void emit_moby_directional_particles(struct Moby *moby) {
                 amount = pvars[1] * x;
             }
             x = random_float_between(0.5f, 1.0f);
-            color = fast_tween_color(x, D_L10_00161EF0, D_L10_00161EF4);
-            first_color = D_L10_00161EF4 & 0xff000000;
+            color = fast_tween_color(x, directional_particle_color_range_start, directional_particle_color_range_end);
+            first_color = directional_particle_color_range_end & 0xff000000;
             x = random_float_between(0.25f, 0.5f);
-            fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
+            fade_color = fast_tween_color(x, directional_particle_color_range_end, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             spawn_gravity_floor_burst_particle(&position, &velocity, life, amount, pvars[0],
                                D_L10_00161F00 * frame_time_sq, color, fade_color, variant);
