@@ -1097,7 +1097,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *input_vector) {
     struct Hero *base = &hero;
-    float m[16] __attribute__((aligned(16)));
+    float gravity_axis_rotation_matrix[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
@@ -1107,8 +1107,8 @@ float gravity_z(float *input_vector) {
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         clear_u64_value(axis);
         axis[2] = 1.0f;
-        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
-        transform_vector(axis, axis, m);
+        euler_rotation_matrix(gravity_axis_rotation_matrix, ((char *)base->moby) + 0x40);
+        transform_vector(axis, axis, gravity_axis_rotation_matrix);
         return fast_vec_dot(axis, input_vector);
     }
     return 0.0f;
