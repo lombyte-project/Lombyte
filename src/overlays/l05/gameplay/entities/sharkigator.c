@@ -1847,7 +1847,9 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
 /* Walks m toward its next path node, steering `side` radians off the direct heading while
    FUN_L05_00303e50 reports the way blocked; slows near the goal and arms the stuck timer
    when it drifts off the path. */
-void FUN_L05_00303b08(struct Moby *moby, s32 node, f32 side) {
+void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) __asm__("FUN_L05_00303b08");
+
+void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
     Vec4f facing_direction, out, goal;
     f32 offset_heading;
