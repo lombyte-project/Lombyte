@@ -24,9 +24,9 @@ void update_three_phase_effect_particle(char *particle) __asm__("FUN_L00_0026929
 
 void update_three_phase_effect_particle(char *particle) {
     S_269290 *particle_data = (S_269290 *)(particle + 0x20);
-    float v[4] __attribute__((aligned(16)));
-    float a[4] __attribute__((aligned(16)));
-    float b[4] __attribute__((aligned(16)));
+    float position_step[4] __attribute__((aligned(16)));
+    float initial_motion_step[4] __attribute__((aligned(16)));
+    float final_motion_step[4] __attribute__((aligned(16)));
     float phase_remaining_ratio;
 
     if (D_15F5CC_269290 & 1) {
@@ -34,8 +34,8 @@ void update_three_phase_effect_particle(char *particle) {
     }
     if (particle_data->h10 != 0) {
         *(volatile int *)0x10000000 = 0;
-        f4bc0_269290(v, particle_data);
-        add_269290(particle + 0x10, particle + 0x10, v);
+        f4bc0_269290(position_step, particle_data);
+        add_269290(particle + 0x10, particle + 0x10, position_step);
         phase_remaining_ratio = i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h10);
         *(int *)(particle + 4) = lerpc_269290(particle_data->w8 & 0xFFFFFF, particle_data->w8, 1.0f - phase_remaining_ratio);
         *(float *)(particle + 0xC) = (float)(particle_data->h16 * 1000);
@@ -44,11 +44,11 @@ void update_three_phase_effect_particle(char *particle) {
             *(short *)(particle + 0xA) = particle_data->h12;
         }
     } else if (particle_data->h12 != 0) {
-        f4bc0_269290(a, particle_data);
-        f4bc0_269290(b, particle + 0x24);
+        f4bc0_269290(initial_motion_step, particle_data);
+        f4bc0_269290(final_motion_step, particle + 0x24);
         phase_remaining_ratio = i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h12);
-        lerp_269290(v, b, a, phase_remaining_ratio);
-        add_269290(particle + 0x10, particle + 0x10, v);
+        lerp_269290(position_step, final_motion_step, initial_motion_step, phase_remaining_ratio);
+        add_269290(particle + 0x10, particle + 0x10, position_step);
         *(float *)(particle + 0xC) = ((float)(particle_data->h16 - particle_data->h18) * phase_remaining_ratio + (float)particle_data->h18) * 1000.0f;
         *(int *)(particle + 4) = lerpc_269290(particle_data->wC, particle_data->w8, phase_remaining_ratio);
         if (f9770_269290(particle + 0xA)) {
@@ -57,8 +57,8 @@ void update_three_phase_effect_particle(char *particle) {
         }
     } else {
         int packed_rgb;
-        f4bc0_269290(v, particle + 0x24);
-        add_269290(particle + 0x10, particle + 0x10, v);
+        f4bc0_269290(position_step, particle + 0x24);
+        add_269290(particle + 0x10, particle + 0x10, position_step);
         packed_rgb = particle_data->wC & 0xFFFFFF;
         *(int *)(particle + 4) =
             lerpc_269290(packed_rgb, particle_data->wC, i2f_269290(*(short *)(particle + 0xA)) / i2f_269290(particle_data->h14));
