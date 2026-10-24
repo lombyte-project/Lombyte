@@ -8000,10 +8000,10 @@ extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern int D_L06_001621C4 __attribute__((sda));
-extern int D_L06_001621C8 __attribute__((sda));
-extern int D_L06_001621C0 __attribute__((sda));
-extern int D_L06_001621CC __attribute__((sda));
+extern int vector_stream_blend_color_b_selector __asm__("D_L06_001621C4") __attribute__((sda));
+extern int vector_stream_blend_alpha_c_selector __asm__("D_L06_001621C8") __attribute__((sda));
+extern int vector_stream_blend_color_a_selector __asm__("D_L06_001621C0") __attribute__((sda));
+extern int vector_stream_blend_color_d_selector __asm__("D_L06_001621CC") __attribute__((sda));
 extern int vector_stream_timer_threshold_color __asm__("D_L06_001621E0") __attribute__((sda));
 extern int vector_stream_cycle_boundary_color __asm__("D_L06_001621E4") __attribute__((sda));
 extern float vector_stream_texture_u_step __asm__("D_L06_001621F4") __attribute__((sda));
@@ -8037,9 +8037,9 @@ void draw_moby_vector_streams(char *moby) {
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
-    vu1_add_g_sregister(0x42, (long)D_L06_001621C0 | ((long)D_L06_001621C4 << 2) |
-                                  ((long)D_L06_001621C8 << 4) |
-                                  ((long)D_L06_001621CC << 6) | 0x8000000000L);
+    vu1_add_g_sregister(0x42, (long)vector_stream_blend_color_a_selector | ((long)vector_stream_blend_color_b_selector << 2) |
+                                  ((long)vector_stream_blend_alpha_c_selector << 4) |
+                                  ((long)vector_stream_blend_color_d_selector << 6) | 0x8000000000L);
     font_queue_vu_state();
     transform_matrix_base = copy_transform_matrices[0];
     sp = shared_helper_arguments;
