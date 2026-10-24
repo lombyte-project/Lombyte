@@ -101,9 +101,9 @@ typedef struct { float r, g, b; } Rgb_0e00;
 extern Coll_0e00 D_L14_00174540;
 extern int D_L14_00174558 __attribute__((section(".data")));
 extern int D_L14_0016208C_0e00 __asm__("D_L14_0016208C") __attribute__((sda));
-extern float D_L14_00162088 __attribute__((sda));
-extern float D_L14_00162090 __attribute__((sda));
-extern float D_L14_00162094 __attribute__((sda));
+extern float spark_contact_clearance __asm__("D_L14_00162088") __attribute__((sda));
+extern float spark_minimum_speed __asm__("D_L14_00162090") __attribute__((sda));
+extern float spark_rolling_speed_factor __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
 extern float D_L14_001620A4 __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
@@ -203,9 +203,9 @@ void update_bouncing_spark(struct Moby *spark_moby)
       {
         qcopy(&spark_moby->pos, &next);
       }
-      if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, D_L14_00162088) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
+      if (((on_ground_0e00(&spark_moby->pos, 0, spark_moby, spark_contact_clearance) != 0) && ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) && ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner)))
       {
-        normalize_0e00(&position_scratch, &D_L14_00174540.normal, D_L14_00162088);
+        normalize_0e00(&position_scratch, &D_L14_00174540.normal, spark_contact_clearance);
         add_0e00(&spark_moby->pos, &D_L14_00174540.hit, &position_scratch);
         reflect_0e00(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
         sound_0e00(1, 0, spark_moby);
@@ -220,9 +220,9 @@ void update_bouncing_spark(struct Moby *spark_moby)
           else
           {
             scale_0e00(&from, &spark_data->vel, D_L14_001620A0);
-            if (length_0e00(&from) < (D_L14_00162090 * frame_time))
+            if (length_0e00(&from) < (spark_minimum_speed * frame_time))
             {
-              cap_0e00(&spark_data->vel, &spark_data->vel, D_L14_00162090 * frame_time);
+              cap_0e00(&spark_data->vel, &spark_data->vel, spark_minimum_speed * frame_time);
               spark_data->vel.z *= D_L14_001620A0;
             }
             else
@@ -238,7 +238,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
           spark_data->vel.z = 0.0f;
           spark_data->vel.w = length_0e00(&spark_data->vel);
           spark_data->vel.w *= D_L14_001620A0;
-          min = D_L14_00162090 * frame_time;
+          min = spark_minimum_speed * frame_time;
           if (spark_data->vel.w < min)
           {
             spark_data->vel.w = min;
@@ -264,8 +264,8 @@ void update_bouncing_spark(struct Moby *spark_moby)
       b = ftoi_0e00(((((Rgb_0e00 *) (&next))->b - 0.0f) * fade_fraction) + 0.0f);
       spark_moby->glow_color = 0xFF000000;
       spark_moby->glow_color = (((b << 16) | spark_moby->glow_color) | (g << 8)) | r;
-      min = D_L14_00162090 * frame_time;
-      spark_data->vel.w *= ((D_L14_00162094 - 1.0f) * frame_scale) + 1.0f;
+      min = spark_minimum_speed * frame_time;
+      spark_data->vel.w *= ((spark_rolling_speed_factor - 1.0f) * frame_scale) + 1.0f;
       if (spark_data->vel.w < min)
       {
         spark_data->vel.w = min;
