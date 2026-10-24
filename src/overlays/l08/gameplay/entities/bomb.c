@@ -2538,7 +2538,7 @@ extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
-extern int D_L08_00161A20 __attribute__((sda));
+extern int rocket_guidance_effect_frame_count_gp __asm__("D_L08_00161A20") __attribute__((sda));
 extern int D_L08_00161A2C __attribute__((sda));
 extern int D_L08_00161A30 __attribute__((sda));
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
@@ -2622,7 +2622,7 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
         effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
-        life=scale_game_frames_alt(D_L08_00161A20);
+        life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
         size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
@@ -2652,7 +2652,7 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
         effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
-        life=scale_game_frames_alt(D_L08_00161A20);
+        life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
         size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
         FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
         return;
