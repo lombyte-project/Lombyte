@@ -2008,10 +2008,10 @@ typedef struct {
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float D_L01_00201630[];
 extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
-extern int D_L01_00161FB8 __attribute__((sda));
-extern int D_L01_00161FBC __attribute__((sda));
-extern int D_L01_00161FC0 __attribute__((sda));
-extern int D_L01_00161FC4 __attribute__((sda));
+extern int moby_radius_ring_blend_minuend_selector __asm__("D_L01_00161FB8") __attribute__((sda));
+extern int moby_radius_ring_blend_subtrahend_selector __asm__("D_L01_00161FBC") __attribute__((sda));
+extern int moby_radius_ring_blend_alpha_factor_selector __asm__("D_L01_00161FC0") __attribute__((sda));
+extern int moby_radius_ring_blend_addend_selector __asm__("D_L01_00161FC4") __attribute__((sda));
 extern int moby_radius_ring_texture_index __asm__("D_L01_00161FC8") __attribute__((sda));
 extern int moby_radius_ring_vertex_color __asm__("D_L01_00161FCC") __attribute__((sda));
 extern float moby_radius_ring_center_z __asm__("D_L01_00161FD0") __attribute__((sda));
@@ -2029,7 +2029,7 @@ void draw_moby_radius_ring(char *moby) {
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
     qcopy(moby_position_snapshot, moby + 0x10);
     quad.g[1] = get_effect_texture(moby_radius_ring_texture_index);
-    quad.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
+    quad.g[3] = (long)moby_radius_ring_blend_minuend_selector | ((long)moby_radius_ring_blend_subtrahend_selector << 2) | ((long)moby_radius_ring_blend_alpha_factor_selector << 4) | ((long)moby_radius_ring_blend_addend_selector << 6) | (0x8000L << 24);
     quad.g[2] = 0xFF9000000260UL;
     quad.g[0] = 0;
     for (i = 0; i < 4; i++) {
