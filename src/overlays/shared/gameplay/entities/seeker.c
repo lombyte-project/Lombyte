@@ -375,7 +375,9 @@ extern float func_001F9B88_2C73D0(float) __asm__("FUN_001f99c0");
 extern Path_2C73D0 *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
-void FUN_L09_002c6230(Moby *moby) {
+void update_seeker_damage_and_target(Moby *moby) __asm__("FUN_L09_002c6230");
+
+void update_seeker_damage_and_target(Moby *moby) {
     enum {
         RESPONSE_NONE = 0,
         RESPONSE_FATAL_KNOCKBACK = 1,
