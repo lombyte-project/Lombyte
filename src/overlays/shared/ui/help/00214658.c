@@ -687,7 +687,7 @@ void update_hero_planar_movement_velocity(void) {
     struct Hero *slope_hero_state;
     Vec4 *hero_velocity;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
-    f32 f20, f21, f22, impulse_step_factor, impulse_length_or_step, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
+    f32 f20, f21, zero_or_slope_step_limit, impulse_step_factor, impulse_length_or_step, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
@@ -739,11 +739,11 @@ void update_hero_planar_movement_velocity(void) {
         f21 = frame_time_sq * 13.0f;
     }
     impulse_gate_or_target_length = hero.unk930;
-    f22 = 0.0f;
-    if (f22 < impulse_gate_or_target_length) {
+    zero_or_slope_step_limit = 0.0f;
+    if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
         f20 = -fast_vec_dot(&target_velocity_before_impulse, &saved_move_impulse);
         impulse_gate_or_target_length = fast_vec_length(&target_velocity_before_impulse);
-        if (f22 < impulse_gate_or_target_length) {
+        if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
             f20 = f20 / impulse_gate_or_target_length;
         }
         impulse_length_or_step = vector_length_xy(&saved_move_impulse);
@@ -773,14 +773,14 @@ void update_hero_planar_movement_velocity(void) {
         f20 = f20 * 8.0f;
         f20 = f20 * slope_hero_state->ground_slope.f;
         f20 = f20 / 0.785398185f;
-        f22 = frame_time_sq * 8.5f * slope_hero_state->ground_slope.f / 0.785398185f;
+        zero_or_slope_step_limit = frame_time_sq * 8.5f * slope_hero_state->ground_slope.f / 0.785398185f;
         xy_velocity_scratch.f[0] = fast_cos(f21) * f20;
         xy_velocity_scratch.f[1] = fast_sin(f21) * f20;
         xy_velocity_scratch.f[2] = 0.0f;
         fast_vec_sub(&slope_velocity_delta, &xy_velocity_scratch, hero_velocity);
         slope_velocity_delta.f[2] = 0.0f;
-        if (f22 < fast_vec_length(&slope_velocity_delta)) {
-            fast_vec_normalize(&slope_velocity_delta, &slope_velocity_delta, f22);
+        if (zero_or_slope_step_limit < fast_vec_length(&slope_velocity_delta)) {
+            fast_vec_normalize(&slope_velocity_delta, &slope_velocity_delta, zero_or_slope_step_limit);
         }
         FUN_001f9a10_c(hero_velocity, hero_velocity, &slope_velocity_delta);
     }
