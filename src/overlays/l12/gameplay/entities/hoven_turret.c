@@ -871,24 +871,24 @@ extern short D_L12_00161E1C __attribute__((sda));
 extern short D_L12_00161E20 __attribute__((sda));
 extern short D_L12_00161E24 __attribute__((sda));
 extern short D_L12_00161E28 __attribute__((sda));
-extern int D_L12_00161E2C __attribute__((sda));
-extern int D_L12_00161E30 __attribute__((sda));
-extern int D_L12_00161E34 __attribute__((sda));
-extern int D_L12_00161E38 __attribute__((sda));
+extern int hoven_turret_hud_health_dial_vertex_0_uv __asm__("D_L12_00161E2C") __attribute__((sda));
+extern int hoven_turret_hud_health_dial_vertex_1_uv __asm__("D_L12_00161E30") __attribute__((sda));
+extern int hoven_turret_hud_health_dial_vertex_2_uv __asm__("D_L12_00161E34") __attribute__((sda));
+extern int hoven_turret_hud_health_dial_vertex_3_uv __asm__("D_L12_00161E38") __attribute__((sda));
 extern int hoven_turret_hud_yaw_indicator_texture_index __asm__("D_L12_00161E3C") __attribute__((sda));
 extern int hoven_turret_hud_pitch_indicator_texture_index __asm__("D_L12_00161E40") __attribute__((sda));
 extern short D_L12_00161E44 __attribute__((sda));
 extern short D_L12_00161E48 __attribute__((sda));
-extern int D_L12_00161E4C __attribute__((sda));
-extern int D_L12_00161E50 __attribute__((sda));
-extern int D_L12_00161E54 __attribute__((sda));
-extern int D_L12_00161E58 __attribute__((sda));
+extern int hoven_turret_hud_orientation_indicator_vertex_0_uv __asm__("D_L12_00161E4C") __attribute__((sda));
+extern int hoven_turret_hud_orientation_indicator_vertex_1_uv __asm__("D_L12_00161E50") __attribute__((sda));
+extern int hoven_turret_hud_orientation_indicator_vertex_2_uv __asm__("D_L12_00161E54") __attribute__((sda));
+extern int hoven_turret_hud_orientation_indicator_vertex_3_uv __asm__("D_L12_00161E58") __attribute__((sda));
 extern int hoven_turret_hud_frame_texture_index_offset __asm__("D_L12_00161E5C") __attribute__((sda));
 extern int hoven_turret_hud_frame_color __asm__("D_L12_00161EB0") __attribute__((sda));
-extern int D_L12_00161F08 __attribute__((sda));
-extern int D_L12_00161F0C __attribute__((sda));
-extern int D_L12_00161F10 __attribute__((sda));
-extern int D_L12_00161F14 __attribute__((sda));
+extern int hoven_turret_hud_frame_vertex_0_uv __asm__("D_L12_00161F08") __attribute__((sda));
+extern int hoven_turret_hud_frame_vertex_1_uv __asm__("D_L12_00161F0C") __attribute__((sda));
+extern int hoven_turret_hud_frame_vertex_2_uv __asm__("D_L12_00161F10") __attribute__((sda));
+extern int hoven_turret_hud_frame_vertex_3_uv __asm__("D_L12_00161F14") __attribute__((sda));
 extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
 extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");
@@ -913,10 +913,10 @@ void draw_hoven_turret_hud(Moby *moby) {
     float angle;
 
     vu1_add_g_sregister_c(0x42, 0x8000000044L);
-    uv[0] = D_L12_00161F08;
-    uv[1] = D_L12_00161F0C;
-    uv[2] = D_L12_00161F10;
-    uv[3] = D_L12_00161F14;
+    uv[0] = hoven_turret_hud_frame_vertex_0_uv;
+    uv[1] = hoven_turret_hud_frame_vertex_1_uv;
+    uv[2] = hoven_turret_hud_frame_vertex_2_uv;
+    uv[3] = hoven_turret_hud_frame_vertex_3_uv;
     colors[3] = hoven_turret_hud_frame_color;
     colors[2] = hoven_turret_hud_frame_color;
     colors[1] = hoven_turret_hud_frame_color;
@@ -950,10 +950,10 @@ void draw_hoven_turret_hud(Moby *moby) {
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
     texture = func_001F4868_3055F8(6);
-    uv[0] = D_L12_00161E2C;
-    uv[1] = D_L12_00161E30;
-    uv[2] = D_L12_00161E34;
-    uv[3] = D_L12_00161E38;
+    uv[0] = hoven_turret_hud_health_dial_vertex_0_uv;
+    uv[1] = hoven_turret_hud_health_dial_vertex_1_uv;
+    uv[2] = hoven_turret_hud_health_dial_vertex_2_uv;
+    uv[3] = hoven_turret_hud_health_dial_vertex_3_uv;
     if (data->f8C > 100.0f) {
         color = fast_tween_color(0x6000FFFF, 0x6000FF00, (data->f8C - 100.0f) / 100.0f);
     } else {
@@ -1000,10 +1000,10 @@ void draw_hoven_turret_hud(Moby *moby) {
     } else {
         color = fast_tween_color(0x5000FF00, 0x5000FFFF, convert_integer_to_float(data->f88) / (float)scale_game_frames_alt(0xF));
     }
-    uv[0] = D_L12_00161E4C;
-    uv[1] = D_L12_00161E50;
-    uv[2] = D_L12_00161E54;
-    uv[3] = D_L12_00161E58;
+    uv[0] = hoven_turret_hud_orientation_indicator_vertex_0_uv;
+    uv[1] = hoven_turret_hud_orientation_indicator_vertex_1_uv;
+    uv[2] = hoven_turret_hud_orientation_indicator_vertex_2_uv;
+    uv[3] = hoven_turret_hud_orientation_indicator_vertex_3_uv;
     colors[3] = color;
     colors[2] = color;
     colors[1] = color;
