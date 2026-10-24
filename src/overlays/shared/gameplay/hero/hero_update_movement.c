@@ -2135,8 +2135,8 @@ void hero_update_movement(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 1.7f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         f32 s;
         f32 a;
         f32 b;
@@ -2729,8 +2729,8 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x4D:
-    case 0x4E: {
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90:
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90: {
         f32 s;
         f32 a;
         f32 b;
