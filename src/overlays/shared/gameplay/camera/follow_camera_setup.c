@@ -936,7 +936,9 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
     return r;
 }
 /* Does nothing and returns 0 (the buffer is unused). */
-int FUN_L00_002e7520(void) {
+int return_follow_camera_no_collision(void) __asm__("FUN_L00_002e7520");
+
+int return_follow_camera_no_collision(void) {
     char unused_stack_reservation[0x50];
     return 0;
 }
