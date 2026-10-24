@@ -561,7 +561,7 @@ void update_rocket_moby(struct Moby *moby) {
     }
 }
 /* Spawns a moby that travels along a path, with its heading set from the direction vector. */
-extern float D_L18_00161960 __attribute__((sda));
+extern float rocket_spawn_scale_multiplier __asm__("D_L18_00161960") __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
@@ -576,7 +576,7 @@ char *create_rocket_moby(float *rocket_spawn_position, float *initial_movement_s
         moby[0x31] = 1;
         moby[0x20] = 0;
         set_moby_color(moby, 0xC0, 0xC0, 0xC0);
-        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * D_L18_00161960;
+        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * rocket_spawn_scale_multiplier;
         qcopy(moby + 0x10, rocket_spawn_position);
         data = *(char **)(moby + 0x78);
         qcopy(data, initial_movement_step);
