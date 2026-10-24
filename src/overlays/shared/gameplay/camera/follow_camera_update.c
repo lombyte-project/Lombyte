@@ -43,7 +43,7 @@ void follow_camera_build_view(u8 *camera) {
     u8 *w;     /* scratch vector pointer: p + 0x10, later v4 */
     u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
     f32 projected_view_length;
-    f32 g2, reference_orbit_up_component, e2, view_blend_fraction;
+    f32 g2, reference_orbit_up_component, remaining_view_blend_frames, view_blend_fraction;
     f32 position_up_component, adjusted_view_length, smoothed_height_difference, view_rotation_angle, target_view_angle_offset, x, smoothed_view_angle_offset;
     f32 vector_scratch[4];
     f32 projected_reference_position[4];
@@ -128,8 +128,8 @@ void follow_camera_build_view(u8 *camera) {
     }
     if (*(s16 *)q20 != 0) {
         fast_dec_timer(q20);
-        e2 = FUN_001fa6c0_2e9010(*(s16 *)q20);
-        view_blend_fraction = e2 / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_gp));
+        remaining_view_blend_frames = FUN_001fa6c0_2e9010(*(s16 *)q20);
+        view_blend_fraction = remaining_view_blend_frames / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_gp));
         lerp_vector(camera, camera, camera + 0x40, view_blend_fraction);
         FUN_001f9bf8_2e9010(camera, camera, 1.0f);
     }
