@@ -1720,21 +1720,21 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) {
-    float a[4] __attribute__((aligned(16)));
-    float b[4] __attribute__((aligned(16)));
+    float target_position_copy[4] __attribute__((aligned(16)));
+    float movement_delta[4] __attribute__((aligned(16)));
     float speed;
     float distance_to_target;
     char *data = *(char **)(moby + 0x78);
-    *(OvlQuad *)a = *(OvlQuad *)target_position;
+    *(OvlQuad *)target_position_copy = *(OvlQuad *)target_position;
     approach_angle((float *)(moby + 0x48), (float *)(data + 0x100), angle,
                      frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
     speed = 0.0f;
-    subtract_vector_xyz(b, a, moby + 0x10);
-    distance_to_target = vector_length_xyz(b);
+    subtract_vector_xyz(movement_delta, target_position_copy, moby + 0x10);
+    distance_to_target = vector_length_xyz(movement_delta);
     advance_accelerated_scalar(distance_to_target, frame_time_sq * 12.0f, frame_time_sq * 12.0f, D_0015ED6C * 6.0f,
                                &speed, (float *)(data + 0xFC));
-    normalize_vector_xyz(b, b, *(float *)(data + 0xFC));
-    add_vector_xyz(moby + 0x10, moby + 0x10, b);
+    normalize_vector_xyz(movement_delta, movement_delta, *(float *)(data + 0xFC));
+    add_vector_xyz(moby + 0x10, moby + 0x10, movement_delta);
     if (distance_to_target < 0.05f) {
         if (*(float *)(data + 0xFC) < 0.005f)
             return 1;
