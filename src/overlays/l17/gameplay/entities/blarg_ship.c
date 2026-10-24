@@ -350,7 +350,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     Pkt pkt;
     OvlQuad vv[4];
     char *data = (char *)moby->pvars;
-    char *pos;
+    char *backdrop_endpoint_position;
     int i;
     int k;
     int j;
@@ -359,15 +359,15 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     float *quad_vertex_v_coordinates;
     vu1_add_g_sregister_c(0x47, 0x513F1);
     vb = &vv[2];
-    pos = data + 0x10;
+    backdrop_endpoint_position = data + 0x10;
     pu = &pkt.uv[0];
     quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
     *(float *)(data + 0x14) = -8000.0f;
     for (i = 0; i < 2; i++) {
-        subtract_vector_xyz(vb, data, pos);
+        subtract_vector_xyz(vb, data, backdrop_endpoint_position);
         subtract_vector_xyz(&vv[0], data, D_L17_001676C0);
-        subtract_vector_xyz(&vv[1], pos, D_L17_001676C0);
+        subtract_vector_xyz(&vv[1], backdrop_endpoint_position, D_L17_001676C0);
         cross_vectors_xyz(&vv[0], &vv[0], vb);
         normalize_vector_xyz(&vv[0], &vv[0], D_L17_001DE0B8[i]);
         cross_vectors_xyz(&vv[1], &vv[1], vb);
@@ -392,9 +392,9 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         pkt.m[0] = vv[3];
         add_vector_xyz(&vv[3], data, &vv[0]);
         pkt.m[1] = vv[3];
-        subtract_vector_xyz(&vv[3], pos, &vv[1]);
+        subtract_vector_xyz(&vv[3], backdrop_endpoint_position, &vv[1]);
         pkt.m[2] = vv[3];
-        add_vector_xyz(&vv[3], pos, &vv[1]);
+        add_vector_xyz(&vv[3], backdrop_endpoint_position, &vv[1]);
         pkt.m[3] = vv[3];
         *(long *)&pkt.q[2] = get_effect_texture_alt(D_L17_001DE088[i]);
         for (j = 0; j < 4; j++) {
