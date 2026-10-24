@@ -281,7 +281,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         DRONE_STATE_FLIGHT = 0,
         DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
     };
-    float a[4];
+    float flight_position_or_spark_velocity[4];
     float b[4];
     float flight_offset_scratch[4];
     float lowered_hero_position[4];
@@ -317,22 +317,22 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         }
         scale_vector_xyz_q(flight_offset_scratch, drone_vars, -20.0f);
         step = 0;
-        add_vector_xyz_q(a, &moby->pos, drone_vars);
+        add_vector_xyz_q(flight_position_or_spark_velocity, &moby->pos, drone_vars);
         add_vector_xyz_q(b, &moby->pos, flight_offset_scratch);
-        FUN_001f9a40_q(movement_midpoint, a, &moby->pos, 0.5f);
+        FUN_001f9a40_q(movement_midpoint, flight_position_or_spark_velocity, &moby->pos, 0.5f);
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
-        create_drone_flight_trail_record((char *)a, 1, step);
+        create_drone_flight_trail_record((char *)flight_position_or_spark_velocity, 1, step);
         create_drone_flight_trail_record((char *)movement_midpoint, 1, step);
-        create_drone_flight_trail_record((char *)a, 0, step);
+        create_drone_flight_trail_record((char *)flight_position_or_spark_velocity, 0, step);
         b[2] = b[2] + 0.25f;
         func_L00_0025A8C0_alt_q((char *)hit_descriptor, (int)moby, 1, 6.0f, drone_vars);
         *(short *)((char *)hit_descriptor + 0x1A) = moby->oclass;
-        qcopy(&moby->pos, a);
+        qcopy(&moby->pos, flight_position_or_spark_velocity);
         r = D_L17_00174740_lui;
         *(int *)(r + 0x18) = 0;
-        if (FUN_001efa68_q(b, a, 0, moby, hit_descriptor) != 0 ||
+        if (FUN_001efa68_q(b, flight_position_or_spark_velocity, 0, moby, hit_descriptor) != 0 ||
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
@@ -397,8 +397,8 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
     case DRONE_STATE_SPARKS_UNTIL_REMOVAL: {
         float x = random_float_between_alt_q(frame_time + frame_time, frame_time * 10.0f);
         float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
-        build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
-        spawn_moving_hero_relative_alpha_fade_particle(&moby->pos.x, (char *)a, 0x60FF3020, 0xF,
+        build_spherical_offset_q(flight_position_or_spark_velocity, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
+        spawn_moving_hero_relative_alpha_fade_particle(&moby->pos.x, (char *)flight_position_or_spark_velocity, 0x60FF3020, 0xF,
                            random_integer_below_q(0xFF), 0, 3.0f);
         if (tick_countdown_32_q(drone_vars + 0x38) != 0) {
             mmr_q_q(moby);
