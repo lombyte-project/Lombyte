@@ -2473,8 +2473,8 @@ extern s32 D_0015ED84;
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern int D_L10_00161EE4 __attribute__((sda));
-extern float D_L10_00161EE8 __attribute__((sda));
-extern float D_L10_00161EEC __attribute__((sda));
+extern float blarg_ship_rocket_speed __asm__("D_L10_00161EE8") __attribute__((sda));
+extern float blarg_ship_firing_animation_speed __asm__("D_L10_00161EEC") __attribute__((sda));
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_001413F4[];
 extern unsigned char D_0014161B[];
@@ -2611,7 +2611,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if (fast_difference_between_rotations_c2(ship->f48, fast_arc_tan(tgt->pos.x - ship->pos.x, tgt->pos.y - ship->pos.y)) < 0.17453292f) {
             if (ship->b53 != 3) blend_moby_animation(ship, 3, 0, scale_game_frames_c2(6));
-            ship->f58 = D_L10_00161EEC;
+            ship->f58 = blarg_ship_firing_animation_speed;
         }
         if (ship->b52 == 3 && d->i114 != 2 && D_L10_001742D8 == tgt) {
             int near = is_value_within_interpolated_window((char *)ship, 1.0f);
@@ -2621,7 +2621,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
                 build_spherical_offset_c(&B, 1.0f, ship->f48, -ship->f44);
                 FUN_L00_001ff290(&D, &C, &B);
                 func_001F9BF0_2E52B0(&B, &A, &C);
-                fast_vec_normalize(&B, &B, D_L10_00161EE8 * D_0015ED6C);
+                fast_vec_normalize(&B, &B, blarg_ship_rocket_speed * D_0015ED6C);
                 fast_vec_scale(&E, &B, FUN_L04_001f1978(3.0f));
                 FUN_L00_001ff290(&D, &E, &C);
                 emit_radial_particle_burst(ship, &E, 0);
@@ -2669,7 +2669,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         ship->f44 = FUN_L00_00258110_c(&d->f19C, ship->f44, -aim_elevation, 0.02f, 0.3f, D_0015ED6C * 3.1415927f);
         if (tick_countdown_32_alt(&d->i168)) {
             blend_moby_animation(ship, 3, 0, scale_game_frames_c2(10));
-            ship->f58 = D_L10_00161EEC;
+            ship->f58 = blarg_ship_firing_animation_speed;
             ship->state = 4;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f160 * 60.0f));
         }
@@ -2695,7 +2695,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
         next = ship->bBC;
         if (next == 4) {
             blend_moby_animation(ship, 3, 0, scale_game_frames_c2(10));
-            ship->f58 = D_L10_00161EEC;
+            ship->f58 = blarg_ship_firing_animation_speed;
             ship->state = next;
             d->i168 = truncate_float_to_s32_c2(FUN_L04_001f1978(d->f160 * 60.0f));
         } else if (next == 6) {
