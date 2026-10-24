@@ -7363,7 +7363,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 }
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
-extern float D_L06_0016215C __attribute__((sda));
+extern float shuttle_breakup_particle_max_speed __asm__("D_L06_0016215C") __attribute__((sda));
 extern int D_L06_00162160 __attribute__((sda));
 extern int D_L06_00162164 __attribute__((sda));
 extern int D_L06_00162168 __attribute__((sda));
@@ -7376,7 +7376,7 @@ extern int D_L06_00162180 __attribute__((sda));
 extern int D_L06_00162184 __attribute__((sda));
 extern int D_L06_00162188 __attribute__((sda));
 extern int D_L06_0016218C __attribute__((sda));
-extern int D_L06_00162190 __attribute__((sda));
+extern int shuttle_breakup_particles_per_piece __asm__("D_L06_00162190") __attribute__((sda));
 extern int D_L06_00162194 __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
@@ -7442,11 +7442,11 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
         push[3] = 6.0f;
         random_vector_03b68(spin, frame_time * 0.2617994f, frame_time * 0.08726646f);
         begin_moby_linear_and_angular_motion((char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
-        for (i = 0; i < D_L06_00162190; i++) {
+        for (i = 0; i < shuttle_breakup_particles_per_piece; i++) {
             piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector_03b68(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
             add_vector_03b68(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
-            random_vector_03b68(particle_velocity, 0.0f, D_L06_0016215C * frame_time);
+            random_vector_03b68(particle_velocity, 0.0f, shuttle_breakup_particle_max_speed * frame_time);
             clear_vector_03b68(particle_acceleration);
             particle_velocity[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
             particle_acceleration[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
