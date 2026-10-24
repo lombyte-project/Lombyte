@@ -2924,7 +2924,7 @@ extern int cart_tick(void *) __asm__("FUN_001f9740");
 extern float cart_atan2(float, float) __asm__("FUN_001f9e90");
 extern int cart_voice_alive(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern int cart_sound(int, int, struct Moby *) __asm__("FUN_0022da68");
-extern int D_0015EE08;
+extern int enemy_fighter_destruction_count __asm__("D_0015EE08");
 extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
 extern s32 enemy_fighter_respawn_delay_frames __asm__("D_L14_00161F5C") __attribute__((sda));
 extern char D_0013E550[];
@@ -2964,8 +2964,8 @@ void update_enemy_fighter(struct Moby *moby) {
     moby->hit_slot = 0xff;
     if (hit && moby->state != 2) {
         if (current_level_index == 14) {
-            D_0015EE08 = D_0015EE08 + 1;
-            if (D_0015EE08 > 2 && D_0013D408.flag == 0) {
+            enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
+            if (enemy_fighter_destruction_count > 2 && D_0013D408.flag == 0) {
                 D_0013D408.flag = 1;
                 cart_bank_voice(1, 0, 0);
                 cart_dialog(0x53d6, -1);
@@ -3237,7 +3237,7 @@ extern int D_L14_001BABD0[];
 extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
 extern char D_L14_001FCE98[];
 extern char D_L14_001FCED0[];
-extern s32 D_L14_00161F8C __attribute__((sda));
+extern s32 enemy_fighter_921_respawn_delay_frames __asm__("D_L14_00161F8C") __attribute__((sda));
 extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
@@ -3308,8 +3308,8 @@ void update_enemy_fighter_921(struct Moby *moby) {
         moby->hit_slot = 0xFF;
         if (hit != 0 && moby_vars->carrier == -1 && moby->state != 3) {
             if (current_level_index == 14) {
-                D_0015EE08 = D_0015EE08 + 1;
-                if (D_0015EE08 >= 3 && D_0013D408_t[0x18] == 0) {
+                enemy_fighter_destruction_count = enemy_fighter_destruction_count + 1;
+                if (enemy_fighter_destruction_count >= 3 && D_0013D408_t[0x18] == 0) {
                     D_0013D408_t[0x18] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
                     FUN_L00_00263d40(0x53D6, -1);
@@ -3359,7 +3359,7 @@ void update_enemy_fighter_921(struct Moby *moby) {
         }
         moby->draw_dist = 0x80;
         moby_vars->sound = -1;
-        moby_vars->timer = tram_frames(D_L14_00161F8C);
+        moby_vars->timer = tram_frames(enemy_fighter_921_respawn_delay_frames);
         break;
     case TRAM_STATE_WAIT_FOR_UNLOCK: {
         int lvl = current_level_index * 16;
@@ -3421,7 +3421,7 @@ void update_enemy_fighter_921(struct Moby *moby) {
             char *path = D_L14_001B0BB0_t[moby_vars->path];
             moby->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
-            moby_vars->timer = tram_frames(D_L14_00161F8C);
+            moby_vars->timer = tram_frames(enemy_fighter_921_respawn_delay_frames);
             moby->state = 2;
             moby_vars->segment = 0;
             moby_vars->along = 0;
