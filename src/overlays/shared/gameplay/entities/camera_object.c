@@ -150,7 +150,7 @@ void update_ambience_target_cycle(void) {
         break;
     }
 }
-extern int D_L00_00161390;
+extern int fetch_add_accumulator __asm__("D_L00_00161390");
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
 extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
@@ -176,7 +176,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
     int scaled_frame_count;
     switch (state_object[0x20]) {
     case INITIALIZE_FRAME_TIMING:
-        D_L00_00161390 = 0;
+        fetch_add_accumulator = 0;
         state_object[0x20] = 1;
         state_object[0x30] = 0xFF;
         one = 1.0f;
@@ -198,8 +198,8 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
 int fetch_and_add_global_accumulator(int addend) __asm__("FUN_L00_002a4dc8");
 
 int fetch_and_add_global_accumulator(int addend) {
-    int previous_value = D_L00_00161390;
-    D_L00_00161390 = previous_value + addend;
+    int previous_value = fetch_add_accumulator;
+    fetch_add_accumulator = previous_value + addend;
     return previous_value;
 }
 #include "eetypes.h"
