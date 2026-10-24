@@ -35,7 +35,7 @@ extern void FUN_L00_00250df8(void *);
 
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) __asm__("FUN_L15_002e4580");
 
-char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) {
+char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spawn_position) {
     char *spawned_moby = func_0020D348_m(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
@@ -45,7 +45,7 @@ char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos
         spawned_moby[0x20] = 0;
         *(long *)(spawned_moby + 0x38) = *(long *)(source_moby + 0x38);
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 20.0f;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         moby_vars = *(char **)(spawned_moby + 0x78);
         FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
