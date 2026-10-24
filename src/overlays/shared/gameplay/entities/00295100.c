@@ -1380,8 +1380,8 @@ extern void attach_manipulator(char *, s32, void *) __asm__("FUN_0020cb10");
 
 typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
-extern f32 D_L00_00161060 __attribute__((sda));
-extern f32 D_L00_00161068;
+extern f32 vendor_camera_eye_local_offset_x __asm__("D_L00_00161060") __attribute__((sda));
+extern f32 vendor_camera_eye_local_offset_z __asm__("D_L00_00161068");
 extern Vec4 D_L00_00180250;
 extern f32 D_L00_001610D0 __attribute__((sda));
 extern f32 D_L00_001610E0 __attribute__((sda));
@@ -1402,9 +1402,9 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     if (vendor_moby == 0) {
         vendor_moby = create_moby(0xB);
         *(s16 *)((char *)vendor_moby + 0x32) = 0x40;
-        *(f32 *)((char *)vendor_moby + 0x10) = D_L00_00166C80_29a6b0.x + D_L00_00161060;
+        *(f32 *)((char *)vendor_moby + 0x10) = D_L00_00166C80_29a6b0.x + vendor_camera_eye_local_offset_x;
         *(f32 *)((char *)vendor_moby + 0x14) = D_L00_00166C80_29a6b0.y;
-        *(f32 *)((char *)vendor_moby + 0x18) = D_L00_00166C80_29a6b0.z - D_L00_00161068;
+        *(f32 *)((char *)vendor_moby + 0x18) = D_L00_00166C80_29a6b0.z - vendor_camera_eye_local_offset_z;
         clear_vec_29a6b0(&vendor_moby->rot);
         vendor_moby->rot.f[2] = 3.1415927f;
         update_moby_29a6b0(vendor_moby);
@@ -1467,7 +1467,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     }
     vendor_moby->f58 = frame_scale_macro * 0.5f;
     if (vendor_29a6b0.mode == 0) {
-        FUN_001f9cf8_29a6b0(&vendor_29a6b0.eye, &D_L00_00161060, vendor_29a6b0.moby + 0xC0);
+        FUN_001f9cf8_29a6b0(&vendor_29a6b0.eye, &vendor_camera_eye_local_offset_x, vendor_29a6b0.moby + 0xC0);
         add_vec_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.eye, vendor_29a6b0.moby + 0x10);
         vendor_29a6b0.look.f[2] = add_angles_29a6b0(*(f32 *)(vendor_29a6b0.moby + 0x48), 3.1415927f);
         FUN_L00_002eaaa0_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.look, 1, 0, 0);
