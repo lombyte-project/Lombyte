@@ -1048,7 +1048,9 @@ s32 D_L02_0016199C = 0x40306058;
 s32 D_L02_001619A0 = 0x10306058;
 s32 D_L02_001619A4 = -1;
 
-void FUN_L02_002d5a68(Vec4 *from) {
+void emit_sand_shark_single_particle(Vec4 *from) __asm__("FUN_L02_002d5a68");
+
+void emit_sand_shark_single_particle(Vec4 *from) {
     Vec4 saved_source_position;
     Vec4 at;
     Vec4 vertical_motion;
