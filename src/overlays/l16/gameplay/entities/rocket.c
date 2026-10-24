@@ -309,7 +309,7 @@ extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 SubtractIntegerWithClamp(s32);
 
 extern float D_L16_00161A84 __attribute__((sda));
-extern int D_L16_00161A88 __attribute__((sda));
+extern int last_test_dummy_door_sound_request_frame __asm__("D_L16_00161A88") __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
     enum {
@@ -327,8 +327,8 @@ void test_dummy_door_update(struct Moby *moby) {
         float target_height;
         if (timer_result != 0) {
             if (timer_result == 2) {
-                if (SubtractIntegerWithClamp(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
-                    D_L16_00161A88 = D_L16_0015F5CC;
+                if (SubtractIntegerWithClamp(last_test_dummy_door_sound_request_frame - D_L16_0015F5CC) >= 4) {
+                    last_test_dummy_door_sound_request_frame = D_L16_0015F5CC;
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
             }
@@ -2850,8 +2850,8 @@ extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
 void refresh_test_dummy_door_timer(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     if (*(int *)(moby_data + 8) == 0) {
-        if (FUN_001f99a8_5e80(D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
-            D_L16_00161A88 = D_L16_0015F5CC;
+        if (FUN_001f99a8_5e80(last_test_dummy_door_sound_request_frame - D_L16_0015F5CC) >= 4) {
+            last_test_dummy_door_sound_request_frame = D_L16_0015F5CC;
             FUN_0022da68_5e80(0, 0, moby);
         }
     }
