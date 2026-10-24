@@ -1317,7 +1317,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern float D_L09_0015F5D0;
+extern float radial_effect_count_reduction_control __asm__("D_L09_0015F5D0");
 extern float D_L09_0015F5D4;
 extern int FUN_L00_001fefc8();
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -1393,7 +1393,7 @@ void barrier_update(Moby *moby)
     }
     moby->hit_slot = 0xFF;
     count = 40;
-    if (0.85f < D_L09_0015F5D0 || 0.85f < D_L09_0015F5D4) count = 30;
+    if (0.85f < radial_effect_count_reduction_control || 0.85f < D_L09_0015F5D4) count = 30;
     angle = -3.1415927f;
     for (i = 0; i < count; i++) {
         *(u128 *)piece_velocity = 0;
