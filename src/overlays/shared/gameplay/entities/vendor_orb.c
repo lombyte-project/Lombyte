@@ -395,7 +395,7 @@ int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 void emit_hydrodisplacer_effect(char *moby) __asm__("FUN_L00_002e01b0");
 
 void emit_hydrodisplacer_effect(char *moby) {
-    V_2e01b0 effect_position, v;
+    V_2e01b0 effect_position, effect_motion_vector;
     char *moby_data = *(char **)(moby + 0x78);
     struct Hero *player;
     int countdown_lower_bound;
@@ -404,13 +404,13 @@ void emit_hydrodisplacer_effect(char *moby) {
         return;
     add_vector_xyz_cf(moby, 0, &effect_position);
     normalization_scale = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
-    fast_vec_normalize(&v, moby + 0xD0, normalization_scale);
+    fast_vec_normalize(&effect_motion_vector, moby + 0xD0, normalization_scale);
     player = &hero;
-    v.x += player->motion.displacement.f[0] * 0.8f;
-    v.y += player->motion.displacement.f[1] * 0.8f;
-    v.z += player->motion.displacement.f[2] +
+    effect_motion_vector.x += player->motion.displacement.f[0] * 0.8f;
+    effect_motion_vector.y += player->motion.displacement.f[1] * 0.8f;
+    effect_motion_vector.z += player->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
-    FUN_L00_0026f548_2e01b0(&effect_position, &v, 2, random_int_between(0x5A, 0x78));
+    FUN_L00_0026f548_2e01b0(&effect_position, &effect_motion_vector, 2, random_int_between(0x5A, 0x78));
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
     *(int *)(moby_data + 4) = random_int_between(countdown_lower_bound, FUN_001f96f8_2e01b0(15));
 }
