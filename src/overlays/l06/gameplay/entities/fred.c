@@ -6819,7 +6819,7 @@ extern void normalize_vector_xyz_302578(void *, void *, float) __asm__("FUN_001f
 extern void add_vector_xyz_302578(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
-extern float D_L06_001620F4 __attribute__((sda));
+extern float shuttle_second_stop_ride_scale_multiplier_gp __asm__("D_L06_001620F4") __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
 extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attribute__((sda));
 extern int D_L06_00162104 __attribute__((sda));
@@ -6901,20 +6901,20 @@ void shuttle_update(struct Moby *moby) {
                 case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
                     shuttle_vars->sel = 1;
                     shuttle_vars->fC4 = D_L06_001620F8;
-                    shuttle_vars->fC8 = D_L06_001620F4;
+                    shuttle_vars->fC8 = shuttle_second_stop_ride_scale_multiplier_gp;
                     shuttle_vars->side = 0;
                     play_sound_302578(4, 8);
                     break;
                 case SHUTTLE_ROUTE_SECOND_TO_INITIAL_STOP:
                     shuttle_vars->side = 1;
-                    shuttle_vars->fC4 = D_L06_001620F4;
+                    shuttle_vars->fC4 = shuttle_second_stop_ride_scale_multiplier_gp;
                     shuttle_vars->fC8 = D_L06_001620F8;
                     shuttle_vars->sel = 0;
                     play_sound_302578(0, 10);
                     break;
                 case SHUTTLE_ROUTE_FORCED_TO_INITIAL_STOP:
                     shuttle_vars->side = 2;
-                    shuttle_vars->fC4 = D_L06_001620F4;
+                    shuttle_vars->fC4 = shuttle_second_stop_ride_scale_multiplier_gp;
                     shuttle_vars->fC8 = D_L06_001620F8;
                     shuttle_vars->sel = 0;
                     break;
@@ -7040,7 +7040,7 @@ void shuttle_update(struct Moby *moby) {
     case WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER:
         if (is_point_inside_clip_volume((char *)&hero.motion.pos, shuttle_vars->fF0) != 0) {
             shuttle_vars->side = 2;
-            shuttle_vars->fC4 = D_L06_001620F4;
+            shuttle_vars->fC4 = shuttle_second_stop_ride_scale_multiplier_gp;
             shuttle_vars->fC8 = D_L06_001620F8;
             shuttle_vars->sel = 0;
             shuttle_vars->go = 1;
