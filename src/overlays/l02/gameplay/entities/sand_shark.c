@@ -1757,9 +1757,9 @@ extern float level02_bot_death_knockback_horizontal_speed_gp __asm__("D_L02_0016
 extern float level02_bot_death_knockback_vertical_speed_gp __asm__("D_L02_00161A68") __attribute__((sda));
 extern float level02_bot_hit_knockback_horizontal_speed_gp __asm__("D_L02_00161A6C") __attribute__((sda));
 extern float level02_bot_hit_knockback_vertical_speed_gp __asm__("D_L02_00161A70") __attribute__((sda));
-extern float D_L02_00161A74 __attribute__((sda));
-extern float D_L02_00161A78 __attribute__((sda));
-extern float D_L02_00161A9C __attribute__((sda));
+extern float level02_bot_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161A74") __attribute__((sda));
+extern float level02_bot_hit_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161A78") __attribute__((sda));
+extern float level02_bot_knockback_horizontal_target_speed_gp __asm__("D_L02_00161A9C") __attribute__((sda));
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
@@ -1825,10 +1825,10 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
                 void *k = moby_vars->knock;
                 moby_vars->flash = 0x78;
                 moby_vars->f80 = level02_bot_gravity_gp * frame_time_sq;
-                moby_vars->f84 = D_L02_00161A78 * frame_time_sq;
+                moby_vars->f84 = level02_bot_hit_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
                 moby_vars->f88 = level02_bot_hit_knockback_horizontal_speed_gp * D_0015ED6C;
                 moby_vars->f8C = level02_bot_hit_knockback_vertical_speed_gp * D_0015ED6C;
-                moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
+                moby_vars->fBC = level02_bot_knockback_horizontal_target_speed_gp * D_0015ED6C;
                 moby_vars->fA0 = 0.5f;
                 moby_vars->i94 = 25;
                 moby_vars->bAD = 0;
@@ -1842,10 +1842,10 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
         } else {
             void *k2 = moby_vars->knock;
             moby_vars->f80 = level02_bot_gravity_gp * frame_time_sq;
-            moby_vars->f84 = D_L02_00161A74 * frame_time_sq;
+            moby_vars->f84 = level02_bot_death_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
             moby_vars->f88 = level02_bot_death_knockback_horizontal_speed_gp * D_0015ED6C;
             moby_vars->f8C = level02_bot_death_knockback_vertical_speed_gp * D_0015ED6C;
-            moby_vars->fBC = D_L02_00161A9C * D_0015ED6C;
+            moby_vars->fBC = level02_bot_knockback_horizontal_target_speed_gp * D_0015ED6C;
             moby_vars->i94 = 9;
             moby_vars->bAD = 0;
             trooper_start_knockback(fast_arc_tan(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
