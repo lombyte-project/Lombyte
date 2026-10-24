@@ -867,7 +867,7 @@ typedef struct {
 extern int D_L15_001619EC __attribute__((sda));
 extern int D_L15_001619F4 __attribute__((sda));
 extern int D_L15_001619F8 __attribute__((sda));
-extern float D_L15_001619FC __attribute__((sda));
+extern float construction_arm_effect_speed_max __asm__("D_L15_001619FC") __attribute__((sda));
 extern float D_L15_00161A00 __attribute__((sda));
 extern float D_L15_00161A04 __attribute__((sda));
 extern unsigned short *D_L15_001ABE40[];
@@ -984,8 +984,8 @@ void construction_arm_update(struct Moby *moby)
     case CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION:
         if (FUN_001f9b48(&moby->pos, D_L15_001673C0) < 20.0f &&
             random_integer_below(2) == 0 && moby->visible != 0) {
-            speed = random_float_between(D_L15_001619FC / 5.0f, D_L15_001619FC) * frame_time;
-            spread = random_float_between(0.0f, D_L15_001619FC / 5.0f) * frame_time;
+            speed = random_float_between(construction_arm_effect_speed_max / 5.0f, construction_arm_effect_speed_max) * frame_time;
+            spread = random_float_between(0.0f, construction_arm_effect_speed_max / 5.0f) * frame_time;
             direction = random_angle_radians_7880();
             velocity.f[0] = fast_cos(arm_vars->direction) * speed;
             velocity.f[1] = fast_sin(arm_vars->direction) * speed;
