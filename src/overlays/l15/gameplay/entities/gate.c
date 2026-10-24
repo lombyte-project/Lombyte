@@ -865,8 +865,8 @@ typedef struct {
     float direction;
 } UpdateVars_2938;
 extern int D_L15_001619EC __attribute__((sda));
-extern int D_L15_001619F4 __attribute__((sda));
-extern int D_L15_001619F8 __attribute__((sda));
+extern int construction_arm_effect_duration_min_frames __asm__("D_L15_001619F4") __attribute__((sda));
+extern int construction_arm_effect_duration_max_frames __asm__("D_L15_001619F8") __attribute__((sda));
 extern float construction_arm_effect_speed_max __asm__("D_L15_001619FC") __attribute__((sda));
 extern float D_L15_00161A00 __attribute__((sda));
 extern float D_L15_00161A04 __attribute__((sda));
@@ -996,8 +996,8 @@ void construction_arm_update(struct Moby *moby)
             /* Retail computes the sum but passes velocity to the effect helper. */
             FUN_L00_001ff290(&sum, &velocity, &offset);
             moby_point_position(moby, 1, &origin);
-            first = scale_game_frames(D_L15_001619F4);
-            duration = scale_game_frames(D_L15_001619F8);
+            first = scale_game_frames(construction_arm_effect_duration_min_frames);
+            duration = scale_game_frames(construction_arm_effect_duration_max_frames);
             duration = FUN_L00_00257b90(first, duration);
             FUN_0025c2f0(40000.0f, &origin, &velocity, D_L15_001619EC, D_L15_001619EC, duration, 1);
         }
