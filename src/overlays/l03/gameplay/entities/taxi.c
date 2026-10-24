@@ -359,8 +359,8 @@ typedef struct {
     struct Moby *source;  /* 0x20: moby that dealt it */
 } TrooperHit;
 
-extern f32 D_L03_001618F8 __attribute__((sda));
-extern f32 D_L03_001618FC __attribute__((sda));
+extern f32 mine_layer_lethal_knockback_speed_scale __asm__("D_L03_001618F8") __attribute__((sda));
+extern f32 mine_layer_nonlethal_knockback_speed_scale __asm__("D_L03_001618FC") __attribute__((sda));
 extern f32 D_L03_00161900 __attribute__((sda));
 extern f32 D_L03_00161904 __attribute__((sda));
 extern f32 D_L03_00161908 __attribute__((sda));
@@ -410,7 +410,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         switch (damage_response) {
         case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
-            trooper_vars->kb_speed = D_L03_001618FC * frame_time_sq_macro;
+            trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale * frame_time_sq_macro;
             trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
@@ -424,7 +424,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
-            trooper_vars->kb_speed = D_L03_001618FC * frame_time_sq_macro;
+            trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale * frame_time_sq_macro;
             trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
@@ -437,7 +437,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             damaged_moby->state = 4;
             break;
         case TROOPER_DAMAGE_LETHAL:
-            trooper_vars->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
+            trooper_vars->kb_speed = mine_layer_lethal_knockback_speed_scale * frame_time_sq_macro;
             trooper_set_knockback(trooper_vars->knockback, D_L03_00161908, D_L03_0016190C);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
