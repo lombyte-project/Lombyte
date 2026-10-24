@@ -205,16 +205,16 @@ void update_planetbuster_maximus_guns(char *moby) {
                             md->b92 = scale_game_frames(0x14);
                             for (j = 0; j < 9; j++) {
                                 int c0;
-                                int c1;
+                                int firing_particle_color;
                                 int life;
                                 particle_random_vector[0] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
                                 particle_random_vector[1] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
                                 particle_random_vector[2] = FUN_L00_00257c48(0.0f, D_0015ED6C_gp * 1.7f);
                                 c0 = FUN_L00_00257b90(0xAA, 0xF0);
-                                c1 = FUN_L00_00257b90(0x6E, 0xC8);
-                                c1 = 0x7F000000 | (c1 << 8) | c0;
+                                firing_particle_color = FUN_L00_00257b90(0x6E, 0xC8);
+                                firing_particle_color = 0x7F000000 | (firing_particle_color << 8) | c0;
                                 life = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
-                                FUN_L00_00269958(position_buffer, particle_random_vector, c1, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
+                                FUN_L00_00269958(position_buffer, particle_random_vector, firing_particle_color, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
                             }
                         }
                         md->h9C = scale_game_frames(7);
