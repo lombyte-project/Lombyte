@@ -1297,8 +1297,8 @@ void update_sentrybot_joint_aim(void *mv) {
 }
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
 extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
-extern float D_L15_001613F0 __attribute__((sda));
-extern float D_L15_001613F4 __attribute__((sda));
+extern float sentrybot_knockback_gravity_gp __asm__("D_L15_001613F0") __attribute__((sda));
+extern float sentrybot_death_knockback_gravity_gp __asm__("D_L15_001613F4") __attribute__((sda));
 extern float sentrybot_recoverable_knockback_vertical_speed_gp __asm__("D_L15_001613F8") __attribute__((sda));
 extern float sentrybot_recoverable_knockback_horizontal_speed_gp __asm__("D_L15_001613FC") __attribute__((sda));
 extern float D_L15_00161400 __attribute__((sda));
@@ -1367,7 +1367,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         if (*(float *)(data + 0x20) <= 0.0f)
             code = 1;
         amount = convert_float_to_int_a570(512.0f);
-        speed = D_L15_001613F0 * frame_time_sq;
+        speed = sentrybot_knockback_gravity_gp * frame_time_sq;
         *(int *)(data + 0x90) = amount;
         *(float *)(data + 0x98) = 0.5f;
         *(int *)(data + 0x94) = 9;
@@ -1395,7 +1395,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 float vz;
                 float fall_speed;
                 step = frame_time;
-                fall_speed = D_L15_001613F0;
+                fall_speed = sentrybot_knockback_gravity_gp;
                 step_sq = frame_time_sq;
                 fall_speed = fall_speed * step_sq;
                 forward = sentrybot_recoverable_knockback_horizontal_speed_gp * step;
@@ -1430,7 +1430,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 float vz;
                 float fall_speed;
                 step = frame_time;
-                fall_speed = D_L15_001613F4;
+                fall_speed = sentrybot_death_knockback_gravity_gp;
                 step_sq = frame_time_sq;
                 fall_speed = fall_speed * step_sq;
                 forward = sentrybot_death_knockback_horizontal_speed_gp * step;
