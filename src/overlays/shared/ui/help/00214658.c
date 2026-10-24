@@ -460,7 +460,7 @@ float smooth_216130(float *, void *, float, float, float, float, int) __asm__("F
 void set_216130(void *, void *) __asm__("FUN_00214598");
 void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float b, float c) __asm__("FUN_L00_00216130");
 
-void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float b, float c) {
+void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float pitch_angular_velocity_damping, float pitch_angular_velocity_limit) {
     M_216130 y_rotation_matrix;
     M_216130 z_rotation_matrix;
     V_216130 r;
@@ -501,7 +501,7 @@ void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *
         r.f[2] = pitch;
         r.f[0] = 0.0f;
     } else {
-        smooth_216130(&smoothed_pitch, (&hero.motion.unkA0.f[1]), pitch, pitch_smoothing_parameter, b, c, 0);
+        smooth_216130(&smoothed_pitch, (&hero.motion.unkA0.f[1]), pitch, pitch_smoothing_parameter, pitch_angular_velocity_damping, pitch_angular_velocity_limit, 0);
         r.f[0] = 0.0f;
         r.f[2] = smoothed_pitch;
     }
