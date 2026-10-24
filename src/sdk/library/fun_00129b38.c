@@ -38,9 +38,9 @@ int FinishMpegReferenceImage(void *object) {
     Obj40 *reference_image_object = (Obj40 *)object;
     int return_value = 1;
     if (reference_image_object->unk008 != 2) {
-        int v = reference_image_object->unk118;
+        int saved_reference_image_value = reference_image_object->unk118;
         reference_image_object->unk008 = 2;
-        reference_image_object->unk0AC = v;
+        reference_image_object->unk0AC = saved_reference_image_value;
     }
     reference_image_object->unk820 = return_value;
     return return_value;
