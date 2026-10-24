@@ -26,7 +26,7 @@ void apply_hero_ground_material_response(void) {
     struct Hero *hero_state = &hero;
     struct Hero *g1;
     struct Hero *g2;
-    struct Hero *g3;
+    struct Hero *sink_check_hero;
     int saved_ground_sound_class = hero_state->unk12ED;
     int previous_ground_type = hero_state->ground_type;
     fast_mem_zero16(&hero_state->ground_type, 0x10);
@@ -88,16 +88,16 @@ void apply_hero_ground_material_response(void) {
             }
         }
     }
-    g3 = &hero;
-    if (g3->selector_13 == 0)
+    sink_check_hero = &hero;
+    if (sink_check_hero->selector_13 == 0)
         return;
-    if (g3->state.current == 0x7F)
+    if (sink_check_hero->state.current == 0x7F)
         return;
-    if (!(absolute_float(g3->water_surface_z - (g3->motion.pos.f[2] + 0.25f)) < 1.0f))
+    if (!(absolute_float(sink_check_hero->water_surface_z - (sink_check_hero->motion.pos.f[2] + 0.25f)) < 1.0f))
         return;
-    if (!(0.0f < g3->water_surface_z - g3->motion.pos.f[2]))
+    if (!(0.0f < sink_check_hero->water_surface_z - sink_check_hero->motion.pos.f[2]))
         return;
-    if (!(g3->motion.displacement.f[2] < 0.0f))
+    if (!(sink_check_hero->motion.displacement.f[2] < 0.0f))
         return;
     exit_hero_vehicle_mode_if_mode_three();
     hero_set_state(HERO_STATE_SINK, 1);
