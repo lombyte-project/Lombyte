@@ -732,9 +732,9 @@ struct RespawnVars {
 };
 
 extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
-extern f32 D_L06_00161C04 __attribute__((sda));
-extern int D_L06_00161C08 __attribute__((sda));
-extern int D_L06_00161C0C __attribute__((sda));
+extern f32 frog_glow_phase_rate_degrees_gp __asm__("D_L06_00161C04") __attribute__((sda));
+extern int frog_glow_color_start_gp __asm__("D_L06_00161C08") __attribute__((sda));
+extern int frog_glow_color_end_gp __asm__("D_L06_00161C0C") __attribute__((sda));
 extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -831,8 +831,8 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    vars->glow_phase = fast_add_rotations_e94f0(vars->glow_phase, D_L06_00161C04 * 0.017453292f * D_0015ED6C);
-    moby->glow_color = blend_color_e94f0(D_L06_00161C08, D_L06_00161C0C, (fast_sin_e94f0(vars->glow_phase) + 1.0f) * 0.5f);
+    vars->glow_phase = fast_add_rotations_e94f0(vars->glow_phase, frog_glow_phase_rate_degrees_gp * 0.017453292f * D_0015ED6C);
+    moby->glow_color = blend_color_e94f0(frog_glow_color_start_gp, frog_glow_color_end_gp, (fast_sin_e94f0(vars->glow_phase) + 1.0f) * 0.5f);
     if (vars->new_blink != 0) {
         vars->blink_timer = truncate_e94f0(scale_time_e94f0(random_float_e94f0(180.0f, 240.0f)));
         vars->new_blink = 0;
