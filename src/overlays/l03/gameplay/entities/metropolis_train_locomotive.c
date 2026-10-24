@@ -1671,7 +1671,7 @@ void robot_dog_update(char *moby) {
         ROBOT_DOG_DEATH_FALL = 21
     };
     Tgt2c5bb8 selected_target;
-    float dir[4];
+    float forward_vector_or_path_point[4];
     float push[4];
     float at[4];
     int seg;
@@ -1780,10 +1780,10 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_CHASE_TARGET:
         initialization_multiplier_or_desired_heading = fast_arc_tan(selected_target.pos[0] - *(float *)(moby + 0x10), selected_target.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
-        dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
-        dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
-        dir[2] = 0.0f;
-        FUN_L00_00258b50(moby, &data->i180, dir, push, 1.0f);
+        forward_vector_or_path_point[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[2] = 0.0f;
+        FUN_L00_00258b50(moby, &data->i180, forward_vector_or_path_point, push, 1.0f);
         if (fast_dec_timer(&data->i23C)) {
             data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
@@ -1801,7 +1801,7 @@ void robot_dog_update(char *moby) {
         break;
     case ROBOT_DOG_FOLLOW_PATH:
         path = (int *)D_L03_001B05B0_c5bb8[data->i270];
-        FUN_L00_0025df68(path, moby + 0x10, dir, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
+        FUN_L00_0025df68(path, moby + 0x10, forward_vector_or_path_point, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
         if (data->i278 < seg) {
             data->i278 = seg;
         }
@@ -1838,10 +1838,10 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_MELEE_ATTACK:
         initialization_multiplier_or_desired_heading = fast_arc_tan(selected_target.pos[0] - *(float *)(moby + 0x10), selected_target.pos[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
-        dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
-        dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
-        dir[2] = 0.0f;
-        FUN_L00_00258b50(moby, &data->i180, dir, data->v40, 1.0f);
+        forward_vector_or_path_point[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[2] = 0.0f;
+        FUN_L00_00258b50(moby, &data->i180, forward_vector_or_path_point, data->v40, 1.0f);
         if (((unsigned char *)moby)[0x52] == 5) {
             approach_value_c5bb8(&data->f1A4, 0.0f, data->f234 * frame_time / FUN_L04_001f1978(40.0f));
         }
@@ -1869,10 +1869,10 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_RETURN_HOME:
         initialization_multiplier_or_desired_heading = fast_arc_tan(data->home[0] - *(float *)(moby + 0x10), data->home[1] - *(float *)(moby + 0x14));
         FUN_L00_00258278(moby, data->v220, initialization_multiplier_or_desired_heading, 0.02f, 0.3f, 0.1f);
-        dir[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
-        dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
-        dir[2] = 0.0f;
-        FUN_L00_00258b50(moby, &data->i180, dir, push, 1.0f);
+        forward_vector_or_path_point[0] = 2.0f * fast_cos(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
+        forward_vector_or_path_point[2] = 0.0f;
+        FUN_L00_00258b50(moby, &data->i180, forward_vector_or_path_point, push, 1.0f);
         if (vector_distance(moby + 0x10, data->home) < 1.0f) {
             moby[0x20] = 1;
             if (((unsigned char *)moby)[0x53] != 1) {
@@ -1907,7 +1907,7 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_DEATH_FALL:
         *(unsigned short *)(moby + 0x34) &= 0xEFFF;
         if (mine_fall(moby, data->m120) & 0x60) {
-            clear_vector(dir);
+            clear_vector(forward_vector_or_path_point);
             cart_burst(moby, moby + 0x10, -1, 0.5f, 13.0f);
             spawn_debris_c5bb8(moby, 0x6CE, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
             spawn_debris_c5bb8(moby, 0x6CF, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
