@@ -2610,7 +2610,7 @@ float FUN_001f9de0_2d54c8(float) __asm__("FUN_001f9de0");
 void FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("FUN_L00_00258830");
 
 float move_horny_toad_toward_position(unsigned char *moby, float *target_position, float initial_travel_distance) {
-    float vec[4] __attribute__((aligned(16)));
+    float requested_movement_displacement[4] __attribute__((aligned(16)));
     unsigned char *moby_vars;
     float desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement, vertical_displacement;
     moby_vars = *(unsigned char **)(moby + 0x78);
@@ -2629,11 +2629,11 @@ float move_horny_toad_toward_position(unsigned char *moby, float *target_positio
         *(float *)(moby_vars + 0x1F8) = 0.0f;
     movement_yaw = *(float *)(moby + 0x48);
     *(float *)(moby_vars + 0x278) = movement_yaw;
-    vec[0] = FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(moby_vars + 0x1F8);
-    vec[1] = FUN_001f9de0_2d54c8(*(float *)(moby_vars + 0x278)) * *(float *)(moby_vars + 0x1F8);
-    vec[2] = 0.0f;
-    vec[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
-    FUN_L00_00258830_2d54c8(moby, vec, 0x10, 0.5f, 0.5f, 0.0f);
+    requested_movement_displacement[0] = FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(moby_vars + 0x1F8);
+    requested_movement_displacement[1] = FUN_001f9de0_2d54c8(*(float *)(moby_vars + 0x278)) * *(float *)(moby_vars + 0x1F8);
+    requested_movement_displacement[2] = 0.0f;
+    requested_movement_displacement[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
+    FUN_L00_00258830_2d54c8(moby, requested_movement_displacement, 0x10, 0.5f, 0.5f, 0.0f);
     vertical_displacement = *(float *)(moby + 0x18) - z;
     maximum_vertical_displacement = D_0015ED6C_2d54c8 * 4.0f;
     *(float *)(moby_vars + 0x270) = vertical_displacement;
