@@ -180,28 +180,26 @@ extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
+/* Near miss, 2 words: retail loads 0x90 twice for the two i * 0x90 products; reload here
+ * copies the second from $v1. */
 void FUN_L05_0030de90(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
     u64 texture;
-    int i, j, k, n, next_i, next_j, outer_color, inner_color, offset;
+    int i, j, k, n, outer_color, inner_color, offset;
     float angle, blend;
     unsigned short *list;
     unsigned short *next;
     short id;
 
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
-    i = 0;
-    do {
-        next_i = i + 1;
+    for (i = 0; i < 5; i++) {
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
         outer_color = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
         inner_color = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
         angle = fast_add_rotations(angle, 1.2566371f);
-        j = 0;
-        do {
+        for (j = 0; j < 2; j++) {
             texture = get_effect_texture(D_L05_00161D98);
-            next_j = j + 1;
             quads[j][i].primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) | ((s64)D_L05_00161D78 << 4)
                                     | ((s64)D_L05_00161D7C << 6) | 0x8000000000LL;
             quads[j][i].texture = texture;
@@ -220,10 +218,8 @@ void FUN_L05_0030de90(char *moby) {
                     quads[0][i].positions[n].f[2] += (float)(i + 1);
                 }
             }
-            j = next_j;
-        } while (j < 2);
-        i = next_i;
-    } while (i < 5);
+        }
+    }
 
     list = (unsigned short *)D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
     do {
