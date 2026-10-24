@@ -464,7 +464,7 @@ int D_L15_001620EC = 128;
 int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
 extern float D_L15_001620F8 __attribute__((sda));
-extern float D_L15_001620FC __attribute__((sda));
+extern float ripple_mesh_buffers_phase_advance_divisor_gp __asm__("D_L15_001620FC") __attribute__((sda));
 extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
@@ -506,7 +506,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     vu1_add_gs_register(0x14, ((long)0xFF90 << 32) | 0x260);
     ripple_data->f0 = ripple_data->f4;
     ripple_data->f4 = fast_add_rotations(ripple_data->f4,
-                               360.0f / multiply_global_factor_ed64(D_L15_001620FC) * DEG_TO_RAD * frame_time);
+                               360.0f / multiply_global_factor_ed64(ripple_mesh_buffers_phase_advance_divisor_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
