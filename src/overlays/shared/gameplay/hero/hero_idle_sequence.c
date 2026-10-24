@@ -1506,24 +1506,24 @@ void apply_hero_and_item_scale_sequence(void) {
         }
     }
 }
-extern int D_L00_0015F680 __attribute__((sda));
-extern int D_L00_0015F684 __attribute__((sda));
-extern float D_L00_0015F67C __attribute__((sda));
+extern int hero_scalar_pulse_active __asm__("D_L00_0015F680") __attribute__((sda));
+extern int hero_scalar_pulse_phase __asm__("D_L00_0015F684") __attribute__((sda));
+extern float hero_scalar_pulse_step __asm__("D_L00_0015F67C") __attribute__((sda));
 extern float D_L00_0015F3FC;
 float FUN_00213ed8(float *, float, float);
 void update_hero_scalar_pulse(void) {
-    if (D_L00_0015F680 == 0)
+    if (hero_scalar_pulse_active == 0)
         return;
-    if (D_L00_0015F684 == 0) {
-        FUN_00213ed8(&D_L00_0015F3FC, 1.0f, D_L00_0015F67C);
+    if (hero_scalar_pulse_phase == 0) {
+        FUN_00213ed8(&D_L00_0015F3FC, 1.0f, hero_scalar_pulse_step);
         if (D_L00_0015F3FC == 1.0f)
-            D_L00_0015F684 = 1;
-    } else if (D_L00_0015F684 == 1) {
-        D_L00_0015F684 = 2;
-    } else if (D_L00_0015F684 == 2) {
-        FUN_00213ed8(&D_L00_0015F3FC, 0.0f, D_L00_0015F67C);
+            hero_scalar_pulse_phase = 1;
+    } else if (hero_scalar_pulse_phase == 1) {
+        hero_scalar_pulse_phase = 2;
+    } else if (hero_scalar_pulse_phase == 2) {
+        FUN_00213ed8(&D_L00_0015F3FC, 0.0f, hero_scalar_pulse_step);
         if (D_L00_0015F3FC == 0.0f)
-            D_L00_0015F680 = 0;
+            hero_scalar_pulse_active = 0;
     }
 }
 #define NOT_SDA
