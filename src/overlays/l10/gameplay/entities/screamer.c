@@ -2731,7 +2731,9 @@ extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern char *D_L10_001B0930_5968[] __asm__("D_L10_001B0930");
 
-void FUN_L10_002e5968(struct Moby *moby) {
+void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002e5968");
+
+void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     enum {
         LETHAL_HIT_RESPONSE = 1,
         COLOR_UPDATE_ONLY_HIT_RESPONSE = 9,
