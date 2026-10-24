@@ -1439,7 +1439,9 @@ extern void FUN_00214db0_2b46a8(void *, float, float, float) __asm__("FUN_00214d
 extern void FUN_001f9a10_2b46a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_001efa68_2b46a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
-unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitch) {
+unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *yaw, float *pitch) __asm__("FUN_L00_002b46a8");
+
+unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *yaw, float *pitch) {
     V_2b46a8 aim_origin_position;
     V_2b46a8 tp;
     V_2b46a8 aim_probe_position;
