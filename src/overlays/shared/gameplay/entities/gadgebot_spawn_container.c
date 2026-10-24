@@ -766,7 +766,9 @@ extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a42
 extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
 extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((section(".data")));
 
-void FUN_L06_002e94f0(struct Moby *moby) {
+void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
+
+void update_frog_health_respawn_and_target(struct Moby *moby) {
     enum {
         HIT_RESULT_LETHAL = 1,
         HIT_RESULT_REMOVE_OR_RESPAWN = 2,
