@@ -1422,7 +1422,7 @@ void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 void apply_hero_vertical_oscillation(void) {
     struct Hero *P = &hero;
     Vec4_2078a8 position_offset;
-    float m[16] __attribute__((aligned(16)));
+    float position_offset_rotation_matrix[16] __attribute__((aligned(16)));
     if (P->state.current == 0x7F) {
         update_moby_vertical_oscillation(P->moby, &P->unk6A8, &P->unk6AC, 0.3f,
                                   D_0015ED6C * 6.981317f);
@@ -1436,8 +1436,8 @@ void apply_hero_vertical_oscillation(void) {
             position_offset.q = 0;
             position_offset.f[2] = 0.21f;
             transform_vector_by_basis(&position_offset, &position_offset, hero_moby + 0xC0);
-            rotation_matrix(m, D_L00_0017A6C0);
-            transform_vector(&position_offset, &position_offset, m);
+            rotation_matrix(position_offset_rotation_matrix, D_L00_0017A6C0);
+            transform_vector(&position_offset, &position_offset, position_offset_rotation_matrix);
             add_vector_xyz(((char *)P->unk86C) + 0x10, ((char *)P->unk86C) + 0x10, &position_offset);
         }
     }
