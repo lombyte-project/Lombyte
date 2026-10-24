@@ -619,7 +619,9 @@ typedef struct {
     int t[4];
     float c[4];
 } M_2e0788;
-void FUN_L00_002e0788(unsigned char *moby) {
+void emit_moby_color_cycling_particles(unsigned char *moby) __asm__("FUN_L00_002e0788");
+
+void emit_moby_color_cycling_particles(unsigned char *moby) {
     OvlQuad sprite_position_and_step[2];
     M_2e0788 *moby_data = *(M_2e0788 **)(moby + 0x78);
     float *a;
