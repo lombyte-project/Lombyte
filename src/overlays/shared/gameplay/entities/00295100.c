@@ -2031,10 +2031,10 @@ extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8 D_00141345[];
-extern s32 D_L00_00161E0C __attribute__((sda));
-extern s32 D_L00_00161E10 __attribute__((sda));
-extern s32 D_L00_00161E28;
-extern s32 D_L00_00161E2C;
+extern s32 vendor_purchase_confirmed __asm__("D_L00_00161E0C") __attribute__((sda));
+extern s32 vendor_ammo_quantity_adjustment_enabled __asm__("D_L00_00161E10") __attribute__((sda));
+extern s32 vendor_ammo_decrease_held_frames __asm__("D_L00_00161E28");
+extern s32 vendor_ammo_increase_held_frames __asm__("D_L00_00161E2C");
 extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E34;
 extern void FUN_0020c5f0_2ba78(void *, int) __asm__("FUN_0020c5f0");
@@ -2072,7 +2072,7 @@ void update_vendor_purchase(void) {
     }
     if (purchase_state == 1) {
         D_L00_00161E34 = 1;
-        D_L00_00161E0C = 0;
+        vendor_purchase_confirmed = 0;
         FUN_0020c5f0_2ba78(&vendor_menu.f20[4], 0x471);
         vendor_menu.f20[4].h32 = 0x40;
         lv = 0;
@@ -2089,7 +2089,7 @@ void update_vendor_purchase(void) {
         }
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         FUN_0020d4f0_2ba78(&vendor_menu.f20[4], 0x101010, 0xE, 0xE, 0);
-        D_L00_00161E10 = 0;
+        vendor_ammo_quantity_adjustment_enabled = 0;
         if (CUR_ITEM.fD4 == 1 && !(weapon_ammo_counts[CUR_ITEM.fD0] < CUR_TB.hE)) {
             FUN_0022da68_2ba78(2, 0, vendor_menu.f1c);
         } else if (CUR_ITEM.fD4 == 1) {
@@ -2097,7 +2097,7 @@ void update_vendor_purchase(void) {
             if (D_0015ED98 < nn) {
                 FUN_0022da68_2ba78(2, 0, vendor_menu.f1c);
             } else {
-                D_L00_00161E10 = 1;
+                vendor_ammo_quantity_adjustment_enabled = 1;
             }
         } else {
             s32 nn = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
@@ -2109,28 +2109,28 @@ void update_vendor_purchase(void) {
         return;
     }
     if (purchase_state == 2) {
-        if (D_L00_00161E10 == 1) {
+        if (vendor_ammo_quantity_adjustment_enabled == 1) {
             if (pad_state.held_unmasked & 0x8000) {
-                D_L00_00161E28++;
+                vendor_ammo_decrease_held_frames++;
             } else {
-                D_L00_00161E28 = 0;
+                vendor_ammo_decrease_held_frames = 0;
             }
             if (pad_state.held_unmasked & 0x2000) {
-                D_L00_00161E2C++;
+                vendor_ammo_increase_held_frames++;
             } else {
-                D_L00_00161E2C = 0;
+                vendor_ammo_increase_held_frames = 0;
             }
             if ((pad_state.pressed_unmasked & 0x8000) ||
-                (D_L00_00161E28 >= 0x10 && (D_L00_00161E28 & 0x7) == 0) || D_L00_00161E28 >= 0x30) {
+                (vendor_ammo_decrease_held_frames >= 0x10 && (vendor_ammo_decrease_held_frames & 0x7) == 0) || vendor_ammo_decrease_held_frames >= 0x30) {
                 if (D_L00_00161E34 >= 2) {
                     D_L00_00161E34 = D_L00_00161E34 - 1;
-                    if ((D_L00_00161E28 & 0x3) == 0 || D_L00_00161E28 < 0x10) {
+                    if ((vendor_ammo_decrease_held_frames & 0x3) == 0 || vendor_ammo_decrease_held_frames < 0x10) {
                         FUN_0022da68_2ba78(1, 0, vendor_menu.f1c);
                     }
                 }
             }
             if ((pad_state.pressed_unmasked & 0x2000) ||
-                (D_L00_00161E2C >= 0x10 && (D_L00_00161E2C & 0x7) == 0) || D_L00_00161E2C >= 0x30) {
+                (vendor_ammo_increase_held_frames >= 0x10 && (vendor_ammo_increase_held_frames & 0x7) == 0) || vendor_ammo_increase_held_frames >= 0x30) {
                 if ((vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) > 0) {
                     s32 max_ammo_purchase_quantity = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
                     s32 i = CUR_ITEM.fD0;
@@ -2138,7 +2138,7 @@ void update_vendor_purchase(void) {
                     if (left < max_ammo_purchase_quantity) max_ammo_purchase_quantity = left;
                     if (D_L00_00161E34 < max_ammo_purchase_quantity) {
                         D_L00_00161E34++;
-                        if ((D_L00_00161E2C & 0x3) == 0 || D_L00_00161E2C < 0x10) {
+                        if ((vendor_ammo_increase_held_frames & 0x3) == 0 || vendor_ammo_increase_held_frames < 0x10) {
                             FUN_0022da68_2ba78(1, 0, vendor_menu.f1c);
                         }
                     }
@@ -2148,7 +2148,7 @@ void update_vendor_purchase(void) {
         if (pad_state.pressed_unmasked & 0x10) {
             if (!(D_L00_00161E30 & 0x10)) {
                 vendor_menu.f5c = 3;
-                D_L00_00161E0C = 0;
+                vendor_purchase_confirmed = 0;
                 FUN_00212f90_2ba78(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 1);
                 FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
                 return;
@@ -2157,7 +2157,7 @@ void update_vendor_purchase(void) {
         if (pad_state.pressed_unmasked & 0x40) {
             if (!(D_L00_00161E30 & 0x40)) {
                 vendor_menu.f5c = 3;
-                D_L00_00161E0C = 1;
+                vendor_purchase_confirmed = 1;
                 FUN_00212f90_2ba78(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 8);
                 FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
                 return;
@@ -2184,10 +2184,10 @@ void update_vendor_purchase(void) {
     }
     advance_moby_animation(&vendor_menu.f20[4]);
     if (vendor_menu.f20[4].b70 & 2) {
-        if (D_L00_00161E0C == 1) {
+        if (vendor_purchase_confirmed == 1) {
             s32 need;
 
-            if (CUR_ITEM.fD4 == D_L00_00161E0C) {
+            if (CUR_ITEM.fD4 == vendor_purchase_confirmed) {
                 need = vendor_menu.f40 ? CUR_TB.hA * D_L00_00161E34 : CUR_TB.h8 * D_L00_00161E34;
             } else if (D_0013D4E3[0]) {
                 need = CUR_TB.f4;
