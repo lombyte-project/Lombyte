@@ -1622,7 +1622,8 @@ int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 
 int handle_hero_gadget_button(void) {
     enum {
-        ITEM_WRENCH = 8
+        ITEM_WRENCH = 8,
+        ITEM_VENDOR_MENU_DEVICE = 0x20
     };
     int out0;
     int out1;
@@ -1712,7 +1713,7 @@ int handle_hero_gadget_button(void) {
             hero.unk22DC = 1;
         }
         break;
-    case 0x20:
+    case ITEM_VENDOR_MENU_DEVICE:
         if ((unsigned int)hero.state.control_mode < 3 || hero.state.control_mode == 4 ||
             hero.state.control_mode == 5) {
             if (FUN_L00_00266d60(buttons, scale_game_frames(8), 0) != 0)
