@@ -24,7 +24,9 @@ int FUN_L01_002efaf8(char *a) {
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
-int FUN_L01_002efb98(char *moby) {
+int cancel_suck_cannon_suction_and_set_state_14(char *moby) __asm__("FUN_L01_002efb98");
+
+int cancel_suck_cannon_suction_and_set_state_14(char *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
     moby[0x20] = 0xe;
     return helper_result;
@@ -34,7 +36,9 @@ typedef struct {
     s32 f;
 } T6;
 /* Returns the moby data pointer plus 0xC0, or 0 when either is null. */
-s32 FUN_L01_002efbc8(T6 *moby) {
+s32 get_moby_data_plus_0xc0(T6 *moby) __asm__("FUN_L01_002efbc8");
+
+s32 get_moby_data_plus_0xc0(T6 *moby) {
     s32 moby_data_address;
     if (moby != 0) {
         moby_data_address = moby->f;

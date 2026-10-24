@@ -109,7 +109,7 @@ void FUN_00237a78_29fcd0(void *, void *, int *, int *, int *, int *) __asm__("FU
 void FUN_00239690_29fcd0(int, int, float) __asm__("FUN_00239690");
 void FUN_001fb740_29fcd0(int, int) __asm__("FUN_001fb740");
 void FUN_00233980_29fcd0(int, long) __asm__("FUN_00233980");
-void FUN_L00_0029ead8_29fcd0(void *, int, int) __asm__("FUN_L00_0029ead8");
+void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
 void FUN_00239328_29fcd0(int, float, float) __asm__("FUN_00239328");
 void FUN_001f7978_29fcd0(void) __asm__("FUN_001f7978");
 void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
@@ -117,7 +117,9 @@ void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 extern I3_29fcd0 D_L00_00161178 __attribute__((section(".data")));
-void FUN_L00_0029fcd0(void *moby) {
+void draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
+
+void draw_vendor_purchase_panel(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
     OvlQuad base[1];
@@ -152,7 +154,7 @@ void FUN_L00_0029fcd0(void *moby) {
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_L00_0029ead8_29fcd0(moby, x, y);
+    draw_vendor_purchase_text(moby, x, y);
     FUN_00239328_29fcd0(6, (float)x, (float)y);
     FUN_001f7978_29fcd0();
     FUN_001fb740_29fcd0(0x200, 0x200);
@@ -182,7 +184,9 @@ extern struct Quad D_L00_001CA480[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L00_0029ff58(void) {
+void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
+
+void draw_vendor_hologram_cone(void) {
     struct HoloPacket quad_packet;
     float transformed_vertex_offsets[4][4];
     int i;
@@ -293,7 +297,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
-extern void FUN_L00_0029b680(void);
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
@@ -303,9 +307,9 @@ extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
 extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
 extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
-extern void FUN_L00_0029ff58_u(void) __asm__("FUN_L00_0029ff58");
+extern void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
 extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
-extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
+extern void draw_vendor_purchase_panel(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
 extern void update_hud(void) __asm__("FUN_001ff780");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
@@ -379,7 +383,7 @@ void draw_vendor_screen(void) {
         *(u16 *)(p->f20 + 0x532) = 0x40;
         FUN_L00_00250df8(p->f20 + 0x500);
         pack_render_command_fields(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
-        FUN_L00_0029b680();
+        initialize_vendor_selected_item_mobys();
         p->f2C = p->f14 + 0x1400;
         fast_mem_zero16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
@@ -418,11 +422,11 @@ void draw_vendor_screen(void) {
     }
     draw_moby_list(p->f1C, 1);
     if (p->f40 == 0) {
-        FUN_L00_0029ff58_u();
+        draw_vendor_hologram_cone();
     }
     render_vendor_capture_pass_sequence(p->f1C);
     if (p->f5C != 0) {
-        FUN_L00_0029fcd0_c(p->f20 + 0x400);
+        draw_vendor_purchase_panel(p->f20 + 0x400);
     }
     draw_vendor_inset_quads(p->f1C);
     FUN_00233980(0x42, 0x8000000044LL);

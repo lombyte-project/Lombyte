@@ -133,7 +133,9 @@ typedef struct {
 } G002583f0;
 extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-s32 FUN_L00_002583f0(void *probe_base_position, s32 moby, s32 flag, f32 up, f32 down) {
+s32 probe_vertical_ground_collision(void *probe_base_position, s32 moby, s32 flag, f32 up, f32 down) __asm__("FUN_L00_002583f0");
+
+s32 probe_vertical_ground_collision(void *probe_base_position, s32 moby, s32 flag, f32 up, f32 down) {
     V002583f0 raised_pos, lowered_pos;
     s32 collision_result;
     qcopy(&raised_pos, probe_base_position);
@@ -355,7 +357,9 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L00_00258830(int, int, float, float, float, int);
 /* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
-void FUN_L00_00258ad0(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) {
+void move_moby_with_collision_integer_radius(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) __asm__("FUN_L00_00258ad0");
+
+void move_moby_with_collision_integer_radius(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) {
     FUN_L00_00258830(moby, movement_displacement, x, convert_integer_to_float(collision_radius_fixed) * (1.0f / 1024.0f), y, collision_flags);
 }
 #include "rnc/math/vector.h"
@@ -561,7 +565,9 @@ extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the
  * current entry back, as the original did. */
-int FUN_L00_002591d0(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
+int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) __asm__("FUN_L00_002591d0");
+
+int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
     unsigned short *entry_index_list;
     char *entry_address;
     int entry_sign_bit_set;
@@ -596,7 +602,9 @@ extern unsigned short *D_L00_001AB840[];
 
 /* Iterator over the mobies of target's group: finds the next one whose
  * visibility matches the two flags; 0 when found, -1 at the end. */
-int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
+int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_entries, int require_sign_bit_set_entries) __asm__("FUN_L00_002592b8");
+
+int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_entries, int require_sign_bit_set_entries) {
     int entry_sign_bit_set;
 
     *out = 0;
@@ -643,7 +651,9 @@ int FUN_L00_002592b8(char **out, char *target, int include_sign_bit_set_entries,
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
 /* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
-int FUN_L00_00259430(int *packed_countdown, int decrement_amount) {
+int decrement_packed_countdown(int *packed_countdown, int decrement_amount) __asm__("FUN_L00_00259430");
+
+int decrement_packed_countdown(int *packed_countdown, int decrement_amount) {
     int original_packed_word = *packed_countdown;
     int remaining_countdown = (original_packed_word >> 24) - decrement_amount;
     if (remaining_countdown < 0)
@@ -660,7 +670,9 @@ int FUN_L00_00259430(int *packed_countdown, int decrement_amount) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-float FUN_L00_00259468(float *base_values, float *b, int *out, float triangular_correction_coefficient) {
+float calculate_triangular_corrected_scalar(float *base_values, float *b, int *out, float triangular_correction_coefficient) __asm__("FUN_L00_00259468");
+
+float calculate_triangular_corrected_scalar(float *base_values, float *b, int *out, float triangular_correction_coefficient) {
     int truncated_ratio = truncate_float_to_s32(b[2] / triangular_correction_coefficient);
     float truncated_ratio_float = convert_integer_to_float(truncated_ratio);
     float corrected_scalar_value = base_values[2] + b[2] * truncated_ratio_float - convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) * triangular_correction_coefficient;
@@ -679,7 +691,9 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L00_00259508(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) {
+void predict_position_with_vertical_drop(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) __asm__("FUN_L00_00259508");
+
+void predict_position_with_vertical_drop(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) {
     float displacement[4];
     fast_vec_scale(displacement, velocity, convert_integer_to_float(frame_count));
     displacement[2] -= convert_integer_to_float((frame_count * frame_count + frame_count) >> 1) * vertical_drop_coefficient;
@@ -687,7 +701,9 @@ void FUN_L00_00259508(void *destination, void *base_position, void *velocity, in
 }
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
-int FUN_L00_002595a0(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) {
+int solve_quadratic_equation(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) __asm__("FUN_L00_002595a0");
+
+int solve_quadratic_equation(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) {
     float discriminant = linear_coefficient * linear_coefficient - quadratic_coefficient * 4.0f * constant_coefficient;
     float sqrt_abs_discriminant, root_swap_temp;
     if (discriminant == 0.0f) {

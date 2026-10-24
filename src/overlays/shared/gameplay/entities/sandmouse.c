@@ -17,8 +17,8 @@ extern s32 random_integer_between_b618(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
-extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
-extern void FUN_L00_0023e838(s32);
+extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
+extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
@@ -82,7 +82,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
     if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1)
-            FUN_L00_0023e838(slot);
+            release_point_light_slot(slot);
         mark_moby_for_removal_b618(moby);
         return;
     }
@@ -127,7 +127,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
         }
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot == -1) {
-            slot = FUN_L00_0023e738(moby + 0x10, *(f32 *)(effect_vars + 0x60), *(f32 *)(effect_vars + 0x4c),
+            slot = allocate_colored_effect_slot(moby + 0x10, *(f32 *)(effect_vars + 0x60), *(f32 *)(effect_vars + 0x4c),
                                   *(f32 *)(effect_vars + 0x40), *(f32 *)(effect_vars + 0x44),
                                   *(f32 *)(effect_vars + 0x48));
             *(s32 *)(effect_vars + 0x68) = slot;
@@ -142,7 +142,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
     } else {
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1) {
-            FUN_L00_0023e838(slot);
+            release_point_light_slot(slot);
             *(s32 *)(effect_vars + 0x68) = -1;
         }
     }
@@ -257,7 +257,9 @@ void draw_moby_offset_textured_quad(char *moby) {
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
-char *FUN_L01_0030c898(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) {
+char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) __asm__("FUN_L01_0030c898");
+
+char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) {
     OvlQuad spawn_position_copy;
     char *cp = (char *)&spawn_position_copy;
     char *spawned_moby;
@@ -606,7 +608,7 @@ extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
-extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
+extern s32 move_moby_with_collision_integer_radius(struct Moby *, Vec4 *, f32, f32, s32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_vars) __asm__("FUN_L01_0030d880");
@@ -665,7 +667,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
         hover_tuning = &D_L01_001DEB38;
-        hit = FUN_L00_00258ad0(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
+        hit = move_moby_with_collision_integer_radius(moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
         velocity_magnitude = fast_vec_length(&hover_vars->vel);
         if (hit == 0) {
             hover_vars->stuck = 0;
@@ -729,7 +731,7 @@ void emit_sandmouse_particles(char *source_moby) {
 /* Initialize both consecutive effect entries. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
 
@@ -738,7 +740,7 @@ void draw_sandmouse_billboard_quads(char *moby) {
     char *entry = data + 0x70;
     int i;
     for (i = 1; i >= 0; i--) {
-        FUN_L00_00263618(entry, 0x2528AA28, 0.1f, 0.08f);
+        draw_offset_textured_effect_quad(entry, 0x2528AA28, 0.1f, 0.08f);
         entry += 0x10;
     }
 }
@@ -836,7 +838,7 @@ extern void *FUN_L00_00272060(void *, int, f32, f32, int, int, int, void *, f32)
 extern void FUN_L00_002323b8(f32, int, int);
 extern void FUN_L00_00258278_df40(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_00258278");
 extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
-extern void FUN_L00_0025f8e0(void *, f32);
+extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L01_0026d930(void *);
 extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_002e30b8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1142,7 +1144,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             int fade_particle_color_low_byte, c1, c2, color, life, spin;
             f32 size;
             qcopy(&pos, &sandmouse_moby->pos);
-            FUN_L00_0025f8e0(&pos, *(f32 *)&D_L01_001620B0);
+            add_random_offset_to_vector_xyz(&pos, *(f32 *)&D_L01_001620B0);
             fade_particle_color_low_byte = (rand() + 0x30) & 0x3F;
             c1 = (rand() + 0x20) & 0x3F;
             c2 = rand() & 0x2F;
@@ -1815,7 +1817,7 @@ void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_001eb1f8(int);
+extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera_track_accel_z) __asm__("FUN_L01_00316e88");
@@ -1825,7 +1827,7 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
     char *selected_camera;
     char *destination;
     if (*(short *)(camera_candidate + 0x86) != 5)
-        selected_camera = FUN_L00_001eb1f8(5);
+        selected_camera = find_camera_record_by_id(5);
     else
         selected_camera = camera_candidate;
     destination = *(char **)(selected_camera + 0x70) + 0xE0;

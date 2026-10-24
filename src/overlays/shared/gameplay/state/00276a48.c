@@ -44,7 +44,7 @@ extern void vec_sub_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a2
 extern void vec_add_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void vec_cross_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
 extern void vec_normalize_276a48(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
-extern s32 FUN_L00_00261968_276a48(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
+extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
 
 /* Bit i set for each point i of the path that none of the n segments in ids
    reaches from pos (with a sideways margin of radius when it is nonzero). */
@@ -72,12 +72,12 @@ s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_i
                 vec_normalize_276a48(&side, &side, radius);
                 vec_sub_276a48(&left, segment_origin, &side);
                 vec_add_276a48(&right, segment_origin, &side);
-                if (FUN_L00_00261968_276a48(ids[j], &left, &path->pts[i])) {
+                if (test_path_segment_strict_crossing(ids[j], &left, &path->pts[i])) {
                     hit = 1;
-                } else if (FUN_L00_00261968_276a48(ids[j], &right, &path->pts[i])) {
+                } else if (test_path_segment_strict_crossing(ids[j], &right, &path->pts[i])) {
                     hit = 1;
                 }
-            } else if (FUN_L00_00261968_276a48(ids[j], segment_origin, &path->pts[i])) {
+            } else if (test_path_segment_strict_crossing(ids[j], segment_origin, &path->pts[i])) {
                 hit = 1;
             }
             if (hit) {
@@ -119,12 +119,12 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
             side.f[1] = -x;
             vec_sub_276a48(&left, start_position, &side);
             vec_add_276a48(&right, start_position, &side);
-            if (FUN_L00_00261968_276a48(ids[j], &left, target)) {
+            if (test_path_segment_strict_crossing(ids[j], &left, target)) {
                 hit = 1;
-            } else if (FUN_L00_00261968_276a48(ids[j], &right, target)) {
+            } else if (test_path_segment_strict_crossing(ids[j], &right, target)) {
                 hit = 1;
             }
-        } else if (FUN_L00_00261968_276a48(ids[j], start_position, target)) {
+        } else if (test_path_segment_strict_crossing(ids[j], start_position, target)) {
             hit = 1;
         }
         if (hit) break;

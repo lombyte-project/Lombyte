@@ -245,7 +245,9 @@ u8 D_L15_00180C40[8][1024] = {0};
 u8 D_L16_00180AC0[8][1024] = {0};
 u8 D_L17_00180F40[8][1024] = {0};
 u8 D_L18_00181040[8][1024] = {0};
-int FUN_L00_0023e5e0(u128 *position, float radius, float b, int col) {
+int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) __asm__("FUN_L00_0023e5e0");
+
+int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) {
     int i;
     T_0023e5e0 *slot_state;
     P_0023e5e0 *parameter_entry;
@@ -288,8 +290,8 @@ typedef struct {
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
-int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
-int FUN_L00_0023e738(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
+int allocate_colored_effect_slot(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
     int i;
     T_0023e738 *slot_state;
     P_0023e738 *parameter_entry;
@@ -318,8 +320,8 @@ extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
 void fast_mem_zero16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
-void FUN_L00_0023e838(int i);
-void FUN_L00_0023e838(int i) {
+void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
+void release_point_light_slot(int i) {
     detach_point_light();
     fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
     fast_mem_zero16(D_L00_001804C0 + i * 48, 48);

@@ -16,8 +16,8 @@
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
-                                       int col, float *vel);
+extern unsigned char *spawn_mode_controlled_orbiting_trail_particle(float f0, float f1, int a0, void *pos, int timer, int flag,
+                                       int col, float *vel) __asm__("FUN_L00_002743a8");
 
 void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
 void hoverboard_ring_update(char *moby) {
@@ -41,7 +41,7 @@ void hoverboard_ring_update(char *moby) {
                 for (i = 0; i < 3; i++) {
                     float first_random_angle = random_angle_radians();
                     float second_random_angle = random_angle_radians();
-                    FUN_L00_002743a8(first_random_angle, second_random_angle, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
+                    spawn_mode_controlled_orbiting_trail_particle(first_random_angle, second_random_angle, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
                                      0x7F, 0);
                 }
             }
@@ -94,7 +94,7 @@ extern void add_vector_xyz_c8e0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void play_sound_c8e0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 scale_game_frames_c8e0(s32) __asm__("FUN_001f96f8");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern void FUN_L01_002787a0_c8e0(struct Moby *) __asm__("FUN_L01_002787a0");
+extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
 extern f32 fast_add_rotations_c8e0(f32, f32) __asm__("FUN_001fa580");
 extern f32 random_float_between_c8e0(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below_c8e0(s32) __asm__("FUN_00213260");
@@ -173,7 +173,7 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
     if (debris != 0) {
         debris->spawn_frame = moby->spawn_frame;
     }
-    FUN_L01_002787a0_c8e0(moby);
+    spawn_proximity_gated_bolts(moby);
     scale_vector_xyz_c8e0(&debris_velocity, &moby->rot_row0, D_L05_00161FD0 * frame_scale);
     debris_velocity.f[2] += D_L05_00161FD4 * frame_scale;
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
@@ -325,7 +325,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_L05_00329358(char *moby) {
+void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
+
+void update_hero_follow_camera_focus(char *moby) {
     float hero_focus_offset[4];
     char *orbit = *(char **)(moby + 0x70);
     float *focus_position = (float *)(orbit + 0x80);

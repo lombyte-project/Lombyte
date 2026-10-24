@@ -15,7 +15,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
 
 extern char D_0013E030_c[] __asm__("D_0013E030");
-extern void FUN_L00_0028e990_c(void) __asm__("FUN_L00_0028e990");
+extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void update_moby_proximity_interaction(void) __asm__("FUN_L00_0028e180");
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
@@ -26,7 +26,7 @@ void initialize_moby_state_record(char *moby) {
     char *moby_state_record;
     int *moby_state_copy_source;
     D_L00_00160540_gp = 1;
-    FUN_L00_0028e990_c();
+    deactivate_recorded_moby();
     if (current_level_index == 0xD) {
         char *global_record = D_0013E030_c;
         *(float *)(global_record + 0x60) = 464.66f;
@@ -49,7 +49,7 @@ void initialize_moby_state_record(char *moby) {
 #include "sda.h"
 extern u8 *D_0013E030 NOT_SDA;
 /* Flags the moby in D_0013E030 (bits 0 and 1) and clears its field 0x94. */
-void FUN_L00_0028e990(void) {
+void deactivate_recorded_moby(void) {
     if (D_0013E030 != 0) {
         *(u16 *)(D_0013E030 + 0x34) |= 3;
         *(s32 *)(D_0013E030 + 0x94) = 0;
@@ -177,7 +177,7 @@ extern int D_L00_0015F5D8;
 extern short D_0013E05C __attribute__((section(".data")));
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");
-void FUN_L00_002039a0(void);
+void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
@@ -191,7 +191,7 @@ void FUN_L00_0028ecd8(void) {
     if ((unsigned)((unsigned short)music_state->secondary.state - 6) >= 2)
         music_state->secondary.state = 5;
     sound_update();
-    FUN_L00_002039a0();
+    clear_active_help_record();
     FUN_L00_0028e9c8(0);
     D_0013E05C = 0;
 }
@@ -281,7 +281,9 @@ void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
 extern u8 D_0013D3F0[];
-void FUN_L00_0028eed0(void) {
+void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
+
+void prepare_level_entry_transition(void) {
     int level_index, shared_table_offset;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)

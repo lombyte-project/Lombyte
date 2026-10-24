@@ -1065,11 +1065,13 @@ out:
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
 
 extern HudCounter D_L00_0015FAB8;
-extern void FUN_L00_0023a760(HudElem *);
+extern void initialize_numeric_hud_timer_and_base_dimensions(HudElem *) __asm__("FUN_L00_0023a760");
 
 /* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
-void FUN_L00_00239cc8(HudElem *hud_element) {
-    FUN_L00_0023a760(hud_element);
+void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8");
+
+void initialize_bolt_counter_hud(HudElem *hud_element) {
+    initialize_numeric_hud_timer_and_base_dimensions(hud_element);
     hud_element->unk80 = &D_L00_0015FAB8;
     D_L00_0015FAB8.unk0 = 0;
 }
@@ -1087,7 +1089,9 @@ typedef struct T00239d00 {
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00239d00(T00239d00 *hud_element) {
+void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__("FUN_L00_00239d00");
+
+void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
     u8 *visibility_counters = &hud_element->a;
     s32 icon_cycle_period = 60;
     s32 bolt_count_snapshot;
@@ -1151,7 +1155,9 @@ extern s32 D_L00_0015F844 __attribute__((sda));
 extern s32 D_L00_0015F848 __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
-int FUN_L00_00239df8(HudElem *hud_element)
+int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
+
+int draw_bolt_counter_hud_panel(HudElem *hud_element)
 {
     char bolt_display_text[16];
     s16 *frame;
@@ -1330,11 +1336,13 @@ out:
 }
 extern short D_00140986 __attribute__((section(".data")));
 int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
-void FUN_L00_00235ad8(char *, int *, int *, int, int);
+void apply_hud_slide_offset(char *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
-int FUN_L00_0023a640(char *rec) {
+int draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
+
+int draw_hud_cropped_gauge_panel(char *rec) {
     int x, y;
     int sprite_width;
     x = *(int *)(rec + 0x50);
@@ -1342,7 +1350,7 @@ int FUN_L00_0023a640(char *rec) {
     *(int *)(rec + 0x58) = 0x100;
     *(int *)(rec + 0x5C) = 0x40;
     hud_screen_position(rec, &x, &y);
-    FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
+    apply_hud_slide_offset(rec, &x, &y, *(int *)(rec + 0x6C), 0);
     sprite_width = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
     draw_cropped_hud_sprite(get_icon_frame(0x7558, 1), x, y, sprite_width, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
@@ -1358,7 +1366,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
-void FUN_L00_0023a760(HudElem *hud_element) {
+void initialize_numeric_hud_timer_and_base_dimensions(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0x78) + 0x1E;
     hud_element->w = 0x20;
     hud_element->h = 0x20;

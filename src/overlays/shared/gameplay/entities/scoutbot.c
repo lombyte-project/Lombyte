@@ -84,9 +84,9 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 void FUN_L00_0025a120(char *o);
 void spawn_explosion(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate) __asm__("FUN_L00_0025e450");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-void FUN_L08_002d36e0_c(char *m) __asm__("FUN_L08_002d36e0");
+void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
 void FUN_L08_002d3878(char *m);
-void FUN_L08_002d3d78_c(char *m) __asm__("FUN_L08_002d3d78");
+void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
 void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern float distance_3DF8(void *, void *) __asm__("FUN_001f9b48");
@@ -117,7 +117,7 @@ extern void delete_3DF8(void *) __asm__("FUN_0020c828");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
 extern void joint_3DF8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L08_002d3878();
-extern void FUN_L08_002d4108();
+extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 extern float frame_3DF8 __asm__("D_0015ED6C");
 extern float dt_3DF8 __asm__("D_0015ED70");
@@ -144,7 +144,7 @@ void scoutbot_update(Moby *moby) {
         wake_3DF8(moby);
         moby->shadow_range = 0x16;
     }
-    FUN_L08_002d36e0_c((char *)moby);
+    update_scoutbot_health_and_target((char *)moby);
     data->current_target = data->target;
     qcopy(target_pos, data->target_pos);
     switch (moby->state) {
@@ -322,7 +322,7 @@ void scoutbot_update(Moby *moby) {
         delete_3DF8(moby);
         return;
     }
-    FUN_L08_002d3d78_c((char *)moby);
+    update_scoutbot_movement((char *)moby);
     if (moby->state != 5 && (signed char)moby->state >= 0) {
         int col = 0x7F20FF20;
 
@@ -331,7 +331,7 @@ void scoutbot_update(Moby *moby) {
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
         joint_3DF8(moby, 3, data->f220);
-        draw_3DF8(FUN_L08_002d4108, moby);
+        draw_3DF8(draw_scoutbot_glow_quad, moby);
     }
 }
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
@@ -347,7 +347,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
 
-void FUN_L08_002d36e0(char *moby) {
+void update_scoutbot_health_and_target(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int hit;
     float dmg;
@@ -524,7 +524,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L08_002d3d78(char *moby) {
+void update_scoutbot_movement(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float movement_length = vector_length_xyz((float *)(data + 0x40)) - frame_time_sq * 6.0f;
     float movement_length_limit = frame_time * 3.0f;
@@ -612,8 +612,8 @@ void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
 extern float D_L08_00161898 __attribute__((sda));
 extern float D_L08_0016189C __attribute__((sda));
-void FUN_L08_002d4108(char *arg);
-void FUN_L08_002d4108(char *moby) {
+void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
+void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
     Pk_002d4108 pk;
     float up[4];
@@ -1192,7 +1192,7 @@ typedef struct {
     short f20E;
 } Paratrooper302618;
 
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
+char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
 extern char D_L08_001675C0[];
 extern char D_L08_001FC8F0[];
 extern char D_L08_001FC630[];
@@ -1222,7 +1222,7 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
-int FUN_L01_0028b510(void *arg0, void *arg1, float target);
+int select_point_index_by_distance(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_0025a120(char *o);
 void FUN_L00_0025f730(void *a, float x);
@@ -1257,7 +1257,7 @@ extern void FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern int hero_anim302618(int) __asm__("FUN_00213260");
 extern void log302618(char *, int) __asm__("FUN_001e93b0");
 extern void FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern int range302618(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract302618(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1351,7 +1351,7 @@ void blarg_paratrooper_update(char *moby) {
             int index;
             short direction;
             data->f20C=2*(random302618()&1)-1;
-            index=FUN_L01_0028b510(moby+0x10,path,0.0f)+data->f20C;
+            index=select_point_index_by_distance(moby+0x10,path,0.0f)+data->f20C;
             direction=data->f20C;
             data->f1F4=index;
             if(index>=(*(int *)((char *)(path)+0))||index<0) {
@@ -1377,13 +1377,13 @@ void blarg_paratrooper_update(char *moby) {
         }
         FUN_L00_00259028_c(moby,(char *)data+0xD0,path+0x10+data->f1F4*16,pos);
         if(target && data->f164!=2 && timer302618((char *)data+0x1F0)) {
-            data->f1F4=FUN_L01_0028b510(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
+            data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
             (*(unsigned char *)((char *)(moby)+0x20))=2;
         }
         break;
     case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
-        data->f1F4=FUN_L01_0028b510(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
+        data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
         distance=fast_distance302618(moby+0x10,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16);
         if(distance<1.0f || distance<data->fE0) {
             data->fE0=0.0f; (*(unsigned char *)((char *)(moby)+0x20))=3;

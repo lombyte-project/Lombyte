@@ -8,13 +8,13 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C918), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit);
+extern void advance_damped_scalar_velocity(float *ptr, float rate, float b, float c, float limit) __asm__("FUN_L00_0025b798");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 float vendor_spring(float *value, float *velocity, float target_value, float error_gain, float damping_coefficient, float eps) {
     float next_value, remaining_error;
-    FUN_L00_0025b798(velocity, target_value - *value, error_gain, damping_coefficient, eps);
+    advance_damped_scalar_velocity(velocity, target_value - *value, error_gain, damping_coefficient, eps);
     next_value = *value + *velocity;
     remaining_error = target_value - next_value;
     *value = next_value;

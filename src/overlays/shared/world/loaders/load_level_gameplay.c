@@ -14,7 +14,9 @@ typedef struct {
 extern u8 *D_L00_00173E40 NOT_SDA;
 extern Tbl *D_L00_0015F618 __attribute__((sda));
 /* Sets D_L00_00173E40 from offset h[0] and turns the table at offset h[1] into pointers. */
-void FUN_L00_00241728(s32 *offset_header) {
+void resolve_level_asset_block_pointers(s32 *offset_header) __asm__("FUN_L00_00241728");
+
+void resolve_level_asset_block_pointers(s32 *offset_header) {
     s32 i;
     Tbl *entry_table;
     if (offset_header[0])
@@ -478,7 +480,7 @@ extern void light_ties(void *) __asm__("FUN_00237370");
 extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
-extern void FUN_L00_0024a798(int, int);
+extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
 extern void FUN_L00_00250df8(void *);
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
@@ -1084,7 +1086,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 PackRenderCommandFields(m, m->f80, 0, 0, 0);
                 m->f38 = upd;
                 if (*(int *)p != -1) {
-                    FUN_L00_0024a798((int)m, *(int *)p);
+                    store_current_level_table_value((int)m, *(int *)p);
                 }
                 count++;
             }
@@ -1487,7 +1489,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             set_moby_animation(m, 1, 0);
             FUN_L00_00250df8(m);
             D_0013E030.f0 = m;
-            FUN_L00_0024a798((int)m, 0);
+            store_current_level_table_value((int)m, 0);
         }
     }
     if (D_L00_0015F600 != 0 && hdr->f8C != 0) {
@@ -1800,7 +1802,7 @@ extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
 extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
 extern void relocate_counted_pointer_table(char *) __asm__("FUN_L00_0023f120");
-extern void FUN_L00_0023f0d8(char *);
+extern void load_two_int_two_float_header(char *) __asm__("FUN_L00_0023f0d8");
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
@@ -1826,7 +1828,9 @@ extern void FUN_L00_00264740(void);
  * mobies at 0x24 of their data); a stored coordinate times scale / 1024 gives
  * world units. Index 0x10 gives where the sky data starts and 0x14 where the
  * collision data starts. */
-s32 FUN_L00_00244110(s32 full, s32 keep) {
+s32 load_level_assets_and_gameplay(s32 full, s32 keep) __asm__("FUN_L00_00244110");
+
+s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     Load244110 *ld = &D_L00_00173E00_244110;
     s32 *core_header = ld->f4;
     s32 *level_file_base = D_0015EE48.file;
@@ -1948,7 +1952,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
             D_L00_0015F440 = 0;
         }
         if (core_header[0x29]) {
-            FUN_L00_0023f0d8(base + core_header[0x29]);
+            load_two_int_two_float_header(base + core_header[0x29]);
         } else {
             D_L00_0015FC98 = 0;
             D_L00_0015FC9C = 0;
@@ -2095,8 +2099,8 @@ extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */
-s32 FUN_L00_002451b8(s32 i);
-s32 FUN_L00_002451b8(s32 i) {
+s32 start_cutscene_chunk_read(s32 i) __asm__("FUN_L00_002451b8");
+s32 start_cutscene_chunk_read(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
     s32 size;

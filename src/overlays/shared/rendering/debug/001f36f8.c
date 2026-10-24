@@ -152,7 +152,7 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_L00_002e6bf8(void *);
+extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
 
 static inline void copy_vector3(f32 *dst, f32 *src) {
     dst[0] = src[0];
@@ -396,7 +396,7 @@ void update_debug_camera(void) {
         qcopy(target->basis + 8, D_L00_00166C80.camera.basis + 8);
         qcopy(target->previous_basis, D_L00_00166C80.camera.basis);
         copy_vector3(target->camera_position, D_L00_00166C80.camera.position);
-        FUN_L00_002e6bf8(D_L00_00166C80.camera.target);
+        reset_follow_camera_state_from_position(D_L00_00166C80.camera.target);
     }
 }
 #include "qcopy.h"

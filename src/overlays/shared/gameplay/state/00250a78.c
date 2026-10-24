@@ -32,7 +32,9 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void *FUN_L00_002712b8(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32);
 extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
 
-void FUN_L03_00250ae8(char *orientation_source, u128 *emission_position, void *velocity_addend) {
+void emit_radial_particle_burst(char *orientation_source, u128 *emission_position, void *velocity_addend) __asm__("FUN_L03_00250ae8");
+
+void emit_radial_particle_burst(char *orientation_source, u128 *emission_position, void *velocity_addend) {
     struct { u128 position; u128 velocity; u128 temp; } vectors;
     s32 i;
     s32 j;

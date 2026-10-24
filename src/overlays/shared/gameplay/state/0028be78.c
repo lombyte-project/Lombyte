@@ -10,7 +10,7 @@
 /* Build a symmetric adjacency bitmask over a table's entries from pairwise tests. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0028AA68.c: func_L05_0028CEE8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00261968(int, void *, void *);
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 
 void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_table_index) __asm__("FUN_L05_0028be78");
 
@@ -27,7 +27,7 @@ void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_ta
         for (j = i + 1; j < *(int *)adjacency_table; j++) {
             found = 0;
             for (k = 0; k < list_count; k++) {
-                if (FUN_L00_00261968(list[k], adjacency_table + 0x10 + i * 16, adjacency_table + 0x10 + j * 16) != 0) {
+                if (test_path_segment_strict_crossing(list[k], adjacency_table + 0x10 + i * 16, adjacency_table + 0x10 + j * 16) != 0) {
                     found = 1;
                     break;
                 }

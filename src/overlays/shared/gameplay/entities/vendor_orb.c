@@ -410,7 +410,9 @@ void FUN_L00_002e01b0(char *moby) {
 extern u8 *D_L00_0015FFD8;
 
 /* Tests flag 2 (or 1 when &hero.unk20B0 is set) at 0xBC of the moby selected by +0x2FC. */
-s32 FUN_L00_002e02e0(void) {
+s32 test_hydrodisplacer_activation_flag(void) __asm__("FUN_L00_002e02e0");
+
+s32 test_hydrodisplacer_activation_flag(void) {
     struct Hero *base;
     u8 *linked_moby;
     s32 ground_moby_address;
@@ -442,7 +444,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002eac18(int);
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
-void FUN_L00_002e0340(char *moby) {
+void end_hydrodisplacer_interaction(char *moby) __asm__("FUN_L00_002e0340");
+
+void end_hydrodisplacer_interaction(char *moby) {
     if (*(unsigned char *)(moby + 0x20) == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
@@ -492,7 +496,7 @@ extern u8 D_0014C050_2e03a0[] __asm__("D_0014C050");
 extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L00_002d6bf0_2e03a0(void *) __asm__("FUN_L00_002d6bf0");
+extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void stub_printf() __asm__("FUN_001e93b0");
 extern void FUN_0020c828_2e03a0(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
@@ -500,7 +504,7 @@ extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0_2e03a0(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00260860_2e03a0(s32, s32) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -530,7 +534,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     moby->ang = FUN_001fa580_2e03a0(moby->ang, D_0015ED6C_2e03a0 * 1.5707964f);
     switch (moby->state) {
     case PILOTS_HELMET_INITIALIZE:
-        FUN_L00_002d6bf0_2e03a0(moby);
+        initialize_moby_particle_effect(moby);
         if (p->fa_2e03a0 == -1)
             stub_printf(D_L00_001EA1B0, moby->h);
         if (item_available[7]) {
@@ -562,7 +566,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         stub_printf(D_L00_00161BC0);
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
-        FUN_L00_00260860_2e03a0(7, 1);
+        grant_inventory_item(7, 1);
         if (D_00141B08[0] == 0)
             give_reward(0x2328, 0x34);
         if (p->b != -1) {
@@ -686,7 +690,7 @@ extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") __attribute__((section("
 extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-extern void FUN_L00_0023e838(int);
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 int FUN_L00_002e2040(int id);
 int FUN_L00_002e2040(int id) {
@@ -696,11 +700,11 @@ int FUN_L00_002e2040(int id) {
             D_L00_00161BF8_c[i] = 0;
             D_L00_00161C88_c[i] = 0;
             if (D_L00_00161C38_c[i] != -1) {
-                FUN_L00_0023e838(D_L00_00161C38_c[i]);
+                release_point_light_slot(D_L00_00161C38_c[i]);
                 D_L00_00161C38_c[i] = -1;
             }
             if (D_L00_00161C48_c[i] != -1) {
-                FUN_L00_0023e838(D_L00_00161C48_c[i]);
+                release_point_light_slot(D_L00_00161C48_c[i]);
                 D_L00_00161C48_c[i] = -1;
             }
             return 1;
@@ -714,7 +718,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C38[] MACRO_ADDR;
 extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
-extern void FUN_L00_0023e838(s32);
+extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 
 void release_beam_slot(s32 i) __asm__("FUN_L00_002e20f8");
 
@@ -724,11 +728,11 @@ void release_beam_slot(s32 i) {
     D_L00_00161BF8[i] = 0;
     D_L00_00161C88[i] = 0;
     if (first_endpoint_light_index != -1) {
-        FUN_L00_0023e838(first_endpoint_light_index);
+        release_point_light_slot(first_endpoint_light_index);
         D_L00_00161C38[i] = -1;
     }
     if (D_L00_00161C48[i] != -1) {
-        FUN_L00_0023e838(D_L00_00161C48[i]);
+        release_point_light_slot(D_L00_00161C48[i]);
         D_L00_00161C48[i] = -1;
     }
 }
@@ -830,8 +834,8 @@ extern void transform_vector_c(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
-int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
-unsigned char *FUN_L00_00274948(void *a, void *b, int c, int d);
+int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern Slot_2E3700 D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
 extern End_2E3700 D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
@@ -1423,7 +1427,7 @@ extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1475,7 +1479,7 @@ void robot_arm_update(char *moby) {
         transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
         add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
         if (*(int *)(moby_data + 0x34) & 2) {
-            FUN_L00_0025f3e8(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
+            spawn_color_swapped_explosion_burst(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
             float half_collision_radius = *(float *)(moby_data + 0x2C) * 0.5f;
             spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, half_collision_radius, 9.0f, 5, half_collision_radius, -1, 0.0f, 0, 0, -1, 0);
@@ -1538,7 +1542,9 @@ extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a68_002e4180(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e4180(void *, void *, void *) __asm__("FUN_001f9a10");
 
-int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
+int compute_follow_camera_radial_collision_positions(u128 *input_position, float radial_distance_extension) __asm__("FUN_L00_002e4180");
+
+int compute_follow_camera_radial_collision_positions(u128 *input_position, float radial_distance_extension) {
     u128 lookup_position_copy;
     u128 position_delta;
     char *selected_record;
@@ -1565,11 +1571,13 @@ int FUN_L00_002e4180(u128 *input_position, float radial_distance_extension) {
 fail:
     return 0;
 }
-int FUN_L00_001ee1b0(OvlQuad *, float);
+int find_camera_collision_volume_for_point(OvlQuad *, float) __asm__("FUN_L00_001ee1b0");
 /* True when FUN_L00_001ee1b0 returns non-zero for a copy of v and 0. */
-int FUN_L00_002e4290(OvlQuad *input_quad) {
+int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) __asm__("FUN_L00_002e4290");
+
+int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) {
     OvlQuad input_copy = *input_quad;
-    return FUN_L00_001ee1b0(&input_copy, 0.0f) != 0;
+    return find_camera_collision_volume_for_point(&input_copy, 0.0f) != 0;
 }
 typedef struct {
     u8 p0[0x2DC];
@@ -1669,7 +1677,9 @@ extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_002e4168_c2(char *, void *) __asm__("FUN_L00_002e4168");
 
-float FUN_L00_002e4580(char *camera, float target_offset_scale) {
+float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__("FUN_L00_002e4580");
+
+float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) {
     float hero_position[4], offset_target_position[4], angle_direction[4], axis_projection[4];
     float reference_dot_or_signed_angle, axis_dot_or_direction_length;
     char *camera_view = D_L00_00166E10;
@@ -1755,7 +1765,9 @@ extern void vcopy_2e48a0(void *, void *) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 void follow_camera_hero_target(int, void *) __asm__("FUN_L00_002e4168");
-void FUN_L00_002e48a0(void *out) {
+void compute_follow_camera_offset_target_up_projection(void *out) __asm__("FUN_L00_002e48a0");
+
+void compute_follow_camera_offset_target_up_projection(void *out) {
     V4 offset_target_position, hero_position;
     char *camera_view = D_L00_00166E10;
     vcopy_2e48a0(offset_target_position, camera_view + 0x20);
@@ -2423,8 +2435,8 @@ struct P1_388 {
 };
 extern struct P1_388 *D_L00_00166E00_c __asm__("D_L00_00166E00");
 /* -1 while D_L00_00166E00+0x86 is set; else clears its current id, 1 if it was id. */
-s32 FUN_L00_002e8388(s32 id);
-s32 FUN_L00_002e8388(s32 id) {
+s32 clear_follow_camera_volume_if_current(s32 id) __asm__("FUN_L00_002e8388");
+s32 clear_follow_camera_volume_if_current(s32 id) {
     struct P1_388 *current_camera = D_L00_00166E00_c;
     if (current_camera->f86 != 0) {
         return -1;
@@ -2453,8 +2465,8 @@ typedef struct {
     char pad00[0x84];
     short f84;
 } O842e83c0;
-int FUN_L00_002e83c0(int arg1, int arg2);
-int FUN_L00_002e83c0(int candidate_object, int unused) {
+int try_select_follow_camera_volume(int arg1, int arg2) __asm__("FUN_L00_002e83c0");
+int try_select_follow_camera_volume(int candidate_object, int unused) {
     void *current_camera = D_L00_00166E00_c2;
     C842e83c0 *camera_state;
     u8 x;
@@ -2582,7 +2594,9 @@ void follow_camera_start_slide(void) {
     }
 }
 extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") __attribute__((section(".data")));
-void FUN_L00_002e8680(void) {
+void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
+
+void set_follow_camera_blend_output_flags(void) {
     char *current_camera = D_L00_00166E00_002e8680;
     if (*(short *)(current_camera + 0x86) == 0) {
         char *blend_output_block = *(char **)(current_camera + 0x70) + 0x1a8;
@@ -2598,7 +2612,9 @@ extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_angle_limit) {
+float update_follow_camera_angle_blend_from_direction(char *camera, float *input_direction, float blend_update_angle_limit) __asm__("FUN_L00_002e86b0");
+
+float update_follow_camera_angle_blend_from_direction(char *camera, float *input_direction, float blend_update_angle_limit) {
     float axis_projection[4];
     float planar_input_direction[4];
     float planar_reference_direction[4];
@@ -2649,15 +2665,19 @@ float FUN_L00_002e86b0(char *camera, float *input_direction, float blend_update_
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 /* Passes b minus the vector at +0x40 of p's object, with x, to FUN_L00_002e86b0. */
-float FUN_L00_002e88c8(char *camera, void *target_position, f32 x) {
+float update_follow_camera_angle_blend_from_position(char *camera, void *target_position, f32 x) __asm__("FUN_L00_002e88c8");
+
+float update_follow_camera_angle_blend_from_position(char *camera, void *target_position, f32 x) {
     float focus_to_target_direction[4];
     FUN_001f9a28_c2(focus_to_target_direction, target_position, *(char **)(camera + 0x70) + 0x40);
-    return FUN_L00_002e86b0(camera, focus_to_target_direction, x);
+    return update_follow_camera_angle_blend_from_direction(camera, focus_to_target_direction, x);
 }
 extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e86b0_002e8918(char *, char *, float) __asm__("FUN_L00_002e86b0");
 /* For non-zero x: stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e86b0. */
-void FUN_L00_002e8918(char *input_direction, float x, float y) {
+void set_follow_camera_angle_blend_from_direction(char *input_direction, float x, float y) __asm__("FUN_L00_002e8918");
+
+void set_follow_camera_angle_blend_from_direction(char *input_direction, float x, float y) {
     char *current_camera = D_L00_00166E00_002e8918;
     if (*(short *)(current_camera + 0x86) == 0 && x != 0.0f) {
         *(float *)(*(char **)(current_camera + 0x70) + 0x1bc) = x;

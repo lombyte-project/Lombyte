@@ -20,11 +20,11 @@ extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_L00_0025d238_32b90(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
+extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
+extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
-extern s32 FUN_L00_002595a0_32b90(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
+extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 extern u8 D_L02_00174480[] __attribute__((section(".data")));
 f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) __asm__("FUN_L02_002360c8");
@@ -49,16 +49,16 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
             trajectory_position[2] -= ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient;
             FUN_001f9a10_32b90(trajectory_position, trajectory_position, &hero.motion.pos);
             v.q = hero.motion.pos.q;
-            FUN_L00_0025d238_32b90(&v, trajectory_position);
+            clip_negative_segment_endpoint_xyz(&v, trajectory_position);
             qcopy(&v, &hero.motion.pos);
             if (FUN_001efa68_32b90(&v, trajectory_position, 0x324, 0, 0) != 0) {
-                if (FUN_L00_00233d30_32b90((f32 *)D_L02_00174480) <= 0.87266463f) {
+                if (compute_gravity_relative_vector_inclination((f32 *)D_L02_00174480) <= 0.87266463f) {
                     target_z = *(f32 *)(D_L02_00174480 - 0x18);
                 }
             }
         }
         if (target_z > 0.0f) {
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[0], &quadratic_roots[1], trajectory_acceleration_coefficient * -0.5f, hero.motion.velocity.f[2] - trajectory_acceleration_coefficient * -0.5f,
+            if (solve_quadratic_equation(&quadratic_roots[0], &quadratic_roots[1], trajectory_acceleration_coefficient * -0.5f, hero.motion.velocity.f[2] - trajectory_acceleration_coefficient * -0.5f,
                                        hero.motion.pos.f[2] - target_z) > 0 &&
                 quadratic_roots[0] > 0.0f) {
                 return quadratic_roots[0];
@@ -74,14 +74,14 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
         FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_position);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_position);
         if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = trajectory_acceleration_coefficient * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
+            if (solve_quadratic_equation(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
                 return quadratic_roots[2];
             }
         }
@@ -98,14 +98,14 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
         FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
-        FUN_L00_0025d238_32b90(&hero_position_copy, trajectory_position);
+        clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_position);
         if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = trajectory_acceleration_coefficient * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
             y = FUN_L00_00233a78_32b90(&D_L02_00174460);
-            if (FUN_L00_002595a0_32b90(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
+            if (solve_quadratic_equation(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
                 return quadratic_roots[4];
             }
         }

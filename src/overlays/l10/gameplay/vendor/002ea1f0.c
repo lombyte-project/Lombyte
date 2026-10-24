@@ -9,8 +9,8 @@
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern void FUN_L10_002ea4e8_c(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
-extern void FUN_L10_002ea7b0_c(void *,short *) __asm__("FUN_L10_002ea7b0");
+extern void emit_burst_spark_particle(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
+extern void emit_timed_spark_particle(void *,short *) __asm__("FUN_L10_002ea7b0");
 void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
 extern void func_L10_002EBDC8_a01(float,void *,short *,short *) __asm__("FUN_L10_002eaa08");
 
@@ -47,12 +47,12 @@ void update_configurable_particle_emitter(char *moby) {
   }
   break;
  case EFFECT_STATE_EMIT_BURST_PARTICLES:
-  if(*(int *)(effect_pvars+4)==-1)FUN_L10_002ea4e8_c(moby+0x10,(short *)(effect_pvars+8),(short *)(effect_pvars+0x48));
+  if(*(int *)(effect_pvars+4)==-1)emit_burst_spark_particle(moby+0x10,(short *)(effect_pvars+8),(short *)(effect_pvars+0x48));
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
    if(point_count>0) {short *burst=(short *)(effect_pvars+0x48);short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
-   do {FUN_L10_002ea4e8_c(path_point_position,timer,burst);timer++;++burst;--count;path_point_position+=0x10;}while(count);}
+   do {emit_burst_spark_particle(path_point_position,timer,burst);timer++;++burst;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  case EFFECT_STATE_UPDATE_WITH_GROUND_HEIGHT:
@@ -65,12 +65,12 @@ void update_configurable_particle_emitter(char *moby) {
   }
   break;
  case EFFECT_STATE_EMIT_TIMED_PARTICLES:
-  if(*(int *)(effect_pvars+4)==-1)FUN_L10_002ea7b0_c(moby+0x10,(short *)(effect_pvars+8));
+  if(*(int *)(effect_pvars+4)==-1)emit_timed_spark_particle(moby+0x10,(short *)(effect_pvars+8));
   else {
    char *tab=D_L10_001B0930[*(int *)(effect_pvars+4)];int point_count=*(int *)tab;
    if(point_count>32)point_count=32;
    if(point_count>0) {short *timer=(short *)(effect_pvars+8);char *path_point_position=tab+0x10;int count=point_count;
-   do {FUN_L10_002ea7b0_c(path_point_position,timer);++timer;--count;path_point_position+=0x10;}while(count);}
+   do {emit_timed_spark_particle(path_point_position,timer);++timer;--count;path_point_position+=0x10;}while(count);}
   }
   break;
  }
@@ -108,7 +108,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L10_002ea4e8(void *emission_position, short *timer, short *burst) {
+void emit_burst_spark_particle(void *emission_position, short *timer, short *burst) {
     float visibility_sphere[4];
     float vel[4];
     float acc[4];
@@ -187,7 +187,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void clear_u64_value(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L10_002ea7b0(void *emission_position, short *timer) {
+void emit_timed_spark_particle(void *emission_position, short *timer) {
     float visibility_sphere[4];
     float vel[4];
     float acc[4];
@@ -342,8 +342,8 @@ void update_level_mode_dispatcher(struct Moby *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void update_hit_triggered_fragment_spawner(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
@@ -368,8 +368,8 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
         break;
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        FUN_L01_002787a0(moby);
-        FUN_L00_00263e30(moby, 0x742, 1, 0x742, 1, 11, 2);
+        spawn_proximity_gated_bolts(moby);
+        spawn_moby_break_fragments(moby, 0x742, 1, 0x742, 1, 11, 2);
         mark_moby_for_removal(moby);
         break;
     }
@@ -403,7 +403,7 @@ void update_hit_triggered_moby_spawner(struct Moby *moby) {
         break;
     case HIT_RESPONSE_STATE_RESPOND_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         spawn_moby_from_placement(moby, 0x741);
         mark_moby_for_removal(moby);
         break;

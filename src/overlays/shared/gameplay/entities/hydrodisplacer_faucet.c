@@ -97,7 +97,9 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 extern int *D_L05_001ABCC0[];
 extern void FUN_L05_002f4f60(int, int, int);
 
-void FUN_L05_002f5190(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) {
+void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) __asm__("FUN_L05_002f5190");
+
+void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) {
     unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
     if (moby_index_entry != 0) {
         do {
@@ -181,7 +183,7 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
 extern short D_L05_0015FFD8;
-extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
+extern void update_hydrodisplacer_faucet_pulse_color(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
@@ -218,7 +220,7 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
             blend_moby_animation(faucet_moby, 2, 0, 0);
         break;
     }
-    FUN_L05_002f81b8_u(faucet_moby);
+    update_hydrodisplacer_faucet_pulse_color(faucet_moby);
 }
 /* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
@@ -234,7 +236,7 @@ extern short D_L05_001618CC __attribute__((sda));
 extern short D_L05_001618D0 __attribute__((sda));
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
-void FUN_L05_002f81b8(void *mv) {
+void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     char *moby = mv;
     struct Hero *base = &hero;
     char *data = *(char **)(moby + 0x78);
@@ -387,8 +389,8 @@ void hoverboard_update(unsigned char *moby) {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float vector_length_xyz(void *);
-extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int tick_countdown_32(int *);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -418,7 +420,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        FUN_L00_002591d0((int *)&l1, *(int *)(od + 0x44), 0, 0);
+        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
         while (l1) {
             if (*(short *)(l1 + 0xA6) == 0x473) {
                 float offset_test_position[4];
@@ -438,11 +440,11 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            FUN_L00_002592b8((int *)&l1, (int)l1, 0, 0);
+            get_next_moby_in_group((int *)&l1, (int)l1, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
-        FUN_L00_002591d0((int *)&l2, *(int *)(od + 0x48), 0, 0);
+        get_first_moby_in_group((int *)&l2, *(int *)(od + 0x48), 0, 0);
         while (l2) {
             if (*(short *)(l2 + 0xA6) == 0x474) {
                 float m[16];
@@ -458,7 +460,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            FUN_L00_002592b8((int *)&l2, (int)l2, 0, 0);
+            get_next_moby_in_group((int *)&l2, (int)l2, 0, 0);
         }
     }
 }
@@ -870,7 +872,7 @@ void blarg_gun_update(char *moby)
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
-extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L05_00319208");
+extern void initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC");
 void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_00319510");
 
@@ -889,7 +891,7 @@ void reset_selected_moby_to_current_placement(void *moby_v) {
         entry = D_L16_001601AC_m_19510;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
-        func_L16_002E5D68_19510(spawn);
+        initialize_taxi_stop_state(spawn);
     }
     *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
 }
@@ -897,7 +899,9 @@ void reset_selected_moby_to_current_placement(void *moby_v) {
 extern unsigned short *D_L05_001ABCC0_9598[] __asm__("D_L05_001ABCC0");
 extern char *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8");
 typedef struct { char pad[0x78]; char *data; char pad2[0x84]; } M_9598;
-char *FUN_L05_00319598(unsigned char *list_owner_moby, int id) {
+char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) __asm__("FUN_L05_00319598");
+
+char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
     unsigned short *moby_index_entry = D_L05_001ABCC0_9598[list_owner_moby[0x21]];
     char *pool; int idx;
     if (moby_index_entry != 0) {

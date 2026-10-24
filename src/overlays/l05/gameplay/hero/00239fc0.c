@@ -11,7 +11,7 @@ void FUN_001f9810_239fc0(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_239fc0(f32) __asm__("FUN_001f99c0");
-void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
+void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
 
@@ -76,7 +76,7 @@ void apply_hero_ground_material_effects(void) {
         goto call;
     }
     if (hero.selector_1 && hero.grounded_frames && (hero.state.current != 0x3C || hero.unk41E != 0)) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         if (hero.health.hp)
             goto call3c;
         s = 0x7C;
@@ -84,14 +84,14 @@ void apply_hero_ground_material_effects(void) {
     }
     if (hero.selector_13 && hero.state.current != HERO_STATE_SINK && FUN_001f99c0_239fc0(hero.water_surface_z - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
         0.0f < hero.water_surface_z - hero.motion.pos.f[2] && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         s = 0x7F;
         goto call;
     }
     if (hero.selector_3 && hero.state.current != 0x68 && hero.state.current != 0x7B &&
         FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f && 0.0f < hero.unk2F4 - hero.motion.pos.f[2] &&
         (hero.state.current != 0x69 || hero.unk41E != 0) && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         if (hero.health.hp) {
             s = 0x68;
             goto call;
@@ -107,7 +107,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (hero.selector_11 && hero.state.current != 0x7B && FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
         0.0f < hero.unk2F4 - hero.motion.pos.f[2] && hero.motion.displacement.f[2] < 0.0f) {
-        FUN_L00_0020b930_239fc0();
+        exit_hero_vehicle_mode_if_mode_three();
         hero_set_state(0x7B, 1);
     }
 }
@@ -127,18 +127,18 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
+s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
-f32 FUN_L00_00233d30(void *);
+f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
-void FUN_L00_002335c8(void *, f32, f32, f32);
+void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 void FUN_L00_002334d0(void *, void *, f32);
 f32 FUN_001f99c0(f32);
 
@@ -226,7 +226,7 @@ void update_hero_ground_contact(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
                 FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
@@ -243,7 +243,7 @@ void update_hero_ground_contact(void) {
         hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
-        hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         fast_vec_sub(&ground_vector_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&ground_vector_scratch, (u8 *)&hero.unk270)) {
@@ -309,8 +309,8 @@ d1:
         if (i == 1) {
             side_probe_angle = -side_probe_angle;
         }
-        FUN_L00_002335c8(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
-        FUN_L00_002335c8(&unused_probe_vector, 0.2f, side_probe_angle, -0.45f);
+        transform_hero_polar_offset_to_world(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
+        transform_hero_polar_offset_to_world(&unused_probe_vector, 0.2f, side_probe_angle, -0.45f);
         if (collision_line(&side_probe_endpoint, &shared_probe_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
@@ -346,7 +346,7 @@ typedef union {
 } V_2133a8;
 extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002347c0(void);
-extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
 extern void vadd_2133a8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -378,7 +378,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
-            FUN_L00_00233660(&collision_query_offset, 0.0f, 0.0f, 0.7f);
+            transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             vsub_2133a8(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
         } else if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0 ||
@@ -501,7 +501,7 @@ extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_00233ba0(float *, float *, float);
+extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -624,8 +624,8 @@ void integrate_hero_motion_with_collisions(void) {
     if (magnitude < 0.0f) magnitude = 0.0f;
     normalize_vector_xyz(horizontal, work.f, magnitude);
     qcopy(plane.f, velocity);
-    FUN_L00_00233ba0(plane.f, plane.f, 0.0f);
-    FUN_L00_00233ba0(vertical, vertical, 0.0f);
+    set_gravity_relative_vector_length_xy(plane.f, plane.f, 0.0f);
+    set_gravity_relative_vector_length_xy(vertical, vertical, 0.0f);
     normalize_vector_xyz(vertical, vertical, 1.0f);
     magnitude = dot_vectors_xyz(vertical, plane.f);
     if (magnitude < 0.0f) magnitude = 0.0f;

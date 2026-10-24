@@ -7,8 +7,8 @@ typedef struct {
     float f;
 } O_2899f8;
 
-O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d);
-O_2899f8 *FUN_L05_002899f8(O_2899f8 *initial_candidate, O_2899f8 *second_candidate, O_2899f8 *third_candidate, O_2899f8 *fourth_candidate) {
+O_2899f8 *select_candidate_by_max_float_2c(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) __asm__("FUN_L05_002899f8");
+O_2899f8 *select_candidate_by_max_float_2c(O_2899f8 *initial_candidate, O_2899f8 *second_candidate, O_2899f8 *third_candidate, O_2899f8 *fourth_candidate) {
     O_2899f8 *selected_candidate = initial_candidate;
 
     if (selected_candidate == 0) {

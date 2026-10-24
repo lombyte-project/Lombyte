@@ -26,13 +26,13 @@ extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
-extern void FUN_L00_00207a58(void);
-extern void FUN_L00_00207c48(void);
-extern void FUN_L00_00207d00(void);
+extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
+extern void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
+extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_vehicle_moby(void) __asm__("FUN_L00_00208a10");
-extern void FUN_L00_00208b60(void);
+extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
@@ -61,8 +61,8 @@ void FUN_L15_001ff938(void) {
     if (hero0[0x20A4] == 0)
         return;
     update_hero_vehicle_moby();
-    FUN_L00_00207c48();
-    FUN_L00_00207a58();
+    update_hero_scalar_pulse();
+    apply_hero_and_item_scale_sequence();
     FUN_L00_002484e0(hero0 + 0x80);
 
     if (hero0[0x20A4] == 2) {
@@ -75,7 +75,7 @@ void FUN_L15_001ff938(void) {
         if (((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) != 0) {
             moby_point_position(hero_moby, 6, copy);
             qcopy(hero0 + 0x1D80, copy);
-            FUN_L00_00207d00();
+            enqueue_hero_glow_draw_callback_once();
         }
         }
     }
@@ -123,13 +123,13 @@ void FUN_L15_001ff938(void) {
         if (*(short *)(hero4 + 0x22DE) != 0)
             alpha = truncate_float_to_s32((convert_integer_to_float(*(short *)(hero4 + 0x22DE)) / convert_integer_to_float(0x12)) * (float)alpha);
         *(unsigned int *)(hero4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        FUN_L00_00207d00();
+        enqueue_hero_glow_draw_callback_once();
         *(short *)(hero4 + 0x22E0) = 0;
         if (hero4[0x20A4] == 3) {
             int pending = ((struct Hero *)hero4)->pending_item[0];
             if (pending != 0 && pending != 0x1F) {
                 if (*(short *)(hero4 + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    allocate_hero_voice_for_entry(0x19, 0);
                     *(short *)(hero4 + 0x22DE) = 0x12;
                     *(short *)(hero4 + 0x22DC) = 1;
                 }
@@ -138,14 +138,14 @@ void FUN_L15_001ff938(void) {
                 ((struct Hero *)hero5)->pending_item[0] = 0;
                 if (hero5[0x12E7] != 0 && *(int *)(hero5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
                     *(short *)(hero5 + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    allocate_hero_voice_for_entry(0x19, 0);
                     *(short *)(hero5 + 0x22DE) = 0x12;
                     *(short *)(hero5 + 0x22DC) = 1;
                 }
             }
         }
     }
-    FUN_L00_00208b60();
+    update_hero_moby_probed_height_bounds();
     hero6 = ((char *)&D_0013F350);
     FUN_L00_00257024(*(void **)(hero6 + 0x2080));
 }
@@ -160,7 +160,9 @@ extern unsigned char D_0013E05A[];
 #include "rnc/data_labels.h"
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 
-void FUN_L15_00200788(void) {
+void update_enabled_item_tint_from_hero(void) __asm__("FUN_L15_00200788");
+
+void update_enabled_item_tint_from_hero(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     int index = *(int *)(base + 0x10B8);
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
@@ -178,7 +180,7 @@ extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section("
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
@@ -189,7 +191,7 @@ void update_hero_bobbing_and_target_position(void) {
         char *position_target;
         float position_offset[4];
         float rotation_matrix[16];
-        FUN_L00_00262b00(1.1f, frame_time * 5.2359877f, ((char *)base->moby),
+        update_moby_vertical_oscillation(1.1f, frame_time * 5.2359877f, ((char *)base->moby),
                          (float *)(&base->unk6A8), (float *)(&base->unk6AC));
         position_target = ((char *)base->unk86C);
         if (position_target != 0) {
@@ -211,14 +213,16 @@ void update_hero_bobbing_and_target_position(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_002092E0), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015F5C4;
-extern void FUN_L00_00205538(void);
-extern void FUN_L00_00206c08(void);
+extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
+extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void FUN_L00_00232628(void);
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
-void FUN_L15_00208ca8(void) {
+void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
+
+void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *hero_state_bytes;
     int flag_clear_target;
@@ -231,7 +235,7 @@ void FUN_L15_00208ca8(void) {
             *(short *)(base + 0x1634) = -1;
         }
     }
-    FUN_L00_00205538();
+    reset_hero_easing_records();
     hero_state_bytes = ((unsigned char *)&D_0013E533) + 0xE1D;
     flag_clear_target = *(int *)(hero_state_bytes + 0xA84);
     hero_state_bytes[0x20A4] = 0;
@@ -244,7 +248,7 @@ void FUN_L15_00208ca8(void) {
         mark_moby_for_removal(moby_to_remove);
         *(int *)(hero_state_bytes + 0xA8C) = 0;
     }
-    FUN_L00_00206c08();
+    release_and_clear_hero_voice_slots();
     restored_hero_moby = *(char **)(hero_state_bytes + 0xA88);
     *(char **)(hero_state_bytes + 0x2080) = restored_hero_moby;
     qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);
@@ -420,23 +424,23 @@ typedef struct {
 extern s32 D_L15_0015F5C4;
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
-extern void FUN_L00_002165b8_215e58(void) __asm__("FUN_L00_002165b8");
+extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_215e58(s32 *) __asm__("FUN_001f9740");
 extern s16 FUN_001f9770_215e58(s16 *) __asm__("FUN_001f9770");
-extern void FUN_L15_00208ca8_215e58(void) __asm__("FUN_L15_00208ca8");
+extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern s32 FUN_001f96f8_215e58(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_215e58(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *FUN_0020c4f8_215e58(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_215e58(struct Moby *) __asm__("FUN_L00_00250df8");
-extern void FUN_L00_00210a08_215e58(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
+extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 FUN_L00_00233a78_215e58(void *) __asm__("FUN_L00_00233a78");
 extern void FUN_001f99f8_215e58(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28_215e58(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_215e58(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_215e58(void *) __asm__("FUN_001f9af0");
-extern void FUN_L00_00221b68_215e58(void) __asm__("FUN_L00_00221b68");
-extern void FUN_L00_00233660_215e58(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
+extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_215e58(void) __asm__("FUN_L00_00211250");
 
 extern Entry70_215e58 D_L15_00179EF0[];
@@ -452,7 +456,7 @@ void update_hero_timers_and_auxiliary_state(void) {
     s32 sample_count;
 
     if (hero.unk20AD == 0) {
-        FUN_L00_002165b8_215e58();
+        update_hero_tilt();
     }
     hero.state_timer++;
     hero.unk19C++;
@@ -502,7 +506,7 @@ void update_hero_timers_and_auxiliary_state(void) {
     if (hero.unk22DE != 0 && FUN_001f9770_215e58(&hero.unk22DE) != 0 &&
         hero.health.hp != 0 && D_L15_0015F5C4 == 0) {
         if (hero.vehicle_mode == 3) {
-            FUN_L15_00208ca8_215e58();
+            restore_saved_hero_moby_and_clear_vehicle_mode();
             if (FUN_L00_00266d60_215e58(0x80, FUN_001f96f8_215e58(0x12), 0)) {
                 hero.unk20A6 = 1;
             }
@@ -517,7 +521,7 @@ void update_hero_timers_and_auxiliary_state(void) {
                 ((struct Moby *)hero.unkA8C)->glow_color = 0;
                 ((struct Moby *)hero.unkA8C)->spawn_frame = hero.moby->spawn_frame;
                 FUN_L00_00250df8_215e58(hero.unkA8C);
-                FUN_L00_00210a08_215e58(3, 0x53, hero.unkA8C);
+                enter_hero_vehicle_mode(3, 0x53, hero.unkA8C);
             }
         }
     }
@@ -549,13 +553,13 @@ void update_hero_timers_and_auxiliary_state(void) {
     }
     hero.unk1E2 = 0;
 skip:
-    FUN_L00_00221b68_215e58();
+    update_hero_planar_distance_spring_motion();
     if (hero.vehicle_mode == 2) {
-        FUN_L00_00233660_215e58(&hero.motion.unkD0, 0.0f, 0.0f, 4.0f);
+        transform_hero_local_offset_to_world(&hero.motion.unkD0, 0.0f, 0.0f, 4.0f);
         hero.reach_distance = 15.0f;
         hero.reach_height = 3.0f;
     } else {
-        FUN_L00_00233660_215e58(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        transform_hero_local_offset_to_world(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D4E2_lui) {
             hero.reach_distance = 12.0f;
             hero.reach_height = 4.5f;

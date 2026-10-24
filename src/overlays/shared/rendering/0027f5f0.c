@@ -17,7 +17,9 @@ extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B29A4 __attribute__((section(".data")));
-void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float velocity_w_override) {
+void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) __asm__("FUN_L08_0027f5f0");
+
+void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) {
     float saved_velocity[4];
     unsigned char *particle;
     float *vp = saved_velocity;

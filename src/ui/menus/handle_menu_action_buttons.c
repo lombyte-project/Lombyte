@@ -7,7 +7,9 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 FUN_00221968(struct MenuScreen *menu_screen) {
+s32 handle_menu_action_buttons(struct MenuScreen *menu_screen) __asm__("FUN_00221968");
+
+s32 handle_menu_action_buttons(struct MenuScreen *menu_screen) {
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
@@ -30,4 +32,4 @@ s32 FUN_00221968(struct MenuScreen *menu_screen) {
     return 0;
 }
 
-extern __typeof__(FUN_00221968) func_00221968 __attribute__((alias("FUN_00221968")));
+extern __typeof__(handle_menu_action_buttons) func_00221968 __attribute__((alias("FUN_00221968")));

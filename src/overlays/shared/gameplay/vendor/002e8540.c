@@ -29,14 +29,14 @@ void follow_camera_set_up_spring(float up_spring_value, float up_spring_setting)
 /* Copies a vector into the current object's slot, switching to state 5 first. */
 
 extern char *D_L00_00166E00 __attribute__((section(".data")));
-extern char *FUN_L00_001eb1f8(int);
+extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 void FUN_L00_002eaa30(char *src);
 void FUN_L00_002eaa30(char *rotation_source) {
     char *current_camera_record = D_L00_00166E00;
     char *camera_record;
     if (*(short *)(current_camera_record + 0x86) != 5)
-        camera_record = FUN_L00_001eb1f8(5);
+        camera_record = find_camera_record_by_id(5);
     else
         camera_record = current_camera_record;
     qcopy(*(char **)(camera_record + 0x70) + 0x90, rotation_source);

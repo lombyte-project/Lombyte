@@ -565,12 +565,12 @@ extern struct {
     short h46;
 } D_L14_0016CF60;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L02_002e0cd8(void *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00262d38(int);
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
@@ -588,7 +588,7 @@ void sam_update(L14WatchMoby *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SAM_STATE_INITIALIZE: {
         unsigned short id;
@@ -638,7 +638,7 @@ void sam_update(L14WatchMoby *moby) {
             moby->state = 1;
             if ((short)moby_data->sub == 4) {
                 unlock_planet(0xF);
-                FUN_L00_00262d38(0xF);
+                queue_planet_unlock_message(0xF);
                 D_0014C190_257218[D_0015ED84_m][(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 D_L14_001BABD0[(short)moby->hB2 >> 5] |= 1 << (moby->hB2 & 0x1F);
                 memcard_save_data(0, -1);

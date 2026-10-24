@@ -18,7 +18,7 @@ extern f32 D_0013F3D8, D_0013F3DC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
-extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
+extern void collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
@@ -200,7 +200,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
         D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff &&
         (frame_number < 5 || (D_0013F64C &&
           (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
-        FUN_L00_002d5830((void *)(D_L05_0015FFD8 + value * 256));
+        collect_moby_and_clear_path_keys((void *)(D_L05_0015FFD8 + value * 256));
         data[21] = -1;
     }
     qcopy(data, D_0013F3D0);

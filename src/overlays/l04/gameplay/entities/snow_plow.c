@@ -783,9 +783,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025fcb8(void *, void *, float);
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void FUN_L00_002a1538(void *);
+extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
-extern void FUN_L04_00295de8(void *, void *);
+extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -930,7 +930,7 @@ void woodcut_bot_update(WBMoby *m) {
 
                     m->fBC |= 5;
                     blend_moby_animation(m, 5, 0, scale_game_frames(3));
-                    FUN_L00_002a1538(d->f160);
+                    reset_walker_gait_helpers(d->f160);
                     m->state = 9;
                     hit_source_moby_class = *(short *)(*(char **)(p + 0x20) + 0xA6);
                     if (hit_source_moby_class == 0x131 || hit_source_moby_class == 0xB0) {
@@ -949,7 +949,7 @@ void woodcut_bot_update(WBMoby *m) {
             case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE:
             case WOODCUT_BOT_REACTION_RECOIL_TO_IDLE_WITH_COOLDOWNS:
                 blend_moby_animation(m, 6, 0, scale_game_frames(10));
-                FUN_L00_002a1538(d->f160);
+                reset_walker_gait_helpers(d->f160);
                 m->state = 1;
                 d->f3E4 = 2.0f / multiply_global_factor_ed64(15.0f);
                 *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
@@ -1053,7 +1053,7 @@ void woodcut_bot_update(WBMoby *m) {
                 } else {
                     d->f3D0 = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    FUN_L00_002a1538(d->f160);
+                    reset_walker_gait_helpers(d->f160);
                     m->state = 0xA;
                     m->fBC |= 1;
                 }
@@ -1130,7 +1130,7 @@ void woodcut_bot_update(WBMoby *m) {
                 } else {
                     d->f3D0 = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    FUN_L00_002a1538(d->f160);
+                    reset_walker_gait_helpers(d->f160);
                     m->state = 0xA;
                     m->fBC |= 1;
                 }
@@ -1142,7 +1142,7 @@ void woodcut_bot_update(WBMoby *m) {
         if (excited) {
             if (target_distance < 3.0f && adiff < 1.5707964f) {
                 blend_moby_animation(m, 4, 0, scale_game_frames(10));
-                FUN_L00_002a1538(d->f160);
+                reset_walker_gait_helpers(d->f160);
                 m->state = 8;
             } else if (d->f3DC == -1 || point_in_path_xy(selected_target_position, D_L04_001B0630[d->f3DC] + 4,
                                                          *D_L04_001B0630[d->f3DC]) != 0) {
@@ -1151,7 +1151,7 @@ void woodcut_bot_update(WBMoby *m) {
             } else if (adiff > 1.5707964f) {
                 d->f3D0 = 0.0f;
                 blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                FUN_L00_002a1538(d->f160);
+                reset_walker_gait_helpers(d->f160);
                 m->state = 0xA;
             }
         } else {
@@ -1161,13 +1161,13 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_MOVE_TOWARD_TARGET: {
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            FUN_L04_00295de8(m, d->f160);
+            reset_leg_rig_from_animation(m, d->f160);
         }
         FUN_L04_00295778(m, d->f160, frame_time * 4.0f,
                          fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]), frame_time_sq * 20.0f);
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            FUN_L00_002a1538(d->f160);
+            reset_walker_gait_helpers(d->f160);
             m->state = 8;
         } else if (d->f3DC != -1) {
             float v[4];
@@ -1185,7 +1185,7 @@ void woodcut_bot_update(WBMoby *m) {
                                             *D_L04_001B0630[d->f3DC]) != 0) {
                     d->f3D0 = 0.0f;
                     blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                    FUN_L00_002a1538(d->f160);
+                    reset_walker_gait_helpers(d->f160);
                     m->state = 0xA;
                 }
             }
@@ -1201,16 +1201,16 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_RETURN_TO_SAVED_POSITION:
         if (m->fBC & 8) {
             m->fBC &= ~8;
-            FUN_L04_00295de8(m, d->f160);
+            reset_leg_rig_from_animation(m, d->f160);
         }
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            FUN_L00_002a1538(d->f160);
+            reset_walker_gait_helpers(d->f160);
             m->state = 8;
         } else {
             if (m->fBC & 8) {
                 m->fBC &= ~8;
-                FUN_L04_00295de8(m, d->f160);
+                reset_leg_rig_from_animation(m, d->f160);
             }
             if (vector_distance(pos, d->f3B0) < 2.0f) {
                 m->state = 7;
@@ -1229,7 +1229,7 @@ void woodcut_bot_update(WBMoby *m) {
                                          *D_L04_001B0630[d->f3DC]) == 0) {
                         d->f3D0 = 0.0f;
                         blend_moby_animation(m, 0x10, 0, scale_game_frames(10));
-                        FUN_L00_002a1538(d->f160);
+                        reset_walker_gait_helpers(d->f160);
                         m->state = 0xA;
                         m->fBC |= 0x10;
                     } else if (point_in_path_xy(selected_target_position, D_L04_001B0630[d->f3DC] + 4,
@@ -1243,7 +1243,7 @@ void woodcut_bot_update(WBMoby *m) {
     case WOODCUT_BOT_STOP_MOVEMENT:
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
-            FUN_L00_002a1538(d->f160);
+            reset_walker_gait_helpers(d->f160);
             m->state = 8;
         } else {
             FUN_L04_00295778(m, d->f160, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
@@ -1694,12 +1694,12 @@ extern u8 D_0013D4F1[];
 extern u8 D_0013D4C9[];
 extern char D_L04_001DC760[];
 extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
-extern void FUN_L00_002d6bf0(struct Moby *);
+extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -1722,7 +1722,7 @@ void suck_cannon_update(struct Moby *moby) {
         moby->flags &= ~0x41;
     switch (moby->state) {
     case SUCK_CANNON_INITIALIZE:
-        FUN_L00_002d6bf0(moby);
+        initialize_moby_particle_effect(moby);
         if (D_0013D4F1[0]) {
             remove_moby_2e1a10(moby);
             break;
@@ -1746,7 +1746,7 @@ void suck_cannon_update(struct Moby *moby) {
         else
             queue_dialogue_message(0x53DF, -1);
         D_L04_0015F640 = 0xB4;
-        FUN_L00_00260860(9, 1);
+        grant_inventory_item(9, 1);
         if (vars->exitMoby != -1) {
             exit = &portal_mobys_2e1a10[vars->exitMoby];
             jet_reset_camera(&exit->pos, &exit->rot);

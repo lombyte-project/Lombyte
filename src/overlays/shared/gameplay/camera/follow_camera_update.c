@@ -303,7 +303,9 @@ typedef struct {
     int idx;
     int r[6];
 } E_9aa0;
-void FUN_L00_002e9aa0(int unused_camera_moby) {
+void run_type5_grid_record_noop_callbacks(int unused_camera_moby) __asm__("FUN_L00_002e9aa0");
+
+void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
     int i, j, k;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {
@@ -333,14 +335,14 @@ extern void follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002
 extern void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
 extern void FUN_L00_002e9010_u(int) __asm__("FUN_L00_002e9010");
 extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
-extern void FUN_L00_002e9aa0(int);
+extern void run_type5_grid_record_noop_callbacks(int) __asm__("FUN_L00_002e9aa0");
 
 /* Runs eight FUN_L00_002e* steps on object a in order. */
 void update_follow_camera_pose(int camera_moby) __asm__("FUN_L00_002e9bb0");
 
 void update_follow_camera_pose(int camera_moby) {
     float camera_stick_input[2];
-    FUN_L00_002e9aa0(camera_moby);
+    run_type5_grid_record_noop_callbacks(camera_moby);
     follow_camera_auto_turn(camera_moby);
     follow_camera_read_stick(camera_moby, &camera_stick_input[0], &camera_stick_input[1]);
     follow_camera_turn_and_pitch(camera_moby, camera_stick_input[0], camera_stick_input[1]);
@@ -376,7 +378,9 @@ extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8")
 extern void FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002e9cc0(char *camera_object) {
+void update_hero_aligned_camera_position(char *camera_object) __asm__("FUN_L00_002e9cc0");
+
+void update_hero_aligned_camera_position(char *camera_object) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
     struct Hero *hero_data = &hero;
@@ -434,7 +438,9 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
 }
 void initialize_hero_aligned_camera_pose();
 /* Clears seven words of the object at p+0x70, calls FUN_L00_002e9dd0, clears 0x7E. */
-void FUN_L00_002e9ef0(char *camera_object) {
+void reset_hero_aligned_camera(char *camera_object) __asm__("FUN_L00_002e9ef0");
+
+void reset_hero_aligned_camera(char *camera_object) {
     int *camera_state = *(int **)(camera_object + 0x70);
     camera_state[0] = 0;
     camera_state[2] = 0;
@@ -606,7 +612,7 @@ extern OvlQuad D_0013F3D0_2ea488 __asm__("D_0013F3D0") __attribute__((section(".
 extern E_2ea488 *D_L00_0015EF50_2ea488 __asm__("D_L00_0015EF50");
 extern char *D_L00_00166E00_2ea488 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern char D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
-extern char *FUN_L00_001ee1b0_2ea488(void *, f32) __asm__("FUN_L00_001ee1b0");
+extern char *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9dc8_2ea488(f32) __asm__("FUN_001f9dc8");
 extern f32 FUN_001f9de0_2ea488(f32) __asm__("FUN_001f9de0");
@@ -646,7 +652,7 @@ int FUN_L00_002ea488(u8 *m, char *mode_check_object) {
         if (s != 0 && s != 10 && s != 14 && s != 2)
             goto off;
         *(OvlQuad *)&v = D_0013F3D0_2ea488;
-        r = FUN_L00_001ee1b0_2ea488(&v, 0.25f);
+        r = find_camera_collision_volume_for_point(&v, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
         q->i24 = 0;
@@ -724,7 +730,9 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 
 /* Sets s to 1 (2 if set), resets D_L00_00166C80, calls 002e9ef0, allocates a voice for its p. */
-void FUN_L00_002ea7a0(void) {
+void initialize_hero_aligned_camera_mode(void) __asm__("FUN_L00_002ea7a0");
+
+void initialize_hero_aligned_camera_mode(void) {
     S *shared_camera_globals = &D_L00_00166C80;
     S *camera_globals;
     if (shared_camera_globals->s == 0)
@@ -811,7 +819,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00166E00 __attribute__((section(".data")));
-extern char *FUN_L00_001eb1f8(int);
+extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
 void FUN_L00_002ea9d8(char *src);
@@ -819,7 +827,7 @@ void FUN_L00_002ea9d8(char *requested_position) {
     char *current_camera_record = D_L00_00166E00;
     char *camera_record;
     if (*(short *)(current_camera_record + 0x86) != 5)
-        camera_record = FUN_L00_001eb1f8(5);
+        camera_record = find_camera_record_by_id(5);
     else
         camera_record = current_camera_record;
     qcopy(*(char **)(camera_record + 0x70) + 0x80, requested_position);
@@ -871,7 +879,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
 }
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-void FUN_L00_001eb448_2eac18(void) __asm__("FUN_L00_001eb448");
+void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -880,7 +888,7 @@ void FUN_L00_002eac18(int mode);
 void FUN_L00_002eac18(int mode) {
     char *camera_globals = D_L00_00166C80_2eac18;
     char *current_follow_camera = *(char **)(camera_globals + 0x180);
-    FUN_L00_001eb448_2eac18();
+    initialize_camera_record_handoff_defaults();
     if (mode == 0) {
         float v0[4] __attribute__((aligned(16)));
         float v1[4] __attribute__((aligned(16)));
@@ -953,14 +961,16 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
-extern void FUN_L00_001ed580(void *, void *, void *);
-extern void FUN_L00_001ed630(void *, void *, void *);
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
+extern void compute_spherical_offset_from_positions(void *, void *, void *) __asm__("FUN_L00_001ed630");
 extern void interpolate_vector_xyz_cosine_eased(void *, void *, void *, float) __asm__("FUN_L00_00257f70");
 extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *, float) __asm__("FUN_L00_00258050");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
-void FUN_L00_002eae20(void *camera) {
+void update_camera_pose_from_targets(void *camera) __asm__("FUN_L00_002eae20");
+
+void update_camera_pose_from_targets(void *camera) {
     char *camera_object = camera;
     float mtx[16];
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -985,7 +995,7 @@ void FUN_L00_002eae20(void *camera) {
             float t, x, y, transition_azimuth_delta, z;
             t = (float)(*(int *)(transition_state + 4) - *(int *)(camera_state + 0xE0)) /
                 convert_integer_to_float(*(int *)(transition_state + 4));
-            FUN_L00_001ed630(camera_state + 0xE8, target_position, &hero.motion.pos);
+            compute_spherical_offset_from_positions(camera_state + 0xE8, target_position, &hero.motion.pos);
             x = fast_subtract_rotations(F(transition_state, 8), F(transition_state, 0x1C));
             y = fast_subtract_rotations(F(target_position, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
@@ -1004,7 +1014,7 @@ void FUN_L00_002eae20(void *camera) {
                                           cubic_hermite_scalar(F(transition_state, 0x44), 0, 1.0f, F(transition_state, 0x48), t);
             F(transition_state, 0x20) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x20), F(transition_state, 0xC), t);
             interpolate_vector_xyz_cosine_eased(transition_state + 0x30, transition_state + 0x30, &hero.motion.pos, t);
-            FUN_L00_001ed580(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
+            compute_position_from_spherical_offset(camera_object + 0x30, transition_state + 0x1C, transition_state + 0x30);
             interpolate_wrapped_rotations_cosine_eased((float *)(camera_object + 0x40), (float *)(camera_object + 0x40), (float *)(target_position + 0x10), t);
         }
     } else {
@@ -1035,14 +1045,14 @@ void FUN_L00_002eae20(void *camera) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
 extern void resolve_camera_movement_collisions(void *, float) __asm__("FUN_L00_001ed6a8");
-extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
+extern void update_camera_pose_from_targets(void *) __asm__("FUN_L00_002eae20");
 
 /* Runs FUN_L00_002eae20; if word +0x120 of its object is set, clears 0x89 and calls 001ed6a8. */
 void update_camera_pose_with_optional_collision(char *camera_object) __asm__("FUN_L00_002eb218");
 
 void update_camera_pose_with_optional_collision(char *camera_object) {
     char *transition_state = *(char **)(camera_object + 0x70) + 0xE0;
-    FUN_L00_002eae20_u(camera_object);
+    update_camera_pose_from_targets(camera_object);
     if (*(int *)(transition_state + 0x40) != 0) {
         camera_object[0x89] = 0;
         resolve_camera_movement_collisions(camera_object + 0x30, 0.5f);
@@ -1057,13 +1067,15 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void FUN_L00_001ed580(void *, void *, void *);
+extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 
-void FUN_L00_002eb278(void *camera) {
+void initialize_orbit_camera_pose(void *camera) __asm__("FUN_L00_002eb278");
+
+void initialize_orbit_camera_pose(void *camera) {
     char *camera_object = camera;
     float rotation_matrix[16];
     char *orbit_origin = *(char **)(camera_object + 0x70) + 0xB0;
-    FUN_L00_001ed580(camera_object + 0x30, camera_object + 0x50, orbit_origin);
+    compute_position_from_spherical_offset(camera_object + 0x30, camera_object + 0x50, orbit_origin);
     *(float *)(camera_object + 0x50) = fast_add_rotations(*(float *)(camera_object + 0x50), *(float *)(orbit_origin + 0x18));
     *(int *)(camera_object + 0x40) = 0;
     *(float *)(camera_object + 0x44) = fast_add_rotations(*(float *)(camera_object + 0x54), *(float *)(camera_object + 0x5C));
@@ -1076,10 +1088,12 @@ void FUN_L00_002eb278(void *camera) {
 #include "eetypes.h"
 #include "qcopy.h"
 void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8");
-void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
-void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
+void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
-void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
+void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) __asm__("FUN_L00_002eb320");
+
+void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
     char *camera_state = *(char **)(camera_object + 0x70);
     char *orbit_origin = camera_state + 0xb0;
     qcopy(orbit_origin, initial_orbit_origin);
@@ -1087,8 +1101,8 @@ void FUN_L00_002eb320(char *camera_object, void *camera_initialization_values, u
     *(float *)(orbit_origin + 0x18) = x;
     FUN_L00_001eb0c8_002eb320(camera_state + 0x14, camera_initialization_values, x);
     FUN_L00_001eb0c8_002eb320(camera_object + 0x50, camera_initialization_values, 0.0f);
-    FUN_L00_001eb0b0_002eb320(camera_state);
-    FUN_L00_001ff250_002eb320(camera_state + 0x90);
+    zero_five_words(camera_state);
+    clear_twelve_bytes(camera_state + 0x90);
     FUN_L00_002eb278_002eb320(camera_object);
 }
 typedef struct {
@@ -1120,11 +1134,13 @@ typedef struct {
     s16 f7E;
 } S002eb3b0;
 
-extern void FUN_L00_001eb0b0_c(void *) __asm__("FUN_L00_001eb0b0");
-extern void FUN_L00_001ff250(void *);
+extern void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
+extern void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
 extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
-void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
+void initialize_orbit_camera_state(S002eb3b0 *camera_object) __asm__("FUN_L00_002eb3b0");
+
+void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     Moby002eb3b0 *m;
     camera_object->m->fF0 = 0;
     m = camera_object->m;
@@ -1143,16 +1159,16 @@ void FUN_L00_002eb3b0(S002eb3b0 *camera_object) {
     m->f30 = 0.07f;
     m->f34 = 1.0f;
     m->f38 = 0.07f;
-    FUN_L00_001eb0b0_c((u8 *)m + 0x50);
-    FUN_L00_001eb0b0_c(m);
-    FUN_L00_001ff250((u8 *)m + 0x90);
+    zero_five_words((u8 *)m + 0x50);
+    zero_five_words(m);
+    clear_twelve_bytes((u8 *)m + 0x90);
     FUN_L00_002eb278_c(camera_object);
     camera_object->f7E = 0;
 }
 float FUN_001fa580_2eb480(float, float) __asm__("FUN_001fa580");
 void FUN_001fa050_2eb480(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eb480(void *, void *) __asm__("FUN_001fa2b8");
-void FUN_L00_001ed580_2eb480(void *, void *, void *) __asm__("FUN_L00_001ed580");
+void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 float FUN_L00_001eb328_2eb480(void *, float, float, float, float,
                               float) __asm__("FUN_L00_001eb328");
 float FUN_001ebd78_2eb480(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
@@ -1183,7 +1199,7 @@ void update_orbit_camera_pose(char *camera_object) {
     } else {
         qcopy(orbit_origin, camera_state + 0x80);
     }
-    FUN_L00_001ed580_2eb480(camera_object + 0x30, camera_object + 0x50, orbit_origin);
+    compute_position_from_spherical_offset(camera_object + 0x30, camera_object + 0x50, orbit_origin);
     F(camera_object, 0x40) = F(camera_state, 0xAC);
     F(camera_object, 0x44) = FUN_001fa580_2eb480(F(camera_object, 0x54), F(camera_object, 0x5C));
     F(camera_object, 0x48) = FUN_001fa580_2eb480(3.14159274101257324f, F(camera_object, 0x50));
@@ -1277,11 +1293,13 @@ void FUN_001ebf10_002eb930(char *) __asm__("FUN_001ebf10");
 void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
 void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
-void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 extern char D_L00_001E77C0[];
 extern char D_L00_001E77D8[];
 extern char D_L00_001E77F0[];
-char *FUN_L00_002eb930(void *target_moby) {
+char *initialize_mode6_orbit_camera(void *target_moby) __asm__("FUN_L00_002eb930");
+
+char *initialize_mode6_orbit_camera(void *target_moby) {
     char *camera_record = FUN_L00_001eb1f8_002eb930(6);
     char *camera_state;
     D_L00_00166EF0_002eb930[0] = 0;
@@ -1295,7 +1313,7 @@ char *FUN_L00_002eb930(void *target_moby) {
     *(int *)(camera_state + 0x9C) = 1;
     FUN_L00_001eb0c8_002eb930(camera_state + 0x28, D_L00_001E77D8, 0.0f);
     FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, D_L00_001E77F0, 0.0f);
-    FUN_L00_001eb0b0_002eb930(camera_state + 0x50);
+    zero_five_words(camera_state + 0x50);
     return camera_record;
 }
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
@@ -1327,8 +1345,8 @@ typedef struct {
     u8 x50[0x20];
     u8 *m;
 } O002ebb00;
-void FUN_L00_001eb0b0(void *);
-void FUN_L00_001eb0c8(void *, void *, f32);
+void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
+void copy_five_floats_with_rotation_offset(void *, void *, f32) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
 void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) __asm__("FUN_L00_002ebb00");
 
@@ -1341,9 +1359,9 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     qcopy(m + 0xC0, &hero.motion.rot);
     camera_state = camera_object->m;
     qcopy(camera_state + 0x80, raised_hero_position);
-    FUN_L00_001eb0b0(camera_state + 0x14);
+    zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
-    FUN_L00_001eb0c8(camera_object->x50, camera_state + 0x14, 0.0f);
+    copy_five_floats_with_rotation_offset(camera_object->x50, camera_state + 0x14, 0.0f);
     FUN_L00_002eb3b0_u(camera_object);
 }
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
@@ -1359,7 +1377,9 @@ extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L00_002ebbd8(void *camera) {
+void initialize_target_tracking_camera(void *camera) __asm__("FUN_L00_002ebbd8");
+
+void initialize_target_tracking_camera(void *camera) {
     char *camera_object = camera;
     char *hero_data;
     int lvl0 = D_0015ED84;
@@ -1604,7 +1624,7 @@ void turn_camera_view_toward_hero(unsigned char *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_002ebbd8_u(void *) __asm__("FUN_L00_002ebbd8");
+extern void initialize_target_tracking_camera(void *) __asm__("FUN_L00_002ebbd8");
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
@@ -1634,7 +1654,7 @@ void update_target_tracking_camera(char *camera_object) {
         qcopy(r, camera_object);
         qcopy(r + 0x10, camera_object + 0x10);
         qcopy(r + 0x20, camera_object + 0x20);
-        FUN_L00_002ebbd8_u(camera_object);
+        initialize_target_tracking_camera(camera_object);
         *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
     }
 done:
@@ -1650,7 +1670,9 @@ done:
 
 
 /* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
-void FUN_L00_002ec7b0(char *camera_object) {
+void conditionally_set_camera_state_three(char *camera_object) __asm__("FUN_L00_002ec7b0");
+
+void conditionally_set_camera_state_three(char *camera_object) {
     struct Hero *hero_data = &hero;
     if (hero_data->unk2284 != *(short *)(camera_object + 0x86) && hero_data->state.current != 6) {
         *(char *)(camera_object + 0x7D) = 0;
@@ -1741,16 +1763,16 @@ extern s32 D_001415D4[];
 extern u8 *D_L00_001B04B0[];
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern s32 FUN_L00_0025fa38(void *, s32);
-extern s32 FUN_L00_0025faf0(void *, s32);
+extern s32 test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00_0025fa38");
+extern s32 test_point_in_transformed_unit_sphere(void *, s32) __asm__("FUN_L00_0025faf0");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern s32 fun_l00_002e83c0(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
-extern void fun_l00_002e8388(struct UpdateCam *) __asm__("FUN_L00_002e8388");
+extern s32 try_select_follow_camera_volume(struct UpdateCam *) __asm__("FUN_L00_002e83c0");
+extern void clear_follow_camera_volume_if_current(struct UpdateCam *) __asm__("FUN_L00_002e8388");
 extern void fun_l00_002e8490(f32) __asm__("FUN_L00_002e8490");
 extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
 extern void fun_l00_002e8568(s32) __asm__("FUN_L00_002e8568");
 extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
-extern void fun_l00_002e8680(void) __asm__("FUN_L00_002e8680");
+extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void fun_l00_002e8918(void *, f32, f32) __asm__("FUN_L00_002e8918");
 
 /* Nonzero while the hero is in one of the swing camera's volumes. */
@@ -1774,9 +1796,9 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
         return 1;
     if (params->clip_volume2 >= 0 && (forced || is_point_inside_clip_volume(&hero.motion.pos, params->clip_volume2)))
         return 1;
-    if (params->volume_25fa38 >= 0 && (forced || FUN_L00_0025fa38(&hero.motion.pos, params->volume_25fa38)))
+    if (params->volume_25fa38 >= 0 && (forced || test_point_in_transformed_unit_cylinder(&hero.motion.pos, params->volume_25fa38)))
         return 1;
-    if (params->volume_25faf0 >= 0 && (forced || FUN_L00_0025faf0(&hero.motion.pos, params->volume_25faf0)))
+    if (params->volume_25faf0 >= 0 && (forced || test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0)))
         return 1;
     if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, D_L00_001B04B0[params->path] + 0x10,
                                                          *(s32 *)D_L00_001B04B0[params->path])))
@@ -1814,7 +1836,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     if (volume_camera_swing_active(swing_camera_record) == 0) {
         goto stop;
     }
-    if (fun_l00_002e83c0(swing_camera_record) <= 0) {
+    if (try_select_follow_camera_volume(swing_camera_record) <= 0) {
         if (params->timer != 0) {
             params->done = 1;
         }
@@ -1831,7 +1853,7 @@ stop:
             params->done = 1;
         }
         params->timer = 0;
-        fun_l00_002e8388(swing_camera_record);
+        clear_follow_camera_volume_if_current(swing_camera_record);
         return;
     }
     if (params->timer == 0) {
@@ -1880,11 +1902,11 @@ stop:
     total = convert_integer_to_float(scale_game_frames(200));
     params->timer++;
     if (params->type == 10) {
-        fun_l00_002e8680();
+        set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 0x14D;
     }
     if (params->type == 11) {
-        fun_l00_002e8680();
+        set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 2;
     }
     if (params->type == 2 || params->type == 4) {
@@ -2029,9 +2051,9 @@ s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
     }
     if (params->clip_volume >= 0 && is_point_inside_clip_volume(&hero.motion.pos, params->clip_volume))
         return 1;
-    if (params->volume_25fa38 >= 0 && FUN_L00_0025fa38(&hero.motion.pos, params->volume_25fa38))
+    if (params->volume_25fa38 >= 0 && test_point_in_transformed_unit_cylinder(&hero.motion.pos, params->volume_25fa38))
         return 1;
-    if (params->volume_25faf0 >= 0 && FUN_L00_0025faf0(&hero.motion.pos, params->volume_25faf0))
+    if (params->volume_25faf0 >= 0 && test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0))
         return 1;
     params->done = 1;
     return 0;
@@ -2060,7 +2082,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
 
     params = camera_descriptors[aim_camera_record->descriptor_index].params;
     if (volume_camera_aim_active(aim_camera_record)) {
-        if (fun_l00_002e83c0(aim_camera_record) <= 0) {
+        if (try_select_follow_camera_volume(aim_camera_record) <= 0) {
             if (params->timer) {
                 params->done = 1;
             }
@@ -2075,7 +2097,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
         params->done = 1;
     }
     params->timer = 0;
-    fun_l00_002e8388(aim_camera_record);
+    clear_follow_camera_volume_if_current(aim_camera_record);
     return;
 run:
     if (params->timer < 2) {

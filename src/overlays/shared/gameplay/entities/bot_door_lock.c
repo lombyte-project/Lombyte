@@ -315,7 +315,7 @@ extern char *func_0020D348_m(int);
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
@@ -345,7 +345,7 @@ void update_hit_triggered_moby_breakup(char *self) {
     case MOBY_STATE_SPAWN_AND_REMOVE: {
         char *spawned_moby;
         FUN_0022da68_c(0, 0, (int)self);
-        FUN_L01_002787a0(self);
+        spawn_proximity_gated_bolts(self);
         FUN_L00_00263fd8(self, 0x679, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
         FUN_L00_00263fd8(self, 0x67a, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
@@ -400,7 +400,9 @@ extern char *mk_b(int) __asm__("FUN_0020c4f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
-void FUN_L06_0030bef8(char *world_position, int duration_updates, int start_color, int end_color) {
+void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) __asm__("FUN_L06_0030bef8");
+
+void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) {
     OvlQuad position_copy;
     char *vp = (char *)&position_copy;
     unsigned char *effect_moby;

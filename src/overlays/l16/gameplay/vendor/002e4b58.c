@@ -13,7 +13,7 @@
 #ifndef __attribute__((section(".sdata")))
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L16_002e4be0");
-extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L16_002e4900");
+extern void initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L16_001600EC");
 void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4b58");
 
@@ -32,7 +32,7 @@ void transfer_moby_placement_to_linked_moby(void *moby_v) {
         entry = D_L16_001601AC_m_19510;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
-        func_L16_002E5D68_19510(spawn);
+        initialize_taxi_stop_state(spawn);
     }
     *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
 }
@@ -46,7 +46,9 @@ typedef struct {
 } M_4be0;
 
 extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
-char *FUN_L16_002e4be0(struct Moby *group_source_moby, int id) {
+char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) __asm__("FUN_L16_002e4be0");
+
+char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) {
     unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
     char *pool;
     int moby_pool_index;
@@ -187,7 +189,7 @@ extern float D_L16_001DF278[];
 float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
-extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
@@ -207,7 +209,7 @@ void draw_level16_visible_textured_batches(void) {
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
-            FUN_L16_002e8b98_i(element_counts[i], input_vector_tables[i], packet_vector_tables[i], c[i], D_L16_001DF2D0);
+            compute_level16_reflection_map_coordinates(element_counts[i], input_vector_tables[i], packet_vector_tables[i], c[i], D_L16_001DF2D0);
             FUN_L00_001fde98(element_counts[i], packet_vector_tables[i], packet_word_tables[i], D_L16_001DF2D0, 1);
         }
     }

@@ -634,7 +634,9 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 extern float D_L06_00161FD4 __attribute__((sda));
 extern int D_L06_00161FD8 __attribute__((sda));
-void FUN_L06_002ff100(char *moby) {
+void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
+
+void initialize_blarg_space_commando_beam(char *moby) {
     char *vars = *(char **)(moby + 0x78);
     float point_offset[4];
     int i;
@@ -988,7 +990,9 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Spawns one fragment of the break-apart at pos, flying along vel with a
  * random spin. */
-unsigned char *FUN_L06_00300c60(char *unused_source_moby, float *fragment_spawn_position, float *fragment_initial_velocity) {
+unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fragment_spawn_position, float *fragment_initial_velocity) __asm__("FUN_L06_00300c60");
+
+unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fragment_spawn_position, float *fragment_initial_velocity) {
     u128 position_copy, velocity_copy;
     u128 *pp = &position_copy;
     u128 *saved_velocity = &velocity_copy;

@@ -23,7 +23,9 @@ extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
-void FUN_L10_00298940(char *moby) {
+void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
+
+void emit_moby_sprite_particles(char *moby) {
     L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
@@ -63,7 +65,9 @@ extern float func_001F9D10_cc1b8(void *, void *) __asm__("FUN_001f9b48");
 extern float func_L00_001FF860_cc1b8(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9CE8_cc1b8(void *) __asm__("FUN_001f9b20");
 extern void func_L00_00251E30_cc1b8(void *) __asm__("FUN_L00_00250df8");
-char *FUN_L10_002cc1b8(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) {
+char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) __asm__("FUN_L10_002cc1b8");
+
+char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) {
     char *rocket = (char *)func_0020D348_m_cc1b8(0x333);
     char *shot_data;
     if (rocket) {

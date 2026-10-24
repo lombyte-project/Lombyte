@@ -30,11 +30,11 @@ extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern void DebugPrint();
-extern void FUN_L00_002039a0(void);
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_002e8680(void);
+extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
-extern void FUN_L06_00239528(void);
+extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_00141D54[];
 extern char D_00141D7C[];
@@ -221,7 +221,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         }
         if (*(unsigned char *)(pvars + 0x4C) == 0 &&
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x3C))) {
-            FUN_L00_002039a0();
+            clear_active_help_record();
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 help_request(0x4268, 0x8B);
             }
@@ -235,7 +235,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         break;
     case CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET: {
         char *cam;
-        FUN_L00_002e8680();
+        set_follow_camera_blend_output_flags();
         set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x44) << 7) + 0x30), 0.02617994f,
                          0.0f);
         cam = D_L17_00167580;
@@ -250,7 +250,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         break;
     }
     case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
-        FUN_L00_002e8680();
+        set_follow_camera_blend_output_flags();
         if (func_001F9908_i((int *)(pvars + 0x5C))) {
             char *cam;
             set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x40) << 7) + 0x30), 0.02617994f,
@@ -261,7 +261,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
                              *(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x40) << 7) + 0x34)) -
                                  *(float *)(cam + 0x144));
             if (fast_difference_between_rotations(*(float *)(cam + 0x158), target_heading) < 0.034906585f) {
-                FUN_L06_00239528();
+                enter_hero_idle_state_for_current_vehicle_mode();
                 *(unsigned char *)(pvars + 0x4C) = 1;
                 moby->state = 1;
             }
@@ -843,8 +843,8 @@ char *try_activate_blarg_ship_from_list(int list) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -871,9 +871,9 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
     case HIT_EFFECT_EMIT_AND_REMOVE:
         FUN_0022da68(0, 0, (int)moby);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L01_002787a0(moby);
-        FUN_L00_00263e30(moby, 0x753, 1, 0x753, 1, 11, 2);
-        FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
+        spawn_proximity_gated_bolts(moby);
+        spawn_moby_break_fragments(moby, 0x753, 1, 0x753, 1, 11, 2);
+        spawn_moby_break_fragments(moby, 0x756, 1, 0x756, 1, 1, 2);
         spawn_moby_from_placement(moby, 0x752);
         mark_moby_for_removal(moby);
         break;
@@ -913,10 +913,10 @@ void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
     case HIT_EFFECT_EMIT_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L00_00257470(moby, 0, -1);
-        FUN_L01_002787a0(moby);
+        spawn_proximity_gated_bolts(moby);
         FUN_L00_00263fd8((char *)moby, 0x753, &moby->pos.x, &moby->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
-        FUN_L00_00263e30(moby, 0x756, 1, 0x756, 1, 1, 2);
+        spawn_moby_break_fragments(moby, 0x756, 1, 0x756, 1, 1, 2);
         spawn_moby_from_placement(moby, 0x755);
         mark_moby_for_removal_c(moby);
         break;

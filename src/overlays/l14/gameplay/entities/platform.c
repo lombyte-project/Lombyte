@@ -105,7 +105,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_0023e838(int);
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
@@ -157,7 +157,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
         if (*(int *)(od + 0xF0) != -1) {
-            FUN_L00_0023e838(*(int *)(od + 0xF0));
+            release_point_light_slot(*(int *)(od + 0xF0));
             *(int *)(od + 0xF0) = -1;
         }
     }
@@ -217,7 +217,7 @@ extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *)
 extern int ray_67e8(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
 extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float cos_67e8(float) __asm__("FUN_001f9dc8");
 extern float sin_67e8(float) __asm__("FUN_001f9de0");
 
@@ -417,11 +417,11 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
                 muzzle_light_entry[2] = D_L14_00161A58;
             }
         } else if (*(int *)(moby_data + 0xF0) != -1) {
-            light_off_67e8(*(int *)(moby_data + 0xF0));
+            release_point_light_slot(*(int *)(moby_data + 0xF0));
             *(int *)(moby_data + 0xF0) = -1;
         }
     } else if (*(int *)(moby_data + 0xF0) != -1) {
-        light_off_67e8(*(int *)(moby_data + 0xF0));
+        release_point_light_slot(*(int *)(moby_data + 0xF0));
         *(int *)(moby_data + 0xF0) = -1;
     }
     sub_67e8(&v[0], &D_0013F3D0_67e8, &racer_moby->pos);
@@ -531,12 +531,12 @@ void draw_racer_glow_quads(struct Moby *m) {
 /* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern char D_L14_001809C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
@@ -564,7 +564,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
     if ((unsigned int)(moby->state - 3) < 3) {
         joint_position[2] += 1.0f;
         if (*(int *)(moby_data + 0xF0) == -1) {
-            *(int *)(moby_data + 0xF0) = FUN_L00_0023e738(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
         }
         if (*(int *)(moby_data + 0xF0) >= 0) {
             char *e = D_L14_001809C0 + *(int *)(moby_data + 0xF0) * 32;
@@ -574,14 +574,14 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
         joint_position[2] -= 1.0f;
     }
     random_spherical_offset(random_particle_vector, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(joint_position, random_particle_vector, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(joint_position, random_particle_vector, 0x7F, moby);
     if (particle != 0) {
         *(float *)(particle + 0xC) = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         char *e;
         int lifetime_frames;
-        particle = FUN_L00_00274948(joint_position, D_L14_0015F580, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(joint_position, D_L14_0015F580, 0x7F, moby);
         if (particle == 0)
             continue;
         e = particle + 0x20;

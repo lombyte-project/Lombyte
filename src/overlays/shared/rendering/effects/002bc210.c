@@ -23,7 +23,9 @@ extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_L12_002bc210(void *list_, int count, int context_one_texture_state, int context_two_texture_state) {
+void draw_textured_effect_list(void *list_, int count, int context_one_texture_state, int context_two_texture_state) __asm__("FUN_L12_002bc210");
+
+void draw_textured_effect_list(void *list_, int count, int context_one_texture_state, int context_two_texture_state) {
     char *list = list_;
     int i;
     int *sp;
@@ -95,12 +97,12 @@ void apply_npc_big_head_cheat(char *moby) {
 
 extern char D_L12_001F5480[];
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void FUN_L12_002bc210_u(void *, int, int, int) __asm__("FUN_L12_002bc210");
+extern void draw_textured_effect_list(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 
 void draw_level_12_effects(void) {
-    FUN_L12_002bc210_u(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
+    draw_textured_effect_list(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
 }
 
 f32 D_L15_0017CA60[1] __attribute__((section(".data"))) = {0};

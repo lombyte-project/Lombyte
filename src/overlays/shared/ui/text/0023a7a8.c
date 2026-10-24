@@ -225,12 +225,12 @@ extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");
 extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");
-extern void FUN_L00_0023a760_23adb8(void) __asm__("FUN_L00_0023a760");
+extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_0023cdb8_23adb8(void) __asm__("FUN_L00_0023cdb8");
 extern void FUN_L00_0023a7a8_23adb8(void) __asm__("FUN_L00_0023a7a8");
-extern void FUN_L00_00235d80_23adb8(void) __asm__("FUN_L00_00235d80");
+extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0_23adb8(void) __asm__("FUN_L00_00235ea0");
-extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
+extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 
 void update_weapon_hud_state(void) {
     struct Hero *hero_state;
@@ -246,7 +246,7 @@ void update_weapon_hud_state(void) {
     if (weapon_item_id != 0) {
         D_L00_0015F96C = weapon_item_id;
         *(volatile int *)&D_L00_0015F970 = FUN_001ff308_23adb8(
-            0x10, weapon_item_id + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
+            0x10, weapon_item_id + 60000, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_0023cdb8_23adb8,
             FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[weapon_item_id], D_L00_001C40B0[weapon_item_id].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970 != k) {
@@ -254,8 +254,8 @@ void update_weapon_hud_state(void) {
             D_L00_0015F970 = k;
         }
         hero_state->unk1634 =
-            FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
-                                FUN_L00_0023a640_23adb8, &hero_state->unk1630, 200);
+            FUN_001ff308_23adb8(0x10, 0xFFFF, reset_numeric_hud_element, FUN_L00_00235ea0_23adb8,
+                                draw_hud_cropped_gauge_panel, &hero_state->unk1630, 200);
     } else {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);
@@ -268,7 +268,9 @@ extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F970;
 extern int D_L00_0015F96C;
 /* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
-void FUN_L00_0023aef8(void) {
+void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
+
+void reset_hud_and_suspend_weapon_updates(void) {
     reset_hud_animation_channels();
     D_L00_0015F968_gp = 1;
     D_L00_0015F970 = -1;

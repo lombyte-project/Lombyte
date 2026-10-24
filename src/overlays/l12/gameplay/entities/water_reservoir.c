@@ -262,7 +262,7 @@ extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00
 extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern float fast_cos_ece00(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_ece00(float) __asm__("FUN_001f9de0");
-extern void FUN_L00_00259a88(int, void *);
+extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                              int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -323,7 +323,7 @@ void rocket_update(struct Moby *moby) {
                 hit.unk18 = 1;
                 hit.unk19 = 1;
                 hit.oclass = moby->oclass;
-                FUN_L00_00259a88(D_L12_001742C0_ece00.moby, &hit);
+                record_moby_hit(D_L12_001742C0_ece00.moby, &hit);
             }
             moby->state = 2;
         }
@@ -355,7 +355,7 @@ void rocket_update(struct Moby *moby) {
 
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
-extern int FUN_L01_0026e008(int, int);
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -367,7 +367,7 @@ void update_hoven_help_and_dialogue(struct Moby *moby) __asm__("FUN_L12_002ed280
 
 void update_hoven_help_and_dialogue(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
-    if (FUN_L01_0026e008(moby_vars[3], -1) == 0) {
+    if (count_active_moby_group_members(moby_vars[3], -1) == 0) {
         unsigned char *dialogue_trigger_state = D_0013D50F_e;
         if (dialogue_trigger_state[0x14] == 0) {
             dialogue_trigger_state[0x14] = 1;

@@ -7,7 +7,7 @@
 #include "rnc/overlay/quad.h"
 f32 FUN_L00_00257c48_261630(f32, f32) __asm__("FUN_L00_00257c48");
 s32 FUN_L00_00257b90_261630(s32, s32) __asm__("FUN_L00_00257b90");
-void FUN_L00_0025bc00_261630(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
+void step_angle_toward_target(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
 s32 FUN_001f9770_261630(void *) __asm__("FUN_001f9770");
 f32 FUN_001f9dc8_261630(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_261630(f32) __asm__("FUN_001f9de0");
@@ -17,7 +17,7 @@ f32 FUN_00213508_261630(void *, s32, f32) __asm__("FUN_00213508");
 f32 FUN_001f9b80_261630(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f9e90_261630(f32, f32) __asm__("FUN_001f9e90");
 s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
-f32 FUN_L00_0025b750_261630(f32, f32, f32) __asm__("FUN_L00_0025b750");
+f32 interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
     OvlQuad proposed_position[1];
     u8 *pos;
@@ -29,7 +29,7 @@ void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
         *(s16 *)(movement_state + 0x2A) = FUN_L00_00257b90_261630(*(s16 *)(movement_state + 0x2C), *(s16 *)(movement_state + 0x2E));
         *(s16 *)(movement_state + 0x28) = 1;
     } else {
-        FUN_L00_0025bc00_261630(moving_object + 0x48, 0, *(f32 *)(movement_state + 0x24), *(f32 *)(movement_state + 0x18));
+        step_angle_toward_target(moving_object + 0x48, 0, *(f32 *)(movement_state + 0x24), *(f32 *)(movement_state + 0x18));
         if (FUN_001f9770_261630(movement_state + 0x2A))
             *(s16 *)(movement_state + 0x28) = 0;
         pos = moving_object + 0x10;
@@ -50,7 +50,7 @@ void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
         planar_distance = FUN_001f9b80_261630(pos, &hero.motion.pos.f[0]);
         if (planar_distance < *(f32 *)(movement_state + 0x20)) {
             planar_distance = planar_distance / *(f32 *)(movement_state + 0x20);
-            *(f32 *)(movement_state + 0x24) = FUN_L00_0025b750_261630(
+            *(f32 *)(movement_state + 0x24) = interpolate_angle(
                 *(f32 *)(movement_state + 0x24),
                 FUN_001f9e90_261630(*(f32 *)(moving_object + 0x10) - hero.motion.pos.f[0],
                                     *(f32 *)(moving_object + 0x14) - hero.motion.pos.f[1]),

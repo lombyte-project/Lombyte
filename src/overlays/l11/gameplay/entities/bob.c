@@ -209,10 +209,10 @@ extern int FUN_00214720(void *, int);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
-extern void FUN_L00_002039a0(void);
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
@@ -269,10 +269,10 @@ void bob_update(WM11 *moby) {
         if (D_L11_0015F5C4 != 2) {
             moby->state = 1;
             if (moby_vars->h04 == 2) {
-                FUN_L00_00260860(3, 1);
+                grant_inventory_item(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
-                FUN_L00_002039a0();
+                clear_active_help_record();
                 help_request(0x2AFB, 0x3D);
             }
         }
@@ -344,7 +344,7 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 
 extern float D_L11_001677C0[];
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L02_002e0cd8(void *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void update_resort_owner_state_actions(void *mp) __asm__("FUN_L11_002d1030");
 
 extern void update_resort_owner_state_actions(void *) __asm__("FUN_L11_002d1030");
@@ -358,7 +358,7 @@ void update_resort_owner_look_tracking(WM11 *m) __asm__("FUN_L11_002d27b0");
 
 void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 void resort_owner_update(struct Moby *moby) {
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 30;
@@ -530,7 +530,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
 extern unsigned char D_0013D4EE __attribute__((section(".data")));
@@ -732,7 +732,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         if (update_npc_dialogue(moby, moby_vars->talk)) {
             jet_clear_persistent(moby_vars->unk10C);
             D_0013D3DC = 1;
-            FUN_L00_00266858(moby, 2);
+            set_moby_dialogue_record_value(moby, 2);
             qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
             qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[moby_vars->leg]].rot);
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
@@ -791,7 +791,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         break;
     case RESORT_OWNER_WAIT_FOR_POST_PATH_DIALOGUE_END:
         if (D_L11_0015F5C4 != 2) {
-            FUN_L00_00260860(6, 1);
+            grant_inventory_item(6, 1);
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);
@@ -1140,7 +1140,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     float head_rate;
     int tracking;
 
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 24;
@@ -1270,11 +1270,11 @@ extern float fast_add_rotations_2518(float, float) __asm__("FUN_001fa580");
 extern void FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
 extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
-extern void FUN_L01_003092d0_2518(char *) __asm__("FUN_L01_003092d0");
+extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern int allocate_voice_2518(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00233ee8_2518(float *, int, float) __asm__("FUN_L00_00233ee8");
+extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
-extern int FUN_L00_00233f38_2518(void) __asm__("FUN_L00_00233f38");
+extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void advance_accelerated_scalar_2518(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void approach_value_2518(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L00_00216f90_2518(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -1328,7 +1328,7 @@ void teleporter_update(struct Moby *moby) {
                 *(int *)(slots[j] + 0x94) = 0;
             }
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_WAIT_FOR_ACTIVATION: {
@@ -1352,12 +1352,12 @@ void teleporter_update(struct Moby *moby) {
         moby->state = 2;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x2C) = 0;
-        FUN_L00_00233ee8_2518(&moby->pos.x, 0, moby->rot.z);
+        request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
         FUN_L00_002598b0_2518((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
     }
     case TELEPORTER_OPEN_PARTS: {
-        int teleport_transition_status = FUN_L00_00233f38_2518();
+        int teleport_transition_status = get_hero_target_pose_status();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                             D_L11_00161910 * D_0015ED70_2518,
@@ -1376,7 +1376,7 @@ void teleporter_update(struct Moby *moby) {
                 moby->state = 4;
             }
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
     case TELEPORTER_CONTRACT_RING:
@@ -1412,7 +1412,7 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(data + 0x28) = 0.0f;
             *(float *)(data + 0x2C) = 0.0f;
             *(float *)(data + 0x3C) = 1.95f;
-            FUN_L01_003092d0_2518(moby);
+            update_teleporter_child_transforms(moby);
         }
         break;
     case TELEPORTER_RESET:
@@ -1434,7 +1434,7 @@ void teleporter_update(struct Moby *moby) {
         } else {
             moby->state = 1;
         }
-        FUN_L01_003092d0_2518(moby);
+        update_teleporter_child_transforms(moby);
         break;
     }
 }
@@ -1444,7 +1444,9 @@ void teleporter_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002f2cd0(struct Moby *moby) {
+void request_teleporter_help_message(struct Moby *moby) __asm__("FUN_L11_002f2cd0");
+
+void request_teleporter_help_message(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     switch (*(int *)(data + 0x10)) {
     case 0:
@@ -1554,7 +1556,9 @@ void FUN_L11_002f2d58(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
-void FUN_L11_002f3040(struct Moby *moby) {
+void restore_teleporter_visibility_and_collision(struct Moby *moby) __asm__("FUN_L11_002f3040");
+
+void restore_teleporter_visibility_and_collision(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char **child = (char **)(data + 0x14);
     int count;
@@ -1640,7 +1644,7 @@ typedef struct {
     unsigned char unk70;
 } MobyAnim_309378;
 
-extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
@@ -1726,7 +1730,7 @@ extern float FUN_00213308_309ac0(void) __asm__("FUN_00213308");
 extern float advance_309ac0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_00260738_309ac0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_00262b80_309ac0(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void FUN_L00_002e8450_309ac0(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
 void update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
@@ -1939,7 +1943,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         boat_vars->angle_e0 = fast_add_rotations(boat_vars->angle_e0, spin);
         amp = 0.13f;
         moby->pos.z = moby->pos.z + sin_309ac0(boat_vars->angle_e0) * amp;
-        FUN_L00_00262b80_309ac0(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
+        update_moby_rotation_oscillation(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
     }
     subtract_vector_xyz(delta, &moby->pos, start_pos);
     FUN_L00_00260738_309ac0(boat_vars->ctl60, delta, start_rot, &moby->rot);

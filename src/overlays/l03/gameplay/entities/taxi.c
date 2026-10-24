@@ -47,16 +47,16 @@ extern float D_L03_00161AF4 __attribute__((sda));
 extern float D_L03_00161AF8 __attribute__((sda));
 extern float D_L03_00161AFC __attribute__((sda));
 extern float D_L03_00161B00 __attribute__((sda));
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
-extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) __asm__("FUN_L03_002d3c40");
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
     char *moby_vars = (char *)taxi_moby->pvars;
-    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
+    update_moby_vertical_oscillation(D_L03_00161AF0, D_L03_00161AF4 * DEG_TO_RAD * frame_time, taxi_moby,
                      (float *)(moby_vars + 0xEC), (float *)(moby_vars + 0xE8));
-    FUN_L00_00262b80(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
+    update_moby_rotation_oscillation(taxi_moby, moby_vars + 0xF0, moby_vars + 0xF4, D_L03_00161AF8,
                      D_L03_00161AFC * DEG_TO_RAD * frame_time,
                      D_L03_00161B00 * DEG_TO_RAD * frame_time);
 }
@@ -758,12 +758,12 @@ extern f32 D_L03_00161B10 __attribute__((sda));
 extern f32 D_L03_00161B18 __attribute__((sda));
 extern L03LevelState D_L03_001BB330;
 extern s32 D_L03_0015F594 __attribute__((sda));
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern void FUN_L00_00233ee8(void *, float, int);
-extern s32 FUN_L00_00233f38(void);
+extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
+extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 taxi_atan2(f32, f32) __asm__("FUN_001f9e90");
@@ -798,7 +798,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
     s32 i;
     s32 route_index;
 
-    FUN_L00_00266858(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
+    set_moby_dialogue_record_value(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
     if (D_L03_00161B04 != 0) {
         for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
             draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
@@ -873,14 +873,14 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
             request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
-                FUN_L00_00233ee8(&taxi_moby->pos, taxi_moby->rot.z, 0);
+                request_hero_target_pose(&taxi_moby->pos, taxi_moby->rot.z, 0);
                 taxi_moby->state = 4;
                 taxi_vars->idx = 1;
             }
         }
         break;
     case TAXI_WAIT_FOR_RETURN_DEPARTURE:
-        if (!FUN_L00_00233f38()) {
+        if (!get_hero_target_pose_status()) {
             taxi_moby->state = 5;
         }
         break;
@@ -1115,7 +1115,7 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_L03_00161B28 __attribute__((sda));
@@ -1187,7 +1187,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
                 hit.kind = state;
                 hit.source = state;
                 hit.oclass = rocket_moby->oclass;
-                FUN_L00_00259a88(level[6], &hit);
+                record_moby_hit(level[6], &hit);
             }
             rocket_moby->state = 2;
         }
@@ -1295,14 +1295,14 @@ extern u8 D_L03_0015FC88[];
 extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
-extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
+extern void record_moby_context_bytes(void *, int, struct Moby *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1350,7 +1350,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
             taxi_kill(helga_moby);
@@ -1361,7 +1361,7 @@ void helga_update(struct Moby *helga_moby) {
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
-                FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
             }
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
@@ -1380,7 +1380,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                 }
             }
         }
@@ -1394,7 +1394,7 @@ void helga_update(struct Moby *helga_moby) {
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
-                        FUN_L01_0029b0a0(flag, 4, helga_moby, 2, D_L03_001BA720);
+                        record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
                     }
                 }
                 if (helga_vars->talk.warp != -1) {
@@ -1404,7 +1404,7 @@ void helga_update(struct Moby *helga_moby) {
             }
             helga_moby->state = 1;
             if (helga_vars->talk.mode == 2) {
-                FUN_L00_00260860(0xC, 1);
+                grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (helga_vars->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
@@ -1693,12 +1693,12 @@ extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 #include "rnc/gameplay/state/game_globals.h"
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
-extern void FUN_L03_002db480(struct Moby *);
+extern void attach_shared_manipulator_to_matching_class_moby(struct Moby *) __asm__("FUN_L03_002db480");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
@@ -1737,7 +1737,7 @@ void big_al_update(struct Moby *guide_moby) {
     int tracking;
     u8 group;
 
-    FUN_L03_002db480(guide_moby);
+    attach_shared_manipulator_to_matching_class_moby(guide_moby);
     switch (guide_moby->state) {
     case BIG_AL_INITIALIZE:
         if (race_gates.unk14C == 0) {
@@ -1811,7 +1811,7 @@ void big_al_update(struct Moby *guide_moby) {
         if (v->talk.mode != 2) {
             break;
         }
-        FUN_L00_00260860(2, 1);
+        grant_inventory_item(2, 1);
         queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
@@ -1936,7 +1936,7 @@ extern f32 talker_rand_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 talker_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 talker_sin(f32) __asm__("FUN_001f9de0");
 extern s32 talker_rand_below(s32) __asm__("FUN_00213260");
-extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
 
 /* A talking moby that can be shot down: talks (and may warp the hero) when
  * approached, and once hit by a type 3 hit or already recorded as collected
@@ -2026,7 +2026,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         pos.f[2] = 0.0f;
         FUN_L00_001ff290(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
         if (talker_rand_below(3) == 0) {
-            FUN_L00_0026ced0(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
+            spawn_effect_particle_with_target_scalar(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);
         }
         break;
@@ -2106,11 +2106,11 @@ struct RailLiftVars {
 };
 
 extern s32 D_L03_0015F594 __attribute__((sda));
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern void FUN_L00_00233ee8(void *, float, int);
-extern s32 FUN_L00_00233f38(void);
+extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
+extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 void update_moby_oscillation(struct Moby *m) __asm__("FUN_L03_002dd0f0");
 
 void update_rail_lift(struct Moby *lift_moby) __asm__("FUN_L03_002dccc0");
@@ -2128,7 +2128,7 @@ void update_rail_lift(struct Moby *lift_moby) {
 
     if (lift_vars->path[0] == -1 || lift_vars->path[1] == -1)
         return;
-    FUN_L00_00266858(lift_moby, is_rail_lift_started((unsigned char *)lift_moby));
+    set_moby_dialogue_record_value(lift_moby, is_rail_lift_started((unsigned char *)lift_moby));
     qcopy(&oldPos, &lift_moby->pos);
     oldRot.q = *(u128 *)&lift_moby->rot;
     fast_dec_timer(&lift_vars->timer);
@@ -2166,7 +2166,7 @@ void update_rail_lift(struct Moby *lift_moby) {
         } else if (lift_vars->ready && is_hero_on_moby(lift_moby)) {
             update_rail_lift_help_and_hud((char *)lift_moby, lift_vars->help[lift_moby->command ^ 1]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
-                FUN_L00_00233ee8(&lift_moby->pos, lift_moby->rot.z, 0);
+                request_hero_target_pose(&lift_moby->pos, lift_moby->rot.z, 0);
                 lift_moby->command ^= 1;
                 lift_vars->unk64 = 1;
                 lift_vars->ready = 0;
@@ -2180,7 +2180,7 @@ void update_rail_lift(struct Moby *lift_moby) {
         }
         break;
     case LIFT_WAIT_FOR_HERO_ANIMATION:
-        if (!FUN_L00_00233f38())
+        if (!get_hero_target_pose_status())
             lift_moby->state = 3;
         break;
     case LIFT_FOLLOW_PATH:

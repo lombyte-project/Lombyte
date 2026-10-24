@@ -61,7 +61,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *, void *);
 
-char *FUN_L15_002e7ed8(void *unused, void *vector) {
+char *spawn_poison_vessel(void *unused, void *vector) __asm__("FUN_L15_002e7ed8");
+
+char *spawn_poison_vessel(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -348,11 +350,11 @@ extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4FD[];
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_002d6bf0(char *);
-extern void FUN_L10_00298940(char *);
+extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
+extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern short D_L15_00162078 __attribute__((sda));
@@ -368,7 +370,7 @@ void bolt_grabber_update(struct Moby *moby) {
     moby->scale = moby->pclass->scale * *(float *)&D_L15_00162078;
     switch (moby->state) {
     case BOLT_GRABBER_INITIALIZE:
-        FUN_L00_002d6bf0((char *)moby);
+        initialize_moby_particle_effect((char *)moby);
         if (D_0013D4FD[0xD] != 0) {
             mark_moby_for_removal(moby);
             return;
@@ -377,7 +379,7 @@ void bolt_grabber_update(struct Moby *moby) {
         moby->pos.z = moby->pos.z + 1.0f;
         break;
     case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
-        FUN_L10_00298940((char *)moby);
+        emit_moby_sprite_particles((char *)moby);
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(5);
@@ -388,7 +390,7 @@ void bolt_grabber_update(struct Moby *moby) {
         if (D_L15_0015F5C4 != 2) {
             queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
-            FUN_L00_00260860(0x22, 1);
+            grant_inventory_item(0x22, 1);
             memcard_save_data(0, -1);
             moby->state = 3;
         }
@@ -401,7 +403,7 @@ void bolt_grabber_update(struct Moby *moby) {
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
+extern char *spawn_poison_vessel(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -425,7 +427,7 @@ void update_poison_vessel_spawner(struct Moby *moby) {
     case WAIT_FOR_SPAWN_TIMER:
         if (fast_dec_timer(data)) {
             data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
-            FUN_L15_002e7ed8_c(moby, &moby->pos);
+            spawn_poison_vessel(moby, &moby->pos);
         }
         break;
     }
@@ -726,12 +728,12 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002502a0_v(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
-extern void FUN_L00_00299460_v(int) __asm__("FUN_L00_00299460");
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
 extern void FUN_L00_00216f90_v(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00284e50_v(void *, void *) __asm__("FUN_L00_00284e50");
-extern void FUN_L00_00262d38_v(int) __asm__("FUN_L00_00262d38");
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
@@ -766,7 +768,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00299460_v(0x11);
+            queue_scene_movie_with_game_language(0x11);
             moby->state = 1;
         }
         break;
@@ -788,7 +790,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
                 char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
                 FUN_L00_00284e50_v(o + 0x30, o + 0x70);
             }
-            FUN_L00_00262d38_v(0x11);
+            queue_planet_unlock_message(0x11);
             memcard_save_data(0, -1);
             moby->state = 4;
         }
@@ -1140,19 +1142,19 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int FUN_L01_0026e008(int, int);
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern void FUN_L00_002502a0(int);
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void update_joint_animation(void *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L00_00262d38(int);
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_00284e50(void *, void *);
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L01_0027a248(int, int);
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
-extern void FUN_L15_00208ca8(void);
+extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 #include "rnc/gameplay/state/game_globals.h"
@@ -1321,10 +1323,10 @@ void ultramech_scientist_update(struct Moby *moby) {
                 }
             }
         }
-        if (FUN_L01_0026e008(*(int *)(data + 0x144), 0x40) != 0) {
+        if (count_active_moby_group_members(*(int *)(data + 0x144), 0x40) != 0) {
             break;
         }
-        if (FUN_L01_0026e008(*(int *)(data + 0x148), 0x40) != 0) {
+        if (count_active_moby_group_members(*(int *)(data + 0x148), 0x40) != 0) {
             break;
         }
         moby->state = 4;
@@ -1334,7 +1336,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (fast_dec_timer(data + 0x15C) == 0) {
             break;
         }
-        FUN_L15_00208ca8();
+        restore_saved_hero_moby_and_clear_vehicle_mode();
         set_moby_animation((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14C) << 8), 0, 0);
         *(int *)(data + 0x140) = 1;
         *(short *)(data + 0x36) = 1;
@@ -1359,12 +1361,12 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (D_L15_0015F5C4 == 2) {
             break;
         }
-        FUN_L00_00299460(0x10);
+        queue_scene_movie_with_game_language(0x10);
         moby->state = 7;
         break;
     case ULTRAMECH_SCIENTIST_START_SECOND_SCENE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_00262d38(0x10);
+            queue_planet_unlock_message(0x10);
             start_scene(2);
             moby->state = 8;
         }
@@ -2175,8 +2177,8 @@ int can_spawn_codebot_slot_effect(int slot) {
 extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
 extern int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
-extern int FUN_L00_0025fa38(void *p, int i);
-extern int FUN_L00_0025faf0(float *p, int idx);
+extern int test_point_in_transformed_unit_cylinder(void *p, int i) __asm__("FUN_L00_0025fa38");
+extern int test_point_in_transformed_unit_sphere(float *p, int idx) __asm__("FUN_L00_0025faf0");
 
 extern char *D_L15_0015EF48[] __attribute__((section(".sdata")));
 int is_hero_in_moby_follow_camera_region(char *moby) __asm__("FUN_L15_002f85a8");
@@ -2185,7 +2187,7 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
     int *slot_data = *(int **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
-    if (slot_data[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[10])) {
+    if (slot_data[10] >= 0 && test_point_in_transformed_unit_cylinder(D_0013E533 + 0xE9D, slot_data[10])) {
         return 0;
     }
     if (slot_data[3] >= 0) {
@@ -2193,11 +2195,11 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
             return 1;
         }
     } else if (slot_data[4] >= 0) {
-        if (FUN_L00_0025fa38(D_0013E533 + 0xE9D, slot_data[4])) {
+        if (test_point_in_transformed_unit_cylinder(D_0013E533 + 0xE9D, slot_data[4])) {
             return 1;
         }
     } else if (slot_data[2] >= 0) {
-        if (FUN_L00_0025faf0((float *)(D_0013E533 + 0xE9D), slot_data[2])) {
+        if (test_point_in_transformed_unit_sphere((float *)(D_0013E533 + 0xE9D), slot_data[2])) {
             return 1;
         }
     } else if (slot_data[5] >= 0) {
@@ -2282,8 +2284,8 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
-extern int FUN_L00_002e83c0(char *);
-extern void FUN_L00_002e8388(char *);
+extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
+extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int frames_s(int) __asm__("FUN_001f96f8");
 extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
 extern float itof_s(int) __asm__("FUN_001fa6c0");
@@ -2306,13 +2308,13 @@ void update_moby_follow_camera(char *moby) {
     int spin_ramp_frames;
     float spin_ramp_ratio;
     float spin_angle_radians;
-    if (FUN_L00_002e83c0(moby) <= 0) {
+    if (try_select_follow_camera_volume(moby) <= 0) {
         *(short *)(slot_data + 0x20) = 0;
         return;
     }
     if (is_hero_in_moby_follow_camera_region(moby) == 0) {
         *(short *)(slot_data + 0x20) = 0;
-        FUN_L00_002e8388(moby);
+        clear_follow_camera_volume_if_current(moby);
         return;
     }
     *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;

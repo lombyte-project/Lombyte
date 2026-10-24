@@ -66,7 +66,7 @@ extern void fun_00216c48(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
-extern void FUN_L00_00299460(s32);
+extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
@@ -74,9 +74,9 @@ extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32)
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
-extern void FUN_L00_00239cc8(void);
-extern void FUN_L00_00239d00(void);
-extern void FUN_L00_00239df8(void);
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
@@ -145,7 +145,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
         active_scene_trigger.moby = moby;
         active_scene_trigger.trigger = trigger;
         if (entry->scene & 0x4000) {
-            FUN_L00_00299460((s16)(entry->scene ^ 0x4000));
+            queue_scene_movie_with_game_language((s16)(entry->scene ^ 0x4000));
             return 1;
         }
         remove_hud_item(bolt_hud_item);
@@ -163,8 +163,8 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
         struct SceneEntry *unpaid = &trigger->entries[trigger->entry];
 
         if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
-            handle = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00,
-                                            FUN_L00_00239df8, &current_bolt_count, 9999999);
+            handle = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
+                                            draw_bolt_counter_hud_panel, &current_bolt_count, 9999999);
             hud_keep_visible(handle, scale_game_frames(60));
         }
     }
@@ -197,7 +197,9 @@ typedef struct {
 extern E00266858 D_0013D5B0[];
 s32 FUN_L00_002667d0_u(s32, s32) __asm__("FUN_L00_002667d0");
 /* Stores b in the entry get_dialogue_entry finds, if it finds one. */
-void FUN_L00_00266858(s32 moby_address, s32 moby_record_value) {
+void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) __asm__("FUN_L00_00266858");
+
+void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) {
     s32 i = FUN_L00_002667d0_u(moby_address, moby_record_value);
     if (i != -1)
         D_0013D5B0[i].d = moby_record_value;

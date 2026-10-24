@@ -127,7 +127,9 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float D_L16_001613E0 __attribute__((sda));
 extern float D_L16_001613E4 __attribute__((sda));
 
-char *FUN_L16_002a0dc0(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
+char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
+
+char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
@@ -206,7 +208,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
-float FUN_L16_002d3eb8(char *moby, float *target);
+float advance_blarg_elite_commando_base_position(char *moby, float *target) __asm__("FUN_L16_002d3eb8");
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
 void update_blarg_elite_commando_joint_aim(char *commando_moby) __asm__("FUN_L16_002d4590");
 
@@ -562,7 +564,7 @@ extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm_
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
+extern void randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -598,7 +600,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
     }
     response = hit_reaction(commando_moby, hit, &commando_data->health, 0, &scratch.status, &scratch.amount, 0, 4);
     if (scratch.status != 1 && commando_moby->state != 9) {
-        FUN_L16_002d3f78_u(commando_moby, 0x12C, 0x168);
+        randomize_blarg_elite_commando_group_pursuit_timers(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
             commando_data->reward_hits = 0;
         }
@@ -759,7 +761,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-float FUN_L16_002d3eb8(char *moby, float *target) {
+float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
     char *base_position = data + 0x2C0;
     float distance = fast_vec_dist(base_position);
@@ -794,7 +796,7 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002d3f78(void *group_source_moby, int lower, int upper) {
+void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby, int lower, int upper) {
     L16GroupMoby *source_moby = group_source_moby;
     L16GroupTimer *timer_data;
     short *group_entry;
@@ -871,7 +873,9 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L16_002d41f8(void *moby) {
+void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d41f8");
+
+void emit_blarg_elite_commando_death_particles(void *moby) {
     float delta[4], velocity[4], position[4];
     L16ParticleChoices first, second;
     float distance, range, delay;

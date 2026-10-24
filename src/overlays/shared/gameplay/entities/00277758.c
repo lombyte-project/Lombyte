@@ -14,7 +14,9 @@ extern float scale_by_one_minus_random_squared(float) __asm__("FUN_L09_00277688"
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-void FUN_L09_00277758(float *out, float scale) {
+void generate_random_scaled_vector2(float *out, float scale) __asm__("FUN_L09_00277758");
+
+void generate_random_scaled_vector2(float *out, float scale) {
     float angle = random_angle_radians();
     float magnitude = scale_by_one_minus_random_squared(scale);
     clear_u64_value(out);

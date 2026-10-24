@@ -783,7 +783,7 @@ extern int FUN_001fa6d0_26b230(float) __asm__("FUN_001fa6d0");
 extern int FUN_001fa6e0_26b230(int, int, float) __asm__("FUN_001fa6e0");
 extern int FUN_00213260_26b230(int) __asm__("FUN_00213260");
 extern float FUN_002132a8_26b230(float, float) __asm__("FUN_002132a8");
-extern unsigned FUN_L00_0025c0e8_26b230(unsigned, int) __asm__("FUN_L00_0025c0e8");
+extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
@@ -803,7 +803,9 @@ extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
 extern int D_L00_001601E0 __attribute__((sda));
 extern int D_L00_001601E4 __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026b230(void *spawn_position, void *initial_velocity, unsigned char flags, float size) {
+unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) __asm__("FUN_L00_0026b230");
+
+unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) {
     void *source = spawn_position;
     unsigned char *particle = create_part2(0xC, 0);
     if (particle) {
@@ -860,9 +862,9 @@ unsigned char *FUN_L00_0026b230(void *spawn_position, void *initial_velocity, un
         motion[0x1F] = flags;
         if (flags & 4) {
             *(short *)(particle + 0xA) = *(short *)(particle + 0xA) * (gold_weapon_purchased[0x10] + 2) / 2;
-            FUN_L00_0025c0e8_26b230(*(int *)(particle + 4), gold_weapon_purchased[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(motion + 0x14), gold_weapon_purchased[0x10]);
-            FUN_L00_0025c0e8_26b230(*(unsigned *)(motion + 0x18), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(int *)(particle + 4), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(unsigned *)(motion + 0x14), gold_weapon_purchased[0x10]);
+            swap_packed_color_channels(*(unsigned *)(motion + 0x18), gold_weapon_purchased[0x10]);
         }
         motion[0x1D] = particle[0xA];
     }
@@ -933,7 +935,10 @@ int FUN_001f96f8_26b790(int) __asm__("FUN_001f96f8");
 int FUN_00213260_26b790(int) __asm__("FUN_00213260");
 float FUN_002132a8_26b790(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B20B4 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026b790(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
+unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
+                                float size) __asm__("FUN_L00_0026b790");
+
+unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
                                 float size) {
     unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
     if (particle) {
@@ -1048,7 +1053,10 @@ extern int FUN_001fa6d0_26bb70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bb70(void) __asm__("FUN_001160d8");
 
 extern unsigned char *D_L00_001B20BC __attribute__((section(".data")));
-unsigned char *FUN_L00_0026bb70(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
+                                int blend_mode) __asm__("FUN_L00_0026bb70");
+
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *spawn_position, void *initial_velocity, int initial_color, int final_color, float initial_size, int lifetime, int secondary_spawn_enabled, int texture_id,
                                 int blend_mode) {
     unsigned char *particle;
     unsigned char *particle_data;
@@ -1101,7 +1109,7 @@ float FUN_001f9af0_26bca8(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_26bca8(void *, void *, float) __asm__("FUN_001f9bf8");
 int FUN_L00_00257b90_26bca8(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
-unsigned char *FUN_L00_0026bb70_26bca8(void *, void *, int, int, float, int, int, int,
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
 void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned char *particle) __asm__("FUN_L00_0026bca8");
 
@@ -1136,7 +1144,7 @@ void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned
         FUN_001f9bf8_26bca8(&spawn_velocity, &spawn_velocity, initial_lifetime_or_speed_scratch * FUN_002132a8_26bca8(0.15f, 0.25f));
         FUN_001f9a10_26bca8(&spawn_velocity, &spawn_velocity, particle_data);
         FUN_001f9a68_26bca8(&spawn_velocity, &spawn_velocity, FUN_002132a8_26bca8(0.75f, 0.95f));
-        FUN_L00_0026bb70_26bca8(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(particle_position, &spawn_velocity, *(int *)(particle + 4), *(int *)(particle_data + 0x14),
                                 *(float *)(particle + 0xC),
                                 FUN_001f96f8_26bca8(FUN_L00_00257b90_26bca8(0xF, 0x1E)), 0, particle[2], particle[3]);
     } else {
@@ -1280,7 +1288,9 @@ extern int FUN_001160d8_26c3d0(void) __asm__("FUN_001160d8");
 extern int FUN_001f96f8_26c3d0(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20C8 __attribute__((section(".data")));
-void FUN_L00_0026c3d0(void *spawn_origin, u128 *spawn_offset_matrix) {
+void spawn_effect_particle_with_transformed_random_offset(void *spawn_origin, u128 *spawn_offset_matrix) __asm__("FUN_L00_0026c3d0");
+
+void spawn_effect_particle_with_transformed_random_offset(void *spawn_origin, u128 *spawn_offset_matrix) {
     unsigned char *particle = FUN_L00_002678b8_26c3d0(0x12);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
@@ -1447,7 +1457,7 @@ void FUN_001f9a10_26c860(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0024f7c8_26c860(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void FUN_L00_001ff500_26c860(void *, void *, f32) __asm__("FUN_L00_001ff500");
 f32 FUN_001fa580_26c860(f32, f32) __asm__("FUN_001fa580");
-f32 FUN_L00_0025c230_26c860(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
+f32 compute_transformed_delta_component(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
 s32 FUN_001f9770_26c860(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
 s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
@@ -1481,7 +1491,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
         position_offset_scratch.w = zero;
         FUN_001f9d20_26c860(&transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         FUN_001f9a10_26c860(&particle->v10, &particle->v10, &transformed_position_offset);
-        if (zero < FUN_L00_0025c230_26c860(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
+        if (zero < compute_transformed_delta_component(&reference_position, r->p18 + 0xC0, &particle->v10, 1)) {
             FUN_L00_00267a08_26c860(particle);
             return;
         }
@@ -1614,7 +1624,9 @@ int FUN_001160d8_0026ced0(void) __asm__("FUN_001160d8");
 float FUN_001fa6c0_0026ced0(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B20D8 __attribute__((section(".data")));
-void FUN_L00_0026ced0(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) {
+void spawn_effect_particle_with_target_scalar(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) __asm__("FUN_L00_0026ced0");
+
+void spawn_effect_particle_with_target_scalar(u128 *spawn_position, u128 *initial_velocity, int initial_color, int secondary_color, int lifetime, float target_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026ced0(0x16);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
@@ -1813,7 +1825,9 @@ extern float FUN_002132a8_26d598(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8_26d598(int) __asm__("FUN_001f96f8");
 
 extern unsigned char *D_L00_001B20E4 __attribute__((section(".data")));
-void FUN_L00_0026d598(void *spawn_position, void *initial_velocity, int flag) {
+void spawn_color_decaying_effect_particle(void *spawn_position, void *initial_velocity, int flag) __asm__("FUN_L00_0026d598");
+
+void spawn_color_decaying_effect_particle(void *spawn_position, void *initial_velocity, int flag) {
     unsigned char *particle = FUN_L00_002678b8_26d598(0x19);
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
@@ -1961,7 +1975,9 @@ void FUN_001f9a28_0026daa0(V_0026daa0 *, void *, V_0026daa0 *) __asm__("FUN_001f
 void FUN_001f9bf8_0026daa0(V_0026daa0 *, V_0026daa0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026daa0(void *, V_0026daa0 *, V_0026daa0 *) __asm__("FUN_001f9a10");
 extern unsigned char *D_L00_001B20E8 __attribute__((section(".data")));
-unsigned char *FUN_L00_0026daa0(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
+unsigned char *spawn_source_attached_fading_effect_particle(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) __asm__("FUN_L00_0026daa0");
+
+unsigned char *spawn_source_attached_fading_effect_particle(char *source_moby, int color, int lifetime, int source_position_selector, float initial_particle_scalar) {
     unsigned char *particle = FUN_L00_002678b8_0026daa0(0x1A);
     if (particle) {
         E_0026daa0 *particle_data = (E_0026daa0 *)(particle + 0x20);
@@ -2757,7 +2773,7 @@ typedef struct {
 
 extern V D_L00_00173E60;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void FUN_L00_002715e8(void *, int, int, float, float);
+extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void spawn_random_planar_drift_particle(void *, int, float, float) __asm__("FUN_L00_002741a0");
 
 void update_ballistic_effect_particle_with_contact_spawns(char *particle) __asm__("FUN_L00_0026f660");
@@ -2775,7 +2791,7 @@ void update_ballistic_effect_particle_with_contact_spawns(char *particle) {
         fast_vec_add(&next_position, particle_position, particle_data);
         if (func_L00_001EFFF0(particle_position, &next_position, 2, 0, 0)) {
             if (collision_hit_material() == 0) {
-                FUN_L00_002715e8(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
+                spawn_moving_resizing_height_snapped_alpha_fade_particle(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
             }
             free_effect_particle(particle);
             return;
@@ -2788,7 +2804,7 @@ void update_ballistic_effect_particle_with_contact_spawns(char *particle) {
         water_surface_z = hero.water_surface_z;
         if (*(float *)(particle + 0x18) < water_surface_z) {
             *(float *)(particle + 0x18) = water_surface_z;
-            FUN_L00_002715e8(particle_position, 0, -1, 0.2f, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(particle_position, 0, -1, 0.2f, 5250.0f);
             free_effect_particle(particle);
             return;
         }

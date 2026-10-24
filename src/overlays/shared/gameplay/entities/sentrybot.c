@@ -52,7 +52,7 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L15_00299880(unsigned char *, char *, int, int, float);
+extern int begin_sentrybot_turn_toward_heading(unsigned char *, char *, int, int, float) __asm__("FUN_L15_00299880");
 int move_sentrybot_toward_point(char *moby, float *point, float target_forward_step) __asm__("FUN_L15_00299ae0");
 
 extern int move_sentrybot_toward_point(char *moby, float *point, float arg) __asm__("FUN_L15_00299ae0");
@@ -84,13 +84,13 @@ extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point,
 void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
 
 void alert_visible_group_sentrybots(void *mp) __asm__("FUN_L15_0029a0d0");
-extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
+extern void update_sentrybot_joint_aim(void *) __asm__("FUN_L15_0029a2a8");
 extern void update_sentrybot_hit_response_and_target_visibility(void *, int) __asm__("FUN_L15_0029a570");
 void draw_sentrybot_effect_quads(char *moby) __asm__("FUN_L15_0029aba8");
 
 extern void draw_sentrybot_effect_quads(char *m) __asm__("FUN_L15_0029aba8");
-extern void FUN_L15_002a35d8(int);
-extern void FUN_L15_002cbac0(char *m, int a);
+extern void mark_moby_killed_and_release_owned_voice(int) __asm__("FUN_L15_002a35d8");
+extern void set_sentrybot_alarm_duration(char *m, int a) __asm__("FUN_L15_002cbac0");
 void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 
 extern void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
@@ -195,7 +195,7 @@ void sentrybot_update(unsigned char *moby) {
     if (*(short *)(data + 0x156) != 0 && *(int *)(data + 0x128) != -1) {
         char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
         if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-            FUN_L15_002cbac0(o, 0xB4);
+            set_sentrybot_alarm_duration(o, 0xB4);
     }
     if (moby[0xBC] == 0)
         data[0x15F] = 0;
@@ -304,7 +304,7 @@ void sentrybot_update(unsigned char *moby) {
                         blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 }
             } else if (*(int *)(data + 0x124) == -1) {
-                FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
             }
         } else if (moby[0x20] == 3) {
             if (tick_countdown_32(data + 0x14C) != 0) {
@@ -347,11 +347,11 @@ void sentrybot_update(unsigned char *moby) {
         if (moby[0x70] & 2) {
             *(short *)(data + 0x154) = scale_game_frames(0xF0);
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             moby[0x20] = data[0x15C];
@@ -518,7 +518,7 @@ void sentrybot_update(unsigned char *moby) {
             if (*(int *)(data + 0x128) != -1) {
                 char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    FUN_L15_002cbac0(o, scale_game_frames(0x1E));
+                    set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
             }
         }
         break;
@@ -535,7 +535,7 @@ void sentrybot_update(unsigned char *moby) {
                                        (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                              (void *)2, (void *)0);
         } else {
-            FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+            begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
         }
         break;
     }
@@ -552,7 +552,7 @@ void sentrybot_update(unsigned char *moby) {
                                            (*(int *)(data + 0x13C) * 0x10 + 0x10)),
                                  (void *)2, (void *)0);
             } else {
-                FUN_L15_00299880(moby, data, 2, 0, *(float *)(data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby, data, 2, 0, *(float *)(data + 0x16C));
             }
         } else if (fast_difference_between_rotations(
                        *(float *)(moby + 0x48),
@@ -613,10 +613,10 @@ void sentrybot_update(unsigned char *moby) {
         break;
     case SENTRYBOT_ACTIVATE_LINKED_MOBY:
         if (moby[0x52] == moby[0x53] && compute_interpolated_record_value(moby) >= 12.0f) {
-            FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
+            set_sentrybot_alarm_duration((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
         }
         if (moby[0x70] & 2) {
-            FUN_L15_002cbac0((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
+            set_sentrybot_alarm_duration((char *)(D_L15_0015FFD8_m + (*(int *)(data + 0x128) << 8)), 0xB4);
             begin_sentrybot_turn_toward_point((char *)moby, data, (float *)(target + 0x10), (void *)0x14,
                              (void *)0xE);
         }
@@ -779,7 +779,7 @@ void sentrybot_update(unsigned char *moby) {
             if (*(int *)(data + 0x128) != -1) {
                 char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                    FUN_L15_002cbac0(o, -1);
+                    set_sentrybot_alarm_duration(o, -1);
             }
         } else {
             int mode = *(int *)(data + 0x114);
@@ -793,7 +793,7 @@ void sentrybot_update(unsigned char *moby) {
                 if (*(int *)(data + 0x128) != -1) {
                     char *o = (char *)((*(int *)(data + 0x128) << 8) + D_L15_0015FFD8_m);
                     if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
-                        FUN_L15_002cbac0(o, scale_game_frames(0x1E));
+                        set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
                 }
             } else if (data[0x15A] != 0) {
                 if (mode != 2 && data[0x15B] == 0) {
@@ -853,11 +853,11 @@ void sentrybot_update(unsigned char *moby) {
                 return;
             }
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -874,11 +874,11 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_DEATH_KNOCKBACK:
         if (mine_fall(moby, data + 0x70) & 0x160) {
             if (*(int *)(data + 0x12C) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x12C) << 8));
                 *(int *)(data + 0x12C) = -1;
             }
             if (*(int *)(data + 0x150) != -1) {
-                FUN_L15_002a35d8(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(D_L15_0015FFD8_m + (*(int *)(data + 0x150) << 8));
                 *(int *)(data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -889,7 +889,7 @@ void sentrybot_update(unsigned char *moby) {
         }
         break;
     }
-    FUN_L15_0029a2a8_u(moby);
+    update_sentrybot_joint_aim(moby);
     if (*(short *)(data + 0x156) != 0) {
         lvl = 2;
     } else if (*(int *)(data + 0x114) != 2) {
@@ -945,7 +945,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L15_00299880(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
+int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
     float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
     float stored_heading_delta;
     int turn_required = 1;
@@ -1232,7 +1232,7 @@ extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
-void FUN_L15_0029a2a8(void *mv) {
+void update_sentrybot_joint_aim(void *mv) {
     char *moby = mv;
     char *moby_data = *(char **)(moby + 0x78);
     float target_position[4];
@@ -1530,14 +1530,14 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00263618(void *, int, float, float);
+extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_sentrybot_effect_quads(char *moby) {
     int effect_color = (*(int *)(moby + 0x90) & 0xFFFFFF) | 0x30000000;
     char *effect_position = *(char **)(moby + 0x78) + 0x2A0;
     int i;
     for (i = 2; i >= 0; i--) {
-        FUN_L00_00263618(effect_position, effect_color, 0.2f, 0.08f);
+        draw_offset_textured_effect_quad(effect_position, effect_color, 0.2f, 0.08f);
         effect_position += 0x10;
     }
 }
@@ -2216,7 +2216,7 @@ extern Fade29FF90 D_L15_0015F330 __attribute__((section(".sdata")));
 extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
 extern Light29FF90 D_L15_001808C0[];
 extern s32 D_L15_00178500[];
-extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
@@ -2225,20 +2225,20 @@ extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161484; /* no foreign declaration */
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0023e5e0(float *pos, float radius, float intensity, int color);
+extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_0023e838(int);
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g, int h);
-unsigned char *FUN_L00_0026daa0(char *src, int color, int n, int h, float f);
+unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g, int h) __asm__("FUN_L00_0026bb70");
+unsigned char *spawn_source_attached_fading_effect_particle(char *src, int color, int n, int h, float f) __asm__("FUN_L00_0026daa0");
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b);
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern char D_001413F4[];
@@ -2323,7 +2323,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                     (D_L15_001808C0 + moby_data->light)->f0 < (D_L15_001808C0 + moby_data->light)->f4 * 0.8f ? (D_L15_001808C0 + moby_data->light)->f0 : (D_L15_001808C0 + moby_data->light)->f4 * 0.8f,
                     (D_L15_001808C0 + moby_data->light)->f0);
             } else if ((D_L15_0015F5CC_macro & 3) == 0) {
-                moby_data->light = FUN_L00_0023e5e0(moby->pos, 0.0f, 0.0f, 0);
+                moby_data->light = allocate_packed_color_point_light_slot(moby->pos, 0.0f, 0.0f, 0);
             }
         } else {
             D_L15_0015F320.on = 0;
@@ -2346,7 +2346,7 @@ void update_charged_blast(Moby29FF90 *moby) {
         if (moby_data->light != -1) {
             (D_L15_001808C0 + moby_data->light)->f1C = (D_L15_001808C0 + moby_data->light)->f1C * (frame_scale_macro * -0.6f + 1.0f);
             if ((D_L15_001808C0 + moby_data->light)->f1C < 0.0001f) {
-                FUN_L00_0023e838(moby_data->light);
+                release_point_light_slot(moby_data->light);
                 moby_data->light = -1;
             }
         }
@@ -2377,7 +2377,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                 random_spherical_offset(random_effect_vector, r * D_0015ED6C, r * 2.0f * D_0015ED6C);
                 random_spherical_offset(effect_vector_scratch, 0.0f, r * 0.5f);
                 FUN_L00_001ff290(temporary_position, effect_vector_scratch, moby->pos);
-                p = (Part29FF90 *)FUN_L00_00274948(effect_vector_scratch, random_effect_vector, 0x7F, moby);
+                p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(effect_vector_scratch, random_effect_vector, 0x7F, moby);
                 if (p != 0) {
                     p->fC = random_float_between(6000.0f, 32000.0f) * r * 0.4f;
                 }
@@ -2387,7 +2387,7 @@ void update_charged_blast(Moby29FF90 *moby) {
             int i;
 
             for (i = 0; i < 12; i++) {
-                Part29FF90 *p = (Part29FF90 *)FUN_L00_00274948(moby->pos, D_L15_0015F580, 0x7F, moby);
+                Part29FF90 *p = (Part29FF90 *)spawn_mode_controlled_rotating_alpha_fade_particle(moby->pos, D_L15_0015F580, 0x7F, moby);
 
                 if (p != 0) {
                     PartSub29FF90 *particle_subrecord = &p->sub;
@@ -2671,7 +2671,7 @@ extern unsigned char D_0014C190[];
 extern int D_0015ED84;
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int FUN_L15_002a3138();
-unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner);
+unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) __asm__("FUN_L15_002647f0");
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
 extern char D_0013F420[];
@@ -2950,7 +2950,7 @@ extern u8 D_0013E550[] __attribute__((section(".data")));
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
-void FUN_L15_002a35d8(int addr) {
+void mark_moby_killed_and_release_owned_voice(int addr) {
     struct Moby *moby = (struct Moby *)addr;
     s32 slot;
     moby->collision = 0;
@@ -3179,7 +3179,9 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L15_002a7628(char *moby) {
+void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
+
+void draw_spiderbot_effect_quad(char *moby) {
     float B[4];
     float A[4];
     Quad effect_quad;
@@ -3440,7 +3442,7 @@ stop_animation:
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 12.566371f);
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
-            FUN_L15_002cbac0((char *)moby, 0);
+            set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
             if (moby[0x53] != 8)
                 blend_moby_animation(moby, 8, 0, scale_game_frames(10));
@@ -3470,7 +3472,7 @@ stop_animation:
                 data[3] = data[4];
         }
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
-            FUN_L15_002cbac0((char *)moby, 0);
+            set_sentrybot_alarm_duration((char *)moby, 0);
             data[2] = 0;
             moby[0x20] = 9;
             if (moby[0x53] != 7)
@@ -3514,7 +3516,7 @@ extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section("
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
-void FUN_L15_002cbac0(char *moby, int duration_frames) {
+void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
     char *moby_data = *(char **)(moby + 0x78);
     int flag;
     short *group_moby_entry;
@@ -3570,7 +3572,7 @@ extern int D_0015ED84;
 extern s32 D_L15_00161AB8 ;
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
-extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
+extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern int D_L15_00161AC4 __attribute__((sda));
@@ -3592,7 +3594,7 @@ void update_sentrybot_alarm_effect(void *moby) {
             D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)moby);
             *(void **)&D_L15_00161AC8 = moby;
         }
-        enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, moby);
+        enqueue_callback_list_1_alt(emit_sine_modulated_rgba_draw_packet, moby);
     } else {
         if (voice_is_playing(*(void **)&D_L15_00161AC8, D_L15_00161AC4) != 0) {
             release_voice_slot(D_L15_00161AC4);

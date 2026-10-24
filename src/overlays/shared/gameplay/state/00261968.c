@@ -18,7 +18,9 @@ extern void FUN_001ff500_261968(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8
 extern void FUN_001ff260_261968(OvlVec4 *) __asm__("FUN_001f99f8");
 extern void FUN_001ff6d0_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
 
-s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
+s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) __asm__("FUN_L00_00261968");
+
+s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     OvlVec4 direction;
     OvlVec4 axis;
     OvlVec4 origin;
@@ -532,7 +534,9 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* When o+0x13C is set, marks each nonzero moby of the 0x120 list for removal; clears the flag. */
-void FUN_L00_00262840(char *history_state) {
+void clear_moby_transform_history(char *history_state) __asm__("FUN_L00_00262840");
+
+void clear_moby_transform_history(char *history_state) {
     int i;
     if (*(int *)(history_state + 0x13C) != 0) {
         for (i = 0; i < *(int *)(history_state + 0x138); i++) {
@@ -550,7 +554,7 @@ void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
 float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
 float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");
-void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
+void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
 void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
@@ -579,7 +583,7 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     FUN_L00_0025bc98_2628d8(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
     if (!joint_animation_state[1])
         FUN_0020cb10_2628d8(moby, joint_index, joint_animation_state);
-    FUN_L00_00259f50_2628d8(joint_animation_state + 0x10, joint_animation_state + 0x40);
+    build_quaternion_from_axis_rotations(joint_animation_state + 0x10, joint_animation_state + 0x40);
     uniform_scale = *(float *)(joint_animation_state + 0x70);
     *(float *)(joint_animation_state + 0x20) = uniform_scale;
     *(float *)(joint_animation_state + 0x24) = uniform_scale;
@@ -597,7 +601,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
-void FUN_L00_00262b00(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) {
+void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");
+
+void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) {
     float sine_offset;
     *phase_angle = fast_add_rotations(*phase_angle, y);
     *(float *)(moby + 0x18) -= *previous_sine_offset;
@@ -610,7 +616,9 @@ void FUN_L00_00262b00(float x, float y, char *moby, float *phase_angle, float *p
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
-void FUN_L00_00262b80(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
+void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) __asm__("FUN_L00_00262b80");
+
+void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
     moby[0x10] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
     moby[0x11] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
     *first_phase_angle = fast_add_rotations(*first_phase_angle, first_phase_increment);

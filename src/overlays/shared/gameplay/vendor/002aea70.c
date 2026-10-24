@@ -27,11 +27,11 @@ extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
 extern void sound_update(void) __asm__("FUN_0022ca50");
-extern void FUN_L00_002039a0(void);
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
-extern void FUN_L00_0023aef8(void);
+extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void fill_transfer_words_alt() __asm__("FUN_001f97e8");
@@ -49,7 +49,9 @@ void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 extern char D_L01_00161100 __attribute__((sda));
 extern int D_L01_0015F5D8 __attribute__((sda));
 extern short D_L01_0015F400 __attribute__((sda));
-void FUN_L01_002aea70(char *vendor_moby, int lvl) {
+void initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
+
+void initialize_vendor_screen(char *vendor_moby, int lvl) {
     struct Hero *hero_state = &hero;
     char *vendor_screen_state = D_L01_001CA940;
     char *relocated_address_block = D_L01_0016CCE0;
@@ -70,8 +72,8 @@ void FUN_L01_002aea70(char *vendor_moby, int lvl) {
     *(int *)(vendor_screen_state + 4) = 0;
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
     sc = vendor_screen_state + 0xC0;
-    FUN_L00_0023aef8();
-    FUN_L00_002039a0();
+    reset_hud_and_suspend_weapon_updates();
+    clear_active_help_record();
     hero_set_state(100, 1);
     *(char *)&hero_state->unk20AC = 1;
     *(char *)&hero_state->unk20A5 = 1;
