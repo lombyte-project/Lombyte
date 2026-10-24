@@ -1972,7 +1972,7 @@ void update_gravity_damped_resizing_particle(unsigned char *particle) {
         free_effect_particle(particle);
     }
 }
-extern int D_L00_00160240 __attribute__((sda));
+extern int timed_particle_alpha_decrement __asm__("D_L00_00160240") __attribute__((sda));
 void decrement_packed_countdown() __asm__("FUN_L00_00259430");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle() __asm__("FUN_L00_00267a08");
@@ -1980,7 +1980,7 @@ void free_effect_particle() __asm__("FUN_L00_00267a08");
 void update_timed_alpha_fade_particle(char *particle) __asm__("FUN_L00_00275810");
 
 void update_timed_alpha_fade_particle(char *particle) {
-    decrement_packed_countdown(particle + 4, D_L00_00160240);
+    decrement_packed_countdown(particle + 4, timed_particle_alpha_decrement);
     if (fast_dec_timer_s16(particle + 0xA))
         free_effect_particle(particle);
 }
