@@ -7769,7 +7769,7 @@ typedef struct {
 extern char D_0013E550[];
 extern float D_L06_00167540[];
 extern float D_0015ED6C;
-extern float D_L06_00162200 __attribute__((sda));
+extern float vector_stream_increment_random_scale_bound_gp __asm__("D_L06_00162200") __attribute__((sda));
 extern float D_L06_001FE890[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_vec_dist(void *, void *);
@@ -7789,8 +7789,8 @@ extern float vector_stream_burst_min_particle_scale_gp __asm__("D_L06_0016221C")
 extern float vector_stream_burst_max_particle_scale_gp __asm__("D_L06_00162220") __attribute__((sda));
 extern int vector_stream_burst_min_lifetime_frames_gp __asm__("D_L06_00162224") __attribute__((sda));
 extern int vector_stream_burst_max_lifetime_frames_gp __asm__("D_L06_00162228") __attribute__((sda));
-extern float D_L06_0016222C __attribute__((sda));
-extern float D_L06_00162230 __attribute__((sda));
+extern float vector_stream_burst_velocity_random_scale_bound_a_gp __asm__("D_L06_0016222C") __attribute__((sda));
+extern float vector_stream_burst_velocity_random_scale_bound_b_gp __asm__("D_L06_00162230") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
@@ -7880,7 +7880,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
                 for (j = 0; j < 30; j++) {
                     FUN_L06_00217300(vector_stream_vars->a[i][j]);
                     vector_stream_vars->a[i][j][0] = stream_point_x;
-                    FUN_L00_00257d78(u.tmp[j], 0.0f, D_L06_00162200 * D_0015ED6C);
+                    FUN_L00_00257d78(u.tmp[j], 0.0f, vector_stream_increment_random_scale_bound_gp * D_0015ED6C);
                     stream_point_x += stream_point_x_step;
                 }
                 for (k = 1; k < 29; k++) {
@@ -7938,7 +7938,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
                 color = fast_tween_color(vector_stream_burst_color_blend_a_gp, vector_stream_burst_color_blend_b_gp, random_float_between(0.0f, 1.0f));
                 scale = random_float_between(vector_stream_burst_min_particle_scale_gp, vector_stream_burst_max_particle_scale_gp);
                 particle_lifetime_frames = truncate_float_to_s32_c(random_float_between((float)vector_stream_burst_min_lifetime_frames_gp, (float)vector_stream_burst_max_lifetime_frames_gp));
-                FUN_L00_00257d78(u.m.vel, D_L06_0016222C * D_0015ED6C, D_L06_00162230 * D_0015ED6C);
+                FUN_L00_00257d78(u.m.vel, vector_stream_burst_velocity_random_scale_bound_a_gp * D_0015ED6C, vector_stream_burst_velocity_random_scale_bound_b_gp * D_0015ED6C);
                 life = scale_game_frames(particle_lifetime_frames);
                 func_L00_00273F80_r(u.m.pos, u.m.vel, color, scale, life, (unsigned char)random_integer_below(0xFF), 0);
             }
