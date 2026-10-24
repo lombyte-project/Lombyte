@@ -2134,16 +2134,16 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     case ULTRAMECH_FOLLOW_ENTRY_PATH: {
         UPath *path = D_L15_001B0AB0[ultramech_vars->path];
         float speed = frame_time * 12.0f;
-        float dist;
+        float entry_path_distance_or_fraction;
         float entry_path_step_length;
         FUN_L00_0025df68(path, &ultramech_moby->pos, &position_or_motion_vector, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-        dist = convert_integer_to_float(seg) * path->pt[0].f[3];
-        dist += frac;
-        dist += 2.0f;
-        seg = func_001FA898_r(dist / path->pt[0].f[3]);
-        dist -= convert_integer_to_float(seg) * path->pt[0].f[3];
-        dist /= path->pt[0].f[3];
-        frac = dist;
+        entry_path_distance_or_fraction = convert_integer_to_float(seg) * path->pt[0].f[3];
+        entry_path_distance_or_fraction += frac;
+        entry_path_distance_or_fraction += 2.0f;
+        seg = func_001FA898_r(entry_path_distance_or_fraction / path->pt[0].f[3]);
+        entry_path_distance_or_fraction -= convert_integer_to_float(seg) * path->pt[0].f[3];
+        entry_path_distance_or_fraction /= path->pt[0].f[3];
+        frac = entry_path_distance_or_fraction;
         if (seg >= path->n - 1) {
             float z = probe_ground_height(&ultramech_moby->pos, 0, 0.5f);
             if (ultramech_moby->pos.f[2] < z)
@@ -2152,8 +2152,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             ultramech_vars->timer = scale_game_frames(0xF);
             break;
         }
-        dist = FUN_001f9b48(&ultramech_moby->pos, (UVec *)path + path->n);
-        if (dist < speed / FUN_L04_001f1978(26.0f) && ultramech_moby->anim != 5) {
+        entry_path_distance_or_fraction = FUN_001f9b48(&ultramech_moby->pos, (UVec *)path + path->n);
+        if (entry_path_distance_or_fraction < speed / FUN_L04_001f1978(26.0f) && ultramech_moby->anim != 5) {
             blend_moby_animation(ultramech_moby, 5, 0, scale_game_frames(6));
         }
         subtract_vector_xyz(&position_or_motion_vector, (UVec *)path + (seg + 2), (UVec *)path + (seg + 1));
