@@ -20,7 +20,7 @@ s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
 f32 interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a, f32 b) __asm__("FUN_L00_00261630");
 
-void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
+void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 collision_height_offset, f32 ground_height_difference_limit) {
     OvlQuad proposed_position[1];
     u8 *pos;
     s32 movement_unconstrained, countdown_lower_bound;
@@ -39,7 +39,7 @@ void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a,
     qcopy(proposed_position, pos);
     ((f32 *)proposed_position)[0] += FUN_001f9dc8_261630(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
     ((f32 *)proposed_position)[1] += FUN_001f9de0_261630(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
-    movement_unconstrained = FUN_L00_00258490_261630(moving_object, pos, proposed_position, 0, a, *(f32 *)(movement_state + 0x10), b, 0.52359879f);
+    movement_unconstrained = FUN_L00_00258490_261630(moving_object, pos, proposed_position, 0, collision_height_offset, *(f32 *)(movement_state + 0x10), ground_height_difference_limit, 0.52359879f);
     *(f32 *)(moving_object + 0x18) = FUN_00213508_261630(pos, 0, 0.5f);
     planar_distance = FUN_001f9b80_261630(pos, movement_state);
     if (movement_unconstrained == 0 || *(f32 *)(movement_state + 0x1C) < planar_distance) {
