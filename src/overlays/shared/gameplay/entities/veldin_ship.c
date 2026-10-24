@@ -3517,7 +3517,7 @@ extern float D_L00_00161374;
 extern float D_L00_00161384;
 extern float D_L00_0016138C;
 extern unsigned short D_L00_00161388_gp __asm__("D_L00_00161388") __attribute__((sda));
-extern int D_L00_00161998 __attribute__((sda));
+extern int smoke_fire_particle_steady_alpha __asm__("D_L00_00161998") __attribute__((sda));
 extern float D_L00_0016199C __attribute__((sda));
 extern u8 D_L00_001619A0[4] __attribute__((sda));
 extern u8 D_L00_001619A8[8] __attribute__((sda));
@@ -3625,7 +3625,7 @@ void draw_smoke_fire_spawner(P *spawner) {
                 if (fast_dec_timer_s16(&D_L00_001D6A00[i])) {
                     D_L00_001D60A0[i] = D_L00_00161388_gp;
                 }
-                alpha = D_L00_00161998;
+                alpha = smoke_fire_particle_steady_alpha;
             }
             alpha <<= 24;
             quad.primitive = 0x8000000048L;
