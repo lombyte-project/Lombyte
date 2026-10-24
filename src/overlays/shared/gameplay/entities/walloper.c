@@ -892,6 +892,9 @@ extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 extern SparkleRowC860 D_L00_001DBB90[];
 void walloper_update(char *m) __asm__("FUN_L00_002bb558");
 void walloper_update(char *walloper_moby) {
+    enum {
+        WALLOPER_STATE_INITIALIZE = 0
+    };
     int flag = 0;
     float arc_origin[4] __attribute__((aligned(16)));
     float arc_step[4] __attribute__((aligned(16)));
@@ -908,7 +911,7 @@ void walloper_update(char *walloper_moby) {
         D_L00_0017AEBC = 0.1f;
     }
     switch (*(unsigned char *)(walloper_moby + 0x20)) {
-    case 0:
+    case WALLOPER_STATE_INITIALIZE:
         walloper_moby[0x20] = 2;
         for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
             D_L00_001DBEC0[arc_init_index] = 0;
