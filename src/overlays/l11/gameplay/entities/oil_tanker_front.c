@@ -676,9 +676,9 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) {
         fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(chain_vars + 0x6C), x);
     lerp_vector(&moby->pos, current_path_point, pb, *(float *)(chain_vars + 0x6C));
 }
-extern float D_L11_00162324 __attribute__((sda));
-extern float D_L11_00162328 __attribute__((sda));
-extern s32 D_L11_0016232C __attribute__((sda));
+extern float oil_tanker_link_spacing_threshold_gp __asm__("D_L11_00162324") __attribute__((sda));
+extern float oil_tanker_spacing_reference_offset_gp __asm__("D_L11_00162328") __attribute__((sda));
+extern s32 oil_tanker_link_marker_cooldown_frames_gp __asm__("D_L11_0016232C") __attribute__((sda));
 extern s32 D_L11_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern s32 FUN_001fa6d0(float);
@@ -699,7 +699,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
     float spacing_reference_position[4];
     int i;
 
-    fast_vec_normalize(spacing_reference_position, &moby->rot_row0, D_L11_00162328);
+    fast_vec_normalize(spacing_reference_position, &moby->rot_row0, oil_tanker_spacing_reference_offset_gp);
     fast_vec_add(spacing_reference_position, spacing_reference_position, &moby->pos);
     for (i = 0; i < chain_vars->count; i++) {
         int segment_start_index = chain_vars->offsets[i];
@@ -712,7 +712,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
         float yaw0, yaw1, pitch0;
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
-        while (segment_end_distance > D_L11_00162324) {
+        while (segment_end_distance > oil_tanker_link_spacing_threshold_gp) {
             segment_start_index = segment_end_index;
             segment_end_index = (segment_start_index + 1) % chain_path->count;
             segment_start_distance = segment_end_distance;
@@ -728,12 +728,12 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
                     if (D_L11_0015F5C4 == 0) {
                         FUN_0022da68(2, 0, chain_vars->links[i]);
                     }
-                    *(s32 *)(lv + 0x28) = scale_game_frames(D_L11_0016232C);
+                    *(s32 *)(lv + 0x28) = scale_game_frames(oil_tanker_link_marker_cooldown_frames_gp);
                 }
             }
         }
-        if (segment_start_distance > D_L11_00162324) {
-            segment_fraction = (segment_start_distance - D_L11_00162324) / (segment_start_distance - segment_end_distance);
+        if (segment_start_distance > oil_tanker_link_spacing_threshold_gp) {
+            segment_fraction = (segment_start_distance - oil_tanker_link_spacing_threshold_gp) / (segment_start_distance - segment_end_distance);
         } else {
             segment_fraction = 0.0f;
         }
@@ -769,7 +769,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
             pitch0);
         chain_vars->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * segment_fraction, yaw0);
         FUN_L00_00250df8(chain_vars->links[i]);
-        fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, D_L11_00162328);
+        fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, oil_tanker_spacing_reference_offset_gp);
         fast_vec_add(spacing_reference_position, spacing_reference_position, &chain_vars->links[i]->pos);
     }
 }
