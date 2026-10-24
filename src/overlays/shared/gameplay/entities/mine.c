@@ -308,7 +308,7 @@ void mine_update(M910 *mine_moby) {
         Qry910 q;
         {
             float k;
-            float dist;
+            float explosion_camera_distance;
             float gz;
 
             mine_moby->flags &= 0xFEFF;
@@ -752,7 +752,7 @@ void mine_update(M910 *mine_moby) {
             v->f70 = fast_add_rotations(v->f70, frame_time * 6.2831855f);
             mine_moby->pos.f[2] = mine_moby->pos.f[2] + v->f6C * fast_sin(v->f70) * k + 0.4f;
             if (mine_moby->bBC != 0) {
-                dist = vector_distance(&mine_moby->pos, D_L00_00166DC0);
+                explosion_camera_distance = vector_distance(&mine_moby->pos, D_L00_00166DC0);
                 if (v->h50 == 0) {
                     V910 t;
                     {
@@ -852,7 +852,7 @@ void mine_update(M910 *mine_moby) {
                     }
                 } else {
                     float sc = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
-                    int explosion_debris_count = truncate_float_to_s32(dist * 15.0f);
+                    int explosion_debris_count = truncate_float_to_s32(explosion_camera_distance * 15.0f);
                     int i;
 
                     for (i = 0; i < explosion_debris_count; i++) {
@@ -941,7 +941,7 @@ void mine_update(M910 *mine_moby) {
                 } else {
                     allocate_voice_for_target_entry(2, 0, (int)mine_moby);
                 }
-                D_L00_00166C80.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
+                D_L00_00166C80.f160 = explosion_camera_distance < 20.0f ? 0.4f - explosion_camera_distance * 0.0175f : 0.050000012f;
                 D_L00_00166C80.i168 = scale_game_frames(0x19);
                 FUN_001f9b48(&mine_moby->pos, hero.motion.pos.f);
                 if (D_E910.b11 != 0) {
