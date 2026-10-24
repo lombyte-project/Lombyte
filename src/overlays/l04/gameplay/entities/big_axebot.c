@@ -1555,7 +1555,7 @@ extern void FUN_L00_0025a120(void *);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025fcb8(char *, float *, float);
-extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
+extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void FUN_L01_0026d930(char *p);
@@ -1799,7 +1799,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         V4_35F0 save;
         {
             qcopy(save, moby->pos);
-            FUN_L00_00261630((char *)moby, (char *)data->f240, 0.35f, 0.25f);
+            update_object_wander_movement((char *)moby, (char *)data->f240, 0.35f, 0.25f);
             if (data->f138 != -1) {
                 if (point_in_path_xy(moby->pos, D_L04_001B0930_2C35F0[data->f138]->pts,
                                      D_L04_001B0930_2C35F0[data->f138]->count) == 0) {

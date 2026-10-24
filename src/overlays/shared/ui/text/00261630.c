@@ -18,7 +18,9 @@ f32 FUN_001f9b80_261630(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f9e90_261630(f32, f32) __asm__("FUN_001f9e90");
 s32 FUN_001f96f8_261630(s32) __asm__("FUN_001f96f8");
 f32 interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
-void FUN_L00_00261630(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
+void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a, f32 b) __asm__("FUN_L00_00261630");
+
+void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a, f32 b) {
     OvlQuad proposed_position[1];
     u8 *pos;
     s32 movement_unconstrained, t;

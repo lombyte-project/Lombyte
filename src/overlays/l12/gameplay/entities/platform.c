@@ -505,7 +505,7 @@ int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int FUN_L12_002e2eb8_c(struct Moby *m, float speed) __asm__("FUN_L12_002e2eb8");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_0025a120(char *o);
-void FUN_L00_00261630(u8 *o, u8 *s, f32 a, f32 b);
+void update_object_wander_movement(u8 *o, u8 *s, f32 a, f32 b) __asm__("FUN_L00_00261630");
 void FUN_L00_00263b38(char *p, float x);
 void FUN_L01_0026d930(char *p);
 void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");

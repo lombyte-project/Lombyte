@@ -1399,7 +1399,7 @@ extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_0025a120(void *);
 extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00261630(char *moby, char *d, float a, float b);
+extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern void FUN_L00_00261d78(float, int, void *, void *);
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
 extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
@@ -1618,7 +1618,7 @@ void gadgebot_update(GbMoby *moby) {
         if (moby->anim != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(7));
         }
-        FUN_L00_00261630((char *)moby, (char *)gadgebot_vars, 0.35f, 0.25f);
+        update_object_wander_movement((char *)moby, (char *)gadgebot_vars, 0.35f, 0.25f);
         break;
     case GADGEBOT_FOLLOW_HERO: {
         int j;
