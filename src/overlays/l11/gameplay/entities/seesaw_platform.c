@@ -868,7 +868,7 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
         LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS = 2
     };
     char *private_data = (char *)moving_moby->pvars;
-    float v[4] __attribute__((aligned(16)));
+    float motion_displacement[4] __attribute__((aligned(16)));
     struct Moby *spawned_moby;
     struct Moby *linked_moby;
     char *spawned_private_data;
@@ -910,8 +910,8 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
     case LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS:
         func_00214D88_f((float *)private_data, (float *)(private_data + 4), *(float *)(private_data + 0x10), frame_time_sq, frame_time_sq,
                         frame_time + frame_time);
-        func_L00_001FF4B0_u(v, &moving_moby->rot_row1, -*(float *)(private_data + 4));
-        func_001F9BD8_u(&moving_moby->pos, &moving_moby->pos, v);
+        func_L00_001FF4B0_u(motion_displacement, &moving_moby->rot_row1, -*(float *)(private_data + 4));
+        func_001F9BD8_u(&moving_moby->pos, &moving_moby->pos, motion_displacement);
         break;
     }
 }
