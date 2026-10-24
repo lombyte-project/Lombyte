@@ -553,8 +553,8 @@ s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
 extern f32 vendor_color_pulse_phase __asm__("D_L00_001613A4") __attribute__((sda));
-extern f32 D_L00_0016139C __attribute__((sda));
-extern f32 D_L00_001613A0 __attribute__((sda));
+extern f32 vendor_manipulator_rotation_phase __asm__("D_L00_0016139C") __attribute__((sda));
+extern f32 vendor_manipulator_counter_rotation_phase __asm__("D_L00_001613A0") __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *vendor_moby) {
     enum {
@@ -605,10 +605,10 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             q->mC->h34 &= 0xFFFE;
         }
         enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
-        D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
-        D_L00_001613A0 = FUN_001fa580_2a57a8(D_L00_001613A0, -0.02f);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        vendor_manipulator_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_rotation_phase, 0.01f);
+        vendor_manipulator_counter_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         break;
@@ -626,10 +626,10 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
         help_message_allowed = 1;
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
-        D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
-        D_L00_001613A0 = FUN_001fa580_2a57a8(D_L00_001613A0, -0.02f);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        vendor_manipulator_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_rotation_phase, 0.01f);
+        vendor_manipulator_counter_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         if (hero_data.state.control_mode != 0 && hero_data.state.current != 3 && hero_data.state.control_mode != 1) {
