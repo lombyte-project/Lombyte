@@ -420,7 +420,7 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     char *hero_animation_moby = ((char *)g1->moby);
     int slot;
     int sequence_pointer_byte_offset;
-    char *e;
+    char *animation_slot_copy_destination;
 
     if (g1->anim_flags & 2) {
         *(int *)(hero_animation_moby + 0x54) = 0;
@@ -436,12 +436,12 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     if (slot >= 0) {
         FUN_L00_00251ce8(hero_animation_moby, slot | 0x300);
         FlushCache(0);
-        e = D_L00_00196D00 + slot * 16;
-        qcopy(e, hero_animation_moby);
+        animation_slot_copy_destination = D_L00_00196D00 + slot * 16;
+        qcopy(animation_slot_copy_destination, hero_animation_moby);
         if (*(unsigned char *)(hero_animation_moby + 0x52) != 0xFF) {
             *(unsigned char *)(hero_animation_moby + 0xA5) = *(unsigned char *)(hero_animation_moby + 0x52);
         }
-        qcopy(e, hero_animation_moby + 0xF0);
+        qcopy(animation_slot_copy_destination, hero_animation_moby + 0xF0);
         *(unsigned char *)(hero_animation_moby + 0x52) = 0xFF;
         *(unsigned char *)(hero_animation_moby + 0x50) = slot;
     }
