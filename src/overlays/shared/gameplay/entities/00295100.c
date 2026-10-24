@@ -2296,7 +2296,7 @@ void update_vendor_menu(void) {
     VendorMoby *mb;
     VendorMoby *cutscene_moby_to_remove;
     Vec4 *keys;
-    s32 lim;
+    s32 cutscene_frame_threshold;
     u8 flag;
 
     switch (vendor_menu.state) {
@@ -2618,8 +2618,8 @@ void update_vendor_menu(void) {
             }
             break;
         }
-        lim = D_0015ED80 ? 0x50 : 0x60;
-        if (cs->f38 >= lim) {
+        cutscene_frame_threshold = D_0015ED80 ? 0x50 : 0x60;
+        if (cs->f38 >= cutscene_frame_threshold) {
             cs->f3C++;
             FUN_002049f0(cs->f3C);
         }
