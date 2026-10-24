@@ -129,7 +129,7 @@ extern float D_L16_001613E4 __attribute__((sda));
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
-char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
+char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spawn_position, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
@@ -140,7 +140,7 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos,
         spawned_moby[0x20] = 0;
         *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(owner + 0x38);
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 3.0f;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         moby_data = *(char **)(spawned_moby + 0x78);
         qcopy(moby_data, initial_movement_vector);
         qcopy(moby_data + 0x10, vel);
