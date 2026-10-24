@@ -1233,7 +1233,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     char *camera_globals;
     char *pp;
     char *cp;
-    float ang, hero_to_camera_distance, x;
+    float hero_to_camera_bearing_difference, hero_to_camera_distance, x;
     camera_state = *(char **)(camera_object + 0x70);
     camera_initialization_values = (float *)(camera_state + 0x64);
     if (!target_moby)
@@ -1260,9 +1260,9 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     camera_globals = D_L00_00166C80_2eb648;
     pp = &hero_state->motion.pos;
     cp = camera_globals + 0x140;
-    ang = FUN_001f9e90_2eb648(*(float *)(camera_globals + 0x140) - hero_state->motion.pos.f[0],
+    hero_to_camera_bearing_difference = FUN_001f9e90_2eb648(*(float *)(camera_globals + 0x140) - hero_state->motion.pos.f[0],
                               *(float *)(camera_globals + 0x144) - hero_state->motion.pos.f[1]);
-    ang = FUN_001fa688_2eb648(ang, *(float *)(camera_globals + 0x158));
+    hero_to_camera_bearing_difference = FUN_001fa688_2eb648(hero_to_camera_bearing_difference, *(float *)(camera_globals + 0x158));
     hero_to_camera_distance = vector_distance(pp, cp);
     if (hero_to_camera_distance < vector_distance(((char *)hero_state->items[0].moby) + 0x10, cp)) {
         x = vector_distance(pp, cp);
@@ -1270,7 +1270,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
         x = vector_distance(((char *)hero_state->items[0].moby) + 0x10, cp);
     }
     if (x < 0.77f) {
-        if (ang < 1.5707964f) {
+        if (hero_to_camera_bearing_difference < 1.5707964f) {
             *(float *)(camera_state + 0x1C) -= 0.7f - x;
             *(int *)(target_private_data + 4) = 0;
         } else {
