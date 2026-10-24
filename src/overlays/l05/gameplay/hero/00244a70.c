@@ -2534,7 +2534,7 @@ void update_hero_motion_by_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
         break;
     }
-    case 0x65: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         f32 l;
         f32 k;
         subtract_vector_xyz(&vector_and_hit_scratch, &hero.unk1640, &hero.motion.pos);
@@ -2588,7 +2588,7 @@ void update_hero_motion_by_state(void) {
         }
         break;
     }
-    case 0x66:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&vector_and_hit_scratch, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&vector_and_hit_scratch, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);
