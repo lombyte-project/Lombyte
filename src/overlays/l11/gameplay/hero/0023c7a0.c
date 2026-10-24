@@ -585,7 +585,7 @@ void update_hero_motion_by_state(void) {
         update_hero_water_height_and_bobbing();
         break;
     case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
@@ -893,7 +893,7 @@ void update_hero_motion_by_state(void) {
         hero.motion.velocity.f[2] = hero.unk8FC;
         break;
     }
-    case 0x36:
+    case HERO_STATE_WATER_SURFACE_MOVE:
     case 0x37:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
