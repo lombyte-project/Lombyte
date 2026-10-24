@@ -1586,7 +1586,7 @@ extern int FUN_L00_002ad410_2adb30(void *, void *, int) __asm__("FUN_L00_002ad41
 extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
-extern char *FUN_L00_002df808_2adb30(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
+extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
 void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
 extern int D_L00_00160770;
 extern short D_L00_001613F0 __attribute__((sda));
@@ -1868,28 +1868,28 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         int r;
                         int gg;
                         int bb;
-                        FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0xF), 0x7F, 0x7F, 0x7F, 0x20);
+                        spawn_randomly_rotated_colored_moby(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0xF), 0x7F, 0x7F, 0x7F, 0x20);
                         r = 0x7F;
                         gg = 0x20;
                         bb = 0;
                         swap_color_channel_words(&r, &gg, &bb, (unsigned char)D_E910.p0[0xA]);
-                        FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x18), r, gg, bb, 0x20);
+                        spawn_randomly_rotated_colored_moby(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x18), r, gg, bb, 0x20);
                     }
                     r2 = 0x7F;
                     g2 = 0x3F;
                     b2 = 0;
                     swap_color_channel_words(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x14), r2, g2, b2, 0x30);
+                    spawn_randomly_rotated_colored_moby(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 4.0f, FUN_001f96f8_2adb30(0x14), r2, g2, b2, 0x30);
                     r2 = 0x60;
                     g2 = 0x10;
                     b2 = 0;
                     swap_color_channel_words(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.5f, FUN_001f96f8_2adb30(0x1B), r2, g2, b2, 0x40);
+                    spawn_randomly_rotated_colored_moby(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.5f, FUN_001f96f8_2adb30(0x1B), r2, g2, b2, 0x40);
                     r2 = 0x20;
                     g2 = 0;
                     b2 = 0;
                     swap_color_channel_words(&r2, &g2, &b2, (unsigned char)D_E910.p0[0xA]);
-                    FUN_L00_002df808_2adb30(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.0f, FUN_001f96f8_2adb30(0x1D), r2, g2, b2, 0x20);
+                    spawn_randomly_rotated_colored_moby(bomb_moby, &bomb_moby->pos, &blast_velocity, s * 3.0f, FUN_001f96f8_2adb30(0x1D), r2, g2, b2, 0x20);
                 }
                 if (d->h68 >= FUN_001f96f8_2adb30(0x14)) {
                     float h;

@@ -48,7 +48,12 @@ extern unsigned char *FUN_L00_0024e838_2df808(int) __asm__("FUN_L00_0024e838");
 extern float FUN_L00_00257be8_2df808(float, float) __asm__("FUN_L00_00257be8");
 extern void glow_n(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002df808(int owner, V_2df808 *position, V_2df808 *vector,
+unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
+                                 int flags, unsigned char red, unsigned char green,
+                                 unsigned char blue, unsigned char alpha,
+                                 float scale) __asm__("FUN_L00_002df808");
+
+unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
                                  int flags, unsigned char red, unsigned char green,
                                  unsigned char blue, unsigned char alpha,
                                  float scale) {

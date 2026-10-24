@@ -475,7 +475,7 @@ char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, in
 
 extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("FUN_L13_0030c138");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
-extern char *FUN_L00_002df808(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int);
+extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
 
 void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) __asm__("FUN_L13_003073c8");
 
@@ -602,27 +602,27 @@ void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) {
         float amount;
         amount = scale * 4.0f;
         duration = scale_game_frames(15);
-        FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 127, 127, 127, 32);
+        spawn_randomly_rotated_colored_moby(moby, &work.pos, &work.velocity, amount, duration, 127, 127, 127, 32);
         duration = scale_game_frames(24);
-        FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 32, 127, 0, 32);
+        spawn_randomly_rotated_colored_moby(moby, &work.pos, &work.velocity, amount, duration, 32, 127, 0, 32);
     }
     {
         float amount;
         amount = scale * 4.0f;
         duration = scale_game_frames(20);
-        FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 63, 127, 0, 48);
+        spawn_randomly_rotated_colored_moby(moby, &work.pos, &work.velocity, amount, duration, 63, 127, 0, 48);
     }
     {
         float amount;
         amount = scale * 3.5f;
         duration = scale_game_frames(27);
-        FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 16, 96, 0, 64);
+        spawn_randomly_rotated_colored_moby(moby, &work.pos, &work.velocity, amount, duration, 16, 96, 0, 64);
     }
     {
         float amount;
         amount = scale * 3.0f;
         duration = scale_game_frames(29);
-        FUN_L00_002df808(moby, &work.pos, &work.velocity, amount, duration, 0, 32, 0, 32);
+        spawn_randomly_rotated_colored_moby(moby, &work.pos, &work.velocity, amount, duration, 0, 32, 0, 32);
     }
 }
 struct BlastHit {

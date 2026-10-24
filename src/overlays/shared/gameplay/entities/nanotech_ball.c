@@ -2080,7 +2080,7 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void subtract_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a28");
-unsigned char *FUN_L00_002df808(int owner, void *position, void *vector, int flags, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float scale);
+unsigned char *spawn_randomly_rotated_colored_moby(int owner, void *position, void *vector, int flags, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float scale) __asm__("FUN_L00_002df808");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_002E0CB8_DD3D8(float, void *, void *, void *, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002df808");
 extern char D_L00_00166C80[];
