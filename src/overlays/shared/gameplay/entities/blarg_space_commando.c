@@ -634,8 +634,8 @@ extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-extern float D_L06_00161FD4 __attribute__((sda));
-extern int D_L06_00161FD8 __attribute__((sda));
+extern float beam_spread_degrees __asm__("D_L06_00161FD4") __attribute__((sda));
+extern int beam_duration_frames __asm__("D_L06_00161FD8") __attribute__((sda));
 void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
 void initialize_blarg_space_commando_beam(char *moby) {
@@ -648,7 +648,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
     *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
-        angle_offset = angle_offset * (D_L06_00161FD4 * 0.017453292f);
+        angle_offset = angle_offset * (beam_spread_degrees * 0.017453292f);
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[2] = 0.15f;
@@ -660,7 +660,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
             *(float *)(vars + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(vars + 0x21C) = (float)scale_game_frames(D_L06_00161FD8);
+    *(float *)(vars + 0x21C) = (float)scale_game_frames(beam_duration_frames);
 }
 /* Shared moby update: steps the timer at 0x21C, spaces 16 entries, and runs the pair checks. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_003006F8), where it is exact; names translated to the US level program. */
