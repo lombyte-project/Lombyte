@@ -2090,7 +2090,7 @@ extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
-void FUN_L00_002be078(void *, int, int, int, float, float, float, int);
+void FUN_L00_002be078(void *, int, int, float, float, float, int, int);
 void draw_beam_pulse_quads(void *unused) __asm__("FUN_L00_002be650");
 
 void draw_beam_pulse_quads(void *) __asm__("FUN_L00_002be650");
@@ -2113,8 +2113,8 @@ void draw_beam_ring_and_rail_effects(void *moby) {
 
     D_L00_0016178C = D_L00_0016178C - D_L00_00161790 * frame_scale;
     if (D_L00_0016178C <= -8.0f) D_L00_0016178C += 8.0f;
-    FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161784);
-    FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, 12, D_L00_00161774, D_L00_00161778, D_L00_0016177C, D_L00_00161788);
+    FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161784);
+    FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161788);
     draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
@@ -2179,21 +2179,18 @@ void draw_beam_ring_and_rail_effects(void *moby) {
         y += D_L00_00161710;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be078.s", FUN_L00_002be078);
-#else
 extern int D_L00_00161780 __attribute__((sda));
 extern int D_L00_001617A4 __attribute__((sda));
 extern int D_L00_001617A8 __attribute__((sda));
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF380). */
-void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float sz, int col) {
+void FUN_L00_002be078(void *mv, int a, int b, float sx, float sy, float sz, int n, int col) {
     RW_2baae0 *m = mv;
     RW_2baae0 q[4];
     RT_2baae0 t;
     RW_2baae0 q2[4];
     RT_2baae0 u;
     RW_2baae0 w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
-    int i, col0, col1, x;
+    int i, col0, col1;
     float len, len0, len2, l0, l1;
     t.q0 = tex_2baae0(D_L00_001617A4);
     col0 = D_L00_00161780 | (a << 24);
@@ -2205,20 +2202,10 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
     t.c[1] = col0;
     t.c[0] = col0;
     u.q0 = tex_2baae0(D_L00_001617A8);
-    x = col | (b << 24);
-    /* Fakematch: the zero terms ((unsigned char)v >> 8) make reload copy the colour
-       through $v0 as retail does. */
-    col |= (unsigned char)col >> 8;
-    col1 = x | ((unsigned char)x >> 8);
-    /* Near miss, 4 rows: the two locals put t.q1 and t.z4 in retail's registers; the
-       colour home store is still scheduled one slot early. */
-    {
-        long q1v = t.q1;
-        long z4v = t.z4;
-        u.q2 = t.q2;
-        u.q1 = q1v;
-        u.z4 = z4v;
-    }
+    col1 = col | (b << 24);
+    u.q2 = t.q2;
+    u.q1 = t.q1;
+    u.z4 = t.z4;
     u.c[3] = col1;
     u.c[2] = col1;
     u.c[1] = col1;
@@ -2304,7 +2291,6 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
     }
     gsreg_2baae0(0x47, 0x5360B);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF958). */
 #include "rnc/rendering/geometry_quad.h"
 extern int D_L00_00161760 __attribute__((sda));
