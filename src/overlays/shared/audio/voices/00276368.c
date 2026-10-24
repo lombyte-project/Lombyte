@@ -148,7 +148,7 @@ extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
 extern Own D_L00_001B6B38;
 extern Own D_L00_001B86C8;
-extern f32 D_L00_00160280 __attribute__((sda));
+extern f32 pause_menu_initial_vector __asm__("D_L00_00160280") __attribute__((sda));
 extern f32 D_L00_00160290 __attribute__((sda));
 extern Vec4 D_L00_00180250;
 extern Vec4 D_L00_00180260;
@@ -232,7 +232,7 @@ void initialize_pause_menu(void) {
 
     {
         u8 *row = (u8 *)&D_L00_00180250;
-        fast_vec_scale(row, &D_L00_00160280, 1.0f);
+        fast_vec_scale(row, &pause_menu_initial_vector, 1.0f);
         qcopy(row - 0x10, &D_L00_00160290);
         row += 0x20;
         qzero(row);
