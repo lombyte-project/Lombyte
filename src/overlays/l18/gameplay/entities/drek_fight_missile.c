@@ -848,14 +848,14 @@ extern int blend_color_1fd8(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
-extern f32 D_L18_001622E0 __attribute__((sda));
+extern f32 glow_moby_phase_rate __asm__("D_L18_001622E0") __attribute__((sda));
 extern int D_L18_001622E4 __attribute__((sda));
 extern int D_L18_001622E8 __attribute__((sda));
 extern int D_L18_001622EC __attribute__((sda));
 extern int D_L18_001622F0 __attribute__((sda));
-extern int D_L18_001622C8 __attribute__((sda));
-extern int D_L18_001622CC __attribute__((sda));
-extern f32 D_L18_001622D0 __attribute__((sda));
+extern int glow_moby_phase_blend_start_color __asm__("D_L18_001622C8") __attribute__((sda));
+extern int glow_moby_phase_blend_end_color __asm__("D_L18_001622CC") __attribute__((sda));
+extern f32 glow_moby_layer_z_step __asm__("D_L18_001622D0") __attribute__((sda));
 extern f32 D_L18_001622D4 __attribute__((sda));
 f32 D_L18_001DA350[4][2] = {
     {0.0f, 0.0f},
@@ -881,7 +881,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
     copy_matrix_1fd8(matrix, &moby->rot_row0);
     qcopy(matrix[3], &moby->pos);
     matrix[3][3] = 1.0f;
-    vars->scroll += D_L18_001622E0 * D_0015ED6C;
+    vars->scroll += glow_moby_phase_rate * D_0015ED6C;
     if (1.0f < vars->scroll) {
         vars->scroll -= 1.0f;
     }
@@ -900,7 +900,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
                              ((u64)D_L18_001622F0 << 6) | 0x8000000000ULL;
         phase = vars->scroll + i * step;
         phase = phase - (float)truncate_1fd8(phase);
-        color = blend_color_1fd8(D_L18_001622C8, D_L18_001622CC, phase);
+        color = blend_color_1fd8(glow_moby_phase_blend_start_color, glow_moby_phase_blend_end_color, phase);
         color = blend_color_1fd8(color & 0xFFFFFF, color, alpha);
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA350[j][0] + i * step;
@@ -915,7 +915,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
         }
     }
     for (pass = 2; pass >= 0; pass--) {
-        matrix[3][2] += D_L18_001622D0;
+        matrix[3][2] += glow_moby_layer_z_step;
         draw_quad_1fd8(&quads[0], matrix, 0);
         draw_quad_1fd8(&quads[1], matrix, 0);
         draw_quad_1fd8(&quads[2], matrix, 0);
