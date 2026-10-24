@@ -15,7 +15,7 @@ typedef struct {
     u8 pad0[0x5C];
     u8 *tint;
 } LevelFx;
-extern f32 D_L02_00161F58 __attribute__((sda));
+extern f32 shard_vertical_velocity_approach_scale __asm__("D_L02_00161F58") __attribute__((sda));
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx D_L02_001B2680;
@@ -56,7 +56,7 @@ void update_shard_debris(struct Moby *moby) {
         return;
     }
     vec_add(&moby->pos, &moby->pos, &shard_vars->vel);
-    approach_value(&shard_vars->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
+    approach_value(&shard_vars->vel.z, 0.0f, shard_vertical_velocity_approach_scale * frame_time_sq);
     moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&shard_vars->vel), shard_vars->vel.z);
     qcopy(&trail_position, &moby->pos);
     vec_scale(&half, &shard_vars->vel, 0.5f);
