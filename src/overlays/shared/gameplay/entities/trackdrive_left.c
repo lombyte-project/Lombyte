@@ -1027,9 +1027,9 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     }
 }
 
-extern int D_L02_00161C18 __attribute__((sda));
-extern float D_L02_00161C14 __attribute__((sda));
-extern float D_L02_00161C1C __attribute__((sda));
+extern int escalator_direction_timer_frames __asm__("D_L02_00161C18") __attribute__((sda));
+extern float escalator_target_speed __asm__("D_L02_00161C14") __attribute__((sda));
+extern float escalator_acceleration __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void vec_clear_2dc6b0(void *) __asm__("FUN_001f99f8");
 extern int scale_game_frames_2dc6b0(int) __asm__("FUN_001f96f8");
@@ -1059,7 +1059,7 @@ void escalator_update(char *moby) {
     goto move;
 state0:
         vec_clear_2dc6b0(data + 0x40);
-        *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(D_L02_00161C18);
+        *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
         *(u32 *)(data + 0x9c) |= 4;
         if (*(int *)(data + 0xa4) != 0) *(u8 *)(moby + 0x20) = 3;
         else *(u8 *)(moby + 0x20) = 1;
@@ -1069,9 +1069,9 @@ state1: {
 
         *(float *)(moby + 0x58) = 1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = fast_vec_length(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - escalator_acceleration * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
-                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(D_L02_00161C18);
+                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
                 *(u8 *)(moby + 0x20) = 2;
             } else {
                 *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -speed;
@@ -1081,14 +1081,14 @@ state1: {
             }
         } else {
             speed = fast_vec_length(data + 0x40);
-            limit = absolute_float(D_L02_00161C14 * frame_time);
+            limit = absolute_float(escalator_target_speed * frame_time);
             /* Retail loads frame_time_sq through its absolute EE address here. */
-            if (speed < limit) speed += D_L02_00161C1C * (*(float *)0x0015ED70);
+            if (speed < limit) speed += escalator_acceleration * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -speed;
             *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / (D_L02_00161C14 * frame_time);
+        *(float *)(moby + 0x58) = speed / (escalator_target_speed * frame_time);
         goto move;
 }
 state2: {
@@ -1096,9 +1096,9 @@ state2: {
 
         *(float *)(moby + 0x58) = -1.0f;
         if (count_down_2dc6b0((int *)(data + 0xa0))) {
-            speed = fast_vec_length(data + 0x40) - D_L02_00161C1C * D_0015ED70_2dc6b0;
+            speed = fast_vec_length(data + 0x40) - escalator_acceleration * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
-                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(D_L02_00161C18);
+                *(int *)(data + 0xa0) = scale_game_frames_2dc6b0(escalator_direction_timer_frames);
                 *(u8 *)(moby + 0x20) = 1;
             } else {
                 *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * speed;
@@ -1107,18 +1107,18 @@ state2: {
             }
         } else {
             speed = fast_vec_length(data + 0x40);
-            limit = absolute_float(D_L02_00161C14 * frame_time);
-            if (speed < limit) speed += D_L02_00161C1C * (*(float *)0x0015ED70);
+            limit = absolute_float(escalator_target_speed * frame_time);
+            if (speed < limit) speed += escalator_acceleration * (*(float *)0x0015ED70);
             *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * speed;
             *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / -(D_L02_00161C14 * frame_time);
+        *(float *)(moby + 0x58) = speed / -(escalator_target_speed * frame_time);
         goto move;
 }
 state3:
-        *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -(D_L02_00161C14 * frame_time);
-        *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -(D_L02_00161C14 * frame_time);
+        *(float *)(data + 0x40) = fast_cos_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed * frame_time);
+        *(float *)(data + 0x44) = fast_sin_2dc6b0(*(float *)(moby + 0x48)) * -(escalator_target_speed * frame_time);
         *(int *)(data + 0x48) = 0;
 move:
     FUN_L00_00260738_2dc6b0(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
