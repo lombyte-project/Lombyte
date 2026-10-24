@@ -118,7 +118,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
     float beam_endpoint_position_scratch[4];
     float hit_descriptor_and_vector_scratch[12];
     char *beam_vars;
-    char *e;
+    char *beam_endpoint_record;
     int flag;
     int i;
     int k;
@@ -208,10 +208,10 @@ void update_fleet_beam(struct Moby *beam_moby) {
         normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&D_L17_00161498 - 0.2f));
         normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&D_L17_00161498);
         add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
-        e = *(char **)(beam_vars + 0x60);
+        beam_endpoint_record = *(char **)(beam_vars + 0x60);
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
-        add_vector_xyz(beam_geometry_scratch, e + 0x10, beam_endpoint_and_offset_scratch);
-        *(OvlQuad *)(e + 0x10) = *(OvlQuad *)beam_geometry_scratch;
+        add_vector_xyz(beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
+        *(OvlQuad *)(beam_endpoint_record + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_endpoint_and_offset_scratch;
     }
