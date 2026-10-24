@@ -1680,7 +1680,7 @@ extern void release_voice_ed(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
 extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float D_L17_0015F3FC;
+extern float fighter_jet_transition_fade_value __asm__("D_L17_0015F3FC");
 extern int D_L17_0015F608;
 extern char *D_L17_0015F420;
 extern ShipLevelEntry D_L17_0016DA80[];
@@ -1804,14 +1804,14 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             jet_animate(moby, D_L17_00162054 * D_L17_0016209C);
             break;
         }
         case FIGHTER_JET_STATE_BOARDING_FADE:
             FUN_00213ed8(&ship_vars->fade, 1.0f, frame_time * 4.0f);
-            D_L17_0015F3FC = ship_vars->fade;
+            fighter_jet_transition_fade_value = ship_vars->fade;
             if (ship_vars->fade == 1.0f) {
                 struct Hero *g = &hero;
                 g->ship_moby = (struct Moby *)moby;
@@ -1884,7 +1884,7 @@ void fighter_jet_update(ShipMoby *moby) {
             }
             if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             {
                 struct Hero *g = &hero;
@@ -1926,7 +1926,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->voice2 = -1;
             moby->state = 1;
             ship_vars->fade = 0.99f;
-            D_L17_0015F3FC = 0.99f;
+            fighter_jet_transition_fade_value = 0.99f;
             break;
         }
         case FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY:
@@ -1967,7 +1967,7 @@ void fighter_jet_update(ShipMoby *moby) {
             update_fighter_jet_flight((Moby *)moby, (Obj *)ship_vars);
             if (fast_dec_timer(&ship_vars->timerF8)) {
                 FUN_00213ed8(&ship_vars->fade, 1.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             if (ship_vars->fade >= 1.0f) {
                 char *p;
@@ -2029,7 +2029,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 return;
             }
             FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-            D_L17_0015F3FC = ship_vars->fade;
+            fighter_jet_transition_fade_value = ship_vars->fade;
             break;
         }
         if (moby->pos[0] < 15.0f) {
