@@ -846,7 +846,7 @@ extern void rotation_2D5FA8(float *, int, float) __asm__("FUN_L00_001fff28");
 extern void matmul_2D5FA8(float *, float *, float *) __asm__("FUN_001fa3c0");
 extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
-extern int D_L08_0015F5B8 __attribute__((sda));
+extern int bomber_tank_part_3_destroyed_by_class_661 __asm__("D_L08_0015F5B8") __attribute__((sda));
 void update_bomber_tank_damage_and_aim(Moby *moby) {
     Data_2D5FA8 *data = (Data_2D5FA8 *)moby->pvars;
     Hit_2D5FA8 *source;
@@ -919,7 +919,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                     if (part != 0 && source != 0 && source->moby != 0 && source->moby->oclass == 0x661) {
                         if (part == one) D_L08_0015F694_2D5FA8 = one;
                         if (part == 2) D_L08_0015F698_2D5FA8 = one;
-                        if (part == 3) D_L08_0015F5B8 = one;
+                        if (part == 3) bomber_tank_part_3_destroyed_by_class_661 = one;
                         if (part == 4) D_L08_0015F6A0_2D5FA8 = one;
                         if (D_L08_0015F694_2D5FA8 != 0 && D_L08_0015F698_2D5FA8 != 0) {
                             unsigned char *flags = D_0013D50F_2D5FA8;
