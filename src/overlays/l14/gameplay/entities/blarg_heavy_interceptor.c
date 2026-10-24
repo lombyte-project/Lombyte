@@ -1722,7 +1722,7 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void set_moby_animation_c2(void *, s32, s32) __asm__("func_00212ED8");
-int FUN_L14_00268038(char *a, char *o, float best);
+int select_moby_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L14_00268038");
 void FUN_L14_002b4340_c(struct Moby *m) __asm__("FUN_L14_002b4340");
 extern int func_001E9730_2B4E40() __asm__("FUN_001e93b0");
 extern char D_L14_001FBD50[];
