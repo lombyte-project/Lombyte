@@ -3391,7 +3391,7 @@ s16 D_L01_001D5BC0[1200] = {0};
 s16 D_L14_001D5E40[1200] = {0};
 extern float D_L00_001619B4 __attribute__((sda));
 extern float D_L00_001619B8 __attribute__((sda));
-extern int D_L00_001619BC __attribute__((sda));
+extern int smoke_fire_emission_attempts_per_update __asm__("D_L00_001619BC") __attribute__((sda));
 extern int D_L00_001619C0 __attribute__((sda));
 extern int D_L00_001619C4 __attribute__((sda));
 extern int D_L00_001619C8 __attribute__((sda));
@@ -3475,7 +3475,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
         if (fast_bsphere_check(&culling_sphere, D_L00_001619E0) < 0)
             return;
         if (q->flag42 && vector_distance(&D_L00_00166DC0, &spawner->pos) < 128.0f) {
-            for (particle_end_or_emission_index = 0; particle_end_or_emission_index < D_L00_001619BC; particle_end_or_emission_index++) {
+            for (particle_end_or_emission_index = 0; particle_end_or_emission_index < smoke_fire_emission_attempts_per_update; particle_end_or_emission_index++) {
                 particle_vector.x = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.y = FUN_L00_00257c48(0.0f, 1.0f);
                 particle_vector.z = 1.0f;
