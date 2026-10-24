@@ -753,9 +753,9 @@ typedef struct {
 
 extern struct RailPath *D_L03_001B05B0[];
 extern s32 D_L03_00161B04 __attribute__((sda));
-extern f32 D_L03_00161B08 __attribute__((sda));
-extern f32 D_L03_00161B10 __attribute__((sda));
-extern f32 D_L03_00161B18 __attribute__((sda));
+extern f32 rail_flyer_max_speed __asm__("D_L03_00161B08") __attribute__((sda));
+extern f32 rail_flyer_pitch_acceleration_degrees __asm__("D_L03_00161B10") __attribute__((sda));
+extern f32 rail_flyer_roll_acceleration_degrees __asm__("D_L03_00161B18") __attribute__((sda));
 extern L03LevelState D_L03_001BB330;
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
@@ -853,7 +853,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
                 taxi_moby->state = 2;
                 taxi_moby->draw_dist = 0x80;
                 taxi_vars->idx = 1;
-                taxi_vars->speed = D_L03_00161B08 * frame_time;
+                taxi_vars->speed = rail_flyer_max_speed * frame_time;
                 taxi_vars->route = -1;
                 break;
             }
@@ -866,10 +866,10 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_WAIT_FOR_RETURN_REQUEST:
-        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
-                            D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
-                            D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                            rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                            rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (hero.ground_moby == taxi_moby && hero.air_frames.s == 0) {
             request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
@@ -894,10 +894,10 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         }
         break;
     case TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY:
-        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
-                            D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
-        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
-                            D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&taxi_moby->rot.y, 0.0f, &taxi_vars->pitch_vel, rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                            rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&taxi_moby->rot.x, 0.0f, &taxi_vars->roll_vel, rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                            rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (taxi_vars->onward[taxi_moby->command] != -1 && taxi_dist(&taxi_moby->pos, &hero.motion.pos) > 15.0f) {
             taxi_moby->state = 7;
             taxi_vars->idx = 1;
@@ -938,8 +938,8 @@ typedef struct {
 
 extern struct RailPath *D_L03_001B05B0[];
 extern u8 D_0013E550[];
-extern f32 D_L03_00161B0C __attribute__((sda));
-extern f32 D_L03_00161B14 __attribute__((sda));
+extern f32 rail_flyer_speed_acceleration __asm__("D_L03_00161B0C") __attribute__((sda));
+extern f32 rail_flyer_yaw_acceleration_degrees __asm__("D_L03_00161B14") __attribute__((sda));
 extern f32 D_L03_00161B1C __attribute__((sda));
 extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -970,14 +970,14 @@ s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
     acc = 0.0f;
     qcopy(&target_path_point, &(*pp)->pts[rail_flyer_vars->idx]);
     vec_sub(&movement_delta, &target_path_point, &rail_moby->pos);
-    if (vec_len(&movement_delta) < D_L03_00161B08 * frame_time * 2.0f) {
+    if (vec_len(&movement_delta) < rail_flyer_max_speed * frame_time * 2.0f) {
         rail_flyer_vars->idx++;
         done = rail_flyer_vars->idx == (*pp)->count;
     }
     distance_to_path_end = vec_dist(&rail_moby->pos, &(*pp)->pts[(*pp)->count - 1]);
     approach_speed(&acc, distance_to_path_end,
-                   D_L03_00161B0C * frame_time_sq_macro, D_L03_00161B0C * frame_time_sq_macro,
-                   D_L03_00161B08 * frame_time, &rail_flyer_vars->speed);
+                   rail_flyer_speed_acceleration * frame_time_sq_macro, rail_flyer_speed_acceleration * frame_time_sq_macro,
+                   rail_flyer_max_speed * frame_time, &rail_flyer_vars->speed);
     vec_set_len(&movement_delta, &movement_delta, rail_flyer_vars->speed);
     vec_add(&rail_moby->pos, &movement_delta, &rail_moby->pos);
     target_pitch = -angle_atan2(vec_len_xy(&movement_delta), movement_delta.z);
@@ -985,14 +985,14 @@ s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
         target_pitch = 0.2617994f;
     else if (target_pitch < -0.2617994f)
         target_pitch = -0.2617994f;
-    approach_angle(&rail_moby->rot.y, target_pitch, &rail_flyer_vars->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
-                   D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+    approach_angle(&rail_moby->rot.y, target_pitch, &rail_flyer_vars->pitch_vel, rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                   rail_flyer_pitch_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     approach_angle(&rail_moby->rot.z, angle_atan2(target_path_point.x - rail_moby->pos.x, target_path_point.y - rail_moby->pos.y), &rail_flyer_vars->yaw_vel,
-                   D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro,
-                   D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+                   rail_flyer_yaw_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                   rail_flyer_yaw_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     approach_angle(&rail_moby->rot.x, rail_flyer_vars->yaw_vel * rail_flyer_vars->speed * D_L03_00161B1C, &rail_flyer_vars->roll_vel,
-                   D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
-                   D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+                   rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro,
+                   rail_flyer_roll_acceleration_degrees * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     sound_voice = *snd;
     if (!done) {
         if (sound_is_playing(rail_moby, sound_voice) == 0)
