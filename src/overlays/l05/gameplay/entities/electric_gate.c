@@ -921,9 +921,9 @@ struct GateVars {
     f32 swingSpeed;
 };
 
-extern float D_L05_00161E80 __attribute__((sda));
-extern float D_L05_00161E84 __attribute__((sda));
-extern float D_L05_00161E88 __attribute__((sda));
+extern float gate_rise_acceleration __asm__("D_L05_00161E80") __attribute__((sda));
+extern float gate_rise_deceleration __asm__("D_L05_00161E84") __attribute__((sda));
+extern float gate_rise_max_speed __asm__("D_L05_00161E88") __attribute__((sda));
 extern float gate_swing_acceleration __asm__("D_L05_00161E8C") __attribute__((sda));
 extern float gate_swing_deceleration __asm__("D_L05_00161E90") __attribute__((sda));
 extern float gate_swing_max_speed __asm__("D_L05_00161E94") __attribute__((sda));
@@ -967,8 +967,8 @@ void update_triggered_gate_motion(struct Moby *gate_moby) {
         break;
     case GATE_RAISE_AND_SWING:
         if (gate_tick_314eb0(&gate_vars->riseTimer)) {
-            advance_accelerated_scalar(gate_vars->topZ, D_L05_00161E80 * frame_time_sq, D_L05_00161E84 * frame_time_sq,
-                                       D_L05_00161E88 * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
+            advance_accelerated_scalar(gate_vars->topZ, gate_rise_acceleration * frame_time_sq, gate_rise_deceleration * frame_time_sq,
+                                       gate_rise_max_speed * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
             if (gate_moby->oclass == 0x355 && FUN_001f99c0(gate_moby->pos.z - gate_vars->topZ) < 3.0f &&
                 3.0f < FUN_001f99c0(gate_vars->topZ - gate_moby->pos.z + gate_vars->riseSpeed))
                 func_0022ED80_i(0, 0, gate_moby);
