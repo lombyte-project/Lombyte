@@ -1295,16 +1295,16 @@ void spawn_effect_particle_with_transformed_random_offset(void *spawn_origin, u1
     if (particle) {
         float *particle_data = (float *)(particle + 0x20);
         u128 out[1];
-        float v[4] __attribute__((aligned(16)));
+        float random_spawn_offset[4] __attribute__((aligned(16)));
         u128 mt[4];
         qzero(&mt[3]);
         mt[0] = spawn_offset_matrix[0];
         mt[1] = spawn_offset_matrix[1];
         mt[2] = spawn_offset_matrix[2];
-        v[0] = FUN_002132a8_26c3d0(-0.1f, 0.1f);
-        v[1] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
-        v[2] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
-        FUN_001f9d20_26c3d0(out, v, mt);
+        random_spawn_offset[0] = FUN_002132a8_26c3d0(-0.1f, 0.1f);
+        random_spawn_offset[1] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
+        random_spawn_offset[2] = FUN_002132a8_26c3d0(-0.3f, 0.3f);
+        FUN_001f9d20_26c3d0(out, random_spawn_offset, mt);
         FUN_001f9a10_26c3d0(particle + 0x10, out, spawn_origin);
         *(int *)(particle + 4) = 0x806040;
         particle[9] = FUN_001fa6d0_26c3d0(4.0f) + 0x40;
