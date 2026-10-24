@@ -2604,8 +2604,8 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
 extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-extern float D_L18_00161ED0 __attribute__((sda));
-extern float D_L18_00161ED4 __attribute__((sda));
+extern float target_effect_first_rotation_rate_degrees_gp __asm__("D_L18_00161ED0") __attribute__((sda));
+extern float target_effect_second_rotation_rate_degrees_gp __asm__("D_L18_00161ED4") __attribute__((sda));
 extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __attribute__((sda));
 extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
@@ -2616,8 +2616,8 @@ void update_moby_target_travel_and_electric_effects(struct Moby *moby) {
         STATE_TRAVEL_TO_TARGET = 1
     };
     float *moby_vars = (float *)moby->pvars;
-    float updated_rotation_angle = fast_add_rotations_c(moby_vars[0xB], D_L18_00161ED0 * DEG_TO_RAD * frame_time);
-    float second_rotation_angle_step = D_L18_00161ED4 * DEG_TO_RAD * frame_time;
+    float updated_rotation_angle = fast_add_rotations_c(moby_vars[0xB], target_effect_first_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time);
+    float second_rotation_angle_step = target_effect_second_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time;
     moby_vars[0xB] = updated_rotation_angle;
     moby_vars[0xC] = fast_add_rotations_c(moby_vars[0xC], second_rotation_angle_step);
     switch (MOBY(moby)->state) {
