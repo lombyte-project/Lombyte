@@ -724,7 +724,7 @@ void update_hero_motion_for_current_state(void) {
         float kb;
         float old;
         float roll;
-        float ang;
+        float swim_velocity_pitch;
         float lean;
 
         if (hero.state.current == 0x35) {
@@ -956,9 +956,9 @@ void update_hero_motion_for_current_state(void) {
         } else {
             speed_step(frame_time_sq * 7.0f, frame_time_sq * 4.0f);
         }
-        ang = build_spherical_offset_cf(-hero.motion.rot.f[1], 0.0f);
+        swim_velocity_pitch = build_spherical_offset_cf(-hero.motion.rot.f[1], 0.0f);
         if (hero.state.current == 0x35) {
-            FUN_L00_00209018_cf(hero.motion.velocity.f, hero.ground_speed, hero.motion.rot.f[2], ang);
+            FUN_L00_00209018_cf(hero.motion.velocity.f, hero.ground_speed, hero.motion.rot.f[2], swim_velocity_pitch);
         } else if (hero.state.current == 0x33) {
             float v;
 
@@ -968,7 +968,7 @@ void update_hero_motion_for_current_state(void) {
                     v = frame_time * 4.5f;
                 }
             }
-            FUN_L00_00209018_cf(hero.motion.velocity.f, v, hero.motion.rot.f[2], ang);
+            FUN_L00_00209018_cf(hero.motion.velocity.f, v, hero.motion.rot.f[2], swim_velocity_pitch);
         } else if (hero.state.current == 0x34) {
             float len;
 
@@ -982,7 +982,7 @@ void update_hero_motion_for_current_state(void) {
             qcopy(hero.motion.velocity.f, hero.motion.unk150.f);
         }
         clip_hero_horizontal_velocity(0);
-        lean = hero.unk8EC * FUN_L00_0020a1e0_cf(ang) * -7.0f;
+        lean = hero.unk8EC * FUN_L00_0020a1e0_cf(swim_velocity_pitch) * -7.0f;
         fast_subtract_rotations_cf(&hero.motion.rot.f[0], lean, &hero.unk8E4, 0, 0.007f, 0.17f,
                                    frame_time * 1.2217305f);
         FUN_L00_00209848_cf_0022b5e0(0.009f, 0.22f);
