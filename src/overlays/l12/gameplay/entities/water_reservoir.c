@@ -26,9 +26,9 @@ void draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
 
 extern void draw_water_reservoir(struct Moby *) __asm__("FUN_L12_002ecac0");
 extern float D_L12_0015F3FC;
-extern float D_L12_001619CC __attribute__((sda));
+extern float water_reservoir_angle_rate_degrees __asm__("D_L12_001619CC") __attribute__((sda));
 int D_L12_001619D0 = 105;
-extern float D_L12_001619D4 __attribute__((sda));
+extern float water_reservoir_random_offset_radius __asm__("D_L12_001619D4") __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
 extern int D_L12_001619DC __attribute__((sda));
 extern float D_L12_001619E0 __attribute__((sda));
@@ -41,7 +41,7 @@ int D_L12_001619F8 = 0x10022;
 extern float D_L12_001619FC __attribute__((sda));
 extern float D_L12_00161A00 __attribute__((sda));
 extern float D_L12_00161A04 __attribute__((sda));
-extern float D_L12_00161A08 __attribute__((sda));
+extern float water_reservoir_height_approach_rate __asm__("D_L12_00161A08") __attribute__((sda));
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 void water_reservoir_update(struct Moby *moby) {
@@ -68,7 +68,7 @@ active:
         moby->command = 2;
         *(int *)&data[1] = scale_game_frames_72(D_L12_001619D0);
     }
-    data[0] = fast_add_rotations_72(data[0], D_L12_001619CC * 0.017453292f * frame_time);
+    data[0] = fast_add_rotations_72(data[0], water_reservoir_angle_rate_degrees * 0.017453292f * frame_time);
 frame_active:
     frame_scale = D_L12_0015F3FC;
 update:
@@ -82,9 +82,9 @@ update:
                            convert_integer_to_float_72(D_L12_001619D0);
             }
             if (random_float_between_72(0.0f, 1.0f) < fraction) {
-                random_vector_72(pos, 0.0f, D_L12_001619D4);
-                random_vector_72(offset0, 0.0f, D_L12_001619D4);
-                random_vector_72(offset1, 0.0f, D_L12_001619D4);
+                random_vector_72(pos, 0.0f, water_reservoir_random_offset_radius);
+                random_vector_72(offset0, 0.0f, water_reservoir_random_offset_radius);
+                random_vector_72(offset1, 0.0f, water_reservoir_random_offset_radius);
                 subtract_vector_72(pos_offset_delta, pos, offset0);
                 pos_offset_delta[2] += D_L12_00161A00 - D_L12_001619FC;
                 subtract_vector_72(offset_pair_delta, offset0, offset1);
@@ -108,9 +108,9 @@ update:
             }
         }
         if ((moby->command & 1) && *(int *)&data[1] == 0) {
-            approach_value_72(-1.0f, D_L12_00161A08 * frame_time, &data[2]);
+            approach_value_72(-1.0f, water_reservoir_height_approach_rate * frame_time, &data[2]);
         } else if (moby->command & 2) {
-            approach_value_72(3.0f, D_L12_00161A08 * frame_time, &data[2]);
+            approach_value_72(3.0f, water_reservoir_height_approach_rate * frame_time, &data[2]);
         }
     }
     enqueue_callback_list_1_72(draw_water_reservoir, moby);
