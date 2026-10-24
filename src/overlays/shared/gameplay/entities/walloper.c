@@ -1438,11 +1438,11 @@ int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *FUN_L00_002c9348(void *a);
-void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
-void light_off_67e8(int i) __asm__("FUN_L00_0023e838");
+void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern char item_unlocked[] __asm__("D_0013D408");
@@ -1452,7 +1452,7 @@ extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166C80[];
 extern float func_0020D830_2BDAF0(void *) __asm__("FUN_0020c9e0");
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
 extern void func_L00_00250800_2BDAF0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_00222B80_2BDAF0(int, int) __asm__("FUN_L00_002223f8");
@@ -1479,7 +1479,7 @@ extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10")
 extern int func_L00_0028EB98_2BDAF0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_2BDAF0(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FFCB0_2BDAF0(int) __asm__("FUN_001ff480");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void func_L00_0028EBF0_2BDAF0(int) __asm__("FUN_0022d798");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
@@ -1518,7 +1518,7 @@ void morphoray_update(Moby *moby) {
         && (*(int *)D_0013A5E0_2BDAF0 & ((Hero *)((char *)&hero))->items[0].button_mask) != 0
         && !busy && in_range) {
         if (((Hero *)((char *)&hero))->unk20A8 == 0) {
-            f_fun_l00_0020e4c8_227fa0();
+            start_equipped_item_animation();
         }
         if (data->seen == 0) {
             data->seen = 1;
@@ -1637,12 +1637,12 @@ void morphoray_update(Moby *moby) {
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = brightness;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = brightness * 0.25f;
             if (func_001F9908_2BDAF0(&D_L00_001617C4) != 0) {
-                light_off_67e8(D_L00_001617C0);
+                release_point_light_slot(D_L00_001617C0);
                 D_L00_001617C0 = -1;
             }
         }
         if (D_L00_001617C0 >= 0 && D_L00_001617C4 == 0) {
-            light_off_67e8(D_L00_001617C0);
+            release_point_light_slot(D_L00_001617C0);
             D_L00_001617C0 = -1;
         }
         if (D_L00_001617C8 >= 0) {
@@ -1655,7 +1655,7 @@ void morphoray_update(Moby *moby) {
         cancel_hero_item_animation();
     }
     if (busy && D_L00_001617C0 >= 0) {
-        light_off_67e8(D_L00_001617C0);
+        release_point_light_slot(D_L00_001617C0);
         D_L00_001617C0 = -1;
     }
 }

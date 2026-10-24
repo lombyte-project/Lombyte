@@ -2232,7 +2232,7 @@ extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
@@ -2346,7 +2346,7 @@ void update_charged_blast(Moby29FF90 *moby) {
         if (moby_data->light != -1) {
             (D_L15_001808C0 + moby_data->light)->f1C = (D_L15_001808C0 + moby_data->light)->f1C * (frame_scale_macro * -0.6f + 1.0f);
             if ((D_L15_001808C0 + moby_data->light)->f1C < 0.0001f) {
-                light_off_67e8(moby_data->light);
+                release_point_light_slot(moby_data->light);
                 moby_data->light = -1;
             }
         }

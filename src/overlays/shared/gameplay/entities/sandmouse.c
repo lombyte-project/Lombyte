@@ -18,7 +18,7 @@ extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
-extern void light_off_67e8(s32) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
@@ -82,7 +82,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
     if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1)
-            light_off_67e8(slot);
+            release_point_light_slot(slot);
         mark_moby_for_removal_b618(moby);
         return;
     }
@@ -142,7 +142,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
     } else {
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1) {
-            light_off_67e8(slot);
+            release_point_light_slot(slot);
             *(s32 *)(effect_vars + 0x68) = -1;
         }
     }

@@ -482,7 +482,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_0015172A[];
 extern void reset_numeric_hud_element() __asm__("FUN_L00_00235d80");
 extern void FUN_L00_00235ea0();
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -911,7 +911,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             owner->state = 8;
             owner->flags |= 2;
             if (data->light120 != -1) {
-                light_off_67e8(data->light120);
+                release_point_light_slot(data->light120);
             }
             flag_vendor_item(data->i12C);
             mark_moby_for_removal_c(moby);
@@ -959,7 +959,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             data->snd11C = -1;
         }
         if (data->light120 != -1) {
-            light_off_67e8(data->light120);
+            release_point_light_slot(data->light120);
         }
         if (data->hud104 != -1) {
             set_animation_parameter(data->hud104, 0);
@@ -1314,7 +1314,7 @@ extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
 extern int ftoi_n(float) __asm__("FUN_001fa6d0");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
 
@@ -1363,7 +1363,7 @@ void forcefield_update(unsigned char *moby) {
         break;
     case FORCEFIELD_STATE_REMOVE:
         if (*(short *)(forcefield_data + 0xE) != -1) {
-            light_off_67e8(*(short *)(forcefield_data + 0xE));
+            release_point_light_slot(*(short *)(forcefield_data + 0xE));
             *(short *)(forcefield_data + 0xE) = -1;
         }
         mark_moby_for_removal(moby);

@@ -35,8 +35,8 @@ typedef struct {
 extern unsigned short *D_L01_001ABCC0_26e008[] __asm__("D_L01_001ABCC0") NOT_SDA;
 extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
-int count_group_e81e0(int i, int st) __asm__("FUN_L01_0026e008");
-int count_group_e81e0(int i, int excluded_moby_state) {
+int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
+int count_active_moby_group_members(int i, int excluded_moby_state) {
     unsigned short *moby_index_entry;
     int qualifying_moby_count = 0;
     O_26e008 *moby;

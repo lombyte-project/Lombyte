@@ -2618,7 +2618,7 @@ extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float_c4(float input) __asm__("func_001F99C0");
-int count_group_e81e0(int i, int st) __asm__("FUN_L01_0026e008");
+int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
 int check_all_listed_class_33b_states_fe_fd_or_10(int index) __asm__("FUN_L06_002e9ea0");
 int FUN_L06_002fb2a8_c(char *moby) __asm__("FUN_L06_002fb2a8");
 int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
@@ -2669,7 +2669,7 @@ extern int func_L06_002FCA98_q(void *) __asm__("FUN_L06_002fb668");
 extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void func_L06_002FD0B8_q(void *) __asm__("FUN_L06_002fbc88");
 extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern float func_L00_001FF860_q(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA850_q(float, float) __asm__("FUN_001fa688");
 extern float func_L00_0025CE58_q(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -2824,7 +2824,7 @@ void alien_queen_update(unsigned char *moby)
     case 6:
         func_L06_002FD0B8_q(moby);
         if (((unsigned char)moby[0x20] == 4 && check_all_listed_class_33b_states_fe_fd_or_10(*(int *)(data + 0xF0)) != 0)
-            || ((unsigned char)moby[0x20] == 6 && count_group_e81e0(*(int *)(data + 0xF4), -1) == 0)) {
+            || ((unsigned char)moby[0x20] == 6 && count_active_moby_group_members(*(int *)(data + 0xF4), -1) == 0)) {
             moby[0x20] = 8;
             *(int *)(data + 0x120) = func_001F9850_q(0x4B0);
             if ((unsigned char)moby[0x53] != 3) {

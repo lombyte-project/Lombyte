@@ -30,7 +30,7 @@ extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern void DebugPrint();
-extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
@@ -221,7 +221,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         }
         if (*(unsigned char *)(pvars + 0x4C) == 0 &&
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x3C))) {
-            f2039a0_298840();
+            clear_active_help_record();
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 help_request(0x4268, 0x8B);
             }

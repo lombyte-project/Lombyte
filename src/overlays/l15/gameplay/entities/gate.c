@@ -1316,7 +1316,7 @@ void process_helicopter_hits(struct Moby *moby) __asm__("FUN_L15_002c6900");
 void process_helicopter_hits(struct Moby *m) __asm__("FUN_L15_002c6900");
 extern void FUN_L02_00261c80(void *, float *, float);
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern struct Moby *spawn_homing_spark_projectile(void *, void *, struct Moby *, int, float) __asm__("FUN_L03_002d5208");
 extern void FUN_L00_0025a120(void *);
@@ -1459,7 +1459,7 @@ void helicopter_update(struct Moby *moby) {
         }
         if (vars->wait_group != -1 ||
             (is_point_inside_clip_volume(&hero.motion.pos, vars->trigger_volume) && goal.status != 2)) {
-            if (vars->wait_group != -1 && count_group_e81e0(vars->wait_group, 0x40)) break;
+            if (vars->wait_group != -1 && count_active_moby_group_members(vars->wait_group, 0x40)) break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             vars->unk58 = 0x19;
@@ -1971,7 +1971,7 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int rand(void);
@@ -2097,7 +2097,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         break;
     case ULTRAMECH_WAIT_FOR_ACTIVATION:
         if (ultramech_vars->w1CC != -1 || is_point_inside_clip_volume(&hero.motion.pos, ultramech_vars->w1DC)) {
-            if (ultramech_vars->w1CC != -1 && count_group_e81e0(ultramech_vars->w1CC, 0x40))
+            if (ultramech_vars->w1CC != -1 && count_active_moby_group_members(ultramech_vars->w1CC, 0x40))
                 break;
             if (hero.vehicle_mode == 2) {
                 ultramech_moby->w94 = *(int *)(ultramech_moby->cls + 0x10);

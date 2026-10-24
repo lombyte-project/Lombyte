@@ -972,8 +972,8 @@ extern void release_moby_animation_slot(u8 *, u8 **) __asm__("FUN_L00_0024f0e8")
 extern void initialize_moby_animation_blend(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
 extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
-void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
-void f_fun_l00_0020e4c8_227fa0(void) {
+void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
+void start_equipped_item_animation(void) {
     s32 item_id, hero_animation_id, animation_step_divisor, slot_animation_id, i;
     u8 *slot_animation_object;
     struct Hero *P;

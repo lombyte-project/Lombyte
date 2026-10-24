@@ -27,7 +27,7 @@ extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
 extern void sound_update(void) __asm__("FUN_0022ca50");
-extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
@@ -73,7 +73,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
     sc = vendor_screen_state + 0xC0;
     reset_hud_and_suspend_weapon_updates();
-    f2039a0_298840();
+    clear_active_help_record();
     hero_set_state(100, 1);
     *(char *)&hero_state->unk20AC = 1;
     *(char *)&hero_state->unk20A5 = 1;

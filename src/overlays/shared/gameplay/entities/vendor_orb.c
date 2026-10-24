@@ -690,7 +690,7 @@ extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") __attribute__((section("
 extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 int FUN_L00_002e2040(int id);
 int FUN_L00_002e2040(int id) {
@@ -700,11 +700,11 @@ int FUN_L00_002e2040(int id) {
             D_L00_00161BF8_c[i] = 0;
             D_L00_00161C88_c[i] = 0;
             if (D_L00_00161C38_c[i] != -1) {
-                light_off_67e8(D_L00_00161C38_c[i]);
+                release_point_light_slot(D_L00_00161C38_c[i]);
                 D_L00_00161C38_c[i] = -1;
             }
             if (D_L00_00161C48_c[i] != -1) {
-                light_off_67e8(D_L00_00161C48_c[i]);
+                release_point_light_slot(D_L00_00161C48_c[i]);
                 D_L00_00161C48_c[i] = -1;
             }
             return 1;
@@ -718,7 +718,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C38[] MACRO_ADDR;
 extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
-extern void light_off_67e8(s32) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 
 void release_beam_slot(s32 i) __asm__("FUN_L00_002e20f8");
 
@@ -728,11 +728,11 @@ void release_beam_slot(s32 i) {
     D_L00_00161BF8[i] = 0;
     D_L00_00161C88[i] = 0;
     if (first_endpoint_light_index != -1) {
-        light_off_67e8(first_endpoint_light_index);
+        release_point_light_slot(first_endpoint_light_index);
         D_L00_00161C38[i] = -1;
     }
     if (D_L00_00161C48[i] != -1) {
-        light_off_67e8(D_L00_00161C48[i]);
+        release_point_light_slot(D_L00_00161C48[i]);
         D_L00_00161C48[i] = -1;
     }
 }

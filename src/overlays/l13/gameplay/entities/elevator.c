@@ -1133,7 +1133,7 @@ extern int FUN_L00_00258830(void *, void *, float, float, float, int);
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int select_list_point_toward_target(void *, void *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");

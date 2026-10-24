@@ -2341,7 +2341,7 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
 extern int D_L00_0015F320;
 extern int D_L00_0015F330;
 extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
@@ -2359,7 +2359,7 @@ void remove_tracked_class_5f3_moby(void) {
             D_L00_0015F330 = 0;
             point_light_slot_index = *(short *)(data + 0x2C);
             if (point_light_slot_index != -1)
-                light_off_67e8(point_light_slot_index);
+                release_point_light_slot(point_light_slot_index);
             mark_moby_for_removal(*(char **)&D_L00_001613C8_d);
         }
         *(int *)&D_L00_001613C8_d = 0;

@@ -3314,7 +3314,7 @@ extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern int f_fun_l00_00233e98_227fa0(int) __asm__("FUN_L00_00233e98");
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int engine_voice_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int f_fun_0022da68_227fa0(int, int, int) __asm__("FUN_0022da68");
 extern int f_fun_l00_0020d498_227fa0(int) __asm__("FUN_L00_0020d498");
@@ -3535,7 +3535,7 @@ int process_hero_equipped_item_input(void) {
             if (((D_0013CA40_p228770.f1A0 & mask) && D_0013F450_h228770.f10B0 > f_fun_001f96f8_227fa0(5)) || (D_0013CA40_p228770.f1A4 & mask)) {
                 if (f_fun_l00_00233e98_227fa0(-1)) {
                     if (D_0013F450_h228770.f20A8 == 0) {
-                        f_fun_l00_0020e4c8_227fa0();
+                        start_equipped_item_animation();
                     }
                     break;
                 }
@@ -3572,7 +3572,7 @@ int process_hero_equipped_item_input(void) {
                         || (D_0013F450_h228770.f208C == 1 && D_0013F450_h228770.f229C < 0.7f)) {
                         f_fun_l00_002223f8_227fa0(0x23, 1);
                     } else {
-                        f_fun_l00_0020e4c8_227fa0();
+                        start_equipped_item_animation();
                     }
                     break;
                 }
@@ -3602,7 +3602,7 @@ int process_hero_equipped_item_input(void) {
     case 21:
         if (D_0013F450_h228770.f1090 != 0) {
             if (D_0013CA40_p228770.f1A4 & mask) {
-                f_fun_l00_0020e4c8_227fa0();
+                start_equipped_item_animation();
             }
         }
         break;

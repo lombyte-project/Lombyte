@@ -1435,7 +1435,7 @@ extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_
 extern s32 D_0015EEA4;
 extern s32 is_suck_cannon_suction_blocked_by_hero_state(void) __asm__("FUN_L00_002d9f78");
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_002223f8(int,int);
 extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
@@ -1524,7 +1524,7 @@ void suckcannon_update(SuckMoby *self) {
         }
         if ((suck_input.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
             suck_hero.unk20AC==0 && scale_game_frames_alt(15) < suck_hero.ready_frames && is_suck_cannon_suction_blocked_by_hero_state()==0) {
-            f_fun_l00_0020e4c8_227fa0();
+            start_equipped_item_animation();
             cannon->sound = allocate_voice_for_target_entry_alt(2,4,(int)self);
             cannon->cooldown = scale_game_frames_alt(10);
             stats = (SuckStats *)(((char *)&item_usage));
@@ -1642,7 +1642,7 @@ void suckcannon_update(SuckMoby *self) {
             (suck_input.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&
             suck_hero.control_mode!=18 && suck_hero.control_mode!=17 && !suck_hero.unk20AC && !suck_hero.unk20A7 &&
             scale_game_frames_alt(22)<suck_hero.ready_frames) {
-            f_fun_l00_0020e4c8_227fa0();
+            start_equipped_item_animation();
             blend_moby_animation(self,5,0,scale_game_frames_alt(2));
             suck_hero.firing=2;
             cannon->cooldown=scale_game_frames_alt(25);

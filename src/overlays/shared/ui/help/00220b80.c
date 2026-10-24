@@ -368,7 +368,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
 extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
 extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
@@ -557,7 +557,7 @@ s32 process_hero_item_action_input(void)
                      (controller_state.pressed & buttons)) &&
                     get_ammo(-1) != 0) {
                     if (hero.unk20A8 == 0) {
-                        f_fun_l00_0020e4c8_227fa0();
+                        start_equipped_item_animation();
                     }
                 } else if ((controller_state.held & buttons) && get_ammo(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
@@ -592,7 +592,7 @@ s32 process_hero_item_action_input(void)
                             (hero.state.control_mode == 1 && hero.unk229C < 0.7f)) {
                             hero_set_state(0x23, 1);
                         } else {
-                            f_fun_l00_0020e4c8_227fa0();
+                            start_equipped_item_animation();
                         }
                     } else if (hero.items[0].moby != NULL) {
                         allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
@@ -624,7 +624,7 @@ s32 process_hero_item_action_input(void)
 
     case HERO_ITEM_PRESS_TO_ACTIVATE:
         if (hero.items[0].moby != NULL && (controller_state.pressed & buttons)) {
-            f_fun_l00_0020e4c8_227fa0();
+            start_equipped_item_animation();
         }
         break;
     }

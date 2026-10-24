@@ -105,7 +105,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void place_6570(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
@@ -157,7 +157,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         *(int *)(od + 0xF8) = i * 2;
         *(int *)(od + 0xFC) = i * 2 + 1;
         if (*(int *)(od + 0xF0) != -1) {
-            light_off_67e8(*(int *)(od + 0xF0));
+            release_point_light_slot(*(int *)(od + 0xF0));
             *(int *)(od + 0xF0) = -1;
         }
     }
@@ -217,7 +217,7 @@ extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *)
 extern int ray_67e8(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
 extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float cos_67e8(float) __asm__("FUN_001f9dc8");
 extern float sin_67e8(float) __asm__("FUN_001f9de0");
 
@@ -417,11 +417,11 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
                 muzzle_light_entry[2] = D_L14_00161A58;
             }
         } else if (*(int *)(moby_data + 0xF0) != -1) {
-            light_off_67e8(*(int *)(moby_data + 0xF0));
+            release_point_light_slot(*(int *)(moby_data + 0xF0));
             *(int *)(moby_data + 0xF0) = -1;
         }
     } else if (*(int *)(moby_data + 0xF0) != -1) {
-        light_off_67e8(*(int *)(moby_data + 0xF0));
+        release_point_light_slot(*(int *)(moby_data + 0xF0));
         *(int *)(moby_data + 0xF0) = -1;
     }
     sub_67e8(&v[0], &D_0013F3D0_67e8, &racer_moby->pos);

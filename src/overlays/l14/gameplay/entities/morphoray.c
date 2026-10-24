@@ -1297,7 +1297,7 @@ typedef struct {
 
 extern Level14State D_L14_0016CF60;
 extern int D_L14_0015F5C4;
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern unsigned char D_0013D408[];
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
@@ -1314,7 +1314,7 @@ void update_moby_list_clear_notification(struct Moby *moby) {
     unsigned level_state_offset;
     int i;
     if (moby_pvars[0] != -1) {
-        if (count_group_e81e0(moby_pvars[0], -1) == 0) {
+        if (count_active_moby_group_members(moby_pvars[0], -1) == 0) {
             if (D_0013D408[0x17] == 0) {
                 D_0013D408[0x17] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);

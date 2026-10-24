@@ -2869,7 +2869,7 @@ extern char D_0013E633_q[], D_0014171B[], D_0013D388[], D_L16_00167240[] __asm__
 extern char D_0014162A_q[] __asm__("D_0014162A") __attribute__((section(".data")));
 extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") __attribute__((section(".data")));
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
@@ -2948,7 +2948,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         FUN_L00_002ea9d8_q_002eaa30(rotation);
         if (scene_data->camera >= 0)
             *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
-        if (count_group_e81e0(scene_data->path, -1))
+        if (count_active_moby_group_members(scene_data->path, -1))
             break;
         if (!tick_countdown_32_q(&scene_data->timer_q))
             break;
@@ -2979,7 +2979,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         char *player = D_0013F3D0;
         if (is_point_inside_clip_volume(player, scene_data->trigger) && scene_data->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
-        if (!count_group_e81e0(scene_data->path, -1)) {
+        if (!count_active_moby_group_members(scene_data->path, -1)) {
             moby->state = 4;
             helper = set_class_0287_group_activation_and_find_nearest(scene_data->helper, 0);
             if (helper)

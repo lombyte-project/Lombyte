@@ -212,7 +212,7 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
-extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
@@ -272,7 +272,7 @@ void bob_update(WM11 *moby) {
                 grant_inventory_item(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
-                f2039a0_298840();
+                clear_active_help_record();
                 help_request(0x2AFB, 0x3D);
             }
         }

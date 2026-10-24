@@ -636,7 +636,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] __attribute__((section(".data")));
 extern unsigned short D_00141D80[] __attribute__((section(".data")));
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -869,7 +869,7 @@ int process_hero_primary_item_input(void) {
             if (((D_0013CA40_p2523C8.held & mask) && (*(Hero *)((char *)&hero)).items[0].unk20 > scale_game_frames_alt(5)) || (D_0013CA40_p2523C8.pressed & mask)) {
                 if (FUN_L00_00233e98(-1)) {
                     if ((*(Hero *)((char *)&hero)).unk20A8 == 0) {
-                        f_fun_l00_0020e4c8_227fa0();
+                        start_equipped_item_animation();
                     }
                     break;
                 }
@@ -906,7 +906,7 @@ int process_hero_primary_item_input(void) {
                         || ((*(Hero *)((char *)&hero)).state.control_mode == 1 && (*(Hero *)((char *)&hero)).unk229C < 0.7f)) {
                         func_L05_0024D680_2523C8(0x23, 1);
                     } else {
-                        f_fun_l00_0020e4c8_227fa0();
+                        start_equipped_item_animation();
                     }
                     break;
                 }
@@ -936,7 +936,7 @@ int process_hero_primary_item_input(void) {
     case ITEM_PRESS_ACTIVATED_DEVICE:
         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
             if (D_0013CA40_p2523C8.pressed & mask) {
-                f_fun_l00_0020e4c8_227fa0();
+                start_equipped_item_animation();
             }
         }
         break;

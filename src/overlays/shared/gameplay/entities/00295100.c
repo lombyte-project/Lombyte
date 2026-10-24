@@ -349,7 +349,7 @@ void f211250_298840(void) __asm__("FUN_L00_00211250");
 void f216050_298840(int) __asm__("FUN_00216050");
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void memset_298840(void *, int, int) __asm__("FUN_001f97e8");
-void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
 int FUN_L00_002451b8_c(int) __asm__("FUN_L00_002451b8");
@@ -388,7 +388,7 @@ void start_scene(int scene_id) {
     D_L00_001611CC = scene_buffer_base;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + scene_buffer_base;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + scene_buffer_base;
-    f2039a0_298840();
+    clear_active_help_record();
     fade_level = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400 = 0;
@@ -860,7 +860,7 @@ extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
-extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
@@ -882,7 +882,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
-    f2039a0_298840();
+    clear_active_help_record();
     D_L00_0015F5C4_macro = 1;
     D_L00_00161054_macro = D_L00_00173E04_lui;
     D_L00_00161058_macro = D_L00_0015F40C_macro;
@@ -1366,7 +1366,7 @@ extern void FUN_L00_00235ea0_29a6b0(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a7a8_29a6b0(void) __asm__("FUN_L00_0023a7a8");
 extern s32 FUN_0022da68_29a6b0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
-extern void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 FUN_L00_002223f8_29a6b0(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_00212ed8_29a6b0(void *, s32, s32) __asm__("FUN_00212ed8");
@@ -1452,7 +1452,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     if (vendor_29a6b0.mode == 0) {
         FUN_001f4a58_29a6b0(4);
     }
-    f2039a0_298840();
+    clear_active_help_record();
     fade_level = 1.0f;
     D_L00_0015F5C4 = 5;
     D_L00_0015F400 = 0;

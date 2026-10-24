@@ -46,7 +46,7 @@ void update_level14_event_moby_effects(void) {
 
 extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
 extern u8 *D_L14_0015FFD8;
-extern void light_off_67e8(s32) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 extern void FUN_0020c828(void *);
 
 /* Walk the record list at D_L14_001ABF40_u[index] (terminated by a negative
@@ -78,7 +78,7 @@ void remove_flying_debris(u8 *self) {
     s16 light_index = *(s16 *)(debris_vars + 0x12);
 
     if (light_index != -1) {
-        light_off_67e8(light_index);
+        release_point_light_slot(light_index);
         *(s16 *)(debris_vars + 0x12) = -1;
     }
     FUN_0020c828(self);

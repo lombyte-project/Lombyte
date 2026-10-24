@@ -680,7 +680,7 @@ extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void light_off_67e8(int) __asm__("FUN_L00_0023e838");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void FUN_L08_002f5e58(struct Moby *m);
 #ifdef NON_MATCHING
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -1087,7 +1087,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
             }
         }
     } else if (light_vars->light != -1) {
-        light_off_67e8(light_vars->light);
+        release_point_light_slot(light_vars->light);
         light_vars->light = -1;
     }
     light_vars->flags |= 2;

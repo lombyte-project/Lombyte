@@ -1575,7 +1575,7 @@ char *activate_listed_blarg_ship(int list) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
-extern int count_group_e81e0(int, int) __asm__("FUN_L01_0026e008");
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern unsigned char D_0013D408[];
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
@@ -1587,7 +1587,7 @@ void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
-    } else if (data[1] != -1 && count_group_e81e0(data[1], -1) == 0) {
+    } else if (data[1] != -1 && count_active_moby_group_members(data[1], -1) == 0) {
         unsigned char *dialogue_latch_base = D_0013D408;
         if (dialogue_latch_base[0x13] == 0) {
             dialogue_latch_base[0x13] = 1;

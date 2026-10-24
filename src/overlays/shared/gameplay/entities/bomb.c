@@ -1782,7 +1782,7 @@ extern float distance_2cc608(void *, void *) __asm__("FUN_001f9b48");
 extern float fabs_2cc608(float) __asm__("FUN_001f99c0");
 extern void reticle_2cc608(struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void hud_2cc608(int, int) __asm__("FUN_L00_002223f8");
-extern void f_fun_l00_0020e4c8_227fa0(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void apply_mat4_2cc608(float *, float *, void *) __asm__("FUN_001f9d20");
 extern void apply_mat3_2cc608(float *, float *, void *) __asm__("FUN_001f9cf8");
@@ -1878,7 +1878,7 @@ void ryno_update(struct Moby *ryno_moby) {
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
-        f_fun_l00_0020e4c8_227fa0();
+        start_equipped_item_animation();
         {
             int k;
             for (k = 6; k >= 0; k--) ryno_vars->recent[k] = 0;
@@ -1907,7 +1907,7 @@ void ryno_update(struct Moby *ryno_moby) {
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
         ryno_vars->shots = 0;
-        f_fun_l00_0020e4c8_227fa0();
+        start_equipped_item_animation();
         {
             int k;
             for (k = 6; k >= 0; k--) ryno_vars->recent[k] = 0;
@@ -1938,7 +1938,7 @@ void ryno_update(struct Moby *ryno_moby) {
         }
         pitch = -angle_2cc608(length_2cc608(muzzle_position_and_launch_direction.f), muzzle_position_and_launch_direction.f[2]);
         muzzle_2cc608(ryno_moby, ryno_vars->slot, aim.f);
-        f_fun_l00_0020e4c8_227fa0();
+        start_equipped_item_animation();
         FUN_L00_002ccee0_c(ryno_moby, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
         if (ryno_vars->shots >= 7) {
             hero.items[0].unk1C = 0;

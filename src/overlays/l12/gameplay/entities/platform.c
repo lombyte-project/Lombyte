@@ -1021,7 +1021,7 @@ extern s32 random_integer_below_e3528(s32) __asm__("FUN_00213260");
 extern f32 fast_add_rotations_e3528(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos_e3528(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin_e3528(f32) __asm__("FUN_001f9de0");
-extern s32 count_group_e81e0(s32, s32) __asm__("FUN_L01_0026e008");
+extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern AnklebiterHit_e3528 *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -1059,7 +1059,7 @@ void FUN_L12_002e3528(struct Moby *moby) {
     if (vars->call_enabled != 0 && moby->state != 9) {
         s16 updated_call_timer = ++vars->call_timer;
         if (scale_game_frames_e3528(0x3C) * 15 < updated_call_timer && moby->visible == 0 && moby->group < 0xFF &&
-            count_group_e81e0(moby->group, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
+            count_active_moby_group_members(moby->group, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
             help_direction_or_hit_position.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
             help_direction_or_hit_position.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
             help_direction_or_hit_position.f[2] = 0.0f;
@@ -1290,7 +1290,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
-extern s32 count_group_e81e0(s32, s32) __asm__("FUN_L01_0026e008");
+extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern s32 tick_countdown_32_alt_c(s32 *) __asm__("FUN_001f9740");
 extern void FUN_L00_0025b6b8(void *, void *, void *, float);
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1341,7 +1341,7 @@ void platform_update(Moby *moby) {
         FUN_L12_002e3948_c((char *)moby);
         return;
     }
-    if (moby->state != 0 && data->fDC != -1 && count_group_e81e0(data->fDC, -1) != 0) {
+    if (moby->state != 0 && data->fDC != -1 && count_active_moby_group_members(data->fDC, -1) != 0) {
         FUN_L12_002e3948_c((char *)moby);
         return;
     }
@@ -2191,7 +2191,7 @@ extern s32 random_integer_below_e81e0(s32) __asm__("FUN_00213260");
 extern f32 fast_add_rotations_e81e0(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos_e81e0(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin_e81e0(f32) __asm__("FUN_001f9de0");
-extern s32 count_group_e81e0(s32, s32) __asm__("FUN_L01_0026e008");
+extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 is_point_inside_clip_volume_e81e0(void *, s32) __asm__("FUN_00214720");
@@ -2228,13 +2228,13 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
         if (scale_game_frames_e81e0(0x3C) * 17 < vars->call_timer) {
             s32 count = 0;
             if (vars->groups[0] != -1)
-                count += count_group_e81e0(vars->groups[0], 2);
+                count += count_active_moby_group_members(vars->groups[0], 2);
             if (vars->groups[1] != -1)
-                count += count_group_e81e0(vars->groups[1], 2);
+                count += count_active_moby_group_members(vars->groups[1], 2);
             if (vars->groups[2] != -1)
-                count += count_group_e81e0(vars->groups[2], 2);
+                count += count_active_moby_group_members(vars->groups[2], 2);
             if (vars->groups[3] != -1)
-                count += count_group_e81e0(vars->groups[3], 2);
+                count += count_active_moby_group_members(vars->groups[3], 2);
             if (count >= 9 && random_integer_below_e81e0(0x27) == 0) {
                 help_direction_or_hit_position.f[0] = fast_cos_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
                 help_direction_or_hit_position.f[1] = fast_sin_e81e0(fast_add_rotations_e81e0(moby->rot.z, 3.1415927f));
