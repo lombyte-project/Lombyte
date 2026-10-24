@@ -3074,7 +3074,7 @@ extern int D_L06_00140408 __attribute__((section(".data")));
 extern int D_0013CAE0 __attribute__((section(".data")));
 extern float D_L06_0015F3FC;
 extern int D_L06_001413D0 __attribute__((section(".data")));
-extern float D_L06_00161F0C __attribute__((sda));
+extern float alien_queen_glow_phase_speed_degrees_gp __asm__("D_L06_00161F0C") __attribute__((sda));
 int D_L06_00161F10 = 0x80808080;
 int D_L06_00161F14 = 0x80804080;
 extern char *D_L06_001600EC;
@@ -3236,7 +3236,7 @@ hit_response_done:
         }
     }
     *(float *)(data + 0x128) = fast_add_rotations(*(float *)(data + 0x128),
-        D_L06_00161F0C * 0.017453292f * frame_time);
+        alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
         (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[*(int *)(data + 0xEC)];
