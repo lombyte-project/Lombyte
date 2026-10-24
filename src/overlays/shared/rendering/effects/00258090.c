@@ -32,29 +32,29 @@ void spawn_span_particle(float *span_start_position, int kind, float *span_direc
     int k2 = kind;
     int color_high_byte;
     float span_length;
-    float f20;
+    float span_start_w;
     int k;
     *(OvlQuad *)v = *(OvlQuad *)span_direction;
     particle = create_part(0);
     if (particle != 0) {
         color_high_byte = 0;
         k = k2;
-        f20 = 0.0f;
-        span_length = f20;
+        span_start_w = 0.0f;
+        span_length = span_start_w;
         switch (k) {
         case PARTICLE_SHORT_SPAN:
             color_high_byte = 0x14;
-            f20 = 0.015f;
+            span_start_w = 0.015f;
             span_length = random_float_between_alt(0.01f, 1.0f);
             break;
         case PARTICLE_MEDIUM_SPAN:
             color_high_byte = 0xD;
-            f20 = 0.5f;
+            span_start_w = 0.5f;
             span_length = random_float_between_alt(1.0f, 5.0f);
             break;
         case PARTICLE_LONG_SPAN:
             color_high_byte = 0xD;
-            f20 = 1.0f;
+            span_start_w = 1.0f;
             k = 1;
             span_length = random_float_between_alt(20.0f, 30.0f);
             break;
@@ -71,7 +71,7 @@ void spawn_span_particle(float *span_start_position, int kind, float *span_direc
         *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)span_start_position;
         add_vector_xyz(u, span_start_position, span_offset);
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)u;
-        *(float *)(particle + 0x1C) = f20;
+        *(float *)(particle + 0x1C) = span_start_w;
         *(float *)(particle + 0x2C) = 1.0f;
         *(OvlQuad *)(particle + 0x30) = *(OvlQuad *)vp;
         *(float *)(particle + 0x3C) = scale;
