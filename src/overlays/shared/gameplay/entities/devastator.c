@@ -494,8 +494,8 @@ typedef struct {
 int FUN_L00_0025a420_2b3458(void *, int, int) __asm__("FUN_L00_0025a420");
 int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
-extern int D_L00_00161478 __attribute__((sda));
-extern int D_L00_00161480 __attribute__((sda));
+extern int linked_moby_selection_delay __asm__("D_L00_00161478") __attribute__((sda));
+extern int owned_record_cooldown __asm__("D_L00_00161480") __attribute__((sda));
 void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
 
 void update_linked_moby_states(unsigned char *source_moby) {
@@ -508,7 +508,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
     switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
         source_moby[0x20] = 1;
-        moby_vars->w4 = D_L00_00161478;
+        moby_vars->w4 = linked_moby_selection_delay;
         moby_vars->w8 = 3;
         moby_vars->p[0] = D_L00_0015FFD8 + (moby_vars->idx[0] << 8);
         moby_vars->p[1] = D_L00_0015FFD8 + (moby_vars->idx[1] << 8);
@@ -520,7 +520,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         FUN_001f9740_2b3458(&moby_vars->wC);
         if (matching_owned_record && moby_vars->wC == 0) {
             source_moby[0xA4] = 0xFF;
-            moby_vars->wC = D_L00_00161480;
+            moby_vars->wC = owned_record_cooldown;
             if (--moby_vars->w8 <= 0) {
                 FUN_0020c828_2b3458(source_moby);
                 return;
@@ -539,7 +539,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         if (moby_vars->p[0][0x20] == 0x50 || moby_vars->p[1][0x20] == 0x50 || moby_vars->p[2][0x20] == 0x50 ||
             moby_vars->p[3][0x20] == 0x50) {
             if (FUN_001f9740_2b3458(&moby_vars->w4)) {
-                moby_vars->w4 = D_L00_00161478;
+                moby_vars->w4 = linked_moby_selection_delay;
                 for (i = 0; i < 4; i++) {
                     if (moby_vars->p[i][0x20] == 0x50)
                         goto found;
