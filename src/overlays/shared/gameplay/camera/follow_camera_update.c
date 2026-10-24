@@ -381,25 +381,25 @@ extern void FUN_001f9a10_002e9cc0(void *, void *, void *) __asm__("FUN_001f9a10"
 void update_hero_aligned_camera_position(char *camera_object) __asm__("FUN_L00_002e9cc0");
 
 void update_hero_aligned_camera_position(char *camera_object) {
-    char a[16] __attribute__((aligned(16)));
-    char b[16] __attribute__((aligned(16)));
+    char normalized_hero_up_axis[16] __attribute__((aligned(16)));
+    char camera_height_offset[16] __attribute__((aligned(16)));
     struct Hero *hero_data = &hero;
     int vehicle_mode;
-    FUN_001f9bf8_002e9cc0(a, ((char *)hero_data->moby) + 0xE0, 1.0f);
+    FUN_001f9bf8_002e9cc0(normalized_hero_up_axis, ((char *)hero_data->moby) + 0xE0, 1.0f);
     vehicle_mode = hero_data->vehicle_mode;
     if (vehicle_mode == 2) {
-        FUN_001f9a68_002e9cc0(b, a, 9.5f);
+        FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 9.5f);
     } else if (vehicle_mode == 1) {
         if (D_0015EDB3_002e9cc0) {
-            FUN_001f9a68_002e9cc0(b, a, 1.2f);
+            FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 1.2f);
         } else {
-            FUN_001f9a68_002e9cc0(b, a, 0.9f);
+            FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 0.9f);
         }
     } else {
-        FUN_001f9a68_002e9cc0(b, a, 1.6f);
+        FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 1.6f);
     }
     camera_object += 0x30;
-    FUN_001f9a10_002e9cc0(camera_object, &hero.motion.pos, b);
+    FUN_001f9a10_002e9cc0(camera_object, &hero.motion.pos, camera_height_offset);
     FUN_001f9a10_002e9cc0(camera_object, &hero.motion.platform_carry, camera_object);
 }
 #include "eetypes.h"
