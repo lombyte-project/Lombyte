@@ -596,8 +596,8 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
 
 void initialize_wind_spark(struct Moby *m, int i, void *dir) __asm__("FUN_L14_002eb388");
 
-extern f32 D_L14_00161C08 __attribute__((sda));
-extern s32 D_L14_00161C04 __attribute__((sda));
+extern f32 wind_effect_strength __asm__("D_L14_00161C08") __attribute__((sda));
+extern s32 wind_push_decay_frames __asm__("D_L14_00161C04") __attribute__((sda));
 void update_wind_control(struct Moby *wind_control_moby) __asm__("FUN_L14_002eaf88");
 
 void update_wind_control(struct Moby *wind_control_moby) {
@@ -639,8 +639,8 @@ void update_wind_control(struct Moby *wind_control_moby) {
     }
     pos = (char *)&hero.motion.pos;
     if (wind_inside(pos, wind_vars->clip_area) != 0) {
-        D_L14_00162230.v = wind_cos(wind_control_moby->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
-        D_L14_00162234.v = wind_sin(wind_control_moby->rot.z) * (D_L14_00161C08 * D_0015ED6C_w);
+        D_L14_00162230.v = wind_cos(wind_control_moby->rot.z) * (wind_effect_strength * D_0015ED6C_w);
+        D_L14_00162234.v = wind_sin(wind_control_moby->rot.z) * (wind_effect_strength * D_0015ED6C_w);
         D_L14_00162238 = 0;
         D_L14_00162240 = 1.0f;
         /* Fakematch: storing the weight again is a no-op that reload's cse drops, but the
@@ -665,7 +665,7 @@ void update_wind_control(struct Moby *wind_control_moby) {
             wind_direction_or_push_delta[1] = wind_sin(wind_control_moby->rot.z) * t;
             wind_direction_or_push_delta[2] = 0.0f;
             wind_add(pos + 0x70, pos + 0x70, wind_direction_or_push_delta);
-            wind_vars->push_timer = wind_frames(D_L14_00161C04);
+            wind_vars->push_timer = wind_frames(wind_push_decay_frames);
             wind_vars->push_inv = 1.0f / wind_itof(wind_vars->push_timer);
             return;
         }
