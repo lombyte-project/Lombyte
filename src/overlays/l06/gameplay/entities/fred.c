@@ -5724,7 +5724,7 @@ extern void draw_backdrop_mesh(void) __asm__("FUN_L06_003003f0");
 
 extern int D_L06_0015F408;
 extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048") __attribute__((sda));
-extern int D_L06_00162044 __attribute__((sda));
+extern int camera_sequence_scalar_ramp_duration_frames_gp __asm__("D_L06_00162044") __attribute__((sda));
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
@@ -5800,13 +5800,13 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 FUN_L00_00216f90((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
             }
         }
-        if (data[9] < D_L06_00162044)
-            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
+        if (data[9] < camera_sequence_scalar_ramp_duration_frames_gp)
+            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)camera_sequence_scalar_ramp_duration_frames_gp;
         break;
     case BLEND_CAMERA_TO_HERO:
-        if (data[9] < D_L06_00162044) {
+        if (data[9] < camera_sequence_scalar_ramp_duration_frames_gp) {
             data[9]++;
-            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
+            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)camera_sequence_scalar_ramp_duration_frames_gp;
         }
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
         if (*(float *)(data + 6) >= 0.99999f) {
