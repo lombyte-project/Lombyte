@@ -1504,10 +1504,10 @@ extern char D_L01_00167240[];
 extern float compute_interpolated_record_value_alt(void) __asm__("FUN_0020c9e0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern int D_L01_00161F3C __attribute__((sda));
-extern int D_L01_00161F40 __attribute__((sda));
+extern int gold_bolt_glow_ring_tween_start_color __asm__("D_L01_00161F3C") __attribute__((sda));
+extern int gold_bolt_glow_ring_tween_end_color __asm__("D_L01_00161F40") __attribute__((sda));
 extern int D_L01_00161F48 __attribute__((sda));
-extern int D_L01_00161F4C __attribute__((sda));
+extern int gold_bolt_glow_ring_particle_texture_index __asm__("D_L01_00161F4C") __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *);
@@ -1559,8 +1559,8 @@ void update_gold_bolt_glow_rings(char *moby) {
             tm[i] = scale_game_frames(0xFF);
         }
         pulse_progress = convert_integer_to_float(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
-        packed_color = fast_tween_color(D_L01_00161F3C, D_L01_00161F40, absolute_float(0.5f - pulse_progress));
-        FUN_L00_00272f68(glow_particle_position, packed_color, func_001FA898_r(ring_rotations[i]), D_L01_00161F4C, D_L01_00161F48, 2, 0,
+        packed_color = fast_tween_color(gold_bolt_glow_ring_tween_start_color, gold_bolt_glow_ring_tween_end_color, absolute_float(0.5f - pulse_progress));
+        FUN_L00_00272f68(glow_particle_position, packed_color, func_001FA898_r(ring_rotations[i]), gold_bolt_glow_ring_particle_texture_index, D_L01_00161F48, 2, 0,
                          sz[i] * scale);
         add_vector_xyz(glow_particle_position, glow_particle_position, step);
     }
