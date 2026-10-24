@@ -103,7 +103,9 @@ void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
 void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
 int f215b10_28e9c8(void) __asm__("FUN_00215b10");
-void FUN_L00_0028e9c8(int audio_selection_mode) {
+void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
+
+void initialize_level_transition_with_audio(int audio_selection_mode) {
     O_28e9c8 *moby;
     int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, shared_table_offset;
     D_0013E030_28e9c8.x24 = -1;
@@ -178,7 +180,7 @@ extern short D_0013E05C __attribute__((section(".data")));
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");
 void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-void FUN_L00_0028e9c8(int);
+void initialize_level_transition_with_audio(int) __asm__("FUN_L00_0028e9c8");
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 
@@ -194,7 +196,7 @@ void prepare_level_transition_with_help_cleanup(void) {
         music_state->secondary.state = 5;
     sound_update();
     clear_active_help_record();
-    FUN_L00_0028e9c8(0);
+    initialize_level_transition_with_audio(0);
     D_0013E05C = 0;
 }
 typedef struct {
