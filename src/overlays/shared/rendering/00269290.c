@@ -2388,11 +2388,11 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         linked_velocity_scale_scratch = 0.15f;
         if (P->h1C == 0 && linked_particle != 0 && !(*(long long *)&linked_particle_data->x18 & 0x1FFFF00000000LL)) {
             f32 kk;
-            f32 linked_displacement_strength = 0.2f, c1 = 1.0f, per_link_gain_decay = 0.999f;
+            f32 linked_displacement_strength = 0.2f, link_rank_step = 1.0f, per_link_gain_decay = 0.999f;
             do {
                 kk = k * k;
                 FUN_001f9a28_x(&next_position, &linked_particle->pos, &particle->pos);
-                k += c1;
+                k += link_rank_step;
                 linked_velocity_scale_scratch *= per_link_gain_decay;
                 FUN_001f9bf8_x(&next_position, &next_position, linked_displacement_strength / kk);
                 FUN_001f9a10_x(&acc, &acc, &next_position);
