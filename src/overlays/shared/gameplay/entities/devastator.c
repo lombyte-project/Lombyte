@@ -2814,7 +2814,9 @@ extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
 extern f32 D_L00_001614C8 __attribute__((sda));
 extern f32 D_L00_001614C4 __attribute__((sda));
 extern u32 D_L00_001614C0 __attribute__((sda));
-void FUN_L00_002b7568(u8 *source_moby) {
+void draw_taunter_effect_quads(u8 *source_moby) __asm__("FUN_L00_002b7568");
+
+void draw_taunter_effect_quads(u8 *source_moby) {
     Q_2b7568 quad;
     V_2b7568 quad_basis_direction;
     V_2b7568 up;
