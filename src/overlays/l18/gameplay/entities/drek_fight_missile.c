@@ -2732,7 +2732,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     float step;
     char *hit_record;
     int crossed = 0;
-    float f20;
+    float health_floor_or_transition_offset;
     unsigned char *spawned_child_moby;
     float V10[16];
     float V50[4];
@@ -2744,7 +2744,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
 
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L18_00162330;
     set_moby_attached_effect_alpha_from_distance(moby, 0.5f);
-    f20 = (7.0f - (float)*(int *)(boss_data + 0x34C) - 2.0f) / 7.0f * 350.0f;
+    health_floor_or_transition_offset = (7.0f - (float)*(int *)(boss_data + 0x34C) - 2.0f) / 7.0f * 350.0f;
     step = 0.0f;
     hit_record = find_moby_hit_5e80(moby, 0x330000, 0);
     if (hit_record != 0) {
@@ -2783,13 +2783,13 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                         blend_moby_animation_5e80(moby, 0xE, 5, 1);
                     }
                 }
-                if (f20 <= *(float *)(boss_data + 0x38C) && *(float *)(boss_data + 0x38C) - step < f20) {
+                if (health_floor_or_transition_offset <= *(float *)(boss_data + 0x38C) && *(float *)(boss_data + 0x38C) - step < health_floor_or_transition_offset) {
                     crossed = 1;
                 }
                 unclamped_health = *(float *)(boss_data + 0x38C) - step;
                 *(float *)(boss_data + 0x38C) = unclamped_health;
-                if (unclamped_health < f20) {
-                    *(float *)(boss_data + 0x38C) = f20;
+                if (unclamped_health < health_floor_or_transition_offset) {
+                    *(float *)(boss_data + 0x38C) = health_floor_or_transition_offset;
                 }
                 *(unsigned char *)(boss_data + 0x67) = 0xF0;
                 FUN_L00_0025d458_5e80(moby, (short *)(boss_data + 0x60));
@@ -2909,12 +2909,12 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                                  ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1]].pos[1] - *(float *)(boss_data + 0x304));
                 *(float *)(boss_data + 0x318) = previous_arena_node_yaw;
                 qcopy(V50, boss_data + 0x300);
-                f20 = 20.0f;
-                V50[0] += fast_cos_5e80(previous_arena_node_yaw) * f20;
-                V50[1] += fast_sin_5e80(*(float *)(boss_data + 0x318)) * f20;
+                health_floor_or_transition_offset = 20.0f;
+                V50[0] += fast_cos_5e80(previous_arena_node_yaw) * health_floor_or_transition_offset;
+                V50[1] += fast_sin_5e80(*(float *)(boss_data + 0x318)) * health_floor_or_transition_offset;
                 V50[2] += 3.0f;
                 qcopy(V90, ((VendorNode_5e80 *)D_L18_001600EC)[((VendorStage_5e80 *)boss_data)->f228[*(int *)(boss_data + 0x34C) - 1]].pos);
-                V90[2] += f20;
+                V90[2] += health_floor_or_transition_offset;
                 V90[2] = probe_ground_height_5e80(V90, 0, 0.5f);
                 qcopy(V60, V90);
                 subtract_vector_5e80(VA0, D_L18_001600EC + (((VendorStage_5e80 *)boss_data)->f250[*(int *)(boss_data + 0x34C) - 1] << 7) + 0x30, V60);
