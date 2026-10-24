@@ -58,9 +58,9 @@ void decompress_and_relocate_selected_groups(int mode) {
         }
     }
     if ((unsigned)(mode - 1) < 2) {
-        G_234fd0 *g2 = &D_L00_0017E4D8_234fd0;
-        if (g2->t->sz[5]) {
-            FUN_00232f20_234fd0(compressed_data_buffer, g2->t->p[5], 0, D_L00_0017E520 / 16, 0);
+        G_234fd0 *group_4_decompression_state = &D_L00_0017E4D8_234fd0;
+        if (group_4_decompression_state->t->sz[5]) {
+            FUN_00232f20_234fd0(compressed_data_buffer, group_4_decompression_state->t->p[5], 0, D_L00_0017E520 / 16, 0);
             FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
             FUN_001fefc0_234fd0(4, decompression_destination);
         }
