@@ -815,7 +815,7 @@ extern s32 D_L08_001F8528[];
 extern char D_L08_001F8550[];
 extern float batalia_effect_reference_position_y __asm__("D_L08_00162384");
 extern float batalia_effect_reference_position_z __asm__("D_L08_00162388");
-extern float D_L08_0016238C;
+extern float batalia_effect_culling_radius __asm__("D_L08_0016238C");
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -874,7 +874,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
         sphere_check_input[0] = *(float *)&D_L08_00162380;
         sphere_check_input[1] = batalia_effect_reference_position_y;
         sphere_check_input[2] = batalia_effect_reference_position_z;
-        sphere_check_input[3] = D_L08_0016238C;
+        sphere_check_input[3] = batalia_effect_culling_radius;
         if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
             position_delta[0] = *(float *)&D_L08_00162380;
             position_delta[1] = batalia_effect_reference_position_y;
