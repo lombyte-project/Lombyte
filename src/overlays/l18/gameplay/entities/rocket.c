@@ -1174,8 +1174,8 @@ f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 void mmr_q(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L18_00161998 __attribute__((sda));
-extern float D_L18_0016199C __attribute__((sda));
-extern float D_L18_001619A0 __attribute__((sda));
+extern float thruster_pack_lock_green_active_height_offset __asm__("D_L18_0016199C") __attribute__((sda));
+extern float thruster_pack_lock_green_rest_height_offset __asm__("D_L18_001619A0") __attribute__((sda));
 void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
 void thruster_pack_lock_green_update(char *moby) {
     enum {
@@ -1231,7 +1231,7 @@ void thruster_pack_lock_green_update(char *moby) {
         ((unsigned char *)moby)[0x20] = 1;
         {
             float base_height = *(float *)(moby + 0x18);
-            float u = D_L18_001619A0;
+            float u = thruster_pack_lock_green_rest_height_offset;
             moby_vars->f10 = base_height;
             moby_vars->f34 = u;
         }
@@ -1273,12 +1273,12 @@ void thruster_pack_lock_green_update(char *moby) {
                                (*(float *)&D_L18_00161A6C) * 4.0f);
             } else {
                 float k = D_0015EE70;
-                advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, D_L18_0016199C, k * 16.0f, k * 4.0f,
+                advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_active_height_offset, k * 16.0f, k * 4.0f,
                                (*(float *)&D_L18_00161A6C) * 8.0f);
             }
-        } else if (moby_vars->f34 != D_L18_001619A0) {
+        } else if (moby_vars->f34 != thruster_pack_lock_green_rest_height_offset) {
             float k = D_0015EE70;
-            advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, D_L18_001619A0, k * 16.0f, k * 4.0f,
+            advance_accelerated_scalar(&moby_vars->f34, &moby_vars->f28, thruster_pack_lock_green_rest_height_offset, k * 16.0f, k * 4.0f,
                            (*(float *)&D_L18_00161A6C) * 8.0f);
         } else {
             advance_accelerated_scalar(&moby_vars->f20, &moby_vars->f28, moby_vars->f24, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f,
