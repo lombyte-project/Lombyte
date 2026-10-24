@@ -974,7 +974,7 @@ extern float rand_between_d57f8(float, float) __asm__("FUN_002132a8");
 extern void clear_vec_d57f8(void *) __asm__("FUN_001f99f8");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
 extern float D_0015ED6C;
-extern int D_L02_00160178;
+extern int sand_shark_particle_emission_throttle_input __asm__("D_L02_00160178");
 extern float sand_shark_vertical_motion_z_range_start_gp __asm__("D_L02_00161920") __attribute__((sda));
 extern float sand_shark_vertical_motion_z_range_end_gp __asm__("D_L02_00161924") __attribute__((sda));
 extern float sand_shark_radial_motion_z_range_start_gp __asm__("D_L02_00161928") __attribute__((sda));
@@ -1005,9 +1005,9 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
     int frame_count, second_frame_count, third_frame_count;
     source_position = saved_source_position;
     *(OvlQuad *)source_position = *(OvlQuad *)particle_origin;
-    if (D_L02_00160178 > 0x5DC) {
+    if (sand_shark_particle_emission_throttle_input > 0x5DC) {
         particle_count = particle_count / 4;
-    } else if (D_L02_00160178 > 0x400) {
+    } else if (sand_shark_particle_emission_throttle_input > 0x400) {
         particle_count = particle_count / 2;
     }
     for (i = 0; i < particle_count; i++) {
@@ -1063,7 +1063,7 @@ void emit_sand_shark_single_particle(Vec4 *from) {
     int frame_count, second_frame_count, third_frame_count;
 
     saved_source_position.q = from->q;
-    if (D_L02_00160178 >= 0x6A5)
+    if (sand_shark_particle_emission_throttle_input >= 0x6A5)
         return;
     radial_angle = rand_angle_d57f8();
     particle_position = &at;
