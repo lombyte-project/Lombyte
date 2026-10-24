@@ -941,7 +941,7 @@ void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
 extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
-extern int D_L18_001622FC __attribute__((sda));
+extern int lift_alternate_height_requested __asm__("D_L18_001622FC") __attribute__((sda));
 extern int next_lift_instance_index __asm__("D_L18_001622F8") __attribute__((sda));
 extern float lift_texture_u_scroll_rate __asm__("D_L18_0016230C") __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
@@ -964,8 +964,8 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     int initial_height_selector;
     switch (lift_moby->state) {
     case LIFT_INITIALIZE:
-        if (D_L18_001622FC != 0) {
-            D_00141400 = *(unsigned char *)&D_L18_001622FC;
+        if (lift_alternate_height_requested != 0) {
+            D_00141400 = *(unsigned char *)&lift_alternate_height_requested;
         }
         *(int *)(lift_vars + 0x1C) = next_lift_instance_index++;
         lift_moby->update_dist = 0xFF;
@@ -990,7 +990,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
         break;
     case LIFT_APPROACH_ALTERNATE_HEIGHT:
         if (lift_moby->command & 4) {
-            D_L18_001622FC = 0;
+            lift_alternate_height_requested = 0;
             lift_moby->state = 2;
             if (*(int *)(lift_vars + 8) == 0) {
                 D_0013D406 = 1;
@@ -1004,7 +1004,7 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     case LIFT_APPROACH_BASE_HEIGHT:
         if (lift_moby->command & 8) {
             lift_moby->state = 3;
-            D_L18_001622FC = 1;
+            lift_alternate_height_requested = 1;
         }
         lift_moby->command = 2;
         synchronize_lift_group_height(lift_moby);
