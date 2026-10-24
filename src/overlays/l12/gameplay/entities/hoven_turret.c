@@ -41,10 +41,10 @@ extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L12_001FB530[][4];
 extern float D_L12_001FB5B0[][4];
-extern int D_L12_00161DCC __attribute__((sda));
-extern int D_L12_00161DD0 __attribute__((sda));
-extern int D_L12_00161DD4 __attribute__((sda));
-extern int D_L12_00161DD8 __attribute__((sda));
+extern int oscillating_link_strip_blend_minuend_color_selector __asm__("D_L12_00161DCC") __attribute__((sda));
+extern int oscillating_link_strip_blend_subtrahend_color_selector __asm__("D_L12_00161DD0") __attribute__((sda));
+extern int oscillating_link_strip_blend_alpha_factor_selector __asm__("D_L12_00161DD4") __attribute__((sda));
+extern int oscillating_link_strip_blend_addend_color_selector __asm__("D_L12_00161DD8") __attribute__((sda));
 extern int oscillating_link_strip_fade_source_color __asm__("D_L12_00161DEC") __attribute__((sda));
 extern int oscillating_link_strip_fade_target_color __asm__("D_L12_00161DF0") __attribute__((sda));
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
@@ -98,7 +98,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         matrix[15] = 1.0f;
     }
     quad[1].g[1] = func_001F4868_303CA8(0xE);
-    quad[1].g[3] = (long)D_L12_00161DCC | ((long)D_L12_00161DD0 << 2) | ((long)D_L12_00161DD4 << 4) | ((long)D_L12_00161DD8 << 6) | (0x8000L << 24);
+    quad[1].g[3] = (long)oscillating_link_strip_blend_minuend_color_selector | ((long)oscillating_link_strip_blend_subtrahend_color_selector << 2) | ((long)oscillating_link_strip_blend_alpha_factor_selector << 4) | ((long)oscillating_link_strip_blend_addend_color_selector << 6) | (0x8000L << 24);
     quad[1].g[2] = 0xFF9000000260UL;
     quad[1].g[0] = 0;
     {
