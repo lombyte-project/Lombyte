@@ -234,8 +234,8 @@ extern float nanotech_ball_collection_gravity_scale_range_end __asm__("D_L00_001
 extern unsigned char D_L00_00161A68 __attribute__((sda));
 extern int D_L00_00161A6C __attribute__((sda));
 extern int D_L00_00161A70 __attribute__((sda));
-extern float D_L00_00161A74 __attribute__((sda));
-extern float D_L00_00161A78 __attribute__((sda));
+extern float nanotech_ball_collection_first_particle_scale_factor __asm__("D_L00_00161A74") __attribute__((sda));
+extern float nanotech_ball_collection_second_particle_scale_factor __asm__("D_L00_00161A78") __attribute__((sda));
 void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
 
 void spawn_nanotech_ball_collection_effect_pair(char *moby) {
@@ -249,9 +249,9 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
                                                 nanotech_ball_collection_gravity_scale_range_end * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
     spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
-                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A74);
+                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_first_particle_scale_factor);
     spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A70, D_L00_00161A68,
-                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A78);
+                              FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_second_particle_scale_factor);
 }
 typedef struct {
     f32 x, y, z, w;
