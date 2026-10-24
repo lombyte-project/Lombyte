@@ -1441,8 +1441,8 @@ extern void mode_freeze_init_254608(int, void *) __asm__("FUN_001fbab8");
 extern void set_animation_parameter_254608(int, int) __asm__("FUN_001ff570");
 extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
 
-extern int D_L05_0015F680 __attribute__((sda));
-extern int D_L05_0015F684 __attribute__((sda));
+extern int race_respawn_request_active __asm__("D_L05_0015F680") __attribute__((sda));
+extern int race_respawn_gate_state __asm__("D_L05_0015F684") __attribute__((sda));
 extern float D_L05_0015F67C __attribute__((sda));
 extern int D_L05_0015F6A8 __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -1534,13 +1534,13 @@ void update_hero_hoverboard_race_progress(void) {
     if (near != 0 || (fast_difference_between_rotations_254608(hero.motion.rot.f[2], wrong_way_reference_heading) > 1.5707964f && hero.trick_input == 0)) {
         hero.off_course_frames++;
         if (hero.off_course_frames > FUN_001f96f8_254608(0xB4)) {
-            if (D_L05_0015F680 == 0) {
-                D_L05_0015F680 = 1;
-                D_L05_0015F684 = 0;
+            if (race_respawn_request_active == 0) {
+                race_respawn_request_active = 1;
+                race_respawn_gate_state = 0;
                 D_L05_0015F67C = frame_scale * 0.08f;
             }
             hero.off_course_reset_pending = 1;
-            if (D_L05_0015F684 == 1) {
+            if (race_respawn_gate_state == 1) {
                 hero.off_course_reset_pending = 0;
                 func_L05_00254B38_254608(world_position_scratch, course_point_or_respawn_rotation);
                 hero.off_course_frames = 0;
