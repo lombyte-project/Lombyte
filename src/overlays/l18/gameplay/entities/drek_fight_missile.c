@@ -3061,33 +3061,33 @@ extern f32 D_L18_00162374 __attribute__((sda));
 void update_drek_boss_arena_circling_movement(struct Moby *moby) {
     BossCircleVars *boss_circle_vars = (BossCircleVars *)moby->pvars;
     Vec4 goal;
-    f32 ang;
+    f32 circling_goal_angle;
     f32 self_ang;
     f32 near, far, slow, fast;
     f32 speed;
     f32 hero_distance;
 
-    ang = atan2_f(hero.motion.pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
+    circling_goal_angle = atan2_f(hero.motion.pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
                   hero.motion.pos.f[1] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[1]);
     self_ang = atan2_f(boss_circle_vars->pos.f[0] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[0],
                        boss_circle_vars->pos.f[1] - ((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center.f[1]);
-    if (fast_subtract_rotations(self_ang, ang) < 0.0f)
-        ang = fast_add_rotations(ang, -2.3561945f);
+    if (fast_subtract_rotations(self_ang, circling_goal_angle) < 0.0f)
+        circling_goal_angle = fast_add_rotations(circling_goal_angle, -2.3561945f);
     else
-        ang = fast_add_rotations(ang, 2.3561945f);
-    ang = fast_subtract_rotations(ang, self_ang);
-    if (ang > 0.17453292f)
-        ang = 0.17453292f;
-    else if (ang < -0.17453292f)
-        ang = -0.17453292f;
-    ang = fast_add_rotations(ang, self_ang);
+        circling_goal_angle = fast_add_rotations(circling_goal_angle, 2.3561945f);
+    circling_goal_angle = fast_subtract_rotations(circling_goal_angle, self_ang);
+    if (circling_goal_angle > 0.17453292f)
+        circling_goal_angle = 0.17453292f;
+    else if (circling_goal_angle < -0.17453292f)
+        circling_goal_angle = -0.17453292f;
+    circling_goal_angle = fast_add_rotations(circling_goal_angle, self_ang);
     if (moby->state == 2) {
-        goal.f[0] = fast_cos(ang) * D_L18_00162370;
-        goal.f[1] = fast_sin(ang) * D_L18_00162370;
+        goal.f[0] = fast_cos(circling_goal_angle) * D_L18_00162370;
+        goal.f[1] = fast_sin(circling_goal_angle) * D_L18_00162370;
         goal.f[2] = 0.0f;
     } else {
-        goal.f[0] = fast_cos(ang) * D_L18_00162374;
-        goal.f[1] = fast_sin(ang) * D_L18_00162374;
+        goal.f[0] = fast_cos(circling_goal_angle) * D_L18_00162374;
+        goal.f[1] = fast_sin(circling_goal_angle) * D_L18_00162374;
         goal.f[2] = 0.0f;
     }
     add_vector_xyz(&goal, &goal, &((ArenaNode *)D_L18_001600EC)[boss_circle_vars->node].center);
