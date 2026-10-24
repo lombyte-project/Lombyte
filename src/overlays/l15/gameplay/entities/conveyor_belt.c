@@ -1840,7 +1840,7 @@ int D_L15_001621E4 = 128;
 int D_L15_001621E8 = 45;
 int D_L15_001621EC = 64;
 extern float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") __attribute__((sda));
-extern float D_L15_001621F4 __attribute__((sda));
+extern float scaled_ripple_phase_advance_divisor_gp __asm__("D_L15_001621F4") __attribute__((sda));
 extern float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") __attribute__((sda));
 extern float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") __attribute__((sda));
 extern float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") __attribute__((sda));
@@ -1864,7 +1864,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edbe0(8, 0);
     FUN_00233980_2edbe0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(D_L15_001621F4) * 0.017453292f * D_0015ED6C_2edbe0);
+    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edbe0);
     FUN_L00_00250320_2edbe0(moby, &r, &g, &b);
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 46; i++) {
