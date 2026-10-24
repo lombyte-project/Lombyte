@@ -1450,15 +1450,15 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     char *destination_moby = base + moby_vars[1] * 256;
     float weighted_first_point[4];
     float weighted_second_point[4];
-    float path_interpolation_factor, g;
+    float path_interpolation_factor, path_point_coordinate;
     int first_point_index;
     int second_point_index = 1;
     float one = 1.0f;
 
     path_interpolation_factor = convert_integer_to_float(path_data[0] - 1);
-    g = (one - source_moby_vars[0]) * path_interpolation_factor;
-    path_interpolation_factor = FUN_L00_00200260(g, one);
-    first_point_index = func_001FA898_r(g);
+    path_point_coordinate = (one - source_moby_vars[0]) * path_interpolation_factor;
+    path_interpolation_factor = FUN_L00_00200260(path_point_coordinate, one);
+    first_point_index = func_001FA898_r(path_point_coordinate);
     if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
     second_point_index += first_point_index;
