@@ -1193,29 +1193,29 @@ void update_hero_motion_by_state(void) {
         hero.target_speed = 0.0f;
         if (MV(hero.unkA54) != NULL && scale_game_frames(4) > hero.state_timer) {
             f32 d = vector_distance(&MV(hero.unkA54)->u10.v10, &hero.motion.pos) - 0.5f;
-            f32 off;
+            f32 attack_spacing_offset;
             f32 tol;
             f32 mx;
-            f32 diff;
+            f32 attack_spacing_error;
             if (d < 0.0f) {
                 d = 0.0f;
             }
             if (tb->kind == 0) {
-                off = 0.75f;
+                attack_spacing_offset = 0.75f;
                 tol = 0.8f;
                 mx = 4.0f;
             } else if (tb->kind == 1) {
-                off = 0.6f;
+                attack_spacing_offset = 0.6f;
                 tol = 1.7f;
                 mx = 4.0f;
             } else {
-                off = 1.3f;
+                attack_spacing_offset = 1.3f;
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
-            if (FUN_001f99c0(diff) < tol + 3.0f) {
-                f32 s = diff / 0.9f;
+            attack_spacing_error = d - attack_spacing_offset;
+            if (FUN_001f99c0(attack_spacing_error) < tol + 3.0f) {
+                f32 s = attack_spacing_error / 0.9f;
                 if (s > mx) {
                     s = mx;
                 }
