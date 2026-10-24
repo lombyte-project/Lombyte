@@ -824,14 +824,14 @@ SparkleArc D_L16_001D04A0[10] = {0};
 SparkleArc D_L17_001D0D20[10] = {0};
 SparkleArc D_L18_001D0A20[10] = {0};
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern float D_L00_001616D4;
+extern float walloper_effect_alpha_scale __asm__("D_L00_001616D4");
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC __attribute__((section(".data")));
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L00_001616CC;
-extern int D_L00_001616D0;
+extern int walloper_effect_fade_out_countdown __asm__("D_L00_001616D0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32();
 extern float D_L00_001616A4 __attribute__((sda));
@@ -897,51 +897,51 @@ void walloper_update(char *walloper_moby) {
     float arc_step[4] __attribute__((aligned(16)));
     float arc_point_camera_offset[4] __attribute__((aligned(16)));
     float arc_point_offsets[5][4] __attribute__((aligned(16)));
-    struct Hero *g = &hero;
+    struct Hero *walloper_hero_state = &hero;
     int i;
     int next_arc_index;
     int j;
-    int q;
+    int arc_init_index;
     int any;
 
-    if (*(unsigned char *)(((char *)g->moby) + 0x53) != 0x82) {
+    if (*(unsigned char *)(((char *)walloper_hero_state->moby) + 0x53) != 0x82) {
         D_L00_0017AEBC = 0.1f;
     }
     switch (*(unsigned char *)(walloper_moby + 0x20)) {
     case 0:
         walloper_moby[0x20] = 2;
-        for (q = 0; q < 10; q++) {
-            D_L00_001DBEC0[q] = 0;
-            D_L00_001DBEF0[q] = 2;
-            D_L00_001DBF08[q] = 1;
+        for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
+            D_L00_001DBEC0[arc_init_index] = 0;
+            D_L00_001DBEF0[arc_init_index] = 2;
+            D_L00_001DBF08[arc_init_index] = 1;
         }
         D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
-        D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
+        walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&D_L00_001616AC);
         break;
     case 2:
-        if (g->state.current == 0x20) {
+        if (walloper_hero_state->state.current == 0x20) {
             float f = compute_interpolated_record_value(walloper_moby);
             if (6.0f <= f) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
                     float a = convert_integer_to_float(D_L00_001616CC);
                     a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616A8));
-                    D_L00_001616D4 = 1.0f - a;
+                    walloper_effect_alpha_scale = 1.0f - a;
                 } else if (12.0f <= f) {
                     if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
-                        float a = convert_integer_to_float(D_L00_001616D0);
+                        float a = convert_integer_to_float(walloper_effect_fade_out_countdown);
                         a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616AC));
-                        D_L00_001616D4 = a;
+                        walloper_effect_alpha_scale = a;
                     } else {
-                        D_L00_001616D4 = 0.0f;
+                        walloper_effect_alpha_scale = 0.0f;
                     }
                 } else {
-                    D_L00_001616D4 = 1.0f;
+                    walloper_effect_alpha_scale = 1.0f;
                 }
             }
         } else {
             D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
-            D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
+            walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&D_L00_001616AC);
             blend_moby_animation(walloper_moby, 1, 0, scale_game_frames(12));
         }
     }
