@@ -177,7 +177,7 @@ extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
 extern void compute_hero_hoverboard_respawn_transform(void *, void *) __asm__("FUN_L05_00254358");
 extern void FUN_L00_00216f90(void *, void *, s32, s32);
-extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
+extern void compute_hero_reference_tilt_rotation(void *, void *, f32, f32, f32, s32) __asm__("FUN_L00_00216130");
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 extern Vec4 D_L16_00179BE0[];
@@ -1096,12 +1096,12 @@ void update_hero_motion_for_current_state(void) {
                 qcopy(&hero.unk780, &hero.unk270);
                 fast_vec_normalize(&hero.unk780, &hero.unk780, 1.0f);
             }
-            FUN_L00_00216130(&hero.unk780, &vector_scratch, frame_time_sq * 52.35988f, frame_time_sq * 0.0034906585f,
+            compute_hero_reference_tilt_rotation(&hero.unk780, &vector_scratch, frame_time_sq * 52.35988f, frame_time_sq * 0.0034906585f,
                              0.0f, 0);
         } else if (hero.unk88D == 0) {
             clear_u64_value(&hero.unk780);
             hero.unk780.f[2] = 1.0f;
-            FUN_L00_00216130(&hero.unk780, &vector_scratch, frame_time_sq * 43.633232f, frame_scale_sq * 0.2f, 0.0f, 0);
+            compute_hero_reference_tilt_rotation(&hero.unk780, &vector_scratch, frame_time_sq * 43.633232f, frame_scale_sq * 0.2f, 0.0f, 0);
         }
         if (hero.wall_hit != 0) {
             approach_value(&hero.unk85C, 0.0f, frame_time_sq * 5.0f);
