@@ -3327,14 +3327,14 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, float, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
 
-extern float D_L06_00161E84 __attribute__((sda));
-extern float D_L06_00161E88 __attribute__((sda));
+extern float energy_sphere_destruction_speed_range_start __asm__("D_L06_00161E84") __attribute__((sda));
+extern float energy_sphere_destruction_speed_range_end __asm__("D_L06_00161E88") __attribute__((sda));
 extern int D_L06_00161E98 __attribute__((sda));
 extern int D_L06_00161E9C __attribute__((sda));
 extern int D_L06_00161EA0 __attribute__((sda));
 extern int D_L06_00161EA4 __attribute__((sda));
-extern float D_L06_00161EA8 __attribute__((sda));
-extern float D_L06_00161EAC __attribute__((sda));
+extern float energy_sphere_destruction_scale_range_start __asm__("D_L06_00161EA8") __attribute__((sda));
+extern float energy_sphere_destruction_scale_range_end __asm__("D_L06_00161EAC") __attribute__((sda));
 extern unsigned char D_L06_00161E94 __attribute__((sda));
 void spawn_energy_sphere_destruction_particles(char *moby) {
     float particle_velocity[4];
@@ -3344,9 +3344,9 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
         int particle_color;
         int particle_lifetime;
         int random_particle_byte;
-        random_vector(particle_velocity, D_L06_00161E84 * frame_time,
-                         D_L06_00161E88 * frame_time);
-        particle_scale = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
+        random_vector(particle_velocity, energy_sphere_destruction_speed_range_start * frame_time,
+                         energy_sphere_destruction_speed_range_end * frame_time);
+        particle_scale = random_float_between_alt(energy_sphere_destruction_scale_range_start, energy_sphere_destruction_scale_range_end);
         if (random_integer_below(2) != 0) {
             particle_color = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
                              random_float_between_alt(0.0f, 1.0f));
