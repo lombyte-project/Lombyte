@@ -1707,10 +1707,10 @@ extern int D_L14_0016150C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161510 __attribute__((sda)); /* no foreign declaration */
 extern float machinegun_turret_aiming_phase_increment_gp __asm__("D_L14_00161514") __attribute__((sda)); /* no foreign declaration */
 extern float machinegun_turret_bolt_launch_vector_magnitude_gp __asm__("D_L14_0016151C") __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161520 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161524 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161528 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_0016152C __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_center_bolt_spawn_base_offset_magnitude_gp __asm__("D_L14_00161520") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp __asm__("D_L14_00161524") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_bolt_spawn_launch_axis_offset_magnitude_gp __asm__("D_L14_00161528") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp __asm__("D_L14_0016152C") __attribute__((sda)); /* no foreign declaration */
 extern int machinegun_turret_firing_cadence_divisor_gp __asm__("D_L14_00161530") __attribute__((sda)); /* no foreign declaration */
 extern int machinegun_turret_target_wait_timeout_frames_gp __asm__("D_L14_00161534") __attribute__((sda)); /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
@@ -1892,20 +1892,20 @@ void machinegun_turret_update(char *moby) {
             sel = func_002140B0_2B4E40(3);
             switch (sel) {
             case TURRET_SPAWN_CENTER:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_center_bolt_spawn_base_offset_magnitude_gp);
                 break;
             case TURRET_SPAWN_UNNEGATED_OFFSET:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             default:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -D_L14_0016152C);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
-            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_00161528);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, machinegun_turret_bolt_spawn_launch_axis_offset_magnitude_gp);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_vector_scratch);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
             func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, machinegun_turret_bolt_launch_vector_magnitude_gp * frame_time);
