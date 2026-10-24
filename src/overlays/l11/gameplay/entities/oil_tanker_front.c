@@ -536,7 +536,7 @@ struct L11ChainVars {
     s32 sound;               /* 0xF4 */
 };
 
-extern float D_L11_00162320 __attribute__((sda));
+extern float oil_tanker_path_progress_step __asm__("D_L11_00162320") __attribute__((sda));
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
@@ -614,7 +614,7 @@ void oil_tanker_front_update(struct Moby *moby) {
     case OIL_TANKER_FOLLOW_PATH_WITH_DAMAGE: {
         int i;
 
-        chain_vars->t += D_L11_00162320;
+        chain_vars->t += oil_tanker_path_progress_step;
         if (chain_vars->t > 1.0f) {
             chain_vars->t -= 1.0f;
             chain_vars->point = (chain_vars->point + 1) % *(s32 *)chain_vars->path;
