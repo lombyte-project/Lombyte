@@ -1306,8 +1306,8 @@ typedef struct {
 extern UPath *D_L15_001B0AB0[];
 extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
-extern float D_L15_00161A08 __attribute__((sda));
-extern float D_L15_00161A0C __attribute__((sda));
+extern float helicopter_bob_period __asm__("D_L15_00161A08") __attribute__((sda));
+extern float helicopter_bob_amplitude __asm__("D_L15_00161A0C") __attribute__((sda));
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_L12_00308708");
@@ -1675,12 +1675,12 @@ void helicopter_update(struct Moby *moby) {
         }
     }
     {
-        float z = moby->pos.z - D_L15_00161A0C * fast_cos(vars->bob_angle);
-        float period = D_L15_00161A08 * 60.0f;
+        float z = moby->pos.z - helicopter_bob_amplitude * fast_cos(vars->bob_angle);
+        float period = helicopter_bob_period * 60.0f;
         moby->pos.z = z;
         vars->bob_angle = fast_add_rotations(vars->bob_angle, 6.2831855f / scale_time(period));
     }
-    moby->pos.z += D_L15_00161A0C * fast_cos(vars->bob_angle);
+    moby->pos.z += helicopter_bob_amplitude * fast_cos(vars->bob_angle);
     if (vars->pilot != 0) {
         *(u128 *)&vars->pilot->pos = *(u128 *)&moby->pos;
         *(u128 *)&vars->pilot->rot = *(u128 *)&moby->rot;
