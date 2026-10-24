@@ -1073,7 +1073,7 @@ s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) __asm__("FUN_L11_00318d10");
 
-char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) {
+char *spawn_class_511_moby_with_sparks(char *source_moby, void *spawn_position, int ticks) {
     char *mob = func_0020D348_m(0x511);
     if (mob != 0) {
         char *moby_vars;
@@ -1086,7 +1086,7 @@ char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) 
         moby_vars = *(char **)(mob + 0x78);
         *(long *)(mob + 0x38) = *(long *)(source_moby + 0x38);
         mob[0x20] = 1;
-        qcopy(mob + 0x10, pos);
+        qcopy(mob + 0x10, spawn_position);
         qcopy(mob + 0x40, source_moby + 0x40);
         clear_u64_value(moby_vars);
         *(char **)(moby_vars + 0x24) = source_moby;
