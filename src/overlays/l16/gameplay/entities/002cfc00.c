@@ -26,7 +26,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Hero *hero_state = &hero;
     float displacement_vector[4];
-    char *l1;
+    char *enumerated_moby;
     char *group_candidate_moby;
     char *other;
     char *od;
@@ -43,18 +43,18 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
-        while (l1) {
-            if (*(short *)(l1 + 0xA6) == 0x473) {
+        get_first_moby_in_group((int *)&enumerated_moby, *(int *)(od + 0x44), 0, 0);
+        while (enumerated_moby) {
+            if (*(short *)(enumerated_moby + 0xA6) == 0x473) {
                 float adjusted_position[4];
                 float m[16];
-                char *candidate_moby = l1;
+                char *candidate_moby = enumerated_moby;
                 qcopy(adjusted_position, data + 0x260);
                 adjusted_position[2] += 0.8f;
                 subtract_vector_xyz(displacement_vector, candidate_moby + 0x10, adjusted_position);
                 if (!(8.0f < vector_length_xyz(displacement_vector))) {
                     set_identity_matrix(m);
-                    transpose_rotation_matrix(m, l1 + 0xC0);
+                    transpose_rotation_matrix(m, enumerated_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);
                     if (absolute_float(displacement_vector[0]) < 0.5f && absolute_float(displacement_vector[1]) < 2.5f &&
                         absolute_float(displacement_vector[2]) < 2.5f) {
@@ -63,7 +63,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&l1, (int)l1, 0, 0);
+            get_next_moby_in_group((int *)&enumerated_moby, (int)enumerated_moby, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
