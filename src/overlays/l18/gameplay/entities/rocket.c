@@ -3055,7 +3055,7 @@ extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribut
 extern float D_L18_00162040 __attribute__((sda));
 extern float D_L18_00162044 __attribute__((sda));
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
-extern float D_L18_00162084 __attribute__((sda));
+extern float electric_bolt_particle_direction_scale_gp __asm__("D_L18_00162084") __attribute__((sda));
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));
 extern short D_L18_001620C0[] __attribute__((section(".sdata")));
@@ -3226,7 +3226,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
     }
     scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
     rotation_angle_or_particle_scale = random_float_between_c(-0.52359879f, 1.04719758f);
-    scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], *(float *)&D_L18_00162084 * frame_scale_macro);
+    scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], *(float *)&electric_bolt_particle_direction_scale_gp * frame_scale_macro);
     build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], rotation_angle_or_particle_scale);
     build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
     r = random_int_between(1, 8);
