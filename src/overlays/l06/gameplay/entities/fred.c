@@ -7739,7 +7739,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
     if (red_button_particle_emission_count > 0) {
         do {
             float frame_scaled_random_factor;
-            float f;
+            float scaled_effect_factor;
             int *pa;
             int *pb;
             int random_frame_count;
@@ -7751,9 +7751,9 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             frame_scaled_random_factor = frame_scaled_random_factor * frame_time;
             pa = first_color_palette.v + random_integer_below(6);
             pb = second_color_palette.v + random_integer_below(6);
-            f = D_L06_001621B4 * 400000.0f;
+            scaled_effect_factor = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
+            FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, scaled_effect_factor, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
         } while (i < red_button_particle_emission_count);
     }
 }
