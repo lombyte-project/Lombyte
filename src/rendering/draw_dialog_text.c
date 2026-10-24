@@ -60,8 +60,8 @@ void draw_dialog_text(void) __asm__("FUN_001fbc50");
 
 extern s32 freeze_ans2 __asm__("D_0015F4E8") __attribute__((sda));
 extern s32 freeze_ans1 __asm__("D_0015F4EC") __attribute__((sda));
-extern s32 D_0015F4F0 __attribute__((sda));
-extern s32 D_0015F4F4 __attribute__((sda));
+extern s32 freeze_fading_dialog_text_base_color __asm__("D_0015F4F0") __attribute__((sda));
+extern s32 freeze_fading_dialog_text_blend_target_color __asm__("D_0015F4F4") __attribute__((sda));
 extern s32 D_0015F4F8 __attribute__((sda));
 extern s32 D_0015F4FC __attribute__((sda));
 extern s32 D_0015F500 __attribute__((sda));
@@ -72,8 +72,8 @@ extern s32 D_0015F510 __attribute__((sda));
 extern s32 D_0015F514 __attribute__((sda));
 extern s32 D_0015F518 __attribute__((sda));
 extern s32 freeze_stats_text __asm__("D_0015F51C") __attribute__((sda));
-extern s32 D_0015F524 __attribute__((sda));
-extern s32 D_0015F528 __attribute__((sda));
+extern s32 freeze_outline_pulse_base_color __asm__("D_0015F524") __attribute__((sda));
+extern s32 freeze_outline_pulse_blend_target_color __asm__("D_0015F528") __attribute__((sda));
 extern s32 freeze_shared_dialog_text_base_color __asm__("D_0015F52C") __attribute__((sda));
 extern s32 freeze_shared_dialog_text_blend_target_color __asm__("D_0015F530") __attribute__((sda));
 extern s32 freeze_matched_record_text_base_color __asm__("D_0015F534") __attribute__((sda));
@@ -137,7 +137,7 @@ void draw_dialog_text(void) {
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box = D_001E78F0;
-        color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
+        color = fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
         text_cursor = SCRATCHPAD;
         while (*text_cursor >= 2) {
@@ -288,7 +288,7 @@ void draw_dialog_text(void) {
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
-        font_print_window_regular(&box, fast_tween_color(D_0015F4F0, D_0015F4F4, alpha), text, -1);
+        font_print_window_regular(&box, fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha), text, -1);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
         if (left != 0) {
@@ -311,7 +311,7 @@ void draw_dialog_text(void) {
         box = D_001E7908;
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        text_color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
+        text_color = fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (freeze.choice) {
         case FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE:
@@ -355,7 +355,7 @@ void draw_dialog_text(void) {
         f32 scale;
         f32 color_blend_fraction;
 
-        pulse = fast_tween_color(D_0015F524, D_0015F528,
+        pulse = fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                              fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
@@ -441,7 +441,7 @@ void draw_dialog_text(void) {
     }
     case FREEZE_TITLE_DIALOG:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
-                     fast_tween_color(D_0015F524, D_0015F528,
+                     fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                                   fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
@@ -452,7 +452,7 @@ void draw_dialog_text(void) {
         MessageBox *mb = &freeze;
         s32 pulse;
 
-        pulse = fast_tween_color(D_0015F524, D_0015F528,
+        pulse = fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                                   fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
