@@ -1455,12 +1455,12 @@ extern int D_L18_0016262C __attribute__((sda));
 extern int D_L18_00162630 __attribute__((sda));
 extern int D_L18_00162634 __attribute__((sda));
 extern int D_L18_00162638 __attribute__((sda));
-extern int D_L18_0016263C __attribute__((sda));
-extern int D_L18_00162640 __attribute__((sda));
-extern int D_L18_00162644 __attribute__((sda));
-extern float D_L18_00162648 __attribute__((sda));
-extern float D_L18_0016264C __attribute__((sda));
-extern float D_L18_00162650 __attribute__((sda));
+extern int gadgebot_launch_glow_tint_start __asm__("D_L18_0016263C") __attribute__((sda));
+extern int gadgebot_launch_glow_tint_end __asm__("D_L18_00162640") __attribute__((sda));
+extern int gadgebot_launch_glow_texture_index __asm__("D_L18_00162644") __attribute__((sda));
+extern float gadgebot_launch_glow_z_offset __asm__("D_L18_00162648") __attribute__((sda));
+extern float gadgebot_launch_glow_vertical_scale_adjustment __asm__("D_L18_0016264C") __attribute__((sda));
+extern float gadgebot_launch_glow_horizontal_scale_adjustment __asm__("D_L18_00162650") __attribute__((sda));
 extern float D_L18_001EFCD0[4][2];
 void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -1471,10 +1471,10 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     int c;
     int i;
     float *quad_vertex;
-    vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C;
-    horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
+    vertical_axis_scale = *(float *)(d + 0x1F4) + 1.0f + gadgebot_launch_glow_vertical_scale_adjustment;
+    horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + gadgebot_launch_glow_horizontal_scale_adjustment;
     qcopy(quad_transform[3], &m->pos);
-    quad_transform[3][2] -= D_L18_00162648;
+    quad_transform[3][2] -= gadgebot_launch_glow_z_offset;
     clear_g(quad_transform[2]);
     quad_transform[2][2] = vertical_axis_scale;
     sub_g(quad_transform[0], D_L18_001677C0_g, &m->pos);
@@ -1482,12 +1482,12 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     cross_g(quad_transform[0], quad_transform[1], quad_transform[2]);
     norm_g(quad_transform[0], quad_transform[0], horizontal_axis_scale);
     norm_g(quad_transform[1], quad_transform[1], horizontal_axis_scale);
-    pk.b = tex_g(D_L18_00162644);
+    pk.b = tex_g(gadgebot_launch_glow_texture_index);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
     pk.d = (unsigned long)D_L18_0016262C | ((unsigned long)D_L18_00162630 << 2) | ((unsigned long)D_L18_00162634 << 4) |
            ((unsigned long)D_L18_00162638 << 6) | 0x8000000000ULL;
-    c = fast_tween_color(D_L18_0016263C, D_L18_00162640, *(float *)(d + 0x1F4));
+    c = fast_tween_color(gadgebot_launch_glow_tint_start, gadgebot_launch_glow_tint_end, *(float *)(d + 0x1F4));
     for (i = 0; i < 4; i++) {
         pk.uv[i][0] = D_L18_001EFCD0[i][0];
         pk.uv[i][1] = D_L18_001EFCD0[i][1];
