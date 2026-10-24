@@ -1450,7 +1450,9 @@ extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, i
                                               float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_2ebce8_ea8b0(float) __asm__("FUN_001fa6d0");
 extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
-void FUN_L02_002ea8b0(char *moby) {
+void update_collectible_sprite_effect(char *moby) __asm__("FUN_L02_002ea8b0");
+
+void update_collectible_sprite_effect(char *moby) {
     L02SpriteData_ea8b0 *sprite_data = *(L02SpriteData_ea8b0 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
