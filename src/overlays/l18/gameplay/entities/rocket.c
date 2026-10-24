@@ -1526,10 +1526,10 @@ int poll_moby_state_and_rearm(struct Moby *moby) {
     return 0;
 }
 extern float D_L18_0015F638 __attribute__((sda));
-extern float D_L18_00161A40 __attribute__((sda));
-extern float D_L18_00161A44 __attribute__((sda));
-extern float D_L18_00161A50 __attribute__((sda));
-extern float D_L18_00161A58 __attribute__((sda));
+extern float floating_platform_sink_acceleration_config_84_nonzero_gp __asm__("D_L18_00161A40") __attribute__((sda));
+extern float floating_platform_sink_acceleration_config_84_zero_gp __asm__("D_L18_00161A44") __attribute__((sda));
+extern float floating_platform_tilt_rate_degrees_config_84_nonzero_gp __asm__("D_L18_00161A50") __attribute__((sda));
+extern float floating_platform_tilt_rate_degrees_config_84_zero_gp __asm__("D_L18_00161A58") __attribute__((sda));
 extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C") __attribute__((sda));
 extern float floating_platform_motion_scale_input_start_gp __asm__("D_L18_00161A60") __attribute__((sda));
 extern float floating_platform_motion_scale_input_end_gp __asm__("D_L18_00161A64") __attribute__((sda));
@@ -1594,9 +1594,9 @@ void floating_platform_update(struct Moby *moby) {
         }
         tilt_rate_scale = 1.0f - tilt_rate_scale * 0.333f;
         if (*(int *)(data + 0x84) != 0) {
-            rate = D_L18_00161A50 * tilt_rate_scale;
+            rate = floating_platform_tilt_rate_degrees_config_84_nonzero_gp * tilt_rate_scale;
         } else {
-            rate = D_L18_00161A58 * tilt_rate_scale;
+            rate = floating_platform_tilt_rate_degrees_config_84_zero_gp * tilt_rate_scale;
         }
         *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
         moby->state = 4;
@@ -1634,9 +1634,9 @@ void floating_platform_update(struct Moby *moby) {
         if (*(int *)(data + 0x80) != 0 || (*(int *)(data + 0x88) != 0 && *(int *)(data + 0x84) == 0)) {
             *(float *)(data + 0x70) -= frame_time_sq * 15.0f;
         } else if (*(int *)(data + 0x84) != 0) {
-            *(float *)(data + 0x70) -= D_L18_00161A40 * sink * frame_time_sq;
+            *(float *)(data + 0x70) -= floating_platform_sink_acceleration_config_84_nonzero_gp * sink * frame_time_sq;
         } else {
-            *(float *)(data + 0x70) -= D_L18_00161A44 * sink * frame_time_sq;
+            *(float *)(data + 0x70) -= floating_platform_sink_acceleration_config_84_zero_gp * sink * frame_time_sq;
         }
         *(float *)(data + 0x64) += *(float *)(data + 0x70);
         if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
