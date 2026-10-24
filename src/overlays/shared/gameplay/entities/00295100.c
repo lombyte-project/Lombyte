@@ -1219,8 +1219,8 @@ extern u8 D_0013D4C0[];
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
    every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
-void FUN_L00_0029a400(s32 skip_unflagged);
-void FUN_L00_0029a400(s32 skip_unflagged) {
+void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
+void build_vendor_menu_rows(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
 
     count = 0;
@@ -1355,7 +1355,7 @@ extern void update_moby_29a6b0(void *) __asm__("FUN_L00_00250df8");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void FUN_0012dc80_29a6b0(void) __asm__("FUN_0012dc80");
-extern void FUN_L00_0029a400(s32);
+extern void build_vendor_menu_rows(s32) __asm__("FUN_L00_0029a400");
 extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern s32 add_text_29a6b0(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
@@ -1426,7 +1426,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     snd_pause_all_sounds_in_group(0x1D);
     FUN_00216050_29a6b0(0);
     FUN_0012dc80_29a6b0();
-    FUN_L00_0029a400(vendor_29a6b0.mode != 0);
+    build_vendor_menu_rows(vendor_29a6b0.mode != 0);
     half = vendor_29a6b0.count;
     sel = half / 2;
     if (half < 3) sel = 1;
