@@ -477,7 +477,7 @@ extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d5
 extern s32 select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
 extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
-extern f32 D_L00_00161BD0 __attribute__((sda));
+extern f32 veldin_robot_default_target_range __asm__("D_L00_00161BD0") __attribute__((sda));
 extern f32 D_L00_00161BD4 __attribute__((sda));
 extern f32 D_L00_00161BD8 __attribute__((sda));
 extern f32 D_L00_00161BDC __attribute__((sda));
@@ -554,7 +554,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         path = D_L00_001B04B0[vars->unk1B4];
         FUN_L00_0025ff38(moby, &vars->targetPos, 0, 0, path->pts, path->count, 64.0f);
     } else if (moby->state != 5) {
-        range = D_L00_00161BD0;
+        range = veldin_robot_default_target_range;
         if (vars->unk1DA != 0) {
             range = 37.0f;
         }
