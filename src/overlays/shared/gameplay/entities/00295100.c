@@ -44,7 +44,7 @@ void FUN_L00_00297e30(void) {
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 extern struct PadStateWords D_0013C940;
-extern int D_L00_00160FF0 __attribute__((sda));
+extern int controller_idle_frames __asm__("D_L00_00160FF0") __attribute__((sda));
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
@@ -55,14 +55,14 @@ void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 void update_game_frame_and_idle_counters(void) {
     if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
         D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
-        D_L00_00160FF0 = 0;
+        controller_idle_frames = 0;
     } else {
-        D_L00_00160FF0++;
+        controller_idle_frames++;
     }
     D_L00_0015F5CC++;
     D_0015EEA4++;
     if (D_L00_0015F598) {
-        if (D_L00_00160FF0 < (int)((float)scale_game_frames(15) * 60.0f)) {
+        if (controller_idle_frames < (int)((float)scale_game_frames(15) * 60.0f)) {
             D_0015EE28++;
         }
     }
