@@ -866,7 +866,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float D_L16_0015F5D0;
+extern float blarg_elite_commando_extra_glow_gate __asm__("D_L16_0015F5D0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
@@ -920,7 +920,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
                              delay);
         } while (remaining != 0);
     }
-    if (D_L16_0015F5D0 < 0.95f && distance > 9.0f) {
+    if (blarg_elite_commando_extra_glow_gate < 0.95f && distance > 9.0f) {
         spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
         spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
     }
