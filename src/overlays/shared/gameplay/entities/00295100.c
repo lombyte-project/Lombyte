@@ -1363,7 +1363,7 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_29a6b0(void) __asm__("FUN_L00_00235ea0");
-extern void FUN_L00_0023a7a8_29a6b0(void) __asm__("FUN_L00_0023a7a8");
+extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 extern s32 FUN_0022da68_29a6b0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
@@ -1439,7 +1439,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
         s32 item = vendor_29a6b0.entries[vendor_29a6b0.cursor].item;
 
         vendor_29a6b0.item_text = add_text_29a6b0(0x30, item + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions,
-                                                  FUN_L00_00235ea0_29a6b0, FUN_L00_0023a7a8_29a6b0,
+                                                  FUN_L00_00235ea0_29a6b0, draw_weapon_ammo_hud_panel,
                                                   &weapon_ammo_counts[item], (vendor_items_29a6b0 + item)->text);
     }
     D_L00_0015F5D8 = 1;
@@ -1998,7 +1998,7 @@ extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0(void);
-extern void FUN_L00_0023a7a8(void);
+extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
@@ -2057,7 +2057,7 @@ extern s32 FUN_001ff308_2ba78(int, int, void *, void *, void *, void *, int) __a
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_2ba78(void) __asm__("FUN_L00_00235ea0");
-extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
+extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
@@ -2242,7 +2242,7 @@ void update_vendor_purchase(void) {
                         s32 i = CUR_ITEM.fD0;
 
                         vendor_menu.f50 = FUN_001ff308_2ba78(0x30, 0xEA60 + i, initialize_numeric_hud_timer_and_base_dimensions,
-                                           FUN_L00_00235ea0_2ba78, FUN_L00_0023a7a8_2ba78,
+                                           FUN_L00_00235ea0_2ba78, draw_weapon_ammo_hud_panel,
                                            &weapon_ammo_counts[i], D_L00_001C40B0[i].hE);
                     } else {
                         last_row_index = vendor_menu.f210 - 1;
@@ -2465,7 +2465,7 @@ void update_vendor_menu(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2482,7 +2482,7 @@ void update_vendor_menu(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2505,7 +2505,7 @@ void update_vendor_menu(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2527,7 +2527,7 @@ void update_vendor_menu(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }

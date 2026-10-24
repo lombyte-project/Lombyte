@@ -29,7 +29,9 @@ extern short D_L00_0015F934 __attribute__((sda));
 extern short D_L00_0015F938 __attribute__((sda));
 extern short D_L00_0015F93C __attribute__((sda));
 extern short D_L00_0015F940 __attribute__((sda));
-int FUN_L00_0023a7a8(char *hud_element) {
+int draw_weapon_ammo_hud_panel(char *hud_element) __asm__("FUN_L00_0023a7a8");
+
+int draw_weapon_ammo_hud_panel(char *hud_element) {
     char formatted_count_text[16];
     char *fade_control_bytes = hud_element + 0x70;
     int x4;
