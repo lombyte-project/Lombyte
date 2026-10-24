@@ -30,7 +30,7 @@ typedef struct {
 } EnvironmentCameraState;
 
 extern s32 ship_substate[] __asm__("D_0013E050");
-extern s32 D_001604A4 __attribute__((sda));
+extern s32 environment_mapping_uv_refresh_state __asm__("D_001604A4") __attribute__((sda));
 #include "rnc/rendering/render_environment_mapped_object_globals.h"
 extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));
@@ -114,7 +114,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     if (game_mode == 6 && ship_substate[0] == 4) {
         mapping_enabled = 0;
     }
-    if (mapping_enabled != 0 || D_001604A4 == 1) {
+    if (mapping_enabled != 0 || environment_mapping_uv_refresh_state == 1) {
         environment_mapping_was_active_gp = 1;
         tick_countdown_32(&D_001604AC);
         transition_fraction =
@@ -131,7 +131,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             normalize_vector(reflection, reflection, 1.0f);
             reflection[2] += 1.0f;
             sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
-            if (D_001604A4 == 1 || D_001604AC == 0) {
+            if (environment_mapping_uv_refresh_state == 1 || D_001604AC == 0) {
                 D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
                 D_001DCB40[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
             } else {
@@ -143,8 +143,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
                     coordinate + (D_001DCE70[element_index][1] - coordinate) * transition_fraction;
             }
         }
-        if (D_001604A4 == 1) {
-            D_001604A4 = 2;
+        if (environment_mapping_uv_refresh_state == 1) {
+            environment_mapping_uv_refresh_state = 2;
         }
     } else {
         if (environment_mapping_was_active_gp == 1) {
