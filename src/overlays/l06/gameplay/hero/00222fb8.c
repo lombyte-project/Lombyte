@@ -24,8 +24,8 @@ void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 
 void apply_hero_ground_material_response(void) {
     struct Hero *hero_state = &hero;
-    struct Hero *g1;
-    struct Hero *g2;
+    struct Hero *vehicle_response_check_hero;
+    struct Hero *grounded_response_check_hero;
     struct Hero *sink_check_hero;
     int saved_ground_sound_class = hero_state->unk12ED;
     int previous_ground_type = hero_state->ground_type;
@@ -66,19 +66,19 @@ void apply_hero_ground_material_response(void) {
         struct Hero *gx = &hero;
         gx->on_slip_ground = 1;
     }
-    g1 = &hero;
-    if (g1->selector_1 != 0) {
-        if (g1->grounded_frames != 0 && g1->vehicle_mode == 1 &&
-            g1->state.current != 0x7D) {
+    vehicle_response_check_hero = &hero;
+    if (vehicle_response_check_hero->selector_1 != 0) {
+        if (vehicle_response_check_hero->grounded_frames != 0 && vehicle_response_check_hero->vehicle_mode == 1 &&
+            vehicle_response_check_hero->state.current != 0x7D) {
             hero_set_state(0x7D, 1);
             return;
         }
-        g2 = &hero;
-        if (g2->selector_1 != 0) {
-            if (g2->grounded_frames != 0) {
-                if (g2->state.current != 0x3C || g2->unk41E != 0) {
+        grounded_response_check_hero = &hero;
+        if (grounded_response_check_hero->selector_1 != 0) {
+            if (grounded_response_check_hero->grounded_frames != 0) {
+                if (grounded_response_check_hero->state.current != 0x3C || grounded_response_check_hero->unk41E != 0) {
                     exit_hero_vehicle_mode_if_mode_three();
-                    if (g2->health.hp != 0) {
+                    if (grounded_response_check_hero->health.hp != 0) {
                         hero_set_state(0x3C, 1);
                     } else {
                         hero_set_state(0x7C, 1);
