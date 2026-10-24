@@ -450,7 +450,7 @@ extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
-extern int D_L00_00161A00 __attribute__((sda));
+extern int nanotech_ball_particle_color_gp __asm__("D_L00_00161A00") __attribute__((sda));
 extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribute__((sda));
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
@@ -686,7 +686,7 @@ void nanotech_ball_update(Moby *moby) {
                     ext->b.z = part->pos.z - moby->pos.z;
                     if (moby->state == 2) ext->u.s.owner = moby;
                     else ext->u.s.owner = data->owner;
-                    part->f4 = D_L00_00161A00;
+                    part->f4 = nanotech_ball_particle_color_gp;
                     part->fC = D_L00_001619F8;
                 }
                 slot = data->slots[i];
@@ -697,7 +697,7 @@ void nanotech_ball_update(Moby *moby) {
                         ext->u.s.scale = D_L00_00161A14_gp;
                         ext->u.s.ang = 0.0f;
                         data->slots[i]->fC = D_L00_001619FC;
-                        data->slots[i]->f4 = D_L00_00161A00;
+                        data->slots[i]->f4 = nanotech_ball_particle_color_gp;
                     }
                 } else {
                     qcopy(&slot->pos, &rotated_slot_offset_or_particle_position);
@@ -794,7 +794,7 @@ void nanotech_ball_update(Moby *moby) {
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
-                        spark->f4 = D_L00_00161A00;
+                        spark->f4 = nanotech_ball_particle_color_gp;
                         spark->fC = D_L00_001619F8;
                     }
                     func_001F9BD8_2D9EA0(&cross_product_or_particle_midpoint, &part->pos, &cross_product_or_particle_midpoint);
@@ -804,7 +804,7 @@ void nanotech_ball_update(Moby *moby) {
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
-                        spark->f4 = D_L00_00161A00;
+                        spark->f4 = nanotech_ball_particle_color_gp;
                         spark->fC = D_L00_001619F8;
                     }
                 }
