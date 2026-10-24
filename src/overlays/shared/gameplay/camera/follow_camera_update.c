@@ -1388,7 +1388,7 @@ void initialize_target_tracking_camera(void *camera) {
     int lvl;
     char *follow_block = *(char **)(camera_object + 0x70) + 0x40;
     float f;
-    char *view_turn_spring_state, *camera_state, *r, *camera_target_state, *camera_data, *pose_source_camera;
+    char *view_turn_spring_state, *camera_state, *camera_reset_state, *camera_target_state, *camera_data, *pose_source_camera;
     char *gg, *gg0, *hero_data_base;
     *(int *)(follow_block + 0x40) = 0;
     f = 1.5f;
@@ -1409,13 +1409,13 @@ void initialize_target_tracking_camera(void *camera) {
         *(float *)(distance_tuning_cursor + 0x10) = 2.0f;
         *(float *)(distance_tuning_cursor + 0x14) = 0.05f;
     }
-    r = *(char **)(camera_object + 0x70);
-    *(int *)(r + 0x18) = 0;
-    *(float *)(r + 0x10) = 0.01f;
-    *(float *)(r + 0x14) = 0.3f;
-    *(short *)(r + 0x1E) = scale_game_frames_c(0x78);
-    *(short *)(r + 0x1C) = 0;
-    clear_u64_value_c(r);
+    camera_reset_state = *(char **)(camera_object + 0x70);
+    *(int *)(camera_reset_state + 0x18) = 0;
+    *(float *)(camera_reset_state + 0x10) = 0.01f;
+    *(float *)(camera_reset_state + 0x14) = 0.3f;
+    *(short *)(camera_reset_state + 0x1E) = scale_game_frames_c(0x78);
+    *(short *)(camera_reset_state + 0x1C) = 0;
+    clear_u64_value_c(camera_reset_state);
     camera_state = *(char **)(camera_object + 0x70);
     view_turn_spring_state = camera_state + 0x30;
     *(float *)(view_turn_spring_state + 4) = 0.02f;
