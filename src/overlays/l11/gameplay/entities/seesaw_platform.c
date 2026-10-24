@@ -283,7 +283,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
     Vec4f parent_axis1_offset;
     int i;
     int j;
-    int n;
+    int attached_child_index;
     int q;
 
     for (i = 0; i < 6; i++) {
@@ -330,17 +330,17 @@ void update_child_set_poses(struct Moby *parent_moby) {
         D_L11_00161F20[j]->rot.x = fast_add_rotations(D_L11_00161F20[j]->rot.x, r);
         FUN_L00_00250df8(D_L11_00161F20[j]);
     }
-    for (n = 0; n < 4; n++) {
+    for (attached_child_index = 0; attached_child_index < 4; attached_child_index++) {
         float rotation_y_progress;
-        normalize_vector_xyz(&child_placement_vector_scratch, &D_L11_00161F20[n]->rot_row2, attached_child_source_axis2_offset_length_gp);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[n]->rot_row1, attached_child_source_axis1_offset_length_gp);
+        normalize_vector_xyz(&child_placement_vector_scratch, &D_L11_00161F20[attached_child_index]->rot_row2, attached_child_source_axis2_offset_length_gp);
+        normalize_vector_xyz(&child_position_scratch, &D_L11_00161F20[attached_child_index]->rot_row1, attached_child_source_axis1_offset_length_gp);
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &child_position_scratch);
-        add_vector_xyz(&D_L11_00161F30[n]->pos, &D_L11_00161F20[n]->pos, &child_placement_vector_scratch);
-        qcopy(&D_L11_00161F30[n]->rot, &D_L11_00161F20[n]->rot);
-        rotation_y_progress = (n & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
-        D_L11_00161F30[n]->rot.y = fast_add_rotations(D_L11_00161F30[n]->rot.y,
+        add_vector_xyz(&D_L11_00161F30[attached_child_index]->pos, &D_L11_00161F20[attached_child_index]->pos, &child_placement_vector_scratch);
+        qcopy(&D_L11_00161F30[attached_child_index]->rot, &D_L11_00161F20[attached_child_index]->rot);
+        rotation_y_progress = (attached_child_index & 1) ? D_L11_00161ED0 : D_L11_00161ED4;
+        D_L11_00161F30[attached_child_index]->rot.y = fast_add_rotations(D_L11_00161F30[attached_child_index]->rot.y,
             -(attached_child_rotation_y_degrees_gp * 0.017453292f) * rotation_y_progress);
-        FUN_L00_00250df8(D_L11_00161F30[n]);
+        FUN_L00_00250df8(D_L11_00161F30[attached_child_index]);
     }
     for (q = 0; q < 4; q++) {
         float sgn;
