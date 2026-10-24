@@ -229,8 +229,8 @@ void FUN_00214890_002d8418(Vec4_002d8418 *, Vec4_002d8418 *, Vec4_002d8418 *,
 int FUN_00213260_002d8418(int) __asm__("FUN_00213260");
 void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int, int, int, int,
                                float) __asm__("FUN_L00_002730e0");
-extern float D_L00_00161A60 __attribute__((sda));
-extern float D_L00_00161A64 __attribute__((sda));
+extern float nanotech_ball_collection_gravity_scale_range_start __asm__("D_L00_00161A60") __attribute__((sda));
+extern float nanotech_ball_collection_gravity_scale_range_end __asm__("D_L00_00161A64") __attribute__((sda));
 extern unsigned char D_L00_00161A68 __attribute__((sda));
 extern int D_L00_00161A6C __attribute__((sda));
 extern int D_L00_00161A70 __attribute__((sda));
@@ -245,8 +245,8 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
     char *moby_position = moby + 0x10;
     fast_vec_sub(&to_camera, g_debug_camera, moby_position);
     fast_vec_scale(&scaled_gravity_vector, &hero.gravity_dir,
-                          FUN_002132a8_002d8418(D_L00_00161A60 * frame_time,
-                                                D_L00_00161A64 * frame_time));
+                          FUN_002132a8_002d8418(nanotech_ball_collection_gravity_scale_range_start * frame_time,
+                                                nanotech_ball_collection_gravity_scale_range_end * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
     spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A74);
