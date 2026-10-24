@@ -1423,7 +1423,7 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void spawn_point_table_sparks(struct Moby *) __asm__("FUN_L13_00309bc8");
 extern void draw_point_table_quads(struct Moby *) __asm__("FUN_L13_003098d0");
-extern float D_L13_00161E7C __attribute__((sda));
+extern float gemlik_trail_point_radial_speed __asm__("D_L13_00161E7C") __attribute__((sda));
 extern struct { char pad[0x28]; float height; } D_L13_00174140;
 typedef struct {
     float x, y, z, w;
@@ -1473,7 +1473,7 @@ void update_gemlik_trail(struct Moby *moby) {
     do {
         subtract_vector_xyz(&next, &data->point[15 - i], &data->anchor);
         next.z = 0.0f;
-        normalize_vector_xyz(&next, &next, D_L13_00161E7C * frame_time);
+        normalize_vector_xyz(&next, &next, gemlik_trail_point_radial_speed * frame_time);
         add_vector_xyz(&next, &data->point[15 - i], &next);
         subtract_vector_xyz(&work.vectors.delta, &next, &moby->pos);
         dot = dot_vector_xyz(&work.vectors.delta, &data->direction);
