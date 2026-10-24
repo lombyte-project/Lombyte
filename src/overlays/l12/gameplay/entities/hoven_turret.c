@@ -66,7 +66,9 @@ extern int func_001FA8A8_303CA8(int, int, float) __asm__("FUN_001fa6e0");
 extern void func_L00_001FD1D8_303CA8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
 
-void FUN_L12_003028c8(Moby *moby) {
+void draw_oscillating_target_link_strips(Moby *moby) __asm__("FUN_L12_003028c8");
+
+void draw_oscillating_target_link_strips(Moby *moby) {
     Quad_303CA8 quad[2];
     float rotation_matrix[16];
     float matrices[5][16];
