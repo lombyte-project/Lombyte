@@ -2609,7 +2609,7 @@ float FUN_001f9dc8_2d54c8(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_2d54c8(float) __asm__("FUN_001f9de0");
 void FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("FUN_L00_00258830");
 
-float move_horny_toad_toward_position(unsigned char *moby, float *target_position, float vel) {
+float move_horny_toad_toward_position(unsigned char *moby, float *target_position, float initial_travel_distance) {
     float vec[4] __attribute__((aligned(16)));
     unsigned char *moby_vars;
     float desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement, vertical_displacement;
@@ -2623,7 +2623,7 @@ float move_horny_toad_toward_position(unsigned char *moby, float *target_positio
         return target_distance;
     FUN_L00_0025be00_2d54c8(moby + 0x48, desired_yaw, moby_vars + 0x1F4, D_0015ED70_2d54c8 * 12.566371f,
                             D_0015ED70_2d54c8 * 12.566371f, D_0015ED6C_2d54c8 * 12.566371f);
-    advance_accelerated_scalar(&vel, target_distance, D_0015ED70_2d54c8 * 8.0f, D_0015ED70_2d54c8 * 12.0f,
+    advance_accelerated_scalar(&initial_travel_distance, target_distance, D_0015ED70_2d54c8 * 8.0f, D_0015ED70_2d54c8 * 12.0f,
                         D_0015ED6C_2d54c8 * 4.0f, (float *)(moby_vars + 0x1F8));
     if (*(float *)(moby_vars + 0x1F8) < 0.0f)
         *(float *)(moby_vars + 0x1F8) = 0.0f;
