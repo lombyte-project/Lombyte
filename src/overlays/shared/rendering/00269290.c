@@ -793,15 +793,15 @@ extern int D_L00_001601AC __attribute__((sda));
 extern int D_L00_001601B0 __attribute__((sda));
 extern int D_L00_001601B4 __attribute__((sda));
 extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
-extern int D_L00_001601C0 __attribute__((sda));
-extern int D_L00_001601C4 __attribute__((sda));
+extern int spinning_particle_default_lifetime_lower_bound __asm__("D_L00_001601C0") __attribute__((sda));
+extern int spinning_particle_default_lifetime_upper_bound __asm__("D_L00_001601C4") __attribute__((sda));
 extern int D_L00_001601C8 __attribute__((sda));
 extern int D_L00_001601CC __attribute__((sda));
 extern int D_L00_001601D0 __attribute__((sda));
 extern int D_L00_001601D4 __attribute__((sda));
 extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
-extern int D_L00_001601E0 __attribute__((sda));
-extern int D_L00_001601E4 __attribute__((sda));
+extern int spinning_particle_alternate_lifetime_lower_bound __asm__("D_L00_001601E0") __attribute__((sda));
+extern int spinning_particle_alternate_lifetime_upper_bound __asm__("D_L00_001601E4") __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
 unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) __asm__("FUN_L00_0026b230");
 
@@ -816,8 +816,8 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601D8_gp;
-            float hi = (float)D_L00_001601E4;
-            float lo = (float)D_L00_001601E0;
+            float hi = (float)spinning_particle_alternate_lifetime_upper_bound;
+            float lo = (float)spinning_particle_alternate_lifetime_lower_bound;
             *(int *)(particle + 4) = D_L00_001601C8;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
@@ -835,8 +835,8 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601B8_gp;
-            float hi = (float)D_L00_001601C4;
-            float lo = (float)D_L00_001601C0;
+            float hi = (float)spinning_particle_default_lifetime_upper_bound;
+            float lo = (float)spinning_particle_default_lifetime_lower_bound;
             *(int *)(particle + 4) = D_L00_001601A8;
             *(float *)(particle + 0xC) = scale * 210000.0f;
             *(short *)(particle + 0xA) = FUN_001fa6d0_26b230(FUN_001f96b0_26b230(
