@@ -2725,7 +2725,7 @@ extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *
 
 extern short D_L18_00162330 __attribute__((sda));
 extern int D_L18_00162388 __attribute__((sda));
-extern int D_L18_0016238C __attribute__((sda));
+extern int drek_boss_arena_phase_reset_requested_gp __asm__("D_L18_0016238C") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void update_drek_boss_damage_and_phase_transitions(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
@@ -2876,15 +2876,15 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
             }
         }
     }
-    if (crossed != 0 || *(int *)&D_L18_0016238C != 0) {
+    if (crossed != 0 || *(int *)&drek_boss_arena_phase_reset_requested_gp != 0) {
         if (*(int *)(D_001413F5 + 0x203) != 0) {
-            if (*(int *)&D_L18_0016238C != 0) {
+            if (*(int *)&drek_boss_arena_phase_reset_requested_gp != 0) {
                 int i;
                 *(int *)(boss_data + 0x34C) = 0;
                 for (i = 0; i < 4; i++) {
                     FUN_L18_002f1cc8_5e80(D_L18_0015FFD8_5e80 + (*(int *)(boss_data + 0x230 + i * 4) << 8));
                 }
-                *(int *)&D_L18_0016238C = 0;
+                *(int *)&drek_boss_arena_phase_reset_requested_gp = 0;
             }
             if (*(int *)(boss_data + 0x34C) < 2) {
                 int previous_phase_index;
