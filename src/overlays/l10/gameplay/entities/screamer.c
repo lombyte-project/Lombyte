@@ -1015,7 +1015,9 @@ extern char D_0013F3D0[];
 extern int D_001413D0[];
 extern Path_2E2B80 *D_L10_001B0C30_2E2B80[] __asm__("D_L10_001B0930");
 
-void FUN_L10_002e17c0(struct Moby *moby)
+void update_class_1199_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002e17c0");
+
+void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
 {
     MobyData_2E2B80 *data = ((struct MobyData_2E2B80 *)moby->pvars);
     float vector_scratch[4];
