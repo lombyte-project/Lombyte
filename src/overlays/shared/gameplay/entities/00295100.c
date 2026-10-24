@@ -1524,7 +1524,7 @@ extern void f20c828_29ab70(void *) __asm__("FUN_0020c828");
 extern void f12e418_29ab70(int) __asm__("FUN_0012e418");
 extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
-extern int D_L00_00161070 __attribute__((sda));
+extern int vendor_close_hero_local_offset __asm__("D_L00_00161070") __attribute__((sda));
 void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
 
 void close_vendor_menu(int exit_cutscene_completed) {
@@ -1544,7 +1544,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     hero.unk20A5 = 0;
     f2330d0_29ab70();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
-        f1f9cf8_29ab70(&world_position, &D_L00_00161070, *(char **)(vendor_state_base + 0x1C) + 0xC0);
+        f1f9cf8_29ab70(&world_position, &vendor_close_hero_local_offset, *(char **)(vendor_state_base + 0x1C) + 0xC0);
         f1f9a10_29ab70(&world_position, &world_position, *(char **)(vendor_state_base + 0x1C) + 0x10);
         euler_rotation.x = 0.0f;
         euler_rotation.y = 0.0f;
