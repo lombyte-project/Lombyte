@@ -156,7 +156,7 @@ void update_hero_state_transitions(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
-    int sp24;
+    int respawn_jump_press_age_frames;
     int path_seg;
     float path_t;
     int new_path;
@@ -170,7 +170,7 @@ void update_hero_state_transitions(void) {
     float ledge_negative_side_probe_yaw;
     float ledge_shimmy_probe_yaw;
     int jump_apex_steps;
-    int sp5C;
+    int airborne_jump_press_age_frames;
     int predicted_apex_steps;
     float alt_ledge_hang_probe_yaw;
     float alt_ledge_positive_side_probe_yaw;
@@ -1018,7 +1018,7 @@ void update_hero_state_transitions(void) {
                     if (hero.sink_jump_count < 2) {
                         if (scale_game_frames(0xF) + hero.sink_jump_count * scale_game_frames(0x19) <
                             hero.state_timer) {
-                            if (pad_pressed_within(0x40, scale_game_frames(7), &sp24)) {
+                            if (pad_pressed_within(0x40, scale_game_frames(7), &respawn_jump_press_age_frames)) {
                                 hero_set_state(0x69, 1);
                             }
                         }
@@ -2242,8 +2242,8 @@ void update_hero_state_transitions(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp5C)) {
-                                    if (sp5C < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &airborne_jump_press_age_frames)) {
+                                    if (airborne_jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
