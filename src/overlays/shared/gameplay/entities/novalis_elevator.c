@@ -501,7 +501,7 @@ extern int truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void spawn_type_14_particle(int, void *) __asm__("FUN_L01_00280970");
 extern void FUN_0020c828(void *);
 
-extern s32 D_L01_00161494 __attribute__((sda));
+extern s32 moby_motion_particle_random_sign_base __asm__("D_L01_00161494") __attribute__((sda));
 extern f32 moby_motion_collision_radius __asm__("D_L01_0016149C") __attribute__((sda));
 void update_moby_motion_collision_and_lifetime(char *moby) __asm__("FUN_L01_002c7530");
 
@@ -526,7 +526,7 @@ void update_moby_motion_collision_and_lifetime(char *moby) {
     fast_vec_add(moby + 0x10, moby + 0x10, data + 8);
     switch ((u8)moby[0x20]) {
     case COLLISION_CHECK_AND_COUNTDOWN:
-        spawn_type_14_particle(D_L01_00161494, moby);
+        spawn_type_14_particle(moby_motion_particle_random_sign_base, moby);
         fast_vec_normalize(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
         if (collect_mobies_in_sphere(moby_motion_collision_radius, moby + 0x10, 0x10, data[6], hit) &&
