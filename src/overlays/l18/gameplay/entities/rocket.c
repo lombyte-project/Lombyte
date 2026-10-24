@@ -2852,9 +2852,9 @@ extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __a
 extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
 extern float D_L18_00161FA8 __attribute__((sda));
 extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
-extern float D_L18_00161FC0 __attribute__((sda));
-extern float D_L18_00161FCC __attribute__((sda));
-extern float D_L18_00161FD8 __attribute__((sda));
+extern float explosion_burst_first_glow_scale_multiplier_gp __asm__("D_L18_00161FC0") __attribute__((sda));
+extern float explosion_burst_second_glow_scale_multiplier_gp __asm__("D_L18_00161FCC") __attribute__((sda));
+extern float explosion_burst_third_glow_scale_multiplier_gp __asm__("D_L18_00161FD8") __attribute__((sda));
 extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4") __attribute__((sda));
 extern int D_L18_001D9C70[];
 extern int D_L18_001D9C88[];
@@ -2927,20 +2927,20 @@ void spawn_explosion_burst(void *source_moby) {
             spawn_particle(offset, velocity, color1, color2, scale, a, b, speed, 0, 0);
         } while (j < explosion_burst_particle_count_gp);
     }
-    if (D_L18_00161FC0 > 0.0f) {
+    if (explosion_burst_first_glow_scale_multiplier_gp > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(explosion_burst_first_glow_duration_frames_gp);
-        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FC0, duration, D_L18_00161FC8, D_L18_00161FC9[0], D_L18_00161FC9[1], D_L18_00161FC9[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, explosion_burst_first_glow_scale_multiplier_gp, duration, D_L18_00161FC8, D_L18_00161FC9[0], D_L18_00161FC9[1], D_L18_00161FC9[2]);
     }
-    if (D_L18_00161FCC > 0.0f) {
+    if (explosion_burst_second_glow_scale_multiplier_gp > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(explosion_burst_second_glow_duration_frames_gp);
-        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FCC, duration, D_L18_00161FD4, D_L18_00161FD5[0], D_L18_00161FD5[1], D_L18_00161FD5[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, explosion_burst_second_glow_scale_multiplier_gp, duration, D_L18_00161FD4, D_L18_00161FD5[0], D_L18_00161FD5[1], D_L18_00161FD5[2]);
     }
-    if (D_L18_00161FD8 > 0.0f) {
+    if (explosion_burst_third_glow_scale_multiplier_gp > 0.0f) {
         void *pos = &moby->pos;
         int duration = scale_ticks(explosion_burst_third_glow_duration_frames_gp);
-        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FD8, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
+        spawn_glow_particle(source_moby, pos, &D_L18_0015F580, explosion_burst_third_glow_scale_multiplier_gp, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
     }
     if (explosion_burst_camera_shake_amplitude_gp > 0.0f) {
         camera = &D_L18_00167680;
