@@ -1366,16 +1366,16 @@ void snagglebeast_update(unsigned char *moby) {
             k = data[0x19D];
             k2 = k + 3;
             if (((ChaserPathPoints *)data)->linked_mobys[k2] != -1) {
-                char *o1 = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) + 0x78);
-                char *o2 = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) + 0x78);
-                if (*(int *)(o1 + 0x28) != -1 && *(int *)(o2 + 0x28) != -1) {
-                    float d1 = vector_distance(((char *)&hero) + 0x80, D_L07_001600EC + (*(int *)(o1 + 0x28) << 7) + 0x30);
+                char *linked_moby_vars = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) + 0x78);
+                char *paired_linked_moby_vars = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) + 0x78);
+                if (*(int *)(linked_moby_vars + 0x28) != -1 && *(int *)(paired_linked_moby_vars + 0x28) != -1) {
+                    float d1 = vector_distance(((char *)&hero) + 0x80, D_L07_001600EC + (*(int *)(linked_moby_vars + 0x28) << 7) + 0x30);
                     int sel;
-                    if (vector_distance(((char *)&hero) + 0x80, D_L07_001600EC + (*(int *)(o2 + 0x28) << 7) + 0x30) < d1) {
-                        sel = *(int *)(o2 + 0x28);
+                    if (vector_distance(((char *)&hero) + 0x80, D_L07_001600EC + (*(int *)(paired_linked_moby_vars + 0x28) << 7) + 0x30) < d1) {
+                        sel = *(int *)(paired_linked_moby_vars + 0x28);
                         k = k2;
                     } else {
-                        sel = *(int *)(o1 + 0x28);
+                        sel = *(int *)(linked_moby_vars + 0x28);
                     }
                     *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(D_L07_001600EC + sel * 0x80 + 0x30) - *(float *)(moby + 0x10),
                                                              *(float *)(D_L07_001600EC + sel * 0x80 + 0x34) - *(float *)(moby + 0x14));
