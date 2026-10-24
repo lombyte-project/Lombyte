@@ -2214,7 +2214,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
 extern f32 smoke_trail_puff_vertical_velocity_scale_gp __asm__("D_L04_001618B4") __attribute__((sda));
-extern f32 D_L04_001618BC __attribute__((sda));
+extern f32 smoke_trail_puff_position_jitter_scale_gp __asm__("D_L04_001618BC") __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
 void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) __asm__("FUN_L04_002c41e0");
@@ -2249,7 +2249,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *
         grey = grey | (grey << 16 | grey << 8);
         size = random_float_between(1.0f, 1.02f);
         spin = random_int_between(-2, 2);
-        puff = spawn_puff(&at, D_L04_001618BC, 1.0f, size, spin, &particle_spawn_velocity, grow + from_puff_scale * 210000.0f, tint << 24 | grey);
+        puff = spawn_puff(&at, smoke_trail_puff_position_jitter_scale_gp, 1.0f, size, spin, &particle_spawn_velocity, grow + from_puff_scale * 210000.0f, tint << 24 | grey);
         if (puff != NULL) {
             tail = &puff->tail;
             if (random_integer_below(2) != 0) {
