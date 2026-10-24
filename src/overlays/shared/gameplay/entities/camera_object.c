@@ -2407,7 +2407,9 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void mmul_2a9c50(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_L00_002a9c50(M_2a9c50 *moby) {
+void draw_mine_predicted_impact_marker(M_2a9c50 *moby) __asm__("FUN_L00_002a9c50");
+
+void draw_mine_predicted_impact_marker(M_2a9c50 *moby) {
     Q_2a9c50 quad;
     V_2a9c50 quad_transform[4];
     V_2a9c50 mz[4];
