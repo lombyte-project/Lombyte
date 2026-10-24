@@ -97,7 +97,7 @@ int D_L02_00161F54 = 0x10;
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
 char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) __asm__("FUN_L02_002ec228");
 
-char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) {
+char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *dir) {
     char *moby;
     char *data;
     moby = create_moby_c(0x4B8);
@@ -106,7 +106,7 @@ char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) {
         *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
         FUN_L00_002502f0_c(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
         *(short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         *(float *)(moby + 0x48) = atan2_c(dir[0], dir[1]);
         *(float *)(moby + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
         moby[0x20] = 1;
