@@ -1319,7 +1319,9 @@ extern int FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 
-int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) {
+int predict_throw_landing(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
+
+int predict_throw_landing(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) {
     U910 position, velocity, previous, hero_position, offset, start;
     int timer;
     int object_hit;
