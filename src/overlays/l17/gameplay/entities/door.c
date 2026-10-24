@@ -1290,7 +1290,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     float collision_adjusted_pitch;
     float k;
     char *pad;
-    struct Hero *g;
+    struct Hero *steering_input_hero;
     char *e;
     char *collision_result;
     int voice_slot_index;
@@ -1354,9 +1354,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     }
 
     if (D_L17_00162014 < ship_vars->count) {
-        g = &hero;
-        x = g->stick_x;
-        y = g->stick_y;
+        steering_input_hero = &hero;
+        x = steering_input_hero->stick_x;
+        y = steering_input_hero->stick_y;
         ka = D_L17_001620B4;
         kb = D_L17_001620C4;
         horizontal_steering_input = x;
@@ -1389,10 +1389,10 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     lenA = 310.0f;
     lenB = 500.0f;
     if (ship_vars->i110 != -1) {
-        int off = ship_vars->i110 << 7;
+        int target_record_byte_offset = ship_vars->i110 << 7;
         char *base = D_L17_001600EC;
         qcopy(target, ((char(*)[128])base)[ship_vars->i110] + 0x30);
-        lenA = vector_length_xyz(base + off + 0x20);
+        lenA = vector_length_xyz(base + target_record_byte_offset + 0x20);
         add_vector_xyz(diff, (ship_vars->i110 << 7) + D_L17_001600EC,
                        (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
         lenB = vector_length_xyz(diff);
