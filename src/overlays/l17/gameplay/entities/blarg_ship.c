@@ -344,7 +344,9 @@ extern int D_L17_001DE010[];
 extern int D_L17_001DE028[];
 extern int D_L17_001DE088[];
 int D_L17_001623B8 = 0x807e4931;
-void FUN_L17_002f32f0(struct Moby *moby) {
+void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
+
+void draw_fleet_backdrop_quads(struct Moby *moby) {
     Pkt pkt;
     OvlQuad vv[4];
     char *data = (char *)moby->pvars;
