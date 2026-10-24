@@ -838,7 +838,7 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     float old[4] __attribute__((aligned(16)));
     float forward_movement_vector[4];
     float hit[4];
-    float res[4] __attribute__((aligned(16)));
+    float path_corrected_position[4] __attribute__((aligned(16)));
     float path_test_position[4];
     float path_test_offset[4];
     int move_result;
@@ -853,10 +853,10 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
         sub_w(path_test_offset, old, &moby->pos);
         norm_w(path_test_offset, path_test_offset, 0.05f);
         add_w(path_test_position, old, path_test_offset);
-        if (path_w(*(int *)(moby_vars + 0x2D0), &moby->pos, path_test_position, res) != 0) {
+        if (path_w(*(int *)(moby_vars + 0x2D0), &moby->pos, path_test_position, path_corrected_position) != 0) {
             char *path = D_L12_001B0930_w[*(int *)(moby_vars + 0x2D0)];
             if (inside_w(&moby->pos, path + 0x10, *(int *)path) == 0)
-                *(OvlQuad *)&moby->pos = *(OvlQuad *)res;
+                *(OvlQuad *)&moby->pos = *(OvlQuad *)path_corrected_position;
             if (dist_w(&moby->pos, old) < D_0015ED6C_w * 0.5f) {
                 *(int *)(moby_vars + 0x2D4) += 1;
                 if (frames_w(10) < *(int *)(moby_vars + 0x2D4))
