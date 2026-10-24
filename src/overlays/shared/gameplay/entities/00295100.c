@@ -1066,7 +1066,7 @@ void start_slideshow(void) {
     }
 }
 extern s32 D_L00_0015F3FC;
-void FUN_L00_002a09d8(s32);
+void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
@@ -1074,7 +1074,7 @@ void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void end_slideshow(void) __asm__("FUN_L00_00299c00");
 
 void end_slideshow(void) {
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     fade_to_black(0xC);
     request_audio_stream_break();
     D_L00_0015F5C0_m[1] = 0;
@@ -1122,7 +1122,7 @@ void update_slideshow(void) {
             slideshow.state = 1;
         }
     } else if (slideshow.state == 1) {
-        FUN_L00_002a09d8(1);
+        vu1_sync_chain(1);
         if (slideshow.timer < 0x20) {
             src = slideshow.src;
             dst = slideshow.dst;
@@ -1589,7 +1589,7 @@ extern void f1f97e8_29ad08(void *, s32, s32) __asm__("FUN_001f97e8");
 extern float f1fa580_29ad08(float, float) __asm__("FUN_001fa580");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void f1f99f8_29ad08(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_002a09d8(s32);
+extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
@@ -1630,7 +1630,7 @@ void start_vendor_exit_cutscene(void) {
     vu_euler_rotation_basis((char *)vendor_state + 0x80, (char *)vendor_state + 0xB0);
     f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     calculate_dma_transfer_address();
     selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;

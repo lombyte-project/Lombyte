@@ -50,7 +50,9 @@ void FUN_L00_001ff018(int);
 void debug_print(char *) __asm__("FUN_001e93b0");
 void reset_graphics(void) __asm__("FUN_001f21c0");
 /* Waits while D_L00_001611A0 has any mask bit; after 100000 tries reports and resets graphics. */
-void FUN_L00_002a09d8(int mask) {
+void vu1_sync_chain(int mask) __asm__("FUN_L00_002a09d8");
+
+void vu1_sync_chain(int mask) {
     int i;
     for (i = 0; D_L00_001611A0 & mask; i++) {
         FUN_L00_001ff018(0x400);
