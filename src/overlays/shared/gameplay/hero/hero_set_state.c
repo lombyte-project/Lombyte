@@ -1497,7 +1497,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x74: {
+    case HERO_STATE_FOLLOW_PATH: {
         struct Hero *p = &hero;
         int i;
         float f;
