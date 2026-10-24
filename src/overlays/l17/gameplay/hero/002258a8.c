@@ -171,7 +171,7 @@ void update_hero_state_transitions(void) {
     float ledge_shimmy_probe_yaw;
     int jump_apex_steps;
     int sp5C;
-    int sp60;
+    int predicted_apex_steps;
     float alt_ledge_hang_probe_yaw;
     float alt_ledge_positive_side_probe_yaw;
     float alt_ledge_negative_side_probe_yaw;
@@ -2421,8 +2421,8 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp60, hero.unk4A0);
-                        adjust_hero_animation_speed_for_target_frame(hero.unk440, sp60, 0.5f, -1.0f);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_apex_steps, hero.unk4A0);
+                        adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_apex_steps, 0.5f, -1.0f);
                         break;
                     }
                     if (hero.unk41C != 0 && !(hero.state_timer < hero.unk3D0) &&
