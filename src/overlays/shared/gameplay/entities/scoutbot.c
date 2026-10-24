@@ -1306,7 +1306,7 @@ void blarg_paratrooper_update(char *moby) {
     char *target;
     Hero302618 *hero;
     float pos[4] __attribute__((aligned(16)));
-    float dir[4] __attribute__((aligned(16)));
+    float attack_vector_or_ray_endpoint[4] __attribute__((aligned(16)));
     char hit[0x30] __attribute__((aligned(16)));
     if ((*(unsigned char *)((char *)(moby)+0x31)) == 0 && distance302618(moby+0x10,D_L08_001675C0)>40.0f) return;
     FUN_L00_00263ac8_c(2.5f,moby,6,(char *)data+0x170);
@@ -1448,9 +1448,9 @@ void blarg_paratrooper_update(char *moby) {
             pos[2]+=height302618*(1.0f-arc*arc);
             qcopy(moby+0x10,pos);
         } else if((*(unsigned char *)((char *)(moby)+0x70))&2) {
-            qcopy(pos,moby+0x10); qcopy(dir,target+0x10);
-            pos[2]+=1.0f; dir[2]+=0.75f;
-            ray302618(pos,dir,0,moby,0);
+            qcopy(pos,moby+0x10); qcopy(attack_vector_or_ray_endpoint,target+0x10);
+            pos[2]+=1.0f; attack_vector_or_ray_endpoint[2]+=0.75f;
+            ray302618(pos,attack_vector_or_ray_endpoint,0,moby,0);
             if(hops302618<data->f1DA) {
                 data->f1DA=0;
                 if((*(unsigned char *)((char *)(moby)+0x53))!=10) {
@@ -1481,11 +1481,11 @@ void blarg_paratrooper_update(char *moby) {
             if((D_L08_0015F5D4<0.8f && D_L08_0015F5D0<0.8f)||!((*(unsigned short *)&data->f20E)&1)) {
                 char *shot;
                 joint302618(data->f1F8,0,pos);
-                dir[0]=sine302618((*(float *)((char *)(moby)+0x48)))*(speed302618*D_0015ED6C);
-                dir[1]=cosine302618((*(float *)((char *)(moby)+0x48)))*(speed302618*D_0015ED6C);
-                dir[2]=0.0f;
-                dir[2]=(-1.0f/data->f1E8)*(speed302618*D_0015ED6C);
-                shot=FUN_L08_00307190_c(dir,pos,moby,target,scale302618(180),data->f20E);
+                attack_vector_or_ray_endpoint[0]=sine302618((*(float *)((char *)(moby)+0x48)))*(speed302618*D_0015ED6C);
+                attack_vector_or_ray_endpoint[1]=cosine302618((*(float *)((char *)(moby)+0x48)))*(speed302618*D_0015ED6C);
+                attack_vector_or_ray_endpoint[2]=0.0f;
+                attack_vector_or_ray_endpoint[2]=(-1.0f/data->f1E8)*(speed302618*D_0015ED6C);
+                shot=FUN_L08_00307190_c(attack_vector_or_ray_endpoint,pos,moby,target,scale302618(180),data->f20E);
                 if(shot) (*(float *)((char *)(shot)+0x2C))*=1.7f;
             }
             data->f20E=(*(unsigned short *)&data->f20E)+1;
@@ -1529,11 +1529,11 @@ void blarg_paratrooper_update(char *moby) {
         frame=animframe302618(moby);
         if(frame>16.5f && frame<20.0f) {
             joint302618(moby,4,pos);
-            subtract302618(dir,pos,moby+0x10);
-            dir[2]=0.0f;
-            vec_scale302618(dir,dir,1.0f);
-            dir[2]=1.0f; pos[2]-=0.25f;
-            hit_init302618(hit,moby,1,1.0f,dir);
+            subtract302618(attack_vector_or_ray_endpoint,pos,moby+0x10);
+            attack_vector_or_ray_endpoint[2]=0.0f;
+            vec_scale302618(attack_vector_or_ray_endpoint,attack_vector_or_ray_endpoint,1.0f);
+            attack_vector_or_ray_endpoint[2]=1.0f; pos[2]-=0.25f;
+            hit_init302618(hit,moby,1,1.0f,attack_vector_or_ray_endpoint);
             damage302618(0.8f,pos,0,moby,hit);
         }
         if((*(unsigned char *)((char *)(moby)+0x70))&2) (*(unsigned char *)((char *)(moby)+0x20))=2;
