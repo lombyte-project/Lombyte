@@ -368,7 +368,7 @@ struct HeroExtraManipulators { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pa
 
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern f32 D_0015EE18 __asm__("D_0015EE18");
-extern s32 D_L00_0015F6F8 __attribute__((sda));
+extern s32 hero_extra_manipulator_attachment_indices __asm__("D_L00_0015F6F8") __attribute__((sda));
 extern u128 D_L00_0017C1E0[];
 extern u128 D_L00_0017C220[];
 extern u128 D_L00_0017C260[];
@@ -474,7 +474,7 @@ void update_hero_glow_and_extra_manipulators(void) {
         s32 j;
         for (i = 0; i < 4; i++) {
             if (EXTRA_MANIPS[i].attached == 0) {
-                attach_manipulator((s32)moby, ((s32 *)&D_L00_0015F6F8)[i], &EXTRA_MANIPS[i]);
+                attach_manipulator((s32)moby, ((s32 *)&hero_extra_manipulator_attachment_indices)[i], &EXTRA_MANIPS[i]);
                 EXTRA_MANIPS[i].unk3 = 1;
                 qcopy(&EXTRA_MANIPS[i].quat, &D_L00_0017C1E0[i]);
                 qcopy(&EXTRA_MANIPS[i].scale3, &D_L00_0017C220[i]);
