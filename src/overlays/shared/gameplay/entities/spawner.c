@@ -645,28 +645,33 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
 
 void spawner_egg_update(struct Moby *moby) __asm__("FUN_L09_0030b3b0");
 void spawner_egg_update(struct Moby *moby) {
+    enum {
+        SPAWNER_EGG_STATE_MOVING = 0,
+        SPAWNER_EGG_STATE_RESPAWN_CHILD = 1,
+        SPAWNER_EGG_STATE_SHRINKING = 2
+    };
     BubbleVars *vars = (BubbleVars *)moby->pvars;
-    Vec4 prev;
+    Vec4 previous_position;
     Vec4 step;
     Vec4 away;
     BubbleOwnerVars *owner;
     struct Moby *other;
     struct Moby *held;
     s32 i;
-    f32 dist;
+    f32 other_bubble_distance_xy;
     f32 rate;
 
     FUN_L00_001fefc8(&vars->sound_delay);
-    qcopy(&prev, &moby->pos);
+    qcopy(&previous_position, &moby->pos);
     switch (moby->state) {
-    case 0:
+    case SPAWNER_EGG_STATE_MOVING:
         moby->scale += (moby->pclass->scale - moby->scale) * (frame_scale * 0.05f);
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
         normalize_vector_xyz(&step, &vars->vel, 0.2f);
         add_vector_xyz(&step, &step, &moby->pos);
         moby->collision = 0;
         vars->owner->collision = 0;
-        if (collision_line(&prev, &step, 4, moby, 0) != 0) {
+        if (collision_line(&previous_position, &step, 4, moby, 0) != 0) {
             subtract_vector_xyz(&step, &D_L09_00173FC0.point, &step);
             normalize_vector_xyz(&step, &step, 0.215f);
             add_vector_xyz(&moby->pos, &moby->pos, &step);
@@ -685,9 +690,9 @@ void spawner_egg_update(struct Moby *moby) {
                 other->state != 0xFD) {
                 subtract_vector_xyz(&away, &moby->pos, &other->pos);
                 away.f[2] = 0.0f;
-                dist = fast_vec_length(&away);
-                if (dist < 1.8f) {
-                    scale_vector_xyz(&away, &away, (1.8f - dist) * (frame_scale * -0.5f + 1.0f));
+                other_bubble_distance_xy = fast_vec_length(&away);
+                if (other_bubble_distance_xy < 1.8f) {
+                    scale_vector_xyz(&away, &away, (1.8f - other_bubble_distance_xy) * (frame_scale * -0.5f + 1.0f));
                     add_vector_xyz(&moby->pos, &moby->pos, &away);
                 }
             }
@@ -703,14 +708,14 @@ void spawner_egg_update(struct Moby *moby) {
         moby->rot.x += frame_scale * 0.01f;
         moby->rot.y += frame_scale * 0.02f;
         break;
-    case 1:
+    case SPAWNER_EGG_STATE_RESPAWN_CHILD:
         moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f) + 0.2f;
         moby->pos.w = 0.0f;
         step.q = ((Vec4 *)&moby->pos)->q;
         vars->held = respawn_spawner_child(vars->owner, &step);
         moby->state = 2;
         break;
-    case 2:
+    case SPAWNER_EGG_STATE_SHRINKING:
         rate = frame_scale * 0.05f;
         moby->scale -= moby->scale * rate;
         if (vars->held != NULL && vars->unk1A != 0) {
