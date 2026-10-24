@@ -1217,7 +1217,7 @@ extern int D_L03_0015F5C4;
 extern float helga_big_head_cutscene_adjustment __asm__("D_L03_0015F5A0");
 extern G_2da710 D_L03_0016C960;
 extern char D_L03_0017C540[];
-extern float D_L03_00161BB4 __attribute__((sda));
+extern float helga_big_head_attachment_uniform_value __asm__("D_L03_00161BB4") __attribute__((sda));
 extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
 
 /* During the cutscene, nudges a camera value at two time windows and attaches
@@ -1240,9 +1240,9 @@ void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby
                 shared_attachment_record = D_L03_0017C540;
                 if (((unsigned char *)shared_attachment_record)[1] == 0) {
                     attach_2da710(D_L03_0016C960.list[i], 0, shared_attachment_record);
-                    *(float *)(shared_attachment_record + 0x20) = D_L03_00161BB4;
-                    *(float *)(shared_attachment_record + 0x24) = D_L03_00161BB4;
-                    *(float *)(shared_attachment_record + 0x28) = D_L03_00161BB4;
+                    *(float *)(shared_attachment_record + 0x20) = helga_big_head_attachment_uniform_value;
+                    *(float *)(shared_attachment_record + 0x24) = helga_big_head_attachment_uniform_value;
+                    *(float *)(shared_attachment_record + 0x28) = helga_big_head_attachment_uniform_value;
                 }
             }
         }
