@@ -1756,17 +1756,17 @@ void update_hero_state_motion(void) {
             turn_to(0, frame_scale_sq * 0.008f, frame_scale_sq * 0.15f, frame_time * 9.948377f);
         } else {
             float sp;
-            float st;
+            float acceleration_reduction_angle;
 
             sp = hero.unk229C;
-            st = hero.motion.unk188;
+            acceleration_reduction_angle = hero.motion.unk188;
             if (hero.unk20A8 != 0) {
-                k = 1.0f - st * 0.55f;
+                k = 1.0f - acceleration_reduction_angle * 0.55f;
                 if (k < 0.0f) {
                     k = 0.0f;
                 }
             } else if (sp < 0.8f) {
-                if (st > 0.5235988f) {
+                if (acceleration_reduction_angle > 0.5235988f) {
                     k = 0.0f;
                 }
             }
