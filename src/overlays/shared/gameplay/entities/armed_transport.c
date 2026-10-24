@@ -546,7 +546,9 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
-void FUN_L16_002e58d8(char *barrier_moby) {
+void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8");
+
+void draw_grindrail_barrier_effect(char *barrier_moby) {
     RingQuad quad;
     float transform[4][4], rotation[4];
     RingData *data = *(RingData **)(barrier_moby + 0x78);
