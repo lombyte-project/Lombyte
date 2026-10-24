@@ -2036,10 +2036,10 @@ typedef struct {
 
 extern float D_L16_001D3170[][4];
 extern float D_L16_001D31B0[][2];
-extern int D_L16_001619EC __attribute__((sda)); /* no foreign declaration */
-extern int D_L16_001619F0 __attribute__((sda)); /* no foreign declaration */
-extern int D_L16_001619E8 __attribute__((sda)); /* no foreign declaration */
-extern int D_L16_001619F4 __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_alpha_blend_b_selector __asm__("D_L16_001619EC") __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_alpha_blend_c_selector __asm__("D_L16_001619F0") __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_alpha_blend_a_selector __asm__("D_L16_001619E8") __attribute__((sda)); /* no foreign declaration */
+extern int linked_pair_ribbon_alpha_blend_d_selector __asm__("D_L16_001619F4") __attribute__((sda)); /* no foreign declaration */
 extern float linked_pair_ribbon_origin_z_offset __asm__("D_L16_001619F8") __attribute__((sda)); /* no foreign declaration */
 extern float linked_pair_ribbon_pass_z_step __asm__("D_L16_001619FC") __attribute__((sda)); /* no foreign declaration */
 extern int linked_pair_ribbon_texture_id __asm__("D_L16_00161A00") __attribute__((sda)); /* no foreign declaration */
@@ -2066,8 +2066,8 @@ void draw_linked_pair_ribbons(char *moby, char *partner) {
     frame[3][2] += linked_pair_ribbon_origin_z_offset;
     frame[3][3] = 1.0f;
     packet.texture = get_effect_texture(linked_pair_ribbon_texture_id);
-    packet.mode = (long)D_L16_001619E8 | ((long)D_L16_001619EC << 2) | ((long)D_L16_001619F0 << 4) |
-                  ((long)D_L16_001619F4 << 6) | 0x8000000000L;
+    packet.mode = (long)linked_pair_ribbon_alpha_blend_a_selector | ((long)linked_pair_ribbon_alpha_blend_b_selector << 2) | ((long)linked_pair_ribbon_alpha_blend_c_selector << 4) |
+                  ((long)linked_pair_ribbon_alpha_blend_d_selector << 6) | 0x8000000000L;
     packet.flags = 0xFF9000000260L;
     packet.zero = 0;
     color = linked_pair_ribbon_vertex_color;
