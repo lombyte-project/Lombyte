@@ -400,7 +400,7 @@ extern s32 D_L08_001E8310[];
 extern char D_L08_001E8350[];
 extern float layered_mesh_effect_center_y __asm__("D_L08_00161DC4");
 extern float layered_mesh_effect_center_z __asm__("D_L08_00161DC8");
-extern float D_L08_00161DCC;
+extern float layered_mesh_effect_culling_radius __asm__("D_L08_00161DCC");
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -459,7 +459,7 @@ void update_layered_mesh_effect(struct Moby *moby) {
         culling_sphere[0] = *(float *)&D_L08_00161DC0;
         culling_sphere[1] = layered_mesh_effect_center_y;
         culling_sphere[2] = layered_mesh_effect_center_z;
-        culling_sphere[3] = D_L08_00161DCC;
+        culling_sphere[3] = layered_mesh_effect_culling_radius;
         if (fast_bsphere_check((char *)culling_sphere, 1000.0f) >= 0) {
             distance_vector[0] = *(float *)&D_L08_00161DC0;
             distance_vector[1] = layered_mesh_effect_center_y;
