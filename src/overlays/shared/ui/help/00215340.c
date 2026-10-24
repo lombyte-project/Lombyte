@@ -6,7 +6,7 @@
 #include "rnc/globals.h"
 typedef struct { f32 f[0x300]; } T_215340;
 extern T_215340 D_L00_0017A680;
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L00_0020a1f8(f32, f32);
 extern void FUN_L00_0020a210(f32, f32);
 extern void FUN_L00_0020a228(f32, f32);
@@ -28,7 +28,7 @@ void adjust_hero_pose_targets_from_motion(void) {
     f32 x;
 
     if (hero.state.current == HERO_STATE_RUN) {
-        FUN_L00_0020a1e0(0.04f, 0.2f);
+        set_first_hero_easing_parameters(0.04f, 0.2f);
         FUN_L00_0020a1f8(0.04f, 0.2f);
         FUN_L00_0020a210(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);
@@ -69,7 +69,7 @@ void adjust_hero_pose_targets_from_motion(void) {
             TF(0xB68) = nw * 0.3f;
         }
     } else if (hero.state.current == HERO_STATE_LAND || hero.state.current == 0x81) {
-        FUN_L00_0020a1e0(0.008f, 0.08f);
+        set_first_hero_easing_parameters(0.008f, 0.08f);
         FUN_L00_0020a1f8(0.015f, 0.08f);
         FUN_L00_0020a210(0.015f, 0.08f);
         FUN_L00_0020a228(0.008f, 0.1f);
@@ -114,7 +114,7 @@ void adjust_hero_pose_targets_from_motion(void) {
         TF(0xAB8) = -scaled_pose_input * 0.3f;
         TF(0xB68) = -scaled_pose_input * 0.3f;
     } else if (hero.state.control_mode == 2 || hero.state.control_mode == 4) {
-        FUN_L00_0020a1e0(0.04f, 0.2f);
+        set_first_hero_easing_parameters(0.04f, 0.2f);
         FUN_L00_0020a1f8(0.04f, 0.2f);
         FUN_L00_0020a210(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);

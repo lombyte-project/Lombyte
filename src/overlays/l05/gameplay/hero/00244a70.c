@@ -212,7 +212,7 @@ extern f32 FUN_L00_00209018(void *, s32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L05_00238858(f32, f32);
 extern void FUN_L05_00238870(f32, f32);
 extern void FUN_L05_00238888(f32, f32);
@@ -1000,7 +1000,7 @@ void update_hero_motion_by_state(void) {
         if (an > 0.0f) {
             AN.f270 = an * -22.0f;
         }
-        FUN_L00_0020a1e0(0.008f, 0.1f);
+        set_first_hero_easing_parameters(0.008f, 0.1f);
         AN.f60 = AN.f60 + an * -11.0f;
         if (AN.f60 > 0.6632251f) {
             AN.f60 = 0.6632251f;
@@ -2036,7 +2036,7 @@ void update_hero_motion_by_state(void) {
                     if (a < -0.7853982f) {
                         a = -0.7853982f;
                     }
-                    FUN_L00_0020a1e0(0.03f, 0.2f);
+                    set_first_hero_easing_parameters(0.03f, 0.2f);
                     if (hero.unk58C != 0) {
                         AN.f64 = -a;
                     } else {
@@ -2048,9 +2048,9 @@ void update_hero_motion_by_state(void) {
                 AN.f60 = fast_arc_tan(vector_length_xy(&hero.motion.displacement), hero.motion.displacement.f[2]);
             }
             if (has) {
-                FUN_L00_0020a1e0(frame_scale_sq * 0.017f, frame_scale_sq * 0.3f);
-                FUN_L00_0020a1e0(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
-                FUN_L00_0020a1e0(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
+                set_first_hero_easing_parameters(frame_scale_sq * 0.017f, frame_scale_sq * 0.3f);
+                set_first_hero_easing_parameters(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
+                set_first_hero_easing_parameters(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
                 if ((struct MobyView *)hero.unk5D8 != NULL) {
                     f32 a;
                     f32 k;

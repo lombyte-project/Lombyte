@@ -2606,7 +2606,9 @@ typedef struct {
 } S0020a1e0;
 extern S0020a1e0 D_L00_0017A680;
 /* Stores the two floats in D_L00_0017A680. */
-void FUN_L00_0020a1e0(float a, float b) {
+void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
+
+void set_first_hero_easing_parameters(float a, float b) {
     S0020a1e0 *destination_record = &D_L00_0017A680;
     destination_record->a = a;
     destination_record->b = b;
@@ -2908,7 +2910,7 @@ extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 float absolute_float(float input) __asm__("FUN_001f99c0");
-void FUN_L00_0020a1e0(float a, float b);
+void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
 void FUN_L00_0020a228(float a, float b);
 void FUN_L00_0020a210(float a, float b);
 

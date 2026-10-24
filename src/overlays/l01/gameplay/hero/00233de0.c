@@ -455,7 +455,7 @@ extern void FUN_L00_00209018_cf(void *, float, float, float) __asm__("FUN_00214d
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
 extern void emit_hero_periodic_surface_particles(int, int) __asm__("FUN_L00_00209848");
-extern void FUN_L00_00209848_cf(float, float) __asm__("FUN_L00_0020a1e0");
+extern void set_first_hero_easing_parameters(float, float) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L00_00209848_cf_0022b5f8(float, float) __asm__("FUN_L01_0022b5f8");
 extern void FUN_L00_00209848_cf_0022b610(float, float) __asm__("FUN_L01_0022b610");
 extern void FUN_L00_00209848_cf_0022b5e0(float, float) __asm__("FUN_L01_0022b5e0");

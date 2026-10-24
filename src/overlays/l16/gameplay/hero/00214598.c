@@ -216,7 +216,7 @@ extern f32 FUN_L00_00209018(void *, s32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L16_00208038(f32, f32);
 extern void FUN_L16_00208050(f32, f32);
 extern void FUN_L16_00208068(f32, f32);
@@ -920,7 +920,7 @@ void update_hero_motion_for_current_state(void) {
         }
         hero.unk88A = hero.air_frames.s;
         if (hero.air_frames.s == 0) {
-            FUN_L00_0020a1e0(0.008f, 0.1f);
+            set_first_hero_easing_parameters(0.008f, 0.1f);
             AN.f60 = hero.motion.unk184 * -12.0f;
             if (AN.f60 > 0.55850536f) {
                 AN.f60 = 0.55850536f;
@@ -929,7 +929,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         if (hero.air_frames.s != 0 && hero.unk88E == 0) {
-            FUN_L00_0020a1e0(0.015f, 0.08f);
+            set_first_hero_easing_parameters(0.015f, 0.08f);
             transform_vector(&v10, &hero.motion.displacement, (Vec4 *)hero.unk40);
             AN.f64 = -fast_arc_tan(vector_length_xy(&v10), v10.f[2]);
             if (AN.f64 > 0.61086524f) {
@@ -1155,7 +1155,7 @@ void update_hero_motion_for_current_state(void) {
         if (an > 0.0f) {
             AN.f270 = an * -22.0f;
         }
-        FUN_L00_0020a1e0(0.008f, 0.1f);
+        set_first_hero_easing_parameters(0.008f, 0.1f);
         AN.f60 = AN.f60 + an * -11.0f;
         if (AN.f60 > 0.6632251f) {
             AN.f60 = 0.6632251f;
@@ -2158,7 +2158,7 @@ void update_hero_motion_for_current_state(void) {
                 if (a < -0.7853982f) {
                     a = -0.7853982f;
                 }
-                FUN_L00_0020a1e0(0.03f, 0.2f);
+                set_first_hero_easing_parameters(0.03f, 0.2f);
                 if (hero.unk58C != 0) {
                     AN.f64 = -a;
                 } else {
