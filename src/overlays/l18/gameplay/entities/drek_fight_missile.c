@@ -287,13 +287,13 @@ void select_drek_fight_missile_wander_target(char *moby, void *out) {
     *(int *)(data + 0x160) = scale_game_frames(180);
 }
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
-extern int D_L18_0016223C __attribute__((sda));
+extern int drek_missile_trail_draw_disabled __asm__("D_L18_0016223C") __attribute__((sda));
 extern int D_L18_00162240 __attribute__((sda));
 extern int D_L18_00162244 __attribute__((sda));
 extern int D_L18_00162248 __attribute__((sda));
 extern int D_L18_0016224C __attribute__((sda));
-extern int D_L18_00162250 __attribute__((sda));
-extern int D_L18_00162254 __attribute__((sda));
+extern int drek_missile_trail_blend_start_color __asm__("D_L18_00162250") __attribute__((sda));
+extern int drek_missile_trail_blend_end_color __asm__("D_L18_00162254") __attribute__((sda));
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern float D_L18_001DA2F0[4][2];
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -339,7 +339,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
             } else if (color_blend_factor < 0.0f) {
                 color_blend_factor = 0.0f;
             }
-            quads[i].colors[j] = interpolate_color(D_L18_00162250, D_L18_00162254, color_blend_factor);
+            quads[i].colors[j] = interpolate_color(drek_missile_trail_blend_start_color, drek_missile_trail_blend_end_color, color_blend_factor);
         }
     }
     clear_memory(extra, 0, 0x20);
@@ -355,7 +355,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
         data = (char *)missile_moby->pvars;
         for (trail_segment_index = 0; trail_segment_index < *(short *)(data + 0x164); trail_segment_index++) {
             base = (*(short *)(data + 0x166) - trail_segment_index + 15) & 15;
-            if (D_L18_0016223C == 0) {
+            if (drek_missile_trail_draw_disabled == 0) {
                 for (k = 0; k < 4; k++) {
                     add_vector_xyz(&quads[trail_segment_index].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
                                    extra + ((k & 1) << 2));
