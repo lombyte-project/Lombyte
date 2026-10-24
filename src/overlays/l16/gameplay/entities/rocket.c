@@ -2414,7 +2414,7 @@ void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
-extern int D_L16_00161A08 __attribute__((sda));
+extern int hoverboard_dummy_spray_initial_color __asm__("D_L16_00161A08") __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {
@@ -2673,7 +2673,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (*(short *)(hoverboard_dummy_data + 0x2F6) == 0) {
             int ticks = random_int_between(scale_game_frames(10), scale_game_frames(13));
 
-            FUN_L00_00269958(impact, spray, D_L16_00161A08, D_L16_00161A0C, ticks, 15, 15, 1);
+            FUN_L00_00269958(impact, spray, hoverboard_dummy_spray_initial_color, D_L16_00161A0C, ticks, 15, 15, 1);
         } else {
             int ticks;
 
@@ -2681,7 +2681,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             ticks = random_int_between(scale_game_frames(15), scale_game_frames(18));
             FUN_L00_00269958(impact, dust, 0x5032F0D2, D_L16_00161A0C, ticks, 30, 20, 1);
             ticks = random_int_between(scale_game_frames(8), scale_game_frames(17));
-            FUN_L00_0026cbb0(impact, spray, D_L16_00161A08, D_L16_00161A0C, ticks, 1,
+            FUN_L00_0026cbb0(impact, spray, hoverboard_dummy_spray_initial_color, D_L16_00161A0C, ticks, 1,
                              15000.0f);
         }
         break;
