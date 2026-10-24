@@ -1379,7 +1379,7 @@ void update_hero_motion_for_current_state(void) {
         hero.target_speed = 0.0f;
         if (MV(hero.unkA54) != NULL && scale_game_frames(4) > hero.state_timer) {
             f32 d = vector_distance(&MV(hero.unkA54)->u10.v10, &hero.motion.pos) - 0.5f;
-            f32 off;
+            f32 attack_target_distance_offset;
             f32 tol;
             f32 mx;
             f32 diff;
@@ -1387,19 +1387,19 @@ void update_hero_motion_for_current_state(void) {
                 d = 0.0f;
             }
             if (tb->kind == 0) {
-                off = 0.75f;
+                attack_target_distance_offset = 0.75f;
                 tol = 0.8f;
                 mx = 4.0f;
             } else if (tb->kind == 1) {
-                off = 0.6f;
+                attack_target_distance_offset = 0.6f;
                 tol = 1.7f;
                 mx = 4.0f;
             } else {
-                off = 1.3f;
+                attack_target_distance_offset = 1.3f;
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
+            diff = d - attack_target_distance_offset;
             if (FUN_001f99c0(diff) < tol + 3.0f) {
                 f32 s = diff / 0.9f;
                 if (s > mx) {
@@ -1776,13 +1776,13 @@ void update_hero_motion_for_current_state(void) {
             hero.unk2218 = -1;
         }
         if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
-            f32 ang;
+            f32 grind_particle_yaw;
             f32 rr;
             qcopy(&vector_and_attack_descriptor_scratch, &hero.motion.pos);
-            ang = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
+            grind_particle_yaw = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
             rr = random_float_between(frame_time * 4.0f, frame_time * 7.0f);
-            v10.f[0] = fast_cos(ang) * rr;
-            v10.f[1] = fast_sin(ang) * rr;
+            v10.f[0] = fast_cos(grind_particle_yaw) * rr;
+            v10.f[1] = fast_sin(grind_particle_yaw) * rr;
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(frame_time * 3.0f, frame_time * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
