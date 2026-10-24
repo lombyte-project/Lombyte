@@ -3041,7 +3041,9 @@ extern float D_0015ED6C;
 
 extern char *D_L13_001600EC;
 
-void FUN_L13_002e97e0(struct Moby *moby, char *vars, int *result) {
+void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result) __asm__("FUN_L13_002e97e0");
+
+void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result) {
     int path_ids = (int)vars + 0xB0;
     struct Moby *mobys;
     float dx;
@@ -3191,7 +3193,7 @@ typedef struct {
 } Hero_2EAE80;
 
 extern char D_00140940[];
-extern void FUN_L13_002e97e0();
+extern void begin_starfighter_death_sequence();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
