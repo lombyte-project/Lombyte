@@ -5721,7 +5721,7 @@ extern void FUN_L06_00300720(void);
 extern void FUN_L06_00300588(void);
 extern void FUN_L06_003003f0(void);
 
-extern int D_L06_0015F404;
+extern int scripted_camera_sequence_active __asm__("D_L06_0015F404");
 extern int D_L06_0015F408;
 extern float camera_sequence_moby_scale_multiplier __asm__("D_L06_00162048") __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
@@ -5764,7 +5764,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 int state;
                 int base;
                 moby[0x20] = 3;
-                D_L06_0015F404 = 1;
+                scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
                 state = data[5];
                 state <<= 7;
@@ -5813,7 +5813,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
             moby[0x20] = 5;
             hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
-            D_L06_0015F404 = 0;
+            scripted_camera_sequence_active = 0;
         } else {
             if (*(float *)(data + 6) >= 0.05f && data[3] >= 0) {
                 {
@@ -6602,7 +6602,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
             *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
-            D_L06_0015F404 = 0;
+            scripted_camera_sequence_active = 0;
             return;
         }
         activate_listed_class_5e8_mobys(*(int *)(moby_vars + 0x34));
@@ -7620,7 +7620,7 @@ void red_button_update(struct Moby *moby) {
                                      D_L06_001621A4, D_L06_001621A8, D_L06_001621B0);
             set_camera_position_304098(&camera_position);
             set_camera_rotation_304098(&camera_rotation);
-            D_L06_0015F404 = 1;
+            scripted_camera_sequence_active = 1;
         }
         if (data->timer < scale_game_frames_304098(10)) {
             previous_value = float_from_int_304098(data->timer);
