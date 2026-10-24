@@ -3294,7 +3294,9 @@ extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_0021
 extern void resolve_point_path_segment_xy_clearance(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
 
 /* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
-void FUN_L06_002fbc88(struct Moby *moby) {
+void update_alien_queen_orbit_movement(struct Moby *moby) __asm__("FUN_L06_002fbc88");
+
+void update_alien_queen_orbit_movement(struct Moby *moby) {
     CirclerVars *circler_vars = (CirclerVars *)moby->pvars;
     struct Moby *focus = circler_vars->focus;
     Vec4f goal, step;
