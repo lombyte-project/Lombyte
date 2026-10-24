@@ -120,7 +120,7 @@ extern f32 follow_camera_rotation_slide_lateral_spring_target_gp __asm__("D_L00_
 extern f32 follow_camera_vehicle_offset_scale_gp __asm__("D_L00_00161D98") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_distance_gp __asm__("D_L00_00161D9C") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_height_gp __asm__("D_L00_00161DA0") __attribute__((sda));
-extern f32 D_L00_00161DA4 __attribute__((sda));
+extern f32 follow_camera_vehicle_collision_probe_step_growth_factor_gp __asm__("D_L00_00161DA4") __attribute__((sda));
 extern f32 D_L00_00161DA8 __attribute__((sda));
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -206,7 +206,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         FUN_L00_002e8620();
         camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
         camera_spring_state->f3C = D_L00_00161DA8;
-        camera_spring_state->f44 = D_L00_00161DA4;
+        camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;
     }
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
         set_follow_camera_orbit_clamp_mode(0);
