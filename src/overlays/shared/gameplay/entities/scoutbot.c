@@ -1061,12 +1061,12 @@ extern f32 spark_emitter_default_primary_z_increment_base_gp __asm__("D_L08_0016
 extern f32 spark_emitter_default_primary_magnitude_base_gp __asm__("D_L08_00161F80") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_z_increment_base_gp __asm__("D_L08_00161F84") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_magnitude_base_gp __asm__("D_L08_00161F88") __attribute__((sda));
-extern s32 D_L08_00161F8C __attribute__((sda));
-extern s32 D_L08_00161F90 __attribute__((sda));
-extern s32 D_L08_00161F94 __attribute__((sda));
+extern s32 spark_emitter_default_frame_count_base_gp __asm__("D_L08_00161F8C") __attribute__((sda));
+extern s32 spark_emitter_default_second_frame_count_base_gp __asm__("D_L08_00161F90") __attribute__((sda));
+extern s32 spark_emitter_default_third_frame_count_base_gp __asm__("D_L08_00161F94") __attribute__((sda));
 extern s32 spark_emitter_default_timer_reset_gp __asm__("D_L08_00161F98") __attribute__((sda));
-extern f32 D_L08_00161F9C __attribute__((sda));
-extern f32 D_L08_00161FA0 __attribute__((sda));
+extern f32 spark_emitter_default_primary_motion_w_gp __asm__("D_L08_00161F9C") __attribute__((sda));
+extern f32 spark_emitter_default_secondary_motion_w_gp __asm__("D_L08_00161FA0") __attribute__((sda));
 extern f32 spark_emitter_default_primary_spread_limit_gp __asm__("D_L08_00161FA4") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_spread_limit_gp __asm__("D_L08_00161FA8") __attribute__((sda));
 
@@ -1099,14 +1099,14 @@ void update_spark_emitter(char *moby) {
         fast_vec_normalize(spark_motion_offset, spark_rotation_matrix + 4, random_float_between(-spark_emitter_default_secondary_spread_limit_gp, spark_emitter_default_secondary_spread_limit_gp) * frame_time);
         fast_vec_add(spark_motion_secondary, spark_motion_secondary, spark_motion_offset);
         spark_motion_secondary[2] += random_float_between(spark_emitter_default_secondary_z_increment_base_gp, spark_emitter_default_secondary_z_increment_base_gp * 1.5f) * frame_time;
-        spark_motion_primary[3] = D_L08_00161F9C;
-        spark_motion_secondary[3] = D_L08_00161FA0;
+        spark_motion_primary[3] = spark_emitter_default_primary_motion_w_gp;
+        spark_motion_secondary[3] = spark_emitter_default_secondary_motion_w_gp;
         spark_frame_count = truncate_float_to_s32(
-            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
+            multiply_global_factor_ed64(random_float_between((f32)spark_emitter_default_frame_count_base_gp, (f32)spark_emitter_default_frame_count_base_gp * 1.2f)));
         spark_second_frame_count = truncate_float_to_s32(
-            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
+            multiply_global_factor_ed64(random_float_between((f32)spark_emitter_default_second_frame_count_base_gp, (f32)spark_emitter_default_second_frame_count_base_gp * 1.2f)));
         spark_third_frame_count = truncate_float_to_s32(
-            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
+            multiply_global_factor_ed64(random_float_between((f32)spark_emitter_default_third_frame_count_base_gp, (f32)spark_emitter_default_third_frame_count_base_gp * 1.2f)));
         spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, D_L08_00161F74, D_L08_00161F78, spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     } else {
         *(s32 *)(spark_data + 0x3C) = *(s32 *)(spark_data + 0x14);
