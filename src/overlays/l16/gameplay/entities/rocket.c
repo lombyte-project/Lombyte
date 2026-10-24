@@ -888,7 +888,9 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002c9650(struct Moby *moby) {
+void emit_moby_sprite_effect_particles(struct Moby *moby) __asm__("FUN_L16_002c9650");
+
+void emit_moby_sprite_effect_particles(struct Moby *moby) {
     L16SpriteData *sprite_data = (L16SpriteData *)moby->pvars;
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
