@@ -1022,7 +1022,9 @@ extern int *D_L00_00177F00[];
 extern void offset_hero_position_against_gravity(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
 extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 
-void FUN_L00_00217368(int voice_target, int entry_count) {
+void emit_filtered_entry_sparkles(int voice_target, int entry_count) __asm__("FUN_L00_00217368");
+
+void emit_filtered_entry_sparkles(int voice_target, int entry_count) {
     if (entry_count != 0) {
         char *hero_base = D_0013E533 + 0xE1D;
         int i;

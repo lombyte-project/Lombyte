@@ -397,7 +397,7 @@ extern void FUN_L01_00232290(void);
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
-extern void FUN_L00_00217368(void *, s32);
+extern void emit_filtered_entry_sparkles(void *, s32) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
@@ -1526,19 +1526,19 @@ void update_hero_motion_by_state(void) {
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], -0.87266463f);
                 matrix_and_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, MV(hero.moby), &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, MV(hero.moby), &vector_and_hit_descriptor_head_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], 0.87266463f);
                 matrix_and_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
             }
         }
         if (scale_game_frames(10) < hero.state_timer) {
