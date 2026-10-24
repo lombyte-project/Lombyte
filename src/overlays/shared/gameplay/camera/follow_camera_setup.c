@@ -973,7 +973,9 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern float resolve_level_path_segment_point(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float) __asm__("FUN_L00_0025dcd8");
 extern int coll_sphere_2e7618(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_002e7618(O002e7530 *camera_moby, V002e7530 *out, int step, float radial_adjustment_distance, float spd) {
+int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002e7530 *out, int step, float radial_adjustment_distance, float spd) __asm__("FUN_L00_002e7618");
+
+int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002e7530 *out, int step, float radial_adjustment_distance, float spd) {
     V002e7530 delta, probe_to_start_delta, start, hit, near, path_segment_end, path_segment_point, next;
     V002e7530 *path;
     V002e7530 *orbit;
