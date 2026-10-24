@@ -1213,7 +1213,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
-extern float D_L12_00161914 __attribute__((sda));
+extern float platform_tilt_offset_divisor __asm__("D_L12_00161914") __attribute__((sda));
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
 
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
@@ -1228,7 +1228,7 @@ void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
         inverse_yaw_angles[2] = -moby->rot.z;
         euler_rotation_matrix(inverse_yaw_matrix, inverse_yaw_angles);
         transform_vector(reference_offset, reference_offset, inverse_yaw_matrix);
-        offset_scale_divisor = D_L12_00161914;
+        offset_scale_divisor = platform_tilt_offset_divisor;
         out[1] = reference_offset[0] / offset_scale_divisor;
         out[0] = -reference_offset[1] / offset_scale_divisor;
     } else {
