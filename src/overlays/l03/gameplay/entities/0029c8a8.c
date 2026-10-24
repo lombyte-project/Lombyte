@@ -46,7 +46,9 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
 }
 
 /* True for a moby of class 0x23E in state 9. */
-int FUN_L03_002c6d58(struct Moby *moby) {
+int is_moby_class_23e_in_state_9(struct Moby *moby) __asm__("FUN_L03_002c6d58");
+
+int is_moby_class_23e_in_state_9(struct Moby *moby) {
     if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23e &&
         moby->state == 0x9) {
         return 1;

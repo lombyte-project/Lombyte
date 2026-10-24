@@ -1988,7 +1988,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
-extern int FUN_L03_002c5b78_c_002c6d58(unsigned char *) __asm__("FUN_L03_002c6d58");
+extern int is_moby_class_23e_in_state_9(unsigned char *) __asm__("FUN_L03_002c6d58");
 
 int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 int is_point_inside_clip_volume_cf(int id) {
@@ -1996,7 +1996,7 @@ int is_point_inside_clip_volume_cf(int id) {
     if (id == 0xFF) goto absent;
     get_first_moby_in_group((int *)&item, id, 0, 0);
     while (item != 0) {
-        if (FUN_L03_002c5b78_c_002c6d58(item)) return 1;
+        if (is_moby_class_23e_in_state_9(item)) return 1;
         if (FUN_L03_002c5b78_c(item)) return 1;
         get_next_moby_in_group((int *)&item, (int)item, 0, 0);
     }
