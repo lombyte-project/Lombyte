@@ -1113,7 +1113,7 @@ extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern float homing_shot_trail_initial_size_min __asm__("D_L00_00161870") __attribute__((sda));
 extern float homing_shot_trail_initial_size_max __asm__("D_L00_00161874") __attribute__((sda));
 extern float homing_shot_trail_size_blend_target __asm__("D_L00_00161878") __attribute__((sda));
-extern float D_L00_00161888 __attribute__((sda));
+extern float homing_shot_attached_particle_size __asm__("D_L00_00161888") __attribute__((sda));
 extern unsigned char *spawn_random_size_rotated_particle(char *a, char *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
@@ -1229,7 +1229,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
             *(float *)(moby + 0x44) = -fast_arc_tan_c2(length, direction[2]);
             return moby;
         } else {
-            spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
+            spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, homing_shot_attached_particle_size);
             for (i = 0; i < 17; i++) {
                 trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (trail != 0) {
