@@ -223,8 +223,8 @@ typedef struct {
 } Progress;
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_00141622[] __attribute__((section(".data")));
-extern float D_L00_0015F788 __attribute__((sda));
-extern float D_L00_0015F784 __attribute__((sda));
+extern float hud_item_selector_even_slot_edge_fraction __asm__("D_L00_0015F788") __attribute__((sda));
+extern float hud_item_selector_slot_angle_offset __asm__("D_L00_0015F784") __attribute__((sda));
 extern int D_L00_0017DC18 __attribute__((section(".data")));
 extern int D_L00_0017DC1C __attribute__((section(".data")));
 extern int D_L00_0017DC20 __attribute__((section(".data")));
@@ -274,14 +274,14 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)FUN_001fa6d0(slot_position);
-                    if (fr > 1.0f - D_L00_0015F788) stick_slot_index++;
-                    else if (fr < D_L00_0015F788) stick_slot_index--;
+                    if (fr > 1.0f - hud_item_selector_even_slot_edge_fraction) stick_slot_index++;
+                    else if (fr < hud_item_selector_even_slot_edge_fraction) stick_slot_index--;
                     stick_slot_index = (stick_slot_index + D_L00_0015FA90) % D_L00_0015FA90;
                 }
                 hud_element->w74 = stick_slot_index;
                 slot_step = -1;
-                D_L00_0015F784 = fast_normalize_angle(a - ((float)stick_slot_index * 0.7853982f + 0.39269909f));
-                if (D_L00_0015F784 > 0.0f) slot_step = 1;
+                hud_item_selector_slot_angle_offset = fast_normalize_angle(a - ((float)stick_slot_index * 0.7853982f + 0.39269909f));
+                if (hud_item_selector_slot_angle_offset > 0.0f) slot_step = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
             int pad_slot_index;
