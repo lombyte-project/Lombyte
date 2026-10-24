@@ -3636,7 +3636,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_FOLLOW_PATH: {
         float vel[4];
         float path_vertical_step_limit;
-        float dist;
+        float path_spray_distance_metric;
         qcopy(pos, D_L11_001B0EB0_4318[puffoid_vars->path] + puffoid_vars->point * 16 + 0x10);
         if (puffoid_vars->carrier >= 0) {
             float h = ((struct Moby *)D_L11_0015FFD8_4318)[puffoid_vars->carrier].pos.z - 1.0f;
@@ -3664,17 +3664,17 @@ void puffoid_update(struct Moby *moby) {
             puffoid_vars->point = (puffoid_vars->point + 1) % *(int *)D_L11_001B0EB0_4318[puffoid_vars->path];
         }
         if (moby->anim_time == 0.0f) {
-            dist = vector_distance_4318(&moby->pos, D_0013F3D0_4318);
+            path_spray_distance_metric = vector_distance_4318(&moby->pos, D_0013F3D0_4318);
             switch (moby->prev_seq) {
             case PUFFOID_PATH_ANIM_TRAVEL:
-                if (dist < 6.0f) {
+                if (path_spray_distance_metric < 6.0f) {
                     set_anim_4318(moby, 5, 0, frames_4318(10));
                 }
                 break;
             case PUFFOID_PATH_ANIM_SPRAY_ATTACK:
-                if (dist > 8.0f) {
+                if (path_spray_distance_metric > 8.0f) {
                     set_anim_4318(moby, 7, 0, frames_4318(10));
-                } else if (dist < 4.0f) {
+                } else if (path_spray_distance_metric < 4.0f) {
                     float spray_position[4];
                     qcopy(spray_position, &moby->pos);
                     spray_position[2] += 0.5f;
