@@ -2566,9 +2566,9 @@ extern f32 amoeboid_burst_spark_position_jitter_bound __asm__("D_L01_001619F8") 
 extern f32 amoeboid_burst_spark_velocity_jitter_bound __asm__("D_L01_001619FC") __attribute__((sda));
 extern f32 amoeboid_burst_radial_speed_min __asm__("D_L01_00161A00") __attribute__((sda));
 extern f32 amoeboid_burst_radial_speed_max __asm__("D_L01_00161A04") __attribute__((sda));
-extern f32 D_L01_00161A08 __attribute__((sda));
-extern f32 D_L01_00161A0C __attribute__((sda));
-extern f32 D_L01_00161A10 __attribute__((sda));
+extern f32 amoeboid_burst_vertical_speed_min __asm__("D_L01_00161A08") __attribute__((sda));
+extern f32 amoeboid_burst_vertical_speed_max __asm__("D_L01_00161A0C") __attribute__((sda));
+extern f32 amoeboid_burst_downward_velocity_adjustment_factor __asm__("D_L01_00161A10") __attribute__((sda));
 extern f32 D_L01_00161A14 __attribute__((sda));
 extern f32 D_L01_00161A18 __attribute__((sda));
 extern s32 D_L01_00161A1C __attribute__((sda));
@@ -2577,8 +2577,8 @@ extern s32 D_L01_00161A24 __attribute__((sda));
 extern s32 D_L01_00161A28 __attribute__((sda));
 extern s32 D_L01_00161A2C __attribute__((sda));
 extern s32 D_L01_00161A30 __attribute__((sda));
-extern s32 D_L01_00161A34 __attribute__((sda));
-extern f32 D_L01_00161A38 __attribute__((sda));
+extern s32 amoeboid_burst_spark_duration_base __asm__("D_L01_00161A34") __attribute__((sda));
+extern f32 amoeboid_burst_input_motion_scale_max __asm__("D_L01_00161A38") __attribute__((sda));
 
 extern f32 D_0015ED70;
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
@@ -2607,8 +2607,8 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
         spawn_position[2] += 1.0f;
         angle = random_angle_radians();
         radius = random_float_between_alt(amoeboid_burst_radial_speed_min, amoeboid_burst_radial_speed_max);
-        lateral = random_float_between_alt(D_L01_00161A08, D_L01_00161A0C);
-        vertical = random_float_between_alt(0.0f, D_L01_00161A38);
+        lateral = random_float_between_alt(amoeboid_burst_vertical_speed_min, amoeboid_burst_vertical_speed_max);
+        vertical = random_float_between_alt(0.0f, amoeboid_burst_input_motion_scale_max);
         scale_vector_xyz(origin_copy, mode, vertical * frame_time_gp);
         scale = fast_cos(angle);
         origin[0] += scale * (radius * frame_time_gp);
@@ -2619,7 +2619,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
         origin[2] += scaled_vertical;
         qcopy(velocity, origin_copy);
         next = i + 1;
-        velocity[2] -= D_L01_00161A10 * D_0015ED70 * (f32)scale_game_frames(D_L01_00161A30);
+        velocity[2] -= amoeboid_burst_downward_velocity_adjustment_factor * D_0015ED70 * (f32)scale_game_frames(D_L01_00161A30);
         for (j = 0; j < amoeboid_burst_sparks_per_group; j++) {
             scale = random_float_between_alt(0.5f, 1.5f);
             origin[3] = scale * D_L01_00161A14;
@@ -2630,7 +2630,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), D_L01_00161A20, D_L01_00161A28);
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
-            duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f)));
+            duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)amoeboid_burst_spark_duration_base * 0.5f, (f32)amoeboid_burst_spark_duration_base * 2.5f)));
             spawn_spark(spawn_position, origin_copy, velocity, lower, upper, first, second, duration, -1);
         }
         i = next;
