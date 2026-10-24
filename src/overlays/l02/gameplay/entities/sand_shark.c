@@ -980,8 +980,8 @@ extern float sand_shark_radial_motion_z_range_start __asm__("D_L02_00161928") __
 extern float sand_shark_radial_motion_z_range_end __asm__("D_L02_0016192C") __attribute__((sda));
 extern float sand_shark_radial_motion_xy_range_start __asm__("D_L02_00161930") __attribute__((sda));
 extern float sand_shark_radial_motion_xy_range_end __asm__("D_L02_00161934") __attribute__((sda));
-extern float D_L02_00161938 __attribute__((sda));
-extern float D_L02_0016193C __attribute__((sda));
+extern float sand_shark_vertical_motion_w __asm__("D_L02_00161938") __attribute__((sda));
+extern float sand_shark_radial_motion_w __asm__("D_L02_0016193C") __attribute__((sda));
 extern int sand_shark_particle_frame_count_range_start __asm__("D_L02_00161940") __attribute__((sda));
 extern int sand_shark_particle_frame_count_range_end __asm__("D_L02_00161944") __attribute__((sda));
 extern int sand_shark_particle_second_frame_count_range_start __asm__("D_L02_00161948") __attribute__((sda));
@@ -1021,8 +1021,8 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
         *(int *)&radial_motion[2] = 0;
         vertical_motion[2] = rand_between_d57f8(sand_shark_vertical_motion_z_range_start, sand_shark_vertical_motion_z_range_end) * D_0015ED6C;
         radial_motion[2] = rand_between_d57f8(sand_shark_radial_motion_z_range_start, sand_shark_radial_motion_z_range_end) * D_0015ED6C;
-        vertical_motion[3] = D_L02_00161938;
-        radial_motion[3] = D_L02_0016193C;
+        vertical_motion[3] = sand_shark_vertical_motion_w;
+        radial_motion[3] = sand_shark_radial_motion_w;
         frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_particle_frame_count_range_start, (float)sand_shark_particle_frame_count_range_end));
         second_frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_particle_second_frame_count_range_start, (float)sand_shark_particle_second_frame_count_range_end));
         third_frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_particle_third_frame_count_range_start, (float)sand_shark_particle_third_frame_count_range_end));
