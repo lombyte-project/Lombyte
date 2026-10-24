@@ -809,7 +809,9 @@ extern float D_L11_001613D4 __attribute__((sda));
 float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
-void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
+void set_resort_owner_state(struct Moby *moby, unsigned char state) __asm__("FUN_L11_002d2088");
+
+void set_resort_owner_state(struct Moby *moby, unsigned char state) {
     char *moby_vars = (char *)moby->pvars;
     float gate_target_offset[4];
 
