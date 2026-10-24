@@ -186,7 +186,7 @@ int D_L14_00161A3C = 0x8c;
 extern float weapon_aim_final_path_step __asm__("D_L14_00161A40") __attribute__((sda));
 extern float muzzle_flash_joint_axis_offset __asm__("D_L14_00161A44") __attribute__((sda));
 extern float D_L14_00161A48 __attribute__((sda));
-extern float D_L14_00161A4C __attribute__((sda));
+extern float muzzle_light_full_blend_position_w __asm__("D_L14_00161A4C") __attribute__((sda));
 extern float D_L14_00161A50 __attribute__((sda));
 extern float D_L14_00161A54 __attribute__((sda));
 extern float D_L14_00161A58 __attribute__((sda));
@@ -386,7 +386,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             ray_67e8(moby_data + 0xD0, moby_data + 0x1E0, 9, racer_moby, &ray);
         } else if (racer_moby->command == 2 || racer_moby->command == 4) {
             char *muzzle_flash_particle;
-            float r;
+            float muzzle_light_position_w;
             char *muzzle = moby_data + 0xD0;
             scale_67e8(&ray, moby_data + 0xA0, muzzle_flash_joint_axis_offset);
             add_67e8(&ray, &ray, muzzle);
@@ -404,14 +404,14 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             }
             qcopy(&ray.self, muzzle);
             ((float *)&ray.self)[2] -= 0.5f;
-            r = (D_L14_00161A4C - 0.1f) * blend + 0.1f;
+            muzzle_light_position_w = (muzzle_light_full_blend_position_w - 0.1f) * blend + 0.1f;
             if (*(int *)(moby_data + 0xF0) == -1) {
-                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, r, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
+                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, muzzle_light_position_w, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
             }
             if (*(int *)(moby_data + 0xF0) >= 0) {
                 float *muzzle_light_entry = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
                 qcopy(muzzle_light_entry + 4, &ray.self);
-                muzzle_light_entry[7] = r;
+                muzzle_light_entry[7] = muzzle_light_position_w;
                 muzzle_light_entry[0] = D_L14_00161A50;
                 muzzle_light_entry[1] = D_L14_00161A54;
                 muzzle_light_entry[2] = D_L14_00161A58;
