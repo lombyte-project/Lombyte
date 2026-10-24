@@ -2839,14 +2839,14 @@ extern int D_L18_00161FAC __attribute__((sda));
 extern int D_L18_00161FB0 __attribute__((sda));
 extern int D_L18_00161FB4 __attribute__((sda));
 extern int D_L18_00161FB8 __attribute__((sda));
-extern int D_L18_00161FC4 __attribute__((sda));
-extern int D_L18_00161FD0 __attribute__((sda));
-extern int D_L18_00161FDC __attribute__((sda));
+extern int explosion_burst_first_glow_duration_frames_gp __asm__("D_L18_00161FC4") __attribute__((sda));
+extern int explosion_burst_second_glow_duration_frames_gp __asm__("D_L18_00161FD0") __attribute__((sda));
+extern int explosion_burst_third_glow_duration_frames_gp __asm__("D_L18_00161FDC") __attribute__((sda));
 extern int explosion_burst_camera_shake_duration_frames_gp __asm__("D_L18_00161FE8") __attribute__((sda));
 extern float explosion_burst_spark_speed_min_gp __asm__("D_L18_00161F70") __attribute__((sda));
 extern float explosion_burst_spark_speed_max_gp __asm__("D_L18_00161F74") __attribute__((sda));
 extern float D_L18_00161F8C __attribute__((sda));
-extern float D_L18_00161F90 __attribute__((sda));
+extern float explosion_burst_spark_second_vector_z_rate_gp __asm__("D_L18_00161F90") __attribute__((sda));
 extern float explosion_burst_spark_second_vector_scale_gp __asm__("D_L18_00161F94") __attribute__((sda));
 extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __attribute__((sda));
 extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
@@ -2889,7 +2889,7 @@ void spawn_explosion_burst(void *source_moby) {
             scale_vector_xyz(offset, velocity, explosion_burst_spark_second_vector_scale_gp);
             scale = random_float_between(0.8f, 1.2f);
             offset[3] = velocity[3] = D_L18_00161F8C;
-            offset[2] += D_L18_00161F90 * scale * frame_time;
+            offset[2] += explosion_burst_spark_second_vector_z_rate_gp * scale * frame_time;
             scale = random_float_between(0.8f, 1.2f);
             a = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_frame_count_gp) * scale);
             b = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_second_frame_count_gp) * scale);
@@ -2929,17 +2929,17 @@ void spawn_explosion_burst(void *source_moby) {
     }
     if (D_L18_00161FC0 > 0.0f) {
         void *pos = &moby->pos;
-        int duration = scale_ticks(D_L18_00161FC4);
+        int duration = scale_ticks(explosion_burst_first_glow_duration_frames_gp);
         spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FC0, duration, D_L18_00161FC8, D_L18_00161FC9[0], D_L18_00161FC9[1], D_L18_00161FC9[2]);
     }
     if (D_L18_00161FCC > 0.0f) {
         void *pos = &moby->pos;
-        int duration = scale_ticks(D_L18_00161FD0);
+        int duration = scale_ticks(explosion_burst_second_glow_duration_frames_gp);
         spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FCC, duration, D_L18_00161FD4, D_L18_00161FD5[0], D_L18_00161FD5[1], D_L18_00161FD5[2]);
     }
     if (D_L18_00161FD8 > 0.0f) {
         void *pos = &moby->pos;
-        int duration = scale_ticks(D_L18_00161FDC);
+        int duration = scale_ticks(explosion_burst_third_glow_duration_frames_gp);
         spawn_glow_particle(source_moby, pos, &D_L18_0015F580, D_L18_00161FD8, duration, D_L18_00161FE0, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
     }
     if (explosion_burst_camera_shake_amplitude_gp > 0.0f) {
