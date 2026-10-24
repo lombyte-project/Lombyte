@@ -1605,17 +1605,17 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.008f, frame_scale_sq * 0.15f, frame_time * 9.948377f);
         } else {
             float sp;
-            float st;
+            float remaining_turn_angle;
 
             sp = hero.stick_magnitude;
-            st = hero.motion.yaw_error;
+            remaining_turn_angle = hero.motion.yaw_error;
             if (hero.item_anim_active != 0) {
-                k = 1.0f - st * 0.55f;
+                k = 1.0f - remaining_turn_angle * 0.55f;
                 if (k < 0.0f) {
                     k = 0.0f;
                 }
             } else if (sp < 0.8f) {
-                if (st > 0.5235988f) {
+                if (remaining_turn_angle > 0.5235988f) {
                     k = 0.0f;
                 }
             }
