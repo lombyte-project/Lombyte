@@ -208,7 +208,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
 
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-extern float D_L08_00161D38 __attribute__((sda));
+extern float commando_part_spin_speed_degrees __asm__("D_L08_00161D38") __attribute__((sda));
 void update_commando_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e9a18");
 
 void update_commando_parts(struct Moby *parent_moby) {
@@ -233,7 +233,7 @@ void update_commando_parts(struct Moby *parent_moby) {
     if (*(char **)(data + 0x90) != 0) {
         *(float *)(*(char **)(data + 0x90) + 0x40) =
             fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
-                               D_L08_00161D38 * DEG_TO_RAD * D_0015ED6C);
+                               commando_part_spin_speed_degrees * DEG_TO_RAD * D_0015ED6C);
     }
     part_entry_cursor = parts + 0x10;
     for (i = 0; i < 16; i++) {
