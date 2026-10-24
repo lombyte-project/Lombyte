@@ -2524,8 +2524,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 extern float D_L15_00161B00 __attribute__((sda));
 extern float D_L15_00161B04 __attribute__((sda));
 extern float D_L15_00161B08 __attribute__((sda));
-extern float D_L15_00161B2C __attribute__((sda));
-extern float D_L15_00161B30 __attribute__((sda));
+extern float ultramech_pre_hit_scale_multiplier __asm__("D_L15_00161B2C") __attribute__((sda));
+extern float ultramech_post_hit_scale_multiplier __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;
 extern int D_001413D0 __attribute__((section(".data")));
 extern char D_00178700[] __asm__("D_L15_00178700");
@@ -2575,7 +2575,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     float reaction_product;
     unsigned char state;
 
-    *(float *)((char *)ultramech_moby + 0x2C) = D_L15_00161B2C * *(float *)(ultramech_moby->cls + 0x24);
+    *(float *)((char *)ultramech_moby + 0x2C) = ultramech_pre_hit_scale_multiplier * *(float *)(ultramech_moby->cls + 0x24);
     impact = 0.0f;
     ultramech_vars->w1C8 = 0;
     for (i = 0; i < 64; i++) {
@@ -2670,7 +2670,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     }
     *(unsigned char *)((char *)ultramech_moby + 0xA4) = 0xFF;
     FUN_0024cde0(ultramech_moby, (char *)ultramech_vars + 0x60);
-    *(float *)((char *)ultramech_moby + 0x2C) = *(float *)(ultramech_moby->cls + 0x24) * D_L15_00161B30;
+    *(float *)((char *)ultramech_moby + 0x2C) = *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier;
     ultramech_vars->w164 = 0;
     if (ultramech_moby->state != 1) {
         if (ultramech_vars->w1D0 != -1)
