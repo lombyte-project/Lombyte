@@ -537,7 +537,9 @@ extern UV_30a908 D_L11_001DA510[];
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
-void FUN_L11_0030a908(struct Moby *moby) {
+void draw_pokitaru_ocean(struct Moby *moby) __asm__("FUN_L11_0030a908");
+
+void draw_pokitaru_ocean(struct Moby *moby) {
     Vec4f scratch_vector;
     Vec4f side_offset;
     Vec4f strip_length_direction;
