@@ -1774,7 +1774,7 @@ void machinegun_turret_update(char *moby) {
     float m80[16];
     float signed_phase_increment;
     float phase_angle, sine_input_angle, sine_scale, target_heading;
-    int r, rem, sel, target_missing_or_outside_waking_cuboid, animation_sequence, aiming_cuboid_index;
+    int scaled_wait_frames_or_target_query_status, rem, sel, target_missing_or_outside_waking_cuboid, animation_sequence, aiming_cuboid_index;
     char *aiming_offset_vector;
     char *aiming_base_point;
 
@@ -1796,8 +1796,8 @@ void machinegun_turret_update(char *moby) {
             func_0020D678_2B4E40(moby);
             return;
         }
-        r = func_001F9850_2B4E40(D_L14_00161534);
-        *(short *)(data + 0x76) = r;
+        scaled_wait_frames_or_target_query_status = func_001F9850_2B4E40(D_L14_00161534);
+        *(short *)(data + 0x76) = scaled_wait_frames_or_target_query_status;
         *(unsigned char *)(data + 0x8B) = 0;
         if (*(short *)(data + 0x88) != 0) {
             *(unsigned char *)(moby + 0x20) = 3;
@@ -1849,8 +1849,8 @@ void machinegun_turret_update(char *moby) {
         *(int *)(data + 0x8C) = 0;
         return;
     case TURRET_STATE_WAIT_FOR_TARGET:
-        r = func_L00_00260D30_2B4E40(moby, target_point_scratch, 34.0f);
-        if (r != 2) {
+        scaled_wait_frames_or_target_query_status = func_L00_00260D30_2B4E40(moby, target_point_scratch, 34.0f);
+        if (scaled_wait_frames_or_target_query_status != 2) {
             if (func_00215570_2B4E40(target_point_scratch, *(int *)(data + 0x90)) != 0) {
                 *(unsigned char *)(moby + 0x20) = 4;
                 func_00213D28_2B4E40(moby, 3, 0);
@@ -1912,8 +1912,8 @@ void machinegun_turret_update(char *moby) {
                 func_L00_00251328_2B4E40(spawn_flying_bolt(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
         }
-        r = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
-        target_missing_or_outside_waking_cuboid = (r == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
+        scaled_wait_frames_or_target_query_status = func_L00_00260D30_2B4E40(moby, target_query_result, 34.0f);
+        target_missing_or_outside_waking_cuboid = (scaled_wait_frames_or_target_query_status == 2 || func_00215570_2B4E40(target_query_result, *(int *)(data + 0x90)) == 0);
         if (target_missing_or_outside_waking_cuboid == 0) {
             return;
         }
