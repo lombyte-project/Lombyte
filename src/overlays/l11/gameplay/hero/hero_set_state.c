@@ -83,7 +83,8 @@ extern char D_L11_0017C960[];
 extern char D_L11_0017C920[];
 int hero_set_state(int a, int b) {
     enum {
-        HERO_STATE_SHALLOW_WATER_RUN = 0x73
+        HERO_STATE_SHALLOW_WATER_RUN = 0x73,
+        HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY = 0x76
     };
     int old2088;
     char *moby;
@@ -346,7 +347,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x75:
-    case 0x76: {
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
         p->state.control_mode = 7;
