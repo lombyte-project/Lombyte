@@ -1410,11 +1410,11 @@ extern float D_0015ED6C;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141680;
 extern int D_0015EEA4;
-extern float D_L00_001616E0 __attribute__((sda));
+extern float morphoray_base_drain_rate __asm__("D_L00_001616E0") __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
 extern int D_L00_001617BC;
-extern int D_L00_001617C0;
-extern int D_L00_001617C4;
+extern int morphoray_point_light_slot __asm__("D_L00_001617C0");
+extern int morphoray_light_fade_countdown __asm__("D_L00_001617C4");
 extern int D_L00_001617C8;
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
@@ -1506,9 +1506,9 @@ void morphoray_update(Moby *moby) {
     data = (struct Ray_2BDAF0 *)moby->pvars;
     if (moby->state == 0) {
         moby->state = 1;
-        D_L00_001617C0 = -1;
+        morphoray_point_light_slot = -1;
         D_L00_001617C8 = -1;
-        D_L00_001617C4 = 0;
+        morphoray_light_fade_countdown = 0;
     }
     in_range = 1;
     if (moby->prev_seq == 0 && func_0020D830_2BDAF0(moby) < 6.0f) {
@@ -1584,7 +1584,7 @@ void morphoray_update(Moby *moby) {
         }
             {
                 float level_bonus = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
-                float remaining = data->left - D_L00_001616E0 * D_0015ED6C * level_bonus;
+                float remaining = data->left - morphoray_base_drain_rate * D_0015ED6C * level_bonus;
                 data->left = remaining;
                 if (remaining < 0.0f) {
                     data->left = 0.0f;
@@ -1602,17 +1602,17 @@ void morphoray_update(Moby *moby) {
             data->target = 0;
         }
         func_L00_002BE3A8_2BDAF0(moby);
-        if (D_L00_001617C0 == -1) {
-            D_L00_001617C0 = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
+        if (morphoray_point_light_slot == -1) {
+            morphoray_point_light_slot = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
         }
-        if (D_L00_001617C0 >= 0) {
-            D_L00_001617C4 = func_001F9850_2BDAF0(20);
+        if (morphoray_point_light_slot >= 0) {
+            morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
             func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[1].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[1].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[1].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[1].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[1].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
         }
         if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
             D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, moby);
@@ -1626,26 +1626,26 @@ void morphoray_update(Moby *moby) {
             data->snd = -1;
         }
         D_L00_001617BC = 1;
-        if (D_L00_001617C0 >= 0) {
+        if (morphoray_point_light_slot >= 0) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[0].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[0].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[0].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
-            brightness = func_001FA888_2BDAF0(D_L00_001617C4) * 0.05f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[0] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = brightness * 0.25f;
-            if (func_001F9908_2BDAF0(&D_L00_001617C4) != 0) {
-                release_point_light_slot(D_L00_001617C0);
-                D_L00_001617C0 = -1;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[0].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[0].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[0].z;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            brightness = func_001FA888_2BDAF0(morphoray_light_fade_countdown) * 0.05f;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[0] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[1] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[2] = brightness * 0.25f;
+            if (func_001F9908_2BDAF0(&morphoray_light_fade_countdown) != 0) {
+                release_point_light_slot(morphoray_point_light_slot);
+                morphoray_point_light_slot = -1;
             }
         }
-        if (D_L00_001617C0 >= 0 && D_L00_001617C4 == 0) {
-            release_point_light_slot(D_L00_001617C0);
-            D_L00_001617C0 = -1;
+        if (morphoray_point_light_slot >= 0 && morphoray_light_fade_countdown == 0) {
+            release_point_light_slot(morphoray_point_light_slot);
+            morphoray_point_light_slot = -1;
         }
         if (D_L00_001617C8 >= 0) {
             if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
@@ -1656,9 +1656,9 @@ void morphoray_update(Moby *moby) {
         }
         cancel_hero_item_animation();
     }
-    if (busy && D_L00_001617C0 >= 0) {
-        release_point_light_slot(D_L00_001617C0);
-        D_L00_001617C0 = -1;
+    if (busy && morphoray_point_light_slot >= 0) {
+        release_point_light_slot(morphoray_point_light_slot);
+        morphoray_point_light_slot = -1;
     }
 }
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
