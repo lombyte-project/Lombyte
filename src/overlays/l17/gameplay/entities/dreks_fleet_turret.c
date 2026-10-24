@@ -828,7 +828,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fleet_radial_uv_scroll_rate __asm__("D_L17_00161BBC") __attribute__((sda));
 extern float FUN_L00_00200260(float, float);
 extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
-extern int D_L17_00161B98 __attribute__((sda));
+extern int fleet_radial_alpha_base_value __asm__("D_L17_00161B98") __attribute__((sda));
 extern int D_L17_00161B9C __attribute__((sda));
 extern int D_L17_00161BA0 __attribute__((sda));
 extern int D_L17_00161BA4 __attribute__((sda));
@@ -856,7 +856,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     moby_transform_matrix[15] = 1.0f;
     quad_primitive.tex = get_effect_texture(0x28);
     quad_primitive.q80 = 0xFF9000000260L;
-    quad_primitive.alpha = (long)D_L17_00161B98 | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
+    quad_primitive.alpha = (long)fleet_radial_alpha_base_value | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
               ((long)D_L17_00161BA4 << 6) | 0x8000000000L;
     quad_primitive.z70 = 0;
     for (pass = 0; pass < 2; pass++) {
