@@ -759,14 +759,14 @@ void hoven_turret_update(struct Moby *moby) {
             }
             fast_dec_timer_s16(&data->f70);
             if ((D_0013A5E0_e[0] & 0xA0) && data->f70 == 0) {
-                Vec_304920 dir;
+                Vec_304920 firing_offset;
                 Vec_304920 muz;
                 float yaw;
                 int i;
 
                 blend_moby_animation_c(moby, data->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations_c3(moby->rot.z, 1.5707964f);
-                build_spherical_offset(dir, D_L12_00161EE8 * D_0015ED6C_gp, yaw, data->f74);
+                build_spherical_offset(firing_offset, D_L12_00161EE8 * D_0015ED6C_gp, yaw, data->f74);
                 if (data->f80 == 1) {
                     data->f80 = 0;
                     FUN_L00_0024f7c8(moby, 2, muz);
@@ -774,10 +774,10 @@ void hoven_turret_update(struct Moby *moby) {
                     FUN_L00_0024f7c8(moby, 1, muz);
                     data->f80 = 1;
                 }
-                add_vector_xyz(muz, muz, dir);
-                add_vector_xyz(muz, muz, dir);
-                add_vector_xyz(muz, muz, dir);
-                create_moby_with_particles(moby, muz, dir, 0);
+                add_vector_xyz(muz, muz, firing_offset);
+                add_vector_xyz(muz, muz, firing_offset);
+                add_vector_xyz(muz, muz, firing_offset);
+                create_moby_with_particles(moby, muz, firing_offset, 0);
                 allocate_voice_for_target_entry_alt(0, 0, (int)moby);
                 ((Cam_304920 *)D_L12_00167180_304920)->f160 = 0.03f;
                 ((Cam_304920 *)D_L12_00167180_304920)->f168 = scale_game_frames_alt(0xA);
@@ -793,13 +793,13 @@ void hoven_turret_update(struct Moby *moby) {
                     rnd[1] = random_float_between_c(-1.0f, 1.0f);
                     rnd[2] = random_float_between_c(-1.0f, 1.0f);
                     *(u128 *)vel = *(u128 *)rnd;
-                    normalize_vector_xyz(vel, vel, vector_length_xyz(dir) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
-                    add_vector_xyz(vel, dir, vel);
+                    normalize_vector_xyz(vel, vel, vector_length_xyz(firing_offset) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
+                    add_vector_xyz(vel, firing_offset, vel);
                     normalize_vector_xyz(vel, vel, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
                     FUN_L00_0026dd20(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
                 }
-                normalize_vector_xyz(dir, dir, D_0015ED6C_gp * 0.5f);
-                FUN_L00_0026dd20(muz, dir, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
+                normalize_vector_xyz(firing_offset, firing_offset, D_0015ED6C_gp * 0.5f);
+                FUN_L00_0026dd20(muz, firing_offset, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
             }
             if (D_L12_001619A0 == 0) {
                 FUN_L12_003032e8_c((char *)moby);
