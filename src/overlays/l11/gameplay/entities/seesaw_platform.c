@@ -2378,8 +2378,8 @@ extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern float D_L11_00161FF8 __attribute__((sda));
 extern float D_L11_00161FFC __attribute__((sda));
 extern float D_L11_00162000 __attribute__((sda));
-extern float D_L11_00162008 __attribute__((sda));
-extern float D_L11_0016200C __attribute__((sda));
+extern float jet_fighter_yaw_deflection_scale_gp __asm__("D_L11_00162008") __attribute__((sda));
+extern float jet_fighter_pitch_deflection_scale_gp __asm__("D_L11_0016200C") __attribute__((sda));
 extern float D_L11_00162014 __attribute__((sda));
 extern float D_L11_00162018 __attribute__((sda));
 extern float D_L11_0016201C __attribute__((sda));
@@ -2646,11 +2646,11 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
                 FUN_L00_001ff660(ship_movement_vector, ship_movement_vector, collision_result + 0x40);
                 ship_vars->f38 = fast_add_rot_2838(
                     ship_vars->f38,
-                    fast_sub_rot_2838(atan2_2838(ship_movement_vector[0], ship_movement_vector[1]), ship_vars->f38) * D_L11_00162008);
+                    fast_sub_rot_2838(atan2_2838(ship_movement_vector[0], ship_movement_vector[1]), ship_vars->f38) * jet_fighter_yaw_deflection_scale_gp);
                 collision_adjusted_pitch = fast_add_rot_2838(
                     ship_vars->f34,
                     fast_sub_rot_2838(-atan2_2838(vector_length_xy_2838(ship_movement_vector), ship_movement_vector[2]), ship_vars->f34) *
-                        D_L11_0016200C);
+                        jet_fighter_pitch_deflection_scale_gp);
                 k = ship_vars->speed * D_L11_0016204C;
                 ship_vars->f34 = collision_adjusted_pitch;
                 ship_vars->speed = k;
@@ -2774,11 +2774,11 @@ void jet_fighter_update(struct Moby *moby) {
                         FUN_L00_001ff660(ship_velocity_scratch, ship_velocity_scratch, hit->push);
                         ship_vars->f38 = fast_add_rot_2838(
                             ship_vars->f38,
-                            fast_sub_rot_2838(atan2_2838(ship_velocity_scratch[0], ship_velocity_scratch[1]), ship_vars->f38) * D_L11_00162008 * k);
+                            fast_sub_rot_2838(atan2_2838(ship_velocity_scratch[0], ship_velocity_scratch[1]), ship_vars->f38) * jet_fighter_yaw_deflection_scale_gp * k);
                         ship_vars->f34 = fast_add_rot_2838(
                             ship_vars->f34,
                             fast_sub_rot_2838(atan2_2838(vector_length_xy_2838(ship_velocity_scratch), ship_velocity_scratch[2]), ship_vars->f34) *
-                                D_L11_0016200C * k);
+                                jet_fighter_pitch_deflection_scale_gp * k);
                     }
                 } else {
                     build_spherical_offset(ship_velocity_scratch, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
