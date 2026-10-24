@@ -3221,7 +3221,7 @@ struct L14RaceState {
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
-extern s32 D_L14_00161A34 __attribute__((sda));
+extern s32 level14_racer_path_follow_initial_timer_frames_gp __asm__("D_L14_00161A34") __attribute__((sda));
 extern s32 D_L14_00161A5C __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
@@ -3309,7 +3309,7 @@ void update_level14_racer(struct Moby *racer_moby) {
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (interpolate_racer_to_path_start(racer_moby)) {
             racer_moby->state = 5;
-            racer_vars->timer = scale_game_frames(D_L14_00161A34);
+            racer_vars->timer = scale_game_frames(level14_racer_path_follow_initial_timer_frames_gp);
         }
         break;
     case RACER_STATE_FOLLOW_PATH:
