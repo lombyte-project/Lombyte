@@ -1283,9 +1283,9 @@ extern void FUN_L00_00216f90_2518(void *, void *, int, int) __asm__("FUN_L00_002
 extern void FUN_L01_0027a248_2518(int, int) __asm__("FUN_L01_0027a248");
 extern int enqueue_callback_2518(void (*)(char *), char *) __asm__("FUN_001f4600");
 
-extern float D_L11_00161910 __attribute__((sda));
-extern float D_L11_00161914 __attribute__((sda));
-extern float D_L11_00161918 __attribute__((sda));
+extern float teleporter_parts_acceleration __asm__("D_L11_00161910") __attribute__((sda));
+extern float teleporter_parts_deceleration __asm__("D_L11_00161914") __attribute__((sda));
+extern float teleporter_parts_max_speed __asm__("D_L11_00161918") __attribute__((sda));
 /* L11 twin of teleporter_update: a three-part switch moby that, once the hero
  * stands on it in mission state 0xB and presses the button, swings its parts
  * open and moves the linked moby (or its fallback) along. */
@@ -1362,14 +1362,14 @@ void teleporter_update(struct Moby *moby) {
         int teleport_transition_status = get_hero_target_pose_status();
         if (*(float *)(data + 0x20) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
-                                            D_L11_00161910 * D_0015ED70_2518,
-                                            D_L11_00161914 * D_0015ED70_2518,
-                                            D_L11_00161918 * D_0015ED6C_2518);
+                                            teleporter_parts_acceleration * D_0015ED70_2518,
+                                            teleporter_parts_deceleration * D_0015ED70_2518,
+                                            teleporter_parts_max_speed * D_0015ED6C_2518);
         } else if (*(float *)(data + 0x24) < 1.0f) {
             advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
-                                            D_L11_00161910 * D_0015ED70_2518,
-                                            D_L11_00161914 * D_0015ED70_2518,
-                                            D_L11_00161918 * D_0015ED6C_2518);
+                                            teleporter_parts_acceleration * D_0015ED70_2518,
+                                            teleporter_parts_deceleration * D_0015ED70_2518,
+                                            teleporter_parts_max_speed * D_0015ED6C_2518);
         } else if (D_L11_0015F594 != 0xB || !(*(float *)(data + 0x20) > 0.25f)) {
             if (teleport_transition_status == 2) {
                 *(float *)(data + 0x3C) = 1.95f;
@@ -1425,14 +1425,14 @@ void teleporter_update(struct Moby *moby) {
             approach_value_2518((float *)(data + 0x3C), 1.95f, D_0015ED6C_2518 * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
             advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
-                                            D_L11_00161910 * D_0015ED70_2518,
-                                            D_L11_00161914 * D_0015ED70_2518,
-                                            D_L11_00161918 * D_0015ED6C_2518);
+                                            teleporter_parts_acceleration * D_0015ED70_2518,
+                                            teleporter_parts_deceleration * D_0015ED70_2518,
+                                            teleporter_parts_max_speed * D_0015ED6C_2518);
         } else if (0.0f < *(float *)(data + 0x20)) {
             advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
-                                            D_L11_00161910 * D_0015ED70_2518,
-                                            D_L11_00161914 * D_0015ED70_2518,
-                                            D_L11_00161918 * D_0015ED6C_2518);
+                                            teleporter_parts_acceleration * D_0015ED70_2518,
+                                            teleporter_parts_deceleration * D_0015ED70_2518,
+                                            teleporter_parts_max_speed * D_0015ED6C_2518);
         } else {
             moby->state = 1;
         }
