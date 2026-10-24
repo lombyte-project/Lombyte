@@ -147,8 +147,8 @@ typedef struct {
 } L01Camera;
 
 extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
-extern u32 D_L01_00161228 __attribute__((sda));
-extern u32 D_L01_0016122C __attribute__((sda));
+extern u32 cached_water_texture_id __asm__("D_L01_00161228") __attribute__((sda));
+extern u32 cached_water_second_texture_id __asm__("D_L01_0016122C") __attribute__((sda));
 extern u32 D_L01_00161230 __attribute__((sda));
 extern u32 D_L01_00161234 __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
@@ -212,8 +212,8 @@ void build_water_render_setup_packet(void) {
     l01_packet.tag->addr = (u32)D_L01_001CAC80;
     l01_packet.tag->vif0 = 0;
     l01_packet.tag->vif1 = 0x50000007;
-    D_L01_00161228 = 0xFFFFFFFF;
-    D_L01_0016122C = 0xFFFFFFFF;
+    cached_water_texture_id = 0xFFFFFFFF;
+    cached_water_second_texture_id = 0xFFFFFFFF;
     D_L01_00161230 = 0xFFFFFFFF;
     D_L01_00161234 = 0xFFFFFFFF;
     l01_packet.tag++;
@@ -3495,7 +3495,7 @@ void render_water_grids(f32 *water_record, s32 count) {
             if (!(near_bits & 0x2f2f2f2f)) mode = 0;
         }
         mask = *(u16 *)((u8 *)water_record + 0x1e);
-        if (*(u32 *)(water_record + 5) != D_L01_00161228 || *(u32 *)(water_record + 6) != D_L01_0016122C ||
+        if (*(u32 *)(water_record + 5) != cached_water_texture_id || *(u32 *)(water_record + 6) != cached_water_second_texture_id ||
             *(u8 *)(water_record + 7) != D_L01_00161230 || *(u8 *)((u8 *)water_record + 0x1d) != D_L01_00161234) {
             l01_packet.words[0] = 0x10000005;
             l01_packet.words[1] = 0;
@@ -3518,8 +3518,8 @@ void render_water_grids(f32 *water_record, s32 count) {
             {
                 u32 texture_id = *(u32 *)(water_record + 5);
                 u32 second_texture_id = *(u32 *)(water_record + 6);
-                D_L01_00161228 = texture_id;
-                D_L01_0016122C = second_texture_id;
+                cached_water_texture_id = texture_id;
+                cached_water_second_texture_id = second_texture_id;
             }
             D_L01_00161230 = *(u8 *)(water_record + 7);
             D_L01_00161234 = *(u8 *)((u8 *)water_record + 0x1d);
