@@ -134,7 +134,7 @@ void update_hero_state_transitions(void) {
     float probe_heading_1;
     float probe_heading_2;
     float probe_heading_3;
-    int sp34;
+    int predicted_trajectory_steps;
     int sp38;
 
     moby = hero.moby;
@@ -1549,9 +1549,9 @@ void update_hero_state_transitions(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp34,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_trajectory_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp34, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_trajectory_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
