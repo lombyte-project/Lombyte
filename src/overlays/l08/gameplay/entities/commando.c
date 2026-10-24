@@ -678,6 +678,7 @@ typedef struct {
 
 typedef struct { char pad0[0x10]; V45 position; } Sound45;
 
+extern float sample_ring_45(char *, float) __asm__("FUN_L08_002f5d98");
 extern Sound45 D_L08_00180AC0_45[] __asm__("D_L08_00180AC0");
 extern float D_0015ED60;
 extern int D_L08_0015F3F8;
@@ -700,8 +701,8 @@ extern void fast_draw_quad_45(void *, void *, int) __asm__("FUN_001f7d30");
 extern void normalize_vector_xyz_45(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_45(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void transform_vector_45(void *, void *, void *) __asm__("FUN_001f9d20");
-extern unsigned char *spawn_colored_effect_45(void *, void *, void *, short, unsigned char, unsigned char, unsigned char, unsigned char, float) __asm__("FUN_L08_0027b450");
-extern void spawn_puff_effect_45(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
+extern unsigned char *spawn_colored_effect_45(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
+extern void spawn_puff_effect_45(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 void FUN_L08_002f5e58(struct Moby *m) {
     M45 *moby = (M45 *)m;
@@ -750,11 +751,11 @@ void FUN_L08_002f5e58(struct Moby *m) {
         quad.gs[2]=0xFF9000000260L;
         quad.gs[3]=(long)data->blend0|((long)data->blend1<<2)|((long)data->blend2<<4)|((long)data->blend3<<6)|((long)data->alpha<<32);
         color=(data->alpha<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-        quad.color[3]=color; quad.color[0]=color; quad.color[1]=color; quad.color[2]=color;
+        quad.color[0]=color; quad.color[1]=color; quad.color[2]=color; quad.color[3]=color;
         qzero(&corner[0]); qzero(&corner[1]); qzero(&corner[2]); qzero(&corner[3]);
         {
         float half_width=data->width*0.5f;
-        corner[3][0]=corner[1][0]=half_width;
+        corner[1][0]=corner[3][0]=half_width;
         corner[0][0]=corner[2][0]=-half_width;
         }
         corner[0][2]=data->z0+0.01f; corner[1][2]=data->z1+0.01f;
@@ -785,16 +786,16 @@ void FUN_L08_002f5e58(struct Moby *m) {
         register int j;
         for (i=0;i<=data->ny;phase+=phase_step,amp+=amp_step,amp2+=amp2_step,phase0+=phase0_step,phase1+=phase1_step,i++) {
             float y=convert_integer_to_float(i)/convert_integer_to_float(data->ny);
-            qcopy(&point,&left);
+            qcopy_nc(&point,&left);
             j=0;
             subtract_vector_xyz_45(&step,&right,&left);
             fast_vec_scale_45(&step,&step,inv_x);
-            row_noise=interpolate_sample_ring(y,(char*)data);
+            row_noise=sample_ring_45((char*)data,y);
             for (;j<=data->nx;j++) {
                 float x=convert_integer_to_float(j)/convert_integer_to_float(data->nx);
                 float theta=x*3.1415927f;
                 float wave=time*phase+data->noise_amp*fast_sin_45(normalize_angle_45(data->noise_speed*time));
-                float noise=interpolate_sample_ring(x,(char*)data);
+                float noise=sample_ring_45((char*)data,x);
                 float angle0,angle1,shape,drop,a,b,normal_angle0,normal_angle1;
                 wave+=noise*data->noise_u+row_noise*data->noise_v+bias*data->noise_bias;
                 drop=z0*x+z1*(1.0f-x);
@@ -877,7 +878,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
                     life=scale_game_frames_45(data->particle_life);
                     r=data->particle_r; g=data->particle_g; b=data->particle_b;
                     a=func_001FA898_r(convert_integer_to_float(data->particle_a)*fraction);
-                    spawn_colored_effect_45(moby,&scratch[1],&scratch[0],life,r,g,b,a,size);
+                    spawn_colored_effect_45(moby,&scratch[1],&scratch[0],size,life,r,g,b,a);
                 }
             }
             if (tick_countdown_16_45(&data->puff_timer)) {
@@ -900,7 +901,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
                     scratch[0][1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
                     scratch[0][2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
                     fast_vec_scale_45(&scratch[0],&scratch[0],1.0f-data->puff_blend+shape*data->puff_blend);
-                    spawn_puff_effect_45(&scratch[1],&scratch[0],c0,c1,life,size);
+                    spawn_puff_effect_45(&scratch[1],&scratch[0],c0,c1,size,life);
                 }
             }
             if (data->sound_index!=-1) {
