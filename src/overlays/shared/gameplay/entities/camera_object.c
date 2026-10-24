@@ -1093,7 +1093,9 @@ extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color
  * 0xE / 0xF / 0x10) to the bolt count, the level's total and its source's
  * stats, shows the bolt counter and spawns two sparkles at the bolt.
  */
-void FUN_L00_002a6b70(struct Moby *bolt)
+void collect_bolt(struct Moby *bolt) __asm__("FUN_L00_002a6b70");
+
+void collect_bolt(struct Moby *bolt)
 {
     Vec4 sparkle_initial_velocity;
     Vec4 pos;
