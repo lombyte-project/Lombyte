@@ -326,7 +326,7 @@ int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1
 extern s32 D_001A03AC[];
 s32 map_filter_l07_6(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) __asm__("func_00207300");
 
-s32 map_filter_l07_6(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 reveal_test_value) {
+s32 map_filter_l07_6(s32 px, s32 py, f32 unused_input, f32 fparg1, f32 reveal_test_value) {
     s32 hit;
 
     hit = 0;
