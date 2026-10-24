@@ -1795,7 +1795,7 @@ extern HeroTableEntry70 D_L02_00179E90[];
 extern S17AD00 D_L02_0017AC80;
 extern S17C438 D_L02_0017C3B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L02_0015F638;
+extern float fatal_fall_height_threshold __asm__("D_L02_0015F638");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1954,7 +1954,7 @@ void update_hero_state_transitions(void) {
                     }
                 }
             }
-            if (D_L02_0015F638 > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
+            if (fatal_fall_height_threshold > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
                 hero.vehicle_mode != 2 && hero.state.current != 0x77) {
                 hero_set_state(0x77, 1);
             } else {
