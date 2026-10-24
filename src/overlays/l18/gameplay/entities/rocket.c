@@ -1531,8 +1531,8 @@ extern float D_L18_00161A44 __attribute__((sda));
 extern float D_L18_00161A50 __attribute__((sda));
 extern float D_L18_00161A58 __attribute__((sda));
 extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C") __attribute__((sda));
-extern float D_L18_00161A60 __attribute__((sda));
-extern float D_L18_00161A64 __attribute__((sda));
+extern float floating_platform_motion_scale_input_start_gp __asm__("D_L18_00161A60") __attribute__((sda));
+extern float floating_platform_motion_scale_input_end_gp __asm__("D_L18_00161A64") __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
 void spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
@@ -1586,7 +1586,7 @@ void floating_platform_update(struct Moby *moby) {
         if (tick_countdown_32((int *)(data + 0x7C)) == 0) {
             break;
         }
-        tilt_rate_scale = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
+        tilt_rate_scale = (convert_integer_to_float(D_L18_001623A8) - floating_platform_motion_scale_input_start_gp) / (floating_platform_motion_scale_input_end_gp - floating_platform_motion_scale_input_start_gp);
         if (1.0f < tilt_rate_scale) {
             tilt_rate_scale = 1.0f;
         } else if (tilt_rate_scale < 0.0f) {
@@ -1624,7 +1624,7 @@ void floating_platform_update(struct Moby *moby) {
             spawn_floating_platform_sparks(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
-        sink = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
+        sink = (convert_integer_to_float(D_L18_001623A8) - floating_platform_motion_scale_input_start_gp) / (floating_platform_motion_scale_input_end_gp - floating_platform_motion_scale_input_start_gp);
         if (1.0f < sink) {
             sink = 1.0f;
         } else if (sink < 0.0f) {
