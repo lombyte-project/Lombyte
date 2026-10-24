@@ -155,7 +155,7 @@ void update_hero_state_machine(void) {
     float probe_heading_3;
     int predicted_jump_trajectory_steps;
     int airborne_jump_press_age_frames;
-    int sp40;
+    int animation_trajectory_steps;
 
     moby = ((unsigned char *)hero.moby);
     prevSub = hero.state.control_mode;
@@ -1866,8 +1866,8 @@ void update_hero_state_machine(void) {
                         break;
                     }
                     if (hero.state_timer == hero.unk420 + scale_game_frames(1)) {
-                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp40, hero.unk4A0);
-                        adjust_hero_animation_speed_for_target_frame(hero.unk440, sp40, hero.unk494, -1.0f);
+                        predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &animation_trajectory_steps, hero.unk4A0);
+                        adjust_hero_animation_speed_for_target_frame(hero.unk440, animation_trajectory_steps, hero.unk494, -1.0f);
                         break;
                     }
                     if (hero.unk418 != 0) {
