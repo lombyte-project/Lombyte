@@ -2104,7 +2104,7 @@ void decoy_update(char *moby) {
     int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
-    float v[4] __attribute__((aligned(16)));
+    float position_effect_and_normal_scratch[4] __attribute__((aligned(16)));
     struct { float w[4]; float x[4]; } scratch __attribute__((aligned(16)));
     float rotated_normal[4] __attribute__((aligned(16)));
     float len, angle, cos_angle, sin_angle, rate;
@@ -2166,7 +2166,7 @@ void decoy_update(char *moby) {
     case DECOY_THROWN_MOVEMENT:
         if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
             *(float *)(moby + 0x2c) += D_0015ED60_2c4380 * 0.02f;
-        qcopy(v, moby + 0x10);
+        qcopy(position_effect_and_normal_scratch, moby + 0x10);
         *(float *)(vars + 0x18) -= D_0015ED70_2c4380 * 9.0f;
         for (i = 1; i <= D_L00_001B0830_lui[0]; ++i) {
             char *target;
@@ -2299,9 +2299,9 @@ void decoy_update(char *moby) {
                         scratch.w[0] = D_0015ED60_2c4380 * 0.5f;
                         scratch.w[2] = D_0015ED60_2c4380 * 0.7f;
                         scratch.w[1] = scratch.w[0];
-                        *(OvlQuad *)v = *(OvlQuad *)scratch.w;
-                        add_random_offset_to_vector_xyz(scratch.w[0], v);
-                        spawn_explosion(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
+                        *(OvlQuad *)position_effect_and_normal_scratch = *(OvlQuad *)scratch.w;
+                        add_random_offset_to_vector_xyz(scratch.w[0], position_effect_and_normal_scratch);
+                        spawn_explosion(0, moby, position_effect_and_normal_scratch, 0, 0, 4.0f, 0, 0, 0,
                                          3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
                             initialize_hit_descriptor(effect + effect, scratch.w, moby, 0x810000);
@@ -2335,14 +2335,14 @@ void decoy_update(char *moby) {
                     if (*(float *)(moby + 0x18) < len) {
                         *(float *)(moby + 0x18) = len;
                         qzero(vars + 0x10);
-                        qcopy(v, &coll_hit.normal_x);
+                        qcopy(position_effect_and_normal_scratch, &coll_hit.normal_x);
                         cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
                         sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
-                        scratch.w[0] = v[0] * cos_angle + v[1] * sin_angle;
+                        scratch.w[0] = position_effect_and_normal_scratch[0] * cos_angle + position_effect_and_normal_scratch[1] * sin_angle;
                         cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
                         sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
-                        scratch.w[1] = v[1] * cos_angle - v[0] * sin_angle;
-                        scratch.w[2] = v[2];
+                        scratch.w[1] = position_effect_and_normal_scratch[1] * cos_angle - position_effect_and_normal_scratch[0] * sin_angle;
+                        scratch.w[2] = position_effect_and_normal_scratch[2];
                         *(float *)(vars + 0x4c) = -FUN_001ff8b0_2c4380(
                             FUN_001ff1e0_2c4380(scratch.w[0] * scratch.w[0] + scratch.w[2] * scratch.w[2]), scratch.w[1]);
                         *(float *)(vars + 0x50) = FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
