@@ -3398,7 +3398,7 @@ extern float D_L00_001619B8 __attribute__((sda));
 extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC") __attribute__((sda));
 extern int D_L00_001619C0 __attribute__((sda));
 extern int D_L00_001619C4 __attribute__((sda));
-extern int D_L00_001619C8 __attribute__((sda));
+extern int smoke_fire_emitted_particle_base_color_gp __asm__("D_L00_001619C8") __attribute__((sda));
 extern float D_L00_001619E0 __attribute__((sda));
 extern V D_L00_00166DC0;
 void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
@@ -3490,7 +3490,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                 particle_vector.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
                 particle_vector.z = q->unk20 * frame_time;
                 sampled_particle_scalar = random_float_between(q->unk24, q->unk28);
-                col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 | D_L00_001619C8;
+                col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 | smoke_fire_emitted_particle_base_color_gp;
                 r = FUN_L00_00257b90(D_L00_001619C0, D_L00_001619C4);
                 ent = FUN_L00_0026d000(&b, r, D_L00_001619B4, 1.0f, &particle_vector, D_L00_001619B8, col, sampled_particle_scalar);
                 if (ent) {
