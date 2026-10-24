@@ -1175,7 +1175,7 @@ extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED60;
-extern float D_L13_0015F5D0;
+extern float optional_glow_suppression_level __asm__("D_L13_0015F5D0");
 extern float D_L13_0015F5D4;
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int update_blarg_space_fighter_path_following();
@@ -1356,8 +1356,8 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
                     fighter_data->fB8 = scale_game_frames_alt(0x78);
                     moby->bBC = 2;
                 }
-                if (tick_countdown_32_alt(&fighter_data->fA4) != 0 && D_L13_0015F5D0 < 0.9f && D_L13_0015F5D4 < 0.9f) {
-                    fighter_data->fA4 = scale_game_frames_alt(6) + func_001FA898_s((D_L13_0015F5D0 + D_L13_0015F5D4) * 1.3f);
+                if (tick_countdown_32_alt(&fighter_data->fA4) != 0 && optional_glow_suppression_level < 0.9f && D_L13_0015F5D4 < 0.9f) {
+                    fighter_data->fA4 = scale_game_frames_alt(6) + func_001FA898_s((optional_glow_suppression_level + D_L13_0015F5D4) * 1.3f);
                     if (vehd != 0) {
                         Vec_2C56B0 up;
                         float lateral_aim_offset[4];
@@ -1728,7 +1728,7 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void 
             FUN_L00_0026a9f0(pA, vC, *pa, *pb, C, F, 0, 1200000.0f, 0, yv);
         } while (j != 0);
     }
-    if (D_L13_0015F5D0 < 0.95f) {
+    if (optional_glow_suppression_level < 0.95f) {
         glow_frame_count = scale_game_frames_alt(15);
         spawn_glow_particle(source_moby, pA, vC, 9.0f, glow_frame_count, 0x7F, 0x7F, 0x7F, 0x20);
         glow_frame_count = scale_game_frames_alt(24);
