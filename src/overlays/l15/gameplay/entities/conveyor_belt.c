@@ -463,7 +463,7 @@ extern int D_L15_0015F5CC;
 int D_L15_001620EC = 128;
 int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
-extern float D_L15_001620F8 __attribute__((sda));
+extern float ripple_mesh_buffers_radial_wavelength_gp __asm__("D_L15_001620F8") __attribute__((sda));
 extern float ripple_mesh_buffers_phase_advance_divisor_gp __asm__("D_L15_001620FC") __attribute__((sda));
 extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -516,8 +516,8 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
             float t = ripple_mesh_buffers_z_amplitude_gp *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
-                                                      D_L15_001620F8) *
-                                     6.2831855f / D_L15_001620F8),
+                                                      ripple_mesh_buffers_radial_wavelength_gp) *
+                                     6.2831855f / ripple_mesh_buffers_radial_wavelength_gp),
                           ripple_data->f4));
             *(float *)(j * 12 + D_L15_00162090[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + D_L15_00162090[i] + 4) = p[1] + moby->pos.y;
