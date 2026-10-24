@@ -205,7 +205,7 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L00_0020a228(f32, f32);
-extern void FUN_L00_0020a210(f32, f32);
+extern void set_third_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a210");
 extern void FUN_L00_0020a1f8(f32, f32);
 extern void emit_hero_periodic_surface_particles(s32, s32) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209638(s32, s32);
@@ -740,7 +740,7 @@ void hero_update_movement(void) {
             t = hero.unk8EC * fast_cos(yaw) * -7.0f;
             FUN_L00_0025bc98(&hero.motion.rot.f[0], t, &hero.swim_lean_vel, 0, 0.007f, 0.17f, frame_time * 1.2217305f);
             FUN_L00_0020a1f8(0.009f, 0.22f);
-            FUN_L00_0020a210(0.04f, 0.2f);
+            set_third_hero_easing_parameters(0.04f, 0.2f);
             FUN_L00_0020a228(0.02f, 0.2f);
             AN.f114 = diff * 47.0f;
             AN.f118 = t * 1.5f;
@@ -1660,7 +1660,7 @@ void hero_update_movement(void) {
         update_hero_planar_movement_velocity();
         set_first_hero_easing_parameters(0.04f, 0.2f);
         FUN_L00_0020a1f8(0.04f, 0.2f);
-        FUN_L00_0020a210(0.04f, 0.2f);
+        set_third_hero_easing_parameters(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);
         if (moby->b53 == 0x37) {
             a = hero.motion.yaw_error;
@@ -1745,7 +1745,7 @@ void hero_update_movement(void) {
                              frame_scale_sq * 0.3f, frame_time * 1.9198622f);
         }
         FUN_L00_0020a1f8(0.009f, 0.22f);
-        FUN_L00_0020a210(0.04f, 0.2f);
+        set_third_hero_easing_parameters(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);
         AN.f118 = d * 2.1f;
         AN.f110 = d * 3.5f;
@@ -1866,7 +1866,7 @@ void hero_update_movement(void) {
         if (has) {
             FUN_L00_0020a228(frame_scale_sq * 0.017f, frame_scale_sq * 0.3f);
             FUN_L00_0020a1f8(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
-            FUN_L00_0020a210(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
+            set_third_hero_easing_parameters(frame_scale_sq * 0.027f, frame_scale_sq * 0.3f);
             if ((struct MobyView *)hero.grind_look_moby != NULL) {
                 f32 a;
                 f32 k;

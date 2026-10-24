@@ -20,7 +20,9 @@ typedef struct {
 } S0020a210;
 extern S0020a210 D_L00_0017A680_0020a210 __asm__("D_L00_0017A680");
 /* Stores the two floats in D_L00_0017A680. */
-void FUN_L00_0020a210(float a, float b) {
+void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
+
+void set_third_hero_easing_parameters(float a, float b) {
     S0020a210 *destination = &D_L00_0017A680_0020a210;
     destination->a = a;
     destination->b = b;

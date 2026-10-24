@@ -2913,7 +2913,7 @@ extern void transform_hero_local_offset_to_world(float *, float, float, float) _
 float absolute_float(float input) __asm__("FUN_001f99c0");
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
 void FUN_L00_0020a228(float a, float b);
-void FUN_L00_0020a210(float a, float b);
+void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
 void update_hero_target_tracking(void) {
     char *hero_control_mode_owner = (char *)hero_pos - 0x80;
@@ -3016,7 +3016,7 @@ void update_hero_target_tracking(void) {
     manipulator_table = D_L00_0017A780;
     *(float *)(manipulator_table + 0x274) = pitch;
     *(float *)(manipulator_table + 0x278) = yaw_delta * 0.7f;
-    FUN_L00_0020a210(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
+    set_third_hero_easing_parameters(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
     *(float *)(manipulator_table + 0x1C8) = *(float *)(manipulator_table + 0x278) * 0.55f;
 }
 typedef struct {
