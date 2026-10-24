@@ -1607,19 +1607,19 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int D_L15_00161418 __attribute__((sda));
-extern float D_L15_00161428 __attribute__((sda));
-extern float D_L15_00161438 __attribute__((sda));
-extern float D_L15_00161448 __attribute__((sda));
+extern float rocket_trail_spark_frame_count_range_start __asm__("D_L15_00161428") __attribute__((sda));
+extern float rocket_trail_spark_third_frame_count_range_start __asm__("D_L15_00161438") __attribute__((sda));
+extern float rocket_trail_spark_first_velocity_scale __asm__("D_L15_00161448") __attribute__((sda));
 extern int D_L15_0016141C __attribute__((sda));
 extern float D_L15_00161420 __attribute__((sda));
 extern float D_L15_00161424 __attribute__((sda));
-extern float D_L15_0016142C __attribute__((sda));
-extern float D_L15_00161430 __attribute__((sda));
-extern float D_L15_00161434 __attribute__((sda));
-extern float D_L15_0016143C __attribute__((sda));
-extern float D_L15_00161440 __attribute__((sda));
-extern float D_L15_00161444 __attribute__((sda));
-extern float D_L15_0016144C __attribute__((sda));
+extern float rocket_trail_spark_frame_count_range_end __asm__("D_L15_0016142C") __attribute__((sda));
+extern float rocket_trail_spark_second_frame_count_range_start __asm__("D_L15_00161430") __attribute__((sda));
+extern float rocket_trail_spark_second_frame_count_range_end __asm__("D_L15_00161434") __attribute__((sda));
+extern float rocket_trail_spark_third_frame_count_range_end __asm__("D_L15_0016143C") __attribute__((sda));
+extern float rocket_trail_spark_first_noise_radius_factor __asm__("D_L15_00161440") __attribute__((sda));
+extern float rocket_trail_spark_second_noise_radius_factor __asm__("D_L15_00161444") __attribute__((sda));
+extern float rocket_trail_spark_second_velocity_scale __asm__("D_L15_0016144C") __attribute__((sda));
 extern int D_L15_00161454 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1633,24 +1633,24 @@ void spawn_rocket_trail_spark(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float noise_radius;
     int frame_count, second_frame_count, third_frame_count;
-    noise_radius = D_L15_00161440;
+    noise_radius = rocket_trail_spark_first_noise_radius_factor;
     noise_radius *= D_0015ED6C;
-    scale_vector_xyz(spark_a, data, D_L15_00161448);
+    scale_vector_xyz(spark_a, data, rocket_trail_spark_first_velocity_scale);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_a, spark_a, noise);
-    noise_radius = D_L15_00161444;
+    noise_radius = rocket_trail_spark_second_noise_radius_factor;
     noise_radius *= D_0015ED6C;
-    scale_vector_xyz(spark_b, data, D_L15_0016144C);
+    scale_vector_xyz(spark_b, data, rocket_trail_spark_second_velocity_scale);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_b, spark_b, noise);
     spark_a[3] = D_L15_00161420;
     spark_b[3] = D_L15_00161424;
     frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(D_L15_00161428, D_L15_0016142C)));
+        random_float_between_alt(rocket_trail_spark_frame_count_range_start, rocket_trail_spark_frame_count_range_end)));
     second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(D_L15_00161430, D_L15_00161434)));
+        random_float_between_alt(rocket_trail_spark_second_frame_count_range_start, rocket_trail_spark_second_frame_count_range_end)));
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-        random_float_between_alt(D_L15_00161438, D_L15_0016143C)));
+        random_float_between_alt(rocket_trail_spark_third_frame_count_range_start, rocket_trail_spark_third_frame_count_range_end)));
     spawn_spark(moby + 0x10, spark_a, spark_b, D_L15_00161418, D_L15_0016141C, frame_count, second_frame_count, third_frame_count,
                  D_L15_00161454);
 }
