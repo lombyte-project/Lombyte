@@ -875,16 +875,16 @@ extern int D_L12_00161E2C __attribute__((sda));
 extern int D_L12_00161E30 __attribute__((sda));
 extern int D_L12_00161E34 __attribute__((sda));
 extern int D_L12_00161E38 __attribute__((sda));
-extern int D_L12_00161E3C __attribute__((sda));
-extern int D_L12_00161E40 __attribute__((sda));
+extern int hoven_turret_hud_yaw_indicator_texture_index __asm__("D_L12_00161E3C") __attribute__((sda));
+extern int hoven_turret_hud_pitch_indicator_texture_index __asm__("D_L12_00161E40") __attribute__((sda));
 extern short D_L12_00161E44 __attribute__((sda));
 extern short D_L12_00161E48 __attribute__((sda));
 extern int D_L12_00161E4C __attribute__((sda));
 extern int D_L12_00161E50 __attribute__((sda));
 extern int D_L12_00161E54 __attribute__((sda));
 extern int D_L12_00161E58 __attribute__((sda));
-extern int D_L12_00161E5C __attribute__((sda));
-extern int D_L12_00161EB0 __attribute__((sda));
+extern int hoven_turret_hud_frame_texture_index_offset __asm__("D_L12_00161E5C") __attribute__((sda));
+extern int hoven_turret_hud_frame_color __asm__("D_L12_00161EB0") __attribute__((sda));
 extern int D_L12_00161F08 __attribute__((sda));
 extern int D_L12_00161F0C __attribute__((sda));
 extern int D_L12_00161F10 __attribute__((sda));
@@ -917,11 +917,11 @@ void draw_hoven_turret_hud(Moby *moby) {
     uv[1] = D_L12_00161F0C;
     uv[2] = D_L12_00161F10;
     uv[3] = D_L12_00161F14;
-    colors[3] = D_L12_00161EB0;
-    colors[2] = D_L12_00161EB0;
-    colors[1] = D_L12_00161EB0;
-    colors[0] = D_L12_00161EB0;
-    texture = func_001F4868_3055F8(D_L12_00161E5C + 0x28);
+    colors[3] = hoven_turret_hud_frame_color;
+    colors[2] = hoven_turret_hud_frame_color;
+    colors[1] = hoven_turret_hud_frame_color;
+    colors[0] = hoven_turret_hud_frame_color;
+    texture = func_001F4868_3055F8(hoven_turret_hud_frame_texture_index_offset + 0x28);
     for (i = 0; i < 4; i++) {
         float sign_x;
         float sign_y;
@@ -1024,7 +1024,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E3C), 1);
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_yaw_indicator_texture_index), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
@@ -1041,7 +1041,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E40), 1);
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_pitch_indicator_texture_index), 1);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
