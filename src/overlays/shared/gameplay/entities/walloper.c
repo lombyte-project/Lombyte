@@ -402,16 +402,16 @@ extern s32 primary_beam_first_pass_alpha __asm__("D_L00_001615D4") __attribute__
 extern s32 primary_beam_second_pass_alpha __asm__("D_L00_001615DC") __attribute__((sda));
 extern f32 beam_and_arc_first_pass_half_width __asm__("D_L00_001615FC") __attribute__((sda));
 extern f32 primary_beam_second_pass_half_width __asm__("D_L00_00161600") __attribute__((sda));
-extern f32 D_L00_00161630 __attribute__((sda));
+extern f32 primary_beam_second_pass_segment_extension_factor __asm__("D_L00_00161630") __attribute__((sda));
 extern s32 secondary_beam_first_pass_alpha __asm__("D_L00_00161604") __attribute__((sda));
 extern s32 secondary_beam_second_pass_alpha __asm__("D_L00_00161608") __attribute__((sda));
 extern f32 D_L00_0016160C __attribute__((sda));
-extern f32 D_L00_00161610 __attribute__((sda));
-extern f32 D_L00_00161634 __attribute__((sda));
+extern f32 secondary_beam_and_arc_second_pass_half_width __asm__("D_L00_00161610") __attribute__((sda));
+extern f32 secondary_beam_second_pass_segment_extension_factor __asm__("D_L00_00161634") __attribute__((sda));
 extern s16 D_L00_00161660;
-extern s16 D_L00_00161662;
-extern s16 D_L00_00161664;
-extern s16 D_L00_00161666;
+extern s16 beam_arc_second_row_alpha __asm__("D_L00_00161662");
+extern s16 beam_arc_third_row_alpha __asm__("D_L00_00161664");
+extern s16 beam_arc_fourth_row_alpha __asm__("D_L00_00161666");
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
@@ -427,17 +427,17 @@ void draw_beam_and_arc_effects(u8 *moby) {
         beam_first_pass_texture_u_offset += 8.0f;
     }
     draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, primary_beam_first_pass_alpha, primary_beam_second_pass_alpha, moby_vars->h3E, beam_and_arc_first_pass_half_width,
-                     primary_beam_second_pass_half_width, D_L00_00161630);
+                     primary_beam_second_pass_half_width, primary_beam_second_pass_segment_extension_factor);
     draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, secondary_beam_first_pass_alpha, secondary_beam_second_pass_alpha, moby_vars->h3E, D_L00_0016160C,
-                     D_L00_00161610, D_L00_00161634);
+                     secondary_beam_and_arc_second_pass_half_width, secondary_beam_second_pass_segment_extension_factor);
     draw_beam_and_arc_two_pass_quads(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0x50, D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xA0, D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0x50, beam_arc_second_row_alpha, beam_arc_second_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xA0, beam_arc_third_row_alpha, beam_arc_third_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xF0, beam_arc_fourth_row_alpha, beam_arc_fourth_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width, 0.2f);
     draw_beam_anchor_camera_facing_quads(moby);
 }
 
