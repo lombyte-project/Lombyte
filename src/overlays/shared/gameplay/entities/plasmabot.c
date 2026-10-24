@@ -1649,10 +1649,10 @@ extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, fl
 extern float D_0015ED60;
 extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
 
-extern float D_L14_00161B30 __attribute__((sda));
-extern float D_L14_00161B34 __attribute__((sda));
-extern float D_L14_00161B38 __attribute__((sda));
-extern float D_L14_00161B3C __attribute__((sda));
+extern float ballistic_debris_launch_magnitude_range_start __asm__("D_L14_00161B30") __attribute__((sda));
+extern float ballistic_debris_launch_magnitude_range_end __asm__("D_L14_00161B34") __attribute__((sda));
+extern float ballistic_debris_z_velocity_range_start __asm__("D_L14_00161B38") __attribute__((sda));
+extern float ballistic_debris_z_velocity_range_end __asm__("D_L14_00161B3C") __attribute__((sda));
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
     unsigned char *spawned_moby = spawn_moby_2e0170(0x193);
     unsigned char *pos;
@@ -1686,13 +1686,13 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
             subtract_vector_2e0170(launch_vector_scratch, pos, &hero.motion.pos);
             launch_vector_scratch[2] = 0.0f;
             normalize_vector_2e0170(launch_vector_scratch, launch_vector_scratch,
-                random_scaled_2e0170(D_L14_00161B30 * D_0015ED60,
-                                       D_L14_00161B34 * D_0015ED60));
+                random_scaled_2e0170(ballistic_debris_launch_magnitude_range_start * D_0015ED60,
+                                       ballistic_debris_launch_magnitude_range_end * D_0015ED60));
             cross_vectors_2e0170(launch_vector_scratch + 4, &hero.gravity_dir, launch_vector_scratch);
             angle = random_angle_2e0170(0.5759586691856384f, 1.3962633609771729f);
             build_look_at_2e0170(spawned_vars + 0x30, launch_vector_scratch, &hero.gravity_dir, angle);
-            *(float *)(spawned_vars + 0x38) = random_scaled_2e0170(D_L14_00161B38 * D_0015ED60,
-                D_L14_00161B3C * D_0015ED60);
+            *(float *)(spawned_vars + 0x38) = random_scaled_2e0170(ballistic_debris_z_velocity_range_start * D_0015ED60,
+                ballistic_debris_z_velocity_range_end * D_0015ED60);
             *(float *)(spawned_vars + 0x20) = random_angle_2e0170(0.0f, 0.008726646f);
             *(float *)(spawned_vars + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
             *(float *)(spawned_vars + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
