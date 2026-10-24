@@ -2050,7 +2050,9 @@ extern int func_0022ED80_s(int, int, int) __asm__("FUN_0022da68");
 extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 extern void func_L00_0025F4A8_s(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_002e1348(struct Moby *moby, char *blob_data, float scale_ratio) {
+void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio) __asm__("FUN_L13_002e1348");
+
+void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio) {
     float split_velocity[4];
     float split_spawn_position[4];
     float nearby_effect_scale = scale_ratio * 7.0f;
