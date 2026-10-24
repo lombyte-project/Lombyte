@@ -1179,7 +1179,7 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     float B[4];
     float D[4];
     float C[4];
-    float rotation_angle_step, c2, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
+    float rotation_angle_step, class_local_rotation_angle, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
 
     if (*(char **)(data + 0x5C) != 0) {
         transform_attachment_pose((int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10),
@@ -1191,28 +1191,28 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     switch (*(short *)(moby + 0xA6)) {
     case BOLT_CLASS_ONE:
         rotation_angle_step = 0.04f;
-        c2 = -0.25f;
+        class_local_rotation_angle = -0.25f;
         base_axis_offset_distance = 0.04875f;
         rotated_axis_offset_distance = 0.325f;
         ground_collision_radius = 0.15f;
         break;
     case BOLT_CLASS_FIVE:
         rotation_angle_step = 0.03f;
-        c2 = -0.5f;
+        class_local_rotation_angle = -0.5f;
         base_axis_offset_distance = 0.0245f;
         rotated_axis_offset_distance = 0.35f;
         ground_collision_radius = 0.23f;
         break;
     case BOLT_CLASS_TWENTY:
         rotation_angle_step = 0.025f;
-        c2 = -0.4f;
+        class_local_rotation_angle = -0.4f;
         base_axis_offset_distance = 0.05625f;
         rotated_axis_offset_distance = 0.375f;
         ground_collision_radius = 0.23f;
         break;
     default:
         rotation_angle_step = 0.0175f;
-        c2 = -0.35f;
+        class_local_rotation_angle = -0.35f;
         base_axis_offset_distance = 0.135f;
         rotated_axis_offset_distance = 0.3f;
         ground_collision_radius = 0.25f;
@@ -1226,7 +1226,7 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
         *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
     }
     qcopy(local_rotation_angles, data + 0x50);
-    local_rotation_angles[1] = c2;
+    local_rotation_angles[1] = class_local_rotation_angle;
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
     multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);
