@@ -1239,7 +1239,9 @@ u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
 extern short D_L14_0016147C __attribute__((sda));
 extern short D_L14_00161480 __attribute__((sda));
-void FUN_L14_002ae260(struct Moby *m) {
+void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) __asm__("FUN_L14_002ae260");
+
+void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     char *d = (char *)m->pvars;
     float glow_quad_position[4];
     Pk_2af4a0 pk;
