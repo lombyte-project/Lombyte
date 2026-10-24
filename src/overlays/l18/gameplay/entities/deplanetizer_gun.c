@@ -62,7 +62,7 @@ extern float deplanetizer_joint_trail_base_size_gp __asm__("D_L18_001624D0") __a
 extern float deplanetizer_burst_local_spawn_offset_x_gp __asm__("D_L18_001624E0") __attribute__((sda));
 extern float deplanetizer_burst_velocity_scale_gp __asm__("D_L18_001624F0") __attribute__((sda));
 extern float deplanetizer_burst_particle_size_gp __asm__("D_L18_001624F4") __attribute__((sda));
-extern float D_L18_0016174C;
+extern float beam_effect_default_length __asm__("D_L18_0016174C");
 extern int D_L18_001617F4, D_L18_001617F8;
 extern float D_L18_0015ED60;
 
@@ -316,10 +316,10 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             color2 = 0x7F7F20;
             data[18] = fast_arc_tan(moby->rot_row1.x, moby->rot_row1.y);
             data[19] = fast_arc_tan(vector_length_xy(&moby->rot_row1), moby->rot_row1.z);
-            saved = D_L18_0016174C;
-            D_L18_0016174C = 24.0f;
+            saved = beam_effect_default_length;
+            beam_effect_default_length = 24.0f;
             update_beam_ring_rail_and_pulse_effects(moby);
-            D_L18_0016174C = saved;
+            beam_effect_default_length = saved;
             D_L18_001617F4 = color;
             D_L18_001617F8 = color2;
         }
