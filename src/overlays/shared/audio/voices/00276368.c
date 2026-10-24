@@ -650,7 +650,7 @@ typedef struct {
 } PageMobyData;
 
 extern s32 D_L00_001B23C0[];
-extern s32 D_L00_00160270 __attribute__((sda));
+extern s32 pause_menu_rectangle_color __asm__("D_L00_00160270") __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
@@ -753,7 +753,7 @@ void draw_pause_menu_pages(int transfer_only) {
         page_data->y = rect.y;
         page_data->w = rect.w;
         page_data->h = rect.h;
-        append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, D_L00_00160270, 0);
+        append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, pause_menu_rectangle_color, 0);
     }
     for (pass = 0; pass < 2; pass++) {
         Ent **mobys = D_L00_001B9E90;
@@ -805,7 +805,7 @@ void draw_pause_menu_pages(int transfer_only) {
             configure_graphics_render_target_and_projection(width_log2, height_log2, pass != 0, 1.0f);
             target_width = 1 << width_log2;
             target_height = 1 << height_log2;
-            draw_hud_rect_depth(0, 0, target_width, target_height, D_L00_00160270, 0, 0);
+            draw_hud_rect_depth(0, 0, target_width, target_height, pause_menu_rectangle_color, 0, 0);
             draw_result = (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
             begin_draw_frame();
             vu1_add_g_sregister(0x42, 0x8000000064L);
