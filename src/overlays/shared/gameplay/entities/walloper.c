@@ -891,15 +891,15 @@ extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
 extern SparkleRowC860 D_L00_001DBB90[];
 void walloper_update(char *m) __asm__("FUN_L00_002bb558");
-void walloper_update(char *m) {
+void walloper_update(char *walloper_moby) {
     int flag = 0;
-    float vec0[4] __attribute__((aligned(16)));
-    float vec1[4] __attribute__((aligned(16)));
-    float t[4] __attribute__((aligned(16)));
-    float w[5][4] __attribute__((aligned(16)));
+    float arc_origin[4] __attribute__((aligned(16)));
+    float arc_step[4] __attribute__((aligned(16)));
+    float arc_point_camera_offset[4] __attribute__((aligned(16)));
+    float arc_point_offsets[5][4] __attribute__((aligned(16)));
     struct Hero *g = &hero;
     int i;
-    int n;
+    int next_arc_index;
     int j;
     int q;
     int any;
@@ -907,9 +907,9 @@ void walloper_update(char *m) {
     if (*(unsigned char *)(((char *)g->moby) + 0x53) != 0x82) {
         D_L00_0017AEBC = 0.1f;
     }
-    switch (*(unsigned char *)(m + 0x20)) {
+    switch (*(unsigned char *)(walloper_moby + 0x20)) {
     case 0:
-        m[0x20] = 2;
+        walloper_moby[0x20] = 2;
         for (q = 0; q < 10; q++) {
             D_L00_001DBEC0[q] = 0;
             D_L00_001DBEF0[q] = 2;
@@ -920,7 +920,7 @@ void walloper_update(char *m) {
         break;
     case 2:
         if (g->state.current == 0x20) {
-            float f = compute_interpolated_record_value(m);
+            float f = compute_interpolated_record_value(walloper_moby);
             if (6.0f <= f) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
@@ -942,11 +942,11 @@ void walloper_update(char *m) {
         } else {
             D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
             D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
-            blend_moby_animation(m, 1, 0, scale_game_frames(12));
+            blend_moby_animation(walloper_moby, 1, 0, scale_game_frames(12));
         }
     }
-    scale_vector_xyz(vec0, m + 0xD0, -0.5f);
-    add_vector_xyz(vec0, vec0, m + 0x10);
+    scale_vector_xyz(arc_origin, walloper_moby + 0xD0, -0.5f);
+    add_vector_xyz(arc_origin, arc_origin, walloper_moby + 0x10);
     any = 0;
     for (j = 0; j < 10; j++) {
         if (D_L00_001DBEC0[j] != 0) {
@@ -956,7 +956,7 @@ void walloper_update(char *m) {
     }
     if (!flag && !any)
         return;
-    for (i = 0; i < 10; i = n) {
+    for (i = 0; i < 10; i = next_arc_index) {
         D_L00_001DBEC0[i]--;
         if (D_L00_001DBEC0[i] < 0)
             D_L00_001DBEC0[i] = 0;
@@ -966,35 +966,35 @@ void walloper_update(char *m) {
                 int k;
                 D_L00_001DBEC0[i] = 2;
                 D_L00_001DBED8[i] = 0x40;
-                random_spherical_offset(vec1, D_L00_001616A4, D_L00_001616A4);
-                qcopy(D_L00_001DBBA0[i].point[0], vec0);
-                n = i + 1;
+                random_spherical_offset(arc_step, D_L00_001616A4, D_L00_001616A4);
+                qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
+                next_arc_index = i + 1;
                 sign = 1.0f;
                 for (k = 1; k < 5; k++) {
-                    float ang;
-                    subtract_vector_xyz(t, D_L00_001DBB90[i].point[k - 1], D_L00_00166DC0);
-                    ang = random_float_between(0.17453292f, 0.7853982f) * sign;
+                    float bend_angle;
+                    subtract_vector_xyz(arc_point_camera_offset, D_L00_001DBB90[i].point[k - 1], D_L00_00166DC0);
+                    bend_angle = random_float_between(0.17453292f, 0.7853982f) * sign;
                     sign = -sign;
-                    build_look_at_matrix(vec1, vec1, t, ang);
+                    build_look_at_matrix(arc_step, arc_step, arc_point_camera_offset, bend_angle);
                     add_vector_xyz(D_L00_001DBBA0[i].point[k],
-                                   D_L00_001DBB90[i].point[k - 1], vec1);
+                                   D_L00_001DBB90[i].point[k - 1], arc_step);
                 }
             } else {
-                n = i + 1;
+                next_arc_index = i + 1;
             }
         } else {
             int k;
-            float(*workspace)[4] = w;
+            float(*workspace)[4] = arc_point_offsets;
             for (k = 1; k < 5; k++) {
-                float *v = workspace[k];
-                subtract_vector_xyz(v, D_L00_001DBBA0[i].point[k],
+                float *point_offset = workspace[k];
+                subtract_vector_xyz(point_offset, D_L00_001DBBA0[i].point[k],
                                     D_L00_001DBB90[i].point[k - 1]);
-                v[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                v[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                v[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                point_offset[0] += FUN_L00_00257c48(0.0f, 0.1f);
+                point_offset[1] += FUN_L00_00257c48(0.0f, 0.1f);
+                point_offset[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
-            n = i + 1;
-            qcopy(D_L00_001DBBA0[i].point[0], vec0);
+            next_arc_index = i + 1;
+            qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
             for (k = 1; k < 5; k++) {
                 add_vector_xyz(D_L00_001DBBA0[i].point[k],
                                D_L00_001DBB90[i].point[k - 1], workspace[k]);
@@ -1005,7 +1005,7 @@ void walloper_update(char *m) {
                 D_L00_001DBED8[i] = 0;
         }
     }
-    enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
+    enqueue_callback_list_1(FUN_L00_002bbb00_c, walloper_moby);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
 extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
