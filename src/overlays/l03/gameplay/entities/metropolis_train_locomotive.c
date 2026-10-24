@@ -3164,8 +3164,8 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
 }
 
 extern float D_L03_001618E0 __attribute__((sda));
-extern float D_L03_001618E4 __attribute__((sda));
-extern float D_L03_001618E8 __attribute__((sda));
+extern float kerwan_path_enemy_knockback_horizontal_distance __asm__("D_L03_001618E4") __attribute__((sda));
+extern float kerwan_path_enemy_knockback_horizontal_deceleration __asm__("D_L03_001618E8") __attribute__((sda));
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -3240,8 +3240,8 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case TURN_AWAY_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                        D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f18 = (kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                        kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                             (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f))) *
                        0.5f;
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
@@ -3264,9 +3264,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
-            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
+            moby_data->q.f18 = kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
@@ -3283,9 +3283,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case ANIMATION_SIX_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
-            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
+            moby_data->q.f18 = kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
@@ -3300,9 +3300,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             break;
         case DEATH_KNOCKBACK_RESPONSE:
             moby_data->q.f10 = frame_time_sq * 40.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
             moby_data->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * moby_data->q.f10) / (frame_time_sq * 40.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(2.0f, 40.0f) / (frame_time_sq * 40.0f));
             moby_data->q.f1C = JUMP_SPEED(2.0f, 40.0f);
             moby_data->q.i24 = 9;
