@@ -178,7 +178,7 @@ extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378"
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
-extern int D_L09_0015F458;
+extern int textured_grid_view_settings_mode __asm__("D_L09_0015F458");
 extern int D_L09_0016CDD0;
 extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
@@ -226,7 +226,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     D_L09_001612FC = saved1;
     D_L09_00161300 = saved2;
     D_L09_00161304 = saved3;
-    if (D_L09_0015F458 != 1) {
+    if (textured_grid_view_settings_mode != 1) {
         current[0x218 / 4] = *(float *)(data + 0x20);
         current[0x21c / 4] = *(float *)(data + 0x24);
         current[0x228 / 4] = *(float *)(data + 0x28);
@@ -295,7 +295,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     D_L09_001611C0 = packet + 4;
     color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
-    if (*(volatile int *)&D_L09_0015F458 == 1)
+    if (*(volatile int *)&textured_grid_view_settings_mode == 1)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                 (*(int *)(current + 0x238 / 4) << 16));
     {
