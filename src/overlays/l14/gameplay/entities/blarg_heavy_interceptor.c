@@ -919,7 +919,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 }
 /* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
  * vertices through it and draws them, then flips the matrix and draws the back face. */
-extern s32 D_L14_00161418 __attribute__((sda));
+extern s32 blarg_heavy_interceptor_light_ring_vertex_count __asm__("D_L14_00161418") __attribute__((sda));
 extern float D_L14_001D7A60[][3];
 extern s32 D_L14_001D80C8[];
 extern char D_L14_001D7E38[];
@@ -965,7 +965,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     sreg_r(0x47, 0x50000);
     sreg_r(0x4A, 0);
     font_queue_vu_state();
-    for (i = 0; i < D_L14_00161418; i++) {
+    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count; i++) {
         float *s = D_L14_001D7A60[i];
         float *o = f.verts[i];
         ring_vertex_scratch[0] = s[0];
@@ -981,13 +981,13 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         }
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, cols, D_L14_001D7E38, 1);
     } else {
-        FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
     }
     scale_r(f.mat[1], f.mat[1], -1.0f);
     scale_r(f.mat[2], f.mat[2], -1.0f);
-    for (j = 0; j < D_L14_00161418; j++) {
+    for (j = 0; j < blarg_heavy_interceptor_light_ring_vertex_count; j++) {
         float *o = f.verts[j];
         float *s = D_L14_001D7A60[j];
         ring_vertex_scratch[0] = s[0];
@@ -1000,9 +1000,9 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[2] = ring_vertex_scratch[2];
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(D_L14_00161418, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, cols, D_L14_001D7E38, 1);
     } else {
-        FUN_L00_001fde98(D_L14_00161418, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
     }
 }
 /* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
@@ -1587,7 +1587,7 @@ void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) {
     step = truncate_float_to_s32(advanced_blink_phase);
     if (1.0f <= *(f32 *)(data + 0x164))
         *(s32 *)(data + 0x164) = 0;
-    for (i = 0; i < D_L14_00161418; i++) {
+    for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count; i++) {
         s32 light_fade_value = D_L14_001D8210[i];
         if (light_fade_value != 0) {
             light_fade_value += step;
