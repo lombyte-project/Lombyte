@@ -3563,11 +3563,11 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float vector_length_xy(void *);
 extern int sample_path() __asm__("FUN_L00_0025d808");
-extern float D_L14_00161F7C __attribute__((sda));
-extern float D_L14_00161F80 __attribute__((sda));
+extern float flight_path_spring_strength __asm__("D_L14_00161F7C") __attribute__((sda));
+extern float flight_path_spring_damping __asm__("D_L14_00161F80") __attribute__((sda));
 extern float D_L14_00161F84 __attribute__((sda));
-extern float D_L14_00161F88 __attribute__((sda));
-extern float D_L14_00161F78 __attribute__((sda));
+extern float flight_path_bank_yaw_error_scale __asm__("D_L14_00161F88") __attribute__((sda));
+extern float flight_path_step_rate __asm__("D_L14_00161F78") __attribute__((sda));
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -3587,7 +3587,7 @@ int advance_moby_along_flight_path(struct Moby *moby) {
     int path_boundary_reached;
     path_boundary_reached = FUN_L00_0025d808_2f05d8(D_L14_001B0BB0[*(int *)(moby_vars + 0x68)], path_target_position, moby_vars + 0x60, moby_vars + 0x64,
                                  (unsigned int)*(int *)(moby_vars + 0x8C) >> 31,
-                                 D_L14_00161F78 * D_0015ED6C_f2);
+                                 flight_path_step_rate * D_0015ED6C_f2);
     if (*(int *)(moby_vars + 0x8C) != 0 && (path_boundary_reached != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
         flag_vendor_item(*(int *)(moby_vars + 0x90));
         if (*(int *)(moby_vars + 0x6C) != -1) {
@@ -3600,28 +3600,28 @@ int advance_moby_along_flight_path(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return 1;
     }
-    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], flight_path_spring_strength, flight_path_spring_damping,
                      0.0f);
-    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], flight_path_spring_strength, flight_path_spring_damping,
                      0.0f);
-    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], D_L14_00161F7C, D_L14_00161F80,
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], flight_path_spring_strength, flight_path_spring_damping,
                      0.0f);
     subtract_vector_xyz(path_position_delta, path_target_position, &moby->pos);
     if (0.01f < absolute_float(path_position_delta[0])) {
         if (0.01f < absolute_float(path_position_delta[1])) {
             yaw = fast_arc_tan(path_position_delta[0], path_position_delta[1]);
             yaw_error_factor = fast_subtract_rotations(moby->rot.z, yaw);
-            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
+            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), yaw, flight_path_spring_strength, flight_path_spring_damping, 0.0f);
             yaw = fast_arc_tan(vector_length_xy(path_position_delta), path_position_delta[2]);
-            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -yaw, D_L14_00161F7C,
-                             D_L14_00161F80, 0.0f);
-            yaw_error_factor = yaw_error_factor / D_L14_00161F88;
+            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -yaw, flight_path_spring_strength,
+                             flight_path_spring_damping, 0.0f);
+            yaw_error_factor = yaw_error_factor / flight_path_bank_yaw_error_scale;
             if (1.0f < yaw_error_factor)
                 yaw_error_factor = 1.0f;
             if (yaw_error_factor < -1.0f)
                 yaw_error_factor = -1.0f;
             FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * D_L14_00161F84, 0.003f,
-                             D_L14_00161F80, 0.0f);
+                             flight_path_spring_damping, 0.0f);
         }
     }
     return 0;
