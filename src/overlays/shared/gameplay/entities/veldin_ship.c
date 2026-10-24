@@ -1354,8 +1354,8 @@ extern int D_L00_00161904 __attribute__((sda));
 extern int D_L00_00161908 __attribute__((sda));
 extern int D_L00_0016190C __attribute__((sda));
 extern int D_L00_00161910 __attribute__((sda));
-extern int D_L00_00161914 __attribute__((sda));
-extern int D_L00_00161918 __attribute__((sda));
+extern int metal_detector_trail_initial_quad_color __asm__("D_L00_00161914") __attribute__((sda));
+extern int metal_detector_trail_texture_selector __asm__("D_L00_00161918") __attribute__((sda));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1375,8 +1375,8 @@ void draw_metal_detector_trail(Moby_2D3F40 *moby) {
     int col;
     int trail_quad_texture;
 
-    trail_quad_texture = func_001F4868_2D3F40(D_L00_00161918);
-    q.c[0] = q.c[1] = q.c[2] = q.c[3] = D_L00_00161914;
+    trail_quad_texture = func_001F4868_2D3F40(metal_detector_trail_texture_selector);
+    q.c[0] = q.c[1] = q.c[2] = q.c[3] = metal_detector_trail_initial_quad_color;
     q.g[1] = trail_quad_texture;
     q.g[2] = 0xFF9000000260L;
     q.g[0] = 4;
