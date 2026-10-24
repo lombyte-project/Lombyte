@@ -1658,7 +1658,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
                                 float scale) __asm__("FUN_L11_00309378");
 
-unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
+unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int duration_frames,
                                 float scale) {
     unsigned char *moby = func_0020D348_m(0x40A);
     if (moby != 0) {
@@ -1678,7 +1678,7 @@ unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, 
                 *(unsigned short *)(target_aux_data + 0x1E) |= 0x80;
             }
         }
-        *(int *)(data + 0x28) = arg;
+        *(int *)(data + 0x28) = duration_frames;
         *(float *)(data + 0x2C) = scale;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
