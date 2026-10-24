@@ -371,18 +371,18 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) {
-    float v[4] __attribute__((aligned(16)));
+    float animated_shell_rotation_angles[4] __attribute__((aligned(16)));
     *(short *)(D_L00_0016051C + 4) = 0;
     sky_draw_shell(0);
     sky_draw_shell(1);
     sky_draw_shell(2);
     sky_draw_shell(3);
-    qzero(v);
-    v[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    qzero(animated_shell_rotation_angles);
+    animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(4);
-    v[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(5);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(6);
