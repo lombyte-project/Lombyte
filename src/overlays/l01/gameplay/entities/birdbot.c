@@ -3486,11 +3486,11 @@ typedef struct {
 } Obj;
 
 extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
-extern f32 D_L01_00161C28 __attribute__((sda));
-extern f32 D_L01_00161C2C __attribute__((sda));
-extern f32 D_L01_00161C30 __attribute__((sda));
-extern f32 D_L01_00161C34 __attribute__((sda));
-extern f32 D_L01_00161C38 __attribute__((sda));
+extern f32 falling_rock_camera_rotation_angle __asm__("D_L01_00161C28") __attribute__((sda));
+extern f32 falling_rock_camera_distance __asm__("D_L01_00161C2C") __attribute__((sda));
+extern f32 falling_rock_camera_height __asm__("D_L01_00161C30") __attribute__((sda));
+extern f32 falling_rock_camera_offset_scale __asm__("D_L01_00161C34") __attribute__((sda));
+extern f32 falling_rock_camera_override_companion_value __asm__("D_L01_00161C38") __attribute__((sda));
 
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
@@ -3506,11 +3506,11 @@ void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) {
     u8 *camera_record;
 
     camera_record = D_L01_001600EC_u + falling_rock_moby->sub->idx * 128;
-    build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, D_L01_00161C28);
+    build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, falling_rock_camera_rotation_angle);
     set_follow_camera_angle_blend_from_direction(rotated_vector, 0.13962634f, 0.0f);
-    follow_camera_set_distance(0, D_L01_00161C2C, D_L01_00161C38);
-    follow_camera_set_height(D_L01_00161C30, D_L01_00161C38);
-    follow_camera_set_offset_scale(0, D_L01_00161C34, D_L01_00161C38);
+    follow_camera_set_distance(0, falling_rock_camera_distance, falling_rock_camera_override_companion_value);
+    follow_camera_set_height(falling_rock_camera_height, falling_rock_camera_override_companion_value);
+    follow_camera_set_offset_scale(0, falling_rock_camera_offset_scale, falling_rock_camera_override_companion_value);
 }
 typedef union {
     u128 q;
