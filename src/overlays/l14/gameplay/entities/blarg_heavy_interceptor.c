@@ -353,15 +353,15 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
 
 void ease_path_mover_to_endpoint(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
-    float t[4] __attribute__((aligned(16)));
+    float endpoint_target_position[4] __attribute__((aligned(16)));
     int *path = D_L14_001B0BB0[*(int *)(moby_vars + 0xB4)];
     if (*(float *)(moby_vars + 0xA4) > 0.5f)
-        qcopy(t, (char *)path + path[0] * 16);
+        qcopy(endpoint_target_position, (char *)path + path[0] * 16);
     else
-        qcopy(t, (char *)path + 0x10);
-    vendor_spring(&moby->pos.x, (float *)(moby_vars + 0xD0), t[0], 0.005f, 0.2f, 0.0f);
-    vendor_spring(&moby->pos.y, (float *)(moby_vars + 0xD4), t[1], 0.005f, 0.2f, 0.0f);
-    vendor_spring(&moby->pos.z, (float *)(moby_vars + 0xD8), t[2], 0.005f, 0.2f, 0.0f);
+        qcopy(endpoint_target_position, (char *)path + 0x10);
+    vendor_spring(&moby->pos.x, (float *)(moby_vars + 0xD0), endpoint_target_position[0], 0.005f, 0.2f, 0.0f);
+    vendor_spring(&moby->pos.y, (float *)(moby_vars + 0xD4), endpoint_target_position[1], 0.005f, 0.2f, 0.0f);
+    vendor_spring(&moby->pos.z, (float *)(moby_vars + 0xD8), endpoint_target_position[2], 0.005f, 0.2f, 0.0f);
 }
 /* Per-frame update of a path-following flyer, a state machine on m->state: 0 checks its three paths
  * and sets it up (or hides it, state 8), 1 patrols the path in pvars 0x78 and scans for a target,
