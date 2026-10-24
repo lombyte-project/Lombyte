@@ -2721,7 +2721,7 @@ extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
 f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
                      f32 probe_start_horizontal_offset) __asm__("FUN_L00_002bf050");
 
-f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
+f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 probe_heading, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
                      f32 probe_start_horizontal_offset) {
     VU probe_start;
     VU probe_end;
@@ -2740,7 +2740,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     Hit *t;
 
     da = arc / step;
-    best = ang;
+    best = probe_heading;
     sweep_probe_count = FUN_001fa6d0_c(step);
     bestDist = 0.0f;
     x = moby->p78;
@@ -2749,11 +2749,11 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     if (target_position != 0) {
         preferred_heading = FUN_001f9e90_c(target_position[0] - moby->f10, target_position[1] - moby->f14);
     } else {
-        preferred_heading = ang;
+        preferred_heading = probe_heading;
     }
     arc *= 0.5f;
-    fast_add_rotations(ang, arc);
-    arc = fast_subtract_rotations(ang, arc);
+    fast_add_rotations(probe_heading, arc);
+    arc = fast_subtract_rotations(probe_heading, arc);
 
     qcopy(&probe_start, probe_origin);
     probe_start.f[1] += fast_sin(preferred_heading) * probe_start_horizontal_offset;
@@ -2834,10 +2834,10 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
         arc = fast_add_rotations(arc, da);
     }
 
-    ang = fast_subtract_rotations(best, 1.5707964f);
+    probe_heading = fast_subtract_rotations(best, 1.5707964f);
     qcopy(&probe_start, probe_origin);
-    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
-    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
+    probe_start.f[1] += fast_sin(probe_heading) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(probe_heading) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
     probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
@@ -2851,10 +2851,10 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
             best = fast_add_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
     }
-    ang = fast_add_rotations(ang, 3.1415927f);
+    probe_heading = fast_add_rotations(probe_heading, 3.1415927f);
     qcopy(&probe_start, probe_origin);
-    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
-    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
+    probe_start.f[1] += fast_sin(probe_heading) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(probe_heading) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
     probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
