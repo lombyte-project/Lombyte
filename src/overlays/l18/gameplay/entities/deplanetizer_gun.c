@@ -1451,10 +1451,10 @@ extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
 extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern int D_L18_0016262C __attribute__((sda));
-extern int D_L18_00162630 __attribute__((sda));
-extern int D_L18_00162634 __attribute__((sda));
-extern int D_L18_00162638 __attribute__((sda));
+extern int gadgebot_launch_glow_blend_minuend_selector __asm__("D_L18_0016262C") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_subtrahend_selector __asm__("D_L18_00162630") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_alpha_factor_selector __asm__("D_L18_00162634") __attribute__((sda));
+extern int gadgebot_launch_glow_blend_addend_selector __asm__("D_L18_00162638") __attribute__((sda));
 extern int gadgebot_launch_glow_tint_start __asm__("D_L18_0016263C") __attribute__((sda));
 extern int gadgebot_launch_glow_tint_end __asm__("D_L18_00162640") __attribute__((sda));
 extern int gadgebot_launch_glow_texture_index __asm__("D_L18_00162644") __attribute__((sda));
@@ -1485,8 +1485,8 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     pk.b = tex_g(gadgebot_launch_glow_texture_index);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
-    pk.d = (unsigned long)D_L18_0016262C | ((unsigned long)D_L18_00162630 << 2) | ((unsigned long)D_L18_00162634 << 4) |
-           ((unsigned long)D_L18_00162638 << 6) | 0x8000000000ULL;
+    pk.d = (unsigned long)gadgebot_launch_glow_blend_minuend_selector | ((unsigned long)gadgebot_launch_glow_blend_subtrahend_selector << 2) | ((unsigned long)gadgebot_launch_glow_blend_alpha_factor_selector << 4) |
+           ((unsigned long)gadgebot_launch_glow_blend_addend_selector << 6) | 0x8000000000ULL;
     c = fast_tween_color(gadgebot_launch_glow_tint_start, gadgebot_launch_glow_tint_end, *(float *)(d + 0x1F4));
     for (i = 0; i < 4; i++) {
         pk.uv[i][0] = D_L18_001EFCD0[i][0];
