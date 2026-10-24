@@ -1871,7 +1871,7 @@ extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern int D_L07_00161B80 __attribute__((sda));
 extern int D_L07_00161B84;
-extern float D_L07_00161BB0;
+extern float rope_swing_target_angle __asm__("D_L07_00161BB0");
 extern char D_L07_00161B90[] __attribute__((section(".sdata")));
 extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
 extern RopeVec rope_previous_points[] __asm__("D_L07_0020DAF0");
@@ -1927,7 +1927,7 @@ void initialize_snagglebeast_rope(char *moby, void *anchor) {
     rotation_axis.f[3] = 1.0f;
     initial_swing_angle = random_angle_radians();
     build_look_at_matrix(D_L07_00161BA0, pc, pd, initial_swing_angle);
-    D_L07_00161BB0 = initial_swing_angle;
+    rope_swing_target_angle = initial_swing_angle;
     row_phase_step_gp = 0.006f;
     D_L07_00161B80 = 0;
     D_L07_00161B84 = 0;
@@ -2041,9 +2041,9 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
         basis[0] = 1.0f;
         basis[3] = 1.0f;
         {
-            float turn = fast_add_rotations(D_L07_00161BB0, random_float_between(45.0f, 315.0f) * 0.017453292f);
+            float turn = fast_add_rotations(rope_swing_target_angle, random_float_between(45.0f, 315.0f) * 0.017453292f);
             build_look_at_matrix(D_L07_00161BA0, delta, basis, turn);
-            D_L07_00161BB0 = turn;
+            rope_swing_target_angle = turn;
         }
         D_L07_00161B80 = 0;
     }
