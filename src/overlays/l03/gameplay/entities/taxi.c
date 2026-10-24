@@ -141,11 +141,11 @@ typedef struct {
 } TrooperVars;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern s32 D_L03_00161918 __attribute__((sda));
-extern f32 D_L03_0016191C __attribute__((sda));
-extern f32 D_L03_00161920 __attribute__((sda));
-extern f32 D_L03_00161910 __attribute__((sda));
-extern f32 D_L03_00161914 __attribute__((sda));
+extern s32 mine_layer_fire_interval_frames __asm__("D_L03_00161918") __attribute__((sda));
+extern f32 mine_layer_patrol_animation_speed __asm__("D_L03_0016191C") __attribute__((sda));
+extern f32 mine_layer_initial_scale_multiplier __asm__("D_L03_00161920") __attribute__((sda));
+extern f32 mine_layer_projectile_lateral_spread_speed __asm__("D_L03_00161910") __attribute__((sda));
+extern f32 mine_layer_projectile_vertical_launch_speed __asm__("D_L03_00161914") __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern void select_moby_target_with_hero_fallback(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
@@ -236,7 +236,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         mine_layer_vars->patrol.path = path;
         qcopy(&mine_layer_moby->pos, &path->pts[0]);
         mine_layer_vars->patrol.idx = 1;
-        mine_layer_moby->scale *= D_L03_00161920;
+        mine_layer_moby->scale *= mine_layer_initial_scale_multiplier;
         mine_layer_moby->state = 1;
         if (mine_layer_moby->prev_seq != 0) {
             trooper_blend_anim(mine_layer_moby, 0, 0, 0);
@@ -259,7 +259,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             if (mine_layer_moby->prev_seq != 2) {
                 trooper_blend_anim(mine_layer_moby, 2, 0, trooper_frames(10));
             }
-            mine_layer_moby->anim_speed = D_L03_0016191C;
+            mine_layer_moby->anim_speed = mine_layer_patrol_animation_speed;
             mine_layer_vars->fire_timer = trooper_frames(120);
         }
         break;
@@ -267,7 +267,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
         FUN_L00_00259028(mine_layer_moby, mine_layer_vars->walk, &pt->path->pts[patrol_point_index], mine_layer_vars->effect);
-        mine_layer_moby->anim_speed = D_L03_0016191C;
+        mine_layer_moby->anim_speed = mine_layer_patrol_animation_speed;
         trooper_tick16(&mine_layer_vars->patrol_timer);
         if (trooper_dist2(&mine_layer_moby->pos, &pt->path->pts[patrol_point_index]) < 1.0f) {
             if (mine_layer_vars->patrol_timer == 0 && trooper_dist(&mine_layer_moby->pos, &target.aim) > 25.0f) {
@@ -288,7 +288,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             }
         }
         if (trooper_tick16(&mine_layer_vars->fire_timer)) {
-            mine_layer_vars->fire_timer = trooper_frames(D_L03_00161918);
+            mine_layer_vars->fire_timer = trooper_frames(mine_layer_fire_interval_frames);
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 2.0f;
             trooper_play_sound(1, 0, mine_layer_moby, 0x273);
@@ -298,10 +298,10 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
                 trooper_add(muzzle, muzzle, &mine_layer_moby->pos);
                 muzzle[2] += 2.0f;
                 trooper_scale(spread, &mine_layer_moby->rot_row0, trooper_rand(-1.0f, 1.0f) * frame_time);
-                trooper_scale(projectile_launch_velocity, &mine_layer_moby->rot_row1, D_L03_00161910 * frame_time);
+                trooper_scale(projectile_launch_velocity, &mine_layer_moby->rot_row1, mine_layer_projectile_lateral_spread_speed * frame_time);
                 trooper_scale4(projectile_launch_velocity, projectile_launch_velocity, scale);
                 trooper_add(projectile_launch_velocity, projectile_launch_velocity, spread);
-                projectile_launch_velocity[2] = D_L03_00161914 * frame_time * trooper_rand(0.9f, 1.1f);
+                projectile_launch_velocity[2] = mine_layer_projectile_vertical_launch_speed * frame_time * trooper_rand(0.9f, 1.1f);
                 spawn_mine_layer_projectile((char *)mine_layer_moby, muzzle, projectile_launch_velocity);
             }
         }
