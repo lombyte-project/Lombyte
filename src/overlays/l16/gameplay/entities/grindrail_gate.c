@@ -2189,8 +2189,8 @@ typedef struct {
 extern char *D_L16_001600FC;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float D_L16_00161EAC __attribute__((sda)); /* no foreign declaration */
-extern float D_L16_00161EBC __attribute__((sda)); /* no foreign declaration */
+extern float elevator_height_offset __asm__("D_L16_00161EAC") __attribute__((sda)); /* no foreign declaration */
+extern float elevator_height_acceleration __asm__("D_L16_00161EBC") __attribute__((sda)); /* no foreign declaration */
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern f32 D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
@@ -2229,7 +2229,7 @@ void elevator_update(L16PlatformMoby *moby) {
             elevator_data->particle = -1;
             transform_vector_by_basis(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
             elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + D_L16_00161EAC;
+            moby->position[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
             moby->reverse = 1;
             moby->state = 2;
             break;
@@ -2246,7 +2246,7 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + D_L16_00161EAC;
+                motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_data->goal = motion.v[2];
@@ -2264,7 +2264,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
                 transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + D_L16_00161EAC;
+                elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 elevator_data->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2277,11 +2277,11 @@ void elevator_update(L16PlatformMoby *moby) {
                 || absolute_float(moby->position[2] - hero_position[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_data->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_data->speed, elevator_data->goal,
-                                      D_L16_00161EBC * frame_time_sq, D_L16_00161EBC * frame_time_sq,
+                                      elevator_height_acceleration * frame_time_sq, elevator_height_acceleration * frame_time_sq,
                                       *(float *)&D_L16_00161EB8_gp * frame_time);
             } else {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_data->speed, moby->position[2],
-                                      D_L16_00161EBC * 4.0f * frame_time_sq, D_L16_00161EBC * 4.0f * frame_time_sq,
+                                      elevator_height_acceleration * 4.0f * frame_time_sq, elevator_height_acceleration * 4.0f * frame_time_sq,
                                       *(float *)&D_L16_00161EB8_gp * frame_time);
             }
             clear_u64_value(motion.v);
