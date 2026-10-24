@@ -578,7 +578,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *pos, void *
 }
 extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
-extern s32 D_L00_00161E08;
+extern s32 timed_hud_visibility_gate __asm__("D_L00_00161E08");
 extern s32 D_L00_00161E04;
 void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
@@ -592,7 +592,7 @@ void update_timed_hud_visibility(void) {
         if (--D_L00_0015F590 == 0)
             D_L00_0015F594 = 0;
     }
-    if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
+    if (D_L00_0015F594 == 0 || timed_hud_visibility_gate == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
         D_L00_00161E04 = queue_animation_update(0xC, 0, initialize_numeric_hud_element, mine_blend_color,
