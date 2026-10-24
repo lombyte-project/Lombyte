@@ -1606,11 +1606,11 @@ extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
-extern int D_L15_00161418 __attribute__((sda));
+extern int rocket_trail_spark_initial_configuration_word __asm__("D_L15_00161418") __attribute__((sda));
 extern float rocket_trail_spark_frame_count_range_start __asm__("D_L15_00161428") __attribute__((sda));
 extern float rocket_trail_spark_third_frame_count_range_start __asm__("D_L15_00161438") __attribute__((sda));
 extern float rocket_trail_spark_first_velocity_scale __asm__("D_L15_00161448") __attribute__((sda));
-extern int D_L15_0016141C __attribute__((sda));
+extern int rocket_trail_spark_second_configuration_word __asm__("D_L15_0016141C") __attribute__((sda));
 extern float D_L15_00161420 __attribute__((sda));
 extern float D_L15_00161424 __attribute__((sda));
 extern float rocket_trail_spark_frame_count_range_end __asm__("D_L15_0016142C") __attribute__((sda));
@@ -1651,7 +1651,7 @@ void spawn_rocket_trail_spark(char *moby) {
         random_float_between_alt(rocket_trail_spark_second_frame_count_range_start, rocket_trail_spark_second_frame_count_range_end)));
     third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(rocket_trail_spark_third_frame_count_range_start, rocket_trail_spark_third_frame_count_range_end)));
-    spawn_spark(moby + 0x10, spark_a, spark_b, D_L15_00161418, D_L15_0016141C, frame_count, second_frame_count, third_frame_count,
+    spawn_spark(moby + 0x10, spark_a, spark_b, rocket_trail_spark_initial_configuration_word, rocket_trail_spark_second_configuration_word, frame_count, second_frame_count, third_frame_count,
                  rocket_trail_spark_lookup_index_and_flags);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
