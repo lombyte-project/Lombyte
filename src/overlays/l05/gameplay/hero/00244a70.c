@@ -804,8 +804,8 @@ void update_hero_motion_by_state(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_MOVE:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
