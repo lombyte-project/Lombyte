@@ -30,7 +30,7 @@ extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f9
 unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
                                 float max_speed) __asm__("FUN_L13_002c13b0");
 
-unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
+unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int initial_expiry_countdown, float scale,
                                 float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby_c13(0x52);
     if (moby != 0) {
@@ -48,7 +48,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *t
             *(float *)(data + 0x2C) = *sp;
         }
         *(float *)(data + 0x38) = max_speed;
-        *(int *)(data + 0x28) = arg;
+        *(int *)(data + 0x28) = initial_expiry_countdown;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
         qcopy(data, *(char **)(owner_moby + 0x78) + 0xC0);
@@ -61,7 +61,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *t
         }
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
         FUN_L00_00250df8(moby);
-        spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, arg, 0, 500000.0f);
+        spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, initial_expiry_countdown, 0, 500000.0f);
     }
     return moby;
 }
