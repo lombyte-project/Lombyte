@@ -1978,7 +1978,7 @@ extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 void update_ship_lock_on_target(void *self, char *moby) __asm__("FUN_L11_00311c80");
 
 void update_ship_lock_on_target(void *self, char *moby) {
-    float v[4] __attribute__((aligned(16)));
+    float reference_rotation_copy[4] __attribute__((aligned(16)));
     float *reference_rotation_source;
     unsigned char *current_target;
     void *selected_target;
@@ -1993,8 +1993,8 @@ void update_ship_lock_on_target(void *self, char *moby) {
                 *(void **)(moby + 0x88) = 0;
         }
         reference_rotation_source = D_L11_001677D0;
-        qcopy(v, reference_rotation_source);
-        selected_target = select_ship_lock_on_target(self, moby, reference_rotation_source - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
+        qcopy(reference_rotation_copy, reference_rotation_source);
+        selected_target = select_ship_lock_on_target(self, moby, reference_rotation_source - 4, reference_rotation_copy, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
         if (selected_target != *(void **)(moby + 0x88)) {
             int initial_lock_timer_frames = lock_hold_frames + lock_fade_frames;
             *(void **)(moby + 0x88) = selected_target;
