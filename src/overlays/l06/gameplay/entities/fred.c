@@ -507,7 +507,7 @@ void draw_dual_texture_50_quad_mesh(void) {
     Packet_2fd1a0 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
     float reference_to_quad_unit_direction[4] __attribute__((aligned(16)));
-    float vec1[4] __attribute__((aligned(16)));
+    float transformed_quad_center_or_normal[4] __attribute__((aligned(16)));
     float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
     float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
     void *matrix_ptr;
@@ -534,12 +534,12 @@ void draw_dual_texture_50_quad_mesh(void) {
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001F2610[i], dual_texture_mesh_position_scale_gp);
-        multiply_2fd1a0(vec1, vec1, matrix);
-        subtract_2fd1a0(reference_to_quad_unit_direction, vec1, D_L06_00167540);
+        transform_2fd1a0(transformed_quad_center_or_normal, D_L06_001F2610[i], dual_texture_mesh_position_scale_gp);
+        multiply_2fd1a0(transformed_quad_center_or_normal, transformed_quad_center_or_normal, matrix);
+        subtract_2fd1a0(reference_to_quad_unit_direction, transformed_quad_center_or_normal, D_L06_00167540);
         normalize_2fd1a0(reference_to_quad_unit_direction, reference_to_quad_unit_direction, 1.0f);
-        transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix_ptr);
-        normalize_other_2fd1a0(reference_to_quad_unit_direction, vec1);
+        transform_other_2fd1a0(transformed_quad_center_or_normal, D_L06_001F19D0[i], matrix_ptr);
+        normalize_other_2fd1a0(reference_to_quad_unit_direction, transformed_quad_center_or_normal);
         j = 0;
         do {
             int vertex_index = D_L06_001F1220[i][j][0];
