@@ -2469,8 +2469,8 @@ extern void vsub_26eb88(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26eb88(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vadd_26eb88(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_26eb88(void *, void *) __asm__("FUN_001f9b48");
-extern float D_L00_001601F4 __attribute__((sda));
-extern float D_L00_001601F8 __attribute__((sda));
+extern float two_point_particle_first_point_target_offset_scale __asm__("D_L00_001601F4") __attribute__((sda));
+extern float two_point_particle_second_point_target_offset_scale __asm__("D_L00_001601F8") __attribute__((sda));
 void update_target_relative_two_point_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026eb88");
 
 void update_target_relative_two_point_effect_particle(unsigned char *particle) {
@@ -2483,12 +2483,12 @@ void update_target_relative_two_point_effect_particle(unsigned char *particle) {
     }
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x10);
     target_offset_scratch[0] = position_scratch;
-    vscl_26eb88(target_offset_scratch, target_offset_scratch, (D_L00_001601F4 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_first_point_target_offset_scale - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x10) = position_scratch;
     vsub_26eb88(&position_scratch, *(unsigned char **)(particle + 0x30) + 0x10, particle + 0x20);
     target_offset_scratch[0] = position_scratch;
-    vscl_26eb88(target_offset_scratch, target_offset_scratch, (D_L00_001601F8 - 1.0f) * D_0015ED60_26eb88 + 1.0f);
+    vscl_26eb88(target_offset_scratch, target_offset_scratch, (two_point_particle_second_point_target_offset_scale - 1.0f) * D_0015ED60_26eb88 + 1.0f);
     vadd_26eb88(&position_scratch, target_offset_scratch, *(unsigned char **)(particle + 0x30) + 0x10);
     *(OvlQuad *)(particle + 0x20) = position_scratch;
     if (dist_26eb88(particle + 0x10, particle + 0x20) < 0.1f ||
