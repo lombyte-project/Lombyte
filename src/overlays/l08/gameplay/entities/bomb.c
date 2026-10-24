@@ -1430,7 +1430,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
             *(short *)(splash + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
     }
 }
-extern float D_L08_00161998 __attribute__((sda));
+extern float line_puff_initial_z_velocity_range_end __asm__("D_L08_00161998") __attribute__((sda));
 extern float D_L08_001619A0 __attribute__((sda));
 extern u16 D_L08_001619A8 __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1465,7 +1465,7 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
         add_vector_xyz(&puff_spawn_position, from, &puff_spawn_position);
         effect_initial_velocity.f[0] = randf_sym(0.0f, 0.005f);
         effect_initial_velocity.f[1] = randf_sym(0.0f, 0.005f);
-        effect_initial_velocity.f[2] = random_float_between(D_L08_00161998 * 0.1f, D_L08_00161998);
+        effect_initial_velocity.f[2] = random_float_between(line_puff_initial_z_velocity_range_end * 0.1f, line_puff_initial_z_velocity_range_end);
         alpha = FUN_L00_00257b90(0x30, 0x70);
         grey = FUN_L00_00257b90(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
