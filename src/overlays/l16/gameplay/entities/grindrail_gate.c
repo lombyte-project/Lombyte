@@ -1844,7 +1844,7 @@ extern float path_walker_speed_approach_acceleration __asm__("D_L16_00161E78") _
 extern float path_walker_height_range_start __asm__("D_L16_00161E7C") __attribute__((sda));
 extern float path_walker_height_range_end __asm__("D_L16_00161E80") __attribute__((sda));
 extern float path_walker_reposition_advance_rate __asm__("D_L16_00161E8C") __attribute__((sda));
-extern int D_L16_00161E90 __attribute__((sda));
+extern int path_walker_draw_distance __asm__("D_L16_00161E90") __attribute__((sda));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -1934,7 +1934,7 @@ void update_path_walker(unsigned char *walker_moby) {
                 sample_camera_path(path, next, 0, trial, rotation, 1);
                 trial[2] += height;
                 trial[3] = 2.0f;
-                if (fast_bsphere_check((char *)trial, (float)D_L16_00161E90) == -1) {
+                if (fast_bsphere_check((char *)trial, (float)path_walker_draw_distance) == -1) {
                     float random = random_float_between(path_walker_speed_range_start, path_walker_speed_range_end);
 
                     walker_data->parameter = next;
@@ -2025,7 +2025,7 @@ extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_L16_00161E94 __attribute__((sda)); /* no foreign declaration */
+extern float path_walker_initial_scale_multiplier __asm__("D_L16_00161E94") __attribute__((sda)); /* no foreign declaration */
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short *D_L16_001ABCC0[];
 
@@ -2069,9 +2069,9 @@ void initialize_path_walker_group(struct Moby *moby) {
                 selected = (selected + 1) % (count - 1);
             }
         }
-        flags = D_L16_00161E90;
+        flags = path_walker_draw_distance;
         current[0x30] = 255;
-        *(float *)(current + 0x2C) *= D_L16_00161E94;
+        *(float *)(current + 0x2C) *= path_walker_initial_scale_multiplier;
         *(int *)(current + 0x94) = 0;
         *(unsigned short *)(current + 0x32) = flags;
         data = *(L16WalkerData **)(current + 0x78);
