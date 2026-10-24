@@ -3291,10 +3291,10 @@ typedef struct {
 } HoverMoby;
 
 
-extern f32 D_L01_00161BF0 __attribute__((sda));
-extern f32 D_L01_00161BF4 __attribute__((sda));
-extern f32 D_L01_00161BF8 __attribute__((sda));
-extern f32 D_L01_00161BFC __attribute__((sda));
+extern f32 water_lily_spring_velocity_adjustment_scale __asm__("D_L01_00161BF0") __attribute__((sda));
+extern f32 water_lily_spring_damping __asm__("D_L01_00161BF4") __attribute__((sda));
+extern f32 water_lily_hero_separation_radius __asm__("D_L01_00161BF8") __attribute__((sda));
+extern f32 water_lily_max_horizontal_speed __asm__("D_L01_00161BFC") __attribute__((sda));
 extern f32 D_L01_00161C00 __attribute__((sda));
 extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -3334,16 +3334,16 @@ void water_lily_update(HoverMoby *water_lily) {
         water_lily->state = 1;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
-        spring_axis_to(&water_lily->pos.v.x, v->home_x, &v->vel_x, D_L01_00161BF0 * frame_time_sq,
-                       D_L01_00161BF4, 3.0f);
-        spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * frame_time_sq,
-                       D_L01_00161BF4, 3.0f);
-        if (vector_distance(&water_lily->pos, &hero.motion.pos) < D_L01_00161BF8) {
+        spring_axis_to(&water_lily->pos.v.x, v->home_x, &v->vel_x, water_lily_spring_velocity_adjustment_scale * frame_time_sq,
+                       water_lily_spring_damping, 3.0f);
+        spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, water_lily_spring_velocity_adjustment_scale * frame_time_sq,
+                       water_lily_spring_damping, 3.0f);
+        if (vector_distance(&water_lily->pos, &hero.motion.pos) < water_lily_hero_separation_radius) {
             if (FUN_001f99c0(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
                 hero_separation_angle = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
                                    water_lily->pos.v.y - hero.motion.pos.f[1]);
-                water_lily->pos.v.x = fast_cos(hero_separation_angle) * D_L01_00161BF8;
-                water_lily->pos.v.y = fast_sin(hero_separation_angle) * D_L01_00161BF8;
+                water_lily->pos.v.x = fast_cos(hero_separation_angle) * water_lily_hero_separation_radius;
+                water_lily->pos.v.y = fast_sin(hero_separation_angle) * water_lily_hero_separation_radius;
                 water_lily->pos.v.x += hero.motion.pos.f[0];
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
@@ -3352,10 +3352,10 @@ void water_lily_update(HoverMoby *water_lily) {
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = old.v.z;
-        if (FUN_001f9b48(&old, &water_lily->pos) > D_L01_00161BFC * frame_time_macro) {
+        if (FUN_001f9b48(&old, &water_lily->pos) > water_lily_max_horizontal_speed * frame_time_macro) {
             fast_vec_sub(&vector_scratch, &water_lily->pos, &old);
             step.q = vector_scratch.q;
-            fast_vec_normalize(&step, &step, D_L01_00161BFC * frame_time_macro);
+            fast_vec_normalize(&step, &step, water_lily_max_horizontal_speed * frame_time_macro);
             fast_vec_add(&vector_scratch, &old, &step);
             water_lily->pos.q = vector_scratch.q;
         }
