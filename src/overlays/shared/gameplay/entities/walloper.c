@@ -3094,7 +3094,7 @@ void FUN_L00_00250df8(unsigned char *);
 void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
 
-unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) {
+unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initial_vector) {
     unsigned char *spawned_moby = create_moby(0xba);
     if (spawned_moby) {
         char *moby_vars;
@@ -3106,7 +3106,7 @@ unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector)
         spawned_moby[0xbc] = 0;
         qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(moby_vars + 0x10, initial_vector);
-        *(int *)(moby_vars + 0x60) = a;
+        *(int *)(moby_vars + 0x60) = linked_moby;
         FUN_L00_00250df8(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
         *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
