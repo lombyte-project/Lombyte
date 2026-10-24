@@ -996,7 +996,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
 }
 extern int D_L08_001B0CB0[];
 extern char D_0013E550[];
-extern float D_L08_001618A0 __attribute__((sda));
+extern float bomber_tank_part_reference_speed __asm__("D_L08_001618A0") __attribute__((sda));
 extern float fast_atan2_l08(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
@@ -1056,7 +1056,7 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
     if (distance_vector_l08(&moby->pos, point) < 0.5f) {
         vars->point = (vars->point + 1) % *path;
     }
-    scale = vars->speed / (D_L08_001618A0 * frame_time);
+    scale = vars->speed / (bomber_tank_part_reference_speed * frame_time);
     if (scale > 2.0f) {
         scale = 2.0f;
     } else if (scale < 0.0f) {
