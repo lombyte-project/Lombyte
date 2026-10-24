@@ -629,7 +629,7 @@ extern float FUN_001f99c0(float);
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
-extern float D_L13_00161490 __attribute__((sda));
+extern float hovering_rocket_attacker_scale_multiplier __asm__("D_L13_00161490") __attribute__((sda));
 
 void update_hovering_rocket_attacker_common(unsigned char *moby) {
     enum {
@@ -691,7 +691,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         rb = FUN_L00_00257b90(0xA, 0xF);
         FUN_L00_00269958(point_3_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
     }
-    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L13_00161490;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * hovering_rocket_attacker_scale_multiplier;
     damage_amount = 0.0f;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
     hit_reaction_code = FUN_L13_002c2d30_collision(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
