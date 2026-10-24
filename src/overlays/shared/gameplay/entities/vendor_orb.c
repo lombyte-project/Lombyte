@@ -2345,15 +2345,15 @@ void follow_camera_springs(void *camera_moby) {
     FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)camera_moby);
     FollowCamTail *camera_tail = &camera_state->tail;
     FollowCamBlock *follow_block = &camera_state->follow;
-    f32 len, back;
+    f32 up_projection_or_collision_clearance, back;
 
     follow_cam_hero_position(camera_moby, hero_pos);
     follow_cam_update_mode(camera_moby);
     follow_cam_focus_velocity(camera_moby, velocity);
     qcopy(&camera_state->follow.velocity, velocity);
     qcopy(focus, follow_block);
-    len = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
-    scale_vector_xyz(up, view + 0x30, len);
+    up_projection_or_collision_clearance = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
+    scale_vector_xyz(up, view + 0x30, up_projection_or_collision_clearance);
     subtract_vector_xyz(lateral, camera_state->follow.offset, up);
     up[0] = cam_interp_values(&camera_state->follow.up_ease[0], up[0], follow_block->velocity[0], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
     up[1] = cam_interp_values(&camera_state->follow.up_ease[1], up[1], follow_block->velocity[1], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
@@ -2389,7 +2389,7 @@ void follow_camera_springs(void *camera_moby) {
     add_vector_xyz(base, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, camera_tail->distance);
     add_vector_xyz(follow_block->eye, look, follow_block);
-    len = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
+    up_projection_or_collision_clearance = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
     add_vector_xyz(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
@@ -2403,7 +2403,7 @@ void follow_camera_springs(void *camera_moby) {
         qcopy(probe, collision_hit_point);
     }
     subtract_vector_xyz(collision_resolution_delta, probe, left);
-    if (vector_length_xyz(collision_resolution_delta) < len + len) {
+    if (vector_length_xyz(collision_resolution_delta) < up_projection_or_collision_clearance + up_projection_or_collision_clearance) {
         add_vector_xyz(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
         qcopy(follow_block->eye, mid);
@@ -2414,15 +2414,15 @@ void follow_camera_springs(void *camera_moby) {
         subtract_vector_xyz(collision_resolution_delta, left, follow_block);
         back = vector_length_xyz(collision_resolution_delta);
         reach = camera_tail->distance;
-        if (back <= reach + len) {
-            scale_vector_xyz(mid, view + 0x20, len);
+        if (back <= reach + up_projection_or_collision_clearance) {
+            scale_vector_xyz(mid, view + 0x20, up_projection_or_collision_clearance);
             subtract_vector_xyz(mid, left, mid);
             qcopy(follow_block->eye, mid);
             subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
             follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
         } else {
-            len = dot_vectors_xyz(follow_block, view + 0x30);
-            if (dot_vectors_xyz(probe, view + 0x30) < len) {
+            up_projection_or_collision_clearance = dot_vectors_xyz(follow_block, view + 0x30);
+            if (dot_vectors_xyz(probe, view + 0x30) < up_projection_or_collision_clearance) {
                 qcopy(probe, follow_block);
             }
             scale_vector_xyz(look, view + 0x20, reach);
