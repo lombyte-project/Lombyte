@@ -152,8 +152,8 @@ void rocket_update(char *rocket) {
         ROCKET_STATE_BURST = 2
     };
     Shot_cc2e8 *shot_data = *(Shot_cc2e8 **)(rocket + 0x78);
-    float pos0[4] __attribute__((aligned(16)));
-    float c[4] __attribute__((aligned(16)));
+    float previous_rocket_position[4] __attribute__((aligned(16)));
+    float spark_zero_vector[4] __attribute__((aligned(16)));
     float diff[4] __attribute__((aligned(16)));
     float hv[4] __attribute__((aligned(16)));
     float tp[4] __attribute__((aligned(16)));
@@ -167,7 +167,7 @@ void rocket_update(char *rocket) {
 
     switch ((unsigned char)rocket[0x20]) {
     case ROCKET_STATE_FLYING:
-        qcopy(pos0, rocket + 0x10);
+        qcopy(previous_rocket_position, rocket + 0x10);
         if (shot_data->target == 0 || (unsigned char)shot_data->target[0x20] == 0xFE ||
             (unsigned char)shot_data->target[0x20] == 0xFD)
             rocket[0x20] = 2;
@@ -218,10 +218,10 @@ void rocket_update(char *rocket) {
             ((Rot_cc2e8 *)rocket)->rx = addrot_cc2e8(((Rot_cc2e8 *)rocket)->rx, frame_time * 6.2831855f);
             setvel_cc2e8(speed, ((Rot_cc2e8 *)rocket)->rz, -((Rot_cc2e8 *)rocket)->ry, shot_data);
         }
-        vclear_cc2e8(c);
-        spark_cc2e8(rocket_position, c, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
+        vclear_cc2e8(spark_zero_vector);
+        spark_cc2e8(rocket_position, spark_zero_vector, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
                     randint_cc2e8(20, 35), 1);
-        spark_cc2e8(rocket_position, c, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
+        spark_cc2e8(rocket_position, spark_zero_vector, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
                     randint_cc2e8(50, 75), 0);
         dist = vdist_cc2e8(rocket_position, &hero.motion.pos);
         vadd_cc2e8(rocket_position, rocket_position, shot_data);
@@ -232,7 +232,7 @@ void rocket_update(char *rocket) {
         if (dist < shot_data->dist)
             shot_data->passed = 1;
         shot_data->dist = dist;
-        if (hit_cc2e8(rocket_position, pos0, 0x10, shot_data->owner, 0)) {
+        if (hit_cc2e8(rocket_position, previous_rocket_position, 0x10, shot_data->owner, 0)) {
             tb = ground_hit;
             if (*(int *)(tb + 0x18) != shot_data->owner) {
                 if (*(int *)(tb + 0x18) != 0) {
