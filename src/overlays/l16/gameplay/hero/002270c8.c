@@ -1487,12 +1487,12 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 24:
+                case HERO_STATE_LEDGE_HANG_ENTRY:
                     if (13.5f < hero.anim_frame) {
                         hero_set_state(0x19, 0);
                     }
                     break;
-                case 25:
+                case HERO_STATE_LEDGE_HANG:
                     if ((hero.unkA98 & 2) && ((unsigned char *)hero.moby)[0x53] == 0x20) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
@@ -1545,8 +1545,8 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 26:
-                case 27: {
+                case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+                case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
                     qcopy(v0, hero.motion.pos.f);
@@ -1857,7 +1857,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
                 case 18:
-                case 28:
+                case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case 105:
                     if (hero.unk4AE != 0) {
