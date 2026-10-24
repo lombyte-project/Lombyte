@@ -3037,24 +3037,24 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L18_0015F580; /* no foreign declaration */
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern float D_L18_00161FFC __attribute__((sda));
-extern float D_L18_00162000 __attribute__((sda));
-extern float D_L18_00162004 __attribute__((sda));
+extern float primary_bolt_z_phase_step __asm__("D_L18_00161FFC") __attribute__((sda));
+extern float primary_bolt_z_amplitude_start __asm__("D_L18_00162000") __attribute__((sda));
+extern float primary_bolt_z_amplitude_end __asm__("D_L18_00162004") __attribute__((sda));
 extern s32 D_L18_00162008 __attribute__((sda));
-extern float D_L18_0016200C __attribute__((sda));
+extern float primary_bolt_z_phase_increment __asm__("D_L18_0016200C") __attribute__((sda));
 extern s32 D_L18_00162010 __attribute__((sda));
-extern float D_L18_00162014 __attribute__((sda));
-extern float D_L18_00162018 __attribute__((sda));
-extern float D_L18_0016201C __attribute__((sda));
-extern float D_L18_00162020 __attribute__((sda));
+extern float secondary_bolt_orbit_phase_decrement __asm__("D_L18_00162014") __attribute__((sda));
+extern float secondary_bolt_orbit_phase_step __asm__("D_L18_00162018") __attribute__((sda));
+extern float secondary_bolt_z_amplitude __asm__("D_L18_0016201C") __attribute__((sda));
+extern float secondary_bolt_lateral_amplitude __asm__("D_L18_00162020") __attribute__((sda));
 extern s32 D_L18_00162024 __attribute__((sda));
-extern float D_L18_00162028 __attribute__((sda));
-extern float D_L18_0016202C __attribute__((sda));
+extern float secondary_bolt_z_phase_increment __asm__("D_L18_00162028") __attribute__((sda));
+extern float secondary_bolt_z_phase_step __asm__("D_L18_0016202C") __attribute__((sda));
 extern float D_L18_00162040 __attribute__((sda));
 extern float D_L18_00162044 __attribute__((sda));
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
 extern float D_L18_00162084 __attribute__((sda));
-extern float D_L18_0016208C __attribute__((sda));
+extern float primary_bolt_random_step_blend_weight __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));
 extern short D_L18_001620C0[] __attribute__((section(".sdata")));
 extern short D_L18_001620C8[] __attribute__((section(".sdata")));
@@ -3078,9 +3078,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
     float rotation_angle_or_particle_scale;
     int r;
 
-    *(float *)&D_L18_00162008 = fast_add_rotations(*(float *)&D_L18_00162008, *(float *)&D_L18_0016200C);
-    *(float *)&D_L18_00162010 = fast_subtract_rotations(*(float *)&D_L18_00162010, *(float *)&D_L18_00162014);
-    *(float *)&D_L18_00162024 = fast_add_rotations(*(float *)&D_L18_00162024, *(float *)&D_L18_00162028);
+    *(float *)&D_L18_00162008 = fast_add_rotations(*(float *)&D_L18_00162008, *(float *)&primary_bolt_z_phase_increment);
+    *(float *)&D_L18_00162010 = fast_subtract_rotations(*(float *)&D_L18_00162010, *(float *)&secondary_bolt_orbit_phase_decrement);
+    *(float *)&D_L18_00162024 = fast_add_rotations(*(float *)&D_L18_00162024, *(float *)&secondary_bolt_z_phase_increment);
     scale = distance_xyz((char *)moby + 0x10, data + 0x10) * 0.05f;
     if (flag) {
         *(int *)&D_L18_00162054_c = 0x7F2040;
@@ -3100,9 +3100,9 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         float blended_step_length;
         float azimuth_angle;
         float b;
-        primary_bolt_z_offset = *(float *)&D_L18_00162000
-              + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
-        primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
+        primary_bolt_z_offset = *(float *)&primary_bolt_z_amplitude_start
+              + (*(float *)&primary_bolt_z_amplitude_end - *(float *)&primary_bolt_z_amplitude_start) * (convert_integer_to_float(i) * 0.05f);
+        primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&primary_bolt_z_phase_step));
         primary_bolt_z_offset = primary_bolt_z_offset + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = primary_bolt_z_offset;
@@ -3110,7 +3110,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         b = random_angle_radians_c();
         build_spherical_offset(&scratch_vectors[1], scale, azimuth_angle, b);
         scratch_vectors[1].f[2] = scratch_vectors[1].f[2] * 0.5f;
-        lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&D_L18_0016208C);
+        lerp_vector(&scratch_vectors[2], &scratch_vectors[3], &scratch_vectors[1], *(float *)&primary_bolt_random_step_blend_weight);
         blended_step_length = vector_length_xyz(&scratch_vectors[2]);
         if (blended_step_length == 0.0f) {
             qcopy(&D_L18_001D9D00[0][i], &D_L18_001D9D00[0][i - 1]);
@@ -3142,15 +3142,15 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             float secondary_bolt_z_offset;
             float secondary_bolt_lateral_angle;
             float secondary_bolt_lateral_offset;
-            g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
-            secondary_bolt_z_offset = *(float *)&D_L18_0016201C
-                * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
+            g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&secondary_bolt_orbit_phase_step);
+            secondary_bolt_z_offset = *(float *)&secondary_bolt_z_amplitude
+                * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&secondary_bolt_z_phase_step));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
             secondary_bolt_z_offset = secondary_bolt_z_offset * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + secondary_bolt_z_offset;
             D_L18_001DA110[i] = secondary_bolt_z_offset;
             secondary_bolt_lateral_angle = fast_add_rotations(fast_arc_tan(scratch_vectors[1].f[0], scratch_vectors[1].f[1]), 1.5707964f);
-            secondary_bolt_lateral_offset = *(float *)&D_L18_00162020 * fast_cos_c(g);
+            secondary_bolt_lateral_offset = *(float *)&secondary_bolt_lateral_amplitude * fast_cos_c(g);
             scratch_vectors[4].f[0] = fast_cos_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
             scratch_vectors[4].f[1] = fast_sin_c(secondary_bolt_lateral_angle) * secondary_bolt_lateral_offset;
             scratch_vectors[4].f[2] = 0.0f;
