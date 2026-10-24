@@ -183,7 +183,9 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
-int FUN_L04_00292828(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
+int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_state) __asm__("FUN_L04_00292828");
+
+int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
 {
     float push[4];
     float tilt_direction[4];
