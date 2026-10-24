@@ -1972,12 +1972,12 @@ extern int D_L18_00161C48 __attribute__((sda));
 extern int D_L18_00161C4C __attribute__((sda));
 extern int D_L18_00161C50 __attribute__((sda));
 extern int D_L18_00161C54 __attribute__((sda));
-extern int D_L18_00161C5C __attribute__((sda));
-extern int D_L18_00161C60 __attribute__((sda));
-extern float D_L18_00161C64 __attribute__((sda));
-extern float D_L18_00161C68 __attribute__((sda));
+extern int expanding_projectile_ring_color_start __asm__("D_L18_00161C5C") __attribute__((sda));
+extern int expanding_projectile_ring_color_end __asm__("D_L18_00161C60") __attribute__((sda));
+extern float expanding_projectile_ring_segment_angle_degrees __asm__("D_L18_00161C64") __attribute__((sda));
+extern float expanding_projectile_ring_draw_height_offset __asm__("D_L18_00161C68") __attribute__((sda));
 extern float D_L18_00161C6C __attribute__((sda));
-extern float D_L18_00161C70 __attribute__((sda));
+extern float expanding_projectile_ring_layer_radius_offset __asm__("D_L18_00161C70") __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
 extern float D_L18_00161C7C __attribute__((sda));
@@ -1992,7 +1992,7 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
 
     unit_matrix_dba20(draw_matrix);
     qcopy(&draw_matrix[3], &moby->pos);
-    draw_matrix[3].f[2] += D_L18_00161C68;
+    draw_matrix[3].f[2] += expanding_projectile_ring_draw_height_offset;
     draw_matrix[3].f[3] = 1.0f;
     for (j = 0; j < 4; j++) {
         float fj;
@@ -2002,9 +2002,9 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         quad_packets[j].unk80 = 0xFF9000000260L;
         quad_packets[j].unk88 = (long)D_L18_00161C48 | ((long)D_L18_00161C4C << 2) | ((long)D_L18_00161C50 << 4) | ((long)D_L18_00161C54 << 6) | 0x8000000000L;
         layer_phase = moby_vars->f24 * D_L18_00161C74 + (float)j * 0.25f;
-        rad = moby_vars->f24 + D_L18_00161C70 * (float)j;
+        rad = moby_vars->f24 + expanding_projectile_ring_layer_radius_offset * (float)j;
         layer_phase = layer_phase - (float)truncate_dba20(layer_phase);
-        col = tween_color_dba20(D_L18_00161C5C, D_L18_00161C60, layer_phase);
+        col = tween_color_dba20(expanding_projectile_ring_color_start, expanding_projectile_ring_color_end, layer_phase);
         color_fade_weight = layer_phase * D_L18_00161C78;
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         col = tween_color_dba20(col & 0xFFFFFF, col, color_fade_weight);
@@ -2025,8 +2025,8 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
             } else {
                 quad_packets[j].corner[k].f[2] = -layer_phase * D_L18_00161C6C;
             }
-            corner_angle = add_rotations_dba20((float)(k >> 1) * (D_L18_00161C64 * 0.017453292f) - 3.14159f,
-                              D_L18_00161C64 * 0.25f * fj * 0.017453292f);
+            corner_angle = add_rotations_dba20((float)(k >> 1) * (expanding_projectile_ring_segment_angle_degrees * 0.017453292f) - 3.14159f,
+                              expanding_projectile_ring_segment_angle_degrees * 0.25f * fj * 0.017453292f);
             quad_packets[j].corner[k].f[0] = cos_dba20(corner_angle) * rad;
             quad_packets[j].corner[k].f[1] = sin_dba20(corner_angle) * rad;
             quad_packets[j].corner[k].f[3] = 1.0f;
@@ -2034,9 +2034,9 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         }
     }
     clear_vector_dba20(&rv);
-    rv.f[2] = D_L18_00161C64 * 0.017453292f;
+    rv.f[2] = expanding_projectile_ring_segment_angle_degrees * 0.017453292f;
     euler_basis_dba20(segment_rotation_basis, &rv);
-    for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / D_L18_00161C64; ring_segment_index++) {
+    for (ring_segment_index = 0; (float)ring_segment_index < 360.0f / expanding_projectile_ring_segment_angle_degrees; ring_segment_index++) {
         draw_quad_dba20(&quad_packets[0], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[1], draw_matrix, 0);
         draw_quad_dba20(&quad_packets[2], draw_matrix, 0);
