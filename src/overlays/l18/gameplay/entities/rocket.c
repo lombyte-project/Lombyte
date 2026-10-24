@@ -689,15 +689,15 @@ extern int D_L18_00161970 __attribute__((sda));
 extern int D_L18_00161974 __attribute__((sda));
 extern int D_L18_00161978 __attribute__((sda));
 extern int D_L18_0016197C __attribute__((sda));
-extern int D_L18_00161980 __attribute__((sda));
-extern int D_L18_00161984 __attribute__((sda));
+extern int rocket_target_pulse_color_start __asm__("D_L18_00161980") __attribute__((sda));
+extern int rocket_target_pulse_color_end __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
     Pk_d5768 pk;
     char *d = (char *)m->pvars;
     unsigned int col;
     int i;
     col = fast_tween_color((fast_sin(fast_normalize_angle((*(int *)(d + 0x2C) & 0xF) * 0.0625f * 6.28318f)) + 1.0f) * 0.5f,
-                          D_L18_00161980, D_L18_00161984);
+                          rocket_target_pulse_color_start, rocket_target_pulse_color_end);
     pk.b = get_effect_texture(0xD);
     pk.d = (unsigned long long)D_L18_00161970 | ((unsigned long long)D_L18_00161974 << 2) |
            ((unsigned long long)D_L18_00161978 << 4) | ((unsigned long long)D_L18_0016197C << 6) |
