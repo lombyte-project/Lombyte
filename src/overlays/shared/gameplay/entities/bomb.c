@@ -2371,15 +2371,15 @@ void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 void replenish_hero_drones(void) {
     P_2cdcc0 *hero_state = &(*(P_2cdcc0 *)((char *)&hero));
     S_2cdcc0 *usage_stats;
-    float d[4] __attribute__((aligned(16)));
-    float v[4] __attribute__((aligned(16)));
+    float initial_drone_velocity[4] __attribute__((aligned(16)));
+    float drone_spawn_position[4] __attribute__((aligned(16)));
     unsigned char *spawned_moby;
     int i;
     hero_state->b1FF5 = 0;
     if (FUN_L00_00233e98_2cdcc0(0x18)) {
-        d[0] = FUN_001f9dc8_2cdcc0(hero_state->f98) * 0.25f;
-        d[1] = FUN_001f9de0_2cdcc0(hero_state->f98) * 0.25f;
-        d[2] = 0.25f;
+        initial_drone_velocity[0] = FUN_001f9dc8_2cdcc0(hero_state->f98) * 0.25f;
+        initial_drone_velocity[1] = FUN_001f9de0_2cdcc0(hero_state->f98) * 0.25f;
+        initial_drone_velocity[2] = 0.25f;
         if (hero_state->b1FF6 < 6) {
             FUN_L00_00233db8_2cdcc0(0x18, 1);
             usage_stats = &D_00141680_2cdcc0;
@@ -2391,12 +2391,12 @@ void replenish_hero_drones(void) {
             }
             usage_stats->wC4 = usage_stats->wC4 | (1 << current_level_index) | 0x80000000;
 
-            FUN_001f9a10_2cdcc0(v, hero_state->v80, hero_state->p2080 + 0xE0);
-            FUN_001f9a10_2cdcc0(v, v, hero_state->p2080 + 0xC0);
+            FUN_001f9a10_2cdcc0(drone_spawn_position, hero_state->v80, hero_state->p2080 + 0xE0);
+            FUN_001f9a10_2cdcc0(drone_spawn_position, drone_spawn_position, hero_state->p2080 + 0xC0);
             for (i = hero_state->b1FF6; i < 6; i++) {
-                spawned_moby = FUN_L00_002ce1f0_2cdcc0(spawned_moby, v);
+                spawned_moby = FUN_L00_002ce1f0_2cdcc0(spawned_moby, drone_spawn_position);
                 if (spawned_moby) {
-                    qcopy(*(void **)(spawned_moby + 0x78), d);
+                    qcopy(*(void **)(spawned_moby + 0x78), initial_drone_velocity);
                 }
             }
         }
