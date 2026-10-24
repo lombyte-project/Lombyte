@@ -195,7 +195,7 @@ extern void steer_child_moby(void *, s32, struct Moby *, void *, void *) __asm__
 extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
 extern PathPoints_eb20 *D_L04_001b0630[];
 f32 D_L04_00166130[8] __attribute__((section(".bss")));
-extern s32 D_L04_001513C0 __attribute__((sda));
+extern s32 swarm_motion_parameters_initialized __asm__("D_L04_001513C0") __attribute__((sda));
 
 /* Variables of a swarm child (class 0x55). */
 typedef struct SwarmPartVars_29ecf8 {
@@ -248,14 +248,14 @@ void update_class_55_swarm_controller(struct Moby *moby) {
     f32 average;
     f32 effect[8];
 
-    if (D_L04_001513C0 == 0) {
+    if (swarm_motion_parameters_initialized == 0) {
         f32 *effect_dest = D_L04_00166130;
         memset(effect, 0, 0x20);
         effect[1] = int_to_float_29ecf8(data->child_count) * 2.073f;
         effect[3] = 2.0f;
         effect[4] = 1.0f;
         effect[5] = 1.0f;
-        D_L04_001513C0 = 1;
+        swarm_motion_parameters_initialized = 1;
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
     if (data->initialized == 0) {
