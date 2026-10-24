@@ -1273,7 +1273,9 @@ extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN
 
 extern int D_L00_001613AC __attribute__((sda));
 extern float D_L00_001613A8 __attribute__((sda));
-int FUN_L00_002a7210(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {
+int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) __asm__("FUN_L00_002a7210");
+
+int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {
     char *bolt_moby = ov;
     char *target_moby = tv;
     char *bolt_vars = *(char **)(bolt_moby + 0x78);
@@ -1423,7 +1425,7 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
             angle = 0.0f;
             if (flags & 0x10)
                 angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
-            FUN_L00_002a7210(spawned_bolt, D_001413D0, angle, 0.0f);
+            begin_bolt_attraction(spawned_bolt, D_001413D0, angle, 0.0f);
         }
         FUN_L00_00250df8((u8 *)spawned_bolt);
     } else {
@@ -1732,7 +1734,7 @@ typedef struct N_2a82c0 {
 extern N_2a82c0 *D_L00_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int FUN_L00_002a7210(void *, void *, float, float);
+extern int begin_bolt_attraction(void *, void *, float, float) __asm__("FUN_L00_002a7210");
 extern int is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *) __asm__("FUN_L00_0025e3f8");
 extern int try_collect_ammo_pickup(void *) __asm__("FUN_L00_002c5be8");
 
@@ -1752,7 +1754,7 @@ void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
             return;
         if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
             if (FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
-                moby_processing_result = FUN_L00_002a7210(scanned_moby, ((void *)hero_context->moby),
+                moby_processing_result = begin_bolt_attraction(scanned_moby, ((void *)hero_context->moby),
                                      random_float_between(-30.0f, 30.0f) * DEG_TO_RAD, 0.0f);
                 goto check;
             }

@@ -3271,7 +3271,7 @@ extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") __attribute__((s
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(O_2df1e0 *) __asm__("FUN_L00_0025e3f8");
 f32 FUN_001f9b48(void *, void *);
-void FUN_L00_002a7210(O_2df1e0 *, void *, f32, f32);
+void begin_bolt_attraction(O_2df1e0 *, void *, f32, f32) __asm__("FUN_L00_002a7210");
 void try_collect_ammo_pickup(O_2df1e0 *) __asm__("FUN_L00_002c5be8");
 void FUN_L00_002df1e0(O_2df1e0 *p) {
     s32 i;
@@ -3294,7 +3294,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
             f = 2.0f;
         if (FUN_001f9b48(p->v10, D_L00_001E5F40_2df1e0[i]) < f) {
             if (p && p->p24 && p->p24->h46 == 0x13) {
-                FUN_L00_002a7210(p, hero.moby, 0.0f, 0.0f);
+                begin_bolt_attraction(p, hero.moby, 0.0f, 0.0f);
             } else {
                 try_collect_ammo_pickup(p);
             }

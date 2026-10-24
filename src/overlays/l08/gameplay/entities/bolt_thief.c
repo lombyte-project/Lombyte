@@ -1661,7 +1661,7 @@ extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f730(void *, float);
 extern int find_listed_moby_by_data_id(struct Moby *) __asm__("FUN_L00_0025f878");
-extern void FUN_L00_002a7210(struct Moby *, struct Moby *, float, float);
+extern void begin_bolt_attraction(struct Moby *, struct Moby *, float, float) __asm__("FUN_L00_002a7210");
 extern void FUN_00212f90(struct Moby *, int, int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1869,7 +1869,7 @@ void bolt_thief_update(struct Moby *moby) {
                     if (moby->prev_seq != 6) {
                         FUN_00212f90(moby, 6, 0, scale_game_frames(0x14));
                     }
-                    FUN_L00_002a7210(data->list[i], moby, 0.0f, 0.0f);
+                    begin_bolt_attraction(data->list[i], moby, 0.0f, 0.0f);
                     data->list[i] = 0;
                 }
                 found = 1;
