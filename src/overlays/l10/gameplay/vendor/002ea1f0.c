@@ -256,7 +256,9 @@ extern short D_L10_00162050 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L10_002eaa08(void *emission_position, short *timer, short *burst, float height) {
+void emit_height_adjusted_burst_spark_particle(void *emission_position, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
+
+void emit_height_adjusted_burst_spark_particle(void *emission_position, short *timer, short *burst, float height) {
     float visibility_sphere[4];
     float vel[4];
     float acc[4];
