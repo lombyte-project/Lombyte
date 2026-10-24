@@ -2538,7 +2538,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             float a[4];
             float b[4];
             float scaled_launch_vector[4];
-            float e[4];
+            float launch_endpoint[4];
             float ang;
             float df;
             moby_data->b254++;
@@ -2560,7 +2560,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 b[2] = 0.0f;
             }
             FUN_L00_001ff290_cf(scaled_launch_vector, b, truncate_float_to_s32_cf(10.0f));
-            FUN_L03_00250ae8_cf(e, scaled_launch_vector, a);
+            FUN_L03_00250ae8_cf(launch_endpoint, scaled_launch_vector, a);
             emit_radial_particle_burst(m, scaled_launch_vector, 0);
             compute_interpolated_record_value_cf(b, a, m, FUN_L03_002c6d98_cf(0x82), ang,
                                                  frame_time * 6.0f, 0.75f);
