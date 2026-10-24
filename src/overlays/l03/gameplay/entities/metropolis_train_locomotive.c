@@ -3181,7 +3181,9 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 /* Hit reaction for class 574 (the path-walking enemy): takes damage from the hit, turns towards the
  * attacker (the hero when hit by the wrench or by nothing) and starts a knock-back jump whose size depends
  * on the hit kind; a lethal hit starts the death jump. */
-void FUN_L03_002c95a8(Moby2C8398 *moby) {
+void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) __asm__("FUN_L03_002c95a8");
+
+void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     enum {
         DEATH_KNOCKBACK_RESPONSE = 1,
         KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE = 3,
