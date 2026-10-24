@@ -1192,10 +1192,10 @@ struct WalkerVars_8d10 {
 };
 
 extern f32 D_L13_00161E58 __attribute__((sda));
-extern f32 D_L13_00161E60 __attribute__((sda));
-extern f32 D_L13_00161E64 __attribute__((sda));
-extern f32 D_L13_00161E68 __attribute__((sda));
-extern f32 D_L13_00161E6C __attribute__((sda));
+extern f32 blarg_space_commando_stun_horizontal_knockback_speed __asm__("D_L13_00161E60") __attribute__((sda));
+extern f32 blarg_space_commando_stun_vertical_knockback_speed __asm__("D_L13_00161E64") __attribute__((sda));
+extern f32 blarg_space_commando_dying_horizontal_knockback_speed __asm__("D_L13_00161E68") __attribute__((sda));
+extern f32 blarg_space_commando_dying_vertical_knockback_speed __asm__("D_L13_00161E6C") __attribute__((sda));
 extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1283,8 +1283,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 10:
             moby->state = 0xF;
             vars->stun_timer = scale_game_frames_8d10(0x3C);
-            vars->knock_up = D_L13_00161E60 * frame_time;
-            vars->knock_back = D_L13_00161E64 * frame_time;
+            vars->knock_up = blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
+            vars->knock_back = blarg_space_commando_stun_vertical_knockback_speed * frame_time;
             vars->knock_min = 8.0f;
             vars->knock_max = 15.0f;
             knock_back_8d10(moby, vars->anim, 7, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
@@ -1294,8 +1294,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case HIT_RESULT_DYING_KNOCKBACK:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
-            vars->knock_up = D_L13_00161E68 * frame_time;
-            vars->knock_back = D_L13_00161E6C * frame_time;
+            vars->knock_up = blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
+            vars->knock_back = blarg_space_commando_dying_vertical_knockback_speed * frame_time;
             vars->knock_min = 9.0f;
             vars->knock_max = 17.0f;
             knock_back_8d10(moby, vars->anim, 8, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
