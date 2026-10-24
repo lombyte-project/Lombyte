@@ -503,7 +503,9 @@ extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void FUN_L00_002c92d8_c(void *) __asm__("FUN_L00_002c92d8");
 extern void FUN_L00_00250df8(void *);
 
-struct Moby *FUN_L00_002c9348(State *source_state) {
+struct Moby *spawn_morphoray_chicken(State *source_state) __asm__("FUN_L00_002c9348");
+
+struct Moby *spawn_morphoray_chicken(State *source_state) {
     struct Moby *spawned_moby;
     Sub *moby_vars;
     Loc loc;

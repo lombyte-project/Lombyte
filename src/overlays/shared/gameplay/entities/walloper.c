@@ -1439,7 +1439,7 @@ int allocate_packed_color_point_light_slot(void *v, float a, float b, int col) _
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
-struct Moby *FUN_L00_002c9348(void *a);
+struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
