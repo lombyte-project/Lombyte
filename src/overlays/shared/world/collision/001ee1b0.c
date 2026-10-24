@@ -70,7 +70,9 @@ extern float FUN_001f9b20_1ee318(void *) __asm__("FUN_001f9b20");
 extern float FUN_001f9af0_1ee318(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b48_1ee318(void *, void *) __asm__("FUN_001f9b48");
 
-int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
+int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) __asm__("FUN_L00_001ee318");
+
+int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
     enum {
         VOLUME_TYPE_BOX = 3,
         VOLUME_TYPE_SPHERE = 5,
