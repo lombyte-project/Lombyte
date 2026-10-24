@@ -591,7 +591,8 @@ void liftcar_platform_update(struct Moby *moby) {
         LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE = 2,
         LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE = 3,
         LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW = 4,
-        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5
+        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5,
+        LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY = 6
     };
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_0015FFD8[*(int *)(data + 0xA0)];
@@ -689,7 +690,7 @@ void liftcar_platform_update(struct Moby *moby) {
             moby->command = 1;
         }
         break;
-    case 6:
+    case LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY:
         break;
     }
     add_vectors(&delta, &delta, &moby->pos);
