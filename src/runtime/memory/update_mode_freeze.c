@@ -64,6 +64,7 @@ void update_mode_freeze(void) {
     };
     enum {
         MODE_FREEZE_AWAIT_CROSS_RESUME = 2,
+        MODE_FREEZE_AWAIT_TRIANGLE_RESUME = 3,
         MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16
     };
     s32 video_mode;
@@ -305,7 +306,7 @@ void update_mode_freeze(void) {
                 break;
             }
 
-        case 3:
+        case MODE_FREEZE_AWAIT_TRIANGLE_RESUME:
 
         case 5:
             if (controller_state.pressed & PAD_TRIANGLE) {
