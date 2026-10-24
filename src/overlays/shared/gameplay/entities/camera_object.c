@@ -2510,14 +2510,14 @@ unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
             float a =
                 FUN_002132a8_2a9ed0(D_0015ED6C_2a9ed0 * 1.0471976f, D_0015ED6C_2a9ed0 * 3.1415927f);
             float frame_rate_scale = D_0015ED6C_2a9ed0;
-            float b;
+            float frame_scaled_random_sample;
             int x;
             float z;
             *(float *)(mine_vars + 0x38) = a;
-            b = FUN_002132a8_2a9ed0(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
+            frame_scaled_random_sample = FUN_002132a8_2a9ed0(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
-            *(float *)(mine_vars + 0x3C) = b;
+            *(float *)(mine_vars + 0x3C) = frame_scaled_random_sample;
             *(float *)(mine_vars + 0x64) = z;
             *(float *)(mine_vars + 0x60) = z;
             *(float *)(mine_vars + 0x70) = z;
