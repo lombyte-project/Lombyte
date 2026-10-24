@@ -919,7 +919,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.tether_radius, hero.grapple_target_radius, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -2325,7 +2325,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x66:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&general_vector_or_hit_descriptor_scratch, &hero.target_pose, &hero.motion.pos);
         if (fast_vec_dot(&general_vector_or_hit_descriptor_scratch, &hero.motion.momentum) < 0.0f) {
             clear_u64_value(&hero.motion.momentum);
