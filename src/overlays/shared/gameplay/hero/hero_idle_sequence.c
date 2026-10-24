@@ -2550,7 +2550,7 @@ void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 
 void emit_hero_timed_effects(void) {
     OvlQuad hero_position_copy[1];
-    OvlQuad w[1];
+    OvlQuad effect_vector[1];
     char *hero_effect_timer_anchor;
     char *base;
     float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
@@ -2562,11 +2562,11 @@ void emit_hero_timed_effects(void) {
         base = hero_effect_timer_anchor - 0x49E;
         lateral_angle = FUN_001fa580_209ec8(*(float *)(base + 0x98), 1.5707963705062866f);
         planar_scale = spread_k(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
-        ((float *)w)[0] = fast_cos(lateral_angle) * planar_scale;
-        ((float *)w)[1] = fast_sin(lateral_angle) * planar_scale;
-        ((int *)w)[2] = 0;
-        ((float *)w)[3] = frame_time_sq * -8.0f;
-        spawn_color_decaying_effect_particle(hero_position_copy, w, 0);
+        ((float *)effect_vector)[0] = fast_cos(lateral_angle) * planar_scale;
+        ((float *)effect_vector)[1] = fast_sin(lateral_angle) * planar_scale;
+        ((int *)effect_vector)[2] = 0;
+        ((float *)effect_vector)[3] = frame_time_sq * -8.0f;
+        spawn_color_decaying_effect_particle(hero_position_copy, effect_vector, 0);
         *(short *)(base + 0x49E) = random_int_between(2, 3);
     }
     if (!fast_dec_timer(hero_effect_timer_anchor - 2))
@@ -2582,7 +2582,7 @@ void emit_hero_timed_effects(void) {
     alpha = 0x1F < alpha ? alpha : 0x20;
     col = (alpha << 24) | 0xC0F0;
     life = FUN_001f96f8_209ec8(0x28);
-    pt = w;
+    pt = effect_vector;
     for (k = 0x38; k >= 0; k--) {
         small_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
         large_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
