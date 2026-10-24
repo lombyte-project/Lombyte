@@ -1759,7 +1759,7 @@ extern float D_L02_00161A9C __attribute__((sda));
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
-extern int FUN_L02_00261c80(char *a, char *o, float best);
+extern int select_moby_target_goal(char *a, char *o, float best) __asm__("FUN_L02_00261c80");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1860,7 +1860,7 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
     if (current_target == 0 || current_target[0x20] < 0 ||
         (*(short *)(current_target + 0xA6) != 0x10E && *(short *)(current_target + 0xA6) != 0xCB && *(short *)(current_target + 0xA6) != 0) ||
         ((unsigned char *)moby)[0x20] != 0xC) {
-        FUN_L02_00261c80(moby, (char *)target, 14.0f);
+        select_moby_target_goal(moby, (char *)target, 14.0f);
         moby_vars->target = (char *)target[16];
     }
     if (moby_vars->target == 0) {

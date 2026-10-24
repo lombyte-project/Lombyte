@@ -1314,7 +1314,7 @@ extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_
 void process_helicopter_hits(struct Moby *moby) __asm__("FUN_L15_002c6900");
 
 void process_helicopter_hits(struct Moby *m) __asm__("FUN_L15_002c6900");
-extern void FUN_L02_00261c80(void *, float *, float);
+extern void select_moby_target_goal(void *, float *, float) __asm__("FUN_L02_00261c80");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
@@ -1391,7 +1391,7 @@ void helicopter_update(struct Moby *moby) {
     if (vars->area_path == -1) {
         vars->range = vars->chase_range;
     near:
-        FUN_L02_00261c80(moby, goal.pos.f, vars->range);
+        select_moby_target_goal(moby, goal.pos.f, vars->range);
     } else {
         UPath *path;
         vars->range = vars->chase_range;
