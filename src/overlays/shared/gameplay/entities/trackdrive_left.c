@@ -902,7 +902,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     s32 vertex_uvs[4];
     s32 unwrapped_uv_scroll;
     s32 wrapped_uv_scroll_offset;
-    s32 tex;
+    s32 strip_texture_tex0;
     f32 f24, f25, f26, f27, f28, f29, f30, f31;
     f32 trig_value;
 
@@ -952,8 +952,8 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     NEG20(packed_vertices[3], truncate_float_to_s32(f27));
     LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
-    tex = FUN_001f44b8(D_L02_00161B64);
-    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, tex, 0);
+    strip_texture_tex0 = FUN_001f44b8(D_L02_00161B64);
+    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
     vertex_uvs[0] = (s32)D_L02_00161AFC;
     vertex_uvs[1] = (s32)D_L02_00161B00;
@@ -995,7 +995,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     NEG20(packed_vertices[3], truncate_float_to_s32(f27));
     LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
-    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, tex, 0);
+    FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 }
 
 typedef struct { long a, b, c, d; } Q_2dae88;
