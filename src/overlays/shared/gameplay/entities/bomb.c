@@ -1604,9 +1604,9 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
         *(float *)(moby_vars + 0x28) = -(rndf_2cbf68(200.0f, 550.0f) * DEG_TO_RAD * D_0015ED6C_lui);
         *(float *)(moby_vars + 0x10) = rnda_2cbf68();
         {
-            float r = rnda_2cbf68();
+            float initial_random_angle = rnda_2cbf68();
             float base_lifetime = (float)D_L00_001618A4;
-            *(float *)(moby_vars + 0x14) = r;
+            *(float *)(moby_vars + 0x14) = initial_random_angle;
             lifetime_lower_bound = rf_2cbf68(base_lifetime * 0.7f);
         }
         lifetime_upper_bound = rf_2cbf68((float)D_L00_001618A4 * 1.2f);
