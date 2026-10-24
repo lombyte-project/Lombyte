@@ -1232,7 +1232,7 @@ extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
 extern float test_dummy_bomb_horizontal_launch_speed_gp __asm__("D_L16_001619CC") __attribute__((sda));
 extern float test_dummy_path_movement_speed_limit_gp __asm__("D_L16_001619D0") __attribute__((sda));
-extern float D_L16_001619D4 __attribute__((sda));
+extern float test_dummy_spray_range_gp __asm__("D_L16_001619D4") __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) __asm__("FUN_L16_002ced20");
 
@@ -1497,7 +1497,7 @@ void test_dummy_update(unsigned char *moby) {
             position_or_direction.f[1] =
                 fast_sin(fast_arc_tan(position_or_delta.f[0] - *(float *)(moby + 16), position_or_delta.f[1] - *(float *)(moby + 20)));
             position_or_direction.f[2] = 0.0f;
-            effect_slots_fire(slots, position_or_delta.f, position_or_direction.f, D_L16_001619D4);
+            effect_slots_fire(slots, position_or_delta.f, position_or_direction.f, test_dummy_spray_range_gp);
             position_or_direction.f[3] = 5627.925f;
             position_or_direction.f[2] = 1.0f;
             make_hit_descriptor(&fx, moby, 0x10001, 1.0f, position_or_direction.f);
