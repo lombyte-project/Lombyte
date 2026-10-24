@@ -1031,20 +1031,20 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
 }
 
 /* Spawns one particle above pos unless D_L02_00160178 is already high. */
-extern float D_L02_00161964 __attribute__((sda));
-extern float D_L02_00161968 __attribute__((sda));
-extern float D_L02_0016196C __attribute__((sda));
-extern float D_L02_00161970 __attribute__((sda));
-extern float D_L02_00161974 __attribute__((sda));
-extern float D_L02_00161978 __attribute__((sda));
+extern float sand_shark_single_particle_vertical_motion_z_range_start __asm__("D_L02_00161964") __attribute__((sda));
+extern float sand_shark_single_particle_vertical_motion_z_range_end __asm__("D_L02_00161968") __attribute__((sda));
+extern float sand_shark_single_particle_radial_motion_z_range_start __asm__("D_L02_0016196C") __attribute__((sda));
+extern float sand_shark_single_particle_radial_motion_z_range_end __asm__("D_L02_00161970") __attribute__((sda));
+extern float sand_shark_single_particle_radial_motion_xy_range_start __asm__("D_L02_00161974") __attribute__((sda));
+extern float sand_shark_single_particle_radial_motion_xy_range_end __asm__("D_L02_00161978") __attribute__((sda));
 extern float D_L02_0016197C __attribute__((sda));
 extern float D_L02_00161980 __attribute__((sda));
-extern s32 D_L02_00161984 __attribute__((sda));
-extern s32 D_L02_00161988 __attribute__((sda));
-extern s32 D_L02_0016198C __attribute__((sda));
-extern s32 D_L02_00161990 __attribute__((sda));
-extern s32 D_L02_00161994 __attribute__((sda));
-extern s32 D_L02_00161998 __attribute__((sda));
+extern s32 sand_shark_single_particle_frame_count_range_start __asm__("D_L02_00161984") __attribute__((sda));
+extern s32 sand_shark_single_particle_frame_count_range_end __asm__("D_L02_00161988") __attribute__((sda));
+extern s32 sand_shark_single_particle_second_frame_count_range_start __asm__("D_L02_0016198C") __attribute__((sda));
+extern s32 sand_shark_single_particle_second_frame_count_range_end __asm__("D_L02_00161990") __attribute__((sda));
+extern s32 sand_shark_single_particle_third_frame_count_range_start __asm__("D_L02_00161994") __attribute__((sda));
+extern s32 sand_shark_single_particle_third_frame_count_range_end __asm__("D_L02_00161998") __attribute__((sda));
 s32 D_L02_0016199C = 0x40306058;
 s32 D_L02_001619A0 = 0x10306058;
 s32 D_L02_001619A4 = -1;
@@ -1071,16 +1071,16 @@ void emit_sand_shark_single_particle(Vec4 *from) {
     at.f[0] = at.f[0] + rand_between_d57f8(-0.125f, 0.125f);
     at.f[1] = at.f[1] + rand_between_d57f8(-0.125f, 0.125f);
     clear_vec_d57f8(&vertical_motion);
-    radial_motion.f[0] = fast_cos_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
-    radial_motion.f[1] = fast_sin_d57f8(radial_angle) * (rand_between_d57f8(D_L02_00161974, D_L02_00161978) * D_0015ED6C);
+    radial_motion.f[0] = fast_cos_d57f8(radial_angle) * (rand_between_d57f8(sand_shark_single_particle_radial_motion_xy_range_start, sand_shark_single_particle_radial_motion_xy_range_end) * D_0015ED6C);
+    radial_motion.f[1] = fast_sin_d57f8(radial_angle) * (rand_between_d57f8(sand_shark_single_particle_radial_motion_xy_range_start, sand_shark_single_particle_radial_motion_xy_range_end) * D_0015ED6C);
     radial_motion.f[2] = 0.0f;
-    vertical_motion.f[2] = rand_between_d57f8(D_L02_00161964, D_L02_00161968) * D_0015ED6C;
-    radial_motion.f[2] = rand_between_d57f8(D_L02_0016196C, D_L02_00161970) * D_0015ED6C;
+    vertical_motion.f[2] = rand_between_d57f8(sand_shark_single_particle_vertical_motion_z_range_start, sand_shark_single_particle_vertical_motion_z_range_end) * D_0015ED6C;
+    radial_motion.f[2] = rand_between_d57f8(sand_shark_single_particle_radial_motion_z_range_start, sand_shark_single_particle_radial_motion_z_range_end) * D_0015ED6C;
     vertical_motion.f[3] = D_L02_0016197C;
     radial_motion.f[3] = D_L02_00161980;
-    frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161984, (float)D_L02_00161988));
-    second_frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_0016198C, (float)D_L02_00161990));
-    third_frame_count = trunc_d57f8(rand_between_d57f8((float)D_L02_00161994, (float)D_L02_00161998));
+    frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_single_particle_frame_count_range_start, (float)sand_shark_single_particle_frame_count_range_end));
+    second_frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_single_particle_second_frame_count_range_start, (float)sand_shark_single_particle_second_frame_count_range_end));
+    third_frame_count = trunc_d57f8(rand_between_d57f8((float)sand_shark_single_particle_third_frame_count_range_start, (float)sand_shark_single_particle_third_frame_count_range_end));
     spawn_spark(&at, &vertical_motion, &radial_motion, D_L02_0016199C, D_L02_001619A0, frame_count, second_frame_count, third_frame_count, D_L02_001619A4);
 }
 
