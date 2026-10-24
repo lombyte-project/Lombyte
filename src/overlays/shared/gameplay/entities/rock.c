@@ -2012,9 +2012,9 @@ extern int D_L01_00161FB8 __attribute__((sda));
 extern int D_L01_00161FBC __attribute__((sda));
 extern int D_L01_00161FC0 __attribute__((sda));
 extern int D_L01_00161FC4 __attribute__((sda));
-extern int D_L01_00161FC8 __attribute__((sda));
-extern int D_L01_00161FCC __attribute__((sda));
-extern float D_L01_00161FD0 __attribute__((sda));
+extern int moby_radius_ring_texture_index __asm__("D_L01_00161FC8") __attribute__((sda));
+extern int moby_radius_ring_vertex_color __asm__("D_L01_00161FCC") __attribute__((sda));
+extern float moby_radius_ring_center_z __asm__("D_L01_00161FD0") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
@@ -2028,14 +2028,14 @@ void draw_moby_radius_ring(char *moby) {
     moby_data = *(char **)(moby + 0x78);
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
     qcopy(moby_position_snapshot, moby + 0x10);
-    quad.g[1] = get_effect_texture(D_L01_00161FC8);
+    quad.g[1] = get_effect_texture(moby_radius_ring_texture_index);
     quad.g[3] = (long)D_L01_00161FB8 | ((long)D_L01_00161FBC << 2) | ((long)D_L01_00161FC0 << 4) | ((long)D_L01_00161FC4 << 6) | (0x8000L << 24);
     quad.g[2] = 0xFF9000000260UL;
     quad.g[0] = 0;
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = D_L01_00201630[i * 2];
         *(&quad.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
-        quad.c[i] = D_L01_00161FCC;
+        quad.c[i] = moby_radius_ring_vertex_color;
     }
     ring_half_height = 0.1f;
     if (*(float *)(moby_data + 0x34) < 1.15f) {
@@ -2066,9 +2066,9 @@ void draw_moby_radius_ring(char *moby) {
             vertex[1] = fast_sin(vertex_angle) * *(float *)(moby_data + 0x34);
             vertex[2] = 0.0f;
             if (k++ & 1) {
-                vertex[2] = D_L01_00161FD0 + ring_half_height + vertex[2];
+                vertex[2] = moby_radius_ring_center_z + ring_half_height + vertex[2];
             } else {
-                vertex[2] = D_L01_00161FD0 - ring_half_height + vertex[2];
+                vertex[2] = moby_radius_ring_center_z - ring_half_height + vertex[2];
             }
             vertex[3] = 1.0f;
             vertex += 4;
