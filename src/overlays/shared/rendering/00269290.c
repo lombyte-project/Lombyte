@@ -535,7 +535,7 @@ void FUN_L00_00267a08_0026a6f0(unsigned char *) __asm__("FUN_L00_00267a08");
 float FUN_001fa580_0026a6f0(float, float) __asm__("FUN_001fa580");
 int FUN_001fa6d0_0026a6f0(float) __asm__("FUN_001fa6d0");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
-extern int D_L00_001601A4 __attribute__((sda));
+extern int rotating_grayscale_particle_fade_reference_duration __asm__("D_L00_001601A4") __attribute__((sda));
 void update_rotating_grayscale_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a6f0");
 
 void update_rotating_grayscale_effect_particle(unsigned char *particle) {
@@ -547,11 +547,11 @@ void update_rotating_grayscale_effect_particle(unsigned char *particle) {
     }
     *(float *)&particle_data[3] = FUN_001fa580_0026a6f0(*(float *)&particle_data[3], *(float *)&particle_data[2]);
     particle[8] = FUN_001fa6d0_0026a6f0(*(float *)&particle_data[3] * 128.0f / 3.1415927f) - 0x80;
-    if (FUN_001f96f8_0026a6f0(D_L00_001601A4) * 3 / 4 < particle_data[0]) {
-        int scaled_fade_duration = FUN_001f96f8_0026a6f0(D_L00_001601A4);
-        faded_alpha = particle_data[4] * (scaled_fade_duration - particle_data[0]) / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
-    } else if (particle_data[0] < FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4) {
-        faded_alpha = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(D_L00_001601A4) / 4);
+    if (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) * 3 / 4 < particle_data[0]) {
+        int scaled_fade_duration = FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration);
+        faded_alpha = particle_data[4] * (scaled_fade_duration - particle_data[0]) / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4);
+    } else if (particle_data[0] < FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4) {
+        faded_alpha = particle_data[4] * particle_data[0] / (FUN_001f96f8_0026a6f0(rotating_grayscale_particle_fade_reference_duration) / 4);
     } else {
         faded_alpha = particle_data[4];
     }
