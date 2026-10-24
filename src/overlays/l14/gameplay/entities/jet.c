@@ -1488,10 +1488,10 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
-extern int D_L14_00161C78 __attribute__((sda));
-extern int D_L14_00161C7C __attribute__((sda));
-extern float D_L14_00161C80 __attribute__((sda));
-extern float D_L14_00161C84 __attribute__((sda));
+extern int lightning_arc_outer_base_color_gp __asm__("D_L14_00161C78") __attribute__((sda));
+extern int lightning_arc_inner_base_color_gp __asm__("D_L14_00161C7C") __attribute__((sda));
+extern float lightning_arc_outer_half_width_end_gp __asm__("D_L14_00161C80") __attribute__((sda));
+extern float lightning_arc_outer_half_width_start_gp __asm__("D_L14_00161C84") __attribute__((sda));
 extern float D_L14_00161C88 __attribute__((sda));
 extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")__attribute__((section(".sdata")));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1531,7 +1531,7 @@ void draw_branched_lightning_arc(void) {
     outer_vertex_alpha = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
     if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
     if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-    c = D_L14_00161C78 | (outer_vertex_alpha << 24);
+    c = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
     layer_quads[0].col[1] = c;
     layer_quads[0].col[0] = c;
     layer_quads[0].uv[0][0] = 0.0f;
@@ -1544,7 +1544,7 @@ void draw_branched_lightning_arc(void) {
     layer_quads[0].uv[3][1] = 1.0f;
     copy_blocks_16_forward(&layer_quads[1], &layer_quads[0], 0x90);
     layer_quads[1].tex = get_effect_texture(0x2C);
-    layer_quads[1].col[0] = layer_quads[1].col[1] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
+    layer_quads[1].col[0] = layer_quads[1].col[1] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
     subtract_vector_xyz_c2(&arc_to_world[0], D_L14_00161CC0, D_L14_00161CD0_c);
     normalize_vector_xyz(&arc_to_world[0], &arc_to_world[0], 1.0f);
     arc_to_world[0].w = 0.0f;
@@ -1559,10 +1559,10 @@ void draw_branched_lightning_arc(void) {
     arc_to_world[2].w = 0.0f;
     qcopy(&arc_to_world[3], D_L14_00161CD0_c);
     *(u128_2EF078 *)&sz[0] = 0;
-    sz[0].z = D_L14_00161C84;
+    sz[0].z = lightning_arc_outer_half_width_start_gp;
     sz[0].w = 1.0f;
     *(u128_2EF078 *)&sz[1] = 0;
-    sz[1].z = D_L14_00161C84 * D_L14_00161C88;
+    sz[1].z = lightning_arc_outer_half_width_start_gp * D_L14_00161C88;
     sz[1].w = 1.0f;
     qcopy(&layer_quads[0].v[0], &sz[0]);
     scale_vector_xyz(&layer_quads[0].v[1], &layer_quads[0].v[0], -1.0f);
@@ -1608,8 +1608,8 @@ void draw_branched_lightning_arc(void) {
             if (main_arc_end_vertex_alpha < 0) main_arc_end_vertex_alpha = 0;
             if (main_arc_end_vertex_alpha > 0xFF) main_arc_end_vertex_alpha = 0xFF;
         }
-        layer_quads[0].col[2] = layer_quads[0].col[3] = D_L14_00161C78 | (main_arc_end_vertex_alpha << 24);
-        layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((main_arc_end_vertex_alpha >> 1) << 24);
+        layer_quads[0].col[2] = layer_quads[0].col[3] = lightning_arc_outer_base_color_gp | (main_arc_end_vertex_alpha << 24);
+        layer_quads[1].col[2] = layer_quads[1].col[3] = lightning_arc_inner_base_color_gp | ((main_arc_end_vertex_alpha >> 1) << 24);
         draw_geometry_quad(&layer_quads[0], 0, 0);
         draw_geometry_quad(&layer_quads[1], 0, 0);
         layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2];
@@ -1618,7 +1618,7 @@ void draw_branched_lightning_arc(void) {
         qcopy(&layer_quads[0].v[1], &layer_quads[0].v[3]);
         qcopy(&layer_quads[1].v[0], &layer_quads[1].v[2]);
         qcopy(&layer_quads[1].v[1], &layer_quads[1].v[3]);
-        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
+        sz[0].z = lightning_arc_outer_half_width_start_gp + (lightning_arc_outer_half_width_end_gp - lightning_arc_outer_half_width_start_gp) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
         sz[1].z = sz[0].z * D_L14_00161C88;
     }
     qcopy(&quad_to_world[0], &arc_to_world[0]);
@@ -1634,11 +1634,11 @@ void draw_branched_lightning_arc(void) {
         outer_vertex_alpha = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
         if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
         if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-        c = D_L14_00161C78 | (outer_vertex_alpha << 24);
+        c = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
         layer_quads[0].col[1] = c;
         layer_quads[0].col[0] = c;
-        layer_quads[1].col[0] = layer_quads[1].col[1] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
-        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
+        layer_quads[1].col[0] = layer_quads[1].col[1] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
+        sz[0].z = (lightning_arc_outer_half_width_start_gp + (lightning_arc_outer_half_width_end_gp - lightning_arc_outer_half_width_start_gp) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
         sz[1].z = sz[0].z * 4.0f;
         qcopy(&layer_quads[0].v[0], &sz[0]);
         scale_vector_xyz(&layer_quads[0].v[1], &layer_quads[0].v[0], -1.0f);
@@ -1675,10 +1675,10 @@ void draw_branched_lightning_arc(void) {
             outer_vertex_alpha = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
             if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
             if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-            c = D_L14_00161C78 | (outer_vertex_alpha << 24);
+            c = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
             layer_quads[0].col[3] = c;
             layer_quads[0].col[2] = c;
-            layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
+            layer_quads[1].col[2] = layer_quads[1].col[3] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
             draw_geometry_quad(&layer_quads[0], 0, 0);
             draw_geometry_quad(&layer_quads[1], 0, 0);
             layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2];
