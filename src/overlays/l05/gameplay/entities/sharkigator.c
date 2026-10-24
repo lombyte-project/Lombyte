@@ -1155,7 +1155,7 @@ void extermibot_update(unsigned char *moby) {
     };
     char *moby_data = *(char **)(moby + 0x78);
     char *target_moby;
-    float dir[4];
+    float path_goal_or_facing_vector[4];
     float out[4];
     float hit[4];
     float spark_spawn_position[4];
@@ -1230,7 +1230,7 @@ void extermibot_update(unsigned char *moby) {
         break;
     case EXTERMIBOT_IDLE_AND_CHECK_TARGET_PATH:
         if (*(int *)(moby_data + 0x164) != 2 && random_integer_below_c2(9) == 0) {
-            if (follow_path(moby_data + 0x2C0, 1, *(int *)(moby_data + 0x2C4), moby + 0x10, (s32)(target_moby + 0x10), dir,
+            if (follow_path(moby_data + 0x2C0, 1, *(int *)(moby_data + 0x2C4), moby + 0x10, (s32)(target_moby + 0x10), path_goal_or_facing_vector,
                                   (D_L05_00161A98) * 0.4f) != 0) {
                 if (random_integer_below_c2(0x100) & 1) {
                     *(float *)(moby_data + 0x298) = -*(float *)(moby_data + 0x298);
@@ -1270,10 +1270,10 @@ void extermibot_update(unsigned char *moby) {
         if (fast_difference_between_rotations(*(float *)(moby + 0x48),
                           fast_arc_tan(*(float *)(moby_data + 0x280) - *(float *)(moby + 0x10),
                                             *(float *)(moby_data + 0x284) - *(float *)(moby + 0x14))) < 1.5707964f) {
-            dir[0] = fast_cos_c4(*(float *)(moby + 0x48)) * 2.0f;
-            dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
-            dir[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
+            path_goal_or_facing_vector[0] = fast_cos_c4(*(float *)(moby + 0x48)) * 2.0f;
+            path_goal_or_facing_vector[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
+            path_goal_or_facing_vector[2] = 0.0f;
+            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, out, 1.0f);
             resolve_point_path_segment_xy_clearance(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         (*(short *)(moby_data + 0x2D2))++;
@@ -1295,10 +1295,10 @@ void extermibot_update(unsigned char *moby) {
         if (fast_difference_between_rotations(*(float *)(moby + 0x48),
                           fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
                                             *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14))) < 1.5707964f) {
-            dir[0] = fast_cos_c4(*(float *)(moby + 0x48)) * 2.0f;
-            dir[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
-            dir[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, dir, out, 1.0f);
+            path_goal_or_facing_vector[0] = fast_cos_c4(*(float *)(moby + 0x48)) * 2.0f;
+            path_goal_or_facing_vector[1] = fast_sin_c6(*(float *)(moby + 0x48)) * 2.0f;
+            path_goal_or_facing_vector[2] = 0.0f;
+            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, out, 1.0f);
             resolve_point_path_segment_xy_clearance(*(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
         near = 0;
@@ -1382,10 +1382,10 @@ void extermibot_update(unsigned char *moby) {
             *(short *)(moby_data + 0x2D0) = 0;
             if (moby[0x53] != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(1));
             a = fast_add_rotations_c4(*(float *)(moby + 0x48), 0.0f);
-            dir[0] = fast_cos_c4(a) * (D_L05_00161AB8 * D_0015ED6C);
-            dir[1] = fast_sin_c6(a) * (D_L05_00161AB8 * D_0015ED6C);
-            dir[2] = 0.0f;
-            dir[3] = D_L05_00161AC0;
+            path_goal_or_facing_vector[0] = fast_cos_c4(a) * (D_L05_00161AB8 * D_0015ED6C);
+            path_goal_or_facing_vector[1] = fast_sin_c6(a) * (D_L05_00161AB8 * D_0015ED6C);
+            path_goal_or_facing_vector[2] = 0.0f;
+            path_goal_or_facing_vector[3] = D_L05_00161AC0;
             out[2] = 0.0f;
             out[3] = D_L05_00161AC4;
             FUN_L00_0024f7c8(moby, 0, hit);
@@ -1400,10 +1400,10 @@ void extermibot_update(unsigned char *moby) {
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
-                spawn_spark_c(spark_spawn_position, dir, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
+                spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
-            dir[3] = D_L05_00161AC0 * 0.1f;
+            path_goal_or_facing_vector[3] = D_L05_00161AC0 * 0.1f;
             out[3] = D_L05_00161AC4 * 0.1f;
             for (j = 0x1D; j >= 0; j--) {
                 int c1, c2;
@@ -1416,7 +1416,7 @@ void extermibot_update(unsigned char *moby) {
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
                 c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
-                spawn_spark_c(spark_spawn_position, dir, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
+                spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
         }
@@ -1429,13 +1429,13 @@ void extermibot_update(unsigned char *moby) {
                                                   *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14))) < 0.2617994f
             && vector_distance_xy_alt(moby + 0x10, target_moby + 0x10) < 3.0f
             && absolute_float(*(float *)(target_moby + 0x18) - *(float *)(moby + 0x18)) < 2.0f) {
-            dir[0] = fast_cos_c4(*(float *)(moby + 0x48));
-            dir[1] = fast_sin_c6(*(float *)(moby + 0x48));
-            dir[2] = 0.0f;
-            dir[3] = 5627.9248f;
+            path_goal_or_facing_vector[0] = fast_cos_c4(*(float *)(moby + 0x48));
+            path_goal_or_facing_vector[1] = fast_sin_c6(*(float *)(moby + 0x48));
+            path_goal_or_facing_vector[2] = 0.0f;
+            path_goal_or_facing_vector[3] = 5627.9248f;
             qcopy(out, target_moby + 0x10);
             out[2] += 0.75f;
-            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&D_001404A8)) != 6 ? 0x10001 : 0x10000, out, dir, 1.0f);
+            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&D_001404A8)) != 6 ? 0x10001 : 0x10000, out, path_goal_or_facing_vector, 1.0f);
         }
         if (moby[0x70] & 2) {
             moby[0x20] = 9;
@@ -1473,7 +1473,7 @@ void extermibot_update(unsigned char *moby) {
         break;
     case EXTERMIBOT_NONLETHAL_KNOCKBACK:
         if (mine_fall(moby, moby_data + 0x70) & 0x60) {
-            if (follow_path(moby_data + 0x2C0, 1, *(int *)(moby_data + 0x2C4), moby + 0x10, (s32)(moby_data + 0x270), dir,
+            if (follow_path(moby_data + 0x2C0, 1, *(int *)(moby_data + 0x2C4), moby + 0x10, (s32)(moby_data + 0x270), path_goal_or_facing_vector,
                                   (D_L05_00161A98) * 0.4f) != 0) {
                 moby[0x20] = 4;
                 if (moby[0x53] != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(10));
