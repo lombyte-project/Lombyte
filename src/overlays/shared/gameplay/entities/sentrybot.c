@@ -69,9 +69,9 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern int D_L15_001613E8 __attribute__((sda));
-extern float D_L15_00161410 __attribute__((sda));
-extern int D_L15_00161414 __attribute__((sda));
+extern int sentrybot_alert_level_frame_stamp_gp __asm__("D_L15_001613E8") __attribute__((sda));
+extern float sentrybot_emission_vector_speed_gp __asm__("D_L15_00161410") __attribute__((sda));
+extern int sentrybot_update_disabled_gp __asm__("D_L15_00161414") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void compute_selected_world_matrices(void *, int, void *, void *) __asm__("FUN_L00_0024f8f0");
 extern void FUN_L00_00257470(void *, int, int);
@@ -153,7 +153,7 @@ void sentrybot_update(unsigned char *moby) {
     int color;
     float color_pulse_sine;
 
-    if (D_L15_00161414 != 0)
+    if (sentrybot_update_disabled_gp != 0)
         return;
     data = *(unsigned char **)(moby + 0x78);
     if (D_L15_0015F5C4 == 2) {
@@ -665,9 +665,9 @@ void sentrybot_update(unsigned char *moby) {
                 j2 = 2;
                 compute_selected_world_matrices(moby, 1, &j2, selected_joint_world_matrix);
                 transform_scaled_vertex_batch((char *)moby, 1, &j2, (char *)emission_origin);
-                normalize_vector_xyz(va, selected_joint_world_matrix[1], D_L15_00161410 * frame_time);
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], sentrybot_emission_vector_speed_gp * frame_time);
                 subtract_vector_xyz(vb, data + 0x100, emission_origin);
-                normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
+                normalize_vector_xyz(vb, vb, sentrybot_emission_vector_speed_gp * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
@@ -723,9 +723,9 @@ void sentrybot_update(unsigned char *moby) {
                 j3 = 3;
                 compute_selected_world_matrices(moby, 1, &j3, selected_joint_world_matrix);
                 transform_scaled_vertex_batch((char *)moby, 1, &j3, (char *)emission_origin);
-                normalize_vector_xyz(va, selected_joint_world_matrix[1], -(D_L15_00161410 * frame_time));
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], -(sentrybot_emission_vector_speed_gp * frame_time));
                 subtract_vector_xyz(vb, data + 0x100, emission_origin);
-                normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
+                normalize_vector_xyz(vb, vb, sentrybot_emission_vector_speed_gp * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
@@ -898,8 +898,8 @@ void sentrybot_update(unsigned char *moby) {
         lvl = *(short *)(data + 0x158) != 0;
     }
     tick = D_L15_0015F5CC;
-    if (tick != D_L15_001613E8 || hero.glow_pulse_level < lvl) {
-        D_L15_001613E8 = tick;
+    if (tick != sentrybot_alert_level_frame_stamp_gp || hero.glow_pulse_level < lvl) {
+        sentrybot_alert_level_frame_stamp_gp = tick;
         hero.glow_pulse_level = lvl;
     }
     alpha = 0x80;
