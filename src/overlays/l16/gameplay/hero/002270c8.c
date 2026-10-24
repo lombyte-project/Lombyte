@@ -675,7 +675,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 23:
+                case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -684,7 +684,7 @@ void update_hero_state_transitions(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 48:
+                case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -970,12 +970,12 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 112:
+                case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
                     if (hero.anim_frame > (float)D_L16_0017C088[hero.attack_record].f18) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 113:
+                case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
                     if (25.0f < hero.anim_frame) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
@@ -2544,7 +2544,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 35:
+                case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
                         if (controller_state.held & 0xA) {
