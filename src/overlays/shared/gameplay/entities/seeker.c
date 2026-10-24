@@ -330,7 +330,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_L09_001613F8 __attribute__((sda));
+extern float seeker_knockback_gravity_scale __asm__("D_L09_001613F8") __attribute__((sda));
 extern float seeker_hurt_knockback_xy_scale __asm__("D_L09_00161400") __attribute__((sda));
 extern float seeker_fatal_knockback_z_scale __asm__("D_L09_00161404") __attribute__((sda));
 extern float seeker_fatal_knockback_xy_scale __asm__("D_L09_00161408") __attribute__((sda));
@@ -420,7 +420,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             response = 1;
         }
         data->f90 = func_001FA898_2C73D0(512.0f);
-        data->f80 = D_L09_001613F8 * D_0015ED70;
+        data->f80 = seeker_knockback_gravity_scale * D_0015ED70;
         data->f84 = D_0015ED70 * 30.0f;
         data->f98 = 0.0f;
         data->f94 = 1;
@@ -455,7 +455,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         case RESPONSE_FATAL_KNOCKBACK:
         case 2:
             moby->flags &= 0xEFFF;
-            data->f80 = D_L09_001613F8 * D_0015ED70;
+            data->f80 = seeker_knockback_gravity_scale * D_0015ED70;
             data->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
             data->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
             data->fC0 = 14.0f;
