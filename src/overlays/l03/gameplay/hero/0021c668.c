@@ -1472,7 +1472,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
