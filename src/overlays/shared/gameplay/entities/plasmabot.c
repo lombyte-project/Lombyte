@@ -1496,10 +1496,10 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern float D_L14_00161B08 __attribute__((sda));
-extern float D_L14_00161B0C __attribute__((sda));
-extern float D_L14_00161B10 __attribute__((sda));
-extern float D_L14_00161B14 __attribute__((sda));
+extern float plasmabot_debris_launch_magnitude_range_start __asm__("D_L14_00161B08") __attribute__((sda));
+extern float plasmabot_debris_launch_magnitude_range_end __asm__("D_L14_00161B0C") __attribute__((sda));
+extern float plasmabot_debris_z_velocity_range_start __asm__("D_L14_00161B10") __attribute__((sda));
+extern float plasmabot_debris_z_velocity_range_end __asm__("D_L14_00161B14") __attribute__((sda));
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     unsigned char *spawned_moby = func_0020D348_m(0x145);
     char *spawned_vars;
@@ -1519,12 +1519,12 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
         hero_launch_reference = hero_launch_reference + 0x210;
         launch_vector_scratch[2] = 0.0f;
         normalize_vector_xyz(launch_vector_scratch, launch_vector_scratch,
-                             random_float_between_alt(D_L14_00161B08 * frame_scale,
-                                                      D_L14_00161B0C * frame_scale));
+                             random_float_between_alt(plasmabot_debris_launch_magnitude_range_start * frame_scale,
+                                                      plasmabot_debris_launch_magnitude_range_end * frame_scale));
         cross_vectors_xyz(launch_vector_scratch + 4, hero_launch_reference, launch_vector_scratch);
         build_look_at_matrix(spawned_vars, launch_vector_scratch, hero_launch_reference, FUN_L00_00257c48(0.34906584f, 1.0471976f));
-        *(float *)(spawned_vars + 8) = random_float_between_alt(D_L14_00161B10 * frame_scale,
-                                                     D_L14_00161B14 * frame_scale);
+        *(float *)(spawned_vars + 8) = random_float_between_alt(plasmabot_debris_z_velocity_range_start * frame_scale,
+                                                     plasmabot_debris_z_velocity_range_end * frame_scale);
         *(float *)(spawned_vars + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
         *(float *)(spawned_vars + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         *(float *)(spawned_vars + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
