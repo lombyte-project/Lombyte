@@ -1946,13 +1946,13 @@ extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
-extern s32 D_L00_00161080 __attribute__((sda));
-extern s32 D_L00_001610A0 __attribute__((sda));
+extern s32 vendor_auxiliary_moby_local_offset_gp __asm__("D_L00_00161080") __attribute__((sda));
+extern s32 vendor_item_display_common_local_offset_gp __asm__("D_L00_001610A0") __attribute__((sda));
 extern s32 D_L00_001610B0 __attribute__((sda));
 extern s32 D_L00_001610C0 __attribute__((sda));
-extern s32 D_L00_00161E14;
+extern s32 vendor_close_delay_frames_remaining __asm__("D_L00_00161E14");
 extern s32 D_L00_00161E18;
-extern s32 D_L00_00161E1C;
+extern s32 vendor_opening_countdown_frames __asm__("D_L00_00161E1C");
 extern s32 D_L00_00161E20;
 extern f32 D_L00_00161E24;
 extern s32 D_L00_00161E30;
@@ -2334,7 +2334,7 @@ void update_vendor_menu(void) {
                 FUN_00212f90(vendor_menu.f1c, 3, 0, 8);
                 vendor_menu.f1c->f58 = 1.0f;
                 D_L00_00161E20 = 1;
-                D_L00_00161E1C = 8;
+                vendor_opening_countdown_frames = 8;
                 allocate_voice_for_target_entry(4, 0, vendor_menu.f1c);
             }
         } else if (vendor_menu_state == 2) {
@@ -2389,7 +2389,7 @@ void update_vendor_menu(void) {
         advance_moby_animation(vendor_menu.f1c);
         FUN_L00_00250df8(vendor_menu.f1c);
         if (D_L00_00161188 == 1) {
-            transform_vector_by_basis(&vendor_menu.f24->pos, &D_L00_00161080, vendor_menu.f1c->mtx);
+            transform_vector_by_basis(&vendor_menu.f24->pos, &vendor_auxiliary_moby_local_offset_gp, vendor_menu.f1c->mtx);
             add_vector_xyz(&vendor_menu.f24->pos, &vendor_menu.f24->pos, &vendor_menu.f1c->pos);
             advance_moby_animation(vendor_menu.f24);
             FUN_L00_00250df8(vendor_menu.f24);
@@ -2419,7 +2419,7 @@ void update_vendor_menu(void) {
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
         position_scratch.q = b.q;
-        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[2].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[2].pos, &vendor_menu.f20[2].pos, &vendor_menu.f1c->pos);
@@ -2430,7 +2430,7 @@ void update_vendor_menu(void) {
         b.q = 0;
         b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
         position_scratch.q = b.q;
-        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
@@ -2536,7 +2536,7 @@ void update_vendor_menu(void) {
                 allocate_voice_for_target_entry(0, 0, vendor_menu.f1c);
             }
             if ((pad_state.pressed_unmasked & 0x10) && D_L00_0016118C == 0) {
-                D_L00_00161E14 = 8;
+                vendor_close_delay_frames_remaining = 8;
                 D_L00_00161E18 = 1;
                 allocate_voice_for_target_entry(5, 0, vendor_menu.f1c);
             }
@@ -2544,14 +2544,14 @@ void update_vendor_menu(void) {
         update_vendor_purchase();
         D_L00_00161E30 = pad_state.pressed_unmasked;
         if (D_L00_00161E20 == 1) {
-            if (D_L00_00161E1C == 0) {
+            if (vendor_opening_countdown_frames == 0) {
                 D_L00_00161E20 = 0;
             } else {
-                D_L00_00161E1C--;
+                vendor_opening_countdown_frames--;
             }
         }
         if (D_L00_00161E18 == 1) {
-            if (--D_L00_00161E14 == 0) {
+            if (--vendor_close_delay_frames_remaining == 0) {
                 D_L00_0015F5D8 = 1;
                 calculate_dma_transfer_address();
                 FUN_00212f90(vendor_menu.f1c, 4, 9, 8);
