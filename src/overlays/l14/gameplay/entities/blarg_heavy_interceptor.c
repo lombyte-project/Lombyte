@@ -2568,7 +2568,9 @@ extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 
-void FUN_L14_002b5290(struct Moby *hit_owner_moby) {
+void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) __asm__("FUN_L14_002b5290");
+
+void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
     enum {
         HIT_REACTION_NO_ACTION = 0,
         HIT_REACTION_LETHAL = 1,
