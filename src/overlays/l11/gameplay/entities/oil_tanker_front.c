@@ -1902,12 +1902,12 @@ extern char D_L11_00162570[4] __attribute__((sda));
 extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
-extern float D_L11_001624E8 __attribute__((sda));
-extern float D_L11_001624EC;
-extern float D_L11_001624F0;
+extern float layered_effect_position_x __asm__("D_L11_001624E8") __attribute__((sda));
+extern float layered_effect_position_y __asm__("D_L11_001624EC");
+extern float layered_effect_position_z __asm__("D_L11_001624F0");
 extern float D_L11_001624F4;
 extern char D_L11_00167680[];
-extern int D_L11_0016252C __attribute__((sda));
+extern int layered_effect_color_tables_initialized __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
@@ -1935,11 +1935,11 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
 
     switch (moby->state) {
     case EFFECT_INITIALIZE:
-        if (D_L11_0016252C == 0) {
+        if (layered_effect_color_tables_initialized == 0) {
             scale_rgba_tables(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
             scale_rgba_tables(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L11_001FF730, 8, D_L11_001F9A78, 0.25f, 0.25f, 0.25f, 0.7f, 1);
-            D_L11_0016252C = 1;
+            layered_effect_color_tables_initialized = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -1961,17 +1961,17 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         reference_position_base = D_L11_00167680;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
-        effect_bounds[0] = D_L11_001624E8;
-        effect_bounds[1] = D_L11_001624EC;
-        effect_bounds[2] = D_L11_001624F0;
+        effect_bounds[0] = layered_effect_position_x;
+        effect_bounds[1] = layered_effect_position_y;
+        effect_bounds[2] = layered_effect_position_z;
         effect_bounds[3] = D_L11_001624F4;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
             return;
-        effect_to_reference_delta[0] = D_L11_001624E8;
-        effect_to_reference_delta[1] = D_L11_001624EC;
-        effect_to_reference_delta[2] = D_L11_001624F0;
+        effect_to_reference_delta[0] = layered_effect_position_x;
+        effect_to_reference_delta[1] = layered_effect_position_y;
+        effect_to_reference_delta[2] = layered_effect_position_z;
         effect_to_reference_delta[3] = 1.0f;
         subtract_vector_xyz(effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
         effect_distance = vector_length_xyz(effect_to_reference_delta);
