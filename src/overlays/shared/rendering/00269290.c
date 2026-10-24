@@ -3316,7 +3316,9 @@ extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
-void *FUN_L00_00270758(char *spawn_position, char *initial_velocity, unsigned char initial_flags, int collision_context) {
+void *spawn_splitting_effect_particle_with_collision_and_fade(char *spawn_position, char *initial_velocity, unsigned char initial_flags, int collision_context) __asm__("FUN_L00_00270758");
+
+void *spawn_splitting_effect_particle_with_collision_and_fade(char *spawn_position, char *initial_velocity, unsigned char initial_flags, int collision_context) {
     char *particle = FUN_L00_002678b8_c2(0x2A);
 
     if (particle != 0) {
