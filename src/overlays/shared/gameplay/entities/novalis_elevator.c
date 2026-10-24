@@ -150,7 +150,7 @@ extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
 extern u32 cached_water_texture_id __asm__("D_L01_00161228") __attribute__((sda));
 extern u32 cached_water_second_texture_id __asm__("D_L01_0016122C") __attribute__((sda));
 extern u32 D_L01_00161230 __attribute__((sda));
-extern u32 D_L01_00161234 __attribute__((sda));
+extern u32 cached_water_alpha_1_fix __asm__("D_L01_00161234") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern char D_L01_00167240[];
 extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
@@ -215,7 +215,7 @@ void build_water_render_setup_packet(void) {
     cached_water_texture_id = 0xFFFFFFFF;
     cached_water_second_texture_id = 0xFFFFFFFF;
     D_L01_00161230 = 0xFFFFFFFF;
-    D_L01_00161234 = 0xFFFFFFFF;
+    cached_water_alpha_1_fix = 0xFFFFFFFF;
     l01_packet.tag++;
 }
 #include "qcopy.h"
@@ -3496,7 +3496,7 @@ void render_water_grids(f32 *water_record, s32 count) {
         }
         mask = *(u16 *)((u8 *)water_record + 0x1e);
         if (*(u32 *)(water_record + 5) != cached_water_texture_id || *(u32 *)(water_record + 6) != cached_water_second_texture_id ||
-            *(u8 *)(water_record + 7) != D_L01_00161230 || *(u8 *)((u8 *)water_record + 0x1d) != D_L01_00161234) {
+            *(u8 *)(water_record + 7) != D_L01_00161230 || *(u8 *)((u8 *)water_record + 0x1d) != cached_water_alpha_1_fix) {
             l01_packet.words[0] = 0x10000005;
             l01_packet.words[1] = 0;
             l01_packet.words[2] = 0x11000000;
@@ -3522,7 +3522,7 @@ void render_water_grids(f32 *water_record, s32 count) {
                 cached_water_second_texture_id = second_texture_id;
             }
             D_L01_00161230 = *(u8 *)(water_record + 7);
-            D_L01_00161234 = *(u8 *)((u8 *)water_record + 0x1d);
+            cached_water_alpha_1_fix = *(u8 *)((u8 *)water_record + 0x1d);
         }
         for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
             if (mask & 1) cull_and_submit_water_grid_tile(water_record, index, mode);
