@@ -1637,15 +1637,15 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-extern float D_L01_00161F54 __attribute__((sda));
-extern float D_L01_00161F58 __attribute__((sda));
-extern float D_L01_00161F5C __attribute__((sda));
-extern float D_L01_00161F60 __attribute__((sda));
+extern float gold_bolt_particle_initial_speed_min __asm__("D_L01_00161F54") __attribute__((sda));
+extern float gold_bolt_particle_initial_speed_max __asm__("D_L01_00161F58") __attribute__((sda));
+extern float gold_bolt_particle_velocity_jitter_speed_min __asm__("D_L01_00161F5C") __attribute__((sda));
+extern float gold_bolt_particle_velocity_jitter_speed_max __asm__("D_L01_00161F60") __attribute__((sda));
 extern short D_L01_00161F64 __attribute__((sda));
-extern int D_L01_00161F68 __attribute__((sda));
-extern int D_L01_00161F6C __attribute__((sda));
-extern float D_L01_00161F70 __attribute__((sda));
-extern float D_L01_00161F74 __attribute__((sda));
+extern int gold_bolt_particle_initial_color __asm__("D_L01_00161F68") __attribute__((sda));
+extern int gold_bolt_particle_loop_color __asm__("D_L01_00161F6C") __attribute__((sda));
+extern float gold_bolt_particle_initial_scale __asm__("D_L01_00161F70") __attribute__((sda));
+extern float gold_bolt_particle_loop_scale __asm__("D_L01_00161F74") __attribute__((sda));
 void spawn_gold_bolt_particles(char *moby) __asm__("FUN_L01_003089f0");
 
 void spawn_gold_bolt_particles(char *moby) {
@@ -1662,17 +1662,17 @@ void spawn_gold_bolt_particles(char *moby) {
         moby_point_position(moby, 0, v);
     }
     frame_duration = frame_time;
-    random_vector(particle_velocity, D_L01_00161F54 * frame_duration, D_L01_00161F58 * frame_duration);
+    random_vector(particle_velocity, gold_bolt_particle_initial_speed_min * frame_duration, gold_bolt_particle_initial_speed_max * frame_duration);
     particle_lifetime = *(unsigned char *)&D_L01_00161F64;
-    spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, D_L01_00161F68, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
-                     D_L01_00161F70);
+    spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_initial_color, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
+                     gold_bolt_particle_initial_scale);
     for (i = 2; i >= 0; i--) {
         frame_duration = frame_time;
-        random_vector(u, D_L01_00161F5C * frame_duration, D_L01_00161F60 * frame_duration);
+        random_vector(u, gold_bolt_particle_velocity_jitter_speed_min * frame_duration, gold_bolt_particle_velocity_jitter_speed_max * frame_duration);
         add_vector_xyz(particle_velocity, particle_velocity, u);
         loop_particle_lifetime = *(unsigned char *)&D_L01_00161F64;
-        spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, D_L01_00161F6C, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
-                         0, D_L01_00161F74);
+        spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_loop_color, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
+                         0, gold_bolt_particle_loop_scale);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309F00), where it is exact; names translated to the US level program. */
