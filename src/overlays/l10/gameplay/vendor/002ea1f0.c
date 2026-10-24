@@ -189,7 +189,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void emit_timed_spark_particle(void *emission_position, short *timer) {
     float visibility_sphere[4];
-    float vel[4];
+    float spark_vertical_vector[4];
     float acc[4];
     float frame_count_scale;
     int frame_count, second_frame_count, third_frame_count, initial_spark_color;
@@ -202,18 +202,18 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
         return;
     if (!fast_dec_timer_s16(timer))
         return;
-    clear_u64_value(vel);
-    vel[2] = D_L10_00161FBC * frame_time;
+    clear_u64_value(spark_vertical_vector);
+    spark_vertical_vector[2] = D_L10_00161FBC * frame_time;
     random_vector(acc, 0.0f, D_L10_00161FC4 * frame_time);
     acc[2] += D_L10_00161FC0 * frame_time;
-    vel[3] = random_float_between(D_L10_00161FC8, D_L10_00161FCC);
+    spark_vertical_vector[3] = random_float_between(D_L10_00161FC8, D_L10_00161FCC);
     acc[3] = random_float_between(D_L10_00161FD0, D_L10_00161FD4);
     frame_count_scale = random_float_between(1.0f - D_L10_00161FE4, D_L10_00161FE4 + 1.0f);
     frame_count = func_001FA898_r((float)D_L10_00161FD8 * frame_count_scale);
     second_frame_count = func_001FA898_r((float)D_L10_00161FDC * frame_count_scale);
     third_frame_count = func_001FA898_r((float)D_L10_00161FE0 * frame_count_scale);
     initial_spark_color = fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
-    spawn_spark(emission_position, vel, acc, initial_spark_color,
+    spawn_spark(emission_position, spark_vertical_vector, acc, initial_spark_color,
                  fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), frame_count,
                  second_frame_count, third_frame_count, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
