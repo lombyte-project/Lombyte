@@ -1087,8 +1087,8 @@ typedef struct {
     long gs_state;
 } VendorDrawPacket;
 
-extern int D_L12_00161F90 __attribute__((sda));
-extern int D_L12_00161F94 __attribute__((sda));
+extern int hoven_jittered_first_packet_vertex_color __asm__("D_L12_00161F90") __attribute__((sda));
+extern int hoven_jittered_second_packet_vertex_color __asm__("D_L12_00161F94") __attribute__((sda));
 extern int D_L12_00161FBC __attribute__((sda));
 extern int D_L12_00161FC0 __attribute__((sda));
 extern int D_L12_00161FC4 __attribute__((sda));
@@ -1117,8 +1117,8 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
     matrix[15] = 1.0f;
     texture = get_effect_texture(0xE);
     packets[0].texture = packets[1].texture = texture;
-    first_color = D_L12_00161F90;
-    second_color = D_L12_00161F94;
+    first_color = hoven_jittered_first_packet_vertex_color;
+    second_color = hoven_jittered_second_packet_vertex_color;
     packets[0].texture_state = packets[1].texture_state = 0xFF9000000260L;
     packets[0].gs_state = (long)D_L12_00161FBC | ((long)D_L12_00161FC0 << 2) | ((long)D_L12_00161FC4 << 4)
                           | ((long)D_L12_00161FC8 << 6) | (0x8000L << 24);
