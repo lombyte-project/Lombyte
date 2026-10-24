@@ -784,11 +784,11 @@ extern void scale_vector_in_place_002e8210(float, void *) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int, int, int,
                                          float, float, float, int, float, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
-extern float D_L08_00161CDC __attribute__((sda));
-extern float D_L08_00161CE4 __attribute__((sda));
+extern float homing_projectile_trail_particle_count_limit __asm__("D_L08_00161CDC") __attribute__((sda));
+extern float homing_projectile_spin_rate_degrees __asm__("D_L08_00161CE4") __attribute__((sda));
 extern int D_L08_00161CE8 __attribute__((sda));
 extern int D_L08_00161CEC __attribute__((sda));
-extern float D_L08_00161D00 __attribute__((sda));
+extern float homing_projectile_trail_spread_speed_limit __asm__("D_L08_00161D00") __attribute__((sda));
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
 extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
@@ -819,14 +819,14 @@ void update_homing_projectile(char *moby) {
         mark_moby_for_removal_002e8210(moby);
         return;
     }
-    scale_vector_xyz_002e8210(direction, data, -1.0f / D_L08_00161CDC);
+    scale_vector_xyz_002e8210(direction, data, -1.0f / homing_projectile_trail_particle_count_limit);
     qcopy(position, position_ptr);
     i = 0;
     timer_ptr = (int *)(data + 0x18);
-    while ((float)i < D_L08_00161CDC) {
+    while ((float)i < homing_projectile_trail_particle_count_limit) {
         add_vector_xyz(position, position, direction);
         angle = random_angle_002e8210();
-        spread = D_L08_00161D00;
+        spread = homing_projectile_trail_spread_speed_limit;
         magnitude = random_float_between_002e8210(0.0f, spread) * frame_time;
         normalize_vector_xyz_002e8210(velocity, moby + 0xe0, magnitude * fast_cos_002e8210(angle));
         normalize_vector_xyz_002e8210(offset, moby + 0xd0, magnitude * fast_sin_002e8210(angle));
@@ -845,7 +845,7 @@ void update_homing_projectile(char *moby) {
                                D_L08_00161CEC, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
     }
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40),
-        D_L08_00161CE4 * 0.017453292f * frame_time * (float)*(int *)(data + 0x1c));
+        homing_projectile_spin_rate_degrees * 0.017453292f * frame_time * (float)*(int *)(data + 0x1c));
     target = *(char **)(data + 0x10);
     if (target != 0) {
         if ((unsigned char)target[0x20] == 0xfe) goto clear_target;
