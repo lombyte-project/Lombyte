@@ -938,7 +938,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     int out;
     char *data = (char *)moby->pvars;
     char *hit_record;
-    struct Hero *g;
+    struct Hero *hero_contact_context;
     float yy;
     int i;
     clear_vector(v);
@@ -963,8 +963,8 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, v);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
-        g = &hero;
-        if (((char *)g->coll_hit_moby) == moby || ((char *)g->unk240) == moby ||
+        hero_contact_context = &hero;
+        if (((char *)hero_contact_context->coll_hit_moby) == moby || ((char *)hero_contact_context->unk240) == moby ||
             func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
                 func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
