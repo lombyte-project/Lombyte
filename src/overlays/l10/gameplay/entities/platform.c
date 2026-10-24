@@ -1143,11 +1143,11 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) __asm__("FUN_L10_002d8170");
 
 int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) {
-    float v0[4] __attribute__((aligned(16)));
-    float v10[4] __attribute__((aligned(16)));
+    float collision_start_position[4] __attribute__((aligned(16)));
+    float world_up[4] __attribute__((aligned(16)));
     float v20[4] __attribute__((aligned(16)));
-    float v30[4] __attribute__((aligned(16)));
-    float v40[4] __attribute__((aligned(16)));
+    float collision_alignment_vector[4] __attribute__((aligned(16)));
+    float yaw_relative_collision_vector[4] __attribute__((aligned(16)));
     char *collision_result;
     int hit_moby_address;
     float yaw_cosine, yaw_sine, collision_xz_length_or_ground_height, collision_tilt_angle, collision_rotation_y_target;
@@ -1155,11 +1155,11 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
     float one = 1.0f;
     float k;
 
-    *(u128 *)v0 = *(u128 *)previous_position;
-    *(u128 *)v10 = 0;
-    v10[2] = one;
+    *(u128 *)collision_start_position = *(u128 *)previous_position;
+    *(u128 *)world_up = 0;
+    world_up[2] = one;
     if (*(short *)(motion_data + 0x14) == 0) {
-      if (collision_line(v0, moby + 0x10, 0x10, (int)moby, 0)) {
+      if (collision_line(collision_start_position, moby + 0x10, 0x10, (int)moby, 0)) {
         collision_result = D_L10_001742C0;
         hit_moby_address = *(int *)(collision_result + 0x18);
         if (hit_moby_address != 0) {
@@ -1170,21 +1170,21 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
             FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.35f);
             normalize_vector_xyz(v20, collision_result + 0x40, one);
-            dot_vectors_xyz(v20, v10);
-            qcopy(v30, collision_result + 0x40);
+            dot_vectors_xyz(v20, world_up);
+            qcopy(collision_alignment_vector, collision_result + 0x40);
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
-                v40[0] = v30[0] * yaw_cosine + v30[1] * yaw_sine;
+                yaw_relative_collision_vector[0] = collision_alignment_vector[0] * yaw_cosine + collision_alignment_vector[1] * yaw_sine;
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
-                v40[2] = v30[2];
-                v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
-                collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
+                yaw_relative_collision_vector[2] = collision_alignment_vector[2];
+                yaw_relative_collision_vector[1] = collision_alignment_vector[1] * yaw_cosine - collision_alignment_vector[0] * yaw_sine;
+                collision_xz_length_or_ground_height = seg_sqrt(yaw_relative_collision_vector[0] * yaw_relative_collision_vector[0] + yaw_relative_collision_vector[2] * yaw_relative_collision_vector[2]);
+                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, yaw_relative_collision_vector[1]);
                 *(float *)(moby + 0x40) = step_rotation_toward_target(*(float *)(moby + 0x40), -collision_tilt_angle, k);
-                collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
+                collision_rotation_y_target = FUN_001f9e90_u(yaw_relative_collision_vector[2], yaw_relative_collision_vector[0]);
                 *(float *)(moby + 0x44) = step_rotation_toward_target(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 1;
@@ -1196,7 +1196,7 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
             FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.5f);
             normalize_vector_xyz(v20, collision_result + 0x40, one);
-            if (0.707f < dot_vectors_xyz(v20, v10)) {
+            if (0.707f < dot_vectors_xyz(v20, world_up)) {
                 collision_xz_length_or_ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
                 if (*(float *)(moby + 0x18) < collision_xz_length_or_ground_height) *(float *)(moby + 0x18) = collision_xz_length_or_ground_height;
                 if (*(float *)(motion_data + 0x8) < 0.0f) *(float *)(motion_data + 0x8) = *(float *)(motion_data + 0x8) * -0.4f;
@@ -1205,20 +1205,20 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
                     return 3;
                 }
             }
-            qcopy(v30, D_L10_00174300);
+            qcopy(collision_alignment_vector, D_L10_00174300);
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
-                v40[0] = v30[0] * yaw_cosine + v30[1] * yaw_sine;
+                yaw_relative_collision_vector[0] = collision_alignment_vector[0] * yaw_cosine + collision_alignment_vector[1] * yaw_sine;
                 k = 0.052359879f;
                 yaw_cosine = fast_cos(*(float *)(moby + 0x48));
                 yaw_sine = fast_sin(*(float *)(moby + 0x48));
-                v40[2] = v30[2];
-                v40[1] = v30[1] * yaw_cosine - v30[0] * yaw_sine;
-                collision_xz_length_or_ground_height = seg_sqrt(v40[0] * v40[0] + v40[2] * v40[2]);
-                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, v40[1]);
+                yaw_relative_collision_vector[2] = collision_alignment_vector[2];
+                yaw_relative_collision_vector[1] = collision_alignment_vector[1] * yaw_cosine - collision_alignment_vector[0] * yaw_sine;
+                collision_xz_length_or_ground_height = seg_sqrt(yaw_relative_collision_vector[0] * yaw_relative_collision_vector[0] + yaw_relative_collision_vector[2] * yaw_relative_collision_vector[2]);
+                collision_tilt_angle = FUN_001f9e90_u(collision_xz_length_or_ground_height, yaw_relative_collision_vector[1]);
                 *(float *)(moby + 0x40) = step_rotation_toward_target(*(float *)(moby + 0x40), -collision_tilt_angle, k);
-                collision_rotation_y_target = FUN_001f9e90_u(v40[2], v40[0]);
+                collision_rotation_y_target = FUN_001f9e90_u(yaw_relative_collision_vector[2], yaw_relative_collision_vector[0]);
                 *(float *)(moby + 0x44) = step_rotation_toward_target(*(float *)(moby + 0x44), collision_rotation_y_target, k);
                 allocate_voice_for_target_entry(1, 0, (int)moby);
             return 2;
