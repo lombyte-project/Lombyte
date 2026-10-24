@@ -550,7 +550,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 int apply_cutscene_camera_key(void) __asm__("FUN_L00_00298de8");
 
 int apply_cutscene_camera_key(void) {
-    float m[16] __attribute__((aligned(16)));
+    float camera_key_rotation_matrix[16] __attribute__((aligned(16)));
     OvlQuad camera_offset[1];
     char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
     float *camera_key_values = (float *)(camera_key + 0x10);
@@ -566,20 +566,20 @@ int apply_cutscene_camera_key(void) {
     f1f2d98_298de8();
     camera_position = D_L00_00166C80_298de8 + 0x140;
     qcopy(camera_position, camera_key);
-    munit_298de8(m);
-    mrx_298de8(m, m, camera_key_values[0]);
-    mry_298de8(m, m, camera_key_values[1]);
-    mrz_298de8(m, m, camera_key_values[2]);
+    munit_298de8(camera_key_rotation_matrix);
+    mrx_298de8(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[0]);
+    mry_298de8(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[1]);
+    mrz_298de8(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[2]);
     camera_state = D_L00_00166C80_298de8;
-    *(float *)(camera_state + 0x350) = -m[8];
-    *(float *)(camera_state + 0x360) = -m[0];
-    *(float *)(camera_state + 0x370) = m[4];
-    *(float *)(camera_state + 0x354) = -m[9];
-    *(float *)(camera_state + 0x364) = -m[1];
-    *(float *)(camera_state + 0x374) = m[5];
-    *(float *)(camera_state + 0x358) = -m[10];
-    *(float *)(camera_state + 0x368) = -m[2];
-    *(float *)(camera_state + 0x378) = m[6];
+    *(float *)(camera_state + 0x350) = -camera_key_rotation_matrix[8];
+    *(float *)(camera_state + 0x360) = -camera_key_rotation_matrix[0];
+    *(float *)(camera_state + 0x370) = camera_key_rotation_matrix[4];
+    *(float *)(camera_state + 0x354) = -camera_key_rotation_matrix[9];
+    *(float *)(camera_state + 0x364) = -camera_key_rotation_matrix[1];
+    *(float *)(camera_state + 0x374) = camera_key_rotation_matrix[5];
+    *(float *)(camera_state + 0x358) = -camera_key_rotation_matrix[10];
+    *(float *)(camera_state + 0x368) = -camera_key_rotation_matrix[2];
+    *(float *)(camera_state + 0x378) = camera_key_rotation_matrix[6];
     if (D_0015EDB4_298de8)
         cross_vectors_xyz(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
     k = D_L00_0015F5A0_298de8;
