@@ -3141,7 +3141,9 @@ extern void FUN_L00_00263d40(int, int);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void FUN_L12_002ebca8(struct Moby *moby, int flag) {
+void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) __asm__("FUN_L12_002ebca8");
+
+void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
     char *moby_vars = (char *)moby->pvars;
     float explosion_position[4];
     float explosion_vector[4];
