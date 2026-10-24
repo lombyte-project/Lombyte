@@ -975,7 +975,7 @@ char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points
 extern int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") __attribute__((sda));
 extern float flying_car_rotation_oscillation_amplitude_gp __asm__("D_L14_00162290") __attribute__((sda));
 extern float flying_car_rotation_oscillation_common_phase_update_gp __asm__("D_L14_00162294") __attribute__((sda));
-extern float D_L14_00162298 __attribute__((sda));
+extern float flying_car_rotation_oscillation_axis_phase_update_gp __asm__("D_L14_00162298") __attribute__((sda));
 extern char *D_L14_0015FFD8_6ee0 __asm__("D_L14_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
@@ -1068,7 +1068,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
     case FLYING_CAR_FOLLOW_PATH:
         flying_car_data->fx.b2 = 1;
         flying_car_data->fx.f20 = flying_car_data->fx.f24 = flying_car_data->fx.f28 = 0.0001f;
-        update_moby_rotation_oscillation(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, flying_car_rotation_oscillation_amplitude_gp, flying_car_rotation_oscillation_common_phase_update_gp, D_L14_00162298);
+        update_moby_rotation_oscillation(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, flying_car_rotation_oscillation_amplitude_gp, flying_car_rotation_oscillation_common_phase_update_gp, flying_car_rotation_oscillation_axis_phase_update_gp);
         if (FUN_L14_00307620_6ee0(flying_car_moby)) {
             if (flying_car_data->part >= 0) {
                 struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
