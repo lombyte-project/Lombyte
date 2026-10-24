@@ -3203,9 +3203,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
 extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
 
-extern float D_L12_001619A8 __attribute__((sda));
+extern float helicopter_path_speed __asm__("D_L12_001619A8") __attribute__((sda));
 extern float D_L12_001619AC __attribute__((sda));
-extern float D_L12_001619B0 __attribute__((sda));
+extern float helicopter_rotation_smoothing_divisor __asm__("D_L12_001619B0") __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
 void helicopter_update(char *moby) {
     enum {
@@ -3263,8 +3263,8 @@ void helicopter_update(char *moby) {
             segment_heading_delta = fast_subtract_rotations(segment_heading_delta, fast_arc_tan(B[0], B[1]));
             segment_heading_delta_per_distance = segment_heading_delta / vector_length_xyz_c(A);
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40),
-                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / D_L12_001619B0);
-            if (distance_xyz(moby + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
+                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / helicopter_rotation_smoothing_divisor);
+            if (distance_xyz(moby + 0x10, C) < helicopter_path_speed * D_0015ED6C) {
                 char *path;
                 *(int *)(moby_vars + 0x60) = next;
                 path = *(char **)(path_state + 0x10);
@@ -3273,10 +3273,10 @@ void helicopter_update(char *moby) {
                 }
             }
             subtract_vector_xyz_c(E, C, moby + 0x10);
-            normalize_vector_xyz(E, E, D_L12_001619A8 * D_0015ED6C);
+            normalize_vector_xyz(E, E, helicopter_path_speed * D_0015ED6C);
             add_vector_xyz_c2(moby + 0x10, moby + 0x10, E);
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48),
-                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / D_L12_001619B0);
+                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / helicopter_rotation_smoothing_divisor);
             *(float *)(moby + 0x44) = 0.52359879f;
             break;
         }
