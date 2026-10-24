@@ -154,7 +154,7 @@ extern int fetch_add_accumulator __asm__("D_L00_00161390");
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
 extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
-extern int D_L00_00161370 __attribute__((sda));
+extern int configured_reciprocal_denominator_frames __asm__("D_L00_00161370") __attribute__((sda));
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
@@ -184,7 +184,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         scaled_frame_count = scale_game_frames(configured_reciprocal_frame_count_gp);
         D_L00_00161380 = scaled_frame_count;
         D_L00_00161384_gp = one / convert_integer_to_float(scaled_frame_count);
-        scaled_frame_count = scale_game_frames(D_L00_00161370);
+        scaled_frame_count = scale_game_frames(configured_reciprocal_denominator_frames);
         D_L00_00161388 = scaled_frame_count;
         D_L00_0016138C_gp = one / (float)scaled_frame_count;
         break;
