@@ -1277,8 +1277,8 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
-extern int D_L00_001613AC __attribute__((sda));
-extern float D_L00_001613A8 __attribute__((sda));
+extern int last_bolt_attraction_sound_frame __asm__("D_L00_001613AC") __attribute__((sda));
+extern float bolt_spin_angle_limit_degrees __asm__("D_L00_001613A8") __attribute__((sda));
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) __asm__("FUN_L00_002a7210");
 
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {
@@ -1287,16 +1287,16 @@ int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float 
     char *bolt_vars = *(char **)(bolt_moby + 0x78);
     int sound_cooldown_frames, last, now;
     float k;
-    float m[3][4] __attribute__((aligned(16)));
+    float attraction_geometry_scratch[3][4] __attribute__((aligned(16)));
 
     if (*(unsigned char *)(bolt_moby + 0x20) == 4) {
         return 0;
     }
     sound_cooldown_frames = fr_2a7210(3);
-    last = D_L00_001613AC;
+    last = last_bolt_attraction_sound_frame;
     now = D_15F5CC_2a7210;
     if (last + sound_cooldown_frames < now || now < last) {
-        D_L00_001613AC = now;
+        last_bolt_attraction_sound_frame = now;
         allocate_voice_for_target_entry(0, 0x20, bolt_moby);
     } else {
         if (attraction_yaw_angle == 0.0f)
@@ -1305,18 +1305,18 @@ int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float 
             attraction_pitch_angle = rndf_2a7210(0.0f, 30.0f) * DEG_TO_RAD;
     }
     if (*(unsigned char *)(bolt_moby + 0x20) == 3) {
-        vu_euler_rotation_basis(m, bolt_vars + 0x10);
-        normalize_vector_xyz(bolt_vars + 0x20, m[2], rndf_2a7210(3.0f, 7.0f) * D_15ED6C_2a7210);
+        vu_euler_rotation_basis(attraction_geometry_scratch, bolt_vars + 0x10);
+        normalize_vector_xyz(bolt_vars + 0x20, attraction_geometry_scratch[2], rndf_2a7210(3.0f, 7.0f) * D_15ED6C_2a7210);
     }
     {
         *(float *)(bolt_vars + 0x4C) = attraction_yaw_angle;
         *(float *)(bolt_vars + 0x48) = attraction_pitch_angle;
         *(int *)(bolt_vars + 0x64) = 0;
         *(char **)(bolt_vars + 0x60) = target_moby;
-        subtract_vector_xyz(m[1], target_moby + 0x10, bolt_moby + 0x10);
-        cross_vectors_xyz(m[0], bolt_vars + 0x20, m[1]);
-        normalize_vector_xyz(bolt_vars + 0x30, m[0], 1.0f);
-        k = rndf_2a7210(D_L00_001613A8 * 0.333000004f, D_L00_001613A8) * DEG_TO_RAD;
+        subtract_vector_xyz(attraction_geometry_scratch[1], target_moby + 0x10, bolt_moby + 0x10);
+        cross_vectors_xyz(attraction_geometry_scratch[0], bolt_vars + 0x20, attraction_geometry_scratch[1]);
+        normalize_vector_xyz(bolt_vars + 0x30, attraction_geometry_scratch[0], 1.0f);
+        k = rndf_2a7210(bolt_spin_angle_limit_degrees * 0.333000004f, bolt_spin_angle_limit_degrees) * DEG_TO_RAD;
         build_quaternion_from_axis_angle(bolt_vars + 0x30, bolt_vars + 0x30, k * D_15ED6C_2a7210);
     }
     *(unsigned char *)(bolt_moby + 0x20) = 4;
@@ -1422,7 +1422,7 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
         bolt_vars->unk50 = random_angle_radians();
         bolt_vars->unk58 = random_angle_radians();
         bolt_vars->start_z = spawned_bolt->pos.z;
-        spin = random_float_between(0.0f, D_L00_001613A8) * 0.017453292f * D_0015ED6C;
+        spin = random_float_between(0.0f, bolt_spin_angle_limit_degrees) * 0.017453292f * D_0015ED6C;
         subtract_vector_xyz(bolt_to_source_offset, &bolt_source->pos, &spawned_bolt->pos);
         cross_vectors_xyz(spin_axis, bolt_vars->vel, bolt_to_source_offset);
         FUN_L00_001ff500(bolt_vars->spin, spin_axis, 1.0f);
