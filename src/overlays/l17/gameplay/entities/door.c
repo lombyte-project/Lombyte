@@ -1620,16 +1620,16 @@ typedef struct {
 extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
 extern char D_L17_001E6E00[];
 char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
-extern float D_L17_00161FE0 __attribute__((sda));
-extern float D_L17_00161FE4 __attribute__((sda));
+extern float fighter_jet_boarding_distance_limit __asm__("D_L17_00161FE0") __attribute__((sda));
+extern float fighter_jet_initial_flight_speed __asm__("D_L17_00161FE4") __attribute__((sda));
 extern float D_L17_00162054 __attribute__((sda));
-extern float D_L17_00162058 __attribute__((sda));
+extern float fighter_jet_starting_hp __asm__("D_L17_00162058") __attribute__((sda));
 /* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
    the load after the stores to the ship vars like retail. */
 extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
 extern unsigned char D_L17_00162064 __attribute__((sda));
 extern unsigned char D_L17_00162068 __attribute__((sda));
-extern float D_L17_00162084 __attribute__((sda));
+extern float fighter_jet_max_hp __asm__("D_L17_00162084") __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;
 char *hp_bar_clut __asm__("D_L17_00162180") = 0;
@@ -1762,7 +1762,7 @@ void fighter_jet_update(ShipMoby *moby) {
             struct Hero *g = &hero;
             if (g->ship_moby == (struct Moby *)moby) {
                 g->ship_hp_percent =
-                    g->ship_hp / D_L17_00162084 * 200.0f;
+                    g->ship_hp / fighter_jet_max_hp * 200.0f;
             }
         }
         switch (moby->state) {
@@ -1800,7 +1800,7 @@ void fighter_jet_update(ShipMoby *moby) {
             break;
         case FIGHTER_JET_STATE_WAIT_FOR_BOARDING: {
             struct Hero *g = &hero;
-            board = jet_distance(moby, (ShipCamera *)g->moby) < D_L17_00161FE0 &&
+            board = jet_distance(moby, (ShipCamera *)g->moby) < fighter_jet_boarding_distance_limit &&
                     FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
@@ -1824,10 +1824,10 @@ void fighter_jet_update(ShipMoby *moby) {
                 g->unk160E = 1;
                 g->ship_ammo_max = D_L17_00162068;
                 g->unk15F8 = D_L17_00162068;
-                g->ship_hp = D_L17_00162058;
+                g->ship_hp = fighter_jet_starting_hp;
                 ship_vars->iF0 = 0;
                 ship_vars->iF4 = 0xFF;
-                g->ship_hp_max = D_L17_00162084;
+                g->ship_hp_max = fighter_jet_max_hp;
                 g->unk1604 = 100.0f;
                 g->unk15F9 = 3;
                 g->unk15FA = 3;
@@ -1844,7 +1844,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 FUN_L17_0021e530(50, 1);
                 jet_mount(moby->pos, moby->rot, 1, 0, 0);
                 ship_vars->s68 = 0;
-                ship_vars->speed = D_L17_00161FE4;
+                ship_vars->speed = fighter_jet_initial_flight_speed;
                 ship_vars->f6C = 0.0f;
                 ship_vars->f70 = 0.0f;
                 ship_vars->i84 = 0;
@@ -1856,7 +1856,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->fBC = D_L17_00162038 * D_L17_0016209C;
                 ship_vars->fB8 = 0.0f;
                 ((ShipCamera *)g->moby)->unk98 = -1;
-                spherical_offset_ed(ship_vars->dir, D_L17_00161FE4, ship_vars->rot[2], -ship_vars->rot[1]);
+                spherical_offset_ed(ship_vars->dir, fighter_jet_initial_flight_speed, ship_vars->rot[2], -ship_vars->rot[1]);
                 if (ship_vars->i11C > 0) {
                     jet_group_state(ship_vars->i11C, 1, 1, 1);
                 }
