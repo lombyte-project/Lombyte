@@ -1181,10 +1181,10 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
         *(int *)(state + 0x68) = 0;
     }
 }
-extern f32 D_L01_00161944 __attribute__((sda));
-extern f32 D_L01_00161948 __attribute__((sda));
-extern f32 D_L01_0016194C __attribute__((sda));
-extern f32 D_L01_00161920 __attribute__((sda));
+extern f32 hover_target_yaw_spring_strength_degrees_gp __asm__("D_L01_00161944") __attribute__((sda));
+extern f32 hover_target_yaw_damping_degrees_gp __asm__("D_L01_00161948") __attribute__((sda));
+extern f32 hover_target_yaw_turn_rate_limit_degrees_gp __asm__("D_L01_0016194C") __attribute__((sda));
+extern f32 hover_ground_animation_height_threshold_gp __asm__("D_L01_00161920") __attribute__((sda));
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -1248,9 +1248,9 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
     } else {
         direction_yaw = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         FUN_L00_00258278(moby, direction_yaw, &D_L01_001DEB4C,
-                         D_L01_00161944 * DEG_TO_RAD * frame_time_sq,
-                         D_L01_00161948 * DEG_TO_RAD * frame_time_sq,
-                         D_L01_0016194C * DEG_TO_RAD * frame_time);
+                         hover_target_yaw_spring_strength_degrees_gp * DEG_TO_RAD * frame_time_sq,
+                         hover_target_yaw_damping_degrees_gp * DEG_TO_RAD * frame_time_sq,
+                         hover_target_yaw_turn_rate_limit_degrees_gp * DEG_TO_RAD * frame_time);
     }
     scale_vector_xyz(&velocity_adjustment, &velocity_adjustment, frame_scale * 0.04f);
     subtract_vector_xyz(&velocity_adjustment, &velocity_adjustment, ((f32 *)(movement_state + 0x10)));
@@ -1275,7 +1275,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
             }
         }
         ground = probe_ground_height(&moby->pos, 0, 0.5f);
-        if ((hit & 2) || moby->pos.z - ground < D_L01_00161920) {
+        if ((hit & 2) || moby->pos.z - ground < hover_ground_animation_height_threshold_gp) {
             if (movement_magnitude < 0.005f) {
                 if (moby->prev_seq >= 3 && moby->prev_seq != random_integer_3830() % 3) {
                     int seq = random_integer_3830() % 3;
@@ -1290,7 +1290,7 @@ void update_hover_moby_steering(struct Moby *moby, char *movement_state) {
         }
     } else {
         ground = probe_ground_height(&moby->pos, 0, 0.5f);
-        if (moby->pos.z - ground < D_L01_00161920) {
+        if (moby->pos.z - ground < hover_ground_animation_height_threshold_gp) {
  animation3:
             if (moby->prev_seq != 3)
                 blend_moby_animation_3830(moby, 3, 0, scale_game_frames(11));
