@@ -3313,9 +3313,9 @@ extern float D_L18_001623B0 __attribute__((sda));
 extern short D_L18_001623B4 __attribute__((sda));
 extern float drek_boss_scalar_blend_min_hero_distance_gp __asm__("D_L18_001623B8") __attribute__((sda));
 extern float drek_boss_scalar_blend_max_hero_distance_gp __asm__("D_L18_001623BC") __attribute__((sda));
-extern float D_L18_001623C0 __attribute__((sda));
-extern float D_L18_001623C4 __attribute__((sda));
-extern float D_L18_001623C8 __attribute__((sda));
+extern float drek_boss_first_scalar_far_hero_target_gp __asm__("D_L18_001623C0") __attribute__((sda));
+extern float drek_boss_second_scalar_far_hero_target_gp __asm__("D_L18_001623C4") __attribute__((sda));
+extern float drek_boss_first_scalar_near_hero_target_gp __asm__("D_L18_001623C8") __attribute__((sda));
 extern float D_L18_001623D0 __attribute__((sda));
 extern float D_L18_001623D4 __attribute__((sda));
 extern float D_L18_001623D8 __attribute__((sda));
@@ -3336,7 +3336,7 @@ extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");
 
-extern float D_L18_001623CC __attribute__((sda));
+extern float drek_boss_second_scalar_near_hero_target_gp __asm__("D_L18_001623CC") __attribute__((sda));
 extern float drek_boss_follow_camera_height_target_gp __asm__("D_L18_001623E4") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void update_drek_boss_state_dependent_scalars(char *moby) {
@@ -3360,8 +3360,8 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
     }
     f = f - drek_boss_scalar_blend_min_hero_distance_gp;
     f = f / (drek_boss_scalar_blend_max_hero_distance_gp - drek_boss_scalar_blend_min_hero_distance_gp);
-    x = (D_L18_001623C0 - D_L18_001623C8) * f + D_L18_001623C8;
-    y = (D_L18_001623C4 - D_L18_001623CC) * f + D_L18_001623CC;
+    x = (drek_boss_first_scalar_far_hero_target_gp - drek_boss_first_scalar_near_hero_target_gp) * f + drek_boss_first_scalar_near_hero_target_gp;
+    y = (drek_boss_second_scalar_far_hero_target_gp - drek_boss_second_scalar_near_hero_target_gp) * f + drek_boss_second_scalar_near_hero_target_gp;
     boss_state = *(unsigned char *)(moby + 0x20);
     if (boss_state == 0x13) {
         char *g = D_0013E533 + 0xe1d;
