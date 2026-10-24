@@ -2388,10 +2388,10 @@ void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L00_001617B4 __attribute__((sda));
-extern float D_L00_001617AC __attribute__((sda));
-extern float D_L00_001617B0 __attribute__((sda));
-extern int D_L00_001617B8 __attribute__((sda));
+extern float beam_origin_quad_basis_offset_length __asm__("D_L00_001617B4") __attribute__((sda));
+extern float beam_origin_quad_first_pass_corner_scale __asm__("D_L00_001617AC") __attribute__((sda));
+extern float beam_origin_quad_second_pass_corner_scale __asm__("D_L00_001617B0") __attribute__((sda));
+extern int beam_origin_quad_first_pass_vertex_color __asm__("D_L00_001617B8") __attribute__((sda));
 void draw_beam_origin_camera_facing_quads(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;
@@ -2401,7 +2401,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     int first_pass_vertex_color;
     int i, j;
     quad.tex = FUN_001f44b8_2be890(11);
-    first_pass_vertex_color = D_L00_001617B8;
+    first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color;
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -2417,7 +2417,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, D_L00_001617B4);
+    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length);
     FUN_001f9a10_2be890(&camera_facing_transform[3], &D_L00_001DBF60_2be890, &offset_vector);
     FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2be890(&camera_facing_transform[0], &offset_vector, 1.0f);
@@ -2425,7 +2425,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     FUN_001f9bf8_2be890(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
     FUN_001f9ad8_2be890(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2be890(D_L00_001617AC, &scaled_corner, &D_L00_001DBF20[3 - i]);
+        FUN_001f9a68_2be890(beam_origin_quad_first_pass_corner_scale, &scaled_corner, &D_L00_001DBF20[3 - i]);
         FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
@@ -2434,7 +2434,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.color[1] = -1;
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
-        FUN_001f9a68_2be890(D_L00_001617B0, &scaled_corner, &D_L00_001DBF20[3 - j]);
+        FUN_001f9a68_2be890(beam_origin_quad_second_pass_corner_scale, &scaled_corner, &D_L00_001DBF20[3 - j]);
         FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
