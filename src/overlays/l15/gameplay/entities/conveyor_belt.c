@@ -464,9 +464,9 @@ int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
 extern float D_L15_001620F8 __attribute__((sda));
 extern float D_L15_001620FC __attribute__((sda));
-extern float D_L15_00162100 __attribute__((sda));
+extern float ripple_mesh_buffers_z_amplitude __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float D_L15_00162104 __attribute__((sda));
+extern float ripple_mesh_buffers_uv_scroll_rate __asm__("D_L15_00162104") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_gs_register(s32, unsigned long) __asm__("func_00233980");
@@ -498,7 +498,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     int color;
     int i, j, uv_buffer_index, uv_vertex_index, draw_buffer_index;
 
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (ripple_mesh_buffers_uv_scroll_rate * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_001620F0));
     vu1_add_gs_register(0x42, ((long)D_L15_001620EC << 32) | 0x44);
     vu1_add_gs_register(8, 0);
@@ -512,7 +512,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
         for (j = 0; j < D_L15_00162080[i]; j++) {
             int *template_vertex_buffer_entry = D_L15_001620C0 + i;
             float *p = (float *)(*template_vertex_buffer_entry + j * 12);
-            float t = D_L15_00162100 *
+            float t = ripple_mesh_buffers_z_amplitude *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
                                                       D_L15_001620F8) *
