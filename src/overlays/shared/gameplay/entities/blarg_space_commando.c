@@ -74,7 +74,7 @@ extern f32 D_L06_00161FA8 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/blarg_space_commando_globals.h"
 extern s32 ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") __attribute__((sda));
 extern f32 melee_attack_distance_threshold_gp __asm__("D_L06_00161FC4") __attribute__((sda));
-extern f32 D_L06_00161FC8 __attribute__((sda));
+extern f32 movement_max_horizontal_speed_gp __asm__("D_L06_00161FC8") __attribute__((sda));
 extern f32 vehicle_melee_windup_animation_speed_gp __asm__("D_L06_00161FCC") __attribute__((sda));
 extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
@@ -164,7 +164,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         vars->ctl.unkC = 0.5f;
         vars->ctl.unk0 = truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
         vars->ctl.unk4 = D_L06_00161FA8 * 0.3f;
-        vars->ctl.unk24 = D_L06_00161FC8 * frame_time;
+        vars->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
         vars->ctl.flags |= 8;
         qcopy(&vars->home, &moby->pos);
         moby->state = 1;
