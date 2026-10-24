@@ -422,8 +422,8 @@ s32 D_L02_001620FC = 0x804080ff;
 s32 D_L02_00162100 = 0x8040ffff;
 s32 D_L02_00162104 = 0x80204040;
 s32 D_L02_00162108 = 0x80204080;
-extern s32 D_L02_0016210C __attribute__((sda));
-extern s32 D_L02_00162110 __attribute__((sda));
+extern s32 view_gated_smoke_burst_interval_min __asm__("D_L02_0016210C") __attribute__((sda));
+extern s32 view_gated_smoke_burst_interval_max __asm__("D_L02_00162110") __attribute__((sda));
 s32 D_L02_00162114 = 0x10019;
 extern f32 D_L02_00162118 __attribute__((sda));
 extern f32 D_L02_0016211C __attribute__((sda));
@@ -442,8 +442,8 @@ s32 D_L02_0016214C = 0x804080ff;
 s32 D_L02_00162150 = 0x8040ffff;
 s32 D_L02_00162154 = 0x80204040;
 s32 D_L02_00162158 = 0x80204080;
-extern s32 D_L02_0016215C __attribute__((sda));
-extern s32 D_L02_00162160 __attribute__((sda));
+extern s32 alternating_smoke_burst_interval_min __asm__("D_L02_0016215C") __attribute__((sda));
+extern s32 alternating_smoke_burst_interval_max __asm__("D_L02_00162160") __attribute__((sda));
 s32 D_L02_00162164 = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
@@ -498,7 +498,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016210C, (f32)D_L02_00162110)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)view_gated_smoke_burst_interval_min, (f32)view_gated_smoke_burst_interval_max)));
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_001620D8 * frame_time);
@@ -550,7 +550,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016215C, (f32)D_L02_00162160)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)alternating_smoke_burst_interval_min, (f32)alternating_smoke_burst_interval_max)));
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_00162128 * frame_time);
