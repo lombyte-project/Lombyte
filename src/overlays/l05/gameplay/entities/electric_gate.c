@@ -1133,11 +1133,11 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
                 if (fall_time_frames < (float)emitter_vars->age) {
                     float splash_forward_distance = fall_time_frames * (frame_time * 4.0f);
                     float splash_offset_angle = random_angle_radians();
-                    float r = random_float_between(0.0f, 1.25f);
+                    float splash_offset_radius = random_float_between(0.0f, 1.25f);
                     fast_vec_scale(v, &emitter_moby->rot_row0, splash_forward_distance);
                     add_vector_xyz(v, v, &emitter_moby->pos);
-                    v[0] += fast_cos(splash_offset_angle) * r;
-                    v[1] += fast_sin(splash_offset_angle) * r;
+                    v[0] += fast_cos(splash_offset_angle) * splash_offset_radius;
+                    v[1] += fast_sin(splash_offset_angle) * splash_offset_radius;
                     v[2] = floor + 0.05f;
                     spawn_splash(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
                                      D_L05_0015F580_macro, &D_L05_001612D0[emitter_vars->floor].z);
