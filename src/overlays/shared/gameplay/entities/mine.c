@@ -1726,7 +1726,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
             if (FUN_001efa68_2adb30(&old, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
                 if (d->h68 == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
-                    Vec_2adb30 vel;
+                    Vec_2adb30 splash_particle_velocity;
                     char *s;
                     int i;
                     FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1, bomb_moby->pos.f[0], bomb_moby->pos.f[1], 0.5f, -0.35f);
@@ -1744,11 +1744,11 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         float ang = FUN_00213308_2adb30();
                         float r = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 0.0f, D_0015ED6C_2adb30 * 3.0f);
                         int n;
-                        vel.f[0] = FUN_001f9dc8_2adb30(ang) * r;
-                        vel.f[1] = FUN_001f9de0_2adb30(ang) * r;
-                        vel.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 3.0f, D_0015ED6C_2adb30 * 6.5f);
+                        splash_particle_velocity.f[0] = FUN_001f9dc8_2adb30(ang) * r;
+                        splash_particle_velocity.f[1] = FUN_001f9de0_2adb30(ang) * r;
+                        splash_particle_velocity.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 3.0f, D_0015ED6C_2adb30 * 6.5f);
                         n = FUN_L00_00257b90_2adb30(0x5A, 0x78);
-                        FUN_L00_0026f548_2adb30(&p, &vel, FUN_00213260_2adb30(2), n);
+                        FUN_L00_0026f548_2adb30(&p, &splash_particle_velocity, FUN_00213260_2adb30(2), n);
                     }
                 } else if (d->h68 != 0 || collision_hit_material() != 0) {
                     if (coll_hit.moby != 0) {
