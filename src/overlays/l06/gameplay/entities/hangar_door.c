@@ -2450,7 +2450,9 @@ extern float func_001F9B88_2FA618(float) __asm__("FUN_001f99c0");
 extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0C30");
 extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
 
-void FUN_L06_002f91e8(Moby *moby)
+void update_alien_snapper_hit_response_and_targeting(Moby *moby) __asm__("FUN_L06_002f91e8");
+
+void update_alien_snapper_hit_response_and_targeting(Moby *moby)
 {
     enum {
         REACTION_SKIP_RESPONSE = 0,
