@@ -16,13 +16,13 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int spawn_moby_offset_effect(char *) __asm__("FUN_L08_00279f00");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
-extern float D_L08_00161468 __attribute__((sda));
-extern float D_L08_0016146C __attribute__((sda));
+extern float bolt_pickup_spin_increment_range_start __asm__("D_L08_00161468") __attribute__((sda));
+extern float bolt_pickup_spin_increment_range_end __asm__("D_L08_0016146C") __attribute__((sda));
 void initialize_bolt_pickup(struct Moby *moby) __asm__("FUN_L08_002b8228");
 
 void initialize_bolt_pickup(struct Moby *moby) {
-    float random_range_start = D_L08_00161468;
-    float random_range_end = D_L08_0016146C;
+    float random_range_start = bolt_pickup_spin_increment_range_start;
+    float random_range_end = bolt_pickup_spin_increment_range_end;
     char *moby_vars;
     moby->rot.x = 0.0f;
     moby->rot.y = 0.5235988f;
