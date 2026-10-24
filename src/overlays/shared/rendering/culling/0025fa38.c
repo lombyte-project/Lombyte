@@ -51,15 +51,15 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 int test_point_in_transformed_unit_sphere(float *point, int volume_index) __asm__("FUN_L00_0025faf0");
 
 int test_point_in_transformed_unit_sphere(float *point, int volume_index) {
-    float a[4] __attribute__((aligned(16)));
-    float b[4] __attribute__((aligned(16)));
+    float volume_relative_offset[4] __attribute__((aligned(16)));
+    float transformed_volume_offset[4] __attribute__((aligned(16)));
     char *volume_entry;
     if (volume_index >= 0) {
         volume_entry = (char *)D_L00_001600F4 + volume_index * 128;
-        subtract_vector_xyz(a, point, volume_entry + 0x30);
-        a[3] = 0;
-        transform_vector_by_basis(b, a, volume_entry + 0x40);
-        if (fast_vec_length(b) < 1.0f)
+        subtract_vector_xyz(volume_relative_offset, point, volume_entry + 0x30);
+        volume_relative_offset[3] = 0;
+        transform_vector_by_basis(transformed_volume_offset, volume_relative_offset, volume_entry + 0x40);
+        if (fast_vec_length(transformed_volume_offset) < 1.0f)
             return 1;
     }
     return 0;
