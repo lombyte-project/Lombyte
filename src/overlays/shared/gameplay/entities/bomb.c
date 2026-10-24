@@ -1048,9 +1048,9 @@ extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da
 
 int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) __asm__("FUN_L00_002cae60");
 
-int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) {
+int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int launch_vector_address, int target_moby, float target_height_offset) {
     char *class_callback_data = get_moby_suck_cannon_record(moby);
-    int projectile_launch_result = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
+    int projectile_launch_result = launch_suck_cannon_projectile(moby, launch_vector_address, target_moby, target_height_offset);
     if (projectile_launch_result != 0) {
         moby[0x20] = 5;
     } else if ((unsigned char)moby[0x20] == 5) {
