@@ -145,8 +145,8 @@ void update_hero_state_machine(void) {
     int prevSub;
     int prevState;
     int prevAnim;
-    float v0[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float temporary_hero_position[4] __attribute__((aligned(16)));
+    float shimmy_probe_position[4] __attribute__((aligned(16)));
     int record_index;
     int respawn_wait_jump_press_age_frames;
     float probe_heading_0;
@@ -1127,9 +1127,9 @@ void update_hero_state_machine(void) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
                     stick_target(0, 1.0f);
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(temporary_hero_position, hero.motion.pos.f);
                     probe_heading_0 = hero.motion.rot.f[2];
-                    if (test_hero_ledge_ahead(v0, &probe_heading_0) == 0) {
+                    if (test_hero_ledge_ahead(temporary_hero_position, &probe_heading_0) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.ledge_probe_cooldown = scale_game_frames(0xA);
                         break;
@@ -1151,11 +1151,11 @@ void update_hero_state_machine(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(shimmy_probe_position, hero.motion.pos.f);
+                        shimmy_probe_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        shimmy_probe_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         probe_heading_1 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_1)) {
+                        if (test_hero_ledge_ahead(shimmy_probe_position, &probe_heading_1)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1164,13 +1164,13 @@ void update_hero_state_machine(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(shimmy_probe_position, hero.motion.pos.f);
+                        shimmy_probe_position[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        shimmy_probe_position[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         probe_heading_2 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_2)) {
+                        if (test_hero_ledge_ahead(shimmy_probe_position, &probe_heading_2)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1179,20 +1179,20 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float shimmy_yaw_offset;
 
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(temporary_hero_position, hero.motion.pos.f);
                     shimmy_yaw_offset = 1.5707964f;
                     if (hero.state.current == 0x1B) {
                         shimmy_yaw_offset = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
+                    temporary_hero_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
+                    temporary_hero_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
                     probe_heading_3 = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.stick_magnitude < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) ||
-                        test_hero_ledge_ahead(v0, &probe_heading_3) == 0) {
+                        test_hero_ledge_ahead(temporary_hero_position, &probe_heading_3) == 0) {
                         if (hero.anim_flags & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -1857,9 +1857,9 @@ void update_hero_state_machine(void) {
                     break;
                 case 94:
                     if (hero.past_jump_apex != 0) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] -= 1.0f;
-                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, v0, 0x30000, 40.0f, 1.0f, 0,
+                        qcopy(temporary_hero_position, hero.motion.pos.f);
+                        temporary_hero_position[2] -= 1.0f;
+                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, temporary_hero_position, 0x30000, 40.0f, 1.0f, 0,
                                          1, 0);
                     }
                     if (!(hero.state_timer > hero.takeoff_frame)) {
@@ -1910,9 +1910,9 @@ void update_hero_state_machine(void) {
                         }
                     }
                     if (hero.rail_land_frames == 1) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] = hero.ground_z.f + 0.2f;
-                        spawn_class_593_moby((int)((unsigned char *)hero.moby), v0, scale_game_frames(0x19), 2.0f,
+                        qcopy(temporary_hero_position, hero.motion.pos.f);
+                        temporary_hero_position[2] = hero.ground_z.f + 0.2f;
+                        spawn_class_593_moby((int)((unsigned char *)hero.moby), temporary_hero_position, scale_game_frames(0x19), 2.0f,
                                          frame_time * 15.0f, 40.0f);
                     }
                     if (hero.rail_land_frames != 0 && hero.move_lock_timer == 0) {
@@ -1941,9 +1941,9 @@ void update_hero_state_machine(void) {
                     break;
                 case 92:
                     if (hero.past_jump_apex != 0) {
-                        qcopy(v0, hero.motion.pos.f);
-                        v0[2] -= 1.0f;
-                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, v0, 0x30000, 1.0f, 1.0f, 0, 1,
+                        qcopy(temporary_hero_position, hero.motion.pos.f);
+                        temporary_hero_position[2] -= 1.0f;
+                        play_entity_sound((int)((unsigned char *)hero.moby), 3.5f, temporary_hero_position, 0x30000, 1.0f, 1.0f, 0, 1,
                                          0);
                     }
                     if (hero.air_frames.s != 0) {
