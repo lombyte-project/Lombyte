@@ -6671,8 +6671,8 @@ struct TauntVoiceVars {
     s32 chatter[3][6];   /* 0x68 */
 };
 extern s32 D_L06_001620B8[1] __attribute__((sda));
-extern s32 D_L06_001620BC;
-extern s32 D_L06_001620C0;
+extern s32 chatter_second_variant_used __asm__("D_L06_001620BC");
+extern s32 chatter_third_variant_used __asm__("D_L06_001620C0");
 extern s32 D_001516EC[];
 extern s32 FUN_00213260(s32);
 
@@ -6705,8 +6705,8 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
             chatter_index = (chatter_index + 1) % 3;
             if (i == 2) {
                 D_L06_001620B8[0] = 0;
-                D_L06_001620BC = 0;
-                D_L06_001620C0 = 0;
+                chatter_second_variant_used = 0;
+                chatter_third_variant_used = 0;
             }
         }
         lang = game_language;
