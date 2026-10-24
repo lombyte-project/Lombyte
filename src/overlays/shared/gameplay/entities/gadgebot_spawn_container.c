@@ -1391,7 +1391,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern float D_L06_00161CE0 __attribute__((sda));
+extern float gadgebot_position_snapshot_z_offset_gp __asm__("D_L06_00161CE0") __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -1588,11 +1588,11 @@ void gadgebot_update(GbMoby *moby) {
                 }
             }
             if (GB_FLAG != 0) {
-                D_L06_00161CE0 = 0.35f;
+                gadgebot_position_snapshot_z_offset_gp = 0.35f;
                 gadgebot_vars->ctl.i00 = 0x177;
             } else {
                 gadgebot_vars->ctl.i00 = 0x12C;
-                D_L06_00161CE0 = 0.27f;
+                gadgebot_position_snapshot_z_offset_gp = 0.27f;
             }
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             moby->unk94 = moby->cls->unk10;
@@ -2044,7 +2044,7 @@ void gadgebot_update(GbMoby *moby) {
         float saved_control_f24;
 
         qcopy(raised_position_snapshot, moby->pos);
-        raised_position_snapshot[2] += D_L06_00161CE0 + 0.02f;
+        raised_position_snapshot[2] += gadgebot_position_snapshot_z_offset_gp + 0.02f;
         qcopy(vector_and_hit_scratch, moby->pos);
         saved_control_f10 = gadgebot_vars->ctl.unk10;
         saved_control_f24 = gadgebot_vars->ctl.unk24;
