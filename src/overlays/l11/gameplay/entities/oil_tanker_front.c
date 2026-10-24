@@ -20,9 +20,9 @@ extern float D_L11_001622CC __attribute__((sda));
 extern float D_L11_001622D0 __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
 extern float puffoid_hit_knockback_vertical_scale_gp __asm__("D_L11_001622D4") __attribute__((sda));
-extern float D_L11_001622D8 __attribute__((sda));
+extern float puffoid_hit_knockback_horizontal_scale_gp __asm__("D_L11_001622D8") __attribute__((sda));
 extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC") __attribute__((sda));
-extern float D_L11_001622E0 __attribute__((sda));
+extern float puffoid_death_knockback_horizontal_scale_gp __asm__("D_L11_001622E0") __attribute__((sda));
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
@@ -171,7 +171,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_ARC:
             case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
-                patrol_vars->unk138 = D_L11_001622D8 * frame_time;
+                patrol_vars->unk138 = puffoid_hit_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_hit_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
@@ -192,7 +192,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 float yaw;
                 moby->flags &= ~0x1000;
                 patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
-                patrol_vars->unk138 = D_L11_001622E0 * frame_time;
+                patrol_vars->unk138 = puffoid_death_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_death_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
