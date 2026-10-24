@@ -3230,7 +3230,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             if (sub_type == 10) {
                 int j;
                 for (j = 0; j < *(int *)&D_L00_0016155C; j++) {
-                    int c1;
+                    int spark_initial_color;
                     int c2;
                     int c3;
                     int c4;
@@ -3239,15 +3239,15 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                     *(float *)(qv + 0xC) = *(float *)&D_L00_0016153C;
                     spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
                     spark_random_vector[3] = *(float *)&D_L00_00161540;
-                    c1 = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
-                    swap_packed_color_channels(c1, item_variant_bytes[0x10]);
+                    spark_initial_color = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
+                    swap_packed_color_channels(spark_initial_color, item_variant_bytes[0x10]);
                     c2 = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
                     swap_packed_color_channels(c2, item_variant_bytes[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
                     add_vector_xyz(spark_position, spark_position, (entry + 0x10));
-                    spawn_spark(spark_position, qv, spark_random_vector, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
+                    spawn_spark(spark_position, qv, spark_random_vector, spark_initial_color, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
                 }
             } else if (sub_type < 2) {
                 *(int *)(slots_base - (-(i * 4))) = 0;
