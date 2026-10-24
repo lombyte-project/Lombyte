@@ -107,7 +107,7 @@ extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__(
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
-extern float D_L14_001620A4 __attribute__((sda));
+extern float spark_first_bounce_horizontal_speed_gp __asm__("D_L14_001620A4") __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
@@ -216,7 +216,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
           spark_moby->state = 1;
           if ((++spark_data->bounces) == 1)
           {
-            cap_0e00(&spark_data->vel, &spark_data->vel, D_L14_001620A4 * frame_time);
+            cap_0e00(&spark_data->vel, &spark_data->vel, spark_first_bounce_horizontal_speed_gp * frame_time);
             spark_data->vel.z = spark_data->vel.z * D_L14_001620A0;
           }
           else
