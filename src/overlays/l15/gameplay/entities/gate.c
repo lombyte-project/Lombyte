@@ -2523,8 +2523,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     }
 }
 extern float D_L15_00161B00 __attribute__((sda));
-extern float D_L15_00161B04 __attribute__((sda));
-extern float D_L15_00161B08 __attribute__((sda));
+extern float ultramech_knockback_vertical_speed_gp __asm__("D_L15_00161B04") __attribute__((sda));
+extern float ultramech_knockback_horizontal_speed_gp __asm__("D_L15_00161B08") __attribute__((sda));
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;
@@ -2632,8 +2632,8 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             case HIT_REACTION_DIRECTIONAL_KNOCKBACK_ALTERNATE:
             case HIT_REACTION_KNOCKBACK_VARIANT:
             case HIT_REACTION_KNOCKBACK_VARIANT_ALTERNATE:
-                angle = D_L15_00161B08 * D_0015ED6C;
-                reaction_product = D_L15_00161B04 * D_0015ED6C;
+                angle = ultramech_knockback_horizontal_speed_gp * D_0015ED6C;
+                reaction_product = ultramech_knockback_vertical_speed_gp * D_0015ED6C;
                 ultramech_vars->w1C8 = 1;
                 *(float *)((char *)ultramech_vars + 0x88) = angle;
                 *(float *)((char *)ultramech_vars + 0x8C) = reaction_product;
