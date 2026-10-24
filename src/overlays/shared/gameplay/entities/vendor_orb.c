@@ -1747,9 +1747,9 @@ void apply_follow_camera_translation(char *camera) {
     ground_check_hero = D_0013E533 + 0xE1D;
     if (*(short *)(ground_check_hero + 0x308) == 0) {
         char *ground_moby = *(char **)(ground_check_hero + 0x2FC);
-        char *q;
+        char *camera_system_state;
         if (ground_moby == 0 || *(short *)(ground_moby + 0xA6) != 0x22D ||
-            ((q = camera_view - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
+            ((camera_system_state = camera_view - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(camera_system_state + 0x398)) {
             char *translation_source_hero = D_0013E533 + 0xE1D;
             *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(translation_source_hero + 0x14C);
         }
