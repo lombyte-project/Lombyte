@@ -2510,7 +2510,7 @@ extern int amoeboid_first_movement_particle_spawn_gate_modulus_plus_one_gp __asm
 extern int amoeboid_second_movement_particle_spawn_gate_modulus_plus_one_gp __asm__("D_L01_001619E4") __attribute__((sda));
 extern float amoeboid_movement_particle_max_spawn_radius_gp __asm__("D_L01_001619E8") __attribute__((sda));
 extern float amoeboid_first_movement_particle_base_scale_max_gp __asm__("D_L01_001619B8") __attribute__((sda));
-extern float D_L01_001619BC __attribute__((sda));
+extern float amoeboid_first_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619BC") __attribute__((sda));
 extern int amoeboid_first_movement_particle_lifetime_min_gp __asm__("D_L01_001619C0") __attribute__((sda));
 extern int amoeboid_first_movement_particle_lifetime_max_gp __asm__("D_L01_001619C4") __attribute__((sda));
 extern int D_L01_001619B0 __attribute__((sda));
@@ -2518,7 +2518,7 @@ extern int D_L01_001619B4 __attribute__((sda));
 extern int D_L01_001619C8 __attribute__((sda));
 extern int D_L01_001619CC __attribute__((sda));
 extern float amoeboid_second_movement_particle_base_scale_max_gp __asm__("D_L01_001619D0") __attribute__((sda));
-extern float D_L01_001619D4 __attribute__((sda));
+extern float amoeboid_second_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619D4") __attribute__((sda));
 extern int amoeboid_second_movement_particle_lifetime_min_gp __asm__("D_L01_001619D8") __attribute__((sda));
 extern int amoeboid_second_movement_particle_lifetime_max_gp __asm__("D_L01_001619DC") __attribute__((sda));
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2538,7 +2538,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         angle = random_angle_radians();
         radius = random_float_between_alt(0.0f, amoeboid_movement_particle_max_spawn_radius_gp);
         lower = random_float_between_alt(0.0f, amoeboid_first_movement_particle_base_scale_max_gp) * *(float *)(data + 0x250);
-        upper = random_float_between_alt(amoeboid_first_movement_particle_base_scale_max_gp, D_L01_001619BC) * *(float *)(data + 0x250);
+        upper = random_float_between_alt(amoeboid_first_movement_particle_base_scale_max_gp, amoeboid_first_movement_particle_secondary_sample_max_gp) * *(float *)(data + 0x250);
         time = truncate_float_to_s32(random_float_between_alt((float)amoeboid_first_movement_particle_lifetime_min_gp, (float)amoeboid_first_movement_particle_lifetime_max_gp));
         pos[0] = fast_cos(angle) * radius;
         pos[1] = fast_sin(angle) * radius;
@@ -2551,7 +2551,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         angle = random_angle_radians();
         radius = random_float_between_alt(0.0f, amoeboid_movement_particle_max_spawn_radius_gp);
         lower = random_float_between_alt(0.0f, amoeboid_second_movement_particle_base_scale_max_gp) * *(float *)(data + 0x250);
-        upper = random_float_between_alt(amoeboid_second_movement_particle_base_scale_max_gp, D_L01_001619D4) * *(float *)(data + 0x250);
+        upper = random_float_between_alt(amoeboid_second_movement_particle_base_scale_max_gp, amoeboid_second_movement_particle_secondary_sample_max_gp) * *(float *)(data + 0x250);
         time = truncate_float_to_s32(random_float_between_alt((float)amoeboid_second_movement_particle_lifetime_min_gp, (float)amoeboid_second_movement_particle_lifetime_max_gp));
         pos[0] = fast_cos(angle) * radius;
         pos[1] = fast_sin(angle) * radius;
