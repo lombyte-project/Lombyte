@@ -1360,8 +1360,8 @@ float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
-extern float D_L00_00161C98 __attribute__((sda));
-extern float D_L00_00161C9C __attribute__((sda));
+extern float pterodactyl_path_speed __asm__("D_L00_00161C98") __attribute__((sda));
+extern float pterodactyl_scale_multiplier __asm__("D_L00_00161C9C") __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 void pterodactyl_update(unsigned char *moby) {
     enum {
@@ -1380,12 +1380,12 @@ void pterodactyl_update(unsigned char *moby) {
         {
             float first_segment_length = distance_xyz(path + 4, path + 8);
             float first_to_last_distance = distance_xyz(path + 4, path + *path * 4);
-            moby_data->f74 = D_L00_00161C98 * D_0015ED6C_2e3a88 / first_segment_length;
+            moby_data->f74 = pterodactyl_path_speed * D_0015ED6C_2e3a88 / first_segment_length;
             moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         moby[0x20] = 1;
-        *(float *)(moby + 0x2C) *= D_L00_00161C9C;
+        *(float *)(moby + 0x2C) *= pterodactyl_scale_multiplier;
         moby[0x30] = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = *(float *)(moby + 0x18);
