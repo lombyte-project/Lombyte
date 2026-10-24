@@ -1295,7 +1295,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
-    case 0x20:
+    case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
     case 0x51: {
         struct Hero *p = &hero;
@@ -1372,7 +1372,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x20: {
+        case HERO_STATE_HELD_ITEM_ATTACK: {
             struct Hero *q = &hero;
             if (((void *)q->items[0].moby) == 0)
                 break;
@@ -1792,7 +1792,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(get_hero_help_value(0), 0, -1.0f);
         break;
     }
-    case 0x78: {
+    case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
