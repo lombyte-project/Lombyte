@@ -1204,7 +1204,7 @@ extern f32 fast_cos_c3(f32) __asm__("func_001F9DC8");
 extern f32 random_angle_radians_c4(void) __asm__("func_00213308");
 extern f32 random_float_between_c4(f32, f32) __asm__("func_002132A8");
 extern float fast_difference_between_rotations_c2(float, float) __asm__("func_001FA688");
-extern int D_L08_0015FFBC;
+extern int available_moby_slot_count __asm__("D_L08_0015FFBC");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern short *D_L08_001AC040[];
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1237,7 +1237,7 @@ void scatter_bomber_tank_linked_debris(char *moby) {
     if (list == 0) return;
     index = *list & 0x7FFF;
     other = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
-    for (i = 0; i < 40 && D_L08_0015FFBC >= 50; i++) {
+    for (i = 0; i < 40 && available_moby_slot_count >= 50; i++) {
         char *spawned_debris_moby;
         if (random_integer_below_c2(0xFF) & 1) spawned_debris_moby = func_0020D348_m(0x310); else spawned_debris_moby = func_0020D348_m(0x311);
         if (spawned_debris_moby != 0) {
