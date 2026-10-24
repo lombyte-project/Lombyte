@@ -699,11 +699,11 @@ extern void func_00215C00_57_q(float, float, float, void *) __asm__("FUN_00214db
 extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
 
 extern float D_L16_001618E8 __attribute__((sda));
-extern float D_L16_001618EC __attribute__((sda));
-extern float D_L16_001618F0 __attribute__((sda));
-extern float D_L16_001618F4 __attribute__((sda));
-extern float D_L16_001618F8 __attribute__((sda));
-extern float D_L16_001618FC __attribute__((sda));
+extern float reposition_effect_velocity_scale_range_start __asm__("D_L16_001618EC") __attribute__((sda));
+extern float reposition_effect_velocity_scale_range_end __asm__("D_L16_001618F0") __attribute__((sda));
+extern float reposition_effect_spawn_z_offset __asm__("D_L16_001618F4") __attribute__((sda));
+extern float reposition_effect_radius_range_start __asm__("D_L16_001618F8") __attribute__((sda));
+extern float reposition_effect_radius_range_end __asm__("D_L16_001618FC") __attribute__((sda));
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) __asm__("FUN_L16_002c44f0");
 
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) {
@@ -726,15 +726,15 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
         float *effectVelocity = effect_velocity;
         i = 3;
         do {
-            radius = random_float_between_alt_q(D_L16_001618F8,
-                                                D_L16_001618FC);
+            radius = random_float_between_alt_q(reposition_effect_radius_range_start,
+                                                reposition_effect_radius_range_end);
             effect_position_angle = random_angle_radians_q();
             random_effect_angle = random_angle_radians_q();
             func_00215C00_57_q(radius, effect_position_angle, random_effect_angle, effectPosition);
-            out[2] += D_L16_001618F4;
+            out[2] += reposition_effect_spawn_z_offset;
             add_vector_xyz_q(effectPosition, effectPosition, &moby->pos);
-            speed = random_float_between_alt_q(D_L16_001618EC * D_0015ED6C,
-                                               D_L16_001618F0 * D_0015ED6C);
+            speed = random_float_between_alt_q(reposition_effect_velocity_scale_range_start * D_0015ED6C,
+                                               reposition_effect_velocity_scale_range_end * D_0015ED6C);
             random_effect_angle = random_angle_radians_q();
             func_00215C00_57_q(speed, random_effect_angle, D_L16_001618E8 * DEG_TO_RAD,
                                effectVelocity);
