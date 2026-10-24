@@ -1289,7 +1289,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_L16_00161E58 __attribute__((sda));
 extern float D_0015EE70;
 extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
-extern float D_L16_00161E54 __attribute__((sda));
+extern float chomper_knockback_gravity __asm__("D_L16_00161E54") __attribute__((sda));
 extern float chomper_knockback_vertical_speed __asm__("D_L16_00161E5C") __attribute__((sda));
 extern float chomper_knockback_horizontal_speed __asm__("D_L16_00161E60") __attribute__((sda));
 extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
@@ -1315,7 +1315,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
         reaction_flags_or_path_entry_address = 0x200;
         pursuit_data->flags = reaction_flags_or_path_entry_address;
         pursuit_data->strength = 0.5f;
-        pursuit_data->speed = D_L16_00161E54 * frame_time_sq;
+        pursuit_data->speed = chomper_knockback_gravity * frame_time_sq;
         pursuit_data->acceleration = D_L16_00161E58 * frame_time_sq;
         pursuit_data->jump_speed = chomper_knockback_horizontal_speed * frame_time;
         pursuit_data->turn_speed = chomper_knockback_vertical_speed * frame_time;
