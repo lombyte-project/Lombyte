@@ -864,7 +864,7 @@ extern char *D_L02_00161AFC __attribute__((sda));
 extern char *D_L02_00161B00 __attribute__((sda));
 extern char *D_L02_00161B04 __attribute__((sda));
 extern char *D_L02_00161B08 __attribute__((sda));
-extern s32 D_L02_00161B64 __attribute__((sda));
+extern s32 tresspasser_radial_strip_texture_index_gp __asm__("D_L02_00161B64") __attribute__((sda));
 
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -945,7 +945,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     NEG20(packed_vertices[3], truncate_float_to_s32(f27));
     LO4(packed_vertices[3], truncate_float_to_s32(f28));
 
-    strip_texture_tex0 = FUN_001f44b8(D_L02_00161B64);
+    strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
     vertex_uvs[0] = (s32)D_L02_00161AFC;
