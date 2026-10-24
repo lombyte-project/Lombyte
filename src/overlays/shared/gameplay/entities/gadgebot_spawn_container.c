@@ -746,7 +746,7 @@ extern int allocate_voice_e94f0(int, int, int) __asm__("FUN_0022da68");
 void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
 
 extern void spawn_moby_directional_spark_bursts(struct Moby *, Vec4 *) __asm__("FUN_L06_002ea198");
-extern void FUN_L06_002e9f30(struct Moby *);
+extern void destroy_frog_child_moby(struct Moby *) __asm__("FUN_L06_002e9f30");
 extern void spawn_moby_death_effect_burst(char *) __asm__("FUN_L06_002ea498");
 extern float fast_add_rotations_e94f0(float, float) __asm__("FUN_001fa580");
 extern float fast_sin_e94f0(float) __asm__("FUN_001f9de0");
@@ -784,7 +784,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
         hit = hit_moby_e94f0(vars->carried, 0x330000, 0);
         if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
             spawn_moby_directional_spark_bursts(moby, (Vec4 *)D_L06_0015F580);
-            FUN_L06_002e9f30(moby);
+            destroy_frog_child_moby(moby);
             stop_moby_sound_e94f0(moby, 0, -1);
             goto remove;
         }
@@ -808,7 +808,7 @@ void FUN_L06_002e94f0(struct Moby *moby) {
             }
             allocate_voice_e94f0(3, 0, (int)moby);
             if (vars->carried != 0) {
-                FUN_L06_002e9f30(moby);
+                destroy_frog_child_moby(moby);
             }
             if (vars->lives == 0) {
             remove:
@@ -972,7 +972,7 @@ extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, 
 extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
 
 /* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
-void FUN_L06_002e9f30(struct Moby *moby) {
+void destroy_frog_child_moby(struct Moby *moby) {
     float origin[4];
     float debris_velocity[4];
     float pos[4];
