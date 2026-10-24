@@ -88,10 +88,10 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char D_L02_0016D040[];
 extern int D_L02_0015F458;
-extern float D_L02_001612F8;
-extern float D_L02_001612FC;
-extern float D_L02_00161300;
-extern float D_L02_00161304;
+extern float textured_grid_saved_fog_near_distance __asm__("D_L02_001612F8");
+extern float textured_grid_saved_fog_far_distance __asm__("D_L02_001612FC");
+extern float textured_grid_saved_fog_near_intensity __asm__("D_L02_00161300");
+extern float textured_grid_saved_fog_far_intensity __asm__("D_L02_00161304");
 extern char D_L02_001673C0[];
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
@@ -129,10 +129,10 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     long blend_mode;
     unsigned int alpha_limit;
 
-    D_L02_001612F8 = ((QuadCamera *)D_L02_0016D040)->f218;
-    D_L02_001612FC = ((QuadCamera *)D_L02_0016D040)->f21C;
-    D_L02_00161300 = ((QuadCamera *)D_L02_0016D040)->f228;
-    D_L02_00161304 = ((QuadCamera *)D_L02_0016D040)->f22C;
+    textured_grid_saved_fog_near_distance = ((QuadCamera *)D_L02_0016D040)->f218;
+    textured_grid_saved_fog_far_distance = ((QuadCamera *)D_L02_0016D040)->f21C;
+    textured_grid_saved_fog_near_intensity = ((QuadCamera *)D_L02_0016D040)->f228;
+    textured_grid_saved_fog_far_intensity = ((QuadCamera *)D_L02_0016D040)->f22C;
     if (D_L02_0015F458 != 1) {
         ((QuadCamera *)D_L02_0016D040)->f218 = draw_parameters->f20;
         ((QuadCamera *)D_L02_0016D040)->f21C = draw_parameters->f24;
@@ -281,10 +281,10 @@ void restore_view_after_textured_grid(void) {
     int *packet_base;
     vu1_add_vif_code(0x13000000);
     camera_state = D_L02_0016D040;
-    *(float *)(camera_state + 0x218) = D_L02_001612F8;
-    *(float *)(camera_state + 0x21C) = D_L02_001612FC;
-    *(float *)(camera_state + 0x228) = D_L02_00161300;
-    *(float *)(camera_state + 0x22C) = D_L02_00161304;
+    *(float *)(camera_state + 0x218) = textured_grid_saved_fog_near_distance;
+    *(float *)(camera_state + 0x21C) = textured_grid_saved_fog_far_distance;
+    *(float *)(camera_state + 0x228) = textured_grid_saved_fog_near_intensity;
+    *(float *)(camera_state + 0x22C) = textured_grid_saved_fog_far_intensity;
     update_view_context();
     update_camera_view_matrices();
     (*(int *volatile *)&D_L02_001611C0)[0] = 0x10000002;
