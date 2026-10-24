@@ -423,7 +423,7 @@ void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 void spawn_moby_radial_particles(char *moby) {
     float v[4];
     float spawn_center_position[4];
-    float w[4];
+    float reference_to_spawn_delta[4];
     float randomized_spawn_vector[4];
     char *moby_data = *(char **)(moby + 0x78);
     int i;
@@ -443,8 +443,8 @@ void spawn_moby_radial_particles(char *moby) {
             rad = random_float_between_alt(*(float *)(moby_data + 0xC), *(float *)(moby_data + 8));
             v[0] = v[0] + fast_cos(spawn_angle_radians) * rad;
             v[1] = v[1] + fast_sin(spawn_angle_radians) * rad;
-            subtract_vector_xyz(w, v, D_L08_001675C0);
-            if (!(vector_length_xy(w) <= *(float *)(moby_data + 0x10))) {
+            subtract_vector_xyz(reference_to_spawn_delta, v, D_L08_001675C0);
+            if (!(vector_length_xy(reference_to_spawn_delta) <= *(float *)(moby_data + 0x10))) {
                 randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[1] = D_L08_00162364 + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
