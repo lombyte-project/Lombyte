@@ -8,6 +8,7 @@ README. Nothing here is configurable: the build always looks at these paths.
 | `compilers/game-compiler`     | game code compiler (required)                      |
 | `compilers/sdk-compiler`      | SDK library compiler                               |
 | `compilers/sn-compiler`       | SN EE-GCC 2.95.2 and Ps2EeAs (assembles game code) |
+| `compilers/sn-cc1`            | SN cc1 built from source (`OVERLAY_SN_UNITS`)      |
 | `binutils-mips-ps2-decompals` | R5900 binutils                                     |
 | `objdiff`                     | objdiff CLI                                        |
 

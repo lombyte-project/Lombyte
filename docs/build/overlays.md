@@ -51,8 +51,10 @@ function it holds once you know it (`lNN/gameplay/entities/sand_shark.c`);
 A function is exact when its C, compiled like retail (game compiler `cc1`,
 then `Ps2EeAs`) and placed at its address with every symbol resolved for that
 level, equals the level's code byte for byte (`scripts/overlay_proof.py`).
-Files in `OVERLAY_SN_UNITS` (top of `configure.py`) use the SN compiler
-instead; add a file there only when every C function in it stays exact.
+Files in `OVERLAY_SN_UNITS` (top of `configure.py`) use SN's preprocessor and
+SN's `cc1` rebuilt from source
+([patches/sn-2.95.2](../../patches/sn-2.95.2/README.md)) instead; add a file
+there only when every C function in it stays exact.
 
 - `check-unit.py FUN_LNN_xxxxxxxx` checks one function.
 - `make overlays` builds every file, checks every function in C and ends with

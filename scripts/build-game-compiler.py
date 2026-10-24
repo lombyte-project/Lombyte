@@ -94,7 +94,7 @@ exec "$DIR/xgcc" -B"$DIR/" "$@"
 
 class BuildError(SystemExit):
     def __init__(self, message: str):
-        super().__init__(f"build-game-compiler: error: {message}")
+        super().__init__(f"{Path(sys.argv[0]).stem}: error: {message}")
 
 
 def parse_args(argv=None):

@@ -1,0 +1,16 @@
+diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
+index 57ee269..e617bde 100644
+--- a/gcc/config/mips/mips.c
++++ b/gcc/config/mips/mips.c
+@@ -4647,10 +4663,7 @@ override_options ()
+ 			    && size == 2 * UNITS_PER_WORD)));
+ 
+ 	  else if (MD1_REG_P (regno))
+-	    temp = (class == MODE_INT
+-		    && (size <= UNITS_PER_WORD
+-			|| (regno == MD1_REG_FIRST
+-			    && size == 2 * UNITS_PER_WORD)));
++	    temp = 0;
+ 
+ 	  else
+ 	    temp = 0;
