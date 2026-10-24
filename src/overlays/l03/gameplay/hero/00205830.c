@@ -18,7 +18,7 @@ struct LedgeSpot {
 };
 
 extern struct LedgeSpot *D_L03_0015F70C;
-extern s32 D_L03_0015F710;
+extern s32 registered_path_count __asm__("D_L03_0015F710");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -36,7 +36,7 @@ s32 find_first_nearby_registered_path(Vec4 *from, s32 **outOwner, Vec4 *to, s32 
     Vec4 *source_position_ptr = &source_position;
 
     *(u128 *)source_position_ptr = *(u128 *)from;
-    for (i = 0; i < D_L03_0015F710; i++) {
+    for (i = 0; i < registered_path_count; i++) {
         if (skip != 0 && D_L03_0015F70C[i].owner == skip)
             continue;
         if (only != 0 && D_L03_0015F70C[i].owner != only)
