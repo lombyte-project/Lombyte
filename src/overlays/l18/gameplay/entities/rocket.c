@@ -1770,7 +1770,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_p() __asm__("FUN_001fa6d0");
 extern short D_L18_00161BFC __attribute__((sda));
-extern int D_L18_00161C00 __attribute__((sda));
+extern int ballistic_ring_glow_color_end __asm__("D_L18_00161C00") __attribute__((sda));
 extern float D_L18_00161C04 __attribute__((sda));
 extern float D_L18_00161C08 __attribute__((sda));
 extern float D_L18_00161C0C __attribute__((sda));
@@ -1786,7 +1786,7 @@ extern int D_L18_00161C30 __attribute__((sda));
 extern int D_L18_00161C34;
 extern int D_L18_00161C38 __attribute__((sda));
 extern int D_L18_00161C3C __attribute__((sda));
-extern int D_L18_00161C40 __attribute__((sda));
+extern int ballistic_ring_trail_sparks_per_update __asm__("D_L18_00161C40") __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
@@ -1823,7 +1823,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
     case STATE_BALLISTIC_FLIGHT: {
         float *cc;
         i = 0;
-        for (; i < D_L18_00161C40; i++) {
+        for (; i < ballistic_ring_trail_sparks_per_update; i++) {
             cc = spark_vector_offset;
             scale_vector_xyz(first_spark_vector, moby_vars, D_L18_00161C08);
             FUN_L00_00257d78(cc, 0.0f, D_L18_00161C0C * frame_time);
@@ -1852,7 +1852,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
         }
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
         {
-            int col = FUN_001fa6e0(*(int *)&D_L18_00161BFC, D_L18_00161C00,
+            int col = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end,
                                    (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
             float k = frame_time_sq * 10.0f;
             moby->glow_color = col;
@@ -1878,7 +1878,7 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
     }
     case STATE_GROUND_IMPACT_DELAY:
         moby_vars[12] = fast_add_rotations(moby_vars[12], frame_time * 18.849556f);
-        moby->glow_color = FUN_001fa6e0(*(int *)&D_L18_00161BFC, D_L18_00161C00,
+        moby->glow_color = FUN_001fa6e0(*(int *)&D_L18_00161BFC, ballistic_ring_glow_color_end,
                                              (fast_sin(moby_vars[12]) + 1.0f) * 0.5f);
         if (tick_countdown_32((int *)(moby_vars + 11))) {
             trooper_play_sound(0xF, 0, (int)moby, 0x58E);
