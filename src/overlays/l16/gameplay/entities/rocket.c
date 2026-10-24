@@ -1066,10 +1066,10 @@ extern float vector_length_xyz(void *a);
 extern int D_L16_0015F5CC;
 extern int conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") __attribute__((sda));
 extern int conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") __attribute__((sda));
-extern int D_L16_00161998 __attribute__((sda));
-extern int D_L16_0016199C __attribute__((sda));
-extern int D_L16_001619A0 __attribute__((sda));
-extern int D_L16_001619A4 __attribute__((sda));
+extern int conveyor_belt_alpha_blend_a_selector __asm__("D_L16_00161998") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_b_selector __asm__("D_L16_0016199C") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_c_selector __asm__("D_L16_001619A0") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_d_selector __asm__("D_L16_001619A4") __attribute__((sda));
 extern int conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") __attribute__((sda));
 extern int conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") __attribute__((sda));
 extern int conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") __attribute__((sda));
@@ -1107,13 +1107,13 @@ void draw_conveyor_belt_strips(char *moby) {
     tint = func_001FA8A8_caa18(conveyor_belt_pulse_color_start_gp, conveyor_belt_pulse_color_end_gp, phase);
     color = conveyor_belt_scrolling_vertex_color_gp;
     packets[0].texture = get_effect_texture(conveyor_belt_pulse_texture_id_gp);
-    packets[0].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
-                      ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
+    packets[0].mode = (long)conveyor_belt_alpha_blend_a_selector | ((long)conveyor_belt_alpha_blend_b_selector << 2) |
+                      ((long)conveyor_belt_alpha_blend_c_selector << 4) | ((long)conveyor_belt_alpha_blend_d_selector << 6) | modebits;
     packets[0].flags = flags;
     packets[0].zero = 0;
     packets[1].texture = get_effect_texture(conveyor_belt_scrolling_texture_id_gp);
-    packets[1].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
-                      ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
+    packets[1].mode = (long)conveyor_belt_alpha_blend_a_selector | ((long)conveyor_belt_alpha_blend_b_selector << 2) |
+                      ((long)conveyor_belt_alpha_blend_c_selector << 4) | ((long)conveyor_belt_alpha_blend_d_selector << 6) | modebits;
     packets[1].flags = flags;
     packets[1].zero = 0;
     {
