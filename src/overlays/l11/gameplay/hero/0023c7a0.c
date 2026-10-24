@@ -863,7 +863,7 @@ void update_hero_motion_by_state(void) {
         clip_hero_horizontal_velocity(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x6A:
+    case HERO_STATE_DROWN:
     case 0x82: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
@@ -894,7 +894,7 @@ void update_hero_motion_by_state(void) {
         break;
     }
     case HERO_STATE_WATER_SURFACE_MOVE:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
