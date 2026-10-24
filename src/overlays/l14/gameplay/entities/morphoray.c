@@ -1845,7 +1845,7 @@ extern float D_L14_001624BC __attribute__((section(".sdata")));
 extern float D_L14_001624C0 __attribute__((section(".sdata")));
 extern float path_key_camera_heading_offset_spring_gain __asm__("D_L14_00162490") __attribute__((sda));
 extern float path_key_camera_placement_elevation_spring_gain __asm__("D_L14_00162494") __attribute__((sda));
-extern float D_L14_00162498 __attribute__((sda));
+extern float path_key_camera_placement_distance_spring_gain __asm__("D_L14_00162498") __attribute__((sda));
 extern float path_key_camera_lateral_axis_rotation_spring_gain __asm__("D_L14_0016249C") __attribute__((sda));
 extern float path_key_camera_up_axis_rotation_spring_gain __asm__("D_L14_001624A0") __attribute__((sda));
 extern float path_key_camera_heading_blend_step_factor __asm__("D_L14_001624A4") __attribute__((sda));
@@ -2034,7 +2034,7 @@ void update_path_key_camera(char *path_key_camera) {
     k = path_key_camera_placement_elevation_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, key_interpolation_fraction);
     cur->f4 = cam_interp_angle_5d48(vel + 1, cur->f4, x, k, 0.2f, 0.0f);
-    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * key_interpolation_fraction, D_L14_00162498, 0.2f, 0.0f);
+    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * key_interpolation_fraction, path_key_camera_placement_distance_spring_gain, 0.2f, 0.0f);
     k = path_key_camera_lateral_axis_rotation_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, key_interpolation_fraction);
     cur->fC = cam_interp_angle_5d48(vel + 3, cur->fC, x, k, 0.2f, 0.0f);
