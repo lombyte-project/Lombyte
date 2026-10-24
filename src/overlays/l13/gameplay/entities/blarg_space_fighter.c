@@ -2617,7 +2617,9 @@ extern int rand_q(void) __asm__("FUN_001160d8");
 extern int below_q(int) __asm__("FUN_00213260");
 
 extern unsigned char D_L13_001D3558[];
-int FUN_L13_002e86f8(void *unused, unsigned char *moby_data, int base, int line_count) {
+int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) __asm__("FUN_L13_002e86f8");
+
+int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) {
     int j = rand_q() % line_count;
     int id = D_L13_001D3558[base + j];
     int i;
@@ -3104,7 +3106,7 @@ void FUN_L13_002e97e0(struct Moby *moby, char *vars, int *result) {
     moby->state = 7;
     *(float *)(vars + 0xAC) = D_0015ED6C * 80.0f;
     *(int *)(vars + 0xF8) = scale_game_frames(600);
-    FUN_L13_002e86f8(moby, (unsigned char *)vars, 0x22, 1);
+    queue_starfighter_voice_line(moby, (unsigned char *)vars, 0x22, 1);
     *(short *)(vars + 0x138) = 0;
     vars[0x148] = 0;
     if (*(int *)(vars + 0x104) != -1) {

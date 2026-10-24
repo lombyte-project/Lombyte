@@ -105,7 +105,7 @@ extern char D_0013E533[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L13_002e86f8(void *, void *, int, int);
+extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -179,7 +179,7 @@ s1b:
         return;
     }
     if (!(*(unsigned short *)(starfighter_data + 0x138) & 1)) {
-        if (FUN_L13_002e86f8(moby, starfighter_data, 1, 2)) {
+        if (queue_starfighter_voice_line(moby, starfighter_data, 1, 2)) {
             *(unsigned short *)(starfighter_data + 0x138) |= 1;
         }
     }
@@ -329,7 +329,7 @@ s4:
         return;
     }
     moby[0xBC] = 5;
-    FUN_L13_002e86f8(moby, starfighter_data, 0x1B, 2);
+    queue_starfighter_voice_line(moby, starfighter_data, 0x1B, 2);
     {
         char *z = *(char **)(*(int *)(((char *)&D_00140940)) + 0x78);
         *(int *)(z + 0x88) = 0;
@@ -718,7 +718,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 qcopy(offset, ((char *)&D_0013F3D0));
                 data->iF8 = scale_game_frames_alt(0x78);
                 if (!(data->h138 & 4)) {
-                    if (FUN_L13_002e86f8(moby, data, 0x17, 4) != 0) {
+                    if (queue_starfighter_voice_line(moby, data, 0x17, 4) != 0) {
                         data->h138 |= 4;
                     }
                 }
@@ -821,7 +821,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         if (*(int *)(dialog + 0x50) == 0) {
             int line = *(int *)(dialog + 0x1C);
             if (line == -1 && (short)data->h138 <= 0) {
-                if (FUN_L13_002e86f8(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
+                if (queue_starfighter_voice_line(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
                     D_L13_00161950 = (D_L13_00161950 + 1) % 4;
                     data->h138 += 1;
                 }
@@ -881,11 +881,11 @@ void update_qwarks_starfighter(Moby388 *moby) {
             char *dialog = (char *)((char *)&D_001516D0);
             if (*(int *)(dialog + 0x50) == 0 && *(int *)(dialog + 0x1C) == -1) {
                 if (data->iF8 < scale_game_frames_alt(0x1A4) && data->i13C < 0) {
-                    if (FUN_L13_002e86f8(moby, data, 0x23, 1) != 0) {
+                    if (queue_starfighter_voice_line(moby, data, 0x23, 1) != 0) {
                         data->i13C &= 0x7FFFFFFF;
                     }
                 } else if (data->iF8 < scale_game_frames_alt(0xB4) && (data->i13C & 0x40000000) &&
-                           FUN_L13_002e86f8(moby, data, 0x24, 1) != 0) {
+                           queue_starfighter_voice_line(moby, data, 0x24, 1) != 0) {
                     data->i13C &= 0xBFFFFFFF;
                 }
             }
@@ -1076,7 +1076,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         if (moby->state != 6) {
             if (owner == 0 || owner->cls_id != 0x45 || owner->state == 0xFE || owner->state == 0xFD || owner->state == 7) {
                 moby->state = 6;
-                if (FUN_L13_002e86f8(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
+                if (queue_starfighter_voice_line(moby, data, D_L13_00161950 + 0x1D, 1) != 0) {
                     D_L13_00161950 = (D_L13_00161950 + 1) % 4;
                     data->h138 = 1;
                 } else {
@@ -1101,7 +1101,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                     (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45 &&
                     (unsigned int)(*(int *)((char *)(*(Moby388 **)(hero + 0x15F0))->d + 0x120) - 1) < 0x270F &&
                     random_integer_below(2) == 0) {
-                    FUN_L13_002e86f8(moby, data, 3, 9);
+                    queue_starfighter_voice_line(moby, data, 3, 9);
                 }
             }
         }
