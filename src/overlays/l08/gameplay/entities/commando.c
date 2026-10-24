@@ -509,7 +509,7 @@ extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __as
 extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
-extern f32 D_L08_00161F70 __attribute__((sda));
+extern f32 path_follower_y_rotation_rate_degrees __asm__("D_L08_00161F70") __attribute__((sda));
 void update_path_following_moby_with_fade(struct Moby *moby) __asm__("FUN_L08_002f44c0");
 
 void update_path_following_moby_with_fade(struct Moby *moby)
@@ -559,7 +559,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
             mark_moby_for_removal_44c0(moby);
             return;
         }
-        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, D_L08_00161F70 * 0.017453292f * frame_time);
+        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, path_follower_y_rotation_rate_degrees * 0.017453292f * frame_time);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if (distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) {
             clear_u64_value_44c0(&velocity);
