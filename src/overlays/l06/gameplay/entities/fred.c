@@ -8006,7 +8006,7 @@ extern int D_L06_001621C0 __attribute__((sda));
 extern int D_L06_001621CC __attribute__((sda));
 extern int D_L06_001621E0 __attribute__((sda));
 extern int D_L06_001621E4 __attribute__((sda));
-extern float D_L06_001621F4 __attribute__((sda));
+extern float vector_stream_texture_u_step __asm__("D_L06_001621F4") __attribute__((sda));
 extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
@@ -8061,7 +8061,7 @@ void draw_moby_vector_streams(char *moby) {
     shared_helper_arguments[1] = D_L06_00162238;
     shared_helper_arguments[3] = D_L06_001621E0;
     shared_helper_arguments[4] = D_L06_001621E4;
-    *(float *)&shared_helper_arguments[7] = D_L06_001621F4;
+    *(float *)&shared_helper_arguments[7] = vector_stream_texture_u_step;
     *(float *)&shared_helper_arguments[8] = *(float *)&D_L06_001621F8_gp;
     shared_helper_arguments[5] = 0x1E;
     shared_helper_arguments[6] = (int)data;
