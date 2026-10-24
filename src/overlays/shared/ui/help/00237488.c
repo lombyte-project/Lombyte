@@ -1342,7 +1342,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
     char *path;
     float distance;
     int i, best;
-    float tmp[4] __attribute__((aligned(16)));
+    float ground_probe_position[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
         qcopy(out, hero_base + 0x80);
@@ -1385,9 +1385,9 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         next_point:;
     }
     qcopy(out, path + best * 16 + 0x10);
-    qcopy(tmp, out);
-    tmp[2] += 2.0f;
-    out[2] = probe_ground_height(tmp, 0, 0.5f);
+    qcopy(ground_probe_position, out);
+    ground_probe_position[2] += 2.0f;
+    out[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
     clear_u64_value(out_rotation);
     {
         float *selected_path_record = (float *)(path + best * 16);
