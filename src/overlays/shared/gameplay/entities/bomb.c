@@ -2009,7 +2009,10 @@ extern void FUN_L00_0025e450_2ccee0(void *, void *, void *, float, float, int, i
                                     int) __asm__("FUN_L00_0025e450");
 extern void FUN_0020c828_2ccee0(void *) __asm__("FUN_0020c828");
 
-unsigned char *FUN_L00_002ccee0(int owner_moby, V_2ccee0 *spawn_position, unsigned char *target_moby, float target_height_offset, float yaw,
+unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsigned char *target_moby, float target_height_offset, float yaw,
+                                float pitch) __asm__("FUN_L00_002ccee0");
+
+unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsigned char *target_moby, float target_height_offset, float yaw,
                                 float pitch) {
     V_2ccee0 forward_step;
     V_2ccee0 collision_start;
