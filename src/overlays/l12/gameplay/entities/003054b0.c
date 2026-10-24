@@ -1283,7 +1283,7 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 
 extern float D_L12_00162108[2] __attribute__((section(".sdata")));
 extern char D_L12_00208B00[];
-extern int D_L12_001620D4;
+extern int hoven_scrolling_second_layer_fixed_alpha __asm__("D_L12_001620D4");
 extern int D_L12_001FBD10[];
 extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
@@ -1315,7 +1315,7 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));
     FUN_L08_002f0c18(0);
-    vu1_add_g_sregister(0x42, ((long)D_L12_001620D4 << 32) | 0x68);
+    vu1_add_g_sregister(0x42, ((long)hoven_scrolling_second_layer_fixed_alpha << 32) | 0x68);
     vu1_add_g_sregister(6, get_effect_texture(0x30));
     FUN_L08_002f0c18(1);
 }
