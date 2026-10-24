@@ -922,7 +922,7 @@ extern float D_L11_00161F74 __attribute__((sda));
 extern float D_L11_00161F78 __attribute__((sda));
 extern float D_L11_00161F7C __attribute__((sda));
 extern float D_L11_00161F80 __attribute__((sda));
-extern float D_L11_00161F84 __attribute__((sda));
+extern float seesaw_fall_tilt_threshold_degrees __asm__("D_L11_00161F84") __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -976,7 +976,7 @@ void seesaw_platform_update(struct Moby *platform) {
             change += D_L11_00161F74 * 0.017453292f * frame_time_sq;
         }
         platform_vars->spin = platform_vars->spin + change;
-        if (absolute_float_eb90(platform->rot.y) > D_L11_00161F84 * 0.017453292f &&
+        if (absolute_float_eb90(platform->rot.y) > seesaw_fall_tilt_threshold_degrees * 0.017453292f &&
             (u32)hero.state.control_mode < 2) {
             hero_set_state(HERO_STATE_FALL, 1);
         }
