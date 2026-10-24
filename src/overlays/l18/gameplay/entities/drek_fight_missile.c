@@ -517,7 +517,7 @@ typedef struct {
 } Level18VendorMoby;
 
 extern char *D_L18_001600EC;
-extern float D_L18_001622C0 __attribute__((sda));
+extern float group_transform_debris_scale_multiplier_gp __asm__("D_L18_001622C0") __attribute__((sda));
 extern float D_L18_001677D8 __attribute__((section(".data")));
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -669,7 +669,7 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
                     debris_spawn_position[2] = 15.0f;
                     add_vector_xyz(debris_spawn_position, debris_spawn_position, &hero.motion.pos);
                     debris_spawn_frames = scale_game_frames(240);
-                    spawn_debris_chunk(debris_spawn_position, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, D_L18_001622C0, 2.0f, 1.0f,
+                    spawn_debris_chunk(debris_spawn_position, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, group_transform_debris_scale_multiplier_gp, 2.0f, 1.0f,
                                      0.75f, 0);
                 }
             }
