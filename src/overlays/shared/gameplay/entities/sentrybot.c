@@ -1757,7 +1757,7 @@ extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(float *, float *) __asm__("FUN_001f9b80");
-extern int D_L15_0015F30C;
+extern int missile_target_reticle_enabled __asm__("D_L15_0015F30C");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
@@ -1838,7 +1838,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
         float dv[4];
         float tp[4];
         float ip[4];
-        if (D_L15_0015F30C != 0 && target_moby != 0) {
+        if (missile_target_reticle_enabled != 0 && target_moby != 0) {
             float scaled_target_distance = fast_vec_dist(D_L15_001673C0, target_moby->pos) / 50.0f;
             qcopy(delta, target_moby->pos);
             delta[2] = delta[2] + missile_data->zoff;
