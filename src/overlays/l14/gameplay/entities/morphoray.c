@@ -670,12 +670,12 @@ typedef struct Snd_3071B0 {
 
 extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
-extern float D_L14_001621F4 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_001621F8 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_001621FC __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00162200 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_00162204 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_0016220C __attribute__((sda)); /* no foreign declaration */
+extern float helper_sequence_initial_position_offset_scale __asm__("D_L14_001621F4") __attribute__((sda)); /* no foreign declaration */
+extern float helper_sequence_slot_spacing __asm__("D_L14_001621F8") __attribute__((sda)); /* no foreign declaration */
+extern float helper_sequence_first_slot_offset __asm__("D_L14_001621FC") __attribute__((sda)); /* no foreign declaration */
+extern float helper_sequence_owner_final_angle_degrees __asm__("D_L14_00162200") __attribute__((sda)); /* no foreign declaration */
+extern int helper_sequence_slot_animation_duration_frames __asm__("D_L14_00162204") __attribute__((sda)); /* no foreign declaration */
+extern int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") __attribute__((sda)); /* no foreign declaration */
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -716,15 +716,15 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         int i;
         if (data->owner == 0) {
             data->owner = func_L14_003075E0_3071B0(moby);
-            func_001F9C30_3071B0(position_offset, moby->rot, D_L14_001621F4);
+            func_001F9C30_3071B0(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
             func_001F9BD8_3071B0(data->owner->pos, moby->pos, position_offset);
         }
         for (i = 0; i < 6; i++) {
             if (data->slots.m[i] == 0) {
                 data->slots.m[i] = (Moby_3071B0 *)(D_L14_0015FFD8_c + (data->idx[i] << 8));
-                func_001F9C30_3071B0(position_offset, moby->rot, D_L14_001621F4);
+                func_001F9C30_3071B0(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
                 func_001F9BD8_3071B0(data->slots.m[i]->pos, moby->pos, position_offset);
-                data->slots.m[i]->pos[2] = data->slots.m[i]->pos[2] + (D_L14_001621F8 * (float)i + D_L14_001621FC);
+                data->slots.m[i]->pos[2] = data->slots.m[i]->pos[2] + (helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
             }
         }
         data->voice = -1;
@@ -737,7 +737,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         if (((Moby_3071B0 *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
             moby->state = 2;
             data->cur = 5;
-            data->timer = func_001F9850_3071B0(D_L14_00162204);
+            data->timer = func_001F9850_3071B0(helper_sequence_slot_animation_duration_frames);
             data->rate = 1.0f / func_001FA888_3071B0(data->timer);
             func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
         }
@@ -748,11 +748,11 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         func_001F9938_3071B0(&data->timer);
         current_slot_moby->f44 = interpolate_angle(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
         if (data->timer == 0) {
-            data->timer = func_001F9850_3071B0(D_L14_00162204);
+            data->timer = func_001F9850_3071B0(helper_sequence_slot_animation_duration_frames);
             data->cur--;
             if (data->cur < 0) {
                 moby->state = 3;
-                data->timer = func_001F9850_3071B0(D_L14_0016220C);
+                data->timer = func_001F9850_3071B0(helper_sequence_owner_animation_duration_frames);
                 data->rate = 1.0f / func_001FA888_3071B0(data->timer);
             } else {
                 func_L00_0028EF68_3071B0(0, 0, slots->m[data->cur], 0x575);
@@ -771,9 +771,9 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         func_001F9938_3071B0(&data->timer);
         slots = data->slots.m;
         remaining_timer_fraction = func_001FA888_3071B0(data->timer) * data->rate;
-        owner->f44 = func_L00_0025C700_3071B0(D_L14_00162200 * 0.017453292f, 0.0f, remaining_timer_fraction);
+        owner->f44 = func_L00_0025C700_3071B0(helper_sequence_owner_final_angle_degrees * 0.017453292f, 0.0f, remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
-            func_001F9C30_3071B0(position_offset, owner->fE0, D_L14_001621F8 * (float)i + D_L14_001621FC);
+            func_001F9C30_3071B0(position_offset, owner->fE0, helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
             func_001F9BD8_3071B0(slots[i]->pos, owner->pos, position_offset);
         }
         if (data->timer == 0) {
