@@ -43,12 +43,12 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
 
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-extern float D_L05_001613D0 __attribute__((sda));
+extern float scenery_ship_path_advance_scale __asm__("D_L05_001613D0") __attribute__((sda));
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 
 void advance_scenery_ship_along_path(char *moby, int *path) {
     float *moby_data = *(float **)(moby + 0x78);
-    moby_data[2] = moby_data[2] + D_L05_001613D0 * frame_time / moby_data[3];
+    moby_data[2] = moby_data[2] + scenery_ship_path_advance_scale * frame_time / moby_data[3];
     if ((float)path[0] < moby_data[2]) {
         moby_data[2] = moby_data[2] - (float)path[0];
     }
