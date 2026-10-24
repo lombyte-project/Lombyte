@@ -2513,9 +2513,9 @@ extern float amoeboid_first_movement_particle_base_scale_max_gp __asm__("D_L01_0
 extern float amoeboid_first_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619BC") __attribute__((sda));
 extern int amoeboid_first_movement_particle_lifetime_min_gp __asm__("D_L01_001619C0") __attribute__((sda));
 extern int amoeboid_first_movement_particle_lifetime_max_gp __asm__("D_L01_001619C4") __attribute__((sda));
-extern int D_L01_001619B0 __attribute__((sda));
+extern int amoeboid_first_movement_particle_header_and_data_value_gp __asm__("D_L01_001619B0") __attribute__((sda));
 extern int amoeboid_first_movement_particle_data_value_gp __asm__("D_L01_001619B4") __attribute__((sda));
-extern int D_L01_001619C8 __attribute__((sda));
+extern int amoeboid_second_movement_particle_header_and_data_value_gp __asm__("D_L01_001619C8") __attribute__((sda));
 extern int amoeboid_second_movement_particle_data_value_gp __asm__("D_L01_001619CC") __attribute__((sda));
 extern float amoeboid_second_movement_particle_base_scale_max_gp __asm__("D_L01_001619D0") __attribute__((sda));
 extern float amoeboid_second_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619D4") __attribute__((sda));
@@ -2544,7 +2544,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         pos[1] = fast_sin(angle) * radius;
         pos[2] = 0.0f;
         add_vector_xyz(pos, pos, &MOBY(moby)->pos);
-        spawn_type_52_particle(pos, lower, upper, D_L01_001619B0, amoeboid_first_movement_particle_data_value_gp,
+        spawn_type_52_particle(pos, lower, upper, amoeboid_first_movement_particle_header_and_data_value_gp, amoeboid_first_movement_particle_data_value_gp,
                          scale_game_frames(time));
     }
     if (random_integer_below(amoeboid_second_movement_particle_spawn_gate_modulus_plus_one_gp - 1) == 0) {
@@ -2557,7 +2557,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         pos[1] = fast_sin(angle) * radius;
         pos[2] = 0.0f;
         add_vector_xyz(pos, pos, &MOBY(moby)->pos);
-        spawn_type_52_particle(pos, lower, upper, D_L01_001619C8, amoeboid_second_movement_particle_data_value_gp,
+        spawn_type_52_particle(pos, lower, upper, amoeboid_second_movement_particle_header_and_data_value_gp, amoeboid_second_movement_particle_data_value_gp,
                          scale_game_frames(time));
     }
 }
