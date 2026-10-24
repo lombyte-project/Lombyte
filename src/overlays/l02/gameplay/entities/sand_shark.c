@@ -3140,8 +3140,8 @@ typedef struct {
 
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern f32 rocket_launcher_projectile_speed_gp __asm__("D_L02_00161C6C") __attribute__((sda));
-extern f32 D_L02_00161C70 __attribute__((sda));
-extern f32 D_L02_00161C74 __attribute__((sda));
+extern f32 rocket_launcher_yaw_acceleration_gp __asm__("D_L02_00161C70") __attribute__((sda));
+extern f32 rocket_launcher_max_yaw_speed_gp __asm__("D_L02_00161C74") __attribute__((sda));
 s32 D_L02_00161C78 = 0x800000ff;
 s32 D_L02_00161C7C = 0x80329600;
 extern f32 D_L02_00161C84 __attribute__((sda));
@@ -3191,9 +3191,9 @@ void rocket_launcher_update(struct Moby *moby) {
         break;
     case ROCKET_LAUNCHER_TURN_AND_FIRE:
         turret_approach_angle(&moby->rot.z, rocket_launcher_vars->target_yaw, &rocket_launcher_vars->yaw_vel,
-                              D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
-                              D_L02_00161C70 * DEG_TO_RAD * frame_time_sq_macro,
-                              D_L02_00161C74 * DEG_TO_RAD * D_0015ED6C);
+                              rocket_launcher_yaw_acceleration_gp * DEG_TO_RAD * frame_time_sq_macro,
+                              rocket_launcher_yaw_acceleration_gp * DEG_TO_RAD * frame_time_sq_macro,
+                              rocket_launcher_max_yaw_speed_gp * DEG_TO_RAD * D_0015ED6C);
         if (!turret_sound_playing(moby, rocket_launcher_vars->voice))
             rocket_launcher_vars->voice = turret_play_sound(2, 4, moby);
         if (turret_angle_diff(moby->rot.z, rocket_launcher_vars->target_yaw) < DEG_TO_RAD && rocket_launcher_vars->yaw_vel == 0.0f) {
