@@ -292,50 +292,50 @@ extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 
 void update_hero_motion_response_parameters(void) {
-    f32 t, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, unclamped_response, unclamped_magnitude;
+    f32 state_scaled_motion_input, clamped_speed_ratio, negated_scaled_input, v, clamp_bound, u, unclamped_negated_value, unclamped_response, unclamped_magnitude;
     s32 control_mode;
 
     if (hero.state.current == 0x44) {
-        t = hero.motion.yaw_error * 0.5f;
-        if (0.7f < t)
-            t = 0.7f;
-        else if (t < -0.7f)
-            t = -0.7f;
-        t = t * FUN_001f99c0_215b68(t) * 1.25f;
+        state_scaled_motion_input = hero.motion.yaw_error * 0.5f;
+        if (0.7f < state_scaled_motion_input)
+            state_scaled_motion_input = 0.7f;
+        else if (state_scaled_motion_input < -0.7f)
+            state_scaled_motion_input = -0.7f;
+        state_scaled_motion_input = state_scaled_motion_input * FUN_001f99c0_215b68(state_scaled_motion_input) * 1.25f;
         clamped_speed_ratio = hero.motion.flat_speed / (frame_time * 3.0f);
-        negated_scaled_input = -t;
+        negated_scaled_input = -state_scaled_motion_input;
         X.f1240 = negated_scaled_input * 0.3f;
         if (1.0f < clamped_speed_ratio)
             clamped_speed_ratio = 1.0f;
         if (clamped_speed_ratio < 0.0f)
             clamped_speed_ratio = 0.0f;
-        X.f10E8 = t;
+        X.f10E8 = state_scaled_motion_input;
         X.f1240 = X.f1240 * clamped_speed_ratio;
         X.f10E0 = negated_scaled_input * 0.35f;
-        X.f1198 = t * 1.35f;
-        X.f1194 = FUN_001f99c0_215b68(t) * 0.25f;
+        X.f1198 = state_scaled_motion_input * 1.35f;
+        X.f1194 = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.25f;
         return;
     }
     if (hero.state.current == 0x4F) {
-        t = hero.motion.yaw_error * 1.6f;
-        if (1.25f < t)
-            t = 1.25f;
-        else if (t < -1.25f)
-            t = -1.25f;
-        unclamped_negated_value = -t * 0.52f;
+        state_scaled_motion_input = hero.motion.yaw_error * 1.6f;
+        if (1.25f < state_scaled_motion_input)
+            state_scaled_motion_input = 1.25f;
+        else if (state_scaled_motion_input < -1.25f)
+            state_scaled_motion_input = -1.25f;
+        unclamped_negated_value = -state_scaled_motion_input * 0.52f;
         X.f1240 = unclamped_negated_value;
         if (0.28f < unclamped_negated_value)
             X.f1240 = 0.28f;
         else if (unclamped_negated_value < -0.28f)
             X.f1240 = -0.28f;
-        unclamped_response = t * 1.7f;
+        unclamped_response = state_scaled_motion_input * 1.7f;
         X.f1198 = unclamped_response;
-        X.f10E8 = t * 0.58f;
+        X.f10E8 = state_scaled_motion_input * 0.58f;
         if (0.7f < unclamped_response)
             X.f1198 = 0.7f;
         else if (unclamped_response < -0.7f)
             X.f1198 = -0.7f;
-        unclamped_magnitude = FUN_001f99c0_215b68(t) * 0.2f;
+        unclamped_magnitude = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.2f;
         X.f1194 = unclamped_magnitude;
         clamp_bound = 0.2f;
         if (clamp_bound < unclamped_magnitude)
@@ -345,7 +345,7 @@ void update_hero_motion_response_parameters(void) {
         st94:
             X.f1194 = clamp_bound;
         }
-        X.f1190 = FUN_001f99c0_215b68(t) * 0.16f;
+        X.f1190 = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.16f;
         return;
     }
     control_mode = hero.state.control_mode;
