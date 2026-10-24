@@ -37,23 +37,23 @@ void update_sky_shells_animated(void) {
         SKY_SHELL_MEDIUM_ROTATION = 3,
         SKY_SHELL_FAST_ROTATION = 4
     };
-    float v[4] __attribute__((aligned(16)));
+    float animated_sky_shell_rotation_angles[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
-    qzero(v);
+    qzero(animated_sky_shell_rotation_angles);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
         case SKY_SHELL_SLOW_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_MEDIUM_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_FAST_ROTATION:
-            v[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         default:
             FUN_001f9fc8_c(D_L00_001BD7E0);
