@@ -969,7 +969,7 @@ extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32_2b2ed8(f32) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
-extern f32 D_L14_001614C4 __attribute__((sda));
+extern f32 plasmabot_base_target_range __asm__("D_L14_001614C4") __attribute__((sda));
 void update_plasmabot_target_range(struct Moby *moby) __asm__("FUN_L14_002b2ed8");
 
 void update_plasmabot_target_range(struct Moby *moby) {
@@ -982,9 +982,9 @@ void update_plasmabot_target_range(struct Moby *moby) {
     }
     tick_countdown_2b2ed8(&delay_state->delay);
     if (delay_state->delay != 0) {
-        delay_state->unk234 = D_L14_001614C4 + 6.0f;
+        delay_state->unk234 = plasmabot_base_target_range + 6.0f;
     } else {
-        delay_state->unk234 = D_L14_001614C4;
+        delay_state->unk234 = plasmabot_base_target_range;
     }
 }
 
