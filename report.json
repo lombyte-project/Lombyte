@@ -10533,7 +10533,7 @@
           }
         },
         {
-          "name": "FUN_00221968",
+          "name": "handle_menu_action_buttons",
           "size": "220",
           "fuzzy_match_percent": 100.0,
           "address": "104168",
@@ -10578,7 +10578,7 @@
           }
         },
         {
-          "name": "FUN_00221d28",
+          "name": "assign_pause_level_sprite_list",
           "size": "60",
           "fuzzy_match_percent": 100.0,
           "address": "105128",
