@@ -2232,7 +2232,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     char *hit_record_moby_for_class_check;
     char *x2;
     char *path_search_position;
-    int c258;
+    int removal_height_entry_index;
     int path_search_gate_moby_index;
     float size_multiplier;
     float rate;
@@ -2348,9 +2348,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         return;
     }
     *(unsigned char *)(moby + 0xA4) = 0xFF;
-    c258 = *(int *)(moby_vars + 0x258);
-    if (c258 != 0 && *(unsigned char *)(moby + 0x20) != 0
-        && *(float *)(moby + 0x18) < *(float *)(c258 * 0x1190 + D_L01_001612D0 + 8)) {
+    removal_height_entry_index = *(int *)(moby_vars + 0x258);
+    if (removal_height_entry_index != 0 && *(unsigned char *)(moby + 0x20) != 0
+        && *(float *)(moby + 0x18) < *(float *)(removal_height_entry_index * 0x1190 + D_L01_001612D0 + 8)) {
         clear_u64_value_c(&scratch_vector);
         spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)&scratch_vector);
         mark_moby_for_removal_c(moby);
