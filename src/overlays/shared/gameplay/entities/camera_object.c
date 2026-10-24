@@ -1362,8 +1362,8 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
         BOLT_VALUE_TWENTY = 20,
         BOLT_VALUE_FIFTY = 50
     };
-    f32 dir[4] __attribute__((aligned(16)));
-    f32 tmp[4] __attribute__((aligned(16)));
+    f32 spin_axis[4] __attribute__((aligned(16)));
+    f32 bolt_to_source_offset[4] __attribute__((aligned(16)));
     struct Moby *spawned_bolt;
     BoltVars_u *bolt_vars;
     struct Moby *root;
@@ -1423,9 +1423,9 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
         bolt_vars->unk58 = random_angle_radians();
         bolt_vars->start_z = spawned_bolt->pos.z;
         spin = random_float_between(0.0f, D_L00_001613A8) * 0.017453292f * D_0015ED6C;
-        subtract_vector_xyz(tmp, &bolt_source->pos, &spawned_bolt->pos);
-        cross_vectors_xyz(dir, bolt_vars->vel, tmp);
-        FUN_L00_001ff500(bolt_vars->spin, dir, 1.0f);
+        subtract_vector_xyz(bolt_to_source_offset, &bolt_source->pos, &spawned_bolt->pos);
+        cross_vectors_xyz(spin_axis, bolt_vars->vel, bolt_to_source_offset);
+        FUN_L00_001ff500(bolt_vars->spin, spin_axis, 1.0f);
         build_quaternion_from_axis_angle(bolt_vars->spin, bolt_vars->spin, spin);
         if (flags & 2) {
             angle = 0.0f;
