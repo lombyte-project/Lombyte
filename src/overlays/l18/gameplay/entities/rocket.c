@@ -3052,8 +3052,8 @@ extern float secondary_bolt_lateral_amplitude_gp __asm__("D_L18_00162020") __att
 extern s32 D_L18_00162024 __attribute__((sda));
 extern float secondary_bolt_z_phase_increment_gp __asm__("D_L18_00162028") __attribute__((sda));
 extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribute__((sda));
-extern float D_L18_00162040 __attribute__((sda));
-extern float D_L18_00162044 __attribute__((sda));
+extern float primary_bolt_z_jitter_range_start_gp __asm__("D_L18_00162040") __attribute__((sda));
+extern float primary_bolt_z_jitter_range_end_gp __asm__("D_L18_00162044") __attribute__((sda));
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
 extern float electric_bolt_particle_direction_scale_gp __asm__("D_L18_00162084") __attribute__((sda));
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
@@ -3105,7 +3105,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         primary_bolt_z_offset = *(float *)&primary_bolt_z_amplitude_start_gp
               + (*(float *)&primary_bolt_z_amplitude_end_gp - *(float *)&primary_bolt_z_amplitude_start_gp) * (convert_integer_to_float(i) * 0.05f);
         primary_bolt_z_offset = primary_bolt_z_offset * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&primary_bolt_z_phase_step_gp));
-        primary_bolt_z_offset = primary_bolt_z_offset + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
+        primary_bolt_z_offset = primary_bolt_z_offset + FUN_L00_00257c48(*(float *)&primary_bolt_z_jitter_range_start_gp, *(float *)&primary_bolt_z_jitter_range_end_gp);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = primary_bolt_z_offset;
         azimuth_angle = random_angle_radians_c();
