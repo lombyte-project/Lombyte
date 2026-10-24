@@ -2823,7 +2823,9 @@ extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, i
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
-void FUN_L08_002de528(char *moby, int transform_index, int spawn_count, int flag) {
+void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spawn_count, int flag) __asm__("FUN_L08_002de528");
+
+void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spawn_count, int flag) {
     float spawn_position[4];
     float local_rotation_offset[4];
     float launch_velocity[4];
