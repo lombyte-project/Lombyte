@@ -890,7 +890,7 @@ extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_0021
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-extern float D_L06_00161C00 __attribute__((sda));
+extern float frog_facing_rotation_blend_factor __asm__("D_L06_00161C00") __attribute__((sda));
 void blend_frog_rotation_to_facing_frame(char *moby, float *reference_axis, float *facing_direction) {
     float facing_projection;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
@@ -905,7 +905,7 @@ void blend_frog_rotation_to_facing_frame(char *moby, float *reference_axis, floa
     moby += 0xC0;
     extract_matrix_rotation_quaternion(A, moby);
     extract_matrix_rotation_quaternion(B, F);
-    quaternion_nlerp(A, A, B, D_L06_00161C00);
+    quaternion_nlerp(A, A, B, frog_facing_rotation_blend_factor);
     quaternion_to_rotation_basis(A, moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
