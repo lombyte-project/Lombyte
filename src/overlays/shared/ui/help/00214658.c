@@ -686,7 +686,7 @@ void update_hero_planar_movement_velocity(void) {
     struct Hero *slope_hero_state;
     Vec4 *hero_velocity;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
-    f32 f20, f21, f22, impulse_step_factor, b, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
+    f32 f20, f21, f22, impulse_step_factor, impulse_length_or_step, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
@@ -745,17 +745,17 @@ void update_hero_planar_movement_velocity(void) {
         if (f22 < impulse_gate_or_target_length) {
             f20 = f20 / impulse_gate_or_target_length;
         }
-        b = vector_length_xy(&saved_move_impulse);
-        impulse_step_factor = (b - f20) / b;
+        impulse_length_or_step = vector_length_xy(&saved_move_impulse);
+        impulse_step_factor = (impulse_length_or_step - f20) / impulse_length_or_step;
         base_impulse_step = frame_time_sq * 3.0f;
-        b = base_impulse_step * impulse_step_factor;
+        impulse_length_or_step = base_impulse_step * impulse_step_factor;
         if (hero.unk229C < 0.3f) {
-            if (b < base_impulse_step) {
-                b = base_impulse_step;
+            if (impulse_length_or_step < base_impulse_step) {
+                impulse_length_or_step = base_impulse_step;
             }
         }
-        if (f21 < b) {
-            f21 = b;
+        if (f21 < impulse_length_or_step) {
+            f21 = impulse_length_or_step;
         }
     }
     fast_vec_sub(&xy_velocity_scratch, &target_velocity, &hero.motion.unk130);
