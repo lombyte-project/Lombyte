@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002648e0.s", FUN_L00_002648e0);
-#else
 #include "rnc/gameplay/entities/moby.h"
 
 typedef struct {
@@ -59,14 +56,12 @@ void FUN_L00_002648e0(void) {
         void (*update)(struct Moby *);
         if ((s8)moby->state >= 0) {
             *(volatile u32 *)0x10000000 = 0;
-            update = moby->update;
             if (!(moby->flags & 0x40)) {
                 FUN_L00_00250480(moby);
-                update = moby->update;
             }
+            update = moby->update;
             if (update != 0) {
-                update = moby->update;
-                update(moby);
+                moby_call_update(update, moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & 4)) {
                 FUN_L00_00250df8(moby);
@@ -117,4 +112,3 @@ void FUN_L00_002648e0(void) {
         current_ticks = next_ticks;
     } while (next_ticks != 0);
 }
-#endif
