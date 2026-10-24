@@ -2427,7 +2427,7 @@ extern float D_L15_001614B4 __attribute__((sda));
 extern int D_L15_001614B8 __attribute__((sda));
 extern float D_L15_001614BC __attribute__((sda));
 extern int D_L15_001614C0 __attribute__((sda));
-extern float D_L15_001614C4 __attribute__((sda));
+extern float group_moby_effect_z_offset __asm__("D_L15_001614C4") __attribute__((sda));
 extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
@@ -2468,7 +2468,7 @@ void update_hero_seeking_group_moby(char *moby) {
     if (((unsigned char *)moby)[0x20] != 1) {
         random_vector(va, 0.0f, D_0015ED6C + D_0015ED6C);
         qcopy(pb, moby + 0x10);
-        pb[2] = pb[2] + *(float *)&D_L15_001614C4;
+        pb[2] = pb[2] + *(float *)&group_moby_effect_z_offset;
         if (D_L15_00161AB8_lui == 0) {
             ((unsigned char *)moby)[0x20] = 1;
             goto tailA;
@@ -2594,7 +2594,7 @@ typedef struct {
 
 extern float D_L15_001CE110[4][4][4];
 extern float D_L15_001CE210[8];
-extern int D_L15_001614C8 __attribute__((sda));
+extern int group_moby_effect_first_quad_color __asm__("D_L15_001614C8") __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
@@ -2639,11 +2639,11 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
                                     D_L15_00167280.position[2] - MOBY(other)->pos.z);
             rotation_matrix_from_euler(rotation, angles);
             qcopy(position, &MOBY(other)->pos);
-            position[2] += D_L15_001614C4;
+            position[2] += group_moby_effect_z_offset;
             position[3] = 1.0f;
             for (i = 0; i < 4; i++) {
                 int *colors = effect_quad.col;
-                int color = (&D_L15_001614C8)[i];
+                int color = (&group_moby_effect_first_quad_color)[i];
                 for (j = 0; j < 4; j++) {
                     colors[j] = color;
                     qcopy(effect_quad.v[j], D_L15_001CE110[i][j]);
