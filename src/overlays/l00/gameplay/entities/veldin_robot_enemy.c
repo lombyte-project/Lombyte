@@ -474,7 +474,7 @@ extern void trooper_knockback_arc(ElectroidVec *, f32 *, f32 *, f32 *) __asm__("
 extern void trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
-extern s32 FUN_L00_0025fcb8(ElectroidMoby *, f32, void *);
+extern s32 select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
 extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern f32 D_L00_00161BD0 __attribute__((sda));
@@ -558,7 +558,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         if (vars->unk1DA != 0) {
             range = 37.0f;
         }
-        if (FUN_L00_0025fcb8(moby, range, &vars->targetPos) != 2 &&
+        if (select_moby_combat_target(moby, range, &vars->targetPos) != 2 &&
             range < vector_distance(&moby->pos, &vars->targetPos)) {
             vars->unk114 = 2;
         }

@@ -683,7 +683,7 @@ extern void FUN_L00_0025d458_u(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_0025fcb8(void *, void *, float);
+extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8_u(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
@@ -763,7 +763,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         path_reposition_requested = select_birdbot_path_node(birdbot_moby, &idx);
     }
     target_search_radius = flag ? birdbot_vars->f1A0 * 2.0f : birdbot_vars->f1A0;
-    FUN_L00_0025fcb8(birdbot_moby, &selected_combat_target, target_search_radius);
+    select_moby_combat_target(birdbot_moby, &selected_combat_target, target_search_radius);
     hit = find_moby_hit(birdbot_moby, 0x210000, 0);
     kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->f20, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&birdbot_vars->h26);
@@ -1549,7 +1549,7 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *, f32);
-extern void FUN_L00_0025fcb8(void *, void *, f32);
+extern void select_moby_combat_target(void *, void *, f32) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(void *, s32, void *, f32);
 extern void FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, f32, void *, void *, void *);
 extern s32 FUN_L00_002dc9f0(void *, void *);
@@ -1625,7 +1625,7 @@ void peckbot_update(Mob577 *self) {
     }
     self->id = self->ref->id;
     self->flags &= ~0x41;
-    FUN_L00_0025fcb8(self, &target, peckbot_vars->range + 4.0f);
+    select_moby_combat_target(self, &target, peckbot_vars->range + 4.0f);
     target_moby = target.p40;
     qcopy(&oldpos, &self->pos);
     if (peckbot_vars->x38 != 0) {

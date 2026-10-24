@@ -720,7 +720,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_001413D0[];
 extern float D_0015EE70 __asm__("D_0015ED70");
-extern int FUN_L00_0025fcb8(char *, char *, float);
+extern int select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int scale_game_frames_i(int) __asm__("FUN_001f96f8");
 extern short D_L18_00161988 __attribute__((sda));
@@ -787,7 +787,7 @@ void update_class_238_moby(struct Moby *moby) {
         if (moby->visible) {
             char target_search_output[0x50];
             float previous_position[4];
-            int target_search_result = FUN_L00_0025fcb8((char *)moby, target_search_output, 6.0f);
+            int target_search_result = select_moby_combat_target((char *)moby, target_search_output, 6.0f);
             char *hit;
 
             char *movement_step;

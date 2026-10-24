@@ -3853,7 +3853,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L00_0025fcb8(unsigned char *, char *, float);
+extern int select_moby_combat_target(unsigned char *, char *, float) __asm__("FUN_L00_0025fcb8");
 extern void *FUN_L00_00257470_cf(char *src, int cls, float *pos, void *mat, int a8, int a9,
                                  float scale, float *v10, float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
@@ -3913,7 +3913,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
         FUN_L00_0025e450_cf(moby_bytes, (short *)(tank_data + 0x60));
     }
     moby_bytes[0xA4] = 0xFF;
-    if (FUN_L00_0025fcb8(moby_bytes, tank_data + 0x70, 30.0f) != 2) {
+    if (select_moby_combat_target(moby_bytes, tank_data + 0x70, 30.0f) != 2) {
         float *pa = (float *)(moby_bytes + 0x10);
         char *pl = (char *)&hero.motion.pos;
         if (vector_distance(pa, pl) < 10.0f) {

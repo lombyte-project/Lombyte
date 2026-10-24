@@ -488,7 +488,7 @@ extern void FUN_L00_00257470_c(Level12VendorMoby *, int, int) __asm__("FUN_L00_0
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_0025fcb8(char *, float *, float);
+extern void select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L12_002e3098_u(struct Moby *) __asm__("FUN_L12_002e3098");
 extern void approach_value_alt(void *, float, float) __asm__("FUN_00213ed8");

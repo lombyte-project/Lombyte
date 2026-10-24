@@ -13,7 +13,9 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
-int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
+int select_moby_combat_target(char *query_moby, char *target_output, float best) __asm__("FUN_L00_0025fcb8");
+
+int select_moby_combat_target(char *query_moby, char *target_output, float best) {
     struct Hero *hero_data = &hero_lui;
     char *selected_moby;
     char *candidate_moby;

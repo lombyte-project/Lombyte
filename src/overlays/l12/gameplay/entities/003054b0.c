@@ -978,7 +978,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
 extern char D_0013E533[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_0025fcb8(char *, char *, float);
+extern int select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void update_homing_mine_spawner_target(struct Moby *spawner) {
@@ -994,7 +994,7 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
         } else {
             *(float *)(spawner_data + 0xF8) = *(float *)(spawner_data + 0xF4) + 5.0f;
         }
-        if (FUN_L00_0025fcb8(spawner, spawner_data + 0x70, *(float *)(spawner_data + 0xF8)) != 2) {
+        if (select_moby_combat_target(spawner, spawner_data + 0x70, *(float *)(spawner_data + 0xF8)) != 2) {
             if (absolute_float(spawner->pos.z - *(float *)(spawner_data + 0x78)) > 3.0f) {
                 *(int *)(spawner_data + 0xB4) = 2;
             }

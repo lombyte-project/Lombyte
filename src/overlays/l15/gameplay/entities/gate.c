@@ -1791,7 +1791,7 @@ extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-int FUN_L00_0025fcb8(char *a, char *o, float best);
+int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
 float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");

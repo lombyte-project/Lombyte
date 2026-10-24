@@ -2281,7 +2281,7 @@ extern void FUN_L00_00259710_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00259a88_cf(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_0025c698_cf(void *, void *, void *, int *, float *, int, float, float,
                                 float) __asm__("FUN_L00_0025df68");
-extern void FUN_L00_0025fcb8(void *, void *, float);
+extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00260400_cf(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263fd8_cf(void *, void *, void *, float, float, int, int, int, float, float,
@@ -2329,7 +2329,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     Data2C8398 *moby_data = m->data;
     float target_distance;
 
-    FUN_L00_0025fcb8(m, &selected_target, moby_data->f270);
+    select_moby_combat_target(m, &selected_target, moby_data->f270);
     target_distance = vector_distance(m->pos, &selected_target);
     FUN_L00_00263b38(&moby_data->look0, 2.5f);
     if (moby_data->b262 == 1) {

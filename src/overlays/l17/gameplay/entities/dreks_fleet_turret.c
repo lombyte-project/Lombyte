@@ -380,7 +380,7 @@ extern char D_L17_00161980[4] __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_0025fcb8(void *, void *, float);
+extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10");
 void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN_L17_002cbd38");
@@ -515,7 +515,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             float off;
 
             transform_scaled_vertex_batch(turret_moby, 2, D_L17_00161980, (char *)j);
-            FUN_L00_0025fcb8(turret_moby, &aim, 512.0f);
+            select_moby_combat_target(turret_moby, &aim, 512.0f);
             subtract_vector_xyz(targeting_vector_scratch, aim.pos, j);
             qcopy(from, j + 4);
             yaw = &turret_moby->rot.z;

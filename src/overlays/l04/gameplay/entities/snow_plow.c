@@ -780,7 +780,7 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025fcb8(void *, void *, float);
+extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
@@ -840,7 +840,7 @@ void woodcut_bot_update(WBMoby *m) {
 
     if (d->f38 != 0 || d->t3C6 != 0)
         excited = 1;
-    FUN_L00_0025fcb8(m, selected_target_position, excited ? d->f3E8 * 2.0f : d->f3E8);
+    select_moby_combat_target(m, selected_target_position, excited ? d->f3E8 * 2.0f : d->f3E8);
     p = &d->f120;
     FUN_L00_00263ac8(2.5f, m, 6, p);
     manipulator = p;

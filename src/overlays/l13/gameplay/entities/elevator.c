@@ -632,7 +632,7 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0025fcb8(void *, void *, float);
+extern int select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
 void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_002b48d8");
 
@@ -643,7 +643,7 @@ void update_blarg_turret_target_and_state(struct Moby *moby) {
         distance = 22.0f;
     else
         distance = 20.0f;
-    FUN_L00_0025fcb8(moby, data, distance);
+    select_moby_combat_target(moby, data, distance);
     if (*(int *)(data + 0x40) == 0) {
         *(int *)(data + 0x40) = ((int)hero.moby);
     }

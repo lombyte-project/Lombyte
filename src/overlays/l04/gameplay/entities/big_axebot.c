@@ -79,7 +79,7 @@ void FUN_L04_002ba470(char *moby) {
 
 extern char *D_L04_0015FFE4;
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
-extern void FUN_L00_0025fcb8(char *, float *, float);
+extern void select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_0025fcb8");
 
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
 
@@ -99,7 +99,7 @@ int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
     } else {
         target_selection_distance_limit = *(float *)(data + 0x140);
     }
-    FUN_L00_0025fcb8(moby, target_selection_output, target_selection_distance_limit);
+    select_moby_combat_target(moby, target_selection_output, target_selection_distance_limit);
     target_distance = vector_distance((float *)&moby->pos, target_selection_output);
     for (other_moby = D_L04_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
         if (other_moby != moby && *(short *)(other_moby + 0xA6) == 0x154) {
@@ -545,7 +545,7 @@ extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm_
 extern void FUN_L00_0025c698_cf(void *, float, float, float) __asm__("FUN_00214db0");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025fcb8(char *, float *, float);
+extern void select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
@@ -613,7 +613,7 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->f7F = 0x15;
         }
     }
-    FUN_L00_0025fcb8((char *)moby, (float *)&tg, flag ? data->f43C * 2.0f : data->f43C);
+    select_moby_combat_target((char *)moby, (float *)&tg, flag ? data->f43C * 2.0f : data->f43C);
     target_moby = tg.f40;
     rot = moby->rot[2];
     target_distance = vector_distance(moby->pos, (float *)&tg);
@@ -1554,7 +1554,7 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void FUN_L00_0025a120(void *);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025fcb8(char *, float *, float);
+extern void select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_0025fcb8");
 extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
@@ -1627,7 +1627,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             moby->f7F = 0x15;
         }
     }
-    FUN_L00_0025fcb8((char *)moby, (float *)&tg, flag ? data->f140 * 2.0f : data->f140);
+    select_moby_combat_target((char *)moby, (float *)&tg, flag ? data->f140 * 2.0f : data->f140);
     target_moby = tg.f40;
     hd = compute_interpolated_record_value(moby);
     target_distance = vector_distance(moby->pos, (float *)&tg);
@@ -2437,7 +2437,7 @@ void blarg_trooper_update(struct Moby *moby) {
     } else {
         target_selection_distance_limit = *(float *)(data + 0xDC);
     }
-    FUN_L00_0025fcb8(moby, st.tgt, target_selection_distance_limit);
+    select_moby_combat_target(moby, st.tgt, target_selection_distance_limit);
     target = *(char **)&st.tgt[16];
     target_distance = vector_distance(pos, st.tgt);
     dmg = 0.0f;
