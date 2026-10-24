@@ -43,7 +43,7 @@ void follow_camera_build_view(u8 *camera) {
     u8 *w;     /* scratch vector pointer: p + 0x10, later v4 */
     u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
     f32 projected_view_length;
-    f32 g2, reference_orbit_up_component, remaining_view_blend_frames, view_blend_fraction;
+    f32 smoothed_height_baseline, reference_orbit_up_component, remaining_view_blend_frames, view_blend_fraction;
     f32 position_up_component, adjusted_view_length, smoothed_height_difference, view_rotation_angle, target_view_angle_offset, x, smoothed_view_angle_offset;
     f32 vector_scratch[4];
     f32 projected_reference_position[4];
@@ -85,10 +85,10 @@ void follow_camera_build_view(u8 *camera) {
         *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(camera_state + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(reference_orbit_offset + 0x30),
                                0.004f, 0.2f, 0.0f);
         view_up_axis = camera + 0x20;
-        g2 = FUN_001ebd78_2e9010(camera_state + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
+        smoothed_height_baseline = FUN_001ebd78_2e9010(camera_state + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
                                0.004f, 0.2f, 0.0f);
-        smoothed_height_difference = *(f32 *)(q20 + 0x8) - g2;
-        *(f32 *)(q20 + 0x4) = g2;
+        smoothed_height_difference = *(f32 *)(q20 + 0x8) - smoothed_height_baseline;
+        *(f32 *)(q20 + 0x4) = smoothed_height_baseline;
         FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(reloaded_camera_state + 0x140, up));
         FUN_001f9a28_2e9010(vector_scratch, vector_scratch, view_direction);
         w = (u8 *)adjusted_aim_position;
