@@ -551,7 +551,9 @@ extern f32 dist2_2c7320(void *, void *) __asm__("FUN_001f9b80");
 extern f32 cos_2c7320(f32) __asm__("FUN_001f9dc8");
 extern f32 sin_2c7320(f32) __asm__("FUN_001f9de0");
 extern f32 fn_2c7320(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
-void FUN_L00_002c7320(V2c7320 *origin_position, V2c7320 *target_position, f32 *out, f32 speed, f32 unused, f32 range) {
+void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position, V2c7320 *target_position, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c7320");
+
+void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position, V2c7320 *target_position, f32 *out, f32 speed, f32 unused, f32 range) {
     V2c7320 effective_target_position;
     V2c7320 u;
     f32 launch_heading;
