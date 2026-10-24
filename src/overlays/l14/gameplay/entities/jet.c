@@ -420,9 +420,9 @@ typedef struct {
 extern struct Moby *D_L14_0015FFD8_lift __asm__("D_L14_0015FFD8");
 extern char *D_L14_001B0BB0_lift[] __asm__("D_L14_001B0BB0");
 extern char D_L14_001FC840[];
-extern s32 D_L14_00161B8C __attribute__((sda));
-extern s32 D_L14_00161B90 __attribute__((sda));
-extern f32 D_L14_00161B88 __attribute__((sda));
+extern s32 shuttle_enter_riding_transition_frames __asm__("D_L14_00161B8C") __attribute__((sda));
+extern s32 shuttle_exit_riding_transition_frames __asm__("D_L14_00161B90") __attribute__((sda));
+extern f32 shuttle_horizontal_rider_correction_limit_scale __asm__("D_L14_00161B88") __attribute__((sda));
 extern f32 D_0015ED6C_lift __asm__("D_0015ED6C");
 extern int lift_inside(void *, int) __asm__("FUN_00214720");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
@@ -519,14 +519,14 @@ void shuttle_update(struct Moby *shuttle_moby) {
     if (hero.state.control_mode == 13 && hero.unk964 == rider) {
         if (shuttle_vars->riding == 0) {
             shuttle_vars->riding = 1;
-            shuttle_vars->timer = lift_frames(D_L14_00161B8C);
+            shuttle_vars->timer = lift_frames(shuttle_enter_riding_transition_frames);
             shuttle_vars->timer_inv = 1.0f / lift_itof(shuttle_vars->timer);
         }
     } else {
         if (shuttle_vars->riding == 1) {
             if (hero.air_frames.s == 0 || hero.motion.pos.f[2] <= shuttle_moby->pos.z - 3.0f) {
                 shuttle_vars->riding = 0;
-                shuttle_vars->timer = lift_frames(D_L14_00161B90);
+                shuttle_vars->timer = lift_frames(shuttle_exit_riding_transition_frames);
                 shuttle_vars->timer_inv = 1.0f / lift_itof(shuttle_vars->timer);
                 shuttle_vars->to = shuttle_vars->height;
             } else {
@@ -534,7 +534,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 lift_sub(&delta, &rider->pos, &base);
                 delta.f[2] = 0.0f;
                 horizontal_rider_correction_distance = lift_length(&delta);
-                max = D_L14_00161B88 * D_0015ED6C_lift;
+                max = shuttle_horizontal_rider_correction_limit_scale * D_0015ED6C_lift;
                 if (max < horizontal_rider_correction_distance)
                     horizontal_rider_correction_distance = max;
                 lift_normalize(&hero.motion.platform_delta, &delta, horizontal_rider_correction_distance);
