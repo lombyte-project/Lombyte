@@ -1038,10 +1038,10 @@ void emit_filtered_entry_sparkles(int voice_target, int entry_count) {
             int *entry_type_lookup_pointer = D_L00_00177F00[i];
             int entry_type = (entry_type_lookup_pointer && (entry_type_lookup_pointer = (int *)entry_type_lookup_pointer[9])) ? *(short *)((char *)entry_type_lookup_pointer + 0x46) : 0;
             if (entry_type == 5 || entry_type == 9) {
-                float v[4] __attribute__((aligned(16)));
-                qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
-                offset_hero_position_against_gravity(v, v, 0.5f);
-                emit_randomized_sparkle_pairs(v, 4);
+                float sparkle_emission_position[4] __attribute__((aligned(16)));
+                qcopy(sparkle_emission_position, (char *)D_L00_00177F00[i] + 0x10);
+                offset_hero_position_against_gravity(sparkle_emission_position, sparkle_emission_position, 0.5f);
+                emit_randomized_sparkle_pairs(sparkle_emission_position, 4);
             }
         }
     }
