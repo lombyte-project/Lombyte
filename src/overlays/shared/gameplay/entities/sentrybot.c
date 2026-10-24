@@ -1980,7 +1980,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
         if (missile_moby->bc != 0) {
             float burst_position_or_velocity[4];
             float effect_reference_distance;
-            char *cam;
+            char *blast_attenuation_view;
             int i, j;
             int r = collect_mobies_in_sphere(missile_moby->pos, 2.0f, 0x10, missile_moby, 0);
             *(u128_29E8A0 *)burst_position_or_velocity = *(u128_29E8A0 *)missile_moby->pos;
@@ -2101,17 +2101,17 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 4.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 2.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
             missile_movement_delta[0] = 0.0f;
-            cam = (char *)&D_L15_00167280;
+            blast_attenuation_view = (char *)&D_L15_00167280;
             missile_moby->bc = 0;
             if (effect_reference_distance < 20.0f) {
-                *(float *)(cam + 0x160) = 0.4f - effect_reference_distance * 0.0175f;
+                *(float *)(blast_attenuation_view + 0x160) = 0.4f - effect_reference_distance * 0.0175f;
             } else {
-                *(float *)(cam + 0x160) = 0.050000012f;
+                *(float *)(blast_attenuation_view + 0x160) = 0.050000012f;
             }
             {
                 int sh = scale_game_frames(0x19);
-                char *cam2 = (char *)&D_L15_00167280;
-                *(int *)(cam2 + 0x168) = sh;
+                char *blast_timing_view = (char *)&D_L15_00167280;
+                *(int *)(blast_timing_view + 0x168) = sh;
             }
             allocate_voice_for_target_entry(0, 0, (int)missile_moby);
             mine_camera_blast(&camera_blast_parameters, missile_moby->pos, 0, 0);
