@@ -1214,7 +1214,7 @@ typedef struct {
 
 extern int D_L03_0015F5C4;
 #include "rnc/gameplay/state/options.h"
-extern float D_L03_0015F5A0;
+extern float helga_big_head_cutscene_adjustment __asm__("D_L03_0015F5A0");
 extern G_2da710 D_L03_0016C960;
 extern char D_L03_0017C540[];
 extern float D_L03_00161BB4 __attribute__((sda));
@@ -1230,10 +1230,10 @@ void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby
 
     if (D_L03_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
         if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x1EA && D_L03_0016C960.t < 0x266) {
-            D_L03_0015F5A0 = -0.2f;
+            helga_big_head_cutscene_adjustment = -0.2f;
         }
         if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x2EE && D_L03_0016C960.t < 0x321) {
-            D_L03_0015F5A0 = 0.2f;
+            helga_big_head_cutscene_adjustment = 0.2f;
         }
         for (i = 0; i < D_L03_0016C960.n; i++) {
             if (*(short *)(D_L03_0016C960.list[i] + 0xA6) == class_reference_moby->oclass) {
