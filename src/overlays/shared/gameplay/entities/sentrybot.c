@@ -2802,7 +2802,7 @@ extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
-extern int D_L15_0015F3F8;
+extern int spark_emitter_uv_phase_input __asm__("D_L15_0015F3F8");
 extern int D_L15_001CE230[];
 extern float D_L15_001CE250[][2];
 extern int D_L15_001CE290[][2];
@@ -2898,7 +2898,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                 float radians;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
-                angle = integer_to_float_2a3138(D_L15_0015F3F8 % limit)
+                angle = integer_to_float_2a3138(spark_emitter_uv_phase_input % limit)
                     / *frequency - 180.0f;
                 frequency++;
                 value = *(int *)((char *)D_L15_001CE290 + waveform);
