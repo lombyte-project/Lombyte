@@ -33,7 +33,7 @@ extern int D_L06_00161F8C __attribute__((sda));
 extern int dual_texture_mesh_first_pass_texture_index __asm__("D_L06_00161F90") __attribute__((sda));
 extern unsigned int D_L06_00161F94 __attribute__((sda));
 extern int dual_texture_mesh_second_pass_vertex_color __asm__("D_L06_00161F98") __attribute__((sda));
-extern float D_L06_00161F9C __attribute__((sda));
+extern float dual_texture_mesh_position_scale __asm__("D_L06_00161F9C") __attribute__((sda));
 extern float dual_texture_mesh_first_pass_u_offset_multiplier __asm__("D_L06_00161FA0") __attribute__((sda));
 extern float dual_texture_mesh_first_pass_v_offset_multiplier __asm__("D_L06_00161FA4") __attribute__((sda));
 extern float D_L06_00167554;
@@ -533,7 +533,7 @@ void draw_dual_texture_50_quad_mesh(void) {
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = dual_texture_mesh_second_pass_vertex_color;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001F2610[i], dual_texture_mesh_position_scale);
         multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
@@ -1060,7 +1060,7 @@ void draw_dual_texture_58_quad_mesh(void) {
     second.color[0] = dual_texture_mesh_second_pass_vertex_color;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001F0560[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001F0560[i], dual_texture_mesh_position_scale);
         multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
@@ -1073,7 +1073,7 @@ void draw_dual_texture_58_quad_mesh(void) {
                 int vertex_index = D_L06_001EF310[i][j][0];
                 int uv_index = D_L06_001EF310[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001EED30[vertex_index], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001EED30[vertex_index], dual_texture_mesh_position_scale);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001EF6B0[uv_index][0];
                 v = D_L06_001EF6B0[uv_index][1];
@@ -5565,7 +5565,7 @@ void draw_dual_texture_864_quad_mesh(void) {
     second.color[0] = dual_texture_mesh_second_pass_vertex_color;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001EB730[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001EB730[i], dual_texture_mesh_position_scale);
         multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
@@ -5577,7 +5577,7 @@ void draw_dual_texture_864_quad_mesh(void) {
                 int vertex_index = D_L06_001DF6F0[i][j][0];
                 int uv_index = D_L06_001DF6F0[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[vertex_index], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[vertex_index], dual_texture_mesh_position_scale);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001E2CF0[uv_index][0];
                 v = D_L06_001E2CF0[uv_index][1];
