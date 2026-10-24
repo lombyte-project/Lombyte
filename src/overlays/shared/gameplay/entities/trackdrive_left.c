@@ -1532,18 +1532,18 @@ f32 D_L18_001D37A0[1] __attribute__((section(".data"))) = {0};
 typedef struct { int slot[12]; } Ring12;
 
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
-extern int D_L02_00161B30 __attribute__((sda));
-extern int D_L02_00161B34 __attribute__((sda));
+extern int tresspasser_third_ring_arc_second_boundary_radius_gp __asm__("D_L02_00161B30") __attribute__((sda));
+extern int tresspasser_third_ring_arc_first_boundary_radius_gp __asm__("D_L02_00161B34") __attribute__((sda));
 extern int tresspasser_third_ring_arrow_distance_gp __asm__("D_L02_00161B38") __attribute__((sda));
-extern int D_L02_00161B3C __attribute__((sda));
-extern int D_L02_00161B40 __attribute__((sda));
+extern int tresspasser_second_ring_arc_second_boundary_radius_gp __asm__("D_L02_00161B3C") __attribute__((sda));
+extern int tresspasser_second_ring_arc_first_boundary_radius_gp __asm__("D_L02_00161B40") __attribute__((sda));
 extern int tresspasser_second_ring_arrow_distance_gp __asm__("D_L02_00161B44") __attribute__((sda));
-extern int D_L02_00161B48 __attribute__((sda));
-extern int D_L02_00161B4C __attribute__((sda));
+extern int tresspasser_first_ring_arc_second_boundary_radius_gp __asm__("D_L02_00161B48") __attribute__((sda));
+extern int tresspasser_first_ring_arc_first_boundary_radius_gp __asm__("D_L02_00161B4C") __attribute__((sda));
 extern int tresspasser_first_ring_arrow_distance_gp __asm__("D_L02_00161B50") __attribute__((sda));
-extern int D_L02_00161B54 __attribute__((sda));
-extern int D_L02_00161B58 __attribute__((sda));
-extern int D_L02_00161B5C __attribute__((sda));
+extern int tresspasser_marker_arc_second_boundary_radius_gp __asm__("D_L02_00161B54") __attribute__((sda));
+extern int tresspasser_marker_arc_first_boundary_radius_gp __asm__("D_L02_00161B58") __attribute__((sda));
+extern int tresspasser_unintercepted_strip_endpoint_distance_gp __asm__("D_L02_00161B5C") __attribute__((sda));
 extern int tresspasser_selected_ring_base_color_gp __asm__("D_L02_00161BA0") __attribute__((sda));
 extern int tresspasser_unselected_ring_color_gp __asm__("D_L02_00161BA4") __attribute__((sda));
 extern int D_L02_00161BA8 __attribute__((sda));
@@ -1552,7 +1552,7 @@ extern int tresspasser_reached_marker_strip_color_gp __asm__("D_L02_00161BB0") _
 extern int tresspasser_reverse_radial_strip_color_gp __asm__("D_L02_00161BB4") __attribute__((sda));
 extern int D_L02_00161BBC __attribute__((sda));
 extern int D_L02_00161BC0 __attribute__((sda));
-extern int D_L02_00161BC4 __attribute__((sda));
+extern int tresspasser_reached_marker_arc_color_gp __asm__("D_L02_00161BC4") __attribute__((sda));
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void draw_tresspasser_puzzle_arrow(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void draw_tresspasser_puzzle_radial_strip(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
@@ -1623,7 +1623,7 @@ void draw_tresspasser_puzzle(char *moby) {
                 else if (first->slot[(index + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
                     int opposite;
-                    distance = (float)-D_L02_00161B5C;
+                    distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                     draw_second = 0;
                     opposite = first_step + 6;
                     if (markers->slot[(i + opposite) % 12] != 0) {
@@ -1660,7 +1660,7 @@ void draw_tresspasser_puzzle(char *moby) {
             else if (first->slot[(i + *(int *)(data + 0x14) + second_step - first_step + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
             else {
                 int opposite;
-                distance = (float)-D_L02_00161B5C;
+                distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                 draw_second = 0;
                 opposite = second_step + 6;
                 if (markers->slot[(i + opposite) % 12] != 0) {
@@ -1694,7 +1694,7 @@ void draw_tresspasser_puzzle(char *moby) {
             else if (first->slot[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
             else {
                 int opposite;
-                distance = (float)-D_L02_00161B5C;
+                distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                 draw_second = 0;
                 opposite = third_step + 6;
                 if (markers->slot[(i + opposite) % 12] != 0) {
@@ -1723,7 +1723,7 @@ void draw_tresspasser_puzzle(char *moby) {
         } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B4C, (float)D_L02_00161B48, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_first_ring_arc_first_boundary_radius_gp, (float)tresspasser_first_ring_arc_second_boundary_radius_gp, color);
         if (first->slot[(i + *(int *)(data + 0x14)) % 12] != 0) {
             if (first->slot[(i + *(int *)(data + 0x14)) % 12] >= 3) {
                 draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_first_ring_arrow_distance_gp);
@@ -1748,7 +1748,7 @@ void draw_tresspasser_puzzle(char *moby) {
         } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B40, (float)D_L02_00161B3C, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_second_ring_arc_first_boundary_radius_gp, (float)tresspasser_second_ring_arc_second_boundary_radius_gp, color);
         if (second->slot[(i + *(int *)(data + 0x18)) % 12] != 0) {
             if (second->slot[(i + *(int *)(data + 0x18)) % 12] >= 3) {
                 draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_second_ring_arrow_distance_gp);
@@ -1773,7 +1773,7 @@ void draw_tresspasser_puzzle(char *moby) {
         } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B34, (float)D_L02_00161B30, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_third_ring_arc_first_boundary_radius_gp, (float)tresspasser_third_ring_arc_second_boundary_radius_gp, color);
         if (third->slot[(i + *(int *)(data + 0x1c)) % 12] != 0) {
             if (third->slot[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
                 draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_third_ring_arrow_distance_gp);
@@ -1794,10 +1794,10 @@ void draw_tresspasser_puzzle(char *moby) {
         phase = fast_add_rotations(angle, 0.17453292f);
         value = markers->slot[i];
         if (value != 0) {
-            if (value == 2) color = D_L02_00161BC4;
+            if (value == 2) color = tresspasser_reached_marker_arc_color_gp;
             else if (D_L02_0015F5CC & 0x20) color = D_L02_00161BC0;
             else color = D_L02_00161BBC;
-            draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54, color);
+            draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_marker_arc_first_boundary_radius_gp, (float)tresspasser_marker_arc_second_boundary_radius_gp, color);
         }
     }
     }
