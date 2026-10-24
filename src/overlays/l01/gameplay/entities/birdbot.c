@@ -3295,7 +3295,7 @@ extern f32 water_lily_spring_velocity_adjustment_scale __asm__("D_L01_00161BF0")
 extern f32 water_lily_spring_damping __asm__("D_L01_00161BF4") __attribute__((sda));
 extern f32 water_lily_hero_separation_radius __asm__("D_L01_00161BF8") __attribute__((sda));
 extern f32 water_lily_max_horizontal_speed __asm__("D_L01_00161BFC") __attribute__((sda));
-extern f32 D_L01_00161C00 __attribute__((sda));
+extern f32 water_lily_collision_radius __asm__("D_L01_00161C00") __attribute__((sda));
 extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f99c0(f32);
@@ -3348,7 +3348,7 @@ void water_lily_update(HoverMoby *water_lily) {
                 water_lily->pos.v.y += hero.motion.pos.f[1];
             }
         }
-        FUN_L00_00258490(water_lily, &collision_adjusted_position, &water_lily->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
+        FUN_L00_00258490(water_lily, &collision_adjusted_position, &water_lily->pos, 3, 0.1f, water_lily_collision_radius, 600.0f, 1.5707964f);
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
         water_lily->pos.v.z = old.v.z;
