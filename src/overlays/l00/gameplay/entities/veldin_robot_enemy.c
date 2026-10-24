@@ -480,8 +480,8 @@ extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040")
 extern f32 veldin_robot_default_target_range __asm__("D_L00_00161BD0") __attribute__((sda));
 extern f32 D_L00_00161BD4 __attribute__((sda));
 extern f32 D_L00_00161BD8 __attribute__((sda));
-extern f32 D_L00_00161BDC __attribute__((sda));
-extern f32 D_L00_00161BE0 __attribute__((sda));
+extern f32 veldin_robot_knockback_xy_scale __asm__("D_L00_00161BDC") __attribute__((sda));
+extern f32 veldin_robot_knockback_z_scale __asm__("D_L00_00161BE0") __attribute__((sda));
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     ElectroidVars *vars;
@@ -515,8 +515,8 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         vars->unk90 = 0x200;
         vars->unk80 = D_L00_00161BD4 * frame_time_sq;
         vars->unk84 = D_L00_00161BD8 * frame_time_sq;
-        vars->unk88 = D_L00_00161BDC * frame_time;
-        vars->unk8C = D_L00_00161BE0 * frame_time;
+        vars->unk88 = veldin_robot_knockback_xy_scale * frame_time;
+        vars->unk8C = veldin_robot_knockback_z_scale * frame_time;
         vars->unkAD = 0;
         vars->unk94 = 9;
         vars->unkBC = frame_time + frame_time;
@@ -535,8 +535,8 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             trooper_anim_update(moby, anim);
             FUN_L00_00257470(moby, 0, -1);
         } else {
-            vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
-            vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
+            vars->unk88 = veldin_robot_knockback_xy_scale * frame_time * 0.35f;
+            vars->unk8C = veldin_robot_knockback_z_scale * frame_time * 0.5f;
             hit_position.q = coll->pos.q;
             trooper_knockback_arc(&hit_position, &unused, &vars->unk88, &vars->unk8C);
             trooper_start_knockback(moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
