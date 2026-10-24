@@ -1992,7 +1992,7 @@ void update_floating_mine(struct Moby *moby) {
         HitInfo_ff640 info;
         float sphere[4];
     } scratch;
-    float vel[4];
+    float explosion_vector[4];
     int count;
     MobyHit_ff640 *hit;
     float glow_pulse_sine;
@@ -2029,12 +2029,12 @@ void update_floating_mine(struct Moby *moby) {
         scratch.info.unk3B = 0xFF;
         take_damage_ff640(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
-            clear_vector_ff640(vel);
+            clear_vector_ff640(explosion_vector);
             play_sound_ff640(0, 0, moby);
             if (hero.coll_hit_moby == (u8 *)moby)
-                explode_ff640(moby, vel, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                explode_ff640(moby, explosion_vector, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             else
-                explode_ff640(moby, vel, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                explode_ff640(moby, explosion_vector, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             if ((char *)moby < D_L14_0015FFDC) {
                 moby->state = 2;
                 moby->flags |= 0x41;
