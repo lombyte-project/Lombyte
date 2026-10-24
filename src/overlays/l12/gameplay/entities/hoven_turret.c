@@ -898,7 +898,9 @@ extern float func_001FA7D8_3055F8(float) __asm__("FUN_001fa610");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void func_L02_0020BF88_3055F8(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
 
-void FUN_L12_00304218(Moby *moby) {
+void draw_hoven_turret_hud(Moby *moby) __asm__("FUN_L12_00304218");
+
+void draw_hoven_turret_hud(Moby *moby) {
     int uv[4];
     long xy[4];
     int colors[4];
