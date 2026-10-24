@@ -1574,7 +1574,7 @@ extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern s32 vendor_exit_hero_local_offset __asm__("D_L00_00161100") __attribute__((sda));
-extern s32 D_L00_001610F0 __attribute__((sda));
+extern s32 vendor_exit_cutscene_local_offset __asm__("D_L00_001610F0") __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
 extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
@@ -1618,7 +1618,7 @@ void start_vendor_exit_cutscene(void) {
     vendor_state->f0 = 3;
     vendor_state->f4 = 0;
     cutscene_world_origin = (f32 *)((char *)vendor_state + 0xC0);
-    f1f9cf8_29ad08(cutscene_world_origin, &D_L00_001610F0, vendor_state->moby + 0xC0);
+    f1f9cf8_29ad08(cutscene_world_origin, &vendor_exit_cutscene_local_offset, vendor_state->moby + 0xC0);
     moby = (VendorMoby_29a6b0 *)vendor_state->moby;
     f1f9a10_29ad08(cutscene_world_origin, cutscene_world_origin, (char *)moby + 0x10);
     *(f32 *)((char *)vendor_state + 0xC8) += 2.0f;
