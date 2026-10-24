@@ -15,7 +15,9 @@ extern int D_L08_001F84E8[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-void FUN_L08_00308db8(int pair_index) {
+void queue_batalia_eight_textured_batches(int pair_index) __asm__("FUN_L08_00308db8");
+
+void queue_batalia_eight_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
         FUN_L08_00258090(D_L08_001F8560, D_L08_001F84E8[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
@@ -26,7 +28,9 @@ void FUN_L08_00308db8(int pair_index) {
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
 extern int D_L08_001F4C18[];
 extern int D_L08_001F4C00[];
-void FUN_L08_00308e90(int pair_index) {
+void queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");
+
+void queue_batalia_six_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x6; i++) {
         FUN_L08_00258090(D_L08_001F8560, D_L08_001F4C18[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
@@ -45,8 +49,8 @@ extern int D_L08_001623C0 __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
-extern void FUN_L08_00308db8_u(int) __asm__("FUN_L08_00308db8");
-extern void FUN_L08_00308e90_u(int) __asm__("FUN_L08_00308e90");
+extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
+extern void queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
 extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
@@ -60,17 +64,17 @@ void queue_batalia_textured_batch_passes(void) {
     font_queue_vu_state();
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
     vu1_add_g_sregister(0x42, (long)D_L08_00162390 << 32 | 0x64);
-    FUN_L08_00308db8_u(0);
+    queue_batalia_eight_textured_batches(0);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
     vu1_add_g_sregister(0x42, (long)((D_L08_00162394 * D_L08_00161E08_u) >> 8) << 32 | 0x62);
-    FUN_L08_00308db8_u(1);
+    queue_batalia_eight_textured_batches(1);
     vu1_add_g_sregister(0x42, (long)((D_L08_00162398 * D_L08_00161E08_u) >> 8) << 32 | 0x68);
-    FUN_L08_00308db8_u(2);
+    queue_batalia_eight_textured_batches(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)D_L08_001623B0 << 32 | 0x48);
-    FUN_L08_00308e90_u(0);
+    queue_batalia_six_textured_batches(0);
     vu1_add_g_sregister(0x42, (long)D_L08_001623B4 << 32 | 0x48);
-    FUN_L08_00308e90_u(1);
+    queue_batalia_six_textured_batches(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)D_L08_001623C0 << 32 | 0x48);
     queue_batalia_offset_textured_batches(0);
@@ -80,8 +84,8 @@ void queue_batalia_textured_batch_passes(void) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -107,8 +111,8 @@ void update_moby_hit_removal_state(struct Moby *moby) {
         break;
     case MOBY_STATE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        FUN_L01_002787a0(moby);
-        FUN_L00_00263e30(moby, 0x736, 1, 0x737, 1, 0x1, 2);
+        spawn_proximity_gated_bolts(moby);
+        spawn_moby_break_fragments(moby, 0x736, 1, 0x737, 1, 0x1, 2);
         spawn_moby_from_placement(moby, 0x735);
         mark_moby_for_removal(moby);
         break;

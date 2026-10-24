@@ -967,8 +967,8 @@ char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max 
 extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
-extern void FUN_L00_0023e838(int);
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void FUN_L08_002f5e58(struct Moby *m);
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
@@ -1035,7 +1035,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         enqueue_callback_list_1(FUN_L08_002f5e58, moby);
         if (light_vars->flags & 4) {
             if (light_vars->light == -1) {
-                light_vars->light = FUN_L00_0023e738(light_vars->light_pos.f, (f32)light_vars->radius,
+                light_vars->light = allocate_colored_effect_slot(light_vars->light_pos.f, (f32)light_vars->radius,
                                             convert_integer_to_float(light_vars->falloff) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->red) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->green) / 100.0f,
@@ -1048,7 +1048,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
             }
         }
     } else if (light_vars->light != -1) {
-        FUN_L00_0023e838(light_vars->light);
+        release_point_light_slot(light_vars->light);
         light_vars->light = -1;
     }
     light_vars->flags |= 2;
@@ -1149,10 +1149,10 @@ extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
 extern int D_L08_001621D8 __attribute__((sda));
 extern char *D_L08_001600EC;
-extern void FUN_L00_00262d38(int);
+extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
-extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
+extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -1174,7 +1174,7 @@ void commando_update(WM *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L08_00305138_c(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     if (moby->opacity) {
         if (FUN_001f9b48(moby->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
             FUN_L00_0025a120(moby);
@@ -1228,7 +1228,7 @@ void commando_update(WM *moby) {
             commando_vars->b28 = 1;
             if (commando_vars->h24 == 3) {
                 unlock_planet(10);
-                FUN_L00_00262d38(10);
+                queue_planet_unlock_message(10);
                 jet_clear_persistent(((unsigned char *)moby)[0xB0]);
                 jet_reset_camera((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);
                 memcard_save_data(0, -1);

@@ -21,7 +21,7 @@ typedef union {
     float f[4];
 } __attribute__((aligned(16))) L16TransportVector;
 
-char *FUN_L16_002a0dc0_5(char *owner, char *vec, void *pos, void *vel, int c) __asm__("FUN_L16_002a0dc0");
+char *spawn_class_32_moby(char *owner, char *vec, void *pos, void *vel, int c) __asm__("FUN_L16_002a0dc0");
 extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
@@ -232,7 +232,7 @@ void armed_transport_update(char *transport_moby) {
         subtract_vector_xyz(rotation.f, transport_data + 0x70, vector.f);
         normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
         func_0022ED80_update(1, 0, transport_moby);
-        FUN_L16_002a0dc0_5(transport_moby, (char *)rotation.f, vector.f, transport_data + 0x70, scale_game_frames(45));
+        spawn_class_32_moby(transport_moby, (char *)rotation.f, vector.f, transport_data + 0x70, scale_game_frames(45));
         transport_moby[0x20] = 6;
         *(int *)(transport_data + 0x164) = scale_game_frames(180);
         break;

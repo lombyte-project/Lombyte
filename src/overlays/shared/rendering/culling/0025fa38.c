@@ -17,7 +17,9 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-int FUN_L00_0025fa38(void *point, int i) {
+int test_point_in_transformed_unit_cylinder(void *point, int i) __asm__("FUN_L00_0025fa38");
+
+int test_point_in_transformed_unit_cylinder(void *point, int i) {
     Vp point_offset;
     Vp transformed_point_offset;
     char *volume_entry;
@@ -46,7 +48,9 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
-int FUN_L00_0025faf0(float *point, int volume_index) {
+int test_point_in_transformed_unit_sphere(float *point, int volume_index) __asm__("FUN_L00_0025faf0");
+
+int test_point_in_transformed_unit_sphere(float *point, int volume_index) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     char *volume_entry;

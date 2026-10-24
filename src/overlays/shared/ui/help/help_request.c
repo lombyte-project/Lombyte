@@ -41,8 +41,8 @@ s32 help_request(s32 message_id, s32 help_record_index) {
 extern char D_L00_00179410[];
 
 /* When D_L00_00179410 is active, may set the 0x5A state to 5, then clears and resets the record. */
-void FUN_L00_002039a0(void);
-void FUN_L00_002039a0(void) {
+void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
+void clear_active_help_record(void) {
     if (*(int *)(D_L00_00179410) != 0) {
         int help_entry_value = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
         if (help_entry_value != -1) {
@@ -64,7 +64,9 @@ typedef struct {
 } P;
 extern P D_00141968[];
 /* Clears the top bit of each of the 0x94 help records. */
-void FUN_L00_00203a28(void) {
+void clear_help_record_high_bits(void) __asm__("FUN_L00_00203a28");
+
+void clear_help_record_high_bits(void) {
     s32 i;
     for (i = 0; i < 0x94; i++)
         D_00141968[i].b &= 0x7FFFFFFF;

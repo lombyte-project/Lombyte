@@ -82,7 +82,7 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
-extern s32 FUN_L01_00275690(f32, void *);
+extern s32 check_scaled_vector_bsphere(f32, void *) __asm__("FUN_L01_00275690");
 
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -209,7 +209,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
                     help_request(1, 1);
-                } else if (FUN_L01_00275690(255.0f, health_hint_candidate_moby) != 0) {
+                } else if (check_scaled_vector_bsphere(255.0f, health_hint_candidate_moby) != 0) {
                     help_request(2, 2);
                 }
             }
@@ -603,7 +603,7 @@ typedef struct {
 extern s32 D_L01_0015F580;
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_L01_002787a0();
+extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -634,7 +634,7 @@ void tall_shroom_update(TriggerMoby *shroom_moby) {
         break;
     case TALL_SHROOM_STATE_REMOVE_WITH_EFFECTS:
         allocate_voice_for_target_entry(0, 0, shroom_moby);
-        FUN_L01_002787a0(shroom_moby);
+        spawn_proximity_gated_bolts(shroom_moby);
         FUN_L00_00263fd8(shroom_moby, 0x717, shroom_moby->pos, shroom_moby->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
                          0.0f, &D_L01_0015F580);
         spawn_moby_from_placement(shroom_moby, 0x718);

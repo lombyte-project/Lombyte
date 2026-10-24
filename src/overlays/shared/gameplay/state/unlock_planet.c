@@ -279,8 +279,8 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
-int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d);
-int FUN_L00_00260668(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
+int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
+int convert_pose_to_reference_local(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
     float transposed_rotation_matrix[16];
     float position_offset[4];
     float composed_rotation_matrix[4];
@@ -313,7 +313,7 @@ void update_entity_matrix(char *out, OvlQuad *position_delta, void *previous_rot
 }
 extern u8 level_available[] __asm__("D_0013DD40");
 extern s32 D_0013D510[] __asm__("D_0013D510");
-void FUN_L00_00262d38(s32);
+void queue_planet_unlock_message(s32) __asm__("FUN_L00_00262d38");
 void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
 void unlock_planet(s32 id) {
     s32 available_planet_count, i;
@@ -326,7 +326,7 @@ void unlock_planet(s32 id) {
         level_available[id] = 1;
         D_0013D510[available_planet_count] = id;
         if (id != *(volatile s32 *)&current_level_index)
-            FUN_L00_00262d38(id);
+            queue_planet_unlock_message(id);
     }
 }
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
@@ -353,8 +353,8 @@ extern int D_00141414 __attribute__((section(".data")));
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
-void FUN_L00_00260860(int id, int flag);
-void FUN_L00_00260860(int id, int flag) {
+void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
+void grant_inventory_item(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
     int dialogue_message_index = id + 0x25;
@@ -440,7 +440,7 @@ extern void debug_print() __asm__("FUN_001e93b0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
@@ -624,7 +624,7 @@ void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags
             rise = velocity[2] - gravity;
             height = position[2] - *(float *)(D_L00_001B04B0[path_index] + 0x18);
             time = 120.0f;
-            roots = FUN_L00_002595a0(&first_root, &second_root, gravity, rise, height);
+            roots = solve_quadratic_equation(&first_root, &second_root, gravity, rise, height);
             if (1.0f <= (float)roots) {
                 if (0.0f < first_root) {
                     if (first_root < time) {

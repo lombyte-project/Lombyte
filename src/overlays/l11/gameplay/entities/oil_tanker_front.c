@@ -75,7 +75,7 @@ struct L11HitInfo {
 
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
-extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
+extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_001fa6d0(float);
@@ -123,7 +123,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     if (patrol_vars->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
         moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].pos.z + 0.5f) {
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
         }
     }
@@ -325,7 +325,9 @@ s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Grabbed check: while held, park the moby in state 0x14 (remembering its state) unless it cannot be grabbed; restore the saved state once released. */
-int FUN_L11_00316160(struct Moby *moby) {
+int update_moby_suck_cannon_suction_state(struct Moby *moby) __asm__("FUN_L11_00316160");
+
+int update_moby_suck_cannon_suction_state(struct Moby *moby) {
     int grab_check_result = process_moby_suck_cannon_suction(moby);
     if (grab_check_result != 0) {
         if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
@@ -910,7 +912,7 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale);
+char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) __asm__("FUN_L11_0031ada0");
 extern char D_L11_00161E18[] __attribute__((section(".sdata")));
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -1069,7 +1071,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-char *FUN_L11_00318d10(char *source_moby, void *pos, int ticks) {
+char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) __asm__("FUN_L11_00318d10");
+
+char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) {
     char *mob = func_0020D348_m(0x511);
     if (mob != 0) {
         char *moby_vars;
@@ -1107,7 +1111,9 @@ char *FUN_L11_00318d10(char *source_moby, void *pos, int ticks) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
 
-void FUN_L11_00318e78(struct Moby *moby, void *new_position) {
+void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_position) __asm__("FUN_L11_00318e78");
+
+void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_position) {
     char *moby_vars = (char *)moby->pvars;
     qcopy(&moby->pos, new_position);
     *(int *)(moby_vars + 0x28) = 5;
@@ -1143,7 +1149,9 @@ extern short D_L11_0016239C __attribute__((sda));
 extern short D_L11_001623A0 __attribute__((sda));
 extern short D_L11_001623A4 __attribute__((sda));
 extern short D_L11_001623A8 __attribute__((sda));
-void FUN_L11_00318ed8(struct Moby *source_moby) {
+void spawn_moby_radial_spark(struct Moby *source_moby) __asm__("FUN_L11_00318ed8");
+
+void spawn_moby_radial_spark(struct Moby *source_moby) {
     float spark_position[4];
     float radial_offset[4];
     float row1_offset[4];
@@ -1180,7 +1188,9 @@ extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
 extern short D_L11_00162384 __attribute__((sda));
 extern short D_L11_00162380 __attribute__((sda));
-void FUN_L11_00319028(struct Moby *moby) {
+void spawn_energy_sphere_particles(struct Moby *moby) __asm__("FUN_L11_00319028");
+
+void spawn_energy_sphere_particles(struct Moby *moby) {
     float effect_position[4];
     float position_step[4];
     char *data = (char *)moby->pvars;
@@ -1219,7 +1229,9 @@ extern short D_L11_001623C0 __attribute__((sda));
 extern short D_L11_001623C4 __attribute__((sda));
 extern short D_L11_001623C8 __attribute__((sda));
 extern short D_L11_001623CC __attribute__((sda));
-void FUN_L11_003191c0(struct Moby *moby) {
+void spawn_energy_sphere_spark(struct Moby *moby) __asm__("FUN_L11_003191c0");
+
+void spawn_energy_sphere_spark(struct Moby *moby) {
     float first_spark_vector[4];
     float second_spark_vector[4];
     int first_spark_color;
@@ -1563,7 +1575,7 @@ char *activate_listed_blarg_ship(int list) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
-extern int FUN_L01_0026e008(int, int);
+extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern unsigned char D_0013D408[];
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
@@ -1575,7 +1587,7 @@ void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
-    } else if (data[1] != -1 && FUN_L01_0026e008(data[1], -1) == 0) {
+    } else if (data[1] != -1 && count_active_moby_group_members(data[1], -1) == 0) {
         unsigned char *dialogue_latch_base = D_0013D408;
         if (dialogue_latch_base[0x13] == 0) {
             dialogue_latch_base[0x13] = 1;
@@ -1678,7 +1690,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 
-char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
+char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) {
     char *moby = create_moby(0x5F4);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -1808,7 +1820,9 @@ extern void FUN_L08_00258090(void *, int, int, void *);
 
 extern short D_L11_00162540 __attribute__((sda));
 extern short D_L11_00162550 __attribute__((sda));
-void FUN_L11_0031d8d8(int pair_offset_index) {
+void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__("FUN_L11_0031d8d8");
+
+void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) {
     int *element_counts = (int *)&D_L11_00162530_d;
     int *triple_word_source_tables = (int *)&D_L11_00162540;
     int *pair_source_tables = (int *)&D_L11_00162550;
@@ -1826,7 +1840,7 @@ extern int D_L11_0016251C;
 extern int D_L11_00162528 __attribute__((sda));
 extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
-extern void FUN_L11_0031d8d8_c(int) __asm__("FUN_L11_0031d8d8");
+extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
 extern void FUN_L08_002f0c18(int);
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 extern void queue_oil_tanker_front_texture_2b_batches(int) __asm__("FUN_L11_0031e858");
@@ -1844,15 +1858,15 @@ void draw_level11_layered_effect_batches(void) {
     FUN_001f76a0_31db50();
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2C));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_001624F8 << 32 | 0x44);
-    FUN_L11_0031d8d8_c(0);
+    emit_level11_layered_effect_batches_with_pair_offset(0);
     if (D_L11_0016258C[4] != 0) {
         vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x29));
         vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_0016258C[4]) >> 8) << 32 |
                                              0x68);
-        FUN_L11_0031d8d8_c(1);
+        emit_level11_layered_effect_batches_with_pair_offset(1);
         vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_0016258C[4]) >> 8) << 32 |
                                              0x62);
-        FUN_L11_0031d8d8_c(2);
+        emit_level11_layered_effect_batches_with_pair_offset(2);
     }
     vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2A));
     vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162518 << 32 | 0x48);

@@ -44,7 +44,7 @@ extern struct ShopCamera D_L04_0016C9F0;
 extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(struct Moby *);
-extern void FUN_L02_002e0cd8(struct Moby *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_002668a0");
 extern int FUN_00214720(char *, s32);
 extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
@@ -72,7 +72,7 @@ void lieutenant_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case LIEUTENANT_STATE_INITIALIZE:
         if (D_0014C050[((struct VendorMobyView *)moby)->slot + current_level_index * 16] == 0xFF) {

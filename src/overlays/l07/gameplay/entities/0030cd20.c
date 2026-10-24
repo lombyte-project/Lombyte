@@ -14,7 +14,9 @@
 
 extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
-void FUN_L07_0030cd20(void) {
+void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
+
+void render_level07_water_grids(void) {
     render_water_grids(D_L07_001DCE40, 0x24);
 }
 struct L07MovingVars {

@@ -81,7 +81,9 @@ extern float D_L00_0017E3A0[];
 extern float D_L00_0017E400[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00235ad8(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) {
+void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) __asm__("FUN_L00_00235ad8");
+
+void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) {
     int dx = 0;
     int dy = 0;
     float slide_scale;
@@ -160,7 +162,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
-void FUN_L00_00235d80(HudElem *hud_element) {
+void reset_numeric_hud_element(HudElem *hud_element) __asm__("FUN_L00_00235d80");
+
+void reset_numeric_hud_element(HudElem *hud_element) {
     hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
     hud_element->unk48 = 0;
     hud_element->unk4A = 0;
@@ -341,7 +345,7 @@ void FUN_L00_00236268(HudElem *elem) {
     float margin, lo, band, hi;
     int bands;
 
-    FUN_L00_00235d80(elem);
+    reset_numeric_hud_element(elem);
     for (i = 0; i < 100; i++) {
         margin = star_init_limit0_gp;
         if (i >= 10) {
@@ -421,7 +425,7 @@ extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern float scale_game_seconds(float) __asm__("FUN_001f96b0");
-extern void FUN_L00_00216de8(int, int);
+extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
@@ -445,7 +449,7 @@ int draw_hud_stars(HudElem *element) {
         element->h = D_L00_0015F764;
     }
     hud_screen_position(element, &x, &y);
-    FUN_L00_00235ad8(element, &x, &y, element->unk6C, 0);
+    apply_hud_slide_offset(element, &x, &y, element->unk6C, 0);
 
     {
         int left_inset = D_L00_0015F760 * 0xD0;
@@ -477,7 +481,7 @@ int draw_hud_stars(HudElem *element) {
         current = 0;
     }
     if (!previous && current == 1) {
-        FUN_L00_00216de8(0xB, 0);
+        allocate_hero_voice_for_entry(0xB, 0);
     }
     star_width = 0;
     image = get_icon_frame(*(int *)element, current);
@@ -584,7 +588,7 @@ int FUN_L00_00236e50(HudElem *hud_element) {
     hud_element->w = D_L00_0015F760;
     hud_element->h = D_L00_0015F764;
     hud_screen_position(hud_element, &x, &y);
-    FUN_L00_00235ad8(hud_element, &x, &y, hud_element->unk6C, 0);
+    apply_hud_slide_offset(hud_element, &x, &y, hud_element->unk6C, 0);
     image = get_icon_frame(*(int *)hud_element, 0);
     draw_rotated_hud_sprite(image, x + hud_element->unk48, y + hud_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     {

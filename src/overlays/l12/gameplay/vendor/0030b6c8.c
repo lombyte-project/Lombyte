@@ -8,8 +8,8 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L01_002787a0(void *);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
+extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
@@ -34,8 +34,8 @@ void lamp_update(struct Moby *lamp_moby) {
         break;
     case LAMP_STATE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)lamp_moby);
-        FUN_L01_002787a0(lamp_moby);
-        FUN_L00_00263e30(lamp_moby, 0x748, 1, 0x748, 1, 0xb, 2);
+        spawn_proximity_gated_bolts(lamp_moby);
+        spawn_moby_break_fragments(lamp_moby, 0x748, 1, 0x748, 1, 0xb, 2);
         spawn_moby_from_placement(lamp_moby, 0x747);
         mark_moby_for_removal(lamp_moby);
         break;

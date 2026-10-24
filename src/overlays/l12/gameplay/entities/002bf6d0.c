@@ -30,7 +30,9 @@ void copy_moby_z_to_group_records(struct Moby *moby) {
 
 extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
-void FUN_L12_002bf748(void) {
+void render_level_12_water_grids(void) __asm__("FUN_L12_002bf748");
+
+void render_level_12_water_grids(void) {
     render_water_grids(D_L12_001CBF40, 0x11);
 }
 #include "eetypes.h"

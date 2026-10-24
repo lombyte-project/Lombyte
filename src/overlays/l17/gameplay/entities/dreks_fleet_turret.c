@@ -911,7 +911,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 extern short D_L17_00161D2C __attribute__((sda));
 extern short D_L17_00161D30 __attribute__((sda));
-extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
@@ -957,7 +957,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         moby->state = 1;
         break;
     case BOBBING_UPDATE_AND_CHECK_CONTACT:
-        FUN_L00_00262b00(*(float *)&D_L17_00161D2C,
+        update_moby_vertical_oscillation(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
         func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, v);

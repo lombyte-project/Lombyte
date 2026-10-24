@@ -37,7 +37,9 @@ typedef struct {
 extern Ent D_L05_001D6880[];
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L05_0030d6a0(int selected_entry_index) {
+void record_grid_entry_neighbor_indices(int selected_entry_index) __asm__("FUN_L05_0030d6a0");
+
+void record_grid_entry_neighbor_indices(int selected_entry_index) {
     int i;
     Ent *entry_table = D_L05_001D6880;
     for (i = 0; i < 48; i++) {
@@ -813,7 +815,7 @@ extern float fast_cos_f5c8(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_f5c8(float) __asm__("FUN_001f9de0");
 extern int allocate_target_entry_f5c8(int, int, void *) __asm__("FUN_0022da68");
 extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
-extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
@@ -899,7 +901,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             }
         }
         moby->command = 1;
-        FUN_L01_0029b0a0(&moby->command, 1, moby, 1, D_L05_001BAAA0);
+        record_moby_context_bytes(&moby->command, 1, moby, 1, D_L05_001BAAA0);
         mark_moby_for_removal_f5c8(moby);
     } else if (moby->command) {
         mark_moby_for_removal_f5c8(moby);
@@ -1009,7 +1011,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void create_particle_with_velocity_and_randomized_parameters(float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
 extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern unsigned char D_0014C050[][16];
@@ -1061,7 +1063,7 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
         break;
     case EMITTER_WAIT_FOR_TRIGGER:
         if (emitter_vars->trigger >= 0 && D_L05_0015FFD8[emitter_vars->trigger].command != 0) {
-            FUN_L01_0026e0e0(emitter_moby->group, 2);
+            set_moby_list_state(emitter_moby->group, 2);
         }
         break;
     case EMITTER_SPRAY_PARTICLES:
@@ -1436,7 +1438,9 @@ extern f32 D_L05_00211B20[];
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void draw_textured_grid(char *) __asm__("FUN_L03_00291918");
 
-void FUN_L05_00316070(char *moby) {
+void draw_ocean_grid_outside_clip_volumes(char *moby) __asm__("FUN_L05_00316070");
+
+void draw_ocean_grid_outside_clip_volumes(char *moby) {
     int *clip_volume_index_cursor = *(int **)(moby + 0x78);
     int i;
     int none = 1;
@@ -1998,10 +2002,10 @@ extern char D_L05_00161EF8[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L02_002e0cd8(char *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -2018,7 +2022,7 @@ void shady_salesman_update(WM *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L02_002e0cd8((char *)moby);
+    attach_big_head_cheat_manipulator_to_matching_moby((char *)moby);
     if (moby->opacity) {
         if (FUN_001f9b48(moby->position, D_L05_001671C0) < 40.0f) {
             FUN_L00_0025a120(moby);
@@ -2041,7 +2045,7 @@ void shady_salesman_update(WM *moby) {
         if (update_npc_dialogue(moby, npc_data))
             begin_dialogue_camera_transition(moby, 2.0f);
         if ((unsigned)(npc_data->sub - 3) < 2) {
-            FUN_L00_00260860(0x17, 1);
+            grant_inventory_item(0x17, 1);
             queue_dialogue_message(0x1396, -1);
             memcard_save_data(0, -1);
             mark_moby_for_removal(moby);
@@ -2213,7 +2217,7 @@ typedef struct {
 } PickupPose_318c78;
 
 extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC");
-extern char *FUN_L05_00319598(void *, int);
+extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
@@ -2226,13 +2230,13 @@ extern void FUN_001f9d20(void *, void *, void *);
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_0022da68_c(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
-extern void FUN_L00_00266858(void *, int);
+extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
-void FUN_L05_00319208(void *moby_v);
-extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
+void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
+extern void select_taxi_route(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -2262,11 +2266,11 @@ void taxi_update(struct Moby *moby) {
     int s;
     qcopy(old_position, &moby->pos);
     qcopy(old_rotation, &moby->rot);
-    FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
+    set_moby_dialogue_record_value(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
     case TAXI_INITIALIZE:
         *(short *)(taxi_data + 0xB2) = *(short *)(taxi_data + 0xB0) = -1;
-        FUN_L05_00319208(moby);
+        initialize_taxi_stop_state(moby);
         break;
     case TAXI_WAIT_FOR_PICKUP:
         pickup_hero = &hero;
@@ -2276,11 +2280,11 @@ void taxi_update(struct Moby *moby) {
             hero_offset[3] = 0;
             FUN_001f9d20(hero_offset, hero_offset, rotation_or_start_position_scratch);
             if (absolute_float(hero_offset[1]) < 1.2f && hero_offset[0] < 1.0f && hero_offset[0] > -0.75f) {
-                FUN_L05_003193a8_u(moby);
+                select_taxi_route(moby);
                 request_moby_variant_help_message(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby->state = 3;
-                    destination_stop_moby = FUN_L05_00319598(moby, *(short *)(taxi_data + 0xB6));
+                    destination_stop_moby = find_moby_in_owner_list_by_id(moby, *(short *)(taxi_data + 0xB6));
                     if (destination_stop_moby != 0) {
                         destination_stop_moby[0x20] = 2;
                         *(unsigned short *)(destination_stop_moby + 0x34) |= 1;
@@ -2380,7 +2384,7 @@ extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
 extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
-void FUN_L05_00319208(void *moby_v) {
+void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     int *list = (int *)(data + 0x80);
@@ -2435,7 +2439,7 @@ void FUN_L05_00319208(void *moby_v) {
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
-void FUN_L05_003193a8(char *moby) {
+void select_taxi_route(char *moby) {
     char *taxi_data = *(char **)(moby + 0x78);
     char *selected_path;
     float inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;

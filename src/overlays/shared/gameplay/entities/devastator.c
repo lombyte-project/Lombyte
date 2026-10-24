@@ -58,7 +58,7 @@ extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
 extern float frame_time_2b2100 __asm__("D_0015ED6C");
 extern int D_0015EEA4;
 extern int level_index_2b2100 __asm__("D_0015ED84");
-extern void FUN_L00_002b1af0_2b2100(struct Moby *) __asm__("FUN_L00_002b1af0");
+extern void emit_object_offset_particles(struct Moby *) __asm__("FUN_L00_002b1af0");
 extern void copy_matrix3x4_2b2100(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_001fa2d8_2b2100(void *, void *) __asm__("FUN_001fa2d8");
 extern int tick_countdown_32_2b2100(int *) __asm__("FUN_001f9740");
@@ -86,17 +86,17 @@ extern float distance_xy_2b2100(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations_2b2100(float, float) __asm__("FUN_001fa688");
 extern void build_spherical_offset_2b2100(void *, float, float, float) __asm__("FUN_00214db0");
 extern float approximate_arcsine_2b2100(float) __asm__("FUN_001f9df8");
-extern int FUN_L00_0025f878_2b2100(void *) __asm__("FUN_L00_0025f878");
+extern int find_listed_moby_by_data_id(void *) __asm__("FUN_L00_0025f878");
 extern int allocate_voice_for_target_entry_2b2100(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_002b1de0_2b2100(void *) __asm__("FUN_L00_002b1de0");
-extern void *FUN_L00_002afc70_2b2100(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
-extern float FUN_L00_002aff50_2b2100(int) __asm__("FUN_L00_002aff50");
+extern void emit_object_offset_particle_burst(void *) __asm__("FUN_L00_002b1de0");
+extern void *spawn_devastator_missile(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
+extern float calculate_eased_step_sum(int) __asm__("FUN_L00_002aff50");
 extern void FUN_L00_002323b8_2b2100(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_0020e4c8_2b2100(void) __asm__("FUN_L00_0020e4c8");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern float fast_cos_2b2100(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2b2100(float) __asm__("FUN_001f9de0");
-extern int FUN_L00_0023e738_2b2100(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void FUN_L00_0023e838_2b2100(int) __asm__("FUN_L00_0023e838");
+extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
 extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
@@ -119,7 +119,7 @@ void devastator_update(struct Moby *devastator_moby) {
     float muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z;
     int i;
 
-    FUN_L00_002b1af0_2b2100(devastator_moby);
+    emit_object_offset_particles(devastator_moby);
     height = 0.75f;
     limit = 10000.0f;
     if ((unsigned char)devastator_moby->state == 0) {
@@ -237,7 +237,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                         limit = distance;
                                         pitch = -tpitch;
                                         yaw = tyaw;
-                                        if (!FUN_L00_0025f878_2b2100(best)) {
+                                        if (!find_listed_moby_by_data_id(best)) {
                                             height = 0.5f;
                                             data->target = best;
                                             if (aim_info) height = aim_info->height;
@@ -253,7 +253,7 @@ void devastator_update(struct Moby *devastator_moby) {
             }
             allocate_voice_for_target_entry_2b2100(0, 0, (int)devastator_moby);
             data->glow = scale_game_frames_2b2100(5) + scale_game_frames_2b2100(10);
-            if (hero.state.current != 30) FUN_L00_002b1de0_2b2100(devastator_moby);
+            if (hero.state.current != 30) emit_object_offset_particle_burst(devastator_moby);
             stats = (UsageStat_2b2100 *)usage_stats_2b2100;
             if (stats->uses < 65535) stats->uses++;
             if (scale_game_frames_2b2100(D_0015EEA4) / 600 > stats->longest)
@@ -264,15 +264,15 @@ void devastator_update(struct Moby *devastator_moby) {
                 yaw = devastator_moby->rot.z;
                 aim_info = get_moby_aim_info_2b2100(data->target);
                 if (aim_info) height = aim_info->height;
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else if (limit < 2.0f) {
                 aim_info = get_moby_aim_info_2b2100(data->target);
                 if (aim_info) height = aim_info->height;
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else {
                 if (!data->target) {
                     if (best) {
-                        limit = FUN_L00_002aff50_2b2100(6);
+                        limit = calculate_eased_step_sum(6);
                         qcopy(&point, &best->pos);
                         aim_info = get_moby_aim_info_2b2100(best);
                         if (aim_info) point.f.z += aim_info->height;
@@ -287,12 +287,12 @@ void devastator_update(struct Moby *devastator_moby) {
                         pitch0 -= hero.ground_pitch.f * 0.5f;
                     }
                 }
-                FUN_L00_002afc70_2b2100(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
+                spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
             }
             if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.unk229C < 0.7f)) {
                 FUN_L00_002323b8_2b2100(0x36, 1, (float)scale_game_frames_2b2100(10));
             } else {
-                FUN_L00_0020e4c8_2b2100();
+                start_equipped_item_animation();
             }
         } else {
             allocate_voice_for_target_entry_2b2100(1, 0, (int)devastator_moby);
@@ -314,7 +314,7 @@ void devastator_update(struct Moby *devastator_moby) {
         velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738_2b2100(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
+            data->light = allocate_colored_effect_slot(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
         } else {
             Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
             qcopy(&muzzle_light->pos, &velocity);
@@ -325,12 +325,12 @@ void devastator_update(struct Moby *devastator_moby) {
         }
         FUN_001f9770_2b2100(&data->glow);
     } else if (data->light != -1) {
-        FUN_L00_0023e838_2b2100(data->light);
+        release_point_light_slot(data->light);
         data->light = -1;
         data->glow = 0;
     }
     if (devastator_moby->prev_seq == 2) {
-        FUN_L00_0023e838_2b2100(data->light);
+        release_point_light_slot(data->light);
         data->light = -1;
         data->glow = 0;
     }
@@ -496,7 +496,9 @@ int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
-void FUN_L00_002b3458(unsigned char *source_moby) {
+void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
+
+void update_linked_moby_states(unsigned char *source_moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
@@ -1306,7 +1308,9 @@ extern void FUN_001f9a10_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a10");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
 
-void FUN_L00_002b3c50(X *x) {
+void emit_beam_trail_particles(X *x) __asm__("FUN_L00_002b3c50");
+
+void emit_beam_trail_particles(X *x) {
     V4 effect_input_and_position_offset;
     V4 emission_position;
     V4 previous_position_delta;
@@ -1400,7 +1404,9 @@ void FUN_L00_002b3c50(X *x) {
 extern char *func_0020D348_m(int);
 
 /* Creates a class 0xA7 moby carrying a in its data; sets bytes 0x30/0x31, 0x32 and state 0. */
-char *FUN_L00_002b4138(int instance_index) {
+char *spawn_indexed_class_a7_moby(int instance_index) __asm__("FUN_L00_002b4138");
+
+char *spawn_indexed_class_a7_moby(int instance_index) {
     char *spawned_moby = func_0020D348_m(0xA7);
     if (spawned_moby != 0) {
         int *moby_vars = *(int **)(spawned_moby + 0x78);
@@ -1606,11 +1612,11 @@ extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
+int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
-void FUN_L00_0020e698(void);
-void FUN_L00_00233660(float *out, float x, float y, float z);
-void FUN_L00_0023e838(int);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
+void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
+void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern unsigned char item_usage[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
@@ -1773,7 +1779,7 @@ void blaster_update(struct Moby *moby) {
                 work.spawn.b18 = 1;
                 work.spawn.b19 = 1;
                 work.spawn.cls = (*(unsigned short *)&moby->oclass);
-                FUN_L00_00233660(&inverse, 0.7f, -0.15f, 0.5f);
+                transform_hero_local_offset_to_world(&inverse, 0.7f, -0.15f, 0.5f);
                 collect_mobies_in_sphere(&inverse, 0.42f, 5, hero.moby, &work.spawn);
                 FUN_L00_002caf70_49a8(hero.moby, yaw, pitch, base_yaw, base_pitch, &launch, target);
                 data->glow = scale_game_frames(15);
@@ -1810,7 +1816,7 @@ void blaster_update(struct Moby *moby) {
             set_moby_animation(moby, 1, 0);
             advance_moby_animation(moby);
         }
-        FUN_L00_0020e698();
+        cancel_hero_item_animation();
         data->cooldown = 0;
     }
     if (moby->seq != 2 && data->glow > 0) {
@@ -1821,7 +1827,7 @@ void blaster_update(struct Moby *moby) {
         work.point.f.y = hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.unk670, hero.unk674)) * 2.0f;
         work.point.f.z = hero.motion.pos.f[2] + 1.0f;
         if (data->light == -1) {
-            data->light = FUN_L00_0023e738(&work.point, 6.0f, 0.0f, red, green, blue);
+            data->light = allocate_colored_effect_slot(&work.point, 6.0f, 0.0f, red, green, blue);
         } else {
             PointLight *light = &((PointLight *)D_L00_001802C0)[data->light];
             qcopy(&light->pos, &work.point);
@@ -1832,7 +1838,7 @@ void blaster_update(struct Moby *moby) {
         }
         fast_dec_timer(&data->glow);
     } else if (data->light != -1) {
-        FUN_L00_0023e838(data->light);
+        release_point_light_slot(data->light);
         data->light = -1;
         data->glow = 0;
     }
@@ -1934,7 +1940,7 @@ float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
 int FUN_001f96f8_2b58d8(int) __asm__("FUN_001f96f8");
 void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
-int FUN_L00_002eb930_2b58d8(void *) __asm__("FUN_L00_002eb930");
+int initialize_mode6_orbit_camera(void *) __asm__("FUN_L00_002eb930");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
 void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
@@ -1978,7 +1984,7 @@ unsigned char *FUN_L00_002b58d8(unsigned char *source_moby, V_2b58d8 *pos, float
         *(float *)(spawned_moby_vars + 0x44) = 0.4f;
         FUN_L00_002b56d0_2b58d8(spawned_moby);
         FUN_L00_00250df8_2b58d8(spawned_moby);
-        *(int *)(spawned_moby_vars + 0x14) = FUN_L00_002eb930_2b58d8(spawned_moby);
+        *(int *)(spawned_moby_vars + 0x14) = initialize_mode6_orbit_camera(spawned_moby);
         hero_set_state(0x1D, 1);
         FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x24), 0, 0x40);
         FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x28), 0, 0x40);
@@ -2014,7 +2020,9 @@ void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void clear_jet_camera_mode_latch() __asm__("FUN_L00_00203b78");
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Clears the moby state word 4 and the 0x14 handle, calls release helpers, marks a for removal. */
-void FUN_L00_002b5b20(void *missile_moby, char **missile_vars) {
+void terminate_visibomb_missile(void *missile_moby, char **missile_vars) __asm__("FUN_L00_002b5b20");
+
+void terminate_visibomb_missile(void *missile_moby, char **missile_vars) {
     char *x = *(char **)(*missile_vars + 0x78);
     if (x)
         *(int *)(x + 4) = 0;
@@ -2043,7 +2051,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
-void FUN_L00_002b5ba0(unsigned char *source_moby, unsigned char *attachment_state) {
+void update_attached_moby_transform(unsigned char *source_moby, unsigned char *attachment_state) __asm__("FUN_L00_002b5ba0");
+
+void update_attached_moby_transform(unsigned char *source_moby, unsigned char *attachment_state) {
     M_2b5ba0 combined_rotation, attachment_rotation, source_rotation;
     V_2b5ba0 k, rotated_attachment_offset;
     unsigned char *attached_moby = *(unsigned char **)(attachment_state + 0x20);
@@ -2082,8 +2092,8 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range, float f1,
-                                       float f2, float f3, float scale);
+extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *pos, int spin, int col, float range, float f1,
+                                       float f2, float f3, float scale) __asm__("FUN_L00_0026b790");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
 extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
@@ -2091,7 +2101,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_002b5d00(char *source_moby, int flag) {
+void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) __asm__("FUN_L00_002b5d00");
+
+void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     float elevated_spawn_position[4];
     float view_origin_delta[4];
     float particle_velocity[4];
@@ -2102,9 +2114,9 @@ void FUN_L00_002b5d00(char *source_moby, int flag) {
 
     qcopy(elevated_spawn_position, source_moby + 0x10);
     elevated_spawn_position[2] += 0.3f;
-    FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    spawn_spinning_fade_in_out_effect_particle(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (j = 4; j >= 0; j--) {
-        FUN_L00_0026b790(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+        spawn_spinning_fade_in_out_effect_particle(elevated_spawn_position, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
         subtract_vector_xyz(view_origin_delta, D_L00_00166DC0, source_moby + 0x10);
@@ -2220,7 +2232,7 @@ extern void release_voice_slot_2b6140(int) __asm__("FUN_0022d798");
 extern void spawn_explosion_2b6140(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere_2b6140(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits_2b6140(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void func_L00_00260958_2b6140(void *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));
 extern float D_L00_00161498 __attribute__((sda));
@@ -2416,7 +2428,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         qcopy(&vA0, &missile_moby->pos);
         for (k = 4; k >= 0; k--) {
             qcopy(&missile_moby->pos, &vA0);
-            func_L00_00260958_2b6140(&missile_moby->pos, 1.5f);
+            add_random_offset_to_vector_xyz(&missile_moby->pos, 1.5f);
             func_L00_002B6FF0_2b6140(missile_moby, 1);
             qcopy(&missile_moby->pos, &vA0);
         }
@@ -2902,10 +2914,10 @@ extern s32 FUN_L00_0028d8c0_2b77f0(struct Moby *, s32) __asm__("FUN_L00_0028d8c0
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void FUN_L00_00257d78_2b77f0(void *, f32, f32) __asm__("FUN_L00_00257d78");
-extern void *FUN_L00_0026b230_2b77f0(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
+extern void *spawn_spinning_and_fading_effect_particle(void *, void *, s32, f32) __asm__("FUN_L00_0026b230");
 extern void FUN_L00_002b8798_2b77f0(struct Moby *, void *) __asm__("FUN_L00_002b8798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_0026d598_2b77f0(void *, void *, s32) __asm__("FUN_L00_0026d598");
+extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern void FUN_001fa030_2b77f0(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
@@ -2954,14 +2966,14 @@ void pyrocitor_update(struct Moby *moby) {
         if (v->light != -1) {
             lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580_2b77f0, 0.1f);
             if (fast_vec_length(&lights_2b2100[v->light]) < 0.001f) {
-                FUN_L00_0023e838_2b2100(v->light);
+                release_point_light_slot(v->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
                 if (moby) v->light = -1; else v->light = -1;
             }
         }
         if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.unk20AC && FUN_L00_00233e98_2b2100(-1)) {
             moby->state = 3;
-            FUN_L00_0020e4c8_2b2100();
+            start_equipped_item_animation();
             v->timer = scale_game_frames_2b2100(10);
             if (v->light == -1)
                 v->light = FUN_L00_0023e5e0_2b77f0(&moby->pos, 7.5f, 0.0f, 0);
@@ -3028,7 +3040,7 @@ void pyrocitor_update(struct Moby *moby) {
                 fl = 1;
             else
                 fl = 0;
-            effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec, fl | 4, length);
+            effect = spawn_spinning_and_fading_effect_particle(&particle_pos, &random_vec, fl | 4, length);
             if (i == 2 && gate)
                 FUN_L00_002b8798_2b77f0(moby, effect);
         }
@@ -3056,7 +3068,7 @@ void pyrocitor_update(struct Moby *moby) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f, frame_time + frame_time);
             scale_vector_xyz_2b3628(&particle_pos, &dir, random_float_between_2b3628(0.5f, 0.1f));
             add_vector_xyz_2b2100(&particle_pos, &particle_pos, &random_vec);
-            FUN_L00_0026d598_2b77f0(&scratch, &particle_pos, item_text_variant[16]);
+            spawn_color_decaying_effect_particle(&scratch, &particle_pos, item_text_variant[16]);
         }
         if (D_L00_0015F5CC % scale_game_frames_2b2100(D_L00_00161530) == 0)
             FUN_L00_00233db8_2b2100(-1, 1);
@@ -3065,7 +3077,7 @@ void pyrocitor_update(struct Moby *moby) {
             if ((controller_state.held & hero.items[0].button_mask) && !hero.unk20AC && ready)
                 break;
             moby->state = 2;
-            FUN_L00_0020e698();
+            cancel_hero_item_animation();
             h = v->voice;
             if (h != -1) {
                 u8 *slot = D_0013E550 + h * 0x70;
@@ -3091,7 +3103,7 @@ extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
 void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
-void FUN_L00_0023e838_2b8230(int) __asm__("FUN_L00_0023e838");
+void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void FUN_0022d798_2b8230(int) __asm__("FUN_0022d798");
 int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
 void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
@@ -3109,7 +3121,7 @@ void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
         if (*(void **)pyrocitor_vars)
             FUN_0020c828_2b8230(*(void **)pyrocitor_vars);
         if (*(short *)(pyrocitor_vars + 0x44) != -1) {
-            FUN_L00_0023e838_2b8230(*(short *)(pyrocitor_vars + 0x44));
+            release_point_light_slot(*(short *)(pyrocitor_vars + 0x44));
             *(short *)(pyrocitor_vars + 0x44) = -1;
         }
         voice_slot_or_time_stat = *(short *)(pyrocitor_vars + 0x4A);
@@ -3157,7 +3169,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
+extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00257d78(float *, float, float);
@@ -3220,9 +3232,9 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                     spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
                     spark_random_vector[3] = *(float *)&D_L00_00161540;
                     c1 = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
-                    FUN_L00_0025c0e8(c1, item_variant_bytes[0x10]);
+                    swap_packed_color_channels(c1, item_variant_bytes[0x10]);
                     c2 = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
-                    FUN_L00_0025c0e8(c2, item_variant_bytes[0x10]);
+                    swap_packed_color_channels(c2, item_variant_bytes[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
@@ -3245,7 +3257,9 @@ typedef struct {
 } ListSlots8;
 
 /* Stores val in the first empty of 15 slots after the list head. */
-void FUN_L00_002b8798(ListSlots8 *list, s32 val) {
+void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) __asm__("FUN_L00_002b8798");
+
+void register_pyrocitor_flame_effect(ListSlots8 *list, s32 val) {
     s32 *list_data = list->slots;
     s32 i = 0;
     s32 *first_slot;
@@ -3338,12 +3352,12 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-int FUN_L00_0023e5e0(u128 *v, float a, float b, int col);
+int allocate_packed_color_point_light_slot(u128 *v, float a, float b, int col) __asm__("FUN_L00_0023e5e0");
 void FUN_L00_00203908(int, int);
-void FUN_L00_0020e4c8(void);
-void FUN_L00_0020e698(void);
-void FUN_L00_0023e838(int);
-void FUN_L00_002b9310(char *moby);
+void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
+void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
+void initialize_tesla_claw_beam(char *moby) __asm__("FUN_L00_002b9310");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
@@ -3376,9 +3390,9 @@ extern void FUN_001f4600_2b2100(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void FUN_0022d798_2b2100(int) __asm__("FUN_0022d798");
 extern int FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_0022da68_2b2100(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_0020e4c8_2b2100a(void) __asm__("FUN_L00_0020e4c8");
-extern void FUN_L00_0020e698_2b2100(void) __asm__("FUN_L00_0020e698");
-extern void FUN_L00_0023e838_2b2100a(int) __asm__("FUN_L00_0023e838");
+extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
+extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
+extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
 void tesla_claw_update(struct Moby *m) {
@@ -3545,7 +3559,7 @@ void tesla_claw_update(struct Moby *m) {
     case 1:
         FUN_001f9740_2b2100(&s->timer);
         if (active) {
-            FUN_L00_0020e4c8_2b2100a();
+            start_equipped_item_animation();
             m->state = 3;
         }
         if ((controller_state.pressed & (h = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !h->unk20AC) {
@@ -3555,7 +3569,7 @@ void tesla_claw_update(struct Moby *m) {
                 if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > st->longest)
                     st->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
                 st->levels = (st->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
-                FUN_L00_0020e4c8_2b2100a();
+                start_equipped_item_animation();
                 m->state = 3;
             } else {
                 s->target = 0;
@@ -3564,7 +3578,7 @@ void tesla_claw_update(struct Moby *m) {
                 s->lock2 = 0;
                 m->state = 1;
                 FUN_0022da68_2b2100(0, 0, m);
-                FUN_L00_0020e698_2b2100();
+                cancel_hero_item_animation();
             }
         }
         break;
@@ -3589,7 +3603,7 @@ void tesla_claw_update(struct Moby *m) {
             s->lock = 0;
             s->lock2 = 0;
             s->reach = 0.0f;
-            FUN_L00_0020e698_2b2100();
+            cancel_hero_item_animation();
             m->state = 1;
         }
         break;
@@ -3614,7 +3628,7 @@ void tesla_claw_update(struct Moby *m) {
         D_L00_001802C0_2b2100[s->light].y = k;
         D_L00_001802C0_2b2100[s->light].x = D_L00_001802C0_2b2100[s->light].y;
         if (done && s->light != -1) {
-            FUN_L00_0023e838_2b2100a(s->light);
+            release_point_light_slot(s->light);
             s->light = -1;
         }
     }
@@ -3648,7 +3662,7 @@ extern short D_L00_00161676;
 extern V2b9310 D_L00_001DB5B0[];
 extern V2b9310 D_L00_001DB5C0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
-void FUN_L00_002b9310(char *moby) {
+void initialize_tesla_claw_beam(char *moby) {
     V2b9310 beam_endpoint_delta;
     V2b9310 step;
     char *data;

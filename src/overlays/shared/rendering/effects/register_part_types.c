@@ -249,7 +249,9 @@ extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00268f10(Vec4 *spawn_position, int initial_high_byte) {
+void spawn_timed_effect_particle(Vec4 *spawn_position, int initial_high_byte) __asm__("FUN_L00_00268f10");
+
+void spawn_timed_effect_particle(Vec4 *spawn_position, int initial_high_byte) {
     unsigned char *particle = create_part(1);
     if (particle) {
         spawn_position->f[2] += 0.1f;

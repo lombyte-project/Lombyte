@@ -135,8 +135,10 @@ float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_001f9a28_002634f8(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9b20_002634f8(void *) __asm__("FUN_001f9b20");
-void FUN_L00_00268f10_002634f8(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
-void FUN_L00_002634f8(Vec4_2634f8 *v) {
+void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
+void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
+
+void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
     S166C80_2634f8 *position_owner;
@@ -150,7 +152,7 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
         u.f[2] = u.f[2] - (k + k);
         if (FUN_001efa68_002634f8(&ground_probe_start, &u, 0x12, 0, 0)) {
             FUN_001f9a28_002634f8(&position_delta, &D_L00_00173E60_002634f8, &position_owner->pos);
-            FUN_L00_00268f10_002634f8(
+            spawn_timed_effect_particle(
                 &D_L00_00173E60_002634f8,
                 (u8)(int)(FUN_001f9b20_002634f8(&position_delta) / 60.0f * 191.0f + 64.0f));
         }
@@ -174,7 +176,9 @@ void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
-void FUN_L00_00263618(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
+void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");
+
+void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
     Pk_00263618 pk;
     float up[4];
     float M[4][4];
@@ -399,8 +403,8 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
-void FUN_L00_00263db0(s32 a, s32 b, s32 c);
-void FUN_L00_00263db0(s32 help_message_selector, s32 format_argument, s32 message_duration_frames) {
+void queue_formatted_dialogue_message(s32 a, s32 b, s32 c) __asm__("FUN_L00_00263db0");
+void queue_formatted_dialogue_message(s32 help_message_selector, s32 format_argument, s32 message_duration_frames) {
     if (message_duration_frames == -1)
         message_duration_frames = scale_game_frames(0xB4);
     sprintf(D_L00_00179118, get_help_message_text(help_message_selector), format_argument);
@@ -411,11 +415,13 @@ extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
     __attribute__((section(".sdata")));
 void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void *, float,
                              void *) __asm__("FUN_L00_00263fd8");
-int FUN_L00_0025aca0_263e30(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
+int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 void FUN_001f99f8_263e30(void *) __asm__("FUN_001f99f8");
 float FUN_00213308_263e30(void) __asm__("FUN_00213308");
 int FUN_00213260_263e30(int) __asm__("FUN_00213260");
-void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
+void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
+
+void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
     u128_263e30 fragment_spawn_positions[16];
     float v[4] __attribute__((aligned(16)));
     int mode = 0;
@@ -432,7 +438,7 @@ void FUN_L00_00263e30(unsigned char *source_moby, int first_fragment_class, int 
             }
     }
     if (first_fragment_class > 0 && range > 0) {
-        k = FUN_L00_0025aca0_263e30(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
+        k = generate_random_points_from_shape_entries(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
         if (k) {
             for (i = 0; i < random_class_fragment_limit && i < k; i++) {
                 FUN_001f99f8_263e30(v);

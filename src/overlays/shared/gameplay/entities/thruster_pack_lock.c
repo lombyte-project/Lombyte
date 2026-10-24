@@ -311,7 +311,10 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 
-void FUN_L11_00311048(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
+                      float y, float scale, float quad_rotation_angle) __asm__("FUN_L11_00311048");
+
+void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
                       float y, float scale, float quad_rotation_angle) {
     int texture;
     float quad_size;
@@ -351,7 +354,7 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0025f8e0(float *v, float s);
+extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
 
 extern short D_L11_001621C8 __attribute__((sda));
@@ -383,9 +386,9 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
         qcopy(first_particle_position, joint_world_position);
         qcopy(second_particle_position, joint_world_position);
         qcopy(third_particle_position, joint_world_position);
-        FUN_L00_0025f8e0(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
-        FUN_L00_0025f8e0(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
+        add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
         initial_particle_velocity[0] =
             -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
             scale;
@@ -399,9 +402,9 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
             scale;
         spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &D_L11_001621E8, 1);
         if (*(float *)(particle_emission_data + 0xC4) > 0.5f) {
-            FUN_L00_0025f8e0(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
-            FUN_L00_0025f8e0(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
+            add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
+            add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
+            add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;

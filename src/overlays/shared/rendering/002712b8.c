@@ -110,7 +110,9 @@ float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
-unsigned char *FUN_L00_002715e8(void *initial_position, int x, int color, float size, float size_increment) {
+unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) __asm__("FUN_L00_002715e8");
+
+unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) {
     unsigned char *particle = p27fe00_alloc(0x2D);
     if (particle) {
         unsigned char *particle_data;
@@ -744,7 +746,7 @@ extern char D_0013F3D0[] __attribute__((section(".data")));
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern float FUN_001fa6c0_272bc0(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern void FUN_L00_0025f8e0_272bc0(void *, float) __asm__("FUN_L00_0025f8e0");
+extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int FUN_001f96f8_272bc0(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float,
                                    float) __asm__("FUN_L00_002729c8");
@@ -792,7 +794,7 @@ void update_color_tween_emitter_particle(unsigned char *particle) {
         for (i = 0; i < particle_data[0x13]; i++) {
             qcopy(particle_vector_scratch, particle + 0x10);
             emitted_speed_scale = 1.0f;
-            FUN_L00_0025f8e0_272bc0(particle_vector_scratch, 0.05f);
+            add_random_offset_to_vector_xyz(particle_vector_scratch, 0.05f);
             if (*(short *)(particle + 0xA) < FUN_001f96f8_272bc0(10)) {
                 emitted_speed_scale = FUN_001fa6c0_272bc0(*(short *)(particle + 0xA)) / (float)FUN_001f96f8_272bc0(10);
             }
@@ -1055,7 +1057,9 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
-unsigned char *FUN_L00_00273708(void *position, int alpha_fade_divisor, int particle_mode) {
+unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) __asm__("FUN_L00_00273708");
+
+unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) {
     unsigned char *particle = p27fe00_alloc(0x3E);
     if (particle != 0) {
         unsigned char *particle_data = particle + 0x20;
@@ -1113,7 +1117,9 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
-unsigned char *FUN_L00_002738e8(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
+unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) __asm__("FUN_L00_002738e8");
+
+unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) {
     unsigned char *particle = p27fe00_alloc(0x40);
     unsigned char *particle_data;
     if (particle != 0) {
@@ -1163,8 +1169,8 @@ struct EmberParticle {
 
 extern s32 FUN_L00_00257b90(s32, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern unsigned char *FUN_L00_0026bb70(void *a, void *b, int c, int d, float f, int n, int e, int g,
-                                       int h);
+extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g,
+                                       int h) __asm__("FUN_L00_0026bb70");
 extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
 extern u32 D_L00_00160228 __attribute__((sda));
@@ -1195,7 +1201,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.5f;
         emitted_lifetime_frames = FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x78));
-        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
     } else {
         ember_particle->pos.f[2] = m->floor_z;
         m->vel.f[0] += random_float_between(-5.0f, 5.0f) * frame_time;
@@ -1204,13 +1210,13 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
         f = ember_particle->size;
         f *= 0.25f;
         emitted_lifetime_frames = FUN_L00_00257b90(scale_game_frames(0x1E), scale_game_frames(0x3C));
-        FUN_L00_0026bb70(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&ember_particle->pos, &m->vel, ember_particle->color, m->color2, f, emitted_lifetime_frames, 0, ember_particle->tex, ember_particle->blend);
     }
     if (current_level_index == 10) {
         if (!random_integer_below(0x13)) {
             emitted_position.q = ember_particle->pos.q;
             emitted_position.f[2] += 0.1f;
-            FUN_L00_002715e8(&emitted_position, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(&emitted_position, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
                              0.05f, 10500.0f);
         }
         if (!random_integer_below(9)) {
@@ -1351,7 +1357,10 @@ int FUN_001fa6d0(float);
 int FUN_00213260(int);
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
-unsigned char *FUN_L00_002743a8(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
+unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
+                                float *vec) __asm__("FUN_L00_002743a8");
+
+unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
                                 float *vec) {
     unsigned char *particle = FUN_L00_002678b8(0x43);
     if (particle) {
@@ -1534,8 +1543,8 @@ extern int FUN_001f96f8_274948(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_274948(int) __asm__("FUN_001fa6c0");
 
 extern unsigned char *D_L00_001B2194 __attribute__((section(".data")));
-unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d);
-unsigned char *FUN_L00_00274948(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *a, u128 *b, int c, int d) __asm__("FUN_L00_00274948");
+unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
     unsigned char *particle = p27fe00_alloc(0x45);
     if (particle) {
         unsigned char *particle_data;
@@ -1613,7 +1622,9 @@ void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
 
-unsigned char *FUN_L00_00274cf8(void *position, int particle_texture_index, float initial_rotation_radians) {
+unsigned char *spawn_texture_indexed_rotated_particle(void *position, int particle_texture_index, float initial_rotation_radians) __asm__("FUN_L00_00274cf8");
+
+unsigned char *spawn_texture_indexed_rotated_particle(void *position, int particle_texture_index, float initial_rotation_radians) {
     unsigned char *particle = p27fe00_alloc(0x46);
     if (particle != 0) {
         qcopy(particle + 0x10, position);
@@ -1815,7 +1826,7 @@ typedef struct {
 } O_275320;
 extern void FUN_001f9a10_275320(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
-extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
+extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
 
 void update_gravity_ground_culled_particle(O_275320 *particle) __asm__("FUN_L00_00275320");
 
@@ -1836,7 +1847,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
     }
     if (particle->pos.f[2] < ground_height_threshold) {
         particle_vector_scratch.q = particle->pos.q;
-        FUN_L00_002634f8_275320(&particle_vector_scratch);
+        spawn_ground_contact_effect_particle(&particle_vector_scratch);
         free_effect_particle(particle);
         return;
     }
@@ -1857,7 +1868,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
         }
         if (particle->pos.f[2] < ground_height_threshold) {
             ground_probe_position.q = particle->pos.q;
-            FUN_L00_002634f8_275320(&ground_probe_position);
+            spawn_ground_contact_effect_particle(&ground_probe_position);
             free_effect_particle(particle);
             return;
         }
@@ -1956,14 +1967,14 @@ void update_gravity_damped_resizing_particle(unsigned char *particle) {
     }
 }
 extern int D_L00_00160240 __attribute__((sda));
-void FUN_L00_00259430();
+void decrement_packed_countdown() __asm__("FUN_L00_00259430");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle() __asm__("FUN_L00_00267a08");
 /* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once fast_dec_timer_s16(p+0xA) is set. */
 void update_timed_alpha_fade_particle(char *particle) __asm__("FUN_L00_00275810");
 
 void update_timed_alpha_fade_particle(char *particle) {
-    FUN_L00_00259430(particle + 4, D_L00_00160240);
+    decrement_packed_countdown(particle + 4, D_L00_00160240);
     if (fast_dec_timer_s16(particle + 0xA))
         free_effect_particle(particle);
 }

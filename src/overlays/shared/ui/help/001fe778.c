@@ -71,18 +71,18 @@ s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
+s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
-f32 FUN_L00_00233d30(void *);
+f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
-void FUN_L00_002335c8(void *, f32, f32, f32);
+void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 f32 FUN_001f99c0(f32);
 
 #define GI(o) (*(s32 *)(hero_lui + (o)))
@@ -165,7 +165,7 @@ void update_hero_ground_contact(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.unk30A = 1;
         }
         aim_height_data = suck_get_aim_height(HH.moby);
@@ -179,7 +179,7 @@ void update_hero_ground_contact(void) {
         hero.ground_distance = fast_vec_dist(&hero.motion.pos, &hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c(&hero.unk270, (u8 *)&HH.normal_x);
-        hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         subtract_vector_xyz(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&ground_displacement_or_angles, &hero.unk270)) {
@@ -245,8 +245,8 @@ d1:
         if (i == 1) {
             surface_probe_angle = -surface_probe_angle;
         }
-        FUN_L00_002335c8(&surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
-        FUN_L00_002335c8(&unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
+        transform_hero_polar_offset_to_world(&surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
+        transform_hero_polar_offset_to_world(&unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
         if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;

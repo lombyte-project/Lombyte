@@ -14,7 +14,9 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
-float FUN_L00_0025c230(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
+float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) __asm__("FUN_L00_0025c230");
+
+float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
     float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
     float *transformed_delta_ptr = transformed_delta;
     subtract_vector_xyz(delta, minuend_vector, subtrahend_vector);
@@ -61,19 +63,21 @@ typedef struct {
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
+extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source_mask) {
+void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) __asm__("FUN_L00_0025c398");
+
+void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) {
     V4 generated_points[20];
     float randomized_vector[4];
     int point_count, i;
 
-    point_count = FUN_L00_0025aca0(source_object, 20, generated_points, point_source_mask, 14.0f);
+    point_count = generate_random_points_from_shape_entries(source_object, 20, generated_points, point_source_mask, 14.0f);
     if (point_count == 0) {
         return;
     }
@@ -166,7 +170,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0025e3b8(void *);
+extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
@@ -174,11 +178,11 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c);
+int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __asm__("FUN_L00_002595a0");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);
 void spawn_nearby_effect(char *, float, int, int, void *, void *) __asm__("FUN_L00_00259bc8");
-void FUN_L00_0025c398_c(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
+void spawn_particles_at_shape_points(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -212,7 +216,7 @@ int mine_fall(char *moby, char *motion_state) {
     *(float *)(motion_state + 0x8) = *(float *)(motion_state + 0x8) - *(float *)(motion_state + 0x10);
     if (*(unsigned char *)(motion_state + 0x2E) == 1) {
         if (*(unsigned char *)(motion_state + 0x2F) != 0) {
-            FUN_L00_0025c398_c(moby, motion_state, (void *)(int)*(unsigned char *)(motion_state + 0x2F));
+            spawn_particles_at_shape_points(moby, motion_state, (void *)(int)*(unsigned char *)(motion_state + 0x2F));
         }
     }
 
@@ -279,7 +283,7 @@ int mine_fall(char *moby, char *motion_state) {
             } else {
                 float negative_half_gravity_step = *(float *)(motion_state + 0x10) * -0.5f;
                 landing_prediction_divisor = 60.0f;
-                result_count = FUN_L00_002595a0(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
                 if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
                     landing_prediction_divisor = larger_quadratic_root;
                 }
@@ -321,7 +325,7 @@ int mine_fall(char *moby, char *motion_state) {
         int **pp = D_L00_00177F00;
         int k = result_count;
         do {
-            if (FUN_L00_0025e3b8(*pp) == 0) {
+            if (is_moby_in_class_range_500_to_540(*pp) == 0) {
                 if (*(int *)(motion_state + 0x24) & 0x20) {
                     if (*(short *)(motion_state + 0x3E) == 2) {
                         flags |= 0x100;

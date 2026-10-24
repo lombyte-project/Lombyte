@@ -14,7 +14,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F9438.c: func_L07_002F9438), where it is exact; names translated to the US level program. */
 
 extern char D_L07_001D3400[];
-extern void FUN_L02_002a4058(void *, int, float);
+extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -23,7 +23,7 @@ void FUN_L07_002f8058(unsigned char *moby) {
     case 0:
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
-        FUN_L02_002a4058(D_L07_001D3400, 0x80, 1.0f);
+        prepare_scaled_float_table_with_target_byte(D_L07_001D3400, 0x80, 1.0f);
         break;
     case 1:
         enqueue_callback_list_1(l07_moby_draw_callback, moby);
@@ -46,9 +46,9 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L01_0026e090(int i, int v);
-void FUN_L01_0026e0e0(int list, int state);
+void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013E633_30D370[] __asm__("D_0013F350") NOT_SDA;
-extern void func_L01_0026F090_30D370(int list, int state) __asm__("FUN_L01_0026e0e0");
+extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void func_001FA190_30D370(void *) __asm__("FUN_001f9fc8");
@@ -96,7 +96,7 @@ void timed_activation_pads_update(unsigned char *moby)
     if (moby[0x20] < 6) {
         if (moby[0xB0] != 0xFF) {
             if (visited52[moby[0xB0] + (current_level_index << 4)] == 0xFF)
-                func_L01_0026F090_30D370(moby[0x21], 6);
+                set_moby_list_state(moby[0x21], 6);
         }
     }
 
@@ -129,7 +129,7 @@ void timed_activation_pads_update(unsigned char *moby)
         if (moby[0xBC] == 1) {
             if (func_001F9908_30D370((int *)pad_data)) {
                 func_0022ED80_30D370(2, 0, (int)moby);
-                func_L01_0026F090_30D370(moby[0x21], 8);
+                set_moby_list_state(moby[0x21], 8);
             } else if (func_001F9908_30D370((int *)(pad_data + 4))) {
                 func_0022ED80_30D370(0, 0, (int)moby);
                 *(int *)(pad_data + 4) = func_001F9850_30D370(0x2D) < func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
@@ -142,7 +142,7 @@ void timed_activation_pads_update(unsigned char *moby)
     case PAD_INITIALIZE:
         glow_n(moby, 0x80, 0x80, 0x80);
         func_L01_0026F040_30D370(moby[0x21], 0);
-        func_L01_0026F090_30D370(moby[0x21], 1);
+        set_moby_list_state(moby[0x21], 1);
         break;
     case PAD_WAIT_FOR_ACTIVATION:
         *(int *)(pad_data + 0x8) = 0;
@@ -158,7 +158,7 @@ void timed_activation_pads_update(unsigned char *moby)
             func_L01_0026F040_30D370(moby[0x21], 0);
             moby[0xBC] = on;
             func_0022ED80_30D370(3, 0, (int)moby);
-            func_L01_0026F090_30D370(moby[0x21], 2);
+            set_moby_list_state(moby[0x21], 2);
         }
         break;
     case PAD_ADVANCE_TO_FLASH_ACTIVATION_GATE:
@@ -169,7 +169,7 @@ void timed_activation_pads_update(unsigned char *moby)
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
             func_0022ED80_30D370(3, 0, (int)moby);
-            func_L01_0026F090_30D370(moby[0x21], 4);
+            set_moby_list_state(moby[0x21], 4);
         }
         break;
     case PAD_ENTER_FLASH_ACTIVATION_WAIT:
@@ -179,7 +179,7 @@ void timed_activation_pads_update(unsigned char *moby)
         if (flag) {
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
-            func_L01_0026F090_30D370(moby[0x21], 6);
+            set_moby_list_state(moby[0x21], 6);
             func_0022ED80_30D370(1, 0, (int)moby);
         }
         break;

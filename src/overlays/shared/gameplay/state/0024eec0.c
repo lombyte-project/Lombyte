@@ -23,8 +23,8 @@ void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
 void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
-void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b);
-void FUN_L00_0024eed8(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
+void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
+void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
     Vec4 local_offset;
     Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[table_entry_index];
@@ -44,8 +44,8 @@ void FUN_L00_0024eed8(char *moby, int table_entry_index, void *v, float unscaled
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
 /* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
-void FUN_L00_0024efb0(unsigned char *a, int dx, int dy);
-void FUN_L00_0024efb0(unsigned char *moby_class, int dx, int dy) {
+void offset_moby_class_point_pairs(unsigned char *a, int dx, int dy) __asm__("FUN_L00_0024efb0");
+void offset_moby_class_point_pairs(unsigned char *moby_class, int dx, int dy) {
     int i;
     int entry_count = moby_class[4] + moby_class[5];
     int *entry_cursor = *(int **)moby_class;
@@ -107,7 +107,9 @@ SlotBuffer slot_buffers_l16[6] __asm__("D_L16_001871C0") = {{0}};
 SlotBuffer slot_buffers_l17[6] __asm__("D_L17_00187640") = {{0}};
 SlotBuffer slot_buffers_l18[6] __asm__("D_L18_00187740") = {{0}};
 
-Slot *FUN_L00_0024f028(char *owner, int id) {
+Slot *allocate_moby_animation_slot(char *owner, int id) __asm__("FUN_L00_0024f028");
+
+Slot *allocate_moby_animation_slot(char *owner, int id) {
     int i = 0;
     Slot *selected_slot;
     unsigned char *selected_record;
@@ -141,7 +143,9 @@ typedef struct {
 
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
-void FUN_L00_0024f0e8(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
+void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) __asm__("FUN_L00_0024f0e8");
+
+void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
     ListNode_24f0e8 *list_cursor;
 
     if (*slot == 0)
@@ -244,7 +248,9 @@ typedef struct {
     u8 b51, b52, b53;
 } A;
 /* Fills a1 from a0's bytes, a2/a3 and a 1/a4 step; calls FUN_L00_0024f190 when a5 is set. */
-void FUN_L00_0024f3e0(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) {
+void initialize_moby_animation_blend(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) __asm__("FUN_L00_0024f3e0");
+
+void initialize_moby_animation_blend(A *source, S *destination, s32 target_animation_index, s32 target_frame_index, s32 step_divisor, s32 update_immediately) {
     destination->b22 = source->b53;
     destination->b20 = source->b51;
     destination->b23 = target_animation_index;

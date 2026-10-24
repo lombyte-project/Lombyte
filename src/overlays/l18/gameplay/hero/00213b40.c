@@ -12,7 +12,7 @@ extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
-extern void FUN_L00_0020b930(void);
+extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -117,7 +117,7 @@ void apply_hero_ground_type_effects(void) {
                 if (hero_ptr->unk2F4 - hero_ptr->motion.pos.f[2] > 0.0f) {
                     if (hero_ptr->state.current != 0x69 || hero_ptr->unk41E != 0) {
                         if (hero_ptr->motion.displacement.f[2] < 0.0f) {
-                            FUN_L00_0020b930();
+                            exit_hero_vehicle_mode_if_mode_three();
                             if (hero_ptr->health.hp == 0)
                                 hero_set_state(0x7B, 1);
                             else
@@ -133,7 +133,7 @@ void apply_hero_ground_type_effects(void) {
             if (absolute_float(hero_ptr->unk2F4 - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
                 if (hero_ptr->unk2F4 - hero_ptr->motion.pos.f[2] > 0.0f) {
                     if (hero_ptr->motion.displacement.f[2] < 0.0f) {
-                        FUN_L00_0020b930();
+                        exit_hero_vehicle_mode_if_mode_three();
                         hero_set_state(0x7B, 1);
                     }
                 }
@@ -166,15 +166,15 @@ typedef union {
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
-void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_210ce8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001fa580_210ce8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
-void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
+void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
+void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -237,7 +237,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     if (apply_hurt_response == 0) {
         return 1;
     }
-    FUN_L00_00206c08_210ce8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (response_record->i30 & 1) {
         qcopy(&response_motion_delta, &response_record->v10);
@@ -282,7 +282,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
                 mob = ((u8 *)hero.unk2280);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
-                    FUN_L00_00216de8_210ce8(0x1C, 0);
+                    allocate_hero_voice_for_entry(0x1C, 0);
                 }
             }
             hero_set_state(0x76, 1);
@@ -313,7 +313,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_GIANT_CLANK:
         if ((response_record->i24 & 4) || hero.unk1630 <= 0) {
             hero_set_state(0x5D, 1);
-            FUN_L00_002a9be0_210ce8();
+            remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
                 FUN_L00_00210c80_210ce8(&response_motion_delta, flag, frame_time * 7.0f,
                                         frame_time * 3.5f);

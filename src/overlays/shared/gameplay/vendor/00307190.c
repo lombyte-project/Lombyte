@@ -19,8 +19,8 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
-char *FUN_L08_00307190(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
+char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
+char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
     char *spawned_moby = func_0020D348_m(0x50C);
     if (spawned_moby != 0) {
         char *moby_data;
@@ -125,7 +125,9 @@ extern int D_L08_00162374;
 
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
-void FUN_L08_00307b90(int use_reduced_xy_range_preset) {
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
+
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
     float xy_random_range_scale, countdown_range_start, count_interpolation_end, count_interpolation_start;
     float xy_range_reference_vector[2];
     float xy_length_ratio;
@@ -183,15 +185,15 @@ extern int D_L08_00162358 __attribute__((sda));
 extern float D_L08_0016235C __attribute__((sda));
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
-extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
-void FUN_L00_002634f8(void *v);
-void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
-void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");
+void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
+void create_type_49_particle(void *pos, int kind, void *vel, float f) __asm__("FUN_L08_0027f5f0");
+void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
-extern void func_L08_00309050_3091B0(int) __asm__("FUN_L08_00307b90");
+extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
 extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void func_001F9BF0_3091B0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00263D68_3091B0(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
@@ -202,7 +204,7 @@ extern float func_001F9CE8_3091B0(void *) __asm__("FUN_001f9b20");
 extern float func_L00_002644E0_3091B0(void *) __asm__("FUN_L00_00263468");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
-extern void func_L00_00264570_3091B0(void *) __asm__("FUN_L00_002634f8");
+extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
 
 void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
 
@@ -264,10 +266,10 @@ void scatter_ground_particles(Moby *moby) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
         moby->state = 2;
         moby->update_dist = 0xFF;
-        func_L08_00309050_3091B0(flag);
+        randomize_ground_particle_scatter_parameters(flag);
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
-        if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
+        if (update_float_countdown(&D_L08_00162370)) randomize_ground_particle_scatter_parameters(flag);
         func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
@@ -378,7 +380,7 @@ void scatter_ground_particles(Moby *moby) {
                     w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.y += w;
-                    func_L00_00264570_3091B0(&pt);
+                    spawn_ground_contact_effect_particle(&pt);
                 } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
@@ -396,7 +398,7 @@ void scatter_ground_particles(Moby *moby) {
                     w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.y += w;
-                    func_L00_00264570_3091B0(&pt);
+                    spawn_ground_contact_effect_particle(&pt);
                 } while (--remaining_pass_attempts != 0);
             }
         }
@@ -413,7 +415,7 @@ extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
@@ -448,7 +450,7 @@ void spawn_moby_radial_particles(char *moby) {
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);
                 randomized_spawn_vector[3] = 0.0f;
-                FUN_L08_00272cb8(v, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
+                spawn_span_particle(v, *(void **)moby_data, randomized_spawn_vector, *(float *)(moby + 0x18) - *(float *)(moby_data + 0x20));
             }
         }
     }

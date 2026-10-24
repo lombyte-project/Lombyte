@@ -12,7 +12,9 @@ typedef struct {
 } Ent09;
 extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 /* Finds the 0xA0-byte entry in D_L00_00167150 whose short at 0x86 equals id; 0 when none. */
-s32 FUN_L00_001eb1f8(s32 id) {
+s32 find_camera_record_by_id(s32 id) __asm__("FUN_L00_001eb1f8");
+
+s32 find_camera_record_by_id(s32 id) {
     s32 camera_record_address;
     s32 camera_table_end_address;
     s16 camera_record_id;
@@ -59,7 +61,9 @@ typedef struct {
 } S001eb448;
 extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
 /* Sets h and clears b in the block D_L00_00166C80 points to. */
-void FUN_L00_001eb448(void) {
+void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
+
+void initialize_camera_record_handoff_defaults(void) {
     D_L00_00166C80_u.p->h = 1;
     D_L00_00166C80_u.p->b = 0;
 }
@@ -277,7 +281,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_001ed580(float *output_position, float *angles_and_distance, void *origin_position) {
+void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) __asm__("FUN_L00_001ed580");
+
+void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) {
     output_position[0] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_cos(angles_and_distance[0]);
     output_position[1] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_sin(angles_and_distance[0]);
     output_position[2] = angles_and_distance[2] * fast_sin(angles_and_distance[1]);
@@ -299,7 +305,9 @@ extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
-int FUN_L00_001ed630(float *angles_and_distance) {
+int compute_spherical_offset_from_positions(float *angles_and_distance) __asm__("FUN_L00_001ed630");
+
+int compute_spherical_offset_from_positions(float *angles_and_distance) {
     W difference_vector;
     float xy_angle;
     subtract_vector_xyz(difference_vector);

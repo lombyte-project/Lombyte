@@ -42,8 +42,8 @@ typedef struct { int v[2]; } Pair_2c26c8;
 typedef union { float m[4][4]; Pair_2c26c8 pair; } Buf_2c26c8;
 
 extern int FUN_001e93b0_2c26c8() __asm__("FUN_001e93b0");
-extern void FUN_L00_00262b00_2c26c8(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void FUN_L00_00262b80_2c26c8(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void FUN_001fa050_2c26c8(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_001f9d20_2c26c8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_L00_00257470_2c26c8(void *, int, int) __asm__("FUN_L00_00257470");
@@ -158,8 +158,8 @@ void update_airship_part(struct Moby *moby) {
     case AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_COMMAND:
     case AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_GATE: {
         if (moby->oclass == 0x4A0) {
-            FUN_L00_00262b00_2c26c8(part_vars->f48, part_vars->f4C * 0.017453292f * frame_time, (char *)moby, &part_vars->f40, &part_vars->f44);
-            FUN_L00_00262b80_2c26c8(moby, (char *)&part_vars->f50, (char *)&part_vars->f54, part_vars->f58 * 0.017453292f, part_vars->f5C * 0.017453292f * frame_time, part_vars->f60 * 0.017453292f * frame_time);
+            update_moby_vertical_oscillation(part_vars->f48, part_vars->f4C * 0.017453292f * frame_time, (char *)moby, &part_vars->f40, &part_vars->f44);
+            update_moby_rotation_oscillation(moby, (char *)&part_vars->f50, (char *)&part_vars->f54, part_vars->f58 * 0.017453292f, part_vars->f5C * 0.017453292f * frame_time, part_vars->f60 * 0.017453292f * frame_time);
         }
         if (moby->oclass != 0x4A0 && part_vars->parent != 0 && part_vars->parent->state != 3) {
             struct Moby *p = part_vars->parent;

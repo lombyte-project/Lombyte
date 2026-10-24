@@ -35,7 +35,9 @@ extern volatile unsigned char D_0015EDB0[1];
 extern unsigned char D_L08_0017CC40[];
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L08_00305138(struct Moby *moby) {
+void attach_batalia_deserter_class_manipulator(struct Moby *moby) __asm__("FUN_L08_00305138");
+
+void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
     int i;
     if (D_L08_0015F5C4 == 2 && D_0015EDB0[0]) {
         if (D_L08_0016D060.a == 3 && D_L08_0016D060.b >= 0x1BA && D_L08_0016D060.b < 0x284) {
@@ -306,7 +308,9 @@ extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
 
 extern short D_L08_00162300 __attribute__((sda));
-void FUN_L08_003063f0(struct Moby *moby) {
+void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L08_003063f0");
+
+void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
     int i;
     if (D_L08_0015F5C4 == 2 && D_0015EDB0_c[0]) {
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
@@ -409,10 +413,10 @@ extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
-extern void FUN_L00_00299460(int);
+extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void FUN_L00_00260860(int, int);
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
@@ -462,7 +466,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
         break;
     case PLUMBER_SAVE_AND_REMOVE:
         jet_clear_persistent(moby->bB0);
-        FUN_L00_00260860(0x1B, 1);
+        grant_inventory_item(0x1B, 1);
         memcard_save_data(0, -1);
         mark_moby_for_removal(moby);
         return;

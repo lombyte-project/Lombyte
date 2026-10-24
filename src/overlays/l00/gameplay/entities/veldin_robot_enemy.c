@@ -230,7 +230,7 @@ extern s32 FUN_L00_002e2040_c(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern s32 mine_fall(ElectroidMoby *, void *) __asm__("FUN_L00_0025c698");
 extern void cart_burst(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00263e30(ElectroidMoby *, s32, s32, s32, s32, s32, s32);
+extern void spawn_moby_break_fragments(ElectroidMoby *, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_00263e30");
 extern void FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
                              void *);
 extern void update_veldin_robot_effects() __asm__("FUN_L00_002e1aa8");
@@ -440,7 +440,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     case VELDIN_ROBOT_STATE_DEATH_KNOCKBACK:
         if (mine_fall(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
-            FUN_L00_00263e30(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
+            spawn_moby_break_fragments(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
             FUN_L00_00263fd8(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
                              D_L00_0015F580, D_L00_0015F580);
             FUN_L00_00263fd8(moby, 0x78E, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
@@ -610,7 +610,7 @@ typedef struct {
 
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
+extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
@@ -630,12 +630,12 @@ void update_veldin_robot_effects(SparkMoby *moby) {
     moby_point_position(moby, 1, pos);
     vars->pos[2] -= 0.333f;
     random_spherical_offset(particle_initial_velocity, 0.005f, 0.03f);
-    particle = FUN_L00_00274948(pos, particle_initial_velocity, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(pos, particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        particle = FUN_L00_00274948(vars->pos, D_L00_0015F580, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(vars->pos, D_L00_0015F580, 0x7F, moby);
         if (particle != 0) {
             particle_tail = &particle->tail;
             if (i == 2 && random_integer_below(8) == 0) {

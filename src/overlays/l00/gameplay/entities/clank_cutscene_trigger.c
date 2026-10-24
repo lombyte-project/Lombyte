@@ -171,7 +171,7 @@ extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
+extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026ced0");
 extern VeldinLevelState D_L00_0016C860;
 
 void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
@@ -218,7 +218,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
                 build_spherical_offset(
                     spherical_offset.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
                 r = scale_game_frames(0xC);
-                FUN_L00_0026ced0(&joint_world_position, &spherical_offset, 0x80808080, 0x808080,
+                spawn_effect_particle_with_target_scalar(&joint_world_position, &spherical_offset, 0x80808080, 0x808080,
                                  random_int_between(r, scale_game_frames(0x23)), 147000.0f);
             }
         }

@@ -36,7 +36,9 @@ int point_in_path_xy(float *test_point, float *path_vertices, int vertex_count) 
     return crossing_parity;
 }
 /* True when the pointer at a+0x94 is set and its word at +8 is non-zero. */
-int FUN_L00_00259830(char *moby) {
+int test_moby_linked_record_word8(char *moby) __asm__("FUN_L00_00259830");
+
+int test_moby_linked_record_word8(char *moby) {
     char *moby_linked_record = *(char **)(moby + 0x94);
     if (moby_linked_record && *(int *)(moby_linked_record + 8))
         return 1;
@@ -51,8 +53,8 @@ int FUN_L00_00259830(char *moby) {
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
-void FUN_L00_00259858(char *a, int b, int c, float d);
-void FUN_L00_00259858(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority) {
+void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
+void initialize_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, float hit_priority) {
     *(int *)(hit_descriptor + 0x10) = source_moby;
     *(int *)(hit_descriptor + 0x14) = hit_mask;
     *(float *)(hit_descriptor + 0x1C) = hit_priority;
@@ -95,7 +97,9 @@ int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_rad
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 /* Calls play_entity_sound at a moby point; the f13 argument is ignored and c is passed again as a float. */
-int FUN_L00_002599e8(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
+int collect_mobies_in_sphere_at_moby_point(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) __asm__("FUN_L00_002599e8");
+
+int collect_mobies_in_sphere_at_moby_point(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
     float position[4] __attribute__((aligned(16)));
     moby_point_position(moby, point, position);
     return play_entity_sound(moby, position, hit_mask, sphere_radius, (float)hit_mask, direction_scale, hit_descriptor_payload_byte, hit_payload_byte, i);
@@ -129,8 +133,8 @@ typedef struct {
 extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
-void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
-void FUN_L00_00259a88(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
+void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
+void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *hit_record;
@@ -242,7 +246,9 @@ typedef struct {
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 
-void FUN_L00_00259f50(void *output_quaternion, float *axis_rotation_angles) {
+void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) __asm__("FUN_L00_00259f50");
+
+void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) {
     Vk z_axis_quaternion, y_axis_quaternion, x_axis_quaternion;
     FUN_L00_001fff28(&x_axis_quaternion, 0, axis_rotation_angles[0]);
     FUN_L00_001fff28(&y_axis_quaternion, 1, axis_rotation_angles[1]);
@@ -508,7 +514,9 @@ extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
 extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
 
-int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
+int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) __asm__("FUN_L00_0025aca0");
+
+int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
     enum HitShape {
         SHAPE_INLINE_CENTER_SPHERE = 0x0,
         SHAPE_INDEXED_CENTER_SPHERE = 0x2,
@@ -825,8 +833,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Turns from angle a toward angle b by fraction c of the difference. */
-float FUN_L00_0025b750(float a, float b, float c);
-float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fraction) {
+float interpolate_angle(float a, float b, float c) __asm__("FUN_L00_0025b750");
+float interpolate_angle(float start_angle, float target_angle, float blend_fraction) {
     float angle_difference = fast_subtract_rotations(target_angle, start_angle);
     return fast_add_rotations(start_angle, angle_difference * blend_fraction);
 }
@@ -838,7 +846,9 @@ float FUN_L00_0025b750(float start_angle, float target_angle, float blend_fracti
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L00_0025b798(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
+void advance_damped_scalar_velocity(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) __asm__("FUN_L00_0025b798");
+
+void advance_damped_scalar_velocity(float *velocity, float rate, float error_gain, float damping_coefficient, float limit) {
     float unclamped_velocity = *velocity + (error_gain * rate - damping_coefficient * (*velocity));
 
     *velocity = unclamped_velocity;

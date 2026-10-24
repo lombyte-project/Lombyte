@@ -50,7 +50,9 @@ extern int D_0015EEA4;
 extern int D_L00_0015F598;
 extern int D_0015EE28;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00297e70(void) {
+void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
+
+void update_game_frame_and_idle_counters(void) {
     if (D_0013C940.buttons.w.held != 0 || D_0013C940.analog[2] != 0.0f || D_0013C940.analog[3] != 0.0f ||
         D_0013C940.analog[0] != 0.0f || D_0013C940.analog[1] != 0.0f) {
         D_L00_00160FF0 = 0;
@@ -133,9 +135,9 @@ extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
                                   s32) __asm__("FUN_001ff308");
-extern void FUN_L00_00239cc8(void);
-extern void FUN_L00_00239d00(void);
-extern void FUN_L00_00239df8(void);
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0028ecd8(void);
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void FUN_L00_0024e7a8(void);
@@ -155,7 +157,7 @@ extern void update_all_point_lights(void) __asm__("FUN_00201a28");
 extern void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
 extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void update_help_state(void) __asm__("FUN_001fde90");
-extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
+extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 
 #define DBG(b)                                                                                     \
     ((D_L00_0016C058.w8 & (b)) || ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)))
@@ -236,7 +238,7 @@ void handle_pause_input(void) {
         s32 x;
         x = show_health_hud();
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
-        x = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8,
+        x = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, draw_bolt_counter_hud_panel,
                                    &current_bolt_count, 9999999);
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
     }
@@ -287,7 +289,7 @@ void handle_pause_input(void) {
     update_hud_elements(1);
     update_help_state();
     if (DBG(2))
-        FUN_L00_00297e70_c();
+        update_game_frame_and_idle_counters();
     if (D_L00_0016C058.w18 == 2)
         no_op_main_callback_alt();
     if (D_L00_0016C058.w18 == 3)
@@ -347,7 +349,7 @@ void f211250_298840(void) __asm__("FUN_L00_00211250");
 void f216050_298840(int) __asm__("FUN_00216050");
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void memset_298840(void *, int, int) __asm__("FUN_001f97e8");
-void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
+void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
 int FUN_L00_002451b8_c(int) __asm__("FUN_L00_002451b8");
@@ -386,7 +388,7 @@ void start_scene(int scene_id) {
     D_L00_001611CC = scene_buffer_base;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + scene_buffer_base;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + scene_buffer_base;
-    f2039a0_298840();
+    clear_active_help_record();
     fade_level = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400 = 0;
@@ -652,7 +654,7 @@ extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
-extern void FUN_L00_002451b8(s32);
+extern void start_cutscene_chunk_read(s32) __asm__("FUN_L00_002451b8");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -727,7 +729,7 @@ void update_cutscene_playback(void) {
             FUN_002168a8(1);
             D_L00_0016C860.f3C++;
             FUN_00204790();
-            FUN_L00_002451b8(D_L00_0016C860.f3C + 1);
+            start_cutscene_chunk_read(D_L00_0016C860.f3C + 1);
         }
         last = apply_cutscene_camera_key();
         for (i = 0; i < D_L00_0016C860.h44; i++) {
@@ -763,7 +765,7 @@ void update_cutscene_playback(void) {
     update_all_point_lights();
     update_resident_packed_direction();
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        FUN_L00_00297e70();
+        update_game_frame_and_idle_counters();
     }
 }
 typedef struct {
@@ -780,7 +782,9 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) __asm__("FUN_L00
 
 void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 void hero_respawn() __asm__("FUN_L00_00211250");
-void FUN_L00_00299460(s32 i) {
+void queue_scene_movie_with_game_language(s32 i) __asm__("FUN_L00_00299460");
+
+void queue_scene_movie_with_game_language(s32 i) {
     s32 a, b;
     struct Hero *hero_ptr;
     if (i < 0)
@@ -856,7 +860,7 @@ extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
-extern void FUN_L00_002039a0(void);
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
@@ -878,7 +882,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
-    FUN_L00_002039a0();
+    clear_active_help_record();
     D_L00_0015F5C4_macro = 1;
     D_L00_00161054_macro = D_L00_00173E04_lui;
     D_L00_00161058_macro = D_L00_0015F40C_macro;
@@ -1352,17 +1356,17 @@ extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void FUN_0012dc80_29a6b0(void) __asm__("FUN_0012dc80");
 extern void FUN_L00_0029a400(s32);
-extern void FUN_L00_0023aef8_29a6b0(void) __asm__("FUN_L00_0023aef8");
+extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern s32 add_text_29a6b0(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern void FUN_L00_00239cc8_29a6b0(void) __asm__("FUN_L00_00239cc8");
-extern void FUN_L00_00239d00_29a6b0(void) __asm__("FUN_L00_00239d00");
-extern void FUN_L00_00239df8_29a6b0(void) __asm__("FUN_L00_00239df8");
-extern void FUN_L00_0023a760_29a6b0(void) __asm__("FUN_L00_0023a760");
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
+extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_29a6b0(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a7a8_29a6b0(void) __asm__("FUN_L00_0023a7a8");
 extern s32 FUN_0022da68_29a6b0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
-extern void FUN_L00_002039a0_29a6b0(void) __asm__("FUN_L00_002039a0");
+extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 FUN_L00_002223f8_29a6b0(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_00212ed8_29a6b0(void *, s32, s32) __asm__("FUN_00212ed8");
@@ -1384,8 +1388,8 @@ extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
-void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m);
-void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
+void open_vendor_menu(VendorMoby_29a6b0 *m) __asm__("FUN_L00_0029a6b0");
+void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     s32 i;
     Vec4 *vector_destination_cursor;
     s32 half;
@@ -1428,13 +1432,13 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
     if (half < 3) sel = 1;
     vendor_29a6b0.cursor = half / 2;
     vendor_29a6b0.scroll = (sel - half / 2) * 0x28;
-    FUN_L00_0023aef8_29a6b0();
-    vendor_29a6b0.title_text = add_text_29a6b0(0x12, 0x754E, FUN_L00_00239cc8_29a6b0, FUN_L00_00239d00_29a6b0,
-                                               FUN_L00_00239df8_29a6b0, &D_0015ED98_29a6b0, 0x98967F);
+    reset_hud_and_suspend_weapon_updates();
+    vendor_29a6b0.title_text = add_text_29a6b0(0x12, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
+                                               draw_bolt_counter_hud_panel, &D_0015ED98_29a6b0, 0x98967F);
     if (vendor_29a6b0.entries[vendor_29a6b0.cursor].selected == 1) {
         s32 item = vendor_29a6b0.entries[vendor_29a6b0.cursor].item;
 
-        vendor_29a6b0.item_text = add_text_29a6b0(0x30, item + 0xEA60, FUN_L00_0023a760_29a6b0,
+        vendor_29a6b0.item_text = add_text_29a6b0(0x30, item + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions,
                                                   FUN_L00_00235ea0_29a6b0, FUN_L00_0023a7a8_29a6b0,
                                                   &weapon_ammo_counts[item], (vendor_items_29a6b0 + item)->text);
     }
@@ -1448,7 +1452,7 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *vendor_moby) {
     if (vendor_29a6b0.mode == 0) {
         FUN_001f4a58_29a6b0(4);
     }
-    FUN_L00_002039a0_29a6b0();
+    clear_active_help_record();
     fade_level = 1.0f;
     D_L00_0015F5C4 = 5;
     D_L00_0015F400 = 0;
@@ -1713,7 +1717,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void FUN_L00_0029b4d8(int vendor_event) {
+void handle_vendor_auxiliary_moby_event(int vendor_event) __asm__("FUN_L00_0029b4d8");
+
+void handle_vendor_auxiliary_moby_event(int vendor_event) {
     enum {
         VENDOR_SELECTION_CHANGED = 0,
         VENDOR_AUXILIARY_MOBY_READY = 1,
@@ -1805,7 +1811,9 @@ extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f
 extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
 extern int D_L00_00161090 __attribute__((sda));
-void FUN_L00_0029b680(void) {
+void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
+
+void initialize_vendor_selected_item_mobys(void) {
     V_29b680 item_local_position;
     int id;
     int k;
@@ -1955,7 +1963,7 @@ extern ViewCamera D_L00_00166C80;
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 
 extern void FUN_L00_00297e30(void);
-extern void FUN_L00_00297e70(void);
+extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
 extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
@@ -1977,7 +1985,7 @@ extern void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_00
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
-extern void FUN_L00_0029b4d8(s32);
+extern void handle_vendor_auxiliary_moby_event(s32) __asm__("FUN_L00_0029b4d8");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_resident_dialogue_animation_state(void *) __asm__("FUN_00237ed0");
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
@@ -1988,14 +1996,14 @@ extern s32 FUN_001fdd10(s32);
 extern void FUN_00237e90(s32);
 extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
-extern void FUN_L00_0023a760(void);
+extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0(void);
 extern void FUN_L00_0023a7a8(void);
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-extern void FUN_L00_0029b680(void);
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
@@ -2043,11 +2051,11 @@ extern void FUN_L00_0029b4d8_2ba78(int) __asm__("FUN_L00_0029b4d8");
 extern void FUN_L00_0029a400_2ba78(int) __asm__("FUN_L00_0029a400");
 extern int get_help_message_text(int) __asm__("FUN_001fdd10");
 extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
-extern void FUN_L00_00260860_2ba78(int, int) __asm__("FUN_L00_00260860");
+extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void FUN_001ff570_2ba78(int, int) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308_2ba78(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void FUN_L00_0029b680_2ba78(void) __asm__("FUN_L00_0029b680");
-extern void FUN_L00_0023a760_2ba78(void) __asm__("FUN_L00_0023a760");
+extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
+extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_00235ea0_2ba78(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L00_0023a7a8_2ba78(void) __asm__("FUN_L00_0023a7a8");
 
@@ -2219,7 +2227,7 @@ void update_vendor_purchase(void) {
                 purchase_cost = D_0013D4E3[0] ? CUR_TB.f4 : CUR_TB.f0;
                 if (D_0015ED98 >= purchase_cost) {
                     FUN_L00_0029b4d8_2ba78(2);
-                    FUN_L00_00260860_2ba78(CUR_ITEM.fD0, 1);
+                    grant_inventory_item(CUR_ITEM.fD0, 1);
                     vendor_menu.f48 = CUR_ITEM.fD0;
                     if (CUR_ITEM.fD0 == 0x18) {
                         D_00141345[0] = 1;
@@ -2233,7 +2241,7 @@ void update_vendor_purchase(void) {
                     if (CUR_ITEM.fD4 == 1) {
                         s32 i = CUR_ITEM.fD0;
 
-                        vendor_menu.f50 = FUN_001ff308_2ba78(0x30, 0xEA60 + i, FUN_L00_0023a760_2ba78,
+                        vendor_menu.f50 = FUN_001ff308_2ba78(0x30, 0xEA60 + i, initialize_numeric_hud_timer_and_base_dimensions,
                                            FUN_L00_00235ea0_2ba78, FUN_L00_0023a7a8_2ba78,
                                            &weapon_ammo_counts[i], D_L00_001C40B0[i].hE);
                     } else {
@@ -2241,7 +2249,7 @@ void update_vendor_purchase(void) {
                         if (last_row_index < vendor_menu.f58) {
                             vendor_menu.f58 = last_row_index;
                         }
-                        FUN_L00_0029b680_2ba78();
+                        initialize_vendor_selected_item_mobys();
                     }
                     set_scrolling_status_message(get_help_message_text(0x4F5F));
                     FUN_0022da68_2ba78(7, 0, vendor_menu.f1c);
@@ -2363,7 +2371,7 @@ void update_vendor_menu(void) {
         }
         FUN_00201a28();
         if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-            FUN_L00_00297e70();
+            update_game_frame_and_idle_counters();
         }
         break;
     case VENDOR_MENU_OPEN:
@@ -2377,7 +2385,7 @@ void update_vendor_menu(void) {
             pack_render_command_fields(vendor_menu.f24, 0x202020, 0xE, 0xE, 0);
             D_L00_00161188 = 1;
             D_L00_0016118C = 0;
-            FUN_L00_0029b4d8(1);
+            handle_vendor_auxiliary_moby_event(1);
         }
         advance_moby_animation(vendor_menu.f1c);
         FUN_L00_00250df8(vendor_menu.f1c);
@@ -2447,7 +2455,7 @@ void update_vendor_menu(void) {
                 if ((pad_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
                     if (vendor_menu.f58 < vendor_menu.f210 - 1) {
                         D_L00_00161E38 = 1;
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58++;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
                         FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
@@ -2456,7 +2464,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
                                                   FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2464,7 +2472,7 @@ void update_vendor_menu(void) {
                 if ((pad_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
                     if (vendor_menu.f58 > 0) {
                         D_L00_00161E38 = 1;
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58--;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
                         FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
@@ -2473,7 +2481,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
                                                   FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2484,7 +2492,7 @@ void update_vendor_menu(void) {
                         D_L00_00161E38 = 1;
                         vendor_menu.f4c += 0x38;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         if (vendor_menu.f58 < vendor_menu.f210 - 1) {
                             vendor_menu.f58++;
                         } else {
@@ -2496,7 +2504,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
                                                   FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2506,7 +2514,7 @@ void update_vendor_menu(void) {
                         D_L00_00161E38 = 1;
                         vendor_menu.f4c -= 0x38;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_L00_0029b4d8(0);
+                        handle_vendor_auxiliary_moby_event(0);
                         if (vendor_menu.f58 > 0) {
                             vendor_menu.f58--;
                         } else {
@@ -2518,7 +2526,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
                                                   FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2566,7 +2574,7 @@ void update_vendor_menu(void) {
                 }
             }
         } else if (D_L00_00161E38 != 0) {
-            FUN_L00_0029b680();
+            initialize_vendor_selected_item_mobys();
         }
         update_hud_elements(1);
         break;
@@ -2664,7 +2672,7 @@ void update_vendor_menu(void) {
             }
         }
         FUN_00201a28();
-        FUN_L00_00297e70();
+        update_game_frame_and_idle_counters();
         break;
     }
     FUN_0022ca50();

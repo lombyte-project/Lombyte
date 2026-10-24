@@ -36,7 +36,9 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L04_0024c660(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
+float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) __asm__("FUN_L04_0024c660");
+
+float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
@@ -80,7 +82,9 @@ extern int find_first_positive_polygon_edge_cross_xy(float *, float *, int) __as
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
-int FUN_L04_0024c7d8(float *out, float *query_point, float *poly, int vertex_count) {
+int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) __asm__("FUN_L04_0024c7d8");
+
+int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;

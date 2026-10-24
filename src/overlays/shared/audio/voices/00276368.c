@@ -86,9 +86,9 @@ typedef struct {
 extern Ent *D_L00_001B9E90[];
 extern s32 D_L00_0015F5D8;
 extern s32 current_bolt_count __asm__("D_0015ED98");
-extern void FUN_L00_00239cc8(void);
-extern void FUN_L00_00239d00(void);
-extern void FUN_L00_00239df8(void);
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern s32 D_00141660[];
 extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
@@ -139,7 +139,7 @@ extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
 extern void start_scene(void *) __asm__("FUN_L00_00298840");
-extern void FUN_L00_00299460(void *);
+extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_00299460");
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
@@ -166,7 +166,7 @@ extern void initialize_menu_stream_buffers(s32) __asm__("FUN_00225ac0");
 extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
 extern void decompress_and_relocate_selected_groups(s32) __asm__("FUN_L00_00234fd0");
-extern void FUN_L00_002a0f18(s32, s32, s32);
+extern void transfer_draw_buffer_chunks(s32, s32, s32) __asm__("FUN_L00_002a0f18");
 extern void FUN_L00_002df638(Ent *);
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00277208). */
@@ -301,7 +301,7 @@ void initialize_pause_menu(void) {
     } else {
         decompress_and_relocate_selected_groups(0);
     }
-    FUN_L00_002a0f18(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
+    transfer_draw_buffer_chunks(D_L00_001B9CF0.unk10, draw_buffer_address, frame_size << 11);
     texture_start = gs_texture_allocation_start;
     D_L00_001B9CF0.saved_texture_start = texture_start;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
@@ -416,8 +416,8 @@ void close_pause_menu(void) {
         }
         handle = show_health_hud();
         hud_keep_visible(handle, scale_game_frames(0xb4));
-        handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
-                                    FUN_L00_00239df8, &current_bolt_count, 9999999);
+        handle = queue_animation_update(2, 0x754e, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
+                                    draw_bolt_counter_hud_panel, &current_bolt_count, 9999999);
         hud_keep_visible(handle, scale_game_frames(0xb4));
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
@@ -507,7 +507,7 @@ void update_pause_menu(void) {
             D_L00_001B9CF0.unk130 = previous_decode_mode;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
-            FUN_L00_00299460(D_L00_001B9CF0.unkE4);
+            queue_scene_movie_with_game_language(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
             previous_decode_mode = decode_mode;
             decode_mode = 1;

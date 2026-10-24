@@ -155,9 +155,9 @@ void update_hero_locomotion_state(void) {
 }
 extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") __attribute__((section(".data")));
-extern int FUN_L00_00221d98_229660(void) __asm__("FUN_L00_00221d98");
+extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_00266e00_229660(int, void *, int, int) __asm__("FUN_L00_00266e00");
+extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int FUN_L00_00266d60_229660(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -171,10 +171,10 @@ int hero_handle_jump_press(void) {
 
     if (hero.state.current == 0xE)
         return 0;
-    input_history_separation_limit = FUN_L00_00221d98_229660();
+    input_history_separation_limit = get_hero_high_jump_input_window_frames();
     input_history_window_padding = FUN_001f96f8_229660(5);
     if ((D_0013CAE0_229660 & 0xA) && input_history_separation_limit > 0 &&
-        FUN_L00_00266e00_229660(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
+        check_pad_press_separation(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
     found:
         hero_set_state(next_state, 1);
@@ -255,7 +255,7 @@ typedef struct {
 } E00229a98;
 extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-void FUN_L00_0020e698(void);
+void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -268,7 +268,7 @@ s32 try_start_hero_item_idle_animation(void) {
         return 0;
     id = hero_slot_item_id(0);
     if (id != hero_ptr->unk2298) {
-        FUN_L00_0020e698();
+        cancel_hero_item_animation();
         return 0;
     }
     k = item_defs[id].x24;

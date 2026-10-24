@@ -638,15 +638,15 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void approach_e088(float *, void *, float, float, float, float) __asm__("FUN_00213f38");
 extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030e690");
 extern int random_below_e088(int) __asm__("FUN_00213260");
 extern float rand_range_e088(float, float) __asm__("FUN_002132a8");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
-extern int FUN_L01_00275690(float, void *);
+extern int check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
 extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
-extern void FUN_L11_0030e708(void);
+extern void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 extern void enqueue_e088(void *, void *) __asm__("FUN_001f4600");
 
 /* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
@@ -727,7 +727,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     case WATER_TILE_STATE_APPROACH_LOWER_HEIGHT:
         if (water_tile_moby->command & 4) {
             water_tile_vars[2] = 1;
-            FUN_L01_0026e0e0(water_tile_moby->group, 2);
+            set_moby_list_state(water_tile_moby->group, 2);
         }
         water_tile_moby->command = 1;
         if (water_tile_vars[2] != 0) {
@@ -744,7 +744,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     case WATER_TILE_STATE_APPROACH_UPPER_HEIGHT:
         if (water_tile_moby->command & 8) {
             water_tile_vars[2] = 1;
-            FUN_L01_0026e0e0(water_tile_moby->group, 3);
+            set_moby_list_state(water_tile_moby->group, 3);
         }
         water_tile_moby->command = 2;
         if (water_tile_vars[2] != 0) {
@@ -761,7 +761,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
     }
     if (water_tile_vars[1] >= 0) {
         tile_query_has_result = 0.0f;
-        if (FUN_L01_00275690(64.0f, water_tile_moby) != -1) {
+        if (check_scaled_vector_bsphere(64.0f, water_tile_moby) != -1) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {
@@ -771,7 +771,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
         }
         if (water_tile_vars[1] == 0) {
             pool_flush(D_L11_001DA880, 20);
-            enqueue_e088(FUN_L11_0030e708, water_tile_moby);
+            enqueue_e088(render_level_11_water_grids, water_tile_moby);
         }
     }
 }
@@ -989,7 +989,7 @@ void seesaw_platform_update(struct Moby *platform) {
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern char D_0013D3E3_t[] __asm__("D_0013D3E3");
-extern int FUN_L11_0030f270(char *);
+extern int test_linked_moby_turn_trigger(char *) __asm__("FUN_L11_0030f270");
 extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
 extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
@@ -1013,7 +1013,7 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
         private_data[2] = turning_moby->rot.z;
         break;
     case LINKED_TURN_STATE_WAIT_FOR_LINK:
-        if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
+        if (test_linked_moby_turn_trigger(D_L11_0015FFD8_t + (*(int *)private_data << 8))) {
             if (level_frame >= 11) {
                 D_0013D3E3_t[0] = entry_state;
                 turning_moby->state = 2;
@@ -1280,7 +1280,9 @@ void ammocrate_update(struct Moby *pickup) {
 extern char *func_0020D348_m(int);
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *FUN_L11_0030fd98(struct Moby *owner) {
+char *spawn_ship_pickup_child(struct Moby *owner) __asm__("FUN_L11_0030fd98");
+
+char *spawn_ship_pickup_child(struct Moby *owner) {
     char *moby = func_0020D348_m(0x4C3);
     if (moby != 0) {
         char *data;
@@ -1494,7 +1496,7 @@ extern float atan2_0180(float, float) __asm__("FUN_001f9e90");
 extern int in_window_0180(struct Moby *, float) __asm__("FUN_00214cc8");
 extern void normalize_0180(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_0180(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void *FUN_L11_00318d10_p(struct Moby *, void *, int) __asm__("FUN_L11_00318d10");
+extern void *spawn_class_511_moby_with_sparks(struct Moby *, void *, int) __asm__("FUN_L11_00318d10");
 extern void FUN_L11_00318e98_p(void *, void *) __asm__("FUN_L11_00318e98");
 extern int FUN_L00_0025c698_p(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00259740_p(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -1509,7 +1511,7 @@ extern float D_L11_00161F94 __attribute__((sda));
 extern float D_L11_00161F98 __attribute__((sda));
 extern float D_L11_00161F9C __attribute__((sda));
 extern int FUN_001f9740_p(void *) __asm__("FUN_001f9740");
-extern void FUN_L11_00318e78_p(void *, void *) __asm__("FUN_L11_00318e78");
+extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");
 extern char *hit_info_0698(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int take_hit_0698(struct Moby *, char *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025ab48_p(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
@@ -1595,7 +1597,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             normalize_0180(&projectile_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
             add_0180(&projectile_vector_scratch, &projectile_vector_scratch, &psytcopus->pos);
             projectile_vector_scratch.z += D_L11_00161FCC;
-            psytcopus_vars->unk160 = FUN_L11_00318d10_p(psytcopus, &projectile_vector_scratch, 5);
+            psytcopus_vars->unk160 = spawn_class_511_moby_with_sparks(psytcopus, &projectile_vector_scratch, 5);
             break;
         }
         if (psytcopus->anim_flags & 2) {
@@ -1693,7 +1695,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         normalize_0180(&projectile_and_hit_vector_scratch, &psytcopus->rot_row0, D_L11_00161FC8);
         add_0180(&projectile_and_hit_vector_scratch, &projectile_and_hit_vector_scratch, &psytcopus->pos);
         projectile_and_hit_vector_scratch.z += D_L11_00161FCC;
-        FUN_L11_00318e78_p(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
+        set_moby_position_and_refresh_removal_timer(psytcopus_vars->unk160, &projectile_and_hit_vector_scratch);
     }
     damage = 0.0f;
     info = hit_info_0698(psytcopus, 0x330000, 0);
@@ -1858,7 +1860,7 @@ void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char 
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
 
-extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
+extern float compute_ship_target_reticle_distance_squared(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int collect_oil_tanker_chain_mobys(char *moby, void **out) __asm__("FUN_L11_00318050");
 extern short *D_L11_001AC240[];
@@ -1875,7 +1877,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
     void *list[12];
     count_active_and_visible_listed_mobys(moby, ship_vars + 0xE8, ship_vars + 0xEA);
     if (current_target != 0) {
-        if (FUN_L11_00311a88_u(moby, current_target) < bestd)
+        if (compute_ship_target_reticle_distance_squared(moby, current_target) < bestd)
             return current_target;
     }
     moby_list_entry = D_L11_001AC240[*(short *)(ship_vars + 0x108)];
@@ -1887,7 +1889,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
             int moby_count = collect_oil_tanker_chain_mobys(listed_moby, list);
             int i;
             for (i = 1; i < moby_count; i++) {
-                float reticle_distance_sq = FUN_L11_00311a88_u(moby, list[i]);
+                float reticle_distance_sq = compute_ship_target_reticle_distance_squared(moby, list[i]);
                 if (reticle_distance_sq < bestd) {
                     best = list[i];
                     bestd = reticle_distance_sq;
@@ -1909,7 +1911,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-float FUN_L11_00311a88(void *moby_v, void *o_v) {
+float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     char *moby = moby_v;
     char *target_moby = o_v;
     char *data = *(char **)(moby + 0x78);
@@ -2048,7 +2050,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
                                        f32) __asm__("FUN_001f5ab0");
 extern void append_scaled_screen_triangle_strip(short *pts, int n, f32 x, f32 y, u32 col, u64 prim, f32 scale) __asm__("FUN_L11_00310ad0");
-extern void FUN_L11_00311048(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a);
+extern void draw_quarter_turn_textured_quads(f32 x, f32 y, f32 scale, f32 angle, u8 r, u8 g, u8 b, u8 a) __asm__("FUN_L11_00311048");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern s32 help_request(s32 message, s32 help) __asm__("FUN_L00_00203908");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -2148,7 +2150,7 @@ void draw_ship_hud(struct Moby *moby) {
                 fade = 1.0f;
             }
             alpha = truncate_float_to_s32(fade * 96.0f);
-            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
+            draw_quarter_turn_textured_quads(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
                              normalize_angle(convert_integer_to_float(level_frame) / 30.0f), 0, 0xFF, 0, alpha);
             vars->locked = NULL;
         } else {
@@ -2156,7 +2158,7 @@ void draw_ship_hud(struct Moby *moby) {
             if ((vars->lock_timer / scale_game_frames(0x14)) & 1) {
                 blink = 0;
             }
-            FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), 1.0f, 0.0f, 0xFF, blink, 0,
+            draw_quarter_turn_textured_quads(convert_integer_to_float(sx), convert_integer_to_float(sy), 1.0f, 0.0f, 0xFF, blink, 0,
                              0x60);
             vars->locked = vars->target;
         }
@@ -3214,9 +3216,9 @@ extern void spray_4318(struct Moby *, void *, float, int, float, float, int, int
 extern float jump_speed_4318(void *, void *, int, float, float) __asm__("FUN_L00_0025abf0");
 extern float turn_to_4318(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int FUN_L00_0025c698_4318(struct Moby *, void *) __asm__("FUN_L00_0025c698");
-extern void FUN_L00_0025f3e8(struct Moby *, void *, int, float, float);
+extern void spawn_color_swapped_explosion_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void follow_carrier_4318(struct Moby *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-extern int FUN_L00_00261968_4318(int, void *, void *) __asm__("FUN_L00_00261968");
+extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern void move_4318(struct Moby *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern float rnd_4318(float, float) __asm__("FUN_L00_00257c48");
 extern void smoke_4318(void *, void *, float, float) __asm__("FUN_L00_0026f080");
@@ -3419,7 +3421,7 @@ void puffoid_update(struct Moby *moby) {
         pos[2] = 0.0f;
         normalize_4318(pos, pos, 2.5f);
         add_vector_4318(pos, pos, &moby->pos);
-        if (FUN_L00_00261968_4318(puffoid_vars->unk230, &moby->pos, pos)) {
+        if (test_path_segment_strict_crossing(puffoid_vars->unk230, &moby->pos, pos)) {
             float *rz = &moby->rot.z;
             float ang = atan2_4318(puffoid_vars->target->pos.x - moby->pos.x, puffoid_vars->target->pos.y - moby->pos.y);
             turn_to_4318(rz, &puffoid_vars->unk250, ang,
@@ -3496,7 +3498,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_DEATH_KNOCKBACK:
         if (FUN_L00_0025c698_4318(moby, puffoid_vars->unk120) & 0x160) {
             zero_vector_4318(pos);
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_for_removal_4318(moby);
             return;
         }
@@ -3626,7 +3628,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->pos, &moby->rot);
         if (FUN_L00_0025c698_4318(moby, puffoid_vars->unk120) & 0x160) {
             zero_vector_4318(pos);
-            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
+            spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_for_removal_4318(moby);
             return;
         }

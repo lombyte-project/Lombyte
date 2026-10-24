@@ -18,7 +18,9 @@ extern void FUN_L00_0025d1b8(void *);
 
 extern float D_L08_00161468 __attribute__((sda));
 extern float D_L08_0016146C __attribute__((sda));
-void FUN_L08_002b8228(struct Moby *moby) {
+void initialize_bolt_pickup(struct Moby *moby) __asm__("FUN_L08_002b8228");
+
+void initialize_bolt_pickup(struct Moby *moby) {
     float random_range_start = D_L08_00161468;
     float random_range_end = D_L08_0016146C;
     char *moby_vars;
@@ -115,9 +117,9 @@ extern int func_001FFB38_2B94B0(int, int, void *, void *, void *, void *, int) _
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float func_001F9FA8_2B94B0(float) __asm__("FUN_001f9de0");
 extern void func_L08_002B9438_2B94B0(void *moby) __asm__("FUN_L08_002b8228");
-extern void func_L00_0023A658_2B94B0(void) __asm__("FUN_L00_00239cc8");
-extern void func_L00_0023A690_2B94B0(void) __asm__("FUN_L00_00239d00");
-extern void func_L00_0023A788_2B94B0(void) __asm__("FUN_L00_00239df8");
+extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
+extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
+extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
@@ -206,8 +208,8 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         current_bolt_count = current_bolt_count + moby_data->f20;
         ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + moby_data->f20;
         allocate_voice_for_target_entry(0, 0, moby);
-        func_001FFB38_2B94B0(2, 0x754E, func_L00_0023A658_2B94B0, func_L00_0023A690_2B94B0,
-                             func_L00_0023A788_2B94B0, &current_bolt_count, 0x98967F);
+        func_001FFB38_2B94B0(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
+                             draw_bolt_counter_hud_panel, &current_bolt_count, 0x98967F);
         mark_moby_for_removal(moby);
         return;
     case MOBY_STATE_VERTICAL_BOB_ONLY:
@@ -237,7 +239,9 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L08_002d22e0(int source_moby, char *spawn_position, char *initial_velocity) {
+char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002d22e0");
+
+char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) {
     char *spawned_moby = func_0020D348_m(0xF8);
     if (spawned_moby != 0) {
         char *bomb_vars = *(char **)(spawned_moby + 0x78);
@@ -788,7 +792,7 @@ typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 
 typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
 
-void *FUN_L05_002899f8(void *a, void *b, void *c, void *d);
+void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm__("FUN_L05_002899f8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
@@ -1503,7 +1507,9 @@ extern char *D_L08_0015FFD8;
 extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
-char *FUN_L08_002daa10(struct Moby *moby) {
+char *select_blarg_bombthrower_waypoint(struct Moby *moby) __asm__("FUN_L08_002daa10");
+
+char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
     short *group_entry = D_L08_001AC040[moby->group];
     char *best;
     char *candidate_moby;
@@ -1601,7 +1607,7 @@ typedef struct {
 
 typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46_c;
 
-char *FUN_L08_002d22e0_c(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
+char *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
@@ -1902,7 +1908,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             subtract_vector_xyz(velocity, &target->pos, point);
             set_vector_length_xy(velocity, velocity, time);
             velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));
-            next = FUN_L08_002d22e0_c((int)moby, (char *)point, (char *)velocity);
+            next = spawn_bomb_with_velocity((int)moby, (char *)point, (char *)velocity);
             vars->p124 = (struct Moby *)next;
             if (next != 0) {
                 char *next_vars = *(char **)(next + 0x78);
@@ -2003,7 +2009,7 @@ extern s32 D_L08_0015F594 __attribute__((sda));
 extern LiftLock D_L08_00179C10;
 extern s32 D_0013CAE4[];
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_00259f50(void *, void *);
+extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void FUN_L00_00261d78(s32, float, void *, void *);
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -2049,7 +2055,7 @@ void shuttle_update(struct Moby *moby) {
     if (vars->manip_set == 0)
         attach_manipulator(moby, 0, &vars->manip);
     vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], frame_time * 1.5707964f);
-    FUN_L00_00259f50(vars->spin_state, &vars->spin);
+    build_quaternion_from_axis_rotations(vars->spin_state, &vars->spin);
     switch (moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
         clear_u64_value(&vars->spin);
@@ -2528,7 +2534,7 @@ extern float D_L08_00161A0C __attribute__((sda));
 extern float D_L08_00161A14 __attribute__((sda));
 extern float D_L08_00161A24 __attribute__((sda));
 extern float D_L08_00161A28 __attribute__((sda));
-extern float FUN_L00_0025bc00(float*,int,float,float);
+extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
@@ -2745,8 +2751,8 @@ void update_rocket(M46 *moby) {
         return;
     }
     case ROCKET_STATE_FLY_CONFIGURED_HEADING:
-        FUN_L00_0025bc00(&moby->rotation[2],0,data->yaw,D_0015ED6C*0.5235988f);
-        FUN_L00_0025bc00(&moby->rotation[1],0,-data->pitch,D_0015ED6C*0.5235988f);
+        step_angle_toward_target(&moby->rotation[2],0,data->yaw,D_0015ED6C*0.5235988f);
+        step_angle_toward_target(&moby->rotation[1],0,-data->pitch,D_0015ED6C*0.5235988f);
         moby->rotation[0]=fast_add_rotations(moby->rotation[0],D_0015ED6C*6.2831855f);
         build_spherical_offset(data->velocity,(D_L08_00161A00+D_L08_00161A00)*D_0015ED6C,moby->rotation[2],-moby->rotation[1]);
         add_vector_xyz(moby->position,moby->position,data->velocity);

@@ -10,7 +10,9 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L10_002eb8c0(struct Moby *owner) {
+char *spawn_destruction_replacement_moby(struct Moby *owner) __asm__("FUN_L10_002eb8c0");
+
+char *spawn_destruction_replacement_moby(struct Moby *owner) {
     char *moby = create_moby(0x781);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;

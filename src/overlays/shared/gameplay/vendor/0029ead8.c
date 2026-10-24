@@ -47,7 +47,9 @@ extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 
 #define SELECTED_ITEM D_L00_001C40B0[vendor_menu.rows[vendor_menu.selected].item]
 
-void FUN_L00_0029ead8(void *moby, s32 x, s32 y) {
+void draw_vendor_purchase_text(void *moby, s32 x, s32 y) __asm__("FUN_L00_0029ead8");
+
+void draw_vendor_purchase_text(void *moby, s32 x, s32 y) {
     VendorTextBox box;
     char text[256];
     s32 cost;

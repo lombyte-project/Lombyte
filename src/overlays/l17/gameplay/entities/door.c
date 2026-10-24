@@ -257,7 +257,7 @@ extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern unsigned char *FUN_L00_002730e0_q(float *pos, char *vel, int color, unsigned char life,
                                          unsigned char b, int mode,
                                          float scale) __asm__("FUN_L00_002730e0");
-extern unsigned char *FUN_L17_0026fdd0_q(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
+extern unsigned char *create_drone_flight_trail_record(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
 extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
@@ -323,9 +323,9 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
-        FUN_L17_0026fdd0_q((char *)a, 1, step);
-        FUN_L17_0026fdd0_q((char *)movement_midpoint, 1, step);
-        FUN_L17_0026fdd0_q((char *)a, 0, step);
+        create_drone_flight_trail_record((char *)a, 1, step);
+        create_drone_flight_trail_record((char *)movement_midpoint, 1, step);
+        create_drone_flight_trail_record((char *)a, 0, step);
         b[2] = b[2] + 0.25f;
         func_L00_0025A8C0_alt_q((char *)hit_descriptor, (int)moby, 1, 6.0f, drone_vars);
         *(short *)((char *)hit_descriptor + 0x1A) = moby->oclass;
@@ -558,7 +558,10 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 short D_L17_00162188 = 2;
-int FUN_L17_002eace8(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
+int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
+                     char *excluded_target) __asm__("FUN_L17_002eace8");
+
+int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
     float v[4];
     float arrow_target_position_scratch[4];
@@ -789,7 +792,7 @@ extern int D_L17_0015F5C4;
 int D_L17_0016216C = 600;
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, char *,
+extern int select_fighter_jet_target_and_draw_contacts(int, char *, char *, char *, float, float, float, char *,
                               char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(char **)((char *)(p) + (o)))
@@ -832,7 +835,7 @@ void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
     W(ship_vars, 0x88) = 0;
 skip:
     qcopy(radar_rotation, D_L17_001676D0_lui);
-    candidate_target = (char *)FUN_L17_002eace8_u(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
+    candidate_target = (char *)select_fighter_jet_target_and_draw_contacts(ship_moby, ship_vars, D_L17_001676D0_lui - 0x10, (char *)radar_rotation, 0.19634955f, 0.19634955f,
                                    255.0f, P(ship_vars, 0x88), excluded_target);
     if ((candidate_target != P(ship_vars, 0x88) && W(ship_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(ship_vars, 0xEC) = 0;
@@ -890,8 +893,8 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 font_print_center(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6af0");
-void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
-                      float y, float s, float ang);
+void draw_quarter_turn_textured_quads(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
+                      float y, float s, float ang) __asm__("FUN_L11_00311048");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
 extern void func_L17_002EBF08_f(float, float, float, float, unsigned char, unsigned char,
@@ -1657,7 +1660,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
@@ -1795,7 +1798,7 @@ void fighter_jet_update(ShipMoby *moby) {
             board = jet_distance(moby, (ShipCamera *)g->moby) < D_L17_00161FE0 &&
                     FUN_00215130(7, 0x53E4) != 0 && (*(int *)D_0013CAE4_ed & 0x10);
             if (board) {
-                FUN_L00_002644e0(7);
+                remove_help_message_for_selector(7);
                 moby->state = 2;
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
@@ -2348,7 +2351,9 @@ extern char D_L17_001676C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
-void FUN_L17_002ee9c0(struct Moby *moby, char *camera_position, char *state) {
+void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) __asm__("FUN_L17_002ee9c0");
+
+void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) {
     subtract_vector_xyz(camera_position, D_L17_001676C0, &moby->pos);
     set_vector_length_xy(camera_position, camera_position, 2.5f);
     *(float *)(camera_position + 8) = 1.5f;
@@ -2364,7 +2369,9 @@ extern char D_L17_001B0DB0[];
 extern char D_L17_001D9F70[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-void FUN_L17_002eea70(struct Moby *moby) {
+void rebuild_magnet_elevator_world_path(struct Moby *moby) __asm__("FUN_L17_002eea70");
+
+void rebuild_magnet_elevator_world_path(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (hero.unk308 && hero.ground_moby == moby) {
         char *world_path_point = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
@@ -2443,7 +2450,7 @@ extern void spawn_nearby_effect(int, int, int, void *, void *, float) __asm__("F
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263b38(void *, float);
-extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
 
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int arg) __asm__("FUN_L17_002efa48");
@@ -2797,7 +2804,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                              zero, zero);
             FUN_L00_00263fd8((char *)robot_dog_moby, 0x6CF, (float *)(robot_dog_moby + 0x10), robot_dog_moby + 0x40, 0, 0, 0.0f, zero,
                              zero, zero);
-            FUN_L00_00263e30(robot_dog_moby, 0x77D, 1, 0x77D, 1, 3, 2);
+            spawn_moby_break_fragments(robot_dog_moby, 0x77D, 1, 0x77D, 1, 3, 2);
             FUN_L00_00257470(robot_dog_moby, 0, -1);
             mark_moby_for_removal_c(robot_dog_moby);
         } else if (*(float *)(robot_dog_moby + 0x18) < 2.0f) {
@@ -2959,7 +2966,9 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 
-int FUN_L17_002efd48(struct Moby *moby, float *target, float speed) {
+int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed) __asm__("FUN_L17_002efd48");
+
+int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed) {
     char *data;
     float *yaw = &moby->rot.z;
     float target_yaw;
@@ -3548,7 +3557,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float);
 extern int D_L17_001BADD0[];
-extern int FUN_L00_002644e0(int);
+extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int);
 extern short D_L17_001623A8 __attribute__((sda));
@@ -3558,7 +3567,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void FUN_L00_002ea9d8(void *);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18(int);
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
@@ -3661,7 +3670,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
-            FUN_L00_002644e0(10);
+            remove_help_message_for_selector(10);
             shuttle_moby->state = 2;
             allocate_voice_for_target_entry(2, 0, (int)shuttle_moby);
             if (shuttle_moby->prev_seq != 0) {
@@ -3676,7 +3685,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             rot[2] = fast_arc_tan(b[0] - a[0], b[1] - a[1]);
             rot[1] = -fast_arc_tan(vector_distance(a, b), b[2] - a[2]);
             jet_mount(a, rot, 2, scale_game_frames(300), 0);
-            FUN_L02_002f8aa0(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
+            set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L00_002ea9d8(a);
             FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,

@@ -75,7 +75,9 @@ void update_glints(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fefc8.s", FUN_L00_001fefc8);
 /* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_001FF200), where it is exact; names translated to the US level program. */
 
-void FUN_L00_001ff250(s64 *destination) {
+void clear_twelve_bytes(s64 *destination) __asm__("FUN_L00_001ff250");
+
+void clear_twelve_bytes(s64 *destination) {
     destination[0] = 0;
     __asm__ volatile ("nop");
     ((s32 *)destination)[2] = 0;

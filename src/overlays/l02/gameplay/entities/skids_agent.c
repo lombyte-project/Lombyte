@@ -61,7 +61,7 @@ extern u8 D_0015EDB0 __attribute__((section(".sdata")));
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
-extern void FUN_L02_002e0cd8(struct Moby *);
+extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
@@ -72,7 +72,7 @@ extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448"
 extern void watcher_face(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern s32 point_in_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
-extern void FUN_L00_00260860(s32, s32);
+extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void end_conversation(s32, s32) __asm__("FUN_0020b178");
@@ -141,7 +141,7 @@ void skids_agent_update(struct Moby *moby) {
     f32 fade;
     struct Moby *prop;
 
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SKIDS_AGENT_INITIALIZE:
         if (items_owned[0x2D] != 0) {
@@ -226,7 +226,7 @@ void skids_agent_update(struct Moby *moby) {
         }
         break;
     case SKIDS_AGENT_END_CONVERSATION:
-        FUN_L00_00260860(5, 1);
+        grant_inventory_item(5, 1);
         end_conversation(0, -1);
         goto kill;
     case SKIDS_AGENT_INTERPOLATE_TRANSFORM_AND_FADE: {
@@ -374,7 +374,7 @@ void skid_mcmarx_update(struct Moby *moby) {
     f32 head_rate;
     s32 tracking;
 
-    FUN_L02_002e0cd8(moby);
+    attach_big_head_cheat_manipulator_to_matching_moby(moby);
     update_skid_mcmarx_relocation_sequence((char *)moby);
     switch (moby->state) {
     case SKID_MCMARX_INITIALIZE:
@@ -400,7 +400,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         }
         if (watcher_vars->talk_state == 2) {
             give_reward(2000, 10);
-            FUN_L00_00260860(30, 1);
+            grant_inventory_item(30, 1);
             jet_clear_persistent(*((u8 *)moby + 0xB0));
             jet_reset_camera(&hero.motion.pos, &hero.motion.rot);
             end_conversation(0, -1);
@@ -503,7 +503,7 @@ extern void f9f8_n(void *) __asm__("FUN_001f99f8");
 extern float fa580_n(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_00216f90_n(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int FUN_001ff308_n(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void FUN_L00_0023a760(void);
+extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void update_hud_counter_transition(void) __asm__("FUN_L02_0023ccc8");
 extern void draw_hud_counter(void) __asm__("FUN_L02_0023cda8");
 
@@ -561,8 +561,8 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
     } else if (*(int *)(data + 0x180) == 0) {
         if (FUN_00214720_n(&hero.motion.pos, *(int *)(data + 0x148)) != 0) {
             *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, FUN_L00_0023a760, update_hud_counter_transition, draw_hud_counter, data + 0x14C, 100);
-            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, FUN_L00_0023a760, update_hud_counter_transition, draw_hud_counter, data + 0x150, 7);
+            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x14C, 100);
+            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x150, 7);
         }
     }
 }
@@ -713,7 +713,9 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */
-void FUN_L02_002ea048(struct Moby *moby) {
+void draw_aridia_ocean_parts(struct Moby *moby) __asm__("FUN_L02_002ea048");
+
+void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
     begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
