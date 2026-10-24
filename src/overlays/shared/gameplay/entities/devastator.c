@@ -1962,7 +1962,7 @@ extern int D_L00_0015F608;
 extern float visibomb_missile_default_speed_gp __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
-unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
+unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, float fa, float fb) {
     unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
     if (spawned_moby) {
         unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
@@ -1979,7 +1979,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
         *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
         *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, launch_position);
         *(int *)(spawned_moby_vars + 0x8) = 0;
         *(int *)(spawned_moby_vars + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
@@ -2008,8 +2008,8 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         copy_hero_moby_field_38(spawned_moby);
         *(int *)(spawned_moby_vars + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
         collision_start.q = *(OvlQuad *)(source_moby + 0x10);
-        collision_start.f[2] = pos->f[2];
-        if (FUN_001efa68_2b58d8(&collision_start, pos, 0, ({
+        collision_start.f[2] = launch_position->f[2];
+        if (FUN_001efa68_2b58d8(&collision_start, launch_position, 0, ({
                 struct Hero *collision_ignored_hero = &hero;
                 (void *)collision_ignored_hero->moby;
             }),
