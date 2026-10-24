@@ -1883,7 +1883,7 @@ extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct Moby *, float, float) __asm__("FUN_L00_00275910");
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
-extern int D_L00_00161744 __attribute__((sda));
+extern int beam_pulse_spawn_interval_frames_gp __asm__("D_L00_00161744") __attribute__((sda));
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern Tab_2BE3A8 D_L00_001E9AB0;
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
@@ -2030,7 +2030,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         }
     }
     if (func_001F9908_2BE3A8(&D_L00_00161824_macro) != 0) {
-        D_L00_00161824_macro = func_001F9850_2BE3A8(D_L00_00161744);
+        D_L00_00161824_macro = func_001F9850_2BE3A8(beam_pulse_spawn_interval_frames_gp);
         for (slot = 0; slot < 3; slot++) {
             if (D_L00_001618E8_2BE3A8[slot] == 0) {
                 D_L00_001618E8_2BE3A8[slot] = 1;
