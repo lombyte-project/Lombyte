@@ -116,7 +116,7 @@ extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/002d6810_globals.h"
 extern float electric_water_on_duration_seconds_gp __asm__("D_L15_00161BC8") __attribute__((sda));
 extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __attribute__((sda));
-extern float D_L15_00161BD0 __attribute__((sda));
+extern float electric_water_path_arc_inhibit_gp __asm__("D_L15_00161BD0") __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
 extern int D_L15_001BAAD0[];
@@ -271,7 +271,7 @@ void electric_water_update(struct Moby *moby) {
             }
         }
 
-        if ((!inside || !wet) && random_integer_below(1) == 0 && D_L15_00161BD0 == 0.0f) {
+        if ((!inside || !wet) && random_integer_below(1) == 0 && electric_water_path_arc_inhibit_gp == 0.0f) {
             best = 0;
             for (line_offset = 0; line_offset < 24; line_offset += 8) {
                 line = vars->spark_lines[0] + line_offset;
