@@ -107,11 +107,11 @@ extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern s32 D_0015FF00;
 extern s32 D_0015FF08;
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
-extern s32 D_001603EC;
-extern s32 D_00160E94;
+extern s32 shrub_render_texture_definition_count __asm__("D_001603EC");
+extern s32 tfrag_texture_definition_count __asm__("D_00160E94");
 extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
-extern s32 D_00160F64;
+extern s32 object_render_texture_definition_count __asm__("D_00160F64");
 extern u8 boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8 D_00186310[];
 extern SoundBanks D_0018CB20;
@@ -212,14 +212,14 @@ void transition_load_wad(void)
   special_material_template[1] = 0xFFA0000000E0;
   special_material_template[2] = 0x0040000400004000;
   texture_definition_entries = (WadTex *) (((u8 *) hdr) + hdr->x34);
-  if ((D_00160E94 = hdr->n30) > 0)
+  if ((tfrag_texture_definition_count = hdr->n30) > 0)
   {
     do
     {
       tfrag_texture_size_table[i] = (((s32) base) + texture_definition_entries[i].offset) + (log2dim(texture_definition_entries[i].x4) << 28);
       i++;
     }
-    while (i < D_00160E94);
+    while (i < tfrag_texture_definition_count);
   }
   k = 0;
   texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x3C));
@@ -234,25 +234,25 @@ void transition_load_wad(void)
   }
   k = 0;
   texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x44));
-  if ((D_00160F64 = hdr->n40) > 0)
+  if ((object_render_texture_definition_count = hdr->n40) > 0)
   {
     do
     {
       D_001E2600[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
-    while (k < D_00160F64);
+    while (k < object_render_texture_definition_count);
   }
   k = 0;
   texture_definition_entries = (new_var2 = (WadTex *) (((u8 *) hdr) + hdr->x4C));
-  if ((D_001603EC = hdr->n48) > 0)
+  if ((shrub_render_texture_definition_count = hdr->n48) > 0)
   {
     do
     {
       D_001D84B0[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
-    while (k < D_001603EC);
+    while (k < shrub_render_texture_definition_count);
   }
   initialize_tfrag_render_data(data + hdr->x10, ((u8 *) hdr) + hdr->x34);
   relocate_sky_definition(data + hdr->x14);
