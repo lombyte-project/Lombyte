@@ -1599,7 +1599,9 @@ void FUN_001f9a10_002e42c0(OvlQuad *, OvlQuad *,
                            OvlQuad *) __asm__("FUN_001f9a10");
 s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
                           s32) __asm__("FUN_001efa68");
-s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
+s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) __asm__("FUN_L00_002e42c0");
+
+s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
     OvlQuad position_and_offset_vectors[4];
     struct Hero *player = &hero_data;
     u8 *camera_view = D_L00_00166E10_002e42c0;
