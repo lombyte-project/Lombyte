@@ -133,7 +133,7 @@ typedef struct {
 } E00237ae8;
 extern s32 D_L00_0015FA90;
 extern void *D_L00_0015FAC0;
-extern s32 D_L00_0015F738 __attribute__((sda));
+extern s32 eight_slot_hud_selector_table_pointer __asm__("D_L00_0015F738") __attribute__((sda));
 extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
@@ -149,7 +149,7 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     s32 *item_id_cursor;
     E00237ae8 *tab;
     D_L00_0015FA90 = 8;
-    D_L00_0015FAC0 = &D_L00_0015F738;
+    D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer;
     hud_element->x48 = 0;
     hud_element->x4a = 0;
     hud_element->x58 = D_L00_0015F718_gp;
