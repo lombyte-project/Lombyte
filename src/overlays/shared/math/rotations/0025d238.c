@@ -489,7 +489,9 @@ int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *m
     return predicate_result;
 }
 /* True for a moby of one of eight listed classes. */
-s32 FUN_L00_0025e3f8(void *moby) {
+s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) __asm__("FUN_L00_0025e3f8");
+
+s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) {
     s16 moby_class_id = *(s16 *)((char *)moby + 0xA6);
     if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE || moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 || moby_class_id == 0xD5 ||
         moby_class_id == 0xDF) {

@@ -3267,7 +3267,7 @@ typedef struct {
 extern short D_L00_001E6008[] __attribute__((section(".data")));
 extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") __attribute__((section(".data")));
 s32 random_integer_below(s32) __asm__("FUN_00213260");
-s32 FUN_L00_0025e3f8(O_2df1e0 *);
+s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(O_2df1e0 *) __asm__("FUN_L00_0025e3f8");
 f32 FUN_001f9b48(void *, void *);
 void FUN_L00_002a7210(O_2df1e0 *, void *, f32, f32);
 void try_collect_ammo_pickup(O_2df1e0 *) __asm__("FUN_L00_002c5be8");
@@ -3282,7 +3282,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
         return;
     if (random_integer_below(10))
         return;
-    if (!(p->p24 && p->p24->h46 == 0x13) && !FUN_L00_0025e3f8(p))
+    if (!(p->p24 && p->p24->h46 == 0x13) && !is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(p))
         return;
     if (!(FUN_001f9b48(p->v10, &hero.motion.pos) < 30.0f))
         return;
