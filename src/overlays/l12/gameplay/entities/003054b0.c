@@ -1320,7 +1320,7 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     FUN_L08_002f0c18(1);
 }
 /* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
-extern int D_L12_001620F0 __attribute__((sda));
+extern int hoven_scrolling_color_tables_initialized __asm__("D_L12_001620F0") __attribute__((sda));
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
 extern float D_L12_001620E0[1] __attribute__((sda));
 extern float D_L12_001620D8[2] __attribute__((sda));
@@ -1349,34 +1349,34 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
     int i;
     switch (moby->state) {
     case INITIALIZE_SCROLL_PHASES:
-        if (D_L12_001620F0 == 0) {
+        if (hoven_scrolling_color_tables_initialized == 0) {
             scale_rgba_tables(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
             scale_rgba_tables(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
-            D_L12_001620F0 = 1;
+            hoven_scrolling_color_tables_initialized = 1;
         }
         moby->state = 1;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
         for (i = 0; i < 2; i++) {
-            ((float *)&D_L12_001620F0)[i * 2 + 2] = 0.0f;
-            ((float *)&D_L12_001620F0)[i * 2 + 3] = 0.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] = 0.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] = 0.0f;
         }
         break;
     case UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW:
         for (i = 0; i < 2; i++) {
-            ((float *)&D_L12_001620F0)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
-            if (((float *)&D_L12_001620F0)[i * 2 + 2] > 1.0f) {
-                ((float *)&D_L12_001620F0)[i * 2 + 2] -= 1.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
+            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] > 1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] -= 1.0f;
             }
-            if (((float *)&D_L12_001620F0)[i * 2 + 2] < -1.0f) {
-                ((float *)&D_L12_001620F0)[i * 2 + 2] += 1.0f;
+            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] < -1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 2] += 1.0f;
             }
-            ((float *)&D_L12_001620F0)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
-            if (((float *)&D_L12_001620F0)[i * 2 + 3] > 1.0f) {
-                ((float *)&D_L12_001620F0)[i * 2 + 3] -= 1.0f;
+            ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
+            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] > 1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] -= 1.0f;
             }
-            if (((float *)&D_L12_001620F0)[i * 2 + 3] < -1.0f) {
-                ((float *)&D_L12_001620F0)[i * 2 + 3] += 1.0f;
+            if (((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] < -1.0f) {
+                ((float *)&hoven_scrolling_color_tables_initialized)[i * 2 + 3] += 1.0f;
             }
         }
         D_L12_00162108[0] += D_L12_001620D8[0] * frame_delta_time;
