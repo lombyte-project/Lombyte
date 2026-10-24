@@ -3316,9 +3316,9 @@ extern float drek_boss_scalar_blend_max_hero_distance_gp __asm__("D_L18_001623BC
 extern float drek_boss_first_scalar_far_hero_target_gp __asm__("D_L18_001623C0") __attribute__((sda));
 extern float drek_boss_second_scalar_far_hero_target_gp __asm__("D_L18_001623C4") __attribute__((sda));
 extern float drek_boss_first_scalar_near_hero_target_gp __asm__("D_L18_001623C8") __attribute__((sda));
-extern float D_L18_001623D0 __attribute__((sda));
-extern float D_L18_001623D4 __attribute__((sda));
-extern float D_L18_001623D8 __attribute__((sda));
+extern float drek_boss_first_scalar_gated_follow_target_gp __asm__("D_L18_001623D0") __attribute__((sda));
+extern float drek_boss_second_scalar_gated_follow_target_gp __asm__("D_L18_001623D4") __attribute__((sda));
+extern float drek_boss_first_scalar_near_node_follow_target_gp __asm__("D_L18_001623D8") __attribute__((sda));
 extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
 extern float drek_boss_follow_camera_distance_target_gp __asm__("D_L18_001623E0") __attribute__((sda));
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
@@ -3368,8 +3368,8 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
         if ((*(int *)(g + 0x208c) == 0xf || *(int *)(g + 0x2084) == 0x42) &&
             *(int *)(boss_data + 0x364) == 0 && *(float *)(boss_data + 0x390) <= 25.0f &&
             *(int *)(boss_data + 0x360) == 0) {
-            x = D_L18_001623D0;
-            y = D_L18_001623D4;
+            x = drek_boss_first_scalar_gated_follow_target_gp;
+            y = drek_boss_second_scalar_gated_follow_target_gp;
             first_scalar_value = (float *)(selected_scalar_record + 0x34);
             second_scalar_value = (float *)(selected_scalar_record + 0x38);
             first_scalar_update_state = (float *)(boss_data + 0x378);
@@ -3381,7 +3381,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
             first_scalar_update_state = (float *)(boss_data + 0x378);
             if (vector_distance(hero.motion.pos.f,
                              D_L18_001600EC + (*(int *)(boss_data + 0x344) << 7) + 0x30) < 28.0f) {
-                x = D_L18_001623D8;
+                x = drek_boss_first_scalar_near_node_follow_target_gp;
                 y = D_L18_001623DC_target;
             }
         }
