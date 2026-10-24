@@ -985,7 +985,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int FUN_00213928();
 extern int FUN_L00_0025ff38();
-extern int FUN_L00_00260a88();
+extern int spawn_randomized_bolt_drop() __asm__("FUN_L00_00260a88");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int blend_moby_animation_alt(int) __asm__("FUN_00212f90");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");

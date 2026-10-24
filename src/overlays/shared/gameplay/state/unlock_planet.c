@@ -446,7 +446,9 @@ extern int solve_quadratic_equation(float *, float *, float, float, float) __asm
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
-void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
+void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index) __asm__("FUN_L00_00260a88");
+
+void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
 {
     float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4], quarter[4];
     float first_root, second_root;

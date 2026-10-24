@@ -3140,7 +3140,7 @@ extern int D_0015EE04 __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 extern void FUN_L00_00263d40(int, int);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
@@ -3166,7 +3166,7 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
         }
         qcopy(explosion_position, &moby->pos);
         clear_vector(explosion_vector);
-        FUN_L00_00260a88(moby, 0x1F, 0x4A, 2, -1);
+        spawn_randomized_bolt_drop(moby, 0x1F, 0x4A, 2, -1);
         *(int *)(moby_vars + 0xA4) = scale_game_frames(500);
         spawn_explosion(moby, explosion_vector, explosion_position, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1,
                          1, -1, 0);

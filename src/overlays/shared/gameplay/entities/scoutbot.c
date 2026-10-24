@@ -1597,7 +1597,7 @@ extern int hit_3024d8(void *, void *, void *, int, int *, float *, int, int) __a
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void trooper_knockback_arc(void *, void *, float *, float *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
@@ -1738,7 +1738,7 @@ void FUN_L08_003024d8(char *moby) {
                 trooper_start_knockback(moby, data + 0x70, second_knock_angle, 12, 1, 0);
                 *(unsigned char *)(moby + 0x20) = 11;
                 *(unsigned char *)(data + 0x67) = 0xf0;
-                FUN_L00_00260a88(moby, 2, 3, 0, -1);
+                spawn_randomized_bolt_drop(moby, 2, 3, 0, -1);
                 break;
             default:
                 break;

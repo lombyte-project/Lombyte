@@ -86,7 +86,7 @@ extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
 extern void FUN_001e93b0_257470(void *, ...) __asm__("FUN_001e93b0");
 extern int FUN_001fa6d0_257470(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9b48_257470(void *, void *) __asm__("FUN_001f9b48");
-extern void FUN_L00_00260a88_257470(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
+extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 extern unsigned char D_L00_001E8F00[] __attribute__((section(".data")));
 extern unsigned char D_L00_001E8F28[] __attribute__((section(".data")));
@@ -175,7 +175,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
             int lower_bound = FUN_001fa6d0_257470(amt);
             int hi = lower_bound + bound_offset;
             lower_bound -= bound_offset;
-            FUN_L00_00260a88_257470(moby, lower_bound, hi, call_flags, trajectory_target_index);
+            spawn_randomized_bolt_drop(moby, lower_bound, hi, call_flags, trajectory_target_index);
         }
     }
 }

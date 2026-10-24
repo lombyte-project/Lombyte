@@ -1165,7 +1165,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
-extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1206,9 +1206,9 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
         scale_vector_xyz(halved_motion_delta, halved_motion_delta, 0.5f);
         add_vector_xyz(spot, spot, moby + 0x10);
         if (*(int *)(hit + 0x24) & 0x800000) {
-            FUN_L00_00260a88(moby, 10, 20, 2, -1);
+            spawn_randomized_bolt_drop(moby, 10, 20, 2, -1);
         } else {
-            FUN_L00_00260a88(moby, 3, 5, 2, -1);
+            spawn_randomized_bolt_drop(moby, 3, 5, 2, -1);
         }
         *(short *)(data + 0x14A) = scale_game_frames(600);
         spawn_explosion(moby, halved_motion_delta, spot, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1, 1,
