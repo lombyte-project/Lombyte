@@ -32,8 +32,8 @@ int D_L12_001619D0 = 105;
 extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
 extern int D_L12_001619DC __attribute__((sda));
-extern float D_L12_001619E0 __attribute__((sda));
-extern float D_L12_001619E4 __attribute__((sda));
+extern float water_reservoir_effect_delta_fourth_component_range_start_gp __asm__("D_L12_001619E0") __attribute__((sda));
+extern float water_reservoir_effect_delta_fourth_component_range_end_gp __asm__("D_L12_001619E4") __attribute__((sda));
 int D_L12_001619E8 = 1;
 extern int D_L12_001619EC __attribute__((sda));
 int D_L12_001619F0 = 1;
@@ -101,8 +101,8 @@ update:
                 } else {
                     pos[2] += water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 }
-                pos_offset_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
-                offset_pair_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                pos_offset_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
+                offset_pair_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
                 FUN_00218888_72(pos, pos_offset_delta, offset_pair_delta, D_L12_001619F4, D_L12_001619F4,
                                   D_L12_001619E8, scale_game_frames_72(D_L12_001619EC),
                                   D_L12_001619F0, D_L12_001619F8);
