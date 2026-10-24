@@ -1677,7 +1677,7 @@ void update_hero_motion_for_current_state(void) {
             AN.f274 = FUN_001f99c0(a) * -0.09f;
             AN.f270 = FUN_001f99c0(a) * 0.08f;
         } else if (moby->b53 == 0x6D) {
-            f32 ang = fast_add_rotations(
+            f32 planar_direction_angle = fast_add_rotations(
                 fast_subtract_rotations(fast_arc_tan(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]),
                 3.1415927f);
             f32 m = hero.motion.unk164 / (frame_time * 3.0f) * 0.34906584f;
@@ -1686,8 +1686,8 @@ void update_hero_motion_for_current_state(void) {
             if (m > 0.43633232f) {
                 m = 0.43633232f;
             }
-            c = fast_cos(ang) * m;
-            s = -fast_sin(ang);
+            c = fast_cos(planar_direction_angle) * m;
+            s = -fast_sin(planar_direction_angle);
             AN.f114 = c;
             AN.f110 = s * m;
         }
@@ -1775,13 +1775,13 @@ void update_hero_motion_for_current_state(void) {
             hero.unk2218 = -1;
         }
         if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
-            f32 ang;
+            f32 planar_direction_angle;
             f32 rr;
             qcopy(&scratch_vector, &hero.motion.pos);
-            ang = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
+            planar_direction_angle = fast_add_rotations(hero.unk57C, randf_sym(0.0f, 0.5235988f));
             rr = random_float_between(frame_time * 4.0f, frame_time * 7.0f);
-            v10.f[0] = fast_cos(ang) * rr;
-            v10.f[1] = fast_sin(ang) * rr;
+            v10.f[0] = fast_cos(planar_direction_angle) * rr;
+            v10.f[1] = fast_sin(planar_direction_angle) * rr;
             v10.f[2] = 0.0f;
             v10.f[2] = random_float_between(frame_time * 3.0f, frame_time * 5.0f);
             v10.f[3] = -(frame_time_sq * 30.0f);
