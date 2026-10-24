@@ -471,7 +471,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int FUN_L13_002e9160(void *, void *, int, int);
+extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int continue_audio_stream_if_ready_alt(void) __asm__("FUN_00215b10");
@@ -638,7 +638,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         data->fAC += (frame_time * 42.0f - data->fAC) * 0.1f;
-        if (FUN_L13_002e9160(moby, data, 0, 1) != 0) {
+        if (advance_moby_along_selected_path(moby, data, 0, 1) != 0) {
             char *hero = ((char *)&D_0013F350);
             char *ship;
             moby->bBC = 1;
@@ -724,7 +724,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 }
                 data->bFF = 1;
             }
-            if (FUN_L13_002e9160(moby, data, data->b13B, 1) & 2) {
+            if (advance_moby_along_selected_path(moby, data, data->b13B, 1) & 2) {
                 if (data->b13B != D_L13_001D3448[moby->bBC]) {
                     data->b13B = D_L13_001D3448[moby->bBC];
                     data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
@@ -816,7 +816,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
-        FUN_L13_002e9160(moby, data, data->b13B, 1);
+        advance_moby_along_selected_path(moby, data, data->b13B, 1);
         dialog = (char *)((char *)&D_001516D0);
         if (*(int *)(dialog + 0x50) == 0) {
             int line = *(int *)(dialog + 0x1C);
@@ -839,7 +839,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             allocate_voice_for_target_entry_alt(7, 0, (int)moby);
         }
         tick_countdown_32_alt(&data->iF8);
-        if (FUN_L13_002e9160(moby, data, data->b13B, 0) != 0 ||
+        if (advance_moby_along_selected_path(moby, data, data->b13B, 0) != 0 ||
             data->s9C >= *(int *)walker_paths[data->paths[data->b13B]] - 1) {
             data->iF8 = scale_game_frames_alt(0xB4);
             moby->state = 8;

@@ -2873,7 +2873,9 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L13_002e9018_c(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 
-int FUN_L13_002e9160(struct Moby *moby, char *moby_data, int path_slot_index, int aim) {
+int advance_moby_along_selected_path(struct Moby *moby, char *moby_data, int path_slot_index, int aim) __asm__("FUN_L13_002e9160");
+
+int advance_moby_along_selected_path(struct Moby *moby, char *moby_data, int path_slot_index, int aim) {
     char *path = D_L13_001B07B0[*(int *)(&moby_data[path_slot_index << 2] + 0xB0)];
     float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor, yaw, pitch;
     int wrapped = 0;
