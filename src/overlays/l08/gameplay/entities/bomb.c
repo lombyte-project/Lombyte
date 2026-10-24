@@ -1104,8 +1104,8 @@ extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int D_L08_001618D4 __attribute__((sda));
-extern int D_L08_001618D8 __attribute__((sda));
+extern int bomber_tank_joint_particle_initial_color_gp __asm__("D_L08_001618D4") __attribute__((sda));
+extern int bomber_tank_joint_particle_second_color_gp __asm__("D_L08_001618D8") __attribute__((sda));
 extern float bomber_tank_joint_particle_jitter_magnitude_base_gp __asm__("D_L08_001618DC") __attribute__((sda));
 extern float bomber_tank_joint_particle_vertical_spread_gp __asm__("D_L08_001618E0") __attribute__((sda));
 extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("D_L08_001618E8") __attribute__((sda));
@@ -1184,7 +1184,7 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
         frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
         frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
         frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
-        func_00219780_2D6C58(joint_pos, velocity, spread_vector, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
+        func_00219780_2D6C58(joint_pos, velocity, spread_vector, bomber_tank_joint_particle_initial_color_gp, bomber_tank_joint_particle_second_color_gp, frames1, frames2, frames3, -1);
     }
 }
 /* Spawns debris mobys while the level counter allows, then scatters or bursts the group's other mobys. */
