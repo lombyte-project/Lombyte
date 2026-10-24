@@ -2690,8 +2690,8 @@ int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int pos
 
 int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) {
     char *callback_record = get_moby_suck_cannon_record(moby);
-    int r = launch_suck_cannon_projectile(moby, a, position_source_moby, position_z_offset);
-    if (r != 0) {
+    int projectile_launch_result = launch_suck_cannon_projectile(moby, a, position_source_moby, position_z_offset);
+    if (projectile_launch_result != 0) {
         moby[0x20] = 7;
     } else if ((unsigned char)moby[0x20] == 7) {
         moby[0x20] = 1;
@@ -2701,7 +2701,7 @@ int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int pos
             FUN_0022da68(2, 0, moby);
         }
     }
-    return r;
+    return projectile_launch_result;
 }
 extern float FUN_L00_00258110_w7(float *vel, float cur, float target, float k, float d,
                                  float max) __asm__("FUN_L00_00258110");
