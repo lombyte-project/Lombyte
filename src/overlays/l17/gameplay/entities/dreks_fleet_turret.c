@@ -690,7 +690,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
     OvlQuad spD0[1];
     OvlQuad spE0[1];
     OvlQuad spF0[1];
-    OvlQuad sp100[1];
+    OvlQuad particle_vector_scratch[1];
     int j;
     int k;
     float *ring_vars;
@@ -768,8 +768,8 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                     *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
                                 if (particle_lifetime <= 0)
                                     particle_lifetime = 1;
-                                subtract_vector_xyz(sp100, spC0, (moby + 0x10));
-                                spF0[0] = sp100[0];
+                                subtract_vector_xyz(particle_vector_scratch, spC0, (moby + 0x10));
+                                spF0[0] = particle_vector_scratch[0];
                                 scale_vector_xyz(spF0, spF0, f20);
                                 particle_direction_length = vector_length_xyz(spF0);
                                 if (f20 < 0.0f)
@@ -777,7 +777,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                 else
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
-                                w = (char *)sp100;
+                                w = (char *)particle_vector_scratch;
                                 FUN_L00_001ff290(w, spE0, spF0);
                                 f20 = frame_time;
                                 f20 *= 10.0f;
