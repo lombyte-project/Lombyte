@@ -1512,7 +1512,7 @@ extern void queue_movie_with_game_language(int i) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
-extern void FUN_L18_002d6d50(int idx);
+extern void set_class_247_list_data_fields(int idx) __asm__("FUN_L18_002d6d50");
 extern void moby_init_action_mode(void *moby) __asm__("FUN_L18_002d6dc0");
 extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
 extern void end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
@@ -1678,7 +1678,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         } else if (((BossShared *)&D_L18_0016D260_c)->f30 == 3) {
             if (scale_game_frames(0x3B6) < ((BossShared *)&D_L18_0016D260_c)->f34 &&
                 ((BossShared *)&D_L18_0016D260_c)->f34 < scale_game_frames(0x3C0)) {
-                FUN_L18_002d6d50(boss_data->f200);
+                set_class_247_list_data_fields(boss_data->f200);
             }
             if (*(int *)&D_L18_001623A0 == 0) {
                 char *b = D_L18_001600EC + boss_data->f294 * 0x80;
@@ -1742,7 +1742,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             } else if (FUN_001f9b48(hero.motion.pos.f, D_L18_001600EC + (boss_data->f250[2] << 7) + 0x30) <
                        50.0f) {
                 if (*(int *)&D_L18_001623A0 != 0) {
-                    FUN_L18_002d6d50(boss_data->f200);
+                    set_class_247_list_data_fields(boss_data->f200);
                     if (voice_is_playing(moby, boss_data->f3B0) != 0) {
                         int i = boss_data->f3B0;
                         if (i != -1) {
@@ -2560,7 +2560,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     boss_data->f3AC = 1;
                 }
             } else if (boss_data->f3AC == 0) {
-                FUN_L18_002d6d50(boss_data->f200);
+                set_class_247_list_data_fields(boss_data->f200);
             }
             if (boss_data->f3AC != 0) {
                 int n = boss_data->f3AC++;

@@ -57,7 +57,9 @@ extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
-void FUN_L18_002d6d50(int moby_list_index) {
+void set_class_247_list_data_fields(int moby_list_index) __asm__("FUN_L18_002d6d50");
+
+void set_class_247_list_data_fields(int moby_list_index) {
     short *moby_list_entry = (short *)D_L18_001AC240_u[moby_list_index];
     if (moby_list_entry != 0) {
         char *base = *(char **)&D_L18_0015FFD8_d;
