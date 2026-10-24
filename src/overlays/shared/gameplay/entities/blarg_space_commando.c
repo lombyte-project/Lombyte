@@ -888,8 +888,8 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int D_L06_00162004 __attribute__((sda));
 extern int D_L06_00162008 __attribute__((sda));
-extern float D_L06_0016200C __attribute__((sda));
-extern float D_L06_00162010 __attribute__((sda));
+extern float beam_spark_first_vector_w __asm__("D_L06_0016200C") __attribute__((sda));
+extern float beam_spark_second_vector_w __asm__("D_L06_00162010") __attribute__((sda));
 extern float beam_spark_frame_count_range_start __asm__("D_L06_00162014") __attribute__((sda));
 extern float beam_spark_frame_count_range_end __asm__("D_L06_00162018") __attribute__((sda));
 extern float beam_spark_second_frame_count_range_start __asm__("D_L06_0016201C") __attribute__((sda));
@@ -945,9 +945,9 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
         third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(beam_spark_third_frame_count_range_start, beam_spark_third_frame_count_range_end)));
         scale_vector_xyz(first_spark_vector, first_spark_vector, 1.0f / (float)frame_count);
-        first_spark_vector[3] = D_L06_0016200C;
+        first_spark_vector[3] = beam_spark_first_vector_w;
         scale_vector_xyz(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
-        second_spark_vector[3] = D_L06_00162010;
+        second_spark_vector[3] = beam_spark_second_vector_w;
         spark_source_point = data + (current_point_byte_offset + 0x230);
         lerp_vector(spark_position, spark_source_point, spark_source_point, random_float_between(0.0f, 1.0f));
         spawn_spark(spark_position, first_spark_vector, second_spark_vector, D_L06_00162004, D_L06_00162008, frame_count, second_frame_count, third_frame_count,
