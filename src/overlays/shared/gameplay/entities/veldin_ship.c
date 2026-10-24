@@ -1507,7 +1507,7 @@ extern u128 D_L00_001E1160 __attribute__((section(".data")));
 extern u8 D_L00_001E1170[] __attribute__((section(".data")));
 extern f32 metal_detector_aim_yaw_limit_degrees_gp __asm__("D_L00_00161950") __attribute__((sda));
 extern f32 metal_detector_aim_pitch_limit_degrees_gp __asm__("D_L00_00161954") __attribute__((sda));
-extern s32 D_L00_0016191C __attribute__((sda));
+extern s32 metal_detector_aim_perpendicular_cross_direction_row_index_gp __asm__("D_L00_0016191C") __attribute__((sda));
 extern s32 metal_detector_aim_direction_row_index_gp __asm__("D_L00_00161920") __attribute__((sda));
 extern s32 metal_detector_aim_perpendicular_row_index_gp __asm__("D_L00_00161924") __attribute__((sda));
 extern s32 metal_detector_aim_direction_normalization_length_gp __asm__("D_L00_0016192C") __attribute__((sda));
@@ -1626,7 +1626,7 @@ void metal_detector_update(struct Moby *moby) {
             fast_vec_normalize(aim_basis[metal_detector_aim_direction_row_index_gp], v, (f32)metal_detector_aim_direction_normalization_length_gp);
             fast_vec_cross(aim_basis[metal_detector_aim_perpendicular_row_index_gp], aim_basis[metal_detector_aim_direction_row_index_gp], &D_L00_00161940);
             fast_vec_normalize(aim_basis[metal_detector_aim_perpendicular_row_index_gp], aim_basis[metal_detector_aim_perpendicular_row_index_gp], (f32)metal_detector_aim_perpendicular_normalization_length_gp);
-            fast_vec_cross(aim_basis[D_L00_0016191C], aim_basis[metal_detector_aim_perpendicular_row_index_gp], aim_basis[metal_detector_aim_direction_row_index_gp]);
+            fast_vec_cross(aim_basis[metal_detector_aim_perpendicular_cross_direction_row_index_gp], aim_basis[metal_detector_aim_perpendicular_row_index_gp], aim_basis[metal_detector_aim_direction_row_index_gp]);
             aim_basis[3][2] = zero;
             aim_basis[3][1] = zero;
             aim_basis[3][0] = zero;
