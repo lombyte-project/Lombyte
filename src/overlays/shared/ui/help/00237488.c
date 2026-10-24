@@ -1453,7 +1453,7 @@ void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 
 void update_hero_hoverboard_race_progress(void) {
     float world_position_scratch[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float course_point_or_respawn_rotation[4] __attribute__((aligned(16)));
     Data_254608 *race_pvars;
     Path_254608 *path;
     int near;
@@ -1486,11 +1486,11 @@ void update_hero_hoverboard_race_progress(void) {
                 hero.race_path_node = 0xD;
             }
         }
-        *(u128_254608 *)v1 = 0;
-        v1[0] = 223.0f;
-        v1[1] = 281.0f;
-        v1[2] = 93.0f;
-        if (distance_xyz_254608(hero.motion.pos.f, v1) < 7.0f) {
+        *(u128_254608 *)course_point_or_respawn_rotation = 0;
+        course_point_or_respawn_rotation[0] = 223.0f;
+        course_point_or_respawn_rotation[1] = 281.0f;
+        course_point_or_respawn_rotation[2] = 93.0f;
+        if (distance_xyz_254608(hero.motion.pos.f, course_point_or_respawn_rotation) < 7.0f) {
             if (hero.race_path_node < 0x3B) {
                 hero.race_path_node = 0x3B;
             }
@@ -1542,10 +1542,10 @@ void update_hero_hoverboard_race_progress(void) {
             hero.off_course_reset_pending = 1;
             if (D_L05_0015F684 == 1) {
                 hero.off_course_reset_pending = 0;
-                func_L05_00254B38_254608(world_position_scratch, v1);
+                func_L05_00254B38_254608(world_position_scratch, course_point_or_respawn_rotation);
                 hero.off_course_frames = 0;
-                hero.board_air_yaw = v1[2];
-                func_L00_00217718_254608(world_position_scratch, v1, 0x6B, 1);
+                hero.board_air_yaw = course_point_or_respawn_rotation[2];
+                func_L00_00217718_254608(world_position_scratch, course_point_or_respawn_rotation, 0x6B, 1);
                 if (((Path_254608 *)hero.race_path) != 0) {
                     int r = select_point_index_by_distance(hero.motion.pos.f, (Path_254608 *)hero.race_path, 0.0f);
 
