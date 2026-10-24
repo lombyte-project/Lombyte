@@ -1480,7 +1480,9 @@ extern E_2a7780 effects[] __asm__("D_L00_001D92E8");
 extern int last_frame __asm__("D_L00_001613C0");
 extern f32 uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
 /* Draws the animated quad-strip effect attached to o; the effect set is chosen by state 0x17..0x19 / 0x2B. */
-void FUN_L00_002a7780(O_2a7780 *effect_owner) {
+void draw_wrench_swing_effect(O_2a7780 *effect_owner) __asm__("FUN_L00_002a7780");
+
+void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
     R_2a7780 *r;
     E_2a7780 *effect_config;
     V_2a7780 quad;
