@@ -38,7 +38,9 @@ char *create_class_5c3_moby(int owner, char *initial_position, int arg, float in
 }
 extern s32 moby_pool_4f60 __asm__("D_L05_0015FFD8");
 
-void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
+void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) __asm__("FUN_L05_002f4f60");
+
+void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
     int moby = moby_pool_4f60 + index * 0x100;
     char *trigger = (char *)trigger_arg;
     short kind;
@@ -95,7 +97,7 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
 
 extern int *D_L05_001ABCC0[];
-extern void FUN_L05_002f4f60(int, int, int);
+extern void apply_spatial_trigger_to_moby(int, int, int) __asm__("FUN_L05_002f4f60");
 
 void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) __asm__("FUN_L05_002f5190");
 
@@ -103,7 +105,7 @@ void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_var
     unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
     if (moby_index_entry != 0) {
         do {
-            FUN_L05_002f4f60(*moby_index_entry & 0x7FFF, trigger_vars_arg, inside);
+            apply_spatial_trigger_to_moby(*moby_index_entry & 0x7FFF, trigger_vars_arg, inside);
         } while (*(short *)moby_index_entry++ >= 0);
     }
 }
