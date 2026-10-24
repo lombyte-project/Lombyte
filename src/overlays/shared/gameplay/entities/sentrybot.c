@@ -2670,7 +2670,7 @@ extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned char D_0014C190[];
 extern int D_0015ED84;
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
-extern int FUN_L15_002a3138();
+extern int draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
 unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) __asm__("FUN_L15_002647f0");
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
@@ -2814,7 +2814,7 @@ extern int D_L15_001614E0[2] __attribute__((sda));
 extern int D_L15_001614E8[2] __attribute__((sda));
 extern int D_L15_001614F0[2] __attribute__((sda));
 
-int FUN_L15_002a3138(unsigned char *moby) {
+int draw_spark_emitter_effect_quads(unsigned char *moby) {
     EffectQuad first, second;
     float transform[12];
     float position[4];
