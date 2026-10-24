@@ -18,9 +18,8 @@ extern char *D_L11_0015FFD8;
 extern char *path_table[] __asm__("D_L11_001B0EB0");
 extern float D_L11_001622CC __attribute__((sda));
 extern float D_L11_001622D0 __attribute__((sda));
-extern float puffoid_hit_knockback_vertical_scale __asm__("D_L11_001622D4") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
 extern float D_L11_001622D8 __attribute__((sda));
-extern float puffoid_death_knockback_vertical_scale __asm__("D_L11_001622DC") __attribute__((sda));
 extern float D_L11_001622E0 __attribute__((sda));
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
@@ -368,9 +367,6 @@ void *FUN_L11_00316210(struct Moby *arg) {
 
 #include "qcopy.h"
 
-extern float gate_door_z_offset __asm__("D_L11_00162308") __attribute__((sda));
-extern float gate_door_x_rotation_degrees __asm__("D_L11_0016230C") __attribute__((sda));
-extern float gate_door_y_rotation_degrees __asm__("D_L11_00162310") __attribute__((sda));
 extern struct Moby *spawn_moby_class(s32) __asm__("FUN_0020c4f8");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern s32 FUN_00214720(void *, s32);
@@ -536,7 +532,6 @@ struct L11ChainVars {
     s32 sound;               /* 0xF4 */
 };
 
-extern float oil_tanker_path_progress_step __asm__("D_L11_00162320") __attribute__((sda));
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
@@ -773,7 +768,6 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
 }
 extern char D_00141C18[];
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
-extern float oil_tanker_head_fragment_velocity_scale __asm__("D_L11_00162330") __attribute__((sda));
 extern struct Moby *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -1835,11 +1829,6 @@ void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index)
         FUN_L00_001fde98(element_counts[i], triple_word_source_tables[i], word_source_tables[i], D_L11_001FF770, 1);
     }
 }
-extern int layered_effect_texture_2c_fixed_alpha __asm__("D_L11_001624F8") __attribute__((sda));
-extern int layered_effect_texture_29_fixed_alpha_scale __asm__("D_L11_001624FC");
-extern int layered_effect_texture_2a_pair_zero_fixed_alpha __asm__("D_L11_00162518") __attribute__((sda));
-extern int layered_effect_texture_2a_pair_one_fixed_alpha __asm__("D_L11_0016251C");
-extern int layered_effect_texture_2b_fixed_alpha __asm__("D_L11_00162528") __attribute__((sda));
 extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
 extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
@@ -1902,12 +1891,8 @@ extern char D_L11_00162570[4] __attribute__((sda));
 extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
-extern float layered_effect_position_x __asm__("D_L11_001624E8") __attribute__((sda));
-extern float layered_effect_position_y __asm__("D_L11_001624EC");
-extern float layered_effect_position_z __asm__("D_L11_001624F0");
 extern float D_L11_001624F4;
 extern char D_L11_00167680[];
-extern int layered_effect_color_tables_initialized __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
@@ -2002,8 +1987,6 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
 
 extern char D_L11_00167680[];
-extern int distance_faded_effect_texture_29_fixed_alpha_scale __asm__("D_L11_001625CC");
-extern int distance_faded_effect_texture_2a_pair_one_fixed_alpha __asm__("D_L11_001625EC");
 extern int D_L11_00162610; /* no foreign declaration */
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -2083,12 +2066,8 @@ extern s32 D_L11_00215220[];
 extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
-extern float distance_faded_effect_position_x __asm__("D_L11_001625B8") __attribute__((sda));
-extern float distance_faded_effect_position_y __asm__("D_L11_001625BC");
-extern float distance_faded_effect_position_z __asm__("D_L11_001625C0");
 extern float D_L11_001625C4;
 extern char D_L11_00167680[];
-extern int distance_faded_effect_color_tables_initialized __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 extern float vector_length_xyz(void *);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");

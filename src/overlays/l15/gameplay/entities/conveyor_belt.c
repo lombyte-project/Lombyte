@@ -224,7 +224,7 @@ typedef struct Tb_2E9358 {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_0015ED6C;
-extern float poison_vessel_gravity __asm__("D_L15_00161FBC") __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_globals.h"
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();
@@ -464,9 +464,7 @@ int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
 extern float D_L15_001620F8 __attribute__((sda));
 extern float D_L15_001620FC __attribute__((sda));
-extern float ripple_mesh_buffers_z_amplitude __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float ripple_mesh_buffers_uv_scroll_rate __asm__("D_L15_00162104") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_gs_register(s32, unsigned long) __asm__("func_00233980");
@@ -559,7 +557,6 @@ typedef struct {
 
 Quad4 D_L15_00162170 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float ripple_mesh_uv_scroll_rate __asm__("D_L15_0016216C") __attribute__((sda));
 float D_L15_001DDBA0[204] = {3.485078f, 4.343359f, 0.0f, 5.279609f, 3.600078f, 0.0f, 2.980781f, 2.623281f, 0.0f, 4.615703f, 1.997344f, 0.0f, 2.298828f, 0.976816f, 0.0f, 3.933828f, 0.351152f, 0.0f, 1.616797f, -0.669707f, 0.0f, 3.237344f, -1.330234f, 0.0f, 0.850156f, -2.520547f, 0.0f, 2.454375f, -3.220508f, 0.0f, -0.025f, -4.63334f, 0.0f, 1.594062f, -5.297578f, 0.0f, -0.025f, -4.63334f, 0.0f, 0.733984f, -7.373926f, -5e-06f, -0.025f, -4.63334f, 0.0f, -1.060508f, -6.630625f, 0.0f, -1.641797f, -3.963652f, 0.0f, -2.49957f, -6.034551f, 0.0f, -3.258633f, -3.293945f, 0.0f, -3.938672f, -5.438457f, 0.0f, -3.258633f, -3.293945f, 0.0f, -5.733164f, -4.695137f, 0.0f, -3.258633f, -3.293945f, 0.0f, -4.873164f, -2.618789f, 0.0f, -2.383437f, -1.181152f, 0.0f, -4.012774f, -0.541719f, 0.0f, -1.616797f, 0.669688f, 0.0f, -3.229805f, 1.348555f, 0.0f, -0.934805f, 2.316172f, 0.0f, -2.53332f, 3.029922f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.851445f, 4.676094f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.187617f, 6.278828f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.606953f, 5.535547f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.046016f, 4.939453f, 0.0f, 1.363984f, 3.292969f, 0.0f, 3.485078f, 4.343359f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.980781f, 2.623281f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.298828f, 0.976816f, 0.0f, 1.363984f, 3.292969f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.934805f, 2.316172f, 0.0f, 0.681953f, 1.646484f, 0.0f, -1.616797f, 0.669688f, 0.0f, 0.681953f, 1.646484f, 0.0f, 0.0f, 0.0f, 0.0f, 2.298828f, 0.976816f, 0.0f, 0.0f, 0.0f, 0.0f, 1.616797f, -0.669707f, 0.0f, -0.766641f, -1.85084f, 0.0f, 0.850156f, -2.520547f, 0.0f, -0.766641f, -1.85084f, 0.0f, -0.025f, -4.63334f, 0.0f, -0.766641f, -1.85084f, 0.0f, -1.641797f, -3.963652f, 0.0f, -0.766641f, -1.85084f, 0.0f, -3.258633f, -3.293945f, 0.0f, -0.766641f, -1.85084f, 0.0f, -2.383437f, -1.181152f, 0.0f, 0.0f, 0.0f, 0.0f, -1.616797f, 0.669688f, 0.0f};
 float D_L15_001DDED0[68][2] = {
     {2.945454f, -1.355928f},
@@ -647,9 +644,7 @@ int D_L15_00162150[1] = {(int)D_L15_001DE750};
 int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
-extern float ripple_mesh_radial_wavelength __asm__("D_L15_00162160") __attribute__((sda));
 extern float D_L15_00162164 __attribute__((sda));
-extern float ripple_mesh_z_amplitude __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -980,7 +975,6 @@ typedef struct {
 extern KillFlags D_L15_001BB830;
 extern unsigned int D_L15_001BAAD0[];
 extern unsigned int D_L15_0014C190[];
-extern int level_save_bank_index __asm__("D_L15_0015ED84");
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern int D_L15_0015FFD8;
@@ -1839,11 +1833,7 @@ int D_L15_001621E0[1] = {(int)D_L15_001DF048};
 int D_L15_001621E4 = 128;
 int D_L15_001621E8 = 45;
 int D_L15_001621EC = 64;
-extern float scaled_ripple_radial_wavelength __asm__("D_L15_001621F0") __attribute__((sda));
 extern float D_L15_001621F4 __attribute__((sda));
-extern float scaled_ripple_z_amplitude __asm__("D_L15_001621F8") __attribute__((sda));
-extern float scaled_ripple_uv_scroll_rate __asm__("D_L15_001621FC") __attribute__((sda));
-extern float scaled_ripple_template_vertex_scale __asm__("D_L15_00162200") __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 46 scaled vertices and colours, then two passes of 46 texture coordinates. */
 void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edbe0");
 
@@ -2103,11 +2093,7 @@ int D_L15_00162250[1] = {(int)D_L15_001E0020};
 int D_L15_00162254 = 128;
 int D_L15_00162258 = 45;
 int D_L15_0016225C = 64;
-extern float ripple_88_radial_wavelength __asm__("D_L15_00162260") __attribute__((sda));
 extern float D_L15_00162264 __attribute__((sda));
-extern float ripple_88_z_amplitude __asm__("D_L15_00162268") __attribute__((sda));
-extern float ripple_88_uv_scroll_rate __asm__("D_L15_0016226C") __attribute__((sda));
-extern float ripple_88_template_vertex_scale __asm__("D_L15_00162270") __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 88 scaled vertices and colours, then two passes of 88 texture coordinates. */
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edfc0");
 
@@ -2160,7 +2146,6 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern char *D_L15_0015EF50;
-extern float codebot_slot_effect_spawn_gate __asm__("D_L15_0015F3FC");
 
 int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;

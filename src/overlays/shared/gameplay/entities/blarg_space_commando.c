@@ -71,10 +71,8 @@ typedef struct {
 } Moby1068Vars;
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
-extern s32 ranged_attack_cooldown_frames __asm__("D_L06_00161FC0") __attribute__((sda));
-extern f32 melee_attack_distance_threshold __asm__("D_L06_00161FC4") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/blarg_space_commando_globals.h"
 extern f32 D_L06_00161FC8 __attribute__((sda));
-extern f32 vehicle_melee_windup_animation_speed __asm__("D_L06_00161FCC") __attribute__((sda));
 extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
@@ -634,8 +632,6 @@ extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-extern float beam_spread_degrees __asm__("D_L06_00161FD4") __attribute__((sda));
-extern int beam_duration_frames __asm__("D_L06_00161FD8") __attribute__((sda));
 void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
 void initialize_blarg_space_commando_beam(char *moby) {
@@ -681,7 +677,6 @@ typedef struct {
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern float approach_value(float *, float, float);
 extern int collision_line(void *, void *, int, void *, void *);
-extern f32 beam_point_horizontal_speed __asm__("D_L06_00161FD0") __attribute__((sda));
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
@@ -791,11 +786,6 @@ extern s32 D_L06_00161FE0 __attribute__((sda));
 extern s32 D_L06_00161FE4 __attribute__((sda));
 extern s32 D_L06_00161FE8 __attribute__((sda));
 extern s32 D_L06_00161FEC __attribute__((sda));
-extern s32 beam_effect_texture_index __asm__("D_L06_00161FF0") __attribute__((sda));
-extern s32 beam_outer_corner_color_at_zero_weight __asm__("D_L06_00161FF4") __attribute__((sda));
-extern s32 beam_outer_corner_color_at_unit_weight __asm__("D_L06_00161FF8") __attribute__((sda));
-extern s32 beam_inset_corner_color_at_zero_weight __asm__("D_L06_00161FFC") __attribute__((sda));
-extern s32 beam_inset_corner_color_at_unit_weight __asm__("D_L06_00162000") __attribute__((sda));
 /* Scrolling texture coordinates of the four corners. */
 extern f32 D_L06_001F2E90[4][2];
 
@@ -888,19 +878,6 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int D_L06_00162004 __attribute__((sda));
 extern int D_L06_00162008 __attribute__((sda));
-extern float beam_spark_first_vector_w __asm__("D_L06_0016200C") __attribute__((sda));
-extern float beam_spark_second_vector_w __asm__("D_L06_00162010") __attribute__((sda));
-extern float beam_spark_frame_count_range_start __asm__("D_L06_00162014") __attribute__((sda));
-extern float beam_spark_frame_count_range_end __asm__("D_L06_00162018") __attribute__((sda));
-extern float beam_spark_second_frame_count_range_start __asm__("D_L06_0016201C") __attribute__((sda));
-extern float beam_spark_second_frame_count_range_end __asm__("D_L06_00162020") __attribute__((sda));
-extern float beam_spark_third_frame_count_range_start __asm__("D_L06_00162024") __attribute__((sda));
-extern float beam_spark_third_frame_count_range_end __asm__("D_L06_00162028") __attribute__((sda));
-extern float beam_spark_horizontal_scale_range_start __asm__("D_L06_0016202C") __attribute__((sda));
-extern float beam_spark_horizontal_scale_range_end __asm__("D_L06_00162030") __attribute__((sda));
-extern float beam_spark_vector_z_range_start __asm__("D_L06_00162034") __attribute__((sda));
-extern float beam_spark_vector_z_range_end __asm__("D_L06_00162038") __attribute__((sda));
-extern float beam_spark_spawn_probability __asm__("D_L06_0016203C") __attribute__((sda));
 extern int D_L06_00162040 __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");

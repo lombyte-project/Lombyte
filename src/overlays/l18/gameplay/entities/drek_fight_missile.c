@@ -287,13 +287,7 @@ void select_drek_fight_missile_wander_target(char *moby, void *out) {
     *(int *)(data + 0x160) = scale_game_frames(180);
 }
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
-extern int drek_missile_trail_draw_disabled __asm__("D_L18_0016223C") __attribute__((sda));
-extern int drek_missile_trail_blend_minuend_selector __asm__("D_L18_00162240") __attribute__((sda));
-extern int drek_missile_trail_blend_subtrahend_selector __asm__("D_L18_00162244") __attribute__((sda));
-extern int drek_missile_trail_blend_factor_selector __asm__("D_L18_00162248") __attribute__((sda));
-extern int drek_missile_trail_blend_addend_selector __asm__("D_L18_0016224C") __attribute__((sda));
-extern int drek_missile_trail_blend_start_color __asm__("D_L18_00162250") __attribute__((sda));
-extern int drek_missile_trail_blend_end_color __asm__("D_L18_00162254") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_globals.h"
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern float D_L18_001DA2F0[4][2];
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -377,12 +371,6 @@ extern void FUN_001f9a10_c7(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern float FUN_001fa580_c7(float, float) __asm__("FUN_001fa580");
 
-extern float drek_missile_moving_effect_phase_rate_degrees __asm__("D_L18_00162258") __attribute__((sda));
-extern float drek_missile_wait_to_explode_effect_phase_rate_degrees __asm__("D_L18_0016225C") __attribute__((sda));
-extern int drek_missile_effect_blend_start_color __asm__("D_L18_00162260") __attribute__((sda));
-extern int drek_missile_effect_blend_end_color __asm__("D_L18_00162264") __attribute__((sda));
-extern float drek_missile_effect_quad_scale __asm__("D_L18_00162268") __attribute__((sda));
-extern float drek_missile_effect_position_offset_length __asm__("D_L18_0016226C") __attribute__((sda));
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) __asm__("FUN_L18_002f06c0");
 
 void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
@@ -848,14 +836,10 @@ extern int blend_color_1fd8(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
-extern f32 glow_moby_phase_rate __asm__("D_L18_001622E0") __attribute__((sda));
 extern int D_L18_001622E4 __attribute__((sda));
 extern int D_L18_001622E8 __attribute__((sda));
 extern int D_L18_001622EC __attribute__((sda));
 extern int D_L18_001622F0 __attribute__((sda));
-extern int glow_moby_phase_blend_start_color __asm__("D_L18_001622C8") __attribute__((sda));
-extern int glow_moby_phase_blend_end_color __asm__("D_L18_001622CC") __attribute__((sda));
-extern f32 glow_moby_layer_z_step __asm__("D_L18_001622D0") __attribute__((sda));
 extern f32 D_L18_001622D4 __attribute__((sda));
 f32 D_L18_001DA350[4][2] = {
     {0.0f, 0.0f},
@@ -941,9 +925,6 @@ void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
 extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970");
 
-extern int lift_alternate_height_requested __asm__("D_L18_001622FC") __attribute__((sda));
-extern int next_lift_instance_index __asm__("D_L18_001622F8") __attribute__((sda));
-extern float lift_texture_u_scroll_rate __asm__("D_L18_0016230C") __attribute__((sda));
 extern unsigned char D_00141400 __attribute__((section(".data")));
 extern unsigned char D_0013D406 __attribute__((section(".data")));
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");

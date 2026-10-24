@@ -227,7 +227,7 @@ typedef struct {
 } SoundSlot_2A48B0;
 
 extern float D_0015ED6C;
-extern float vertical_gate_travel_distance __asm__("D_L15_001614F8") __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/gate_globals.h"
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -410,8 +410,6 @@ extern void *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern char D_L15_001673C0[];
 extern char *D_L15_0015FFE4;
 extern struct Moby *D_L15_0015FFD8;
-extern f32 swinging_door_swing_angle_degrees __asm__("D_L15_001614FC") __attribute__((sda));
-extern f32 swinging_door_swing_duration __asm__("D_L15_00161500") __attribute__((sda));
 
 void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
 
@@ -865,11 +863,6 @@ typedef struct {
     float direction;
 } UpdateVars_2938;
 extern int D_L15_001619EC __attribute__((sda));
-extern int construction_arm_effect_duration_min_frames __asm__("D_L15_001619F4") __attribute__((sda));
-extern int construction_arm_effect_duration_max_frames __asm__("D_L15_001619F8") __attribute__((sda));
-extern float construction_arm_effect_speed_max __asm__("D_L15_001619FC") __attribute__((sda));
-extern float construction_arm_wait_time_min __asm__("D_L15_00161A00") __attribute__((sda));
-extern float construction_arm_wait_time_max __asm__("D_L15_00161A04") __attribute__((sda));
 extern unsigned short *D_L15_001ABE40[];
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -1306,8 +1299,6 @@ typedef struct {
 extern UPath *D_L15_001B0AB0[];
 extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
-extern float helicopter_bob_period __asm__("D_L15_00161A08") __attribute__((sda));
-extern float helicopter_bob_amplitude __asm__("D_L15_00161A0C") __attribute__((sda));
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_L12_00308708");
@@ -2524,8 +2515,6 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 extern float D_L15_00161B00 __attribute__((sda));
 extern float D_L15_00161B04 __attribute__((sda));
 extern float D_L15_00161B08 __attribute__((sda));
-extern float ultramech_pre_hit_scale_multiplier __asm__("D_L15_00161B2C") __attribute__((sda));
-extern float ultramech_post_hit_scale_multiplier __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;
 extern int D_001413D0 __attribute__((section(".data")));
 extern char D_00178700[] __asm__("D_L15_00178700");

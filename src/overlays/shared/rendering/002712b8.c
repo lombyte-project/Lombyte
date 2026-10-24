@@ -343,7 +343,7 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
 void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *D_L00_001B2148[];
-extern float height_culled_particle_size_rate __asm__("D_L00_00160210") __attribute__((sda));
+#include "rnc/overlay/shared/rendering/002712b8_globals.h"
 void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
 
 void update_moving_height_culled_particle(unsigned char *particle) {
@@ -1179,7 +1179,6 @@ extern unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary
                                        int h) __asm__("FUN_L00_0026bb70");
 extern unsigned char *mine_debris(void *a, void *b, int c, int d, float f, int n, int k) __asm__("FUN_L00_0026bed0");
 extern int FUN_L00_002371e0(int, int, float);
-extern u32 large_floor_burst_random_limit_plus_one __asm__("D_L00_00160228") __attribute__((sda));
 
 void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__("FUN_L00_00273a68");
 
@@ -1972,7 +1971,6 @@ void update_gravity_damped_resizing_particle(unsigned char *particle) {
         free_effect_particle(particle);
     }
 }
-extern int timed_particle_alpha_decrement __asm__("D_L00_00160240") __attribute__((sda));
 void decrement_packed_countdown() __asm__("FUN_L00_00259430");
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle() __asm__("FUN_L00_00267a08");

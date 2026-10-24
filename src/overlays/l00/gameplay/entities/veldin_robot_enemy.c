@@ -191,9 +191,8 @@ typedef struct {
     s32 unk90;
 } ElectroidProbe;
 
-extern f32 veldin_robot_probe_length __asm__("D_L00_00161BE4") __attribute__((sda));
+#include "rnc/overlay/l00/gameplay/entities/veldin_robot_enemy_globals.h"
 s32 D_L00_00161BE8 = 3;
-extern f32 veldin_robot_probe_heading_offset __asm__("D_L00_00161BEC") __attribute__((sda));
 extern Vec4 D_L00_00166DC0;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
@@ -477,11 +476,8 @@ extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d5
 extern s32 select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
 extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
-extern f32 veldin_robot_default_target_range __asm__("D_L00_00161BD0") __attribute__((sda));
 extern f32 D_L00_00161BD4 __attribute__((sda));
 extern f32 D_L00_00161BD8 __attribute__((sda));
-extern f32 veldin_robot_knockback_xy_scale __asm__("D_L00_00161BDC") __attribute__((sda));
-extern f32 veldin_robot_knockback_z_scale __asm__("D_L00_00161BE0") __attribute__((sda));
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     ElectroidVars *vars;

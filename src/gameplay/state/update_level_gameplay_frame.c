@@ -120,7 +120,7 @@ extern f32 D_00160404 MACRO_ADDR;
 #include "rnc/rendering/sky_shell.h"
 extern s32 D_001604E0 __attribute__((sda));
 extern s32 D_001604F0 __attribute__((sda));
-extern s32 mode4_render_vector_delta __asm__("D_00160500") __attribute__((sda));
+#include "rnc/gameplay/state/update_level_gameplay_frame_globals.h"
 extern s32 current_vu_chain __asm__("D_00160F0C");
 extern LevelGameplayState render_sequence __asm__("D_0018CB20");
 /* Fakematch: a second name for render_sequence keeps the fade loop's own lui/addiu. */

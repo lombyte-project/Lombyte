@@ -1396,7 +1396,7 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
 extern char D_0013E533_lui[] __asm__("D_0013E533") __attribute__((section(".data")));
 extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00_0020f0b8");
-extern int hero_item_rotation_history_target_window_size __asm__("D_L00_0015F694") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage_globals.h"
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
@@ -2562,7 +2562,6 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern s32 D_0013DFD8[];
 extern s32 D_0014E990[][16];
-extern s32 level_15_class_4d_respawn_flag __asm__("D_L00_0015F5A4");
 void hero_respawn(void) {
     s32 lvl = current_level_index;
     char *damage_source_moby;

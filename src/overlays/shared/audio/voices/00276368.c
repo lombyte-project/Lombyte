@@ -148,7 +148,7 @@ extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
 extern Own D_L00_001B6B38;
 extern Own D_L00_001B86C8;
-extern f32 pause_menu_initial_vector __asm__("D_L00_00160280") __attribute__((sda));
+#include "rnc/overlay/shared/audio/voices/00276368_globals.h"
 extern f32 D_L00_00160290 __attribute__((sda));
 extern Vec4 D_L00_00180250;
 extern Vec4 D_L00_00180260;
@@ -650,7 +650,6 @@ typedef struct {
 } PageMobyData;
 
 extern s32 D_L00_001B23C0[];
-extern s32 pause_menu_rectangle_color __asm__("D_L00_00160270") __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");

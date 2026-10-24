@@ -31,7 +31,7 @@ int play_voice(int voice_definition_index, int voice_flags, int sound_owner, int
 extern char D_0013E550_c[] __asm__("D_0013E550");
 
 extern unsigned char D_L00_001BD820[];
-extern int grouped_voice_definition_base_index __asm__("D_L00_0015F574");
+#include "rnc/overlay/shared/audio/voices/0028ddd8_globals.h"
 
 int request_grouped_voice(int voice_group_index, int voice_pair_index, int voice_index_offset, int voice_flags, int voice_moby) __asm__("FUN_L00_0028de68");
 

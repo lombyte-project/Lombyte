@@ -494,8 +494,7 @@ typedef struct {
 int FUN_L00_0025a420_2b3458(void *, int, int) __asm__("FUN_L00_0025a420");
 int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
-extern int linked_moby_selection_delay __asm__("D_L00_00161478") __attribute__((sda));
-extern int owned_record_cooldown __asm__("D_L00_00161480") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/devastator_globals.h"
 void update_linked_moby_states(unsigned char *source_moby) __asm__("FUN_L00_002b3458");
 
 void update_linked_moby_states(unsigned char *source_moby) {
@@ -1956,7 +1955,6 @@ void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 
 extern int D_L00_0017E508 __attribute__((section(".data")));
 extern int D_L00_0015F608;
-extern float visibomb_missile_default_speed __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
@@ -2242,9 +2240,6 @@ extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025
 
 extern int D_L00_0015F458 __attribute__((sda));
 extern float D_L00_00161498 __attribute__((sda));
-extern float visibomb_missile_max_speed __asm__("D_L00_001614A0") __attribute__((sda));
-extern float visibomb_missile_speed_target_blend_factor __asm__("D_L00_001614A4") __attribute__((sda));
-extern float visibomb_missile_speed_blend_factor __asm__("D_L00_001614A8") __attribute__((sda));
 extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
@@ -2496,8 +2491,6 @@ extern u32 D_0013C940[];
 extern u32 D_0013CAE0[];
 extern u8 D_0013E550[];
 extern Ring D_00141680;
-extern s32 taunter_effect_reset_pending __asm__("D_L00_001614CC");
-extern s32 taunter_effect_emission_disabled __asm__("D_L00_001614D4");
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F5CC;
 extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
@@ -2722,11 +2715,7 @@ extern E8690 D_L00_001DB440[];
 extern int D_L00_001614D0;
 extern float D_L00_001614DC;
 extern char D_L00_001614E0[] __attribute__((section(".sdata")));
-extern int taunter_effect_spawn_interval_frames __asm__("D_L00_001614B0") __attribute__((sda));
-extern float taunter_effect_travel_distance __asm__("D_L00_001614B4") __attribute__((sda));
-extern float taunter_effect_travel_speed __asm__("D_L00_001614B8") __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
-extern int taunter_effect_lifetime_frames __asm__("D_L00_001614D8");
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -2815,9 +2804,6 @@ extern f32 itof_2b7568(s32) __asm__("FUN_001fa6c0");
 extern s32 ftoi_2b7568(f32) __asm__("FUN_001fa6d0");
 extern void draw_2b7568(void *, void *, int) __asm__("FUN_001f7d30");
 extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
-extern f32 taunter_effect_quad_final_scale __asm__("D_L00_001614C8") __attribute__((sda));
-extern f32 taunter_effect_quad_initial_scale __asm__("D_L00_001614C4") __attribute__((sda));
-extern u32 taunter_effect_quad_rgb __asm__("D_L00_001614C0") __attribute__((sda));
 void draw_taunter_effect_quads(u8 *source_moby) __asm__("FUN_L00_002b7568");
 
 void draw_taunter_effect_quads(u8 *source_moby) {
@@ -3655,8 +3641,6 @@ extern void vadd_2b9310(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vzero_2b9310(void *) __asm__("FUN_001f99f8");
 
 extern int D_L00_0016167C __attribute__((sda));
-extern int tesla_beam_initial_frame_count __asm__("D_L00_00161624") __attribute__((sda));
-extern int tesla_beam_scaled_initial_frame_count __asm__("D_L00_00161678");
 extern float D_L00_00161594 __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668;

@@ -1112,7 +1112,7 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
 /* Stores a value into each table entry listed for this moby's index. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
-extern int moby_group_command_frames __asm__("D_L10_00161E00") __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/entities/screamer_globals.h"
 void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");
 
 void set_moby_group_command_frames(struct Moby *moby) {
@@ -2080,7 +2080,6 @@ typedef struct { char p0[0x11]; unsigned char b11; } Flags_2E52B0;
 extern char *FUN_L00_0025a420(void *,int,int);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float dot_vectors_xyz(float) __asm__("FUN_001f9ab0");
-extern float toxic_crab_hit_knockback_gravity __asm__("D_L10_00161E2C") __attribute__((sda));
 extern float D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
@@ -2343,7 +2342,6 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 #include "rnc/data_labels.h"
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float toxic_crab_group_approach_angle_limit_degrees __asm__("D_L10_00161E48") __attribute__((sda));
 float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     char *owner = *(char **)(self->pvars + 0x160);
     float hi, lo, owner_to_self_angle, owner_to_self_distance, translated_radial_point[3];
@@ -2473,8 +2471,6 @@ extern s32 D_0015ED84;
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern int D_L10_00161EE4 __attribute__((sda));
-extern float blarg_ship_rocket_speed __asm__("D_L10_00161EE8") __attribute__((sda));
-extern float blarg_ship_firing_animation_speed __asm__("D_L10_00161EEC") __attribute__((sda));
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_001413F4[];
 extern unsigned char D_0014161B[];
@@ -2808,12 +2804,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         *(int *)(pvars + 0x110) = (int)hero.moby;
     }
 }
-extern s32 directional_particle_color_range_start __asm__("D_L10_00161EF0") __attribute__((sda));
-extern s32 directional_particle_color_range_end __asm__("D_L10_00161EF4") __attribute__((sda));
-extern f32 directional_particle_speed_range_end __asm__("D_L10_00161EF8") __attribute__((sda));
-extern f32 directional_particle_speed_range_start __asm__("D_L10_00161EFC") __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
-extern s32 directional_particle_variant_threshold_percent __asm__("D_L10_00161F04") __attribute__((sda));
 extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
@@ -2898,7 +2889,6 @@ extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
 extern int memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_00263d40_vendor(int, int) __asm__("FUN_L00_00263d40");
 extern int D_0013ED98 __attribute__((section(".sdata")));
-extern int purchased_nanotech_health __asm__("D_0013EDA0") __attribute__((sda));
 extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sdata")));
 
 void nanotech_upgrade_vendor_update(struct Moby *moby) __asm__("FUN_L10_002e8358");

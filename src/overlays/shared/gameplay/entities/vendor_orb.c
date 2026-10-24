@@ -7,7 +7,7 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 
-extern float vendor_orb_rotation_rate_degrees __asm__("D_L00_00161BB0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/vendor_orb_globals.h"
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1360,8 +1360,6 @@ float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
-extern float pterodactyl_path_speed __asm__("D_L00_00161C98") __attribute__((sda));
-extern float pterodactyl_scale_multiplier __asm__("D_L00_00161C9C") __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 void pterodactyl_update(unsigned char *moby) {
     enum {
@@ -2281,10 +2279,6 @@ typedef struct {
     u8 p[0x70];
     u8 *m;
 } O002e5730;
-extern f32 follow_camera_position_default_stiffness __asm__("D_L00_00161D28") __attribute__((sda));
-extern f32 follow_camera_position_default_damping __asm__("D_L00_00161D2C") __attribute__((sda));
-extern f32 follow_camera_position_transition_end_stiffness __asm__("D_L00_00161D30") __attribute__((sda));
-extern f32 follow_camera_position_transition_end_damping __asm__("D_L00_00161D34") __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");

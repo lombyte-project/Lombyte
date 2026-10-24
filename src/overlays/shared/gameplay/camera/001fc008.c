@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
-extern int camera_update_callback_count __asm__("D_L02_0015EF4C");
+#include "rnc/overlay/shared/gameplay/camera/001fc008_globals.h"
 extern int D_L02_001695F0[] NOT_SDA;
 
 void register_camera_update_callback(int x) __asm__("FUN_L02_001fc008");

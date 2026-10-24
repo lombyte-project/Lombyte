@@ -59,7 +59,7 @@ extern int D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
 extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
 extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
-extern int vendor_beam_damage_disabled __asm__("D_L14_001620D8") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/vendor/003015d0_globals.h"
 void update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
 
 void update_vendor_beam(unsigned char *moby) {
@@ -151,10 +151,6 @@ extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern int vendor_beam_min_pulse_duration_frames __asm__("D_L14_001620BC") __attribute__((sda));
-extern int vendor_beam_max_pulse_duration_frames __asm__("D_L14_001620C0") __attribute__((sda));
-extern float vendor_beam_displacement_radius __asm__("D_L14_001620FC") __attribute__((sda));
-extern float vendor_beam_max_point_speed __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
 extern float D_L14_00162114 __attribute__((sda));
@@ -280,10 +276,6 @@ void start_vendor_beam_pulse(char *moby) {
         }
     }
 }
-extern int vendor_beam_color_transition_countdown __asm__("D_L14_001620C4") __attribute__((sda));
-extern int vendor_beam_initial_color __asm__("D_L14_001620F0") __attribute__((sda));
-extern int vendor_beam_transition_color __asm__("D_L14_001620F4") __attribute__((sda));
-extern int vendor_beam_final_color __asm__("D_L14_001620F8") __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -355,7 +347,6 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern int vendor_beam_effect_texture_index __asm__("D_L14_001620DC") __attribute__((sda));
 extern int D_L14_001620E0 __attribute__((sda));
 extern int D_L14_001620E4 __attribute__((sda));
 extern int D_L14_001620E8 __attribute__((sda));

@@ -119,12 +119,11 @@ extern QuadCorner D_L10_001DA350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L10_001DA270[][2];
 extern float D_L10_001DA2F0[][2];
-extern int quad_uv_animation_phase_input __asm__("D_L10_0015F3F8");
+#include "rnc/overlay/shared/gameplay/vendor/002e3de8_globals.h"
 extern int D_L10_001DA250[];
 extern int D_L10_001DA2B0[][2];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern int quad_layer_count __asm__("D_L10_00161F40") __attribute__((sda));
 extern int D_L10_00161F48[2] __attribute__((sda));
 extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));

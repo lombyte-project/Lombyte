@@ -13,7 +13,7 @@ struct ParticleTex {
     s32 tex1;
 };
 
-extern s32 particle_texture_range_count __asm__("D_001600C0");
+#include "rnc/rendering/texture/parse_particle_textures_globals.h"
 extern u8 D_001CE180[];
 extern struct ParticleTex D_001CD980[];
 extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");

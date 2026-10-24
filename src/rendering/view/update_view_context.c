@@ -20,7 +20,7 @@ struct Clip {
 
 Vec4 D_0018CFC0[4] = {0};
 extern f32 D_00160720[4];
-extern f32 view_fog_multiplier __asm__("D_00160B30");
+#include "rnc/rendering/view/update_view_context_globals.h"
 extern f32 D_001DFF50[];
 extern f32 D_001E6B70[];
 extern struct FogRegs2 shrub_vu1_constants __asm__("D_001DE9B0");

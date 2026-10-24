@@ -607,7 +607,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
-extern float blarg_turret_launch_displacement_scale __asm__("D_L13_00161388") __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/elevator_globals.h"
 int D_L13_0016138C = 2;
 void fire_blarg_turret_projectile(struct Moby *moby) __asm__("FUN_L13_002b47a0");
 
@@ -1113,9 +1113,6 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L13_0015F62C;
 extern float D_L13_0015F630;
-extern float robosquawker_damage_knockback_vertical_speed __asm__("D_L13_00161390") __attribute__((sda));
-extern float robosquawker_damage_knockback_horizontal_speed __asm__("D_L13_00161394") __attribute__((sda));
-extern float robosquawker_home_hop_horizontal_speed __asm__("D_L13_00161398") __attribute__((sda));
 extern float D_L13_0016139C __attribute__((sda));
 extern float D_L13_001670C0[];
 extern float FUN_L04_001f1978(float);

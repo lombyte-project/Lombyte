@@ -13,7 +13,7 @@ extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 extern unsigned char D_0013D389[];
 extern char D_L11_00179B18[];
 extern char D_L11_0021A900[];
-extern int proximity_removal_frame_count __asm__("D_L11_0015F640");
+#include "rnc/overlay/shared/gameplay/entities/ocean_pokitaru_globals.h"
 void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
 void remove_moby_when_near_hero(char *moby) {
@@ -311,11 +311,7 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char D_L11_00174880[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern int projectile_trail_color_start __asm__("D_L11_00161DC0") __attribute__((sda));
-extern int projectile_trail_color_end __asm__("D_L11_00161DC4") __attribute__((sda));
-extern int projectile_trail_frame_count __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
-extern float projectile_trail_velocity_scale __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");

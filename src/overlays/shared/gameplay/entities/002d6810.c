@@ -113,8 +113,7 @@ extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") __attribute__((section(".data
 extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-extern float electric_water_on_duration_seconds __asm__("D_L15_00161BC8") __attribute__((sda));
-extern float electric_water_off_duration_seconds __asm__("D_L15_00161BCC") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/002d6810_globals.h"
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
@@ -596,16 +595,12 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
-extern int electric_water_bolt_init_requested __asm__("D_L15_00161BF8") __attribute__((sda));
-extern float electric_water_bolt_initial_length_scale __asm__("D_L15_00161BFC") __attribute__((sda));
-extern int electric_water_bolt_initial_frame_count __asm__("D_L15_00161C8C") __attribute__((sda));
 extern short D_L15_00161CD2;
 extern short D_L15_00161CD4;
 extern short D_L15_00161CD6;
 extern short D_L15_00161CDA;
 extern short D_L15_00161CDC;
 extern short D_L15_00161CDE;
-extern int electric_water_bolt_initial_scaled_frame_count __asm__("D_L15_00161CE0");
 extern int D_L15_00161CE4;
 void initialize_electric_water_bolt_effect(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -908,9 +903,6 @@ extern void draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float
                                   float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
-extern int second_side_arc_fade_level __asm__("D_L15_00161CCA");
-extern int third_side_arc_fade_level __asm__("D_L15_00161CCC");
-extern int fourth_side_arc_fade_level __asm__("D_L15_00161CCE");
 void draw_electric_water_bolt_effect(char *moby) {
     float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = decremented_accumulator;

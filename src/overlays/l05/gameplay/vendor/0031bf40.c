@@ -81,8 +81,7 @@ extern L05Fields_0013D4C0 l05_0013D4C0 __asm__("D_0013D4C0");
 #define D_0013F64C (*(int *)(D_0013F3D0 + 0x27c))
 #define D_0013F65E (*(short *)(D_0013F3D0 + 0x28e))
 
-extern int gameplay_event_level_index __asm__("D_L05_0015ED84");
-extern int gameplay_event_frame_count __asm__("D_L05_0015EEA4");
+#include "rnc/overlay/l05/gameplay/vendor/0031bf40_globals.h"
 void update_moby_gameplay_events(unsigned char *moby) __asm__("FUN_L05_0031bf40");
 
 void update_moby_gameplay_events(unsigned char *moby) {

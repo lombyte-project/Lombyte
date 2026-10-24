@@ -539,7 +539,7 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern float joint_light_position_w __asm__("D_L14_00161A60") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");

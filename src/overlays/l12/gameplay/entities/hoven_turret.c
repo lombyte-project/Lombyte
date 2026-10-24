@@ -47,10 +47,7 @@ extern int D_L12_00161DD4 __attribute__((sda));
 extern int D_L12_00161DD8 __attribute__((sda));
 extern int D_L12_00161DEC __attribute__((sda));
 extern int D_L12_00161DF0 __attribute__((sda));
-extern float oscillating_link_strip_segment_u_step __asm__("D_L12_00161DF4") __attribute__((sda));
-extern float oscillating_link_strip_scroll_phase __asm__("D_L12_00161DF8") __attribute__((sda));
-extern int oscillating_link_strip_reset_ticks __asm__("D_L12_00161E04");
-extern int oscillating_link_strip_fade_pivot_ticks __asm__("D_L12_00161E08");
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern int euler_rotation_matrix() __asm__("FUN_001fa050");
 extern int multiply_matrix() __asm__("FUN_001fa378");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -143,8 +140,6 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern float oscillating_link_strip_scroll_rate __asm__("D_L12_00161DFC") __attribute__((sda));
-extern float oscillating_link_strip_random_delta_magnitude_rate __asm__("D_L12_00161E00") __attribute__((sda));
 extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");

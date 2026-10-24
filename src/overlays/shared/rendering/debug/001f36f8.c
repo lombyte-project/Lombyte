@@ -9,7 +9,7 @@
 typedef struct {
     s32 a, b, c, d;
 } E001f36f8;
-extern s32 debug_text_queue_count __asm__("D_L00_0015EFC4") __attribute__((sda));
+#include "rnc/overlay/shared/rendering/debug/001f36f8_globals.h"
 extern void *D_L00_0015EFC0 __attribute__((sda));
 extern E001f36f8 D_L00_0016A840[];
 u8 D_L00_0016A040[0x800] = {0};

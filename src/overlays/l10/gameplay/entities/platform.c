@@ -29,11 +29,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 int D_L10_00161BF0 = 240;
 int D_L10_00161BF4 = 600;
-extern float bombthrower_grass_yaw_offset_limit_degrees __asm__("D_L10_00161BF8") __attribute__((sda));
-extern float bombthrower_grass_launch_elevation_min_degrees __asm__("D_L10_00161BFC") __attribute__((sda));
-extern float bombthrower_grass_launch_elevation_max_degrees __asm__("D_L10_00161C00") __attribute__((sda));
-extern float bombthrower_grass_launch_speed_min __asm__("D_L10_00161C04") __attribute__((sda));
-extern float bombthrower_grass_launch_speed_max __asm__("D_L10_00161C08") __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/entities/platform_globals.h"
 void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
 void bombthrower_grass_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -269,7 +265,6 @@ extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void FUN_L00_00284e50_p(void *, void *) __asm__("FUN_L00_00284e50");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-extern int dialogue_message_duration __asm__("D_L10_0015F640");
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
 void magnetboots_update(struct Moby *moby) {
     enum {
@@ -460,9 +455,6 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L10_0015F5CC;
-extern int gadgebot_telepot_camera_effect_duration_frames __asm__("D_L10_001618A0") __attribute__((sda));
-extern int gadgebot_telepot_camera_spring_decay_frames __asm__("D_L10_001618A4") __attribute__((sda));
-extern int gadgebot_telepot_camera_effect_remaining_frames __asm__("D_L10_001618A8");
 extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -1696,8 +1688,6 @@ void update_path_spark_emitter(char *moby) {
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
-extern float lab_door_local_y_half_extent __asm__("D_L10_00161C0C") __attribute__((sda));
-extern float lab_door_local_x_half_extent __asm__("D_L10_00161C10") __attribute__((sda));
 int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) __asm__("FUN_L10_002d9000");
 
 int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point) {
@@ -1988,7 +1978,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
-extern float data_processor_linked_effect_fade_duration_seconds __asm__("D_L10_00161C98") __attribute__((sda));
 void update_data_processor_linked_effect(struct Moby *moby) __asm__("FUN_L10_002da2c8");
 
 void update_data_processor_linked_effect(struct Moby *moby) {
@@ -2085,7 +2074,6 @@ typedef int u128_c __attribute__((mode(TI)));
 
 typedef int OvlQuad_c __attribute__((mode(TI)));
 
-extern f32 data_processor_linked_effect_row_uv_phase_step __asm__("D_L10_00161D60");
 extern f32 D_L10_001D9FF0[];
 extern f32 D_L10_001DA010[];
 extern s32 D_L10_00161D64;
@@ -2095,8 +2083,6 @@ extern int D_L10_00161C70 __attribute__((sda));
 extern int D_L10_00161C74 __attribute__((sda));
 extern int D_L10_00161C78 __attribute__((sda));
 extern int D_L10_00161C7C __attribute__((sda));
-extern int data_processor_linked_effect_color_at_zero_progress __asm__("D_L10_00161C90") __attribute__((sda));
-extern int data_processor_linked_effect_color_at_full_progress __asm__("D_L10_00161C94") __attribute__((sda));
 
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b48");
 extern void rotation_matrix_y(void *, f32) __asm__("FUN_001f9ff8");

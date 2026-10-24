@@ -124,8 +124,7 @@ void rocket_update(char *rocket_moby) {
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern float class_32_symmetric_angle_bound_degrees __asm__("D_L16_001613E0") __attribute__((sda));
-extern float class_32_zero_based_angle_bound_degrees __asm__("D_L16_001613E4") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_globals.h"
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
@@ -553,7 +552,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern int blarg_elite_commando_reward_kill_count __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -866,7 +864,6 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float blarg_elite_commando_extra_glow_gate __asm__("D_L16_0015F5D0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);

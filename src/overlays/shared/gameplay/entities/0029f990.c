@@ -179,7 +179,7 @@ extern float D_L00_001CA410[][2];
 extern int D_L00_001CA458[] __attribute__((section(".data")));
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern float vendor_hologram_v_scroll_offset __asm__("D_L00_00161184") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/0029f990_globals.h"
 extern struct Quad D_L00_001CA480[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");

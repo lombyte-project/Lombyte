@@ -263,15 +263,13 @@ extern float fast_sub_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
 extern float D_L11_0015F580[] MACRO_ADDR;
-extern float child_set_base_z_offset __asm__("D_L11_00161EAC") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_globals.h"
 extern float D_L11_00161EB0 __attribute__((sda));
 extern float D_L11_00161EB4 __attribute__((sda));
 extern float D_L11_00161EB8 __attribute__((sda));
-extern float child_set_base_rotation_y_degrees __asm__("D_L11_00161EBC") __attribute__((sda));
 extern float D_L11_00161EFC __attribute__((sda));
 extern float D_L11_00161F00 __attribute__((sda));
 extern float D_L11_00161F04 __attribute__((sda));
-extern float final_child_set_z_offset __asm__("D_L11_00161F08") __attribute__((sda));
 extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
 /* Places the child moby sets spawned by FUN_L11_0030c788 around this one, opened by the progress values
@@ -374,9 +372,6 @@ typedef struct {
 extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
 int D_L11_00161F54 = 0;
-extern float child_grid_pose_blend_acceleration __asm__("D_L11_00161F58") __attribute__((sda));
-extern float child_grid_pose_blend_deceleration __asm__("D_L11_00161F5C") __attribute__((sda));
-extern float child_grid_pose_blend_max_speed __asm__("D_L11_00161F60") __attribute__((sda));
 extern float D_L11_0015F3FC;
 extern struct Moby *create_moby_d800(int) __asm__("FUN_0020c4f8");
 extern void FUN_0022da68_d800(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -506,9 +501,6 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sub_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
-extern float child_grid_parent_axis0_offset_length __asm__("D_L11_00161F40") __attribute__((sda));
-extern float child_grid_parent_axis1_offset_length __asm__("D_L11_00161F44") __attribute__((sda));
-extern float child_grid_child_axis1_offset_length __asm__("D_L11_00161F48") __attribute__((sda));
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C. */
 void update_child_grid_poses(struct Moby *grid_controller) {
@@ -915,14 +907,6 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
         break;
     }
 }
-extern float seesaw_hero_local_x_scale __asm__("D_L11_00161F68") __attribute__((sda));
-extern float seesaw_tilt_feedback_scale __asm__("D_L11_00161F6C") __attribute__((sda));
-extern float seesaw_spin_feedback_scale __asm__("D_L11_00161F70") __attribute__((sda));
-extern float seesaw_rider_spin_change_bias_degrees __asm__("D_L11_00161F74") __attribute__((sda));
-extern float seesaw_rider_spin_change_gain_degrees __asm__("D_L11_00161F78") __attribute__((sda));
-extern float seesaw_tilt_feedback_gain_degrees __asm__("D_L11_00161F7C") __attribute__((sda));
-extern float seesaw_spin_feedback_gain_degrees __asm__("D_L11_00161F80") __attribute__((sda));
-extern float seesaw_fall_tilt_threshold_degrees __asm__("D_L11_00161F84") __attribute__((sda));
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1483,8 +1467,6 @@ struct PokiPathVars {
 extern struct Moby *D_001413D0 __attribute__((section(".data")));
 extern char D_L11_001677C0[];
 extern s32 *D_L11_001B0EB0[];
-extern float psytcopus_projectile_forward_offset_length __asm__("D_L11_00161FC8") __attribute__((sda));
-extern float psytcopus_projectile_z_offset __asm__("D_L11_00161FCC") __attribute__((sda));
 void handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
 extern void FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern float distance_0180(void *, void *) __asm__("FUN_001f9b48");

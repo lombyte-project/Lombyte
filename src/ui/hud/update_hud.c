@@ -16,7 +16,7 @@ extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
 
 extern s32 D_0015F684;
-extern s32 hud_msg_y __asm__("D_0015F688");
+#include "rnc/ui/hud/update_hud_globals.h"
 void update_hud(void) {
     s32 update_fn;
     short new_var2;

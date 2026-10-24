@@ -25,7 +25,7 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("F
 
 extern void initialize_level_12_slot_grid_neighbors(int) __asm__("FUN_L12_002bf770");
 
-extern int next_water_tile_index __asm__("D_L12_00151388") __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/platform_globals.h"
 extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void slot_limit_c(int) __asm__("FUN_001e93b0");
@@ -353,20 +353,6 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern float spark_scatter_vertical_z_range_start __asm__("D_L12_00161888") __attribute__((sda));
-extern float spark_scatter_vertical_z_range_end __asm__("D_L12_0016188C") __attribute__((sda));
-extern float spark_scatter_radial_z_range_start __asm__("D_L12_00161890") __attribute__((sda));
-extern float spark_scatter_radial_z_range_end __asm__("D_L12_00161894") __attribute__((sda));
-extern float spark_scatter_radial_xy_scale_range_start __asm__("D_L12_00161898") __attribute__((sda));
-extern float spark_scatter_radial_xy_scale_range_end __asm__("D_L12_0016189C") __attribute__((sda));
-extern float spark_scatter_vertical_vector_w __asm__("D_L12_001618A0") __attribute__((sda));
-extern float spark_scatter_radial_vector_w __asm__("D_L12_001618A4") __attribute__((sda));
-extern int spark_scatter_frame_count_range_start __asm__("D_L12_001618AC") __attribute__((sda));
-extern int spark_scatter_frame_count_range_end __asm__("D_L12_001618B0") __attribute__((sda));
-extern int spark_scatter_second_frame_count_range_start __asm__("D_L12_001618B4") __attribute__((sda));
-extern int spark_scatter_second_frame_count_range_end __asm__("D_L12_001618B8") __attribute__((sda));
-extern int spark_scatter_third_frame_count_range_start __asm__("D_L12_001618BC") __attribute__((sda));
-extern int spark_scatter_third_frame_count_range_end __asm__("D_L12_001618C0") __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
@@ -475,8 +461,6 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c2(void *, int, float) __asm__("func_00213508");
-extern float hoven_anklebiter_leap_launch_speed __asm__("D_L12_001618D8") __attribute__((sda));
-extern float hoven_anklebiter_leap_gravity __asm__("D_L12_001618DC") __attribute__((sda));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00259740(void *, void *, int);
 extern int FUN_L00_002dc9f0();
@@ -1170,7 +1154,6 @@ extern void appr_k(void *, float, float) __asm__("FUN_00213ed8");
 extern float turn_k(float *, float, float *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float platform_tilt_approach_divisor __asm__("D_L12_00161918") __attribute__((sda));
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) {
@@ -1213,7 +1196,6 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
-extern float platform_tilt_offset_divisor __asm__("D_L12_00161914") __attribute__((sda));
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
 
 void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
@@ -3136,7 +3118,6 @@ void edwina_update(L16WatchMoby *moby) {
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
 extern char D_0013D408[];
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
-extern int helicopter_help_message_hit_count __asm__("D_0015EE04") __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -3203,9 +3184,7 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
 extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
 
-extern float helicopter_path_speed __asm__("D_L12_001619A8") __attribute__((sda));
 extern float D_L12_001619AC __attribute__((sda));
-extern float helicopter_rotation_smoothing_divisor __asm__("D_L12_001619B0") __attribute__((sda));
 void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
 void helicopter_update(char *moby) {
     enum {

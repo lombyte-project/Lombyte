@@ -782,7 +782,7 @@ extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
 extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-extern float cutscene_big_head_scale __asm__("D_L01_00161D30") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/rock_globals.h"
 void attach_cutscene_big_head_manipulator(char *class_reference_moby) __asm__("FUN_L01_002ff028");
 
 void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
@@ -1218,7 +1218,6 @@ extern void FUN_001f4600_302648(void (*)(char *), void *) __asm__("FUN_001f4600"
 extern void FUN_L01_00302438_302648(char *) __asm__("FUN_L01_00302438");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
-extern s32 visibomb_outside_zone_overlay_enabled __asm__("D_L01_0015F30C") __attribute__((sda));
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
 void update_target_outside_zone_timeout(struct Moby *moby) __asm__("FUN_L01_00302648");
@@ -1311,9 +1310,6 @@ extern void FUN_L01_00308380_f(struct Moby *) __asm__("FUN_L01_00308380");
 extern void FUN_L01_003087e0_f(struct Moby *) __asm__("FUN_L01_003087e0");
 extern void FUN_L01_003089f0_f(struct Moby *) __asm__("FUN_L01_003089f0");
 
-extern f32 gold_bolt_spin_x_degrees_per_second __asm__("D_L01_00161F20") __attribute__((sda));
-extern f32 gold_bolt_spin_y_degrees_per_second __asm__("D_L01_00161F24") __attribute__((sda));
-extern f32 gold_bolt_spin_z_degrees_per_second __asm__("D_L01_00161F28") __attribute__((sda));
 void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 void gold_bolt_update(struct Moby *moby) {
     enum {
@@ -1504,10 +1500,6 @@ extern char D_L01_00167240[];
 extern float compute_interpolated_record_value_alt(void) __asm__("FUN_0020c9e0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern int gold_bolt_glow_ring_tween_start_color __asm__("D_L01_00161F3C") __attribute__((sda));
-extern int gold_bolt_glow_ring_tween_end_color __asm__("D_L01_00161F40") __attribute__((sda));
-extern int gold_bolt_glow_ring_particle_use_flags_44 __asm__("D_L01_00161F48") __attribute__((sda));
-extern int gold_bolt_glow_ring_particle_texture_index __asm__("D_L01_00161F4C") __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *);
@@ -1637,15 +1629,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-extern float gold_bolt_particle_initial_speed_min __asm__("D_L01_00161F54") __attribute__((sda));
-extern float gold_bolt_particle_initial_speed_max __asm__("D_L01_00161F58") __attribute__((sda));
-extern float gold_bolt_particle_velocity_jitter_speed_min __asm__("D_L01_00161F5C") __attribute__((sda));
-extern float gold_bolt_particle_velocity_jitter_speed_max __asm__("D_L01_00161F60") __attribute__((sda));
 extern short D_L01_00161F64 __attribute__((sda));
-extern int gold_bolt_particle_initial_color __asm__("D_L01_00161F68") __attribute__((sda));
-extern int gold_bolt_particle_loop_color __asm__("D_L01_00161F6C") __attribute__((sda));
-extern float gold_bolt_particle_initial_scale __asm__("D_L01_00161F70") __attribute__((sda));
-extern float gold_bolt_particle_loop_scale __asm__("D_L01_00161F74") __attribute__((sda));
 void spawn_gold_bolt_particles(char *moby) __asm__("FUN_L01_003089f0");
 
 void spawn_gold_bolt_particles(char *moby) {
@@ -1732,9 +1716,6 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern int enqueue_callback_list_1(void (*)(char *), char *) __asm__("FUN_001f4600");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-extern float teleporter_child_motion_acceleration __asm__("D_L01_00161F88") __attribute__((sda));
-extern float teleporter_child_motion_deceleration __asm__("D_L01_00161F8C") __attribute__((sda));
-extern float teleporter_child_motion_max_speed __asm__("D_L01_00161F90") __attribute__((sda));
 void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 void teleporter_update(struct Moby *moby) {
     enum {
@@ -1934,8 +1915,6 @@ void teleporter_update(struct Moby *moby) {
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
 
-extern float teleporter_child_position_z_offset __asm__("D_L01_00161F78") __attribute__((sda));
-extern float teleporter_child_displacement_angle_degrees __asm__("D_L01_00161F80") __attribute__((sda));
 void update_teleporter_child_transforms(char *parent_moby) {
     char *parent_data = *(char **)(parent_moby + 0x78);
     char **child_slot = (char **)(parent_data + 0x14);
@@ -2008,13 +1987,6 @@ typedef struct {
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float D_L01_00201630[];
 extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
-extern int moby_radius_ring_blend_minuend_selector __asm__("D_L01_00161FB8") __attribute__((sda));
-extern int moby_radius_ring_blend_subtrahend_selector __asm__("D_L01_00161FBC") __attribute__((sda));
-extern int moby_radius_ring_blend_alpha_factor_selector __asm__("D_L01_00161FC0") __attribute__((sda));
-extern int moby_radius_ring_blend_addend_selector __asm__("D_L01_00161FC4") __attribute__((sda));
-extern int moby_radius_ring_texture_index __asm__("D_L01_00161FC8") __attribute__((sda));
-extern int moby_radius_ring_vertex_color __asm__("D_L01_00161FCC") __attribute__((sda));
-extern float moby_radius_ring_center_z __asm__("D_L01_00161FD0") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 

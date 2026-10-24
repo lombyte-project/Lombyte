@@ -101,9 +101,7 @@ typedef struct { float r, g, b; } Rgb_0e00;
 extern Coll_0e00 D_L14_00174540;
 extern int D_L14_00174558 __attribute__((section(".data")));
 extern int D_L14_0016208C_0e00 __asm__("D_L14_0016208C") __attribute__((sda));
-extern float spark_contact_clearance __asm__("D_L14_00162088") __attribute__((sda));
-extern float spark_minimum_speed __asm__("D_L14_00162090") __attribute__((sda));
-extern float spark_rolling_speed_factor __asm__("D_L14_00162094") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/morphoray_globals.h"
 extern float D_L14_001620A0 __attribute__((sda));
 extern float D_L14_001620A4 __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
@@ -315,7 +313,6 @@ extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
-extern float spark_initial_moby_value_multiplier __asm__("D_L14_00162098") __attribute__((sda));
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
 
 char *create_bouncing_spark(int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
@@ -473,9 +470,6 @@ extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00305b18");
 
 extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18");
-extern f32 morphoray_ground_height_offset __asm__("D_L14_001621E8") __attribute__((sda));
-extern f32 morphoray_yaw_step __asm__("D_L14_001621EC") __attribute__((sda));
-extern f32 morphoray_position_offset_scale __asm__("D_L14_001621F0") __attribute__((sda));
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -970,7 +964,6 @@ extern void FUN_L14_003135b8_6ee0(void *) __asm__("FUN_L14_003135b8");
 extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
-extern int flying_car_path_reset_delay_frames __asm__("D_L14_0016227C") __attribute__((sda));
 extern float D_L14_00162290 __attribute__((sda));
 extern float D_L14_00162294 __attribute__((sda));
 extern float D_L14_00162298 __attribute__((sda));
@@ -1485,7 +1478,6 @@ typedef struct {
 extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
 extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
-extern s32 path_camera_active __asm__("D_L14_0015F404");
 extern char D_L14_001676D0[];
 extern float D_L14_001675D8 __attribute__((section(".data")));
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");

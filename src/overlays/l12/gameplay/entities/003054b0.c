@@ -408,7 +408,7 @@ void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003078C8), where it is exact; names translated to the US level program. */
 
 extern float D_L12_00161F40;
-extern float planetbuster_maximus_detached_owner_rotation __asm__("D_L12_00161F50");
+#include "rnc/overlay/l12/gameplay/entities/003054b0_globals.h"
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
@@ -573,7 +573,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 extern float D_L12_00161F28 __attribute__((sda));
 extern float D_L12_00161F2C __attribute__((sda));
-extern float planetbuster_maximus_rotation_oscillation_amplitude __asm__("D_L12_00161F30") __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -1087,16 +1086,6 @@ typedef struct {
     long gs_state;
 } VendorDrawPacket;
 
-extern int hoven_jittered_first_packet_vertex_color __asm__("D_L12_00161F90") __attribute__((sda));
-extern int hoven_jittered_second_packet_vertex_color __asm__("D_L12_00161F94") __attribute__((sda));
-extern int hoven_jittered_first_packet_blend_minuend_selector __asm__("D_L12_00161FBC") __attribute__((sda));
-extern int hoven_jittered_first_packet_blend_subtrahend_selector __asm__("D_L12_00161FC0") __attribute__((sda));
-extern int hoven_jittered_first_packet_blend_alpha_factor_selector __asm__("D_L12_00161FC4") __attribute__((sda));
-extern int hoven_jittered_first_packet_blend_addend_selector __asm__("D_L12_00161FC8") __attribute__((sda));
-extern int hoven_jittered_second_packet_blend_minuend_selector __asm__("D_L12_00161FCC") __attribute__((sda));
-extern int hoven_jittered_second_packet_blend_subtrahend_selector __asm__("D_L12_00161FD0") __attribute__((sda));
-extern int hoven_jittered_second_packet_blend_alpha_factor_selector __asm__("D_L12_00161FD4") __attribute__((sda));
-extern int hoven_jittered_second_packet_blend_addend_selector __asm__("D_L12_00161FD8") __attribute__((sda));
 extern float D_L12_001FB6D0[4][2];
 extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
 extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
@@ -1283,7 +1272,6 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 
 extern float D_L12_00162108[2] __attribute__((section(".sdata")));
 extern char D_L12_00208B00[];
-extern int hoven_scrolling_second_layer_fixed_alpha __asm__("D_L12_001620D4");
 extern int D_L12_001FBD10[];
 extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
@@ -1320,7 +1308,6 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     FUN_L08_002f0c18(1);
 }
 /* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
-extern int hoven_scrolling_color_tables_initialized __asm__("D_L12_001620F0") __attribute__((sda));
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
 extern float D_L12_001620E0[1] __attribute__((sda));
 extern float D_L12_001620D8[2] __attribute__((sda));

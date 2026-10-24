@@ -14,7 +14,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int owner_target_particle_frame_count __asm__("D_L15_001601FC") __attribute__((sda));
+#include "rnc/overlay/shared/rendering/0025e2c0_globals.h"
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
 void spawn_owner_target_particle(int color, u128 *target_position, char *owner) __asm__("FUN_L15_0025e2c0");

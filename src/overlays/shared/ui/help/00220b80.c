@@ -359,7 +359,7 @@ struct HeldGadgetVars {
 
 extern int D_00141660 __attribute__((section(".data")));
 extern HeroTableRow2C D_L02_0017C228[];
-extern s32 hero_button_8_double_press_countdown __asm__("D_L02_0015F674") __attribute__((sda));
+#include "rnc/overlay/shared/ui/help/00220b80_globals.h"
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");

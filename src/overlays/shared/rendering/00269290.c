@@ -535,7 +535,7 @@ void FUN_L00_00267a08_0026a6f0(unsigned char *) __asm__("FUN_L00_00267a08");
 float FUN_001fa580_0026a6f0(float, float) __asm__("FUN_001fa580");
 int FUN_001fa6d0_0026a6f0(float) __asm__("FUN_001fa6d0");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
-extern int rotating_grayscale_particle_fade_reference_duration __asm__("D_L00_001601A4") __attribute__((sda));
+#include "rnc/overlay/shared/rendering/00269290_globals.h"
 void update_rotating_grayscale_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a6f0");
 
 void update_rotating_grayscale_effect_particle(unsigned char *particle) {
@@ -788,20 +788,8 @@ extern unsigned char *D_L00_001B20B0_26b230 __asm__("D_L00_001B20B0") __attribut
 
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
 
-extern int spinning_particle_default_initial_color_blend_source __asm__("D_L00_001601A8") __attribute__((sda));
-extern int spinning_particle_default_initial_color_blend_target __asm__("D_L00_001601AC") __attribute__((sda));
-extern int spinning_particle_default_final_color_blend_source __asm__("D_L00_001601B0") __attribute__((sda));
-extern int spinning_particle_default_final_color_blend_target __asm__("D_L00_001601B4") __attribute__((sda));
 extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
-extern int spinning_particle_default_lifetime_lower_bound __asm__("D_L00_001601C0") __attribute__((sda));
-extern int spinning_particle_default_lifetime_upper_bound __asm__("D_L00_001601C4") __attribute__((sda));
-extern int spinning_particle_alternate_initial_color_blend_source __asm__("D_L00_001601C8") __attribute__((sda));
-extern int spinning_particle_alternate_initial_color_blend_target __asm__("D_L00_001601CC") __attribute__((sda));
-extern int spinning_particle_alternate_final_color_blend_source __asm__("D_L00_001601D0") __attribute__((sda));
-extern int spinning_particle_alternate_final_color_blend_target __asm__("D_L00_001601D4") __attribute__((sda));
 extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
-extern int spinning_particle_alternate_lifetime_lower_bound __asm__("D_L00_001601E0") __attribute__((sda));
-extern int spinning_particle_alternate_lifetime_upper_bound __asm__("D_L00_001601E4") __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
 unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, void *initial_velocity, unsigned char flags, float size) __asm__("FUN_L00_0026b230");
 
@@ -880,11 +868,8 @@ extern float D_0015ED70;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float D_L00_001601B8 __attribute__((sda));
-extern float spinning_particle_default_final_size __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8 __attribute__((sda));
-extern float spinning_particle_alternate_final_size __asm__("D_L00_001601DC") __attribute__((sda));
 extern float D_L00_001601E8 __attribute__((sda));
-extern float spinning_particle_vertical_step_scale __asm__("D_L00_001601EC") __attribute__((sda));
 extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2469,8 +2454,6 @@ extern void vsub_26eb88(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26eb88(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vadd_26eb88(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float dist_26eb88(void *, void *) __asm__("FUN_001f9b48");
-extern float two_point_particle_first_point_target_offset_scale __asm__("D_L00_001601F4") __attribute__((sda));
-extern float two_point_particle_second_point_target_offset_scale __asm__("D_L00_001601F8") __attribute__((sda));
 void update_target_relative_two_point_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026eb88");
 
 void update_target_relative_two_point_effect_particle(unsigned char *particle) {
@@ -2989,10 +2972,6 @@ void FUN_001f9bf8_0026fc38(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026fc38(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 FUN_001fa6d0_0026fc38(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00267a08_0026fc38(void *) __asm__("FUN_L00_00267a08");
-extern f32 animated_offset_particle_scalar __asm__("D_L00_00160200") __attribute__((sda));
-extern s32 animated_offset_particle_packed_color __asm__("D_L00_00160204") __attribute__((sda));
-extern f32 animated_offset_particle_offset_distance __asm__("D_L00_00160208") __attribute__((sda));
-extern u8 animated_offset_particle_rotation_step __asm__("D_L00_0016020C") __attribute__((sda));
 extern u8 *D_L00_001B211C __attribute__((section(".data")));
 void update_animated_offset_effect_particle(O0026fc38 *particle) __asm__("FUN_L00_0026fc38");
 

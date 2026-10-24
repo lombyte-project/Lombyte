@@ -1295,7 +1295,7 @@ void update_sentrybot_joint_aim(void *mv) {
     }
     update_joint_animation(moby, moby_data + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
 }
-extern float sentrybot_class_scale_multiplier __asm__("D_L15_001613EC") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
 extern float D_L15_001613F0 __attribute__((sda));
 extern float D_L15_001613F4 __attribute__((sda));
 extern float D_L15_001613F8 __attribute__((sda));
@@ -1606,21 +1606,8 @@ extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
-extern int rocket_trail_spark_initial_configuration_word __asm__("D_L15_00161418") __attribute__((sda));
-extern float rocket_trail_spark_frame_count_range_start __asm__("D_L15_00161428") __attribute__((sda));
-extern float rocket_trail_spark_third_frame_count_range_start __asm__("D_L15_00161438") __attribute__((sda));
-extern float rocket_trail_spark_first_velocity_scale __asm__("D_L15_00161448") __attribute__((sda));
-extern int rocket_trail_spark_second_configuration_word __asm__("D_L15_0016141C") __attribute__((sda));
 extern float D_L15_00161420 __attribute__((sda));
 extern float D_L15_00161424 __attribute__((sda));
-extern float rocket_trail_spark_frame_count_range_end __asm__("D_L15_0016142C") __attribute__((sda));
-extern float rocket_trail_spark_second_frame_count_range_start __asm__("D_L15_00161430") __attribute__((sda));
-extern float rocket_trail_spark_second_frame_count_range_end __asm__("D_L15_00161434") __attribute__((sda));
-extern float rocket_trail_spark_third_frame_count_range_end __asm__("D_L15_0016143C") __attribute__((sda));
-extern float rocket_trail_spark_first_noise_radius_factor __asm__("D_L15_00161440") __attribute__((sda));
-extern float rocket_trail_spark_second_noise_radius_factor __asm__("D_L15_00161444") __attribute__((sda));
-extern float rocket_trail_spark_second_velocity_scale __asm__("D_L15_0016144C") __attribute__((sda));
-extern int rocket_trail_spark_lookup_index_and_flags __asm__("D_L15_00161454") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -1659,8 +1646,6 @@ void spawn_rocket_trail_spark(char *moby) {
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
-extern float rocket_detonation_glow_scale __asm__("D_L15_00161458") __attribute__((sda));
-extern int rocket_detonation_glow_lifetime_frames __asm__("D_L15_0016145C") __attribute__((sda));
 extern unsigned char D_L15_00161460 __attribute__((sda));
 extern unsigned char D_L15_00161464 __attribute__((sda));
 extern unsigned char D_L15_00161468 __attribute__((sda));
@@ -2423,11 +2408,6 @@ extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declarati
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern float group_moby_seeking_speed __asm__("D_L15_001614B4") __attribute__((sda));
-extern int group_moby_particle_color __asm__("D_L15_001614B8") __attribute__((sda));
-extern float group_moby_particle_scale __asm__("D_L15_001614BC") __attribute__((sda));
-extern int group_moby_particle_lifetime_frames __asm__("D_L15_001614C0") __attribute__((sda));
-extern float group_moby_effect_z_offset __asm__("D_L15_001614C4") __attribute__((sda));
 extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
@@ -2594,7 +2574,6 @@ typedef struct {
 
 extern float D_L15_001CE110[4][4][4];
 extern float D_L15_001CE210[8];
-extern int group_moby_effect_first_quad_color __asm__("D_L15_001614C8") __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
@@ -2998,9 +2977,6 @@ extern float fast_add_rotations_c2(float, float) __asm__("func_001FA580");
 extern s32 rand(void);
 extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
-extern int spiderbot_effect_spawn_count __asm__("D_L15_00161558") __attribute__((sda));
-extern float spiderbot_effect_scale __asm__("D_L15_0016155C") __attribute__((sda));
-extern float spiderbot_effect_lifetime_range_end __asm__("D_L15_00161560") __attribute__((sda));
 extern u8 D_L15_00174460[];
 extern void FUN_L15_002a7628_c() __asm__("FUN_L15_002a7628");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -3575,7 +3551,6 @@ extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
-extern int sentrybot_alarm_voice_slot_index __asm__("D_L15_00161AC4") __attribute__((sda));
 extern short D_L15_00161AC8 __attribute__((sda));
 void update_sentrybot_alarm_effect(void *moby) {
     struct Hero *base = &hero;

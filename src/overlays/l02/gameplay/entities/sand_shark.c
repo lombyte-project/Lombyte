@@ -85,8 +85,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
     FUN_L02_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
 }
 #include "rnc/overlay/quad.h"
-extern float sand_shark_dust_vertical_velocity_scale __asm__("D_L02_001619D4") __attribute__((sda));
-extern float sand_shark_dust_position_jitter_radius __asm__("D_L02_001619DC") __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_globals.h"
 extern unsigned short D_L02_001619E0 __attribute__((sda));
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -974,20 +973,6 @@ extern void clear_vec_d57f8(void *) __asm__("FUN_001f99f8");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
 extern float D_0015ED6C;
 extern int D_L02_00160178;
-extern float sand_shark_vertical_motion_z_range_start __asm__("D_L02_00161920") __attribute__((sda));
-extern float sand_shark_vertical_motion_z_range_end __asm__("D_L02_00161924") __attribute__((sda));
-extern float sand_shark_radial_motion_z_range_start __asm__("D_L02_00161928") __attribute__((sda));
-extern float sand_shark_radial_motion_z_range_end __asm__("D_L02_0016192C") __attribute__((sda));
-extern float sand_shark_radial_motion_xy_range_start __asm__("D_L02_00161930") __attribute__((sda));
-extern float sand_shark_radial_motion_xy_range_end __asm__("D_L02_00161934") __attribute__((sda));
-extern float sand_shark_vertical_motion_w __asm__("D_L02_00161938") __attribute__((sda));
-extern float sand_shark_radial_motion_w __asm__("D_L02_0016193C") __attribute__((sda));
-extern int sand_shark_particle_frame_count_range_start __asm__("D_L02_00161940") __attribute__((sda));
-extern int sand_shark_particle_frame_count_range_end __asm__("D_L02_00161944") __attribute__((sda));
-extern int sand_shark_particle_second_frame_count_range_start __asm__("D_L02_00161948") __attribute__((sda));
-extern int sand_shark_particle_second_frame_count_range_end __asm__("D_L02_0016194C") __attribute__((sda));
-extern int sand_shark_particle_third_frame_count_range_start __asm__("D_L02_00161950") __attribute__((sda));
-extern int sand_shark_particle_third_frame_count_range_end __asm__("D_L02_00161954") __attribute__((sda));
 int D_L02_00161958 = 0x60306058;
 int D_L02_0016195C = 0x20306058;
 int D_L02_00161960 = -1;
@@ -1031,20 +1016,6 @@ void emit_sand_shark_radial_particles(void *particle_origin, int particle_count)
 }
 
 /* Spawns one particle above pos unless D_L02_00160178 is already high. */
-extern float sand_shark_single_particle_vertical_motion_z_range_start __asm__("D_L02_00161964") __attribute__((sda));
-extern float sand_shark_single_particle_vertical_motion_z_range_end __asm__("D_L02_00161968") __attribute__((sda));
-extern float sand_shark_single_particle_radial_motion_z_range_start __asm__("D_L02_0016196C") __attribute__((sda));
-extern float sand_shark_single_particle_radial_motion_z_range_end __asm__("D_L02_00161970") __attribute__((sda));
-extern float sand_shark_single_particle_radial_motion_xy_range_start __asm__("D_L02_00161974") __attribute__((sda));
-extern float sand_shark_single_particle_radial_motion_xy_range_end __asm__("D_L02_00161978") __attribute__((sda));
-extern float sand_shark_single_particle_vertical_motion_w __asm__("D_L02_0016197C") __attribute__((sda));
-extern float sand_shark_single_particle_radial_motion_w __asm__("D_L02_00161980") __attribute__((sda));
-extern s32 sand_shark_single_particle_frame_count_range_start __asm__("D_L02_00161984") __attribute__((sda));
-extern s32 sand_shark_single_particle_frame_count_range_end __asm__("D_L02_00161988") __attribute__((sda));
-extern s32 sand_shark_single_particle_second_frame_count_range_start __asm__("D_L02_0016198C") __attribute__((sda));
-extern s32 sand_shark_single_particle_second_frame_count_range_end __asm__("D_L02_00161990") __attribute__((sda));
-extern s32 sand_shark_single_particle_third_frame_count_range_start __asm__("D_L02_00161994") __attribute__((sda));
-extern s32 sand_shark_single_particle_third_frame_count_range_end __asm__("D_L02_00161998") __attribute__((sda));
 s32 D_L02_0016199C = 0x40306058;
 s32 D_L02_001619A0 = 0x10306058;
 s32 D_L02_001619A4 = -1;
@@ -1406,7 +1377,6 @@ extern float D_L02_00161A84 __attribute__((sda));
 int D_L02_00161A88 = 0x40808080;
 int D_L02_00161A90 = 0x3c;
 int D_L02_00161A94 = 0x78;
-extern float level02_bot_wake_spray_planar_magnitude_max __asm__("D_L02_00161A98") __attribute__((sda));
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -1752,10 +1722,6 @@ void update_level02_bot(struct Moby *moby) {
     FUN_L00_0025a120(moby);
 }
 
-extern float level02_bot_death_knockback_horizontal_speed __asm__("D_L02_00161A64") __attribute__((sda));
-extern float level02_bot_death_knockback_vertical_speed __asm__("D_L02_00161A68") __attribute__((sda));
-extern float level02_bot_hit_knockback_horizontal_speed __asm__("D_L02_00161A6C") __attribute__((sda));
-extern float level02_bot_hit_knockback_vertical_speed __asm__("D_L02_00161A70") __attribute__((sda));
 extern float D_L02_00161A74 __attribute__((sda));
 extern float D_L02_00161A78 __attribute__((sda));
 extern float D_L02_00161A9C __attribute__((sda));
@@ -1913,11 +1879,8 @@ typedef struct {
 } L16PlatformMoby;
 
 extern char *D_L02_001600FC;
-extern float level02_elevator_stop_height_offset __asm__("D_L02_00161BD0") __attribute__((sda));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
-extern float level02_elevator_max_vertical_speed __asm__("D_L02_00161BDC") __attribute__((sda));
-extern float level02_elevator_vertical_acceleration __asm__("D_L02_00161BE0") __attribute__((sda));
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L02_002dc2c8");
@@ -2078,10 +2041,6 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L02_0015F5CC;
-extern float level02_elevator_ring_outer_radius __asm__("D_L02_00161BEC") __attribute__((sda));
-extern float level02_elevator_ring_vertical_spacing __asm__("D_L02_00161BE8") __attribute__((sda));
-extern float level02_elevator_ring_segment_half_height __asm__("D_L02_00161BF0") __attribute__((sda));
-extern float level02_elevator_ring_segment_angle_degrees __asm__("D_L02_00161C10") __attribute__((sda));
 int D_L02_00161BF4 = 0;
 int D_L02_00161BF8 = 2;
 int D_L02_00161BFC = 0;
@@ -3138,7 +3097,6 @@ typedef struct {
 } TurretVoiceSlot;
 
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern f32 rocket_launcher_projectile_speed __asm__("D_L02_00161C6C") __attribute__((sda));
 extern f32 D_L02_00161C70 __attribute__((sda));
 extern f32 D_L02_00161C74 __attribute__((sda));
 s32 D_L02_00161C78 = 0x800000ff;

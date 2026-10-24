@@ -1,7 +1,7 @@
 #include "types.h"
 #include "kernel.h"
 
-extern s32 image_buffer_count_decrement_pending __asm__("D_001611E8");
+#include "rnc/video/display/handler_end_image_globals.h"
 extern u8 *D_0016120C;
 extern s32 vo_buf_dec_count() __asm__("func_0023D340");
 

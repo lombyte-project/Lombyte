@@ -107,11 +107,9 @@ extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern s32 D_0015FF00;
 extern s32 D_0015FF08;
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
-extern s32 shrub_render_texture_definition_count __asm__("D_001603EC");
-extern s32 tfrag_texture_definition_count __asm__("D_00160E94");
+#include "rnc/gameplay/state/transition_load_wad_globals.h"
 extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
-extern s32 object_render_texture_definition_count __asm__("D_00160F64");
 extern u8 boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8 D_00186310[];
 extern SoundBanks D_0018CB20;

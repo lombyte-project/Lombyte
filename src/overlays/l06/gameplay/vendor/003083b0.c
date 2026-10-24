@@ -118,7 +118,7 @@ extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern float D_L06_001622F0 __attribute__((sda));
 extern float D_L06_001622F4 __attribute__((sda));
 extern float D_L06_001622F8 __attribute__((sda));
-extern float spark_burst_vector_scale_variation __asm__("D_L06_001622FC") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/vendor/003083b0_globals.h"
 extern int D_L06_00162300 __attribute__((sda));
 extern int D_L06_00162304 __attribute__((sda));
 extern int D_L06_00162308 __attribute__((sda));
@@ -133,8 +133,6 @@ int D_L06_00162328 = 0x20c08080;
 int D_L06_0016232C = 0x20c0c080;
 extern float D_L06_00162330 __attribute__((sda));
 extern float D_L06_00162334 __attribute__((sda));
-extern float spark_spray_z_subtraction_rate __asm__("D_L06_00162338") __attribute__((sda));
-extern float spark_spray_vector_scale_variation __asm__("D_L06_0016233C") __attribute__((sda));
 extern float D_L06_00162340 __attribute__((sda));
 extern int D_L06_00162344 __attribute__((sda));
 extern int D_L06_00162348 __attribute__((sda));
@@ -148,8 +146,6 @@ int D_L06_00162364 = 0x804080ff;
 int D_L06_00162368 = 0x8040ffff;
 int D_L06_0016236C = 0x80204040;
 int D_L06_00162370 = 0x80204080;
-extern int spark_spray_timer_range_start __asm__("D_L06_00162374") __attribute__((sda));
-extern int spark_spray_timer_range_end __asm__("D_L06_00162378") __attribute__((sda));
 int D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));

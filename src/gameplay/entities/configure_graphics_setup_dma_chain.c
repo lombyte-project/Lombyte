@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 extern struct TagPtr D_0015FF40;
-extern s32 graphics_setup_dma_chain_enabled __asm__("D_0015FF3C");
+#include "rnc/gameplay/entities/configure_graphics_setup_dma_chain_globals.h"
 extern u8 D_001C8680[];
 extern u8 D_0015FEC0[];
 extern void FUN_00227740(void);

@@ -602,7 +602,7 @@ void update_moby_trail_points(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int level_11_class_ac_hit_count __asm__("D_0015EE00");
+#include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D408[];

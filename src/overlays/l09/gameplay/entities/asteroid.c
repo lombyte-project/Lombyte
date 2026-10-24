@@ -178,7 +178,7 @@ extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378"
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
-extern int textured_grid_view_settings_mode __asm__("D_L09_0015F458");
+#include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
 extern int D_L09_0016CDD0;
 extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
@@ -1660,9 +1660,6 @@ typedef struct {
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern float D_0015ED70;
-extern float platform_hero_offset_tilt_gain __asm__("D_L09_001619F4") __attribute__((sda));
-extern float platform_sink_speed __asm__("D_L09_001619F8") __attribute__((sda));
-extern float platform_height_return_gain __asm__("D_L09_001619FC") __attribute__((sda));
 extern float D_L09_00161A04 __attribute__((sda));
 extern float D_L09_00161A08 __attribute__((sda));
 extern float D_L09_00161A0C __attribute__((sda));

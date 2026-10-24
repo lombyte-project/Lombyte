@@ -31,7 +31,7 @@ typedef struct {
 
 extern s32 ship_substate[] __asm__("D_0013E050");
 extern s32 D_001604A4 __attribute__((sda));
-extern s32 environment_mapping_was_active __asm__("D_001604A8") __attribute__((sda));
+#include "rnc/rendering/render_environment_mapped_object_globals.h"
 extern s32 D_001604AC __attribute__((sda));
 extern s32 environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));
 extern s32 environment_mesh_vertex_counts[2] __asm__("D_00160530") __attribute__((sda));

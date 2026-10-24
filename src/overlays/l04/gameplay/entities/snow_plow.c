@@ -43,7 +43,7 @@ extern char *D_L04_001600EC;
 extern char D_L04_001DBE10[];
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
-extern int snow_plow_hit_count __asm__("D_L04_0015EDF8") __attribute__((sda));
+#include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
 extern unsigned char D_0013D408[];
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1689,7 +1689,6 @@ struct PortalMobyView {
 };
 
 extern s32 D_L04_0015F5C4;
-extern s32 dialogue_message_duration_frames __asm__("D_L04_0015F640");
 extern u8 D_0013D4F1[];
 extern u8 D_0013D4C9[];
 extern char D_L04_001DC760[];

@@ -308,8 +308,7 @@ extern int D_L16_0015F5CC;
 extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 SubtractIntegerWithClamp(s32);
 
-extern float test_dummy_door_height_offset __asm__("D_L16_00161A84") __attribute__((sda));
-extern int last_test_dummy_door_sound_request_frame __asm__("D_L16_00161A88") __attribute__((sda));
+#include "rnc/overlay/l16/gameplay/entities/rocket_globals.h"
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 void test_dummy_door_update(struct Moby *moby) {
     enum {
@@ -698,12 +697,6 @@ void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00
 extern void func_00215C00_57_q(float, float, float, void *) __asm__("FUN_00214db0");
 extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
 
-extern float reposition_effect_velocity_elevation_degrees __asm__("D_L16_001618E8") __attribute__((sda));
-extern float reposition_effect_velocity_scale_range_start __asm__("D_L16_001618EC") __attribute__((sda));
-extern float reposition_effect_velocity_scale_range_end __asm__("D_L16_001618F0") __attribute__((sda));
-extern float reposition_effect_spawn_z_offset __asm__("D_L16_001618F4") __attribute__((sda));
-extern float reposition_effect_radius_range_start __asm__("D_L16_001618F8") __attribute__((sda));
-extern float reposition_effect_radius_range_end __asm__("D_L16_001618FC") __attribute__((sda));
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) __asm__("FUN_L16_002c44f0");
 
 void reposition_moby_with_collision_check(struct Moby *moby, void *new_position) {
@@ -933,7 +926,6 @@ void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-extern float conveyor_belt_base_speed __asm__("D_L16_0016198C") __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 void conveyor_belt_update(struct Moby *moby) {
     enum {
@@ -1062,15 +1054,10 @@ extern float D_L16_001D32C0[][2], D_L16_001D3010[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D32E0[][2], D_L16_001D3030[][4];
 extern float vector_length_xyz(void *a);
 extern int D_L16_0015F5CC;
-extern int conveyor_belt_pulse_texture_id __asm__("D_L16_00161990") __attribute__((sda));
-extern int conveyor_belt_scrolling_texture_id __asm__("D_L16_00161994") __attribute__((sda));
 extern int D_L16_00161998 __attribute__((sda));
 extern int D_L16_0016199C __attribute__((sda));
 extern int D_L16_001619A0 __attribute__((sda));
 extern int D_L16_001619A4 __attribute__((sda));
-extern int conveyor_belt_pulse_color_start __asm__("D_L16_001619A8") __attribute__((sda));
-extern int conveyor_belt_pulse_color_end __asm__("D_L16_001619AC") __attribute__((sda));
-extern int conveyor_belt_scrolling_vertex_color __asm__("D_L16_001619B0") __attribute__((sda));
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int FUN_001fa6e0(float, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1228,7 +1215,6 @@ extern float vector_length_xyz(void *a);
 extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
-extern float test_dummy_bomb_horizontal_launch_speed __asm__("D_L16_001619CC") __attribute__((sda));
 extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -1748,7 +1734,6 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int *D_L16_001ABCC0_c2[] __asm__("D_L16_001ABCC0");
-extern float test_dummy_glow_phase_rate_degrees __asm__("D_L16_001619DC");
 extern void draw_test_dummy_group_glows() __asm__("FUN_L16_002cef60");
 
 void update_test_dummy_group_glow_phases(struct Moby *moby) __asm__("FUN_L16_002cee70");
@@ -1794,8 +1779,6 @@ float D_L16_001D3130[4][4] = {
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
 extern char D_L16_001671C0[];
-extern int test_dummy_glow_pulse_color_start __asm__("D_L16_001619E0") __attribute__((sda));
-extern int test_dummy_glow_pulse_color_end __asm__("D_L16_001619E4") __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern float fast_sin_alt(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -2414,7 +2397,6 @@ void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
-extern int hoverboard_dummy_spray_initial_color __asm__("D_L16_00161A08") __attribute__((sda));
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {
@@ -2742,7 +2724,6 @@ extern char *D_L16_0015FFD8;
 extern char D_L16_001671C0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int *D_L16_001ABCC0[];
-extern float class_0287_group_activation_value __asm__("D_L16_00161A80") __attribute__((sda));
 
 void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5ad0");
 
@@ -3003,7 +2984,6 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
-extern float triggered_scene_rotation_y __asm__("D_L16_00161A8C") __attribute__((sda));
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) __asm__("FUN_L16_002d6260");
 
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) {

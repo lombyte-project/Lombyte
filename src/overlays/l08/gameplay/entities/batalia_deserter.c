@@ -813,9 +813,7 @@ extern s32 D_L08_001F4C48[];
 extern s32 D_L08_001F4C60[];
 extern s32 D_L08_001F8528[];
 extern char D_L08_001F8550[];
-extern float batalia_effect_reference_position_y __asm__("D_L08_00162384");
-extern float batalia_effect_reference_position_z __asm__("D_L08_00162388");
-extern float batalia_effect_culling_radius __asm__("D_L08_0016238C");
+#include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");

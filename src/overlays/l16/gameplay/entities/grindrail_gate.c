@@ -554,7 +554,7 @@ extern float frame_time, D_0015EE70;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path() __asm__("FUN_L00_0025d808");
-extern float bolt_thief_path_speed __asm__("D_L16_00161D90") __attribute__((sda));
+#include "rnc/overlay/l16/gameplay/entities/grindrail_gate_globals.h"
 extern float D_L16_00161D94_gp __asm__("D_L16_00161D94") __attribute__((sda));
 extern float D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -1286,12 +1286,8 @@ typedef struct {
 
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float chomper_knockback_horizontal_speed_approach_rate __asm__("D_L16_00161E58") __attribute__((sda));
 extern float D_0015EE70;
 extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
-extern float chomper_knockback_gravity __asm__("D_L16_00161E54") __attribute__((sda));
-extern float chomper_knockback_vertical_speed __asm__("D_L16_00161E5C") __attribute__((sda));
-extern float chomper_knockback_horizontal_speed __asm__("D_L16_00161E60") __attribute__((sda));
 extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
@@ -1836,15 +1832,6 @@ typedef struct {
 extern char *D_L16_001B0930[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
-extern float path_walker_gap_range_start __asm__("D_L16_00161E68") __attribute__((sda));
-extern float path_walker_gap_range_end __asm__("D_L16_00161E6C") __attribute__((sda));
-extern float path_walker_speed_range_start __asm__("D_L16_00161E70") __attribute__((sda));
-extern float path_walker_speed_range_end __asm__("D_L16_00161E74") __attribute__((sda));
-extern float path_walker_speed_approach_acceleration __asm__("D_L16_00161E78") __attribute__((sda));
-extern float path_walker_height_range_start __asm__("D_L16_00161E7C") __attribute__((sda));
-extern float path_walker_height_range_end __asm__("D_L16_00161E80") __attribute__((sda));
-extern float path_walker_reposition_advance_rate __asm__("D_L16_00161E8C") __attribute__((sda));
-extern int path_walker_draw_distance __asm__("D_L16_00161E90") __attribute__((sda));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -1970,9 +1957,6 @@ extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
 
 int D_L16_00161E98 = 0x60d0d080;
 int D_L16_00161E9C = 0x801000;
-extern float path_walker_particle_movement_velocity_scale __asm__("D_L16_00161EA0") __attribute__((sda));
-extern float path_walker_particle_random_velocity_scale __asm__("D_L16_00161EA4") __attribute__((sda));
-extern float path_walker_particle_target_scalar_scale __asm__("D_L16_00161EA8") __attribute__((sda));
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
     float offset[4];
@@ -2339,9 +2323,6 @@ extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L16_0015F5CC;
 extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
-extern float elevator_ring_outer_radius __asm__("D_L16_00161EC4") __attribute__((sda));
-extern float elevator_ring_half_height __asm__("D_L16_00161EC8") __attribute__((sda));
-extern float elevator_ring_segment_angle_degrees __asm__("D_L16_00161EE8") __attribute__((sda));
 int D_L16_00161ECC = 0;
 int D_L16_00161ED0 = 2;
 int D_L16_00161ED4 = 0;

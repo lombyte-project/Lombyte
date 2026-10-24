@@ -157,10 +157,7 @@ extern int fr_2e9518(int) __asm__("FUN_001f96f8");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
-extern float orbit_distance_default_stiffness __asm__("D_L00_00161CEC") __attribute__((sda));
-extern float orbit_distance_default_damping __asm__("D_L00_00161CF0") __attribute__((sda));
-extern float orbit_distance_pull_back_stiffness __asm__("D_L00_00161D14") __attribute__((sda));
-extern float orbit_distance_pull_back_damping __asm__("D_L00_00161D18") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update_globals.h"
 void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -473,11 +470,6 @@ typedef struct {
 extern C940 D_0013C940;
 extern G680 D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern int D_0015EDDC;
-extern float hero_aligned_camera_rotation_gain_at_zero_input __asm__("D_L00_00161DC0") __attribute__((sda));
-extern float hero_aligned_camera_rotation_gain_at_unit_input __asm__("D_L00_00161DC4") __attribute__((sda));
-extern float hero_aligned_camera_input_stiffness __asm__("D_L00_00161DC8") __attribute__((sda));
-extern float hero_aligned_camera_input_damping __asm__("D_L00_00161DCC") __attribute__((sda));
-extern float hero_aligned_camera_input_step_limit __asm__("D_L00_00161DD0") __attribute__((sda));
 void FUN_L00_002e9cc0_c(void *) __asm__("FUN_L00_002e9cc0");
 void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");

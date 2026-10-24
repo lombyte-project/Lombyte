@@ -195,7 +195,7 @@ extern void steer_child_moby(void *, s32, struct Moby *, void *, void *) __asm__
 extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
 extern PathPoints_eb20 *D_L04_001b0630[];
 f32 D_L04_00166130[8] __attribute__((section(".bss")));
-extern s32 swarm_motion_parameters_initialized __asm__("D_L04_001513C0") __attribute__((sda));
+#include "rnc/overlay/l04/gameplay/entities/big_axebot_globals.h"
 
 /* Variables of a swarm child (class 0x55). */
 typedef struct SwarmPartVars_29ecf8 {
@@ -1287,7 +1287,6 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
-extern float circular_saw_flock_separation_weight __asm__("D_L04_00161884") __attribute__((sda));
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) __asm__("FUN_L04_002c1fb8");
 
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
@@ -2212,7 +2211,6 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
-extern f32 smoke_trail_puff_vertical_velocity_scale __asm__("D_L04_001618B4") __attribute__((sda));
 extern f32 D_L04_001618BC __attribute__((sda));
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
@@ -2922,8 +2920,8 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     trooper_anim_finish(moby, data + 0x60);
     {
-        int update_scratch = moby->state;
-        if (update_scratch == 1 || update_scratch == 3 || update_scratch == 4 || update_scratch == 5 || update_scratch == 6) {
+        int current_state = moby->state;
+        if (current_state == 1 || current_state == 3 || current_state == 4 || current_state == 5 || current_state == 6) {
             char *t = target;
             if (t == 0) {
                 t = *(char **)((char *)(&hero.moby));

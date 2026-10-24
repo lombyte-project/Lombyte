@@ -28,8 +28,7 @@ typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd_
 float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
-extern float follow_camera_orbit_distance_damping __asm__("D_L00_00161D04") __attribute__((sda));
-extern float follow_camera_orbit_height_damping __asm__("D_L00_00161D08") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_globals.h"
 void follow_camera_approach(unsigned char *moby)
 {
     unsigned char *init, *camera_state, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
@@ -116,9 +115,6 @@ extern f32 D_L00_0015EF40;
 extern s32 D_L00_00161D94 __attribute__((sda));
 extern f32 D_L00_00161D84 __attribute__((sda));
 extern f32 D_L00_00161D88 __attribute__((sda));
-extern f32 follow_camera_vehicle_offset_scale __asm__("D_L00_00161D98") __attribute__((sda));
-extern f32 follow_camera_vehicle_orbit_distance __asm__("D_L00_00161D9C") __attribute__((sda));
-extern f32 follow_camera_vehicle_orbit_height __asm__("D_L00_00161DA0") __attribute__((sda));
 extern f32 D_L00_00161DA4 __attribute__((sda));
 extern f32 D_L00_00161DA8 __attribute__((sda));
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -810,7 +806,6 @@ void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
 float absolute_float(float) __asm__("FUN_001f99c0");
 short FUN_001f96f8_2e7138(int) __asm__("FUN_001f96f8");
 
-extern float follow_camera_collision_retraction_rate __asm__("D_L00_00161CB8") __attribute__((sda));
 int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void *candidate_camera_position, int skip_previous_length_clamp, int sphere_collision_found) __asm__("FUN_L00_002e7138");
 
 int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void *candidate_camera_position, int skip_previous_length_clamp, int sphere_collision_found) {
@@ -1177,7 +1172,6 @@ extern u8 D_L00_00166E10_2e7d20[] __asm__("D_L00_00166E10") __attribute__((secti
 extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
 extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
 extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
-extern f32 follow_camera_minimum_retracted_orbit_distance __asm__("D_L00_00161CD0") __attribute__((sda));
 typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
 extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;

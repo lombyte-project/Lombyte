@@ -431,7 +431,7 @@ extern void update_hovering_rocket_attacker_common(unsigned char *) __asm__("FUN
 extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_003058a8");
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
 extern char *D_L13_001600EC;
-extern float hovering_rocket_attacker_launch_vector_speed __asm__("D_L13_0016149C") __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/blarg_space_fighter_globals.h"
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -629,7 +629,6 @@ extern float FUN_001f99c0(float);
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
-extern float hovering_rocket_attacker_scale_multiplier __asm__("D_L13_00161490") __attribute__((sda));
 
 void update_hovering_rocket_attacker_common(unsigned char *moby) {
     enum {
@@ -1175,8 +1174,6 @@ extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED60;
-extern float optional_glow_suppression_level __asm__("D_L13_0015F5D0");
-extern float blarg_space_fighter_fire_suppression_level __asm__("D_L13_0015F5D4");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int update_blarg_space_fighter_path_following();
 extern s32 rand(void);

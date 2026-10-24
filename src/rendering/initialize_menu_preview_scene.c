@@ -38,8 +38,7 @@ extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
-extern u8 menu_preview_lighting_scale_source __asm__("D_001601C0") __attribute__((sda));
-extern u8 menu_preview_lighting_copy_source __asm__("D_001601D0") __attribute__((sda));
+#include "rnc/rendering/initialize_menu_preview_scene_globals.h"
 extern s32 fast_vec_scale(s32, s32, f32) __asm__("FUN_001f9a68");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);

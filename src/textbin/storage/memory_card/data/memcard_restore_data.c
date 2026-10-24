@@ -30,7 +30,7 @@ typedef struct {
 } CardState;
 
 extern CardState D_0013D290;
-extern s32 memcard_restore_differing_block_count __asm__("D_0015FE90") __attribute__((sda));
+#include "rnc/textbin/storage/memory_card/data/memcard_restore_data_globals.h"
 extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);
 extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");

@@ -3,7 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
 extern struct TagPtr D_00160EBC;
-extern s32 max_tfrag_texture_dma_size __asm__("D_00160EC4");
+#include "rnc/rendering/texture/dma_tfrag_textures_globals.h"
 extern char D_001E89B0[];
 extern void compute_tfrag_texture_usage(void) __asm__("FUN_00234bd8");
 extern s32 build_tfrag_texture_dma(s32) __asm__("func_00234D48");

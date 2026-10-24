@@ -1151,7 +1151,7 @@ float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
 void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
 extern const float D_L00_00161828 __attribute__((sda));
-extern float trespasser_pickup_z_rotation_step __asm__("D_L00_00161830") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
 void update_trespasser_pickup(void *mv) {
     enum {
         TRESPASSER_INITIALIZE = 0,

@@ -50,7 +50,7 @@ typedef struct {
 } VoiceSlot;
 
 extern u8 D_0013E550[];
-extern s32 seeker_state_dispatch_mode __asm__("D_L09_0015F5C4");
+#include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
 extern Vec4f D_L09_00166F40;
 extern u8 D_L09_00208320[];
 

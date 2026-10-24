@@ -368,7 +368,7 @@ struct HeroExtraManipulators { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pa
 
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern f32 D_0015EE18 __asm__("D_0015EE18");
-extern s32 hero_extra_manipulator_attachment_indices __asm__("D_L00_0015F6F8") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence_globals.h"
 extern u128 D_L00_0017C1E0[];
 extern u128 D_L00_0017C220[];
 extern u128 D_L00_0017C260[];
@@ -1506,9 +1506,6 @@ void apply_hero_and_item_scale_sequence(void) {
         }
     }
 }
-extern int hero_scalar_pulse_active __asm__("D_L00_0015F680") __attribute__((sda));
-extern int hero_scalar_pulse_phase __asm__("D_L00_0015F684") __attribute__((sda));
-extern float hero_scalar_pulse_step __asm__("D_L00_0015F67C") __attribute__((sda));
 extern float D_L00_0015F3FC;
 float FUN_00213ed8(float *, float, float);
 void update_hero_scalar_pulse(void) {

@@ -36,7 +36,7 @@ void draw_page_contents(void) {
         draw_pause_menu_pages(0);
 }
 extern volatile s32 D_L00_0015F628;
-extern s16 timed_text_frame __asm__("D_L00_0015F626");
+#include "rnc/overlay/shared/rendering/debug/001f8ec8_globals.h"
 extern u8 D_L00_00173080[];
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

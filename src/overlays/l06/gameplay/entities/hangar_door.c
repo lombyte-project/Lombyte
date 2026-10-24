@@ -1267,8 +1267,7 @@ typedef struct DrawbridgeVars {
 
 extern char D_L06_00161D50[4] __attribute__((sda));
 extern char D_L06_00161D60[4] __attribute__((sda));
-extern float drawbridge_min_segment_distance_base __asm__("D_L06_00161D70") __attribute__((sda));
-extern float drawbridge_min_segment_distance_step __asm__("D_L06_00161D74") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_globals.h"
 extern float D_L06_00161D78 __attribute__((sda));
 extern float D_L06_00161D7C __attribute__((sda));
 extern float D_L06_00161D80 __attribute__((sda));
@@ -1377,15 +1376,6 @@ extern int D_L06_00161E50;
 extern int D_L06_00161E54;
 extern f32 D_L06_00161E08 __attribute__((sda));
 extern float D_L06_00161E0C __attribute__((sda));
-extern float beam_barrier_collision_z_offset __asm__("D_L06_00161E18") __attribute__((sda));
-extern int beam_barrier_burst_color_from __asm__("D_L06_00161E1C") __attribute__((sda));
-extern int beam_barrier_burst_color_to __asm__("D_L06_00161E20") __attribute__((sda));
-extern float beam_barrier_burst_scale_min __asm__("D_L06_00161E24") __attribute__((sda));
-extern float beam_barrier_burst_scale_max __asm__("D_L06_00161E28") __attribute__((sda));
-extern int beam_barrier_burst_lifetime_min_frames __asm__("D_L06_00161E2C") __attribute__((sda));
-extern int beam_barrier_burst_lifetime_max_frames __asm__("D_L06_00161E30") __attribute__((sda));
-extern float beam_barrier_burst_drift_min_speed __asm__("D_L06_00161E34") __attribute__((sda));
-extern float beam_barrier_burst_drift_max_speed __asm__("D_L06_00161E38") __attribute__((sda));
 extern float frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern int current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
@@ -1671,7 +1661,6 @@ int D_L06_00161DD8 = 0;
 int D_L06_00161DDC = 1;
 int D_L06_00161DF0 = 0x80c04070;
 int D_L06_00161DF4 = 0xff0000;
-extern float beam_barrier_texture_u_step __asm__("D_L06_00161DF8") __attribute__((sda));
 float D_L06_00161DFC = 0;
 extern int D_L06_00161E50;
 extern int D_L06_00161E54;
@@ -1752,11 +1741,7 @@ void draw_beam_barrier_segments(char *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 
-extern f32 beam_barrier_rotation_x_speed_degrees __asm__("D_L06_00161E10") __attribute__((sda));
-extern f32 beam_barrier_render_phase_speed __asm__("D_L06_00161E00") __attribute__((sda));
-extern f32 beam_barrier_class_scale_multiplier __asm__("D_L06_00161E14") __attribute__((sda));
 extern f32 D_L06_00161E08 __attribute__((sda));
-extern f32 beam_barrier_strand_jitter_max_speed __asm__("D_L06_00161E04") __attribute__((sda));
 extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
 extern int D_L06_00161E50;
 Vec4 D_L06_001DB870[4][30] = {0};
@@ -2612,7 +2597,6 @@ extern int FUN_L00_00263d40_c() __asm__("FUN_L00_00263d40");
 extern s32 queue_animation_update() __asm__("func_001FF308");
 extern short D_L06_00161EF0 __attribute__((sda));
 extern short D_L06_00161EF4 __attribute__((sda));
-extern f32 alien_queen_movement_acceleration __asm__("D_L06_00161EFC") __attribute__((sda));
 extern short D_L06_00161F00 __attribute__((sda));
 extern short D_L06_00161F04 __attribute__((sda));
 extern short D_L06_00161F08 __attribute__((sda));
@@ -3287,7 +3271,6 @@ typedef struct {
     s32 ground;           /* 0xEC */
 } CirclerVars;
 
-extern f32 alien_queen_orbit_speed __asm__("D_L06_00161EF8") __attribute__((sda));
 extern f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 circler_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -3349,23 +3332,10 @@ extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f9b48(void *, void *);
-extern float moby_pair_parent_fixed_distance __asm__("D_L06_00161F1C") __attribute__((sda));
-extern float moby_pair_child_fixed_distance __asm__("D_L06_00161F20") __attribute__((sda));
-extern float moby_pair_parent_phase_target_distance __asm__("D_L06_00161F24") __attribute__((sda));
-extern float moby_pair_child_phase_target_distance __asm__("D_L06_00161F28") __attribute__((sda));
-extern float moby_pair_parent_phase_two_target_rotation_y __asm__("D_L06_00161F2C") __attribute__((sda));
-extern float moby_pair_child_phase_two_target_rotation_y __asm__("D_L06_00161F30") __attribute__((sda));
 extern float D_L06_00161F34 __attribute__((sda));
 extern float D_L06_00161F38 __attribute__((sda));
-extern float moby_pair_phase_distance_max_speed __asm__("D_L06_00161F3C") __attribute__((sda));
 extern float D_L06_00161F40 __attribute__((sda));
 extern float D_L06_00161F44 __attribute__((sda));
-extern float moby_pair_phase_rotation_y_max_speed_degrees __asm__("D_L06_00161F48") __attribute__((sda));
-extern int moby_pair_phase_one_duration_min_frames __asm__("D_L06_00161F4C") __attribute__((sda));
-extern int moby_pair_phase_one_duration_max_frames __asm__("D_L06_00161F50") __attribute__((sda));
-extern int moby_pair_phase_two_duration_min_frames __asm__("D_L06_00161F54") __attribute__((sda));
-extern int moby_pair_phase_two_duration_max_frames __asm__("D_L06_00161F58") __attribute__((sda));
-extern float moby_pair_reset_enabled __asm__("D_L06_00161F5C") __attribute__((sda));
 
 void update_moby_pair_transforms(char *moby) __asm__("FUN_L06_002fbfb0");
 
@@ -3623,8 +3593,6 @@ extern int D_0013D4C6; /* no foreign declaration */
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern int D_0013D3A8; /* no foreign declaration */
 extern float D_L06_00161F60 __attribute__((sda));
-extern float height_cycle_max_speed __asm__("D_L06_00161F64") __attribute__((sda));
-extern float height_cycle_acceleration __asm__("D_L06_00161F68") __attribute__((sda));
 int D_L06_00161F6C = 0x80202020;
 int D_L06_00161F70 = 0x80808080;
 int D_L06_00161F74 = 0x80208020;

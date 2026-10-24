@@ -26,8 +26,7 @@ typedef struct {
     s16 sound;                   /* 0x17E */
 } SwarmVars;
 
-extern s32 swarm_update_disabled __asm__("D_L08_00161D40") __attribute__((sda));
-extern f32 swarm_path_movement_speed __asm__("D_L08_00161D34") __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/commando_globals.h"
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
@@ -345,12 +344,6 @@ void update_swing_gate_from_driver(struct Moby *moby) {
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
-extern int scrolled_mesh_unscaled_fixed_alpha __asm__("D_L08_00161DD0") __attribute__((sda));
-extern int scrolled_mesh_subtractive_base_fixed_alpha __asm__("D_L08_00161DD4");
-extern int scrolled_mesh_additive_base_fixed_alpha __asm__("D_L08_00161DD8");
-extern int offset_mesh_first_pass_fixed_alpha __asm__("D_L08_00161DF0") __attribute__((sda));
-extern int offset_mesh_second_pass_fixed_alpha __asm__("D_L08_00161DF4");
-extern int pair_offset_mesh_fixed_alpha __asm__("D_L08_00161E00") __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -398,9 +391,6 @@ extern s32 D_L08_001E2828[];
 extern s32 D_L08_001E2858[];
 extern s32 D_L08_001E8310[];
 extern char D_L08_001E8350[];
-extern float layered_mesh_effect_center_y __asm__("D_L08_00161DC4");
-extern float layered_mesh_effect_center_z __asm__("D_L08_00161DC8");
-extern float layered_mesh_effect_culling_radius __asm__("D_L08_00161DCC");
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -509,7 +499,6 @@ extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __as
 extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
-extern f32 path_follower_y_rotation_rate_degrees __asm__("D_L08_00161F70") __attribute__((sda));
 void update_path_following_moby_with_fade(struct Moby *moby) __asm__("FUN_L08_002f44c0");
 
 void update_path_following_moby_with_fade(struct Moby *moby)
@@ -1186,7 +1175,6 @@ typedef struct {
 } WD8;
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
-extern int commando_height_probe_distance_limit __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");

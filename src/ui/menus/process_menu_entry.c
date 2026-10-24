@@ -35,7 +35,7 @@ typedef struct {
     char *s[6];
 } Suffixes;
 
-extern s32 menu_help_hud_item __asm__("D_00160070") __attribute__((sda));
+#include "rnc/ui/menus/process_menu_entry_globals.h"
 extern s32 world_update_time __asm__("D_0015F60C");
 extern s32 world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
 extern s32 D_001993C0[];

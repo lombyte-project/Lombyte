@@ -1871,7 +1871,7 @@ extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern int D_L07_00161B80 __attribute__((sda));
 extern int D_L07_00161B84;
-extern float rope_swing_target_angle __asm__("D_L07_00161BB0");
+#include "rnc/overlay/l07/gameplay/entities/snagglebeast_globals.h"
 extern char D_L07_00161B90[] __attribute__((section(".sdata")));
 extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
 extern RopeVec rope_previous_points[] __asm__("D_L07_0020DAF0");

@@ -81,8 +81,7 @@ struct Spark_c8e0 {
 };
 
 extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
-extern f32 debris_axis_launch_speed __asm__("D_L05_00161FD0") __attribute__((sda));
-extern f32 debris_upward_launch_speed __asm__("D_L05_00161FD4") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/hoverboard_ring_globals.h"
 extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
 extern f32 distance_xyz_c8e0(void *, void *) __asm__("FUN_001f9b48");
 extern f32 int_to_float_c8e0(s32) __asm__("FUN_001fa6c0");

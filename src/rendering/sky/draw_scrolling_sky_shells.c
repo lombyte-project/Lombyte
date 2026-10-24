@@ -16,7 +16,7 @@ struct SkyShellSet {
     struct SkyShell *shells[1];
 };
 
-extern f32 sky_shell_angle_step __asm__("D_00160400") __attribute__((sda));
+#include "rnc/rendering/sky/draw_scrolling_sky_shells_globals.h"
 extern struct SkyShellSet *D_0016045C;
 extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");

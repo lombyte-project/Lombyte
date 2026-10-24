@@ -3,7 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
 extern struct TagPtr D_001603F0;
-extern s32 max_shrub_texture_dma_size __asm__("D_001603F8");
+#include "rnc/rendering/texture/dma_shrub_textures_globals.h"
 extern char D_001E88D0[];
 extern s32 build_shrub_texture_dma(s32) __asm__("FUN_0022a330");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");

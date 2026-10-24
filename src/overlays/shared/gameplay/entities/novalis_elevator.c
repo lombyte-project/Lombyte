@@ -147,10 +147,8 @@ typedef struct {
 } L01Camera;
 
 extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
-extern u32 cached_water_texture_id __asm__("D_L01_00161228") __attribute__((sda));
-extern u32 cached_water_second_texture_id __asm__("D_L01_0016122C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_globals.h"
 extern u32 D_L01_00161230 __attribute__((sda));
-extern u32 cached_water_alpha_1_fix __asm__("D_L01_00161234") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern char D_L01_00167240[];
 extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
@@ -501,8 +499,6 @@ extern int truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void spawn_type_14_particle(int, void *) __asm__("FUN_L01_00280970");
 extern void FUN_0020c828(void *);
 
-extern s32 moby_motion_particle_random_sign_base __asm__("D_L01_00161494") __attribute__((sda));
-extern f32 moby_motion_collision_radius __asm__("D_L01_0016149C") __attribute__((sda));
 void update_moby_motion_collision_and_lifetime(char *moby) __asm__("FUN_L01_002c7530");
 
 void update_moby_motion_collision_and_lifetime(char *moby) {
@@ -603,7 +599,6 @@ extern char *D_L01_001600EC;
 extern char D_L01_001BAAA0[];
 extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
-extern f32 bolt_crank_radial_correction_step __asm__("D_L01_001618A0") __attribute__((sda));
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
@@ -1116,12 +1111,6 @@ extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void *select_sand_mouse_spawn_target(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
 extern void spawn_sandmouse_projectile(void *, void *, float, float, float, float) __asm__("FUN_L01_0030c898");
 
-extern float sand_mouse_spawn_target_range __asm__("D_L01_00161904") __attribute__((sda));
-extern float sand_mouse_spawn_target_yaw_limit_degrees __asm__("D_L01_00161908") __attribute__((sda));
-extern float sand_mouse_spawn_target_pitch_limit_degrees __asm__("D_L01_0016190C") __attribute__((sda));
-extern float sand_mouse_spawn_offset_toward_target_distance __asm__("D_L01_00161910") __attribute__((sda));
-extern float sand_mouse_spawn_and_fallback_aim_height_offset __asm__("D_L01_00161914") __attribute__((sda));
-extern int sand_mouse_projectile_spawn_interval_frames __asm__("D_L01_00161900") __attribute__((sda));
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 
 typedef union {
@@ -2504,21 +2493,12 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
 }
 #include "rnc/gameplay/entities/moby.h"
 #define MOBY(p) ((struct Moby *)(p))
-extern int amoeboid_first_movement_particle_spawn_gate_modulus_plus_one __asm__("D_L01_001619E0") __attribute__((sda));
-extern int amoeboid_second_movement_particle_spawn_gate_modulus_plus_one __asm__("D_L01_001619E4") __attribute__((sda));
-extern float amoeboid_movement_particle_max_spawn_radius __asm__("D_L01_001619E8") __attribute__((sda));
-extern float amoeboid_first_movement_particle_base_scale_max __asm__("D_L01_001619B8") __attribute__((sda));
 extern float D_L01_001619BC __attribute__((sda));
-extern int amoeboid_first_movement_particle_lifetime_min __asm__("D_L01_001619C0") __attribute__((sda));
-extern int amoeboid_first_movement_particle_lifetime_max __asm__("D_L01_001619C4") __attribute__((sda));
 extern int D_L01_001619B0 __attribute__((sda));
 extern int D_L01_001619B4 __attribute__((sda));
 extern int D_L01_001619C8 __attribute__((sda));
 extern int D_L01_001619CC __attribute__((sda));
-extern float amoeboid_second_movement_particle_base_scale_max __asm__("D_L01_001619D0") __attribute__((sda));
 extern float D_L01_001619D4 __attribute__((sda));
-extern int amoeboid_second_movement_particle_lifetime_min __asm__("D_L01_001619D8") __attribute__((sda));
-extern int amoeboid_second_movement_particle_lifetime_max __asm__("D_L01_001619DC") __attribute__((sda));
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -2559,16 +2539,6 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
                          scale_game_frames(time));
     }
 }
-extern s32 amoeboid_burst_group_count __asm__("D_L01_001619EC") __attribute__((sda));
-extern s32 amoeboid_burst_sparks_per_group __asm__("D_L01_001619F0") __attribute__((sda));
-extern f32 amoeboid_burst_group_position_jitter_bound __asm__("D_L01_001619F4") __attribute__((sda));
-extern f32 amoeboid_burst_spark_position_jitter_bound __asm__("D_L01_001619F8") __attribute__((sda));
-extern f32 amoeboid_burst_spark_velocity_jitter_bound __asm__("D_L01_001619FC") __attribute__((sda));
-extern f32 amoeboid_burst_radial_speed_min __asm__("D_L01_00161A00") __attribute__((sda));
-extern f32 amoeboid_burst_radial_speed_max __asm__("D_L01_00161A04") __attribute__((sda));
-extern f32 amoeboid_burst_vertical_speed_min __asm__("D_L01_00161A08") __attribute__((sda));
-extern f32 amoeboid_burst_vertical_speed_max __asm__("D_L01_00161A0C") __attribute__((sda));
-extern f32 amoeboid_burst_downward_velocity_adjustment_factor __asm__("D_L01_00161A10") __attribute__((sda));
 extern f32 D_L01_00161A14 __attribute__((sda));
 extern f32 D_L01_00161A18 __attribute__((sda));
 extern s32 D_L01_00161A1C __attribute__((sda));
@@ -2577,8 +2547,6 @@ extern s32 D_L01_00161A24 __attribute__((sda));
 extern s32 D_L01_00161A28 __attribute__((sda));
 extern s32 D_L01_00161A2C __attribute__((sda));
 extern s32 D_L01_00161A30 __attribute__((sda));
-extern s32 amoeboid_burst_spark_duration_base __asm__("D_L01_00161A34") __attribute__((sda));
-extern f32 amoeboid_burst_input_motion_scale_max __asm__("D_L01_00161A38") __attribute__((sda));
 
 extern f32 D_0015ED70;
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");

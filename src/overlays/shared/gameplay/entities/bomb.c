@@ -1570,8 +1570,7 @@ int fr_2cbf68(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_2cbf68(void *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
-extern int feather_base_lifetime __asm__("D_L00_001618A4") __attribute__((sda));
-extern float feather_scale_multiplier __asm__("D_L00_001618A0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/bomb_globals.h"
 unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initial_velocity) {
     unsigned char *spawned_moby = FUN_0020c4f8_2cbf68(0x1AC);
     if (spawned_moby) {
@@ -1631,7 +1630,6 @@ int FUN_001f9740_2cc210(void *) __asm__("FUN_001f9740");
 void FUN_0020c828_2cc210(void *) __asm__("FUN_0020c828");
 int FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 int FUN_L00_001fefc8_2cc210(void *) __asm__("FUN_L00_001fefc8");
-extern float falling_moby_horizontal_velocity_scale __asm__("D_L00_001618A8") __attribute__((sda));
 void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
 
 void update_damped_falling_moby(unsigned char *updated_moby) {

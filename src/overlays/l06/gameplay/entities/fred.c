@@ -30,12 +30,8 @@ extern int D_L06_00161F80 __attribute__((sda));
 extern int D_L06_00161F84 __attribute__((sda));
 extern int D_L06_00161F88 __attribute__((sda));
 extern int D_L06_00161F8C __attribute__((sda));
-extern int dual_texture_mesh_first_pass_texture_index __asm__("D_L06_00161F90") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern unsigned int D_L06_00161F94 __attribute__((sda));
-extern int dual_texture_mesh_second_pass_vertex_color __asm__("D_L06_00161F98") __attribute__((sda));
-extern float dual_texture_mesh_position_scale __asm__("D_L06_00161F9C") __attribute__((sda));
-extern float dual_texture_mesh_first_pass_u_offset_multiplier __asm__("D_L06_00161FA0") __attribute__((sda));
-extern float dual_texture_mesh_first_pass_v_offset_multiplier __asm__("D_L06_00161FA4") __attribute__((sda));
 extern float D_L06_00167554;
 extern float D_L06_00167540[];
 float D_L06_001F1540[146][2] = {
@@ -5721,11 +5717,8 @@ extern void FUN_L06_00300720(void);
 extern void FUN_L06_00300588(void);
 extern void FUN_L06_003003f0(void);
 
-extern int scripted_camera_sequence_active __asm__("D_L06_0015F404");
 extern int D_L06_0015F408;
-extern float camera_sequence_moby_scale_multiplier __asm__("D_L06_00162048") __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
-extern float camera_sequence_rotation_x_degrees __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
 void update_moby_camera_sequence_and_draw_selection(char *moby) {
@@ -5887,7 +5880,6 @@ extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
-extern float moby_breakup_z_offset __asm__("D_L06_0016204C") __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */
 void spawn_moby_breakup_effect(char *source_moby) {
@@ -6067,7 +6059,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern float moby_bobbing_amplitude __asm__("D_L06_00162090") __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void update_moby_bobbing_and_motion(char *moby) __asm__("FUN_L06_00300df0");
 
@@ -6515,7 +6506,6 @@ extern void FUN_L00_002eac18(int);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
-extern float linked_sequence_exit_ramp_progress __asm__("D_L06_0015F400");
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
@@ -6671,8 +6661,6 @@ struct TauntVoiceVars {
     s32 chatter[3][6];   /* 0x68 */
 };
 extern s32 D_L06_001620B8[1] __attribute__((sda));
-extern s32 chatter_second_variant_used __asm__("D_L06_001620BC");
-extern s32 chatter_third_variant_used __asm__("D_L06_001620C0");
 extern s32 D_001516EC[];
 extern s32 FUN_00213260(s32);
 
@@ -6824,7 +6812,6 @@ extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
 extern float D_L06_001620F4 __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
-extern int shuttle_forced_return_requested __asm__("D_L06_00162100") __attribute__((sda));
 extern int D_L06_00162104 __attribute__((sda));
 extern int D_L06_00162108 __attribute__((sda));
 extern int D_L06_0016210C __attribute__((sda));
@@ -7363,7 +7350,6 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 }
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
-extern float shuttle_breakup_particle_max_speed __asm__("D_L06_0016215C") __attribute__((sda));
 extern int D_L06_00162160 __attribute__((sda));
 extern int D_L06_00162164 __attribute__((sda));
 extern int D_L06_00162168 __attribute__((sda));
@@ -7376,7 +7362,6 @@ extern int D_L06_00162180 __attribute__((sda));
 extern int D_L06_00162184 __attribute__((sda));
 extern int D_L06_00162188 __attribute__((sda));
 extern int D_L06_0016218C __attribute__((sda));
-extern int shuttle_breakup_particles_per_piece __asm__("D_L06_00162190") __attribute__((sda));
 extern int D_L06_00162194 __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
@@ -7729,7 +7714,6 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
-extern int red_button_particle_emission_count __asm__("D_L06_001621B8") __attribute__((sda));
 void emit_red_button_particle_burst(int unused, void *effect_position) {
     float zero_effect_vector[4];
     V6 first_color_palette;
@@ -7957,9 +7941,6 @@ extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
 
-extern float vector_stream_collision_local_x_offset __asm__("D_L06_001621E8") __attribute__((sda));
-extern float vector_stream_collision_local_y_offset __asm__("D_L06_001621EC") __attribute__((sda));
-extern float vector_stream_collision_local_z_offset __asm__("D_L06_001621F0") __attribute__((sda));
 void test_moby_vector_stream_collision_lines(char *moby) {
     float P[4];
     float Q[4];
@@ -8000,13 +7981,6 @@ extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern int vector_stream_blend_color_b_selector __asm__("D_L06_001621C4") __attribute__((sda));
-extern int vector_stream_blend_alpha_c_selector __asm__("D_L06_001621C8") __attribute__((sda));
-extern int vector_stream_blend_color_a_selector __asm__("D_L06_001621C0") __attribute__((sda));
-extern int vector_stream_blend_color_d_selector __asm__("D_L06_001621CC") __attribute__((sda));
-extern int vector_stream_timer_threshold_color __asm__("D_L06_001621E0") __attribute__((sda));
-extern int vector_stream_cycle_boundary_color __asm__("D_L06_001621E4") __attribute__((sda));
-extern float vector_stream_texture_u_step __asm__("D_L06_001621F4") __attribute__((sda));
 extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");

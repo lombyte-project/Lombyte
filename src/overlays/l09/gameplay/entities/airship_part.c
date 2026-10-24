@@ -70,7 +70,7 @@ extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
 
 extern char D_L09_002082A0[];
 extern Pair_2c26c8 D_L09_001613D0 __attribute__((section(".data")));
-extern int airship_part_low_altitude_effect_count __asm__("D_L09_00161368") __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/airship_part_globals.h"
 extern int D_L09_0016136C __attribute__((sda));
 extern int D_L09_00161370 __attribute__((sda));
 extern float D_L09_00161374 __attribute__((sda));
@@ -88,10 +88,7 @@ extern float D_L09_001613A0 __attribute__((sda));
 extern float D_L09_001613A4 __attribute__((sda));
 extern float D_L09_001613A8 __attribute__((sda));
 extern float D_L09_001613AC __attribute__((sda));
-extern float airship_part_initial_tumble_x_speed_limit_degrees __asm__("D_L09_001613B0") __attribute__((sda));
-extern float airship_part_initial_tumble_y_speed_limit_degrees __asm__("D_L09_001613B4") __attribute__((sda));
 extern float D_L09_001613B8 __attribute__((sda));
-extern float airship_hull_breakup_wait_x_rotation_speed_degrees __asm__("D_L09_001613BC") __attribute__((sda));
 extern int D_L09_001613C0 __attribute__((sda));
 extern int D_L09_001613C4 __attribute__((sda));
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));

@@ -12,7 +12,7 @@ struct DmaChannel {
 /* The DMA-busy mask this file owns: both functions below read it
    gp-relative, which needs its definition ahead of them. */
 volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
-extern s32 vu1_chain_peak_bytes __asm__("D_00160F14");
+#include "rnc/rendering/vu1_chain_globals.h"
 extern char D_001E89E0[];
 extern u8 D_001E89C8[];
 extern void DebugPrint(char *, ...);

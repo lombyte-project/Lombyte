@@ -151,14 +151,12 @@ void update_ambience_target_cycle(void) {
     }
 }
 extern int D_L00_00161390;
-extern int configured_unscaled_frame_count __asm__("D_L00_00161368") __attribute__((sda));
-extern int configured_reciprocal_frame_count __asm__("D_L00_0016136C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int D_L00_00161370 __attribute__((sda));
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
 extern float D_L00_00161374_gp __asm__("D_L00_00161374") __attribute__((sda));
-extern float wrapped_value_decrement_rate __asm__("D_L00_00161378") __attribute__((sda));
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
@@ -1277,8 +1275,6 @@ extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
-extern int last_bolt_attraction_sound_frame __asm__("D_L00_001613AC") __attribute__((sda));
-extern float bolt_spin_angle_limit_degrees __asm__("D_L00_001613A8") __attribute__((sda));
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) __asm__("FUN_L00_002a7210");
 
 int begin_bolt_attraction(void *ov, void *tv, float attraction_yaw_angle, float attraction_pitch_angle) {

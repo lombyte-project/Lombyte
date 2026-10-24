@@ -85,8 +85,7 @@ extern float FUN_001fa580_2e8bb8(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_2e8bb8(float, float) __asm__("FUN_001fa5c8");
 
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
-extern float follow_camera_input_stiffness __asm__("D_L00_00161CAC") __attribute__((sda));
-extern float follow_camera_input_damping __asm__("D_L00_00161CB0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_turn_and_pitch_globals.h"
 extern float D_L00_00161CBC __attribute__((sda));
 extern float D_L00_00161CC0 __attribute__((sda));
 extern float D_L00_00161CC4 __attribute__((sda));

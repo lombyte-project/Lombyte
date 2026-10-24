@@ -21,7 +21,7 @@ struct HudSlot {
 
 extern u8 hud_file_str[] __asm__("D_0015F6D8");
 extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
-extern s32 hud_bank_main_start __asm__("D_0015FA04") __attribute__((sda));
+#include "rnc/ui/hud/init_hud_globals.h"
 extern s32 hud_bank_end __asm__("D_0015FA08");
 extern s32 hud_bank_aux __asm__("D_0015FA0C");
 extern s32 fast_mem_zero16() __asm__("func_001F9810");

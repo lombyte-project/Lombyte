@@ -43,7 +43,7 @@ void draw_group_moby_glow_quads(unsigned char *moby) {
 
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
-extern float scenery_ship_path_advance_scale __asm__("D_L05_001613D0") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_globals.h"
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 
 void advance_scenery_ship_along_path(char *moby, int *path) {
@@ -603,8 +603,6 @@ int D_L05_001613D8 = 0x80000080;
 int D_L05_001613DC = 0x80202020;
 float D_L05_001613E0 = 5.0f;
 int D_L05_001613E4 = 1;
-extern float scenery_ship_removal_effect_basis_scale __asm__("D_L05_001613E8") __attribute__((sda));
-extern float scenery_ship_removal_effect_z_addend __asm__("D_L05_001613EC") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2066,26 +2064,19 @@ extern int D_L05_00161B10 __attribute__((sda));
 extern float D_L05_00161B14 __attribute__((sda));
 extern float D_L05_00161B18 __attribute__((sda));
 extern float D_L05_00161B1C __attribute__((sda));
-extern float extermitank_tracked_particle_vector_a_xy_scale __asm__("D_L05_00161B20") __attribute__((sda));
 extern float D_L05_00161B24 __attribute__((sda));
-extern float extermitank_tracked_particle_vector_b_xy_scale __asm__("D_L05_00161B28") __attribute__((sda));
 extern float D_L05_00161B2C __attribute__((sda));
 extern float D_L05_00161B30 __attribute__((sda));
 extern float D_L05_00161B34 __attribute__((sda));
-extern float extermitank_tracked_particle_vector_b_spread_degrees __asm__("D_L05_00161B38") __attribute__((sda));
 extern int D_L05_00161B3C __attribute__((sda));
 extern int D_L05_00161B40 __attribute__((sda));
 extern float D_L05_00161B44 __attribute__((sda));
 extern float D_L05_00161B48 __attribute__((sda));
 extern float D_L05_00161B4C __attribute__((sda));
-extern float extermitank_secondary_particle_vector_a_xy_scale __asm__("D_L05_00161B50") __attribute__((sda));
 extern float D_L05_00161B54 __attribute__((sda));
-extern float extermitank_secondary_particle_vector_b_xy_scale __asm__("D_L05_00161B58") __attribute__((sda));
 extern float D_L05_00161B5C __attribute__((sda));
 extern float D_L05_00161B60 __attribute__((sda));
 extern float D_L05_00161B64 __attribute__((sda));
-extern float extermitank_secondary_particle_vector_b_spread_degrees __asm__("D_L05_00161B68") __attribute__((sda));
-extern float extermitank_secondary_particle_vector_a_spread_degrees __asm__("D_L05_00161B6C") __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));
 extern float D_L05_00161B7C __attribute__((sda));
 extern void FUN_L00_001fff28(void *, int, float);
@@ -2382,9 +2373,7 @@ extern void finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 extern float D_0013F3D0[];
 
 int D_L05_00161B74 = 5;
-extern float extermitank_child_animation_speed_divisor __asm__("D_L05_00161AF0") __attribute__((sda));
 extern const float frame_time_const __asm__("D_0015ED6C");
-extern float extermitank_child_animation_speed_offset_scale __asm__("D_L05_00161AF4") __attribute__((sda));
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -3057,12 +3046,6 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern float floating_platform_rotation_y_phase_rate_degrees __asm__("D_L05_00161CD4") __attribute__((sda));
-extern float floating_platform_rotation_x_phase_rate_degrees __asm__("D_L05_00161CD8") __attribute__((sda));
-extern float floating_platform_rotation_y_amplitude_degrees __asm__("D_L05_00161CDC") __attribute__((sda));
-extern float floating_platform_rotation_x_amplitude_degrees __asm__("D_L05_00161CE0") __attribute__((sda));
-extern int floating_platform_voice_interval_min __asm__("D_L05_00161CE4") __attribute__((sda));
-extern int floating_platform_voice_interval_max __asm__("D_L05_00161CE8") __attribute__((sda));
 void floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 void floating_platform_update(unsigned char *moby) {
     enum {

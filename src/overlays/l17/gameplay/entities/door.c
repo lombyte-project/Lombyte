@@ -563,11 +563,6 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
 
 int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
-    enum {
-        MOBY_CLASS_RADAR_CONTACT_DRAW_BYPASS = 0x188,
-        MOBY_CLASS_CONTACT_DRAW_BYPASS = 0x18F,
-        MOBY_CLASS_CONTACT_RENDER_SUPPRESSED = 0x190
-    };
     float v[4];
     float arrow_target_position_scratch[4];
     float arrow_direction_rotation_matrix[16];
@@ -1620,16 +1615,13 @@ typedef struct {
 extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
 extern char D_L17_001E6E00[];
 char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
-extern float fighter_jet_boarding_distance_limit __asm__("D_L17_00161FE0") __attribute__((sda));
-extern float fighter_jet_initial_flight_speed __asm__("D_L17_00161FE4") __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_globals.h"
 extern float D_L17_00162054 __attribute__((sda));
-extern float fighter_jet_starting_hp __asm__("D_L17_00162058") __attribute__((sda));
 /* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
    the load after the stores to the ship vars like retail. */
 extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
 extern unsigned char D_L17_00162064 __attribute__((sda));
 extern unsigned char D_L17_00162068 __attribute__((sda));
-extern float fighter_jet_max_hp __asm__("D_L17_00162084") __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;
 char *hp_bar_clut __asm__("D_L17_00162180") = 0;
@@ -3191,11 +3183,7 @@ extern float wrap_angle(float);
 int D_L17_00162248 = 128;
 int D_L17_0016224C = 45;
 int D_L17_00162250 = 64;
-extern float ripple_pair_radial_phase_distance_scale __asm__("D_L17_00162254") __attribute__((sda));
-extern float ripple_pair_phase_period __asm__("D_L17_00162258") __attribute__((sda));
-extern float ripple_pair_z_amplitude __asm__("D_L17_0016225C") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float ripple_pair_uv_scroll_rate __asm__("D_L17_00162260") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
@@ -3387,7 +3375,6 @@ typedef struct {
 Quad4 D_L17_00162390 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float ripple_uv_scroll_rate __asm__("D_L17_0016238C") __attribute__((sda));
 float D_L17_001DD760[135] = {-7.788906f, -7.788906f, 0.005259f, -7.788906f, -3.894453f, 0.005259f, -3.894453f, -7.788906f, 0.005259f, -3.894453f, -3.894453f, 0.005259f, 0.0f, -7.788906f, 0.005259f, 0.0f, -3.894453f, 0.005259f, 3.894453f, -7.788906f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 7.788906f, -7.788906f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 7.788906f, -3.894453f, 0.005259f, 3.894453f, 0.0f, 0.005259f, 7.788906f, 0.0f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 7.788906f, 3.894453f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 7.788906f, 7.788906f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 3.894453f, 7.788906f, 0.005259f, 0.0f, 3.894453f, 0.005259f, 0.0f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -3.894453f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -7.788906f, 7.788906f, 0.005259f, -3.894453f, 3.894453f, 0.005259f, -7.788906f, 3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -7.788906f, 0.0f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -7.788906f, -3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -3.894453f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 0.0f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, -3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, 0.0f, 0.005259f, 0.0f, 0.0f, 0.005259f, 3.894453f, 3.894453f, 0.005259f, 0.0f, 0.0f, 0.005259f, 0.0f, 3.894453f, 0.005259f, -3.894453f, 0.0f, 0.005259f, -3.894453f, 3.894453f, 0.005259f};
 float D_L17_001DD980[45][2] = {
     {0.0f, 0.0f},
@@ -3451,9 +3438,6 @@ int D_L17_00162370[1] = {(int)D_L17_001DDF28};
 int D_L17_00162374 = 128;
 int D_L17_00162378 = 45;
 int D_L17_0016237C = 64;
-extern float ripple_radial_phase_distance_scale __asm__("D_L17_00162380") __attribute__((sda));
-extern float ripple_phase_period __asm__("D_L17_00162384") __attribute__((sda));
-extern float ripple_z_amplitude __asm__("D_L17_00162388") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");

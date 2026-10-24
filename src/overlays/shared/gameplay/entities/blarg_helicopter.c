@@ -993,7 +993,7 @@ extern int D_0014C050; /* no foreign declaration */
 extern int D_0015ED68_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
 extern float blarg_helicopter_bob_period __asm__("D_L03_00161994") __attribute__((sda)); /* no foreign declaration */
 extern float blarg_helicopter_bob_amplitude __asm__("D_L03_00161998") __attribute__((sda)); /* no foreign declaration */
-extern float blarg_helicopter_path_min_speed __asm__("D_L03_0016199C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/blarg_helicopter_globals.h"
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int FUN_L00_001fff28();
 extern int FUN_L00_00258110();
@@ -1533,7 +1533,6 @@ extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float homing_spark_turn_rate_degrees __asm__("D_L03_00161B30") __attribute__((sda));
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");

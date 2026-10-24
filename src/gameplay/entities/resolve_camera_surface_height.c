@@ -9,8 +9,7 @@ struct CameraProbePosition {
     f32 z;
 };
 
-extern s32 local_surface_region_center_x __asm__("D_001611A0");
-extern f32 local_surface_region_radius __asm__("D_001611AC");
+#include "rnc/gameplay/entities/resolve_camera_surface_height_globals.h"
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void set_vector_unit_z(s32) __asm__("FUN_001f9a00");
 extern f32 vector_distance(struct CameraProbePosition *, s32 *) __asm__("FUN_001f9b80");

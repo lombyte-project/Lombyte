@@ -1354,8 +1354,7 @@ extern int D_L00_00161904 __attribute__((sda));
 extern int D_L00_00161908 __attribute__((sda));
 extern int D_L00_0016190C __attribute__((sda));
 extern int D_L00_00161910 __attribute__((sda));
-extern int metal_detector_trail_initial_quad_color __asm__("D_L00_00161914") __attribute__((sda));
-extern int metal_detector_trail_texture_selector __asm__("D_L00_00161918") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -2264,8 +2263,6 @@ extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 /* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
 void horny_toad_update(Moby *moby) __asm__("FUN_L00_002d4610");
 extern float D_L00_0016196C __attribute__((sda));
-extern float horny_toad_target_approach_distance_threshold __asm__("D_L00_00161980") __attribute__((sda));
-extern float horny_toad_target_animation_start_index __asm__("D_L00_00161984") __attribute__((sda));
 extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
     enum {
@@ -3391,7 +3388,6 @@ s16 D_L01_001D5BC0[1200] = {0};
 s16 D_L14_001D5E40[1200] = {0};
 extern float D_L00_001619B4 __attribute__((sda));
 extern float D_L00_001619B8 __attribute__((sda));
-extern int smoke_fire_emission_attempts_per_update __asm__("D_L00_001619BC") __attribute__((sda));
 extern int D_L00_001619C0 __attribute__((sda));
 extern int D_L00_001619C4 __attribute__((sda));
 extern int D_L00_001619C8 __attribute__((sda));
@@ -3517,7 +3513,6 @@ extern float D_L00_00161374;
 extern float D_L00_00161384;
 extern float D_L00_0016138C;
 extern unsigned short D_L00_00161388_gp __asm__("D_L00_00161388") __attribute__((sda));
-extern int smoke_fire_particle_steady_alpha __asm__("D_L00_00161998") __attribute__((sda));
 extern float D_L00_0016199C __attribute__((sda));
 extern u8 D_L00_001619A0[4] __attribute__((sda));
 extern u8 D_L00_001619A8[8] __attribute__((sda));

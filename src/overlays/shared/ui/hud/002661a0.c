@@ -36,16 +36,7 @@ void FUN_L05_002661e8(char *moby) {
 extern int D_0013E500[];
 extern int D_0015ED80;
 extern u8 D_0013D388[];
-extern int hud_timer_frame_x __asm__("D_L05_0015FA14") __attribute__((sda));
-extern int hud_timer_frame_bottom_offset __asm__("D_L05_0015FA18") __attribute__((sda));
-extern int hud_timer_frame_width __asm__("D_L05_0015FA1C") __attribute__((sda));
-extern int hud_timer_frame_height __asm__("D_L05_0015FA20") __attribute__((sda));
-extern int hud_timer_frame_alpha __asm__("D_L05_0015FA24") __attribute__((sda));
-extern int hud_timer_label_color __asm__("D_L05_0015FA28") __attribute__((sda));
-extern int hud_timer_value_color __asm__("D_L05_0015FA2C") __attribute__((sda));
-extern int hud_timer_text_center_x __asm__("D_L05_0015FA30") __attribute__((sda));
-extern int hud_timer_optional_row_bottom_offset __asm__("D_L05_0015FA34") __attribute__((sda));
-extern int hud_timer_time_row_bottom_offset __asm__("D_L05_0015FA44") __attribute__((sda));
+#include "rnc/overlay/shared/ui/hud/002661a0_globals.h"
 extern char D_L05_0015F788[];
 extern char D_L05_0015F9D8[];
 extern char D_L05_0015FA50[];

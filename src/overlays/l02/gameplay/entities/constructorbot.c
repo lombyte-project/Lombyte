@@ -15,7 +15,7 @@ typedef struct {
     u8 pad0[0x5C];
     u8 *tint;
 } LevelFx;
-extern f32 shard_vertical_velocity_approach_scale __asm__("D_L02_00161F58") __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_globals.h"
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx D_L02_001B2680;
@@ -422,8 +422,6 @@ s32 D_L02_001620FC = 0x804080ff;
 s32 D_L02_00162100 = 0x8040ffff;
 s32 D_L02_00162104 = 0x80204040;
 s32 D_L02_00162108 = 0x80204080;
-extern s32 view_gated_smoke_burst_interval_min __asm__("D_L02_0016210C") __attribute__((sda));
-extern s32 view_gated_smoke_burst_interval_max __asm__("D_L02_00162110") __attribute__((sda));
 s32 D_L02_00162114 = 0x10019;
 extern f32 D_L02_00162118 __attribute__((sda));
 extern f32 D_L02_0016211C __attribute__((sda));
@@ -442,8 +440,6 @@ s32 D_L02_0016214C = 0x804080ff;
 s32 D_L02_00162150 = 0x8040ffff;
 s32 D_L02_00162154 = 0x80204040;
 s32 D_L02_00162158 = 0x80204080;
-extern s32 alternating_smoke_burst_interval_min __asm__("D_L02_0016215C") __attribute__((sda));
-extern s32 alternating_smoke_burst_interval_max __asm__("D_L02_00162160") __attribute__((sda));
 s32 D_L02_00162164 = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)

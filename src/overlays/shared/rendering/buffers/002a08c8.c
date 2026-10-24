@@ -10,8 +10,7 @@ u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
 void FUN_00118a80_002a08c8(int) __asm__("FUN_00118a80");
 void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
 extern u32 D_L00_001611B8[] __attribute__((section(".data")));
-extern int selected_render_buffer_index __asm__("D_L00_001611D0");
-extern int render_buffer_high_water_bytes __asm__("D_L00_001611D4");
+#include "rnc/overlay/shared/rendering/buffers/002a08c8_globals.h"
 extern char D_L00_001E9530[];
 void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 

@@ -133,7 +133,7 @@ typedef struct {
 } E00237ae8;
 extern s32 D_L00_0015FA90;
 extern void *D_L00_0015FAC0;
-extern s32 eight_slot_hud_selector_table_pointer __asm__("D_L00_0015F738") __attribute__((sda));
+#include "rnc/overlay/shared/ui/text/002377b8_globals.h"
 extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
@@ -199,7 +199,6 @@ extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
 extern int D_L00_0015FA90;
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
-extern int saved_hud_selector_slot_index __asm__("D_L00_0015FA9C") __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern int D_L00_0017DC38 __attribute__((section(".data")));
 extern int D_L00_0017DC3C __attribute__((section(".data")));
@@ -223,8 +222,6 @@ typedef struct {
 } Progress;
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_00141622[] __attribute__((section(".data")));
-extern float hud_item_selector_even_slot_edge_fraction __asm__("D_L00_0015F788") __attribute__((sda));
-extern float hud_item_selector_slot_angle_offset __asm__("D_L00_0015F784") __attribute__((sda));
 extern int D_L00_0017DC18 __attribute__((section(".data")));
 extern int D_L00_0017DC1C __attribute__((section(".data")));
 extern int D_L00_0017DC20 __attribute__((section(".data")));
@@ -365,14 +362,10 @@ extern float D_L00_0015F78C_gp __asm__("D_L00_0015F78C") __attribute__((sda));
 extern int D_L00_0015F790_gp __asm__("D_L00_0015F790") __attribute__((sda));
 extern int D_L00_0015F794_gp __asm__("D_L00_0015F794") __attribute__((sda));
 extern int D_L00_0015F798_gp __asm__("D_L00_0015F798") __attribute__((sda));
-extern int hud_item_selector_text_shadow_color_to __asm__("D_L00_0015F79C");
 extern int D_L00_0015F7A0_gp __asm__("D_L00_0015F7A0") __attribute__((sda));
 extern int D_L00_0015F7A4_gp __asm__("D_L00_0015F7A4") __attribute__((sda));
 extern int D_L00_0015F7A8_gp __asm__("D_L00_0015F7A8") __attribute__((sda));
-extern int hud_item_selector_nonzero_ammo_text_color_to __asm__("D_L00_0015F7AC");
 extern int D_L00_0015F7B0_gp __asm__("D_L00_0015F7B0") __attribute__((sda));
-extern int hud_item_selector_title_with_ammo_y_offset __asm__("D_L00_0015F7B4");
-extern int hud_item_selector_split_title_without_ammo_y_offset __asm__("D_L00_0015F7B8");
 extern int D_L00_0015F7BC_gp __asm__("D_L00_0015F7BC") __attribute__((sda));
 extern float D_L00_0015F7C0;
 extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
@@ -533,7 +526,6 @@ extern void *D_L00_0015FAC0;
 extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
-extern int four_slot_hud_selector_table_pointer __asm__("D_L00_0015F740") __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
 
@@ -1147,12 +1139,8 @@ extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
 
-extern s32 bolt_count_text_x_offset __asm__("D_L00_0015F834") __attribute__((sda));
-extern s32 bolt_count_text_y_offset __asm__("D_L00_0015F838") __attribute__((sda));
 extern s32 D_L00_0015F83C __attribute__((sda));
 extern s32 D_L00_0015F840 __attribute__((sda));
-extern s32 bolt_dot_separator_x_offset __asm__("D_L00_0015F844") __attribute__((sda));
-extern s32 bolt_dot_separator_y_offset __asm__("D_L00_0015F848") __attribute__((sda));
 extern char D_L00_0015F858[] __attribute__((section(".data")));
 extern char D_L00_0015F860[] __attribute__((section(".data")));
 int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
@@ -1259,14 +1247,6 @@ void update_hud_panel_visibility(u8 *hud_element) {
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
-extern s32 bolt_exclamation_panel_max_alpha __asm__("D_L00_0015F8F8") __attribute__((sda));
-extern s32 bolt_exclamation_panel_open_slide_distance __asm__("D_L00_0015F8FC") __attribute__((sda));
-extern s32 bolt_exclamation_panel_right_x_offset __asm__("D_L00_0015F900") __attribute__((sda));
-extern s32 bolt_exclamation_label_x_offset __asm__("D_L00_0015F904") __attribute__((sda));
-extern s32 bolt_exclamation_label_y_offset __asm__("D_L00_0015F908") __attribute__((sda));
-extern s32 bolt_exclamation_label_color_from __asm__("D_L00_0015F90C") __attribute__((sda));
-extern s32 bolt_exclamation_label_color_to __asm__("D_L00_0015F910") __attribute__((sda));
-extern s32 bolt_exclamation_label_pulse_base_period_frames __asm__("D_L00_0015F914") __attribute__((sda));
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");

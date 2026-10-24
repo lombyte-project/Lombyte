@@ -396,22 +396,9 @@ typedef struct {
     u8 pad[0x3E];
     s16 h3E;
 } S2ba970;
-extern f32 beam_first_pass_texture_u_offset __asm__("D_L00_001615EC") __attribute__((sda));
-extern f32 beam_first_pass_texture_u_scroll_speed __asm__("D_L00_001615F0") __attribute__((sda));
-extern s32 primary_beam_first_pass_alpha __asm__("D_L00_001615D4") __attribute__((sda));
-extern s32 primary_beam_second_pass_alpha __asm__("D_L00_001615DC") __attribute__((sda));
-extern f32 beam_and_arc_first_pass_half_width __asm__("D_L00_001615FC") __attribute__((sda));
-extern f32 primary_beam_second_pass_half_width __asm__("D_L00_00161600") __attribute__((sda));
-extern f32 primary_beam_second_pass_segment_extension_factor __asm__("D_L00_00161630") __attribute__((sda));
-extern s32 secondary_beam_first_pass_alpha __asm__("D_L00_00161604") __attribute__((sda));
-extern s32 secondary_beam_second_pass_alpha __asm__("D_L00_00161608") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_globals.h"
 extern f32 D_L00_0016160C __attribute__((sda));
-extern f32 secondary_beam_and_arc_second_pass_half_width __asm__("D_L00_00161610") __attribute__((sda));
-extern f32 secondary_beam_second_pass_segment_extension_factor __asm__("D_L00_00161634") __attribute__((sda));
 extern s16 D_L00_00161660;
-extern s16 beam_arc_second_row_alpha __asm__("D_L00_00161662");
-extern s16 beam_arc_third_row_alpha __asm__("D_L00_00161664");
-extern s16 beam_arc_fourth_row_alpha __asm__("D_L00_00161666");
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
@@ -615,8 +602,6 @@ long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float rnd_2bb0b0(float, float) __asm__("FUN_L00_00257c48");
 void draw_2bb0b0(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int D_L00_00161640 __attribute__((sda));
-extern float beam_anchor_first_pass_base_corner_scale __asm__("D_L00_00161648") __attribute__((sda));
-extern float beam_anchor_second_pass_base_corner_scale __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
 extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
 void draw_beam_anchor_camera_facing_quads(void *mv) {
@@ -969,8 +954,6 @@ void walloper_update(char *m) {
     enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
-extern f32 walloper_arc_first_pass_half_width __asm__("D_L00_00161690") __attribute__((sda));
-extern f32 walloper_arc_second_pass_half_width __asm__("D_L00_00161694") __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
@@ -1168,9 +1151,6 @@ int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
-extern float walloper_quad_basis_offset_scale __asm__("D_L00_001616BC") __attribute__((sda));
-extern float walloper_quad_corner_scale __asm__("D_L00_001616B8") __attribute__((sda));
-extern int walloper_quad_texture_index __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
@@ -1410,11 +1390,8 @@ extern float D_0015ED6C;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141680;
 extern int D_0015EEA4;
-extern float morphoray_base_drain_rate __asm__("D_L00_001616E0") __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
 extern int D_L00_001617BC;
-extern int morphoray_point_light_slot __asm__("D_L00_001617C0");
-extern int morphoray_light_fade_countdown __asm__("D_L00_001617C4");
 extern int D_L00_001617C8;
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
@@ -2311,7 +2288,6 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sy, float s
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF958). */
 #include "rnc/rendering/geometry_quad.h"
-extern int beam_pulse_default_rgb __asm__("D_L00_00161760") __attribute__((sda));
 extern int D_L00_00161764 __attribute__((sda));
 extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
 extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
@@ -2388,10 +2364,6 @@ void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
-extern float beam_origin_quad_basis_offset_length __asm__("D_L00_001617B4") __attribute__((sda));
-extern float beam_origin_quad_first_pass_corner_scale __asm__("D_L00_001617AC") __attribute__((sda));
-extern float beam_origin_quad_second_pass_corner_scale __asm__("D_L00_001617B0") __attribute__((sda));
-extern int beam_origin_quad_first_pass_vertex_color __asm__("D_L00_001617B8") __attribute__((sda));
 void draw_beam_origin_camera_facing_quads(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;

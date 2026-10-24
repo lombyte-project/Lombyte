@@ -117,11 +117,10 @@ void update_fire_bolt(char *fire_bolt) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
 extern float D_L08_00162360[2];
-extern float ground_particle_scatter_refresh_countdown __asm__("D_L08_00162370");
+#include "rnc/overlay/shared/gameplay/vendor/00307190_globals.h"
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int ground_particle_scatter_base_attempt_count __asm__("D_L08_00162374");
 
 extern short D_L08_0016234C __attribute__((sda));
 extern short D_L08_00162350 __attribute__((sda));
@@ -175,14 +174,7 @@ extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float ground_particle_scatter_spawn_vector_y_bias __asm__("D_L08_00162364");
 extern float D_L08_00160260 __attribute__((sda));
-extern float ground_particle_scatter_minimum_z_scale __asm__("D_L08_00162340") __attribute__((sda));
-extern float ground_particle_scatter_reference_height_offset __asm__("D_L08_00162344") __attribute__((sda));
-extern float ground_particle_scatter_xy_offset_random_range __asm__("D_L08_00162348") __attribute__((sda));
-extern float ground_particle_scatter_minimum_z_scale_override __asm__("D_L08_00162354") __attribute__((sda));
-extern int ground_particle_scatter_distant_spawn_argument __asm__("D_L08_00162358") __attribute__((sda));
-extern float ground_particle_scatter_ground_height_floor_offset __asm__("D_L08_0016235C") __attribute__((sda));
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
@@ -470,7 +462,6 @@ extern float frame_delta_time __asm__("D_0015ED7C");
 extern int FUN_L00_00263468();
 extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
 extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
-extern float smoothed_below_reference_ground_fraction __asm__("D_L08_001625E8") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __asm__("FUN_00214890");
 extern char D_0013E550[];
 extern char D_0013E5E0[];

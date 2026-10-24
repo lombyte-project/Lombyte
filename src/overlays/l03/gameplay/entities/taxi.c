@@ -42,11 +42,7 @@ void request_taxi_return_help_message(void *taxi_moby, int mode) {
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
-extern float taxi_bobbing_amplitude __asm__("D_L03_00161AF0") __attribute__((sda));
-extern float taxi_bobbing_phase_rate_degrees __asm__("D_L03_00161AF4") __attribute__((sda));
-extern float taxi_rocking_amplitude __asm__("D_L03_00161AF8") __attribute__((sda));
-extern float taxi_rocking_first_phase_rate_degrees __asm__("D_L03_00161AFC") __attribute__((sda));
-extern float taxi_rocking_second_phase_rate_degrees __asm__("D_L03_00161B00") __attribute__((sda));
+#include "rnc/overlay/l03/gameplay/entities/taxi_globals.h"
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
@@ -141,11 +137,6 @@ typedef struct {
 } TrooperVars;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern s32 mine_layer_fire_interval_frames __asm__("D_L03_00161918") __attribute__((sda));
-extern f32 mine_layer_patrol_animation_speed __asm__("D_L03_0016191C") __attribute__((sda));
-extern f32 mine_layer_initial_scale_multiplier __asm__("D_L03_00161920") __attribute__((sda));
-extern f32 mine_layer_projectile_lateral_spread_speed __asm__("D_L03_00161910") __attribute__((sda));
-extern f32 mine_layer_projectile_vertical_launch_speed __asm__("D_L03_00161914") __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern void select_moby_target_with_hero_fallback(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
@@ -359,8 +350,6 @@ typedef struct {
     struct Moby *source;  /* 0x20: moby that dealt it */
 } TrooperHit;
 
-extern f32 mine_layer_lethal_knockback_speed_scale __asm__("D_L03_001618F8") __attribute__((sda));
-extern f32 mine_layer_nonlethal_knockback_speed_scale __asm__("D_L03_001618FC") __attribute__((sda));
 extern f32 D_L03_00161900 __attribute__((sda));
 extern f32 D_L03_00161904 __attribute__((sda));
 extern f32 D_L03_00161908 __attribute__((sda));
@@ -752,10 +741,6 @@ typedef struct {
 } L03LevelState;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern s32 taxi_path_point_debug_draw_enabled __asm__("D_L03_00161B04") __attribute__((sda));
-extern f32 rail_flyer_max_speed __asm__("D_L03_00161B08") __attribute__((sda));
-extern f32 rail_flyer_pitch_acceleration_degrees __asm__("D_L03_00161B10") __attribute__((sda));
-extern f32 rail_flyer_roll_acceleration_degrees __asm__("D_L03_00161B18") __attribute__((sda));
 extern L03LevelState D_L03_001BB330;
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
@@ -938,8 +923,6 @@ typedef struct {
 
 extern struct RailPath *D_L03_001B05B0[];
 extern u8 D_0013E550[];
-extern f32 rail_flyer_speed_acceleration __asm__("D_L03_00161B0C") __attribute__((sda));
-extern f32 rail_flyer_yaw_acceleration_degrees __asm__("D_L03_00161B14") __attribute__((sda));
 extern f32 D_L03_00161B1C __attribute__((sda));
 extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1118,7 +1101,6 @@ extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern float rocket_trail_offset_z_scale __asm__("D_L03_00161B28") __attribute__((sda));
 extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
@@ -1214,10 +1196,8 @@ typedef struct {
 
 extern int D_L03_0015F5C4;
 #include "rnc/gameplay/state/options.h"
-extern float helga_big_head_cutscene_adjustment __asm__("D_L03_0015F5A0");
 extern G_2da710 D_L03_0016C960;
 extern char D_L03_0017C540[];
-extern float helga_big_head_attachment_uniform_value __asm__("D_L03_00161BB4") __attribute__((sda));
 extern void attach_2da710(void *, int, void *) __asm__("FUN_0020cb10");
 
 /* During the cutscene, nudges a camera value at two time windows and attaches
@@ -1519,7 +1499,6 @@ extern float itof_2db020(int) __asm__("FUN_001fa6c0");
 extern void kill_2db020(char *) __asm__("FUN_0020c828");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-extern float path_mover_distance_step __asm__("D_L03_00161BC0");
 /* Moves the moby along its path: advances the distance, places it on the
  * current segment, and dies at the end of the path. */
 void update_path_mover(struct Moby *path_moby) __asm__("FUN_L03_002db020");

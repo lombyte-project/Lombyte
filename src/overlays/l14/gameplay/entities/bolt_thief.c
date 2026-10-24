@@ -42,11 +42,7 @@ typedef struct Part_2FF358 {
 } Part_2FF358;
 
 extern float D_L14_0015F580;
-extern float bolt_thief_puff_initial_right_offset __asm__("D_L14_00161F90") __attribute__((sda));
-extern float bolt_thief_puff_forward_offset __asm__("D_L14_00161F94") __attribute__((sda));
-extern float bolt_thief_puff_up_offset __asm__("D_L14_00161F98") __attribute__((sda));
-extern float bolt_thief_puff_middle_right_offset_delta __asm__("D_L14_00161F9C") __attribute__((sda));
-extern float bolt_thief_puff_final_right_offset __asm__("D_L14_00161FA0") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/bolt_thief_globals.h"
 int D_L14_00161FA4 = 0x7f204080;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -235,8 +231,6 @@ extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 
 extern int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
-extern float bolt_thief_path_spring_gain __asm__("D_L14_00161FBC") __attribute__((sda));
-extern float bolt_thief_path_spring_damping __asm__("D_L14_00161FC0") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -432,7 +426,6 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
-extern float bolt_thief_default_path_sample_rate __asm__("D_L14_00161FB8") __attribute__((sda));
 extern char *D_L14_001B0BB0[];
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);

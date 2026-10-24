@@ -439,7 +439,7 @@ typedef struct {
 } LockOn_c618;
 extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
-extern f32 blarg_heavy_interceptor_culling_sphere_radius __asm__("D_L14_0016139C") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_globals.h"
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
@@ -919,7 +919,6 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 }
 /* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
  * vertices through it and draws them, then flips the matrix and draws the back face. */
-extern s32 blarg_heavy_interceptor_light_ring_vertex_count __asm__("D_L14_00161418") __attribute__((sda));
 extern float D_L14_001D7A60[][3];
 extern s32 D_L14_001D80C8[];
 extern char D_L14_001D7E38[];
@@ -1014,18 +1013,6 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2add48;
 
-extern float blarg_heavy_interceptor_spinning_beam_initial_offset_scale __asm__("D_L14_00161434") __attribute__((sda));
-extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair __asm__("D_L14_00161438") __attribute__((sda));
-extern float blarg_heavy_interceptor_spinning_beam_initial_quad_scale __asm__("D_L14_0016143C") __attribute__((sda));
-extern float blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair __asm__("D_L14_00161440") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_initial_red __asm__("D_L14_00161444") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_initial_green __asm__("D_L14_00161448") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_initial_blue __asm__("D_L14_0016144C") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_initial_alpha __asm__("D_L14_00161450") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_red_decrement_per_pair __asm__("D_L14_00161454") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair __asm__("D_L14_00161458") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair __asm__("D_L14_0016145C") __attribute__((sda));
-extern int blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair __asm__("D_L14_00161460") __attribute__((sda));
 extern char D_L14_001674C0_b[] __asm__("D_L14_001674C0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1159,8 +1146,6 @@ extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
 
-extern float blarg_heavy_interceptor_glow_quad_scale __asm__("D_L14_00161474") __attribute__((sda));
-extern float blarg_heavy_interceptor_glow_position_offset_scale __asm__("D_L14_00161478") __attribute__((sda));
 void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) {
     char *d = (char *)m->pvars;
     float glow_quad_transform[4][4];
@@ -1445,16 +1430,6 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
                        *(float *)&D_L14_001613FC, 0.0f);
 }
-extern f32 blarg_heavy_interceptor_vertical_oscillation_amplitude __asm__("D_L14_001613A8") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_vertical_oscillation_phase_increment __asm__("D_L14_001613AC") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_rotation_oscillation_amplitude __asm__("D_L14_001613B0") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_rotation_oscillation_first_phase_increment __asm__("D_L14_001613B4") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_rotation_oscillation_second_phase_increment __asm__("D_L14_001613B8") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_patrol_heading_change_interval_frames __asm__("D_L14_001613BC") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_patrol_heading_offset_magnitude __asm__("D_L14_001613C0") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_patrol_heading_error_gain __asm__("D_L14_001613C4") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_patrol_heading_damping_coefficient __asm__("D_L14_001613C8") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_patrol_heading_snap_threshold_scale __asm__("D_L14_001613CC") __attribute__((sda));
 extern void update_moby_vertical_oscillation(f32, f32, u8 *, f32 *, f32 *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L00_00262b80");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
@@ -2217,7 +2192,6 @@ extern char D_L14_001FBF48[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
-extern float minibomber_bomb_gravity __asm__("D_L14_00161568") __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
 extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
@@ -3003,9 +2977,6 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
 /* Flying debris: moves by its velocity under drag and gravity; while it is airborne it tumbles and trails
  * smoke, sparks and a light. When it hits the world or reaches the hero it explodes; once its timer runs out
  * or it leaves the level box it is removed. */
-extern f32 flying_debris_gravity __asm__("D_L14_001615D0") __attribute__((sda));
-extern f32 flying_debris_velocity_retention_factor __asm__("D_L14_001615D4") __attribute__((sda));
-extern f32 flying_debris_horizontal_drag_speed_threshold __asm__("D_L14_001615D8") __attribute__((sda));
 extern char D_L14_001809C0[];
 extern int tick_countdown_16_d(void *) __asm__("FUN_001f9770");
 extern void add_d(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3219,7 +3190,6 @@ struct L14RaceState {
 
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
-extern s32 level14_racer_start_interpolation_duration_frames __asm__("D_L14_00161A2C") __attribute__((sda));
 extern s32 D_L14_00161A34 __attribute__((sda));
 extern s32 D_L14_00161A5C __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");

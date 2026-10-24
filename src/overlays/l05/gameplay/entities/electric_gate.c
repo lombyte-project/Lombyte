@@ -752,9 +752,7 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
 extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern float D_L05_00161DD8 __attribute__((sda));
-extern float drain_cover_tilt_acceleration __asm__("D_L05_00161DDC") __attribute__((sda));
-extern float drain_cover_tilt_deceleration __asm__("D_L05_00161DE0") __attribute__((sda));
-extern float drain_cover_tilt_max_speed __asm__("D_L05_00161DE4") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/electric_gate_globals.h"
 extern float approach_angle(float *, float, float *, float, float,
                             float) __asm__("FUN_L00_0025be00");
 
@@ -921,12 +919,6 @@ struct GateVars {
     f32 swingSpeed;
 };
 
-extern float gate_rise_acceleration __asm__("D_L05_00161E80") __attribute__((sda));
-extern float gate_rise_deceleration __asm__("D_L05_00161E84") __attribute__((sda));
-extern float gate_rise_max_speed __asm__("D_L05_00161E88") __attribute__((sda));
-extern float gate_swing_acceleration __asm__("D_L05_00161E8C") __attribute__((sda));
-extern float gate_swing_deceleration __asm__("D_L05_00161E90") __attribute__((sda));
-extern float gate_swing_max_speed __asm__("D_L05_00161E94") __attribute__((sda));
 extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -1190,7 +1182,6 @@ typedef struct {
 
 extern LiftVoicePool voice_pool __asm__("D_0013E550");
 extern u16 D_0014162A __attribute__((section(".data")));
-extern f32 elevator_camera_transition_fade __asm__("D_L05_0015F3FC");
 extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -2137,8 +2128,6 @@ extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int find_318a68(void *, int) __asm__("FUN_00214720");
 extern float sin_318a68(float) __asm__("FUN_001f9de0");
 
-extern int hero_inside_clip_volume __asm__("D_L05_001612DC");
-extern float hero_clip_volume_output_w __asm__("D_L05_001612EC");
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
 void update_hero_clip_volume_outputs(char *moby) __asm__("FUN_L05_00318a68");

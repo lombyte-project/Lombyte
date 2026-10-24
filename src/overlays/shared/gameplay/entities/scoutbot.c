@@ -610,8 +610,7 @@ void FUN_001f9d20_002d4108(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
-extern float scoutbot_glow_position_offset_scale __asm__("D_L08_00161898") __attribute__((sda));
-extern float scoutbot_glow_quad_vertex_scale __asm__("D_L08_0016189C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/scoutbot_globals.h"
 void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -684,13 +683,10 @@ extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
-extern float moby_creation_default_timer_frames __asm__("D_L08_00161CD8") __attribute__((sda));
-extern float moby_creation_particle_count_limit __asm__("D_L08_00161CE0") __attribute__((sda));
 extern int D_L08_00161CF0 __attribute__((sda));
 extern int D_L08_00161CF4 __attribute__((sda));
 extern int D_L08_00161CF8 __attribute__((sda));
 extern int D_L08_00161CFC __attribute__((sda));
-extern float moby_creation_particle_spread_speed_base __asm__("D_L08_00161D04") __attribute__((sda));
 extern float D_L08_00161D14 __attribute__((sda));
 extern float D_L08_00161D18 __attribute__((sda));
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
@@ -784,11 +780,8 @@ extern void scale_vector_in_place_002e8210(float, void *) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int, int, int,
                                          float, float, float, int, float, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
-extern float homing_projectile_trail_particle_count_limit __asm__("D_L08_00161CDC") __attribute__((sda));
-extern float homing_projectile_spin_rate_degrees __asm__("D_L08_00161CE4") __attribute__((sda));
 extern int D_L08_00161CE8 __attribute__((sda));
 extern int D_L08_00161CEC __attribute__((sda));
-extern float homing_projectile_trail_spread_speed_limit __asm__("D_L08_00161D00") __attribute__((sda));
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
 extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
@@ -1054,18 +1047,11 @@ extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __
 
 extern s32 D_L08_00161F74 __attribute__((sda));
 extern s32 D_L08_00161F78 __attribute__((sda));
-extern f32 spark_emitter_default_primary_z_increment_base __asm__("D_L08_00161F7C") __attribute__((sda));
-extern f32 spark_emitter_default_primary_magnitude_base __asm__("D_L08_00161F80") __attribute__((sda));
-extern f32 spark_emitter_default_secondary_z_increment_base __asm__("D_L08_00161F84") __attribute__((sda));
-extern f32 spark_emitter_default_secondary_magnitude_base __asm__("D_L08_00161F88") __attribute__((sda));
 extern s32 D_L08_00161F8C __attribute__((sda));
 extern s32 D_L08_00161F90 __attribute__((sda));
 extern s32 D_L08_00161F94 __attribute__((sda));
-extern s32 spark_emitter_default_timer_reset __asm__("D_L08_00161F98") __attribute__((sda));
 extern f32 D_L08_00161F9C __attribute__((sda));
 extern f32 D_L08_00161FA0 __attribute__((sda));
-extern f32 spark_emitter_default_primary_spread_limit __asm__("D_L08_00161FA4") __attribute__((sda));
-extern f32 spark_emitter_default_secondary_spread_limit __asm__("D_L08_00161FA8") __attribute__((sda));
 
 void update_spark_emitter(char *moby) __asm__("FUN_L08_002f5830");
 

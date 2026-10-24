@@ -3291,11 +3291,7 @@ typedef struct {
 } HoverMoby;
 
 
-extern f32 water_lily_spring_velocity_adjustment_scale __asm__("D_L01_00161BF0") __attribute__((sda));
-extern f32 water_lily_spring_damping __asm__("D_L01_00161BF4") __attribute__((sda));
-extern f32 water_lily_hero_separation_radius __asm__("D_L01_00161BF8") __attribute__((sda));
-extern f32 water_lily_max_horizontal_speed __asm__("D_L01_00161BFC") __attribute__((sda));
-extern f32 water_lily_collision_radius __asm__("D_L01_00161C00") __attribute__((sda));
+#include "rnc/overlay/l01/gameplay/entities/birdbot_globals.h"
 extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f99c0(f32);
@@ -3486,11 +3482,6 @@ typedef struct {
 } Obj;
 
 extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
-extern f32 falling_rock_camera_rotation_angle __asm__("D_L01_00161C28") __attribute__((sda));
-extern f32 falling_rock_camera_distance __asm__("D_L01_00161C2C") __attribute__((sda));
-extern f32 falling_rock_camera_height __asm__("D_L01_00161C30") __attribute__((sda));
-extern f32 falling_rock_camera_offset_scale __asm__("D_L01_00161C34") __attribute__((sda));
-extern f32 falling_rock_camera_override_companion_value __asm__("D_L01_00161C38") __attribute__((sda));
 
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");

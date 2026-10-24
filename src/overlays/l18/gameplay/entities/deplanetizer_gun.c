@@ -43,19 +43,13 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float
     __asm__("FUN_L00_0026d000");
 extern struct Moby *D_L18_0015FFE4;
 extern struct Moby *D_L18_00162528;
-extern float deplanetizer_camera_quad_scale_ramp_start_value __asm__("D_L18_00162490") __attribute__((sda));
-extern float deplanetizer_camera_quad_scale_ramp_end_value __asm__("D_L18_00162494") __attribute__((sda));
-extern int deplanetizer_camera_quad_scale_ramp_end_frame __asm__("D_L18_0016249C") __attribute__((sda));
-extern int deplanetizer_camera_quad_end_frame __asm__("D_L18_001624A0") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_globals.h"
 extern int D_L18_001624A4 __attribute__((sda));
 extern int D_L18_001624A8 __attribute__((sda));
 extern int D_L18_001624AC __attribute__((sda));
 extern int D_L18_001624B0 __attribute__((sda));
 extern int D_L18_001624B4 __attribute__((sda));
 extern int D_L18_001624B8 __attribute__((sda));
-extern int deplanetizer_glow_alpha_ramp_end_frame __asm__("D_L18_001624C0") __attribute__((sda));
-extern int deplanetizer_three_quad_scale_ramp_start_frame __asm__("D_L18_001624C4") __attribute__((sda));
-extern int deplanetizer_three_quad_scale_ramp_end_frame __asm__("D_L18_001624C8") __attribute__((sda));
 extern float D_L18_001624D0 __attribute__((sda));
 /* First component of the vector passed at gp - 0x4720. */
 extern float D_L18_001624E0 __attribute__((sda));
@@ -76,11 +70,6 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void rotate_vector_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
-extern int deplanetizer_camera_quad_start_frame __asm__("D_L18_00162498") __attribute__((sda));
-extern int deplanetizer_glow_alpha_ramp_start_frame __asm__("D_L18_001624BC") __attribute__((sda));
-extern int deplanetizer_glow_quad_alpha __asm__("D_L18_00162524");
-extern float deplanetizer_camera_quad_base_scale __asm__("D_L18_00162520");
-extern float deplanetizer_three_quad_local_x_scale __asm__("D_L18_0016252C");
 extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
@@ -385,8 +374,6 @@ extern float D_L18_00162550;
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
 extern float D_L18_0016255C;
-extern int deplanetizer_camera_quad_first_color __asm__("D_L18_001624F8") __attribute__((sda));
-extern int deplanetizer_camera_quad_smaller_color __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
     {0.0f, -1.0f, 1.0f, 1.0f},
     {0.0f, -1.0f, -1.0f, 1.0f},
@@ -535,14 +522,6 @@ extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern int deplanetizer_glow_local_offset_x __asm__("D_L18_00162560");
-extern int deplanetizer_glow_local_offset_y __asm__("D_L18_00162564");
-extern float deplanetizer_glow_local_offset_z __asm__("D_L18_00162568");
-extern float deplanetizer_glow_local_offset_w __asm__("D_L18_0016256C");
-extern int deplanetizer_glow_first_quad_base_tint __asm__("D_L18_00162504") __attribute__((sda));
-extern float deplanetizer_glow_first_quad_scale __asm__("D_L18_00162508") __attribute__((sda));
-extern float deplanetizer_glow_second_quad_scale __asm__("D_L18_0016250C") __attribute__((sda));
-extern int deplanetizer_glow_second_quad_base_tint __asm__("D_L18_00162510") __attribute__((sda));
 void draw_moby_two_tint_glow_quads(struct Moby *m) {
     Pk_9c20 pk;
     float quad_transform[4][4];
@@ -602,9 +581,6 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     draw_9c20(&pk, 0, 0);
 }
 
-extern float deplanetizer_first_quad_local_z_scale __asm__("D_L18_00162514") __attribute__((sda));
-extern float deplanetizer_second_quad_local_z_scale __asm__("D_L18_00162518") __attribute__((sda));
-extern float deplanetizer_third_quad_local_z_scale __asm__("D_L18_0016251C") __attribute__((sda));
 extern float D_L18_001DFBD0[4][4];
 void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     Pk_9c20 pk;
@@ -1215,12 +1191,7 @@ typedef struct {
     float spin;                /* 0x1F8 */
 } SentryVars_c100;
 
-extern int gadgebot_joint_glows_last_queued_frame __asm__("D_L18_00162604") __attribute__((sda));
-extern int gadgebot_glow_tint_start __asm__("D_L18_0016260C") __attribute__((sda));
-extern int gadgebot_glow_tint_end __asm__("D_L18_00162610") __attribute__((sda));
 extern float D_L18_001625FC __attribute__((sda));
-extern float gadgebot_glow_default_phase_speed_degrees_per_second __asm__("D_L18_00162614") __attribute__((sda));
-extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second __asm__("D_L18_00162618") __attribute__((sda));
 extern float D_L18_0016261C __attribute__((sda));
 extern float D_L18_00162620 __attribute__((sda));
 extern float D_L18_00162624 __attribute__((sda));
@@ -1451,16 +1422,6 @@ extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
 extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern int gadgebot_launch_glow_blend_minuend_selector __asm__("D_L18_0016262C") __attribute__((sda));
-extern int gadgebot_launch_glow_blend_subtrahend_selector __asm__("D_L18_00162630") __attribute__((sda));
-extern int gadgebot_launch_glow_blend_alpha_factor_selector __asm__("D_L18_00162634") __attribute__((sda));
-extern int gadgebot_launch_glow_blend_addend_selector __asm__("D_L18_00162638") __attribute__((sda));
-extern int gadgebot_launch_glow_tint_start __asm__("D_L18_0016263C") __attribute__((sda));
-extern int gadgebot_launch_glow_tint_end __asm__("D_L18_00162640") __attribute__((sda));
-extern int gadgebot_launch_glow_texture_index __asm__("D_L18_00162644") __attribute__((sda));
-extern float gadgebot_launch_glow_z_offset __asm__("D_L18_00162648") __attribute__((sda));
-extern float gadgebot_launch_glow_vertical_scale_adjustment __asm__("D_L18_0016264C") __attribute__((sda));
-extern float gadgebot_launch_glow_horizontal_scale_adjustment __asm__("D_L18_00162650") __attribute__((sda));
 extern float D_L18_001EFCD0[4][2];
 void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     char *d = (char *)m->pvars;

@@ -578,7 +578,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *pos, void *
 }
 extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
-extern s32 timed_hud_visibility_gate __asm__("D_L00_00161E08");
+#include "rnc/overlay/shared/gameplay/entities/002630b8_globals.h"
 extern s32 D_L00_00161E04;
 void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");

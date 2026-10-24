@@ -400,7 +400,7 @@ void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
 void FUN_001fa070_28b1a0(void *, void *) __asm__("FUN_001fa070");
 void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 
-extern float sky_shell_rotation_phase_step __asm__("D_L00_001604C0") __attribute__((sda));
+#include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated_globals.h"
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
 void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 

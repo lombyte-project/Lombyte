@@ -97,16 +97,13 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_L02_00161F7C __attribute__((sda));
 extern float D_L02_00161F80 __attribute__((sda));
-extern int level_2_ship_removal_count __asm__("D_0015EDF4");
-extern int level_9_ship_removal_count __asm__("D_0015EDFC");
+#include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
-extern float background_ship_1_path_travel_speed __asm__("D_L02_00161F64") __attribute__((sda));
-extern float background_ship_1_color_phase_rate_degrees __asm__("D_L02_00161F70") __attribute__((sda));
 extern short D_L02_00161F74 __attribute__((sda));
 extern short D_L02_00161F78 __attribute__((sda));
 extern unsigned char D_0013D408[];
@@ -364,13 +361,9 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 
-extern float background_ship_2_path_travel_speed __asm__("D_L02_00161FC0") __attribute__((sda));
 extern char D_L02_001FADB0[];
 extern char D_L02_001FADD0[];
 extern float D_0015ED60_f __asm__("D_0015ED60");
-extern float background_ship_2_color_phase_rate_degrees __asm__("D_L02_00161FC4") __attribute__((sda));
-extern int background_ship_2_color_tween_start __asm__("D_L02_00161FC8") __attribute__((sda));
-extern int background_ship_2_color_tween_end __asm__("D_L02_00161FCC") __attribute__((sda));
 extern float D_L02_00161FD0 __attribute__((sda));
 extern float D_L02_00161FD4 __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");

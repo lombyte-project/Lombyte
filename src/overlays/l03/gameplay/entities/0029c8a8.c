@@ -57,11 +57,7 @@ int is_moby_class_23e_in_state_9(struct Moby *moby) {
 }
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
 
-extern float moby_vertical_oscillation_amplitude __asm__("D_L03_00161BD8") __attribute__((sda));
-extern float moby_vertical_oscillation_phase_rate __asm__("D_L03_00161BDC") __attribute__((sda));
-extern float moby_rotation_oscillation_amplitude __asm__("D_L03_00161BE0") __attribute__((sda));
-extern float moby_rotation_oscillation_first_phase_rate __asm__("D_L03_00161BE4") __attribute__((sda));
-extern float moby_rotation_oscillation_second_phase_rate __asm__("D_L03_00161BE8") __attribute__((sda));
+#include "rnc/overlay/l03/gameplay/entities/0029c8a8_globals.h"
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 

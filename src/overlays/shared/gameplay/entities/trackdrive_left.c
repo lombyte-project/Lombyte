@@ -5,10 +5,7 @@
 #include "asm.h"
 
 extern u8 D_L02_001CB9C0[];
-extern s32 scaled_table_header_leading_word __asm__("D_L02_001612A0") __attribute__((sda));
-extern s32 scaled_table_header_second_word __asm__("D_L02_001612A4");
-extern s32 scaled_table_header_third_word __asm__("D_L02_001612A8");
-extern s32 scaled_table_header_final_word __asm__("D_L02_001612AC");
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
 
 extern float D_L02_001CB500[];
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
@@ -87,11 +84,6 @@ extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char D_L02_0016D040[];
-extern int textured_grid_fog_source_mode __asm__("D_L02_0015F458");
-extern float textured_grid_saved_fog_near_distance __asm__("D_L02_001612F8");
-extern float textured_grid_saved_fog_far_distance __asm__("D_L02_001612FC");
-extern float textured_grid_saved_fog_near_intensity __asm__("D_L02_00161300");
-extern float textured_grid_saved_fog_far_intensity __asm__("D_L02_00161304");
 extern char D_L02_001673C0[];
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
@@ -721,10 +713,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern int tresspasser_ring_arc_first_vertex_uv __asm__("D_L02_00161B0C") __attribute__((sda));
-extern int tresspasser_ring_arc_second_vertex_uv __asm__("D_L02_00161B10") __attribute__((sda));
-extern int tresspasser_ring_arc_third_vertex_uv __asm__("D_L02_00161B14") __attribute__((sda));
-extern int tresspasser_ring_arc_fourth_vertex_uv __asm__("D_L02_00161B18") __attribute__((sda));
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -775,20 +763,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L02_001D33B0[4][4];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern int tresspasser_arrow_newly_reached_first_vertex_uv __asm__("D_L02_00161ABC") __attribute__((sda));
-extern int tresspasser_arrow_newly_reached_second_vertex_uv __asm__("D_L02_00161AC0") __attribute__((sda));
-extern int tresspasser_arrow_newly_reached_third_vertex_uv __asm__("D_L02_00161AC4") __attribute__((sda));
-extern int tresspasser_arrow_newly_reached_fourth_vertex_uv __asm__("D_L02_00161AC8") __attribute__((sda));
-extern int tresspasser_arrow_occupied_first_vertex_uv __asm__("D_L02_00161ACC") __attribute__((sda));
-extern int tresspasser_arrow_occupied_second_vertex_uv __asm__("D_L02_00161AD0") __attribute__((sda));
-extern int tresspasser_arrow_occupied_third_vertex_uv __asm__("D_L02_00161AD4") __attribute__((sda));
-extern int tresspasser_arrow_occupied_fourth_vertex_uv __asm__("D_L02_00161AD8") __attribute__((sda));
-extern int tresspasser_arrow_lit_first_vertex_uv __asm__("D_L02_00161ADC") __attribute__((sda));
-extern int tresspasser_arrow_lit_second_vertex_uv __asm__("D_L02_00161AE0") __attribute__((sda));
-extern int tresspasser_arrow_lit_third_vertex_uv __asm__("D_L02_00161AE4") __attribute__((sda));
-extern int tresspasser_arrow_lit_fourth_vertex_uv __asm__("D_L02_00161AE8") __attribute__((sda));
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
-extern int tresspasser_arrow_vertex_color __asm__("D_L02_00161B9C") __attribute__((sda));
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
@@ -1003,11 +978,6 @@ extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 D_L02_001D3310[];
-extern int tresspasser_textured_quad_color __asm__("D_L02_00161B94") __attribute__((sda));
-extern int tresspasser_quad_first_vertex_uv __asm__("D_L02_00161AAC") __attribute__((sda));
-extern int tresspasser_quad_second_vertex_uv __asm__("D_L02_00161AB0") __attribute__((sda));
-extern int tresspasser_quad_third_vertex_uv __asm__("D_L02_00161AB4") __attribute__((sda));
-extern int tresspasser_quad_fourth_vertex_uv __asm__("D_L02_00161AB8") __attribute__((sda));
 void draw_tresspasser_puzzle_textured_quads(void) __asm__("FUN_L02_002dae88");
 
 void draw_tresspasser_puzzle_textured_quads(void) {
@@ -1027,9 +997,6 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     }
 }
 
-extern int escalator_direction_timer_frames __asm__("D_L02_00161C18") __attribute__((sda));
-extern float escalator_target_speed __asm__("D_L02_00161C14") __attribute__((sda));
-extern float escalator_acceleration __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void vec_clear_2dc6b0(void *) __asm__("FUN_001f99f8");
 extern int scale_game_frames_2dc6b0(int) __asm__("FUN_001f96f8");
@@ -1140,9 +1107,6 @@ extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int approach_angle() __asm__("FUN_L00_0025be00");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern float versatarget_particle_base_lifetime __asm__("D_L02_00161CB0") __attribute__((sda));
-extern int versatarget_particle_color __asm__("D_L02_00161CB4") __attribute__((sda));
-extern float versatarget_particle_scale __asm__("D_L02_00161CB8") __attribute__((sda));
 extern float D_L02_00161CBC;
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");

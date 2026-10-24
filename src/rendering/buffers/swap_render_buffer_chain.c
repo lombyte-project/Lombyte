@@ -2,7 +2,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
-extern s32 previous_render_packet_cursor __asm__("D_00160F04");
+#include "rnc/rendering/buffers/swap_render_buffer_chain_globals.h"
 void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 
 void swap_render_buffer_chain(void) {

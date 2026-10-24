@@ -11,7 +11,7 @@ struct FogMode {
 
 extern struct FogMode view_proj_clip __asm__("D_00187000");
 
-extern u8 water_fog_color_red __asm__("D_001610C4");
+#include "rnc/rendering/update_fog_globals.h"
 extern f32 water_fog_near_dist __asm__("D_001610C8");
 extern f32 water_fog_far_dist __asm__("D_001610CC");
 extern f32 water_fog_near_intensity __asm__("D_001610D0");
@@ -21,8 +21,6 @@ extern void update_view_context(void) __asm__("func_001F2D98");
 
 void update_fog(void) __asm__("FUN_001f2588");
 
-extern u8 water_fog_color_green __asm__("D_001610C5");
-extern u8 water_fog_color_blue __asm__("D_001610C6");
 void update_fog(void) {
     if (view_proj_clip.use_level_fog != 0) {
         view_context.fog_r = water_fog_color_red;

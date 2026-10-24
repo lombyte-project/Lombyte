@@ -82,10 +82,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 extern char D_L11_0017C960[];
 extern char D_L11_0017C920[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_SHALLOW_WATER_RUN = 0x73,
-        HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY = 0x76
-    };
     int old2088;
     char *moby;
     int old20A7;

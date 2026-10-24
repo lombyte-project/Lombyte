@@ -697,7 +697,7 @@ void liftcar_platform_update(struct Moby *moby) {
     update_entity_matrix(data + 0x60, &delta, &old_rot, &moby->rot);
 }
 
-extern int aridia_ocean_clip_culling_override __asm__("D_L02_0015F608");
+#include "rnc/overlay/l02/gameplay/entities/skids_agent_globals.h"
 extern char D_L02_001673C0[];
 extern char D_L02_001F3C00[];
 extern char D_L02_001F3C60[];

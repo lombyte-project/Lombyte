@@ -167,8 +167,7 @@ typedef struct {
 extern GlowVec_bfa8 D_L01_0020B9D0[4];
 extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
-extern f32 moby_quad_c0_offset_scale __asm__("D_L01_00162064") __attribute__((sda));
-extern f32 moby_quad_e0_offset_scale __asm__("D_L01_0016206C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sandmouse_globals.h"
 extern s64 get_effect_texture_bfa8(s32) __asm__("FUN_001f44b8");
 extern void add_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_bfa8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -503,11 +502,6 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
-extern float sandmouse_projectile_target_range __asm__("D_L01_00162084") __attribute__((sda));
-extern float sandmouse_projectile_target_yaw_limit_degrees __asm__("D_L01_00162088") __attribute__((sda));
-extern float sandmouse_projectile_target_pitch_limit_degrees __asm__("D_L01_0016208C") __attribute__((sda));
-extern float sandmouse_projectile_spawn_offset_distance __asm__("D_L01_00162090") __attribute__((sda));
-extern float sandmouse_projectile_fallback_aim_height __asm__("D_L01_00162094") __attribute__((sda));
 extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 
 typedef union {
@@ -595,13 +589,7 @@ struct HoverTuning {
 
 extern struct HoverTuning D_L01_001DEB38;
 extern f32 D_L01_001DEB4C NOT_SDA;
-extern f32 sandmouse_target_yaw_spring_strength_degrees __asm__("D_L01_001620C4") __attribute__((sda));
-extern f32 sandmouse_target_yaw_damping_degrees __asm__("D_L01_001620C8") __attribute__((sda));
-extern f32 sandmouse_target_yaw_turn_limit_degrees __asm__("D_L01_001620CC") __attribute__((sda));
 extern f32 D_L01_001620D0 __attribute__((sda));
-extern f32 sandmouse_hover_velocity_to_rotation_y_scale __asm__("D_L01_001620D4") __attribute__((sda));
-extern f32 sandmouse_hover_rotation_x_blend_factor __asm__("D_L01_001620D8") __attribute__((sda));
-extern f32 sandmouse_hover_rotation_y_blend_factor __asm__("D_L01_001620DC") __attribute__((sda));
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");

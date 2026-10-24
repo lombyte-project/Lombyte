@@ -85,7 +85,7 @@ void initialize_plasmabot_path_state(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
 
 
-extern float plasmabot_planar_velocity_base_scale __asm__("D_L14_001614DC") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/plasmabot_globals.h"
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 
 void scale_and_apply_plasmabot_planar_velocity(char *moby) {
@@ -182,8 +182,6 @@ void initialize_moby_path_state(char *moby) {
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-extern float linked_moby_initial_offset_length __asm__("D_L14_00161FC4") __attribute__((sda));
-extern float linked_moby_additional_offset_length __asm__("D_L14_00161FC8") __attribute__((sda));
 void update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
 
 void update_linked_moby_position(char *moby) {
@@ -278,7 +276,6 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L14_001614E4_gp __asm__("D_L14_001614E4") __attribute__((sda));
 extern float D_L14_001614E8_gp __asm__("D_L14_001614E8") __attribute__((sda));
 extern int D_L14_001614EC_gp __asm__("D_L14_001614EC") __attribute__((sda));
-extern int plasmabot_path_traversal_delay_frames __asm__("D_L14_001614F0");
 extern float D_L14_001614F4_gp __asm__("D_L14_001614F4") __attribute__((sda));
 extern u8 D_L14_00174560[];
 extern void DebugPrint(char *, ...);
@@ -969,7 +966,6 @@ extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32_2b2ed8(f32) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
-extern f32 plasmabot_base_target_range __asm__("D_L14_001614C4") __attribute__((sda));
 void update_plasmabot_target_range(struct Moby *moby) __asm__("FUN_L14_002b2ed8");
 
 void update_plasmabot_target_range(struct Moby *moby) {
@@ -1000,7 +996,6 @@ extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) _
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern float plasmabot_stagger_motion_z_scale __asm__("D_L14_001614C8") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -1103,7 +1098,6 @@ extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-extern float plasmabot_path_traversal_speed __asm__("D_L14_001614D8") __attribute__((sda));
 int follow_plasmabot_path(char *moby) {
     float path_target_position[4];
     float pre_spring_position[4];
@@ -1222,10 +1216,6 @@ typedef struct {
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001D8890[4][4];
-extern float plasmabot_glow_quad_scale __asm__("D_L14_001614F8") __attribute__((sda));
-extern float plasmabot_glow_camera_pull_distance_limit __asm__("D_L14_001614FC") __attribute__((sda));
-extern float plasmabot_glow_camera_clearance_distance __asm__("D_L14_00161500") __attribute__((sda));
-extern u32 plasmabot_glow_vertex_color __asm__("D_L14_00161504") __attribute__((sda));
 extern float vector_length_xyz(void *a);
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
@@ -1496,10 +1486,6 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern float plasmabot_debris_launch_magnitude_range_start __asm__("D_L14_00161B08") __attribute__((sda));
-extern float plasmabot_debris_launch_magnitude_range_end __asm__("D_L14_00161B0C") __attribute__((sda));
-extern float plasmabot_debris_z_velocity_range_start __asm__("D_L14_00161B10") __attribute__((sda));
-extern float plasmabot_debris_z_velocity_range_end __asm__("D_L14_00161B14") __attribute__((sda));
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     unsigned char *spawned_moby = func_0020D348_m(0x145);
     char *spawned_vars;
@@ -1572,9 +1558,6 @@ typedef struct {
     f32 velocity[3];
 } Data_dfd10;
 
-extern f32 ballistic_debris_gravity __asm__("D_L14_00161B40") __attribute__((sda));
-extern f32 ballistic_debris_velocity_base_scale __asm__("D_L14_00161B44") __attribute__((sda));
-extern f32 ballistic_debris_planar_damping_speed_threshold __asm__("D_L14_00161B48") __attribute__((sda));
 /* A piece of debris: follows its race path until its timer runs out, then flies, spins and falls until it hits something or leaves the map. */
 void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
 
@@ -1649,10 +1632,6 @@ extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, fl
 extern float D_0015ED60;
 extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
 
-extern float ballistic_debris_launch_magnitude_range_start __asm__("D_L14_00161B30") __attribute__((sda));
-extern float ballistic_debris_launch_magnitude_range_end __asm__("D_L14_00161B34") __attribute__((sda));
-extern float ballistic_debris_z_velocity_range_start __asm__("D_L14_00161B38") __attribute__((sda));
-extern float ballistic_debris_z_velocity_range_end __asm__("D_L14_00161B3C") __attribute__((sda));
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
     unsigned char *spawned_moby = spawn_moby_2e0170(0x193);
     unsigned char *pos;
@@ -1880,11 +1859,6 @@ extern P_eca8 *puff_y(void *, float, float, float, int, void *, float, int) __as
 extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
 
-extern float particle_pair_moby_c0_offset_scale __asm__("D_L14_00161FCC") __attribute__((sda));
-extern float particle_pair_moby_e0_offset_scale __asm__("D_L14_00161FD0") __attribute__((sda));
-extern float particle_trio_moby_c0_offset_scale __asm__("D_L14_00161FD4") __attribute__((sda));
-extern float particle_trio_moby_e0_offset_scale __asm__("D_L14_00161FD8") __attribute__((sda));
-extern int particle_pair_color __asm__("D_L14_00161FE4") __attribute__((sda));
 void emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
 
 void emit_moby_offset_particles(unsigned char *moby) {

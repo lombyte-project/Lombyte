@@ -173,7 +173,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-extern float shrub_part_spin_speed_degrees __asm__("D_L08_00161D28") __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_globals.h"
 void update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 
 void update_shrub_parts(struct Moby *parent_moby) {
@@ -208,7 +208,6 @@ void update_shrub_parts(struct Moby *parent_moby) {
 
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
-extern float commando_part_spin_speed_degrees __asm__("D_L08_00161D38") __attribute__((sda));
 void update_commando_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e9a18");
 
 void update_commando_parts(struct Moby *parent_moby) {
@@ -1278,7 +1277,6 @@ void spawn_gunship_parts(struct Moby *moby) {
     }
 }
 #include "rnc/gameplay/hero.h"
-extern float gunship_part_spin_speed_degrees __asm__("D_L08_00161C3C") __attribute__((sda));
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
 typedef struct {
@@ -1421,10 +1419,6 @@ typedef struct {
     s16 sound;                   /* 0x28E */
 } GunshipVars;
 
-extern s32 gunship_updates_disabled __asm__("D_L08_00161C4C") __attribute__((sda));
-extern f32 gunship_path_speed __asm__("D_L08_00161C38") __attribute__((sda));
-extern f32 gunship_turn_acceleration_degrees __asm__("D_L08_00161C44") __attribute__((sda));
-extern f32 gunship_max_turn_speed_degrees __asm__("D_L08_00161C48") __attribute__((sda));
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
@@ -1654,7 +1648,6 @@ void build_bolt_thief_target_list(struct Moby *moby) {
 }
 extern float D_0013F3D4;
 extern float D_0015ED6C;
-extern float bolt_thief_waypoint_speed __asm__("D_L08_00161C50") __attribute__((sda));
 extern char D_001413D0[];
 extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L00_0025a120(struct Moby *);
@@ -2024,12 +2017,9 @@ extern float D_L08_00161C88_gp __asm__("D_L08_00161C88") __attribute__((sda));
 extern float D_L08_00161C8C_gp __asm__("D_L08_00161C8C") __attribute__((sda));
 extern float D_L08_00161C94_gp __asm__("D_L08_00161C94") __attribute__((sda));
 extern float D_L08_00161C98_gp __asm__("D_L08_00161C98") __attribute__((sda));
-extern float bolt_pickup_default_surface_orbit_speed_degrees __asm__("D_L08_00161C9C");
 extern float D_L08_00161CA0_gp __asm__("D_L08_00161CA0") __attribute__((sda));
 extern float D_L08_00161CA4_gp __asm__("D_L08_00161CA4") __attribute__((sda));
-extern float five_bolt_pickup_surface_roll_speed_degrees __asm__("D_L08_00161CA8");
 extern float D_L08_00161CAC_gp __asm__("D_L08_00161CAC") __attribute__((sda));
-extern float ten_bolt_pickup_surface_roll_speed_degrees __asm__("D_L08_00161CB0");
 extern float D_L08_00161CB4_gp __asm__("D_L08_00161CB4") __attribute__((sda));
 extern float D_L08_00161CB8;
 extern float D_L08_00161CBC_gp __asm__("D_L08_00161CBC") __attribute__((sda));
@@ -2038,9 +2028,7 @@ extern float FUN_L04_001f1978(float);
 extern float step_angle_toward_target(float *, float, float, int) __asm__("FUN_L00_0025bc00");
 extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
-extern int bolt_pickup_collection_alpha_fade_enabled __asm__("D_L08_00161CC0");
 extern int D_L08_00161CC4_gp __asm__("D_L08_00161CC4") __attribute__((sda));
-extern int bolt_pickup_rotating_quad_enabled __asm__("D_L08_00161CC8");
 extern int D_L08_00161CCC_gp __asm__("D_L08_00161CCC") __attribute__((sda));
 extern int D_L08_00161CD4_gp __asm__("D_L08_00161CD4") __attribute__((sda));
 extern int D_L08_00174658;
@@ -2528,18 +2516,9 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float bolt_pickup_default_surface_base_tilt_degrees __asm__("D_L08_00161C64") __attribute__((sda));
-extern float bolt_pickup_default_surface_planar_offset_per_scale __asm__("D_L08_00161C7C") __attribute__((sda));
-extern float five_bolt_pickup_surface_planar_offset_per_scale __asm__("D_L08_00161C80") __attribute__((sda));
-extern float ten_bolt_pickup_surface_normal_offset_per_scale __asm__("D_L08_00161C78") __attribute__((sda));
 extern float D_L08_00161CB8 __attribute__((sda));
 extern float D_L08_00161CBC __attribute__((sda));
-extern float ten_bolt_pickup_surface_planar_offset_per_scale __asm__("D_L08_00161C84") __attribute__((sda));
-extern float five_bolt_pickup_surface_base_tilt_degrees __asm__("D_L08_00161C68") __attribute__((sda));
-extern float ten_bolt_pickup_surface_base_tilt_degrees __asm__("D_L08_00161C6C") __attribute__((sda));
 extern float D_L08_00161CB4 __attribute__((sda));
-extern float bolt_pickup_default_surface_normal_offset_per_scale __asm__("D_L08_00161C70") __attribute__((sda));
-extern float five_bolt_pickup_surface_normal_offset_per_scale __asm__("D_L08_00161C74") __attribute__((sda));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2786,8 +2765,6 @@ typedef struct {
     s16 sound;                   /* 0x13E */
 } SwarmVars;
 
-extern s32 shrub_updates_disabled __asm__("D_L08_00161D30") __attribute__((sda));
-extern f32 shrub_path_speed __asm__("D_L08_00161D24") __attribute__((sda));
 extern s32 D_L08_0015F5C4;
 extern s64 D_L08_0016D090 __attribute__((section(".data")));
 extern u8 D_0014C050[];

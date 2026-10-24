@@ -937,8 +937,7 @@ typedef struct {
 /* moby the sound collision probe ignores (clamp_voice_position_to_collision) */
 extern struct Moby *sound_probe_ignore[] __asm__("D_0013E5BC");
 extern s32 D_0015EDDC;
-extern f32 turret_camera_offset_length __asm__("D_L09_00161CB0") __attribute__((sda));
-extern f32 turret_camera_z_offset __asm__("D_L09_00161CB4") __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/elevator_globals.h"
 extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
@@ -1317,7 +1316,6 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern float radial_effect_count_reduction_control __asm__("D_L09_0015F5D0");
 extern float D_L09_0015F5D4;
 extern int FUN_L00_001fefc8();
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -1449,9 +1447,6 @@ typedef struct {
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
-extern float floating_ship_piece_hero_offset_tilt_gain __asm__("D_L09_00161DC4") __attribute__((sda));
-extern float floating_ship_piece_sink_speed __asm__("D_L09_00161DC8") __attribute__((sda));
-extern float floating_ship_piece_height_return_rate __asm__("D_L09_00161DCC") __attribute__((sda));
 extern float D_L09_00161DD4 __attribute__((sda));
 extern float D_L09_00161DD8 __attribute__((sda));
 extern float D_L09_00161DDC __attribute__((sda));

@@ -44,7 +44,7 @@ void FUN_L00_00297e30(void) {
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 extern struct PadStateWords D_0013C940;
-extern int controller_idle_frames __asm__("D_L00_00160FF0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/00295100_globals.h"
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
@@ -1380,8 +1380,6 @@ extern void attach_manipulator(char *, s32, void *) __asm__("FUN_0020cb10");
 
 typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
-extern f32 vendor_camera_eye_local_offset_x __asm__("D_L00_00161060") __attribute__((sda));
-extern f32 vendor_camera_eye_local_offset_z __asm__("D_L00_00161068");
 extern Vec4 D_L00_00180250;
 extern f32 D_L00_001610D0 __attribute__((sda));
 extern f32 D_L00_001610E0 __attribute__((sda));
@@ -1524,7 +1522,6 @@ extern void f20c828_29ab70(void *) __asm__("FUN_0020c828");
 extern void f12e418_29ab70(int) __asm__("FUN_0012e418");
 extern void f216088_29ab70(void) __asm__("FUN_00216088");
 extern void f12dc80_29ab70(void) __asm__("FUN_0012dc80");
-extern int vendor_close_hero_local_offset __asm__("D_L00_00161070") __attribute__((sda));
 void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
 
 void close_vendor_menu(int exit_cutscene_completed) {
@@ -1573,8 +1570,6 @@ extern s32 D_L00_001CA020[];
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
-extern s32 vendor_exit_hero_local_offset __asm__("D_L00_00161100") __attribute__((sda));
-extern s32 vendor_exit_cutscene_local_offset __asm__("D_L00_001610F0") __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
 extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
@@ -1709,7 +1704,6 @@ void restore_hero_after_vendor_exit_cutscene(void) {
 
 extern int D_L00_0015F3F8;
 extern int D_L00_00161188;
-extern int vendor_auxiliary_reaction_started __asm__("D_L00_00161190");
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1810,7 +1804,6 @@ extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f
 
 extern float D_L00_001C8920[][12] __attribute__((section(".data")));
 extern float D_L00_001C8900[][12] __attribute__((section(".data")));
-extern int vendor_selected_item_local_offset __asm__("D_L00_00161090") __attribute__((sda));
 void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 
 void initialize_vendor_selected_item_mobys(void) {
@@ -2031,10 +2024,6 @@ extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
 extern u8 D_00141345[];
-extern s32 vendor_purchase_confirmed __asm__("D_L00_00161E0C") __attribute__((sda));
-extern s32 vendor_ammo_quantity_adjustment_enabled __asm__("D_L00_00161E10") __attribute__((sda));
-extern s32 vendor_ammo_decrease_held_frames __asm__("D_L00_00161E28");
-extern s32 vendor_ammo_increase_held_frames __asm__("D_L00_00161E2C");
 extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E34;
 extern void FUN_0020c5f0_2ba78(void *, int) __asm__("FUN_0020c5f0");

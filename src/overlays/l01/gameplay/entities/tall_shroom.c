@@ -234,9 +234,7 @@ typedef struct {
     Vec4f normal;      /* 0x40 */
 } BlobHitInfo;
 
-extern f32 explosive_moby_gravity_coefficient __asm__("D_L01_00162058") __attribute__((sda));
-extern f32 explosive_moby_velocity_multiplier __asm__("D_L01_0016205C") __attribute__((sda));
-extern f32 explosive_moby_horizontal_damping_threshold __asm__("D_L01_00162060") __attribute__((sda));
+#include "rnc/overlay/l01/gameplay/entities/tall_shroom_globals.h"
 extern BlobHitInfo D_L01_001742C0;
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");

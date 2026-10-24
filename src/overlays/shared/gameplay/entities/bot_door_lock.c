@@ -163,11 +163,7 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
 }
 #include "rnc/overlay/quad.h"
 extern void FUN_L06_00307578(char *moby);
-extern float bot_door_lock_number_bob_amplitude __asm__("D_L06_001622DC") __attribute__((sda));
-extern float bot_door_lock_number_bob_period __asm__("D_L06_001622E0") __attribute__((sda));
-extern float bot_door_lock_color_pulse_period __asm__("D_L06_001622E4") __attribute__((sda));
-extern float bot_door_lock_number_color_pulse_amplitude __asm__("D_L06_001622E8") __attribute__((sda));
-extern float bot_door_lock_max_effect_horizontal_scale __asm__("D_L06_001622EC") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/bot_door_lock_globals.h"
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
@@ -427,12 +423,6 @@ extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];
-extern s32 projected_quad_texture_selector __asm__("D_L06_00162414") __attribute__((sda));
-extern s32 projected_quad_base_radius __asm__("D_L06_00162418") __attribute__((sda));
-extern s32 projected_quad_top_right_uv __asm__("D_L06_0016241C") __attribute__((sda));
-extern s32 projected_quad_top_left_uv __asm__("D_L06_00162420") __attribute__((sda));
-extern s32 projected_quad_bottom_right_uv __asm__("D_L06_00162424") __attribute__((sda));
-extern s32 projected_quad_bottom_left_uv __asm__("D_L06_00162428") __attribute__((sda));
 
 /* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void draw_projected_fading_quad(char *moby) {

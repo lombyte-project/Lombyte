@@ -229,13 +229,10 @@ void FUN_00214890_002d8418(Vec4_002d8418 *, Vec4_002d8418 *, Vec4_002d8418 *,
 int FUN_00213260_002d8418(int) __asm__("FUN_00213260");
 void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int, int, int, int,
                                float) __asm__("FUN_L00_002730e0");
-extern float nanotech_ball_collection_gravity_scale_range_start __asm__("D_L00_00161A60") __attribute__((sda));
-extern float nanotech_ball_collection_gravity_scale_range_end __asm__("D_L00_00161A64") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_globals.h"
 extern unsigned char D_L00_00161A68 __attribute__((sda));
 extern int D_L00_00161A6C __attribute__((sda));
 extern int D_L00_00161A70 __attribute__((sda));
-extern float nanotech_ball_collection_first_particle_scale_factor __asm__("D_L00_00161A74") __attribute__((sda));
-extern float nanotech_ball_collection_second_particle_scale_factor __asm__("D_L00_00161A78") __attribute__((sda));
 void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
 
 void spawn_nanotech_ball_collection_effect_pair(char *moby) {
@@ -284,8 +281,6 @@ s32 FUN_001fa6d0_2d8510(f32) __asm__("FUN_001fa6d0");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
-extern s32 nanotech_ball_collection_color_range_start __asm__("D_L00_00161A7C") __attribute__((sda));
-extern s32 nanotech_ball_collection_color_range_end __asm__("D_L00_00161A80") __attribute__((sda));
 extern s32 D_L00_00161A84 __attribute__((sda));
 extern s32 D_L00_00161A88 __attribute__((sda));
 extern f32 D_L00_00161A90[1] __attribute__((sda));
@@ -370,7 +365,6 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
 typedef f32 V4[4] __attribute__((aligned(16)));
 extern V4 D_L00_001E3CA0[];
 extern V4 D_L00_001E3D20[];
-extern f32 nanotech_ball_slot_offset_transform_amount __asm__("D_L00_001619F0") __attribute__((sda));
 extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
@@ -450,17 +444,12 @@ extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
 extern int D_L00_00161A00 __attribute__((sda));
-extern float nanotech_ball_bob_phase_step __asm__("D_L00_00161A0C") __attribute__((sda));
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
-extern int nanotech_ball_collection_lifetime_frames __asm__("D_L00_00161A3C") __attribute__((sda));
 extern int D_L00_00161A40 __attribute__((sda));
-extern int nanotech_ball_slot_collection_min_frames __asm__("D_L00_00161A44") __attribute__((sda));
-extern int nanotech_ball_slot_collection_max_frames __asm__("D_L00_00161A48") __attribute__((sda));
 extern float D_L00_00161A50 __attribute__((sda));
 extern float D_L00_00161A54 __attribute__((sda));
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
-extern float nanotech_ball_slot_scale_pulse_amplitude __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
 extern int free_effect_particle() __asm__("FUN_L00_00267a08");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
@@ -3371,9 +3360,6 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
-extern int red_orb_pulse_color_start __asm__("D_L00_00161B90") __attribute__((sda));
-extern int red_orb_pulse_color_end __asm__("D_L00_00161B94") __attribute__((sda));
-extern float red_orb_pulse_angular_speed_degrees __asm__("D_L00_00161B98") __attribute__((sda));
 void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
 void red_orb_update(char *moby) {
     enum {

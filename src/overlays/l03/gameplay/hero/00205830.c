@@ -18,7 +18,7 @@ struct LedgeSpot {
 };
 
 extern struct LedgeSpot *D_L03_0015F70C;
-extern s32 registered_path_count __asm__("D_L03_0015F710");
+#include "rnc/overlay/l03/gameplay/hero/00205830_globals.h"
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
