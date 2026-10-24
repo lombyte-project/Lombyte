@@ -3623,8 +3623,8 @@ extern int D_0013D4C6; /* no foreign declaration */
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern int D_0013D3A8; /* no foreign declaration */
 extern float D_L06_00161F60 __attribute__((sda));
-extern float D_L06_00161F64 __attribute__((sda));
-extern float D_L06_00161F68 __attribute__((sda));
+extern float height_cycle_max_speed __asm__("D_L06_00161F64") __attribute__((sda));
+extern float height_cycle_acceleration __asm__("D_L06_00161F68") __attribute__((sda));
 int D_L06_00161F6C = 0x80202020;
 int D_L06_00161F70 = 0x80808080;
 int D_L06_00161F74 = 0x80208020;
@@ -3830,8 +3830,8 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
         if (moby->state == 6) {
             target += ((Node_2FDA70 *)D_L06_001600EC_c)[moby_data->f78].v20.z;
         }
-        height_acceleration_step = D_L06_00161F68 * frame_time_sq_macro;
-        advance_accelerated_scalar(&moby->pos.z, &moby_data->f8C, target, height_acceleration_step, height_acceleration_step, D_L06_00161F64 * D_0015ED6C);
+        height_acceleration_step = height_cycle_acceleration * frame_time_sq_macro;
+        advance_accelerated_scalar(&moby->pos.z, &moby_data->f8C, target, height_acceleration_step, height_acceleration_step, height_cycle_max_speed * D_0015ED6C);
         if (absolute_float(moby->pos.z - target) < 0.01f) {
             if (moby->state == 6) {
                 moby->state = 7;
