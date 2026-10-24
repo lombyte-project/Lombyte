@@ -2137,7 +2137,7 @@ extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int find_318a68(void *, int) __asm__("FUN_00214720");
 extern float sin_318a68(float) __asm__("FUN_001f9de0");
 
-extern int D_L05_001612DC;
+extern int hero_inside_clip_volume __asm__("D_L05_001612DC");
 extern float D_L05_001612EC;
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
@@ -2168,7 +2168,7 @@ void update_hero_clip_volume_outputs(char *moby) {
             D_L05_001612EC = 48.0f;
             *(volatile float *)&D_L05_001612E8 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         } else {
-            D_L05_001612DC = 0;
+            hero_inside_clip_volume = 0;
         }
         break;
     }
