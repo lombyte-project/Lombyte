@@ -755,6 +755,7 @@ void snagglebeast_update(unsigned char *moby) {
     enum {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
+        SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
@@ -1108,7 +1109,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 4:
+    case SNAGGLEBEAST_SWEEP_BEAM_ATTACK:
         if (start_snagglebeast_turn_toward_target(moby, data, (float *)(((char *)&hero) + 0x80), 5, 0)) break;
         if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
