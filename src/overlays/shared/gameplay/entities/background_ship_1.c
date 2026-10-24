@@ -364,13 +364,13 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 
-extern float D_L02_00161FC0 __attribute__((sda));
+extern float background_ship_2_path_travel_speed __asm__("D_L02_00161FC0") __attribute__((sda));
 extern char D_L02_001FADB0[];
 extern char D_L02_001FADD0[];
 extern float D_0015ED60_f __asm__("D_0015ED60");
-extern float D_L02_00161FC4 __attribute__((sda));
-extern int D_L02_00161FC8 __attribute__((sda));
-extern int D_L02_00161FCC __attribute__((sda));
+extern float background_ship_2_color_phase_rate_degrees __asm__("D_L02_00161FC4") __attribute__((sda));
+extern int background_ship_2_color_tween_start __asm__("D_L02_00161FC8") __attribute__((sda));
+extern int background_ship_2_color_tween_end __asm__("D_L02_00161FCC") __attribute__((sda));
 extern float D_L02_00161FD0 __attribute__((sda));
 extern float D_L02_00161FD4 __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
@@ -440,7 +440,7 @@ void background_ship_2_update(char *moby) {
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        path_travel_distance = D_L02_00161FC0 * frame_time;
+        path_travel_distance = background_ship_2_path_travel_speed * frame_time;
         if (current_level_index == 10) {
             path_travel_distance = path_travel_distance * 0.25f;
         }
@@ -523,8 +523,8 @@ void background_ship_2_update(char *moby) {
         {
             int tweened_color;
             float k;
-            tweened_color = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
-            k = D_L02_00161FC4 * 0.017453292f * frame_time;
+            tweened_color = fast_tween_color(background_ship_2_color_tween_start, background_ship_2_color_tween_end, x);
+            k = background_ship_2_color_phase_rate_degrees * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
