@@ -3407,7 +3407,8 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
     enum {
         TESLA_CLAW_STATE_INITIALIZE = 0,
         TESLA_CLAW_STATE_WAIT_FOR_FIRE = 1,
-        TESLA_CLAW_STATE_FIRING = 3
+        TESLA_CLAW_STATE_FIRING = 3,
+        TESLA_CLAW_STATE_FINISHED = 4
     };
     V_2B9AD8 transformed_offset;
     Data_2B9AD8 *tesla_claw_vars = (Data_2B9AD8 *)tesla_claw_moby->pvars;
@@ -3620,7 +3621,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
             tesla_claw_moby->state = 1;
         }
         break;
-    case 4:
+    case TESLA_CLAW_STATE_FINISHED:
         break;
     case 5:
         break;
