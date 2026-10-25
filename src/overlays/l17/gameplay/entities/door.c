@@ -3302,7 +3302,7 @@ extern RingPt D_L17_001DC680[];
 T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L17_001622CC __attribute__((sda));
+extern float ring_ripple_uv_scroll_rate_gp __asm__("D_L17_001622CC") __attribute__((sda));
 extern float D_L17_001DC250[][2];
 extern float D_L17_001DCAB0[][2];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -3318,9 +3318,9 @@ int D_L17_001622B0[2] = {(int)D_L17_001DCD78, 0x80};
 int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
-extern float D_L17_001622C0 __attribute__((sda));
-extern float D_L17_001622C4 __attribute__((sda));
-extern float D_L17_001622C8 __attribute__((sda));
+extern float ring_ripple_radial_phase_distance_scale_gp __asm__("D_L17_001622C0") __attribute__((sda));
+extern float ring_ripple_phase_period_gp __asm__("D_L17_001622C4") __attribute__((sda));
+extern float ring_ripple_z_amplitude_gp __asm__("D_L17_001622C8") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -3329,43 +3329,43 @@ void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_ripple_ring(struct Moby *moby) __asm__("FUN_L17_002f0948");
 void draw_ripple_ring(struct Moby *moby) {
-    RippleData_c *d = (RippleData_c *)moby->pvars;
-    T4_c t;
+    RippleData_c *ring_ripple_vars = (RippleData_c *)moby->pvars;
+    T4_c ring_uv_scroll_factors;
     float scale;
     int r, g, b;
     int color;
-    int i, j, n, k;
+    int i, j, ring_uv_vertex_index, k;
 
-    scale = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_001622CC * frame_time);
+    scale = convert_integer_to_float(D_L17_0015F5CC) * (ring_ripple_uv_scroll_rate_gp * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_001622B8));
     vu1_add_g_sregister(0x42, ((long)D_L17_001622B4 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
-    d->f0 = d->f4;
-    d->f4 = fast_add_rotations(d->f4,
-                               360.0f / multiply_global_factor_ed64(D_L17_001622C4) * DEG_TO_RAD * frame_time);
+    ring_ripple_vars->f0 = ring_ripple_vars->f4;
+    ring_ripple_vars->f4 = fast_add_rotations(ring_ripple_vars->f4,
+                               360.0f / multiply_global_factor_ed64(ring_ripple_phase_period_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L17_001622BC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < D_L17_00162280[0]; i++) {
         RingPt *p = &D_L17_001DBE20[i];
-        float w = D_L17_001622C8 *
+        float w = ring_ripple_z_amplitude_gp *
                   fast_sin(fast_add_rotations(
                       wrap_angle(FUN_L00_00200260(square_root(p->x * p->x + p->y * p->y),
-                                                  D_L17_001622C0) *
-                                 6.2831855f / D_L17_001622C0),
-                      d->f4));
+                                                  ring_ripple_radial_phase_distance_scale_gp) *
+                                 6.2831855f / ring_ripple_radial_phase_distance_scale_gp),
+                      ring_ripple_vars->f4));
         D_L17_001DC680[i].x = p->x + moby->pos.x;
         D_L17_001DC680[i].y = p->y + moby->pos.y;
         D_L17_001DC680[i].z = p->z + moby->pos.z + w;
         D_L17_001DCD78[i] = color;
     }
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < D_L17_00162280[0]; n++) {
-            t = D_L17_001622D0;
-            D_L17_001DCAB0[n][0] =
-                D_L17_001DC250[n][0] + FUN_L00_00200260(scale * t.p[j].v[0], 1.0f);
-            D_L17_001DCAB0[n][1] =
-                D_L17_001DC250[n][1] + FUN_L00_00200260(scale * t.p[j].v[1], 1.0f);
+        for (ring_uv_vertex_index = 0; ring_uv_vertex_index < D_L17_00162280[0]; ring_uv_vertex_index++) {
+            ring_uv_scroll_factors = D_L17_001622D0;
+            D_L17_001DCAB0[ring_uv_vertex_index][0] =
+                D_L17_001DC250[ring_uv_vertex_index][0] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[0], 1.0f);
+            D_L17_001DCAB0[ring_uv_vertex_index][1] =
+                D_L17_001DC250[ring_uv_vertex_index][1] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[1], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
