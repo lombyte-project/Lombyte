@@ -53,6 +53,7 @@ void update_mode_freeze(void) {
         FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
         FREEZE_MODE_AWAIT_CROSS_CONTINUE = 2,
         FREEZE_MODE_STATE_DISPATCH = 3,
+        FREEZE_MODE_TRIANGLE_HIDE_HERO_CONTINUE = 4,
         FREEZE_MODE_DELAYED_CONTINUE = 5,
         FREEZE_MODE_VIDEO_MODE_TEST = 6
     };
@@ -95,7 +96,7 @@ void update_mode_freeze(void) {
         break;
     }
 
-    case 4:
+    case FREEZE_MODE_TRIANGLE_HIDE_HERO_CONTINUE:
         if (controller_state.pressed & PAD_TRIANGLE) {
             struct Moby *moby = hero.moby;
             moby->visible = 0;
