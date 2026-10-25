@@ -88,6 +88,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");
 extern char D_L03_0017C020[];
 extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1650,7 +1653,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
