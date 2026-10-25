@@ -238,11 +238,13 @@ next_candidate:;
         ((float *)D_L00_001DB840)[seg] = wave;
         fast_vec_sub(&delta, &beam[seg], (char *)D_L00_001DB5C0 - 16 + seg * 16);
         blend_vector_2b94d0(0.85f, &blend, &delta, &step);
-        score = fast_vec_length(&blend);
-        if (score == 0.0f) qcopy(&beam[seg], previous);
-        else {
-            fast_vec_scale(spacing / score, &blend, &blend);
-            fast_vec_add(&beam[seg], (char *)D_L00_001DB5C0 - 16 + seg * 16, &blend); qcopy(&step, &blend);
+        {
+            float blend_length = fast_vec_length(&blend);
+            if (blend_length == 0.0f) qcopy(&beam[seg], previous);
+            else {
+                fast_vec_scale(spacing / blend_length, &blend, &blend);
+                fast_vec_add(&beam[seg], (char *)D_L00_001DB5C0 - 16 + seg * 16, &blend); qcopy(&step, &blend);
+            }
         }
         beam[seg].f[2] += wave;
         fast_vec_sub(&delta, &beam[seg], (char *)D_L00_001DB5C0 - 16 + seg * 16);
@@ -272,7 +274,6 @@ next_candidate:;
             }
         }
         if (seg < 10) {
-            Vec4 *off = &offset;
             side_phase = normalize_angle(D_L00_001615B4_gp + (float)seg * D_L00_001615BC);
             angle = normalize_angle(D_L00_001615C8_gp + (float)seg * D_L00_001615D0);
             factor = D_L00_001615C0 * fast_sin(angle);
@@ -287,8 +288,8 @@ next_candidate:;
             offset.f[0] = fast_cos(x_a) * x_m;
             offset.f[1] = fast_sin(x_a) * x_m;
             offset.f[2] = 0.0f;
-            qcopy_nc(&D_L00_001DB890[seg], off);
-            fast_vec_add(side, side, off);
+            qcopy_nc(&D_L00_001DB890[seg], &offset);
+            fast_vec_add(side, side, &offset);
         } else {
             mirror = 21 - seg;
             qcopy(side, &beam[seg]);
