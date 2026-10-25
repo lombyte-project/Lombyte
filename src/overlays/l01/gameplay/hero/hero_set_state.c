@@ -81,6 +81,7 @@ extern char D_L01_0017C3A0[];
 extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1476,7 +1477,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
