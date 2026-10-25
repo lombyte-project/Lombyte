@@ -757,7 +757,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
+    case HERO_STATE_WATER_SURFACE_MOVE:
     case 0x37:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
@@ -1623,7 +1623,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
-    case 0x2B:
+    case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
         s32 flag;
