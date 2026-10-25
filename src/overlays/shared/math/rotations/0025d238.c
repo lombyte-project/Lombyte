@@ -155,25 +155,25 @@ typedef struct { float x, y, z, w; } Pt_0025E860;
 typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
-int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, float *segment_offset, int loop, float dist) {
+int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, float *segment_offset, int loop, float remaining_traversal_amount) {
     float segment_delta[4];
     int crossed_path_boundary = 0;
     int traversal_direction = 1;
     int i;
     int j;
 
-    if (dist < 0.0f) {
-        dist = -dist;
+    if (remaining_traversal_amount < 0.0f) {
+        remaining_traversal_amount = -remaining_traversal_amount;
         traversal_direction = -1;
     }
-    while (dist != 0.0f && (*segment_index != path->n - 1 || loop)) {
+    while (remaining_traversal_amount != 0.0f && (*segment_index != path->n - 1 || loop)) {
         int adv;
 
         i = *segment_index;
         if (traversal_direction == 1) {
-            adv = path->pt[i].w < *segment_offset + dist;
+            adv = path->pt[i].w < *segment_offset + remaining_traversal_amount;
         } else {
-            adv = *segment_offset < dist;
+            adv = *segment_offset < remaining_traversal_amount;
         }
         if (adv) {
             i += traversal_direction;
@@ -181,13 +181,13 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, floa
                 i = (i + path->n) % path->n;
             }
             if (traversal_direction == 1) {
-                dist -= path->pt[*segment_index].w - *segment_offset;
+                remaining_traversal_amount -= path->pt[*segment_index].w - *segment_offset;
                 *segment_offset = 0.0f;
-                if (dist < 0.0f) {
-                    dist = 0.0f;
+                if (remaining_traversal_amount < 0.0f) {
+                    remaining_traversal_amount = 0.0f;
                 }
             } else {
-                dist -= *segment_offset;
+                remaining_traversal_amount -= *segment_offset;
                 *segment_offset = path->pt[i].w;
             }
             if ((traversal_direction == 1 && *segment_index == path->n - 1) || (traversal_direction == -1 && *segment_index == 0)) {
@@ -196,11 +196,11 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, floa
             *segment_index = i;
         } else {
             if (traversal_direction == 1) {
-                *segment_offset = *segment_offset + dist;
+                *segment_offset = *segment_offset + remaining_traversal_amount;
             } else {
-                *segment_offset = *segment_offset - dist;
+                *segment_offset = *segment_offset - remaining_traversal_amount;
             }
-            dist = 0.0f;
+            remaining_traversal_amount = 0.0f;
         }
     }
     i = *segment_index;
