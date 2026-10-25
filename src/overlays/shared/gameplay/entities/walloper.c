@@ -7,19 +7,21 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
 #else
+#include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/beam_vector.h"
-extern int D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
-extern int D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
-extern int D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
+extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
+extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
+extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
 extern char D_0013E533[];
 #include "rnc/data_labels.h"
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
+extern float player_camera[] __asm__("D_L00_00166C80");
 extern u8 D_L00_001DB5C0[], D_L00_001DBA20[];
-extern char *D_L00_00173E58 __attribute__((section(".data")));
-extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
+#include "rnc/overlay/collision.h"
+extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern float D_L00_00161594 __attribute__((sda));
 extern float D_L00_00161598 __attribute__((sda));
 extern float D_L00_0016159C __attribute__((sda));
@@ -63,6 +65,7 @@ extern float FUN_L00_00257c48(float, float);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 /* The arc points one slot before each arc row. */
 extern Vec4 D_L00_001DBA10[4][5];
+extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
@@ -76,62 +79,89 @@ extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
 extern unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
+typedef struct {
+    Vec4 origin;
+    Vec4 tip;
+    struct Moby *target;
+    u8 pad24[0x14];
+    struct Moby *second_target;
+    u8 pad3c[2];
+    short count3e;
+    short target_timer;
+    short second_timer;
+    short unk44;
+    short unk46;
+} WalloperBeam;
+
 void FUN_L00_002b94d0(u8 *o) {
     Vec4 target0, target1;
     struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } hit;
     Vec4 camera_direction, direction, delta, blend, step, offset;
-    char *collided[128];
+    struct Moby *collided[128];
     Vec4 target_delta;
     union { struct { Vec4 origin; HitDescriptor_2b94d0 hit0; } first; HitDescriptor_2b94d0 hit1; } effects;
     /* Retail uses a five-vector scratch span with differences beginning at slot 1. */
     Vec4 differences[5];
-    u8 *v = *(u8 **)(o + 0x78);
-    char *best = 0, *second = 0, *candidate, **list, *data;
+    WalloperBeam *v = *(WalloperBeam **)(o + 0x78);
+    struct Moby *best = 0, *second = 0, *candidate, **list;
+    char *data;
     float best_score = 0.0f, second_score = 0.0f;
-    unsigned int enabled = (u8)D_0013E533[0];
+    int enabled = (u8)D_0013E533[0];
     float spacing = D_L00_00161594 / 20.0f;
+    float *axis = (float *)D_L00_0015F580_lui;
     float distance, angle, score, n, amplitude, wave, length, factor, phase, side_wave;
+    float side_phase;
+    float x_s, x_c, x_s2, x_a, x_m;
+    float side_amp_w3;
+    float side_amp;
     struct Hero *player;
-    char *camera_base;
-    char *hero_base;
+    float *camera;
+    struct Hero *aim_hero;
     float primary_distance, sign;
-    float enabled_float;
+    float distance_w17;
+    float distance_w16;
+    float factor_w15;
+    float factor_w13;
+    float length_w4;
+    float length_w3;
+    int k;
+    int m;
+    int mirror;
+    int seg;
     int i, j, hit_result, collided_count, spin, timer, difference;
     char *point, *previous, *side;
     char *collision_previous;
-    (*(float *)&D_L00_001615AC_gp) = fast_add_rotations((*(float *)&D_L00_001615AC_gp), D_L00_001615B0);
-    (*(float *)&D_L00_001615B4_gp) = fast_subtract_rotations((*(float *)&D_L00_001615B4_gp), D_L00_001615B8);
-    (*(float *)&D_L00_001615C8_gp) = fast_add_rotations((*(float *)&D_L00_001615C8_gp), D_L00_001615CC);
-    if (!*(char **)(v + 0x20) || (enabled && !*(char **)(v + 0x38))) {
-        if (*(char **)(v + 0x38)) {
-            *(char **)(v + 0x20) = *(char **)(v + 0x38);
-            *(short *)(v + 0x40) = *(short *)(v + 0x42);
-            *(char **)(v + 0x38) = 0;
-            *(short *)(v + 0x42) = 0;
+    D_L00_001615AC_gp = fast_add_rotations(D_L00_001615AC_gp, D_L00_001615B0);
+    D_L00_001615B4_gp = fast_subtract_rotations(D_L00_001615B4_gp, D_L00_001615B8);
+    D_L00_001615C8_gp = fast_add_rotations(D_L00_001615C8_gp, D_L00_001615CC);
+    if (!v->target || (enabled && !v->second_target)) {
+        if (v->second_target) {
+            v->target = v->second_target;
+            v->target_timer = v->second_timer;
+            v->second_target = 0;
+            v->second_timer = 0;
         } else {
-            for (list = active_mobies; (candidate = *list) != 0; list++) {
-                camera_base = (char *)g_debug_camera - 0x140;
-                hero_base = D_0013F3D0 - 0x80;
-                if (candidate == *(char **)(v + 0x20) || candidate == *(char **)(v + 0x38) ||
-                    !candidate || !*(char **)(candidate + 0x24) ||
-                    *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5) continue;
-                if ((u8)candidate[0x20] == 0xfe) goto next_candidate;
-                if ((u8)candidate[0x20] == 0xfd) goto next_candidate;
+            for (k = 0; (candidate = ((struct Moby **)active_mobies)[k]) != 0; k++) {
+                camera = player_camera;
+                aim_hero = &hero;
+                if (candidate == v->target || candidate == v->second_target ||
+                    !candidate || !candidate->pclass ||
+                    *(short *)((char *)candidate->pclass + 0x46) != 5) continue;
+                if (candidate->state == 0xfe) goto next_candidate;
+                if (candidate->state == 0xfd) goto next_candidate;
                 if (!suck_get_aim_height(candidate)) continue;
-                fast_vec_sub(&target0, candidate + 0x10, v);
-                distance = vector_length_xy(&target0);
-                if (D_L00_00161594 < distance) continue;
-                length = fast_difference_between_rotations(*(float *)(camera_base + 0x158),
-                    fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(camera_base + 0x140),
-                                  *(float *)(candidate + 0x14) - *(float *)(camera_base + 0x144)));
-                if (D_L00_0016159C < length) continue;
+                fast_vec_sub(&target0, &candidate->pos, v);
+                distance_w16 = vector_length_xy(&target0);
+                if (D_L00_00161594 < distance_w16) continue;
+                length_w3 = fast_difference_between_rotations(camera[0x56],
+                    fast_arc_tan(candidate->pos.x - camera[0x50], candidate->pos.y - camera[0x51]));
+                if (D_L00_0016159C < length_w3) continue;
                 score = fast_difference_between_rotations(
-                    fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(hero_base + 0x80),
-                                  *(float *)(candidate + 0x14) - *(float *)(hero_base + 0x84)),
-                    *(float *)(hero_base + 0x98));
+                    fast_arc_tan(candidate->pos.x - aim_hero->motion.pos.f[0], candidate->pos.y - aim_hero->motion.pos.f[1]),
+                    aim_hero->motion.rot.f[2]);
                 if (D_L00_00161598 < score) continue;
-                score = ((D_L00_0016159C - length) / D_L00_0016159C) * D_L00_0016162C +
-                        (D_L00_00161594 - distance) / D_L00_00161594;
+                score = ((D_L00_0016159C - length_w3) / D_L00_0016159C) * D_L00_0016162C +
+                        (D_L00_00161594 - distance_w16) / D_L00_00161594;
                 if (best_score < score) {
                     second_score = best_score; second = best;
                     best_score = score; best = candidate;
@@ -140,50 +170,49 @@ next_candidate:;
             }
         }
     }
-    enabled_float = (float)(int)enabled;
     if (best) {
-        if (*(char **)(v + 0x20)) second = best;
+        if (v->target) second = best;
         else {
-            *(char **)(v + 0x20) = best;
-            *(short *)(v + 0x40) = 0;
+            v->target = best;
+            v->target_timer = 0;
             FUN_0022da68(1, 0, o);
         }
     }
     if (second && enabled) {
-        distance = fast_vec_dist(v, best + 0x10);
-        if (distance < D_L00_00161594) {
-            angle = fast_vec_dist(best + 0x10, second + 0x10);
-            if (distance + angle < D_L00_00161594) {
-                *(char **)(v + 0x38) = second;
-                *(short *)(v + 0x42) = 0;
+        distance_w17 = fast_vec_dist(v, &best->pos);
+        if (distance_w17 < D_L00_00161594) {
+            angle = fast_vec_dist(&best->pos, &second->pos);
+            if (distance_w17 + angle < D_L00_00161594) {
+                v->second_target = second;
+                v->second_timer = 0;
             }
         }
     }
     primary_distance = 0.0f;
-    if (*(char **)(v + 0x20)) {
-        data = (char *)suck_get_aim_height(*(char **)(v + 0x20));
-        qcopy(&target0, *(char **)(v + 0x20) + 0x10);
+    if (v->target) {
+        data = (char *)suck_get_aim_height(v->target);
+        qcopy(&target0, &v->target->pos);
         target0.f[2] += *(float *)(data + 0x10);
         primary_distance = fast_vec_dist(v, &target0);
         spacing = primary_distance * 0.05f;
     }
-    if (*(char **)(v + 0x38)) {
-        data = (char *)suck_get_aim_height(*(char **)(v + 0x38));
-        qcopy(&target1, *(char **)(v + 0x38) + 0x10);
+    if (v->second_target) {
+        data = (char *)suck_get_aim_height(v->second_target);
+        qcopy(&target1, &v->second_target->pos);
         target1.f[2] += *(float *)(data + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
     if (enabled) D_L00_001615F8 = 0x207f20;
     else D_L00_001615F8 = 0x7f2020;
     clear_u64_value(&camera_direction);
-    make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled_float + 2.0f);
-    hit.id = *(short *)(o + 0xa6); hit.mode = 1; hit.kind = 5;
-    *(short *)(v + 0x3e) = 20;
+    make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled + 2.0f);
+    hit.kind = 5; hit.mode = 1; hit.id = *(short *)(o + 0xa6);
+    v->count3e = 20;
     player = &hero;
     collect_mobies_in_sphere(0.3f, v, 0x10, player->moby, &hit);
-    fast_vec_sub(&direction, v + 0x10, v);
+    fast_vec_sub(&direction, &v->tip, v);
     fast_vec_normalize(&direction, &direction, 1.0f);
-    if (*(char **)(v + 0x20) || *(char **)(v + 0x38)) {
+    if (v->target || v->second_target) {
         fast_vec_cross(&delta, &direction, &player->gravity_dir);
         build_look_at_matrix(&direction, &direction, &delta, 0.17453292f);
     }
@@ -191,86 +220,85 @@ next_candidate:;
     collided_count = 0;
     fast_vec_scale(spacing, &step, &direction);
     qcopy(D_L00_001DB5C0, v); qcopy(D_L00_001DB5C0 + 0x140, v);
-    difference = 16;
-    point = (char *)D_L00_001DB5C0 + 16;
-    previous = (char *)D_L00_001DB5C0;
-    side = (char *)D_L00_001DB5C0 + 0x150;
-    for (i = 1; i < 20; i++, difference += 16, point += 16, side += 16, previous += 16) {
-        n = (float)i;
+    for (seg = 1, point = (char *)D_L00_001DB5C0 + 16, previous = (char *)D_L00_001DB5C0,
+         side = (char *)D_L00_001DB5C0 + 0x150; seg < 20; seg++, point += 16, side += 16, previous += 16) {
+        n = (float)seg;
         factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
-                    (convert_integer_to_float(i) * 0.05f);
-        phase = normalize_angle((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
+                    (convert_integer_to_float(seg) * 0.05f);
+        phase = normalize_angle(D_L00_001615AC_gp + n * D_L00_001615A0);
         wave = factor * fast_sin(phase);
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
-        score = *(float *)(point + 8) - ((float *)D_L00_001DB840)[i];
-        *(float *)(point + 8) = score;
-        ((float *)D_L00_001DB840)[i] = wave;
-        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + difference);
+        *(float *)(point + 8) -= ((float *)D_L00_001DB840)[seg];
+        ((float *)D_L00_001DB840)[seg] = wave;
+        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + seg * 16);
         blend_vector_2b94d0(0.85f, &blend, &delta, &step);
         score = fast_vec_length(&blend);
         if (score == 0.0f) qcopy(point, previous);
         else {
             fast_vec_scale(spacing / score, &blend, &blend);
-            fast_vec_add(point, (char *)D_L00_001DB5C0 - 16 + difference, &blend); qcopy(&step, &blend);
+            fast_vec_add(point, (char *)D_L00_001DB5C0 - 16 + seg * 16, &blend); qcopy(&step, &blend);
         }
         *(float *)(point + 8) += wave;
-        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + difference);
-        if (*(char **)(v + 0x20)) {
-            if (!enabled || !*(char **)(v + 0x38)) {
+        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + seg * 16);
+        if (v->target) {
+            if (!enabled || !v->second_target) {
                 fast_vec_sub(&target_delta, &target0, point);
-                length = fast_vec_length(&target_delta);
-                if (length != 0.0f) {
-                    if (i == 19) { factor = 0.5f; spacing = length; }
-                    else if (i >= 16) { factor = 0.5f; spacing = length / convert_integer_to_float(19 - i); }
-                    else factor = 0.1f;
-                    fast_vec_scale(spacing / length, &target_delta, &target_delta);
-                    blend_vector_2b94d0(factor, &step, &step, &target_delta);
+                length_w4 = fast_vec_length(&target_delta);
+                if (length_w4 != 0.0f) {
+                    if (seg == 19) { factor_w13 = 0.5f; spacing = length_w4; }
+                    else if (seg >= 16) { factor_w13 = 0.5f; spacing = length_w4 / convert_integer_to_float(19 - seg); }
+                    else factor_w13 = 0.1f;
+                    fast_vec_scale(spacing / length_w4, &target_delta, &target_delta);
+                    blend_vector_2b94d0(factor_w13, &step, &step, &target_delta);
                 }
             } else {
-                if (i < 10) fast_vec_sub(&target_delta, &target0, point);
-                else fast_vec_sub(&target_delta, &target1, point);
-                length = fast_vec_length(&target_delta);
-                if (length != 0.0f) {
-                    if (i == 9 || i == 19) { factor = 0.7f; spacing = length; }
-                    else if ((unsigned)(i - 5) < 5 || i > 14) {
-                        factor = 0.7f; spacing = length / convert_integer_to_float((unsigned)(i - 5) < 5 ? 9 - i : 19 - i);
-                    } else factor = 0.2f;
-                    fast_vec_scale(spacing / length, &target_delta, &target_delta);
-                    blend_vector_2b94d0(factor, &step, &step, &target_delta);
+                if (seg >= 10) fast_vec_sub(&target_delta, &target1, point);
+                else fast_vec_sub(&target_delta, &target0, point);
+                length_w4 = fast_vec_length(&target_delta);
+                if (length_w4 != 0.0f) {
+                    if (seg == 9 || seg == 19) { factor_w13 = 0.7f; spacing = length_w4; }
+                    else if ((unsigned)(seg - 5) < 5) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float(9 - seg); }
+                    else if (seg > 14) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float(19 - seg); }
+                    else factor_w13 = 0.2f;
+                    fast_vec_scale(spacing / length_w4, &target_delta, &target_delta);
+                    blend_vector_2b94d0(factor_w13, &step, &step, &target_delta);
                 }
             }
         }
-        if (i < 10) {
-            phase = normalize_angle((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
-            angle = normalize_angle((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
+        if (seg < 10) {
+            Vec4 *off;
+            side_phase = normalize_angle(D_L00_001615B4_gp + (float)seg * D_L00_001615BC);
+            angle = normalize_angle(D_L00_001615C8_gp + (float)seg * D_L00_001615D0);
             factor = D_L00_001615C0 * fast_sin(angle);
             qcopy(side, point);
-            wave = fast_sin(phase);
+            x_s = fast_sin(side_phase);
             side_wave = FUN_L00_00257c48(0.0f, 0.1f);
-            wave = factor * wave + side_wave;
-            ((float *)D_L00_001DB9D0)[i] = wave;
-            *(float *)(point + 0x148) += wave;
-            angle = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
-            wave = D_L00_001615C4 * fast_cos(phase);
-            offset.f[0] = fast_cos(angle) * wave;
-            offset.f[1] = fast_sin(angle) * wave;
+            x_c = factor * x_s + side_wave;
+            ((float *)D_L00_001DB9D0)[seg] = x_c;
+            *(float *)(point + 0x148) += x_c;
+            x_a = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
+            x_m = D_L00_001615C4 * fast_cos(side_phase);
+            offset.f[0] = fast_cos(x_a) * x_m;
+            offset.f[1] = fast_sin(x_a) * x_m;
             offset.f[2] = 0.0f;
-            qcopy(&D_L00_001DB890[i], &offset);
-            fast_vec_add(side, side, &offset);
+            off = &offset;
+            qcopy_nc(&D_L00_001DB890[seg], off);
+            fast_vec_add(side, side, off);
         } else {
+            mirror = 21 - seg;
             qcopy(side, point);
-            *(float *)(point + 0x148) += ((float *)D_L00_001DB9D0)[21 - i];
-            fast_vec_add(side, side, &D_L00_001DB890[21 - i]);
-            qcopy(&offset, &D_L00_001DB890[i]);
+            *(float *)(point + 0x148) += ((float *)D_L00_001DB9D0)[mirror];
+            fast_vec_add(side, side, &D_L00_001DB890[mirror]);
+            qcopy(&offset, &D_L00_001DB890[seg]);
         }
-        if (i == 1) {
+        if (seg == 1) {
             struct Hero *h = &hero;
             fast_vec_scale(0.5f, &effects.first.origin, (char *)h->moby + 0xe0);
             fast_vec_add(&target_delta, &h->motion.pos, &effects.first.origin);
             hit_result = FUN_001efa68(&target_delta, (Vec4 *)v, 0x10, h->moby, 0);
-        } else if (i == 19 || !(i & 1)) {
-            hit_result = FUN_001efa68((Vec4 *)((char *)D_L00_001DB5C0 - 32 + difference), (Vec4 *)point, 0x10, o, 0);
+        } else if (seg == 19 || !(seg & 1)) {
+            hit_result = FUN_001efa68((Vec4 *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4 *)point, 0x10, o, 0);
         } else continue;
         fast_vec_sub(&camera_direction, point, g_debug_camera);
         camera_direction.f[2] = 0.0f;
@@ -280,94 +308,98 @@ next_candidate:;
         camera_direction.f[3] = 5627.9248046875f;
         qcopy(&hit.direction, &camera_direction);
         if (hit_result) {
-            candidate = D_L00_00173E58;
+            candidate = (struct Moby *)coll_hit.moby;
             if (candidate) {
-                if (!suck_get_aim_height(candidate) || !*(char **)(candidate + 0x24) ||
-                    *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5)
+                if (!suck_get_aim_height(candidate) || !candidate->pclass ||
+                    *(short *)((char *)candidate->pclass + 0x46) != 5)
                     record_moby_hit(candidate, &hit);
                 else {
                     hit_result = 0; collided[collided_count++] = candidate;
-                    *(int *)(candidate + 0x94) = 0;
+                    candidate->collision = 0;
                 }
             }
             if (hit_result) {
-                qcopy(point, &collision_hit_point);
-                *(short *)(v + 0x3e) = i;
-                qcopy(v + 0x10, &collision_hit_point);
-                if (!D_L00_00173E58 || test_moby_linked_record_word8(D_L00_00173E58)) {
-                    *(char **)(v + 0x20) = 0; *(short *)(v + 0x40) = 0;
+                qcopy(point, &coll_hit.point);
+                v->count3e = seg;
+                qcopy(&v->tip, &coll_hit.point);
+                if (!coll_hit.moby || test_moby_linked_record_word8(coll_hit.moby)) {
+                    v->target = 0; v->target_timer = 0;
                 }
                 break;
             }
         }
     }
-    for (i = 0; i < collided_count; i++) {
-        candidate = collided[i];
-        *(int *)(candidate + 0x94) = *(int *)(*(char **)(candidate + 0x24) + 0x10);
-    }
-    if (!hit_result) qcopy(v + 0x10, D_L00_001DB5C0 + 0x130);
-    if (*(char **)(v + 0x20) && !(*(unsigned long *)(v + 0x40) & 0xffff0000ffffUL)) {
-        fast_vec_sub(&target_delta, *(char **)(v + 0x20) + 0x10, g_debug_camera);
+    for (k = 0; k < collided_count; k++)
+        collided[k]->collision = *(int *)((char *)collided[k]->pclass + 0x10);
+    if (!hit_result) qcopy(&v->tip, D_L00_001DB5C0 + 0x130);
+    if (v->target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffffUL)) {
+        fast_vec_sub(&target_delta, &v->target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled_float + 2.0f);
-        effects.first.hit0.id = *(short *)(o + 0xa6); effects.first.hit0.mode = 3; effects.first.hit0.kind = 5;
-        record_moby_hit(*(char **)(v + 0x20), &effects.first.hit0);
-        timer = 5;
-        data = (char *)suck_get_aim_height(*(char **)(v + 0x20));
-        if (data && *(short *)(data + 4) == 1) timer = 1;
-        *(short *)(v + 0x44) = scale_game_frames(timer);
+        make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled + 2.0f);
+        effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = *(short *)(o + 0xa6);
+        record_moby_hit(v->target, &effects.first.hit0);
+        {
+            char *aim;
+            int frames = 5;
+            aim = (char *)suck_get_aim_height(v->target);
+            if (aim && *(short *)(aim + 4) == 1) frames = 1;
+            v->unk44 = scale_game_frames(frames);
+        }
     }
-    if (*(char **)(v + 0x38) && !(*(unsigned long *)(v + 0x40) & 0xffff0000ffff0000UL)) {
-        fast_vec_sub(&target_delta, *(char **)(v + 0x38) + 0x10, g_debug_camera);
+    if (v->second_target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffff0000UL)) {
+        fast_vec_sub(&target_delta, &v->second_target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled_float + 2.0f);
-        effects.hit1.id = *(short *)(o + 0xa6); effects.hit1.kind = 5; effects.hit1.mode = 3;
-        record_moby_hit(*(char **)(v + 0x38), &effects.hit1);
-        timer = 5;
-        data = (char *)suck_get_aim_height(*(char **)(v + 0x38));
-        if (data && *(short *)(data + 4) == 1) timer = 1;
-        *(short *)(v + 0x46) = scale_game_frames(timer);
+        make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled + 2.0f);
+        effects.hit1.mode = 3; effects.hit1.kind = 5; effects.hit1.id = *(short *)(o + 0xa6);
+        record_moby_hit(v->second_target, &effects.hit1);
+        {
+            char *aim;
+            int frames = 5;
+            aim = (char *)suck_get_aim_height(v->second_target);
+            if (aim && *(short *)(aim + 4) == 1) frames = 1;
+            v->unk46 = scale_game_frames(frames);
+        }
     }
     for (i = 0; i < 4; i++) {
         Vec4 *rows;
         char *arcpoint, *arcprev;
         Vec4 *diffp;
-        if (i < 2) { qcopy(&effects.first.origin, v); factor = 0.4f; }
-        else { qcopy(&effects.first.origin, v + 0x10); factor = 0.5f; }
+        if (i < 2) { qcopy(&effects.first.origin, v); factor_w15 = 0.4f; }
+        else { qcopy(&effects.first.origin, &v->tip); factor_w15 = 0.5f; }
         if (fast_dec_timer_s16(&D_L00_00161658[i])) {
             D_L00_00161658[i] = scale_game_frames(D_L00_00161668[i]);
             (&D_L00_00161660)[i] = 0;
             angle = FUN_L00_00257c48(0.5235988f, 1.0471976f);
             phase = random_float_between(-1.0471976f, 0.17453292f);
-            fast_vec_scale(factor, &target_delta, &direction);
+            fast_vec_scale(factor_w15, &target_delta, &direction);
             rows = (Vec4 *)(D_0013F3D0 + 0x5d0);
             build_look_at_matrix(&target_delta, &target_delta, rows, phase);
             build_look_at_matrix(&target_delta, &target_delta, rows + 1, angle);
-            qcopy(&((Vec4 (*)[5])D_L00_001DBA20)[i][0], &effects.first.origin);
-            fast_vec_add(&((Vec4 (*)[5])D_L00_001DBA20)[i][1], &effects.first.origin, &target_delta);
+            qcopy(&arc_points[i][0], &effects.first.origin);
+            fast_vec_add(&arc_points[i][1], &effects.first.origin, &target_delta);
             sign = 1.0f;
-            for (j = 2; j < 5; j++) {
-                fast_vec_sub(&effects.first.hit0, &D_L00_001DBA10[i][j], g_debug_camera);
+            for (m = 2; m < 5; m++) {
+                fast_vec_sub(&effects.first.hit0, &arc_points[i][-1] + m, g_debug_camera);
                 phase = random_float_between(0.17453292f, 0.9599311f) * sign;
                 sign = -sign;
                 build_look_at_matrix(&target_delta, &target_delta, &effects.first.hit0, phase);
-                fast_vec_add(&((Vec4 (*)[5])D_L00_001DBA20)[i][j], &D_L00_001DBA10[i][j], &target_delta);
+                fast_vec_add(&arc_points[i][m], &arc_points[i][-1] + m, &target_delta);
             }
         } else {
             int d, n0;
             for (j = 1; j < 5; j++) {
-                fast_vec_sub(&differences[j], &((Vec4 (*)[5])D_L00_001DBA20)[i][j], &D_L00_001DBA10[i][j]);
+                fast_vec_sub(&differences[j], &arc_points[i][j], &arc_points[i][-1] + j);
                 differences[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 differences[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 differences[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
-            qcopy(&((Vec4 (*)[5])D_L00_001DBA20)[i][0], &effects.first.origin);
+            qcopy(&arc_points[i][0], &effects.first.origin);
             for (j = 1; j < 5; j++)
-                fast_vec_add(&((Vec4 (*)[5])D_L00_001DBA20)[i][j], &D_L00_001DBA10[i][j], &differences[j]);
+                fast_vec_add(&arc_points[i][j], &arc_points[i][-1] + j, &differences[j]);
             d = D_L00_00161670[i]; n0 = D_L00_00161658[i];
             if (d < n0) d = n0 - d; else d = d - n0;
             distance = convert_integer_to_float(d) / convert_integer_to_float(scale_game_frames(15));
@@ -388,8 +420,8 @@ next_candidate:;
                     (float *)&target_delta, amplitude * 0.15f, amplitude * 0.5f, 0.0f);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
-    FUN_L00_00272060(v + 0x10, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
-                    (float *)D_L00_0015F580_lui, amplitude * 0.1f, amplitude, 0.0f);
+    FUN_L00_00272060(&v->tip, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
+                    axis, amplitude * 0.1f, amplitude, 0.0f);
 }
 #endif
 typedef struct {
