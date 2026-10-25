@@ -5942,14 +5942,14 @@ typedef struct {
 typedef struct {
     short v, uv;
 } I3003f0;
-extern int D_L06_00162054 __attribute__((sda));
-extern int D_L06_00162058 __attribute__((sda));
-extern int D_L06_0016205C __attribute__((sda));
-extern int D_L06_00162060 __attribute__((sda));
-extern int D_L06_00162064 __attribute__((sda));
-extern int D_L06_00162068 __attribute__((sda));
+extern int backdrop_mesh_blend_color_a_selector_gp __asm__("D_L06_00162054") __attribute__((sda));
+extern int backdrop_mesh_blend_color_b_selector_gp __asm__("D_L06_00162058") __attribute__((sda));
+extern int backdrop_mesh_blend_alpha_c_selector_gp __asm__("D_L06_0016205C") __attribute__((sda));
+extern int backdrop_mesh_blend_color_d_selector_gp __asm__("D_L06_00162060") __attribute__((sda));
+extern int backdrop_mesh_effect_texture_index_gp __asm__("D_L06_00162064") __attribute__((sda));
+extern int backdrop_mesh_blend_fixed_alpha_gp __asm__("D_L06_00162068") __attribute__((sda));
 extern unsigned int D_L06_0016206C __attribute__((sda));
-extern float D_L06_00162074 __attribute__((sda));
+extern float backdrop_mesh_vertex_position_scale_gp __asm__("D_L06_00162074") __attribute__((sda));
 extern V3003f0 D_L06_001F2EB0[];
 extern I3003f0 D_L06_001F34B0[];
 extern UV3003f0 D_L06_001F38B0[];
@@ -5961,33 +5961,33 @@ extern void draw_3003f0(void *, void *, int) __asm__("FUN_001f7d30");
 /* Draws the 64 quads of the backdrop mesh, each corner scaled from the shared vertex table. */
 void draw_backdrop_mesh(void) {
     Q3003f0 quad;
-    B3003f0 buf;
+    B3003f0 backdrop_draw_transform;
     unsigned int c;
     int i, j, k;
-    I3003f0 *e;
+    I3003f0 *quad_corner_index_pair;
 
-    quad.tex = tex_3003f0(D_L06_00162064);
-    quad.unk88 = (long)D_L06_00162054 | ((long)D_L06_00162058 << 2) | ((long)D_L06_0016205C << 4) |
-                 ((long)D_L06_00162060 << 6) | ((long)D_L06_00162068 << 32);
+    quad.tex = tex_3003f0(backdrop_mesh_effect_texture_index_gp);
+    quad.unk88 = (long)backdrop_mesh_blend_color_a_selector_gp | ((long)backdrop_mesh_blend_color_b_selector_gp << 2) | ((long)backdrop_mesh_blend_alpha_c_selector_gp << 4) |
+                 ((long)backdrop_mesh_blend_color_d_selector_gp << 6) | ((long)backdrop_mesh_blend_fixed_alpha_gp << 32);
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
-    init_3003f0(&buf);
+    init_3003f0(&backdrop_draw_transform);
     c = D_L06_0016206C;
-    buf.f38 = moby_breakup_z_offset_gp;
+    backdrop_draw_transform.f38 = moby_breakup_z_offset_gp;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
     for (i = 0; i < 64; i++) {
-        e = &D_L06_001F34B0[i * 4];
+        quad_corner_index_pair = &D_L06_001F34B0[i * 4];
         for (j = 0; j < 4; j++) {
-            k = e->uv;
-            vmul_3003f0(&quad.corner[j], &D_L06_001F2EB0[e->v], D_L06_00162074);
-            e++;
+            k = quad_corner_index_pair->uv;
+            vmul_3003f0(&quad.corner[j], &D_L06_001F2EB0[quad_corner_index_pair->v], backdrop_mesh_vertex_position_scale_gp);
+            quad_corner_index_pair++;
             quad.uv[j].u = D_L06_001F38B0[k].u;
             quad.uv[j].v = D_L06_001F38B0[k].v;
         }
-        draw_3003f0(&quad, &buf, 0);
+        draw_3003f0(&quad, &backdrop_draw_transform, 0);
     }
 }
 
@@ -6022,13 +6022,13 @@ void effect_quad_draw_single(void) {
     int i;
     int j;
 
-    pkt[1] = tex_3003f0(D_L06_00162064);
+    pkt[1] = tex_3003f0(backdrop_mesh_effect_texture_index_gp);
     mp = mat[0];
     pkt[2] = 0xFF9000000260;
-    pkt[3] = D_L06_00162054 | (long)D_L06_00162058 << 2;
-    pkt[3] |= (long)D_L06_0016205C << 4;
-    pkt[3] |= (long)D_L06_00162060 << 6;
-    pkt[3] |= (long)D_L06_00162068 << 32;
+    pkt[3] = backdrop_mesh_blend_color_a_selector_gp | (long)backdrop_mesh_blend_color_b_selector_gp << 2;
+    pkt[3] |= (long)backdrop_mesh_blend_alpha_c_selector_gp << 4;
+    pkt[3] |= (long)backdrop_mesh_blend_color_d_selector_gp << 6;
+    pkt[3] |= (long)backdrop_mesh_blend_fixed_alpha_gp << 32;
     pkt[0] = 0;
     init_3003f0(mp);
     mat[3][2] = moby_breakup_z_offset_gp;
@@ -6037,7 +6037,7 @@ void effect_quad_draw_single(void) {
     colors[1] = D_L06_0016206C;
     colors[0] = D_L06_0016206C;
     for (i = 0; i < 96; i++) {
-        vmul_3003f0(center, &D_L06_001FAFF0[i], D_L06_00162074);
+        vmul_3003f0(center, &D_L06_001FAFF0[i], backdrop_mesh_vertex_position_scale_gp);
         transform_vector(center, center, mat);
         subtract_vector_xyz(dir, center, D_L06_00167540);
         fast_vec_normalize(dir, dir, 1.0f);
@@ -6047,7 +6047,7 @@ void effect_quad_draw_single(void) {
         for (j = 0; j < 4; j++) {
             int a = D_L06_001F7EB0[i][j][0];
             int b = D_L06_001F7EB0[i][j][1];
-            vmul_3003f0(&m[j], &D_L06_001F77B0[a], D_L06_00162074);
+            vmul_3003f0(&m[j], &D_L06_001F77B0[a], backdrop_mesh_vertex_position_scale_gp);
             uv[j][0] = D_L06_001F84B0[b][0];
             uv[j][1] = D_L06_001F84B0[b][1];
         }
