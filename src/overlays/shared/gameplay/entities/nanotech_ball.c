@@ -3083,9 +3083,10 @@ void FUN_L00_002ddf60(void *moby,void *position) {
             if(segment>0) {
                 if(segment>=2 && sparks<2) {
                     { int k=random_integer_below(20);
+                    V41 *ring;
                     amount=random_float_between(0.2f,1.0f);
-                    k=(int)&((V41 *)D_L00_001E6020)[k];
-                    lerp_vector(&tmp_a,(V41 *)k,(V41 *)k+segment*20,amount); }
+                    ring=(V41 *)D_L00_001E6020+k;
+                    lerp_vector(&tmp_a,ring,ring+segment*20,amount); }
                     lerp_vector(&tmp_c,D_L00_001E5F40,D_L00_001E5F40+segment*16,amount);
                     speed=random_float_between(60000.0f,180000.0f);
                     p=new_particle41(&tmp_a,0.0f,1.0f,1.03f,random_integer_below(5)+1,&tmp_b,speed,0x404040);
