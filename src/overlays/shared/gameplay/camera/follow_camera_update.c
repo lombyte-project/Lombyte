@@ -892,16 +892,16 @@ void FUN_L00_002eac18(int mode) {
     initialize_camera_record_handoff_defaults();
     if (mode == 0) {
         float v0[4] __attribute__((aligned(16)));
-        float v1[4] __attribute__((aligned(16)));
+        float camera_backward_offset[4] __attribute__((aligned(16)));
         float hero_rotation_matrix[16] __attribute__((aligned(16)));
         char *hero_rotation = (char *)&hero.motion.rot;
         char *camera_position = current_follow_camera + 0x30;
         FUN_001fa050_2eac18(hero_rotation_matrix, hero_rotation);
         FUN_001fa2b8_2eac18(current_follow_camera, hero_rotation_matrix);
-        FUN_001f9bf8_2eac18(v1, hero_rotation_matrix, -1.0f);
+        FUN_001f9bf8_2eac18(camera_backward_offset, hero_rotation_matrix, -1.0f);
         FUN_001f9bf8_2eac18(v0, &hero_rotation_matrix[8], 1.2f);
         FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, v0);
-        FUN_001f9a10_2eac18(camera_position, camera_position, v1);
+        FUN_001f9a10_2eac18(camera_position, camera_position, camera_backward_offset);
         *(short *)(*(char **)(camera_globals + 0x180) + 0x8A) = 1;
     } else if (mode == 2) {
         *(char *)(camera_globals + 0x273) = 0;
