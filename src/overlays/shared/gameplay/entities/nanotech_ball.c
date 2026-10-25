@@ -2880,7 +2880,8 @@ void FUN_L00_002ddcb8(char *a, char *b) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 #else
-/* Form the Suck Cannon's bending suction tube and update its particles. */
+/* Form the Suck Cannon's bending suction tube and update its particles.
+   Near miss, 15 words: registers of the tube loop's address temps differ. */
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002DF410.c: func_L00_002DF410). */
 typedef unsigned int Q41 __attribute__((mode(TI)));
 
@@ -3062,13 +3063,16 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         qcopy(&axis,&basis_c);
         radius=(float)i*0.3f;
         phase=(float)i*0.7f;
-        { V41 *dst=((V41 *)D_L00_001E6020)+i*20; V41 *src=D_L00_001E4B40; unsigned int j;
-        for(j=0;j<20;j++) {
+        { V41 *dst; int j; V41 *src;
+        dst=((V41 *)D_L00_001E6020)+i*20; j=0; src=D_L00_001E4B40;
+        while(1) {
             angle=radius+0.1f;
             angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+phase,0.0f))*0.1f;
             fast_vec_scale(&tmp_f,src++,angle);
             transform_vector_by_basis(&tmp_f,&tmp_f,&interp);
             add_vector_xyz(dst++,D_L00_001E5F40+i*16,&tmp_f);
+            j++;
+            if(j>=20) break;
         }
         }
         fast_vec_normalize(&step,&motion,D_L00_00161B84);
