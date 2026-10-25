@@ -1577,7 +1577,7 @@ void update_hero_state_motion(void) {
         hero.motion.move_yaw = FUN_001f9b80_cf(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         int t0;
         int t1;
         int n;
