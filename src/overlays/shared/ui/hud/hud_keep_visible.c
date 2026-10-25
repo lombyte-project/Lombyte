@@ -379,42 +379,42 @@ void hud_update_counter() __asm__("FUN_L00_00235ea0");
  * depends on the star index. */
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
 void hud_update_particles(void) {
-    Star_236458 *p;
+    Star_236458 *hud_star;
     int i;
-    float lim, hx, hy, nhx, nhy;
+    float boundary_inset, hx, hy, nhx, nhy;
 
     hud_update_counter();
-    p = &D_L00_0017E660[D_L00_0015F3F8 % 2];
+    hud_star = &D_L00_0017E660[D_L00_0015F3F8 % 2];
     i = D_L00_0015F3F8 % 2;
-    for (; i < 100; i += 2, p += 2) {
+    for (; i < 100; i += 2, hud_star += 2) {
         if (i < 10) {
-            lim = star_init_limit0_gp;
+            boundary_inset = star_init_limit0_gp;
         } else if (i < 30) {
-            lim = star_init_limit1_gp;
+            boundary_inset = star_init_limit1_gp;
         } else {
-            lim = star_init_limit2_gp;
+            boundary_inset = star_init_limit2_gp;
         }
-        hx = lim - 17.0f;
-        hy = lim - 116.0f;
+        hx = boundary_inset - 17.0f;
+        hy = boundary_inset - 116.0f;
         nhx = -hx;
         nhy = -hy;
-        p->x += p->vx;
-        p->y += p->vy;
-        if (p->x < hx) {
-            p->x = hx;
-            p->vx = -p->vx;
+        hud_star->x += hud_star->vx;
+        hud_star->y += hud_star->vy;
+        if (hud_star->x < hx) {
+            hud_star->x = hx;
+            hud_star->vx = -hud_star->vx;
         }
-        if (nhx < p->x) {
-            p->x = nhx;
-            p->vx = -p->vx;
+        if (nhx < hud_star->x) {
+            hud_star->x = nhx;
+            hud_star->vx = -hud_star->vx;
         }
-        if (p->y < hy) {
-            p->y = hy;
-            p->vy = -p->vy;
+        if (hud_star->y < hy) {
+            hud_star->y = hy;
+            hud_star->vy = -hud_star->vy;
         }
-        if (nhy < p->y) {
-            p->y = nhy;
-            p->vy = -p->vy;
+        if (nhy < hud_star->y) {
+            hud_star->y = nhy;
+            hud_star->vy = -hud_star->vy;
         }
     }
 }
