@@ -4,9 +4,6 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
-#else
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
@@ -43,43 +40,43 @@ extern float D_L00_0016162C __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668[] __attribute__((section(".sdata")));
 extern short D_L00_00161670[] __attribute__((section(".sdata")));
-extern short D_L00_00161660;
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern short D_L00_00161660_c __asm__("D_L00_00161660");
+extern float fast_add_rotations_c(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations_c(float, float) __asm__("FUN_001fa5c8");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy_c(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void clear_u64_value() __asm__("FUN_001f99f8");
+extern void fast_vec_normalize_c(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void clear_u64_value_c() __asm__("FUN_001f99f8");
 extern void blend_vector_2b94d0(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern float fast_cos(float), fast_sin(float), fast_arc_tan(float, float);
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float_c(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32_c3(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
-extern float FUN_L00_00257c48(float, float);
+extern float FUN_L00_00257c48_c(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 /* The arc points one slot before each arc row. */
 extern Vec4 D_L00_001DBA10[4][5];
 extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
+extern void build_look_at_matrix_c2(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
-extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
+extern int FUN_001efa68_c3(Vec4 *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
 extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
 extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-extern unsigned char *FUN_L00_00272060(void *, int, float, float, int, int, int, float *, float);
+extern unsigned char *FUN_L00_00272060_c(void *, int, float, float, int, int, int, float *, float) __asm__("FUN_L00_00272060");
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
 typedef struct {
@@ -133,9 +130,9 @@ void FUN_L00_002b94d0(u8 *o) {
     char *previous, *side;
     Vec4 *beam;
     float *side_waves;
-    D_L00_001615AC_gp = fast_add_rotations(D_L00_001615AC_gp, D_L00_001615B0);
-    D_L00_001615B4_gp = fast_subtract_rotations(D_L00_001615B4_gp, D_L00_001615B8);
-    D_L00_001615C8_gp = fast_add_rotations(D_L00_001615C8_gp, D_L00_001615CC);
+    D_L00_001615AC_gp = fast_add_rotations_c(D_L00_001615AC_gp, D_L00_001615B0);
+    D_L00_001615B4_gp = fast_subtract_rotations_c(D_L00_001615B4_gp, D_L00_001615B8);
+    D_L00_001615C8_gp = fast_add_rotations_c(D_L00_001615C8_gp, D_L00_001615CC);
     if (!v->target || (enabled && !v->second_target)) {
         if (v->second_target) {
             v->target = v->second_target;
@@ -153,7 +150,7 @@ void FUN_L00_002b94d0(u8 *o) {
                 if (candidate->state == 0xfd) goto next_candidate;
                 if (!suck_get_aim_height(candidate)) continue;
                 fast_vec_sub(&target0, &candidate->pos, v);
-                distance_w16 = vector_length_xy(&target0);
+                distance_w16 = vector_length_xy_c(&target0);
                 if (D_L00_00161594 < distance_w16) continue;
                 length_w3 = fast_difference_between_rotations(camera[0x56],
                     fast_arc_tan(candidate->pos.x - camera[0x50], candidate->pos.y - camera[0x51]));
@@ -206,17 +203,17 @@ next_candidate:;
     }
     if (enabled) D_L00_001615F8 = 0x207f20;
     else D_L00_001615F8 = 0x7f2020;
-    clear_u64_value(&camera_direction);
+    clear_u64_value_c(&camera_direction);
     make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled + 2.0f);
     hit.kind = 5; hit.mode = 1; hit.id = *(short *)(o + 0xa6);
     v->count3e = 20;
     player = &hero;
     collect_mobies_in_sphere(0.3f, v, 0x10, player->moby, &hit);
     fast_vec_sub(&direction, &v->tip, v);
-    fast_vec_normalize(&direction, &direction, 1.0f);
+    fast_vec_normalize_c(&direction, &direction, 1.0f);
     if (v->target || v->second_target) {
         fast_vec_cross(&delta, &direction, &player->gravity_dir);
-        build_look_at_matrix(&direction, &direction, &delta, 0.17453292f);
+        build_look_at_matrix_c2(&direction, &direction, &delta, 0.17453292f);
     }
     hit_result = 0;
     collided_count = 0;
@@ -229,10 +226,10 @@ next_candidate:;
         side = (char *)&beam[seg + 20];
         n = (float)seg;
         factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
-                    (convert_integer_to_float(seg) * 0.05f);
+                    (convert_integer_to_float_c(seg) * 0.05f);
         phase = normalize_angle(D_L00_001615AC_gp + n * D_L00_001615A0);
         wave = factor * fast_sin(phase);
-        wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
+        wave += FUN_L00_00257c48_c(D_L00_001615E4, D_L00_001615E8);
 
         beam[seg].f[2] -= ((float *)D_L00_001DB840)[seg];
         ((float *)D_L00_001DB840)[seg] = wave;
@@ -254,7 +251,7 @@ next_candidate:;
                 length_w4 = fast_vec_length(&target_delta);
                 if (length_w4 != 0.0f) {
                     if (seg == 19) { factor_w13 = 0.5f; spacing = length_w4; }
-                    else if (seg >= 16) { factor_w13 = 0.5f; spacing = length_w4 / convert_integer_to_float(19 - seg); }
+                    else if (seg >= 16) { factor_w13 = 0.5f; spacing = length_w4 / convert_integer_to_float_c(19 - seg); }
                     else factor_w13 = 0.1f;
                     fast_vec_scale(spacing / length_w4, &target_delta, &target_delta);
                     blend_vector_2b94d0(factor_w13, &step, &step, &target_delta);
@@ -265,8 +262,8 @@ next_candidate:;
                 length_w4 = fast_vec_length(&target_delta);
                 if (length_w4 != 0.0f) {
                     if (seg == 9 || seg == 19) { factor_w13 = 0.7f; spacing = length_w4; }
-                    else if ((unsigned)(seg - 5) < 5) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float(9 - seg); }
-                    else if (seg > 14) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float(19 - seg); }
+                    else if ((unsigned)(seg - 5) < 5) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float_c(9 - seg); }
+                    else if (seg > 14) { factor_w13 = 0.7f; spacing = length_w4 / convert_integer_to_float_c(19 - seg); }
                     else factor_w13 = 0.2f;
                     fast_vec_scale(spacing / length_w4, &target_delta, &target_delta);
                     blend_vector_2b94d0(factor_w13, &step, &step, &target_delta);
@@ -279,11 +276,11 @@ next_candidate:;
             factor = D_L00_001615C0 * fast_sin(angle);
             qcopy(side, &beam[seg]);
             x_s = fast_sin(side_phase);
-            side_wave = FUN_L00_00257c48(0.0f, 0.1f);
+            side_wave = FUN_L00_00257c48_c(0.0f, 0.1f);
             x_c = factor * x_s + side_wave;
             side_waves[seg] = x_c;
             *(float *)((char *)&beam[seg] + 0x148) += x_c;
-            x_a = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
+            x_a = fast_add_rotations_c(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
             x_m = D_L00_001615C4 * fast_cos(side_phase);
             offset.f[0] = fast_cos(x_a) * x_m;
             offset.f[1] = fast_sin(x_a) * x_m;
@@ -301,9 +298,9 @@ next_candidate:;
             struct Hero *h = &hero;
             fast_vec_scale(0.5f, &effects.first.origin, (char *)h->moby + 0xe0);
             fast_vec_add(&target_delta, &h->motion.pos, &effects.first.origin);
-            hit_result = FUN_001efa68(&target_delta, (Vec4 *)v, 0x10, h->moby, 0);
+            hit_result = FUN_001efa68_c3(&target_delta, (Vec4 *)v, 0x10, h->moby, 0);
         } else if (seg == 19 || !(seg & 1)) {
-            hit_result = FUN_001efa68((Vec4 *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4 *)&beam[seg], 0x10, o, 0);
+            hit_result = FUN_001efa68_c3((Vec4 *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4 *)&beam[seg], 0x10, o, 0);
         } else continue;
         fast_vec_sub(&camera_direction, &beam[seg], g_debug_camera);
         camera_direction.f[2] = 0.0f;
@@ -340,7 +337,7 @@ next_candidate:;
     if (v->target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffffUL)) {
         fast_vec_sub(&target_delta, &v->target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
-        fast_vec_normalize(&target_delta, &target_delta, 1.0f);
+        fast_vec_normalize_c(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled + 2.0f);
         effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = *(short *)(o + 0xa6);
@@ -356,7 +353,7 @@ next_candidate:;
     if (v->second_target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffff0000UL)) {
         fast_vec_sub(&target_delta, &v->second_target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
-        fast_vec_normalize(&target_delta, &target_delta, 1.0f);
+        fast_vec_normalize_c(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled + 2.0f);
         effects.hit1.kind = 5; effects.hit1.mode = 3; effects.hit1.id = *(short *)(o + 0xa6);
@@ -375,13 +372,13 @@ next_candidate:;
         else { qcopy(&effects.first.origin, &v->tip); factor_w15 = 0.5f; }
         if (fast_dec_timer_s16(&D_L00_00161658[i])) {
             D_L00_00161658[i] = scale_game_frames(D_L00_00161668[i]);
-            (&D_L00_00161660)[i] = 0;
-            angle = FUN_L00_00257c48(0.5235988f, 1.0471976f);
+            (&D_L00_00161660_c)[i] = 0;
+            angle = FUN_L00_00257c48_c(0.5235988f, 1.0471976f);
             phase = random_float_between(-1.0471976f, 0.17453292f);
             fast_vec_scale(factor_w15, &target_delta, &direction);
             rows = (Vec4 *)(D_0013F3D0 + 0x5d0);
-            build_look_at_matrix(&target_delta, &target_delta, rows, phase);
-            build_look_at_matrix(&target_delta, &target_delta, rows + 1, angle);
+            build_look_at_matrix_c2(&target_delta, &target_delta, rows, phase);
+            build_look_at_matrix_c2(&target_delta, &target_delta, rows + 1, angle);
             qcopy(&arc_points[i][0], &effects.first.origin);
             fast_vec_add(&arc_points[i][1], &effects.first.origin, &target_delta);
             sign = 1.0f;
@@ -389,41 +386,52 @@ next_candidate:;
                 fast_vec_sub(&effects.first.hit0, &arc_points[i][-1] + m, g_debug_camera);
                 phase = random_float_between(0.17453292f, 0.9599311f) * sign;
                 sign = -sign;
-                build_look_at_matrix(&target_delta, &target_delta, &effects.first.hit0, phase);
+                build_look_at_matrix_c2(&target_delta, &target_delta, &effects.first.hit0, phase);
                 fast_vec_add(&arc_points[i][m], &arc_points[i][-1] + m, &target_delta);
             }
         } else {
             int d, n0;
             for (j = 1; j < 5; j++) {
                 fast_vec_sub(&differences[j], &arc_points[i][j], &arc_points[i][-1] + j);
-                differences[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                differences[j].f[0] += FUN_L00_00257c48_c(0.0f, 0.1f);
+                differences[j].f[1] += FUN_L00_00257c48_c(0.0f, 0.1f);
+                differences[j].f[2] += FUN_L00_00257c48_c(0.0f, 0.1f);
             }
             qcopy(&arc_points[i][0], &effects.first.origin);
             for (j = 1; j < 5; j++)
                 fast_vec_add(&arc_points[i][j], &arc_points[i][-1] + j, &differences[j]);
             d = D_L00_00161670[i]; n0 = D_L00_00161658[i];
             if (d < n0) d = n0 - d; else d = d - n0;
-            distance = convert_integer_to_float(d) / convert_integer_to_float(scale_game_frames(15));
-            (&D_L00_00161660)[i] = truncate_float_to_s32((1.0f - distance) * 32.0f);
+            distance = convert_integer_to_float_c(d) / convert_integer_to_float_c(scale_game_frames(15));
+            (&D_L00_00161660_c)[i] = truncate_float_to_s32_c3((1.0f - distance) * 32.0f);
         }
     }
-    angle = FUN_L00_00257c48(0.5235988f, 1.0471976f);
+    angle = FUN_L00_00257c48_c(0.5235988f, 1.0471976f);
     phase = random_float_between(-0.5235988f, 1.0471976f);
     fast_vec_scale(D_L00_00161628 * frame_scale, &target_delta, &direction);
-    build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
-    build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
+    build_look_at_matrix_c2(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
+    build_look_at_matrix_c2(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.2f, 0.6f);
-    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)&target_delta, 0.0f);
+    FUN_L00_00272060_c(v, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)&target_delta, 0.0f);
     spin = -spin;
-    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.15f, amplitude * 0.5f, 0x307f7f7f, 0, spin, (float *)&target_delta, 0.0f);
+    FUN_L00_00272060_c(v, scale_game_frames(15), amplitude * 0.15f, amplitude * 0.5f, 0x307f7f7f, 0, spin, (float *)&target_delta, 0.0f);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
-    FUN_L00_00272060(&v->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)D_L00_0015F580_macro, 0.0f);
+    {
+        /* Fakematch: a never-taken branch (cprop proves dead == 0, then jump deletes it). Retail
+           had about 30 more insns before gcse that vanish later; they size the PRE hash table,
+           which orders the &target_delta and &effects spill slots. */
+        int dead = 0;
+        if (amplitude < 0.0f) dead = 0;
+        if (dead) {
+            FUN_L00_00272060_c(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+            FUN_L00_00272060_c(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+            FUN_L00_00272060_c(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+        }
+    }
+    FUN_L00_00272060_c(&v->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)D_L00_0015F580_macro, 0.0f);
 }
-#endif
 typedef struct {
     u8 pad[0x3E];
     s16 h3E;
