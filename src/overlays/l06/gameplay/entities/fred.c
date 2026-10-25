@@ -5962,7 +5962,7 @@ extern void draw_3003f0(void *, void *, int) __asm__("FUN_001f7d30");
 void draw_backdrop_mesh(void) {
     Q3003f0 quad;
     B3003f0 backdrop_draw_transform;
-    unsigned int c;
+    unsigned int shared_quad_vertex_color;
     int i, j, k;
     I3003f0 *quad_corner_index_pair;
 
@@ -5972,12 +5972,12 @@ void draw_backdrop_mesh(void) {
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
     init_3003f0(&backdrop_draw_transform);
-    c = D_L06_0016206C;
+    shared_quad_vertex_color = D_L06_0016206C;
     backdrop_draw_transform.f38 = moby_breakup_z_offset_gp;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    quad.color[3] = shared_quad_vertex_color;
+    quad.color[2] = shared_quad_vertex_color;
+    quad.color[1] = shared_quad_vertex_color;
+    quad.color[0] = shared_quad_vertex_color;
     for (i = 0; i < 64; i++) {
         quad_corner_index_pair = &D_L06_001F34B0[i * 4];
         for (j = 0; j < 4; j++) {
