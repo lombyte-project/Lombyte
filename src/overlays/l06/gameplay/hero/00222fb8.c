@@ -2751,8 +2751,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x4D:
-    case 0x4E: {
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90:
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90: {
         f32 s;
         f32 a;
         f32 b;
