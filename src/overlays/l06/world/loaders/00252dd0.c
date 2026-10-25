@@ -75,7 +75,7 @@ extern s32 D_L06_001C6E80[];
 extern s32 shrub_texture_reference_count __asm__("D_L06_001604AC");
 extern s32 D_L06_001BCD30[];
 extern char *D_L18_0015F600_252dd0 __asm__("D_L06_0015F600");
-extern s32 D_L06_0016051C;
+extern s32 level_06_sky_definition_base __asm__("D_L06_0016051C");
 extern Class252dd0 *D_L06_00197A80[];
 extern s32 D_L06_0016000C;
 extern s32 D_L06_00160010;
@@ -274,7 +274,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         if (level_header[4])
             relocate_sky_definition(base + level_header[4]);
         else
-            D_L06_0016051C = 0;
+            level_06_sky_definition_base = 0;
         resolve_level_asset_block_pointers(base + level_header[5]);
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7]; i < level_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)level_header + level_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
@@ -387,18 +387,18 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         printf_1e93b0(D_L06_001FFC60, KB(D_L18_00174800_252dd0.f14 - D_L18_00174800_252dd0.f10));
         if (D_L18_0015F600_252dd0 != 0)
             printf_1e93b0(D_L06_001FFC78, KB(D_L18_0015F600_252dd0 - D_L18_00174800_252dd0.f14));
-        else if (D_L06_0016051C != 0)
-            printf_1e93b0(D_L06_001FFC78, KB((char *)D_L06_0016051C - D_L18_00174800_252dd0.f14));
+        else if (level_06_sky_definition_base != 0)
+            printf_1e93b0(D_L06_001FFC78, KB((char *)level_06_sky_definition_base - D_L18_00174800_252dd0.f14));
         else
             printf_1e93b0(D_L06_001FFC90);
         if (D_L18_0015F600_252dd0 != 0) {
-            if (D_L06_0016051C != 0)
-                printf_1e93b0(D_L06_001FFCB0, KB(D_L06_0016051C - (s32)D_L18_0015F600_252dd0));
+            if (level_06_sky_definition_base != 0)
+                printf_1e93b0(D_L06_001FFCB0, KB(level_06_sky_definition_base - (s32)D_L18_0015F600_252dd0));
             else
                 printf_1e93b0(D_L06_001FFCB0, KB(D_L18_00174840_252dd0[0] - D_L18_0015F600_252dd0));
         }
         if (level_header[4])
-            printf_1e93b0(D_L06_001FFCC8, KB(D_L18_00174840_252dd0[0] - (char *)D_L06_0016051C));
+            printf_1e93b0(D_L06_001FFCC8, KB(D_L18_00174840_252dd0[0] - (char *)level_06_sky_definition_base));
         printf_1e93b0(D_L06_001FFCE0, KB(level_06_texture_reference_base - (s32)D_L18_00174840_252dd0[0]));
         printf_1e93b0(D_L06_001FFCF8, KB((D_L06_001B2200[1] >> 4) - level_06_texture_reference_base));
         printf_1e93b0(D_L06_001FFD10, KB((s32)D_L06_0015F420 - (D_L06_001B2200[1] >> 4)));
