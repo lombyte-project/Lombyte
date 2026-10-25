@@ -22,7 +22,7 @@ void FUN_L03_0024fba8(Q *axis, Q *point, float angle) {
     float skew_sq[4][4] __attribute__((aligned(16)));
     float sin_part[4][4] __attribute__((aligned(16)));
     float cos_part[4][4] __attribute__((aligned(16)));
-    float rot[4][4] __attribute__((aligned(16)));
+    float axis_rotation_matrix[4][4] __attribute__((aligned(16)));
     float *point_p = point_v;
     *(Q *)axis_v = *axis;
     *(Q *)point_p = *point;
@@ -47,6 +47,6 @@ void FUN_L03_0024fba8(Q *axis, Q *point, float angle) {
     FUN_L00_001ffd48(sin_part, skew, fast_sin(angle));
     FUN_L00_001ffe20(sin_part, sin_part, cos_part);
     set_identity_matrix(cos_part);
-    FUN_L00_001ffe20(rot, sin_part, cos_part);
-    matrix_to_euler(rot, point_p);
+    FUN_L00_001ffe20(axis_rotation_matrix, sin_part, cos_part);
+    matrix_to_euler(axis_rotation_matrix, point_p);
 }
