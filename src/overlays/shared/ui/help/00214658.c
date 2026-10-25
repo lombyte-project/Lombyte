@@ -42,11 +42,11 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern f32 D_L00_0017BDD0[];
 void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
 void hero_move_state_velocity(void) {
-    HopVec_214658 tmp;
+    HopVec_214658 velocity_addend;
     f32 x;
     f32 speed;
     f32 a;
-    f32 d;
+    f32 planar_speed_reduction_step;
     f32 arg;
     s32 state;
 
@@ -125,8 +125,8 @@ void hero_move_state_velocity(void) {
                 hero.motion.velocity.f[1] = FUN_001f9de0_214658(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_214658(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                normalize_vector_xyz(&tmp, &hero.motion.move_dir, ED6C * 4.9f);
-                FUN_001f9a10_214658(&hero.motion.velocity, &hero.motion.velocity, &tmp);
+                normalize_vector_xyz(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
+                FUN_001f9a10_214658(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
             }
         }
         hero.ground_speed = hero.motion.flat_speed;
@@ -145,11 +145,11 @@ void hero_move_state_velocity(void) {
         arg = ED70 * 20.0f;
         if (hero.target_speed < D_L00_0017BDD0[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
-                d = hero.stickless_decel;
+                planar_speed_reduction_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
-                    d = ED70 * 0.17f;
+                    planar_speed_reduction_step = ED70 * 0.17f;
                 speed = vector_length_xy(&hero.motion.velocity);
-                approach_value(0.0f, d, &speed);
+                approach_value(0.0f, planar_speed_reduction_step, &speed);
                 trooper_scale(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
