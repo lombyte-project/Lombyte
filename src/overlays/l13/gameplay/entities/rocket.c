@@ -1238,7 +1238,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         HIT_RESULT_NO_REACTION = 11
     };
     enum {
-        GROUND_MATERIAL_DESTROYS_WALKER = 0
+        GROUND_MATERIAL_DESTROYS_WALKER = 0,
+        GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1335,7 +1336,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 1:
         case 3:
         case 11:
-        case 13:
+        case GROUND_MATERIAL_EXPLODES_WALKER:
             moby->flags &= ~0x1000;
             stop_moby_sound_8d10(moby, 0, -1);
             spawn_explosion(moby, D_L13_00160680, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
