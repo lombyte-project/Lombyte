@@ -1008,18 +1008,18 @@ float *D_L17_00162410[2] = {D_L17_001DE7D0, D_L17_001DE838};
 void draw_reflection_strips(void) __asm__("FUN_L17_002f5690");
 void draw_reflection_strips(void) {
     int i;
-    float *p;
+    float *reflection_uv_coordinates;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x30));
     vu1_add_g_sregister(0x42, 0x2000000064L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
-    p = (float *)D_L17_001DE8A0;
+    reflection_uv_coordinates = (float *)D_L17_001DE8A0;
     for (i = 0; i < 2; i++) {
         compute_reflection_sphere_map_uvs(D_L17_001623F0[i], ((int *)D_L17_00162408)[i],
-                         ((int *)D_L17_001623F8)[i], ((int *)D_L17_00162400)[i], p);
+                         ((int *)D_L17_001623F8)[i], ((int *)D_L17_00162400)[i], reflection_uv_coordinates);
         FUN_L00_001fde98(D_L17_001623F0[i], ((int *)D_L17_001623F8)[i],
-                         ((int *)D_L17_00162410)[i], p, 1);
+                         ((int *)D_L17_00162410)[i], reflection_uv_coordinates, 1);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
