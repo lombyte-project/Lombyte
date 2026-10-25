@@ -65,6 +65,7 @@ void update_mode_freeze(void) {
     enum {
         MODE_FREEZE_AWAIT_CROSS_RESUME = 2,
         MODE_FREEZE_AWAIT_TRIANGLE_RESUME = 3,
+        MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME = 12,
         MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16
     };
     s32 video_mode;
@@ -301,7 +302,7 @@ void update_mode_freeze(void) {
             pause_current_action_list[0] = freeze.unk18;
             break;
 
-        case 12:
+        case MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME:
             if (mode_freeze_flags & 2) {
                 break;
             }
