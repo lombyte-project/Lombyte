@@ -128,20 +128,20 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
 extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
-extern int D_L14_001614E0;
+extern int plasmabot_beam_cooldown_frames __asm__("D_L14_001614E0");
 
-void FUN_L14_002b3890(int idx) {
-    short *p;
-    if (idx != -1) {
-        p = D_L14_001ABF40[idx];
-        if (p != 0) {
+void FUN_L14_002b3890(int selected_moby_list_index) {
+    short *listed_moby_entry_cursor;
+    if (selected_moby_list_index != -1) {
+        listed_moby_entry_cursor = D_L14_001ABF40[selected_moby_list_index];
+        if (listed_moby_entry_cursor != 0) {
             do {
-                char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
+                char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
                 char *data = *(char **)(moby + 0x78);
                 if (*(short *)(moby + 0xA6) == 0x1C) {
-                    *(short *)(data + 0x260) = scale_game_frames(D_L14_001614E0);
+                    *(short *)(data + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
-            } while (*p++ >= 0);
+            } while (*listed_moby_entry_cursor++ >= 0);
         }
     }
 }
