@@ -5,8 +5,8 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/vendor/render_vendor_buy_label_pass/FUN_00238f08.s", FUN_00238f08);
 #else
-/* Near miss, 5 rows: retail computes the %hi of vendor_item_prices once before the first
-   purchase_kind test; this computes it in the ammo test and copies it for the other path. */
+/* Near miss (game BYTES 66/149, size-exact): retail computes the %hi of vendor_item_prices
+   once before the first purchase_kind test, which shifts the register choice after it. */
 /* Ported from rac1-decomp (src/game/vendor.c: func_0023A220). */
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
@@ -40,12 +40,8 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) __asm__("
 
 void render_vendor_buy_label_pass(char *unused, int width, int height) {
     struct TextRegion region;
-    struct VendorState *vendor;
-    int message_id;
     int price;
-    int saved;
-    /* Fakematch: the entry size in a variable keeps a multiply in the first test. */
-    int pricing_size = sizeof(struct VendorItemPricing);
+    int message_id;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     memset(&region, 0, sizeof(region));
@@ -58,42 +54,31 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
     if (vendor_state.selection_active != 0) {
         if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 &&
             weapon_ammo_counts[vendor_state.entries[vendor_state.selected_entry].item_index] >=
-                ((struct VendorItemPricing *)((char *)vendor_item_prices +
-                                              vendor_state.entries[vendor_state.selected_entry]
-                                                      .item_index *
-                                                  pricing_size))
-                    ->ammo_capacity &&
-            /* Fakematch: a load/store pair that reload_cse deletes; it fixes the call argument
-               order. */
-            (saved = vendor_state.discount_ammo_pricing,
-             vendor_state.discount_ammo_pricing = saved, 1)) {
+                vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index]
+                    .ammo_capacity) {
             message_id = 0x5233;
-        } else {
-            vendor = &vendor_state;
-            if (vendor->entries[vendor->selected_entry].purchase_kind == 1) {
-                if (vendor->discount_ammo_pricing) {
-                    price = vendor_item_prices[vendor->entries[vendor->selected_entry].item_index]
-                                .discounted_ammo_price;
-                } else {
-                    price = vendor_item_prices[vendor->entries[vendor->selected_entry].item_index]
-                                .ammo_price;
-                }
-                message_id = 0x5233;
-                if (current_bolt_count_macro >= price)
-                    message_id = 0x5234;
+        } else if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1) {
+            if (vendor_state.discount_ammo_pricing != 0) {
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index]
+                            .discounted_ammo_price;
             } else {
-                int cost;
-                if (discount_purchase_pricing[0] != 0) {
-                    cost = vendor_item_prices[vendor->entries[vendor->selected_entry].item_index]
-                               .discounted_purchase_price;
-                } else {
-                    cost = vendor_item_prices[vendor->entries[vendor->selected_entry].item_index]
-                               .purchase_price;
-                }
-                message_id = 0x5233;
-                if (current_bolt_count_macro >= cost)
-                    message_id = 0x524E;
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index]
+                            .ammo_price;
             }
+            message_id = 0x5233;
+            if (current_bolt_count_macro >= price)
+                message_id = 0x5234;
+        } else {
+            if (discount_purchase_pricing[0] != 0) {
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index]
+                            .discounted_purchase_price;
+            } else {
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index]
+                            .purchase_price;
+            }
+            message_id = 0x5233;
+            if (current_bolt_count_macro >= price)
+                message_id = 0x524E;
         }
     } else {
         message_id = 0x5234;
