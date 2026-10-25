@@ -3246,13 +3246,13 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
 }
 f32 FUN_001f99c0(f32);
 
-f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
+f32 FUN_L01_002f81c8(f32 *pos, f32 *spring_axis_velocity, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
     f32 velocity_adjustment;
     f32 f;
 
     range = range * range;
     damp = ((1.0f - damp) - 1.0f) * frame_scale + 1.0f;
-    *vel = *vel * damp;
+    *spring_axis_velocity = *spring_axis_velocity * damp;
     velocity_adjustment = *pos - target;
     velocity_adjustment = velocity_adjustment * velocity_adjustment;
     if (range < velocity_adjustment) {
@@ -3260,11 +3260,11 @@ f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 velocity_adjustment_sca
     }
     velocity_adjustment = velocity_adjustment * velocity_adjustment_scale / range;
     if (target < *pos) {
-        *vel = *vel - velocity_adjustment;
+        *spring_axis_velocity = *spring_axis_velocity - velocity_adjustment;
     } else {
-        *vel = *vel + velocity_adjustment;
+        *spring_axis_velocity = *spring_axis_velocity + velocity_adjustment;
     }
-    *pos = *pos + *vel;
+    *pos = *pos + *spring_axis_velocity;
     return FUN_001f99c0(target - *pos);
 }
 typedef union {
