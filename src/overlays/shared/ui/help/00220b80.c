@@ -238,11 +238,11 @@ extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
 extern f32 D_L02_0017C3D0[];
 void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
 void hero_update_hop_velocity(void) {
-    HopVec_223450 tmp;
+    HopVec_223450 velocity_addend;
     f32 x;
     f32 speed;
     f32 a;
-    f32 d;
+    f32 speed_reduction_step;
     f32 arg;
     s32 state;
 
@@ -311,8 +311,8 @@ void hero_update_hop_velocity(void) {
                 hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                FUN_001f9bf8_223450(&tmp, &hero.motion.move_dir, ED6C * 4.9f);
-                FUN_001f9a10_223450(&hero.motion.velocity, &hero.motion.velocity, &tmp);
+                FUN_001f9bf8_223450(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
+                FUN_001f9a10_223450(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
             }
         }
         hero.ground_speed = hero.motion.flat_speed;
@@ -331,9 +331,9 @@ void hero_update_hop_velocity(void) {
         arg = ED70 * 20.0f;
         if (hero.target_speed < D_L02_0017C3D0[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
-                d = hero.stickless_decel;
+                speed_reduction_step = hero.stickless_decel;
                 speed = FUN_001f9b20_223450(&hero.motion.velocity);
-                approach_value_223450(0.0f, d, &speed);
+                approach_value_223450(0.0f, speed_reduction_step, &speed);
                 FUN_001f9c48_223450(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
