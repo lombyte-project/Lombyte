@@ -1584,7 +1584,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x58: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
