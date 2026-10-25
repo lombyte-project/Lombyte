@@ -2877,11 +2877,7 @@ void FUN_L00_002ddcb8(char *a, char *b) {
         for (j = 199; j >= 0; j--) ((E04_DF168 *)D_L00_001E4C80)[j].f14 = 0;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
-#else
-/* Form the Suck Cannon's bending suction tube and update its particles.
-   Near miss, 15 words: registers of the tube loop's address temps differ. */
+/* Form the Suck Cannon's bending suction tube and update its particles. */
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002DF410.c: func_L00_002DF410). */
 typedef unsigned int Q41 __attribute__((mode(TI)));
 
@@ -2960,7 +2956,7 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         frame[3],tmp_c,motion,tmp_d,tmp_e,interp,cross_c,basis_c,tmp_f,unused_a,unused_b;
     V41 *orientation;
     int i,j,n,segment,next_ring;
-    float t,angle,turn,delta,dot,length,radius,phase,amount,speed;
+    float t,angle,turn,delta,dot,length,amount,speed;
     Particle41 *p;
     V41 *anchor,*previous,*source;
 
@@ -3061,18 +3057,13 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         fast_vec_normalize(&cross_c,&cross_c,1.0f);
         cross_vectors_xyz(&basis_c,&cross_c,&interp);
         qcopy(&axis,&basis_c);
-        radius=(float)i*0.3f;
-        phase=(float)i*0.7f;
-        { V41 *dst; int j; V41 *src;
-        dst=((V41 *)D_L00_001E6020)+i*20; j=0; src=D_L00_001E4B40;
-        while(1) {
-            angle=radius+0.1f;
-            angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+phase,0.0f))*0.1f;
-            fast_vec_scale(&tmp_f,src++,angle);
+        { int j;
+        for(j=0;j<20;j++) {
+            angle=(float)i*0.3f+0.1f;
+            angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+(float)i*0.7f,0.0f))*0.1f;
+            fast_vec_scale(&tmp_f,&D_L00_001E4B40[j],angle);
             transform_vector_by_basis(&tmp_f,&tmp_f,&interp);
-            add_vector_xyz(dst++,D_L00_001E5F40+i*16,&tmp_f);
-            j++;
-            if(j>=20) break;
+            add_vector_xyz(&((V41 (*)[20])D_L00_001E6020)[i][j],D_L00_001E5F40+i*16,&tmp_f);
         }
         }
         fast_vec_normalize(&step,&motion,D_L00_00161B84);
@@ -3166,7 +3157,6 @@ void FUN_L00_002ddf60(void *moby,void *position) {
     }
 }
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
