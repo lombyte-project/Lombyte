@@ -2641,10 +2641,10 @@ extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void env_map_a_draw(void) __asm__("FUN_L16_002e8d40");
 void env_map_a_draw(void) {
-    int *a = (int *)D_L16_00161EF0_gp;
-    int *b = (int *)D_L16_00161F00_gp;
+    int *mesh_point_counts = (int *)D_L16_00161EF0_gp;
+    int *mesh_point_positions = (int *)D_L16_00161F00_gp;
     int *c = (int *)D_L16_00161F10;
-    int *d = (int *)D_L16_00161F20;
+    int *mesh_direction_vectors = (int *)D_L16_00161F20;
     int *e = (int *)D_L16_00161F30;
     int i;
 
@@ -2655,8 +2655,8 @@ void env_map_a_draw(void) {
     font_queue_vu_state();
     for (i = 0; i < 3; i++) {
         if (fast_bsphere_check(D_L16_001DC600[i], 512.0f) != -1) {
-            FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DC630);
-            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DC630, 1);
+            FUN_L16_002e8b98_i(mesh_point_counts[i], mesh_direction_vectors[i], mesh_point_positions[i], c[i], D_L16_001DC630);
+            FUN_L00_001fde98(mesh_point_counts[i], mesh_point_positions[i], e[i], D_L16_001DC630, 1);
         }
     }
 }
