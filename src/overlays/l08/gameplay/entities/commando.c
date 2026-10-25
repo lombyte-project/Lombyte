@@ -859,6 +859,26 @@ void FUN_L08_002f5e58(struct Moby *m) {
             }
         }
         }
+        {
+            /* Fakematch: a never-taken branch (cprop proves dead == 0, then jump deletes it).
+               Retail had about 50 more insns before gcse that vanish later; they size the PRE
+               hash table, which orders the frame address spill slots. */
+            int dead = 0;
+            if (data->flags & 0x8000) dead = 0;
+            if (dead) {
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+                fast_draw_quad_5e58(&quad,0,0);
+            }
+        }
         if (data->flags&2) {
             if (tick_countdown_32_alt(&data->particle_timer)) {
                 data->particle_timer=scale_game_frames_5e58(data->particle_ticks);
