@@ -295,9 +295,9 @@ extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 /* Defined under a local name: this unit already declares FUN_L00_0024f440
  * with a generic prototype for its callers. */
 void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) __asm__("FUN_L00_0024f440");
-void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
-    char *frame_table_container = *(char **)(obj + 0x18);
-    char *u = *(char **)(obj + 0x14);
+void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet_24f440 *out) {
+    char *frame_table_container = *(char **)(animation_blend_state + 0x18);
+    char *u = *(char **)(animation_blend_state + 0x14);
     int nb = (unsigned char)frame_table_container[8];
     int na = (unsigned char)u[8];
     Frame_24f440 *selected_frame;
@@ -330,7 +330,7 @@ void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) {
         if (trailing_byte_count != 0)
             FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
     }
-    ix = (unsigned char *)(*(char **)(*(char **)(obj + 0x18) + 0x1C) + 4);
+    ix = (unsigned char *)(*(char **)(*(char **)(animation_blend_state + 0x18) + 0x1C) + 4);
     scatter_source_cursor = selected_frame->q;
     if (nb != 0) {
         int remaining_scatter_count = nb;
