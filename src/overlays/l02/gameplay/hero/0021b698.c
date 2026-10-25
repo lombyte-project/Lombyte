@@ -1823,8 +1823,8 @@ void update_hero_state_motion(void) {
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         float initial_probe_yaw;
         float offset_probe_yaw;
 
