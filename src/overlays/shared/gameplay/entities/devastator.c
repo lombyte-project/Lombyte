@@ -1906,24 +1906,24 @@ extern void set_background_color(int, int, int) __asm__("FUN_001fb280");
 
 void moby_restore_globals_state(int m_, int flag) __asm__("FUN_L00_002b57f0");
 void moby_restore_globals_state(int m_, int flag) {
-    char *m = (char *)m_;
-    char *p;
+    char *render_restore_moby = (char *)m_;
+    char *render_restore_moby_vars;
     float f0, f1, f2, f3;
-    char *d;
+    char *background_color_source;
 
-    p = *(char **)(m + 0x78);
+    render_restore_moby_vars = *(char **)(render_restore_moby + 0x78);
     D_L00_0015F30C = 0;
-    f0 = *(float *)(p + 0x30);
-    f1 = *(float *)(p + 0x34);
-    f2 = *(float *)(p + 0x38);
-    f3 = *(float *)(p + 0x3C);
+    f0 = *(float *)(render_restore_moby_vars + 0x30);
+    f1 = *(float *)(render_restore_moby_vars + 0x34);
+    f2 = *(float *)(render_restore_moby_vars + 0x38);
+    f3 = *(float *)(render_restore_moby_vars + 0x3C);
     D_L00_0015F448 = f0;
     D_L00_0015F44C = f1;
     D_L00_0015F450 = f2;
     D_L00_0015F448_e[3] = f3;
-    D_L00_0015F444 = p[0x40];
-    D_L00_0015F445 = p[0x41];
-    D_L00_0015F446 = p[0x42];
+    D_L00_0015F444 = render_restore_moby_vars[0x40];
+    D_L00_0015F445 = render_restore_moby_vars[0x41];
+    D_L00_0015F446 = render_restore_moby_vars[0x42];
     D_L00_00169FF8 = 1;
     if (flag != 0) {
         D_L00_00160F80 = 512000.0f;
@@ -1932,8 +1932,8 @@ void moby_restore_globals_state(int m_, int flag) {
         D_L00_0015FFF0 = 500;
         D_L00_0016017C = 0x1F4000;
     }
-    d = D_L00_0016CA40;
-    set_background_color(*(int *)(d + 0x23C), *(int *)(d + 0x240), *(int *)(d + 0x244));
+    background_color_source = D_L00_0016CA40;
+    set_background_color(*(int *)(background_color_source + 0x23C), *(int *)(background_color_source + 0x240), *(int *)(background_color_source + 0x244));
 }
 typedef union {
     OvlQuad q;
