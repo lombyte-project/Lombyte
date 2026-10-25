@@ -1007,21 +1007,21 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 extern float D_L01_001DEB40[];
-void sand_mouse_compute_target(char *a, char *m) __asm__("FUN_L01_002e3110");
-void sand_mouse_compute_target(char *a, char *m) {
+void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) __asm__("FUN_L01_002e3110");
+void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) {
     Vs t0;
     Vs t1;
-    struct Hero *g = &hero;
-    normalize_vector_xyz(&t0, ((char *)g->moby) + 0xD0, 1.1f);
-    normalize_vector_xyz(&t1, ((char *)g->moby) + 0xE0, 1.0f);
-    add_vector_xyz(m, &t0, &t1);
-    add_vector_xyz(m, m, &g->motion.pos);
-    if (*(int *)(m + 0x68) == 0) {
-        if (probe_vertical_ground_collision((Vs *)m, (int)a, 0, D_L01_001DEB40[0], 2.0f)) {
-            *(float *)(m + 8) = D_L01_001742E8;
+    struct Hero *hero_context = &hero;
+    normalize_vector_xyz(&t0, ((char *)hero_context->moby) + 0xD0, 1.1f);
+    normalize_vector_xyz(&t1, ((char *)hero_context->moby) + 0xE0, 1.0f);
+    add_vector_xyz(follow_movement_state, &t0, &t1);
+    add_vector_xyz(follow_movement_state, follow_movement_state, &hero_context->motion.pos);
+    if (*(int *)(follow_movement_state + 0x68) == 0) {
+        if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, D_L01_001DEB40[0], 2.0f)) {
+            *(float *)(follow_movement_state + 8) = D_L01_001742E8;
         }
     } else {
-        *(float *)(m + 8) = *(float *)(m + 8) + 1.0f;
+        *(float *)(follow_movement_state + 8) = *(float *)(follow_movement_state + 8) + 1.0f;
     }
 }
 struct DriftEmitter {
