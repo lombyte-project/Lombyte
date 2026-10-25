@@ -1382,15 +1382,15 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 int FUN_L14_002d9870(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int *data = *(int **)(moby + 0x78);
-    int r = 0;
+    int hatch_reset_delay_active = 0;
     if (moby[0x20] == 0) {
         moby[0x20] = 5;
         set_moby_animation(moby, 1, 0);
     } else {
-        r = moby[0x20] == 6;
+        hatch_reset_delay_active = moby[0x20] == 6;
     }
     data[2] = scale_game_frames(0x3C);
-    return r;
+    return hatch_reset_delay_active;
 }
 extern float D_0015ED60;
 #define DE670_THRESHOLD D_L14_00161B20
