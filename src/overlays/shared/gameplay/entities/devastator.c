@@ -3636,9 +3636,9 @@ void tesla_claw_update(struct Moby *m) {
 }
 
 #include "rnc/overlay/beam_vector.h"
-extern int D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
-extern int D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
-extern int D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
+extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
+extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
+extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
 extern int D_L00_00161590_gp __asm__("D_L00_00161590") __attribute__((sda));
 extern int frames_2b9310(int) __asm__("FUN_001f96f8");
 extern void vsub_2b9310(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -3651,11 +3651,11 @@ extern int D_L00_00161624 __attribute__((sda));
 extern int D_L00_00161678;
 extern float D_L00_00161594 __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
-extern short D_L00_00161668;
+extern short D_L00_00161668[] __attribute__((section(".sdata")));
 extern short D_L00_0016166A;
 extern short D_L00_0016166C;
 extern short D_L00_0016166E;
-extern short D_L00_00161670;
+extern short D_L00_00161670[] __attribute__((section(".sdata")));
 extern short D_L00_00161672;
 extern short D_L00_00161674;
 extern short D_L00_00161676;
@@ -3689,17 +3689,17 @@ void initialize_tesla_claw_beam(char *moby) {
     for (j = 0; j < 4; j++) {
         D_L00_00161658[j] = -1;
     }
-    D_L00_00161668 = 8;
+    D_L00_00161668[0] = 8;
     D_L00_0016166C = 8;
-    D_L00_00161670 = 4;
+    D_L00_00161670[0] = 4;
     D_L00_0016166A = 4;
     D_L00_00161672 = 2;
     D_L00_00161674 = 4;
     D_L00_0016166E = 4;
     D_L00_00161676 = 2;
-    D_L00_001615AC_gp = 0;
-    D_L00_001615B4_gp = 0;
-    D_L00_001615C8_gp = 0;
+    D_L00_001615AC_gp = 0.0f;
+    D_L00_001615B4_gp = 0.0f;
+    D_L00_001615C8_gp = 0.0f;
 }
 
 /* D_0013F350, the shared Level-00 state block; only the offsets the listing

@@ -19,7 +19,7 @@ extern char D_0013E533[];
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern float player_camera[] __asm__("D_L00_00166C80");
-extern u8 D_L00_001DB5C0[], D_L00_001DBA20[];
+extern u8 D_L00_001DB5C0[];
 #include "rnc/overlay/collision.h"
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern float D_L00_00161594 __attribute__((sda));
@@ -79,7 +79,7 @@ extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__
 extern void FUN_0022da68(int, int, void *);
 extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
 extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-extern unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
+extern unsigned char *FUN_L00_00272060(void *, int, float, float, int, int, int, float *, float);
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
 typedef struct {
@@ -415,15 +415,15 @@ next_candidate:;
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.2f, 0.6f);
-    FUN_L00_00272060(v, scale_game_frames(15), D_L00_001615F8 | 0x7f000000, 0, spin,
-                    (float *)&target_delta, amplitude * 0.3f, amplitude, 0.0f);
+    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000,
+                     0, spin, (float *)&target_delta, 0.0f);
     spin = -spin;
-    FUN_L00_00272060(v, scale_game_frames(15), 0x307f7f7f, 0, spin,
-                    (float *)&target_delta, amplitude * 0.15f, amplitude * 0.5f, 0.0f);
+    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.15f, amplitude * 0.5f, 0x307f7f7f,
+                     0, spin, (float *)&target_delta, 0.0f);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
-    FUN_L00_00272060(&v->tip, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
-                    (float *)D_L00_0015F580_macro, amplitude * 0.1f, amplitude, 0.0f);
+    FUN_L00_00272060(&v->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000,
+                     0, spin, (float *)D_L00_0015F580_macro, 0.0f);
 }
 #endif
 typedef struct {
@@ -447,7 +447,7 @@ extern s16 D_L00_00161662;
 extern s16 D_L00_00161664;
 extern s16 D_L00_00161666;
 extern u8 D_L00_001DB5C0[];
-extern u8 D_L00_001DBA20[];
+extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
 void draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
 
@@ -464,13 +464,13 @@ void draw_beam_and_arc_effects(u8 *moby) {
                      D_L00_00161600, D_L00_00161630);
     draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, moby_vars->h3E, D_L00_0016160C,
                      D_L00_00161610, D_L00_00161634);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(arc_points[0], D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0x50, D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(arc_points[1], D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xA0, D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(arc_points[2], D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
+    draw_beam_and_arc_two_pass_quads(arc_points[3], D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
                      D_L00_00161610, 0.2f);
     draw_beam_anchor_camera_facing_quads(moby);
 }
@@ -1788,7 +1788,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void cross_vectors_xyz_c(void *, void *, void *) __asm__("func_001F9AD8");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
-unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
+unsigned char *FUN_L00_00272060(void *pos, int s, float x, float y, int color, int mode, int b, float *v, float z);
 unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
 void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
