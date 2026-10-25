@@ -1870,8 +1870,8 @@ void FUN_L00_002e4930(char *camera) {
                     attach_state->timer = D_L00_00161D60;
                     attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
                 } else {
-                    struct Hero *p3 = &hero;
-                    if (p3->state.current == 0xB && D_L00_00166EEC == 0.0f) {
+                    struct Hero *hero_state_player = &hero;
+                    if (hero_state_player->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         attach_state->prev = attach_state->state;
                         attach_state->state = 6;
                         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
