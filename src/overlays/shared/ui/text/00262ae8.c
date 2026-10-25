@@ -7,15 +7,15 @@
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
 extern int D_L05_0015F97C;
-extern int D_L05_0015F980;
+extern int animation_parameter_target_id __asm__("D_L05_0015F980");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 extern short D_L05_0015F978 __attribute__((sda));
 void hud_release_held_element(void) __asm__("FUN_L05_00264298");
 void hud_release_held_element(void) {
-    if (D_L05_0015F980 != -1) {
-        set_animation_parameter(D_L05_0015F980, 0);
-        D_L05_0015F980 = -1;
+    if (animation_parameter_target_id != -1) {
+        set_animation_parameter(animation_parameter_target_id, 0);
+        animation_parameter_target_id = -1;
     }
     D_L05_0015F97C = 0;
     *(int *)&D_L05_0015F978 = *(int *)&D_L05_0015F978 + 1;
