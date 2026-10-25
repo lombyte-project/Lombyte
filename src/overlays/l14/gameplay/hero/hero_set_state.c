@@ -781,7 +781,7 @@ int hero_set_state(int a, int b) {
     case 0x12:
     case 0x1C:
     case HERO_STATE_GRIND_JUMP:
-    case 0x2A:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case 0x3C:
     case 0x49:
     case 0x4C:
