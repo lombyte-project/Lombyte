@@ -498,6 +498,12 @@ extern char D_0013C940[];
 
 void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
 void tresspasser_pad_update(Moby *moby) {
+    enum {
+        TRESSPASSER_PAD_STATE_INITIALIZE = 0,
+        TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION = 1,
+        TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE = 2,
+        TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
+    };
     Vec_2D9F08 camera_pos, camera_rot;
     Data_2D9F08 *data = (struct Data_2D9F08 *)moby->pvars;
     int i;
@@ -506,7 +512,7 @@ void tresspasser_pad_update(Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case TRESSPASSER_PAD_STATE_INITIALIZE:
         data->h12 = 0;
         moby->state = 1;
         D_L02_001D33B0[2][1] = 17.0f;
@@ -525,7 +531,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         }
         break;
-    case 1:
+    case TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION:
         if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->ground_moby == moby && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->air_frames.s == 0) {
             int holding_tool;
 
@@ -558,7 +564,7 @@ void tresspasser_pad_update(Moby *moby) {
             moby->glow_color = D_L02_00161B38_2D9F08;
         }
         break;
-    case 2:
+    case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:
         func_L02_002DA728_2D9F08(moby);
         func_L02_002D9D48_2D9F08(&camera_pos, &camera_rot, moby);
         func_00214D88_2D9F08(&data->f110, &data->f114, 1.0f, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE6C_2D9F08 + D_0015EE6C_2D9F08);
@@ -652,7 +658,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         }
         break;
-    case 3:
+    case TRESSPASSER_PAD_STATE_COMMIT_COMPLETION:
         if (D_0013F450_2D9F08.anim_flags & 2) {
             if (moby->mission != 0xFF) {
                 ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
