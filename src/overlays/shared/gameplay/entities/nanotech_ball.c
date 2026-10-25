@@ -3181,7 +3181,7 @@ extern void FUN_L00_002dd8e8_u(void) __asm__("FUN_L00_002dd8e8");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* When D_L00_001E6008[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
-void suck_beam_queue_draw(int arg0) {
+void suck_beam_queue_draw(int draw_callback_context) {
     int i;
     if (D_L00_001E6008[0] > 0) {
         for (i = 0; i < 10; i++) {
@@ -3189,7 +3189,7 @@ void suck_beam_queue_draw(int arg0) {
                 D_L00_001E6008[i] = 0x40;
             D_L00_001E6008[i] = (unsigned short)D_L00_001E6008[i] - 4;
         }
-        enqueue_callback_list_1(FUN_L00_002dd8e8_u, arg0);
+        enqueue_callback_list_1(FUN_L00_002dd8e8_u, draw_callback_context);
     }
 }
 
