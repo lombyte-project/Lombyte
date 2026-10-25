@@ -243,7 +243,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3D, 0, (float)n);
         break;
     }
-    case 0x34: {
+    case HERO_STATE_SWIM_IDLE: {
         struct Hero *p = &hero;
         int n;
         int t;
