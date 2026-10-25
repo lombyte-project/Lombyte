@@ -6011,19 +6011,19 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 void effect_quad_draw_single(void) {
-    FRow_l06 m[4];
+    FRow_l06 quad_corner_positions[4];
     int colors[4];
     float uv[4][2];
     unsigned long pkt[4];
-    float mat[4][4];
-    FVec4_l06 dir;
+    float backdrop_quad_transform_matrix[4][4];
+    FVec4_l06 reference_to_backdrop_quad_unit_direction;
     FVec4_l06 center;
     float *mp;
     int i;
     int j;
 
     pkt[1] = tex_3003f0(backdrop_mesh_effect_texture_index_gp);
-    mp = mat[0];
+    mp = backdrop_quad_transform_matrix[0];
     pkt[2] = 0xFF9000000260;
     pkt[3] = backdrop_mesh_blend_color_a_selector_gp | (long)backdrop_mesh_blend_color_b_selector_gp << 2;
     pkt[3] |= (long)backdrop_mesh_blend_alpha_c_selector_gp << 4;
@@ -6031,27 +6031,27 @@ void effect_quad_draw_single(void) {
     pkt[3] |= (long)backdrop_mesh_blend_fixed_alpha_gp << 32;
     pkt[0] = 0;
     init_3003f0(mp);
-    mat[3][2] = moby_breakup_z_offset_gp;
+    backdrop_quad_transform_matrix[3][2] = moby_breakup_z_offset_gp;
     colors[3] = D_L06_0016206C;
     colors[2] = D_L06_0016206C;
     colors[1] = D_L06_0016206C;
     colors[0] = D_L06_0016206C;
     for (i = 0; i < 96; i++) {
         vmul_3003f0(center, &D_L06_001FAFF0[i], backdrop_mesh_vertex_position_scale_gp);
-        transform_vector(center, center, mat);
-        subtract_vector_xyz(dir, center, D_L06_00167540);
-        fast_vec_normalize(dir, dir, 1.0f);
+        transform_vector(center, center, backdrop_quad_transform_matrix);
+        subtract_vector_xyz(reference_to_backdrop_quad_unit_direction, center, D_L06_00167540);
+        fast_vec_normalize(reference_to_backdrop_quad_unit_direction, reference_to_backdrop_quad_unit_direction, 1.0f);
         transform_vector_by_basis(center, &D_L06_001FA2F0[i], mp);
-        if (fast_vec_dot(dir, center) > 0.0f)
+        if (fast_vec_dot(reference_to_backdrop_quad_unit_direction, center) > 0.0f)
             continue;
         for (j = 0; j < 4; j++) {
-            int a = D_L06_001F7EB0[i][j][0];
-            int b = D_L06_001F7EB0[i][j][1];
-            vmul_3003f0(&m[j], &D_L06_001F77B0[a], backdrop_mesh_vertex_position_scale_gp);
-            uv[j][0] = D_L06_001F84B0[b][0];
-            uv[j][1] = D_L06_001F84B0[b][1];
+            int quad_source_vertex_index = D_L06_001F7EB0[i][j][0];
+            int quad_source_uv_index = D_L06_001F7EB0[i][j][1];
+            vmul_3003f0(&quad_corner_positions[j], &D_L06_001F77B0[quad_source_vertex_index], backdrop_mesh_vertex_position_scale_gp);
+            uv[j][0] = D_L06_001F84B0[quad_source_uv_index][0];
+            uv[j][1] = D_L06_001F84B0[quad_source_uv_index][1];
         }
-        draw_3003f0(m, mat, 0);
+        draw_3003f0(quad_corner_positions, backdrop_quad_transform_matrix, 0);
     }
 }
 #define NOT_SDA
