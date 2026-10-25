@@ -74,7 +74,7 @@ extern s32 D_L07_001C6780[];
 extern s32 l07_shrub_texture_count __asm__("D_L07_001604AC");
 extern s32 D_L07_001BC630[];
 extern char *D_L18_0015F600_26b768 __asm__("D_L07_0015F600");
-extern s32 D_L07_0016051C;
+extern s32 l07_sky_definition_base __asm__("D_L07_0016051C");
 extern Class26b768 *D_L07_00197380[];
 extern s32 D_L07_0016000C;
 extern s32 D_L07_00160010;
@@ -86,9 +86,9 @@ typedef int Q26b768 __attribute__((mode(TI)));
 extern Q26b768 D_L07_001AFD60[];
 extern u8 D_L07_00197C40[];
 extern char *D_L07_0015F420;
-extern s32 D_L07_0015F438;
-extern s32 D_L07_0015F43C;
-extern s32 D_L07_0015F440;
+extern s32 l07_counted_pointer_table_count __asm__("D_L07_0015F438");
+extern s32 l07_counted_pointer_table_records_base __asm__("D_L07_0015F43C");
+extern s32 l07_counted_pointer_table_base __asm__("D_L07_0015F440");
 extern s32 D_L07_0015FC98;
 extern s32 D_L07_0015FC9C;
 extern s32 D_L07_0015FCA0;
@@ -273,7 +273,7 @@ s32 load_level_assets(s32 full, s32 keep) {
         if (level_header[4])
             relocate_sky_definition(base + level_header[4]);
         else
-            D_L07_0016051C = 0;
+            l07_sky_definition_base = 0;
         resolve_level_asset_block_pointers(base + level_header[5]);
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7]; i < level_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)level_header + level_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
@@ -305,9 +305,9 @@ s32 load_level_assets(s32 full, s32 keep) {
         if (level_header[0x28]) {
             relocate_counted_pointer_table(base + level_header[0x28]);
         } else {
-            D_L07_0015F438 = 0;
-            D_L07_0015F43C = 0;
-            D_L07_0015F440 = 0;
+            l07_counted_pointer_table_count = 0;
+            l07_counted_pointer_table_records_base = 0;
+            l07_counted_pointer_table_base = 0;
         }
         if (level_header[0x29]) {
             load_two_int_two_float_header(base + level_header[0x29]);
@@ -386,18 +386,18 @@ s32 load_level_assets(s32 full, s32 keep) {
         printf_1e93b0(D_L07_0020FB00, KB(D_L18_00174800_26b768.f14 - D_L18_00174800_26b768.f10));
         if (D_L18_0015F600_26b768 != 0)
             printf_1e93b0(D_L07_0020FB18, KB(D_L18_0015F600_26b768 - D_L18_00174800_26b768.f14));
-        else if (D_L07_0016051C != 0)
-            printf_1e93b0(D_L07_0020FB18, KB((char *)D_L07_0016051C - D_L18_00174800_26b768.f14));
+        else if (l07_sky_definition_base != 0)
+            printf_1e93b0(D_L07_0020FB18, KB((char *)l07_sky_definition_base - D_L18_00174800_26b768.f14));
         else
             printf_1e93b0(D_L07_0020FB30);
         if (D_L18_0015F600_26b768 != 0) {
-            if (D_L07_0016051C != 0)
-                printf_1e93b0(D_L07_0020FB50, KB(D_L07_0016051C - (s32)D_L18_0015F600_26b768));
+            if (l07_sky_definition_base != 0)
+                printf_1e93b0(D_L07_0020FB50, KB(l07_sky_definition_base - (s32)D_L18_0015F600_26b768));
             else
                 printf_1e93b0(D_L07_0020FB50, KB(D_L18_00174840_26b768[0] - D_L18_0015F600_26b768));
         }
         if (level_header[4])
-            printf_1e93b0(D_L07_0020FB68, KB(D_L18_00174840_26b768[0] - (char *)D_L07_0016051C));
+            printf_1e93b0(D_L07_0020FB68, KB(D_L18_00174840_26b768[0] - (char *)l07_sky_definition_base));
         printf_1e93b0(D_L07_0020FB80, KB(l07_texture_data_base - (s32)D_L18_00174840_26b768[0]));
         printf_1e93b0(D_L07_0020FB98, KB((D_L07_001B1B00[1] >> 4) - l07_texture_data_base));
         printf_1e93b0(D_L07_0020FBB0, KB((s32)D_L07_0015F420 - (D_L07_001B1B00[1] >> 4)));
