@@ -1700,7 +1700,7 @@ int handle_hero_gadget_button(void) {
             }
         }
         break;
-    case 0x1f:
+    case ITEM_VEHICLE_MODE_TOGGLE:
         if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0 &&
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
