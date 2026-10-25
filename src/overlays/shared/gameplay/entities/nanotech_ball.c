@@ -2713,8 +2713,8 @@ extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".
 extern char D_L00_001E5EE0[] __attribute__((section(".data")));
 extern char D_L00_001E6020[] __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float D_L00_00161B48 __attribute__((sda));
-extern float D_L00_00161B4C __attribute__((sda));
+extern float suction_effect_texture_u_offset __asm__("D_L00_00161B48") __attribute__((sda));
+extern float suction_effect_texture_v_offset __asm__("D_L00_00161B4C") __attribute__((sda));
 extern float D_L00_00161B50 __attribute__((sda));
 extern short D_L00_001E6008[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
@@ -2723,39 +2723,39 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void suck_beam_draw_mesh(void) __asm__("FUN_L00_002dd8e8");
 void suck_beam_draw_mesh(void) {
-    Pkt s;
+    Pkt quad_packet;
     float vc[4];
     float vd[4];
     float ve[4];
     float vf[4];
     float a, a2, am, b, b2, dot;
     float step;
-    short *pv;
-    int i, j, k, v;
+    short *row_alpha_counter;
+    int i, j, k, row_alpha_or_packed_color;
     unsigned short y;
-    s.word1 = get_effect_texture(0x15);
-    s.word2 = 0x0000FF9000000260L;
-    s.word3 = 0x8000000048L;
-    s.word0 = 0;
-    a = D_L00_00161B48;
-    D_L00_00161B48 = a + 0.001f;
-    if (D_L00_00161B48 > 7.0f) D_L00_00161B48 -= 7.0f;
+    quad_packet.word1 = get_effect_texture(0x15);
+    quad_packet.word2 = 0x0000FF9000000260L;
+    quad_packet.word3 = 0x8000000048L;
+    quad_packet.word0 = 0;
+    a = suction_effect_texture_u_offset;
+    suction_effect_texture_u_offset = a + 0.001f;
+    if (suction_effect_texture_u_offset > 7.0f) suction_effect_texture_u_offset -= 7.0f;
     step = 0.3f;
     a += step;
     for (i = 1; i < 10; i++) {
-        b = D_L00_00161B4C;
-        D_L00_00161B4C = b + D_L00_00161B50;
-        if (D_L00_00161B4C > 7.0f) D_L00_00161B4C -= 7.0f;
+        b = suction_effect_texture_v_offset;
+        suction_effect_texture_v_offset = b + D_L00_00161B50;
+        if (suction_effect_texture_v_offset > 7.0f) suction_effect_texture_v_offset -= 7.0f;
         a2 = a + step;
         for (j = 0; j < 20; j++) {
-            qcopy(s.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
-            qcopy(s.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
-            qcopy(s.q[2], D_L00_001E5EE0 + (j * 16 + i * 0x140));
-            qcopy(s.q[3], D_L00_001E5EE0 + ((j + 1) % 20 * 16 + i * 0x140));
-            subtract_vector_xyz_c4(vc, s.q[0], s.q[1]);
-            subtract_vector_xyz_c4(vd, s.q[2], s.q[1]);
+            qcopy(quad_packet.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
+            qcopy(quad_packet.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
+            qcopy(quad_packet.q[2], D_L00_001E5EE0 + (j * 16 + i * 0x140));
+            qcopy(quad_packet.q[3], D_L00_001E5EE0 + ((j + 1) % 20 * 16 + i * 0x140));
+            subtract_vector_xyz_c4(vc, quad_packet.q[0], quad_packet.q[1]);
+            subtract_vector_xyz_c4(vd, quad_packet.q[2], quad_packet.q[1]);
             cross_vectors_xyz(ve, vd, vc);
-            subtract_vector_xyz_c4(vf, s.q[1], g_debug_camera);
+            subtract_vector_xyz_c4(vf, quad_packet.q[1], g_debug_camera);
             dot = fast_vec_dot(ve, vf);
             if (0.0f <= dot) {
                 b += 0.05f;
@@ -2763,33 +2763,33 @@ void suck_beam_draw_mesh(void) {
                 b2 = b + 0.05f;
                 am = a - step;
                 y = D_L00_001E6008[i - 1];
-                pv = &D_L00_001E6008[i];
-                v = *pv;
+                row_alpha_counter = &D_L00_001E6008[i];
+                row_alpha_or_packed_color = *row_alpha_counter;
                 for (k = 0; k < 2; k++) {
-                    if (v < 0) v = 0;
-                    if (v > 0x40) v = 0x40;
-                    v = (v << 24) | 0x404040;
-                    s.col[k * 2] = v;
-                    s.col[k * 2 + 1] = v;
-                    v = (short)y;
+                    if (row_alpha_or_packed_color < 0) row_alpha_or_packed_color = 0;
+                    if (row_alpha_or_packed_color > 0x40) row_alpha_or_packed_color = 0x40;
+                    row_alpha_or_packed_color = (row_alpha_or_packed_color << 24) | 0x404040;
+                    quad_packet.col[k * 2] = row_alpha_or_packed_color;
+                    quad_packet.col[k * 2 + 1] = row_alpha_or_packed_color;
+                    row_alpha_or_packed_color = (short)y;
                 }
                 if (i == 1) {
-                    s.col[3] = 0x20404040;
-                    s.col[2] = 0x20404040;
+                    quad_packet.col[3] = 0x20404040;
+                    quad_packet.col[2] = 0x20404040;
                 } else if (i == 9) {
-                    s.col[1] = 0x404040;
-                    s.col[0] = 0x404040;
+                    quad_packet.col[1] = 0x404040;
+                    quad_packet.col[0] = 0x404040;
                 }
-                s.x0 = a;
-                s.y0 = b;
-                s.x1 = a;
-                s.y1 = b2;
-                s.x2 = am;
-                s.y2 = b;
-                s.x3 = am;
-                s.y3 = b2;
+                quad_packet.x0 = a;
+                quad_packet.y0 = b;
+                quad_packet.x1 = a;
+                quad_packet.y1 = b2;
+                quad_packet.x2 = am;
+                quad_packet.y2 = b;
+                quad_packet.x3 = am;
+                quad_packet.y3 = b2;
                 b = b2;
-                fast_draw_quad_real(&s, 0, 0);
+                fast_draw_quad_real(&quad_packet, 0, 0);
             }
         }
         a = a2;
