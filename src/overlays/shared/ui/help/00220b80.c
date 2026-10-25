@@ -243,7 +243,7 @@ void hero_update_hop_velocity(void) {
     f32 speed;
     f32 a;
     f32 speed_reduction_step;
-    f32 arg;
+    f32 velocity_change_step;
     s32 state;
 
     state = hero.state.current;
@@ -328,7 +328,7 @@ void hero_update_hop_velocity(void) {
         }
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
-        arg = ED70 * 20.0f;
+        velocity_change_step = ED70 * 20.0f;
         if (hero.target_speed < D_L02_0017C3D0[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_reduction_step = hero.stickless_decel;
@@ -338,12 +338,12 @@ void hero_update_hop_velocity(void) {
                 return;
             }
             if (hero.on_flagged_ground_moby != 0) {
-                arg = ED70 * 6.0f;
+                velocity_change_step = ED70 * 6.0f;
             } else {
-                arg = ED70 * 2.0f;
+                velocity_change_step = ED70 * 2.0f;
             }
         }
-        FUN_L01_00234358_223450(arg);
+        FUN_L01_00234358_223450(velocity_change_step);
     }
 }
 #include "sda.h"
