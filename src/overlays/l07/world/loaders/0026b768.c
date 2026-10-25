@@ -58,8 +58,8 @@ extern Load26b768 D_L18_00174800_26b768 __asm__("D_L07_00173E80");
 extern char *D_L18_00174840_26b768[] __asm__("D_L07_00173EC0");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
 extern Ldg26b768 D_0015EE48;
-extern s32 D_L07_0015F40C;
-extern s32 D_L07_00160004;
+extern s32 l07_texture_data_base __asm__("D_L07_0015F40C");
+extern s32 l07_asset_sound_bank_handle __asm__("D_L07_00160004");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L07_00182840[3];
 extern u64 D_L07_00182858[3];
@@ -226,13 +226,13 @@ s32 load_level_assets(s32 full, s32 keep) {
     base = ld->f14;
     if (full) {
         fast_mem_copy(level_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
-        D_L07_0015F40C = 0;
+        l07_texture_data_base = 0;
         FUN_001f9838_26b768(D_L07_0015FC88_macro, visited52 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), level_header[0], (char *)level_header + level_header[1]);
-        D_L07_00160004 = sound_bank_handle;
+        l07_asset_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
         used = FUN_L00_0024d8d0_26b768((char *)(level_file_base[0x14] + (s32)level_file_base), base);
-        D_L07_0015F40C = (s32)(base + level_header[0x18]);
+        l07_texture_data_base = (s32)(base + level_header[0x18]);
 
         D_L07_00182840[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + level_header[0x25]) >> 8, 0, 0, 0, 4);
@@ -250,20 +250,20 @@ s32 load_level_assets(s32 full, s32 keep) {
         tfrag_texture_refs = (TexRef26b768 *)((char *)level_header + level_header[0xD]);
         l07_tfrag_texture_count = level_header[0xC];
         for (tfrag_texture_index = 0; tfrag_texture_index < l07_tfrag_texture_count; tfrag_texture_index++)
-            D_L07_001C4A80[tfrag_texture_index] = D_L07_0015F40C + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
+            D_L07_001C4A80[tfrag_texture_index] = l07_texture_data_base + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
         moby_texture_refs = (TexRef26b768 *)((char *)level_header + level_header[0xF]);
         l07_moby_texture_count = level_header[0xE];
         for (moby_texture_index = 0; moby_texture_index < l07_moby_texture_count; moby_texture_index++)
-            D_L07_00199B00[moby_texture_index] = D_L07_0015F40C + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
+            D_L07_00199B00[moby_texture_index] = l07_texture_data_base + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
         fast_mem_copy(D_L07_001AEC40, moby_texture_refs, l07_moby_texture_count * 16);
         tie_texture_refs = (TexRef26b768 *)((char *)level_header + level_header[0x11]);
         l07_tie_texture_count = level_header[0x10];
         for (tie_texture_index = 0; tie_texture_index < l07_tie_texture_count; tie_texture_index++)
-            D_L07_001C6780[tie_texture_index] = D_L07_0015F40C + tie_texture_refs[tie_texture_index].offset + (log2dim(tie_texture_refs[tie_texture_index].kind) << 28);
+            D_L07_001C6780[tie_texture_index] = l07_texture_data_base + tie_texture_refs[tie_texture_index].offset + (log2dim(tie_texture_refs[tie_texture_index].kind) << 28);
         shrub_texture_refs = (TexRef26b768 *)((char *)level_header + level_header[0x13]);
         l07_shrub_texture_count = level_header[0x12];
         for (shrub_texture_index = 0; shrub_texture_index < l07_shrub_texture_count; shrub_texture_index++)
-            D_L07_001BC630[shrub_texture_index] = D_L07_0015F40C + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
+            D_L07_001BC630[shrub_texture_index] = l07_texture_data_base + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
 
         initialize_tfrag_render_data(base + level_header[2], (char *)level_header + level_header[0xD]);
         if (level_header[3])
@@ -398,8 +398,8 @@ s32 load_level_assets(s32 full, s32 keep) {
         }
         if (level_header[4])
             printf_1e93b0(D_L07_0020FB68, KB(D_L18_00174840_26b768[0] - (char *)D_L07_0016051C));
-        printf_1e93b0(D_L07_0020FB80, KB(D_L07_0015F40C - (s32)D_L18_00174840_26b768[0]));
-        printf_1e93b0(D_L07_0020FB98, KB((D_L07_001B1B00[1] >> 4) - D_L07_0015F40C));
+        printf_1e93b0(D_L07_0020FB80, KB(l07_texture_data_base - (s32)D_L18_00174840_26b768[0]));
+        printf_1e93b0(D_L07_0020FB98, KB((D_L07_001B1B00[1] >> 4) - l07_texture_data_base));
         printf_1e93b0(D_L07_0020FBB0, KB((s32)D_L07_0015F420 - (D_L07_001B1B00[1] >> 4)));
         printf_1e93b0(D_L07_0020FBC8, KB((char *)D_L07_00197380[0] - D_L07_0015F420));
         printf_1e93b0(D_L07_0020FBE0, KB(D_L18_001C6200_26b768[0] - (char *)D_L07_00197380[0]));
