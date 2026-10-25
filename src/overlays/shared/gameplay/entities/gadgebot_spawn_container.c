@@ -1161,8 +1161,8 @@ int update_moby_grab_state(struct Moby *moby) {
 extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 int FUN_L06_002ea6a8(unsigned char *moby) {
-    int r = store_moby_in_suck_cannon(moby);
-    if (r != 0) {
+    int suck_cannon_store_result = store_moby_in_suck_cannon(moby);
+    if (suck_cannon_store_result != 0) {
         if (moby[0x20] != 0x10) {
             moby[0xBC] = moby[0x20];
             moby[0x20] = 0x10;
@@ -1173,7 +1173,7 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
             blend_moby_animation_u(moby, 0, 0, scale_game_frames(10));
         }
     }
-    return r;
+    return suck_cannon_store_result;
 }
 extern s32 cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
