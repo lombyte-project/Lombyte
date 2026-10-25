@@ -1865,23 +1865,23 @@ extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
 
 void moby_save_globals_state(void *m_) __asm__("FUN_L00_002b56d0");
 void moby_save_globals_state(void *m_) {
-    char *m = (char *)m_;
-    char *p;
+    char *render_state_owner_moby = (char *)m_;
+    char *render_state_backup_vars;
     float f0, f1, f2, f3;
 
-    p = *(char **)(m + 0x78);
+    render_state_backup_vars = *(char **)(render_state_owner_moby + 0x78);
     f0 = D_L00_0015F448;
     f1 = D_L00_0015F44C;
     f2 = D_L00_0015F450;
     f3 = D_L00_0015F448_e[3];
     D_L00_0015F30C = 1;
-    *(float *)(p + 0x30) = f0;
-    *(float *)(p + 0x34) = f1;
-    *(float *)(p + 0x38) = f2;
-    *(float *)(p + 0x3C) = f3;
-    p[0x40] = D_L00_0015F444_e[0];
-    p[0x41] = D_L00_0015F444_e[1];
-    p[0x42] = D_L00_0015F444_e[2];
+    *(float *)(render_state_backup_vars + 0x30) = f0;
+    *(float *)(render_state_backup_vars + 0x34) = f1;
+    *(float *)(render_state_backup_vars + 0x38) = f2;
+    *(float *)(render_state_backup_vars + 0x3C) = f3;
+    render_state_backup_vars[0x40] = D_L00_0015F444_e[0];
+    render_state_backup_vars[0x41] = D_L00_0015F444_e[1];
+    render_state_backup_vars[0x42] = D_L00_0015F444_e[2];
     D_L00_0015F444_e[0] = 0x40;
     D_L00_0015F448 = 0;
     D_L00_0015F444_e[1] = 0x60;
