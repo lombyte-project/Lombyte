@@ -51,6 +51,7 @@ void update_mode_freeze(void) {
     };
     enum {
         FREEZE_MODE_CONFIRM_CANCEL_CHOICE = 0,
+        FREEZE_MODE_TRIANGLE_SET_SHIP_FLAG_CONTINUE = 1,
         FREEZE_MODE_AWAIT_CROSS_CONTINUE = 2,
         FREEZE_MODE_STATE_DISPATCH = 3,
         FREEZE_MODE_TRIANGLE_HIDE_HERO_CONTINUE = 4,
@@ -160,7 +161,7 @@ void update_mode_freeze(void) {
 
         break;
 
-    case 1:
+    case FREEZE_MODE_TRIANGLE_SET_SHIP_FLAG_CONTINUE:
         D_0015F648 = 2;
         if (controller_state.pressed & PAD_TRIANGLE) {
             game_mode = 0;
