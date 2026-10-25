@@ -965,7 +965,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.tether_radius, hero.grapple_target_radius, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -2056,7 +2056,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x74: {
+    case HERO_STATE_FOLLOW_PATH: {
         s32 idx;
         s32 n;
         compute_hero_fixed_offset_world_position(&v0);
