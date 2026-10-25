@@ -654,22 +654,22 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 extern float D_L16_00161D78;
-void group_trigger_nearest(int idx) __asm__("FUN_L16_002e5d30");
-void group_trigger_nearest(int idx) {
-    short *p = D_L16_001ABCC0[idx];
+void group_trigger_nearest(int moby_list_index) __asm__("FUN_L16_002e5d30");
+void group_trigger_nearest(int moby_list_index) {
+    short *moby_list_entry = D_L16_001ABCC0[moby_list_index];
     char *best = 0;
     float bestd = 50000.0f;
-    if (p != 0) {
+    if (moby_list_entry != 0) {
         do {
-            char *m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-            if (*(short *)(m + 0xA6) != 0x5A3) {
-                float d = func_001F9D10_2E7198(D_0013E533 + 0xE9D, m + 0x10);
-                if (d < bestd) {
-                    bestd = d;
-                    best = m;
+            char *candidate_moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
+            if (*(short *)(candidate_moby + 0xA6) != 0x5A3) {
+                float candidate_distance = func_001F9D10_2E7198(D_0013E533 + 0xE9D, candidate_moby + 0x10);
+                if (candidate_distance < bestd) {
+                    bestd = candidate_distance;
+                    best = candidate_moby;
                 }
             }
-        } while (*p++ >= 0);
+        } while (*moby_list_entry++ >= 0);
         if (best != 0) {
             allocate_voice_for_target_entry(0, 0, (int)best);
         }
