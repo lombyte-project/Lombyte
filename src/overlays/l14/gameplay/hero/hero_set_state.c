@@ -80,6 +80,9 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION = 0x72
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1538,7 +1541,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
