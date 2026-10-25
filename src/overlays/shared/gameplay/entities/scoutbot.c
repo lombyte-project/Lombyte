@@ -1011,21 +1011,21 @@ extern float frame_delta_time __asm__("D_0015ED7C");
 extern float frame_delta_time __asm__("D_0015ED7C");
 
 extern V2_12a0 D_L08_001DB500[];
-void advance_scroll_offsets(int idx) __asm__("FUN_L08_002f12a0");
-void advance_scroll_offsets(int idx) {
-    D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * frame_delta_time;
-    if (D_L08_001E8348_12a0[idx].x > 1.0f) {
-        D_L08_001E8348_12a0[idx].x -= 1.0f;
+void advance_scroll_offsets(int scroll_pair_index) __asm__("FUN_L08_002f12a0");
+void advance_scroll_offsets(int scroll_pair_index) {
+    D_L08_001E8348_12a0[scroll_pair_index].x += D_L08_001DB500[scroll_pair_index].x * frame_delta_time;
+    if (D_L08_001E8348_12a0[scroll_pair_index].x > 1.0f) {
+        D_L08_001E8348_12a0[scroll_pair_index].x -= 1.0f;
     }
-    if (D_L08_001E8348_12a0[idx].x < -1.0f) {
-        D_L08_001E8348_12a0[idx].x += 1.0f;
+    if (D_L08_001E8348_12a0[scroll_pair_index].x < -1.0f) {
+        D_L08_001E8348_12a0[scroll_pair_index].x += 1.0f;
     }
-    D_L08_001E8348_12a0[idx].y += D_L08_001DB500[idx].y * frame_delta_time;
-    if (D_L08_001E8348_12a0[idx].y > 1.0f) {
-        D_L08_001E8348_12a0[idx].y -= 1.0f;
+    D_L08_001E8348_12a0[scroll_pair_index].y += D_L08_001DB500[scroll_pair_index].y * frame_delta_time;
+    if (D_L08_001E8348_12a0[scroll_pair_index].y > 1.0f) {
+        D_L08_001E8348_12a0[scroll_pair_index].y -= 1.0f;
     }
-    if (D_L08_001E8348_12a0[idx].y < -1.0f) {
-        D_L08_001E8348_12a0[idx].y += 1.0f;
+    if (D_L08_001E8348_12a0[scroll_pair_index].y < -1.0f) {
+        D_L08_001E8348_12a0[scroll_pair_index].y += 1.0f;
     }
 }
 extern float scroll_pos_x[] __asm__("D_L08_00161E10") __attribute__((section(".sdata")));
