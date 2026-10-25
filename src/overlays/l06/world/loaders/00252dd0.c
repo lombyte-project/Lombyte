@@ -59,8 +59,8 @@ extern Load252dd0 D_L18_00174800_252dd0 __asm__("D_L06_00174580");
 extern char *D_L18_00174840_252dd0[] __asm__("D_L06_001745C0");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg252dd0;
 extern Ldg252dd0 D_0015EE48;
-extern s32 D_L06_0015F40C;
-extern s32 D_L06_00160004;
+extern s32 level_06_texture_reference_base __asm__("D_L06_0015F40C");
+extern s32 level_06_sound_bank_handle_snapshot __asm__("D_L06_00160004");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L06_00182F40[3];
 extern u64 D_L06_00182F58[3];
@@ -98,7 +98,7 @@ extern s32 D_L06_0015FCA8;
 extern char *D_L06_0015F604;
 extern Slot252dd0 *D_L06_0015F5F4;
 extern s32 level_06_sound_slot_count __asm__("D_L06_0015F5F0");
-extern s32 D_L06_0015FFC0;
+extern s32 level_06_moby_class_table_count __asm__("D_L06_0015FFC0");
 extern s16 D_L06_00198180[];
 extern u16 D_L06_001B05E0[][16];
 extern char D_L06_001FFB80[], D_L06_001FFBD0[], D_L06_001FFC90[], D_L06_001FFE18[],
@@ -227,13 +227,13 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
     base = ld->f14;
     if (full) {
         fast_mem_copy(level_header, (char *)(level_archive[4] + (s32)level_archive), level_archive[5]);
-        D_L06_0015F40C = 0;
+        level_06_texture_reference_base = 0;
         FUN_001f9838_252dd0(D_L06_0015FC88, visited52 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_archive[6] + (s32)level_archive), level_header[0], (char *)level_header + level_header[1]);
-        D_L06_00160004 = sound_bank_handle;
+        level_06_sound_bank_handle_snapshot = sound_bank_handle;
         flush_cache(0);
         used = FUN_L00_0024d8d0_252dd0((char *)(level_archive[0x14] + (s32)level_archive), base);
-        D_L06_0015F40C = (s32)(base + level_header[0x18]);
+        level_06_texture_reference_base = (s32)(base + level_header[0x18]);
 
         D_L06_00182F40[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + level_header[0x25]) >> 8, 0, 0, 0, 4);
@@ -251,20 +251,20 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         tfrag_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0xD]);
         tfrag_texture_reference_count = level_header[0xC];
         for (tfrag_texture_index = 0; tfrag_texture_index < tfrag_texture_reference_count; tfrag_texture_index++)
-            D_L06_001C5180[tfrag_texture_index] = D_L06_0015F40C + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
+            D_L06_001C5180[tfrag_texture_index] = level_06_texture_reference_base + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
         moby_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0xF]);
         moby_texture_reference_count = level_header[0xE];
         for (moby_texture_index = 0; moby_texture_index < moby_texture_reference_count; moby_texture_index++)
-            D_L06_0019A200[moby_texture_index] = D_L06_0015F40C + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
+            D_L06_0019A200[moby_texture_index] = level_06_texture_reference_base + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
         fast_mem_copy(D_L06_001AF340, moby_texture_refs, moby_texture_reference_count * 16);
         object_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0x11]);
         object_texture_reference_count = level_header[0x10];
         for (object_texture_index = 0; object_texture_index < object_texture_reference_count; object_texture_index++)
-            D_L06_001C6E80[object_texture_index] = D_L06_0015F40C + object_texture_refs[object_texture_index].offset + (log2dim(object_texture_refs[object_texture_index].kind) << 28);
+            D_L06_001C6E80[object_texture_index] = level_06_texture_reference_base + object_texture_refs[object_texture_index].offset + (log2dim(object_texture_refs[object_texture_index].kind) << 28);
         shrub_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0x13]);
         shrub_texture_reference_count = level_header[0x12];
         for (shrub_texture_index = 0; shrub_texture_index < shrub_texture_reference_count; shrub_texture_index++)
-            D_L06_001BCD30[shrub_texture_index] = D_L06_0015F40C + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
+            D_L06_001BCD30[shrub_texture_index] = level_06_texture_reference_base + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
 
         initialize_tfrag_render_data(base + level_header[2], (char *)level_header + level_header[0xD]);
         if (level_header[3])
@@ -350,7 +350,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         }
         end = free + 0x3F;
         span++;
-        for (ci = 0; ci < D_L06_0015FFC0; ci++, span++) {
+        for (ci = 0; ci < level_06_moby_class_table_count; ci++, span++) {
             Class252dd0 *moby_class = D_L06_00197A80[ci];
             if (moby_class == 0) {
                 for (j = 0; j < level_class_mapping_count; j++)
@@ -399,8 +399,8 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         }
         if (level_header[4])
             printf_1e93b0(D_L06_001FFCC8, KB(D_L18_00174840_252dd0[0] - (char *)D_L06_0016051C));
-        printf_1e93b0(D_L06_001FFCE0, KB(D_L06_0015F40C - (s32)D_L18_00174840_252dd0[0]));
-        printf_1e93b0(D_L06_001FFCF8, KB((D_L06_001B2200[1] >> 4) - D_L06_0015F40C));
+        printf_1e93b0(D_L06_001FFCE0, KB(level_06_texture_reference_base - (s32)D_L18_00174840_252dd0[0]));
+        printf_1e93b0(D_L06_001FFCF8, KB((D_L06_001B2200[1] >> 4) - level_06_texture_reference_base));
         printf_1e93b0(D_L06_001FFD10, KB((s32)D_L06_0015F420 - (D_L06_001B2200[1] >> 4)));
         printf_1e93b0(D_L06_001FFD28, KB((char *)D_L06_00197A80[0] - D_L06_0015F420));
         printf_1e93b0(D_L06_001FFD40, KB(D_L18_001C6200_252dd0[0] - (char *)D_L06_00197A80[0]));
