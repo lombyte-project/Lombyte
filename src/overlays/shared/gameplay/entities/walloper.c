@@ -40,7 +40,9 @@ extern float D_L00_001615E8 __attribute__((sda));
 extern int D_L00_001615F8 __attribute__((sda));
 extern float D_L00_00161628 __attribute__((sda));
 extern float D_L00_0016162C __attribute__((sda));
-extern short D_L00_00161658[], D_L00_00161668[], D_L00_00161670[];
+extern short D_L00_00161658[] __attribute__((section(".sdata")));
+extern short D_L00_00161668[] __attribute__((section(".sdata")));
+extern short D_L00_00161670[] __attribute__((section(".sdata")));
 extern short D_L00_00161660;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -76,6 +78,7 @@ extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
 extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
+extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
 extern unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
@@ -108,7 +111,6 @@ void FUN_L00_002b94d0(u8 *o) {
     float best_score = 0.0f, second_score = 0.0f;
     int enabled = (u8)D_0013E533[0];
     float spacing = D_L00_00161594 / 20.0f;
-    float *axis = (float *)D_L00_0015F580_lui;
     float distance, angle, score, n, amplitude, wave, length, factor, phase, side_wave;
     float side_phase;
     float x_s, x_c, x_s2, x_a, x_m;
@@ -421,7 +423,7 @@ next_candidate:;
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
     FUN_L00_00272060(&v->tip, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
-                    axis, amplitude * 0.1f, amplitude, 0.0f);
+                    (float *)D_L00_0015F580_macro, amplitude * 0.1f, amplitude, 0.0f);
 }
 #endif
 typedef struct {
