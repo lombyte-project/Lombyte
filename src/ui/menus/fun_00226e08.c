@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-extern s32 D_0015F5EC;
+extern s32 counter_advance_disabled __asm__("D_0015F5EC");
 void tick_space_transition(void) __asm__("FUN_00226e08");
 void tick_space_transition(void) {
     s32 new_value;
@@ -9,7 +9,7 @@ void tick_space_transition(void) {
     s32 fifty;
 
     old_value = D_0015EE24;
-    if (D_0015F5EC == 0) {
+    if (counter_advance_disabled == 0) {
         fifty = 50;
         new_value = old_value + 1;
         D_0015EE24 = new_value;
