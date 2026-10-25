@@ -3062,13 +3062,13 @@ void FUN_L00_002ddf60(void *moby,void *position) {
         qcopy(&axis,&basis_c);
         radius=(float)i*0.3f;
         phase=(float)i*0.7f;
-        { V41 *dst=((V41 *)D_L00_001E6020)+i*20; unsigned int j;
+        { V41 *dst=((V41 *)D_L00_001E6020)+i*20; V41 *src=D_L00_001E4B40; unsigned int j;
         for(j=0;j<20;j++) {
             angle=radius+0.1f;
             angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+phase,0.0f))*0.1f;
-            fast_vec_scale(&tmp_f,(char *)D_L00_001E4B40+j*16,angle);
+            fast_vec_scale(&tmp_f,src++,angle);
             transform_vector_by_basis(&tmp_f,&tmp_f,&interp);
-            add_vector_xyz(dst+j,D_L00_001E5F40+i*16,&tmp_f);
+            add_vector_xyz(dst++,D_L00_001E5F40+i*16,&tmp_f);
         }
         }
         fast_vec_normalize(&step,&motion,D_L00_00161B84);
