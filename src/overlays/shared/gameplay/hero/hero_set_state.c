@@ -685,6 +685,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ATTACK_RECORD_GROUND_MOTION_ENTRY = 0x21,
         HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY = 0x25,
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
+        HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY = 0x27,
         HERO_STATE_GRIND_JUMP_WITH_DIRECTION_DEPENDENT_ANIMATION = 0x2A,
         HERO_STATE_RUN_WITH_DISPLACEMENT_GROUND_SPEED = 0x2E,
         HERO_STATE_DISPLACEMENT_CAPTURE_IDLE_ANIMATION_SHORT_BLEND = 0x30,
@@ -693,6 +694,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY = 0x36,
         HERO_STATE_SUSPEND_MOTION_WITH_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_DAMAGING_JUMP_ENTRY = 0x3C,
+        HERO_STATE_LAND_WITH_ALTERNATE_ANIMATION = 0x4F,
+        HERO_STATE_RUN_WITH_FIXED_ANIMATION_ENTRY = 0x5B,
+        HERO_STATE_FALL_WITH_GROUND_DISTANCE_ANIMATION_ENTRY = 0x5C,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
         HERO_STATE_DYING_WITH_INHERITED_MOTION = 0x62,
@@ -2599,7 +2603,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(9));
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_LAND_WITH_ALTERNATE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 5;
         p->unk2284 = 0;
@@ -2761,7 +2765,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(8, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x5C: {
+    case HERO_STATE_FALL_WITH_GROUND_DISTANCE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -2777,7 +2781,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x5B: {
+    case HERO_STATE_RUN_WITH_FIXED_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -2944,7 +2948,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
