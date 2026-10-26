@@ -106,12 +106,15 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
+        HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCEL = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_SELECT_IDLE_ANIMATION = 0x72,
+        HERO_STATE_DYING_SAVE_GROUND_HEIGHT = 0x7C,
         HERO_STATE_DYING_COPY_POSITION_TO_TARGET = 0x7D,
         HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
     };
@@ -548,7 +551,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x2E: {
+    case HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1929,7 +1932,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x71, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x7C: {
+    case HERO_STATE_DYING_SAVE_GROUND_HEIGHT: {
         if (current_level_index == 6) {
             int c0;
             int c1;
@@ -2262,7 +2265,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x3B: {
+    case HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         char *m;
         int n;
