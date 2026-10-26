@@ -91,6 +91,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_BLEND_TO_IDLE_IN_ITEM_RELEASE_MODE = 0x27,
         HERO_STATE_SWIM_CROUCH_INPUT = 0x35,
         HERO_STATE_RESET_ATTACK_STATE = 0x51,
+        HERO_STATE_IDLE_ANIMATION_WITH_DYING_MODE_OVERRIDE = 0x64,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCEL = 0x72
     };
     int old2088;
@@ -1740,7 +1741,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_MODE_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
