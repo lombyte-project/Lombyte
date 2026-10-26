@@ -681,6 +681,9 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
     };
+    enum {
+        HERO_STATE_WEAPON_FIRE_ANIMATION_ENTRY = 0x23
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -2186,7 +2189,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_WEAPON_FIRE_ANIMATION_ENTRY:
     case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -2354,7 +2357,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_WEAPON_FIRE_ANIMATION_ENTRY: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
