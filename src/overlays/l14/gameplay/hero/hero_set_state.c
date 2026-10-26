@@ -82,6 +82,7 @@ extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_REFRESH_IDLE_ANIMATION = 0x1F,
+        HERO_STATE_ATTACK_SETUP_ONLY = 0x51,
         HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1158,7 +1159,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case 0x51: {
+    case HERO_STATE_ATTACK_SETUP_ONLY: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
