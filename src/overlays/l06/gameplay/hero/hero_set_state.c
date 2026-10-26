@@ -89,7 +89,8 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
         HERO_STATE_LAND_WITH_TIMED_BLEND = 0x4F,
-        HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D
+        HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D,
+        HERO_STATE_RUN_WITH_LANDING_ANIMATION = 0x81
     };
     enum {
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
@@ -719,7 +720,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_RUN_WITH_LANDING_ANIMATION: {
         struct Hero *p = &hero;
         int animation_blend_spec = -2;
         p->state.control_mode = 1;
