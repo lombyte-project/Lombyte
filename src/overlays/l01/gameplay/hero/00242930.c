@@ -131,6 +131,9 @@ int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 
 void update_hero_state_machine(void) {
+    enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 18
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1381,7 +1384,7 @@ void update_hero_state_machine(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
