@@ -2850,7 +2850,7 @@ extern float explosion_burst_spark_second_vector_z_rate_gp __asm__("D_L18_00161F
 extern float explosion_burst_spark_second_vector_scale_gp __asm__("D_L18_00161F94") __attribute__((sda));
 extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __attribute__((sda));
 extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
-extern float D_L18_00161FA8 __attribute__((sda));
+extern float explosion_burst_particle_scale_multiplier_gp __asm__("D_L18_00161FA8") __attribute__((sda));
 extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
 extern float explosion_burst_first_glow_scale_multiplier_gp __asm__("D_L18_00161FC0") __attribute__((sda));
 extern float explosion_burst_second_glow_scale_multiplier_gp __asm__("D_L18_00161FCC") __attribute__((sda));
@@ -2921,7 +2921,7 @@ void spawn_explosion_burst(void *source_moby) {
             add_vector_xyz(offset, offset, &moby->pos);
             color1 = D_L18_001D9C70[random_integer_below(6)];
             color2 = D_L18_001D9C88[random_integer_below(6)];
-            scale = D_L18_00161FA8 * 400000.0f;
+            scale = explosion_burst_particle_scale_multiplier_gp * 400000.0f;
             a = scale_ticks(random_int_between(explosion_burst_particle_frame_count_range_start_gp, explosion_burst_particle_frame_count_range_end_gp));
             b = scale_ticks(random_int_between(explosion_burst_particle_second_frame_count_range_start_gp, explosion_burst_particle_second_frame_count_range_end_gp));
             spawn_particle(offset, velocity, color1, color2, scale, a, b, speed, 0, 0);
