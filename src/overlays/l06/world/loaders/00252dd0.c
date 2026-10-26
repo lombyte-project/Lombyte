@@ -87,14 +87,14 @@ typedef int Q252dd0 __attribute__((mode(TI)));
 extern Q252dd0 D_L06_001B0460[];
 extern u8 D_L06_00198340[];
 extern char *D_L06_0015F420;
-extern s32 D_L06_0015F438;
-extern s32 D_L06_0015F43C;
-extern s32 D_L06_0015F440;
+extern s32 level_06_counted_pointer_table_entry_count __asm__("D_L06_0015F438");
+extern s32 level_06_counted_pointer_table_records_base __asm__("D_L06_0015F43C");
+extern s32 level_06_counted_pointer_table_entries_base __asm__("D_L06_0015F440");
 extern s32 D_L06_0015FC98;
 extern s32 D_L06_0015FC9C;
 extern s32 D_L06_0015FCA0;
 extern s32 D_L06_0015FCA4;
-extern s32 D_L06_0015FCA8;
+extern s32 level_06_two_int_two_float_payload_base __asm__("D_L06_0015FCA8");
 extern char *D_L06_0015F604;
 extern Slot252dd0 *D_L06_0015F5F4;
 extern s32 level_06_sound_slot_count __asm__("D_L06_0015F5F0");
@@ -306,9 +306,9 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         if (level_header[0x28]) {
             relocate_counted_pointer_table(base + level_header[0x28]);
         } else {
-            D_L06_0015F438 = 0;
-            D_L06_0015F43C = 0;
-            D_L06_0015F440 = 0;
+            level_06_counted_pointer_table_entry_count = 0;
+            level_06_counted_pointer_table_records_base = 0;
+            level_06_counted_pointer_table_entries_base = 0;
         }
         if (level_header[0x29]) {
             load_two_int_two_float_header(base + level_header[0x29]);
@@ -317,7 +317,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             D_L06_0015FC9C = 0;
             D_L06_0015FCA4 = 0;
             D_L06_0015FCA0 = 0;
-            D_L06_0015FCA8 = 0;
+            level_06_two_int_two_float_payload_base = 0;
         }
         if (level_header[0x2A])
             D_L06_0015F604 = base + level_header[0x2A];
