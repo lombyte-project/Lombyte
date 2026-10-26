@@ -1036,15 +1036,15 @@ extern float D_L08_00161DE4[] __attribute__((section(".sdata")));
 /* Advances the X and Y scroll offsets of entry `i` by speed * frame step, wrapping them into [-1, 1]. */
 void advance_scroll_entry(int i) __asm__("FUN_L08_002f1378");
 void advance_scroll_entry(int i) {
-    float *p;
-    p = &scroll_pos_x[i * 2];
-    *p += D_L08_00161DE0[i * 2] * frame_delta_time;
-    if (*p > 1.0f) *p -= 1.0f;
-    if (*p < -1.0f) *p += 1.0f;
-    p = &scroll_pos_y[i * 2];
-    *p += D_L08_00161DE4[i * 2] * frame_delta_time;
-    if (*p > 1.0f) *p -= 1.0f;
-    if (*p < -1.0f) *p += 1.0f;
+    float *scroll_offset_ptr;
+    scroll_offset_ptr = &scroll_pos_x[i * 2];
+    *scroll_offset_ptr += D_L08_00161DE0[i * 2] * frame_delta_time;
+    if (*scroll_offset_ptr > 1.0f) *scroll_offset_ptr -= 1.0f;
+    if (*scroll_offset_ptr < -1.0f) *scroll_offset_ptr += 1.0f;
+    scroll_offset_ptr = &scroll_pos_y[i * 2];
+    *scroll_offset_ptr += D_L08_00161DE4[i * 2] * frame_delta_time;
+    if (*scroll_offset_ptr > 1.0f) *scroll_offset_ptr -= 1.0f;
+    if (*scroll_offset_ptr < -1.0f) *scroll_offset_ptr += 1.0f;
 }
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
