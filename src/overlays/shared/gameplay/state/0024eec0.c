@@ -297,9 +297,9 @@ extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) __asm__("FUN_L00_0024f440");
 void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet_24f440 *out) {
     char *frame_table_container = *(char **)(animation_blend_state + 0x18);
-    char *u = *(char **)(animation_blend_state + 0x14);
+    char *output_layout_source = *(char **)(animation_blend_state + 0x14);
     int nb = (unsigned char)frame_table_container[8];
-    int na = (unsigned char)u[8];
+    int na = (unsigned char)output_layout_source[8];
     Frame_24f440 *selected_frame;
     unsigned short frame_header_a;
     int trailing_byte_count;
