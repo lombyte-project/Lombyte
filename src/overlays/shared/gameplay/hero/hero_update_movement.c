@@ -307,8 +307,13 @@ void hero_update_movement(void) {
     enum {
         HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
         HERO_STATE_SWIM_WITH_ITEM_EFFECTS = 0x35,
+        HERO_STATE_JUMP_WITH_ASCENT_EFFECTS = 0x3C,
         HERO_STATE_LOCAL_HEADING_LIMITED_MOVE = 0x3F,
+        HERO_STATE_ALT_LEDGE_POSITION_HOLD = 0x4A,
+        HERO_STATE_GRAVITY_FLATTENED_STICK_MOVE = 0x4F,
+        HERO_STATE_ATTACK_RECORD_POINT_PAIR_SOUND = 0x51,
         HERO_STATE_ANIMATION_TIMED_POINT_ATTACK = 0x60,
+        HERO_STATE_ANIMATION_TRACKED_MOBY_POSITION_UPDATE = 0x61,
         HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
     };
     enum {
@@ -2139,7 +2144,7 @@ void hero_update_movement(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x4A:
+    case HERO_STATE_ALT_LEDGE_POSITION_HOLD:
     case HERO_STATE_ALT_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, frame_time * 4.712389f);
@@ -2343,7 +2348,7 @@ void hero_update_movement(void) {
     case 0x11:
     case HERO_STATE_JUMP_WITH_TIMED_SPLASH:
     case HERO_STATE_LEDGE_JUMP:
-    case 0x3C:
+    case HERO_STATE_JUMP_WITH_ASCENT_EFFECTS:
     case 0x49:
     case 0x4C:
     case 0x5E:
@@ -2617,7 +2622,7 @@ void hero_update_movement(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x51: {
+    case HERO_STATE_ATTACK_RECORD_POINT_PAIR_SOUND: {
         struct HeroTableRow2C *tb;
         s32 ok;
         tb = &attack_records[hero.attack_record];
@@ -2664,7 +2669,7 @@ void hero_update_movement(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_GRAVITY_FLATTENED_STICK_MOVE: {
         f32 sp = frame_time * 2.0f;
         stick_target(sp, 0);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 8.726646f);
@@ -2878,7 +2883,7 @@ void hero_update_movement(void) {
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
-    case 0x61:
+    case HERO_STATE_ANIMATION_TRACKED_MOBY_POSITION_UPDATE:
         hero.target_speed = 0.0f;
         speed_step(hero.target_speed, frame_time_sq * 12.6f);
         clear_u64_value(&hero.motion.velocity);
