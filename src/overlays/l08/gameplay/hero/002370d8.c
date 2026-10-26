@@ -145,6 +145,9 @@ int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void update_hero_state_transitions(void) __asm__("FUN_L08_002370d8");
 
 void update_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_TIMED_RESPAWN_WAIT = 127
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -478,7 +481,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 127:
+                case HERO_STATE_TIMED_RESPAWN_WAIT:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
