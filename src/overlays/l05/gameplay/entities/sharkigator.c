@@ -2063,8 +2063,8 @@ extern int FUN_L00_00259740(void *, void *, int);
 extern s32 spawn_spark_c2(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
 extern float D_L05_00161AF8 __attribute__((sda));
-extern int D_L05_00161B0C __attribute__((sda));
-extern int D_L05_00161B10 __attribute__((sda));
+extern int extermitank_tracked_particle_color_a_gp __asm__("D_L05_00161B0C") __attribute__((sda));
+extern int extermitank_tracked_particle_color_b_gp __asm__("D_L05_00161B10") __attribute__((sda));
 extern float extermitank_tracked_particle_lifetime_base_frames_gp __asm__("D_L05_00161B14") __attribute__((sda));
 extern float D_L05_00161B18 __attribute__((sda));
 extern float D_L05_00161B1C __attribute__((sda));
@@ -2075,8 +2075,8 @@ extern float extermitank_tracked_particle_vector_b_z_scale_gp __asm__("D_L05_001
 extern float extermitank_tracked_particle_vector_a_w_gp __asm__("D_L05_00161B30") __attribute__((sda));
 extern float extermitank_tracked_particle_vector_b_w_gp __asm__("D_L05_00161B34") __attribute__((sda));
 extern float extermitank_tracked_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B38") __attribute__((sda));
-extern int D_L05_00161B3C __attribute__((sda));
-extern int D_L05_00161B40 __attribute__((sda));
+extern int extermitank_secondary_particle_color_a_gp __asm__("D_L05_00161B3C") __attribute__((sda));
+extern int extermitank_secondary_particle_color_b_gp __asm__("D_L05_00161B40") __attribute__((sda));
 extern float extermitank_secondary_particle_lifetime_base_frames_gp __asm__("D_L05_00161B44") __attribute__((sda));
 extern float D_L05_00161B48 __attribute__((sda));
 extern float D_L05_00161B4C __attribute__((sda));
@@ -2296,7 +2296,7 @@ void extermitank_update(unsigned char *moby) {
             a = truncate_float_to_s32_c5(scale_time(random_float_between_c4(extermitank_tracked_particle_lifetime_base_frames_gp, extermitank_tracked_particle_lifetime_base_frames_gp + extermitank_tracked_particle_lifetime_base_frames_gp)));
             b = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B18, D_L05_00161B18 * 1.2f)));
             e = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B1C, D_L05_00161B1C * 1.2f)));
-            r = ((Spawn_305778)spawn_spark_c2)(working_position, particle_vector_a, particle_vector_b, D_L05_00161B0C, D_L05_00161B10, a, b, e, -1);
+            r = ((Spawn_305778)spawn_spark_c2)(working_position, particle_vector_a, particle_vector_b, extermitank_tracked_particle_color_a_gp, extermitank_tracked_particle_color_b_gp, a, b, e, -1);
             if ((frame_number_gp & 7) == 0 && r != 0 && i == 0) {
                 int j;
                 for (j = 0; j < 8; j++) {
@@ -2331,7 +2331,7 @@ void extermitank_update(unsigned char *moby) {
             a = truncate_float_to_s32_c5(scale_time(random_float_between_c4(extermitank_secondary_particle_lifetime_base_frames_gp, extermitank_secondary_particle_lifetime_base_frames_gp + extermitank_secondary_particle_lifetime_base_frames_gp)));
             b = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B48, D_L05_00161B48 * 1.2f)));
             e = truncate_float_to_s32_c5(scale_time(random_float_between_c4(D_L05_00161B4C, D_L05_00161B4C * 1.2f)));
-            ((Spawn_305778)spawn_spark_c2)(working_position, particle_vector_a, particle_vector_b, D_L05_00161B3C, D_L05_00161B40, a, b, e, -1);
+            ((Spawn_305778)spawn_spark_c2)(working_position, particle_vector_a, particle_vector_b, extermitank_secondary_particle_color_a_gp, extermitank_secondary_particle_color_b_gp, a, b, e, -1);
         }
         qcopy(working_position, moby + 0x10);
         working_position[2] = working_position[2] + 3.0f;
