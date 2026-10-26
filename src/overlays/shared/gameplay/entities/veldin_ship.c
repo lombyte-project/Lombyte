@@ -1884,9 +1884,9 @@ void update_animated_point_light_moby(unsigned char *moby) {
     void *base_position_ptr;
     void *position_offset_ptr;
     int radius_reset_this_update;
-    int c1 = 0;
-    int c2 = 0;
-    int c3 = 0;
+    int first_color_randomization_timer_bypass = 0;
+    int second_color_randomization_timer_bypass = 0;
+    int third_color_randomization_timer_bypass = 0;
     int sphere_check_result_or_light_slot_index;
 
     if (moby == 0) return;
@@ -2064,7 +2064,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
                 if (vars[0x68] != 0 && FUN_L00_001fefc8(vars + 0x7C)) *(int *)(vars + 0x4C) ^= 0x20;
             }
         } else {
-            if (*(unsigned short *)(vars + 0x6C) == 0 || c1 == 1) {
+            if (*(unsigned short *)(vars + 0x6C) == 0 || first_color_randomization_timer_bypass == 1) {
                 float a = (float)func_001FA898_r((float)vars[0x27]) / 100.0f;
                 float b = (float)func_001FA898_r((float)vars[0x26]) / 100.0f;
                 *(float *)(vars + 0x54) = random_float_between_c(a, b);
@@ -2111,7 +2111,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
                 if (vars[0x69] != 0 && FUN_L00_001fefc8(vars + 0x7D)) *(int *)(vars + 0x4C) ^= 0x200;
             }
         } else {
-            if (*(unsigned short *)(vars + 0x6E) == 0 || c2 == 1) {
+            if (*(unsigned short *)(vars + 0x6E) == 0 || second_color_randomization_timer_bypass == 1) {
                 float a = (float)func_001FA898_r((float)vars[0x2C]) / 100.0f;
                 float b = (float)func_001FA898_r((float)vars[0x2B]) / 100.0f;
                 *(float *)(vars + 0x58) = random_float_between_c(a, b);
@@ -2158,7 +2158,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
                 if (vars[0x6A] != 0 && FUN_L00_001fefc8(vars + 0x7E)) *(int *)(vars + 0x4C) ^= 0x2000;
             }
         } else {
-            if (*(unsigned short *)(vars + 0x70) == 0 || c3 == 1) {
+            if (*(unsigned short *)(vars + 0x70) == 0 || third_color_randomization_timer_bypass == 1) {
                 float a = (float)func_001FA898_r((float)vars[0x31]) / 100.0f;
                 float b = (float)func_001FA898_r((float)vars[0x30]) / 100.0f;
                 *(float *)(vars + 0x5C) = random_float_between_c(a, b);
