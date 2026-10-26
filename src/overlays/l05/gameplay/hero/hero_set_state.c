@@ -112,6 +112,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
         HERO_STATE_TRAJECTORY_ANIMATION_INITIALIZATION = 0x22,
         HERO_STATE_FACE_TARGET_WITH_QUEUED_ANIMATION = 0x24,
+        HERO_STATE_TARGET_CONTROL_ANIMATION_ENTRY = 0x25,
         HERO_STATE_CAPTURE_TARGET_DISTANCE_WITH_ANIMATION = 0x26,
         HERO_STATE_TARGET_MOBY_MOTION_SETUP = 0x2C,
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
@@ -908,7 +909,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x25: {
+    case HERO_STATE_TARGET_CONTROL_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
