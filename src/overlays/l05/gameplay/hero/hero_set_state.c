@@ -126,6 +126,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
         HERO_STATE_ATTACK_CONTROL_INITIALIZATION = 0x51,
         HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
+        HERO_STATE_ITEM_CANCEL_IDLE_ANIMATION_ENTRY = 0x63,
+        HERO_STATE_DEATH_MODE_EXIT_WITH_IDLE_ANIMATION = 0x64,
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION_VECTOR = 0x67,
@@ -2010,8 +2012,8 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x63:
-    case 0x64: {
+    case HERO_STATE_ITEM_CANCEL_IDLE_ANIMATION_ENTRY:
+    case HERO_STATE_DEATH_MODE_EXIT_WITH_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
