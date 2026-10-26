@@ -22,6 +22,7 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     u8 *work;
     int x, y, xm, ym, xr, yr;
     int cx, cy, cxm, cym, cxr, cyr;
+    int cyofs;
     int cdx, cdy;
     int xh, yh;
     int cxh, cyh;
@@ -36,9 +37,9 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     ye = &d->mb_buf[d->mb_buf_index].luma[n];
     ce = &d->mb_buf[d->mb_buf_index].chroma[n];
     if (fieldpred) {
-        y = ((dy >> 1) * 2 + by) + (yofs + sfield);
+        y = (dy >> 1) * 2 + by + yofs + sfield;
     } else {
-        y = ((dy >> 1) + by) + (yofs + sfield);
+        y = (dy >> 1) + by + yofs + sfield;
     }
     xm = x >> 4;
     ym = y >> 4;
@@ -78,20 +79,21 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     cdy = dy / 2;
     cdx = dx / 2;
     cx = (cdx >> 1) + (bx >> 1);
+    cyofs = yofs >> 1;
+    ch = h >> 1;
     if (fieldpred) {
-        cy = ((cdy >> 1) * 2 + (by >> 1) + (yofs >> 1)) + sfield;
+        cy = ((cdy >> 1) * 2 + (by >> 1) + cyofs) + sfield;
     } else {
-        cy = ((cdy >> 1) + (yofs >> 1)) + ((by >> 1) + sfield);
+        cy = ((cdy >> 1) + cyofs) + ((by >> 1) + sfield);
     }
     cxm = cx >> 3;
     cym = cy >> 3;
     cxr = cx - cxm * 8;
     cyr = cy - cym * 8;
     ce->x = cxr;
-    ce->addr = work + (dfield + (yofs >> 1)) * 16 + 0x200;
-    ch = h >> 1;
-    cyh = cdy & 1;
+    ce->addr = work + (dfield + cyofs) * 16 + 0x200;
     cxh = cdx & 1;
+    cyh = cdy & 1;
     if (cyh) {
         if (cyr + (ch << fieldpred) >= 8) {
             k = (8 >> fieldpred) - (cyr >> fieldpred) - 1;
