@@ -187,9 +187,9 @@ extern float weapon_aim_final_path_step __asm__("D_L14_00161A40") __attribute__(
 extern float muzzle_flash_joint_axis_offset __asm__("D_L14_00161A44") __attribute__((sda));
 extern float muzzle_flash_particle_full_blend_endpoint __asm__("D_L14_00161A48") __attribute__((sda));
 extern float muzzle_light_full_blend_position_w __asm__("D_L14_00161A4C") __attribute__((sda));
-extern float D_L14_00161A50 __attribute__((sda));
-extern float D_L14_00161A54 __attribute__((sda));
-extern float D_L14_00161A58 __attribute__((sda));
+extern float muzzle_light_color_component_x __asm__("D_L14_00161A50") __attribute__((sda));
+extern float muzzle_light_color_component_y __asm__("D_L14_00161A54") __attribute__((sda));
+extern float muzzle_light_color_component_z __asm__("D_L14_00161A58") __attribute__((sda));
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -406,15 +406,15 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             ((float *)&ray.self)[2] -= 0.5f;
             muzzle_light_position_w = (muzzle_light_full_blend_position_w - 0.1f) * blend + 0.1f;
             if (*(int *)(moby_data + 0xF0) == -1) {
-                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, muzzle_light_position_w, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
+                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, muzzle_light_position_w, 0.0f, muzzle_light_color_component_x, muzzle_light_color_component_y, muzzle_light_color_component_z);
             }
             if (*(int *)(moby_data + 0xF0) >= 0) {
                 float *muzzle_light_entry = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
                 qcopy(muzzle_light_entry + 4, &ray.self);
                 muzzle_light_entry[7] = muzzle_light_position_w;
-                muzzle_light_entry[0] = D_L14_00161A50;
-                muzzle_light_entry[1] = D_L14_00161A54;
-                muzzle_light_entry[2] = D_L14_00161A58;
+                muzzle_light_entry[0] = muzzle_light_color_component_x;
+                muzzle_light_entry[1] = muzzle_light_color_component_y;
+                muzzle_light_entry[2] = muzzle_light_color_component_z;
             }
         } else if (*(int *)(moby_data + 0xF0) != -1) {
             release_point_light_slot(*(int *)(moby_data + 0xF0));
