@@ -104,6 +104,8 @@ extern char D_L16_0017C380[];
 extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_WATER_DEPTH_JUMP = 0x12,
+        HERO_STATE_RUN_WITH_GROUND_ITEM_CONTACT = 0x3F,
         HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
         HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C,
         HERO_STATE_HOVERBOARD_UPWARD_LAUNCH = 0x6D,
@@ -675,7 +677,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x3F:
+    case HERO_STATE_RUN_WITH_GROUND_ITEM_CONTACT:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -1175,7 +1177,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_DEPTH_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
