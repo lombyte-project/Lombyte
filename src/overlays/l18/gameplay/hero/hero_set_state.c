@@ -89,14 +89,18 @@ extern char D_L18_0017C920[];
 extern char D_L18_0017C960[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_VEHICLE_MODE_2_RUN = 0x5B,
         HERO_STATE_VEHICLE_MODE_2_FALL = 0x5C,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E
+        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E,
+        HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 0x60,
+        HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 0x61,
+        HERO_STATE_VEHICLE_MODE_2_DYING = 0x62
     };
     int old2088;
     char *moby;
     int old20A7;
-    float vec[4];
+    float grind_direction_or_jump_probe_position[4];
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
@@ -380,7 +384,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
-    case 0x6A: {
+    case HERO_STATE_DROWN: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->item_select_blocked = 1;
@@ -840,11 +844,11 @@ int hero_set_state(int a, int b) {
         seg = p->rail_segment;
         t = p->rail_seg_frac;
         sample_path(*(int **)&p->rail_spline, pos, &seg, &t, p->rail_spline_loops, 1.0f);
-        subtract_vector_xyz(vec, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(vec)) {
-            normalize_vector_xyz(vec, vec, 1.0f);
+        subtract_vector_xyz(grind_direction_or_jump_probe_position, pos, &p->motion.pos);
+        if (0.001f < vector_length_xyz(grind_direction_or_jump_probe_position)) {
+            normalize_vector_xyz(grind_direction_or_jump_probe_position, grind_direction_or_jump_probe_position, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, vec);
+                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, grind_direction_or_jump_probe_position);
             }
         }
         {
@@ -855,7 +859,7 @@ int hero_set_state(int a, int b) {
                                  *(float *)(((char *)q->grind_look_moby) + 0x14) - q->motion.pos.f[1]);
                 if (1.5707964f < fast_difference_between_rotations(
                                      ang, fast_add_rotations(q->grind_yaw_offset,
-                                                             fast_arc_tan(vec[0], vec[1])))) {
+                                                             fast_arc_tan(grind_direction_or_jump_probe_position[0], grind_direction_or_jump_probe_position[1])))) {
                     q->grind_yaw_offset = 1.5707964f;
                     q->grind_anim_variant = 1;
                 }
@@ -925,7 +929,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1001,7 +1005,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case 0x1C:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
@@ -1141,15 +1145,15 @@ int hero_set_state(int a, int b) {
                 u->jump_gravity = frame_time_sq * 27.0f;
                 if (u->selector_5 != 0) {
                     float k = 4.7f;
-                    *(u128 *)vec = 0;
+                    *(u128 *)grind_direction_or_jump_probe_position = 0;
                     u->unk430 = u->unk430 + k;
                     u->jump_height_start = u->jump_height_start + k;
                     u->unk48C = u->unk48C + k;
                     u->jump_gravity = frame_time_sq * 14.0f;
-                    vec[0] = 331.0f;
-                    vec[1] = 104.0f;
-                    vec[2] = 145.0f;
-                    if (FUN_001f9b48(&u->motion.pos, vec) < 10.0f) {
+                    grind_direction_or_jump_probe_position[0] = 331.0f;
+                    grind_direction_or_jump_probe_position[1] = 104.0f;
+                    grind_direction_or_jump_probe_position[2] = 145.0f;
+                    if (FUN_001f9b48(&u->motion.pos, grind_direction_or_jump_probe_position) < 10.0f) {
                         k = 0.7f;
                         u->unk430 = u->unk430 + k;
                         u->jump_height_start = u->jump_height_start + k;
@@ -1748,7 +1752,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x71, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x5A: {
+    case HERO_STATE_VEHICLE_MODE_2_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1756,7 +1760,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x60: {
+    case HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
@@ -1777,7 +1781,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x61: {
+    case HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
@@ -1819,7 +1823,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(3, 0x12, (float)scale_game_frames(8));
         break;
     }
-    case 0x62: {
+    case HERO_STATE_VEHICLE_MODE_2_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
