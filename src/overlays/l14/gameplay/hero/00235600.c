@@ -137,7 +137,7 @@ void process_hero_state_transitions(void) {
     int prevState;
     int prevAnim;
     float query_position[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float motion_query_vector[4] __attribute__((aligned(16)));
     int record_index;
     int path_seg;
     float path_t;
@@ -1062,11 +1062,11 @@ void process_hero_state_transitions(void) {
                             if (current_level_index != 0x10) {
                                 qcopy(query_position, hero.rail_point.f);
                                 query_position[2] += 2.0f;
-                                v1[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
-                                v1[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
-                                v1[2] = 0.0f;
-                                add_vector_xyz(v1, v1, query_position);
-                                if (collision_line(query_position, v1, 2, 0, 0)) {
+                                motion_query_vector[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
+                                motion_query_vector[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
+                                motion_query_vector[2] = 0.0f;
+                                add_vector_xyz(motion_query_vector, motion_query_vector, query_position);
+                                if (collision_line(query_position, motion_query_vector, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }
@@ -1157,10 +1157,10 @@ void process_hero_state_transitions(void) {
                                 hero.rail_gap_jump = 1;
                                 t = FUN_L00_0025abf0(hero.motion.pos.f, hero.jump_target_pos.f, 0,
                                                      hero.motion.flat_speed, -hero.jump_gravity);
-                                *(OvlQuad *)v1 = 0;
+                                *(OvlQuad *)motion_query_vector = 0;
                                 *(OvlQuad *)query_position = 0;
-                                v1[2] = t;
-                                t = calculate_triangular_corrected_scalar(query_position, v1, 0, hero.jump_gravity);
+                                motion_query_vector[2] = t;
+                                t = calculate_triangular_corrected_scalar(query_position, motion_query_vector, 0, hero.jump_gravity);
                                 hero.jump_height_start = t;
                                 hero.jump_gravity = hero.rail_jump_gravity;
                                 hero.unk430 = t;
@@ -1229,14 +1229,14 @@ void process_hero_state_transitions(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, query_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, t)) {
-                                        scale_vector_xyz(v1, hero.motion.displacement.f,
+                                        scale_vector_xyz(motion_query_vector, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(query_position, hero.motion.pos.f, v1);
+                                        add_vector_xyz(query_position, hero.motion.pos.f, motion_query_vector);
                                     }
                                     query_position[0] += fast_cos(ang) * d;
                                     query_position[1] += fast_sin(ang) * d;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (nearest_rail_point(query_position, &new_path, v1, &new_seg, &new_t,
+                                    if (nearest_rail_point(query_position, &new_path, motion_query_vector, &new_seg, &new_t,
                                                          &new_loop, hero.rail_spline, 0)) {
                                         hero.transfer_from_spline = hero.rail_spline;
                                         hero.prev_rail_segment = hero.rail_segment;
@@ -1375,11 +1375,11 @@ void process_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(motion_query_vector, hero.motion.pos.f);
+                        motion_query_vector[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        motion_query_vector[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         probe_heading_1 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_1)) {
+                        if (test_hero_ledge_ahead(motion_query_vector, &probe_heading_1)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1388,13 +1388,13 @@ void process_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(motion_query_vector, hero.motion.pos.f);
+                        motion_query_vector[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        motion_query_vector[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         probe_heading_2 = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &probe_heading_2)) {
+                        if (test_hero_ledge_ahead(motion_query_vector, &probe_heading_2)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
