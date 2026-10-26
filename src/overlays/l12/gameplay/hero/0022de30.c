@@ -653,8 +653,11 @@ void update_hero_motion_for_current_state(void) {
     enum {
         HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION = 0x11,
         HERO_STATE_WATER_SPLASH_JUMP = 0x12,
+        HERO_STATE_BACKWARD_FACING_DECELERATION = 0x21,
+        HERO_STATE_STATIONARY_TARGET_FACING = 0x2E,
         HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION = 0x35,
-        HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT = 0x3F
+        HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT = 0x3F,
+        HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT = 0x81
     };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -1251,7 +1254,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRAPPLE_TARGET_ENTRY:
-    case 0x2E:
+    case HERO_STATE_STATIONARY_TARGET_FACING:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
@@ -1758,7 +1761,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x21:
+    case HERO_STATE_BACKWARD_FACING_DECELERATION:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -2152,7 +2155,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT: {
         s32 big;
         f32 sp;
         f32 m;
