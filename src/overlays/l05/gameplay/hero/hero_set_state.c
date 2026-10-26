@@ -114,8 +114,12 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E,
         HERO_STATE_HOVERBOARD_VOICE_RESET_ANIMATION = 0x6F,
         HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE = 0x72,
+        HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION = 0x73,
         HERO_STATE_HURT_WITH_DISPLACEMENT_AND_ALTERNATE_ANIMATION = 0x75,
         HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
+    };
+    enum {
+        HERO_STATE_ATTACK_ANIMATION_WITH_OPTIONAL_TARGET_HEADING = 0x23
     };
     int old2088;
     char *moby;
@@ -696,7 +700,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_RUN:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1545,7 +1549,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ATTACK_ANIMATION_WITH_OPTIONAL_TARGET_HEADING:
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1687,7 +1691,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ATTACK_ANIMATION_WITH_OPTIONAL_TARGET_HEADING: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
