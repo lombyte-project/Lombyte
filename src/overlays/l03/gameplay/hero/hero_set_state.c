@@ -90,7 +90,9 @@ extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE = 0x26,
         HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
+        HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72
     };
     int old2088;
@@ -704,7 +706,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -1693,7 +1695,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x3B: {
+    case HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         char *m;
         int n;
