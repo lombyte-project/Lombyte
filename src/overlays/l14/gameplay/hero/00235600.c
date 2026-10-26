@@ -136,7 +136,7 @@ void process_hero_state_transitions(void) {
     int prevSub;
     int prevState;
     int prevAnim;
-    float v0[4] __attribute__((aligned(16)));
+    float query_position[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
     int path_seg;
@@ -1060,13 +1060,13 @@ void process_hero_state_transitions(void) {
                             int ok = 1;
 
                             if (current_level_index != 0x10) {
-                                qcopy(v0, hero.rail_point.f);
-                                v0[2] += 2.0f;
+                                qcopy(query_position, hero.rail_point.f);
+                                query_position[2] += 2.0f;
                                 v1[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
                                 v1[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
                                 v1[2] = 0.0f;
-                                add_vector_xyz(v1, v1, v0);
-                                if (collision_line(v0, v1, 2, 0, 0)) {
+                                add_vector_xyz(v1, v1, query_position);
+                                if (collision_line(query_position, v1, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }
@@ -1107,11 +1107,11 @@ void process_hero_state_transitions(void) {
                         int go = 1;
 
                         if (current_level_index == 8) {
-                            *(OvlQuad *)v0 = 0;
-                            v0[0] = 342.0f;
-                            v0[1] = 111.1f;
-                            v0[2] = 42.0f;
-                            if (FUN_001f9b48(hero.motion.pos.f, v0) < 7.0f) {
+                            *(OvlQuad *)query_position = 0;
+                            query_position[0] = 342.0f;
+                            query_position[1] = 111.1f;
+                            query_position[2] = 42.0f;
+                            if (FUN_001f9b48(hero.motion.pos.f, query_position) < 7.0f) {
                                 go = 0;
                                 hero.move_lock_timer = scale_game_frames(0x64);
                             }
@@ -1158,9 +1158,9 @@ void process_hero_state_transitions(void) {
                                 t = FUN_L00_0025abf0(hero.motion.pos.f, hero.jump_target_pos.f, 0,
                                                      hero.motion.flat_speed, -hero.jump_gravity);
                                 *(OvlQuad *)v1 = 0;
-                                *(OvlQuad *)v0 = 0;
+                                *(OvlQuad *)query_position = 0;
                                 v1[2] = t;
-                                t = calculate_triangular_corrected_scalar(v0, v1, 0, hero.jump_gravity);
+                                t = calculate_triangular_corrected_scalar(query_position, v1, 0, hero.jump_gravity);
                                 hero.jump_height_start = t;
                                 hero.jump_gravity = hero.rail_jump_gravity;
                                 hero.unk430 = t;
@@ -1223,20 +1223,20 @@ void process_hero_state_transitions(void) {
                                 for (d = 2.0f; d <= lim; d += 0.75f) {
                                     float t = hero.motion.speed_xy * (float)scale_game_frames(0);
 
-                                    qcopy(v0, hero.motion.pos.f);
+                                    qcopy(query_position, hero.motion.pos.f);
                                     path_seg = hero.rail_segment;
                                     path_t = hero.rail_seg_frac;
                                     /* Step a copy of the hero position along its current path. */
-                                    if (sample_path((int *)hero.rail_spline, v0, &path_seg,
+                                    if (sample_path((int *)hero.rail_spline, query_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, t)) {
                                         scale_vector_xyz(v1, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(v0, hero.motion.pos.f, v1);
+                                        add_vector_xyz(query_position, hero.motion.pos.f, v1);
                                     }
-                                    v0[0] += fast_cos(ang) * d;
-                                    v0[1] += fast_sin(ang) * d;
+                                    query_position[0] += fast_cos(ang) * d;
+                                    query_position[1] += fast_sin(ang) * d;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (nearest_rail_point(v0, &new_path, v1, &new_seg, &new_t,
+                                    if (nearest_rail_point(query_position, &new_path, v1, &new_seg, &new_t,
                                                          &new_loop, hero.rail_spline, 0)) {
                                         hero.transfer_from_spline = hero.rail_spline;
                                         hero.prev_rail_segment = hero.rail_segment;
@@ -1351,9 +1351,9 @@ void process_hero_state_transitions(void) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
                     stick_target(0, 1.0f);
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(query_position, hero.motion.pos.f);
                     probe_heading_0 = hero.motion.rot.f[2];
-                    if (test_hero_ledge_ahead(v0, &probe_heading_0) == 0) {
+                    if (test_hero_ledge_ahead(query_position, &probe_heading_0) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.ledge_probe_cooldown = scale_game_frames(0xA);
                         break;
@@ -1403,20 +1403,20 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float ang;
 
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(query_position, hero.motion.pos.f);
                     ang = 1.5707964f;
                     if (hero.state.current == 0x1B) {
                         ang = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
+                    query_position[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
+                    query_position[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], ang)) * 0.3f;
                     probe_heading_3 = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.stick_magnitude < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], ang)) ||
-                        test_hero_ledge_ahead(v0, &probe_heading_3) == 0) {
+                        test_hero_ledge_ahead(query_position, &probe_heading_3) == 0) {
                         if (hero.anim_flags & 2) {
                             hero_set_state(0x19, 1);
                             break;
