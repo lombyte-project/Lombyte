@@ -162,10 +162,12 @@ void hero_update_transitions(void) {
         HERO_STATE_JUMP_WITH_BUFFERED_REPEAT = 17,
         HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 53,
+        HERO_STATE_RUN_WITH_GROUNDED_EXIT = 63,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
         HERO_STATE_VEHICLE_MODE_1_LAND = 79,
+        HERO_STATE_VEHICLE_MODE_1_RUN_WITH_PLANAR_SPEED_ANIMATION = 80,
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 81,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
         HERO_STATE_VEHICLE_MODE_2_FALL = 92,
@@ -1078,7 +1080,7 @@ void hero_update_transitions(void) {
                         return;
                     }
                     break;
-                case 63:
+                case HERO_STATE_RUN_WITH_GROUNDED_EXIT:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -2614,7 +2616,7 @@ void hero_update_transitions(void) {
                     hero_set_state(0x43, 1);
                     break;
                 case HERO_STATE_VEHICLE_MODE_1_RUN:
-                case 80:
+                case HERO_STATE_VEHICLE_MODE_1_RUN_WITH_PLANAR_SPEED_ANIMATION:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
                         break;
