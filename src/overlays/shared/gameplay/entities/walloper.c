@@ -40,7 +40,7 @@ extern float D_L00_0016162C __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668[] __attribute__((section(".sdata")));
 extern short D_L00_00161670[] __attribute__((section(".sdata")));
-extern short D_L00_00161660_c __asm__("D_L00_00161660");
+extern s16 D_L00_00161660;
 extern float fast_add_rotations_c(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations_c(float, float) __asm__("FUN_001fa5c8");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -67,11 +67,11 @@ extern Vec4 D_L00_001DBA10[4][5];
 extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
-extern void build_look_at_matrix_c2(void *, void *, void *, float) __asm__("FUN_00214890");
+extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
-extern int FUN_001efa68_c3(Vec4 *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
+extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
 extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
@@ -214,7 +214,7 @@ next_candidate:;
     fast_vec_normalize_c(&direction, &direction, 1.0f);
     if (v->target || v->second_target) {
         fast_vec_cross(&delta, &direction, &player->gravity_dir);
-        build_look_at_matrix_c2(&direction, &direction, &delta, 0.17453292f);
+        build_look_at_matrix(&direction, &direction, &delta, 0.17453292f);
     }
     hit_result = 0;
     collided_count = 0;
@@ -299,9 +299,9 @@ next_candidate:;
             struct Hero *h = &hero;
             fast_vec_scale(0.5f, &effects.first.origin, (char *)h->moby + 0xe0);
             fast_vec_add(&target_delta, &h->motion.pos, &effects.first.origin);
-            hit_result = FUN_001efa68_c3(&target_delta, (Vec4 *)v, 0x10, h->moby, 0);
+            hit_result = collision_line((Vec4f *)&target_delta, (Vec4f *)v, 0x10, h->moby, 0);
         } else if (seg == 19 || !(seg & 1)) {
-            hit_result = FUN_001efa68_c3((Vec4 *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4 *)&beam[seg], 0x10, o, 0);
+            hit_result = collision_line((Vec4f *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4f *)&beam[seg], 0x10, o, 0);
         } else continue;
         fast_vec_sub(&camera_direction, &beam[seg], g_debug_camera);
         camera_direction.f[2] = 0.0f;
@@ -373,13 +373,13 @@ next_candidate:;
         else { qcopy(&effects.first.origin, &v->tip); factor_w15 = 0.5f; }
         if (fast_dec_timer_s16(&D_L00_00161658[i])) {
             D_L00_00161658[i] = scale_game_frames(D_L00_00161668[i]);
-            (&D_L00_00161660_c)[i] = 0;
+            (&D_L00_00161660)[i] = 0;
             angle = FUN_L00_00257c48_c(0.5235988f, 1.0471976f);
             phase = random_float_between(-1.0471976f, 0.17453292f);
             fast_vec_scale(factor_w15, &target_delta, &direction);
             rows = (Vec4 *)(D_0013F3D0 + 0x5d0);
-            build_look_at_matrix_c2(&target_delta, &target_delta, rows, phase);
-            build_look_at_matrix_c2(&target_delta, &target_delta, rows + 1, angle);
+            build_look_at_matrix(&target_delta, &target_delta, rows, phase);
+            build_look_at_matrix(&target_delta, &target_delta, rows + 1, angle);
             qcopy(&arc_points[i][0], &effects.first.origin);
             fast_vec_add(&arc_points[i][1], &effects.first.origin, &target_delta);
             sign = 1.0f;
@@ -387,7 +387,7 @@ next_candidate:;
                 fast_vec_sub(&effects.first.hit0, &arc_points[i][-1] + m, g_debug_camera);
                 phase = random_float_between(0.17453292f, 0.9599311f) * sign;
                 sign = -sign;
-                build_look_at_matrix_c2(&target_delta, &target_delta, &effects.first.hit0, phase);
+                build_look_at_matrix(&target_delta, &target_delta, &effects.first.hit0, phase);
                 fast_vec_add(&arc_points[i][m], &arc_points[i][-1] + m, &target_delta);
             }
         } else {
@@ -404,14 +404,14 @@ next_candidate:;
             d = D_L00_00161670[i]; n0 = D_L00_00161658[i];
             if (d < n0) d = n0 - d; else d = d - n0;
             distance = convert_integer_to_float_c(d) / convert_integer_to_float_c(scale_game_frames(15));
-            (&D_L00_00161660_c)[i] = truncate_float_to_s32_c3((1.0f - distance) * 32.0f);
+            (&D_L00_00161660)[i] = truncate_float_to_s32_c3((1.0f - distance) * 32.0f);
         }
     }
     angle = FUN_L00_00257c48_c(0.5235988f, 1.0471976f);
     phase = random_float_between(-0.5235988f, 1.0471976f);
     fast_vec_scale(D_L00_00161628 * frame_scale, &target_delta, &direction);
-    build_look_at_matrix_c2(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
-    build_look_at_matrix_c2(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
+    build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
+    build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.2f, 0.6f);
     FUN_L00_00272060_c(v, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)&target_delta, 0.0f);
