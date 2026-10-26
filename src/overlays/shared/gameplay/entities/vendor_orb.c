@@ -1885,8 +1885,8 @@ void FUN_L00_002e4930(char *camera) {
                         FUN_L00_002e48a0_c(attach_state->v30, x);
                         qcopy(attach_state->v20, attach_state->v10);
                     } else {
-                        struct Hero *p4 = &hero;
-                        if ((p4->state.current == 0xD || p4->state.current == 0xE) &&
+                        struct Hero *state_transition_player = &hero;
+                        if ((state_transition_player->state.current == 0xD || state_transition_player->state.current == 0xE) &&
                             D_L00_00166EEC == 0.0f) {
                             attach_state->prev = attach_state->state;
                             attach_state->state = 5;
