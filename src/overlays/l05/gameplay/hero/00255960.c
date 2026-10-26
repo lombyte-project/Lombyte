@@ -140,6 +140,13 @@ extern int landing_run_entry_animation_frame __asm__("D_L05_0015F6EC");
 void update_hero_state_machine(void) __asm__("FUN_L05_00255960");
 
 void update_hero_state_machine(void) {
+    enum {
+        HERO_STATE_HOVERBOARD_RIDING = 107,
+        HERO_STATE_HOVERBOARD_BOOST_JUMP = 108,
+        HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT = 109,
+        HERO_STATE_HOVERBOARD_POSITION_OR_TIMEOUT_RESPAWN_WAIT = 110,
+        HERO_STATE_HOVERBOARD_ANIMATION_END_RESPAWN_WAIT = 111
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -900,7 +907,7 @@ void update_hero_state_machine(void) {
                     }
                     update_hero_animation_for_movement_speed();
                     break;
-                case 102:
+                case HERO_STATE_BRAKE_AT_TARGET_POSITION:
                     if (hero.anim_flags & 2) {
                         hero_set_state(0x65, 1);
                     }
@@ -1839,7 +1846,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 107:
+                case HERO_STATE_HOVERBOARD_RIDING:
                     fast_dec_timer_s16(&hero.board_jump_cooldown);
                     if (hero_pick_help_mode()) {
                         break;
@@ -1975,7 +1982,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 108:
+                case HERO_STATE_HOVERBOARD_BOOST_JUMP:
                     if (((unsigned char *)hero.moby)[0x53] == 0x55 || ((unsigned char *)hero.moby)[0x53] == 0x7F) {
                         hero.board_jump_land_frames =
                             truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero.board_gravity, -1.0f));
@@ -1993,7 +2000,7 @@ void update_hero_state_machine(void) {
                     process_hero_race_object_interactions();
                     update_hero_hoverboard_trick_score();
                     break;
-                case 109:
+                case HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT:
                     if (current_level_index == 5 && 61.4f > hero.motion.pos.f[2]) {
                         hero.board_floor_z = 61.4f;
                         hero_set_state(0x6E, 1);
@@ -2018,7 +2025,7 @@ void update_hero_state_machine(void) {
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
-                case 110:
+                case HERO_STATE_HOVERBOARD_POSITION_OR_TIMEOUT_RESPAWN_WAIT:
                     if (5.0f > hero.motion.pos.f[0] || 5.0f > hero.motion.pos.f[1] ||
                         hero.state_timer > hero.board_respawn_delay) {
                         compute_hero_hoverboard_respawn_transform(v0, v1);
@@ -2026,7 +2033,7 @@ void update_hero_state_machine(void) {
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
-                case 111:
+                case HERO_STATE_HOVERBOARD_ANIMATION_END_RESPAWN_WAIT:
                     if (hero.anim_flags & 2) {
                         compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.board_air_yaw = v1[2];
