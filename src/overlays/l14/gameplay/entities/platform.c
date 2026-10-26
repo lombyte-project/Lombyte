@@ -185,7 +185,7 @@ typedef struct {
 int D_L14_00161A3C = 0x8c;
 extern float weapon_aim_final_path_step __asm__("D_L14_00161A40") __attribute__((sda));
 extern float muzzle_flash_joint_axis_offset __asm__("D_L14_00161A44") __attribute__((sda));
-extern float D_L14_00161A48 __attribute__((sda));
+extern float muzzle_flash_particle_full_blend_endpoint __asm__("D_L14_00161A48") __attribute__((sda));
 extern float muzzle_light_full_blend_position_w __asm__("D_L14_00161A4C") __attribute__((sda));
 extern float D_L14_00161A50 __attribute__((sda));
 extern float D_L14_00161A54 __attribute__((sda));
@@ -394,7 +394,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             if (muzzle_flash_particle != 0) {
                 char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
-                *(float *)(muzzle_flash_particle + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
+                *(float *)(muzzle_flash_particle + 0xC) = (muzzle_flash_particle_full_blend_endpoint - 1000.0f) * blend + 1000.0f;
                 *(short *)(muzzle_flash_particle_state + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
                 *(short *)(muzzle_flash_particle_state + 0x16) = 1;
                 lifetime_frames = frames_67e8(4);
