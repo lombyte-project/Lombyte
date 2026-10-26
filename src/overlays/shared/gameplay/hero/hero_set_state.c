@@ -679,6 +679,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
+        HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
+        HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
+        HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION = 0x72,
         HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D
     };
     enum {
@@ -781,7 +784,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -2376,7 +2379,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x70: {
+    case HERO_STATE_ALTERNATING_WRENCH_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unkA64 = 0;
@@ -2905,7 +2908,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
