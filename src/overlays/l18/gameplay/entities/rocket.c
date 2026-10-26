@@ -877,7 +877,7 @@ void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __as
 
 char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) __asm__("FUN_L18_002d5cf8");
 
-char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
+char *launch_class_238_moby_from_list(float horizontal_speed, int launching_moby, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
     float adjusted_target_position[4];
     float pitch_and_target_setback_scalar;
     float ballistic_gravity_magnitude;
@@ -936,7 +936,7 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_l
         *(float *)(moby + 0x48) =
             angle_atan2(*(float *)(data + 0x180), *(float *)(data + 0x184));
         *(int *)(data + 0x194) = detonation_countdown;
-        *(int *)(data + 0x198) = a0;
+        *(int *)(data + 0x198) = launching_moby;
         *(int *)(data + 0x19C) = 0;
         allocate_voice_for_target_entry(0, 0, (int)moby);
     }
