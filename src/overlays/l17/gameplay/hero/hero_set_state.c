@@ -116,7 +116,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FACE_TARGET_MOBY_ENTRY = 0x24,
         HERO_STATE_SAVE_TARGET_MOBY_DISTANCE_ENTRY = 0x26,
         HERO_STATE_GRIND_JUMP_WITH_DIRECTIONAL_ANIMATION = 0x2A,
+        HERO_STATE_FALL_CLEAR_AUXILIARY_MOTION = 0x2D,
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
+        HERO_STATE_SAVE_DISPLACEMENT_AND_RESET_ENTRY_WORKSPACE = 0x31,
         HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_JUMP_WITH_HEALTH_DAMAGE = 0x3C,
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
@@ -688,7 +690,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_SAVE_DISPLACEMENT_AND_RESET_ENTRY_WORKSPACE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
@@ -886,7 +888,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2D: {
+    case HERO_STATE_FALL_CLEAR_AUXILIARY_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
