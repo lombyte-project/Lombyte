@@ -120,7 +120,7 @@ extern float spark_burst_initial_z_scale __asm__("D_L06_001622F4") __attribute__
 extern float spark_burst_rotation_row1_scale_variation __asm__("D_L06_001622F8") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/vendor/003083b0_globals.h"
 extern float spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") __attribute__((sda));
-extern int D_L06_00162300 __attribute__((sda));
+extern int spark_burst_emission_random_span __asm__("D_L06_00162300") __attribute__((sda));
 extern int D_L06_00162304 __attribute__((sda));
 extern int D_L06_00162308 __attribute__((sda));
 extern float spark_burst_emission_scale_variation __asm__("D_L06_0016230C") __attribute__((sda));
@@ -137,7 +137,7 @@ extern float spark_spray_second_vector_scale __asm__("D_L06_00162334") __attribu
 extern float spark_spray_z_subtraction_rate_gp __asm__("D_L06_00162338") __attribute__((sda));
 extern float spark_spray_vector_scale_variation_gp __asm__("D_L06_0016233C") __attribute__((sda));
 extern float spark_spray_offset_random_range_end __asm__("D_L06_00162340") __attribute__((sda));
-extern int D_L06_00162344 __attribute__((sda));
+extern int spark_spray_emission_random_span __asm__("D_L06_00162344") __attribute__((sda));
 extern int D_L06_00162348 __attribute__((sda));
 extern int D_L06_0016234C __attribute__((sda));
 extern float spark_spray_emission_scale_variation __asm__("D_L06_00162350") __attribute__((sda));
@@ -219,7 +219,7 @@ void update_spark_emitter(struct Moby *emitter) {
                 z_adjusted_spark_vector.w = random_float_between_alt(spark_burst_z_adjusted_vector_w_range_start, spark_burst_z_adjusted_vector_w_range_end);
                 c19 = fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between_alt(0.0f, 1.0f));
                 c18 = fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between_alt(0.0f, 1.0f));
-                c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162300 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)spark_burst_emission_random_span * random_float_between_alt(0.0f, 1.0f) + 1.0f));
                 c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162304 * (random_float_between_alt(-spark_burst_emission_scale_variation, spark_burst_emission_scale_variation) + 1.0f)));
                 c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162308 * (random_float_between_alt(-spark_burst_emission_scale_variation, spark_burst_emission_scale_variation) + 1.0f)));
                 emit_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, -1);
@@ -243,7 +243,7 @@ void update_spark_emitter(struct Moby *emitter) {
                     z_adjusted_spark_vector.w = random_float_between_alt(spark_spray_z_adjusted_vector_w_range_start, spark_spray_z_adjusted_vector_w_range_end);
                     c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between_alt(0.0f, 1.0f));
                     c18 = fast_tween_color(D_L06_0016236C, D_L06_00162370, random_float_between_alt(0.0f, 1.0f));
-                    c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162344 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                    c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)spark_spray_emission_random_span * random_float_between_alt(0.0f, 1.0f) + 1.0f));
                     c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162348 * (random_float_between_alt(-spark_spray_emission_scale_variation, spark_spray_emission_scale_variation) + 1.0f)));
                     c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_0016234C * (random_float_between_alt(-spark_spray_emission_scale_variation, spark_spray_emission_scale_variation) + 1.0f)));
                     emit_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, D_L06_0016237C);
