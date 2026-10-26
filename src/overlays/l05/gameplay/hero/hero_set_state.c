@@ -107,6 +107,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_COPIED_VECTOR_SNAPSHOT = 0x11,
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
         HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT = 0x17,
+        HERO_STATE_ANIMATION_ENTRY_WITH_PRESERVED_JUMP_HEIGHT = 0x18,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
@@ -1024,7 +1025,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x2A, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x18: {
+    case HERO_STATE_ANIMATION_ENTRY_WITH_PRESERVED_JUMP_HEIGHT: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
