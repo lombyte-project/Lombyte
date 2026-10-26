@@ -138,7 +138,10 @@ void update_hero_state_machine(void) {
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_VEHICLE_MODE_1_LEDGE_JUMP = 76,
-        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81
+        HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
+        HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN = 80,
+        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
+        HERO_STATE_RESPAWN_ON_DESCENT_OR_TIMEOUT = 125
     };
     unsigned char *moby;
     int prevSub;
@@ -772,7 +775,7 @@ void update_hero_state_machine(void) {
                         return;
                     }
                     break;
-                case 125:
+                case HERO_STATE_RESPAWN_ON_DESCENT_OR_TIMEOUT:
                     if (hero.sink_surface_z - 0.8f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -2153,7 +2156,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 79:
+                case HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT:
                     if (hero.state_timer > scale_game_frames(0x1E) && !(controller_state.held & 0x40)) {
                         hero_set_state(0x45, 1);
                         break;
@@ -2225,7 +2228,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(0x43, 1);
                     break;
                 case HERO_STATE_VEHICLE_MODE_1_RUN:
-                case 80:
+                case HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
                         break;
