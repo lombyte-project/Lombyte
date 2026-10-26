@@ -124,7 +124,9 @@ void update_hero_state_transitions(void) __asm__("FUN_L11_00253a18");
 
 void update_hero_state_transitions(void) {
     enum {
-        HERO_STATE_JUMP_FROM_WATER_SURFACE = 18
+        HERO_STATE_JUMP_FROM_WATER_SURFACE = 18,
+        HERO_STATE_SWIM_FROM_CROUCH_INPUT = 53,
+        HERO_STATE_ANIMATION_COMPLETION_RESPAWN = 98
     };
     struct Moby *moby;
     int prevSub;
@@ -438,7 +440,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_ANIMATION_COMPLETION_RESPAWN:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -454,7 +456,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_FROM_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
