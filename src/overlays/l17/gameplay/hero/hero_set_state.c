@@ -120,6 +120,10 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FALL_CLEAR_AUXILIARY_MOTION = 0x2D,
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SAVE_DISPLACEMENT_AND_RESET_ENTRY_WORKSPACE = 0x31,
+        HERO_STATE_WATER_CONTROL_WITH_CONDITIONAL_ENTRY_TIMER = 0x33,
+        HERO_STATE_WATER_CONTROL_WITH_SAVED_ENTRY_MOTION = 0x34,
+        HERO_STATE_WATER_CONTROL_WITH_REFRESHED_ENTRY_TIMER = 0x35,
+        HERO_STATE_WATER_SURFACE_WITH_ENTRY_TIMER = 0x36,
         HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_JUMP_WITH_HEALTH_DAMAGE = 0x3C,
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
@@ -297,7 +301,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
-    case 0x33: {
+    case HERO_STATE_WATER_CONTROL_WITH_CONDITIONAL_ENTRY_TIMER: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x11;
         p->unk2284 = 0xB;
@@ -320,7 +324,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_WATER_CONTROL_WITH_REFRESHED_ENTRY_TIMER: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -340,7 +344,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3D, 0, (float)n);
         break;
     }
-    case 0x34: {
+    case HERO_STATE_WATER_CONTROL_WITH_SAVED_ENTRY_MOTION: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -448,7 +452,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_WITH_ENTRY_TIMER: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->item_select_blocked = 1;
