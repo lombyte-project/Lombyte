@@ -676,7 +676,9 @@ extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_PACK_JUMP_WITH_TRAIL_EVENTS = 0xD,
+        HERO_STATE_JUMP_WITH_GROUND_DISTANCE_ADJUSTED_LAUNCH = 0xE,
         HERO_STATE_PACK_JUMP_WITH_PAL_ADJUSTED_TIMING = 0xF,
+        HERO_STATE_DISPLACEMENT_CAPTURE_IDLE_ANIMATION_LONG_BLEND = 0x17,
         HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION = 0x1D,
         HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
@@ -685,6 +687,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_GRIND_JUMP_WITH_DIRECTION_DEPENDENT_ANIMATION = 0x2A,
         HERO_STATE_RUN_WITH_DISPLACEMENT_GROUND_SPEED = 0x2E,
+        HERO_STATE_DISPLACEMENT_CAPTURE_IDLE_ANIMATION_SHORT_BLEND = 0x30,
         HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY = 0x36,
@@ -1124,7 +1127,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x17: {
+    case HERO_STATE_DISPLACEMENT_CAPTURE_IDLE_ANIMATION_LONG_BLEND: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -1133,7 +1136,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x30: {
+    case HERO_STATE_DISPLACEMENT_CAPTURE_IDLE_ANIMATION_SHORT_BLEND: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -1696,7 +1699,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case HERO_STATE_PACK_JUMP_WITH_TRAIL_EVENTS:
-    case 0xE:
+    case HERO_STATE_JUMP_WITH_GROUND_DISTANCE_ADJUSTED_LAUNCH:
     case HERO_STATE_PACK_JUMP_WITH_PAL_ADJUSTED_TIMING:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
