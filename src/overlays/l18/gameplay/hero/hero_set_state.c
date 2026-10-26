@@ -105,6 +105,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 0x60,
         HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 0x61,
         HERO_STATE_VEHICLE_MODE_2_DYING = 0x62,
+        HERO_STATE_CANCEL_ITEM_ANIMATION_TO_OPTIONAL_DEFAULT_POSE = 0x63,
         HERO_STATE_SET_DEFAULT_POSE_WITH_DYING_OVERRIDE = 0x64,
         HERO_STATE_CANCEL_ITEM_ANIMATION_TO_DEFAULT_POSE = 0x72
     };
@@ -2034,7 +2035,7 @@ int hero_set_state(int a, int b) {
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
-    case 0x63:
+    case HERO_STATE_CANCEL_ITEM_ANIMATION_TO_OPTIONAL_DEFAULT_POSE:
     case HERO_STATE_SET_DEFAULT_POSE_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
