@@ -106,6 +106,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
+        HERO_STATE_ATTACK_WITH_FIXED_ENTRY_ANIMATION = 0x61,
         HERO_STATE_TERMINAL_ENTRY_WITH_COPIED_MOTION = 0x62,
         HERO_STATE_CANCEL_ITEM_AND_ENTER_EXIT_CONTROL = 0x63,
         HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION = 0x64,
@@ -1611,7 +1612,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x61: {
+    case HERO_STATE_ATTACK_WITH_FIXED_ENTRY_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
