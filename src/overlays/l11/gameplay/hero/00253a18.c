@@ -123,6 +123,9 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void update_hero_state_transitions(void) __asm__("FUN_L11_00253a18");
 
 void update_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_JUMP_FROM_WATER_SURFACE = 18
+    };
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -1437,7 +1440,7 @@ void update_hero_state_transitions(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_JUMP_FROM_WATER_SURFACE:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
