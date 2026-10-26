@@ -141,13 +141,18 @@ void update_hero_state_machine(void) __asm__("FUN_L05_00255960");
 
 void update_hero_state_machine(void) {
     enum {
+        HERO_STATE_AIRBORNE_REPEAT_JUMP = 17,
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 18,
+        HERO_STATE_TRAJECTORY_TIMED_ANIMATION_WAIT = 34,
+        HERO_STATE_DELAYED_ITEM_RELEASE_FALL = 44,
         HERO_STATE_SWIM_CROUCH_INPUT_VARIANT = 53,
         HERO_STATE_HOVERBOARD_RIDING = 107,
         HERO_STATE_HOVERBOARD_BOOST_JUMP = 108,
         HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT = 109,
         HERO_STATE_HOVERBOARD_POSITION_OR_TIMEOUT_RESPAWN_WAIT = 110,
-        HERO_STATE_HOVERBOARD_ANIMATION_END_RESPAWN_WAIT = 111
+        HERO_STATE_HOVERBOARD_ANIMATION_END_RESPAWN_WAIT = 111,
+        HERO_STATE_HURT_RECOVER_TO_SWIM_IDLE = 118,
+        HERO_STATE_HIT_ANIMATION_END_RESPAWN_WAIT = 128
     };
     unsigned char *moby;
     int prevSub;
@@ -464,7 +469,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case HERO_STATE_DROWN:
-                case 128:
+                case HERO_STATE_HIT_ANIMATION_END_RESPAWN_WAIT:
                 case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
@@ -588,7 +593,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x37, 1);
                     }
                     break;
-                case 118:
+                case HERO_STATE_HURT_RECOVER_TO_SWIM_IDLE:
                     if (hero.health.hp <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
                             hero_set_state(0x82, 1);
@@ -1109,7 +1114,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case 44:
+                case HERO_STATE_DELAYED_ITEM_RELEASE_FALL:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -1122,7 +1127,7 @@ void update_hero_state_machine(void) {
                         hero.fall_state_gravity = frame_time_sq * 27.0f;
                     }
                     break;
-                case 34:
+                case HERO_STATE_TRAJECTORY_TIMED_ANIMATION_WAIT:
                     if (hero.state_timer < scale_game_frames(0xC) &&
                         (hero.state.prev2 != 0x10 ||
                          (hero.state.prev != 8 && hero.state.prev != 6)) &&
@@ -1512,7 +1517,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_AIRBORNE_REPEAT_JUMP:
                 case HERO_STATE_JUMP_FROM_WATER_SURFACE:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
