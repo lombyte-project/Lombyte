@@ -306,8 +306,10 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT = 8,
         HERO_STATE_SPLASH_BURST_JUMP = 0x12,
         HERO_STATE_OPPOSITE_HEADING_RECOIL = 0x21,
+        HERO_STATE_TARGET_AIMED_DECELERATION = 0x23,
         HERO_STATE_HEIGHT_DEPENDENT_PITCH_FALL = 0x2D,
         HERO_STATE_PLATFORM_HEADING_DESCENT = 0x31,
         HERO_STATE_FAST_SWIM = 0x35,
@@ -1525,7 +1527,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x23:
+    case HERO_STATE_TARGET_AIMED_DECELERATION:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
@@ -2301,7 +2303,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
