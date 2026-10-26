@@ -90,10 +90,12 @@ extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_CANNON_MOUNT_IDLE = 0x32,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 0x49,
         HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 0x51,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E
+        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E,
+        HERO_STATE_IDLE_POSE_CANCEL_ITEM_ANIMATION = 0x72
     };
     int old2088;
     char *moby;
@@ -1800,7 +1802,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_IDLE_POSE_CANCEL_ITEM_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1816,7 +1818,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_CANNON_MOUNT_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
