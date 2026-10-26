@@ -155,7 +155,11 @@ void process_hero_state_transitions(void) __asm__("FUN_L18_0022e8f8");
 
 void process_hero_state_transitions(void) {
     enum {
+        HERO_STATE_PACK_LONG_JUMP_FALLBACK = 13,
+        HERO_STATE_PACK_JUMP_FALLBACK = 15,
+        HERO_STATE_REPEATABLE_JUMP = 17,
         HERO_STATE_WATER_SURFACE_JUMP = 18,
+        HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 53,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
         HERO_STATE_VEHICLE_MODE_2_FALL = 92,
         HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT = 93,
@@ -500,7 +504,7 @@ void process_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_CROUCH_INPUT_ACTION:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1891,11 +1895,11 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
-                case 13:
+                case HERO_STATE_PACK_LONG_JUMP_FALLBACK:
                 case HERO_STATE_DOUBLE_JUMP:
-                case 15:
+                case HERO_STATE_PACK_JUMP_FALLBACK:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
