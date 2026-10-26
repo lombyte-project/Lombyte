@@ -1655,7 +1655,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x2F: {
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z: {
         f32 a;
         update_hero_planar_movement_velocity();
         set_first_hero_easing_parameters(0.04f, 0.2f);
