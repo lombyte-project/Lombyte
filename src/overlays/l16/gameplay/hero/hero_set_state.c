@@ -103,6 +103,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 extern char D_L16_0017C380[];
 extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
+        HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -481,7 +485,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x52, 0, (float)scale_game_frames(5));
         break;
     }
-    case 0x6B: {
+    case HERO_STATE_HOVERBOARD_RACE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x16;
         p->unk2284 = 8;
@@ -551,7 +555,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x6C: {
+    case HERO_STATE_HOVERBOARD_ANIMATION_VARIANT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x16;
         p->unk2284 = 8;
@@ -1165,7 +1169,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
