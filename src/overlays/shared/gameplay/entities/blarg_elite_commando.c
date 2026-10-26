@@ -246,7 +246,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     owner = *(char **)(commando_data + 0x110);
     owner_moby_class = *(short *)(owner + 0xA6);
     if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
-        qcopy(target, &hero.motion.unkC0);
+        qcopy(target, &hero.motion.near_ground_point);
     } else {
         qcopy(target, owner + 0x10);
     }

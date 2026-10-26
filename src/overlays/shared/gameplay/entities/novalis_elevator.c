@@ -352,7 +352,7 @@ void novalis_elevator_update(unsigned char *moby) {
     case NOVALIS_ELEVATOR_TRAVERSE_PATH:
         if (*(int *)(data + 0xC8) == 0 && is_hero_on_moby(moby)) {
             struct Hero *player = &hero;
-            player->unk1F2 = 4;
+            player->jump_lock_timer = 4;
             player->unk1F4 = 4;
         }
         if (*(short *)(data + 0xBA) != 0 ||
@@ -803,13 +803,13 @@ void bolt_crank_update(struct Moby *moby) {
         if (absolute_float(crank->speed) < frame_time_sq * 5.5f * 0.25f) crank->speed = 0.0f;
         fast_vec_normalize(step, facing, crank->speed);
 
-        if (hero.unkA98 & 2) {
+        if (hero.anim_flags & 2) {
             if (hero.moby->prev_seq == 0x44) {
                 set_hero_animation(0x3F, 0, (float)scale_game_frames(7));
             }
         }
         if (hero.moby->prev_seq != 0x44) {
-            if (hero.unkA9C == 0) {
+            if (hero.anim_changing == 0) {
                 if (hero.moby->seq == 0x40 && absolute_float(crank->speed) == 0.0f) {
                     set_hero_animation(0x3F, 0, (float)scale_game_frames(0xE));
                 } else {
@@ -2901,11 +2901,11 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
     }
 in_range:
     target_distance = FUN_001f9b80_2f2eb8(&moby->pos, &target);
-    if (target_distance < hero.unk2044) {
-        hero.unk2040 = moby;
-        hero.unk2044 = target_distance;
+    if (target_distance < hero.detector_target_dist) {
+        hero.metal_detector_target = moby;
+        hero.detector_target_dist = target_distance;
         if (target_distance < 20.0f) {
-            hero.unk2048 = 1;
+            hero.nearby_moby_close = 1;
         }
     }
 }

@@ -6408,13 +6408,13 @@ void fred_update(struct Moby *moby) {
             tracking = 1;
             if (vector_distance_301070(((float *)&moby->pos), player) < 8.0f &&
                 fast_difference_between_rotations_301070(moby->rot.z,
-                    angle_atan2_301070(hero.motion.unkD0.f[0] - moby->pos.x,
-                        hero.motion.unkD0.f[1] - moby->pos.y)) < 1.5707964f) {
+                    angle_atan2_301070(hero.motion.body_center.f[0] - moby->pos.x,
+                        hero.motion.body_center.f[1] - moby->pos.y)) < 1.5707964f) {
                 if (vector_length_xyz_301070(player + 0x80) > 0.01f) fred_vars->f158 = scale_game_frames_301070(120);
                 else FUN_001f9740_301070(&fred_vars->f158);
             } else if (fred_vars->f158) {
                 fred_vars->f158 = 0;
-                qcopy(fred_vars->f140, &hero.motion.unkD0);
+                qcopy(fred_vars->f140, &hero.motion.body_center);
             }
             if (FUN_001f9740_301070(&fred_vars->f15C)) {
                 float heading;
@@ -6424,7 +6424,7 @@ void fred_update(struct Moby *moby) {
                 add_vector_xyz_301070(fred_vars->f140, fred_vars->f140, ((float *)&moby->pos));
             }
             if (fred_vars->f158) {
-                qcopy(target, &hero.motion.unkD0);
+                qcopy(target, &hero.motion.body_center);
                 rate = 0.04f;
                 head_rate = 0.3f;
             } else {

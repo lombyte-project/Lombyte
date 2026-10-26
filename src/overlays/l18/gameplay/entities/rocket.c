@@ -387,7 +387,7 @@ void update_projectile_motion_collision_and_trail(char *moby) {
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), frame_time * 6.2831855f);
     if (*(short *)(data + 0x12) != 0) {
         movement_step_length = vector_length_xyz(data);
-        subtract_vector_xyz(data, &hero.motion.unkC0, moby + 0x10);
+        subtract_vector_xyz(data, &hero.motion.near_ground_point, moby + 0x10);
         target_distance = vector_length_xyz(data);
         if (movement_step_length < target_distance) {
             normalize_vector_xyz(data, data, movement_step_length);
@@ -1088,10 +1088,10 @@ void update_path_junction_selection(struct Moby *moby) {
         }
         break;
     case STATE_SELECT_NEARER_PATH:
-        hero.unk1CA = 5;
+        hero.rail_catch_grace = 5;
         for (k = 0; k < 4; k++) {
             if (hero.state.control_mode == 0xF &&
-                (hero.unk560 == (s32)vars->pair[k].first->path || hero.unk560 == (s32)vars->pair[k].second->path)) {
+                (hero.rail_spline == (s32)vars->pair[k].first->path || hero.rail_spline == (s32)vars->pair[k].second->path)) {
                 continue;
             }
             near_first = vector_distance(&hero.motion.pos, &vars->pair[k].first->path->points[0]);

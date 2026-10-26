@@ -1004,13 +1004,13 @@ void bolt_update(Bolt *bolt_moby) {
         flag = 0;
         if (v->unk60->oclass == 0) {
             fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &hero.ground_point);
-            transform_vector(&geometry_scratch, &geometry_scratch, hero.unk40);
+            transform_vector(&geometry_scratch, &geometry_scratch, hero.inv_rot_matrix);
             if (geometry_scratch.f[2] < 0.0f) {
                 flag = 1;
             }
         }
         if (flag) {
-            fast_vec_normalize(&geometry_scratch, &hero.unk0[8], D_0015ED6C * 7.0f);
+            fast_vec_normalize(&geometry_scratch, &hero.rot_matrix[8], D_0015ED6C * 7.0f);
             fast_vec_sub(&vector_scratch, &geometry_scratch, &v->vel);
             FUN_L00_0025f730(&vector_scratch, frame_time_sq * 50.0f);
             fast_vec_add(&v->vel, &v->vel, &vector_scratch);
@@ -1030,16 +1030,16 @@ void bolt_update(Bolt *bolt_moby) {
         quaternion_to_rotation_basis(&v->spin, &geometry_scratch);
         multiply_matrix3x3(&bolt_moby->rot, &geometry_scratch, &bolt_moby->rot);
         fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &v->vel);
-        fast_vec_sub(&collection_offset, &hero.motion.unkD0, &bolt_moby->pos);
+        fast_vec_sub(&collection_offset, &hero.motion.body_center, &bolt_moby->pos);
         if (v->speed < fast_vec_length(&collection_offset)) {
             if (!(v->unk4C == 0.0f && v->unk48 == 0.0f)) {
-                transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk40);
+                transform_vector_by_basis(&collection_offset, &collection_offset, hero.inv_rot_matrix);
                 clear_u64_value(&attraction_rotation_angles);
                 attraction_rotation_angles.f[1] = v->unk48;
                 attraction_rotation_angles.f[2] = v->unk4C;
                 euler_rotation_basis(attraction_rotation_basis, &attraction_rotation_angles);
                 transform_vector_by_basis(&collection_offset, &collection_offset, attraction_rotation_basis);
-                transform_vector_by_basis(&collection_offset, &collection_offset, hero.unk0);
+                transform_vector_by_basis(&collection_offset, &collection_offset, hero.rot_matrix);
             }
             fast_vec_normalize(&collection_offset, &collection_offset, v->speed);
             fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &collection_offset);

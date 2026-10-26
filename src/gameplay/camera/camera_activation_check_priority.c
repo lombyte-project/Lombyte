@@ -98,7 +98,7 @@ int camera_activation_check_priority(void *candidate_camera, void *other) {
             int secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
 
             if (secondary_descriptor_index < 0 ||
-                (base->unk560 == D_0015EF40[secondary_descriptor_index].unk10 && base->unk570 == 0)) {
+                (base->rail_spline == D_0015EF40[secondary_descriptor_index].unk10 && base->rail_off_frames == 0)) {
                 return 1;
             }
         }

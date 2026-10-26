@@ -73,8 +73,8 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
         qcopy(output_data + 0x10, selected_moby + 0x40);
         hero = &hero_lui;
         if (selected_moby == ((char *)hero->moby)) {
-            qcopy(output_data + 0x20, &hero->motion.unkC0);
-            qcopy(output_data + 0x30, &hero->motion.unkD0);
+            qcopy(output_data + 0x20, &hero->motion.near_ground_point);
+            qcopy(output_data + 0x30, &hero->motion.body_center);
         } else {
             qcopy(output_data + 0x30, output_data);
             *(float *)(output_data + 0x38) += 0.6f;

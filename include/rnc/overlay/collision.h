@@ -8,7 +8,7 @@
  * Collision hit record filled by the overlay collision queries
  * (coll_sphere, rig_probe, coll_line_fix) at D_L00_00173E40
  * (per-level copies at other addresses). FUN_L00_002133a8 copies +0x30 into
- * hero.motion.pos, +0x40 into hero.unk200, +0x20 into hero.unk210 and +0x18 into
+ * hero.motion.pos, +0x40 into hero.wall_contact_normal, +0x20 into hero.wall_contact_point and +0x18 into
  * hero.coll_hit_moby.
  */
 typedef struct {

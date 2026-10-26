@@ -763,7 +763,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
         *(u16 *)(moby + 0x34) &= ~1;
         *(u16 *)(moby + 0x34) |= *(u16 *)(moby_vars->o + 0x34) & 1;
     }
-    if (hero.items[0].unk20 < FUN_001f96f8_2bb400(0x19)) {
+    if (hero.items[0].ready_frames < FUN_001f96f8_2bb400(0x19)) {
         *(u16 *)(moby + 0x34) |= 0x41;
     }
     old = moby_vars->ang;

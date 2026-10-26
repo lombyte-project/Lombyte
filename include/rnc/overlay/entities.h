@@ -8,7 +8,7 @@
  * Per-level table of 0x40-byte entries indexed by the moby byte at +0xA4
  * (0xFF = none), e.g. D_L08_00178900. FUN_L08_00222800 uses an entry only
  * when owner == that moby and bit 0 of unk24 is set, then stores target in
- * hero.unk2280 and aims the hero at pos (flags bit 0) or at target+0x10.
+ * hero.damage_source_moby and aims the hero at pos (flags bit 0) or at target+0x10.
  */
 typedef struct {
     u8 pad0[0x10];

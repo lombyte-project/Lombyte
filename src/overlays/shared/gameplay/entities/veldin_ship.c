@@ -745,7 +745,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
         transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
         if (FUN_001f99c0(hero_local_offset.x) < 0.55f && FUN_001f99c0(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
-            -(hero.capsule_top + hero.unk234) < hero_local_offset.z) {
+            -(hero.capsule_top + hero.capsule_radius) < hero_local_offset.z) {
             switch (moby->state) {
             case CRATE_STATE_BREAKABLE:
             case CRATE_STATE_IMPACT_TRIGGERED:
@@ -1084,8 +1084,8 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
     func_001F9EC0_2D3608(direction, direction, D_0013F990_2D3608);
     {
         Hero *hero = (Hero *)(D_0013F990_2D3608 - 0x640);
-        anchor_ptr[0] = func_001F9F90_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->unk670, hero->unk674))) * 0.859039009f;
-        anchor_ptr[1] = func_001F9FA8_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->unk670, hero->unk674))) * 0.859039009f;
+        anchor_ptr[0] = func_001F9F90_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->facing_x, hero->facing_y))) * 0.859039009f;
+        anchor_ptr[1] = func_001F9FA8_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->facing_x, hero->facing_y))) * 0.859039009f;
         anchor_ptr[2] = 0.0f;
         func_001F9BD8_2D3608(anchor_ptr, anchor_ptr, D_0013F990_2D3608 - 0x5C0);
         anchor_ptr[2] = anchor_ptr[2] + 0.390819997f;
@@ -1093,7 +1093,7 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
         range = (((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f;
         func_001F9C30_2D3608(aim, direction, range);
         func_001F9BD8_2D3608(aim, aim, anchor_ptr);
-        if ((((PadState *)controller_state_2D3608)->held & 5) && hero->unk20AC == 0) {
+        if ((((PadState *)controller_state_2D3608)->held & 5) && hero->item_use_locked == 0) {
             *(u128_2D3608 *)launch = 0;
             launch[2] = 1.0f;
             func_001F9EE8_2D3608(launch, launch, inverse);
@@ -1465,10 +1465,10 @@ void increment_metal_detector_collection_counter(unsigned char *moby) {
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/input/pad_state.h"
 
-/* metal_detector_update: update for a moby that tracks hero.unk2040, the nearest
+/* metal_detector_update: update for a moby that tracks hero.metal_detector_target, the nearest
  * oclass 0x25D moby. It orients itself towards it within the
  * D_L00_00161950/54 limits (degrees), tints itself by the distance
- * (hero.unk2044) while the 0x20 pad button is held, and at under 1.0 drains
+ * (hero.detector_target_dist) while the 0x20 pad button is held, and at under 1.0 drains
  * the target's count in steps of 5, then removes it. */
 
 typedef f32 Mtx2d2ee8[4][4] __attribute__((aligned(16)));
@@ -1575,8 +1575,8 @@ void metal_detector_update(struct Moby *moby) {
     moby_point_position(moby, 0, &vars->pos);
     switch (moby->state) {
     case METAL_DETECTOR_INITIALIZE:
-        hero.unk2044 = 100000.0f;
-        hero.unk2040 = 0;
+        hero.detector_target_dist = 100000.0f;
+        hero.metal_detector_target = 0;
         vars->voice0 = -1;
         vars->voice1 = -1;
         vars->voice2 = -1;
@@ -1596,11 +1596,11 @@ void metal_detector_update(struct Moby *moby) {
         one = 1.0f;
         *(u128 *)v = 0;
         v[2] = one;
-        if (hero.unk2040 != 0 && hero.unk2040->oclass == 0x25D && hero.unk2040->state != 0xFE &&
-            hero.unk2040->state != 0xFD) {
-            pitch = vector_distance(&vars->pos, &hero.unk2040->pos);
-            pitch = fast_arc_tan(pitch, hero.unk2040->pos.z - vars->pos.f[2]);
-            yaw = fast_arc_tan(hero.unk2040->pos.x - vars->pos.f[0], hero.unk2040->pos.y - vars->pos.f[1]);
+        if (hero.metal_detector_target != 0 && hero.metal_detector_target->oclass == 0x25D && hero.metal_detector_target->state != 0xFE &&
+            hero.metal_detector_target->state != 0xFD) {
+            pitch = vector_distance(&vars->pos, &hero.metal_detector_target->pos);
+            pitch = fast_arc_tan(pitch, hero.metal_detector_target->pos.z - vars->pos.f[2]);
+            yaw = fast_arc_tan(hero.metal_detector_target->pos.x - vars->pos.f[0], hero.metal_detector_target->pos.y - vars->pos.f[1]);
             yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = FUN_001f99c0(yaw);
@@ -1652,23 +1652,23 @@ void metal_detector_update(struct Moby *moby) {
             vars->unk24 = 0;
             vars->unk28 = 0;
         }
-        if ((controller_state_lui.held & 0x20) && hero.items[0].unk20 > scale_game_frames(0xF)) {
-            if (hero.unk2044 < 10.0f) {
+        if ((controller_state_lui.held & 0x20) && hero.items[0].ready_frames > scale_game_frames(0xF)) {
+            if (hero.detector_target_dist < 10.0f) {
                 if (voice_is_playing(moby, vars->voice2) == 0 && vars->voice2 == -1) {
                     vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
                 }
                 if (vars->voice2 != -1) {
                     engine_voice_set_pitch(vars->voice2,
-                                     truncate_float_to_s32((10.0f - (hero.unk2044 + hero.unk2044)) * 32767.0f / 60.0f) - 0x1FFF);
+                                     truncate_float_to_s32((10.0f - (hero.detector_target_dist + hero.detector_target_dist)) * 32767.0f / 60.0f) - 0x1FFF);
                 }
                 {
-                    s32 distance_tint_component = truncate_float_to_s32(hero.unk2044 * 255.0f / 10.0f);
+                    s32 distance_tint_component = truncate_float_to_s32(hero.detector_target_dist * 255.0f / 10.0f);
                     s32 col = (distance_tint_component << 8) | 0xFF000000;
 
                     moby->glow_color = ((distance_tint_component << 16) | col) | 0xFF;
                 }
-                target_moby = hero.unk2040;
-                if (target_moby != 0 && target_moby->oclass == 0x25D && target_moby->state != 0xFE && target_moby->state != 0xFD && hero.unk2044 < 1.0f) {
+                target_moby = hero.metal_detector_target;
+                if (target_moby != 0 && target_moby->oclass == 0x25D && target_moby->state != 0xFE && target_moby->state != 0xFD && hero.detector_target_dist < 1.0f) {
                     tv = (TargetVars2d2ee8 *)target_moby->pvars;
                     while (tv->count > 0) {
                         scratch_vector[0] = random_float_between(1.0f, 10.0f) * frame_time;
@@ -1676,28 +1676,28 @@ void metal_detector_update(struct Moby *moby) {
                         scratch_vector[2] = random_float_between(1.0f, 12.0f) * frame_time;
                         transform_vector_by_basis(scratch_vector, scratch_vector, &hero);
                         {
-                            Vec4f *target_position = &hero.unk2040->pos;
+                            Vec4f *target_position = &hero.metal_detector_target->pos;
 
                             qcopy(target_position, &vars->pos);
                             add_random_offset_to_vector_xyz(target_position, 0.2f);
                         }
-                        target_moby = hero.unk2040;
+                        target_moby = hero.metal_detector_target;
                         spawn_bolt_by_value(target_moby, &target_moby->pos, scratch_vector, 0x13, 5, 0);
-                        target_moby = hero.unk2040;
+                        target_moby = hero.metal_detector_target;
                         qcopy(&target_moby->pos, &vars->pos);
                         if (tv != 0) {
                             if (tv->count > 0) {
                                 tv->count -= 5;
-                                target_moby = hero.unk2040;
+                                target_moby = hero.metal_detector_target;
                             }
                             increment_metal_detector_collection_counter((u8 *)target_moby);
                         } else {
                             increment_metal_detector_collection_counter((u8 *)target_moby);
                         }
                     }
-                    delete_moby(hero.unk2040);
-                    hero.unk2040 = 0;
-                    hero.unk2044 = 100000.0f;
+                    delete_moby(hero.metal_detector_target);
+                    hero.metal_detector_target = 0;
+                    hero.detector_target_dist = 100000.0f;
                     vars->unk8 = 0x7FFF;
                     allocate_voice_for_target_entry(3, 0, moby);
                     if (vars->voice2 != -1) {

@@ -437,7 +437,7 @@ int hero_set_state(int a, int b) {
             }
             h[29].level_mask =
                 h[29].level_mask | (1 << current_level_index) | 0x80000000;
-            v = (char *)&hero.motion.unk150;
+            v = (char *)&hero.motion.momentum;
             qcopy(v, v - 0x40);
         }
         if (b)

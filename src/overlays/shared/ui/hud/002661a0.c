@@ -107,13 +107,13 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     print_text_with_texture_3(x - 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     x += measure_text_width_regular(formatted_hud_text, -1);
-    count = hero.unk89A + 1;
+    count = hero.race_lap + 1;
     if (count > 3) count = 3;
     sprintf(formatted_hud_text, D_L05_0015F9E0, count);
     print_text_with_texture_3(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     {
-        int count = hero.unk8C0;
+        int count = hero.race_position;
         x = D_L05_0015F9B0;
         if (count == 1) {
             sprintf(formatted_hud_text, D_L05_0015F9E8, 1);
@@ -134,7 +134,7 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     if (D_0015ED84 == 0x10) {
         int y2, x2;
-        sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
+        sprintf(small_buf, D_L05_0015F860, hero.race_ammo);
         /* Fakematch: the dead early copy of the default row gives retail's register order. */
         y2 = D_0015ED80 ? 10 : 18;
         x2 = hud_element->unk50;
@@ -147,7 +147,7 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
         draw_stretchable_ui_frame(x2 - 0x18, y2, D_L05_0015F9C8, 0x20, 0x60);
         draw_hud_sprite(get_icon_frame(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
         print_text_with_texture_3(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
-        if (hero.unk8CE != 0) {
+        if (hero.race_ammo != 0) {
             print_text_with_texture_3(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
         } else {
             print_text_with_texture_3(x2 + 0x28, y2 + 7, 0x80202080, small_buf, -1);
@@ -174,7 +174,7 @@ int draw_hud_timer(HudElem *hud_element) {
     y2 = -(D_0015ED80 ? hud_timer_time_row_bottom_offset_gp + 10 : hud_timer_time_row_bottom_offset_gp + 18) + D_0013E500[1];
     per_min = D_0015ED80 ? 3000 : 3600;
     per_sec = per_min / 60;
-    frames = hero.unk894;
+    frames = hero.race_time_frames;
     min = frames / per_min;
     frames -= min * per_min;
     sec = frames / per_sec;
@@ -184,13 +184,13 @@ int draw_hud_timer(HudElem *hud_element) {
     if (D_0013D388[0]) {
         draw_stretchable_ui_frame(hud_timer_frame_x_gp, y0, hud_timer_frame_width_gp, hud_timer_frame_height_gp, hud_timer_frame_alpha_gp);
         x = hud_timer_text_center_x_gp;
-        sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
+        sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.race_score);
         x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
         sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x50A6));
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
         print_text_with_texture_3(x, y1, hud_timer_label_color_gp, formatted_hud_text, -1);
         x += FUN_001f6250(formatted_hud_text, -1);
-        sprintf(formatted_hud_text, D_L05_0015FA50, hero.unk8A8);
+        sprintf(formatted_hud_text, D_L05_0015FA50, hero.race_score);
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
         print_text_with_texture_3(x, y1, hud_timer_value_color_gp, formatted_hud_text, -1);
     }

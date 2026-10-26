@@ -351,7 +351,7 @@ int update_alien_queen_intro_camera(char *moby) {
         fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
         x = &hero;
         moby_offset_position[2] = x->motion.pos.f[2] + 2.0f;
-        fast_vec_normalize(hero_offset_position, x->unk0, -7.0f);
+        fast_vec_normalize(hero_offset_position, x->rot_matrix, -7.0f);
         fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
@@ -412,7 +412,7 @@ int update_alien_queen_first_recovery_camera(char *moby) {
         fast_vec_add(moby_offset_position, moby_offset_position, moby + 0x10);
         x = &hero;
         moby_offset_position[2] = x->motion.pos.f[2] + 2.0f;
-        fast_vec_normalize(hero_offset_position, x->unk0, -7.0f);
+        fast_vec_normalize(hero_offset_position, x->rot_matrix, -7.0f);
         fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;

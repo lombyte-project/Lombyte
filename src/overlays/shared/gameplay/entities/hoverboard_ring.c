@@ -609,7 +609,7 @@ extern void rotate_about_axis(void *out, void *v, void *axis, f32 ang) __asm__("
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
-/* Camera that orbits the hero while hero.unk88E is set, easing yaw, pitch and distance toward their goals. */
+/* Camera that orbits the hero while hero.vert_ramp_launch is set, easing yaw, pitch and distance toward their goals. */
 void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
 
 void update_hero_follow_camera_orbit(Camera *cam) {
@@ -631,7 +631,7 @@ void update_hero_follow_camera_orbit(Camera *cam) {
     f32 tilt;
 
     normalize_vector_xyz(&up, &hero.gravity_dir, -1.0f);
-    if (orbit->mode == 0 && hero.unk88E != 0) {
+    if (orbit->mode == 0 && hero.vert_ramp_launch != 0) {
         orbit->mode = 1;
         cross_vectors_xyz(&side, &hero.moby->rot_row2, &up);
         normalize_vector_xyz(&side, &side, 1.0f);
@@ -690,7 +690,7 @@ void update_hero_follow_camera_orbit(Camera *cam) {
         cam->yaw = rope_spring_turn(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
         cam->pitch = rope_spring_turn(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
         cam->dist = FUN_001ebd78(&spring[5], cam->dist, spring[2], spring[8], spring[11], 0.0f);
-        if (hero.unk88E == 0) {
+        if (hero.vert_ramp_launch == 0) {
             orbit->mode = 0;
             scale_vector_xyz(orbit, orbit, -1.0f);
         }
@@ -901,7 +901,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     fast_vec_cross(&camera->up, &rel, &down);
     fast_vec_normalize(&camera->up, &camera->up, 1.0f);
     fast_vec_cross(&camera->side, &camera->up, &rel);
-    if (orbiting == 0 || fabs_32B1F8(along) < 0.5f || (vel = (float *)(D_0013E633_32B1F8 - 0x290), ((Hero *)vel)->unk88D != 0)) {
+    if (orbiting == 0 || fabs_32B1F8(along) < 0.5f || (vel = (float *)(D_0013E633_32B1F8 - 0x290), ((Hero *)vel)->trick_input != 0)) {
         track->blend = spring_32B1F8(track->blend, 0.0f, track->state, track->k34, track->k38, track->k3C);
     } else {
         float tilt;

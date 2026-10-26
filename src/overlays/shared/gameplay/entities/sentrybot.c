@@ -898,9 +898,9 @@ void sentrybot_update(unsigned char *moby) {
         lvl = *(short *)(data + 0x158) != 0;
     }
     tick = D_L15_0015F5CC;
-    if (tick != D_L15_001613E8 || hero.unk22E0 < lvl) {
+    if (tick != D_L15_001613E8 || hero.glow_pulse_level < lvl) {
         D_L15_001613E8 = tick;
-        hero.unk22E0 = lvl;
+        hero.glow_pulse_level = lvl;
     }
     alpha = 0x80;
     color_pulse_period_frames = scale_game_frames(0xAA);

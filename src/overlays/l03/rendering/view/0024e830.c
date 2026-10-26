@@ -72,8 +72,8 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
         qcopy(target_output + 0x10, selected_moby + 0x40);
         hero = &hero_lui;
         if (selected_moby == ((char *)hero->moby)) {
-            qcopy(target_output + 0x20, &hero->motion.unkC0);
-            qcopy(target_output + 0x30, &hero->motion.unkD0);
+            qcopy(target_output + 0x20, &hero->motion.near_ground_point);
+            qcopy(target_output + 0x30, &hero->motion.body_center);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;

@@ -2352,7 +2352,7 @@ void taxi_update(struct Moby *moby) {
     apply_moby_position_and_rotation_wobble(moby);
     if (moby->state >= 3 && moby->state <= 5) {
         travel_hero = &hero;
-        travel_hero->unk1F2 = 2;
+        travel_hero->jump_lock_timer = 2;
         travel_hero->unk1F4 = 2;
         transform_moby_vector_table_to_world_space(moby);
         if (voice_is_playing(moby, *(short *)(taxi_data + 0xB2)) == 0) {

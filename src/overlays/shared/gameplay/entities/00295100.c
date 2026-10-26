@@ -213,21 +213,21 @@ void handle_pause_input(void) {
         mode_freeze_init(0, 0);
         return;
     }
-    if (HELD && level_timer >= 8 && hero.state.current != 0x72 && hero.items[0].unk1C != 2 &&
-        hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.unk20B1 &&
+    if (HELD && level_timer >= 8 && hero.state.current != 0x72 && hero.items[0].switch_lock != 2 &&
+        hero.state.current != 0x32 && hero.state.current != 0x1D && !hero.fall_fade_pending &&
         hero.health.hp && lvl == 0) {
         pause_all_sounds(0);
         return;
     }
     if (!(D_L00_0016C058.w8 & 0x10) && level_timer >= 8 && (D_0013C940_c.w1A4 & 0x500) &&
         hero.state.control_mode != 0x16 && hero.state.current != 0x72 && hero.state.current != 0x32 &&
-        hero.state.current != 0x1D && !hero.unk20B1 && hero.health.hp && lvl == 0 &&
+        hero.state.current != 0x1D && !hero.fall_fade_pending && hero.health.hp && lvl == 0 &&
         !special && !D_L00_0016C058.wEC) {
         pause_all_sounds(10);
         return;
     }
     if (D_0013D384 && !D_0013D388.b10 && level_timer >= 8 && !alternate_animation_sequence &&
-        !hero.unk20B1 && hero.health.hp && FUN_001f96f8_c(0x1E) < game_frame &&
+        !hero.fall_fade_pending && hero.health.hp && FUN_001f96f8_c(0x1E) < game_frame &&
         current_level_index) {
         mode_freeze_init(5, 0);
         D_0013D388.b10 = 1;
@@ -800,7 +800,7 @@ void queue_scene_movie_with_game_language(s32 i) {
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
         hero_respawn();
-    } else if (hero_ptr->unk20B1 == 0) {
+    } else if (hero_ptr->fall_fade_pending == 0) {
         prepare_movie_playback(a, b, game_language);
     }
 }

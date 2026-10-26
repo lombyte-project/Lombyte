@@ -42,7 +42,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
     f32 quadratic_roots[6];
     f32 x, y, z;
 
-    switch (hero.unk20B3) {
+    switch (hero.gravity_mode) {
     case HERO_MOTION_Z_AXIS_ACCELERATION:
         if (target_z < 0.0f) {
             FUN_001f9a68_32b90(predicted_position, &hero.motion.velocity, prediction_time);
@@ -66,7 +66,7 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         }
         break;
     case HERO_MOTION_STORED_VECTOR_ACCELERATION:
-        qcopy(&position_or_acceleration_vector, &hero.unk270);
+        qcopy(&position_or_acceleration_vector, &hero.ground_normal);
         FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, acceleration_scale);
         FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
         FUN_001f9a68_32b90(predicted_position, &hero.motion.velocity, prediction_time);

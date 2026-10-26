@@ -92,7 +92,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
                     player[0x224B] = 0;
                 }
             } else if (0.0f < hero_point_local_offset[1]) {
-                hero.unk22CB = 0;
+                hero.vent_updraft = 0;
             }
         }
         enqueue_callback_list_1(draw_moby_animated_quad_layers, moby);

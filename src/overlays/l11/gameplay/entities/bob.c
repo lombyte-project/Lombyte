@@ -295,7 +295,7 @@ void bob_update(WM11 *moby) {
                 fast_dec_timer(&moby_vars->moving_timer);
         } else if (moby_vars->moving_timer) {
             moby_vars->moving_timer = 0;
-            qcopy(moby_vars->target, hero.motion.unkD0.f);
+            qcopy(moby_vars->target, hero.motion.body_center.f);
         }
         if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
@@ -306,7 +306,7 @@ void bob_update(WM11 *moby) {
             fast_vec_add(moby_vars->target, moby_vars->target, moby->position);
         }
         if (moby_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
@@ -1215,7 +1215,7 @@ void fred_pokitaru_update(struct Moby *moby) {
                 fast_dec_timer(&moby_vars->moving_timer);
         } else if (moby_vars->moving_timer) {
             moby_vars->moving_timer = 0;
-            qcopy(moby_vars->target, hero.motion.unkD0.f);
+            qcopy(moby_vars->target, hero.motion.body_center.f);
         }
         if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
@@ -1226,7 +1226,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             fast_vec_add(moby_vars->target, moby_vars->target, &moby->pos);
         }
         if (moby_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
@@ -1617,7 +1617,7 @@ void copy_pokitaru_pvar_to_hero(struct Moby *moby) {
         break;
     case MOBY_COPY_PVAR_TO_HERO:
         if (hero.motion.pos.f[2] > 194.0f && hero.state.current != 0x32) {
-            *(short unsigned int *)&hero.unk22DA = *(unsigned short *)state;
+            *(short unsigned int *)&hero.path_constrain_pending = *(unsigned short *)state;
         }
         break;
     }

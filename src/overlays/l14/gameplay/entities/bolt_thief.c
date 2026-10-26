@@ -670,7 +670,7 @@ void sam_update(L14WatchMoby *moby) {
                 fast_dec_timer(&moby_data->moving_timer);
         } else if (moby_data->moving_timer) {
             moby_data->moving_timer = 0;
-            qcopy(moby_data->target, hero.motion.unkD0.f);
+            qcopy(moby_data->target, hero.motion.body_center.f);
         }
         if (fast_dec_timer(&moby_data->target_timer)) {
             float heading;
@@ -683,7 +683,7 @@ void sam_update(L14WatchMoby *moby) {
             fast_vec_add(moby_data->target, moby_data->target, moby->position);
         }
         if (moby_data->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {

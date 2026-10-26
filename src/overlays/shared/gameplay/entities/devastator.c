@@ -133,7 +133,7 @@ void devastator_update(struct Moby *devastator_moby) {
     if (tick_countdown_32_2b2100(&data->target_timer) ||
         (data->target && ((unsigned char)data->target->state & 0x80))) data->target = 0;
     if (hero.state.current == 1) hero_set_state_2b2100(30, 1);
-    if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.unk20AC) {
+    if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.item_use_locked) {
         velocity.q = 0;
         velocity.f.z = 70.0f;
         transform_vector_2b2100(&velocity, &velocity, &inverse);
@@ -159,13 +159,13 @@ void devastator_update(struct Moby *devastator_moby) {
                 0x27, -1, 90.0f, 4);
         }
     }
-    if (hero.items[6].unk40) {
+    if (hero.items[6].locked_on) {
         data->target = hero.items[6].lock_target;
         data->target_timer = scale_game_frames_2b2100(20);
         data->target_height = collision_hit_z_2b2100 - data->target->pos.z;
     }
-    if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.unk20AC && devastator_moby->seq < 2 &&
-        (pad_input_2b2100.held & hero.items[0].button_mask) && scale_game_frames_2b2100(22) < hero.items[0].unk20) {
+    if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.item_use_locked && devastator_moby->seq < 2 &&
+        (pad_input_2b2100.held & hero.items[0].button_mask) && scale_game_frames_2b2100(22) < hero.items[0].ready_frames) {
         velocity.q = 0;
         if (devastator_moby->prev_seq == 0) blend_moby_animation_2b2100(devastator_moby, 1, 0, scale_game_frames_2b2100(4));
         if (hero.state.current == 30 && (hero.moby->flags & 1)) {
@@ -177,7 +177,7 @@ void devastator_update(struct Moby *devastator_moby) {
         }
         if (FUN_L00_00233db8_2b2100(-1, 1)) {
             best = 0;
-            if (hero.items[6].unk40) yaw = hero.items[6].unk4C;
+            if (hero.items[6].locked_on) yaw = hero.items[6].lock_yaw;
             else yaw = atan2_fast_2b2100(velocity.f.x, velocity.f.y);
             pitch = -atan2_fast_2b2100(vector_length_xy_2b2100(&velocity), velocity.f.z);
             yaw0 = yaw;
@@ -289,7 +289,7 @@ void devastator_update(struct Moby *devastator_moby) {
                 }
                 spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
             }
-            if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.unk229C < 0.7f)) {
+            if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.stick_magnitude < 0.7f)) {
                 FUN_L00_002323b8_2b2100(0x36, 1, (float)scale_game_frames_2b2100(10));
             } else {
                 start_equipped_item_animation();
@@ -310,8 +310,8 @@ void devastator_update(struct Moby *devastator_moby) {
             muzzle_light_color_z = convert_integer_to_float_2b2100(data->glow) * 0.5f / (float)scale_game_frames_2b2100(10);
         }
         FUN_L00_0024f7c8_2b2100(devastator_moby, 0, &velocity);
-        velocity.f.x += fast_cos_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
-        velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.unk670, hero.unk674));
+        velocity.f.x += fast_cos_2b2100(atan2_fast_2b2100(hero.facing_x, hero.facing_y));
+        velocity.f.y += fast_sin_2b2100(atan2_fast_2b2100(hero.facing_x, hero.facing_y));
         velocity.f.z += 0.3f;
         if (data->light == -1) {
             data->light = allocate_colored_effect_slot(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
@@ -425,7 +425,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         goto tail;
     if (v->i4 != 0)
         goto tail;
-    if (g->unk20AC != 0)
+    if (g->item_use_locked != 0)
         goto tail;
     k = g->state.control_mode;
     if (k == 7 || k == 2 || k == 3 || k == 4 || k == 5 || k == 6 || k == 0x10 || k == 0xE ||
@@ -442,7 +442,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         goto tail;
     if (FUN_L00_00233db8_b3058(-1, 1) != 0) {
         b = 0.0f;
-        launch_yaw = g->unk688;
+        launch_yaw = g->held_pose_yaw;
         if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
             launch_yaw = FUN_001f9e90_b3058(camera->f350, camera->f354);
             b = -FUN_001f9e90_b3058(FUN_001f9b20_b3058(&camera->f350), camera->f358);
@@ -1701,7 +1701,7 @@ void blaster_update(struct Moby *moby) {
         launch.f.y += 0.15f;
         transform_vector(&launch, &launch, &inverse);
         fast_vec_add(&launch, &launch, player_camera + 0x140);
-        if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.unk20AC) {
+        if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.item_use_locked) {
             FUN_L00_001edf60_49a8((int)moby, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
             fast_vec_normalize(&reach, &velocity, 20.0f);
             fast_vec_add(&end, &reach, &launch);
@@ -1745,9 +1745,9 @@ void blaster_update(struct Moby *moby) {
             FUN_L00_001edf60_49a8((int)moby, 0xFF0FFF0F, absolute_float(0.9f - distance * 0.65f), &work.point, 0.0f, 0x26, -1, 90.0f, 4);
         }
     }
-    if (hero.unk20A8 && hero.state.current != 0x72 && D_L00_0015F5C4_macro != 2) {
-        if (scale_game_frames(5 - item_text_variant[15]) < hero.unk1BC && data->cooldown == 0) {
-            if (use_ammo(-1, 1) && !hero.unk20AC) {
+    if (hero.item_anim_active && hero.state.current != 0x72 && D_L00_0015F5C4_macro != 2) {
+        if (scale_game_frames(5 - item_text_variant[15]) < hero.item_anim_frames && data->cooldown == 0) {
+            if (use_ammo(-1, 1) && !hero.item_use_locked) {
                 data->cooldown = scale_game_frames(6);
                 if (target) {
                     float speed = frame_time * 40.0f;
@@ -1777,8 +1777,8 @@ void blaster_update(struct Moby *moby) {
                 work.spawn.owner = moby;
                 work.spawn.f1C = 0.25f;
                 work.spawn.i20 = 1;
-                work.spawn.pos.f.x = fast_cos(fast_arc_tan(hero.unk670, hero.unk674));
-                work.spawn.pos.f.y = fast_sin(fast_arc_tan(hero.unk670, hero.unk674));
+                work.spawn.pos.f.x = fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
+                work.spawn.pos.f.y = fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
                 work.spawn.pos.f.z = 1.0f;
                 work.spawn.pos.f.w = 5627.9248f;
                 work.spawn.b18 = 1;
@@ -1813,7 +1813,7 @@ void blaster_update(struct Moby *moby) {
         }
     }
     if (!(((controller_state.held & hero.items[0].button_mask) && get_ammo(-1)) ||
-          (!(scale_game_frames(9) < hero.unk1BC) && hero.unk20A8)) ||
+          (!(scale_game_frames(9) < hero.item_anim_frames) && hero.item_anim_active)) ||
         hero.state.current == 0x72 || D_L00_0015F5C4_macro == 2) {
         if ((moby->prev_seq != 0 || (moby->anim_flags & 2)) && hero.state.current != 0x72 && D_L00_0015F5C4_macro != 2) {
             if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(7));
@@ -1828,8 +1828,8 @@ void blaster_update(struct Moby *moby) {
         red = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow : scale_game_frames(9)) * 0.7f / (float)scale_game_frames(9);
         green = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow : scale_game_frames(9)) * 0.7f / (float)scale_game_frames(9);
         blue = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow : scale_game_frames(9)) * 0.7f / (float)scale_game_frames(9);
-        work.point.f.x = hero.motion.pos.f[0] + fast_cos(fast_arc_tan(hero.unk670, hero.unk674)) * 2.0f;
-        work.point.f.y = hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.unk670, hero.unk674)) * 2.0f;
+        work.point.f.x = hero.motion.pos.f[0] + fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
+        work.point.f.y = hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
         work.point.f.z = hero.motion.pos.f[2] + 1.0f;
         if (data->light == -1) {
             data->light = allocate_colored_effect_slot(&work.point, 6.0f, 0.0f, red, green, blue);
@@ -2633,7 +2633,7 @@ void taunter_update(Moby *taunter_moby) {
     }
     if ((u8)taunter_state != 2)
         goto end;
-    if (taunter_moby->type == 3 && hero.unk20AC == 0) {
+    if (taunter_moby->type == 3 && hero.item_use_locked == 0) {
         taunter_effect_emission_disabled = 0;
         taunter_vars->cnt18++;
     } else {
@@ -2642,7 +2642,7 @@ void taunter_update(Moby *taunter_moby) {
     if (FUN_L00_0028d8c0_u(taunter_moby, taunter_vars->anim) == 0) {
         activation_button_bits = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
         if ((activation_button_bits != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && taunter_vars->retry >= 0x11)) &&
-            hero.unk20AC == 0) {
+            hero.item_use_locked == 0) {
             if (activation_button_bits != 0) {
                 taunter_vars->frame = FUN_001f96f8_c(random_int_between(0xF, 0x2D));
             }
@@ -2668,7 +2668,7 @@ void taunter_update(Moby *taunter_moby) {
             goto end;
         }
         if (taunter_vars->anim < 0) {
-            if ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && hero.unk20AC == 0)
+            if ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && hero.item_use_locked == 0)
                 taunter_vars->retry++;
             else
                 taunter_vars->retry = 0;
@@ -2679,7 +2679,7 @@ void taunter_update(Moby *taunter_moby) {
     } else {
         taunter_vars->retry++;
         if ((D_0013CAE0[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= taunter_vars->cnt18) {
-            if (hero.unk20AC == 0)
+            if (hero.item_use_locked == 0)
                 goto L7340;
         }
     }
@@ -2975,7 +2975,7 @@ void pyrocitor_update(struct Moby *moby) {
                 if (moby) v->light = -1; else v->light = -1;
             }
         }
-        if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.unk20AC && FUN_L00_00233e98_2b2100(-1)) {
+        if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.item_use_locked && FUN_L00_00233e98_2b2100(-1)) {
             moby->state = 3;
             start_equipped_item_animation();
             v->timer = scale_game_frames_2b2100(10);
@@ -3012,10 +3012,10 @@ void pyrocitor_update(struct Moby *moby) {
             add_vector_xyz_2b2100(&endpoint, &dir, &scratch);
         } else {
             qcopy(&scratch, &pos);
-            normalize_vector_xyz(&dir, &hero.unk670, D_L00_00161520 + speed + 0.75f);
+            normalize_vector_xyz(&dir, &hero.facing_x, D_L00_00161520 + speed + 0.75f);
             add_vector_xyz_2b2100(&endpoint, &dir, &pos);
         }
-        if (collision_segment_hits_2b2100(&hero.motion.unkD0, &scratch, 2, 0, 0)) {
+        if (collision_segment_hits_2b2100(&hero.motion.body_center, &scratch, 2, 0, 0)) {
             length = 0.0f;
         } else if (collision_segment_hits_2b2100(&scratch, &endpoint, 2, 0, 0)) {
             length = distance_xyz_2b2100(&scratch, collision_hit_2b2100 + 0x20) - 0.75f;
@@ -3080,7 +3080,7 @@ void pyrocitor_update(struct Moby *moby) {
             FUN_L00_00233db8_2b2100(-1, 1);
         ready = FUN_L00_00233e98_2b2100(-1);
         if (fast_dec_timer_s16(&v->timer)) {
-            if ((controller_state.held & hero.items[0].button_mask) && !hero.unk20AC && ready)
+            if ((controller_state.held & hero.items[0].button_mask) && !hero.item_use_locked && ready)
                 break;
             moby->state = 2;
             cancel_hero_item_animation();
@@ -3771,7 +3771,7 @@ void update_beam_effect_lifecycle(void *moby) {
             if ((u32)(hero_state - 0xB) < 4 ||
                 (hero_state == 0x1C && ((u8 *)((void *)hero.moby))[0x52] == ((u8 *)((void *)hero.moby))[0x53] &&
                  hero.anim_frame >= 6.0f && hero.anim_frame <= 16.0f)) {
-                if (!hero.unk41E)
+                if (!hero.past_jump_apex)
                     flag = 1;
             }
             if (hero.state.current == HERO_STATE_PACK_LONG_JUMP) {

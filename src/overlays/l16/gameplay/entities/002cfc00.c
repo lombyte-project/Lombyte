@@ -31,13 +31,13 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     char *other;
     char *od;
 
-    if (hero_state->unk894 < scale_game_frames(0xB4)) {
+    if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
     if (!tick_countdown_32((int *)(data + 0x2DC))) {
         return;
     }
-    other = ((char *)hero_state->unk86C);
+    other = ((char *)hero_state->hoverboard_moby);
     if (!other) {
         return;
     }

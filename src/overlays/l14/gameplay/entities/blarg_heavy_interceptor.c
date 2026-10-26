@@ -254,7 +254,7 @@ void update_path_mover(struct Moby *moby) {
         break;
     case PATH_MOVER_COMMAND_TRAVERSE_PATH:
         if (vars->silent == 0 && is_hero_on_moby(moby)) {
-            hero.unk1F2 = 4;
+            hero.jump_lock_timer = 4;
             hero.unk1F4 = 4;
         }
         if (vars->wait != 0 ||

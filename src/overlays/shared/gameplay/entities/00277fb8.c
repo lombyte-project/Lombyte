@@ -14,7 +14,7 @@ s32 is_hero_on_moby(struct Moby *candidate_moby) {
     struct Hero *hero_ptr = &hero;
 
     if (hero_ptr->state.control_mode == 3 || hero_ptr->state.current == 0x1C) {
-        if ((struct Moby *)hero_ptr->unk4F8 == candidate_moby) {
+        if ((struct Moby *)hero_ptr->ledge_moby == candidate_moby) {
             return 1;
         }
     } else if (hero_ptr->air_frames.s == 0 && hero_ptr->ground_moby == candidate_moby) {

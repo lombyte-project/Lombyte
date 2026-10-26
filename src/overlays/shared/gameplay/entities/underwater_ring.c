@@ -367,15 +367,15 @@ void giant_clank_pad_update(struct Moby *moby) {
             enter_hero_vehicle_mode(2, 0x5a, pad);
             if (current_level_index == 0xf) {
                 start_scene(8);
-                *(u128 *)hero.unk1D00 = *(u128 *)&hero.motion.pos;
-                *(u128 *)(hero.unk1D00 + 16) = *(u128 *)&hero.motion.rot;
+                *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;
+                *(u128 *)(hero.saved_pos_rot + 16) = *(u128 *)&hero.motion.rot;
                 jet_game_state(2, 4);
                 return;
             }
             if (current_level_index != 0x12) return;
             start_scene(6);
-            *(u128 *)hero.unk1D00 = *(u128 *)&hero.motion.pos;
-            *(u128 *)(hero.unk1D00 + 16) = *(u128 *)&hero.motion.rot;
+            *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;
+            *(u128 *)(hero.saved_pos_rot + 16) = *(u128 *)&hero.motion.rot;
             moby->state = 3;
             return;
         }

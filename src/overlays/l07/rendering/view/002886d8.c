@@ -72,8 +72,8 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         qcopy(sight_out + 0x10, target_moby + 0x40);
         hero_context = &hero_lui;
         if (target_moby == ((char *)hero_context->moby)) {
-            qcopy(sight_out + 0x20, &hero_context->motion.unkC0);
-            qcopy(sight_out + 0x30, &hero_context->motion.unkD0);
+            qcopy(sight_out + 0x20, &hero_context->motion.near_ground_point);
+            qcopy(sight_out + 0x30, &hero_context->motion.body_center);
         } else {
             qcopy(sight_out + 0x30, sight_out);
             *(float *)(sight_out + 0x38) += 0.6f;

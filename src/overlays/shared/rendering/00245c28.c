@@ -260,7 +260,7 @@ void run_level_main_loop(void) {
         if (D_L00_0015F5C4 == 0 && g_debug_menu.profiler_mode != 0) {
             noop_main_callback();
         }
-        if (hero.unk20B1 == 0) {
+        if (hero.fall_fade_pending == 0) {
             int mode = D_L00_0015F5C4;
 
             if (mode == 0 || mode == 2) {
@@ -290,7 +290,7 @@ void run_level_main_loop(void) {
             }
         }
         reset_gs_registers_pr();
-        if (D_L00_0015F5C4 == 0 && hero.unk20B1 != 0) {
+        if (D_L00_0015F5C4 == 0 && hero.fall_fade_pending != 0) {
             quit = 1;
             full = 1;
         }

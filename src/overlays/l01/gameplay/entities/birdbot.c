@@ -2157,7 +2157,7 @@ typedef struct Moby {
  * D_L01_001B0930_u declared above). While the hero's control mode is 0x11 or
  * 0x12 and he is within `radius` of the path, he is pushed along
  * the path (and toward it when `pull` is set), capped at max_speed; the
- * nearest such path this frame wins through hero.unk22B8. When he left it
+ * nearest such path this frame wins through hero.current_path_dist. When he left it
  * (prev control mode 0x12, now 4 or 5) the push is damped instead.
  */
 typedef struct {
@@ -2229,10 +2229,10 @@ void water_current_update(Moby *self)
     }
 
     if ((u32)(hero.state.control_mode - 0x11) < 2) {
-        if (hero.unk22B8 < hero_path_distance) {
+        if (hero.current_path_dist < hero_path_distance) {
             return;
         }
-        hero.unk22B8 = hero_path_distance;
+        hero.current_path_dist = hero_path_distance;
         if (at_end == 0) {
             subtract_vector_xyz(&current_acceleration, &ahead, &nearest);
             normalize_vector_xyz(&current_acceleration, &current_acceleration, frame_time_sq * 7.0f);
@@ -2263,7 +2263,7 @@ void water_current_update(Moby *self)
                 if (cap < hero.ground_speed) {
                     hero.ground_speed = cap;
                 }
-                clear_vector(&hero.motion.unk150);
+                clear_vector(&hero.motion.momentum);
             }
         }
     } else if ((hero.state.prev_control_mode == 0x12 || hero.state.prev2_control_mode == 0x12)
@@ -2271,8 +2271,8 @@ void water_current_update(Moby *self)
         current_speed = vector_length_xyz(water_current_vars);
         normalize_vector_xyz(water_current_vars, water_current_vars, frame_scale * -0.014999985694885254f * current_speed + current_speed);
         qcopy(&hero.motion.platform_delta, water_current_vars);
-        if (hero.unk1D8 < scale_game_frames(0x23)) {
-            hero.unk1D8 = scale_game_frames(0x23);
+        if (hero.jump_lockout_timer < scale_game_frames(0x23)) {
+            hero.jump_lockout_timer = scale_game_frames(0x23);
         }
     }
 }

@@ -1902,7 +1902,7 @@ hide:
     target = (struct Moby *)work.moby;
     if (!target) {
         target = hero.moby;
-        qcopy(work.v20, hero.motion.unkD0.f);
+        qcopy(work.v20, hero.motion.body_center.f);
     }
     switch (moby->state) {
     case BLARG_TROOPER_INITIALIZE: {

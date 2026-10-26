@@ -423,7 +423,7 @@ int hero_set_state(int a, int b) {
                 h[29].level_mask | (1 << current_level_index) | 0x80000000;
         }
         {
-            char *v = (char *)&hero.motion.unk150;
+            char *v = (char *)&hero.motion.momentum;
             qcopy(v, v - 0x40);
         }
         if (b)
@@ -1633,7 +1633,7 @@ int handle_hero_gadget_button(void) {
     T2C_23D688 *row;
     struct HeldGadgetVars *vars;
 
-    if (hero.unk20AC != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) return 0;
+    if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) return 0;
     if (hero.vehicle_mode != 0) return 0;
     if (hero.items[0].moby == 0) return 0;
     if (hero.items[0].state != 2) return 0;
@@ -1643,7 +1643,7 @@ int handle_hero_gadget_button(void) {
     switch (hero.items[0].item_id) {
     case ITEM_WRENCH:
         if ((unsigned int)hero.state.control_mode < 2 ||
-            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
             if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
                 if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == 0) {
@@ -1674,7 +1674,7 @@ int handle_hero_gadget_button(void) {
             if (hero.state.current == 0xb || hero.state.current == 0xe)
                 window = scale_game_frames(0x12);
             if (FUN_L00_00266d60(buttons, window, 0) != 0) {
-                if ((hero.unk41E == 0 ? hero.ground_distance > 0.1f : hero.ground_distance > 0.57f) ||
+                if ((hero.past_jump_apex == 0 ? hero.ground_distance > 0.1f : hero.ground_distance > 0.57f) ||
                     (hero.state.current == 8 && hero.ground_distance > 0.57f)) {
                     hero_set_state(0x14, 1);
                 } else if (hero.on_slip_ground == 0) {
@@ -1684,11 +1684,11 @@ int handle_hero_gadget_button(void) {
         } else if (hero.state.control_mode == 6) {
             row = &D_L01_0017C0A8[hero.attack_record];
             if (hero.state.current == 0x15 && scale_game_frames(0x1e) < hero.state_timer &&
-                hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.anim_frame &&
+                hero.anim_changing == 0 && (float)((int *)row)[4] <= hero.anim_frame &&
                 (controller_state.held & 0xa) != 0 &&
                 FUN_L00_00266d60(buttons, scale_game_frames(0xf), 0) != 0) {
                 hero_set_state(0x15, 1);
-            } else if (hero.unkA9C == 0 && (float)((int *)row)[4] <= hero.anim_frame) {
+            } else if (hero.anim_changing == 0 && (float)((int *)row)[4] <= hero.anim_frame) {
                 frames = (truncate_float_to_s32(hero.anim_frame) - ((int *)row)[3]) * 2;
                 if (frames < 1) frames = 1;
                 if (scale_game_frames(0xf) < frames) frames = scale_game_frames(0xf);
@@ -1704,9 +1704,9 @@ int handle_hero_gadget_button(void) {
         if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0 &&
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
-            hero.unk22DE == 0) {
+            hero.vehicle_toggle_timer == 0) {
             allocate_hero_voice_for_entry(0x18, 0);
-            hero.unk22DE = 0x12;
+            hero.vehicle_toggle_timer = 0x12;
             hero.unk22DC = 1;
         }
         break;
@@ -1728,7 +1728,7 @@ int handle_hero_gadget_button(void) {
                       scale_game_frames(5) < hero.items[0].unk20) ||
                      (controller_state.pressed & buttons) != 0) &&
                     FUN_L00_00233e98(-1) != 0) {
-                    if (hero.unk20A8 == 0) start_equipped_item_animation();
+                    if (hero.item_anim_active == 0) start_equipped_item_animation();
                 } else if ((controller_state.held & buttons) != 0 &&
                            FUN_L00_00233e98(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
@@ -1747,7 +1747,7 @@ int handle_hero_gadget_button(void) {
             hero.state.control_mode == 5 || hero.state.control_mode == 0xf ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
-            if (hero.unk20A8 == 0) {
+            if (hero.item_anim_active == 0) {
                 int hold;
                 window = scale_game_frames(7);
                 hold = hero.items[0].unk20;
@@ -1758,7 +1758,7 @@ int handle_hero_gadget_button(void) {
                     if (FUN_L00_00233e98(-1) != 0) {
                         if (hero.state.control_mode == 0xc || hero.state.control_mode == 0 ||
                             hero.state.current == 3 ||
-                            (hero.state.control_mode == 1 && hero.unk229C < 0.7f))
+                            (hero.state.control_mode == 1 && hero.stick_magnitude < 0.7f))
                             hero_set_state(0x23, 1);
                         else start_equipped_item_animation();
                     } else if (hero.items[0].moby != 0) {
@@ -1770,7 +1770,7 @@ int handle_hero_gadget_button(void) {
         break;
     case 0x12:
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
-            (hero.state.control_mode == 4 && hero.unk418 != 0)) {
+            (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
             if (hero.state.current != 1) {
                 int limit = scale_game_frames(10);
                 int hold = hero.items[0].unk20;
@@ -1789,7 +1789,7 @@ int handle_hero_gadget_button(void) {
     }
     if (hero.state_timer == saved) {
         if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
-            (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
+            (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
             fast_dec_timer(&r1_double_tap_timer);
             if (r1_double_tap_timer != 0 &&
                 ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 0xc ||

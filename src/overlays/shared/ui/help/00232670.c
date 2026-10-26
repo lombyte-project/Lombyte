@@ -41,7 +41,7 @@ extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e
 /* Hero animation frame advance: steps the hero moby's frame position
    (unk54) by the rate in hero.anim_speed/unkA94 or a scripted table, moves to
    the next frame of the sequence each time it passes 1.0 (wrapping or
-   jumping as hero.unkAB0/unkAB4/unkAB8 request), fires the sequence's sound
+   jumping as hero.anim_loop_frame/unkAB4/unkAB8 request), fires the sequence's sound
    triggers crossed this frame, keeps the moby's looping sound in step,
    and records the distance moved (hero.anim_frame/unkAAC). */
 void FUN_L00_00232670(void) {
@@ -53,16 +53,16 @@ void FUN_L00_00232670(void) {
     f32 prev;
 
     clear_hero_mapped_moby_animation_state();
-    hero.unkA98 &= ~3;
+    hero.anim_flags &= ~3;
     same = m->seq == m->prev_seq;
     frame0 = m->frame;
     t0 = m->anim_time;
     if (m->seq == m->prev_seq) {
-        m->anim_time = t0 + hero.anim_speed * hero.unkA94;
-    } else if (hero.unkAA0 >= 0) {
-        m->anim_time = D_L00_0017BDF0[hero.unkAA0][hero.unkAA4++];
+        m->anim_time = t0 + hero.anim_speed * hero.anim_frame_rate;
+    } else if (hero.anim_blend_curve >= 0) {
+        m->anim_time = D_L00_0017BDF0[hero.anim_blend_curve][hero.anim_blend_step++];
     } else {
-        m->anim_time = t0 + hero.unkA94;
+        m->anim_time = t0 + hero.anim_frame_rate;
     }
     if (0.99f < m->anim_time && m->anim_time < 1.01f)
         m->anim_time = 1.0f;
@@ -74,38 +74,38 @@ void FUN_L00_00232670(void) {
             m->seq = m->prev_seq;
             m->anim_trigger_count = SEQ(m, m->seq)->trigger_count;
         }
-        hero.unkAA0 = -1;
-        hero.unkA98 |= 1;
+        hero.anim_blend_curve = -1;
+        hero.anim_flags |= 1;
         m->frame = m->prev_frame;
         m->cur_frame_data = m->prev_frame_data;
         m->prev_frame++;
-        if (hero.unkAB8 != 0) {
-            hero.unkAB8 = 0;
-            hero.unkA94 = 1.0f / 0.0f; /* +inf, from the level's literal pool */
+        if (hero.queued_frame_request != 0) {
+            hero.queued_frame_request = 0;
+            hero.anim_frame_rate = 1.0f / 0.0f; /* +inf, from the level's literal pool */
             /* the just-cleared int, converted: retail holds this 0.0f in a
                register across the loop, which a literal 0.0f (stored from
                $zero, as in the next branch) does not give */
-            m->anim_time = hero.unkAB8;
-            m->prev_frame = hero.unkAB4;
+            m->anim_time = hero.queued_frame_request;
+            m->prev_frame = hero.queued_anim_frame;
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
             clear_hero_queued_animation();
             sync_hero_mapped_moby_animation_frames();
-        } else if (hero.unkAB0 != -1 && hero.unkAB4 < m->prev_frame) {
-            hero.unkA94 = 0.33333334f;
+        } else if (hero.anim_loop_frame != -1 && hero.queued_anim_frame < m->prev_frame) {
+            hero.anim_frame_rate = 0.33333334f;
             m->anim_time = 0.0f;
-            m->prev_frame = hero.unkAB0;
+            m->prev_frame = hero.anim_loop_frame;
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
             sync_hero_mapped_moby_animation_frames();
         } else {
             if (m->prev_frame >= SEQ(m, m->prev_seq)->frame_count) {
                 m->prev_frame = 0;
-                hero.unkA98 |= 2;
+                hero.anim_flags |= 2;
             }
             m->prev_frame_data = SEQ(m, m->prev_seq)->frames[m->prev_frame];
             m->anim_time -= 1.0f;
-            m->anim_time /= hero.unkA94;
-            hero.unkA94 = *(f32 *)m->cur_frame_data;
-            m->anim_time *= hero.unkA94;
+            m->anim_time /= hero.anim_frame_rate;
+            hero.anim_frame_rate = *(f32 *)m->cur_frame_data;
+            m->anim_time *= hero.anim_frame_rate;
         }
     }
     if (same && m->anim_trigger_count != 0) {
@@ -138,8 +138,8 @@ void FUN_L00_00232670(void) {
     prev = hero.anim_frame;
     hero.anim_frame = compute_interpolated_record_value(m);
     if (prev <= hero.anim_frame)
-        hero.unkAAC = hero.anim_frame - prev;
+        hero.anim_frame_delta = hero.anim_frame - prev;
     else
-        hero.unkAAC = dt;
-    hero.unkA9C = m->seq != m->prev_seq;
+        hero.anim_frame_delta = dt;
+    hero.anim_changing = m->seq != m->prev_seq;
 }

@@ -434,10 +434,10 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->collision = 0;
-        hero.unk22CB = 1;
+        hero.vent_updraft = 1;
         mark_moby_for_removal_98b68(moby);
     } else {
-        hero.unk22CB = 1;
+        hero.vent_updraft = 1;
         mark_moby_for_removal_98b68(moby);
     }
 }

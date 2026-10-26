@@ -1577,7 +1577,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             ceo_moby->event = 0;
             pose = D_L16_001D9840;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
-            camera = (char *)hero.unk1D00;
+            camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
             ceo_moby->state = 3;
@@ -1653,7 +1653,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             char *pose = D_L16_001D9840;
             ceo_moby->event = 0;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
-            camera = (char *)hero.unk1D00;
+            camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
         }

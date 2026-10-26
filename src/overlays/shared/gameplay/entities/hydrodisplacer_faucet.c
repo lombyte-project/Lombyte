@@ -314,7 +314,7 @@ void hoverboard_update(unsigned char *moby) {
         if (distance_xyz(player_position, moby + 0x10) < 5.5f && frame_number_gp > 3 &&
             (player = (struct Hero *)(player_position - 0x80))->state.control_mode != 0x15 &&
             player->state.control_mode != 0x16) {
-            player->unk86C = moby;
+            player->hoverboard_moby = moby;
             FUN_L05_0024cee8(0x6b, 1);
             if (*(int *)(data + 0x50) == 0) {
                 qcopy(data + 0x10, moby + 0x10);
@@ -327,7 +327,7 @@ void hoverboard_update(unsigned char *moby) {
     case HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT:
         if (*(int *)(data + 0x50) == 0 && alternate_item_available[0] != 0 &&
             D_00141938 == 0 && D_L05_0015F6A8 != 0 &&
-            (player_hero = &hero, scale_game_frames(0x4b0) < player_hero->unk19C) &&
+            (player_hero = &hero, scale_game_frames(0x4b0) < player_hero->control_mode_timer) &&
             D_00141C60 == 0) {
             play_sound(0x138f, 0x5f);
         }
@@ -410,13 +410,13 @@ void add_moby_frames_for_group_proximity(char *moby) {
     char *other;
     char *od;
 
-    if (player_hero->unk894 < scale_game_frames(0xB4)) {
+    if (player_hero->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
     if (!tick_countdown_32((int *)(data + 0x264))) {
         return;
     }
-    other = ((char *)player_hero->unk86C);
+    other = ((char *)player_hero->hoverboard_moby);
     if (!other) {
         return;
     }
@@ -1030,7 +1030,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
                 fast_vec_add(vector_table_entry + 0x10 + i * 16, vector_table_entry + 0x10 + i * 16, moby + 0x10);
             }
             player_hero = &hero;
-            *(unsigned short *)&player_hero->unk22DA = *(unsigned short *)(data + 0xDC);
+            *(unsigned short *)&player_hero->path_constrain_pending = *(unsigned short *)(data + 0xDC);
         }
     }
 }

@@ -1586,7 +1586,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             D_L15_0015F5A4 = 0;
         }
         if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol54) != 0
-            && hero.vehicle_mode == 3 && hero.unk22E0 == 0
+            && hero.vehicle_mode == 3 && hero.glow_pulse_level == 0
             && D_L15_00161AC0_macro == 0 && *(unsigned short *)(D_00141680_2ed398 + 0x728) == 0) {
             show_help_message_2ed398(0x3A9E, 0x88);
         }

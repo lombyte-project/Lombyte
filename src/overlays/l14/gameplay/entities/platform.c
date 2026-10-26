@@ -127,7 +127,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     do {
         char *o = D_L14_0015FFD8_6570 + ((*moby_index_cursor & 0x7FFF) << 8);
         char *od = *(char **)(o + 0x78);
-        char *path = hero.unk560;
+        char *path = hero.rail_spline;
         if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
             char *tp = D_L14_001B0BB0_6570[*(int *)(od + 0x88)];
             nearest_segment_distance = 0.0f;
@@ -137,8 +137,8 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
             hero_path_euler_rotation[1] = 0.0f;
             hero_path_euler_rotation[2] = fast_add_rotations(angle_atan2(path_heading_delta[0], path_heading_delta[1]), -1.5707964f);
             hero_path_euler_rotation[3] = 0.0f;
-            hero.unk564 = path_segment_index;
-            hero.unk568 = 0.0f;
+            hero.rail_segment = path_segment_index;
+            hero.rail_seg_frac = 0.0f;
             place_6570(path + (path_segment_index * 16 + 0x10), hero_path_euler_rotation, 0x28, 0);
         }
         *out++ = o;
@@ -150,8 +150,8 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         o[0x20] = 6;
         ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - group_anchor_moby->pos.x, hero.motion.pos.f[1] - group_anchor_moby->pos.y);
         path_step_distance = -D_L14_00161A38_gp;
-        *(int *)(od + 0x64) = hero.unk564;
-        *(float *)(od + 0x68) = hero.unk568;
+        *(int *)(od + 0x64) = hero.rail_segment;
+        *(float *)(od + 0x68) = hero.rail_seg_frac;
         FUN_L00_0025d808_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, path_step_distance);
         clear_u64_value(od + 0x90);
         *(int *)(od + 0xF8) = i * 2;

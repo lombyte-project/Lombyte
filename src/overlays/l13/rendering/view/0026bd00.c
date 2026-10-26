@@ -73,8 +73,8 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
         qcopy(selection_output + 0x10, selected_object + 0x40);
         hero = &hero_lui;
         if (selected_object == ((char *)hero->moby)) {
-            qcopy(selection_output + 0x20, &hero->motion.unkC0);
-            qcopy(selection_output + 0x30, &hero->motion.unkD0);
+            qcopy(selection_output + 0x20, &hero->motion.near_ground_point);
+            qcopy(selection_output + 0x30, &hero->motion.body_center);
         } else {
             qcopy(selection_output + 0x30, selection_output);
             *(float *)(selection_output + 0x38) += 0.6f;

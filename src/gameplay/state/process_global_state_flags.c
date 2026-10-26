@@ -48,7 +48,7 @@ s32 process_global_state_flags(void) {
         clear_scene_state_buffers();
         result = scale_game_frames(0x10);
         fade_to_black(result);
-        hero.unk20B1 = 1;
+        hero.fall_fade_pending = 1;
         return -1;
     }
     return 0;

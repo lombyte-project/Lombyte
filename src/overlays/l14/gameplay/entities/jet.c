@@ -517,7 +517,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     FUN_L00_001fff28(shuttle_vars->wobble, 0, shuttle_vars->angle);
     lift_sub(&delta, &shuttle_moby->pos, &old);
     update_entity_matrix(shuttle_vars->spring, &delta, &rot, &shuttle_moby->rot);
-    if (hero.state.control_mode == 13 && hero.unk964 == rider) {
+    if (hero.state.control_mode == 13 && hero.grapple_target == rider) {
         if (shuttle_vars->riding == 0) {
             shuttle_vars->riding = 1;
             shuttle_vars->timer = lift_frames(shuttle_enter_riding_transition_frames_gp);
@@ -678,7 +678,7 @@ void update_wind_control(struct Moby *wind_control_moby) {
             wind_vars->period_timer = wind_frames(wind_vars->period);
             wind_vars->period_inv = 1.0f / wind_itof(wind_vars->period_timer);
         }
-        if (hero.unk308 != 0 || hero.unk12E2 == 0) {
+        if (hero.unk308 != 0 || hero.on_ice_ground == 0) {
             if (wind_vars->push_timer > wind_frames(15)) {
                 wind_vars->push_timer = wind_frames(15);
                 wind_vars->push_inv = 1.0f / (float)wind_vars->push_timer;
@@ -1238,7 +1238,7 @@ void update_path_lightning_controller(struct Moby *moby) {
     float visibility_test_point[4];
     int moby_state;
     if (MOBY(moby)->state == 0) {
-        if (current_level_index == 0xE) hero.unk22D8 = 1;
+        if (current_level_index == 0xE) hero.pack_disabled = 1;
         MOBY(moby)->state = 1;
         moby->update_dist = 0xFF;
         *(int *)&D_L14_00161C58 = 0;
@@ -2852,7 +2852,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
                 fast_dec_timer(&moby_vars->moving_timer);
         } else if (moby_vars->moving_timer) {
             moby_vars->moving_timer = 0;
-            qcopy(moby_vars->target, hero.motion.unkD0.f);
+            qcopy(moby_vars->target, hero.motion.body_center.f);
         }
         if (fast_dec_timer(&moby_vars->target_timer)) {
             float heading;
@@ -2864,7 +2864,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
             FUN_001f9a10_c(moby_vars->target, moby_vars->target, moby->position);
         }
         if (moby_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {

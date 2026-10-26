@@ -161,7 +161,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
 
     camera_override_state = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
-        rotation_or_blend_value = fast_add_rotations(hero.unk4E4, 3.14159265f);
+        rotation_or_blend_value = fast_add_rotations(hero.ledge_normal_yaw, 3.14159265f);
         direction_or_rotation_deltas[0] = fast_cos(rotation_or_blend_value);
         direction_or_rotation_deltas[1] = fast_sin(rotation_or_blend_value);
         direction_or_rotation_deltas[2] = 0.0f;
@@ -341,7 +341,7 @@ void rebuild_follow_camera_pose(int snap) {
         part[2] = *(float *)(orbit + 0x30);
         part[3] = 0.0f;
         mask = 0x94;
-        copy_matrix3x4(basis, player->unk0);
+        copy_matrix3x4(basis, player->rot_matrix);
         transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
         add_vector_xyz(camera_moby + 0x30, target, offset);
         scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));

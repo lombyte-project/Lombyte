@@ -1007,7 +1007,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     if (cnt == 0)
         sel = 0x1E;
     if (hero.vehicle_mode == 1)
-        mode = hero.health.unk22AC;
+        mode = hero.health.vehicle_mode_hp;
     if (mode == 8) {
         tab = D_L00_0017E478;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);

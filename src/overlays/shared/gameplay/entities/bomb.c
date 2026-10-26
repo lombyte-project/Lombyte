@@ -70,8 +70,8 @@ s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *
         return 0;
     qcopy(&position_scratch, &thrown_moby->pos);
     if (thrown_moby->state == 1) {
-        simulated_position.f[0] = FUN_001f9dc8_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
-        simulated_position.f[1] = FUN_001f9de0_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
+        simulated_position.f[0] = FUN_001f9dc8_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.facing_x, hero.facing_y))) * 0.85903900861740112305f;
+        simulated_position.f[1] = FUN_001f9de0_2c8440(fast_add_rotations_2c8440(-0.36196801066398620605f, atan2_f_2c8440(hero.facing_x, hero.facing_y))) * 0.85903900861740112305f;
         simulated_position.f[2] = 0.0f;
         add_vector_xyz_2c8440(&simulated_position, &simulated_position, &hero.motion.pos);
         simulated_position.f[2] += 0.39081999659538269043f;
@@ -1863,7 +1863,7 @@ void ryno_update(struct Moby *ryno_moby) {
     switch (ryno_moby->state) {
     case RYNO_STATE_INITIALIZE:
         ryno_vars->target = 0;
-        hero.items[0].unk1C = 0;
+        hero.items[0].switch_lock = 0;
         ryno_moby->state = 1;
         ryno_vars->track_timer = 0;
         break;
@@ -1873,7 +1873,7 @@ void ryno_update(struct Moby *ryno_moby) {
     case RYNO_STATE_READY_TO_FIRE:
         if (hero.state.current == 1) hud_2cc608(0x1E, 1);
         if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
-        if (hero.unk20AC != 0) return;
+        if (hero.item_use_locked != 0) return;
         if (use_ammo_2cc608(-1, 1) == 0) return;
         {
             int per;
@@ -1883,7 +1883,7 @@ void ryno_update(struct Moby *ryno_moby) {
             if (ticks_2cc608(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = ticks_2cc608(play_frames_2cc608) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
-        hero.items[0].unk1C = 2;
+        hero.items[0].switch_lock = 2;
         ryno_moby->state = 4;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
@@ -1902,7 +1902,7 @@ void ryno_update(struct Moby *ryno_moby) {
             return;
         }
         if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
-        if (hero.unk20AC != 0) return;
+        if (hero.item_use_locked != 0) return;
         if (use_ammo_2cc608(-1, 1) == 0) return;
         {
             int per;
@@ -1912,7 +1912,7 @@ void ryno_update(struct Moby *ryno_moby) {
             if (ticks_2cc608(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = ticks_2cc608(play_frames_2cc608) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
-        hero.items[0].unk1C = 2;
+        hero.items[0].switch_lock = 2;
         ryno_moby->state = 4;
         ryno_vars->shot_timer = 0;
         ryno_vars->slot = 0;
@@ -1941,8 +1941,8 @@ void ryno_update(struct Moby *ryno_moby) {
         add_2cc608(ofs.f, &hero.motion.displacement, &hero.motion.platform_carry);
         scale_2cc608(ofs.f, ofs.f, 3.0f);
         add_2cc608(muzzle_position_and_launch_direction.f, muzzle_position_and_launch_direction.f, ofs.f);
-        if (hero.items[6].unk40 != 0) {
-            yaw = hero.items[6].unk4C;
+        if (hero.items[6].locked_on != 0) {
+            yaw = hero.items[6].lock_yaw;
         } else {
             yaw = angle_2cc608(muzzle_position_and_launch_direction.f[0], muzzle_position_and_launch_direction.f[1]);
         }
@@ -1951,7 +1951,7 @@ void ryno_update(struct Moby *ryno_moby) {
         start_equipped_item_animation();
         FUN_L00_002ccee0_c(ryno_moby, aim.f, ryno_vars->target, ryno_vars->height, yaw, pitch);
         if (ryno_vars->shots >= 7) {
-            hero.items[0].unk1C = 0;
+            hero.items[0].switch_lock = 0;
             cancel_hero_item_animation();
             ryno_moby->state = 5;
             ryno_vars->shot_timer = ticks_2cc608(60);
@@ -3077,7 +3077,7 @@ void crate_update(struct Moby *moby) {
         if (moby->oclass == 0x1F9 &&
             (hero.unk240 == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
              (hero.ground_moby == moby && hero.air_frames.s == 0) ||
-             hero.unk4F8 == (s32)moby || touched)) {
+             hero.ledge_moby == (s32)moby || touched)) {
             moby->command = 0;
             moby->state = 5;
             break;

@@ -631,7 +631,7 @@ void update_path_following_rocket(struct Moby *moby) {
         struct Hero *player = &hero;
         if (player->state.control_mode != 15)
             break;
-        if (is_point_inside_clip_volume(&player->motion.unkD0, *(int *)data)) {
+        if (is_point_inside_clip_volume(&player->motion.body_center, *(int *)data)) {
             moby->state = 2;
             *(short *)(data + 0x16) = 0;
         }

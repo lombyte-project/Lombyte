@@ -80,10 +80,10 @@ void initialize_hero(void) {
     hero.health.hp = hero_max_health;
     hero.reach_distance = 2.125f;
     hero.reach_height = 1.25f;
-    hero.health.unk22AC = 4;
+    hero.health.vehicle_mode_hp = 4;
     hero.health.unk22B0 = hero.health.hp;
     hero.unk1010 = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
-    hero.unk1014 = 0.007f;
+    hero.idle_look_ease_rate = 0.007f;
     hero.unk1018 = 0.3f;
     hero.unkD20 = 0.97f;
 }

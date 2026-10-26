@@ -33,12 +33,12 @@ int try_transition_hero_water_state(void) {
         } else {
             decrement = 10000 / (scale_game_frames(0x3C) * 15);
             queue_animation_update(4, 0x753F, FUN_L00_00236268,
-                FUN_L00_00236458, draw_hud_stars, &hero.unk22A0, 10000);
+                FUN_L00_00236458, draw_hud_stars, &hero.underwater_air, 10000);
         }
-        hero.unk22A0 -= decrement;
-        if (hero.unk22A0 < 0)
-            hero.unk22A0 = 0;
-        if (hero.unk22A0 == 0 &&
+        hero.underwater_air -= decrement;
+        if (hero.underwater_air < 0)
+            hero.underwater_air = 0;
+        if (hero.underwater_air == 0 &&
             (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
              !(hero.motion.rot.f[1] < -0.87266463f) ||
              !(frame_time < hero.motion.displacement.f[2]))) {
@@ -53,7 +53,7 @@ change_state:
         hero_set_state(state, 1);
         return 1;
     } else if (hero.state.current != 0x6A && hero.state.current != 0x76) {
-        hero.unk22A0 = 10000;
+        hero.underwater_air = 10000;
     }
 collision_mode:
     if (hero.state.control_mode != 0x12)

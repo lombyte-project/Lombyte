@@ -75,7 +75,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     reset_hud_and_suspend_weapon_updates();
     clear_active_help_record();
     hero_set_state(100, 1);
-    *(char *)&hero_state->unk20AC = 1;
+    *(char *)&hero_state->item_use_locked = 1;
     *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();
     transform_vector_by_basis(sc, &D_L01_00161100, vendor_moby + 0xC0);

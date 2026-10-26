@@ -33,12 +33,12 @@ void adjust_hero_pose_targets_from_motion(void) {
         FUN_L00_0020a210(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);
         if (hero.state.step == 1) {
-            run_step_pose_input = hero.motion.unk188;
+            run_step_pose_input = hero.motion.yaw_error;
             if (1.4f < run_step_pose_input) run_step_pose_input = 1.4f;
             else if (run_step_pose_input < -1.4f) run_step_pose_input = -1.4f;
             nv = -run_step_pose_input;
             TF(0x60) = nv * 0.14f;
-            k = hero.motion.unk164 / (frame_time * 5.7f);
+            k = hero.motion.flat_speed / (frame_time * 5.7f);
             if (1.0f < k) k = 1.0f;
             if (k < 0.0f) k = 0.0f;
             TF(0x60) = nv * 0.14f * k;
@@ -54,7 +54,7 @@ void adjust_hero_pose_targets_from_motion(void) {
             TF(0x954) = absolute_float(run_step_pose_input) * 0.35f;
             TF(0xA04) = absolute_float(run_step_pose_input) * 0.2f;
         } else {
-            run_pose_weight = hero.motion.unk188 * 0.5f;
+            run_pose_weight = hero.motion.yaw_error * 0.5f;
             if (0.8f < run_pose_weight) run_pose_weight = 0.8f;
             else if (run_pose_weight < -0.8f) run_pose_weight = -0.8f;
             run_pose_weight = run_pose_weight * absolute_float(run_pose_weight) * 1.25f;
@@ -73,11 +73,11 @@ void adjust_hero_pose_targets_from_motion(void) {
         FUN_L00_0020a1f8(0.015f, 0.08f);
         FUN_L00_0020a210(0.015f, 0.08f);
         FUN_L00_0020a228(0.008f, 0.1f);
-        scaled_pose_input = hero.motion.unk188 * 1.6f;
+        scaled_pose_input = hero.motion.yaw_error * 1.6f;
         if (1.25f < scaled_pose_input) scaled_pose_input = 1.25f;
         else if (scaled_pose_input < -1.25f) scaled_pose_input = -1.25f;
         if (hero.state.current == 0x81) {
-            scaled_pose_input = hero.motion.unk188 * 0.8f;
+            scaled_pose_input = hero.motion.yaw_error * 0.8f;
             if (1.1f < scaled_pose_input) scaled_pose_input = 1.1f;
             else if (scaled_pose_input < -1.1f) scaled_pose_input = -1.1f;
         }
@@ -97,9 +97,9 @@ void adjust_hero_pose_targets_from_motion(void) {
         else if (unclamped_pose_magnitude < -0.2f) TF(0x274) = -0.2f;
         TF(0x270) = absolute_float(scaled_pose_input) * 0.16f;
         if (hero.state.current == 0x81) {
-            if (frame_time * 0.5f < hero.motion.unk164) {
+            if (frame_time * 0.5f < hero.motion.flat_speed) {
                 relative_displacement_angle = fast_subtract_rotations(fast_arc_tan(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
-                motion_correction_scale = hero.motion.unk164 * 3.0f;
+                motion_correction_scale = hero.motion.flat_speed * 3.0f;
                 TF(0x60) = -fast_sin(relative_displacement_angle) * motion_correction_scale;
                 TF(0x64) = fast_cos(relative_displacement_angle) * motion_correction_scale;
                 if (0.43633232f < TF(0x60)) TF(0x60) = 0.43633232f;
@@ -118,7 +118,7 @@ void adjust_hero_pose_targets_from_motion(void) {
         FUN_L00_0020a1f8(0.04f, 0.2f);
         FUN_L00_0020a210(0.04f, 0.2f);
         FUN_L00_0020a228(0.02f, 0.2f);
-        x = hero.motion.unk188;
+        x = hero.motion.yaw_error;
         if (1.4f < x) x = 1.4f;
         else if (x < -1.4f) x = -1.4f;
         TF(0x118) = x * 0.29f;

@@ -1548,14 +1548,14 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         Path_316730 *path;
         float dist;
 
-        segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
-        fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
+        segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
+        fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
         progress->t = fraction;
         progress->idx = segment;
         sample_path(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
         qcopy(follow->pos, camera_goal);
         path = D_L01_001B0C30_316730[path_index];
-        dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560)->nodes[segment].w);
+        dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline)->nodes[segment].w);
         subtract_vector_xyz(delta, &path->nodes[segment + 1], &path->nodes[segment]);
         normalize_vector_xyz(look_target, delta, dist);
         add_vector_xyz(rail_point, &path->nodes[segment], look_target);
@@ -1587,11 +1587,11 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
             range_start = func_001FA898_r(pathB->nodes[previous_path_node_index].w);
             range_end = func_001FA898_r(pathB->nodes[i].w);
             if (range_end < range_start) {
-                if (((Hero *)(((char *)((char *)&hero))))->unk564 >= range_start || ((Hero *)(((char *)((char *)&hero))))->unk564 < range_end) {
+                if (((Hero *)(((char *)((char *)&hero))))->rail_segment >= range_start || ((Hero *)(((char *)((char *)&hero))))->rail_segment < range_end) {
                     break;
                 }
             } else {
-                if (((Hero *)(((char *)((char *)&hero))))->unk564 >= range_start && ((Hero *)(((char *)((char *)&hero))))->unk564 < range_end) {
+                if (((Hero *)(((char *)((char *)&hero))))->rail_segment >= range_start && ((Hero *)(((char *)((char *)&hero))))->rail_segment < range_end) {
                     break;
                 }
             }
@@ -1606,14 +1606,14 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
             lead = pathB->nodes[j].x;
         }
         base = func_001FA898_r(pathB->nodes[j].w);
-        count = ((Hero *)(((char *)((char *)&hero))))->unk564 - base;
+        count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - base;
         if (count < 0) {
             count += pathD->n;
         }
         for (i = 0; i < count; i++) {
             sum += pathD->nodes[(base + i) % pathD->n].w;
         }
-        sum += ((Hero *)(((char *)((char *)&hero))))->unk568;
+        sum += ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
         dist = camera_length * (sum / hero_length);
         node = func_001FA898_r(pathC->nodes[j].w);
         node_fraction = 0.0f;
@@ -1653,9 +1653,9 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
             int hero_segment;
             float hero_fraction;
 
-            hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
-            hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
-            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
+            hero_segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
+            hero_fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
+            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
             FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
         camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
@@ -1677,9 +1677,9 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         int hero_segment;
         float hero_fraction;
 
-        hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
-        hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
-        sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
+        hero_segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
+        hero_fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
+        sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
     normalize_vector_xyz(look_offset, D_L01_001672B0, follow->unk4C);
     add_vector_xyz(path_point, look_offset, look_target);
@@ -1781,7 +1781,7 @@ typedef struct {
 /* One 32-byte entry of D_L01_0015F70C */
 typedef struct {
     u8 pad00[0x10];
-    s32 unk10;     /* 0x10: compared with hero.unk560 */
+    s32 unk10;     /* 0x10: compared with hero.rail_spline */
     u8 pad14[0xC];
 } CamTarget_316030;
 
@@ -1806,7 +1806,7 @@ void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
         if (camera_preset->target < 0) {
             return;
         }
-        if (hero.unk560 == D_L01_0015F70C_316030[camera_preset->target].unk10 && hero.unk570 == 0) {
+        if (hero.rail_spline == D_L01_0015F70C_316030[camera_preset->target].unk10 && hero.rail_off_frames == 0) {
             return;
         }
     }

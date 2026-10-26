@@ -887,7 +887,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         break;
     case TAXI_FOLLOW_RETURN_PATH:
         if (is_hero_on_moby(taxi_moby)) {
-            hero.unk1F2 = 4;
+            hero.jump_lock_timer = 4;
             hero.unk1F4 = 4;
         }
         if (advance_moby_along_rail_path(taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {
@@ -1460,7 +1460,7 @@ void helga_update(struct Moby *helga_moby) {
         tracking = 1;
         if (taxi_dist2(&helga_moby->pos, hero_position) < 8.0f &&
             (hero_state = (struct Hero *)((u8 *)hero_position - 0x80),
-             fast_difference_between_rotations(helga_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - helga_moby->pos.x, hero_state->motion.unkD0.f[1] - helga_moby->pos.y))) <
+             fast_difference_between_rotations(helga_moby->rot.z, taxi_atan2(hero_state->motion.body_center.f[0] - helga_moby->pos.x, hero_state->motion.body_center.f[1] - helga_moby->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)hero_position + 0x80) > 0.01f) {
                 helga_vars->watch_timer = scale_game_frames(120);
@@ -1469,7 +1469,7 @@ void helga_update(struct Moby *helga_moby) {
             }
         } else if (helga_vars->watch_timer) {
             helga_vars->watch_timer = 0;
-            qcopy(&helga_vars->target, &hero.motion.unkD0);
+            qcopy(&helga_vars->target, &hero.motion.body_center);
         }
         if (fast_dec_timer(&helga_vars->target_timer)) {
             float heading;
@@ -1479,7 +1479,7 @@ void helga_update(struct Moby *helga_moby) {
             vec_add(&helga_vars->target, &helga_vars->target, &helga_moby->pos);
         }
         if (helga_vars->watch_timer) {
-            qcopy(scratch_target, &hero.motion.unkD0);
+            qcopy(scratch_target, &hero.motion.body_center);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
@@ -1847,7 +1847,7 @@ void big_al_update(struct Moby *guide_moby) {
         tracking = 1;
         if (taxi_dist2(&guide_moby->pos, hero_position) < 8.0f &&
             (hero_state = (struct Hero *)((u8 *)hero_position - 0x80),
-             fast_difference_between_rotations(guide_moby->rot.z, taxi_atan2(hero_state->motion.unkD0.f[0] - guide_moby->pos.x, hero_state->motion.unkD0.f[1] - guide_moby->pos.y))) <
+             fast_difference_between_rotations(guide_moby->rot.z, taxi_atan2(hero_state->motion.body_center.f[0] - guide_moby->pos.x, hero_state->motion.body_center.f[1] - guide_moby->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)hero_position + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
@@ -1856,7 +1856,7 @@ void big_al_update(struct Moby *guide_moby) {
             }
         } else if (v->watch_timer) {
             v->watch_timer = 0;
-            qcopy(&v->target, &hero.motion.unkD0);
+            qcopy(&v->target, &hero.motion.body_center);
         }
         if (fast_dec_timer(&v->target_timer)) {
             float heading;
@@ -1866,7 +1866,7 @@ void big_al_update(struct Moby *guide_moby) {
             vec_add(&v->target, &v->target, &guide_moby->pos);
         }
         if (v->watch_timer) {
-            qcopy(scratch_target, &hero.motion.unkD0);
+            qcopy(scratch_target, &hero.motion.body_center);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
@@ -2184,7 +2184,7 @@ void update_rail_lift(struct Moby *lift_moby) {
         break;
     case LIFT_FOLLOW_PATH:
         if (is_hero_on_moby(lift_moby)) {
-            hero.unk1F2 = 4;
+            hero.jump_lock_timer = 4;
             hero.unk1F4 = 4;
         }
         if (advance_moby_along_rail_path(lift_moby, lift_vars->path[lift_moby->command], &lift_vars->snd)) {

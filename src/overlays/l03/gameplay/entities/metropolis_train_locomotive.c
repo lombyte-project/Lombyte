@@ -643,7 +643,7 @@ void metropolis_train_locomotive_update(char *moby) {
                 RELEASE_VOICE(data->i108);
                 data->i108 = -1;
                 fade_to_black(scale_game_frames(16));
-                hero.unk20B1 = 1;
+                hero.fall_fade_pending = 1;
                 break;
             }
         } else {

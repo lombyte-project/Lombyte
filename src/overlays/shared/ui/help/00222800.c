@@ -51,7 +51,7 @@ s32 handle_hero_hit(s32 apply_response) {
     if (D_L08_0015F5C4 != 0) {
         return 0;
     }
-    G.unk2280 = 0;
+    G.damage_source_moby = 0;
     hero_moby = (u8 *)G.moby;
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
@@ -64,7 +64,7 @@ s32 handle_hero_hit(s32 apply_response) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
-    G.unk2280 = (struct Moby *)hero_moby_entry->target;
+    G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
@@ -89,7 +89,7 @@ s32 handle_hero_hit(s32 apply_response) {
     }
     switch (G.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
-        mob = (u8 *)G.unk2280;
+        mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
@@ -98,24 +98,24 @@ s32 handle_hero_hit(s32 apply_response) {
         }
         if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.motion.unk120.f[2] = frame_time * 7.0f;
+            G.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
             return 1;
         }
         if (G.state.control_mode == 0x12) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (G.state.control_mode == 0x11) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             if (current_level_index == 0xF || current_level_index == 0x11) {
-                mob = (u8 *)G.unk2280;
+                mob = (u8 *)G.damage_source_moby;
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
                     allocate_hero_voice_for_entry(0x1C, 0);
@@ -123,7 +123,7 @@ s32 handle_hero_hit(s32 apply_response) {
             }
             hero_set_state(0x76, 1);
         } else if (G.state.control_mode == 3) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
                 id = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
@@ -137,7 +137,7 @@ s32 handle_hero_hit(s32 apply_response) {
         frame_time_scale = frame_time;
         xy_response_scale = frame_time_scale * 5.7f;
         z_response_amount = frame_time_scale * 2.4f;
-        if (G.unk12E7 != 0) {
+        if (G.on_magnet_ground != 0) {
             xy_response_scale = 0.0f;
             z_response_amount = frame_time_scale * 1.7f;
         }

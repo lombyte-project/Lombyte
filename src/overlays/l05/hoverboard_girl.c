@@ -277,8 +277,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         if (vector_distance(&moby->position, &hero.motion.pos) < 8.0f &&
             absolute_angle_difference(
                 moby->yaw,
-                angle_from_xy(hero.motion.unkD0.f[0] - moby->position.component[0],
-                              hero.motion.unkD0.f[1] -
+                angle_from_xy(hero.motion.body_center.f[0] - moby->position.component[0],
+                              hero.motion.body_center.f[1] -
                                   moby->position.component[1])) < 1.5707964f) {
             if (vector_length(&hero.motion.displacement) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
@@ -287,7 +287,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             }
         } else if (state->player_look_timer != 0) {
             state->player_look_timer = 0;
-            qcopy(&state->look_target, &hero.motion.unkD0);
+            qcopy(&state->look_target, &hero.motion.body_center);
         }
         if (advance_timer(&state->random_look_timer)) {
             state->random_look_timer = truncate_time(scale_time(random_float(180.0f, 300.0f)));
@@ -297,7 +297,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             add_vector(&state->look_target, &state->look_target, &moby->position);
         }
         if (state->player_look_timer != 0) {
-            qcopy(&target_position, &hero.motion.unkD0);
+            qcopy(&target_position, &hero.motion.body_center);
             rotation_step = 0.03f;
             rotation_limit = 0.3f;
         } else {

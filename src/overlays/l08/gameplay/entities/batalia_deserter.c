@@ -489,7 +489,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
                 FUN_001f9740_c(&watch_data->moving_timer);
         } else if (watch_data->moving_timer) {
             watch_data->moving_timer = 0;
-            qcopy(watch_data->target, hero.motion.unkD0.f);
+            qcopy(watch_data->target, hero.motion.body_center.f);
         }
         if (FUN_001f9740_c(&watch_data->target_timer)) {
             float heading;
@@ -501,7 +501,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             fast_vec_add(watch_data->target, watch_data->target, moby->position);
         }
         if (watch_data->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.03f;
             head_rate = 0.3f;
         } else {

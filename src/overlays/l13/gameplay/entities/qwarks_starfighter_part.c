@@ -1468,9 +1468,9 @@ void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
         }
     }
     if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 8)) != 0) {
-        hero.unk22CB = 0;
+        hero.vent_updraft = 0;
     } else {
-        hero.unk22CB = 1;
+        hero.vent_updraft = 1;
     }
 }
 /* State machine: waits for a linked moby to reach one of a set of states, then pushes states onto linked mobys. */

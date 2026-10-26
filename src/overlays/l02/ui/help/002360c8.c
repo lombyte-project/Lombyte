@@ -42,7 +42,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
     f32 quadratic_roots[6];
     f32 x, y, z;
 
-    switch (hero.unk20B3) {
+    switch (hero.gravity_mode) {
     case HERO_TRAJECTORY_Z_AXIS_ACCELERATION:
         if (target_z < 0.0f) {
             FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, trajectory_parameter);
@@ -66,7 +66,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         }
         break;
     case HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION:
-        qcopy(&position_or_acceleration_vector, &hero.unk270);
+        qcopy(&position_or_acceleration_vector, &hero.ground_normal);
         FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
         FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
         FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, trajectory_parameter);

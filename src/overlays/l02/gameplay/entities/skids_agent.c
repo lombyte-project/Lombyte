@@ -305,8 +305,8 @@ void skids_agent_update(struct Moby *moby) {
         if (moby->prev_seq == 0) {
             look_enabled = 1;
             if (vec_dist(&moby->pos, &hero.motion.pos) < 8.0f &&
-                angle_diff(moby->rot.z, angle_atan2(hero.motion.unkD0.f[0] - moby->pos.x,
-                                                                     hero.motion.unkD0.f[1] - moby->pos.y)) <
+                angle_diff(moby->rot.z, angle_atan2(hero.motion.body_center.f[0] - moby->pos.x,
+                                                                     hero.motion.body_center.f[1] - moby->pos.y)) <
                     1.5707964f) {
                 if (vec_len(&hero.motion.displacement) > 0.01f) {
                     *(s16 *)(data + 0x174) = scale_frames(120);
@@ -315,7 +315,7 @@ void skids_agent_update(struct Moby *moby) {
                 }
             } else if (*(s16 *)(data + 0x174) != 0) {
                 *(s16 *)(data + 0x174) = 0;
-                qcopy(data + 0x160, &hero.motion.unkD0);
+                qcopy(data + 0x160, &hero.motion.body_center);
             }
             if (count_down_16((s16 *)(data + 0x176))) {
                 *(s16 *)(data + 0x176) = float_to_int(scale_time(rand_range(180.0f, 300.0f)));
@@ -325,7 +325,7 @@ void skids_agent_update(struct Moby *moby) {
                 vec_add(data + 0x160, data + 0x160, &moby->pos);
             }
             if (*(s16 *)(data + 0x174) != 0) {
-                qcopy(&target, &hero.motion.unkD0);
+                qcopy(&target, &hero.motion.body_center);
                 rotation_step = 0.04f;
                 rotation_limit = 0.3f;
             } else {
@@ -438,15 +438,15 @@ void skid_mcmarx_update(struct Moby *moby) {
     if (moby->prev_seq == 0) {
         tracking = 1;
         if (vec_dist(&moby->pos, &hero.motion.pos) < 8.0f
-            && angle_diff(moby->rot.z, angle_atan2(hero.motion.unkD0.f[0] - moby->pos.x,
-                                                hero.motion.unkD0.f[1] - moby->pos.y)) < 1.5707964f) {
+            && angle_diff(moby->rot.z, angle_atan2(hero.motion.body_center.f[0] - moby->pos.x,
+                                                hero.motion.body_center.f[1] - moby->pos.y)) < 1.5707964f) {
             if (vec_len(&hero.motion.displacement) > 0.01f)
                 watcher_vars->moving_timer = scale_frames(120);
             else
                 count_down(&watcher_vars->moving_timer);
         } else if (watcher_vars->moving_timer) {
             watcher_vars->moving_timer = 0;
-            qcopy(&watcher_vars->target, &hero.motion.unkD0);
+            qcopy(&watcher_vars->target, &hero.motion.body_center);
         }
         if (count_down(&watcher_vars->target_timer)) {
             f32 heading;
@@ -456,7 +456,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             vec_add(&watcher_vars->target, &watcher_vars->target, &moby->pos);
         }
         if (watcher_vars->moving_timer) {
-            qcopy(&look.target, &hero.motion.unkD0);
+            qcopy(&look.target, &hero.motion.body_center);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {

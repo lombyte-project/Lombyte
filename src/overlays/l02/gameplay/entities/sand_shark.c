@@ -2013,7 +2013,7 @@ void elevator_update(L16PlatformMoby *moby) {
         case ELEVATOR_MOVE_TO_GOAL: {
             float speed;
 
-            if (!test_point_in_transformed_unit_cylinder(&hero.motion.unkD0, elevator_vars->joint)
+            if (!test_point_in_transformed_unit_cylinder(&hero.motion.body_center, elevator_vars->joint)
                 || absolute_float(moby->position[2] - hero.motion.pos.f[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_vars->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_vars->speed, elevator_vars->goal,

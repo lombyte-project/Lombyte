@@ -74,8 +74,8 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
         qcopy(target_output + 0x10, selected_moby + 0x40);
         hero_data = &hero_lui;
         if (selected_moby == ((char *)hero_data->moby)) {
-            qcopy(target_output + 0x20, &hero_data->motion.unkC0);
-            qcopy(target_output + 0x30, &hero_data->motion.unkD0);
+            qcopy(target_output + 0x20, &hero_data->motion.near_ground_point);
+            qcopy(target_output + 0x30, &hero_data->motion.body_center);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;
@@ -185,8 +185,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         qcopy(target_output + 0x10, selected_moby + 0x40);
         hero_data = &hero_lui;
         if (selected_moby == (char *)hero_data->moby) {
-            qcopy(target_output + 0x20, &hero_data->motion.unkC0);
-            qcopy(target_output + 0x30, &hero_data->motion.unkD0);
+            qcopy(target_output + 0x20, &hero_data->motion.near_ground_point);
+            qcopy(target_output + 0x30, &hero_data->motion.body_center);
         } else {
             qcopy(target_output + 0x30, target_output);
             *(float *)(target_output + 0x38) += 0.6f;

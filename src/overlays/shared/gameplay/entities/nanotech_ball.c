@@ -1171,11 +1171,11 @@ void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suctio
         out_suction_origin[0] = suction_origin_offset.x + hero_data.motion.pos.f[0];
         out_suction_origin[1] = suction_origin_offset.y + hero_data.motion.pos.f[1];
     } else if (hero_data.unk22C8 == 1) {
-        *out_suction_yaw = hero_data.unk688;
+        *out_suction_yaw = hero_data.held_pose_yaw;
         *out_suction_pitch = *(f32 *)(cannon_moby + 0x44);
     } else {
-        *out_suction_yaw = hero_data.unk688;
-        *out_suction_pitch = hero_data.unk684;
+        *out_suction_yaw = hero_data.held_pose_yaw;
+        *out_suction_pitch = hero_data.basis_pitch;
     }
 }
 typedef struct {
@@ -2489,8 +2489,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 moby->collision = 0;
             }
             if (distance < record->f98) {
-                ((struct Hero *)D_0013F450_2DDEA0)->unk207C--;
-                ((struct Hero *)D_0013F450_2DDEA0)->unk2078++;
+                ((struct Hero *)D_0013F450_2DDEA0)->suck_cannon_incoming--;
+                ((struct Hero *)D_0013F450_2DDEA0)->sucked_moby_count++;
                 func_L00_002DB6C8_2DDEA0(moby, &work.v[0]);
                 ((struct Hero *)D_0013F450_2DDEA0)->unk2050[record->idx]->flags &= 0xEFFF;
             } else {

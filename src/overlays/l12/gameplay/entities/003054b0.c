@@ -187,7 +187,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                             qcopy(aim_target_position, D_L12_00167240);
                             aim_target_position[2] += random_float_between_c(-1.5f, 0.3f);
                         } else {
-                            qcopy(aim_target_position, &((Hero *)((char *)&hero))->motion.unkD0);
+                            qcopy(aim_target_position, &((Hero *)((char *)&hero))->motion.body_center);
                             aim_target_position[2] += FUN_L00_00257c48(0.0f, 0.5f);
                         }
                         n = D_L12_00161F20 - 3;

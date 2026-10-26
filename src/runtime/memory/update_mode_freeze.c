@@ -101,7 +101,7 @@ void update_mode_freeze(void) {
             moby->collision = 0;
             moby->flags = (u16)(moby->flags | 1);
             noop_main_callback();
-            noop_callback_k(hero.unk1D00, hero.unk1D00 + 0x10, 0, 1);
+            noop_callback_k(hero.saved_pos_rot, hero.saved_pos_rot + 0x10, 0, 1);
             game_mode = 0;
         } else if (controller_state.pressed & PAD_CROSS) {
             game_mode = 0;
@@ -212,12 +212,12 @@ void update_mode_freeze(void) {
                 if (video_mode < 0) {
                     freeze.unk1C = step;
                 } else if (step == 2) {
-                    if (hero.unk880 != (-1)) {
-                        set_animation_parameter(hero.unk880, 0);
-                        hero.unk880 = -1;
+                    if (hero.trick_hud_handle != (-1)) {
+                        set_animation_parameter(hero.trick_hud_handle, 0);
+                        hero.trick_hud_handle = -1;
                     }
                     decrement_resource_counter();
-                    if (scale_game_frames(0x1068) < hero.unk19C) {
+                    if (scale_game_frames(0x1068) < hero.control_mode_timer) {
                         if (current_level_index == 5) {
                             D_0015EE38++;
                         } else if (current_level_index == 0x10) {
@@ -228,8 +228,8 @@ void update_mode_freeze(void) {
                     noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
                 } else {
                     game_mode = 0;
-                    if (hero.unk89A >= 3) {
-                        hero.unk89A = (s16)(((u16)hero.unk89A) - 1);
+                    if (hero.race_lap >= 3) {
+                        hero.race_lap = (s16)(((u16)hero.race_lap) - 1);
                         hero.unk890[0xBC] = 3;
                     }
                 }

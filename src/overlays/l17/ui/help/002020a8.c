@@ -42,13 +42,13 @@ int select_hero_help_value(int allow_slot_item_help) {
         if (hero_for_help_checks->health.hp == 1) {
             return 0x54;
         }
-        if (hero_for_help_checks->unk12E2 != 0) {
+        if (hero_for_help_checks->on_ice_ground != 0) {
             return 0x6E;
         }
         if (allow_slot_item_help == 0) {
             return 0;
         }
-        if (hero_for_help_checks->unk20A8 == 0) {
+        if (hero_for_help_checks->item_anim_active == 0) {
             return 0;
         }
         if (hero_for_help_checks->unk20AA == 0) {
@@ -107,7 +107,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (D_L17_0015F5C4 != 0) {
         return 0;
     }
-    G.unk2280 = 0;
+    G.damage_source_moby = 0;
     hero_moby = (u8 *)G.moby;
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
@@ -120,7 +120,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
-    G.unk2280 = (struct Moby *)hero_moby_entry->target;
+    G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
@@ -145,7 +145,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     }
     switch (G.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
-        mob = (u8 *)G.unk2280;
+        mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
@@ -154,24 +154,24 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         }
         if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.motion.unk120.f[2] = frame_time * 7.0f;
+            G.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
             return 1;
         }
         if (G.state.control_mode == 0x12) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             hero_set_state(0x75, 1);
         } else if (G.state.control_mode == 0x11) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             if (current_level_index == 0xF || current_level_index == 0x11) {
-                mob = (u8 *)G.unk2280;
+                mob = (u8 *)G.damage_source_moby;
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
                     allocate_hero_voice_for_entry(0x1C, 0);
@@ -179,7 +179,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
             }
             hero_set_state(0x76, 1);
         } else if (G.state.control_mode == 3) {
-            mob = (u8 *)G.unk2280;
+            mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
                 id = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
@@ -193,7 +193,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         frame_duration = frame_time;
         xy_scale = frame_duration * 5.7f;
         z_response = frame_duration * 2.4f;
-        if (G.unk12E7 != 0) {
+        if (G.on_magnet_ground != 0) {
             xy_scale = 0.0f;
             z_response = frame_duration * 1.7f;
         }
@@ -228,44 +228,44 @@ void update_hero_smoothing(void) __asm__("FUN_L17_0020e1c0");
 void update_hero_smoothing(void) {
     switch (hero.vehicle_mode) {
     case HERO_VEHICLE_MODE_ON_FOOT:
-        hero.unk228 = 0.8f;
-        hero.unk22C = 0.7f;
-        hero.unk230 = 0.45f;
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.7f;
+        hero.capsule_radius_target = 0.45f;
         break;
     case HERO_VEHICLE_MODE_CLANK:
-        hero.unk228 = 0.59999996f;
-        hero.unk22C = 0.45000002f;
-        hero.unk230 = 0.3f;
+        hero.capsule_top_target = 0.59999996f;
+        hero.capsule_bottom_target = 0.45000002f;
+        hero.capsule_radius_target = 0.3f;
         break;
     case 3:
-        hero.unk228 = 0.8f;
-        hero.unk22C = 0.6f;
-        hero.unk230 = 0.45f;
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.6f;
+        hero.capsule_radius_target = 0.45f;
         break;
     }
     if (hero.state.control_mode == 4) {
-        if (hero.state_timer > hero.unk420 && hero.unk41E == 0)
-            hero.unk22C = hero.unk434;
+        if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
+            hero.capsule_bottom_target = hero.unk434;
     } else if (hero.state.current == HERO_STATE_FALL) {
-        hero.unk22C = 0.5f;
+        hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {
-        hero.unk228 = 0.35000002f;
+        hero.capsule_top_target = 0.35000002f;
     } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
-        hero.unk228 = 0.0f;
-        hero.unk22C = 0.0f;
-    } else if (hero.unk12E2 && hero.grounded_frames) {
-        hero.unk228 = 0.8f;
-        hero.unk22C = 0.9f;
+        hero.capsule_top_target = 0.0f;
+        hero.capsule_bottom_target = 0.0f;
+    } else if (hero.on_ice_ground && hero.grounded_frames) {
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.9f;
     } else if (hero.state.current == HERO_STATE_SINK) {
-        hero.unk230 = 0.8f;
+        hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_211380(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
+        FUN_001f9b80_211380(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_for_smoothing_targets = (struct Hero *)((u8 *)smoothing_state - 0x220);
-        approach_value_211380(hero_for_smoothing_targets->unk228, frame_scale * 0.02f, smoothing_state);
-        approach_value_211380(hero_for_smoothing_targets->unk22C, frame_scale * 0.02f, smoothing_state + 1);
-        FUN_L00_0025b8c0_211380(smoothing_state + 5, smoothing_state + 6, hero_for_smoothing_targets->unk230, frame_scale_sq * 0.02f,
+        approach_value_211380(hero_for_smoothing_targets->capsule_top_target, frame_scale * 0.02f, smoothing_state);
+        approach_value_211380(hero_for_smoothing_targets->capsule_bottom_target, frame_scale * 0.02f, smoothing_state + 1);
+        FUN_L00_0025b8c0_211380(smoothing_state + 5, smoothing_state + 6, hero_for_smoothing_targets->capsule_radius_target, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, frame_time * 4.0f);
     }
 }

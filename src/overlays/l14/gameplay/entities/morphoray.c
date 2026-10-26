@@ -1077,8 +1077,8 @@ void update_flying_car(struct Moby *flying_car_moby) {
                 add_vec_6ee0(&o->pos, &o->pos, &attached_part_offset_component);
                 scale_vec_6ee0(&attached_part_offset_component, &flying_car_moby->rot_row2, flying_car_data->fAC);
                 add_vec_6ee0(&o->pos, &o->pos, &attached_part_offset_component);
-                if ((hero.state.control_mode == 13 && hero.unk964 == o)
-                    || (hero.state.control_mode == 14 && hero.unk994 == o)) {
+                if ((hero.state.control_mode == 13 && hero.grapple_target == o)
+                    || (hero.state.control_mode == 14 && hero.swing_target_moby == o)) {
                     FUN_L14_003135b8_6ee0(flying_car_moby);
                     flying_car_data->fCC = scale_ticks_6ee0(0x1E);
                 } else {
@@ -1224,9 +1224,9 @@ int update_flying_car_path_motion(struct Moby *moby) {
         return 0;
     }
     if (((unsigned)(hero.state.current - 0x25) < 2 && *(int *)(flying_car_data + 0xA0) >= 0 &&
-         hero.unk964 == (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256)) ||
+         hero.grapple_target == (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256)) ||
         (hero.state.control_mode == 0xE && *(int *)(flying_car_data + 0xA0) >= 0 &&
-         hero.unk994 == (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256))) {
+         hero.swing_target_moby == (struct Moby *)(D_L14_0015FFD8_7620 + *(int *)(flying_car_data + 0xA0) * 256))) {
         float lim;
         float s;
         s = *(float *)(flying_car_data + 0xB4) + *(float *)(flying_car_data + 0xB8) * frame_scale_sq;
@@ -1567,13 +1567,13 @@ void update_path_camera(struct UpdateCam *path_camera) {
         path_camera_active = 0;
         mb = D_L14_0015FFD8_5290;
         reset_racer_group_to_hero_path_position((struct Moby *)(mb + *(int *)(rec + 0x50) * 256));
-        hp = (char *)hero.unk560;
-        seg = hero.unk564;
-        tt = hero.unk568;
+        hp = (char *)hero.rail_spline;
+        seg = hero.rail_segment;
+        tt = hero.rail_seg_frac;
         path_step_5290(hp, &path_camera->pos.x, &seg, &tt, 0, 10.0f);
         path_camera->pos.z += 2.0f;
-        seg = hero.unk564;
-        tt = hero.unk568;
+        seg = hero.rail_segment;
+        tt = hero.rail_seg_frac;
         path_step_5290(hp, u, &seg, &tt, 0, 0.0f);
         u[2] += 1.5f;
         sub_5290(t, u, &path_camera->pos);
@@ -1895,14 +1895,14 @@ void update_path_key_camera(char *path_key_camera) {
 
     D_L14_001624B4 = data->st.count;
     D_L14_001624B8 = st->idx;
-    if (hero.unk560 == D_L14_0015F70C_z[rec->p34].id) {
+    if (hero.rail_spline == D_L14_0015F70C_z[rec->p34].id) {
         side = 0;
-    } else if (hero.unk560 == D_L14_0015F70C_z[rec->p38].id) {
+    } else if (hero.rail_spline == D_L14_0015F70C_z[rec->p38].id) {
         side = 1;
     } else {
         side = 2;
     }
-    D_L14_001624C0 = (D_L14_001F6C80[side][hero.unk564] + hero.unk568) / D_L14_001F6C80[side][999];
+    D_L14_001624C0 = (D_L14_001F6C80[side][hero.rail_segment] + hero.rail_seg_frac) / D_L14_001F6C80[side][999];
     if (rec->n32 < 2 && D_L14_001F6C38[rec->n32][side] <= D_L14_001624C0) {
         rec->n32++;
     }
@@ -1915,7 +1915,7 @@ void update_path_key_camera(char *path_key_camera) {
         struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
         struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
 
-        if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(first_linked_moby)->zone].id) {
+        if (hero.rail_spline == D_L14_0015F70C_z[MOBYDATA_5d48(first_linked_moby)->zone].id) {
             first_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 {
@@ -1936,7 +1936,7 @@ void update_path_key_camera(char *path_key_camera) {
                     }
                 }
             }
-        } else if (hero.unk560 == D_L14_0015F70C_z[MOBYDATA_5d48(second_linked_moby)->zone].id) {
+        } else if (hero.rail_spline == D_L14_0015F70C_z[MOBYDATA_5d48(second_linked_moby)->zone].id) {
             second_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 if (random_integer_below(2)) {

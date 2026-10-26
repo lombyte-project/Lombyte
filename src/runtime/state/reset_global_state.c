@@ -5,6 +5,6 @@
 void reset_global_state_fields(void) __asm__("func_00217020");
 
 void reset_global_state_fields(void) {
-    controller_state.unk18E = 0;
-    controller_state.unk190 = 0;
+    controller_state.hist_idx = 0;
+    controller_state.hist_count = 0;
 }

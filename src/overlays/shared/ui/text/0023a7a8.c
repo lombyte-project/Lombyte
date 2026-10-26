@@ -257,7 +257,7 @@ void update_weapon_hud_state(void) {
         }
         hero_state->unk1634 =
             FUN_001ff308_23adb8(0x10, 0xFFFF, reset_numeric_hud_element, FUN_L00_00235ea0_23adb8,
-                                draw_hud_cropped_gauge_panel, &hero_state->unk1630, 200);
+                                draw_hud_cropped_gauge_panel, &hero_state->vehicle_hp, 200);
     } else {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);

@@ -379,7 +379,7 @@ void level_draw_dialog_text(void) {
             first_place_or_record_color = fast_tween_color(D_L00_0015F4F4, D_L00_0015F4F8, color_blend_factor);
             other_place_or_no_record_color = fast_tween_color(D_L00_0015F4FC, D_L00_0015F500, color_blend_factor);
         }
-        if (hero.unk89A < 3) {
+        if (hero.race_lap < 3) {
             draw_outlined_rect(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
                          D_L00_0015F4BC + truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
                          D_L00_0015F4B8 - truncate_float_to_s32((f32)D_L00_0015F4C0 * scale),
@@ -393,23 +393,23 @@ void level_draw_dialog_text(void) {
                          D_L00_0015F4CC - truncate_float_to_s32((f32)D_L00_0015F4D4 * scale),
                          D_L00_0015F4CC + truncate_float_to_s32((f32)D_L00_0015F4D4 * scale), pulse);
             sprintf(line, D_L00_0015F520, get_help_message_text(0x5240));
-            if (hero.unk8C0 == 1) {
+            if (hero.race_position == 1) {
                 sprintf(line, D_L00_0015F528, 1);
-            } else if (hero.unk8C0 == 2) {
+            } else if (hero.race_position == 2) {
                 sprintf(line, D_L00_0015F530, 2);
-            } else if (hero.unk8C0 == 3) {
+            } else if (hero.race_position == 3) {
                 sprintf(line, D_L00_0015F538, 3);
             } else {
-                sprintf(line, D_L00_0015F540, hero.unk8C0);
+                sprintf(line, D_L00_0015F540, hero.race_position);
             }
             line[3] = ' ';
-            if (hero.unk8C0 == 1) {
+            if (hero.race_position == 1) {
                 font_print_center(0x100, D_L00_0015F4DC, first_place_or_record_color, line, -1);
             } else {
                 font_print_center(0x100, D_L00_0015F4DC, other_place_or_no_record_color, line, -1);
             }
             best = freeze_stats_time_ref[(current_level_index ^ 0x10) ? 0 : 1];
-            if (best == hero.unk894) {
+            if (best == hero.race_time_frames) {
                 unit = pal_mode ? 3000 : 3600;
                 per = unit / 60;
                 min = best / unit;
@@ -425,10 +425,10 @@ void level_draw_dialog_text(void) {
                 font_print_center(0x100, D_L00_0015F4DC + 0x30, other_place_or_no_record_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
-            if (record != 0 && record == hero.unk8A8) {
+            if (record != 0 && record == hero.race_score) {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
                 font_print_center(0x100, D_L00_0015F4DC + 0x56, first_place_or_record_color, line, -1);
-                sprintf(line, D_L00_0015F560, hero.unk8A8);
+                sprintf(line, D_L00_0015F560, hero.race_score);
                 font_print_center(0x100, D_L00_0015F4DC + 0x6A, first_place_or_record_color, line, -1);
             } else {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A4));

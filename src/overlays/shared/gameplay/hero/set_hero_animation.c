@@ -350,7 +350,7 @@ void sync_hero_mapped_moby_animation_frames(void) {
     if (animation_sync_target == 0) {
         return;
     }
-    animation_sync_target->f5C = base->unkA94;
+    animation_sync_target->f5C = base->anim_frame_rate;
     animation_sync_target->f54 = *(float *)(((char *)base->moby) + 0x54);
     animation_sync_target->seq[0] = *(unsigned char *)(((char *)base->moby) + 0x51);
     animation_sync_target->seq[1] = *(unsigned char *)(((char *)base->moby) + 0x51);
@@ -422,7 +422,7 @@ void set_hero_animation(int a0, int a1, float t) {
     int o;
     char *e;
 
-    if (g1->unkA98 & 2) {
+    if (g1->anim_flags & 2) {
         *(int *)(obj + 0x54) = 0;
     }
     if (D_0015EDB4_m[1] != 0) {
@@ -451,13 +451,13 @@ void set_hero_animation(int a0, int a1, float t) {
     g2 = &hero;
     g2->anim_speed = 1.0f;
     if (t > 0.0f) {
-        g2->unkA94 = 1.0f / t;
+        g2->anim_frame_rate = 1.0f / t;
         *(float *)(obj + 0x54) = 0.0f;
-        g2->unkAA0 = -1;
+        g2->anim_blend_curve = -1;
     } else {
-        g2->unkA94 = 1.0f;
-        g2->unkAA0 = truncate_float_to_s32(-t) - 1;
-        g2->unkAA4 = 0;
+        g2->anim_frame_rate = 1.0f;
+        g2->anim_blend_curve = truncate_float_to_s32(-t) - 1;
+        g2->anim_blend_step = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
     clear_hero_queued_animation();
@@ -465,9 +465,9 @@ void set_hero_animation(int a0, int a1, float t) {
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) =
         *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
-    g3->unkA9C = 1;
+    g3->anim_changing = 1;
     if (t < 0.0f) {
-        t = *(int *)((char *)&D_L00_0015F6E0 + g3->unkAA0 * 4);
+        t = *(int *)((char *)&D_L00_0015F6E0 + g3->anim_blend_curve * 4);
     }
     if (g3->vehicle_mode == 0) {
         blend_hero_slot3_mapped_animation_pair(a0, a1, t);
@@ -497,23 +497,23 @@ void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
    there. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232E60), where it is exact; names translated to the US level program. */
 
-/* Stores bank and seq at &hero.unkAB0 when seq is below the current bank count. */
+/* Stores bank and seq at &hero.anim_loop_frame when seq is below the current bank count. */
 void FUN_L00_002325e0(int bank, int seq) {
     if (bank >= 0) {
         struct Hero *base = &hero;
         AnimState *hero_moby = ((AnimState *)base->moby);
 
         if (seq < hero_moby->model->banks[hero_moby->bank[1]]->count) {
-            base->unkAB0 = bank;
-            base->unkAB4 = seq;
+            base->anim_loop_frame = bank;
+            base->queued_anim_frame = seq;
         }
     }
 }
 /* Sets the word at 0xAB0 of hero to -1 and clears the one at 0xAB8. */
 void clear_hero_queued_animation(void) {
     struct Hero *hero_base = &hero;
-    hero_base->unkAB0 = -1;
-    hero_base->unkAB8 = 0;
+    hero_base->anim_loop_frame = -1;
+    hero_base->queued_frame_request = 0;
 }
 #define NOT_SDA
 
@@ -524,12 +524,12 @@ void clear_hero_queued_animation(void) {
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
-/* Stores id at &hero.unkAB8; -1 stands for 5 frames. */
+/* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
 void FUN_L00_00232640(int id) {
     if (id == -1) {
         id = scale_game_frames(5);
     }
-    hero.unkAB8 = id;
+    hero.queued_frame_request = id;
 }
 #include "eetypes.h"
 
@@ -561,7 +561,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
     f32 trajectory_solver_outputs[6];
     f32 x, y, z;
 
-    switch (hero.unk20B3) {
+    switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         if (target_height < 0.0f) {
             FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
@@ -585,7 +585,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
         }
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        qcopy(&collision_start_or_gravity_vector, &hero.unk270);
+        qcopy(&collision_start_or_gravity_vector, &hero.ground_normal);
         FUN_001f9bf8_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
         FUN_001f9a68_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
         FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
@@ -729,7 +729,7 @@ void FUN_L00_002330d0(void) {
         }
     }
     blk3 = &hero;
-    if (blk3->unk22D8 != 0) {
+    if (blk3->pack_disabled != 0) {
         hero_flag_target = *(char * *)&blk3->items[3].moby;
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
@@ -836,11 +836,11 @@ float compute_hero_ground_aligned_heading(void) {
     FUN_001fa050_002332d0(heading_rotation_matrix, &hero.motion.rot);
     P = &hero;
     FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
-    if (P->unk270.f[0] != 0.0f || P->unk270.f[1] != 0.0f) {
-        y_alignment_reference_vector.q = P->unk270.q;
+    if (P->ground_normal.f[0] != 0.0f || P->ground_normal.f[1] != 0.0f) {
+        y_alignment_reference_vector.q = P->ground_normal.q;
         FUN_001f99f8_002332d0(&z_rotation_angles);
         FUN_001f99f8_002332d0(&y_rotation_angles);
-        z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->unk270.f[0], P->unk270.f[1]);
+        z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->ground_normal.f[0], P->ground_normal.f[1]);
         FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
         FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
         FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, heading_rotation_matrix);
@@ -867,7 +867,7 @@ int resolve_hero_gravity_mode(void) {
     int return_value = base->unk308;
 
     if (state == 0x3F || state == 0x71 || state == 0x70 ||
-        (base->unk12E7 != 0 && D_0013D4DC[0] != 0 && state == 0 &&
+        (base->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
          base->air_frames.s < scale_ticks(4))) {
         return_value = 1;
     }
@@ -882,17 +882,17 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     struct Hero *hero_base = &hero;
     V002334d0 offset_vector;
-    switch (hero_base->unk20B3) {
+    switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         out[2] = in[2] - k;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        FUN_001f9bf8_002334d0(&offset_vector, &hero_base->unk270, -k);
+        FUN_001f9bf8_002334d0(&offset_vector, &hero_base->ground_normal, -k);
         FUN_001f9a10_002334d0(out, in, &offset_vector);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         if (hero_base->state.current == 0x3E && hero_base->air_frames.s == 0) {
-            FUN_001f9bf8_002334d0(&offset_vector, &hero_base->unk270, -k);
+            FUN_001f9bf8_002334d0(&offset_vector, &hero_base->ground_normal, -k);
         } else {
             FUN_001f9bf8_002334d0(&offset_vector, &hero.gravity_dir, k);
         }
@@ -923,7 +923,7 @@ void transform_hero_polar_offset_to_world(float *out, float radius, float angle,
     out[1] = fast_sin(angle) * radius;
     base = &hero;
     out[2] = z;
-    transform_vector(out, out, base->unk0);
+    transform_vector(out, out, base->rot_matrix);
     add_vector_xyz(out, out, &base->motion.pos);
 }
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
@@ -942,7 +942,7 @@ void transform_hero_local_offset_to_world(float *out, float x, float y, float z)
     out[0] = x;
     out[1] = y;
     out[2] = z;
-    transform_vector(out, out, base->unk0);
+    transform_vector(out, out, base->rot_matrix);
     add_vector_xyz(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
@@ -977,7 +977,7 @@ void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset
     struct Hero *hero_base = &hero;
     Mtx_00233708 moby_rotation_matrix;
     Vec4_00233708 offset_vector;
-    switch (hero_base->unk20B3) {
+    switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
         out->x += FUN_001f9dc8_00233708(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
@@ -1010,7 +1010,7 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
     M00233810 moby_rotation_matrix;
     V00233810 offset_vector;
-    switch (hero_base->unk20B3) {
+    switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         qcopy(out, in);
         out[2] += z;
@@ -1038,13 +1038,13 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
     struct Hero *base = &hero;
     float gravity_axis_projection[4] __attribute__((aligned(16)));
 
-    switch (base->unk20B3) {
+    switch (base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         qcopy(flattened_vector, input_vector);
         flattened_vector[2] = 0.0f;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        fast_vec_normalize(gravity_axis_projection, &base->unk270, 1.0f);
+        fast_vec_normalize(gravity_axis_projection, &base->ground_normal, 1.0f);
         scale_vector_xyz(gravity_axis_projection, gravity_axis_projection, dot_vectors_xyz(gravity_axis_projection, input_vector));
         subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
         break;
@@ -1072,7 +1072,7 @@ float gravity_length_xy(float *input_vector) {
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
-    switch (base->unk20B3) {
+    switch (base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         return vector_length_xy(input_vector);
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
@@ -1100,7 +1100,7 @@ float gravity_z(float *input_vector) {
     float gravity_axis_rotation_matrix[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
 
-    switch (base->unk20B3) {
+    switch (base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         return input_vector[2];
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
@@ -1118,16 +1118,16 @@ void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
-    switch (hero_base->unk20B3) {
+    switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         qcopy(out, in);
         out[2] = z;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        FUN_001f9d20_00233b20(out, in, hero_base->unk40);
+        FUN_001f9d20_00233b20(out, in, hero_base->inv_rot_matrix);
         out[2] = z;
-        FUN_001f9d20_00233b20(out, out, hero_base->unk0);
+        FUN_001f9d20_00233b20(out, out, hero_base->rot_matrix);
         break;
     }
 }
@@ -1149,15 +1149,15 @@ void set_gravity_relative_vector_length_xy(float *output_vector, float *input_ve
 void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) {
     struct Hero *base = &hero;
 
-    switch (base->unk20B3) {
+    switch (base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         set_vector_length_xy(output_vector, input_vector, z);
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        transform_vector(output_vector, input_vector, base->unk40);
+        transform_vector(output_vector, input_vector, base->inv_rot_matrix);
         set_vector_length_xy(output_vector, output_vector, z);
-        transform_vector(output_vector, output_vector, base->unk0);
+        transform_vector(output_vector, output_vector, base->rot_matrix);
         break;
     }
 }
@@ -1180,7 +1180,7 @@ float predict_hero_trajectory_z(float *initial_position, float *initial_velocity
     float step_count_float;
     float predicted_z;
 
-    switch (hero.unk20B3) {
+    switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         step_count = truncate_float_to_s32(initial_velocity[2] / step);
         step_count_float = convert_integer_to_float(step_count);
@@ -1214,7 +1214,7 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
     struct Hero *hero_base = &hero;
     V00233d30 gravity_frame_vector;
     f32 xy_length, z;
-    switch (hero_base->unk20B3) {
+    switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         xy_length = FUN_001f9b20_00233d30(input_vector);
         z = input_vector[2];
@@ -1222,7 +1222,7 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         qcopy(&gravity_frame_vector, input_vector);
-        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &hero_base->unk40);
+        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &hero_base->inv_rot_matrix);
         xy_length = FUN_001f9b20_00233d30(&gravity_frame_vector);
         z = gravity_frame_vector.f[2];
     call:
@@ -1292,8 +1292,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void request_hero_target_pose(void *source_position, float f, int state_entry_option) __asm__("FUN_L00_00233ee8");
 
 void request_hero_target_pose(void *source_position, float f, int state_entry_option) {
-    qcopy(&hero.unk1640, source_position);
-    hero.unk1640.f[3] = f;
+    qcopy(&hero.target_pose, source_position);
+    hero.target_pose.f[3] = f;
     hero.unk1650 = state_entry_option;
     if ((unsigned)(hero.state.current - 0x65) >= 3) {
         hero_set_state(0x65, 1);
@@ -1547,8 +1547,8 @@ void FUN_L00_002347c0(void);
 void FUN_L00_002347c0(void) {
     struct Hero *base = &hero;
 
-    if (resolve_point_path_segment_clearance(base->unk22DA, &base->motion.pos, &base->motion.pos,
-                         base->unk234) != 0) {
+    if (resolve_point_path_segment_clearance(base->path_constrain_pending, &base->motion.pos, &base->motion.pos,
+                         base->capsule_radius) != 0) {
         base->unk1F6 = 4;
     }
 }
@@ -1743,7 +1743,7 @@ void try_reposition_hero_on_nearby_ground(void) {
     Vec4_00234d40 candidate_ground_position;
     struct Hero *hero_base = &hero;
     Vec4_00234d40 *pos = (Vec4_00234d40 *)&hero_base->motion.pos;
-    FUN_001f9a68_00234d40(&candidate_ground_position, hero_base->unk0, -0.75f);
+    FUN_001f9a68_00234d40(&candidate_ground_position, hero_base->rot_matrix, -0.75f);
     FUN_001f9a10_00234d40(&candidate_ground_position, &candidate_ground_position, pos);
     candidate_ground_position.z += 0.5f;
     candidate_ground_position.z = probe_ground_height(&candidate_ground_position, 0, 0.5f);

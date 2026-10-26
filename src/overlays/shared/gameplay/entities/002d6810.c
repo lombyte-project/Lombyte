@@ -357,9 +357,9 @@ void electric_water_update(struct Moby *moby) {
             theta = random_angle_radians();
             phi = random_angle_radians();
             build_spherical_offset(&vars->bolt_aim, radius, theta, phi);
-            FUN_L00_001ff290(unused_vector_argument, &vars->bolt_aim, &hero.motion.unkD0);
+            FUN_L00_001ff290(unused_vector_argument, &vars->bolt_aim, &hero.motion.body_center);
             vars->bolt_end = vars->bolt_aim;
-            vars->bolt_start = hero.motion.unkD0.q;
+            vars->bolt_start = hero.motion.body_center.q;
             initialize_electric_water_bolt_effect((char *)moby);
             update_electric_water_bolt_effect(moby);
             enqueue_callback_list_1(draw_electric_water_bolt_effect, moby);

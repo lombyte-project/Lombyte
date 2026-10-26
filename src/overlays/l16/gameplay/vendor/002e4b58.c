@@ -169,7 +169,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
                 add_vector_xyz(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
             hero_state = &hero;
-            *(unsigned short *)&hero_state->unk22DA = *(unsigned short *)(data + 0xa0);
+            *(unsigned short *)&hero_state->path_constrain_pending = *(unsigned short *)(data + 0xa0);
         }
     }
 }

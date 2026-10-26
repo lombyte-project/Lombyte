@@ -1815,7 +1815,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         if (moby->f53 == 10 && (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
                                 is_value_within_interpolated_window((char *)moby, 16.0f) != 0)) {
-            qcopy(position_and_displacement_scratch, hero.motion.unkC0.f);
+            qcopy(position_and_displacement_scratch, hero.motion.near_ground_point.f);
             if (absolute_float(position_and_displacement_scratch[2] - boss_data->f3C0[2]) < 5.0f) {
                 if ((float)moby->f50 < 15.0f) {
                     moby_point_position(moby, 2, v1);
@@ -2401,7 +2401,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             fire = 1;
         }
         if (hero.state.control_mode == 0xF) {
-            int *list = ((int *)hero.unk560);
+            int *list = ((int *)hero.rail_spline);
 
             if (vector_distance(hero.motion.pos.f, (char *)list + *list * 16) < 3.0f) {
                 fire = 1;
@@ -2615,7 +2615,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         draw_trail(position_and_displacement_scratch, position_and_displacement_scratch, position_direction_and_rotation_scratch, 600000.0f, 0.0f);
     }
     if (boss_data->f34C > 1) {
-        hero.unk5D8 = (struct Moby *)moby;
+        hero.grind_look_moby = (struct Moby *)moby;
     }
     qcopy(moby->f10, boss_data->f3C0);
     slow = 0.3f;

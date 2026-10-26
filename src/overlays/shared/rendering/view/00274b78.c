@@ -72,8 +72,8 @@ int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
         qcopy(target_out + 0x10, selected_entity + 0x40);
         hero = &hero_lui;
         if (selected_entity == ((char *)hero->moby)) {
-            qcopy(target_out + 0x20, &hero->motion.unkC0);
-            qcopy(target_out + 0x30, &hero->motion.unkD0);
+            qcopy(target_out + 0x20, &hero->motion.near_ground_point);
+            qcopy(target_out + 0x30, &hero->motion.body_center);
         } else {
             qcopy(target_out + 0x30, target_out);
             *(float *)(target_out + 0x38) += 0.6f;

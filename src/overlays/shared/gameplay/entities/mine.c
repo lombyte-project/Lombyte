@@ -1193,7 +1193,7 @@ unsigned char *spawn_bomb(int owner, void *spawn_position) {
         *(short *)(v + 0x6A) = 0;
         *(int *)(v + 0x60) = 0;
         hero_context = &hero;
-        *(float *)(v + 0x6C) = FUN_001f9e90_2ace70(hero_context->unk670, hero_context->unk674);
+        *(float *)(v + 0x6C) = FUN_001f9e90_2ace70(hero_context->facing_x, hero_context->facing_y);
         *(int *)(v + 0x64) = 0;
         qcopy(bomb_moby + 0x10, spawn_position);
         FUN_001f99f8_2ace70(v);
@@ -1254,15 +1254,15 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
                 *(OvlQuad *)direction = *(OvlQuad *)working;
             }
             {
-                float heading = fast_arc_tan(hero.unk670, hero.unk674);
+                float heading = fast_arc_tan(hero.facing_x, hero.facing_y);
                 float toward = fast_arc_tan(direction[0] - hero.motion.pos.f[0],
                                              direction[1] - hero.motion.pos.f[1]);
                 angle = fast_difference_between_rotations(heading, toward);
             }
             if (angle > 1.5707964f) {
-                working[0] = fast_cos(fast_arc_tan(hero.unk670, hero.unk674)) *
+                working[0] = fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y)) *
                             vector_distance(&hero.motion.pos, direction) * 0.5f;
-                angle = fast_sin(fast_arc_tan(hero.unk670, hero.unk674));
+                angle = fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
                 working[1] = angle * vector_distance(&hero.motion.pos, direction) * 0.5f;
                 working[2] = 0.0f;
                 add_vector_xyz(desired, working, &hero.motion.pos);
@@ -1335,9 +1335,9 @@ int predict_throw_landing(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) {
     qcopy(&previous, &thrown_moby->pos);
     if (thrown_moby->state == 0) {
         position.f[0] = fast_cos(fast_add_rotations(-0.361968f,
-                             fast_arc_tan(hero.unk670, hero.unk674))) * 0.859039f;
+                             fast_arc_tan(hero.facing_x, hero.facing_y))) * 0.859039f;
         position.f[1] = fast_sin(fast_add_rotations(-0.361968f,
-                             fast_arc_tan(hero.unk670, hero.unk674))) * 0.859039f;
+                             fast_arc_tan(hero.facing_x, hero.facing_y))) * 0.859039f;
         position.f[2] = 0.0f;
         add_vector_xyz(&position, &position, &hero.motion.pos);
         position.f[2] += 0.49082f;

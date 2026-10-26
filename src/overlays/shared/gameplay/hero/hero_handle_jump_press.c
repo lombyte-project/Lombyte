@@ -35,7 +35,7 @@ s32 pick_idle_fidget(s32 *index) {
     if (hero.health.hp == 1) {
         *index = 4;
         if (D_L00_00179AB0 != 0) return 0;
-        if (!(hero.unkA98 & 2)) return 0;
+        if (!(hero.anim_flags & 2)) return 0;
         return random_float_between(0.0f, 1.0f) < 0.33f;
     }
     i = 0;
@@ -54,7 +54,7 @@ s32 pick_idle_fidget(s32 *index) {
             if (current_level_index != 12) continue;
             if (hero_slot_item_id(0) == 23) continue;
             /* Room for it: nothing in the 8 units above the hero. */
-            qcopy(startp, &hero.motion.unkD0);
+            qcopy(startp, &hero.motion.body_center);
             qcopy(endp, startp);
             end.f[2] += 8.0f;
             if (FUN_L00_001efc70(startp, endp, 2, hero.moby, 0)) continue;
@@ -138,7 +138,7 @@ void update_hero_locomotion_state(void) {
         *(s32 *)(hero_stop_idle_base + 0x2084) == 0x10) {
         if (hero_set_state(HERO_STATE_STOP, 0)) {
             FUN_L00_002323b8_002293a8(5, 0, -1.0f);
-            FUN_L00_0025f730_002293a8(&hero.motion.unk150, frame_time * 5.0f);
+            FUN_L00_0025f730_002293a8(&hero.motion.momentum, frame_time * 5.0f);
         }
         return;
     }
@@ -184,25 +184,25 @@ int hero_handle_jump_press(void) {
     if (FUN_001f96f8_229660(6) < hero.state_timer) {
         if (!FUN_L00_00266d60_229660(0x40, jump_press_history_limit, 0))
             return 0;
-        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.unk22D8 == 0) {
-            if ((2.5f < hero.wall_probe_distance || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
-                frame_time * 0.9f < hero.motion.unk168) {
+        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.pack_disabled == 0) {
+            if ((2.5f < hero.wall_probe_distance || hero.wall_normal_pitch < 0.7853982f) && 0.7f < hero.stick_magnitude &&
+                frame_time * 0.9f < hero.motion.forward_speed) {
                 next_state = 0xA;
                 goto found;
             }
         }
-        if (FUN_L00_0020d498_229660(3) == 3 && hero.unk22D8 == 0 && 0.7f < hero.unk229C &&
-            (2.5f < hero.wall_probe_distance || hero.unk254) && frame_time * 0.9f < hero.motion.unk168) {
-            if (hero.unk1B8)
+        if (FUN_L00_0020d498_229660(3) == 3 && hero.pack_disabled == 0 && 0.7f < hero.stick_magnitude &&
+            (2.5f < hero.wall_probe_distance || hero.wall_probe_moby_in_class_range) && frame_time * 0.9f < hero.motion.forward_speed) {
+            if (hero.long_jump_lockout)
                 return 1;
             next_state = 0x10;
             goto found;
         }
-        if (FUN_L00_0020d498_229660(3) == 3 && hero.unk22D8 == 0) {
+        if (FUN_L00_0020d498_229660(3) == 3 && hero.pack_disabled == 0) {
             next_state = 0xD;
             goto found;
         }
-        if (FUN_L00_0020d498_229660(3) == 2 && hero.unk22D8 == 0 && D_0013D4C2_229660) {
+        if (FUN_L00_0020d498_229660(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_229660) {
             next_state = 0xF;
             goto found;
         }
@@ -231,15 +231,15 @@ int check_hero_forward_collision_height(void) {
     struct Hero *hero_ptr = &hero;
     V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;
-    if (hero_ptr->motion.unk164 < hero_ptr->unk234 / (float)FUN_001f96f8_00229910(20))
+    if (hero_ptr->motion.flat_speed < hero_ptr->capsule_radius / (float)FUN_001f96f8_00229910(20))
         return 0;
     if (0.52359879f < fast_difference_between_rotations(angle_atan2(hero_ptr->motion.displacement.f[0],
                                                                   hero_ptr->motion.displacement.f[1]),
                                             hero_ptr->motion.rot.f[2]))
         return 0;
     qcopy(&collision_line_start, &hero_ptr->motion.pos);
-    collision_line_start.f[0] += fast_cos(hero_ptr->motion.rot.f[2]) * hero_ptr->unk234 * 0.75f;
-    collision_line_start.f[1] += fast_sin(hero_ptr->motion.rot.f[2]) * hero_ptr->unk234 * 0.75f;
+    collision_line_start.f[0] += fast_cos(hero_ptr->motion.rot.f[2]) * hero_ptr->capsule_radius * 0.75f;
+    collision_line_start.f[1] += fast_sin(hero_ptr->motion.rot.f[2]) * hero_ptr->capsule_radius * 0.75f;
     qcopy(&collision_line_end, &collision_line_start);
     collision_line_start.f[2] += 0.47f;
     collision_line_end.f[2] -= 1.0f;
@@ -266,10 +266,10 @@ s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 s32 try_start_hero_item_idle_animation(void) {
     struct Hero *hero_ptr = &hero;
     s32 id, k;
-    if (hero_ptr->unk20A8 == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)
+    if (hero_ptr->item_anim_active == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)
         return 0;
     id = hero_slot_item_id(0);
-    if (id != hero_ptr->unk2298) {
+    if (id != hero_ptr->item_anim_item_id) {
         cancel_hero_item_animation();
         return 0;
     }
@@ -277,8 +277,8 @@ s32 try_start_hero_item_idle_animation(void) {
     if (hero_set_state(HERO_STATE_IDLE, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
-    if (((s32)hero_ptr->unkD08[0]) != 0)
+    if (((s32)hero_ptr->held_item_anim_blend[0]) != 0)
         hero_ptr->unkD14 = 1;
-    hero_ptr->unk2294 = k;
+    hero_ptr->item_hold_anim = k;
     return 1;
 }

@@ -122,11 +122,11 @@ void update_trick_combo_hud(HudCounter *element) {
             state_bytes[1]--;
         }
         flag_source = &hero;
-        D_L05_0015FAD8 = flag_source->unk6E0[4];
+        D_L05_0015FAD8 = flag_source->tricks_landed[4];
         {
             int k;
             for (k = 0; k < 4; k++) {
-                D_L05_0015FAE0[k] = flag_source->unk6E0[k];
+                D_L05_0015FAE0[k] = flag_source->tricks_landed[k];
             }
         }
         player = &hero;
@@ -141,10 +141,10 @@ void update_trick_combo_hud(HudCounter *element) {
         }
         D_L05_0015FB00 = 0;
         player->unk70C = 0;
-        player->unk6E0[4] = 0;
+        player->tricks_landed[4] = 0;
         {
             int k;
-            s32 *reset_slot = &player->unk6E0[3];
+            s32 *reset_slot = &player->tricks_landed[3];
             for (k = 3; k >= 0; k--) {
                 *reset_slot-- = 0;
             }
@@ -189,10 +189,10 @@ void update_trick_combo_hud(HudCounter *element) {
         } else if (state_bytes[2] == 3 && state_bytes[0] == scale_game_frames(0x6E)) {
             s32 points = D_L05_0015FB00;
             struct Hero *player = &hero;
-            player->unk8A8 += points;
-            player->unk864 += points * 5;
-            if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < player->unk864) {
-                player->unk864 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+            player->race_score += points;
+            player->boost_frames += points * 5;
+            if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < player->boost_frames) {
+                player->boost_frames = (s32)((f32)scale_game_frames(0x11) * 60.0f);
             }
         }
         state_bytes[0]--;
@@ -345,7 +345,7 @@ s32 draw_trick_combo_hud(char *element) {
     frame_icon = get_icon_frame(0x7558, 0);
     draw_hud_sprite(frame_icon, x, y, 0x100, 0x40, 0x80);
     player = &hero;
-    warning_timer = player->unk8AE;
+    warning_timer = player->off_course_frames;
     if (scale_game_frames(0x78) < warning_timer) {
         blink_period = scale_game_frames(0x3C);
         pulse = convert_integer_to_float(frame_number % blink_period) / (f32)blink_period;

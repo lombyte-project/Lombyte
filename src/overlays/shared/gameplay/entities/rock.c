@@ -120,8 +120,8 @@ void update_rail_hero_motion(struct Moby *rail_moby) {
     }
     if (end == 0) {
         fast_vec_sub(&rail_step_delta, &pt, &best_pt);
-        hero.unk9D4 = fast_arc_tan(vector_length_xy(&rail_step_delta), rail_step_delta.f[2]);
-        hero.unk9D0 = fast_arc_tan(rail_step_delta.f[0], rail_step_delta.f[1]);
+        hero.rail_ride_pitch = fast_arc_tan(vector_length_xy(&rail_step_delta), rail_step_delta.f[2]);
+        hero.rail_yaw = fast_arc_tan(rail_step_delta.f[0], rail_step_delta.f[1]);
         rail_step_delta.i[2] = 0;
         if (hero.unk9DC < rail_vars->speed) {
             approach_value(&hero.unk9DC, rail_vars->speed, frame_time_sq * 6.0f);
@@ -135,25 +135,25 @@ void update_rail_hero_motion(struct Moby *rail_moby) {
         rate = frame_time * 5.0f;
         pull.f[2] = 0.0f;
         drag = -vector_length_xy(&pull);
-        vendor_spring(&drag, 0.0f, &hero.unk9E0, frame_scale_sq * 0.008f, frame_scale_sq * 0.3f, rate);
+        vendor_spring(&drag, 0.0f, &hero.rail_pull_step, frame_scale_sq * 0.008f, frame_scale_sq * 0.3f, rate);
         {
             f32 horizontal_pull_distance = fast_vec_length(&pull);
-            if (horizontal_pull_distance < hero.unk9E0) {
-                hero.unk9E0 = horizontal_pull_distance;
+            if (horizontal_pull_distance < hero.rail_pull_step) {
+                hero.rail_pull_step = horizontal_pull_distance;
             }
-            if (hero.unk9E0 < horizontal_pull_distance) {
-                fast_vec_normalize(&pull, &pull, hero.unk9E0);
+            if (hero.rail_pull_step < horizontal_pull_distance) {
+                fast_vec_normalize(&pull, &pull, hero.rail_pull_step);
             }
         }
         fast_vec_add(&hero.motion.platform_delta, &hero.motion.platform_delta, &pull);
         hero.motion.platform_delta.f[3] = 0.0f;
-        qcopy(&hero.motion.unk150, &hero.motion.platform_delta);
+        qcopy(&hero.motion.momentum, &hero.motion.platform_delta);
         if (hero.unk1E0 < scale_game_frames(30)) {
             hero.unk1E0 = scale_game_frames(30);
         }
     } else {
-        fast_vec_scale(&hero.motion.unk150, &hero.motion.unk150, frame_scale * -0.0099999905f + 1.0f);
-        qcopy(&hero.motion.platform_delta, &hero.motion.unk150);
+        fast_vec_scale(&hero.motion.momentum, &hero.motion.momentum, frame_scale * -0.0099999905f + 1.0f);
+        qcopy(&hero.motion.platform_delta, &hero.motion.momentum);
         hero.motion.platform_delta.i[3] = 0;
     }
 }
@@ -1013,7 +1013,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 tick_countdown_32(&plumber_vars->moving_timer);
         } else if (plumber_vars->moving_timer) {
             plumber_vars->moving_timer = 0;
-            qcopy(plumber_vars->target, hero.motion.unkD0.f);
+            qcopy(plumber_vars->target, hero.motion.body_center.f);
         }
         if (tick_countdown_32(&plumber_vars->target_timer)) {
             float heading;
@@ -1024,7 +1024,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
             add_vector_xyz(plumber_vars->target, plumber_vars->target, plumber_moby->position);
         }
         if (plumber_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.unkD0.f);
+            qcopy(scratch.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
@@ -1438,7 +1438,7 @@ void gold_bolt_update(struct Moby *moby) {
             }
         }
         hero_ptr = &hero;
-        if (hero_ptr->unkA98 & 2) {
+        if (hero_ptr->anim_flags & 2) {
             set_hero_animation(scale_game_frames(30), 0, 0);
         }
         if (moby->seq != 0 || !tick_countdown_32(&vars->timer)) {

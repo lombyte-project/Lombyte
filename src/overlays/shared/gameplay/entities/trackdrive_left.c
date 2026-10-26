@@ -639,7 +639,7 @@ void tresspasser_pad_update(Moby *moby) {
                     func_0022ED80_2D9F08(1, 0, moby);
                 }
             }
-        } else if (D_0013F450_2D9F08.unkA98 & 2) {
+        } else if (D_0013F450_2D9F08.anim_flags & 2) {
             func_L00_00232C10_2D9F08(0x58, 0, func_001F9850_2D9F08(6));
         }
         if (i != 12) {
@@ -653,7 +653,7 @@ void tresspasser_pad_update(Moby *moby) {
         }
         break;
     case 3:
-        if (D_0013F450_2D9F08.unkA98 & 2) {
+        if (D_0013F450_2D9F08.anim_flags & 2) {
             if (moby->mission != 0xFF) {
                 ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);

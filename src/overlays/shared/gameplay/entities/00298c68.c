@@ -34,7 +34,7 @@ void start_indexed_disc_stream(s32 i) {
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
         hero_respawn();
-    } else if (hero_ptr->unk20B1 == 0) {
+    } else if (hero_ptr->fall_fade_pending == 0) {
         prepare_movie_playback(a, b, game_language);
     }
 }
