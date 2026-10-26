@@ -518,8 +518,15 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L01_002370b8");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_JUMP_WITH_SAVED_YAW_VELOCITY_COMPONENTS = 0xC,
+        HERO_STATE_JUMP_WITH_DELAYED_TRAIL_UPDATE = 0xD,
+        HERO_STATE_JUMP_WITH_SAVED_BASIS_DIRECTION = 0x11,
         HERO_STATE_JUMP_WITH_AIR_CONTROL_SPEED_CAP = 0x12,
+        HERO_STATE_BRAKE_WITH_ITEM_DIRECTION_TURNING = 0x17,
+        HERO_STATE_JUMP_WITH_ANIMATION_DRIVEN_FORWARD_SPEED = 0x1C,
+        HERO_STATE_BRAKE_WITH_CAMERA_ALIGNED_LOOK = 0x1E,
         HERO_STATE_DECELERATE_WITH_OPTIONAL_TARGET_HEADING = 0x23,
+        HERO_STATE_MOTION_WITH_COMPLETED_ANIMATION_IDLE_RECOVERY = 0x30,
         HERO_STATE_STEER_FROM_PLATFORM_DELTA_WITH_FORCED_DESCENT = 0x31,
         HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
         HERO_STATE_ZERO_GROUND_SPEED_WITH_WATER_BOBBING = 0x37,
@@ -549,9 +556,9 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
-    case 0x17:
+    case HERO_STATE_BRAKE_WITH_ITEM_DIRECTION_TURNING:
     case 0x1D:
-    case 0x1E:
+    case HERO_STATE_BRAKE_WITH_CAMERA_ALIGNED_LOOK:
     case 0x1F:
     case HERO_STATE_DYING:
     case 0x70:
@@ -1150,7 +1157,7 @@ void update_hero_motion_for_current_state(void) {
         clip_hero_horizontal_velocity(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x30: {
+    case HERO_STATE_MOTION_WITH_COMPLETED_ANIMATION_IDLE_RECOVERY: {
         int anim;
         int frames;
 
@@ -1927,14 +1934,14 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_SAVED_YAW_VELOCITY_COMPONENTS:
+    case HERO_STATE_JUMP_WITH_DELAYED_TRAIL_UPDATE:
     case 0xE:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
+    case HERO_STATE_JUMP_WITH_SAVED_BASIS_DIRECTION:
     case HERO_STATE_JUMP_WITH_AIR_CONTROL_SPEED_CAP:
-    case 0x1C:
+    case HERO_STATE_JUMP_WITH_ANIMATION_DRIVEN_FORWARD_SPEED:
     case 0x3C:
     case 0x49:
     case 0x4C:
