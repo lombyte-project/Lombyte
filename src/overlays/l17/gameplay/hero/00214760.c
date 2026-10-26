@@ -306,9 +306,12 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_SPLASH_BURST_JUMP = 0x12,
+        HERO_STATE_OPPOSITE_HEADING_RECOIL = 0x21,
         HERO_STATE_HEIGHT_DEPENDENT_PITCH_FALL = 0x2D,
         HERO_STATE_PLATFORM_HEADING_DESCENT = 0x31,
         HERO_STATE_FAST_SWIM = 0x35,
+        HERO_STATE_RISING_TIMED_EFFECT_JUMP = 0x3C,
         HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
         HERO_STATE_GRAVITY_FLATTENED_SLOW_MOVEMENT = 0x4F,
         HERO_STATE_ATTACK_JOINT_SOUND_WINDOW = 0x51,
@@ -1426,7 +1429,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x21:
+    case HERO_STATE_OPPOSITE_HEADING_RECOIL:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -2346,9 +2349,9 @@ void update_hero_motion_for_current_state(void) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_SPLASH_BURST_JUMP:
     case 0x1C:
-    case 0x3C:
+    case HERO_STATE_RISING_TIMED_EFFECT_JUMP:
     case 0x49:
     case 0x4C:
     case 0x5E:
