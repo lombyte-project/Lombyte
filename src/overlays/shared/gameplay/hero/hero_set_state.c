@@ -674,6 +674,9 @@ extern char D_0013F350[];
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -2753,7 +2756,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(7, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x5D: {
+    case HERO_STATE_VEHICLE_MODE_2_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 7;
         p->unk2284 = 0;
