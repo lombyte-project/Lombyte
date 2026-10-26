@@ -413,9 +413,9 @@ extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void set_hero_animation(int a0, int a1, float t) __asm__("FUN_L00_002323b8");
-void set_hero_animation(int requested_animation_id, int starting_frame_index, float t) {
+void set_hero_animation(int requested_animation_id, int starting_frame_index, float blend_frames_or_selector) {
     struct Hero *hero_blend_state;
-    struct Hero *g3;
+    struct Hero *hero_animation_dispatch_state;
     struct Hero *hero_base = &hero;
     char *hero_animation_moby = ((char *)hero_base->moby);
     int slot;
@@ -450,31 +450,31 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     update_moby_animation_state(hero_animation_moby);
     hero_blend_state = &hero;
     hero_blend_state->anim_speed = 1.0f;
-    if (t > 0.0f) {
-        hero_blend_state->anim_frame_rate = 1.0f / t;
+    if (blend_frames_or_selector > 0.0f) {
+        hero_blend_state->anim_frame_rate = 1.0f / blend_frames_or_selector;
         *(float *)(hero_animation_moby + 0x54) = 0.0f;
         hero_blend_state->anim_blend_curve = -1;
     } else {
         hero_blend_state->anim_frame_rate = 1.0f;
-        hero_blend_state->anim_blend_curve = truncate_float_to_s32(-t) - 1;
+        hero_blend_state->anim_blend_curve = truncate_float_to_s32(-blend_frames_or_selector) - 1;
         hero_blend_state->anim_blend_step = 0;
         *(float *)(hero_animation_moby + 0x54) = 0.0f;
     }
     clear_hero_queued_animation();
-    g3 = &hero;
+    hero_animation_dispatch_state = &hero;
     sequence_pointer_byte_offset = requested_animation_id * 4;
     *(unsigned char *)(hero_animation_moby + 0x7C) =
         *(unsigned char *)(*(int *)(*(int *)(hero_animation_moby + 0x24) + sequence_pointer_byte_offset + 0x48) + 0x11);
-    g3->anim_changing = 1;
-    if (t < 0.0f) {
-        t = *(int *)((char *)&D_L00_0015F6E0 + g3->anim_blend_curve * 4);
+    hero_animation_dispatch_state->anim_changing = 1;
+    if (blend_frames_or_selector < 0.0f) {
+        blend_frames_or_selector = *(int *)((char *)&D_L00_0015F6E0 + hero_animation_dispatch_state->anim_blend_curve * 4);
     }
-    if (g3->vehicle_mode == 0) {
-        blend_hero_slot3_mapped_animation_pair(requested_animation_id, starting_frame_index, t);
+    if (hero_animation_dispatch_state->vehicle_mode == 0) {
+        blend_hero_slot3_mapped_animation_pair(requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
     clear_hero_mapped_moby_animation_state();
-    if (((int)g3->unk2278) != 0) {
-        blend_hero_mapped_moby_animation(requested_animation_id, starting_frame_index, t);
+    if (((int)hero_animation_dispatch_state->unk2278) != 0) {
+        blend_hero_mapped_moby_animation(requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
 }
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
