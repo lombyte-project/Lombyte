@@ -79,7 +79,7 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L18_0015F678") = 0;
 extern int D_L18_0015F6DC_d __asm__("D_L18_0015F6DC");
-extern int D_L18_0015F594 __attribute__((sda));
+extern int hero_triangle_hud_activation_inhibit __asm__("D_L18_0015F594") __attribute__((sda));
 extern int D_L18_0016D180 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -158,6 +158,7 @@ void process_hero_state_transitions(void) {
         HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
         HERO_STATE_VEHICLE_MODE_2_FALL = 92,
+        HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT = 93,
         HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
         HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 96,
         HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 97,
@@ -198,7 +199,7 @@ void process_hero_state_transitions(void) {
         } else if (process_hero_item_action_input() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].switch_lock != 2 && D_L18_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && hero_triangle_hud_activation_inhibit == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {
@@ -2452,7 +2453,7 @@ void process_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 93:
+                case HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.5f) {
                         hero_set_state(0x5C, 1);
