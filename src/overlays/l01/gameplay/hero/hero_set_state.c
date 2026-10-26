@@ -89,6 +89,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PLAY_TIMED_IDLE_ANIMATION = 0x27,
         HERO_STATE_INITIALIZE_GROUND_SPEED_AND_PLAY_ANIMATION = 0x2E,
         HERO_STATE_COPY_DISPLACEMENT_AND_PLAY_IDLE_WITH_FIVE_FRAME_TIMING = 0x30,
+        HERO_STATE_CLEAR_TRANSFER_WORDS_AND_COPY_DISPLACEMENT = 0x31,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_IDLE_ANIMATION = 0x32,
         HERO_STATE_SWIM_PLAY_TIMED_ANIMATION = 0x35,
         HERO_STATE_WATER_SURFACE_PLAY_TIMED_ANIMATION = 0x36,
@@ -589,7 +590,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_CLEAR_TRANSFER_WORDS_AND_COPY_DISPLACEMENT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
