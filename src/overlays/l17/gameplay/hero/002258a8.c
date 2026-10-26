@@ -153,7 +153,8 @@ void update_hero_state_transitions(void) {
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
-        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81
+        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
+        HERO_STATE_HEIGHT_DROP_OR_TIMEOUT_RESPAWN_WAIT = 125
     };
     unsigned char *moby;
     int prevSub;
@@ -503,7 +504,7 @@ void update_hero_state_transitions(void) {
                 case 98:
                 case HERO_STATE_DROWN:
                 case 128:
-                case 130:
+                case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
                         return;
@@ -1049,7 +1050,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 125:
+                case HERO_STATE_HEIGHT_DROP_OR_TIMEOUT_RESPAWN_WAIT:
                     if (hero.sink_surface_z - 0.8f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
