@@ -89,6 +89,7 @@ extern char D_L03_0017C020[];
 extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE = 0xF,
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_CAPTURE_DISPLACEMENT_AND_PLAY_IDLE = 0x17,
         HERO_STATE_REFRESH_LOOK_ANIMATION = 0x1E,
@@ -978,7 +979,7 @@ int hero_set_state(int a, int b) {
     case 0xC:
     case 0xD:
     case HERO_STATE_DOUBLE_JUMP:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case HERO_STATE_WATER_SURFACE_JUMP:
