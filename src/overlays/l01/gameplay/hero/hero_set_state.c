@@ -84,6 +84,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
+        HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1534,7 +1535,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x3B: {
+    case HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         char *m;
         int n;
