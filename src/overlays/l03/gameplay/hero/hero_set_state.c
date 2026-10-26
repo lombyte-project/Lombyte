@@ -99,6 +99,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SYNCHRONIZED_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_PLAY_GRAPPLE_TARGET_ANIMATION = 0x25,
         HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE = 0x26,
+        HERO_STATE_PLAY_IDLE_WITH_SCALED_ENTRY_TIMING = 0x27,
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_RUN_ANIMATION_FROM_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_CAPTURE_DISPLACEMENT_AND_PLAY_IDLE_WITH_REDUCED_TIMING = 0x30,
@@ -1686,7 +1687,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_PLAY_IDLE_WITH_SCALED_ENTRY_TIMING: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
