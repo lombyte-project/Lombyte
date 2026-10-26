@@ -315,8 +315,11 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_FAST_SWIM = 0x35,
         HERO_STATE_RISING_TIMED_EFFECT_JUMP = 0x3C,
         HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
+        HERO_STATE_DESCENT_LIMITED_FALL = 0x45,
         HERO_STATE_GRAVITY_FLATTENED_SLOW_MOVEMENT = 0x4F,
         HERO_STATE_ATTACK_JOINT_SOUND_WINDOW = 0x51,
+        HERO_STATE_MINIMUM_SPEED_SLOW_TURN_RUN = 0x54,
+        HERO_STATE_SLOW_MOVEMENT_DESCENT_LIMITED_FALL = 0x55,
         HERO_STATE_HEIGHT_DEPENDENT_VERTICAL_DESCENT = 0x68,
         HERO_STATE_WATER_BOBBING_WITH_PLANAR_DAMPING = 0x75,
         HERO_STATE_PLANAR_DAMPING_WITH_DECAYING_EFFECT_COUNT = 0x76,
@@ -2690,7 +2693,7 @@ void update_hero_motion_for_current_state(void) {
         steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x45:
+    case HERO_STATE_DESCENT_LIMITED_FALL:
         stick_target(frame_time * 3.0f, 0);
         if (hero.move_lock_timer == 0) {
             hero_move_state_velocity();
@@ -2823,7 +2826,7 @@ void update_hero_motion_for_current_state(void) {
         steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_SLOW_MOVEMENT_DESCENT_LIMITED_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
             hero_move_state_velocity();
@@ -2833,7 +2836,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_MINIMUM_SPEED_SLOW_TURN_RUN: {
         f32 d;
         f32 k;
         f32 g;
