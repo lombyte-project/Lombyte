@@ -675,6 +675,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY = 0x25,
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_GROUND_SPEED = 0x2E,
         HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
@@ -688,7 +689,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION = 0x72,
-        HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D
+        HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D,
+        HERO_STATE_REPEAT_PRESS_ANIMATION_ENTRY = 0x81
     };
     enum {
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
@@ -1357,7 +1359,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x25: {
+    case HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -1643,7 +1645,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_REPEAT_PRESS_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         int animation_timing_preset = -2;
         p->state.control_mode = 1;
