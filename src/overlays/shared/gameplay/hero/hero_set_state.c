@@ -675,7 +675,11 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
-        HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D
+        HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
+        HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60
+    };
+    enum {
+        HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
     };
     int old2088;
     char *moby;
@@ -2183,7 +2187,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
-    case 0x51: {
+    case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -2324,7 +2328,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x51: {
+        case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
             struct Hero *q = &hero;
             T2C_222B80 *e = &attack_records[q->attack_record];
             int k = 0;
@@ -2684,7 +2688,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x60: {
+    case HERO_STATE_THREE_STEP_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
