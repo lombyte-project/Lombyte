@@ -142,6 +142,7 @@ void update_hero_state_machine(void) __asm__("FUN_L05_00255960");
 void update_hero_state_machine(void) {
     enum {
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 18,
+        HERO_STATE_SWIM_CROUCH_INPUT_VARIANT = 53,
         HERO_STATE_HOVERBOARD_RIDING = 107,
         HERO_STATE_HOVERBOARD_BOOST_JUMP = 108,
         HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT = 109,
@@ -477,7 +478,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_CROUCH_INPUT_VARIANT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
