@@ -687,11 +687,14 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SUSPEND_MOTION_WITH_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
+        HERO_STATE_DYING_WITH_INHERITED_MOTION = 0x62,
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
+        HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION = 0x71,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION = 0x72,
+        HERO_STATE_REVERSE_HEADING_GROUND_MOTION_ENTRY = 0x7A,
         HERO_STATE_DYING_WITH_GROUND_HEIGHT_CAPTURE = 0x7C,
         HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D,
         HERO_STATE_REPEAT_PRESS_ANIMATION_ENTRY = 0x81
@@ -1218,7 +1221,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x71: {
+    case HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -2458,7 +2461,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7A: {
+    case HERO_STATE_REVERSE_HEADING_GROUND_MOTION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -2772,7 +2775,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(3, 0x12, (float)scale_game_frames(8));
         break;
     }
-    case 0x62: {
+    case HERO_STATE_DYING_WITH_INHERITED_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
