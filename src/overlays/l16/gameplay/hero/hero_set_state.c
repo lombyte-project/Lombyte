@@ -105,6 +105,7 @@ extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_DEPTH_JUMP = 0x12,
+        HERO_STATE_SWIM_ANIMATION_VARIANT = 0x35,
         HERO_STATE_RUN_WITH_GROUND_ITEM_CONTACT = 0x3F,
         HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
         HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C,
@@ -278,7 +279,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_ANIMATION_VARIANT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
