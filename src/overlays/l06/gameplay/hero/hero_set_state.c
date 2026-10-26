@@ -88,6 +88,7 @@ extern char D_L06_0017C6A0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
+        HERO_STATE_LAND_WITH_TIMED_BLEND = 0x4F,
         HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D
     };
     enum {
@@ -1520,7 +1521,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(9));
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_LAND_WITH_TIMED_BLEND: {
         struct Hero *p = &hero;
         p->state.control_mode = 5;
         p->unk2284 = 0;
