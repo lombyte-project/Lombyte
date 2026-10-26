@@ -141,6 +141,7 @@ void update_hero_state_machine(void) {
         HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
         HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN = 80,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
+        HERO_STATE_ANIMATION_COMPLETION_RESPAWN_WAIT = 98,
         HERO_STATE_RESPAWN_ON_DESCENT_OR_TIMEOUT = 125
     };
     unsigned char *moby;
@@ -479,7 +480,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_ANIMATION_COMPLETION_RESPAWN_WAIT:
                 case 106:
                 case 128:
                 case 130:
