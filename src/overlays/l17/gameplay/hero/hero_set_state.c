@@ -106,6 +106,8 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_REFRESH_LOOK_ANIMATION = 0x1E,
+        HERO_STATE_WRENCH_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_FACE_TARGET_MOBY_ENTRY = 0x24,
         HERO_STATE_SAVE_TARGET_MOBY_DISTANCE_ENTRY = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
@@ -115,7 +117,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
+        HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION = 0x71,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_SELECT_IDLE_ANIMATION = 0x72,
+        HERO_STATE_HURT_WITH_DISPLACEMENT_ALTERNATE_ANIMATION = 0x75,
         HERO_STATE_DYING_SAVE_GROUND_HEIGHT = 0x7C,
         HERO_STATE_DYING_COPY_POSITION_TO_TARGET = 0x7D,
         HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
@@ -399,7 +403,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x75:
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_ALTERNATE_ANIMATION:
     case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
@@ -642,7 +646,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x71: {
+    case HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1845,7 +1849,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_WRENCH_ATTACK_RECORD_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -2215,7 +2219,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(select_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_REFRESH_LOOK_ANIMATION: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
