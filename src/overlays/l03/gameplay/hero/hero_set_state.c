@@ -97,6 +97,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE = 0x26,
         HERO_STATE_RUN_ANIMATION_FROM_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_CAPTURE_DISPLACEMENT_AND_PLAY_IDLE_WITH_REDUCED_TIMING = 0x30,
+        HERO_STATE_CLEAR_ENTRY_BLOCK_AND_CAPTURE_DISPLACEMENT = 0x31,
         HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
@@ -601,7 +602,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_CLEAR_ENTRY_BLOCK_AND_CAPTURE_DISPLACEMENT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
