@@ -106,6 +106,8 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_FACE_TARGET_MOBY_ENTRY = 0x24,
+        HERO_STATE_SAVE_TARGET_MOBY_DISTANCE_ENTRY = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
@@ -120,6 +122,9 @@ int hero_set_state(int a, int b) {
     };
     enum {
         HERO_STATE_TWO_STAGE_ATTACK_COMBO = 0x51
+    };
+    enum {
+        HERO_STATE_ATTACK_WITH_TARGET_YAW_CAPTURE = 0x23
     };
     int old2088;
     char *moby;
@@ -758,7 +763,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x24: {
+    case HERO_STATE_FACE_TARGET_MOBY_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -793,7 +798,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_SAVE_TARGET_MOBY_DISTANCE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -1609,7 +1614,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ATTACK_WITH_TARGET_YAW_CAPTURE:
     case HERO_STATE_TWO_STAGE_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1777,7 +1782,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ATTACK_WITH_TARGET_YAW_CAPTURE: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
