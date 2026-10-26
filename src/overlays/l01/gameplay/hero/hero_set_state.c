@@ -82,6 +82,7 @@ extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
+        HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1487,7 +1488,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_PLAY_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
