@@ -873,7 +873,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3D, 0, (float)n);
         break;
     }
-    case 0x34: {
+    case HERO_STATE_SWIM_IDLE: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -2390,7 +2390,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2B: {
+    case HERO_STATE_GRIND_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unkA64 = 0;
@@ -2625,7 +2625,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x47: {
+    case HERO_STATE_VEHICLE_MODE_1_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -2786,7 +2786,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x58: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
