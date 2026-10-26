@@ -1225,7 +1225,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x24:
+    case HERO_STATE_GRAPPLE_TARGET_ENTRY:
     case 0x2E:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
@@ -1303,7 +1303,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_001f9a28_c(&hero.motion.velocity, &vector_or_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1445,7 +1445,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1713,7 +1713,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, D_0015ED6C_c * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
@@ -1885,10 +1885,10 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRIND:
-    case 0x29:
-    case 0x2A:
-    case 0x2B:
-    case 0x42: {
+    case HERO_STATE_GRIND_JUMP:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
+    case HERO_STATE_GRIND_ATTACK:
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         s32 has;
         s32 flag;
         s32 near;
@@ -2189,8 +2189,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, D_0015ED6C_c * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, D_0015ED6C_c * 4.712389f);
@@ -2199,7 +2199,7 @@ void update_hero_motion_for_current_state(void) {
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], D_0015ED6C_c * 3.0f);
         break;
     case 0x4A:
-    case 0x4B:
+    case HERO_STATE_ALT_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, D_0015ED6C_c * 4.712389f);
         FUN_001f9a28_c(&hero.motion.velocity, &hero.ledge_hang_pos, &hero.motion.pos);
@@ -2288,7 +2288,7 @@ void update_hero_motion_for_current_state(void) {
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, -(D_0015ED6C_c * 50.0f));
         }
         break;
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         f32 len;
         hero.item_use_locked = 1;
         approach_value(&hero.fatal_fall_roll_rate, hero.pivot_rot_x_target, frame_time_sq * 8.726646f);
@@ -2600,10 +2600,10 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     case HERO_STATE_FIDGET:
-    case 0x67:
+    case HERO_STATE_AT_TARGET_POSE:
         clear_u64_value(&hero.motion.velocity);
         break;
-    case 0x7C:
+    case HERO_STATE_DEATH_DESCENT:
         spawn_hero_radial_particle_burst();
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -D_0015ED6C_c;
@@ -2612,8 +2612,8 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -(D_0015ED6C_c * 0.35f);
         break;
-    case 0x43:
-    case 0x47:
+    case HERO_STATE_VEHICLE_MODE_1_IDLE:
+    case HERO_STATE_VEHICLE_MODE_1_DYING:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         FUN_L00_002118c8_c(1.0f, 0);
         hero.target_speed = 0.0f;
@@ -2684,13 +2684,13 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, sp * 0.72f);
         break;
     }
-    case 0x52:
+    case HERO_STATE_VEHICLE_MODE_1_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = D_0015ED6C_c * 5.5f;
         FUN_L01_00234358(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x45:
+    case HERO_STATE_VEHICLE_MODE_1_FALL:
         FUN_L00_002118c8_c(D_0015ED6C_c * 3.0f, 0);
         if (hero.move_lock_timer == 0) {
             update_hero_airborne_planar_velocity();
@@ -2700,7 +2700,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = D_0015ED6C_c * -10.0f;
         }
         break;
-    case 0x44:
+    case HERO_STATE_VEHICLE_MODE_1_RUN:
     case 0x50: {
         f32 k = 1.0f;
         f32 d = fast_difference_between_rotations(hero.motion.rot.f[2], hero.motion.move_yaw);
@@ -2800,8 +2800,8 @@ void update_hero_motion_for_current_state(void) {
         fast_vec_normalize(&hero.motion.velocity, &hero.motion.velocity, D_L06_001C4470[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
-    case 0x53:
-    case 0x57:
+    case HERO_STATE_VEHICLE_MODE_3_IDLE:
+    case HERO_STATE_VEHICLE_MODE_3_DYING:
     case 0x59:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         FUN_L00_002118c8_c(1.0f, 0);
@@ -2817,13 +2817,13 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = D_0015ED6C_c * 5.5f;
         FUN_L01_00234358(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_VEHICLE_MODE_3_FALL:
         FUN_L00_002118c8_c(D_0015ED6C_c * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
             update_hero_airborne_planar_velocity();
@@ -2833,7 +2833,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = D_0015ED6C_c * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         f32 d;
         f32 k;
         f32 g;
