@@ -96,6 +96,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 0x35,
         HERO_STATE_VEHICLE_MODE_2_RUN = 0x5B,
         HERO_STATE_VEHICLE_MODE_2_FALL = 0x5C,
+        HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT = 0x5D,
         HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E,
         HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 0x60,
         HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 0x61,
@@ -1836,7 +1837,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(7, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x5D: {
+    case HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 7;
         p->unk2284 = 0;
