@@ -135,7 +135,7 @@ void update_hero_state_transitions(void) {
     float probe_heading_2;
     float probe_heading_3;
     int predicted_trajectory_steps;
-    int sp38;
+    int jump_press_age_frames;
 
     moby = hero.moby;
     prevSub = hero.state.control_mode;
@@ -434,7 +434,7 @@ void update_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case 87:
+                case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case HERO_STATE_DROWN:
                 case 128:
@@ -500,7 +500,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x33, 1);
                     }
                     break;
-                case 55:
+                case HERO_STATE_WATER_SURFACE_ENTRY:
                     if (hero.jump_lockout_timer == 0) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             if (scale_game_frames(0xA) < hero.state_timer) {
@@ -737,7 +737,7 @@ void update_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_RUN:
                 case 47:
-                case 115:
+                case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
                         (moby->anim_time > 0.9f || moby->seq != 0xFF)) {
@@ -1678,8 +1678,8 @@ void update_hero_state_transitions(void) {
                                 if (hero.state.current == 0x11) {
                                     a = scale_game_frames(7);
                                 }
-                                if (pad_pressed_within(0x40, a, &sp38)) {
-                                    if (sp38 < hero.state_timer) {
+                                if (pad_pressed_within(0x40, a, &jump_press_age_frames)) {
+                                    if (jump_press_age_frames < hero.state_timer) {
                                         hero_set_state(0x11, 1);
                                         break;
                                     }
@@ -1768,7 +1768,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 83:
+                case HERO_STATE_VEHICLE_MODE_3_IDLE:
                     if (hero.anim_flags & 2) {
                         if (hero.moby->prev_seq != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -1802,7 +1802,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_VEHICLE_MODE_3_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -1821,7 +1821,7 @@ void update_hero_state_transitions(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_VEHICLE_MODE_3_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -1845,7 +1845,7 @@ void update_hero_state_transitions(void) {
                     hero.anim_speed = 0.35f;
                     hero.move_lock_timer = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_VEHICLE_MODE_3_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
@@ -1870,7 +1870,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_VEHICLE_MODE_3_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
