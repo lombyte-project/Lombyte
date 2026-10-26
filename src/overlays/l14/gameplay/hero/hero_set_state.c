@@ -82,6 +82,7 @@ extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_REFRESH_IDLE_ANIMATION = 0x1F,
+        HERO_STATE_ITEM_WAIT_IDLE_ANIMATION_REFRESH = 0x27,
         HERO_STATE_ATTACK_SETUP_ONLY = 0x51,
         HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION = 0x72
     };
@@ -1552,7 +1553,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_ITEM_WAIT_IDLE_ANIMATION_REFRESH: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
