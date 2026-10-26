@@ -107,9 +107,11 @@ extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
+        HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCEL = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
+        HERO_STATE_CANCEL_ITEM_ANIMATION_AND_SELECT_IDLE_ANIMATION = 0x72,
         HERO_STATE_DYING_COPY_POSITION_TO_TARGET = 0x7D,
         HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
     };
@@ -645,7 +647,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCEL: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -2222,7 +2224,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(select_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_CANCEL_ITEM_ANIMATION_AND_SELECT_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
