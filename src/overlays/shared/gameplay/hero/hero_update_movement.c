@@ -327,7 +327,9 @@ void hero_update_movement(void) {
         HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE = 2
     };
     enum {
-        HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION = 1
+        HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE = 0,
+        HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION = 1,
+        HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE = 2
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1382,7 +1384,7 @@ void hero_update_movement(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
@@ -1398,7 +1400,7 @@ void hero_update_movement(void) {
                 }
             }
             break;
-        case 2:
+        case HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
