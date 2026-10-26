@@ -762,7 +762,7 @@ extern int *D_L04_001B0630[];
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L04_00295778(void *, void *, float, float, float);
+extern int leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1164,7 +1164,7 @@ void woodcut_bot_update(WBMoby *m) {
             m->fBC &= ~8;
             reset_leg_rig_from_animation(m, d->f160);
         }
-        FUN_L04_00295778(m, d->f160, frame_time * 4.0f,
+        leg_walker_update(m, d->f160, frame_time * 4.0f,
                          fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]), frame_time_sq * 20.0f);
         if (target_distance < 3.0f && adiff < 1.5707964f) {
             blend_moby_animation(m, 4, 0, scale_game_frames(10));
@@ -1216,7 +1216,7 @@ void woodcut_bot_update(WBMoby *m) {
             if (vector_distance(pos, d->f3B0) < 2.0f) {
                 m->state = 7;
             } else {
-                FUN_L04_00295778(m, d->f160, frame_time * 4.0f,
+                leg_walker_update(m, d->f160, frame_time * 4.0f,
                                  fast_arc_tan(d->f3B0[0] - m->pos[0], d->f3B0[1] - m->pos[1]),
                                  frame_time_sq * 20.0f);
                 if (d->f3DC != -1) {
@@ -1247,7 +1247,7 @@ void woodcut_bot_update(WBMoby *m) {
             reset_walker_gait_helpers(d->f160);
             m->state = 8;
         } else {
-            FUN_L04_00295778(m, d->f160, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
+            leg_walker_update(m, d->f160, frame_time * 0.0f, m->rot[2], frame_time_sq * 20.0f);
             if (d->f217 == 0) {
                 if (excited) {
                     m->state = 4;

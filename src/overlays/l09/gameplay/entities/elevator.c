@@ -562,8 +562,8 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern Moby *func_L09_00305580_305710(void *, void *, int) __asm__("FUN_L09_003041d0");
 
-void FUN_L09_00304360(Moby *m);
-void FUN_L09_00304360(Moby *m) {
+void airship_chain_link_update(Moby *m) __asm__("FUN_L09_00304360");
+void airship_chain_link_update(Moby *m) {
     Data_305710 *d = (*(Data_305710 **)&m->pvars);
     float v20[4];
     float v30[4];
@@ -720,8 +720,8 @@ extern void print_missing_link(char *, short) __asm__("FUN_001e93b0");
 extern void effect_00304360(f32, f32, f32, f32, f32, f32, f32,
                              void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L09_00304360(unsigned char *moby);
-void FUN_L09_00304360(unsigned char *moby) {
+void airship_chain_link_update(unsigned char *moby) __asm__("FUN_L09_00304360");
+void airship_chain_link_update(unsigned char *moby) {
     unsigned char *data = *(unsigned char **)(moby + 0x78);
     unsigned char *link;
     unsigned char *link2;

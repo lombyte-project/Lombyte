@@ -497,7 +497,7 @@ extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608
 extern void FUN_L00_0026f080_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
-extern void FUN_L01_00232290(void);
+extern void hero_speed_from_table(void) __asm__("FUN_L01_00232290");
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
@@ -1589,7 +1589,7 @@ void update_hero_motion_for_current_state(void) {
                 hero.unk3BE = 0;
             }
         }
-        FUN_L01_00232290();
+        hero_speed_from_table();
         if (hero.unk930 > 0.0f) {
 
             build_scaled_hero_move_impulse(0.7f, 0.0f);
@@ -1794,7 +1794,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_FALL:
     case 0x2D:
-        FUN_L01_00232290();
+        hero_speed_from_table();
         if (hero.move_lock_timer == 0) {
             update_hero_airborne_planar_motion();
         }

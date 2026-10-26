@@ -16,7 +16,8 @@ extern unsigned char *func_00218928_6fb60(int) __asm__("FUN_L00_002678b8");
 extern void func_001F9BF0_6fb60(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
-unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
+unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
+unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *vec) {
     int header_value_input_base = func_002140B0_6fb60(5);
     unsigned char unscaled_header_value = func_001F9850_6fb60(header_value_input_base + 2);
     unsigned char header_byte_value = func_002140B0_6fb60(0xFF);

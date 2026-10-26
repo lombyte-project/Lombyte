@@ -215,7 +215,7 @@ extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
 
-void FUN_L00_00235ea0(e) HudElem *e;
+void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
 {
     unsigned char *c = e->cnt;
     int v;
@@ -340,7 +340,8 @@ typedef struct {
 extern Star_236458 D_L00_0017E660[];
 extern int D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
 
-void FUN_L00_00236268(HudElem *elem) {
+void hud_init_particles(HudElem *elem) __asm__("FUN_L00_00236268");
+void hud_init_particles(HudElem *elem) {
     int i;
     float margin, lo, band, hi;
     int bands;
@@ -372,16 +373,17 @@ void FUN_L00_00236268(HudElem *elem) {
 
 
 extern int D_L00_0015F3F8;
-void FUN_L00_00235ea0();
+void hud_update_counter() __asm__("FUN_L00_00235ea0");
 
 /* Moves every other star by its velocity and bounces it off a box whose size
  * depends on the star index. */
-void FUN_L00_00236458(void) {
+void hud_update_particles(void) __asm__("FUN_L00_00236458");
+void hud_update_particles(void) {
     Star_236458 *p;
     int i;
     float lim, hx, hy, nhx, nhy;
 
-    FUN_L00_00235ea0();
+    hud_update_counter();
     p = &D_L00_0017E660[D_L00_0015F3F8 % 2];
     i = D_L00_0015F3F8 % 2;
     for (; i < 100; i += 2, p += 2) {
@@ -631,11 +633,11 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
     }
     return hud_element->w;
 }
-void FUN_L00_00235ea0();
-/* Calls FUN_L00_00235ea0. */
+void hud_update_counter() __asm__("FUN_L00_00235ea0");
+/* Calls hud_update_counter. */
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void mine_blend_color(void) {
-    FUN_L00_00235ea0();
+    hud_update_counter();
 }
 #include "eetypes.h"
 #include "qcopy.h"

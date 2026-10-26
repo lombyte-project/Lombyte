@@ -1513,7 +1513,7 @@ extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void FUN_L18_002d6d50(int idx);
-extern void FUN_L18_002d6dc0(void *moby);
+extern void moby_init_action_mode(void *moby) __asm__("FUN_L18_002d6dc0");
 extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
 extern void end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
 extern void spawn_class_270_moby(char *pos, float *vec, int arg, float fa, float fb) __asm__("FUN_L18_002db938");
@@ -1673,7 +1673,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (((BossShared *)&D_L18_0016D260_c)->f30 == 2) {
             if (scale_game_frames(0xA28) <= ((BossShared *)&D_L18_0016D260_c)->f34 &&
                 ((BossShared *)&D_L18_0016D260_c)->f34 <= scale_game_frames(0xB36)) {
-                FUN_L18_002d6dc0(boss_data->f330);
+                moby_init_action_mode(boss_data->f330);
             }
         } else if (((BossShared *)&D_L18_0016D260_c)->f30 == 3) {
             if (scale_game_frames(0x3B6) < ((BossShared *)&D_L18_0016D260_c)->f34 &&
@@ -2456,7 +2456,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         desired_yaw = fast_arc_tan(boss_data->f330->f10[0] - moby->f10[0], boss_data->f330->f10[1] - moby->f10[1]);
         approach_angle(aim, &boss_data->f370, desired_yaw, D_0015ED6C_e[1] * 6.2831855f,
                          D_0015ED6C_e[1] * 6.2831855f, frame_time * 6.2831855f);
-        FUN_L18_002d6dc0(boss_data->f330);
+        moby_init_action_mode(boss_data->f330);
         if (advance_drek_boss_planar_position_toward_target((char *)moby, frame_time * 12.0f, boss_data->f330->f10) != 0) {
             int ticks;
 
@@ -3331,7 +3331,7 @@ extern int D_L18_0016A290[];
 extern char D_L18_00167B50[];
 extern char D_L18_00167680[];
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void FUN_L00_00235ea0(void);
+extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");
@@ -3438,7 +3438,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
         second_scalar_update_state = (float *)(boss_data + 0x37c);
         if (*(float *)(boss_data + 0x38c) > 0.0f) {
             *(int *)(boss_data + 0x368) = queue_animation_update(0x16, 0xffff,
-                     reset_numeric_hud_element, FUN_L00_00235ea0, FUN_L06_00249738,
+                     reset_numeric_hud_element, hud_update_counter, FUN_L06_00249738,
                      boss_data + 0x36c, 0x15e);
         }
     }

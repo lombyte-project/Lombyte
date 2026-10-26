@@ -236,7 +236,8 @@ extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
 #define ED70 frame_time_sq
 
 extern f32 D_L02_0017C3D0[];
-void FUN_L02_00223450(void) {
+void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
+void hero_update_hop_velocity(void) {
     HopVec_223450 tmp;
     f32 x;
     f32 speed;

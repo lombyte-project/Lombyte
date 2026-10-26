@@ -6,7 +6,8 @@ extern u8 *D_L00_0015FFDC;
 extern u8 *D_L00_0015FFE0;
 #include "rnc/overlay/level_labels.h"
 extern s32 D_L00_0015FFBC;
-void FUN_L00_0024e7a8(void) {
+void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
+void count_expired_mobys(void) {
     u8 *current_record;
     s32 flag = 0;
     D_L00_0015FFBC = 0;

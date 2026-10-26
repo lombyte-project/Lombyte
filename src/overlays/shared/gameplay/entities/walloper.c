@@ -93,7 +93,8 @@ typedef struct {
     short unk46;
 } WalloperBeam;
 
-void FUN_L00_002b94d0(u8 *o) {
+void build_beam_and_arc_points(u8 *o) __asm__("FUN_L00_002b94d0");
+void build_beam_and_arc_points(u8 *o) {
     Vec4 target0, target1;
     struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } hit;
     Vec4 camera_direction, direction, delta, blend, step, offset;
@@ -1478,8 +1479,8 @@ s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-void FUN_L00_00236268(HudElem *e);
-void FUN_L00_00236458(void);
+void hud_init_particles(HudElem *e) __asm__("FUN_L00_00236268");
+void hud_update_particles(void) __asm__("FUN_L00_00236458");
 void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
@@ -1555,7 +1556,7 @@ void morphoray_update(Moby *moby) {
           || ((Hero *)((char *)&hero))->state.control_mode == 4 || ((Hero *)((char *)&hero))->state.control_mode == 5))
         && (*(int *)D_0013A5E0_2BDAF0 & ((Hero *)((char *)&hero))->items[0].button_mask) != 0
         && !busy && in_range) {
-        if (((Hero *)((char *)&hero))->unk20A8 == 0) {
+        if (((Hero *)((char *)&hero))->item_anim_active == 0) {
             start_equipped_item_animation();
         }
         if (data->seen == 0) {
@@ -2130,7 +2131,7 @@ extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
 extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
-void FUN_L00_002be078(void *, int, int, float, float, float, int, int);
+void draw_scrolling_ribbon_colored(void *, int, int, float, float, float, int, int) __asm__("FUN_L00_002be078");
 void draw_beam_pulse_quads(void *unused) __asm__("FUN_L00_002be650");
 
 void draw_beam_pulse_quads(void *) __asm__("FUN_L00_002be650");
@@ -2153,8 +2154,8 @@ void draw_beam_ring_and_rail_effects(void *moby) {
 
     D_L00_0016178C = D_L00_0016178C - D_L00_00161790 * frame_scale;
     if (D_L00_0016178C <= -8.0f) D_L00_0016178C += 8.0f;
-    FUN_L00_002be078(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161784);
-    FUN_L00_002be078(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161788);
+    draw_scrolling_ribbon_colored(D_L00_001DC020, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161784);
+    draw_scrolling_ribbon_colored(D_L00_001DC0E0, D_L00_0016176C, D_L00_00161770, D_L00_00161774, D_L00_00161778, D_L00_0016177C, 12, D_L00_00161788);
     draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;
@@ -2223,7 +2224,7 @@ extern int D_L00_00161780 __attribute__((sda));
 extern int D_L00_001617A4 __attribute__((sda));
 extern int D_L00_001617A8 __attribute__((sda));
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF380). */
-void FUN_L00_002be078(void *mv, int a, int b, float sx, float sy, float sz, int n, int col) {
+void draw_scrolling_ribbon_colored(void *mv, int a, int b, float sx, float sy, float sz, int n, int col) {
     RW_2baae0 *m = mv;
     RW_2baae0 q[4];
     RT_2baae0 t;

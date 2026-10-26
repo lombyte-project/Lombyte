@@ -34,8 +34,8 @@ extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b6
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
-extern void FUN_L00_00232670(void);
-extern void FUN_L00_002484e0(void *);
+extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
+extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
@@ -49,7 +49,7 @@ void FUN_L15_001ff938(void) {
     unsigned int color;
     float pulse;
 
-    FUN_L00_00232670();
+    advance_hero_animation();
     hero_update();
     apply_hero_ground_type_effects();
     update_hero_state_machine();
@@ -63,7 +63,7 @@ void FUN_L15_001ff938(void) {
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
     apply_hero_and_item_scale_sequence();
-    FUN_L00_002484e0(hero0 + 0x80);
+    reveal_map_around_position(hero0 + 0x80);
 
     if (hero0[0x20A4] == 2) {
         if ((&big_head_cheat_enabled)[3] != 0)

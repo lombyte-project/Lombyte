@@ -1124,7 +1124,7 @@ extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN_L00_00261d78");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1167,7 +1167,7 @@ void extermibot_update(unsigned char *moby) {
     unsigned char *moby_position;
     extern float fast_vec_dist(void *, void *);
 
-    FUN_L00_00263b38(moby_data + 0x170, 2.5f);
+    manipulator_set_scale(moby_data + 0x170, 2.5f);
     if (D_L05_0015F5C4 == 2 && ((*(unsigned short *)(moby + 0x34) ^ 1) & 1)) {
         *(int *)(moby_data + 0x2DC) = 1;
         *(unsigned short *)(moby + 0x34) |= 0x41;
@@ -1986,7 +1986,8 @@ extern void func_001F9CA0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_305
 extern f32 func_001F9CB8_3054B0(PathVec_3054B0 *) __asm__("FUN_001f9af0");
 extern void func_L00_001FF4B0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, f32) __asm__("FUN_001f9bf8");
 
-f32 FUN_L05_00304058(s32 path_index, void *input, void *output, f32 distance) {
+f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance) __asm__("FUN_L05_00304058");
+f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance) {
     PathVec_3054B0 *point = input;
     PathVec_3054B0 *out = output;
     PathVec_3054B0 difference;
@@ -2821,7 +2822,7 @@ extern unsigned char D_0013D388[];
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2987,10 +2988,10 @@ void skid_mcmarx_update(Moby *moby) {
                     target = D_0015ED6C_gp * 19.0f;
                 }
                 hero = (Hero *)(((char *)&D_0013F350));
-                if (hero->unk894 < scale_game_frames_alt(0x2BC)) {
+                if (hero->race_time_frames < scale_game_frames_alt(0x2BC)) {
                     target += D_0015ED6C_gp * 3.0f;
                 }
-                if (hero->unk7C0[data->racer_index] < hero->unk8C0) {
+                if (hero->race_rank[data->racer_index] < hero->race_position) {
                     target -= D_0015ED6C_gp * 1.5f;
                 } else {
                     target += D_0015ED6C_gp;
@@ -3007,7 +3008,7 @@ void skid_mcmarx_update(Moby *moby) {
                 data->pos[2] = ground;
                 data->jump_frames = 0;
             }
-            FUN_L00_00263b38(&data->m[3], 3.0f);
+            manipulator_set_scale(&data->m[3], 3.0f);
             max_turn = D_0015ED6C_gp * 2.6179938f;
             turn = data->yaw_speed;
             if (max_turn < turn) {

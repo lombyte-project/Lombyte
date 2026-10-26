@@ -499,7 +499,7 @@ typedef union {
     float f[4];
 } Vec4_25aca0 __attribute__((aligned(16)));
 
-extern void FUN_002531e0_25aca0(void *, int, int) __asm__("FUN_0020fa90");
+extern void compute_moby_joint_matrices(void *, int, int) __asm__("FUN_0020fa90");
 extern void FUN_001f9a10_25aca0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
@@ -539,7 +539,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
         unsigned char *entry;
         entry = *(unsigned char **)(*(unsigned char **)(entity + 0x24) + 0x10);
         if (!entry) return 0;
-        if (*(short *)(entry + 2)) FUN_002531e0_25aca0(entity, *(short *)(entry + 2), 0);
+        if (*(short *)(entry + 2)) compute_moby_joint_matrices(entity, *(short *)(entry + 2), 0);
         if (*(int *)(entry + 4) <= 0) return 0;
         count = 0;
         index = 0;

@@ -324,7 +324,8 @@ void FUN_L00_00263ac8(float x, int owner_moby, int slot_index, unsigned char *ma
     } else if (manipulator[1])
         detach_manipulator(owner_moby, manipulator);
 }
-void FUN_L00_00263b38(char *destination, float x) {
+void manipulator_set_scale(char *destination, float x) __asm__("FUN_L00_00263b38");
+void manipulator_set_scale(char *destination, float x) {
     if (*(unsigned char *)0x15EDB7) {
         *(float *)(destination + 0x70) = x;
         return;

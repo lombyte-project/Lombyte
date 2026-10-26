@@ -384,7 +384,8 @@ void update_moby_hit_triggered_removal(struct Moby *moby) {
 
 extern float D_L16_00161C74;
 
-void FUN_L16_002de3b8(float new_value) {
+void challenge_set_layout_param(float new_value) __asm__("FUN_L16_002de3b8");
+void challenge_set_layout_param(float new_value) {
     D_L16_00161C74 = new_value;
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
@@ -1252,7 +1253,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void reset_shot_tracking(char *) __asm__("FUN_L02_00264e40");
-extern void FUN_L02_00264e70(void *, void *, void *, float);
+extern void effect_slots_fire(void *, void *, void *, float) __asm__("FUN_L02_00264e70");
 extern void collect_mobies_around_tracked_objects(char **, int, int) __asm__("FUN_L02_002651d0");
 extern void update_test_dummy_damage_and_respawn(void *) __asm__("FUN_L16_002ce9f0");
 void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
@@ -1496,7 +1497,7 @@ void test_dummy_update(unsigned char *moby) {
             position_or_direction.f[1] =
                 fast_sin(fast_arc_tan(position_or_delta.f[0] - *(float *)(moby + 16), position_or_delta.f[1] - *(float *)(moby + 20)));
             position_or_direction.f[2] = 0.0f;
-            FUN_L02_00264e70(slots, position_or_delta.f, position_or_direction.f, D_L16_001619D4);
+            effect_slots_fire(slots, position_or_delta.f, position_or_direction.f, D_L16_001619D4);
             position_or_direction.f[3] = 5627.925f;
             position_or_direction.f[2] = 1.0f;
             make_hit_descriptor(&fx, moby, 0x10001, 1.0f, position_or_direction.f);
@@ -2399,7 +2400,7 @@ extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
@@ -2435,7 +2436,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
 
     /* No pointer locals: every address is written where it is used. The compiler caches them itself
        (d + 0x1E0 from here on, the others at the top of the active state). */
-    FUN_L00_00263b38(hoverboard_dummy_data + 0x1E0, 2.5f);
+    manipulator_set_scale(hoverboard_dummy_data + 0x1E0, 2.5f);
     switch (moby[0x20]) {
     case HOVERBOARD_DUMMY_STATE_INITIALIZE: {
         float time;

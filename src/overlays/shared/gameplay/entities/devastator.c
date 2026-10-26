@@ -1719,7 +1719,7 @@ void blaster_update(struct Moby *moby) {
         transform_vector_by_basis(&velocity, &velocity, &hero.basis);
         FUN_L00_0024f7c8(moby, 0, &launch);
     }
-    if (hero.items[6].unk40) yaw = hero.items[6].unk4C;
+    if (hero.items[6].locked_on) yaw = hero.items[6].lock_yaw;
     else yaw = fast_arc_tan(velocity.f.x, velocity.f.y);
     pitch = -fast_arc_tan(vector_length_xy(&velocity), velocity.f.z);
     base_yaw = yaw;
@@ -1863,7 +1863,8 @@ extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") __attribute__((section
 extern int D_L00_00169FF8 __attribute__((section(".data")));
 extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
 
-void FUN_L00_002b56d0(void *m_) {
+void moby_save_globals_state(void *m_) __asm__("FUN_L00_002b56d0");
+void moby_save_globals_state(void *m_) {
     char *m = (char *)m_;
     char *p;
     float f0, f1, f2, f3;
@@ -1903,7 +1904,8 @@ extern unsigned char D_L00_0015F444;
 extern float D_L00_0015F448;
 extern void set_background_color(int, int, int) __asm__("FUN_001fb280");
 
-void FUN_L00_002b57f0(int m_, int flag) {
+void moby_restore_globals_state(int m_, int flag) __asm__("FUN_L00_002b57f0");
+void moby_restore_globals_state(int m_, int flag) {
     char *m = (char *)m_;
     char *p;
     float f0, f1, f2, f3;
@@ -3343,7 +3345,7 @@ extern int D_0015EEA4;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98();
-extern int FUN_L00_002b94d0();
+extern int build_beam_and_arc_points() __asm__("FUN_L00_002b94d0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void draw_beam_and_arc_effects(char *) __asm__("FUN_L00_002ba970");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -3410,19 +3412,19 @@ void tesla_claw_update(struct Moby *m) {
     struct Hero *h;
 
     if ((controller_state.pressed & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
-        !((struct Hero *)D_0013F350_2b2100)->unk20AC) {
+        !((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
         s->reach = 0.8f;
     }
     D_L00_0017AEBC = 0.9f;
     active = 0;
     ready = FUN_L00_00233e98_2b2100a(-1);
     if (D_00141D70_2b2100[0] == 0 && D_00141918_2b2100[0] == 0 &&
-        ((struct Hero *)D_0013F350_2b2100)->unk20B5 >= 3) {
+        ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step >= 3) {
         if ((unsigned int)((struct Hero *)D_0013F350_2b2100)->state.control_mode < 2 || ((struct Hero *)D_0013F350_2b2100)->state.control_mode == 9)
             FUN_L00_00203908_2b2100(0x4E30, 0x81);
     }
     if ((controller_state.held & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && m->state != 4 &&
-        m->state != 0 && !((struct Hero *)D_0013F350_2b2100)->unk20AC && ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
+        m->state != 0 && !((struct Hero *)D_0013F350_2b2100)->item_use_locked && ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
         if (s->timer == 0) {
             if (ready > 0) {
                 if (FUN_001f9770_2b2100a(&s->tick)) {
@@ -3568,7 +3570,7 @@ void tesla_claw_update(struct Moby *m) {
             start_equipped_item_animation();
             m->state = 3;
         }
-        if ((controller_state.pressed & (h = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !h->unk20AC) {
+        if ((controller_state.pressed & (h = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !h->item_use_locked) {
             if (active) {
                 Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014161B + 0x65);
                 if (st->uses < 65535) st->uses++;
@@ -3592,18 +3594,18 @@ void tesla_claw_update(struct Moby *m) {
         break;
     case 3:
         if ((controller_state.released & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) || !active ||
-            ((struct Hero *)D_0013F350_2b2100)->unk20AC) {
+            ((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
             h = (struct Hero *)D_0013F350_2b2100;
-            if (FUN_001f96f8_2b2100(70) < h->unk1BC) {
+            if (FUN_001f96f8_2b2100(70) < h->item_anim_frames) {
                 if (((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses++;
             }
             if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->longest)
                 ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
             ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
-            if (((struct Hero *)D_0013F350_2b2100)->unk1BC < FUN_001f96f8_2b2100(30))
-                ((struct Hero *)D_0013F350_2b2100)->unk20B5++;
+            if (((struct Hero *)D_0013F350_2b2100)->item_anim_frames < FUN_001f96f8_2b2100(30))
+                ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step++;
             else
-                ((struct Hero *)D_0013F350_2b2100)->unk20B5 = 0;
+                ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step = 0;
             s->target = 0;
             s->target2 = 0;
             s->lock = 0;

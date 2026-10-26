@@ -20,7 +20,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int D_00141DC4 __attribute__((section(".data")));
 extern int D_L17_00179D10[];
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
@@ -209,7 +209,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             *(int *)(pvars + 0x2C) = 0;
             *(int *)(pvars + 0x30) = -1;
         }
-        if (scale_game_frames(0xE10) < *(int *)(pvars + 0x2C) && pending_help_clip_volume_index != -1 && FUN_L00_0020d568() &&
+        if (scale_game_frames(0xE10) < *(int *)(pvars + 0x2C) && pending_help_clip_volume_index != -1 && hero_is_in_special_state() &&
             D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] != 0) {
             help_request(0x4E2E, 0x78);
             *(int *)(pvars + 0x30) = pending_help_clip_volume_index;
@@ -1005,7 +1005,8 @@ float *D_L17_00162408[2] = {D_L17_001DE560, D_L17_001DE698};
 extern float D_L17_001DE7D0[];
 extern float D_L17_001DE838[];
 float *D_L17_00162410[2] = {D_L17_001DE7D0, D_L17_001DE838};
-void FUN_L17_002f5690(void) {
+void draw_reflection_strips(void) __asm__("FUN_L17_002f5690");
+void draw_reflection_strips(void) {
     int i;
     float *p;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x30));
@@ -1036,7 +1037,8 @@ void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 int D_L17_00162420[2] = {66, 0};
 extern float D_L17_001DF070[];
 float *D_L17_00162448[2] = {D_L17_001DF070, 0};
-void FUN_L17_002f59a8(void) {
+void draw_reflection_strip(void) __asm__("FUN_L17_002f59a8");
+void draw_reflection_strip(void) {
     int i;
     float *p;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x30));

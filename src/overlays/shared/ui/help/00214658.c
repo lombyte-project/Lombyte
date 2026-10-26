@@ -40,7 +40,8 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 #define ED70 frame_time_sq
 
 extern f32 D_L00_0017BDD0[];
-void FUN_L00_00214658(void) {
+void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
+void hero_move_state_velocity(void) {
     HopVec_214658 tmp;
     f32 x;
     f32 speed;
@@ -453,7 +454,7 @@ float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 float seg_sqrt(float) __asm__("FUN_001f9988");
 float atan2_216130(float, float) __asm__("FUN_001f9e90");
 void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void mmul_216130(void *, void *, void *) __asm__("FUN_001fa378");
 void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
@@ -483,14 +484,14 @@ void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *
         r.f[0] = 0.0f;
         r.f[1] = 0.0f;
         r.f[2] = -roll;
-        fun_001fa070(&z_rotation_matrix, &r);
+        euler_to_matrix_ee(&z_rotation_matrix, &r);
         mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
         xform_216130(&x, &x, &z_rotation_matrix);
         yaw = atan2_216130(x.f[2], x.f[0]);
         r.f[0] = 0.0f;
         r.f[2] = 0.0f;
         r.f[1] = -yaw;
-        fun_001fa070(&y_rotation_matrix, &r);
+        euler_to_matrix_ee(&y_rotation_matrix, &r);
         mmul_216130(working_matrix, &y_rotation_matrix, working_matrix);
         xform_216130(&x, &x, &y_rotation_matrix);
     } else {
@@ -506,15 +507,15 @@ void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *
         r.f[2] = smoothed_pitch;
     }
     r.f[1] = 0.0f;
-    fun_001fa070(&z_rotation_matrix, &r);
+    euler_to_matrix_ee(&z_rotation_matrix, &r);
     mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
     r.f[1] = yaw;
     r.f[2] = 0.0f;
-    fun_001fa070(&y_rotation_matrix, &r);
+    euler_to_matrix_ee(&y_rotation_matrix, &r);
     mmul_216130(working_matrix, &y_rotation_matrix, working_matrix);
     r.f[2] = roll;
     r.f[1] = 0.0f;
-    fun_001fa070(&z_rotation_matrix, &r);
+    euler_to_matrix_ee(&z_rotation_matrix, &r);
     mmul_216130(working_matrix, &z_rotation_matrix, working_matrix);
     if (rotation_output)
         set_216130(working_matrix, rotation_output);

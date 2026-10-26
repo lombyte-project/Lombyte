@@ -566,7 +566,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     FUN_001f9bf8_c(camera_object + 0x10, camera_object + 0x10, 1.0f);
     fast_vec_cross(camera_object + 0x20, camera_object + 0x10, camera_object);
 }
-/* FUN_L00_002ea488 -- camera-state steering: either replays the scripted
+/* camera_transition_update -- camera-state steering: either replays the scripted
  * look (state 0x51 or the moby's own state) or steers toward the current
  * camera target, bailing out when the two are already within 80 degrees.
  *
@@ -626,9 +626,9 @@ extern f32 FUN_001f9af0_2ea488(void *) __asm__("FUN_001f9af0");
 extern void FUN_L00_001ed280_2ea488(void) __asm__("FUN_L00_001ed280");
 extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
 #define P D_0013F350_2ea488
-int FUN_L00_002ea488(u8 *, char *) __asm__("FUN_L00_002ea488");
+int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
-int FUN_L00_002ea488(u8 *m, char *mode_check_object) {
+int camera_transition_update(u8 *m, char *mode_check_object) {
     Q_2ea488 *q;
     char *o;
     char *r;

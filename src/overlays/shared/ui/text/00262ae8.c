@@ -11,7 +11,8 @@ extern int D_L05_0015F980;
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 extern short D_L05_0015F978 __attribute__((sda));
-void FUN_L05_00264298(void) {
+void hud_release_held_element(void) __asm__("FUN_L05_00264298");
+void hud_release_held_element(void) {
     if (D_L05_0015F980 != -1) {
         set_animation_parameter(D_L05_0015F980, 0);
         D_L05_0015F980 = -1;

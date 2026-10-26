@@ -11,8 +11,8 @@
 extern char D_001516D0[];
 
 /* Stores v in the three entries of D_001516D0 whose flag 0x8000 is set. */
-void FUN_L00_00265880(int v);
-void FUN_L00_00265880(int entry_value) {
+void music_set_active_track_value(int v) __asm__("FUN_L00_00265880");
+void music_set_active_track_value(int entry_value) {
     char *entry_storage_base = D_001516D0;
     if (*(short *)(entry_storage_base + 0x40) & 0x8000)
         *(short *)(entry_storage_base + 0x42) = entry_value;

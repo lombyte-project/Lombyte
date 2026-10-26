@@ -89,8 +89,8 @@ extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_00
 extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
 extern int compute_hero_hoverboard_respawn_transform(float *, float *) __asm__("FUN_L05_00254358");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
-extern int FUN_L05_002551d0(void);
-extern int FUN_L05_00255208(void);
+extern int hero_select_anim_id_by_flags(void) __asm__("FUN_L05_002551d0");
+extern int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -107,7 +107,7 @@ extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm_
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
-extern void FUN_L00_00232640(int id);
+extern void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
 extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
                              unsigned char f) __asm__("FUN_L00_00233288");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
@@ -120,7 +120,7 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
-extern void FUN_L01_00232290(void);
+extern void hero_speed_from_table(void) __asm__("FUN_L01_00232290");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
@@ -166,7 +166,7 @@ void update_hero_state_machine(void) {
         } else if (process_hero_primary_item_input() == 0 && try_apply_hero_water_and_ground_transitions() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].unk1C != 2 && D_L05_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && D_L05_0015F594 == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {
@@ -418,7 +418,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    FUN_L01_00232290();
+                    hero_speed_from_table();
                     if (hero.target_speed > 0.0f) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
@@ -442,7 +442,7 @@ void update_hero_state_machine(void) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
-                        FUN_L01_00232290();
+                        hero_speed_from_table();
                         if (hero.target_speed > 0.0f) {
                             hero_set_state(HERO_STATE_RUN, 1);
                             break;
@@ -742,7 +742,7 @@ void update_hero_state_machine(void) {
                             break;
                         }
                         if (scale_game_frames(0x64) < hero.state_timer && hero.queued_anim_frame < 0x1A) {
-                            FUN_L00_00232640(2);
+                            hero_set_attack_ticks(2);
                             hero.queued_anim_frame = 0x1A;
                         }
                     }
@@ -1841,7 +1841,7 @@ void update_hero_state_machine(void) {
                     break;
                 case 107:
                     fast_dec_timer_s16(&hero.board_jump_cooldown);
-                    if (FUN_L05_00255208()) {
+                    if (hero_pick_help_mode()) {
                         break;
                     }
                     if (hero.board_jump_frames != 0) {
@@ -1951,7 +1951,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     {
-                        int next = FUN_L05_002551d0();
+                        int next = hero_select_anim_id_by_flags();
 
                         if ((moby[0x53] == 0x52 || moby[0x53] == 0x7D) &&
                             (next == 0x68 || next == 0x7E)) {
@@ -1986,7 +1986,7 @@ void update_hero_state_machine(void) {
                             hero.anim_speed = 2.2f;
                         }
                     }
-                    if (FUN_L05_00255208()) {
+                    if (hero_pick_help_mode()) {
                         break;
                     }
                     update_hero_hoverboard_trick_animations();

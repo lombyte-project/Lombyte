@@ -55,7 +55,7 @@ extern void run_state_handler(void) __asm__("func_00208840");
 extern void memcard_update_state(void) __asm__("func_002093D8");
 extern void music_stop(void) __asm__("func_00215EE8");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
-extern void FUN_00226e08(void) __asm__("FUN_00226e08");
+extern void tick_space_transition(void) __asm__("FUN_00226e08");
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
 extern void update_resident_gameplay_state(void) __asm__("func_0022F778");
 extern void dispatch_game_state_update(void) __asm__("func_00230EE8");
@@ -204,7 +204,7 @@ void do_space_transition(void) {
             vu1_sync_chain(1);
             sceGsSyncV(0);
             game_frame_counter_macro++;
-            FUN_00226e08();
+            tick_space_transition();
             if (!done) {
                 done = service_level_archive_load();
             }
@@ -215,7 +215,7 @@ void do_space_transition(void) {
                 sceGsSyncV(0);
                 memcard_update_state();
                 run_state_handler();
-                FUN_00226e08();
+                tick_space_transition();
             } while (service_level_archive_load() == 0);
         }
         while (memory_card_state.state != 2 || memory_card_state.pending_state >= 0) {
@@ -223,7 +223,7 @@ void do_space_transition(void) {
             sceGsSyncV(0);
             memcard_update_state();
             run_state_handler();
-            FUN_00226e08();
+            tick_space_transition();
         }
     }
     sceCdSync(0);

@@ -744,7 +744,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EB5D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002a47f8(float);
+extern void prepare_scaled_table_on_stack(float) __asm__("FUN_L02_002a47f8");
 extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
 void ocean_aridia_update(struct Moby *moby) __asm__("FUN_L02_002ea198");
@@ -755,7 +755,7 @@ void ocean_aridia_update(struct Moby *moby) {
     };
     switch (moby->state) {
     case OCEAN_ARIDIA_INITIALIZE:
-        FUN_L02_002a47f8(0.16666667f);
+        prepare_scaled_table_on_stack(0.16666667f);
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;

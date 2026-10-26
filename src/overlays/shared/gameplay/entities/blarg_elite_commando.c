@@ -197,7 +197,7 @@ extern int scale_game_frames(int);
 extern int truncate_float_to_s32(float);
 extern int D_001413DC __attribute__((section(".data")));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm__("FUN_L16_002d38b0");
 void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
 
@@ -251,7 +251,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         qcopy(target, owner + 0x10);
     }
     if ((&big_head_cheat_enabled)[7])
-        FUN_L00_00263b38(commando_data + 0x130, 2.5f);
+        manipulator_set_scale(commando_data + 0x130, 2.5f);
     switch (((unsigned char *)commando_moby)[0x20]) {
     case COMMANDO_STATE_INITIALIZE:
         *(int *)(commando_data + 0x2EC) = 0;

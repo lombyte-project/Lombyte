@@ -160,7 +160,8 @@ typedef struct O23cdb8 {
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-void FUN_L00_0023cdb8(O23cdb8 *value_state) {
+void hud_weapon_update(O23cdb8 *value_state) __asm__("FUN_L00_0023cdb8");
+void hud_weapon_update(O23cdb8 *value_state) {
     u8 *c = value_state->c;
     s32 source_value = *value_state->src;
     value_state->val = source_value;

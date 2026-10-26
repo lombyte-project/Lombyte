@@ -28,8 +28,8 @@ extern u8 sky_gouraud_gs_block[] __asm__("D_0013D0F0");
 extern void sky_bsphere_check(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
 extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
-extern s32 FUN_0022bf94(s32, s32, s32, s32) __asm__("FUN_0022bf94");
-extern void FUN_0022c0e0(s32, s32, s32, s32) __asm__("FUN_0022c0e0");
+extern s32 sky_transform_vertices(s32, s32, s32, s32) __asm__("FUN_0022bf94");
+extern void sky_build_gif_gouraud(s32, s32, s32, s32) __asm__("FUN_0022c0e0");
 extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 void sky_draw_shell_gouraud(struct Shell *shell) __asm__("FUN_0022b928");
@@ -76,9 +76,9 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
             dest = D_00160408[1 - D_00160410];
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
-            if (FUN_0022bf94(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
+            if (sky_transform_vertices(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
                              (&shell->tiles[i])->unkC) == 0) {
-                FUN_0022c0e0(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
+                sky_build_gif_gouraud(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }
         }
     }

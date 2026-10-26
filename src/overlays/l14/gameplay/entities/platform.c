@@ -788,11 +788,11 @@ void update_ribbon_effect_moby(struct Moby *moby) {
     case MOBY_STATE_UPDATE:
         x = &hero;
         if (x->state.control_mode != 0xF ||
-            (x->unk560 !=
+            (x->rail_spline !=
                  *(int *)((*(int *)(data + 0x1F4) << 5) + D_L14_0015F7EC + 0x10) &&
-             x->unk560 !=
+             x->rail_spline !=
                  *(int *)((*(int *)(data + 0x1F8) << 5) + D_L14_0015F7EC + 0x10) &&
-             x->unk560 !=
+             x->rail_spline !=
                  *(int *)((*(int *)(data + 0x1FC) << 5) + D_L14_0015F7EC + 0x10))) {
             if (16.0f < absolute_float(x->motion.pos.f[0] - moby->pos.x))
                 goto end;

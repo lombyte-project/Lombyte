@@ -27,7 +27,7 @@ extern u8 sky_textured_gs_block[] __asm__("D_0013D160");
 extern void sky_bsphere_check(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
 extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
-extern s32 FUN_0022bf94(s32, s32, s32, s32) __asm__("FUN_0022bf94");
+extern s32 sky_transform_vertices(s32, s32, s32, s32) __asm__("FUN_0022bf94");
 extern void FUN_0022c208(s32, s32, s32, s32);
 
 void sky_draw_shell_textured(struct Shell *shell) __asm__("FUN_0022b6e8");
@@ -74,7 +74,7 @@ void sky_draw_shell_textured(struct Shell *shell) {
             dest = D_00160408[1 - D_00160410];
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
-            if (FUN_0022bf94(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
+            if (sky_transform_vertices(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
                              (&shell->tiles[i])->unkC) == 0) {
                 FUN_0022c208(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }

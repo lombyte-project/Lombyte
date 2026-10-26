@@ -46,7 +46,8 @@ void seed_linked_record_for_flying_car(u8 *flying_car_moby) {
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
  * object's field at 0x7E as 3. */
-void FUN_L14_003167e0(u8 *target_object) {
+void exit_camera_set_state(u8 *target_object) __asm__("FUN_L14_003167e0");
+void exit_camera_set_state(u8 *target_object) {
     if (D_001413DC != 0x0F) {
         *(s16 *)(target_object + 0x7E) = 3;
     }

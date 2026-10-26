@@ -406,8 +406,8 @@ int is_hero_slot_item_id_28_or_29(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
 /* True when hero.state.control_mode is 0x11/0x12 or state.current is 0x6A, 0x75, 0x76 or 0x82. */
-s32 FUN_L00_0020d568(void);
-s32 FUN_L00_0020d568(void) {
+s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
+s32 hero_is_in_special_state(void) {
     struct Hero *hero_state = &hero;
     u32 control_mode = hero_state->state.control_mode;
     u32 current_state;
@@ -440,7 +440,7 @@ s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
         animation_id = moby_bytes[0xA5];
     return animation_id;
 }
-/* FUN_L00_0020d5d0 -- per-mode angle helper.
+/* hero_get_state_aim_pitch -- per-mode angle helper.
  *
  * Writes 0.0f to *out, then looks up the mode (0x1C..0x6F) in a jump table.
  * Modes 0x1C/0x1D/0x1F optionally overwrite *out with the sloped angle, modes
@@ -452,9 +452,9 @@ s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
  * in source order, and retail lays them out in exactly that order.
  */
 
-int FUN_L00_0020d5d0(int mode, float *out) __asm__("FUN_L00_0020d5d0");
+int hero_get_state_aim_pitch(int mode, float *out) __asm__("FUN_L00_0020d5d0");
 
-int FUN_L00_0020d5d0(int mode, float *out) {
+int hero_get_state_aim_pitch(int mode, float *out) {
     int i;
     *out = 0.0f;
     i = mode - 0x1C;
@@ -2893,7 +2893,7 @@ void stick_target(float scale, int mode) {
 }
 extern float D_L00_0017BDB8[];
 
-/* Hero speed clamp after a move update (twin of FUN_L01_00232290): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
+/* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 
 void update_hero_target_speed_from_stick(void) {

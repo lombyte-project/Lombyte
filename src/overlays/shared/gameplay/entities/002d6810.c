@@ -132,7 +132,7 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int FUN_L15_002d6770(void);
+extern int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -162,7 +162,7 @@ extern void record_moby_hit(struct Moby *moby, void *hit) __asm__("FUN_L00_00259
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 void electric_water_update(struct Moby *moby) __asm__("FUN_L15_002d6810");
 void electric_water_update(struct Moby *moby) {
@@ -236,7 +236,7 @@ void electric_water_update(struct Moby *moby) {
 
     case ELECTRIC_WATER_ON:
         inside = 0;
-        wet = FUN_L15_002d6770();
+        wet = hero_is_near_ground();
         if (fast_dec_timer_s16(&vars->on_timer) != 0) {
             vars->off_timer = truncate_float_to_s32(scale_time(electric_water_off_duration_seconds_gp * 60.0f));
             moby->state = 2;
@@ -524,7 +524,7 @@ void electric_water_update(struct Moby *moby) {
         char *hero_pos = D_0013F3D0;
         struct Hero *player = (struct Hero *)(hero_pos - 0x80);
         for (level_area = 0; level_area < 4; level_area++) {
-            if (is_point_inside_clip_volume(hero_pos, vars->water_level_areas[level_area]) != 0 && FUN_L00_0020d568() != 0) {
+            if (is_point_inside_clip_volume(hero_pos, vars->water_level_areas[level_area]) != 0 && hero_is_in_special_state() != 0) {
                 player->water_surface_z = *(float *)((D_L15_001600EC + vars->water_level_areas[level_area] * 128) + 0x38);
             }
         }

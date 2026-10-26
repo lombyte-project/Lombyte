@@ -10,10 +10,11 @@ static inline short pauseFlagState(void) {
 /* The select sits in a `static inline short` helper so that it stays a
    branch: jump.c turns an if into movz/movn only when its arm sets a
    full register, and the inline's short return value is a subreg. */
-int FUN_0021ddd0(char *state_owner) {
+int set_menu_pause_flag_state(char *state_owner) __asm__("FUN_0021ddd0");
+int set_menu_pause_flag_state(char *state_owner) {
     char *state_destination = *(char **)(state_owner + 0x34);
     *(short *)(state_destination + 2) = pauseFlagState();
     return 0;
 }
 
-extern __typeof__(FUN_0021ddd0) func_0021DDD0 __attribute__((alias("FUN_0021ddd0")));
+extern __typeof__(set_menu_pause_flag_state) func_0021DDD0 __attribute__((alias("FUN_0021ddd0")));

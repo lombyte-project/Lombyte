@@ -498,7 +498,8 @@ void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232E60), where it is exact; names translated to the US level program. */
 
 /* Stores bank and seq at &hero.anim_loop_frame when seq is below the current bank count. */
-void FUN_L00_002325e0(int bank, int seq) {
+void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
+void hero_queue_sequence(int bank, int seq) {
     if (bank >= 0) {
         struct Hero *base = &hero;
         AnimState *hero_moby = ((AnimState *)base->moby);
@@ -525,7 +526,8 @@ void clear_hero_queued_animation(void) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
-void FUN_L00_00232640(int id) {
+void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
+void hero_set_attack_ticks(int id) {
     if (id == -1) {
         id = scale_game_frames(5);
     }

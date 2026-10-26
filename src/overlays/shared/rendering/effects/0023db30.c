@@ -29,7 +29,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_draw_quad_real(void *quads, void *matrix, int count);
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
-void FUN_L00_0023db30(char *moby) {
+void glow_quads_draw(char *moby) __asm__("FUN_L00_0023db30");
+void glow_quads_draw(char *moby) {
     float corners[4][4] __attribute__((aligned(16)));
     QuadAttributes attributes;
     float frame[4][4] __attribute__((aligned(16)));

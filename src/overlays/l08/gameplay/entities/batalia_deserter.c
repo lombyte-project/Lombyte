@@ -826,8 +826,8 @@ extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 extern void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
-extern void FUN_L08_002f12a0(int);
-extern void FUN_L08_002f1378(int);
+extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
+extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -881,9 +881,9 @@ void update_batalia_textured_effect(struct Moby *moby) {
             subtract_vector_xyz(position_delta, D_L08_001675C0, position_delta);
             distance = vector_length_xyz(position_delta);
             if (distance <= 84.0f) {
-                FUN_L08_002f12a0(0);
+                advance_scroll_offsets(0);
                 advance_wrapped_sine_pair(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
-                FUN_L08_002f12a0(2);
+                advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_001623F0 = 0xFF;
                 } else if (distance < 84.0f) {
@@ -893,9 +893,9 @@ void update_batalia_textured_effect(struct Moby *moby) {
                     *(char *)&D_L08_001623F0 = 0;
                 }
             }
-            FUN_L08_002f1378(0);
-            FUN_L08_002f1378(0);
-            FUN_L08_002f1378(1);
+            advance_scroll_entry(0);
+            advance_scroll_entry(0);
+            advance_scroll_entry(1);
             enqueue_callback_list_1(queue_batalia_textured_batch_passes, moby);
         }
         break;

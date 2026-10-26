@@ -758,7 +758,7 @@ void taxi_update(struct Moby *moby) {
     apply_moby_position_and_rotation_wobble(moby);
     if (moby->state >= 3 && moby->state <= 5) {
         travel_player = &hero;
-        travel_player->unk1F2 = 2;
+        travel_player->jump_lock_timer = 2;
         travel_player->unk1F4 = 2;
         transform_moby_vector_table_to_world_space(moby);
         if (voice_is_playing(moby, *(short *)(taxi_data + 0xAA)) == 0) {
@@ -1730,7 +1730,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
 extern f32 D_L16_0015F638 ;
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
-extern void FUN_L16_002de3b8(float f);
+extern void challenge_set_layout_param(float f) __asm__("FUN_L16_002de3b8");
 
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1746,7 +1746,7 @@ void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
         group_index_entry++;
     }
     *(float *)&D_L16_0015F638 = 74.0f;
-    FUN_L16_002de3b8(76.0f);
+    challenge_set_layout_param(76.0f);
     jet_game_state(2, 6);
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
@@ -1765,7 +1765,7 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
         jet_group_state(group_index_entry[0], 1, 1, 0);
         group_index_entry++;
     }
-    FUN_L16_002de3b8(100.0f);
+    challenge_set_layout_param(100.0f);
     jet_game_state(0, 8);
 }
 #ifndef NOT_SDA
@@ -2639,7 +2639,8 @@ extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
-void FUN_L16_002e8d40(void) {
+void env_map_a_draw(void) __asm__("FUN_L16_002e8d40");
+void env_map_a_draw(void) {
     int *a = (int *)D_L16_00161EF0_gp;
     int *b = (int *)D_L16_00161F00_gp;
     int *c = (int *)D_L16_00161F10;
@@ -2739,7 +2740,7 @@ void update_level16_three_mesh_render_state(struct Moby *moby) {
         break;
     }
 }
-/* Sets up the draw state, then draws the one entry of the level's table; same source as FUN_L16_002e8d40. */
+/* Sets up the draw state, then draws the one entry of the level's table; same source as env_map_a_draw. */
 
 extern char D_L16_00161F80_t[][16] __asm__("D_L16_00161F80") __attribute__((section(".sdata")));
 extern int get_effect_texture_2e9270(int) __asm__("FUN_001f44b8");
@@ -3057,7 +3058,7 @@ void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2ea128(FUN_L16_002e8d40, moby);
+        enqueue_callback_list_1_2ea128(env_map_a_draw, moby);
         break;
     }
 }

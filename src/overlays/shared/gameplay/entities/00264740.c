@@ -12,7 +12,8 @@ extern void *active_mobies[] __asm__("D_L00_001ABA00");
 extern void FUN_L00_00250480(struct Moby *moby);
 extern void FUN_L00_00250df8(struct Moby *moby);
 
-void FUN_L00_00264740(void)
+void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
+void link_and_update_all_mobys(void)
 {
     struct Moby *moby;
     struct Moby *last;

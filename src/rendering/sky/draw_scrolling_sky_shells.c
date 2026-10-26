@@ -22,7 +22,7 @@ extern struct SkyShellSet *D_0016045C;
 extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fun_001fa070(void *, f32 *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(void *, f32 *) __asm__("FUN_001fa070");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 
 void draw_scrolling_sky_shells(void) __asm__("FUN_0022abd8");
@@ -86,7 +86,7 @@ void draw_scrolling_sky_shells(void) {
                 rotation_angles[2] =
                     (f32)((s32)(*shell_angle + (f32)shell_index * 2000.0f) % 10000) *
                         0.0006283185f - 3.1415927f;
-                fun_001fa070(sky_matrix, rotation_angles);
+                euler_to_matrix_ee(sky_matrix, rotation_angles);
                 transform_row = sky_matrix;
                 scale_vector(transform_row, transform_row, shell_scale);
                 scale_vector(transform_row + 0x10, transform_row + 0x10, shell_scale);

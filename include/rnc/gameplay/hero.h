@@ -173,7 +173,7 @@ struct HeroHealth {
  * 0x2080 as raw bytes, and one view reads 0x560 as an int *.
  * Notes on unknown fields:
  *   unk200 / unk210 - copied from the collision hit (FUN_L00_002133a8)
- *   unk458 / unk45C - speeds eased in and scaled into velocity (FUN_L02_00223450)
+ *   unk458 / unk45C - speeds eased in and scaled into velocity (hero_update_hop_velocity)
  *   unk22D2         - set on a pad bit-0x10 press (no C reader yet)
  *   unk22DA         - nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0
  * Item switching (hero_switch_item): a nonzero pending_item[i] that differs

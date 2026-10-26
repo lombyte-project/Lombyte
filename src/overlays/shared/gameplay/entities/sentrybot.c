@@ -77,7 +77,7 @@ extern void compute_selected_world_matrices(void *, int, void *, void *) __asm__
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 void begin_sentrybot_turn_toward_point(char *moby, void *moby_data, float *point, void *next_state, void *next_animation) __asm__("FUN_L15_00299a68");
 
 extern void begin_sentrybot_turn_toward_point(char *moby, void *a, float *point, void *b, void *c) __asm__("FUN_L15_00299a68");
@@ -182,7 +182,7 @@ void sentrybot_update(unsigned char *moby) {
     *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xFFBE) | 0x1000;
     *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
     target = *(char **)(data + 0x110);
-    FUN_L00_00263b38(data + 0x1A0, 2.5f);
+    manipulator_set_scale(data + 0x1A0, 2.5f);
     if (moby[0x31] != 0 && FUN_001f9b48(moby + 0x10, D_L15_001673C0) < 28.0f) {
         FUN_L00_0025a120(moby);
         moby[0x7F] = 0x16;
@@ -3363,7 +3363,8 @@ void update_sentrybot_alarm_effect(void *moby) __asm__("FUN_L15_002cbc30");
 extern void update_sentrybot_alarm_effect(void *) __asm__("FUN_L15_002cbc30");
 
 /* Advances the animation state, pulses the color, and updates the shared effect. */
-void FUN_L15_002cb4c8(unsigned char *moby) {
+void sentrybot_alarm_update(unsigned char *moby) __asm__("FUN_L15_002cb4c8");
+void sentrybot_alarm_update(unsigned char *moby) {
     float position[4];
     float step;
     int color;

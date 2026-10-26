@@ -1,4 +1,4 @@
-/* FUN_L00_00232670 split out of set_hero_animation.c: it reads D_L00_0015F5C4
+/* advance_hero_animation split out of set_hero_animation.c: it reads D_L00_0015F5C4
    through $gp, while the functions there reach it with lui. */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
@@ -44,7 +44,8 @@ extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e
    jumping as hero.anim_loop_frame/unkAB4/unkAB8 request), fires the sequence's sound
    triggers crossed this frame, keeps the moby's looping sound in step,
    and records the distance moved (hero.anim_frame/unkAAC). */
-void FUN_L00_00232670(void) {
+void advance_hero_animation(void) __asm__("FUN_L00_00232670");
+void advance_hero_animation(void) {
     struct Moby *m = hero.moby;
     s32 same;
     u8 frame0;

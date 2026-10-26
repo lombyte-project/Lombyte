@@ -85,7 +85,7 @@ extern float FUN_001f9b48(void *, void *);
 extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
-extern void FUN_L05_0030de90(char *moby);
+extern void draw_electric_gate_beams(char *moby) __asm__("FUN_L05_0030de90");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
@@ -116,7 +116,7 @@ void electric_gate_update(char *gate_moby) {
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&D_L05_00161D38 != D_L05_0015F5CC_e[2]) {
             *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
-            enqueue_callback_list_1(FUN_L05_0030de90, gate_moby);
+            enqueue_callback_list_1(draw_electric_gate_beams, gate_moby);
         }
         gate_position = gate_moby + 0x10;
         tab = D_L05_001671C0;
@@ -179,7 +179,7 @@ extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
-void FUN_L05_0030de90(char *moby) {
+void draw_electric_gate_beams(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
     u64 texture;

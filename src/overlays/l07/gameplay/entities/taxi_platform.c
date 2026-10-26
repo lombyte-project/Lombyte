@@ -360,7 +360,8 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
 
-void FUN_L07_003120d8(char *moby) {
+void rumble_by_distance(char *moby) __asm__("FUN_L07_003120d8");
+void rumble_by_distance(char *moby) {
     float distance = distance_xyz(moby + 0x10, D_L07_00166E40);
     char *state;
     if (distance > 80.0f)

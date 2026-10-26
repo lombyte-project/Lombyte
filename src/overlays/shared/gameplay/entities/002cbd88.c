@@ -38,14 +38,15 @@ void emit_sine_modulated_rgba_draw_packet(void) {
 
 
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
-int FUN_L15_002d6770(void) {
+int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
+int hero_is_near_ground(void) {
     struct Hero *hero_ptr;
     float raised_probe_position[4];
     float ground_height;
-    if (FUN_L00_0020d568() != 0)
+    if (hero_is_in_special_state() != 0)
         return 1;
     hero_ptr = &hero;
     if ((unsigned)(hero_ptr->state.current - 0x18) < 2) {

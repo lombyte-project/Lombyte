@@ -28,7 +28,7 @@ extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[] NOT_SDA;
 extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 
 void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 void update_sky_shells_animated(void) {
@@ -45,15 +45,15 @@ void update_sky_shells_animated(void) {
         switch (i) {
         case SKY_SHELL_SLOW_ROTATION:
             animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_MEDIUM_ROTATION:
             animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_FAST_ROTATION:
             animated_sky_shell_rotation_angles[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         default:
             FUN_001f9fc8_c(D_L00_001BD7E0);
@@ -72,7 +72,7 @@ extern char *D_L00_0016051C_2899a8 __asm__("D_L00_0016051C");
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern s32 D_L00_0015F5CC_2899a8 __asm__("D_L00_0015F5CC");
 extern void FUN_001f9fc8_2899a8(void *) __asm__("FUN_001f9fc8");
-extern void FUN_001fa070_2899a8(void *, void *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 
 void FUN_L00_002899a8_2899a8(void) __asm__("FUN_L00_002899a8");
 
@@ -83,18 +83,18 @@ void FUN_L00_002899a8_2899a8(void) {
     sky_draw_shell(0);
     qzero(&shell_rotation);
     shell_rotation.f[2] = (f32) * (u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
+    euler_to_matrix_ee(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(1);
     shell_rotation.f[2] =
         (f32)(*(volatile int *)&D_L00_0015F5CC_2899a8 & 0x1FFFF) * 4.7936901e-5f - 3.1415927f;
-    FUN_001fa070_2899a8(D_L00_001BD7E0, &shell_rotation);
+    euler_to_matrix_ee(D_L00_001BD7E0, &shell_rotation);
     sky_draw_shell(2);
 }
 /* draws sky shells with two animated rotation offsets */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028AD68), where it is exact; names translated to the US level program. */
 
 extern void FUN_001fa070_cf(void *) __asm__("FUN_001f9fc8");
-void FUN_001f9fc8_cf(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 
 void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
 
@@ -111,11 +111,11 @@ void draw_sky_shells_with_fast_and_slow_rotation(void) {
         switch (i) {
         case SKY_SHELL_FAST_ROTATION:
             shell_rotation_angles[2] = (float)*(unsigned short *)&D_L00_0015F5CC * 0.0000958738017f - 3.14159265f;
-            FUN_001f9fc8_cf(D_L00_001BD7E0, shell_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
             break;
         case SKY_SHELL_SLOW_ROTATION:
             shell_rotation_angles[2] = (float)(D_L00_0015F5CC & 0x1FFFF) * 0.00004793690085f - 3.14159265f;
-            FUN_001f9fc8_cf(D_L00_001BD7E0, shell_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
             break;
         default:
             FUN_001fa070_cf(D_L00_001BD7E0);
@@ -132,7 +132,7 @@ extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
 
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
@@ -146,7 +146,7 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
     qzero(shell_rotation_angles);
     shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
     sky_draw_shell(1);
 }
 extern char D_L00_001BD7E0[];
@@ -155,7 +155,7 @@ extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
@@ -170,7 +170,7 @@ void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     sky_draw_shell(1);
     qzero(third_shell_rotation_angles);
     third_shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, third_shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, third_shell_rotation_angles);
     sky_draw_shell(2);
 }
 typedef union {
@@ -198,7 +198,7 @@ void draw_sky_shells_with_modulo_40000_rotation(void) {
 }
 extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
 
 void draw_sky_shells_with_modulo_25000_rotation(void) {
@@ -211,7 +211,7 @@ void draw_sky_shells_with_modulo_25000_rotation(void) {
     shell_rotation[0] = 0.0f;
     shell_rotation[1] = 0.3f;
     shell_rotation[2] = (D_L00_0015F5CC % 25000) * 0.000251327408f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, shell_rotation);
+    euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);
@@ -220,7 +220,7 @@ extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
 extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC");
 extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C");
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
-extern void FUN_001fa070_28a480(void *, void *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
 void draw_sky_shells_with_scaled_phase_rotation(void) __asm__("FUN_L00_0028a480");
@@ -242,24 +242,24 @@ void draw_sky_shells_with_scaled_phase_rotation(void) {
             ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
+            euler_to_matrix_ee(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_QUINTUPLE_PHASE_ROTATION:
             ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
+            euler_to_matrix_ee(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_WIDE_WRAP_ROTATION:
             ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
+            euler_to_matrix_ee(D_L00_001BD7E0_lui, shell_rotation);
             break;
         case SKY_SHELL_TENFOLD_PHASE_ROTATION:
             ((float *)shell_rotation)[2] =
                 (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) -
                 3.14159265f;
-            FUN_001fa070_28a480(D_L00_001BD7E0_lui, shell_rotation);
+            euler_to_matrix_ee(D_L00_001BD7E0_lui, shell_rotation);
             break;
         default:
             FUN_001f9fc8_28a480(D_L00_001BD7E0_lui);
@@ -270,7 +270,7 @@ void draw_sky_shells_with_scaled_phase_rotation(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028B8F8), where it is exact; names translated to the US level program. */
 
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 extern short D_L00_0015F6B0_s __asm__("D_L00_0015F5CC");
 
 void draw_sky_shells_with_slow_medium_and_fast_rotation(void) __asm__("FUN_L00_0028a620");
@@ -289,15 +289,15 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
         switch (i) {
         case SKY_SHELL_SLOW_ROTATION:
             sky_shell_layer_rotation_angles[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         case SKY_SHELL_MEDIUM_ROTATION:
             sky_shell_layer_rotation_angles[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         case SKY_SHELL_FAST_ROTATION:
             sky_shell_layer_rotation_angles[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
+            euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         default:
             set_identity_matrix(D_L00_001BD7E0);
@@ -332,7 +332,7 @@ void draw_three_sky_shells_with_particles(void) {
     sky_draw_shell(2);
 }
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
 
 void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
@@ -341,10 +341,10 @@ void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
     sky_draw_shell(0);
     qzero(sky_shell_rotation_angles);
     sky_shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, sky_shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_rotation_angles);
     sky_draw_shell(1);
     sky_shell_rotation_angles[2] = (D_L00_0015F5CC % 100000) * 0.0000628318521f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, sky_shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_rotation_angles);
     sky_draw_shell(2);
 }
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
@@ -367,7 +367,7 @@ void draw_two_sky_shells_with_particles(void) {
 /* Hand-written from the US listing (closest relative FUN_L00_002895a0). */
 
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) {
@@ -379,10 +379,10 @@ void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) {
     sky_draw_shell(3);
     qzero(animated_shell_rotation_angles);
     animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(4);
     animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
+    euler_to_matrix_ee(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(5);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(6);
@@ -397,7 +397,7 @@ extern unsigned char D_L00_001BD7E0_28b1a0[] __asm__("D_L00_001BD7E0")
     __attribute__((section(".data")));
 void FUN_001f9fc8_28b1a0(void *) __asm__("FUN_001f9fc8");
 void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
-void FUN_001fa070_28b1a0(void *, void *) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated_globals.h"
@@ -456,7 +456,7 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         if (i > 0) {
             M = D_L00_001BD7E0_28b1a0;
             sky_shell_transform_rotation_angles[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
-            FUN_001fa070_28b1a0(M, sky_shell_transform_rotation_angles);
+            euler_to_matrix_ee(M, sky_shell_transform_rotation_angles);
             FUN_001f9a80_28b1a0(M, M, k);
             FUN_001f9a80_28b1a0(M + 0x10, M + 0x10, k);
             FUN_001f9a80_28b1a0(M + 0x20, M + 0x20, k);

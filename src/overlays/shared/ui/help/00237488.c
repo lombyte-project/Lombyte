@@ -40,7 +40,8 @@ void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step)
 }
 
 #include "sda.h"
-int FUN_L05_0023b378(int id, float *out) {
+int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
+int hero_anim_tilt_lookup(int id, float *out) {
     *out = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo
         && (unsigned)(*(unsigned char *)(((char *)hero.moby) + 0x53) - 0x69) < 4)
@@ -84,7 +85,7 @@ extern int D_0015ED94;
 extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_0020d568();
+extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
@@ -177,7 +178,7 @@ void apply_hero_item_slot_selection(int i) {
     }
     if (i == 1) {
         struct Hero *g;
-        if (FUN_L00_0020d568() || (&hero)->state.current == 0x12) {
+        if (hero_is_in_special_state() || (&hero)->state.current == 0x12) {
             int v;
             g = &hero;
             v = *(int *)((char *)g + 0x1108);
@@ -243,7 +244,7 @@ void apply_hero_item_slot_selection(int i) {
     flag4 = 0;
     if (i == 3) {
         struct Hero *g;
-        if (FUN_L00_0020d568() || (&hero)->state.current == 0x12) {
+        if (hero_is_in_special_state() || (&hero)->state.current == 0x12) {
             if (*(int *)(D_00141660 + 0xC) != 4) {
                 int v;
                 g = &hero;
@@ -1060,7 +1061,7 @@ extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_00255
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_002325e0(int bank, int seq);
+extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 
 void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
 
@@ -1082,7 +1083,7 @@ void update_hero_hoverboard_trick_animations(void) {
             int a = h->air_pose_index + 0x69;
             if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
                 set_hero_animation(a, 2, (float)scale_game_frames(5));
-                FUN_L00_002325e0(D_L05_00179BC0[h->air_pose_index].bank,
+                hero_queue_sequence(D_L05_00179BC0[h->air_pose_index].bank,
                                  D_L05_00179BC0[h->air_pose_index].seq);
             } else if ((float)h->anim_loop_frame - 2.0f < h->anim_frame) {
                 h->tricks_landed[h->air_pose_index] = 1;
@@ -1684,7 +1685,8 @@ int select_hero_hoverboard_animation_variant(void) {
         animation_id = 0x55;
     return animation_id;
 }
-int FUN_L05_002551d0(void) {
+int hero_select_anim_id_by_flags(void) __asm__("FUN_L05_002551d0");
+int hero_select_anim_id_by_flags(void) {
     struct Hero *hero_ptr = &hero;
     int hero_variant_selector = hero_ptr->race_ammo;
     if (hero_ptr->board_boost_active == 0) {
@@ -1706,7 +1708,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int D_L05_0015F698 __attribute__((sda));
 
-int FUN_L05_00255208(void) {
+int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
+int hero_pick_help_mode(void) {
     struct Hero *player = &hero;
     float start[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
@@ -1837,7 +1840,8 @@ continue_fall:
 extern char D_L05_0017C068[];
 #include "rnc/data_labels.h"
 
-void FUN_L05_0025b538(void) {
+void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
+void hero_update_linked_target(void) {
     char *hero_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     int path_owner_moby = *(int *)(hero_base + 0x86C);
 

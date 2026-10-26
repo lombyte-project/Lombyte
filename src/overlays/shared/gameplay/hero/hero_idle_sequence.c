@@ -641,7 +641,7 @@ extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
-extern void FUN_L00_00232670(void);
+extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
@@ -657,7 +657,7 @@ extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58")
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
-extern void FUN_L00_002484e0(void *);
+extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0024f7c8(void *, s32, void *);
@@ -705,7 +705,7 @@ void update_hero_in_vehicle_mode(void) {
     s32 i, span, red, green, blue, alpha;
     s32 color, color2;
 
-    FUN_L00_00232670();
+    advance_hero_animation();
     FUN_L00_00211670();
     apply_hero_selected_flags_and_state_transitions();
     g = (char *)&hero;
@@ -835,7 +835,7 @@ void update_hero_in_vehicle_mode(void) {
             *(u32 *)(g + 0x22c0) = 0;
         }
     }
-    FUN_L00_002484e0(&hero.motion.pos);
+    reveal_map_around_position(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
         if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
@@ -1115,7 +1115,7 @@ void scan_hero_input_sequences(void) {
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
-void FUN_L00_00232670(void);
+void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 void hero_update(void) __asm__("FUN_L00_00211670");
 void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
@@ -1149,7 +1149,7 @@ void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
 void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
-void FUN_L00_002484e0(void *);
+void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 void FUN_L00_00257024(int);
 void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 
@@ -1174,7 +1174,7 @@ void coordinate_hero_frame_update(void) {
         update_hero_in_vehicle_mode();
         return;
     }
-    FUN_L00_00232670();
+    advance_hero_animation();
     hero_update();
     apply_hero_selected_flags_and_state_transitions();
     check_ledge_grab();
@@ -1205,7 +1205,7 @@ void coordinate_hero_frame_update(void) {
     scan_hero_input_sequences();
     noop_main_callback((int)hero_state->moby);
     if (hero_state->state.control_mode != 0x16 && hero_state->state.current != 0x32)
-        FUN_L00_002484e0(&hero_state->motion.pos);
+        reveal_map_around_position(&hero_state->motion.pos);
     {
         struct Hero *g2 = &hero;
         FUN_L00_00257024((int)g2->moby);
@@ -1836,7 +1836,7 @@ extern void ff090_208820(void *, void *, int) __asm__("FUN_001f9838");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void set_moby_local_table_entry(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 void update_hero_moby(void) {
     OvlQuad position_scratch[1];
@@ -1866,7 +1866,7 @@ void update_hero_moby(void) {
         second_position_offset = hero.capsule_radius + minimum_top_gap;
         if (hero.state.control_mode == 4)
             second_position_offset += 0.15f;
-        if (FUN_L00_0020d568())
+        if (hero_is_in_special_state())
             second_position_offset = hero.capsule_bottom;
         qcopy(position_scratch, &hero.motion.pos);
         offset_hero_position_against_gravity(position_scratch, position_scratch, second_position_offset);
@@ -1962,7 +1962,7 @@ extern G_208b60 D_0013F350_208b60 __asm__("D_0013F350");
 extern int D_L00_00173E40[];
 f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-void FUN_0020d510_208b60(M_208b60 *, V_208b60 *) __asm__("FUN_0020d510");
+void get_moby_light_direction(M_208b60 *, V_208b60 *) __asm__("FUN_0020d510");
 f32 angle_atan2(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f9dc8_208b60(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_208b60(f32) __asm__("FUN_001f9de0");
@@ -1996,7 +1996,7 @@ void update_hero_moby_probed_height_bounds(void) {
     else if (rotation_step < -0.052f)
         rotation_step = -0.052f;
     G.fD20 = fast_add_rotations(G.fD20, rotation_step);
-    FUN_0020d510_208b60(G.m2080, &v);
+    get_moby_light_direction(G.m2080, &v);
     planar_angle = angle_atan2(v.f[0], v.f[1]);
     planar_cosine = FUN_001f9dc8_208b60(planar_angle);
     planar_sine = FUN_001f9de0_208b60(planar_angle);
@@ -3057,7 +3057,7 @@ extern P_20b1d8 D_0013F350_20b1d8 __asm__("D_0013F350");
 extern A_20b1d8 D_L00_0017A680_20b1d8 __asm__("D_L00_0017A680");
 #define P D_0013F350_20b1d8
 #define A D_L00_0017A680_20b1d8
-extern s32 FUN_L00_0020d568(void);
+extern s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
@@ -3068,7 +3068,7 @@ void update_hero_easing_targets_and_point_effects(void) {
     f32 clamped_rotation_angle, secondary_clamped_rotation_angle;
     u8 *optional_moby_basis;
     s32 i;
-    if (FUN_L00_0020d568())
+    if (hero_is_in_special_state())
         return;
     if (0.03f < FUN_001f99c0(P.f2C0) || 0.03f < FUN_001f99c0(P.f2C4) ||
         0.06981317f < FUN_001f99c0(P.f2C8) || 0.06981317f < FUN_001f99c0(P.f2CC) ||

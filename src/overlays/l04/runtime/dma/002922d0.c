@@ -374,7 +374,8 @@ extern f32 D_0015ED60;
 extern f32 D_0015ED68;
 extern s32 D_L04_00173FF0[] __attribute__((section(".data")));
 
-s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
+s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
+s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {
         s32 joints[6];
         struct {

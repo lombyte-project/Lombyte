@@ -68,7 +68,7 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdat
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L06_0015F5CC_macro __asm__("D_L06_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") __attribute__((section(".data")));
-extern void FUN_L00_00232670(void);
+extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void FUN_L00_00211670(void);
 extern void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
@@ -82,7 +82,7 @@ extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58")
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
-extern void FUN_L00_002484e0(void *);
+extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0024f7c8(void *, s32, void *);
@@ -130,7 +130,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
     s32 i, span, red, green, blue, alpha;
     s32 color, color2;
 
-    FUN_L00_00232670();
+    advance_hero_animation();
     FUN_L00_00211670();
     apply_hero_ground_material_response();
     g = (char *)&hero;
@@ -261,7 +261,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
             *(u32 *)(g + 0x22c0) = 0;
         }
     }
-    FUN_L00_002484e0(&hero.motion.pos);
+    reveal_map_around_position(&hero.motion.pos);
     if (hero.vehicle_mode == 3) {
         s32 color;
         /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */

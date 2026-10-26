@@ -1952,7 +1952,8 @@ extern int truncate_float_3a90(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
 extern char *spawn_particle_3a90(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L10_002e3a90(struct Moby *moby) {
+void emit_moby_particles(struct Moby *moby) __asm__("FUN_L10_002e3a90");
+void emit_moby_particles(struct Moby *moby) {
     float pos[4];
     float vel[4];
     float accel[4];

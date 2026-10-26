@@ -14,7 +14,8 @@
 
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
-int FUN_L12_00227f10(int allow_item_lookup) {
+int hero_get_gadget_anim_id(int allow_item_lookup) __asm__("FUN_L12_00227f10");
+int hero_get_gadget_anim_id(int allow_item_lookup) {
     char *base = D_0013E533 + 0xE1D;
     int i;
     char *item_table_entry;
@@ -77,7 +78,8 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 #define ED70 frame_time_sq
 
 extern f32 D_L12_0017C250[];
-void FUN_L12_00235c08(void) {
+void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
+void hero_update_hop_movement(void) {
     HopVec_235c08 tmp;
     f32 x;
     f32 speed;

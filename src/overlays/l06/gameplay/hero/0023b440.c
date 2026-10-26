@@ -103,7 +103,7 @@ extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm_
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
-extern void FUN_L00_00232640(int id);
+extern void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
 extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
                              unsigned char f) __asm__("FUN_L00_00233288");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
@@ -171,7 +171,7 @@ void update_hero_state_machine(void) {
             hero_set_state(HERO_STATE_DYING, 1);
         } else if (process_hero_item_action_input() == 0 && try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].unk1C != 2 && D_L06_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && D_L06_0015F594 == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0)) {
                     switch (hero.vehicle_mode) {
@@ -609,7 +609,7 @@ void update_hero_state_machine(void) {
                             break;
                         }
                         if (scale_game_frames(0x64) < hero.state_timer && hero.queued_anim_frame < 0x1A) {
-                            FUN_L00_00232640(2);
+                            hero_set_attack_ticks(2);
                             hero.queued_anim_frame = 0x1A;
                         }
                     }

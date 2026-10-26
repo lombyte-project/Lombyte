@@ -5,7 +5,7 @@
 extern u8 D_00186310[];
 extern char D_00186F40[];
 extern int active_class_resource_index __asm__("D_0015FF4C");
-extern void FUN_00224b60();
+extern void gadget_moby_update_noop() __asm__("FUN_00224b60");
 extern int noop_callback_e() __asm__("func_001E9410");
 extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
 extern int fill_transfer_words() __asm__("func_001F97E8");
@@ -66,7 +66,7 @@ int initialize_menu_preview_objects(char *preview) {
         *(float *)(object + 0x14) = *(float *)(camera + 0x144);
         *(float *)(object + 0x18) = *(float *)(camera + 0x148) - 0.6f;
         *(float *)(object + 0x48) = 3.1415927f;
-        *(void **)(object + 0x74) = FUN_00224b60;
+        *(void **)(object + 0x74) = gadget_moby_update_noop;
         object_variables = *(int **)(object + 0x78);
         object_variables[0] = (int)preview;
         object_variables[1] = 0;

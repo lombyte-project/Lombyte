@@ -39,7 +39,8 @@ void FUN_L00_0020a228(float a, float b) {
 
 
 /* Adds an entry to the first free slot of the eight-slot table. */
-void FUN_L00_00216ec0(int a, int b, int c) {
+void help_queue_add(int a, int b, int c) __asm__("FUN_L00_00216ec0");
+void help_queue_add(int a, int b, int c) {
     struct Hero *g = &hero;
     short *p = (short *)(&g->unk21D8[0]);
     int i;

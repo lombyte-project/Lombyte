@@ -31,7 +31,8 @@ extern int D_L00_0015F434;
 extern int D_L00_0017E504[];
 
 /* Clears D_L00_0015F424..0015F434, D_L00_0017E504[0] and D_L00_0015F2F0/2F4. */
-void FUN_L00_00297e30(void) {
+void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
+void reset_frame_counters(void) {
     D_L00_0015F424 = 0;
     D_L00_0017E504[0] = 0;
     D_L00_0015F42C = 0;
@@ -141,7 +142,7 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
-extern void FUN_L00_0024e7a8(void);
+extern void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
 extern void FUN_L00_002648e0(void);
 extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 extern void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
@@ -261,7 +262,7 @@ void handle_pause_input(void) {
     if (DBG(2))
         FUN_L00_00297e30_c();
     if (DBG(2)) {
-        FUN_L00_0024e7a8();
+        count_expired_mobys();
         FUN_L00_002648e0();
         enqueue_voice_request();
         update_ambience_target_cycle();
@@ -470,7 +471,7 @@ float absolute_float(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
-void FUN_L00_00265880(int);
+void music_set_active_track_value(int) __asm__("FUN_L00_00265880");
 void finish_cutscene(void) __asm__("FUN_L00_00298b18");
 
 void finish_cutscene(void) {
@@ -523,7 +524,7 @@ void finish_cutscene(void) {
         active_scene_trigger.trigger = 0;
         fun_00216c48(scene_trigger_moby, scene_trigger, 1);
     }
-    FUN_L00_00265880(scale_game_frames(0x1E));
+    music_set_active_track_value(scale_game_frames(0x1E));
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -684,7 +685,7 @@ void update_cutscene_playback(void) {
     f32 weighted_next_key_position[4] __attribute__((aligned(16)));
 
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        FUN_L00_00297e30();
+        reset_frame_counters();
     }
     if (!(g_debug_menu.update_flags & 0x10) || (D_0013CAE4 & 0x220)) {
         apply_level_specific_cutscene_moby_effects();
@@ -931,7 +932,8 @@ void FUN_001227d8_2997c8(void *, int) __asm__("FUN_001227d8");
 void FUN_00216c48_2997c8(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215c40");
 void count_vsync(void) __asm__("FUN_0012f1c8");
-void FUN_L00_002997c8(void) {
+void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
+void movie_exit_to_gameplay(void) {
     char buf[0x70] __attribute__((aligned(16)));
     s32 large_count, small_count, gs_address, source, i, j;
     struct ActiveSceneTrigger *active;
@@ -989,7 +991,7 @@ extern int D_L00_0016104C;
 extern int D_L00_00161050;
 extern int sceCdSync_alt(int) __asm__("FUN_00120c30");
 extern void play_mpeg_movie(int, int, int, int, int) __asm__("FUN_0023a3b8");
-extern void FUN_L00_002997c8(void);
+extern void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
 extern void FlushCache(s32);
 s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
 void memcard_update_state(void) __asm__("FUN_002093d8");
@@ -1013,7 +1015,7 @@ void play_queued_movie(void) {
     play_mpeg_movie(D_L00_00161048, D_L00_0016104C, (D_L00_00161054 + 0x3F) & ~0x3F,
                     (D_L00_00161058 + 0x3F) & ~0x3F, D_L00_00161050);
     sceCdSync_alt(0);
-    FUN_L00_002997c8();
+    movie_exit_to_gameplay();
 }
 /* starts the slideshow: resets state, rebases the level data pointers, and starts the first two streams */
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029ADD8), where it is exact; names translated to the US level program. */
@@ -1961,7 +1963,7 @@ extern void *D_L00_00197300[];
 extern ViewCamera D_L00_00166C80;
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 
-extern void FUN_L00_00297e30(void);
+extern void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
 extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
@@ -1996,7 +1998,7 @@ extern void FUN_00237e90(s32);
 extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void FUN_L00_00235ea0(void);
+extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
@@ -2301,7 +2303,7 @@ void update_vendor_menu(void) {
     case VENDOR_MENU_CLOSING:
         if (vendor_menu.f40 == 0 || vendor_menu.state == 2) {
             if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-                FUN_L00_00297e30();
+                reset_frame_counters();
             }
             if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 update_visible_resident_objects();
@@ -2461,7 +2463,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2478,7 +2480,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2501,7 +2503,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2523,7 +2525,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, FUN_L00_00235ea0,
+                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2576,7 +2578,7 @@ void update_vendor_menu(void) {
         update_hud_elements(1);
         break;
     case VENDOR_MENU_EXIT_CUTSCENE:
-        FUN_L00_00297e30();
+        reset_frame_counters();
         update_visible_resident_objects();
         FUN_0022dc50();
         coordinate_hero_frame_update();

@@ -12,7 +12,7 @@ extern void update_three_phase_effect_particle(void) __asm__("FUN_L00_00269290")
 extern void update_drifting_effect_particle_with_distance_fade(void) __asm__("FUN_L00_002694f8");
 extern void update_damped_effect_particle(void) __asm__("FUN_L00_00269a70");
 extern void update_scalar_and_fade_effect_particle(void) __asm__("FUN_L00_00269c70");
-extern void FUN_L00_00269d20(void);
+extern void update_colliding_effect_particle(void) __asm__("FUN_L00_00269d20");
 extern void FUN_L00_0026a418(void);
 extern void update_animated_fading_effect_particle(void) __asm__("FUN_L00_0026a5b8");
 extern void update_rotating_grayscale_effect_particle(void) __asm__("FUN_L00_0026a6f0");
@@ -101,7 +101,7 @@ void register_part_types(void) {
     handlers[3] = (u32)update_drifting_effect_particle_with_distance_fade;
     handlers[4] = (u32)update_damped_effect_particle;
     handlers[5] = (u32)update_scalar_and_fade_effect_particle;
-    handlers[6] = (u32)FUN_L00_00269d20;
+    handlers[6] = (u32)update_colliding_effect_particle;
     handlers[7] = (u32)FUN_L00_0026a418;
     handlers[8] = (u32)update_animated_fading_effect_particle;
     handlers[9] = (u32)update_rotating_grayscale_effect_particle;

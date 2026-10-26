@@ -2629,7 +2629,7 @@ int FUN_L06_002fb2a8_c(char *moby) __asm__("FUN_L06_002fb2a8");
 int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void reset_numeric_hud_element(HudElem *e) __asm__("FUN_L00_00235d80");
-void FUN_L00_00235ea0(HudElem *e);
+void hud_update_counter(HudElem *e) __asm__("FUN_L00_00235ea0");
 void FUN_L00_0025a120(char *o);
 void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);

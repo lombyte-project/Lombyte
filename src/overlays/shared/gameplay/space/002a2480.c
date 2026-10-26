@@ -9,7 +9,8 @@
 
 extern char D_0013E030[];
 
-void FUN_L01_002a2480(void) {
+void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
+void show_tracked_moby(void) {
     char *first = *(char **)D_0013E030;
     if (first != 0) {
         char *moby;

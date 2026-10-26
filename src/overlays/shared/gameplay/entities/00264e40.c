@@ -47,7 +47,8 @@ extern void advance_accelerated_scalar(float *, float *, float, float, float, fl
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
-void FUN_L02_00264e70(char *slots, float *position, float *direction, float distance) {
+void effect_slots_fire(char *slots, float *position, float *direction, float distance) __asm__("FUN_L02_00264e70");
+void effect_slots_fire(char *slots, float *position, float *direction, float distance) {
     float origin[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float adjusted[4] __attribute__((aligned(16)));

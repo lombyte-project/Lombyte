@@ -1025,7 +1025,8 @@ void update_morphoray_chicken(Moby *chicken_moby) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 5 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
-int FUN_L00_002cadc0(char *a) {
+int moby_set_state_from_check(char *a) __asm__("FUN_L00_002cadc0");
+int moby_set_state_from_check(char *a) {
     int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 5)
@@ -2982,7 +2983,7 @@ extern s32 is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8")
 extern void update_crate_stack_motion(struct Moby *) __asm__("FUN_L00_002d1428");
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
-extern void FUN_L00_002cfcb8(struct Moby *);
+extern void ground_attached_update(struct Moby *) __asm__("FUN_L00_002cfcb8");
 extern void create_linked_class_0326_moby(struct Moby *) __asm__("FUN_L00_002d8138");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -3063,7 +3064,7 @@ void crate_update(struct Moby *moby) {
         }
         crate_vars->unkA8 = 0;
         if ((crate_vars->flags ^ 1) & 1) {
-            FUN_L00_002cfcb8(moby);
+            ground_attached_update(moby);
         }
         crate_vars->flags |= 0x14;
         if (moby->oclass == 0x1FF) {

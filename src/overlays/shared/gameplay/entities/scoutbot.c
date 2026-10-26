@@ -85,7 +85,7 @@ void FUN_L00_0025a120(char *o);
 void spawn_explosion(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate) __asm__("FUN_L00_0025e450");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
-void FUN_L08_002d3878(char *m);
+void draw_target_beam(char *m) __asm__("FUN_L08_002d3878");
 void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
 void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
@@ -116,7 +116,7 @@ extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, fl
 extern void delete_3DF8(void *) __asm__("FUN_0020c828");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
 extern void joint_3DF8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L08_002d3878();
+extern void draw_target_beam() __asm__("FUN_L08_002d3878");
 extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 extern float frame_3DF8 __asm__("D_0015ED6C");
@@ -272,7 +272,7 @@ void scoutbot_update(Moby *moby) {
             data->glow_a[2] = sine_3DF8(spin) * 0.25f * charge;
             data->glow_b[1] = cosine_3DF8(spin) * 0.25f * charge;
             data->glow_b[2] = sine_3DF8(spin) * 0.25f * charge;
-            draw_3DF8(FUN_L08_002d3878, moby);
+            draw_3DF8(draw_target_beam, moby);
         }
         if (animdone_3DF8(moby, 14.0f)) {
             if (fast_distance_3DF8(&data->target->pos, &moby->pos) < 3.0f && fabs_3DF8(data->current_target->pos.z - moby->pos.z) < 1.0f) {
@@ -402,8 +402,8 @@ extern u32 D_00151878_002d3878 __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_002d3878 __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_002d3878 __asm__("D_00151880") __attribute__((sda));
 extern u32 D_00151884_002d3878 __asm__("D_00151884") __attribute__((sda));
-void FUN_L08_002d3878(char *moby);
-void FUN_L08_002d3878(char *moby) {
+void draw_target_beam(char *moby) __asm__("FUN_L08_002d3878");
+void draw_target_beam(char *moby) {
     char *data = *(char **)(moby + 0x78);
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
@@ -1011,7 +1011,8 @@ extern float frame_delta_time __asm__("D_0015ED7C");
 extern float frame_delta_time __asm__("D_0015ED7C");
 
 extern V2_12a0 D_L08_001DB500[];
-void FUN_L08_002f12a0(int idx) {
+void advance_scroll_offsets(int idx) __asm__("FUN_L08_002f12a0");
+void advance_scroll_offsets(int idx) {
     D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * frame_delta_time;
     if (D_L08_001E8348_12a0[idx].x > 1.0f) {
         D_L08_001E8348_12a0[idx].x -= 1.0f;
@@ -1033,7 +1034,8 @@ extern float scroll_pos_y[] __asm__("D_L08_00161E14") __attribute__((section(".s
 extern float D_L08_00161DE0[2] __attribute__((sda));
 extern float D_L08_00161DE4[] __attribute__((section(".sdata")));
 /* Advances the X and Y scroll offsets of entry `i` by speed * frame step, wrapping them into [-1, 1]. */
-void FUN_L08_002f1378(int i) {
+void advance_scroll_entry(int i) __asm__("FUN_L08_002f1378");
+void advance_scroll_entry(int i) {
     float *p;
     p = &scroll_pos_x[i * 2];
     *p += D_L08_00161DE0[i * 2] * frame_delta_time;
@@ -1231,7 +1233,7 @@ void FUN_L00_0025a120(char *o);
 void FUN_L00_0025f730(void *a, float x);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L01_0026d930(char *p);
-void FUN_L08_003024d8(char *m);
+void update_blarg_paratrooper_damage_and_state(char *m) __asm__("FUN_L08_003024d8");
 extern char D_0013F350[];
 extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern char *target302618 __asm__("D_L08_00174658") __attribute__((section(".data")));
@@ -1612,7 +1614,7 @@ extern float D_L08_00162190 __attribute__((sda));
 extern float D_L08_00162194 __attribute__((sda));
 extern float D_L08_001621B0 __attribute__((sda));
 
-void FUN_L08_003024d8(char *moby) {
+void update_blarg_paratrooper_damage_and_state(char *moby) {
     char *data, *target, *child, *attached, *chased;
     float pos[4] __attribute__((aligned(16)));
     float matrix[16] __attribute__((aligned(16)));

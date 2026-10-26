@@ -18,7 +18,7 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00
 extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 extern void draw_four_sky_shells_with_animated_particles(void) __asm__("FUN_L00_002895a0");
-extern void FUN_L00_002899a8(void);
+extern void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 extern void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
 extern void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
 extern void draw_three_sky_shells_with_three_particle_types(void) __asm__("FUN_L00_00289cb8");
@@ -73,7 +73,7 @@ void draw_level_sky(void) {
         draw_four_sky_shells_with_animated_particles();
         break;
     case LEVEL_WITH_TWO_ROTATING_SKY_SHELLS:
-        FUN_L00_002899a8();
+        sky_shells_rotate_two();
         break;
     case LEVEL_WITH_FAST_AND_SLOW_ROTATING_SKY_SHELLS:
         draw_sky_shells_with_fast_and_slow_rotation();
@@ -165,7 +165,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-extern void FUN_L00_0023db30();
+extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
 extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
@@ -231,7 +231,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
         particle_source_moby = D_L00_0016C860.unk17C;
         if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
             emit_moby_particle_pairs(particle_source_moby);
-            enqueue_callback_list_1((s32)FUN_L00_0023db30, (s32)particle_source_moby);
+            enqueue_callback_list_1((s32)glow_quads_draw, (s32)particle_source_moby);
         }
     }
     if (current_level_index == 15 && (u32)(D_L00_0016C860.state - 3) < 2) {
@@ -249,7 +249,7 @@ typedef union {
 
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
-extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) {
@@ -266,7 +266,7 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) {
     sky_draw_shell(2);
     qzero(&sky_shell_rotation_radians);
     sky_shell_rotation_radians.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
-    fun_001fa070(D_L00_001BD7E0, &sky_shell_rotation_radians);
+    euler_to_matrix_ee(D_L00_001BD7E0, &sky_shell_rotation_radians);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);

@@ -336,7 +336,8 @@ extern float D_0015ED60_269d20 __asm__("D_0015ED60");
 
 extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
 
-void FUN_L00_00269d20(unsigned char *m) {
+void update_colliding_effect_particle(unsigned char *m) __asm__("FUN_L00_00269d20");
+void update_colliding_effect_particle(unsigned char *m) {
     unsigned char *p = m + 0x20;
     unsigned char *e = *(unsigned char **)(p + 0xc);
     float next[4] __attribute__((aligned(16)));

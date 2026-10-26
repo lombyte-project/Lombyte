@@ -18,7 +18,7 @@ extern struct SkyTransform sky_matrix __asm__("D_001D96E0");
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void fun_001fa070(void *, f32 *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(void *, f32 *) __asm__("FUN_001fa070");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void setup_sky_gif_paging(void) __asm__("func_0022B4C8");
 extern void do_sky_gif_paging(void) __asm__("func_0022B558");
@@ -83,7 +83,7 @@ void draw_sky_shells(void) {
                 shell_scale = 2.0f;
                 break;
             }
-            fun_001fa070(&sky_matrix, rotation_angles);
+            euler_to_matrix_ee(&sky_matrix, rotation_angles);
             transform_row = (u8 *)&sky_matrix;
             scale_vector(transform_row, transform_row, shell_scale);
             scale_vector(transform_row + 0x10, transform_row + 0x10, shell_scale);

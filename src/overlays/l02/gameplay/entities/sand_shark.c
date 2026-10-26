@@ -48,8 +48,8 @@ void set_level02_class_1b1_moby_flag_0800(void) {
 
 extern void prepare_scaled_table_with_byte_128(void *) __asm__("FUN_L02_002a40d0");
 
-void FUN_L02_002a47f8(void);
-void FUN_L02_002a47f8(void) {
+void prepare_scaled_table_on_stack(void) __asm__("FUN_L02_002a47f8");
+void prepare_scaled_table_on_stack(void) {
     char scratch[0x40];
     prepare_scaled_table_with_byte_128(scratch);
 }
@@ -1431,7 +1431,7 @@ extern void FUN_L00_00263ac8(float x, int a, int b, unsigned char *m);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern void FUN_L01_0026d930(char *p);
 extern void reset_shot_tracking(char *moby) __asm__("FUN_L02_00264e40");
-extern void FUN_L02_00264e70(void *, void *, void *, float);
+extern void effect_slots_fire(void *, void *, void *, float) __asm__("FUN_L02_00264e70");
 extern void collect_mobies_around_tracked_objects(char **slots, int a, int b) __asm__("FUN_L02_002651d0");
 void handle_level02_bot_damage_and_retargeting(void *owner_moby) __asm__("FUN_L02_002d85b8");
 
@@ -1686,7 +1686,7 @@ void update_level02_bot(struct Moby *moby) {
         direction[0] = fast_cos_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[1] = fast_sin_c(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[2] = -0.1f;
-        FUN_L02_00264e70(data->shots, position, direction, D_L02_00161A80);
+        effect_slots_fire(data->shots, position, direction, D_L02_00161A80);
         direction[3] = 5627.925f;
         direction[2] = 1.0f;
         make_hit_descriptor(shot, (int)moby, 0x10001, direction, 1.0f);

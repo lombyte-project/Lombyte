@@ -18,7 +18,8 @@ extern OvlVec4 D_L06_001fe8d0[];
 extern float D_L06_001fe960[][2];
 extern u32 D_L06_001fe9a8[];
 extern int D_L06_001fe9d0[][4];
-void FUN_L06_00307578(char *moby) {
+void draw_bot_door_lock_glow(char *moby) __asm__("FUN_L06_00307578");
+void draw_bot_door_lock_glow(char *moby) {
     struct GeometryQuad quad;
     OvlVec4 result[4];
     float rotation[4];
@@ -162,7 +163,7 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
     }
 }
 #include "rnc/overlay/quad.h"
-extern void FUN_L06_00307578(char *moby);
+extern void draw_bot_door_lock_glow(char *moby) __asm__("FUN_L06_00307578");
 #include "rnc/overlay/shared/gameplay/entities/bot_door_lock_globals.h"
 extern float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") __attribute__((sda));
 extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attribute__((sda));
@@ -224,7 +225,7 @@ void bot_door_lock_update(char *moby) {
             if (data[9] < 0.0f) data[9] = 0.0f;
         }
         if (0.0f < data[9]) {
-            enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
+            enqueue_callback_list_1((int)draw_bot_door_lock_glow, (int)moby);
             data[6] = fast_add_rotations(data[6], (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
             number_anchor_position[2] += bot_door_lock_number_bob_amplitude_gp * fast_cos(data[6]);
             value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude_gp * fast_cos(data[10]));
@@ -278,7 +279,7 @@ void bot_door_lock_update(char *moby) {
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
         data[9] -= frame_time + frame_time;
         if (data[9] < 0.0f) data[9] = 0.0f;
-        if (0.0f < data[9]) enqueue_callback_list_1((int)FUN_L06_00307578, (int)moby);
+        if (0.0f < data[9]) enqueue_callback_list_1((int)draw_bot_door_lock_glow, (int)moby);
         return;
     default:
         return;

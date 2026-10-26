@@ -624,7 +624,7 @@ extern int D_L00_001612D8;
 extern int D_L00_0015F5C4;
 extern int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
@@ -648,13 +648,13 @@ extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void FUN_L00_00216ec0(int, int, int);
+extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_002325e0(int bank, int seq);
+extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
@@ -914,17 +914,17 @@ int hero_set_state(int a, int b) {
             q->unk698 = 0;
             if (q->state.prev_control_mode == 0x11) {
                 if ((float)q->underwater_air < 2500.0f) {
-                    FUN_L00_00216ec0(8, scale_game_frames(0x1E), 0);
+                    help_queue_add(8, scale_game_frames(0x1E), 0);
                 } else if ((float)q->underwater_air < 7500.0f) {
-                    FUN_L00_00216ec0(7, scale_game_frames(0x1B), 0);
+                    help_queue_add(7, scale_game_frames(0x1B), 0);
                 }
                 {
                     struct Hero *r = &hero;
                     if (r->state.prev_control_mode == 0x11) {
                         if ((float)r->underwater_air < 2500.0f) {
-                            FUN_L00_00216ec0(8, scale_game_frames(0x1E), 0);
+                            help_queue_add(8, scale_game_frames(0x1E), 0);
                         } else if ((float)r->underwater_air < 7500.0f) {
-                            FUN_L00_00216ec0(7, scale_game_frames(0x28), 0);
+                            help_queue_add(7, scale_game_frames(0x28), 0);
                         }
                     }
                 }
@@ -1306,7 +1306,7 @@ int hero_set_state(int a, int b) {
                 } else {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(0xE));
                 }
-                FUN_L00_002325e0(3, 0x12);
+                hero_queue_sequence(3, 0x12);
             }
         }
         break;
@@ -1331,7 +1331,7 @@ int hero_set_state(int a, int b) {
                          *(float *)(((char *)p->grapple_target) + 0x14) - p->motion.pos.f[1]);
         if (b) {
             set_hero_animation(0x2F, 2, (float)scale_game_frames(5));
-            FUN_L00_002325e0(0xA, 0xE);
+            hero_queue_sequence(0xA, 0xE);
         }
         break;
     }
@@ -2251,7 +2251,7 @@ int hero_set_state(int a, int b) {
                 if (q->state.prev == 1)
                     n = scale_game_frames(0x11);
                 set_hero_animation(0x1A, 0, (float)n);
-                FUN_L00_002325e0(6, 0x15);
+                hero_queue_sequence(6, 0x15);
             }
             break;
         }
@@ -2782,7 +2782,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         if (b) {
             set_hero_animation(4, 0, (float)scale_game_frames(7));
-            FUN_L00_002325e0(0xE, 0x22);
+            hero_queue_sequence(0xE, 0x22);
         }
         break;
     }
@@ -2975,7 +2975,7 @@ int hero_set_state(int a, int b) {
             t->restore_item[1] = 1;
         }
     }
-    if (FUN_L00_0020d568() == 0) {
+    if (hero_is_in_special_state() == 0) {
         struct Hero *t = &hero;
         if (t->items[1].item_id == 0 && t->saved_item[1] != 0) {
             t->restore_item[1] = 1;

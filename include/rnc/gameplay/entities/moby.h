@@ -63,7 +63,7 @@ struct Moby {
     void (*update)(struct Moby *moby);
     u8 *pvars;
     u8 unk7C;
-    u8 sound_slot;                    /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
+    u8 sound_slot;                    /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (advance_hero_animation) */
     u8 anim_trigger_count;
     u8 shadow_range;                  /* shadow range in units of 1024; 0x17 from seeker_update near D_L09_00166F40 */
     u8 pad80[6];

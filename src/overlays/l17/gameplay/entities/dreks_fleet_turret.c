@@ -85,7 +85,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short D_L17_00161498 __attribute__((sda));
-extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
+extern unsigned char *spawn_trail_particle(char *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_001ff290(void *, void *, void *);
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
@@ -241,7 +241,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
                 FUN_L00_001ff290(hit_descriptor_and_vector_scratch, beam_endpoint_and_offset_scratch, beam_endpoint_position_scratch);
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
-                FUN_L17_0026fb60(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
+                spawn_trail_particle(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             signed_beam_length = -signed_beam_length;
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x20);
@@ -251,13 +251,13 @@ void update_fleet_beam(struct Moby *beam_moby) {
                 *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
-                FUN_L17_0026fb60(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
+                spawn_trail_particle(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
             beam_vector_scratch[0] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[1] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[2] += random_float_between(-0.01f, 0.01f);
-            FUN_L17_0026fb60(0, beam_vars + 0x20, beam_vector_scratch);
+            spawn_trail_particle(0, beam_vars + 0x20, beam_vector_scratch);
         }
         enqueue_callback_list_1(draw_fleet_beam_quad, beam_moby);
     }
@@ -644,7 +644,7 @@ extern float vector_length_xyz(void *);
 extern float wrap_angle(float);
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int FUN_L00_0020d568(void);
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int rand(void);
 extern int random_integer_below(int);
 extern int truncate_float_to_s32();
@@ -702,7 +702,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
     char *w;
 
     ring_vars = *(float **)(moby + 0x78);
-    if (FUN_L00_0020d568() != 0) {
+    if (hero_is_in_special_state() != 0) {
         switch (*(unsigned char *)(moby + 0x20)) {
         case RING_INITIALIZE:
             *(unsigned char *)(moby + 0x30) = 0xFF;

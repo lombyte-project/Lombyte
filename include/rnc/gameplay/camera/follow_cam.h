@@ -90,7 +90,7 @@ typedef struct {
 
 typedef struct FollowCamState {
     f32 position[4];       /* 0x00: the record's position when a shot camera snaps */
-    s16 unk10;             /* 0x10: set by FUN_L00_002e8568 */
+    s16 unk10;             /* 0x10: set by set_follow_camera_orbit_clamp_mode */
     u8 pad12[0xE];
     FollowCamReset reset;  /* 0x20 */
     FollowCamBlock follow; /* 0x40 */

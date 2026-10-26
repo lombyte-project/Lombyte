@@ -33,10 +33,10 @@ extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
-extern void FUN_L00_00232670(void);
-extern void FUN_L00_002484e0(void *);
+extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
+extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(void *);
-extern void FUN_L01_00228000(void);
+extern void hero_frame_update(void) __asm__("FUN_L01_00228000");
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
@@ -58,10 +58,10 @@ void FUN_L03_002002f8(void) {
     *(short *)(g + 0x1EB2) = 0;
     *(short *)(g + 0x1EB0) = 0;
     if (*(unsigned char *)(g + 0x20A4) != 0) {
-        FUN_L01_00228000();
+        hero_frame_update();
         return;
     }
-    FUN_L00_00232670();
+    advance_hero_animation();
     hero_update();
     update_hero_ground_material_effects();
     update_hero_ledge_probe();
@@ -92,7 +92,7 @@ void FUN_L03_002002f8(void) {
     scan_hero_input_sequences();
     no_op_main_callback_alt(*(void **)(g + 0x2080));
     if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32) {
-        FUN_L00_002484e0(g + 0x80);
+        reveal_map_around_position(g + 0x80);
     }
     {
         char *q = (char *)D_0013E533 + 0xE1D;

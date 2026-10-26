@@ -2450,7 +2450,7 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void spawn_nearby_effect(int, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
 
@@ -2508,7 +2508,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     update_robot_dog_aim_joint(robot_dog_moby);
     update_robot_dog_glow_effects(robot_dog_moby);
     facing_target_moby = robot_dog_vars->target;
-    FUN_L00_00263b38(robot_dog_vars->a230, 2.1f);
+    manipulator_set_scale(robot_dog_vars->a230, 2.1f);
     if (robot_dog_moby[0x31] != 0 && FUN_001f9b48(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
         FUN_L00_0025a120(robot_dog_moby);
         robot_dog_moby[0x7F] = 0x17;
@@ -2993,7 +2993,8 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-int FUN_L17_002efea8(struct Moby *moby) {
+int enemy_stun_update(struct Moby *moby) __asm__("FUN_L17_002efea8");
+int enemy_stun_update(struct Moby *moby) {
     int result = process_moby_suck_cannon_suction(moby);
     if (result) {
         moby->state = 12;
@@ -3321,7 +3322,8 @@ extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_0025
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void FUN_L17_002f0948(struct Moby *moby) {
+void draw_ripple_ring(struct Moby *moby) __asm__("FUN_L17_002f0948");
+void draw_ripple_ring(struct Moby *moby) {
     RippleData_c *d = (RippleData_c *)moby->pvars;
     T4_c t;
     float scale;

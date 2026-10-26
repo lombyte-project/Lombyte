@@ -654,7 +654,8 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 extern float D_L16_00161D78;
-void FUN_L16_002e5d30(int idx) {
+void group_trigger_nearest(int idx) __asm__("FUN_L16_002e5d30");
+void group_trigger_nearest(int idx) {
     short *p = D_L16_001ABCC0[idx];
     char *best = 0;
     float bestd = 50000.0f;
@@ -677,7 +678,8 @@ void FUN_L16_002e5d30(int idx) {
 extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
-void FUN_L16_002e9df0(unsigned char *moby) {
+void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
+void moby_update_draw_only(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         moby[0x20] = 1;

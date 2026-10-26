@@ -139,7 +139,7 @@ extern void FUN_L00_002e8620(void);
 extern void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 extern void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
-extern void FUN_L00_002e8568(s32);
+extern void set_follow_camera_orbit_clamp_mode(s32) __asm__("FUN_L00_002e8568");
 extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590");
 
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
@@ -209,7 +209,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         camera_spring_state->f44 = D_L00_00161DA4;
     }
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
-        FUN_L00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
     }
@@ -243,7 +243,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
     }
     if (hero.state.current == 0x81 && (D_0013CAE0[0] & 3)) {
-        FUN_L00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
         { M_2e6000 *mm = camera_moby->m;

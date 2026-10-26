@@ -10,8 +10,8 @@ extern unsigned int D_0013CAE0 __attribute__((section(".data")));
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void FUN_L00_00236268(void);
-extern void FUN_L00_00236458(void);
+extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
+extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 extern void draw_hud_stars(void) __asm__("FUN_L00_002365a8");
 extern int ray_hits(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -32,8 +32,8 @@ int try_transition_hero_water_state(void) {
             decrement = 0;
         } else {
             decrement = 10000 / (scale_game_frames(0x3C) * 15);
-            queue_animation_update(4, 0x753F, FUN_L00_00236268,
-                FUN_L00_00236458, draw_hud_stars, &hero.underwater_air, 10000);
+            queue_animation_update(4, 0x753F, hud_init_particles,
+                hud_update_particles, draw_hud_stars, &hero.underwater_air, 10000);
         }
         hero.underwater_air -= decrement;
         if (hero.underwater_air < 0)

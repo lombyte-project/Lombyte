@@ -400,7 +400,7 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
             struct Hero *q = &hero;
             if (q->state.current == 0x81) {
                 moby_vars[1]++;
-                if ((pad_held[0] & 3) && 0.3f < q->unk229C) {
+                if ((pad_held[0] & 3) && 0.3f < q->stick_magnitude) {
                     moby_vars[2]++;
                 } else {
                     moby_vars[2] = 0;

@@ -74,7 +74,8 @@ extern void FUN_001f9a10_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, void *) __asm__("FUN_001
 extern void FUN_001f97b0_2cfcb8(void) __asm__("FUN_001f97b0");
 extern f32 FUN_001f9b48_2cfcb8(V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_001f9b48");
 
-void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
+void ground_attached_update(M_2cfcb8 *moby) __asm__("FUN_L00_002cfcb8");
+void ground_attached_update(M_2cfcb8 *moby) {
     V_2cfcb8 probe_top;
     V_2cfcb8 probe_bottom;
     V_2cfcb8 probe_up;
@@ -1060,7 +1061,8 @@ extern void func_00215C00_2D3608(void *, float, float, float) __asm__("FUN_00214
 extern int func_L00_001EFFF0_2D3608(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void func_L00_002C8680_2D3608(float *pos, float *tgt, float *output, float speed, float unused, float range) __asm__("FUN_L00_002c7320");
 
-void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
+void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
+void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *position)
 {
     Vec_2D3608 anchor;
     Mat3_2D3608 rotation;
@@ -2513,7 +2515,8 @@ extern s16 FUN_00200250_2d5160(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001fef20_2d5160(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00257880_2d5160(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
 
-void FUN_L00_002d5160(unsigned char *m) {
+void process_horny_toad_hit_reaction(unsigned char *m) __asm__("FUN_L00_002d5160");
+void process_horny_toad_hit_reaction(unsigned char *m) {
     unsigned char *v = *(unsigned char **)(m + 0x78);
     unsigned char *hit;
     s32 result;
@@ -3767,7 +3770,8 @@ unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
 }
 void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Grows the float at 0x2C by 2.5% and lowers byte 0x23 by 3; removes the moby below 4. */
-void FUN_L00_002d7f38(u8 *moby) {
+void grow_and_fade_out_update(u8 *moby) __asm__("FUN_L00_002d7f38");
+void grow_and_fade_out_update(u8 *moby) {
     *(f32 *)(moby + 0x2C) *= 1.025f;
     if ((u8)(moby[0x23] -= 3) < 4)
         mark_moby_for_removal();

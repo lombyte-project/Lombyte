@@ -1007,7 +1007,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 extern float D_L01_001DEB40[];
-void FUN_L01_002e3110(char *a, char *m) {
+void sand_mouse_compute_target(char *a, char *m) __asm__("FUN_L01_002e3110");
+void sand_mouse_compute_target(char *a, char *m) {
     Vs t0;
     Vs t1;
     struct Hero *g = &hero;
@@ -1384,7 +1385,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
-extern void FUN_L01_002e3110(char *, char *);
+extern void sand_mouse_compute_target(char *, char *) __asm__("FUN_L01_002e3110");
 extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
 extern void update_sand_mouse_targeted_spawning(char *, char *) __asm__("FUN_L01_002e35a8");
 extern void update_hover_moby_steering(struct Moby *, char *) __asm__("FUN_L01_002e3830");
@@ -1585,7 +1586,7 @@ void sand_mouse_update(struct Moby *moby) {
             && hero_2e3f20->b20A4 == 0
             && !fast_dec_timer(&sand_mouse_vars->t60)
             && sand_mouse_vars->count < D_L01_0016191C) {
-            FUN_L01_002e3110((char *)moby, (char *)sand_mouse_vars);
+            sand_mouse_compute_target((char *)moby, (char *)sand_mouse_vars);
             update_hover_moby_steering(moby, sand_mouse_vars);
         } else {
             if (moby->prev_seq != 5) {

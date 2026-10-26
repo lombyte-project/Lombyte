@@ -318,7 +318,8 @@ typedef struct {
     unsigned long pk[4];
 } Quad_2a5040;
 
-void FUN_L00_002a5040(char *m) {
+void draw_vendor_effects(char *m) __asm__("FUN_L00_002a5040");
+void draw_vendor_effects(char *m) {
     char *p = *(char **)(m + 0x78);
     Quad_2a5040 qd;
     float q[4][4];
@@ -1880,7 +1881,7 @@ extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022d
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
 extern void set_vector_length_xy(void*,void*,float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00232640(int);
+extern void hero_set_attack_ticks(int) __asm__("FUN_L00_00232640");
 extern void offset_hero_position_against_gravity(float*,float*,float) __asm__("FUN_L00_002336e8");
 extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
 extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
@@ -2124,7 +2125,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             normalize_vector_xyz(work.v[1],work.v[1],wrench_vars->speed); add_vector_xyz(position,position,work.v[1]);
             if (length/wrench_vars->speed<(float)scale_game_frames_alt(4) && wrench_hero()->selected_weapon!=-1) {
                 int sound;
-                FUN_L00_00232640(2); wrench_hero()->weapon_animation=26;
+                hero_set_attack_ticks(2); wrench_hero()->weapon_animation=26;
                 sound=wrench_hero()->thrown_sound;
                 if (sound!=-1) { unsigned char *audio=voice_slot(sound); if (*(WrenchMoby**)(audio+0x88)==wrench_hero()->moby && audio[0x74]) release_voice_slot(sound); }
                 wrench_hero()->thrown_sound=-1;
@@ -2188,7 +2189,8 @@ extern short D_L00_001B0770[];
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 extern void append_unique_moby_index(void *, short *, int) __asm__("FUN_L00_0025f780");
 
-char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
+char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) __asm__("FUN_L00_002a96f8");
+char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
     char *m;
     char *d;
     BoltVector_2AA998 t;

@@ -353,7 +353,8 @@ int update_moby_suck_cannon_suction_state(struct Moby *moby) {
 
 extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
-void *FUN_L11_00316210(struct Moby *arg) {
+void *moby_park_state_on_find(struct Moby *arg) __asm__("FUN_L11_00316210");
+void *moby_park_state_on_find(struct Moby *arg) {
     void *found = store_moby_in_suck_cannon(arg);
     if (found != 0) {
         unsigned char state = arg->state;
@@ -1910,8 +1911,8 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
-extern void FUN_L08_002f12a0(int);
-extern void FUN_L08_002f1378(int);
+extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
+extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1973,9 +1974,9 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         subtract_vector_xyz(effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
         effect_distance = vector_length_xyz(effect_to_reference_delta);
         if (effect_distance <= 35.0f) {
-            FUN_L08_002f12a0(0);
+            advance_scroll_offsets(0);
             advance_wrapped_sine_pair(D_L11_001FF758, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
-            FUN_L08_002f12a0(2);
+            advance_scroll_offsets(2);
             if (effect_distance < 15.0f) {
                 D_L11_00162590 = 0xFF;
             } else if (effect_distance < 35.0f) {
@@ -1984,9 +1985,9 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
                 D_L11_00162590 = 0;
             }
         }
-        FUN_L08_002f1378(0);
-        FUN_L08_002f1378(0);
-        FUN_L08_002f1378(1);
+        advance_scroll_entry(0);
+        advance_scroll_entry(0);
+        advance_scroll_entry(1);
         enqueue_callback_list_1(draw_level11_layered_effect_batches, moby);
         break;
     }
@@ -2088,8 +2089,8 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void FUN_L11_0031e930_c(void) __asm__("FUN_L11_0031e930");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
-extern void FUN_L08_002f12a0(int);
-extern void FUN_L08_002f1378(int);
+extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
+extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -2150,9 +2151,9 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         subtract_vector_xyz(effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
         effect_distance = vector_length_xyz(effect_to_reference_delta);
         if (effect_distance <= 100.0f) {
-            FUN_L08_002f12a0(0);
+            advance_scroll_offsets(0);
             advance_wrapped_sine_pair(D_L11_00217760, 0.52f, 0.62f, 0.06f, (void *)D_L11_00162630);
-            FUN_L08_002f12a0(2);
+            advance_scroll_offsets(2);
             if (effect_distance < 80.0f) {
                 D_L11_00162610_c = 0xFF;
             } else if (effect_distance < 100.0f) {
@@ -2161,9 +2162,9 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
                 D_L11_00162610_c = 0;
             }
         }
-        FUN_L08_002f1378(0);
-        FUN_L08_002f1378(0);
-        FUN_L08_002f1378(1);
+        advance_scroll_entry(0);
+        advance_scroll_entry(0);
+        advance_scroll_entry(1);
         enqueue_callback_list_1(FUN_L11_0031e930_c, moby);
         break;
     }

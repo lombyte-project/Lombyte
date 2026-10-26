@@ -2345,7 +2345,7 @@ extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm_
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L00_00263b38(void *, float);
+extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void add_vector_xyz(void *, void *, void *);
 extern void advance_moby_animation(void *);
@@ -2433,7 +2433,7 @@ void blarg_trooper_update(struct Moby *moby) {
         flag = 1;
     }
     pos = (float *)&moby->pos;
-    FUN_L00_00263b38(data + 0x110, 3.0f);
+    manipulator_set_scale(data + 0x110, 3.0f);
     if (moby->visible != 0) {
         if (FUN_001f9b48(pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);

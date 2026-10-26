@@ -12,7 +12,7 @@ int spawn_airship_part() __asm__("FUN_L09_002c2500");
 extern s32 FUN_00120478_2c26c8(f32) __asm__("FUN_00120478");
 extern void FUN_001f9a10_2c26c8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_2c26c8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_00210850_2c26c8(void *, int, int *, void *) __asm__("FUN_00210850");
+extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 extern void FUN_L00_0024f7c8_2c26c8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 typedef struct Data_2c26c8 {
     float vel[4];
@@ -151,7 +151,7 @@ void update_airship_part(struct Moby *moby) {
         }
         joint = 0;
         joint_offset_scale = moby->scale * 0.0009765625f;
-        FUN_00210850_2c26c8(moby, 1, &joint, transform_and_effect_scratch.m);
+        get_moby_joint_matrices(moby, 1, &joint, transform_and_effect_scratch.m);
         FUN_001f9a68_2c26c8(part_vars->off, transform_and_effect_scratch.m[3], joint_offset_scale);
         moby->state = 1;
         break;

@@ -336,7 +336,8 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
-void FUN_L00_00262360(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
+void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) __asm__("FUN_L00_00262360");
+void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
     Vec4 tmp;
     s32 seg;
 

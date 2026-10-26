@@ -2,7 +2,8 @@
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 extern s32 D_0015F5EC;
-void FUN_00226e08(void) {
+void tick_space_transition(void) __asm__("FUN_00226e08");
+void tick_space_transition(void) {
     s32 new_value;
     s32 old_value;
     s32 fifty;

@@ -6,6 +6,7 @@
 #include "sda.h"
 
 /* Sets the moby state byte to 1. */
-void FUN_L14_002ffc08(unsigned char *moby) {
+void moby_set_state_one(unsigned char *moby) __asm__("FUN_L14_002ffc08");
+void moby_set_state_one(unsigned char *moby) {
     moby[0x20] = 0x1;
 }

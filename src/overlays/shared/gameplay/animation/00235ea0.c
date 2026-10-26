@@ -16,7 +16,8 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00235ea0(HudElem *hud_element) {
+void hud_update_counter(HudElem *hud_element) __asm__("FUN_L00_00235ea0");
+void hud_update_counter(HudElem *hud_element) {
     unsigned char *counter_state_bytes = hud_element->cnt;
     int counter_value;
     int cap;

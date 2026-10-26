@@ -33,7 +33,8 @@ extern s32 D_L00_001844A8[] NOT_SDA;
 extern void world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
 extern s32 ensure_menu_cache_entry(s32) __asm__("FUN_L00_00249d80");
 
-void FUN_L00_002484e0(f32 *position) {
+void reveal_map_around_position(f32 *position) __asm__("FUN_L00_002484e0");
+void reveal_map_around_position(f32 *position) {
     s32 filters[16];
     f32 px;
     f32 py;

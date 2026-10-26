@@ -10,7 +10,7 @@ typedef union {
 extern void clear_u64_value(float *) __asm__("func_001F99F8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void fun_001fa070(float *, float *) __asm__("FUN_001fa070");
+extern void euler_to_matrix_ee(float *, float *) __asm__("FUN_001fa070");
 extern void multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
 
 /* Matrix to Euler angles: on a copy of src with the translation cleared,
@@ -45,7 +45,7 @@ void matrix_to_euler(Mtx44 *input_matrix, float *out) {
     cancellation_angles[0] = 0.0f;
     cancellation_angles[2] = 0.0f;
     cancellation_angles[1] = -y;
-    fun_001fa070(cancellation_matrix, cancellation_angles);
+    euler_to_matrix_ee(cancellation_matrix, cancellation_angles);
     multiply_matrix(&m, cancellation_matrix, &m);
     x = fast_arc_tan(m.m[1][1], m.m[1][2]);
     cancellation_angles[1] = 0.0f;

@@ -202,7 +202,7 @@ extern Path *D_L00_001B04B0[];
 extern s32 D_L00_0015F580[] MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
-extern void FUN_L00_00263b38(void *, f32);
+extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
 extern void update_joint_animation(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_0025a120(ElectroidMoby *);
 extern f32 FUN_001f9b48(void *, void *);
@@ -271,7 +271,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     vars = moby->vars;
     update_veldin_robot_damage_and_targeting(moby);
     target = vars->target;
-    FUN_L00_00263b38(vars->unk120, 2.5f);
+    manipulator_set_scale(vars->unk120, 2.5f);
     if (*(u8 *)0x15EDB7 != 0) {
         update_joint_animation(moby, vars->unk120, 2, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp * 0.3f);
     }

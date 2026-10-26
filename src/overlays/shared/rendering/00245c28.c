@@ -60,7 +60,7 @@ extern void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void update_slideshow(void) __asm__("FUN_L00_00299c48");
 extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
-extern void FUN_L00_001f6d70(void);
+extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void put_draw_buffer_small(void) __asm__("FUN_001fb3d0");
 extern void append_palette_transfer_packet(void) __asm__("FUN_001fb6e0");
@@ -89,7 +89,7 @@ extern void music_unpause(void) __asm__("FUN_00216088");
 extern void music_pause(int) __asm__("FUN_00216050");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
-extern void FUN_00226e08(void);
+extern void tick_space_transition(void) __asm__("FUN_00226e08");
 
 extern char D_L00_00165FB0[];
 extern char D_L00_00161E00[];
@@ -167,7 +167,7 @@ void run_level_main_loop(void) {
         full = 0;
         frm_clock_time += (unsigned int)*(volatile int *)0x10000800;
         *(volatile int *)0x10000800 = 0;
-        FUN_L00_001f6d70();
+        frame_roll_counter();
         D_L00_0015F5D8 = 0;
         vu1_send_chain_render_buffer();
         swap_render_buffer_chain();
@@ -280,12 +280,12 @@ void run_level_main_loop(void) {
                 }
                 sce_gs_sync_v(0);
                 D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
-                FUN_00226e08();
+                tick_space_transition();
                 D_L00_0015F5AC = 0;
             } else {
                 sce_gs_sync_v(0);
                 D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
-                FUN_00226e08();
+                tick_space_transition();
                 D_L00_0015F5A8_e[1] = 0.0f;
             }
         }

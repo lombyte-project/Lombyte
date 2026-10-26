@@ -784,7 +784,7 @@ extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
-extern void FUN_L02_00223450(void);
+extern void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
@@ -1898,7 +1898,7 @@ void update_hero_state_motion(void) {
         }
         update_hero_stick_target_magnitude();
         if (hero.move_lock_timer == 0) {
-            FUN_L02_00223450();
+            hero_update_hop_velocity();
         }
         adjust_hero_pose_targets_from_motion();
         build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
@@ -2101,7 +2101,7 @@ void update_hero_state_motion(void) {
                     }
                 }
             } else {
-                FUN_L02_00223450();
+                hero_update_hop_velocity();
             }
         }
         if (hero.ground_z.f > hero.smoothed_ground_z) {
@@ -2280,7 +2280,7 @@ void update_hero_state_motion(void) {
     case 0x55:
         stick_target(frame_time * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
-            FUN_L02_00223450();
+            hero_update_hop_velocity();
         }
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 21.0f);
         if (hero.motion.velocity.f[2] < frame_time * -15.0f) {

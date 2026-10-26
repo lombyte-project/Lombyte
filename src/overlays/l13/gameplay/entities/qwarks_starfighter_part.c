@@ -481,7 +481,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_0015172A[];
 extern void reset_numeric_hud_element() __asm__("FUN_L00_00235d80");
-extern void FUN_L00_00235ea0();
+extern void hud_update_counter() __asm__("FUN_L00_00235ea0");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
@@ -634,7 +634,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 0;
             }
         }
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)FUN_L00_00235ea0,
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         data->fAC += (frame_time * 42.0f - data->fAC) * 0.1f;
@@ -662,7 +662,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
     }
     case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH:
     case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY:
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)FUN_L00_00235ea0,
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
@@ -689,7 +689,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         break;
     case STARFIGHTER_STATE_TRACTOR_BEAM: {
         float hero_distance;
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)FUN_L00_00235ea0,
+        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         update_qwarks_starfighter_attack_commands(moby, data);

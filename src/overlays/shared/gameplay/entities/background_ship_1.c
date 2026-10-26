@@ -977,7 +977,7 @@ extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8(float, float) __asm__("FUN_L00_002e84b8");
-extern void FUN_L00_002e8568(int) __asm__("FUN_L00_002e8568");
+extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
 extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e8590");
 extern void follow_camera_set_up_spring(float, float) __asm__("FUN_L00_002e85d8");
 extern void FUN_L00_002e8620(void);
@@ -1186,7 +1186,7 @@ void apply_moby_camera_control(char *moby) {
         follow_camera_set_offset_scale(0, *(float *)(data + 0x4c), 0.005f);
     if (*(short *)(data + 0x3c) == 3) {
         float heading;
-        FUN_L00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
         FUN_L00_002e8648();
         follow_camera_set_up_spring(0.01f, 0.2f);
@@ -1197,7 +1197,7 @@ void apply_moby_camera_control(char *moby) {
         follow_camera_set_lateral_spring(heading, 0.2f);
     }
     if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
-        FUN_L00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
         FUN_L00_002e8648();
         follow_camera_set_up_spring(0.02f, 0.2f);

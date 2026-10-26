@@ -20,7 +20,8 @@
 
 extern int store_moby_in_suck_cannon(struct Moby *) __asm__("FUN_L00_002dbb20");
 
-int FUN_L18_002d6190(struct Moby *moby) {
+int moby_hold_state_while_active(struct Moby *moby) __asm__("FUN_L18_002d6190");
+int moby_hold_state_while_active(struct Moby *moby) {
     int active = store_moby_in_suck_cannon(moby);
     if (active != 0) {
         moby->state = 4;
@@ -88,7 +89,8 @@ typedef struct {
 } Level18VendorActionMoby;
 
 /* Switches the data to mode 5 at scale 1.5. */
-void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
+void moby_init_action_mode(Level18VendorActionMoby *moby) __asm__("FUN_L18_002d6dc0");
+void moby_init_action_mode(Level18VendorActionMoby *moby) {
     Level18VendorActionData *data = moby->data;
     data->mode = 5;
     data->scale = 1.5f;
@@ -2699,7 +2701,8 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void fast_draw_quad_real(void *, void *, int);
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 
-void FUN_L18_002ea1f8(char *moby) {
+void homing_spark_draw(char *moby) __asm__("FUN_L18_002ea1f8");
+void homing_spark_draw(char *moby) {
     Pkt pkt[4];
     float rot[4];
     float m[4][4][4];

@@ -408,8 +408,8 @@ extern s32 D_L08_001DB518[];
 extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
-extern void FUN_L08_002f12a0(int);
-extern void FUN_L08_002f1378(int);
+extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
+extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -464,9 +464,9 @@ void update_layered_mesh_effect(struct Moby *moby) {
             subtract_vector_xyz(distance_vector, D_L08_001675C0, distance_vector);
             distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
-                FUN_L08_002f12a0(0);
+                advance_scroll_offsets(0);
                 advance_wrapped_sine_pair(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
-                FUN_L08_002f12a0(2);
+                advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
                 } else if (distance < 84.0f) {
@@ -476,9 +476,9 @@ void update_layered_mesh_effect(struct Moby *moby) {
                     *(char *)&D_L08_00161E08 = 0;
                 }
             }
-            FUN_L08_002f1378(0);
-            FUN_L08_002f1378(0);
-            FUN_L08_002f1378(1);
+            advance_scroll_entry(0);
+            advance_scroll_entry(0);
+            advance_scroll_entry(1);
             enqueue_callback_list_1(draw_layered_mesh_effect, moby);
         }
         break;
@@ -701,7 +701,8 @@ extern void fast_vec_scale_5e58(void *, void *, f32) __asm__("FUN_001f9a68");
 extern unsigned char *spawn_colored_effect_5e58(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
 extern void spawn_puff_effect_5e58(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
-void FUN_L08_002f5e58(struct Moby *m) {
+void draw_flickering_mesh_effect(struct Moby *m) __asm__("FUN_L08_002f5e58");
+void draw_flickering_mesh_effect(struct Moby *m) {
     Moby_5e58 *moby = (Moby_5e58 *)m;
     Vec_5e58 corner[4],step,left_step,right_step,left,right,point,edge,normal;
     float matrix[16];
@@ -983,7 +984,7 @@ extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-void FUN_L08_002f5e58(struct Moby *m);
+void draw_flickering_mesh_effect(struct Moby *m) __asm__("FUN_L08_002f5e58");
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 
@@ -1046,7 +1047,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
     pos.q = *(u128 *)at;
     pos.f[3] = convert_integer_to_float(light_vars->radius);
     if ((moby->visible != 0 || fast_bsphere_check((char *)&pos, 255.0f) != -1) && !hidden) {
-        enqueue_callback_list_1(FUN_L08_002f5e58, moby);
+        enqueue_callback_list_1(draw_flickering_mesh_effect, moby);
         if (light_vars->flags & 4) {
             if (light_vars->light == -1) {
                 light_vars->light = allocate_colored_effect_slot(light_vars->light_pos.f, (f32)light_vars->radius,

@@ -164,7 +164,7 @@ extern char *FUN_L00_00241940_2463f8(s32) __asm__("FUN_L00_00241940");
 extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
-extern void FUN_L00_00264740(void);
+extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
@@ -430,7 +430,7 @@ s32 load_level_core_data(s32 full, s32 keep) {
             D_0014EE90[z] = 0;
     }
     ((Una2463f8 *)D_L18_00179B00)->v = 0;
-    FUN_L00_00264740();
+    link_and_update_all_mobys();
     game_frame++;
     return 0;
 }
