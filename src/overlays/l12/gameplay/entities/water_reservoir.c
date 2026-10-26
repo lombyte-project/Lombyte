@@ -204,7 +204,7 @@ extern void FUN_L00_00250df8(void *);
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
 
-char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) {
+char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float nominal_speed, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
     if (moby != 0) {
         char *data;
@@ -222,7 +222,7 @@ char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
         *(float *)(data + 0x1C) = yaw;
-        *(float *)(data + 0x24) = f1;
+        *(float *)(data + 0x24) = nominal_speed;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = scaled_frames;
         FUN_L00_00250df8(moby);
