@@ -305,13 +305,18 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void hero_update_movement(void) __asm__("FUN_L00_00217970");
 void hero_update_movement(void) {
     enum {
+        HERO_STATE_JUMP_WITH_TIMED_TRAIL_UPDATE = 0xD,
         HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
         HERO_STATE_SWIM_WITH_ITEM_EFFECTS = 0x35,
         HERO_STATE_JUMP_WITH_ASCENT_EFFECTS = 0x3C,
         HERO_STATE_LOCAL_HEADING_LIMITED_MOVE = 0x3F,
         HERO_STATE_ALT_LEDGE_POSITION_HOLD = 0x4A,
         HERO_STATE_GRAVITY_FLATTENED_STICK_MOVE = 0x4F,
+        HERO_STATE_SPEED_DEPENDENT_STICK_MOVE = 0x50,
         HERO_STATE_ATTACK_RECORD_POINT_PAIR_SOUND = 0x51,
+        HERO_STATE_STICK_MOVE_WITH_RADIAL_SOUND = 0x5B,
+        HERO_STATE_FALL_WITH_LOWERED_SOUND_ORIGIN = 0x5C,
+        HERO_STATE_PLANAR_DAMPING_WITH_ZERO_VERTICAL_VELOCITY = 0x5D,
         HERO_STATE_ANIMATION_TIMED_POINT_ATTACK = 0x60,
         HERO_STATE_ANIMATION_TRACKED_MOBY_POSITION_UPDATE = 0x61,
         HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
@@ -320,6 +325,9 @@ void hero_update_movement(void) {
         HERO_ATTACK_RECORD_POINT_3_STRIKE = 0,
         HERO_ATTACK_RECORD_POINT_4_STRIKE = 1,
         HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE = 2
+    };
+    enum {
+        HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION = 1
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1379,7 +1387,7 @@ void hero_update_movement(void) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -2341,7 +2349,7 @@ void hero_update_movement(void) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_TIMED_TRAIL_UPDATE:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
@@ -2696,7 +2704,7 @@ void hero_update_movement(void) {
         }
         break;
     case HERO_STATE_VEHICLE_MODE_1_RUN:
-    case 0x50: {
+    case HERO_STATE_SPEED_DEPENDENT_STICK_MOVE: {
         f32 k = 1.0f;
         f32 d = fast_difference_between_rotations(hero.motion.rot.f[2], hero.motion.move_yaw);
         f32 sp = frame_time * 3.0f;
@@ -2934,7 +2942,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x5C:
+    case HERO_STATE_FALL_WITH_LOWERED_SOUND_ORIGIN:
         stick_target(frame_time * 6.0f, 0);
         qcopy(&v0, &hero.motion.pos);
         v0.f[2] -= 1.0f;
@@ -2947,7 +2955,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = frame_time * -10.0f;
         }
         break;
-    case 0x5B: {
+    case HERO_STATE_STICK_MOVE_WITH_RADIAL_SOUND: {
         f32 d;
         f32 k;
         f32 g;
@@ -3004,7 +3012,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x5D: {
+    case HERO_STATE_PLANAR_DAMPING_WITH_ZERO_VERTICAL_VELOCITY: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 l2 = len;
         if (hero.air_frames.s != 0) {
