@@ -105,7 +105,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HOVERBOARD_RIDE = 0x6B,
         HERO_STATE_HOVERBOARD_VARIANT_ANIMATION = 0x6C,
         HERO_STATE_HOVERBOARD_JUMP = 0x6D,
-        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E
+        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E,
+        HERO_STATE_HOVERBOARD_VOICE_RESET_ANIMATION = 0x6F,
+        HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE = 0x72
     };
     int old2088;
     char *moby;
@@ -606,7 +608,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x6F: {
+    case HERO_STATE_HOVERBOARD_VOICE_RESET_ANIMATION: {
         struct Hero *p = &hero;
         p->item_select_blocked = 1;
         p->unk2284 = 0;
@@ -1936,7 +1938,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
