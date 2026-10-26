@@ -120,92 +120,92 @@ void reveal_map_around_position(f32 *position) {
             continue;
         }
         if ((flags & 1) && !state) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 2) && state) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 4) && !mode16) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 8) && mode16) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 0x10) && !mode15) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 0x20) && mode15) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 0x40) && !hero.unk308) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if ((flags & 0x80) && !D_L00_001844A8[index]) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         if (flags & 0x100) {
             callback = D_L00_00183F90[current_level_index][0];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x200) {
             callback = D_L00_00183F90[current_level_index][1];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x400) {
             callback = D_L00_00183F90[current_level_index][2];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x800) {
             callback = D_L00_00183F90[current_level_index][3];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x1000) {
             callback = D_L00_00183F90[current_level_index][4];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x2000) {
             callback = D_L00_00183F90[current_level_index][5];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x4000) {
             callback = D_L00_00183F90[current_level_index][6];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
         if (flags & 0x8000) {
             callback = D_L00_00183F90[current_level_index][7];
             if (callback != 0 && !callback(position[0], position[1], position[2], x, y)) {
-                *filter = 0;
-                continue;
-            }
+            *filter = 0;
+            continue;
+        }
         }
     }
 

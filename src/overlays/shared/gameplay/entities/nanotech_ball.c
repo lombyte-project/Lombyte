@@ -2960,7 +2960,7 @@ extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
-s32 scale_frames_ddf60(s32) __asm__("FUN_001f96f8");
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void suck_beam_build(char *a, char *b) __asm__("FUN_L00_002ddcb8");
 extern Particle41 *new_particle41(void *,float,float,float,int,void *,float,int) __asm__("FUN_L00_0026d000");
 
@@ -3015,12 +3015,12 @@ void suck_beam_update(void *moby,void *position) {
     add_vector_xyz(&start,&start,&step);
     transform_vector_by_basis(&end,&(*(V41 *)D_L00_00161B70),orientation);
     add_vector_xyz(&end,&end,&step);
-    t=(float)D_L00_00161B54/convert_integer_to_float(scale_frames_ddf60(60));
+    t=(float)D_L00_00161B54/convert_integer_to_float(scale_game_frames(60));
     D_L00_00161B54++;
     step.f.x=start.f.x+(end.f.x-start.f.x)*t;
     step.f.y=start.f.y+(end.f.y-start.f.y)*t;
     step.f.z=start.f.z+(end.f.z-start.f.z)*t;
-    if(D_L00_00161B54>=scale_frames_ddf60(60)) {
+    if(D_L00_00161B54>=scale_game_frames(60)) {
         qcopy(&(*(V41 *)D_L00_00161B60),&(*(V41 *)D_L00_00161B70));
         fast_vec_normalize(&axis,orientation,D_L00_00161B84);
         tmp_a.q=0; tmp_b.q=0;

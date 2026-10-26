@@ -1615,7 +1615,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
 
 extern char D_L00_0016C860[];
 extern void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
-extern void FUN_L00_0020f580(void);
+extern void update_hero_item_mobys(void) __asm__("FUN_L00_0020f580");
 extern void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
 
 void update_hero_slot4_and_slot5_mobys(int moby_override) __asm__("FUN_L00_00234a50");
@@ -1635,7 +1635,7 @@ void update_hero_slot4_and_slot5_mobys(int moby_override) {
             }
         }
         update_hero_world_matrices(moby_override);
-        FUN_L00_0020f580();
+        update_hero_item_mobys();
         animate_hero_slot4_and_slot5_visuals();
         base = &hero;
         item_moby = ((char *)base->items[4].moby);
