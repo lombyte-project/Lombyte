@@ -155,9 +155,12 @@ void process_hero_state_transitions(void) __asm__("FUN_L18_0022e8f8");
 
 void process_hero_state_transitions(void) {
     enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
         HERO_STATE_VEHICLE_MODE_2_FALL = 92,
         HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
+        HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 96,
+        HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 97,
         HERO_STATE_VEHICLE_MODE_2_DYING = 98
     };
     unsigned char *moby;
@@ -1892,7 +1895,7 @@ void process_hero_state_transitions(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
@@ -2384,7 +2387,7 @@ void process_hero_state_transitions(void) {
                     }
                     hero_set_state(0x5A, 1);
                     break;
-                case 96: {
+                case HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION: {
                     float lim = 21.0f;
                     if (((unsigned char *)hero.moby)[0x53] == 0xB) {
                         lim = 25.5f;
@@ -2402,7 +2405,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(0x5A, 0);
                     }
                     break;
-                case 97:
+                case HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT:
                     if (hero.anim_flags & 2) {
                         hero.vehicle_triangle_cooldown = scale_game_frames(0x12D);
                         hero_set_state(0x5A, 1);
