@@ -2665,13 +2665,13 @@ void hero_update_movement(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, sp * 0.72f);
         break;
     }
-    case 0x52:
+    case HERO_STATE_VEHICLE_MODE_1_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x45:
+    case HERO_STATE_VEHICLE_MODE_1_FALL:
         stick_target(frame_time * 3.0f, 0);
         if (hero.move_lock_timer == 0) {
             hero_move_state_velocity();
@@ -2681,7 +2681,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = frame_time * -10.0f;
         }
         break;
-    case 0x44:
+    case HERO_STATE_VEHICLE_MODE_1_RUN:
     case 0x50: {
         f32 k = 1.0f;
         f32 d = fast_difference_between_rotations(hero.motion.rot.f[2], hero.motion.move_yaw);
@@ -2715,7 +2715,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x46: {
+    case HERO_STATE_VEHICLE_MODE_1_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 l2 = len;
         if (hero.air_frames.s != 0) {
@@ -3024,13 +3024,13 @@ void hero_update_movement(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_VEHICLE_MODE_3_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
             hero_move_state_velocity();
@@ -3040,7 +3040,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         f32 d;
         f32 k;
         f32 g;
@@ -3071,7 +3071,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x56: {
+    case HERO_STATE_VEHICLE_MODE_3_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 l2 = len;
         if (hero.air_frames.s != 0) {
