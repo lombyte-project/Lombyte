@@ -45,7 +45,7 @@ void hero_move_state_velocity(void) {
     HopVec_214658 velocity_addend;
     f32 x;
     f32 speed;
-    f32 a;
+    f32 heading_velocity_scale_or_pivot_yaw_delta;
     f32 planar_speed_reduction_step;
     f32 base_planar_velocity_step;
     s32 state;
@@ -108,9 +108,9 @@ void hero_move_state_velocity(void) {
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_214658(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
         hero.motion.velocity.f[1] = FUN_001f9de0_214658(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        a = hero.air_target_speed * FUN_001f9de0_214658(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
-        hero.motion.velocity.f[0] += FUN_001f9dc8_214658(hero.takeoff_yaw) * a;
-        hero.motion.velocity.f[1] += FUN_001f9de0_214658(hero.takeoff_yaw) * a;
+        heading_velocity_scale_or_pivot_yaw_delta = hero.air_target_speed * FUN_001f9de0_214658(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        hero.motion.velocity.f[0] += FUN_001f9dc8_214658(hero.takeoff_yaw) * heading_velocity_scale_or_pivot_yaw_delta;
+        hero.motion.velocity.f[1] += FUN_001f9de0_214658(hero.takeoff_yaw) * heading_velocity_scale_or_pivot_yaw_delta;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == 0x11) {
@@ -135,8 +135,8 @@ void hero_move_state_velocity(void) {
             x = hero.motion.rot.f[2];
             hero.motion.yaw_error = FUN_L00_0025bc98_214658(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
-            a = fast_subtract_rotations(x, hero.motion.rot.f[2]);
-            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
+            heading_velocity_scale_or_pivot_yaw_delta = fast_subtract_rotations(x, hero.motion.rot.f[2]);
+            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, heading_velocity_scale_or_pivot_yaw_delta);
         } else {
             FUN_L00_00211e30_214658(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
         }
