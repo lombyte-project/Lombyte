@@ -558,6 +558,9 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_by_state(void) __asm__("FUN_L14_00228cd0");
 
 void update_hero_motion_by_state(void) {
+    enum {
+        HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F
+    };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -1390,7 +1393,7 @@ void update_hero_motion_by_state(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 0x3F: {
+    case HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT: {
         f32 a;
         f32 f;
         update_hero_stick_target_magnitude();
