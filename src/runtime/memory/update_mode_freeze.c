@@ -67,8 +67,12 @@ void update_mode_freeze(void) {
     enum {
         MODE_FREEZE_AWAIT_CROSS_RESUME = 2,
         MODE_FREEZE_AWAIT_TRIANGLE_RESUME = 3,
+        MODE_FREEZE_BOOT_FLAGS_RELOAD_OR_RESUME = 4,
+        MODE_FREEZE_TRIANGLE_CLEAR_FLAGS_RESUME = 5,
+        MODE_FREEZE_BOOT_AWAIT_CLEAR_FLAGS_RESUME = 9,
         MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME = 12,
-        MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16
+        MODE_FREEZE_RESUME_WITH_ACTION_LIST = 16,
+        MODE_FREEZE_BOOT_GATED_CROSS_RELOAD = 19
     };
     s32 video_mode;
     s32 step;
@@ -311,7 +315,7 @@ void update_mode_freeze(void) {
 
         case MODE_FREEZE_AWAIT_TRIANGLE_RESUME:
 
-        case 5:
+        case MODE_FREEZE_TRIANGLE_CLEAR_FLAGS_RESUME:
             if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
@@ -319,7 +323,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 19:
+        case MODE_FREEZE_BOOT_GATED_CROSS_RELOAD:
             if ((boot_level_active != 0) && (mode_freeze_flags & 2)) {
                 if (controller_state.pressed & PAD_CROSS) {
                     load_and_initialize_level_chunk();
@@ -356,7 +360,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 4:
+        case MODE_FREEZE_BOOT_FLAGS_RELOAD_OR_RESUME:
             if (boot_level_active != 0) {
                 if (mode_freeze_flags & 2) {
                     struct PadState *pad = &controller_state;
@@ -391,7 +395,7 @@ void update_mode_freeze(void) {
             }
             break;
 
-        case 9:
+        case MODE_FREEZE_BOOT_AWAIT_CLEAR_FLAGS_RESUME:
             if (boot_level_active != 0) {
                 if (!(mode_freeze_flags & 6)) {
                     game_mode = freeze.unk14;
