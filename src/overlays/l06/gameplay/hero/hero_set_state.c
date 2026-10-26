@@ -87,6 +87,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern char D_L06_0017C6A0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
         HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D
     };
     int old2088;
@@ -759,7 +760,7 @@ int hero_set_state(int a, int b) {
     case 0x1C:
     case HERO_STATE_GRIND_JUMP:
     case 0x2A:
-    case 0x3C:
+    case HERO_STATE_DAMAGING_GROUND_BOUNCE:
     case 0x49:
     case 0x4C:
     case 0x5E:
