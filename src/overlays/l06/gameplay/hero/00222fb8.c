@@ -1020,9 +1020,12 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L06_0022e020");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_STORED_HEADING_JUMP = 0xC,
+        HERO_STATE_JUMP_WITH_TIMED_TRAIL = 0xD,
         HERO_STATE_DELAYED_SAVED_DIRECTION_JUMP = 0x11,
         HERO_STATE_GROUND_MATERIAL_LAUNCH = 0x3C,
         HERO_STATE_ALT_LEDGE_ANCHOR_APPROACH = 0x4A,
+        HERO_STATE_ANIMATION_WINDOW_FORWARD_JUMP = 0x4C,
         HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND = 0x51,
         HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT = 0x7D
     };
@@ -2400,8 +2403,8 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
+    case HERO_STATE_STORED_HEADING_JUMP:
+    case HERO_STATE_JUMP_WITH_TIMED_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
@@ -2410,7 +2413,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GROUND_MATERIAL_LAUNCH:
     case 0x49:
-    case 0x4C:
+    case HERO_STATE_ANIMATION_WINDOW_FORWARD_JUMP:
     case 0x5E:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         s32 state_timer_or_trail_control;
