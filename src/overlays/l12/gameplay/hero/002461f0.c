@@ -124,6 +124,10 @@ int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
 void update_hero_state_transitions(void) __asm__("FUN_L12_002461f0");
 
 void update_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
+        HERO_STATE_SWIM_CROUCH_INPUT = 53
+    };
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -459,7 +463,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1548,7 +1552,7 @@ void update_hero_state_transitions(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
