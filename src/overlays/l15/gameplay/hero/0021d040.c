@@ -141,6 +141,13 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
 
 void update_hero_state_machine(void) {
+    enum {
+        HERO_STATE_VEHICLE_MODE_2_RUN = 91,
+        HERO_STATE_VEHICLE_MODE_2_FALL = 92,
+        HERO_STATE_VEHICLE_MODE_2_AIRBORNE_OR_TIMEOUT_RECOVERY = 93,
+        HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
+        HERO_STATE_VEHICLE_MODE_2_RESPAWN_ANIMATION_WAIT = 98
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -454,8 +461,8 @@ void update_hero_state_machine(void) {
                     break;
                 case HERO_STATE_DYING:
                 case 71:
-                case 87:
-                case 98:
+                case HERO_STATE_VEHICLE_MODE_3_DYING:
+                case HERO_STATE_VEHICLE_MODE_2_RESPAWN_ANIMATION_WAIT:
                 case HERO_STATE_DROWN:
                 case 128:
                 case 130:
@@ -514,7 +521,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x33, 1);
                     }
                     break;
-                case 55:
+                case HERO_STATE_WATER_SURFACE_ENTRY:
                     if (hero.jump_lockout_timer == 0) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             if (scale_game_frames(0xA) < hero.state_timer) {
@@ -547,7 +554,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 54:
+                case HERO_STATE_WATER_SURFACE_MOVE:
                     if (hero.jump_lockout_timer == 0) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             hero_set_state(0x12, 1);
@@ -593,7 +600,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x34, 0);
                     }
                     break;
-                case 117:
+                case HERO_STATE_WATER_SURFACE_HURT:
                     if (hero.health.hp <= 0) {
                         hero_set_state(0x6A, 1);
                         set_hero_animation(0x5F, 0x25, scale_game_frames(0x12));
@@ -740,7 +747,7 @@ void update_hero_state_machine(void) {
                     break;
                 case HERO_STATE_RUN:
                 case 47:
-                case 115:
+                case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
                         (*(float *)(moby + 0x54) > 0.9f || moby[0x52] != 0xFF)) {
@@ -1813,7 +1820,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 90:
+                case HERO_STATE_VEHICLE_MODE_2_IDLE:
                     if (hero.anim_flags & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -1855,7 +1862,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x5B, 1);
                     }
                     break;
-                case 94:
+                case HERO_STATE_VEHICLE_MODE_2_JUMP:
                     if (hero.past_jump_apex != 0) {
                         qcopy(temporary_hero_position, hero.motion.pos.f);
                         temporary_hero_position[2] -= 1.0f;
@@ -1939,7 +1946,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 92:
+                case HERO_STATE_VEHICLE_MODE_2_FALL:
                     if (hero.past_jump_apex != 0) {
                         qcopy(temporary_hero_position, hero.motion.pos.f);
                         temporary_hero_position[2] -= 1.0f;
@@ -1997,7 +2004,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x5A, 1);
                     }
                     break;
-                case 91:
+                case HERO_STATE_VEHICLE_MODE_2_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 8.0f;
                     if (hero.anim_speed < 0.75f) {
                         hero.anim_speed = 0.75f;
@@ -2030,7 +2037,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 93:
+                case HERO_STATE_VEHICLE_MODE_2_AIRBORNE_OR_TIMEOUT_RECOVERY:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.5f) {
                         hero_set_state(0x5C, 1);
@@ -2044,7 +2051,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x5A, 0);
                     }
                     break;
-                case 83:
+                case HERO_STATE_VEHICLE_MODE_3_IDLE:
                     if (hero.anim_flags & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -2078,7 +2085,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_VEHICLE_MODE_3_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -2097,7 +2104,7 @@ void update_hero_state_machine(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_VEHICLE_MODE_3_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -2121,7 +2128,7 @@ void update_hero_state_machine(void) {
                     hero.anim_speed = 0.35f;
                     hero.move_lock_timer = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_VEHICLE_MODE_3_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
@@ -2146,7 +2153,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_VEHICLE_MODE_3_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
