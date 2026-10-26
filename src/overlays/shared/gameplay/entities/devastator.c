@@ -2000,9 +2000,9 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *laun
         FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(spawned_moby_vars + 0x24));
         FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
-            int r = FUN_L00_002bb360_2b58d8(spawned_moby);
+            int missile_attachment_moby = FUN_L00_002bb360_2b58d8(spawned_moby);
             float k = visibomb_missile_default_speed_gp * D_0015ED6C_2b58d8;
-            *(int *)(spawned_moby_vars + 0x20) = r;
+            *(int *)(spawned_moby_vars + 0x20) = missile_attachment_moby;
             *(float *)(spawned_moby_vars + 0x48) = k;
         }
         copy_hero_moby_field_38(spawned_moby);
