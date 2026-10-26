@@ -675,8 +675,10 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
-        HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60
+        HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
+        HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D
     };
     enum {
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
@@ -2539,7 +2541,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7D: {
+    case HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY: {
         struct Hero *p = &hero;
         char *m;
         p->state.control_mode = 0x14;
@@ -2918,7 +2920,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
