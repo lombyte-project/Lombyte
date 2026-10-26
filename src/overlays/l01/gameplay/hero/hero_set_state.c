@@ -85,6 +85,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
+        HERO_STATE_PLAY_TIMED_IDLE_ANIMATION = 0x27,
         HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_3_PLAY_AND_QUEUE_ANIMATIONS = 0x59,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
@@ -1511,7 +1512,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_PLAY_TIMED_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
