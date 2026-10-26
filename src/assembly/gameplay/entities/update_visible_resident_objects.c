@@ -28,12 +28,13 @@ void update_visible_resident_objects(void) {
     moby = visible_moby_list;
     while (moby != 0) {
         if ((s8)moby->state >= 0) {
+            callback = moby->update;
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_ANIMATION)) {
                 advance_resident_object_animation(moby);
+                callback = moby->update;
             }
-            /* Near miss, 6 rows: retail keeps the update in v1 and leaves the jalr delay
-               slot empty; the moby argument is set just before the jalr. */
-            callback = moby->update;
+            /* Near miss, 3 rows: retail uses bnezl for the flag test and leaves the
+               jalr delay slot empty; the moby argument is set just before the jalr. */
             if (callback != 0) {
                 callback(moby);
             }
