@@ -1009,12 +1009,12 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern float D_L01_001DEB40[];
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) __asm__("FUN_L01_002e3110");
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) {
-    Vs t0;
-    Vs t1;
+    Vs scaled_hero_follow_offset;
+    Vs unit_hero_follow_offset;
     struct Hero *hero_context = &hero;
-    normalize_vector_xyz(&t0, ((char *)hero_context->moby) + 0xD0, 1.1f);
-    normalize_vector_xyz(&t1, ((char *)hero_context->moby) + 0xE0, 1.0f);
-    add_vector_xyz(follow_movement_state, &t0, &t1);
+    normalize_vector_xyz(&scaled_hero_follow_offset, ((char *)hero_context->moby) + 0xD0, 1.1f);
+    normalize_vector_xyz(&unit_hero_follow_offset, ((char *)hero_context->moby) + 0xE0, 1.0f);
+    add_vector_xyz(follow_movement_state, &scaled_hero_follow_offset, &unit_hero_follow_offset);
     add_vector_xyz(follow_movement_state, follow_movement_state, &hero_context->motion.pos);
     if (*(int *)(follow_movement_state + 0x68) == 0) {
         if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, D_L01_001DEB40[0], 2.0f)) {
