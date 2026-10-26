@@ -1026,6 +1026,11 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND = 0x51,
         HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT = 0x7D
     };
+    enum {
+        WRENCH_COMBO_FRAME_LIMITED_CONSTANT_ADVANCE = 0,
+        WRENCH_COMBO_STAGED_DECELERATING_ADVANCE = 1,
+        WRENCH_COMBO_EXTENDABLE_CONSTANT_ADVANCE = 2
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -1655,12 +1660,12 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case WRENCH_COMBO_FRAME_LIMITED_CONSTANT_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = D_0015ED6C_c * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case WRENCH_COMBO_STAGED_DECELERATING_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = D_0015ED6C_c * 3.0f * hero.speed_scale;
@@ -1671,7 +1676,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case 2:
+        case WRENCH_COMBO_EXTENDABLE_CONSTANT_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = D_0015ED6C_c * 3.7f * hero.speed_scale;
             }
