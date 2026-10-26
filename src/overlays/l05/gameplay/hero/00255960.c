@@ -149,6 +149,7 @@ void update_hero_state_machine(void) {
         HERO_STATE_ITEM_RELEASE_GROUND_OR_FALL_RECOVERY = 38,
         HERO_STATE_DELAYED_ITEM_RELEASE_FALL = 44,
         HERO_STATE_SWIM_CROUCH_INPUT_VARIANT = 53,
+        HERO_STATE_DYING_ANIMATION_COMPLETION_RESPAWN_WAIT = 98,
         HERO_STATE_HOVERBOARD_RIDING = 107,
         HERO_STATE_HOVERBOARD_BOOST_JUMP = 108,
         HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT = 109,
@@ -470,7 +471,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DYING:
                 case 71:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_DYING_ANIMATION_COMPLETION_RESPAWN_WAIT:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_HIT_ANIMATION_END_RESPAWN_WAIT:
                 case HERO_STATE_DYING_ZERO_HEALTH:
