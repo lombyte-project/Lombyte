@@ -159,6 +159,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
+        HERO_STATE_JUMP_WITH_BUFFERED_REPEAT = 17,
         HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 53,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
@@ -2019,7 +2020,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_JUMP_WITH_BUFFERED_REPEAT:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
