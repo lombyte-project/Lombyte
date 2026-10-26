@@ -495,8 +495,8 @@ void update_hero_motion_for_current_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
@@ -539,7 +539,7 @@ void update_hero_motion_for_current_state(void) {
             f32 lo = frame_time * 0.6981317f;
             f32 m;
             f32 rate;
-            f32 accel;
+            f32 pitch_smoothing_coefficient;
             f32 steer;
             f32 old;
             f32 pitch_delta_or_attack_spacing_error;
@@ -551,7 +551,7 @@ void update_hero_motion_for_current_state(void) {
             steer = 0.0f;
             m = PD.f128 < PD.f12C ? PD.f12C : PD.f128;
             rate = frame_scale_sq * 0.2f;
-            accel = frame_scale_sq * 0.015f;
+            pitch_smoothing_coefficient = frame_scale_sq * 0.015f;
             lo = lo + (frame_time * 1.2217305f - lo) * m;
             if ((PD.u1A0.d1A0 & 0xC0) == 0x80 || hero.state.step == 1) {
                 f32 s = PD.f12C * 1.5f;
@@ -632,7 +632,7 @@ void update_hero_motion_for_current_state(void) {
                 steer = 0.0f;
             }
             old = hero.motion.rot.f[1];
-            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, accel, rate, lo);
+            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, pitch_smoothing_coefficient, rate, lo);
             pitch_delta_or_attack_spacing_error = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
@@ -804,8 +804,8 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_MOVE:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -860,17 +860,17 @@ void update_hero_motion_for_current_state(void) {
     case 0x3A:
         if ((struct MobyView *)hero.ground_moby != NULL && ((struct MobyView *)hero.ground_moby)->hA6 == 0x155) {
             f32 d;
-            f32 lim;
+            f32 yaw_step_limit_or_path_cruise_speed;
             clear_u64_value(&scratch_vector);
             add_vector_xyz(&scratch_vector, &scratch_vector, &((struct MobyView *)hero.ground_moby)->u10.v10);
             subtract_vector_xyz(&hero.motion.velocity, &scratch_vector, &hero.motion.pos);
             FUN_L00_0025f730(&hero.motion.velocity, frame_time * 2.0f);
             d = fast_subtract_rotations(((struct MobyView *)hero.ground_moby)->u40.f48.v, hero.motion.rot.f[2]);
-            lim = frame_time * 9.424778f;
-            if (d > lim) {
-                d = lim;
-            } else if (d < -lim) {
-                d = -lim;
+            yaw_step_limit_or_path_cruise_speed = frame_time * 9.424778f;
+            if (d > yaw_step_limit_or_path_cruise_speed) {
+                d = yaw_step_limit_or_path_cruise_speed;
+            } else if (d < -yaw_step_limit_or_path_cruise_speed) {
+                d = -yaw_step_limit_or_path_cruise_speed;
             }
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
@@ -921,7 +921,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&scratch_vector, &((struct MobyView *)hero.grapple_target)->u10.v10);
@@ -966,7 +966,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.tether_radius, hero.grapple_target_radius, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -980,7 +980,7 @@ void update_hero_motion_for_current_state(void) {
         subtract_vector_xyz(&hero.motion.velocity, &vector_workspace, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1656,7 +1656,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x2F: {
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z: {
         f32 a;
         update_hero_planar_movement_velocity();
         set_first_hero_easing_parameters(0.04f, 0.2f);
@@ -1754,8 +1754,8 @@ void update_hero_motion_for_current_state(void) {
     }
     case HERO_STATE_GRIND:
     case 0x29:
-    case 0x2A:
-    case 0x2B:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
+    case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
         s32 flag;
@@ -1958,7 +1958,7 @@ void update_hero_motion_for_current_state(void) {
                 hero_integrate_velocity();
             }
         } else {
-            f32 lim = frame_time * 12.0f;
+            f32 yaw_step_limit_or_path_cruise_speed = frame_time * 12.0f;
             f32 tt;
             f32 e;
             f32 sp;
@@ -1988,7 +1988,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             FUN_L00_0025bc98(&hero.rail_lean, tt, &hero.grind_lean_vel, 0, frame_scale_sq * 0.015f, frame_scale_sq * 0.3f, 0.0f);
-            approach_value(&hero.grind_base_speed, lim, frame_time_sq * 15.0f);
+            approach_value(&hero.grind_base_speed, yaw_step_limit_or_path_cruise_speed, frame_time_sq * 15.0f);
             si = hero.rail_segment;
             sf = hero.rail_seg_frac;
             qcopy(&vector_workspace, &hero.motion.pos);
@@ -2057,7 +2057,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x74: {
+    case HERO_STATE_FOLLOW_PATH: {
         s32 idx;
         s32 n;
         compute_hero_fixed_offset_world_position(&scratch_vector);
@@ -2136,8 +2136,8 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 1.7f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         f32 s;
         f32 a;
         f32 b;
@@ -2730,8 +2730,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x4D:
-    case 0x4E: {
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_PLUS_90:
+    case HERO_STATE_ALT_LEDGE_SHIMMY_YAW_MINUS_90: {
         f32 s;
         f32 a;
         f32 b;
