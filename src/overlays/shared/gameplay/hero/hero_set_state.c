@@ -710,7 +710,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION = 0x71,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION = 0x72,
+        HERO_STATE_FALL_WITH_ENTRY_VOICE_ALLOCATION = 0x77,
         HERO_STATE_REVERSE_HEADING_GROUND_MOTION_ENTRY = 0x7A,
+        HERO_STATE_ANIMATION_ENTRY_WITH_LEVEL_PARTICLE_BURST = 0x7B,
         HERO_STATE_DYING_WITH_GROUND_HEIGHT_CAPTURE = 0x7C,
         HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D,
         HERO_STATE_REPEAT_PRESS_ANIMATION_ENTRY = 0x81
@@ -1629,7 +1631,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_FALL_WITH_ENTRY_VOICE_ALLOCATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -2536,7 +2538,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7B: {
+    case HERO_STATE_ANIMATION_ENTRY_WITH_LEVEL_PARTICLE_BURST: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
