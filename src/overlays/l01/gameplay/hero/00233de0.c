@@ -530,6 +530,7 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_STEER_FROM_PLATFORM_DELTA_WITH_FORCED_DESCENT = 0x31,
         HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
         HERO_STATE_ZERO_GROUND_SPEED_WITH_WATER_BOBBING = 0x37,
+        HERO_STATE_JUMP_WITH_EARLY_AIRBORNE_PLANAR_CONTROL = 0x4C,
         HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_WATER_BOBBING = 0x75,
         HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_DECAYING_EFFECT_COUNT = 0x76,
         HERO_STATE_ROTATE_ABOUT_LOCAL_PIVOT_WITH_FALL_GRAVITY = 0x77,
@@ -1944,7 +1945,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_JUMP_WITH_ANIMATION_DRIVEN_FORWARD_SPEED:
     case 0x3C:
     case 0x49:
-    case 0x4C:
+    case HERO_STATE_JUMP_WITH_EARLY_AIRBORNE_PLANAR_CONTROL:
     case 0x5E:
     case 0x69:
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
