@@ -101,6 +101,12 @@ extern void scale_vector_xyz(void *, void *, float);
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_HOVERBOARD_RIDE = 0x6B,
+        HERO_STATE_HOVERBOARD_VARIANT_ANIMATION = 0x6C,
+        HERO_STATE_HOVERBOARD_JUMP = 0x6D,
+        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -244,7 +250,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
-    case 0x33: {
+    case HERO_STATE_SWIM: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x11;
         p->unk2284 = 0xB;
@@ -287,7 +293,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3D, 0, (float)n);
         break;
     }
-    case 0x34: {
+    case HERO_STATE_SWIM_IDLE: {
         struct Hero *p = &hero;
         int n;
         int t;
@@ -402,7 +408,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_MOVE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->item_select_blocked = 1;
@@ -414,7 +420,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
-    case 0x6A: {
+    case HERO_STATE_DROWN: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->item_select_blocked = 1;
@@ -467,7 +473,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x6B: {
+    case HERO_STATE_HOVERBOARD_RIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x16;
         p->unk2284 = 8;
@@ -537,7 +543,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x6C: {
+    case HERO_STATE_HOVERBOARD_VARIANT_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x16;
         p->unk2284 = 8;
@@ -547,7 +553,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(select_hero_hoverboard_animation_variant(), 5, (float)scale_game_frames(8));
         break;
     }
-    case 0x6D: {
+    case HERO_STATE_HOVERBOARD_JUMP: {
         struct Hero *p = &hero;
         p->item_select_blocked = 1;
         p->unk2284 = 0;
@@ -558,7 +564,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x61, 3, (float)scale_game_frames(4));
         break;
     }
-    case 0x6E: {
+    case HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         int n;
         int v;
@@ -1036,7 +1042,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1108,7 +1114,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
@@ -1779,7 +1785,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x71, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x7C: {
+    case HERO_STATE_DEATH_DESCENT: {
         if (current_level_index == 6) {
             int c0;
             int c1;
