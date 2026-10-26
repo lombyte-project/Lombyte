@@ -654,10 +654,14 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION = 0x11,
         HERO_STATE_WATER_SPLASH_JUMP = 0x12,
         HERO_STATE_BACKWARD_FACING_DECELERATION = 0x21,
+        HERO_STATE_ATTACK_HEADING_DECELERATION = 0x23,
         HERO_STATE_STATIONARY_TARGET_FACING = 0x2E,
         HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION = 0x35,
         HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT = 0x3F,
         HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT = 0x81
+    };
+    enum {
+        WRENCH_COMBO_TAPERED_FORWARD_SPEED = 1
     };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -1714,7 +1718,7 @@ void update_hero_motion_for_current_state(void) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case WRENCH_COMBO_TAPERED_FORWARD_SPEED:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1857,7 +1861,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x23:
+    case HERO_STATE_ATTACK_HEADING_DECELERATION:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
