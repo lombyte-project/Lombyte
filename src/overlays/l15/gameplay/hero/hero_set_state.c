@@ -92,6 +92,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
         HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_GROUND_CONTACT_REACTION = 0x31,
+        HERO_STATE_SWIM_WITH_PREDECESSOR_ADJUSTED_ANIMATION_BLEND = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
         HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE = 0x51,
@@ -251,7 +252,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_WITH_PREDECESSOR_ADJUSTED_ANIMATION_BLEND: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
