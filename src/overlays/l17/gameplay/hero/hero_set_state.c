@@ -109,6 +109,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
+        HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
+        HERO_STATE_DYING_COPY_POSITION_TO_TARGET = 0x7D,
         HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
     };
     enum {
@@ -1786,7 +1788,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x70: {
+    case HERO_STATE_ALTERNATING_WRENCH_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unkA64 = 0;
@@ -1952,7 +1954,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7D: {
+    case HERO_STATE_DYING_COPY_POSITION_TO_TARGET: {
         struct Hero *p = &hero;
         char *m;
         p->state.control_mode = 0x14;
