@@ -675,6 +675,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION = 0x1D,
+        HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY = 0x1E,
         HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY = 0x25,
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_GROUND_SPEED = 0x2E,
@@ -2892,7 +2894,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -2900,7 +2902,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_idle_sequence(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
