@@ -758,11 +758,17 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
         SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
         SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
+        SNAGGLEBEAST_CHASE_TARGET = 5,
+        SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
         SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+        SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
+        SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
+        SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
         SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
+        SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
         SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
     };
     enum {
@@ -1178,8 +1184,8 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 5:
-    case 6: {
+    case SNAGGLEBEAST_CHASE_TARGET:
+    case SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE: {
         float thr = 2.0f;
         float rot = *(float *)(moby + 0x48);
         float dd;
@@ -1352,7 +1358,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 12: {
+    case SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE: {
         int k;
         if (*(float *)(data + 0x20) <= convert_integer_to_float(*(short *)(data + 0x24) / 6)) {
             if (moby[0x53] != 8) FUN_00212f90(moby, 8, 0x35, random_int_between(0xA, 0xD));
@@ -1388,7 +1394,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 13: {
+    case SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE: {
         int done = 0;
         if (FUN_0020c9e0(moby) > 10.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
@@ -1482,7 +1488,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 15: {
+    case SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE: {
         int point;
         if (FUN_0020c9e0(moby) > 198.0f) {
             if (moby[0x53] != 0xA) FUN_00212f90(moby, 0xA, 0, 0);
@@ -1759,7 +1765,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(float *)(moby + 0x18) = 20.0f;
         }
         break;
-    case 11:
+    case SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT:
         if (moby[0x70] & 2) {
             if (target_above) {
                 *(int *)(data + 0x164) = 0;
