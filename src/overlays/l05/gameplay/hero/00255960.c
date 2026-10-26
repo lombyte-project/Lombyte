@@ -463,7 +463,7 @@ void update_hero_state_machine(void) {
                 case 98:
                 case HERO_STATE_DROWN:
                 case 128:
-                case 130:
+                case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
                         return;
