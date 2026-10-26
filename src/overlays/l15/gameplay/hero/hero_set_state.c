@@ -89,6 +89,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE = 0xF,
         HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
         HERO_STATE_RESTORE_LOOK_ANIMATION_IF_NEEDED = 0x1E,
+        HERO_STATE_RESTORE_BASE_ANIMATION = 0x1F,
         HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
         HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED = 0x2E,
@@ -98,6 +99,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
         HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE = 0x51,
         HERO_STATE_VEHICLE_MODE_3_ANIMATION_WITH_QUEUED_SEQUENCE = 0x59,
+        HERO_STATE_GROUND_MOVE_WITH_MOTION_DERIVED_SPEED = 0x5B,
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
@@ -1637,7 +1639,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x5B: {
+    case HERO_STATE_GROUND_MOVE_WITH_MOTION_DERIVED_SPEED: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1788,7 +1790,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_RESTORE_BASE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
