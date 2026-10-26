@@ -687,26 +687,26 @@ void update_hero_planar_movement_velocity(void) {
     struct Hero *slope_hero_state;
     Vec4 *hero_velocity;
     V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, xy_velocity_scratch, slope_velocity_delta;
-    f32 f20, zero_or_planar_step_limit_or_slope_heading, zero_or_slope_step_limit, impulse_step_factor, impulse_length_or_step, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
+    f32 turn_factor_or_speed_scale_or_opposition_or_slope_speed, zero_or_planar_step_limit_or_slope_heading, zero_or_slope_step_limit, impulse_step_factor, impulse_length_or_step, base_impulse_step, frame_duration, impulse_gate_or_target_length, target_speed_y, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
-    f20 = 0.2f;
-    turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
+    turn_factor_or_speed_scale_or_opposition_or_slope_speed = 0.2f;
+    turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * turn_factor_or_speed_scale_or_opposition_or_slope_speed, frame_time * 3.66519141f);
     if (hero.state.current == HERO_STATE_WRENCH_COMBO) {
-        if (hero.stick_magnitude < f20) {
+        if (hero.stick_magnitude < turn_factor_or_speed_scale_or_opposition_or_slope_speed) {
             hero.motion.move_yaw = hero.motion.rot.f[2];
         }
         hero.target_speed = 0.4f;
     } else if (hero.state.current == HERO_STATE_CROUCH_SWING) {
         hero.target_speed = 0.0f;
     }
-    f20 = 5.9f;
-    target_velocity.f[0] = fast_cos(hero.motion.move_yaw) * hero.target_speed * (frame_time * f20);
+    turn_factor_or_speed_scale_or_opposition_or_slope_speed = 5.9f;
+    target_velocity.f[0] = fast_cos(hero.motion.move_yaw) * hero.target_speed * (frame_time * turn_factor_or_speed_scale_or_opposition_or_slope_speed);
     target_speed_y = fast_sin(hero.motion.move_yaw) * hero.target_speed;
     target_velocity.f[2] = 0.0f;
     frame_duration = frame_time;
-    f20 = frame_duration * f20;
-    target_velocity.f[1] = target_speed_y * f20;
+    turn_factor_or_speed_scale_or_opposition_or_slope_speed = frame_duration * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
+    target_velocity.f[1] = target_speed_y * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
     qcopy(&target_velocity_before_impulse, &target_velocity);
     zero_or_planar_step_limit_or_slope_heading = target_velocity.f[2];
     if (zero_or_planar_step_limit_or_slope_heading < hero.unk930) {
@@ -715,19 +715,19 @@ void update_hero_planar_movement_velocity(void) {
         FUN_001f9a10_c(&target_velocity, &target_velocity, &hero.move_impulse);
         FUN_001f99f8_c(&hero.move_impulse);
     }
-    f20 = -(hero.motion.velocity.f[0] * target_velocity.f[0] + hero.motion.velocity.f[1] * target_velocity.f[1]);
-    if (zero_or_planar_step_limit_or_slope_heading < f20) {
-        f20 = f20 / vector_length_xy(&target_velocity);
-        f20 = f20 / vector_length_xy(hero.motion.velocity.f);
+    turn_factor_or_speed_scale_or_opposition_or_slope_speed = -(hero.motion.velocity.f[0] * target_velocity.f[0] + hero.motion.velocity.f[1] * target_velocity.f[1]);
+    if (zero_or_planar_step_limit_or_slope_heading < turn_factor_or_speed_scale_or_opposition_or_slope_speed) {
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed / vector_length_xy(&target_velocity);
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed / vector_length_xy(hero.motion.velocity.f);
     }
-    if (1.0f < f20) {
-        f20 = 1.0f;
+    if (1.0f < turn_factor_or_speed_scale_or_opposition_or_slope_speed) {
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = 1.0f;
     }
-    if (f20 < zero_or_planar_step_limit_or_slope_heading) {
-        f20 = zero_or_planar_step_limit_or_slope_heading;
+    if (turn_factor_or_speed_scale_or_opposition_or_slope_speed < zero_or_planar_step_limit_or_slope_heading) {
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = zero_or_planar_step_limit_or_slope_heading;
     }
     zero_or_planar_step_limit_or_slope_heading = frame_time_sq * 2.45f * hero.target_speed;
-    zero_or_planar_step_limit_or_slope_heading = zero_or_planar_step_limit_or_slope_heading + (frame_time_sq + frame_time_sq) * f20;
+    zero_or_planar_step_limit_or_slope_heading = zero_or_planar_step_limit_or_slope_heading + (frame_time_sq + frame_time_sq) * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
     if (D_0013CB14[0]) {
         zero_or_planar_step_limit_or_slope_heading = frame_time_sq * 1.1f;
     }
@@ -741,13 +741,13 @@ void update_hero_planar_movement_velocity(void) {
     impulse_gate_or_target_length = hero.unk930;
     zero_or_slope_step_limit = 0.0f;
     if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
-        f20 = -fast_vec_dot(&target_velocity_before_impulse, &saved_move_impulse);
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = -fast_vec_dot(&target_velocity_before_impulse, &saved_move_impulse);
         impulse_gate_or_target_length = fast_vec_length(&target_velocity_before_impulse);
         if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
-            f20 = f20 / impulse_gate_or_target_length;
+            turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed / impulse_gate_or_target_length;
         }
         impulse_length_or_step = vector_length_xy(&saved_move_impulse);
-        impulse_step_factor = (impulse_length_or_step - f20) / impulse_length_or_step;
+        impulse_step_factor = (impulse_length_or_step - turn_factor_or_speed_scale_or_opposition_or_slope_speed) / impulse_length_or_step;
         base_impulse_step = frame_time_sq * 3.0f;
         impulse_length_or_step = base_impulse_step * impulse_step_factor;
         if (hero.stick_magnitude < 0.3f) {
@@ -769,13 +769,13 @@ void update_hero_planar_movement_velocity(void) {
     slope_hero_state = &hero;
     if (0.0872664601f < slope_hero_state->ground_slope.f) {
         zero_or_planar_step_limit_or_slope_heading = FUN_001f9e90_c(slope_hero_state->ground_normal.f[0], slope_hero_state->ground_normal.f[1]);
-        f20 = frame_time;
-        f20 = f20 * 8.0f;
-        f20 = f20 * slope_hero_state->ground_slope.f;
-        f20 = f20 / 0.785398185f;
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = frame_time;
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed * 8.0f;
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed * slope_hero_state->ground_slope.f;
+        turn_factor_or_speed_scale_or_opposition_or_slope_speed = turn_factor_or_speed_scale_or_opposition_or_slope_speed / 0.785398185f;
         zero_or_slope_step_limit = frame_time_sq * 8.5f * slope_hero_state->ground_slope.f / 0.785398185f;
-        xy_velocity_scratch.f[0] = fast_cos(zero_or_planar_step_limit_or_slope_heading) * f20;
-        xy_velocity_scratch.f[1] = fast_sin(zero_or_planar_step_limit_or_slope_heading) * f20;
+        xy_velocity_scratch.f[0] = fast_cos(zero_or_planar_step_limit_or_slope_heading) * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
+        xy_velocity_scratch.f[1] = fast_sin(zero_or_planar_step_limit_or_slope_heading) * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
         xy_velocity_scratch.f[2] = 0.0f;
         fast_vec_sub(&slope_velocity_delta, &xy_velocity_scratch, hero_velocity);
         slope_velocity_delta.f[2] = 0.0f;
