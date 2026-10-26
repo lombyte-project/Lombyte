@@ -90,7 +90,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
-        HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72
+        HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72,
+        HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
     };
     enum {
         HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING = 0x23
@@ -870,7 +871,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL: {
         struct Hero *p = &hero;
         int animation_blend_selector = -2;
         p->state.control_mode = 1;
