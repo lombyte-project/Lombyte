@@ -132,7 +132,8 @@ void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 
 void update_hero_state_machine(void) {
     enum {
-        HERO_STATE_WATER_SURFACE_JUMP = 18
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
+        HERO_STATE_CROUCH_TRIGGERED_SWIM = 53
     };
     unsigned char *moby;
     int prevSub;
@@ -462,7 +463,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_CROUCH_TRIGGERED_SWIM:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
