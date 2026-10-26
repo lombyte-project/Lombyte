@@ -142,6 +142,10 @@ void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
 
 void update_hero_state_machine(void) {
     enum {
+        HERO_STATE_SLOT_3_ITEM_3_JUMP = 13,
+        HERO_STATE_SLOT_3_ITEM_2_JUMP = 15,
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
+        HERO_STATE_SWIM_FROM_CROUCH_INPUT = 53,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
         HERO_STATE_VEHICLE_MODE_2_FALL = 92,
         HERO_STATE_VEHICLE_MODE_2_AIRBORNE_OR_TIMEOUT_RECOVERY = 93,
@@ -474,7 +478,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_FROM_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1486,12 +1490,12 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
-                case 13:
+                case HERO_STATE_SLOT_3_ITEM_3_JUMP:
                 case HERO_STATE_DOUBLE_JUMP:
-                case 15:
+                case HERO_STATE_SLOT_3_ITEM_2_JUMP:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
