@@ -923,14 +923,14 @@ void walloper_update(char *walloper_moby) {
         break;
     case 2:
         if (walloper_hero_state->state.current == 0x20) {
-            float f = compute_interpolated_record_value(walloper_moby);
-            if (6.0f <= f) {
+            float interpolated_record_value = compute_interpolated_record_value(walloper_moby);
+            if (6.0f <= interpolated_record_value) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
                     float a = convert_integer_to_float(D_L00_001616CC);
                     a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616A8));
                     walloper_effect_alpha_scale = 1.0f - a;
-                } else if (12.0f <= f) {
+                } else if (12.0f <= interpolated_record_value) {
                     if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
                         float a = convert_integer_to_float(walloper_effect_fade_out_countdown);
                         a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616AC));
