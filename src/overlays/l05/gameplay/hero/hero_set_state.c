@@ -106,14 +106,17 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_TIMED_VELOCITY_KEYS = 0xF,
         HERO_STATE_JUMP_WITH_COPIED_VECTOR_SNAPSHOT = 0x11,
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
+        HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT = 0x17,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
+        HERO_STATE_TRAJECTORY_ANIMATION_INITIALIZATION = 0x22,
         HERO_STATE_FACE_TARGET_WITH_QUEUED_ANIMATION = 0x24,
         HERO_STATE_CAPTURE_TARGET_DISTANCE_WITH_ANIMATION = 0x26,
         HERO_STATE_TARGET_MOBY_MOTION_SETUP = 0x2C,
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
+        HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT_SHORT_TIMING = 0x30,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
@@ -684,7 +687,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x17: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -693,7 +696,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x30: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT_SHORT_TIMING: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -1001,7 +1004,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x22: {
+    case HERO_STATE_TRAJECTORY_ANIMATION_INITIALIZATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xB;
         p->rise_fall_target_frame = 39.0f;
