@@ -833,9 +833,9 @@ void update_hero_state_motion(void) {
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
-    case 0x17:
+    case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
     case 0x1D:
-    case 0x1E:
+    case HERO_STATE_LOOK_RELEASE_WAIT:
     case 0x1F:
     case 0x3D:
     case 0x70:
@@ -1012,7 +1012,7 @@ void update_hero_state_motion(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x30: {
+    case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         int anim;
         int frames;
 
@@ -1040,7 +1040,7 @@ void update_hero_state_motion(void) {
             set_hero_animation(get_hero_idle_animation_index(0), 0, scale_game_frames(5));
         }
     } break;
-    case 0x24:
+    case HERO_STATE_GRAPPLE_TARGET_ENTRY:
     case 0x2E:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
@@ -2027,7 +2027,7 @@ void update_hero_state_motion(void) {
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
-    case 0x1C:
+    case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
     case 0x4C:
@@ -2279,13 +2279,13 @@ void update_hero_state_motion(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
         break;
-    case 0x58:
+    case HERO_STATE_VEHICLE_MODE_3_SLIP:
         hero.motion.move_yaw = hero.downhill_yaw;
         hero.target_speed = frame_time * 5.5f;
         air_accel(frame_time_sq * 25.0f);
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_VEHICLE_MODE_3_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
             hero_update_hop_velocity();
@@ -2295,7 +2295,7 @@ void update_hero_state_motion(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         float d;
         float k;
         float t;
