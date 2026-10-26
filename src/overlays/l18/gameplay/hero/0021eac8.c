@@ -2341,7 +2341,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     case 0x40:
-    case 0x67:
+    case HERO_STATE_AT_TARGET_POSE:
         clear_u64_value(&hero.motion.velocity);
         break;
     case 0x68: {
