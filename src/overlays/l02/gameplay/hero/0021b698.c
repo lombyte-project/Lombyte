@@ -847,11 +847,11 @@ void update_hero_state_motion(void) {
     case 0x1D:
     case HERO_STATE_LOOK_RELEASE_WAIT:
     case 0x1F:
-    case 0x3D:
-    case 0x70:
-    case 0x71:
+    case HERO_STATE_DYING:
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
+    case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
     case 0x72:
-    case 0x80: {
+    case HERO_STATE_DYING_SPEED_LIMITED: {
         float speed;
 
         build_scaled_hero_move_impulse(0.5f, frame_time * 2.0f);
@@ -1741,7 +1741,7 @@ void update_hero_state_motion(void) {
         }
     } break;
     case HERO_STATE_RUN:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         float k;
         float up;
         float down;
@@ -2032,7 +2032,7 @@ void update_hero_state_motion(void) {
     case HERO_STATE_HIGH_JUMP:
     case HERO_STATE_JUMP_WITH_STORED_PLANAR_COMPONENTS:
     case HERO_STATE_JUMP_WITH_DELAYED_TRAIL_UPDATE:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case HERO_STATE_JUMP_WITH_STORED_MOVE_BASIS:
@@ -2042,7 +2042,7 @@ void update_hero_state_motion(void) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69:
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
             if (test_hero_animation_frame_window(10.0f)) {
                 FUN_L00_00233708_cf(4, 0);
@@ -2259,7 +2259,7 @@ void update_hero_state_motion(void) {
         }
     } break;
     case HERO_STATE_FIDGET:
-    case 0x67:
+    case HERO_STATE_AT_TARGET_POSE:
         clear_vector(hero.motion.velocity.f);
         break;
     case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN: {
@@ -2272,9 +2272,9 @@ void update_hero_state_motion(void) {
         clear_vector(hero.motion.velocity.f);
         hero.motion.velocity.f[2] = -frame_time;
         break;
-    case 0x53:
-    case 0x57:
-    case 0x59:
+    case HERO_STATE_VEHICLE_MODE_3_IDLE:
+    case HERO_STATE_VEHICLE_MODE_3_DYING:
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         hero.target_speed = 0.0f;
