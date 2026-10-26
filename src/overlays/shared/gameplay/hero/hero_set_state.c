@@ -696,6 +696,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
         HERO_STATE_DYING_WITH_INHERITED_MOTION = 0x62,
+        HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE = 0x64,
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
@@ -2986,7 +2987,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
