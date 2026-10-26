@@ -93,6 +93,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_GRAPPLE_CAPTURE_TARGET_DISTANCE = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
+        HERO_STATE_ALT_LEDGE_HANG_ENTRY = 0x4A,
         HERO_STATE_LAND_WITH_TIMED_BLEND = 0x4F,
         HERO_STATE_RUN_CANCEL_ITEM_ANIMATION = 0x65,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72,
@@ -1611,7 +1612,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(5, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x4A: {
+    case HERO_STATE_ALT_LEDGE_HANG_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
