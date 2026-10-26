@@ -153,8 +153,8 @@ void update_hero_state_machine(void) {
     int prevSub;
     int prevState;
     int prevAnim;
-    float v0[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float hero_position_or_motion_scratch[4] __attribute__((aligned(16)));
+    float ledge_probe_position_or_respawn_rotation[4] __attribute__((aligned(16)));
     int record_index;
     int respawn_jump_press_age_frames;
     float hang_probe_yaw;
@@ -1158,9 +1158,9 @@ void update_hero_state_machine(void) {
                         set_hero_animation(0x21, 0, scale_game_frames(6));
                     }
                     stick_target(0, 1.0f);
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(hero_position_or_motion_scratch, hero.motion.pos.f);
                     hang_probe_yaw = hero.motion.rot.f[2];
-                    if (test_hero_ledge_ahead(v0, &hang_probe_yaw) == 0) {
+                    if (test_hero_ledge_ahead(hero_position_or_motion_scratch, &hang_probe_yaw) == 0) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.ledge_probe_cooldown = scale_game_frames(0xA);
                         break;
@@ -1182,11 +1182,11 @@ void update_hero_state_machine(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(ledge_probe_position_or_respawn_rotation, hero.motion.pos.f);
+                        ledge_probe_position_or_respawn_rotation[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        ledge_probe_position_or_respawn_rotation[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         positive_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &positive_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(ledge_probe_position_or_respawn_rotation, &positive_shimmy_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1195,13 +1195,13 @@ void update_hero_state_machine(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(ledge_probe_position_or_respawn_rotation, hero.motion.pos.f);
+                        ledge_probe_position_or_respawn_rotation[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        ledge_probe_position_or_respawn_rotation[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         negative_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &negative_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(ledge_probe_position_or_respawn_rotation, &negative_shimmy_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
@@ -1210,20 +1210,20 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
                     float shimmy_yaw_offset;
 
-                    qcopy(v0, hero.motion.pos.f);
+                    qcopy(hero_position_or_motion_scratch, hero.motion.pos.f);
                     shimmy_yaw_offset = 1.5707964f;
                     if (hero.state.current == 0x1B) {
                         shimmy_yaw_offset = -1.5707964f;
                     }
-                    v0[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
-                    v0[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
+                    hero_position_or_motion_scratch[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
+                    hero_position_or_motion_scratch[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) * 0.3f;
                     shimmy_probe_yaw = hero.motion.rot.f[2];
                     stick_target(0, 1.0f);
                     if (hero.stick_magnitude < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], shimmy_yaw_offset)) ||
-                        test_hero_ledge_ahead(v0, &shimmy_probe_yaw) == 0) {
+                        test_hero_ledge_ahead(hero_position_or_motion_scratch, &shimmy_probe_yaw) == 0) {
                         if (hero.anim_flags & 2) {
                             hero_set_state(0x19, 1);
                             break;
@@ -1884,8 +1884,8 @@ void update_hero_state_machine(void) {
                                 top = hero.ground_distance_history[ground_distance_history_index];
                             }
                         }
-                        qcopy_nc(v0, hero.motion.resolved_velocity.f);
-                        if (-0.025f < v0[2]) {
+                        qcopy_nc(hero_position_or_motion_scratch, hero.motion.resolved_velocity.f);
+                        if (-0.025f < hero_position_or_motion_scratch[2]) {
                             up = fast_sin(hero.ground_slope.f) * hero.motion.flat_speed;
                             if (up < 0.0f) {
                                 up = 0.0f;
@@ -1894,10 +1894,10 @@ void update_hero_state_machine(void) {
                                 up = hero.motion.flat_speed * 0.5f;
                             }
                         } else {
-                            up = v0[2];
+                            up = hero_position_or_motion_scratch[2];
                         }
-                        if (v0[2] < 0.0f) {
-                            v0[2] = 0.0f;
+                        if (hero_position_or_motion_scratch[2] < 0.0f) {
+                            hero_position_or_motion_scratch[2] = 0.0f;
                         }
                         if (up < 0.0f) {
                             up = 0.0f;
@@ -1943,8 +1943,8 @@ void update_hero_state_machine(void) {
                             ((controller_state.held & 0x40) || hero.board_jump_frames < scale_game_frames(4))) {
                             float dz = frame_time * 0.59f;
                             hero.motion.displacement.f[2] += dz;
-                            hero.motion.resolved_velocity.f[2] = v0[2] + dz;
-                            hero.motion.resolved_velocity_z.f[2] = v0[2] + dz;
+                            hero.motion.resolved_velocity.f[2] = hero_position_or_motion_scratch[2] + dz;
+                            hero.motion.resolved_velocity_z.f[2] = hero_position_or_motion_scratch[2] + dz;
                         }
                     }
                     update_hero_hoverboard_trick_animations();
@@ -2022,24 +2022,24 @@ void update_hero_state_machine(void) {
                         return;
                     }
                     if (hero.anim_flags & 2) {
-                        compute_hero_hoverboard_respawn_transform(v0, v1);
-                        hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
+                        hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
+                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_POSITION_OR_TIMEOUT_RESPAWN_WAIT:
                     if (5.0f > hero.motion.pos.f[0] || 5.0f > hero.motion.pos.f[1] ||
                         hero.state_timer > hero.board_respawn_delay) {
-                        compute_hero_hoverboard_respawn_transform(v0, v1);
-                        hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
+                        hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
+                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_ANIMATION_END_RESPAWN_WAIT:
                     if (hero.anim_flags & 2) {
-                        compute_hero_hoverboard_respawn_transform(v0, v1);
-                        hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
+                        hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
+                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_VEHICLE_MODE_3_IDLE:
