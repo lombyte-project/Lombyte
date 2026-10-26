@@ -88,6 +88,13 @@ extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 extern char D_L08_0017C760[];
 extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_VEHICLE_MODE_1_JUMP = 0x49,
+        HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
+        HERO_STATE_VEHICLE_MODE_1_ATTACK = 0x51,
+        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -999,14 +1006,14 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
     case 0x3C:
-    case 0x49:
-    case 0x4C:
-    case 0x5E:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
+    case HERO_STATE_ALT_LEDGE_JUMP:
+    case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
@@ -1409,7 +1416,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case 0x51: {
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
