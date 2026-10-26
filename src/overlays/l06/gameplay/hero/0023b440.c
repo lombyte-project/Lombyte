@@ -137,6 +137,9 @@ void update_hero_state_machine(void) {
     enum {
         HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT = 32,
         HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY = 34,
+        HERO_STATE_TIMED_ITEM_RELEASE_RECOVERY = 37,
+        HERO_STATE_ITEM_RELEASE_RECOVERY = 38,
+        HERO_STATE_DELAYED_ITEM_RELEASE_FALL_TRANSITION = 44,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_VEHICLE_MODE_1_LEDGE_JUMP = 76,
@@ -872,7 +875,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 37:
+                case HERO_STATE_TIMED_ITEM_RELEASE_RECOVERY:
                     adjust_hero_animation_speed_for_target_frame(10.0f, hero.target_arrival_frames, 0.5f, -1.0f);
                     if ((float)scale_game_frames(0x16) > hero.target_arrival_frames &&
                         (float)scale_game_frames(0x1E) > hero.target_arrival_frames) {
@@ -912,7 +915,7 @@ void update_hero_state_machine(void) {
                     hero.stickless_decel = frame_time_sq * 42.0f;
                     hero.fall_state_gravity = frame_time_sq * 29.0f;
                     break;
-                case 38:
+                case HERO_STATE_ITEM_RELEASE_RECOVERY:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -927,7 +930,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case 44:
+                case HERO_STATE_DELAYED_ITEM_RELEASE_FALL_TRANSITION:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
