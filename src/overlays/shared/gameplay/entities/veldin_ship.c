@@ -2776,8 +2776,8 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     f32 w_;
     f32 current_speed;
     f32 speed_increment;
-    f32 l;
-    f32 r;
+    f32 endpoint_distance_or_step_length;
+    f32 target_yaw_or_movement_yaw_offset;
     f32 a;
     f32 b;
 
@@ -2785,10 +2785,10 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     FUN_L00_0025df68_2d5988(path, &moby->v[0], &path_target_point, &path_segment_index, &segment_offset_or_fraction, 0, 999.0f, 5.0f, 0.0f);
     distance_along_path = convert_integer_to_float(path_segment_index) * path->a[0].f[3] + segment_offset_or_fraction;
     w_ = distance_along_path + 2.0f;
-    l = distance_xyz(&moby->v[0], (void *)((char *)path + path->n * 16));
+    endpoint_distance_or_step_length = distance_xyz(&moby->v[0], (void *)((char *)path + path->n * 16));
     speed_increment = D_0015ED70_2d5988 * 16.0f;
     current_speed = st->v60;
-    if (l <= (current_speed * current_speed) / (speed_increment + speed_increment)) {
+    if (endpoint_distance_or_step_length <= (current_speed * current_speed) / (speed_increment + speed_increment)) {
         f32 low = current_speed - speed_increment;
         f32 minimum_path_speed = infobot_slot_path_minimum_speed_gp * D_0015ED6C_2d5988;
         st->v60 = low;
@@ -2810,30 +2810,30 @@ void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 ar
     fast_vec_sub(&path_target_point, &path->b[path_segment_index], &path->a[path_segment_index]);
     FUN_001f9a68_2d5988(&path_target_point, &path_target_point, segment_offset_or_fraction);
     add_vector_xyz(&path_target_point, &path_target_point, &path->a[path_segment_index]);
-    l = vector_distance((void *)((char *)path + path->n * 16), &moby->v[0]);
-    if (l < 1.0f) {
+    endpoint_distance_or_step_length = vector_distance((void *)((char *)path + path->n * 16), &moby->v[0]);
+    if (endpoint_distance_or_step_length < 1.0f) {
         if (st->v60 <= infobot_slot_path_minimum_speed_gp * D_0015ED6C_2d5988) {
             moby->flag = arrival_state;
         }
     }
     if (path_segment_index + 1 < path->n - 8) {
-        r = FUN_001f9e90_2d5988(path->a[path_segment_index + 1].f[0] - moby->v[0], path->a[path_segment_index + 1].f[1] - moby->v[1]);
-        moby->f48 = turn_f(&st->v6C, moby->f48, r, 0.01f, 0.3f, 0.1f);
+        target_yaw_or_movement_yaw_offset = FUN_001f9e90_2d5988(path->a[path_segment_index + 1].f[0] - moby->v[0], path->a[path_segment_index + 1].f[1] - moby->v[1]);
+        moby->f48 = turn_f(&st->v6C, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
     } else {
-        r = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
-        moby->f48 = turn_f(&st->v6C, moby->f48, r, 0.01f, 0.3f, 0.1f);
+        target_yaw_or_movement_yaw_offset = FUN_001f9e90_2d5988(hero.motion.pos.f[0] - moby->v[0], hero.motion.pos.f[1] - moby->v[1]);
+        moby->f48 = turn_f(&st->v6C, moby->f48, target_yaw_or_movement_yaw_offset, 0.01f, 0.3f, 0.1f);
     }
     fast_vec_sub(&v, &path_target_point, &moby->v[0]);
-    l = FUN_001f9af0_2d5988(&v);
-    if (st->v60 < l)
-        l = st->v60;
-    FUN_001f9bf8_2d5988(&v, &v, l);
+    endpoint_distance_or_step_length = FUN_001f9af0_2d5988(&v);
+    if (st->v60 < endpoint_distance_or_step_length)
+        endpoint_distance_or_step_length = st->v60;
+    FUN_001f9bf8_2d5988(&v, &v, endpoint_distance_or_step_length);
     add_vector_xyz(&moby->v[0], &moby->v[0], &v);
-    r = FUN_001fa5c8_2d5988(FUN_001f9e90_2d5988(v.f[0], v.f[1]), moby->f48);
+    target_yaw_or_movement_yaw_offset = FUN_001fa5c8_2d5988(FUN_001f9e90_2d5988(v.f[0], v.f[1]), moby->f48);
     {
         f32 xa, xb;
-        xa = st->v60 * 0.34906584f * FUN_001f9dc8_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
-        xb = st->v60 * -0.34906584f * FUN_001f9de0_2d5988(r) / (D_0015ED6C_2d5988 * 16.0f);
+        xa = st->v60 * 0.34906584f * FUN_001f9dc8_2d5988(target_yaw_or_movement_yaw_offset) / (D_0015ED6C_2d5988 * 16.0f);
+        xb = st->v60 * -0.34906584f * FUN_001f9de0_2d5988(target_yaw_or_movement_yaw_offset) / (D_0015ED6C_2d5988 * 16.0f);
         {
             f32 updated_rotation_y, k70;
             updated_rotation_y = turn_f(&st->v68, moby->f44, xa, D_0015ED70_2d5988 * 0.52359879f,
