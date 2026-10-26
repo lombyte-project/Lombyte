@@ -308,7 +308,13 @@ void hero_update_movement(void) {
         HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
         HERO_STATE_SWIM_WITH_ITEM_EFFECTS = 0x35,
         HERO_STATE_LOCAL_HEADING_LIMITED_MOVE = 0x3F,
+        HERO_STATE_ANIMATION_TIMED_POINT_ATTACK = 0x60,
         HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
+    };
+    enum {
+        HERO_ATTACK_RECORD_POINT_3_STRIKE = 0,
+        HERO_ATTACK_RECORD_POINT_4_STRIKE = 1,
+        HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE = 2
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -2800,7 +2806,7 @@ void hero_update_movement(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x60:
+    case HERO_STATE_ANIMATION_TIMED_POINT_ATTACK:
         stick_target(1.0f, 0);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, frame_time * 1.9198622f);
         hero.target_speed = 0.0f;
@@ -2818,19 +2824,19 @@ void hero_update_movement(void) {
             ((u8 *)&v20)[9] = 1;
             ((s16 *)&v20)[5] = ((struct MobyView *)hero.moby)->hA6;
             switch (hero.attack_record) {
-            case 0:
+            case HERO_ATTACK_RECORD_POINT_3_STRIKE:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 3, &v0);
                     collect_mobies_in_sphere(2.0f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
                 }
                 break;
-            case 1:
+            case HERO_ATTACK_RECORD_POINT_4_STRIKE:
                 if (hero.anim_frame > 7.0f && hero.anim_frame < 14.0f) {
                     moby_point_position((struct MobyView *)hero.moby, 4, &v0);
                     collect_mobies_in_sphere(2.0f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
                 }
                 break;
-            case 2:
+            case HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE:
                 if (hero.anim_frame > 14.0f && hero.anim_frame < 21.0f) {
                     f32 sphere_radius = 2.0f;
                     moby_point_position((struct MobyView *)hero.moby, 3, &v0);
@@ -2848,15 +2854,15 @@ void hero_update_movement(void) {
             }
         }
         switch (hero.attack_record) {
-        case 0:
-        case 1:
+        case HERO_ATTACK_RECORD_POINT_3_STRIKE:
+        case HERO_ATTACK_RECORD_POINT_4_STRIKE:
             if (hero.anim_changing == 0 && hero.anim_frame >= 7.0f && hero.anim_frame < 15.0f) {
                 hero.target_speed = frame_time * 21.0f;
             }
             speed_step(frame_time_sq * 180.0f, frame_time_sq * 140.0f);
             set_planar_vel(99999.0f);
             break;
-        case 2:
+        case HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE:
             if (hero.anim_changing == 0 && hero.anim_frame >= 11.0f && hero.anim_frame < 20.0f) {
                 hero.target_speed = frame_time * 30.0f;
             }
