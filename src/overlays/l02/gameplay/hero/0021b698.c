@@ -809,8 +809,14 @@ void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");
 
 void update_hero_state_motion(void) {
     enum {
+        HERO_STATE_AIR_CONTROL_WITH_FLATTENED_DESCENT = 0x8,
+        HERO_STATE_JUMP_WITH_STORED_PLANAR_COMPONENTS = 0xC,
+        HERO_STATE_JUMP_WITH_DELAYED_TRAIL_UPDATE = 0xD,
         HERO_STATE_JUMP_WITH_STORED_MOVE_BASIS = 0x11,
+        HERO_STATE_BRAKE_ALONG_STORED_YAW = 0x21,
+        HERO_STATE_BRAKE_WITH_ATTACK_TARGET_STEERING = 0x23,
         HERO_STATE_FALL_WITH_HEIGHT_DEPENDENT_PITCH = 0x2D,
+        HERO_STATE_BRAKE_FACING_TARGET_MOBY = 0x2E,
         HERO_STATE_ANGLE_LIMITED_GROUND_MOTION = 0x3F,
         HERO_STATE_DAMPED_FALL_WITH_POSE_TARGETS = 0x77,
         HERO_STATE_AIR_CONTROL_WITH_GROUND_HEIGHT_SPRING = 0x81
@@ -1045,7 +1051,7 @@ void update_hero_state_motion(void) {
         }
     } break;
     case HERO_STATE_GRAPPLE_TARGET_ENTRY:
-    case 0x2E:
+    case HERO_STATE_BRAKE_FACING_TARGET_MOBY:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
@@ -1576,7 +1582,7 @@ void update_hero_state_motion(void) {
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
     } break;
-    case 0x21:
+    case HERO_STATE_BRAKE_ALONG_STORED_YAW:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -1674,7 +1680,7 @@ void update_hero_state_motion(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x23:
+    case HERO_STATE_BRAKE_WITH_ATTACK_TARGET_STEERING:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
@@ -1980,7 +1986,7 @@ void update_hero_state_motion(void) {
                              frame_scale_sq * 0.02f, frame_scale_sq * 0.35f, frame_time * 2.5f);
         }
     } break;
-    case 0x8: {
+    case HERO_STATE_AIR_CONTROL_WITH_FLATTENED_DESCENT: {
         float v;
 
         if (hero_slot_item_id(3) == 2) {
@@ -2024,8 +2030,8 @@ void update_hero_state_motion(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_STORED_PLANAR_COMPONENTS:
+    case HERO_STATE_JUMP_WITH_DELAYED_TRAIL_UPDATE:
     case 0xE:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
