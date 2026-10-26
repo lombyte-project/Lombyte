@@ -86,6 +86,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_TRANSFORM_HISTORY = 0xD,
         HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE = 0xF,
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_BLEND_TO_IDLE_ANIMATION = 0x1D,
         HERO_STATE_SELECT_IDLE_ANIMATION = 0x1F,
         HERO_STATE_SWIM_CROUCH_INPUT = 0x35,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCEL = 0x72
@@ -1673,7 +1674,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
