@@ -678,6 +678,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION = 0x1D,
         HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
+        HERO_STATE_ATTACK_RECORD_GROUND_MOTION_ENTRY = 0x21,
         HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY = 0x25,
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_GRIND_JUMP_WITH_DIRECTION_DEPENDENT_ANIMATION = 0x2A,
@@ -686,6 +687,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY = 0x36,
         HERO_STATE_SUSPEND_MOTION_WITH_WRENCH_ANIMATION = 0x3B,
+        HERO_STATE_DAMAGING_JUMP_ENTRY = 0x3C,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
         HERO_STATE_DYING_WITH_INHERITED_MOTION = 0x62,
@@ -1699,7 +1701,7 @@ int hero_set_state(int a, int b) {
     case 0x1C:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_JUMP_WITH_DIRECTION_DEPENDENT_ANIMATION:
-    case 0x3C:
+    case HERO_STATE_DAMAGING_JUMP_ENTRY:
     case 0x49:
     case 0x4C:
     case 0x5E:
@@ -2443,7 +2445,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_ATTACK_RECORD_GROUND_MOTION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
