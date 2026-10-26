@@ -146,6 +146,7 @@ void update_hero_state_transitions(void) __asm__("FUN_L08_002370d8");
 
 void update_hero_state_transitions(void) {
     enum {
+        HERO_STATE_CROUCH_INPUT_SWIM = 53,
         HERO_STATE_TIMED_RESPAWN_WAIT = 127
     };
     unsigned char *moby;
@@ -475,7 +476,7 @@ void update_hero_state_transitions(void) {
                 case 98:
                 case HERO_STATE_DROWN:
                 case 128:
-                case 130:
+                case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
                         return;
@@ -488,7 +489,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_CROUCH_INPUT_SWIM:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
