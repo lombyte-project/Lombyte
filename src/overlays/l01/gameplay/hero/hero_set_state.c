@@ -83,6 +83,7 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
+        HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1315,7 +1316,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
