@@ -1201,33 +1201,33 @@ extern float D_L17_0016209C __attribute__((sda));
 extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern float D_L17_001620AC __attribute__((sda));
 extern float D_L17_001620B0 __attribute__((sda));
-extern float D_L17_001620B4 __attribute__((sda));
-extern float D_L17_001620B8 __attribute__((sda));
+extern float fighter_jet_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B4") __attribute__((sda));
+extern float fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B8") __attribute__((sda));
 extern float D_L17_001620BC __attribute__((sda));
 extern float D_L17_001620C0 __attribute__((sda));
-extern float D_L17_001620C4 __attribute__((sda));
-extern float D_L17_001620C8 __attribute__((sda));
+extern float fighter_jet_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C4") __attribute__((sda));
+extern float fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C8") __attribute__((sda));
 extern float D_L17_001620CC __attribute__((sda));
 extern float D_L17_001620D0 __attribute__((sda));
-extern float D_L17_001620D4 __attribute__((sda));
+extern float fighter_jet_roll_settle_threshold_scale_gp __asm__("D_L17_001620D4") __attribute__((sda));
 extern float D_L17_001620F0 __attribute__((sda));
 extern float D_L17_001620F4 __attribute__((sda));
-extern float D_L17_001620F8 __attribute__((sda));
+extern float fighter_jet_camera_roll_settle_threshold_scale_gp __asm__("D_L17_001620F8") __attribute__((sda));
 extern float D_L17_001620FC __attribute__((sda));
 extern float D_L17_00162100 __attribute__((sda));
-extern float D_L17_00162104 __attribute__((sda));
+extern float fighter_jet_camera_pitch_settle_threshold_scale_gp __asm__("D_L17_00162104") __attribute__((sda));
 extern float D_L17_00162108 __attribute__((sda));
 extern float D_L17_0016210C __attribute__((sda));
-extern float D_L17_00162110 __attribute__((sda));
+extern float fighter_jet_camera_yaw_settle_threshold_scale_gp __asm__("D_L17_00162110") __attribute__((sda));
 extern float D_L17_00162114 __attribute__((sda));
 extern float D_L17_00162118 __attribute__((sda));
-extern float D_L17_0016211C __attribute__((sda));
+extern float fighter_jet_camera_offset_x_settle_threshold_scale_gp __asm__("D_L17_0016211C") __attribute__((sda));
 extern float D_L17_00162120 __attribute__((sda));
 extern float D_L17_00162124 __attribute__((sda));
-extern float D_L17_00162128 __attribute__((sda));
+extern float fighter_jet_camera_offset_y_settle_threshold_scale_gp __asm__("D_L17_00162128") __attribute__((sda));
 extern float D_L17_0016212C __attribute__((sda));
 extern float D_L17_00162130 __attribute__((sda));
-extern float D_L17_00162134 __attribute__((sda));
+extern float fighter_jet_camera_offset_z_settle_threshold_scale_gp __asm__("D_L17_00162134") __attribute__((sda));
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
@@ -1235,7 +1235,7 @@ extern float fighter_jet_cruise_fov_gp __asm__("D_L17_00162144") __attribute__((
 extern float fighter_jet_boost_fov_gp __asm__("D_L17_00162148") __attribute__((sda));
 extern float D_L17_0016214C __attribute__((sda));
 extern float D_L17_00162150 __attribute__((sda));
-extern float D_L17_00162154 __attribute__((sda));
+extern float fighter_jet_fov_settle_threshold_scale_gp __asm__("D_L17_00162154") __attribute__((sda));
 extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
@@ -1284,7 +1284,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     UQ_c4 up;
     W4 camera_rotation;
     W4 target;
-    W4 diff;
+    W4 target_record_sum_or_camera_local_offset;
     float horizontal_steering_input;
     float vertical_steering_input;
     float ka;
@@ -1366,21 +1366,21 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         steering_input_hero = &hero;
         x = steering_input_hero->stick_x;
         y = steering_input_hero->stick_y;
-        ka = D_L17_001620B4;
-        kb = D_L17_001620C4;
+        ka = fighter_jet_horizontal_steering_settle_threshold_scale_gp;
+        kb = fighter_jet_vertical_steering_settle_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
         if (*(int *)(((char *)&D_0013CAE0)) & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
             vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
-            ka = D_L17_001620B8;
-            kb = D_L17_001620C8;
+            ka = fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp;
+            kb = fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp;
         }
         adjust_fighter_jet_steering_for_flight_bounds((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L17_001620BC, D_L17_001620C0, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
-                         D_L17_001620CC, D_L17_001620D0, D_L17_001620D4);
+                         D_L17_001620CC, D_L17_001620D0, fighter_jet_roll_settle_threshold_scale_gp);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L17_00162024);
         ship_vars->f38 = fast_subtract_rotations(ship_vars->f38, ship_vars->f6C * D_L17_00162028);
         if (ship_vars->f34 > 1.3962634f) {
@@ -1402,9 +1402,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         char *base = D_L17_001600EC;
         qcopy(target, ((char(*)[128])base)[ship_vars->i110] + 0x30);
         lenA = vector_length_xyz(base + target_record_byte_offset + 0x20);
-        add_vector_xyz(diff, (ship_vars->i110 << 7) + D_L17_001600EC,
+        add_vector_xyz(target_record_sum_or_camera_local_offset, (ship_vars->i110 << 7) + D_L17_001600EC,
                        (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
-        lenB = vector_length_xyz(diff);
+        lenB = vector_length_xyz(target_record_sum_or_camera_local_offset);
     } else {
         qcopy(target, D_L17_001621F0);
     }
@@ -1454,17 +1454,17 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         camera_offset_targets.e[0].q = wr.e[0].q;
         camera_offset_targets.e[1].q = wr.e[1].q;
         vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
-                         D_L17_0016211C);
+                         fighter_jet_camera_offset_x_settle_threshold_scale_gp);
         vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], D_L17_00162120, D_L17_00162124,
-                         D_L17_00162128);
+                         fighter_jet_camera_offset_y_settle_threshold_scale_gp);
         vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], D_L17_0016212C, D_L17_00162130,
-                         D_L17_00162134);
-        diff[0] = ship_vars->fB4;
-        diff[1] = ship_vars->fB8;
-        diff[2] = ship_vars->fBC;
-        diff[3] = 0.0f;
+                         fighter_jet_camera_offset_z_settle_threshold_scale_gp);
+        target_record_sum_or_camera_local_offset[0] = ship_vars->fB4;
+        target_record_sum_or_camera_local_offset[1] = ship_vars->fB8;
+        target_record_sum_or_camera_local_offset[2] = ship_vars->fBC;
+        target_record_sum_or_camera_local_offset[3] = 0.0f;
         vu_euler_rotation_basis(ship_rotation_basis, (char *)&ship_vars->f30);
-        transform_vector_by_basis(target, diff, ship_rotation_basis);
+        transform_vector_by_basis(target, target_record_sum_or_camera_local_offset, ship_rotation_basis);
         add_vector_xyz(wr.e[0].v, ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rotations(ship_vars->f30 * D_L17_00162048, ship_vars->f6C * D_L17_00162044);
@@ -1472,18 +1472,18 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                                                ship_vars->f70 * D_L17_00162024);
         wr.e[1].v[2] = ship_vars->f38;
         FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
-                         D_L17_001620F4, D_L17_001620F8);
+                         D_L17_001620F4, fighter_jet_camera_roll_settle_threshold_scale_gp);
         FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], D_L17_001620FC,
-                         D_L17_00162100, D_L17_00162104);
+                         D_L17_00162100, fighter_jet_camera_pitch_settle_threshold_scale_gp);
         FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], D_L17_00162108,
-                         D_L17_0016210C, D_L17_00162110);
+                         D_L17_0016210C, fighter_jet_camera_yaw_settle_threshold_scale_gp);
     }
     camera_rotation[0] = ship_vars->f20;
     camera_rotation[2] = ship_vars->f28;
     camera_rotation[1] = ship_vars->f24;
     FUN_L00_002eaa30(camera_rotation);
     vendor_spring(&ship_vars->fB0, &ship_vars->fC0, fighter_jet_cruise_fov_gp + (fighter_jet_boost_fov_gp - fighter_jet_cruise_fov_gp) * ratio,
-                     D_L17_0016214C, D_L17_00162150, D_L17_00162154);
+                     D_L17_0016214C, D_L17_00162150, fighter_jet_fov_settle_threshold_scale_gp);
     half_fov = ship_vars->fB0 * 0.5f;
     tn = fast_sin(half_fov) / fast_cos(half_fov);
     D_L17_0016D3F0 = tn;
