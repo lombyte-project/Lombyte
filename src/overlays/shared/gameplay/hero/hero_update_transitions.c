@@ -160,6 +160,7 @@ void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 18,
+        HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 53,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
@@ -536,7 +537,7 @@ void hero_update_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case 53:
+                case HERO_STATE_SWIM_WITH_MODIFIER_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
