@@ -86,6 +86,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
         HERO_STATE_PLAY_TIMED_IDLE_ANIMATION = 0x27,
+        HERO_STATE_INITIALIZE_GROUND_SPEED_AND_PLAY_ANIMATION = 0x2E,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_IDLE_ANIMATION = 0x32,
         HERO_STATE_SWIM_PLAY_TIMED_ANIMATION = 0x35,
         HERO_STATE_WATER_SURFACE_PLAY_TIMED_ANIMATION = 0x36,
@@ -491,7 +492,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x2E: {
+    case HERO_STATE_INITIALIZE_GROUND_SPEED_AND_PLAY_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
