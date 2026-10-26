@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/update_mpeg_frame_size/func_0012C4C8.s",
             func_0012C4C8);
 #else
-/* Near miss (sdk BYTES 24/170, size-exact): left is the schedule of the frame_size spill and the
+/* Near miss (sdk BYTES 22/170, size-exact): left is the schedule of the frame_size spill and the
  * mpeg->height/width stores. */
 #include "rnc/sdk/libmpeg.h"
 
@@ -30,7 +30,6 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     s32 mb_height;
     s32 width;
     s32 height;
-    s32 half_height;
     u32 frame_size;
 
     decoder = mpeg->sys;
@@ -72,7 +71,6 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     field2 = (u8 *)decoder + 0x3F0;
     field3 = (u8 *)decoder + 0x458;
     field4 = (u8 *)decoder + 0x4C0;
-    half_height = height >> 1;
     copy_object_field_backward(pool);
     decoder->frame_buffers[0] = reserve_aligned_buffer_space(decoder, pool, frame_size, 0x40);
     decoder->frame_buffers[1] = reserve_aligned_buffer_space(decoder, pool, frame_size, 0x40);
@@ -83,11 +81,11 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     InitializeReferenceImage(frame0, width, height);
     InitializeReferenceImage(frame1, width, height);
     InitializeReferenceImage(frame2, width, height);
-    InitializeReferenceImage(field0, width, half_height);
-    InitializeReferenceImage(field1, width, half_height);
-    InitializeReferenceImage(field2, width, half_height);
-    InitializeReferenceImage(field3, width, half_height);
-    InitializeReferenceImage(field4, width, half_height);
-    InitializeReferenceImage(field5, width, half_height);
+    InitializeReferenceImage(field0, width, height >> 1);
+    InitializeReferenceImage(field1, width, height >> 1);
+    InitializeReferenceImage(field2, width, height >> 1);
+    InitializeReferenceImage(field3, width, height >> 1);
+    InitializeReferenceImage(field4, width, height >> 1);
+    InitializeReferenceImage(field5, width, height >> 1);
 }
 #endif /* NON_MATCHING */
