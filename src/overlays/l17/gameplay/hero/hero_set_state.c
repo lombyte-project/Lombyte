@@ -130,11 +130,14 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCEL = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
         HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
+        HERO_STATE_CLEAR_GROUND_AND_TARGET_SPEED = 0x68,
         HERO_STATE_JUMP_WITH_SAVED_HEIGHT_ADJUSTMENT = 0x69,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION = 0x71,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_SELECT_IDLE_ANIMATION = 0x72,
+        HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION = 0x73,
         HERO_STATE_HURT_WITH_DISPLACEMENT_ALTERNATE_ANIMATION = 0x75,
+        HERO_STATE_FALL_WITH_ON_FOOT_VOICE = 0x77,
         HERO_STATE_DYING_SAVE_GROUND_HEIGHT = 0x7C,
         HERO_STATE_DYING_COPY_POSITION_TO_TARGET = 0x7D,
         HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
@@ -589,7 +592,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN:
     case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1053,7 +1056,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_FALL_WITH_ON_FOOT_VOICE: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1920,7 +1923,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x68: {
+    case HERO_STATE_CLEAR_GROUND_AND_TARGET_SPEED: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
