@@ -27,15 +27,15 @@ extern s32 default_dialog_line1_y __asm__("D_L00_0015F4A8") __attribute__((sda))
 extern s32 default_dialog_line2_y __asm__("D_L00_0015F4AC") __attribute__((sda));
 extern s32 dialog_text_tween_start_color __asm__("D_L00_0015F4B0") __attribute__((sda));
 extern s32 dialog_text_tween_end_color __asm__("D_L00_0015F4B4") __attribute__((sda));
-extern s32 D_L00_0015F4B8 __attribute__((sda));
-extern s32 D_L00_0015F4BC __attribute__((sda));
-extern s32 D_L00_0015F4C0 __attribute__((sda));
-extern s32 D_L00_0015F4C4 __attribute__((sda));
+extern s32 results_fixed_labels_frame_center_x __asm__("D_L00_0015F4B8") __attribute__((sda));
+extern s32 results_fixed_labels_frame_center_y __asm__("D_L00_0015F4BC") __attribute__((sda));
+extern s32 results_fixed_labels_frame_half_width __asm__("D_L00_0015F4C0") __attribute__((sda));
+extern s32 results_fixed_labels_frame_half_height __asm__("D_L00_0015F4C4") __attribute__((sda));
 extern s32 results_fixed_labels_base_y __asm__("D_L00_0015F4C8") __attribute__((sda));
-extern s32 D_L00_0015F4CC __attribute__((sda));
-extern s32 D_L00_0015F4D0 __attribute__((sda));
-extern s32 D_L00_0015F4D4 __attribute__((sda));
-extern s32 D_L00_0015F4D8 __attribute__((sda));
+extern s32 results_rank_and_records_frame_center_x __asm__("D_L00_0015F4CC") __attribute__((sda));
+extern s32 results_rank_and_records_frame_center_y __asm__("D_L00_0015F4D0") __attribute__((sda));
+extern s32 results_rank_and_records_frame_half_width __asm__("D_L00_0015F4D4") __attribute__((sda));
+extern s32 results_rank_and_records_frame_half_height __asm__("D_L00_0015F4D8") __attribute__((sda));
 extern s32 results_rank_and_records_base_y __asm__("D_L00_0015F4DC") __attribute__((sda));
 extern s32 dialog_frame_pulse_period __asm__("D_L00_0015F4E0") __attribute__((sda));
 extern s32 dialog_frame_pulse_start_color __asm__("D_L00_0015F4E4") __attribute__((sda));
@@ -380,18 +380,18 @@ void level_draw_dialog_text(void) {
             other_place_or_no_record_color = fast_tween_color(other_place_or_no_record_tween_start_color, other_place_or_no_record_tween_end_color, color_blend_factor);
         }
         if (hero.race_lap < 3) {
-            draw_outlined_rect(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
-                         D_L00_0015F4BC + truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
-                         D_L00_0015F4B8 - truncate_float_to_s32((f32)D_L00_0015F4C0 * scale),
-                         D_L00_0015F4B8 + truncate_float_to_s32((f32)D_L00_0015F4C0 * scale), pulse);
+            draw_outlined_rect(results_fixed_labels_frame_center_y - truncate_float_to_s32((f32)results_fixed_labels_frame_half_height * scale),
+                         results_fixed_labels_frame_center_y + truncate_float_to_s32((f32)results_fixed_labels_frame_half_height * scale),
+                         results_fixed_labels_frame_center_x - truncate_float_to_s32((f32)results_fixed_labels_frame_half_width * scale),
+                         results_fixed_labels_frame_center_x + truncate_float_to_s32((f32)results_fixed_labels_frame_half_width * scale), pulse);
             font_print_center(0x100, results_fixed_labels_base_y, results_label_color, get_help_message_text(0x4F6E), -1);
             font_print_center(0x100, results_fixed_labels_base_y + 0x18, results_label_color, get_help_message_text(0x5249), -1);
             font_print_center(0x100, results_fixed_labels_base_y + 0x30, results_label_color, get_help_message_text(0x5248), -1);
         } else {
-            draw_outlined_rect(D_L00_0015F4D0 - truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
-                         D_L00_0015F4D0 + truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
-                         D_L00_0015F4CC - truncate_float_to_s32((f32)D_L00_0015F4D4 * scale),
-                         D_L00_0015F4CC + truncate_float_to_s32((f32)D_L00_0015F4D4 * scale), pulse);
+            draw_outlined_rect(results_rank_and_records_frame_center_y - truncate_float_to_s32((f32)results_rank_and_records_frame_half_height * scale),
+                         results_rank_and_records_frame_center_y + truncate_float_to_s32((f32)results_rank_and_records_frame_half_height * scale),
+                         results_rank_and_records_frame_center_x - truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale),
+                         results_rank_and_records_frame_center_x + truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale), pulse);
             sprintf(line, D_L00_0015F520, get_help_message_text(0x5240));
             if (hero.race_position == 1) {
                 sprintf(line, D_L00_0015F528, 1);
