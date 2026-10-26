@@ -511,7 +511,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case HERO_STATE_DROWN:
-                case 128:
+                case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
@@ -810,7 +810,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_RUN:
-                case 47:
+                case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
                 case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
@@ -1619,7 +1619,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 116:
+                case HERO_STATE_FOLLOW_PATH:
                     if (((unsigned char *)hero.moby)[0x53] == 0x73) {
                         if (test_hero_animation_frame_window(11.0f)) {
                             allocate_hero_voice_for_entry(0xD, 0);
