@@ -2533,14 +2533,14 @@ extern float rocket_route_speed_gp __asm__("D_L08_00161A08") __attribute__((sda)
 extern float rocket_target_hit_distance_gp __asm__("D_L08_00161A0C") __attribute__((sda));
 extern float rocket_effect_radial_speed_range_end_gp __asm__("D_L08_00161A14") __attribute__((sda));
 extern float rocket_guidance_effect_velocity_w_gp __asm__("D_L08_00161A24") __attribute__((sda));
-extern float D_L08_00161A28 __attribute__((sda));
+extern float rocket_guidance_effect_auxiliary_vector_w_gp __asm__("D_L08_00161A28") __attribute__((sda));
 extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
 extern int rocket_guidance_effect_frame_count_gp __asm__("D_L08_00161A20") __attribute__((sda));
-extern int D_L08_00161A2C __attribute__((sda));
-extern int D_L08_00161A30 __attribute__((sda));
+extern int rocket_guidance_effect_initial_color_gp __asm__("D_L08_00161A2C") __attribute__((sda));
+extern int rocket_guidance_effect_second_color_gp __asm__("D_L08_00161A30") __attribute__((sda));
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned int D_L08_0015FFDC __attribute__((section(".sdata")));
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
@@ -2621,10 +2621,10 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=D_L08_00161A28;
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
-        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(D_L08_00161A28);
-        FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
+        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_HOME_TOWARD_TARGET: {
@@ -2651,10 +2651,10 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=D_L08_00161A28;
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
-        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(D_L08_00161A28);
-        FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
+        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_WAIT_FOR_ACTIVATION:
