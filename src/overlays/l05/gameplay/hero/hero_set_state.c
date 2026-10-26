@@ -119,6 +119,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT_SHORT_TIMING = 0x30,
+        HERO_STATE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT = 0x31,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
         HERO_STATE_RUN_VARIANT = 0x3F,
@@ -803,7 +804,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
