@@ -126,6 +126,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WATER_SURFACE_WITH_ENTRY_TIMER = 0x36,
         HERO_STATE_SYNCHRONIZED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_JUMP_WITH_HEALTH_DAMAGE = 0x3C,
+        HERO_STATE_ALT_LEDGE_HANG_ENTRY = 0x4A,
         HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCEL = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
@@ -2092,7 +2093,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(5, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x4A: {
+    case HERO_STATE_ALT_LEDGE_HANG_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
