@@ -3394,10 +3394,10 @@ s16 D_L00_001D5740[1200] = {0};
 s16 D_L01_001D5BC0[1200] = {0};
 s16 D_L14_001D5E40[1200] = {0};
 extern float smoke_fire_emitted_particle_position_spread_gp __asm__("D_L00_001619B4") __attribute__((sda));
-extern float D_L00_001619B8 __attribute__((sda));
+extern float smoke_fire_emitted_particle_random_scalar_upper_bound_gp __asm__("D_L00_001619B8") __attribute__((sda));
 extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC") __attribute__((sda));
-extern int D_L00_001619C0 __attribute__((sda));
-extern int D_L00_001619C4 __attribute__((sda));
+extern int smoke_fire_emitted_particle_sign_randomized_sample_min_gp __asm__("D_L00_001619C0") __attribute__((sda));
+extern int smoke_fire_emitted_particle_sign_randomized_sample_max_gp __asm__("D_L00_001619C4") __attribute__((sda));
 extern int smoke_fire_emitted_particle_base_color_gp __asm__("D_L00_001619C8") __attribute__((sda));
 extern float smoke_fire_far_culling_distance_gp __asm__("D_L00_001619E0") __attribute__((sda));
 extern V D_L00_00166DC0;
@@ -3491,8 +3491,8 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                 particle_vector.z = q->unk20 * frame_time;
                 sampled_particle_scalar = random_float_between(q->unk24, q->unk28);
                 col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 | smoke_fire_emitted_particle_base_color_gp;
-                r = FUN_L00_00257b90(D_L00_001619C0, D_L00_001619C4);
-                ent = FUN_L00_0026d000(&b, r, smoke_fire_emitted_particle_position_spread_gp, 1.0f, &particle_vector, D_L00_001619B8, col, sampled_particle_scalar);
+                r = FUN_L00_00257b90(smoke_fire_emitted_particle_sign_randomized_sample_min_gp, smoke_fire_emitted_particle_sign_randomized_sample_max_gp);
+                ent = FUN_L00_0026d000(&b, r, smoke_fire_emitted_particle_position_spread_gp, 1.0f, &particle_vector, smoke_fire_emitted_particle_random_scalar_upper_bound_gp, col, sampled_particle_scalar);
                 if (ent) {
                     sub = &ent->sub;
                     ent->h0A = FUN_001f96f8_c(FUN_L00_00257b90(q->x30, q->x34));
