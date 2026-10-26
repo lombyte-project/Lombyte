@@ -1878,6 +1878,7 @@ void update_hero_state_transitions(void) __asm__("FUN_L02_00230988");
 
 void update_hero_state_transitions(void) {
     enum {
+        HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER = 17,
         HERO_STATE_GROUND_SPEED_ANIMATED_RUN = 63,
         HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETION = 98
     };
@@ -3100,7 +3101,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER:
                 case 18:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
