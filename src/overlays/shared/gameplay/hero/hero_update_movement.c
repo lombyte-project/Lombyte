@@ -304,6 +304,9 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 
 void hero_update_movement(void) __asm__("FUN_L00_00217970");
 void hero_update_movement(void) {
+    enum {
+        HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -979,7 +982,7 @@ void hero_update_movement(void) {
         subtract_vector_xyz(&hero.motion.velocity, &v20, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1563,7 +1566,7 @@ void hero_update_movement(void) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         s32 slide = 0;
         f32 k;
         if (hero.base_condition != 0 && hero.water_depth < 0.25f) {
@@ -2586,7 +2589,7 @@ void hero_update_movement(void) {
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;
-    case 0x7D:
+    case HERO_STATE_SLOW_VERTICAL_DESCENT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -(frame_time * 0.35f);
         break;
