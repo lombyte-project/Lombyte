@@ -444,12 +444,12 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_DYING:
-                case 71:
+                case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case HERO_STATE_DROWN:
-                case 128:
-                case 130:
+                case HERO_STATE_DYING_SPEED_LIMITED:
+                case HERO_STATE_DYING_ZERO_HEALTH:
                     if (hero.anim_flags & 2) {
                         hero_respawn();
                         return;
@@ -572,7 +572,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x37, 1);
                     }
                     break;
-                case 118:
+                case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY:
                     if (hero.health.hp <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
                             hero_set_state(0x82, 1);
@@ -736,7 +736,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_RUN:
-                case 47:
+                case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
                 case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
@@ -1092,7 +1092,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 116:
+                case HERO_STATE_FOLLOW_PATH:
                     if (((unsigned char *)hero.moby)[0x53] == 0x73) {
                         if (test_hero_animation_frame_window(11.0f)) {
                             allocate_hero_voice_for_entry(0xD, 0);
@@ -1479,7 +1479,7 @@ void update_hero_state_machine(void) {
                 case 18:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
-                case 105:
+                case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();
                         if (t > 0 && (hero.state_timer < t || hero.rail_land_frames != 0) &&
