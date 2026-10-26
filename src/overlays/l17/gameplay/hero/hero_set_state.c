@@ -106,7 +106,10 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
-        HERO_STATE_IDLE_CLEAR_MOTION = 0x67
+        HERO_STATE_VEHICLE_MODE_1_LAND = 0x4F,
+        HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED = 0x66,
+        HERO_STATE_IDLE_CLEAR_MOTION = 0x67,
+        HERO_STATE_LAND_WITH_RUN_CONTROL_MODE = 0x81
     };
     enum {
         HERO_STATE_TWO_STAGE_ATTACK_COMBO = 0x51
@@ -703,7 +706,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_STOP_WITH_GRAVITY_XY_SPEED: {
         struct Hero *p = &hero;
         char *v = &p->motion.resolved_velocity;
         p->state.control_mode = 1;
@@ -1058,7 +1061,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_LAND_WITH_RUN_CONTROL_MODE: {
         struct Hero *p = &hero;
         int animation_transition = -2;
         p->state.control_mode = 1;
@@ -1976,7 +1979,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(9));
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_VEHICLE_MODE_1_LAND: {
         struct Hero *p = &hero;
         p->state.control_mode = 5;
         p->unk2284 = 0;
@@ -2111,7 +2114,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x58: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
