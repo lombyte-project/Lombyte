@@ -92,9 +92,11 @@ int hero_set_state(int a, int b) {
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
+        HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE = 0x51,
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
+        HERO_STATE_CANCEL_ITEM_AND_ENTER_EXIT_CONTROL = 0x63,
         HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION = 0x64,
         HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION = 0x65,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
@@ -1319,7 +1321,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING:
-    case 0x51: {
+    case HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1839,7 +1841,7 @@ int hero_set_state(int a, int b) {
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
-    case 0x63:
+    case HERO_STATE_CANCEL_ITEM_AND_ENTER_EXIT_CONTROL:
     case HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
