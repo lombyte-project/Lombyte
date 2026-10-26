@@ -692,10 +692,10 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_LOOK_RELEASE_WAIT:
     case 0x1F:
     case HERO_STATE_DYING:
-    case 0x70:
-    case 0x71:
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
+    case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
     case 0x72:
-    case 0x80:
+    case HERO_STATE_DYING_SPEED_LIMITED:
         if (hero.wading != 0) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -1136,7 +1136,7 @@ void update_hero_motion_for_current_state(void) {
         update_hero_water_height_and_bobbing();
         break;
     case HERO_STATE_DROWN:
-    case 0x82: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
         fast_vec_normalize(&hero.motion.momentum, &hero.motion.momentum, len);
@@ -1218,7 +1218,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case 0x38:
     case 0x39:
-    case 0x3A:
+    case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
         if (MV(hero.ground_moby) != NULL && MV(hero.ground_moby)->hA6 == 0x155) {
             f32 d;
             f32 max_yaw_step;
@@ -2269,7 +2269,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         s32 state_timer_or_trail_control;
         s32 state_timer_threshold;
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
@@ -2498,7 +2498,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_VEHICLE_MODE_3_IDLE:
     case HERO_STATE_VEHICLE_MODE_3_DYING:
-    case 0x59:
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         hero.target_speed = 0.0f;
