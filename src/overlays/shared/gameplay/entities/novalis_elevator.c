@@ -1360,7 +1360,7 @@ extern float sand_mouse_fade_particle_position_jitter_gp __asm__("D_L01_00161930
 extern float sand_mouse_fade_particle_random_float_range_start_gp __asm__("D_L01_00161934") __attribute__((sda));
 extern float sand_mouse_fade_particle_random_float_range_end_gp __asm__("D_L01_00161938") __attribute__((sda));
 extern int sand_mouse_fade_particle_color_alpha_gp __asm__("D_L01_0016193C") __attribute__((sda));
-extern float D_L01_00161940 __attribute__((sda));
+extern float sand_mouse_fade_particle_time_squared_coefficient_gp __asm__("D_L01_00161940") __attribute__((sda));
 extern char D_L01_0020AE80[];
 extern char D_L01_0020AEA0[];
 extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
@@ -1630,7 +1630,7 @@ void sand_mouse_update(struct Moby *moby) {
             }
             particle_random_integer = FUN_L00_00257b90(sand_mouse_fade_particle_random_integer_min_gp, sand_mouse_fade_particle_random_integer_max_gp);
             particle_random_float = random_float_between_alt(sand_mouse_fade_particle_random_float_range_start_gp, sand_mouse_fade_particle_random_float_range_end_gp);
-            spawn_particle_2e3f20(va, particle_random_integer, col, 2, particle_random_remainder, vb, particle_random_float, 0.001f, D_L01_00161940 * frame_time_sq);
+            spawn_particle_2e3f20(va, particle_random_integer, col, 2, particle_random_remainder, vb, particle_random_float, 0.001f, sand_mouse_fade_particle_time_squared_coefficient_gp * frame_time_sq);
             moby->flags |= 0x200;
             moby->alpha -= 0x80 / sand_mouse_fade_duration_frames_gp;
             moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 25.132742f);
