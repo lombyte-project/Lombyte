@@ -89,6 +89,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_IDLE_ANIMATION = 0x32,
         HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_3_PLAY_AND_QUEUE_ANIMATIONS = 0x59,
+        HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_LOCOMOTION_ANIMATION = 0x65,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
     enum {
@@ -561,7 +562,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_LOCOMOTION_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
