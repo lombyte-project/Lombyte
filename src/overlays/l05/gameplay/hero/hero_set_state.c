@@ -119,6 +119,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT_SHORT_TIMING = 0x30,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
+        HERO_STATE_RUN_VARIANT = 0x3F,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
         HERO_STATE_ATTACK_CONTROL_INITIALIZATION = 0x51,
         HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
@@ -717,7 +718,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x3F:
+    case HERO_STATE_RUN_VARIANT:
     case HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
