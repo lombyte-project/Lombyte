@@ -169,7 +169,7 @@ void process_hero_state_transitions(void) {
     int prevState;
     int prevAnim;
     float temporary_position[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float trajectory_and_probe_workspace[4] __attribute__((aligned(16)));
     int record_index;
     int respawn_jump_press_age_frames;
     int path_seg;
@@ -1244,11 +1244,11 @@ void process_hero_state_transitions(void) {
                             if (current_level_index != 0x10) {
                                 qcopy(temporary_position, hero.rail_point.f);
                                 temporary_position[2] += 2.0f;
-                                v1[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
-                                v1[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
-                                v1[2] = 0.0f;
-                                add_vector_xyz(v1, v1, temporary_position);
-                                if (collision_line(temporary_position, v1, 2, 0, 0)) {
+                                trajectory_and_probe_workspace[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
+                                trajectory_and_probe_workspace[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
+                                trajectory_and_probe_workspace[2] = 0.0f;
+                                add_vector_xyz(trajectory_and_probe_workspace, trajectory_and_probe_workspace, temporary_position);
+                                if (collision_line(temporary_position, trajectory_and_probe_workspace, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }
@@ -1340,10 +1340,10 @@ void process_hero_state_transitions(void) {
                                 hero.rail_gap_jump = 1;
                                 initial_jump_velocity_z = FUN_L00_0025abf0(hero.motion.pos.f, hero.jump_target_pos.f, 0,
                                                      hero.motion.flat_speed, -hero.jump_gravity);
-                                *(OvlQuad *)v1 = 0;
+                                *(OvlQuad *)trajectory_and_probe_workspace = 0;
                                 *(OvlQuad *)temporary_position = 0;
-                                v1[2] = initial_jump_velocity_z;
-                                t = calculate_triangular_corrected_scalar(temporary_position, v1, 0, hero.jump_gravity);
+                                trajectory_and_probe_workspace[2] = initial_jump_velocity_z;
+                                t = calculate_triangular_corrected_scalar(temporary_position, trajectory_and_probe_workspace, 0, hero.jump_gravity);
                                 hero.unk48C = t + 0.05f;
                                 hero.unk430 = t;
                                 hero.jump_gravity = hero.rail_jump_gravity;
@@ -1416,14 +1416,14 @@ void process_hero_state_transitions(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, temporary_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, d)) {
-                                        scale_vector_xyz(v1, hero.motion.displacement.f,
+                                        scale_vector_xyz(trajectory_and_probe_workspace, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(temporary_position, hero.motion.pos.f, v1);
+                                        add_vector_xyz(temporary_position, hero.motion.pos.f, trajectory_and_probe_workspace);
                                     }
                                     temporary_position[0] += fast_cos(ang) * f;
                                     temporary_position[1] += fast_sin(ang) * f;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (nearest_rail_point(temporary_position, &new_path, v1, &new_seg, &new_t,
+                                    if (nearest_rail_point(temporary_position, &new_path, trajectory_and_probe_workspace, &new_seg, &new_t,
                                                          &new_loop, hero.rail_spline, 0)) {
                                         hero.transfer_from_spline = hero.rail_spline;
                                         hero.prev_rail_segment = hero.rail_segment;
@@ -1561,11 +1561,11 @@ void process_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(trajectory_and_probe_workspace, hero.motion.pos.f);
+                        trajectory_and_probe_workspace[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        trajectory_and_probe_workspace[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         positive_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &positive_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(trajectory_and_probe_workspace, &positive_shimmy_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1574,13 +1574,13 @@ void process_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(trajectory_and_probe_workspace, hero.motion.pos.f);
+                        trajectory_and_probe_workspace[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        trajectory_and_probe_workspace[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         negative_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &negative_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(trajectory_and_probe_workspace, &negative_shimmy_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
