@@ -85,6 +85,8 @@ extern char D_L15_0017C520[];
 extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL = 0xD,
+        HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE = 0xF,
         HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
         HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
@@ -93,8 +95,10 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
+        HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION = 0x64,
         HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION = 0x65,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
+        HERO_STATE_HEIGHT_TRIGGERED_STOP = 0x68,
         HERO_STATE_HEIGHT_ADJUSTED_JUMP = 0x69,
         HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72,
         HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
@@ -913,9 +917,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP:
@@ -1528,7 +1532,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x68: {
+    case HERO_STATE_HEIGHT_TRIGGERED_STOP: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
@@ -1836,7 +1840,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
