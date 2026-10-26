@@ -1123,7 +1123,7 @@ void update_hero_state_motion(void) {
         add_vector_xyz(motion_geometry_scratch[2], motion_geometry_scratch[0], motion_geometry_scratch[3]);
         subtract_vector_xyz(hero.motion.velocity.f, motion_geometry_scratch[2], hero.motion.pos.f);
     } break;
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         float oldz;
         int below;
 
@@ -1822,8 +1822,8 @@ void update_hero_state_motion(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, frame_time_sq * 54.0f);
         }
     } break;
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = FUN_001f9b80_cf(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
