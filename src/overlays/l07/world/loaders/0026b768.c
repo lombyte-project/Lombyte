@@ -93,7 +93,7 @@ extern s32 D_L07_0015FC98;
 extern s32 D_L07_0015FC9C;
 extern s32 D_L07_0015FCA0;
 extern s32 D_L07_0015FCA4;
-extern s32 D_L07_0015FCA8;
+extern s32 l07_two_int_two_float_payload_base __asm__("D_L07_0015FCA8");
 extern char *D_L07_0015F604;
 extern Slot26b768 *D_L07_0015F5F4;
 extern s32 l07_sound_slot_count __asm__("D_L07_0015F5F0");
@@ -316,7 +316,7 @@ s32 load_level_assets(s32 full, s32 keep) {
             D_L07_0015FC9C = 0;
             D_L07_0015FCA4 = 0;
             D_L07_0015FCA0 = 0;
-            D_L07_0015FCA8 = 0;
+            l07_two_int_two_float_payload_base = 0;
         }
         if (level_header[0x2A])
             D_L07_0015F604 = base + level_header[0x2A];
