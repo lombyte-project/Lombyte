@@ -94,6 +94,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_VECTOR_SNAPSHOT = 0x11,
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_CAPTURE_DISPLACEMENT_AND_PLAY_IDLE = 0x17,
+        HERO_STATE_CAPTURE_HEIGHT_WITH_JUMP_HISTORY = 0x18,
         HERO_STATE_PLAY_IDLE_WITH_SCALED_TIMING = 0x1D,
         HERO_STATE_REFRESH_LOOK_ANIMATION = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
@@ -115,6 +116,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_EXIT_DEATH_LOCK_AND_OPTIONALLY_PLAY_IDLE = 0x64,
         HERO_STATE_RUN_WITH_VEHICLE_DEPENDENT_ANIMATION = 0x65,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72,
+        HERO_STATE_RUN_WITH_FIXED_ENTRY_ANIMATION = 0x73,
         HERO_STATE_LAND_ANIMATION_WITH_SPEED_CAP = 0x81
     };
     enum {
@@ -531,7 +533,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_RUN:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_RUN_WITH_FIXED_ENTRY_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -855,7 +857,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x73, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x18: {
+    case HERO_STATE_CAPTURE_HEIGHT_WITH_JUMP_HISTORY: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
