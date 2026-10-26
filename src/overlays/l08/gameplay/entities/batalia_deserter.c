@@ -813,9 +813,7 @@ extern s32 D_L08_001F4C48[];
 extern s32 D_L08_001F4C60[];
 extern s32 D_L08_001F8528[];
 extern char D_L08_001F8550[];
-extern float D_L08_00162384;
-extern float D_L08_00162388;
-extern float D_L08_0016238C;
+#include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -872,13 +870,13 @@ void update_batalia_textured_effect(struct Moby *moby) {
         break;
     case MOBY_ACTIVE:
         sphere_check_input[0] = *(float *)&D_L08_00162380;
-        sphere_check_input[1] = D_L08_00162384;
-        sphere_check_input[2] = D_L08_00162388;
-        sphere_check_input[3] = D_L08_0016238C;
+        sphere_check_input[1] = batalia_effect_reference_position_y;
+        sphere_check_input[2] = batalia_effect_reference_position_z;
+        sphere_check_input[3] = batalia_effect_culling_radius;
         if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
             position_delta[0] = *(float *)&D_L08_00162380;
-            position_delta[1] = D_L08_00162384;
-            position_delta[2] = D_L08_00162388;
+            position_delta[1] = batalia_effect_reference_position_y;
+            position_delta[2] = batalia_effect_reference_position_z;
             position_delta[3] = 1.0f;
             subtract_vector_xyz(position_delta, D_L08_001675C0, position_delta);
             distance = vector_length_xyz(position_delta);

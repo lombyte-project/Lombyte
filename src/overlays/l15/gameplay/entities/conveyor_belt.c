@@ -224,7 +224,8 @@ typedef struct Tb_2E9358 {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_0015ED6C;
-extern float D_L15_00161FBC __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_globals.h"
+extern float poison_vessel_gravity_gp __asm__("D_L15_00161FBC") __attribute__((sda));
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();
@@ -286,7 +287,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     state = moby->state;
     switch (state) {
     case POISON_VESSEL_FREE_FLIGHT:
-        data->f8 = data->f8 - D_L15_00161FBC * frame_time_sq;
+        data->f8 = data->f8 - poison_vessel_gravity_gp * frame_time_sq;
         func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
@@ -464,9 +465,9 @@ int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
 extern float D_L15_001620F8 __attribute__((sda));
 extern float D_L15_001620FC __attribute__((sda));
-extern float D_L15_00162100 __attribute__((sda));
+extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float D_L15_00162104 __attribute__((sda));
+extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_gs_register(s32, unsigned long) __asm__("func_00233980");
@@ -498,7 +499,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     int color;
     int i, j, uv_buffer_index, uv_vertex_index, draw_buffer_index;
 
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_00162104 * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (ripple_mesh_buffers_uv_scroll_rate_gp * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_001620F0));
     vu1_add_gs_register(0x42, ((long)D_L15_001620EC << 32) | 0x44);
     vu1_add_gs_register(8, 0);
@@ -512,7 +513,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
         for (j = 0; j < D_L15_00162080[i]; j++) {
             int *template_vertex_buffer_entry = D_L15_001620C0 + i;
             float *p = (float *)(*template_vertex_buffer_entry + j * 12);
-            float t = D_L15_00162100 *
+            float t = ripple_mesh_buffers_z_amplitude_gp *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
                                                       D_L15_001620F8) *
@@ -559,7 +560,7 @@ typedef struct {
 
 Quad4 D_L15_00162170 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L15_0016216C __attribute__((sda));
+extern float ripple_mesh_uv_scroll_rate_gp __asm__("D_L15_0016216C") __attribute__((sda));
 float D_L15_001DDBA0[204] = {3.485078f, 4.343359f, 0.0f, 5.279609f, 3.600078f, 0.0f, 2.980781f, 2.623281f, 0.0f, 4.615703f, 1.997344f, 0.0f, 2.298828f, 0.976816f, 0.0f, 3.933828f, 0.351152f, 0.0f, 1.616797f, -0.669707f, 0.0f, 3.237344f, -1.330234f, 0.0f, 0.850156f, -2.520547f, 0.0f, 2.454375f, -3.220508f, 0.0f, -0.025f, -4.63334f, 0.0f, 1.594062f, -5.297578f, 0.0f, -0.025f, -4.63334f, 0.0f, 0.733984f, -7.373926f, -5e-06f, -0.025f, -4.63334f, 0.0f, -1.060508f, -6.630625f, 0.0f, -1.641797f, -3.963652f, 0.0f, -2.49957f, -6.034551f, 0.0f, -3.258633f, -3.293945f, 0.0f, -3.938672f, -5.438457f, 0.0f, -3.258633f, -3.293945f, 0.0f, -5.733164f, -4.695137f, 0.0f, -3.258633f, -3.293945f, 0.0f, -4.873164f, -2.618789f, 0.0f, -2.383437f, -1.181152f, 0.0f, -4.012774f, -0.541719f, 0.0f, -1.616797f, 0.669688f, 0.0f, -3.229805f, 1.348555f, 0.0f, -0.934805f, 2.316172f, 0.0f, -2.53332f, 3.029922f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.851445f, 4.676094f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.187617f, 6.278828f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.606953f, 5.535547f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.046016f, 4.939453f, 0.0f, 1.363984f, 3.292969f, 0.0f, 3.485078f, 4.343359f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.980781f, 2.623281f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.298828f, 0.976816f, 0.0f, 1.363984f, 3.292969f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.934805f, 2.316172f, 0.0f, 0.681953f, 1.646484f, 0.0f, -1.616797f, 0.669688f, 0.0f, 0.681953f, 1.646484f, 0.0f, 0.0f, 0.0f, 0.0f, 2.298828f, 0.976816f, 0.0f, 0.0f, 0.0f, 0.0f, 1.616797f, -0.669707f, 0.0f, -0.766641f, -1.85084f, 0.0f, 0.850156f, -2.520547f, 0.0f, -0.766641f, -1.85084f, 0.0f, -0.025f, -4.63334f, 0.0f, -0.766641f, -1.85084f, 0.0f, -1.641797f, -3.963652f, 0.0f, -0.766641f, -1.85084f, 0.0f, -3.258633f, -3.293945f, 0.0f, -0.766641f, -1.85084f, 0.0f, -2.383437f, -1.181152f, 0.0f, 0.0f, 0.0f, 0.0f, -1.616797f, 0.669688f, 0.0f};
 float D_L15_001DDED0[68][2] = {
     {2.945454f, -1.355928f},
@@ -647,9 +648,9 @@ int D_L15_00162150[1] = {(int)D_L15_001DE750};
 int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
-extern float D_L15_00162160 __attribute__((sda));
+extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
 extern float D_L15_00162164 __attribute__((sda));
-extern float D_L15_00162168 __attribute__((sda));
+extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -660,7 +661,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     unsigned int i = 0;
     unsigned int output_vertex_byte_offset = 0;
     RingVars *data = (RingVars *)moby->pvars;
-    unsigned int n;
+    unsigned int scrolled_uv_vertex_index;
     int j;
     int k;
     int color;
@@ -671,7 +672,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     float scale;
     Quad4 *v_scroll_factors;
     float *output_vertex;
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016216C * frame_time);
+    scale = convert_integer_to_float(D_L15_0015F5CC) * (ripple_mesh_uv_scroll_rate_gp * frame_time);
     vu1_add_gs_register(6, get_effect_texture(D_L15_00162158));
     vu1_add_gs_register(0x42, ((long)D_L15_00162154 << 32) | 0x44);
     vu1_add_gs_register(8, 0);
@@ -689,24 +690,24 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
-        float radius_remainder = FUN_L00_00200260(rad, D_L15_00162160);
-        float w = wrap_angle(radius_remainder * 6.2831855f / D_L15_00162160);
+        float radius_remainder = FUN_L00_00200260(rad, ripple_mesh_radial_wavelength_gp);
+        float w = wrap_angle(radius_remainder * 6.2831855f / ripple_mesh_radial_wavelength_gp);
         float z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
         *(float *)((char *)D_L15_001DE200 + 4 + output_vertex_byte_offset) = template_vertex[1] + moby->pos.y;
-        output_vertex[2] = template_vertex[2] + moby->pos.z + D_L15_00162168 * z;
+        output_vertex[2] = template_vertex[2] + moby->pos.z + ripple_mesh_z_amplitude_gp * z;
         D_L15_001DE750[i] = color;
         i++;
         output_vertex_byte_offset += 12;
         output_vertex += 3;
     } while (i < 68);
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < 68; n++) {
+        for (scrolled_uv_vertex_index = 0; scrolled_uv_vertex_index < 68; scrolled_uv_vertex_index++) {
             uv_scroll_factors = D_L15_00162170;
-            D_L15_001DE530[n][0] =
-                D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
-            D_L15_001DE530[n][1] =
-                D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
+            D_L15_001DE530[scrolled_uv_vertex_index][0] =
+                D_L15_001DDED0[scrolled_uv_vertex_index][0] + FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
+            D_L15_001DE530[scrolled_uv_vertex_index][1] =
+                D_L15_001DDED0[scrolled_uv_vertex_index][1] + FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
@@ -901,7 +902,7 @@ void emit_randomized_vertical_effect(struct Moby *moby) {
 
 
 extern char *func_0020D348_m(int);
-extern int FUN_L00_0025d1b8();
+extern int copy_hero_moby_field_38() __asm__("FUN_L00_0025d1b8");
 extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
@@ -909,11 +910,11 @@ extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) __asm__("FUN_L15_002eb9e0");
 
 char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
-    char tmp[32] __attribute__((aligned(16)));
-    char *saved_position = tmp;
+    char saved_spawn_position_and_rotation[32] __attribute__((aligned(16)));
+    char *saved_position = saved_spawn_position_and_rotation;
     char *spawned_moby;
-    *(OvlQuad *)tmp = *(OvlQuad *)spawn_position;
-    *(OvlQuad *)(tmp + 0x10) = *(OvlQuad *)spawn_rotation;
+    *(OvlQuad *)saved_spawn_position_and_rotation = *(OvlQuad *)spawn_position;
+    *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10) = *(OvlQuad *)spawn_rotation;
     spawned_moby = func_0020D348_c(0x594);
     if (spawned_moby != 0) {
         func_L00_0025E210_u(spawned_moby);
@@ -921,7 +922,7 @@ char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
         qcopy(spawned_moby + 0x10, saved_position);
-        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(tmp + 0x10);
+        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10);
         upd_a(spawned_moby);
     }
     return spawned_moby;
@@ -980,7 +981,6 @@ typedef struct {
 extern KillFlags D_L15_001BB830;
 extern unsigned int D_L15_001BAAD0[];
 extern unsigned int D_L15_0014C190[];
-extern int D_L15_0015ED84;
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern int D_L15_0015FFD8;
@@ -1016,16 +1016,16 @@ void codebot_slot_update(struct Moby *moby) {
         CODEBOT_SLOT_COMPLETED = 4
     };
     int *data = (int *)moby->pvars;
-    float vec[4] __attribute__((aligned(16)));
-    float tmp[4] __attribute__((aligned(16)));
+    float position_work_vector[4] __attribute__((aligned(16)));
+    float position_rotation_work_vector[4] __attribute__((aligned(16)));
     OvlQuad position;
     float angle;
     char *effect;
     if (data[3] != -1) {
         if (moby->state != 0) {
-            subtract_vector_xyz(tmp, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
-            *(OvlQuad *)vec = *(OvlQuad *)tmp;
-            FUN_L00_001ff290(tmp, &moby->pos, vec);
+            subtract_vector_xyz(position_rotation_work_vector, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
+            *(OvlQuad *)position_work_vector = *(OvlQuad *)position_rotation_work_vector;
+            FUN_L00_001ff290(position_rotation_work_vector, &moby->pos, position_work_vector);
         }
         *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
     }
@@ -1035,7 +1035,7 @@ void codebot_slot_update(struct Moby *moby) {
         int i;
         save_index = ((int)((unsigned int)moby->save_id << 16)) >> 16;
         if (D_L15_001BB830.killed[save_index] != 0 ||
-            ((*(int *)(D_L15_0015ED84 * 0x100 + (save_index >> 5) * 4 + (char *)D_L15_0014C190) >> (moby->save_id & 31) & 1) != 0)) {
+            ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)D_L15_0014C190) >> (moby->save_id & 31) & 1) != 0)) {
             moby->state = 4;
             break;
         }
@@ -1055,23 +1055,23 @@ void codebot_slot_update(struct Moby *moby) {
         break;
     case CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT:
         if (can_spawn_codebot_slot_effect(data[0])) {
-            vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
-            vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
-            vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
-            data[1] = (int)spawn_codebot_slot_effect((char *)vec, (char *)tmp);
+            position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
+            position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
+            position_work_vector[2] = 0.0f;
+            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
+            data[1] = (int)spawn_codebot_slot_effect((char *)position_work_vector, (char *)position_rotation_work_vector);
             data[2] = 0;
-            vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
-            vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
-            vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
-            vec[2] = probe_ground_height(vec, 0, 0.5f);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            FUN_L00_00216f90(vec, tmp, 0x72, 0);
+            position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
+            position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
+            position_work_vector[2] = 0.0f;
+            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            position_work_vector[2] = probe_ground_height(position_work_vector, 0, 0.5f);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            FUN_L00_00216f90(position_work_vector, position_rotation_work_vector, 0x72, 0);
             if (data[8] != -1)
                 set_moby_list_visibility(data[8], 1);
             moby->state = 3;
@@ -1081,15 +1081,15 @@ void codebot_slot_update(struct Moby *moby) {
         if (data[1] != 0) {
             *(float *)&data[2] = fast_add_rotations(*(float *)&data[2], (360.0f / scale_time(360.0f)) * 0.017453292f);
             angle = fast_cos(*(float *)&data[2]) + 1.0f;
-            vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
-            vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
-            vec[2] = 0.0f;
+            position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
+            position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
+            position_work_vector[2] = 0.0f;
             effect = (char *)data[1];
-            add_vector_xyz(tmp, &moby->pos, vec);
-            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)tmp;
+            add_vector_xyz(position_rotation_work_vector, &moby->pos, position_work_vector);
+            *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)position_rotation_work_vector;
             if (angle < 0.5f) {
                 unsigned int *bits;
-                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + D_L15_0015ED84 * 0x100 + (char *)D_L15_0014C190);
+                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)D_L15_0014C190);
                 *bits |= 1u << (moby->save_id & 31);
                 {
                     unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
@@ -1102,25 +1102,25 @@ void codebot_slot_update(struct Moby *moby) {
     case CODEBOT_SLOT_COMPLETED:
         D_L15_00184AAC = 1;
         if (*(volatile int *)(data + 1) == 0) {
-            vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
-            vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
-            vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
+            position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
+            position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
+            position_work_vector[2] = 0.0f;
+            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
             *(OvlQuad *)&position = *(OvlQuad *)&moby->pos;
-            data[1] = (int)spawn_codebot_slot_effect((char *)&position, (char *)tmp);
+            data[1] = (int)spawn_codebot_slot_effect((char *)&position, (char *)position_rotation_work_vector);
         } else {
-            vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
-            vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
-            vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
-            clear_u64_value(tmp);
-            tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            tmp[1] = 1.5707964f;
-            *(OvlQuad *)((char *)data[1] + 0x10) = *(OvlQuad *)vec;
-            *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)tmp;
+            position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
+            position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
+            position_work_vector[2] = 0.0f;
+            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            clear_u64_value(position_rotation_work_vector);
+            position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
+            position_rotation_work_vector[1] = 1.5707964f;
+            *(OvlQuad *)((char *)data[1] + 0x10) = *(OvlQuad *)position_work_vector;
+            *(OvlQuad *)((char *)data[1] + 0x40) = *(OvlQuad *)position_rotation_work_vector;
         }
         if (alternate_item_available[0x6D] == 0 && count_missing_or_dying_mobys_in_list(data[8]) > 9) {
             alternate_item_available[0x6D] = 1;
@@ -1839,11 +1839,11 @@ int D_L15_001621E0[1] = {(int)D_L15_001DF048};
 int D_L15_001621E4 = 128;
 int D_L15_001621E8 = 45;
 int D_L15_001621EC = 64;
-extern float D_L15_001621F0 __attribute__((sda));
+extern float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") __attribute__((sda));
 extern float D_L15_001621F4 __attribute__((sda));
-extern float D_L15_001621F8 __attribute__((sda));
-extern float D_L15_001621FC __attribute__((sda));
-extern float D_L15_00162200 __attribute__((sda));
+extern float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") __attribute__((sda));
+extern float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") __attribute__((sda));
+extern float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 46 scaled vertices and colours, then two passes of 46 texture coordinates. */
 void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edbe0");
 
@@ -1858,7 +1858,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_macro) * (D_L15_001621FC * D_0015ED6C_2edbe0);
+    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_macro) * (scaled_ripple_uv_scroll_rate_gp * D_0015ED6C_2edbe0);
     FUN_00233980_2edbe0(6, FUN_001f44b8_2edbe0(D_L15_001621E8));
     FUN_00233980_2edbe0(0x42, ((long)D_L15_001621E4 << 32) | 0x44);
     FUN_00233980_2edbe0(8, 0);
@@ -1872,12 +1872,12 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = FUN_001f9988_2edbe0(x * x + y * y);
-        float radius_remainder = FUN_L00_00200260_2edbe0(rad, D_L15_001621F0);
-        float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / D_L15_001621F0);
+        float radius_remainder = FUN_L00_00200260_2edbe0(rad, scaled_ripple_radial_wavelength_gp);
+        float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / scaled_ripple_radial_wavelength_gp);
         float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
-        D_L15_001DECB0[i][0] = D_L15_00162200 * template_vertex[0] + moby->pos.x;
-        D_L15_001DECB0[i][1] = D_L15_00162200 * template_vertex[1] + moby->pos.y;
-        D_L15_001DECB0[i][2] = D_L15_00162200 * template_vertex[2] + moby->pos.z + D_L15_001621F8 * z;
+        D_L15_001DECB0[i][0] = scaled_ripple_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
+        D_L15_001DECB0[i][1] = scaled_ripple_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
+        D_L15_001DECB0[i][2] = scaled_ripple_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + scaled_ripple_z_amplitude_gp * z;
         D_L15_001DF048[i] = color;
     }
     for (j = 0; j < 2; j++) {
@@ -2103,11 +2103,11 @@ int D_L15_00162250[1] = {(int)D_L15_001E0020};
 int D_L15_00162254 = 128;
 int D_L15_00162258 = 45;
 int D_L15_0016225C = 64;
-extern float D_L15_00162260 __attribute__((sda));
+extern float ripple_88_radial_wavelength_gp __asm__("D_L15_00162260") __attribute__((sda));
 extern float D_L15_00162264 __attribute__((sda));
-extern float D_L15_00162268 __attribute__((sda));
-extern float D_L15_0016226C __attribute__((sda));
-extern float D_L15_00162270 __attribute__((sda));
+extern float ripple_88_z_amplitude_gp __asm__("D_L15_00162268") __attribute__((sda));
+extern float ripple_88_uv_scroll_rate_gp __asm__("D_L15_0016226C") __attribute__((sda));
+extern float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") __attribute__((sda));
 /* Builds and draws the animated ring of lights around a moby: 88 scaled vertices and colours, then two passes of 88 texture coordinates. */
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edfc0");
 
@@ -2122,7 +2122,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (D_L15_0016226C * D_0015ED6C_2edfc0);
+    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (ripple_88_uv_scroll_rate_gp * D_0015ED6C_2edfc0);
     FUN_00233980_2edfc0(6, FUN_001f44b8_2edfc0(D_L15_00162258));
     FUN_00233980_2edfc0(0x42, ((long)D_L15_00162254 << 32) | 0x44);
     FUN_00233980_2edfc0(8, 0);
@@ -2136,12 +2136,12 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
         float x = template_vertex[0];
         float y = template_vertex[1];
         float rad = FUN_001f9988_2edfc0(x * x + y * y);
-        float radius_remainder = FUN_L00_00200260_2edfc0(rad, D_L15_00162260);
-        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / D_L15_00162260);
+        float radius_remainder = FUN_L00_00200260_2edfc0(rad, ripple_88_radial_wavelength_gp);
+        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / ripple_88_radial_wavelength_gp);
         float z = FUN_001f9de0_2edfc0(FUN_001fa580_2edfc0(w, data->angle));
-        D_L15_001DF940[i][0] = D_L15_00162270 * template_vertex[0] + moby->pos.x;
-        D_L15_001DF940[i][1] = D_L15_00162270 * template_vertex[1] + moby->pos.y;
-        D_L15_001DF940[i][2] = D_L15_00162270 * template_vertex[2] + moby->pos.z + D_L15_00162268 * z;
+        D_L15_001DF940[i][0] = ripple_88_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
+        D_L15_001DF940[i][1] = ripple_88_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
+        D_L15_001DF940[i][2] = ripple_88_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + ripple_88_z_amplitude_gp * z;
         D_L15_001E0020[i] = color;
     }
     for (j = 0; j < 2; j++) {
@@ -2160,14 +2160,13 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern char *D_L15_0015EF50;
-extern float D_L15_0015F3FC;
 
 int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
     slot_state_data = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
-    if (*(short *)(slot_state_data + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
+    if (*(short *)(slot_state_data + 0x14) == 1 && codebot_slot_effect_spawn_gate != 0.0f)
         return 1;
     return *(short *)(slot_state_data + 0x14) == 3;
 }

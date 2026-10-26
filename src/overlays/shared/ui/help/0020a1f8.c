@@ -57,7 +57,9 @@ void FUN_L00_00216ec0(int a, int b, int c) {
 }
 
 extern int D_0013F350_002321a8[] __asm__("D_0013F350");
-void FUN_L00_002321a8(void) {
+void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
+
+void clear_hero_mapped_moby_animation_state(void) {
     int *destination = D_0013F350_002321a8;
     destination[0x2278 / 4] = 0;
     destination[0x227C / 4] = 0;

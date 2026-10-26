@@ -341,7 +341,7 @@ void draw_dialog_text(void) {
     case FREEZE_SCALED_OUTLINE_DIALOG: {
         char line[0x40];
         s32 pulse;
-        s32 c1;
+        s32 shared_dialog_text_color;
         s32 matched_record_text_color;
         s32 unmatched_record_text_color;
         s32 best;
@@ -365,7 +365,7 @@ void draw_dialog_text(void) {
         } else if (scale < 0.1f) {
             scale = 0.1f;
         }
-        c1 = D_0015F52C;
+        shared_dialog_text_color = D_0015F52C;
         matched_record_text_color = D_0015F534;
         unmatched_record_text_color = D_0015F53C;
         if (freeze.unk24 != 0) {
@@ -375,7 +375,7 @@ void draw_dialog_text(void) {
             } else if (color_blend_fraction < 0.0f) {
                 color_blend_fraction = 0.0f;
             }
-            c1 = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
+            shared_dialog_text_color = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
             matched_record_text_color = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
             unmatched_record_text_color = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
         }
@@ -384,9 +384,9 @@ void draw_dialog_text(void) {
                          D_0015F4FC + truncate_float_to_s32((f32)D_0015F504 * scale),
                          D_0015F4F8 - truncate_float_to_s32((f32)D_0015F500 * scale),
                          D_0015F4F8 + truncate_float_to_s32((f32)D_0015F500 * scale), pulse);
-            font_print_center(0x100, freeze_bevel_a_text, c1, get_help_message_text(0x4F6E), -1);
-            font_print_center(0x100, freeze_bevel_a_text + 0x18, c1, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, freeze_bevel_a_text + 0x30, c1, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, freeze_bevel_a_text, shared_dialog_text_color, get_help_message_text(0x4F6E), -1);
+            font_print_center(0x100, freeze_bevel_a_text + 0x18, shared_dialog_text_color, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, freeze_bevel_a_text + 0x30, shared_dialog_text_color, get_help_message_text(0x5248), -1);
         } else {
             draw_outlined_rect(D_0015F510 - truncate_float_to_s32((f32)D_0015F518 * scale),
                          D_0015F510 + truncate_float_to_s32((f32)D_0015F518 * scale),
@@ -434,8 +434,8 @@ void draw_dialog_text(void) {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A4));
                 font_print_center(0x100, freeze_stats_text + 0x60, unmatched_record_text_color, line, -1);
             }
-            font_print_center(0x100, freeze_stats_text + 0x90, c1, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, freeze_stats_text + 0xA8, c1, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, freeze_stats_text + 0x90, shared_dialog_text_color, get_help_message_text(0x5249), -1);
+            font_print_center(0x100, freeze_stats_text + 0xA8, shared_dialog_text_color, get_help_message_text(0x5248), -1);
         }
         break;
     }

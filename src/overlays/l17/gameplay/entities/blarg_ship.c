@@ -280,7 +280,9 @@ extern struct {
     int pad1[81];
     int tbl[3];
 } D_L17_0016D160;
-void FUN_L17_002f2e78(struct Moby *moby) {
+void update_fleet_guarded_moby_effects(struct Moby *moby) __asm__("FUN_L17_002f2e78");
+
+void update_fleet_guarded_moby_effects(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_GUARDED_TABLE_CALL = 1
@@ -342,7 +344,9 @@ extern int D_L17_001DE010[];
 extern int D_L17_001DE028[];
 extern int D_L17_001DE088[];
 int D_L17_001623B8 = 0x807e4931;
-void FUN_L17_002f32f0(struct Moby *moby) {
+void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
+
+void draw_fleet_backdrop_quads(struct Moby *moby) {
     Pkt pkt;
     OvlQuad vv[4];
     char *data = (char *)moby->pvars;
@@ -446,8 +450,9 @@ void FUN_L17_002f32f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern float D_L17_001623D0 __attribute__((sda));
-extern float D_L17_001623D8 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/blarg_ship_globals.h"
+extern float backdrop_shared_radius_numerator_gp __asm__("D_L17_001623D0") __attribute__((sda));
+extern float backdrop_offset_radius_divisor_gp __asm__("D_L17_001623D8") __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -456,7 +461,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 extern float D_L17_001DDFE0[];
 extern float D_L17_001DE058[];
 extern float D_L17_001DE070[];
-extern float D_L17_001623D4 __attribute__((sda));
+extern float backdrop_heading_radius_numerator_addend_gp __asm__("D_L17_001623D4") __attribute__((sda));
 void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
 
 void update_fleet_backdrop_animation(struct Moby *moby) {
@@ -484,9 +489,9 @@ done:
         }
         qcopy(moby_pvars, &moby->pos);
         build_spherical_offset(
-            offset_accumulator, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
+            offset_accumulator, (backdrop_heading_radius_numerator_addend_gp + backdrop_shared_radius_numerator_gp) / backdrop_offset_radius_divisor_gp,
             moby->rot.z, 0.0f);
-        build_spherical_offset(pvar_angle_offset, D_L17_001623D0 / D_L17_001623D8,
+        build_spherical_offset(pvar_angle_offset, backdrop_shared_radius_numerator_gp / backdrop_offset_radius_divisor_gp,
                                *(float *)(moby_pvars + 0x44), 0.0f);
         add_vector_xyz(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
@@ -563,7 +568,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-extern float D_L17_001623E8 __attribute__((sda));
+extern float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -735,7 +740,7 @@ void blarg_ship_update(struct Moby *moby) {
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
                 subtract_vector_xyz(firing_target_delta, sB0, sA0);
-                normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
+                normalize_vector_xyz(firing_direction, firing_target_delta, blarg_ship_firing_speed_gp * frame_time);
                 add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
                 firing_moby = spawn_class_3f9_moby((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (firing_moby) {

@@ -13,14 +13,14 @@ extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 extern unsigned char D_0013D389[];
 extern char D_L11_00179B18[];
 extern char D_L11_0021A900[];
-extern int D_L11_0015F640;
+#include "rnc/overlay/shared/gameplay/entities/ocean_pokitaru_globals.h"
 void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
 void remove_moby_when_near_hero(char *moby) {
     if (FUN_001f9b48_b7(moby + 0x10, &hero.motion.pos) < 2.0f) {
         D_0013D389[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, D_L11_0021A900);
-        D_L11_0015F640 = FUN_001f96f8_b7(0xB4);
+        proximity_removal_frame_count = FUN_001f96f8_b7(0xB4);
         FUN_0020c828_b7(moby);
     }
 }
@@ -311,11 +311,11 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char D_L11_00174880[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern int D_L11_00161DC0 __attribute__((sda));
-extern int D_L11_00161DC4 __attribute__((sda));
-extern int D_L11_00161DC8 __attribute__((sda));
+extern int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
+extern int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") __attribute__((sda));
+extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
-extern float D_L11_00161DD0 __attribute__((sda));
+extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -348,11 +348,11 @@ void update_projectile_with_trail(char *moby) {
     if (data == 0) return;
     moby_position = moby + 0x10;
     qcopy(old, moby_position);
-    trail_color = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
+    trail_color = fast_tween_color(projectile_trail_color_start_gp, projectile_trail_color_end_gp, random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
     add_vector_xyz(trail_position, trail_position, moby_position);
-    scale_vector_xyz(trail_velocity, data, D_L11_00161DD0);
-    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    scale_vector_xyz(trail_velocity, data, projectile_trail_velocity_scale_gp);
+    FUN_L00_0026dd20((char *)trail_position, (char *)trail_velocity, trail_color, scale_game_frames(projectile_trail_frame_count_gp), (float)D_L11_00161DCC);
     add_vector_xyz(moby_position, moby_position, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
     if (collision_line(old, moby_position, 0, *(void **)(data + 0x1C), hit)) {
@@ -537,7 +537,9 @@ extern UV_30a908 D_L11_001DA510[];
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
-void FUN_L11_0030a908(struct Moby *moby) {
+void draw_pokitaru_ocean(struct Moby *moby) __asm__("FUN_L11_0030a908");
+
+void draw_pokitaru_ocean(struct Moby *moby) {
     Vec4f scratch_vector;
     Vec4f side_offset;
     Vec4f strip_length_direction;

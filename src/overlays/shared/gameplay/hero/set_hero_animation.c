@@ -404,10 +404,10 @@ extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F6E0 __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
-extern void FUN_L00_002321a8(void);
+extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
 extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_00232220");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00251ce8(void *, int);
 extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
@@ -460,7 +460,7 @@ void set_hero_animation(int a0, int a1, float t) {
         g2->unkAA4 = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     g3 = &hero;
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) =
@@ -472,7 +472,7 @@ void set_hero_animation(int a0, int a1, float t) {
     if (g3->vehicle_mode == 0) {
         blend_hero_slot3_mapped_animation_pair(a0, a1, t);
     }
-    FUN_L00_002321a8();
+    clear_hero_mapped_moby_animation_state();
     if (((int)g3->unk2278) != 0) {
         blend_hero_mapped_moby_animation(a0, a1, t);
     }
@@ -510,7 +510,7 @@ void FUN_L00_002325e0(int bank, int seq) {
     }
 }
 /* Sets the word at 0xAB0 of hero to -1 and clears the one at 0xAB8. */
-void FUN_L00_00232628(void) {
+void clear_hero_queued_animation(void) {
     struct Hero *hero_base = &hero;
     hero_base->unkAB0 = -1;
     hero_base->unkAB8 = 0;
@@ -827,29 +827,29 @@ float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
 float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 
 float compute_hero_ground_aligned_heading(void) {
-    float m[16] __attribute__((aligned(16)));
+    float heading_rotation_matrix[16] __attribute__((aligned(16)));
     Vec4_2332d0 heading_direction, z_rotation_angles, y_rotation_angles, y_alignment_reference_vector;
     struct Hero *P;
     heading_direction.f[0] = FUN_001f9dc8_002332d0(0.0f);
     heading_direction.f[1] = FUN_001f9de0_002332d0(0.0f);
     heading_direction.f[2] = 0.0f;
-    FUN_001fa050_002332d0(m, &hero.motion.rot);
+    FUN_001fa050_002332d0(heading_rotation_matrix, &hero.motion.rot);
     P = &hero;
-    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
     if (P->unk270.f[0] != 0.0f || P->unk270.f[1] != 0.0f) {
         y_alignment_reference_vector.q = P->unk270.q;
         FUN_001f99f8_002332d0(&z_rotation_angles);
         FUN_001f99f8_002332d0(&y_rotation_angles);
         z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->unk270.f[0], P->unk270.f[1]);
-        FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
-        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
+        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, heading_rotation_matrix);
         y_rotation_angles.f[1] = -FUN_001f9e90_002332d0(y_alignment_reference_vector.f[2], y_alignment_reference_vector.f[0]);
-        FUN_001fa050_002332d0(m, &y_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &y_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
         z_rotation_angles.f[2] = -z_rotation_angles.f[2];
-        FUN_001fa050_002332d0(m, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, m);
+        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
+        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
     }
     return FUN_001f9e90_002332d0(heading_direction.f[0], heading_direction.f[1]);
 }
@@ -1036,7 +1036,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *flattened_vector, float *input_vector) {
     struct Hero *base = &hero;
-    float n[4] __attribute__((aligned(16)));
+    float gravity_axis_projection[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
     case HERO_GRAVITY_WORLD_DOWN:
@@ -1044,13 +1044,13 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         flattened_vector[2] = 0.0f;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        fast_vec_normalize(n, &base->unk270, 1.0f);
-        scale_vector_xyz(n, n, dot_vectors_xyz(n, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, n);
+        fast_vec_normalize(gravity_axis_projection, &base->unk270, 1.0f);
+        scale_vector_xyz(gravity_axis_projection, gravity_axis_projection, dot_vectors_xyz(gravity_axis_projection, input_vector));
+        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        scale_vector_xyz(n, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, n);
+        scale_vector_xyz(gravity_axis_projection, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, input_vector));
+        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
         break;
     }
 }
@@ -1068,7 +1068,7 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *input_vector) {
     struct Hero *base = &hero;
-    float m[16] __attribute__((aligned(16)));
+    float moby_rotation_matrix[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
     float out[4] __attribute__((aligned(16)));
 
@@ -1077,8 +1077,8 @@ float gravity_length_xy(float *input_vector) {
         return vector_length_xy(input_vector);
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
-        transpose_rotation_matrix(inv, m);
+        euler_rotation_matrix(moby_rotation_matrix, ((char *)base->moby) + 0x40);
+        transpose_rotation_matrix(inv, moby_rotation_matrix);
         transform_vector(out, input_vector, inv);
         return vector_length_xy(out);
     }
@@ -1097,7 +1097,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *input_vector) {
     struct Hero *base = &hero;
-    float m[16] __attribute__((aligned(16)));
+    float gravity_axis_rotation_matrix[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
 
     switch (base->unk20B3) {
@@ -1107,8 +1107,8 @@ float gravity_z(float *input_vector) {
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         clear_u64_value(axis);
         axis[2] = 1.0f;
-        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
-        transform_vector(axis, axis, m);
+        euler_rotation_matrix(gravity_axis_rotation_matrix, ((char *)base->moby) + 0x40);
+        transform_vector(axis, axis, gravity_axis_rotation_matrix);
         return fast_vec_dot(axis, input_vector);
     }
     return 0.0f;
@@ -1674,7 +1674,7 @@ void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
 
-void apply_hero_moby_scale(void *a) {
+void apply_hero_moby_scale(void *scale_owner_moby) {
     f32 scale_factor = D_0015EE14;
     A_00234b38 *scale_state;
     s32 level_index;
@@ -1682,7 +1682,7 @@ void apply_hero_moby_scale(void *a) {
         scale_factor = 1.33f;
     scale_state = &D_L00_0017C340_00234b38;
     if (scale_state->b1 == 0) {
-        FUN_0020cb10_00234b38(a, 0x18, scale_state);
+        FUN_0020cb10_00234b38(scale_owner_moby, 0x18, scale_state);
         scale_state->f20 = scale_factor;
         scale_state->f24 = scale_factor;
         scale_state->f28 = scale_factor;
@@ -1701,7 +1701,7 @@ void apply_hero_moby_scale(void *a) {
             }
         }
     }
-    FUN_L00_00234a50_00234b38(a);
+    FUN_L00_00234a50_00234b38(scale_owner_moby);
 }
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];

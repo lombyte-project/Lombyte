@@ -30,12 +30,13 @@ extern int D_L06_00161F80 __attribute__((sda));
 extern int D_L06_00161F84 __attribute__((sda));
 extern int D_L06_00161F88 __attribute__((sda));
 extern int D_L06_00161F8C __attribute__((sda));
-extern int D_L06_00161F90 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
+extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
 extern unsigned int D_L06_00161F94 __attribute__((sda));
-extern int D_L06_00161F98 __attribute__((sda));
-extern float D_L06_00161F9C __attribute__((sda));
-extern float D_L06_00161FA0 __attribute__((sda));
-extern float D_L06_00161FA4 __attribute__((sda));
+extern int dual_texture_mesh_second_pass_vertex_color_gp __asm__("D_L06_00161F98") __attribute__((sda));
+extern float dual_texture_mesh_position_scale_gp __asm__("D_L06_00161F9C") __attribute__((sda));
+extern float dual_texture_mesh_first_pass_u_offset_multiplier_gp __asm__("D_L06_00161FA0") __attribute__((sda));
+extern float dual_texture_mesh_first_pass_v_offset_multiplier_gp __asm__("D_L06_00161FA4") __attribute__((sda));
 extern float D_L06_00167554;
 extern float D_L06_00167540[];
 float D_L06_001F1540[146][2] = {
@@ -505,15 +506,15 @@ void draw_dual_texture_50_quad_mesh(void) __asm__("FUN_L06_002fd1a0");
 void draw_dual_texture_50_quad_mesh(void) {
     Packet_2fd1a0 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec2[4] __attribute__((aligned(16)));
+    float reference_to_quad_unit_direction[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
-    float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
-    float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
     void *matrix_ptr;
     long flags;
     int i, j;
 
-    long tex = texture_2fd1a0(D_L06_00161F90);
+    long tex = texture_2fd1a0(dual_texture_mesh_first_pass_texture_index_gp);
     first.tex = tex;
     second.tex = texture_2fd1a0(0x2a);
     second.unk80 = 0xFF9000000260L;
@@ -530,15 +531,15 @@ void draw_dual_texture_50_quad_mesh(void) {
     matrix_ptr = matrix;
     initialize_matrix_2fd1a0(matrix);
     first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
-    second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L06_00161F98;
+    second.color[0] = second.color[1] = second.color[2] = second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001F2610[i], dual_texture_mesh_position_scale_gp);
         multiply_2fd1a0(vec1, vec1, matrix);
-        subtract_2fd1a0(vec2, vec1, D_L06_00167540);
-        normalize_2fd1a0(vec2, vec2, 1.0f);
+        subtract_2fd1a0(reference_to_quad_unit_direction, vec1, D_L06_00167540);
+        normalize_2fd1a0(reference_to_quad_unit_direction, reference_to_quad_unit_direction, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix_ptr);
-        normalize_other_2fd1a0(vec2, vec1);
+        normalize_other_2fd1a0(reference_to_quad_unit_direction, vec1);
         j = 0;
         do {
             int vertex_index = D_L06_001F1220[i][j][0];
@@ -1031,13 +1032,13 @@ void draw_dual_texture_58_quad_mesh(void) {
     float vec2[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
     void *matrix_ptr;
-    float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
-    float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
     long flags;
     int i, j;
     float facing;
 
-    first.tex = texture_2fd1a0(D_L06_00161F90);
+    first.tex = texture_2fd1a0(dual_texture_mesh_first_pass_texture_index_gp);
     second.tex = texture_2fd1a0(0x2a);
     matrix_ptr = matrix;
     flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
@@ -1054,13 +1055,13 @@ void draw_dual_texture_58_quad_mesh(void) {
     first.color[2] = D_L06_00161F94;
     first.color[1] = D_L06_00161F94;
     first.color[0] = D_L06_00161F94;
-    second.color[3] = D_L06_00161F98;
-    second.color[2] = D_L06_00161F98;
-    second.color[1] = D_L06_00161F98;
-    second.color[0] = D_L06_00161F98;
+    second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[0] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001F0560[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001F0560[i], dual_texture_mesh_position_scale_gp);
         multiply_2fd1a0(vec1, vec1, matrix);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
@@ -1073,7 +1074,7 @@ void draw_dual_texture_58_quad_mesh(void) {
                 int vertex_index = D_L06_001EF310[i][j][0];
                 int uv_index = D_L06_001EF310[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001EED30[vertex_index], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001EED30[vertex_index], dual_texture_mesh_position_scale_gp);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001EF6B0[uv_index][0];
                 v = D_L06_001EF6B0[uv_index][1];
@@ -5533,16 +5534,16 @@ void draw_dual_texture_864_quad_mesh(void) __asm__("FUN_L06_002fd748");
 void draw_dual_texture_864_quad_mesh(void) {
     Packet_2fd748 first, second;
     float matrix[4][4] __attribute__((aligned(16)));
-    float vec2[4] __attribute__((aligned(16)));
+    float reference_to_quad_direction[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
     void *matrix_ptr;
-    float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
-    float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
     long flags;
     int i, j;
     float facing;
 
-    first.tex = texture_2fd1a0(D_L06_00161F90);
+    first.tex = texture_2fd1a0(dual_texture_mesh_first_pass_texture_index_gp);
     second.tex = texture_2fd1a0(0x2a);
     matrix_ptr = matrix;
     flags = (long)D_L06_00161F7C | (long)D_L06_00161F80 << 2 |
@@ -5559,25 +5560,25 @@ void draw_dual_texture_864_quad_mesh(void) {
     first.color[2] = D_L06_00161F94;
     first.color[1] = D_L06_00161F94;
     first.color[0] = D_L06_00161F94;
-    second.color[3] = D_L06_00161F98;
-    second.color[2] = D_L06_00161F98;
-    second.color[1] = D_L06_00161F98;
-    second.color[0] = D_L06_00161F98;
+    second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
+    second.color[0] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
-        transform_2fd1a0(vec1, D_L06_001EB730[i], D_L06_00161F9C);
+        transform_2fd1a0(vec1, D_L06_001EB730[i], dual_texture_mesh_position_scale_gp);
         multiply_2fd1a0(vec1, vec1, matrix);
-        subtract_2fd1a0(vec2, vec1, D_L06_00167540);
-        normalize_2fd1a0(vec2, vec2, 1.0f);
+        subtract_2fd1a0(reference_to_quad_direction, vec1, D_L06_00167540);
+        normalize_2fd1a0(reference_to_quad_direction, reference_to_quad_direction, 1.0f);
         transform_other_2fd1a0(vec1, D_L06_001E4A30[i], matrix_ptr);
-        facing = normalize_other_2fd1a0(vec2, vec1);
+        facing = normalize_other_2fd1a0(reference_to_quad_direction, vec1);
         if (!(facing > 0.0f)) {
             j = 0;
             do {
                 int vertex_index = D_L06_001DF6F0[i][j][0];
                 int uv_index = D_L06_001DF6F0[i][j][1];
                 float u, v;
-                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[vertex_index], D_L06_00161F9C);
+                transform_2fd1a0(&first.v[j], D_L06_001DBFF0[vertex_index], dual_texture_mesh_position_scale_gp);
                 qcopy(&second.v[j], &first.v[j]);
                 u = D_L06_001E2CF0[uv_index][0];
                 v = D_L06_001E2CF0[uv_index][1];
@@ -5721,11 +5722,10 @@ extern void FUN_L06_00300720(void);
 extern void FUN_L06_00300588(void);
 extern void FUN_L06_003003f0(void);
 
-extern int D_L06_0015F404;
 extern int D_L06_0015F408;
-extern float D_L06_00162048 __attribute__((sda));
+extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048") __attribute__((sda));
 extern int D_L06_00162044 __attribute__((sda));
-extern float D_L06_00162050 __attribute__((sda));
+extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
 void update_moby_camera_sequence_and_draw_selection(char *moby) {
@@ -5740,7 +5740,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
     float camera_position[4], camera_setup_rotation_or_position_target[4], from[4], target[4], offset[4];
     int base;
     int state;
-    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162048;
+    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_DRAW_SELECTION:
         data[1] = 1;
@@ -5764,7 +5764,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 int state;
                 int base;
                 moby[0x20] = 3;
-                D_L06_0015F404 = 1;
+                scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
                 state = data[5];
                 state <<= 7;
@@ -5813,7 +5813,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
             moby[0x20] = 5;
             hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
-            D_L06_0015F404 = 0;
+            scripted_camera_sequence_active = 0;
         } else {
             if (*(float *)(data + 6) >= 0.05f && data[3] >= 0) {
                 {
@@ -5841,7 +5841,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(from, (void *)(state + base + 0x70));
             }
-            from[0] = D_L06_00162050 * 0.017453292f;
+            from[0] = camera_sequence_rotation_x_degrees_gp * 0.017453292f;
             qcopy(camera_setup_rotation_or_position_target, D_0013F3D0);
             qcopy(target, D_0013F3D0 + 16);
             /* Retail takes this component from the camera rotation, not the hero position. */
@@ -5887,7 +5887,7 @@ extern void vadd_300278(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vnorm_300278(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
-extern float D_L06_0016204C __attribute__((sda));
+extern float moby_breakup_z_offset_gp __asm__("D_L06_0016204C") __attribute__((sda));
 /* Breaks the moby apart: spawns a copy (class 0x43C) and throws 50
  * fragments out in random directions. */
 void spawn_moby_breakup_effect(char *source_moby) {
@@ -5916,7 +5916,7 @@ void spawn_moby_breakup_effect(char *source_moby) {
         fragment_velocity[1] = sin_300278(fragment_angle) * 2.0f;
         fragment_velocity[2] = 0.0f;
         vadd_300278(fragment_position, source_moby + 0x10, fragment_velocity);
-        fragment_position[2] += rand_range_300278(D_L06_0016204C + 0.5f, D_L06_0016204C + 4.5f);
+        fragment_position[2] += rand_range_300278(moby_breakup_z_offset_gp + 0.5f, moby_breakup_z_offset_gp + 4.5f);
         vnorm_300278(fragment_velocity, fragment_velocity, fragment_step_length);
         spawn_spinning_moby_fragment(source_moby, fragment_position, fragment_velocity);
     }
@@ -5973,7 +5973,7 @@ void FUN_L06_003003f0(void) {
     quad.unk70 = 0;
     init_3003f0(&buf);
     c = D_L06_0016206C;
-    buf.f38 = D_L06_0016204C;
+    buf.f38 = moby_breakup_z_offset_gp;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
@@ -6031,7 +6031,7 @@ void FUN_L06_00300720(void) {
     pkt[3] |= (long)D_L06_00162068 << 32;
     pkt[0] = 0;
     init_3003f0(mp);
-    mat[3][2] = D_L06_0016204C;
+    mat[3][2] = moby_breakup_z_offset_gp;
     colors[3] = D_L06_0016206C;
     colors[2] = D_L06_0016206C;
     colors[1] = D_L06_0016206C;
@@ -6067,7 +6067,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern float D_L06_00162090 __attribute__((sda));
+extern float moby_bobbing_amplitude_gp __asm__("D_L06_00162090") __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void update_moby_bobbing_and_motion(char *moby) __asm__("FUN_L06_00300df0");
 
@@ -6097,7 +6097,7 @@ void update_moby_bobbing_and_motion(char *moby) {
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * bobbing_sine_factor;
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
@@ -6515,7 +6515,6 @@ extern void FUN_L00_002eac18(int);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
-extern float D_L06_0015F400;
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
@@ -6602,7 +6601,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
             *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
-            D_L06_0015F404 = 0;
+            scripted_camera_sequence_active = 0;
             return;
         }
         activate_listed_class_5e8_mobys(*(int *)(moby_vars + 0x34));
@@ -6653,12 +6652,12 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
     case RAMP_SHARED_VALUE_AFTER_DELAY:
         if (*(float *)(moby_vars + 0xB8) == 1.0f) {
             FUN_L00_00211250();
-            D_L06_0015F400 = 0.0f;
+            linked_sequence_exit_ramp_progress = 0.0f;
             return;
         }
         if (fast_dec_timer(moby_vars + 0xBC) == 0) return;
         approach_value((float *)(moby_vars + 0xB8), 1.0f, frame_time * 6.0f);
-        D_L06_0015F400 = *(float *)(moby_vars + 0xB8);
+        linked_sequence_exit_ramp_progress = *(float *)(moby_vars + 0xB8);
         return;
     }
 }
@@ -6671,8 +6670,6 @@ struct TauntVoiceVars {
     s32 chatter[3][6];   /* 0x68 */
 };
 extern s32 D_L06_001620B8[1] __attribute__((sda));
-extern s32 D_L06_001620BC;
-extern s32 D_L06_001620C0;
 extern s32 D_001516EC[];
 extern s32 FUN_00213260(s32);
 
@@ -6705,8 +6702,8 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
             chatter_index = (chatter_index + 1) % 3;
             if (i == 2) {
                 D_L06_001620B8[0] = 0;
-                D_L06_001620BC = 0;
-                D_L06_001620C0 = 0;
+                chatter_second_variant_used = 0;
+                chatter_third_variant_used = 0;
             }
         }
         lang = game_language;
@@ -6804,7 +6801,7 @@ extern void FUN_L00_002eaa30_302578(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_00216f90_302578(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void vu_euler_rotation_basis_302578(void *, void *) __asm__("FUN_001fa030");
 extern float fast_add_rotations_302578(float, float) __asm__("FUN_001fa580");
-extern void FUN_L06_002e6148_302578(void *) __asm__("FUN_L06_002e6148");
+extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
 extern void FUN_L00_002eac18_302578(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L00_00298840_302578(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002607d0_302578(int) __asm__("FUN_L00_002607d0");
@@ -6824,7 +6821,7 @@ extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
 extern float D_L06_001620F4 __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
-extern int D_L06_00162100 __attribute__((sda));
+extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attribute__((sda));
 extern int D_L06_00162104 __attribute__((sda));
 extern int D_L06_00162108 __attribute__((sda));
 extern int D_L06_0016210C __attribute__((sda));
@@ -6890,15 +6887,15 @@ void shuttle_update(struct Moby *moby) {
             }
         }
         if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->f2FC == moby && ((Hero_302578 *)((char *)&hero))->f30E == 0)
-            || D_L06_00162100 != 0) {
+            || shuttle_forced_return_requested_gp != 0) {
             update_shuttle_route_selection_and_prompt((char *)moby);
-            now = D_L06_00162100;
+            now = shuttle_forced_return_requested_gp;
             if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594 == 10 && shuttle_vars->f9C >= 0)) {
                 shuttle_vars->go = 1;
                 D_L06_0015FDF8 = 0;
                 if (now != 0) {
                     shuttle_vars->f9C = 2;
-                    D_L06_00162100 = 0;
+                    shuttle_forced_return_requested_gp = 0;
                 }
                 switch (shuttle_vars->f9C) {
                 case SHUTTLE_ROUTE_INITIAL_TO_SECOND_STOP:
@@ -7014,7 +7011,7 @@ void shuttle_update(struct Moby *moby) {
             FUN_L00_00216f90_302578(b, rot, 0, 0);
             if (shuttle_vars->f114 != 0) {
                 D_0013D3AC_302578[5] = 1;
-                FUN_L06_002e6148_302578(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
+                initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
                 shuttle_vars->f114 = 0;
                 moby->state = 6;
                 if (moby->prev_seq != 2) {
@@ -7363,7 +7360,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 }
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
-extern float D_L06_0016215C __attribute__((sda));
+extern float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") __attribute__((sda));
 extern int D_L06_00162160 __attribute__((sda));
 extern int D_L06_00162164 __attribute__((sda));
 extern int D_L06_00162168 __attribute__((sda));
@@ -7376,7 +7373,7 @@ extern int D_L06_00162180 __attribute__((sda));
 extern int D_L06_00162184 __attribute__((sda));
 extern int D_L06_00162188 __attribute__((sda));
 extern int D_L06_0016218C __attribute__((sda));
-extern int D_L06_00162190 __attribute__((sda));
+extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
 extern int D_L06_00162194 __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
@@ -7442,11 +7439,11 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
         push[3] = 6.0f;
         random_vector_03b68(spin, frame_time * 0.2617994f, frame_time * 0.08726646f);
         begin_moby_linear_and_angular_motion((char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
-        for (i = 0; i < D_L06_00162190; i++) {
+        for (i = 0; i < shuttle_breakup_particles_per_piece_gp; i++) {
             piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector_03b68(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
             add_vector_03b68(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
-            random_vector_03b68(particle_velocity, 0.0f, D_L06_0016215C * frame_time);
+            random_vector_03b68(particle_velocity, 0.0f, shuttle_breakup_particle_max_speed_gp * frame_time);
             clear_vector_03b68(particle_acceleration);
             particle_velocity[3] = random_float_between_03b68(D_L06_00162170, D_L06_00162174);
             particle_acceleration[3] = random_float_between_03b68(D_L06_00162178, D_L06_0016217C);
@@ -7620,7 +7617,7 @@ void red_button_update(struct Moby *moby) {
                                      D_L06_001621A4, D_L06_001621A8, D_L06_001621B0);
             set_camera_position_304098(&camera_position);
             set_camera_rotation_304098(&camera_rotation);
-            D_L06_0015F404 = 1;
+            scripted_camera_sequence_active = 1;
         }
         if (data->timer < scale_game_frames_304098(10)) {
             previous_value = float_from_int_304098(data->timer);
@@ -7729,17 +7726,17 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
-extern int D_L06_001621B8 __attribute__((sda));
+extern int red_button_particle_emission_count_gp __asm__("D_L06_001621B8") __attribute__((sda));
 void emit_red_button_particle_burst(int unused, void *effect_position) {
-    float pos[4];
+    float zero_effect_vector[4];
     V6 first_color_palette;
     V6 second_color_palette;
     int i = 0;
-    clear_u64_value(pos);
-    if (D_L06_001621B8 > 0) {
+    clear_u64_value(zero_effect_vector);
+    if (red_button_particle_emission_count_gp > 0) {
         do {
             float frame_scaled_random_factor;
-            float f;
+            float scaled_effect_factor;
             int *pa;
             int *pb;
             int random_frame_count;
@@ -7751,10 +7748,10 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             frame_scaled_random_factor = frame_scaled_random_factor * frame_time;
             pa = first_color_palette.v + random_integer_below(6);
             pb = second_color_palette.v + random_integer_below(6);
-            f = D_L06_001621B4 * 400000.0f;
+            scaled_effect_factor = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(effect_position, pos, *pa, *pb, f, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
-        } while (i < D_L06_001621B8);
+            FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, scaled_effect_factor, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
+        } while (i < red_button_particle_emission_count_gp);
     }
 }
 /* Level 06 update for moby class 1123: waits for its partner, animates four ribbons, then bursts into particles. */
@@ -7805,7 +7802,7 @@ extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
+unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -7861,7 +7858,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
     case UPDATE_VECTOR_STREAMS: {
         float stream_point_x;
         float stream_point_x_step;
-        float v;
+        float unwrapped_stream_phase;
         int i;
         int j;
         int k;
@@ -7871,10 +7868,10 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             vector_stream_vars->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         test_moby_vector_stream_collision_lines(moby);
-        v = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
-        D_L06_001621F8 = v;
-        if (1.0f < v) {
-            D_L06_001621F8 = v - 1.0f;
+        unwrapped_stream_phase = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
+        D_L06_001621F8 = unwrapped_stream_phase;
+        if (1.0f < unwrapped_stream_phase) {
+            D_L06_001621F8 = unwrapped_stream_phase - 1.0f;
         }
         stream_point_x_step = D_L06_00162204 / 30.0f;
         stream_point_x = -(D_L06_00162204 * 0.5f);
@@ -7957,31 +7954,31 @@ extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
 
-extern float D_L06_001621E8 __attribute__((sda));
-extern float D_L06_001621EC __attribute__((sda));
-extern float D_L06_001621F0 __attribute__((sda));
+extern float vector_stream_collision_local_x_offset_gp __asm__("D_L06_001621E8") __attribute__((sda));
+extern float vector_stream_collision_local_y_offset_gp __asm__("D_L06_001621EC") __attribute__((sda));
+extern float vector_stream_collision_local_z_offset_gp __asm__("D_L06_001621F0") __attribute__((sda));
 void test_moby_vector_stream_collision_lines(char *moby) {
     float P[4];
     float Q[4];
     float A[12];
     initialize_hit_descriptor((char *)A, (int)moby, 0x10000, 6.0f);
-    P[0] = D_L06_001621E8;
-    P[1] = D_L06_001621EC;
-    P[2] = D_L06_001621F0;
-    Q[0] = -D_L06_001621E8;
-    Q[1] = D_L06_001621EC;
-    Q[2] = D_L06_001621F0;
+    P[0] = vector_stream_collision_local_x_offset_gp;
+    P[1] = vector_stream_collision_local_y_offset_gp;
+    P[2] = vector_stream_collision_local_z_offset_gp;
+    Q[0] = -vector_stream_collision_local_x_offset_gp;
+    Q[1] = vector_stream_collision_local_y_offset_gp;
+    Q[2] = vector_stream_collision_local_z_offset_gp;
     transform_vector_by_basis(P, P, moby + 0xC0);
     fast_vec_add(P, P, moby + 0x10);
     transform_vector_by_basis(Q, Q, moby + 0xC0);
     fast_vec_add(Q, Q, moby + 0x10);
     coll_line_fix(P, Q, 0, (int)moby, (int)A);
-    P[0] = D_L06_001621E8;
-    P[1] = -D_L06_001621EC;
-    P[2] = D_L06_001621F0;
-    Q[0] = -D_L06_001621E8;
-    Q[1] = -D_L06_001621EC;
-    Q[2] = D_L06_001621F0;
+    P[0] = vector_stream_collision_local_x_offset_gp;
+    P[1] = -vector_stream_collision_local_y_offset_gp;
+    P[2] = vector_stream_collision_local_z_offset_gp;
+    Q[0] = -vector_stream_collision_local_x_offset_gp;
+    Q[1] = -vector_stream_collision_local_y_offset_gp;
+    Q[2] = vector_stream_collision_local_z_offset_gp;
     transform_vector_by_basis(P, P, moby + 0xC0);
     fast_vec_add(P, P, moby + 0x10);
     transform_vector_by_basis(Q, Q, moby + 0xC0);
@@ -8000,13 +7997,13 @@ extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern int D_L06_001621C4 __attribute__((sda));
-extern int D_L06_001621C8 __attribute__((sda));
-extern int D_L06_001621C0 __attribute__((sda));
-extern int D_L06_001621CC __attribute__((sda));
-extern int D_L06_001621E0 __attribute__((sda));
-extern int D_L06_001621E4 __attribute__((sda));
-extern float D_L06_001621F4 __attribute__((sda));
+extern int vector_stream_blend_color_b_selector_gp __asm__("D_L06_001621C4") __attribute__((sda));
+extern int vector_stream_blend_alpha_c_selector_gp __asm__("D_L06_001621C8") __attribute__((sda));
+extern int vector_stream_blend_color_a_selector_gp __asm__("D_L06_001621C0") __attribute__((sda));
+extern int vector_stream_blend_color_d_selector_gp __asm__("D_L06_001621CC") __attribute__((sda));
+extern int vector_stream_timer_threshold_color_gp __asm__("D_L06_001621E0") __attribute__((sda));
+extern int vector_stream_cycle_boundary_color_gp __asm__("D_L06_001621E4") __attribute__((sda));
+extern float vector_stream_texture_u_step_gp __asm__("D_L06_001621F4") __attribute__((sda));
 extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
@@ -8037,9 +8034,9 @@ void draw_moby_vector_streams(char *moby) {
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
-    vu1_add_g_sregister(0x42, (long)D_L06_001621C0 | ((long)D_L06_001621C4 << 2) |
-                                  ((long)D_L06_001621C8 << 4) |
-                                  ((long)D_L06_001621CC << 6) | 0x8000000000L);
+    vu1_add_g_sregister(0x42, (long)vector_stream_blend_color_a_selector_gp | ((long)vector_stream_blend_color_b_selector_gp << 2) |
+                                  ((long)vector_stream_blend_alpha_c_selector_gp << 4) |
+                                  ((long)vector_stream_blend_color_d_selector_gp << 6) | 0x8000000000L);
     font_queue_vu_state();
     transform_matrix_base = copy_transform_matrices[0];
     sp = shared_helper_arguments;
@@ -8059,9 +8056,9 @@ void draw_moby_vector_streams(char *moby) {
     shared_helper_arguments[0] = D_L06_00162234;
     shared_helper_arguments[2] = (int)(data + 0xF00);
     shared_helper_arguments[1] = D_L06_00162238;
-    shared_helper_arguments[3] = D_L06_001621E0;
-    shared_helper_arguments[4] = D_L06_001621E4;
-    *(float *)&shared_helper_arguments[7] = D_L06_001621F4;
+    shared_helper_arguments[3] = vector_stream_timer_threshold_color_gp;
+    shared_helper_arguments[4] = vector_stream_cycle_boundary_color_gp;
+    *(float *)&shared_helper_arguments[7] = vector_stream_texture_u_step_gp;
     *(float *)&shared_helper_arguments[8] = *(float *)&D_L06_001621F8_gp;
     shared_helper_arguments[5] = 0x1E;
     shared_helper_arguments[6] = (int)data;

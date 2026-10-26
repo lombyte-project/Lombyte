@@ -52,7 +52,7 @@ extern unsigned char *D_L05_001B25C8 __attribute__((section(".data")));
 unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float b,
                                 float initial_particle_scalar) __asm__("FUN_L05_0029be70");
 
-unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float b,
+unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float initial_velocity_block_scalar,
                                 float initial_particle_scalar) {
     unsigned char *allocated_object = FUN_L00_002678b8_q(0x32);
     unsigned char *velocity_block;
@@ -68,7 +68,7 @@ unsigned char *create_particle_with_velocity_and_randomized_parameters(void *ini
         allocated_object[8] = (int)random_float_between_alt_q(0.0f, 255.0f);
         *(short *)(allocated_object + 0xA) = scale_game_frames_q(0xF);
         qcopy(velocity_block, initial_velocity_source);
-        *(float *)(velocity_block + 0x10) = b;
+        *(float *)(velocity_block + 0x10) = initial_velocity_block_scalar;
         *(int *)(velocity_block + 0x14) = truncate_float_to_s32_q(random_float_between_alt_q(-3.0f, 3.0f));
         *(float *)(velocity_block + 0x18) = initial_particle_scalar;
     }

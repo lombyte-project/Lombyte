@@ -20,7 +20,7 @@ struct Clip {
 
 Vec4 D_0018CFC0[4] = {0};
 extern f32 D_00160720[4];
-extern f32 D_00160B30;
+#include "rnc/rendering/view/update_view_context_globals.h"
 extern f32 D_001DFF50[];
 extern f32 D_001E6B70[];
 extern struct FogRegs2 shrub_vu1_constants __asm__("D_001DE9B0");
@@ -117,7 +117,7 @@ void update_view_context(void) {
     view->fog_slope = fog_distance_slope;
     view->fog_base = view->fog_near_int - view->fog_near_dist / 1024.0f * fog_distance_slope;
     view->fog_mul = fog_multiplier;
-    D_00160B30 = fog_multiplier;
+    view_fog_multiplier = fog_multiplier;
     D_001DFF50[0] = fog_multiplier;
     D_001E6B70[0] = fog_multiplier;
     mul_bits = *(s32 *)&view->fog_mul;

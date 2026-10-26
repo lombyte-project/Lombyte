@@ -55,8 +55,8 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 void initialize_transform_state_from_level_table(char *transform_state) __asm__("FUN_L03_002e8628");
 
 void initialize_transform_state_from_level_table(char *transform_state) {
-    float v[4] __attribute__((aligned(16)));
-    float mat[16] __attribute__((aligned(16)));
+    float entry_euler_angles[4] __attribute__((aligned(16)));
+    float initial_rotation_matrix[16] __attribute__((aligned(16)));
     CamSub *camera_subrecord = &(*(CamInfo **)(transform_state + 0x70))->sub;
     CamInfo *camera_info;
     char *ent;
@@ -78,11 +78,11 @@ void initialize_transform_state_from_level_table(char *transform_state) {
         camera_subrecord->x4C = *(float *)(entry_subrecord + 0x18);
     }
     qcopy(transform_state + 0x30, ent);
-    qcopy(v, ent + 0x10);
-    euler_rotation_matrix(mat, v);
-    qcopy(transform_state, mat);
-    qcopy(transform_state + 0x10, mat + 4);
-    qcopy(transform_state + 0x20, mat + 8);
+    qcopy(entry_euler_angles, ent + 0x10);
+    euler_rotation_matrix(initial_rotation_matrix, entry_euler_angles);
+    qcopy(transform_state, initial_rotation_matrix);
+    qcopy(transform_state + 0x10, initial_rotation_matrix + 4);
+    qcopy(transform_state + 0x20, initial_rotation_matrix + 8);
     qcopy(transform_state + 0x40, transform_state);
     *(short *)(transform_state + 0x7E) = 0;
 }

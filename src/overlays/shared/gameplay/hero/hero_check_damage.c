@@ -433,7 +433,9 @@ zero:
     return 0;
 }
 /* Returns a, or the byte at p+0xA5 when a is 0xFF. */
-s32 FUN_L00_0020d5b8(u8 *moby_bytes, s32 animation_id) {
+s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) __asm__("FUN_L00_0020d5b8");
+
+s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
     if (animation_id == 0xFF)
         animation_id = moby_bytes[0xA5];
     return animation_id;
@@ -521,24 +523,26 @@ extern float adiff_20d6b0(float, float) __asm__("FUN_001fa688");
 extern float hdist_20d6b0(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_0025e3b8_c(void *) __asm__("FUN_L00_0025e3b8");
 
-float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
-    float v[4] __attribute__((aligned(16)));
+float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) __asm__("FUN_L00_0020d6b0");
+
+float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
+    float target_scoring_origin[4] __attribute__((aligned(16)));
     struct Hero *hero_state;
     float target_distance, hero_yaw_error, angular_penalty, elevation_angle_error, angular_limit_error, target_score;
 
     *out = 0;
-    qcopy(v, &hero.motion.pos);
+    qcopy(target_scoring_origin, &hero.motion.pos);
     hero_state = &hero;
     if (hero_state->state.current == 0x14) {
-        v[2] = hero_state->ground_z.f;
+        target_scoring_origin[2] = hero_state->ground_z.f;
     }
-    target_distance = dist_20d6b0(v, target_moby + 0x10);
+    target_distance = dist_20d6b0(target_scoring_origin, target_moby + 0x10);
     if (range < target_distance)
         *out = 1;
-    hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - v[0], *(float *)(target_moby + 0x14) - v[1]), yaw);
+    hero_yaw_error = adiff_20d6b0(atan2_20d6b0(*(float *)(target_moby + 0x10) - target_scoring_origin[0], *(float *)(target_moby + 0x14) - target_scoring_origin[1]), yaw);
     angular_penalty = hero_yaw_error;
     angular_limit_error = hero_yaw_error;
-    elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, target_moby + 0x10), *(float *)(target_moby + 0x18) - v[2]), 0.0f);
+    elevation_angle_error = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(target_scoring_origin, target_moby + 0x10), *(float *)(target_moby + 0x18) - target_scoring_origin[2]), 0.0f);
     if (hero_state->state.current == 1 || hero_state->state.current == 0x1E) {
         C_20d6b0 *camera = &player_camera;
         float b = adiff_20d6b0(
@@ -563,7 +567,7 @@ float FUN_L00_0020d6b0(char *target_moby, float yaw, float range, float ylim, fl
 }
 extern char *active_mobies[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
 float *FUN_002141f8_20d8f8(char *) __asm__("FUN_002141f8");
-float FUN_L00_0020d6b0(char *, float, float, float, float, int *);
+float score_hero_target_candidate(char *, float, float, float, float, int *) __asm__("FUN_L00_0020d6b0");
 char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) __asm__("FUN_L00_0020d8f8");
 
 char *find_best_hero_heading_target(float range_limit, float reference_yaw, float angular_error_limit, float elevation_angle_limit) {
@@ -575,7 +579,7 @@ char *find_best_hero_heading_target(float range_limit, float reference_yaw, floa
         float *candidate_eligibility_value = FUN_002141f8_20d8f8(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
             int out;
-            float candidate_score = FUN_L00_0020d6b0(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
+            float candidate_score = score_hero_target_candidate(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
             if (out == 0 && candidate_score < bd) {
                 bd = candidate_score;
                 best = candidate_moby;
@@ -614,7 +618,7 @@ void update_hero_condition_animation(void) __asm__("FUN_L00_0020da68");
 
 void update_hero_condition_animation(void) {
     int on, anim, slot_zero_item_id, hero_animation_id;
-    float spd, t;
+    float spd, condition_blend_base;
     unsigned char *animation_selector_data;
     char *animation_object;
     char *reloaded_animation_object;
@@ -648,9 +652,9 @@ void update_hero_condition_animation(void) {
     if (hero.state.control_mode == 0x11 && !D_0013D4C6_20da68) {
         on = 1;
         anim = 0x78;
-        t = FUN_001fa6c0_20da68(hero.unk22A0) / FUN_001fa6c0_20da68(10000);
-        t = 1.0f - t;
-        spd = t + 0.25f;
+        condition_blend_base = FUN_001fa6c0_20da68(hero.unk22A0) / FUN_001fa6c0_20da68(10000);
+        condition_blend_base = 1.0f - condition_blend_base;
+        spd = condition_blend_base + 0.25f;
         if (1.0f < spd)
             spd = 1.0f;
     }
@@ -1048,7 +1052,7 @@ void cancel_hero_item_animation(void) {
 extern int get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L00_0024f190(void *, unsigned char *);
+extern void advance_moby_animation_blend(void *, unsigned char *) __asm__("FUN_L00_0024f190");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1093,7 +1097,7 @@ void update_hero_held_items_and_orientation(void) {
         current = slot_owner->unkD08 + slot_index;
         {
         struct Hero *pose_owner = &hero;
-        FUN_L00_0024f190(pose_owner->moby, *current);
+        advance_moby_animation_blend(pose_owner->moby, *current);
 
         if (pose_owner->unkD14 != 0) {
             if (pose_owner->unkD14 == 2) {
@@ -1394,7 +1398,8 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
 extern char D_0013E533_lui[] __asm__("D_0013E533") __attribute__((section(".data")));
 extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00_0020f0b8");
-extern int D_L00_0015F694 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage_globals.h"
+extern int hero_item_rotation_history_target_window_size_gp __asm__("D_L00_0015F694") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
@@ -1434,19 +1439,19 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
     {
     char *b = ((char *)((char *)&hero_lui));
     if (*(int *)(b + 0x208C) == 0x16) {
-        D_L00_0015F694 = 14;
+        hero_item_rotation_history_target_window_size_gp = 14;
     } else if (*(int *)(b + 0x2084) == 2) {
-        D_L00_0015F694 = 5;
+        hero_item_rotation_history_target_window_size_gp = 5;
     } else {
-        D_L00_0015F694 = 11;
+        hero_item_rotation_history_target_window_size_gp = 11;
     }
     }
 
     {
     char *b = ((char *)((char *)&hero_lui));
-    if (*(int *)(b + 0x21C0) < D_L00_0015F694) {
+    if (*(int *)(b + 0x21C0) < hero_item_rotation_history_target_window_size_gp) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) + 1;
-    } else if (D_L00_0015F694 < *(int *)(b + 0x21C0)) {
+    } else if (hero_item_rotation_history_target_window_size_gp < *(int *)(b + 0x21C0)) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) - 1;
     }
     }
@@ -2598,7 +2603,6 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern s32 D_0013DFD8[];
 extern s32 D_0014E990[][16];
-extern s32 D_L00_0015F5A4;
 void hero_respawn(void) {
     s32 lvl = current_level_index;
     char *damage_source_moby;
@@ -2607,7 +2611,7 @@ void hero_respawn(void) {
     D_0015EEAC++;
     if (((char *)hero.unk2280) != 0 && *(s16 *)(((char *)hero.unk2280) + 0xA6) == 0x4D &&
         lvl == 15) {
-        D_L00_0015F5A4 = 1;
+        level_15_class_4d_respawn_flag = 1;
     }
     clear_help_record_high_bits();
     damage_source_moby = ((char *)hero.unk2280);
@@ -3598,7 +3602,9 @@ extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
 extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
-s32 FUN_L00_002133a8(s32 mode) {
+s32 resolve_hero_current_position_collisions(s32 mode) __asm__("FUN_L00_002133a8");
+
+s32 resolve_hero_current_position_collisions(s32 mode) {
     V_2133a8 old;
     V_2133a8 collision_probe_offset;
     V_2133a8 collision_correction;

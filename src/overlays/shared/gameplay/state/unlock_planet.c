@@ -13,7 +13,9 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
-int FUN_L00_0025fcb8(char *query_moby, char *target_output, float best) {
+int select_moby_combat_target(char *query_moby, char *target_output, float best) __asm__("FUN_L00_0025fcb8");
+
+int select_moby_combat_target(char *query_moby, char *target_output, float best) {
     struct Hero *hero_data = &hero_lui;
     char *selected_moby;
     char *candidate_moby;
@@ -241,18 +243,18 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 
 int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__("FUN_L00_002604f0");
 int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
-    float m2[16] __attribute__((aligned(16)));
-    float m[16] __attribute__((aligned(16)));
+    float reference_basis_matrix[16] __attribute__((aligned(16)));
+    float composed_attachment_rotation_matrix[16] __attribute__((aligned(16)));
     V4_2604f0 translation_adjustment;
     u8 *transform_record = FUN_L00_002603d0_002604f0(reference_object);
     if (!transform_record)
         return 0;
     FUN_001f9cf8_002604f0(transformed_position, position, reference_object + 0xC0);
     FUN_001f9a10_002604f0(transformed_position, transformed_position, reference_object + 0x10);
-    FUN_001fa050_002604f0(m, rotation);
-    FUN_001fa298_002604f0(m2, reference_object + 0xC0);
-    FUN_001fa378_002604f0(m, m2, m);
-    FUN_00214598_002604f0(m, transformed_rotation);
+    FUN_001fa050_002604f0(composed_attachment_rotation_matrix, rotation);
+    FUN_001fa298_002604f0(reference_basis_matrix, reference_object + 0xC0);
+    FUN_001fa378_002604f0(composed_attachment_rotation_matrix, reference_basis_matrix, composed_attachment_rotation_matrix);
+    FUN_00214598_002604f0(composed_attachment_rotation_matrix, transformed_rotation);
     if (*(int *)(transform_record + 0x3C) & 4) {
         FUN_001f9a10_002604f0(transformed_position, transformed_position, transform_record + 0x10);
         FUN_L00_00260668_002604f0(comparison_object, reference_object, transformed_position, transformed_rotation, position, rotation);
@@ -444,7 +446,9 @@ extern int solve_quadratic_equation(float *, float *, float, float, float) __asm
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
-void FUN_L00_00260a88(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
+void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index) __asm__("FUN_L00_00260a88");
+
+void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
 {
     float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4], quarter[4];
     float first_root, second_root;

@@ -180,10 +180,10 @@ void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
 void emit_moby_particle_pairs(void *moby) {
     OvlQuad initial_velocity[1];
     OvlQuad old[1];
-    float pos[4] __attribute__((aligned(16)));
+    float particle_spawn_position[4] __attribute__((aligned(16)));
     int i;
     unsigned char *particle;
-    getpos_23e008(moby, 0, pos);
+    getpos_23e008(moby, 0, particle_spawn_position);
     for (i = 3; i >= 0; i--) {
         float particle_size_scale = rndf_23e008(0.15f, 0.5f);
         int k = rndi_23e008(2);
@@ -193,15 +193,15 @@ void emit_moby_particle_pairs(void *moby) {
         azimuth_angle = rnda_23e008();
         elevation_angle = rndf_23e008(0.34906584f, 1.53588974f);
         dir_23e008(initial_velocity, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
-        qcopy(old, pos);
-        pos[0] += rnd_23e008(0.0f, 0.15f);
-        pos[1] += rnd_23e008(0.0f, 0.15f);
-        pos[2] += rnd_23e008(0.0f, 0.15f);
-        particle = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
+        qcopy(old, particle_spawn_position);
+        particle_spawn_position[0] += rnd_23e008(0.0f, 0.15f);
+        particle_spawn_position[1] += rnd_23e008(0.0f, 0.15f);
+        particle_spawn_position[2] += rnd_23e008(0.0f, 0.15f);
+        particle = FUN_L00_00272060(particle_spawn_position, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
         if (particle)
             particle[9] = rf_23e008(4.0f) + 0x70;
         k = -k;
-        particle = FUN_L00_00272060(pos, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
+        particle = FUN_L00_00272060(particle_spawn_position, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
         if (particle)
             particle[9] = rf_23e008(4.0f) + 0x70;
     }

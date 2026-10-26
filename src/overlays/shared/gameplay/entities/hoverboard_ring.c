@@ -81,8 +81,9 @@ struct Spark_c8e0 {
 };
 
 extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
-extern f32 D_L05_00161FD0 __attribute__((sda));
-extern f32 D_L05_00161FD4 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/hoverboard_ring_globals.h"
+extern f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((sda));
+extern f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
 extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
 extern f32 distance_xyz_c8e0(void *, void *) __asm__("FUN_001f9b48");
 extern f32 int_to_float_c8e0(s32) __asm__("FUN_001fa6c0");
@@ -174,8 +175,8 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
         debris->spawn_frame = moby->spawn_frame;
     }
     spawn_proximity_gated_bolts(moby);
-    scale_vector_xyz_c8e0(&debris_velocity, &moby->rot_row0, D_L05_00161FD0 * frame_scale);
-    debris_velocity.f[2] += D_L05_00161FD4 * frame_scale;
+    scale_vector_xyz_c8e0(&debris_velocity, &moby->rot_row0, debris_axis_launch_speed_gp * frame_scale);
+    debris_velocity.f[2] += debris_upward_launch_speed_gp * frame_scale;
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
                                &debris_velocity, D_L05_0015F580, D_L05_0015F580);
     if (debris != 0) {
@@ -609,7 +610,9 @@ extern float rope_spring_turn(void *, float, float, float, float, float) __asm__
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
 /* Camera that orbits the hero while hero.unk88E is set, easing yaw, pitch and distance toward their goals. */
-void FUN_L05_003298d8(Camera *cam) {
+void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
+
+void update_hero_follow_camera_orbit(Camera *cam) {
     Vec4 up;
     Vec4 side;
     Vec4 fwd;

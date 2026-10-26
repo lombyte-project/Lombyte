@@ -17,7 +17,7 @@
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void update_moby_translation_delta_matrix(char *moby) __asm__("FUN_L04_002d3580");
@@ -33,7 +33,7 @@ void update_moby_translation_delta_matrix(char *moby) {
         *(short *)(moby_vars + 0x24) = 0;
         moby_vars[0x28] = 4;
         *(short *)(moby_vars + 0x3E) = 0xD;
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         moby[0x20] = 1;
     }
 }
@@ -43,7 +43,8 @@ extern char *D_L04_001600EC;
 extern char D_L04_001DBE10[];
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
-extern int D_L04_0015EDF8 __attribute__((sda));
+#include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
+extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -284,7 +285,7 @@ void snow_plow_update(struct Moby *moby) {
     }
 hit:
     if (find_moby_hit(moby, 0x210000, 0)) {
-        if (++D_L04_0015EDF8 >= 10) {
+        if (++snow_plow_hit_count_gp >= 10) {
             unsigned char *flags = D_0013D408;
             if (flags[6] == 0) {
                 flags[6] = 1;
@@ -780,7 +781,7 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025fcb8(void *, void *, float);
+extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
@@ -840,7 +841,7 @@ void woodcut_bot_update(WBMoby *m) {
 
     if (d->f38 != 0 || d->t3C6 != 0)
         excited = 1;
-    FUN_L00_0025fcb8(m, selected_target_position, excited ? d->f3E8 * 2.0f : d->f3E8);
+    select_moby_combat_target(m, selected_target_position, excited ? d->f3E8 * 2.0f : d->f3E8);
     p = &d->f120;
     FUN_L00_00263ac8(2.5f, m, 6, p);
     manipulator = p;
@@ -1450,15 +1451,15 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     char *destination_moby = base + moby_vars[1] * 256;
     float weighted_first_point[4];
     float weighted_second_point[4];
-    float path_interpolation_factor, g;
+    float path_interpolation_factor, path_point_coordinate;
     int first_point_index;
     int second_point_index = 1;
     float one = 1.0f;
 
     path_interpolation_factor = convert_integer_to_float(path_data[0] - 1);
-    g = (one - source_moby_vars[0]) * path_interpolation_factor;
-    path_interpolation_factor = FUN_L00_00200260(g, one);
-    first_point_index = func_001FA898_r(g);
+    path_point_coordinate = (one - source_moby_vars[0]) * path_interpolation_factor;
+    path_interpolation_factor = FUN_L00_00200260(path_point_coordinate, one);
+    first_point_index = func_001FA898_r(path_point_coordinate);
     if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
     second_point_index += first_point_index;
@@ -1689,7 +1690,6 @@ struct PortalMobyView {
 };
 
 extern s32 D_L04_0015F5C4;
-extern s32 D_L04_0015F640;
 extern u8 D_0013D4F1[];
 extern u8 D_0013D4C9[];
 extern char D_L04_001DC760[];
@@ -1745,7 +1745,7 @@ void suck_cannon_update(struct Moby *moby) {
             queue_dialogue_message(0xFA7, -1);
         else
             queue_dialogue_message(0x53DF, -1);
-        D_L04_0015F640 = 0xB4;
+        dialogue_message_duration_frames = 0xB4;
         grant_inventory_item(9, 1);
         if (vars->exitMoby != -1) {
             exit = &portal_mobys_2e1a10[vars->exitMoby];
@@ -1782,17 +1782,19 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
 extern int D_L04_0015F5C4;
-void FUN_L04_002e1d00(char *moby) {
+void update_suck_cannon_particles(char *moby) __asm__("FUN_L04_002e1d00");
+
+void update_suck_cannon_particles(char *moby) {
     L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float timer_progress;
 
     *(float *)(moby + 0x18) += 0.25f;
     func_001F9BF0_298940(d, D_L10_00167240_298940, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
-    func_L00_001FF4B0_298940(e, d, 0.1f);
+    func_L00_001FF4B0_298940(particle_position_step, d, 0.1f);
     func_001F9BD8_298940(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.25f;
     for (i = 0; i < 4; i++) {
@@ -1812,6 +1814,6 @@ void FUN_L04_002e1d00(char *moby) {
         if (D_L04_0015F5C4 != 2)
             func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                      sprite_data->d[i]);
-        func_001F9BD8_298940(d, d, e);
+        func_001F9BD8_298940(d, d, particle_position_step);
     }
 }

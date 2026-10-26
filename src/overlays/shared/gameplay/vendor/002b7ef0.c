@@ -90,7 +90,7 @@ void update_animated_offset_pairs(float *offset_animation_state) {
     int i;
     float first_u_offset, first_v_offset, second_u_offset, second_v_offset;
     float unwrapped_offset;
-    float *src, *dst;
+    float *base_offset_pairs, *animated_offset_pairs;
     unwrapped_offset = offset_animation_state[8] + offset_animation_state[10];
     offset_animation_state[8] = unwrapped_offset;
     if (1.0f < unwrapped_offset) {

@@ -12,7 +12,9 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L14_001B0F30[] __attribute__((section(".data")));
 extern char *D_L14_001DE5C0[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int FUN_L14_00268038(char *selection_reference, char *selection_output, float best) {
+int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) __asm__("FUN_L14_00268038");
+
+int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) {
     struct Hero *hero = &hero_lui;
     char *selected_moby;
     char *candidate_moby;

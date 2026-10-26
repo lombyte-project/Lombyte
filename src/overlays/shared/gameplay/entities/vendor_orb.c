@@ -7,7 +7,8 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 
-extern float D_L00_00161BB0 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/vendor_orb_globals.h"
+extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -28,7 +29,7 @@ void vendor_orb_update(unsigned char *moby) {
         attach_manipulator(moby, 1, manipulator);
         break;
     case VENDOR_ORB_ROTATE:
-        rotation_step_radians = D_L00_00161BB0 * DEG_TO_RAD * frame_time;
+        rotation_step_radians = vendor_orb_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time;
         *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), rotation_step_radians);
         *(float *)(manipulator + 0x40) = fast_add_rotations(*(float *)(manipulator + 0x40), rotation_step_radians * -2.0f);
         FUN_L00_001fff28(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
@@ -48,7 +49,12 @@ extern unsigned char *FUN_L00_0024e838_2df808(int) __asm__("FUN_L00_0024e838");
 extern float FUN_L00_00257be8_2df808(float, float) __asm__("FUN_L00_00257be8");
 extern void glow_n(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002df808(int owner, V_2df808 *position, V_2df808 *vector,
+unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
+                                 int flags, unsigned char red, unsigned char green,
+                                 unsigned char blue, unsigned char alpha,
+                                 float scale) __asm__("FUN_L00_002df808");
+
+unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
                                  int flags, unsigned char red, unsigned char green,
                                  unsigned char blue, unsigned char alpha,
                                  float scale) {
@@ -387,8 +393,10 @@ void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void FUN_L00_0026f548_2e01b0(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
-void FUN_L00_002e01b0(char *moby) {
-    V_2e01b0 effect_position, v;
+void emit_hydrodisplacer_effect(char *moby) __asm__("FUN_L00_002e01b0");
+
+void emit_hydrodisplacer_effect(char *moby) {
+    V_2e01b0 effect_position, effect_motion_vector;
     char *moby_data = *(char **)(moby + 0x78);
     struct Hero *player;
     int countdown_lower_bound;
@@ -397,13 +405,13 @@ void FUN_L00_002e01b0(char *moby) {
         return;
     add_vector_xyz_cf(moby, 0, &effect_position);
     normalization_scale = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
-    fast_vec_normalize(&v, moby + 0xD0, normalization_scale);
+    fast_vec_normalize(&effect_motion_vector, moby + 0xD0, normalization_scale);
     player = &hero;
-    v.x += player->motion.displacement.f[0] * 0.8f;
-    v.y += player->motion.displacement.f[1] * 0.8f;
-    v.z += player->motion.displacement.f[2] +
+    effect_motion_vector.x += player->motion.displacement.f[0] * 0.8f;
+    effect_motion_vector.y += player->motion.displacement.f[1] * 0.8f;
+    effect_motion_vector.z += player->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
-    FUN_L00_0026f548_2e01b0(&effect_position, &v, 2, random_int_between(0x5A, 0x78));
+    FUN_L00_0026f548_2e01b0(&effect_position, &effect_motion_vector, 2, random_int_between(0x5A, 0x78));
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
     *(int *)(moby_data + 4) = random_int_between(countdown_lower_bound, FUN_001f96f8_2e01b0(15));
 }
@@ -612,7 +620,9 @@ typedef struct {
     int t[4];
     float c[4];
 } M_2e0788;
-void FUN_L00_002e0788(unsigned char *moby) {
+void emit_moby_color_cycling_particles(unsigned char *moby) __asm__("FUN_L00_002e0788");
+
+void emit_moby_color_cycling_particles(unsigned char *moby) {
     OvlQuad sprite_position_and_step[2];
     M_2e0788 *moby_data = *(M_2e0788 **)(moby + 0x78);
     float *a;
@@ -692,8 +702,8 @@ extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section("
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
-int FUN_L00_002e2040(int id);
-int FUN_L00_002e2040(int id) {
+int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
+int release_beam_slot_by_id(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
         if (D_L00_00161C88_c[i] == id) {
@@ -1251,7 +1261,9 @@ void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern f32 D_L00_001E6CE0[4][4];
-void FUN_L00_002e3388(s32 unused, s32 beam_slot) {
+void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_L00_002e3388");
+
+void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     Q_e3388 geometry_quad;
     f32 a[4] __attribute__((aligned(16)));
     f32 b[4] __attribute__((aligned(16)));
@@ -1349,8 +1361,8 @@ float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
-extern float D_L00_00161C98 __attribute__((sda));
-extern float D_L00_00161C9C __attribute__((sda));
+extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
+extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 void pterodactyl_update(unsigned char *moby) {
     enum {
@@ -1369,12 +1381,12 @@ void pterodactyl_update(unsigned char *moby) {
         {
             float first_segment_length = distance_xyz(path + 4, path + 8);
             float first_to_last_distance = distance_xyz(path + 4, path + *path * 4);
-            moby_data->f74 = D_L00_00161C98 * D_0015ED6C_2e3a88 / first_segment_length;
+            moby_data->f74 = pterodactyl_path_speed_gp * D_0015ED6C_2e3a88 / first_segment_length;
             moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - first_to_last_distance) < 0.1f;
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         moby[0x20] = 1;
-        *(float *)(moby + 0x2C) *= D_L00_00161C9C;
+        *(float *)(moby + 0x2C) *= pterodactyl_scale_multiplier_gp;
         moby[0x30] = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
         y = *(float *)(moby + 0x18);
@@ -1597,7 +1609,9 @@ void FUN_001f9a10_002e42c0(OvlQuad *, OvlQuad *,
                            OvlQuad *) __asm__("FUN_001f9a10");
 s32 FUN_001efa68_002e42c0(OvlQuad *, OvlQuad *, s32, void *,
                           s32) __asm__("FUN_001efa68");
-s32 FUN_L00_002e42c0(OvlQuad *out, s32 flag) {
+s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) __asm__("FUN_L00_002e42c0");
+
+s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
     OvlQuad position_and_offset_vectors[4];
     struct Hero *player = &hero_data;
     u8 *camera_view = D_L00_00166E10_002e42c0;
@@ -1723,25 +1737,25 @@ void apply_follow_camera_translation(char *camera) {
     char *camera_view = D_L00_00166E10;
     char *camera_state = *(char **)(camera + 0x70);
     char *attach_state = camera_state + 0x40;
-    char *g, *g3;
+    char *ground_check_hero, *state_check_hero;
     qcopy(&translation_delta, D_0013E533 + 0xF5D);
     FUN_001f9a10_c(camera + 0x30, &translation_delta, camera + 0x30);
     FUN_001f9a10_c(camera_state + 0xA0, &translation_delta, camera_state + 0xA0);
     FUN_001f9a10_c(attach_state, &translation_delta, attach_state);
     FUN_001f9a10_c(camera_state + 0xD0, &translation_delta, camera_state + 0xD0);
     FUN_001f9a10_c(camera_state, &translation_delta, camera_state);
-    g = D_0013E533 + 0xE1D;
-    if (*(short *)(g + 0x308) == 0) {
-        char *ground_moby = *(char **)(g + 0x2FC);
+    ground_check_hero = D_0013E533 + 0xE1D;
+    if (*(short *)(ground_check_hero + 0x308) == 0) {
+        char *ground_moby = *(char **)(ground_check_hero + 0x2FC);
         char *q;
         if (ground_moby == 0 || *(short *)(ground_moby + 0xA6) != 0x22D ||
             ((q = camera_view - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
-            char *g2 = D_0013E533 + 0xE1D;
-            *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
+            char *translation_source_hero = D_0013E533 + 0xE1D;
+            *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(translation_source_hero + 0x14C);
         }
     }
-    g3 = D_0013E533 + 0xE1D;
-    if ((unsigned)(*(int *)(g3 + 0x2084) - 0xB) < 2) {
+    state_check_hero = D_0013E533 + 0xE1D;
+    if ((unsigned)(*(int *)(state_check_hero + 0x2084) - 0xB) < 2) {
         char *reloaded_camera_state = *(char **)(camera + 0x70);
         char *camera_up_axis = camera_view + 0x30;
         float translation_up_component;
@@ -2229,7 +2243,7 @@ s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *ou
     u8 *camera = mm;
     s32 attach_mode_return_flag = 1;
     u8 *stored_focus_position = *(u8 **)(camera + 0x70) + 0x40;
-    f32 t[4] __attribute__((aligned(16)));
+    f32 hero_base_position[4] __attribute__((aligned(16)));
     switch (k) {
     case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
@@ -2243,8 +2257,8 @@ s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *ou
         attach_mode_return_flag = 0;
         break;
     case CAM_ATTACH_HERO_POSITION_BASE:
-        follow_camera_hero_target((int)camera, t);
-        fast_vec_add(out_target_position, input_offset, t);
+        follow_camera_hero_target((int)camera, hero_base_position);
+        fast_vec_add(out_target_position, input_offset, hero_base_position);
         break;
     case CAM_ATTACH_GROUND_AWARE_FOCUS_VELOCITY:
     default:
@@ -2268,10 +2282,10 @@ typedef struct {
     u8 p[0x70];
     u8 *m;
 } O002e5730;
-extern f32 D_L00_00161D28 __attribute__((sda));
-extern f32 D_L00_00161D2C __attribute__((sda));
-extern f32 D_L00_00161D30 __attribute__((sda));
-extern f32 D_L00_00161D34 __attribute__((sda));
+extern f32 follow_camera_position_default_stiffness_gp __asm__("D_L00_00161D28") __attribute__((sda));
+extern f32 follow_camera_position_default_damping_gp __asm__("D_L00_00161D2C") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_stiffness_gp __asm__("D_L00_00161D30") __attribute__((sda));
+extern f32 follow_camera_position_transition_end_damping_gp __asm__("D_L00_00161D34") __attribute__((sda));
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
@@ -2288,11 +2302,11 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     compute_follow_camera_target_position(camera, input_offset, &target_position, attach_state->xc4);
     attach_mode = attach_state->xc4;
     if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 || attach_mode == 1) {
-        x = D_L00_00161D30 + (D_L00_00161D28 - D_L00_00161D30) * k;
-        y = D_L00_00161D34 + (D_L00_00161D2C - D_L00_00161D34) * k;
+        x = follow_camera_position_transition_end_stiffness_gp + (follow_camera_position_default_stiffness_gp - follow_camera_position_transition_end_stiffness_gp) * k;
+        y = follow_camera_position_transition_end_damping_gp + (follow_camera_position_default_damping_gp - follow_camera_position_transition_end_damping_gp) * k;
     } else {
-        x = D_L00_00161D28;
-        y = D_L00_00161D2C;
+        x = follow_camera_position_default_stiffness_gp;
+        y = follow_camera_position_default_damping_gp;
     }
     interpolate_follow_camera_position(camera, attach_state->x90, &target_position, x, y, 0.0f);
 }
@@ -2332,15 +2346,15 @@ void follow_camera_springs(void *camera_moby) {
     FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)camera_moby);
     FollowCamTail *camera_tail = &camera_state->tail;
     FollowCamBlock *follow_block = &camera_state->follow;
-    f32 len, back;
+    f32 up_projection_or_collision_clearance, back;
 
     follow_cam_hero_position(camera_moby, hero_pos);
     follow_cam_update_mode(camera_moby);
     follow_cam_focus_velocity(camera_moby, velocity);
     qcopy(&camera_state->follow.velocity, velocity);
     qcopy(focus, follow_block);
-    len = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
-    scale_vector_xyz(up, view + 0x30, len);
+    up_projection_or_collision_clearance = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
+    scale_vector_xyz(up, view + 0x30, up_projection_or_collision_clearance);
     subtract_vector_xyz(lateral, camera_state->follow.offset, up);
     up[0] = cam_interp_values(&camera_state->follow.up_ease[0], up[0], follow_block->velocity[0], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
     up[1] = cam_interp_values(&camera_state->follow.up_ease[1], up[1], follow_block->velocity[1], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
@@ -2376,7 +2390,7 @@ void follow_camera_springs(void *camera_moby) {
     add_vector_xyz(base, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, camera_tail->distance);
     add_vector_xyz(follow_block->eye, look, follow_block);
-    len = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
+    up_projection_or_collision_clearance = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
     add_vector_xyz(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
@@ -2390,7 +2404,7 @@ void follow_camera_springs(void *camera_moby) {
         qcopy(probe, collision_hit_point);
     }
     subtract_vector_xyz(collision_resolution_delta, probe, left);
-    if (vector_length_xyz(collision_resolution_delta) < len + len) {
+    if (vector_length_xyz(collision_resolution_delta) < up_projection_or_collision_clearance + up_projection_or_collision_clearance) {
         add_vector_xyz(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
         qcopy(follow_block->eye, mid);
@@ -2401,15 +2415,15 @@ void follow_camera_springs(void *camera_moby) {
         subtract_vector_xyz(collision_resolution_delta, left, follow_block);
         back = vector_length_xyz(collision_resolution_delta);
         reach = camera_tail->distance;
-        if (back <= reach + len) {
-            scale_vector_xyz(mid, view + 0x20, len);
+        if (back <= reach + up_projection_or_collision_clearance) {
+            scale_vector_xyz(mid, view + 0x20, up_projection_or_collision_clearance);
             subtract_vector_xyz(mid, left, mid);
             qcopy(follow_block->eye, mid);
             subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
             follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
         } else {
-            len = dot_vectors_xyz(follow_block, view + 0x30);
-            if (dot_vectors_xyz(probe, view + 0x30) < len) {
+            up_projection_or_collision_clearance = dot_vectors_xyz(follow_block, view + 0x30);
+            if (dot_vectors_xyz(probe, view + 0x30) < up_projection_or_collision_clearance) {
                 qcopy(probe, follow_block);
             }
             scale_vector_xyz(look, view + 0x20, reach);

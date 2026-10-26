@@ -24,7 +24,7 @@ void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_regi
     struct Vec4 rotated_half_width_offset;
     struct Vec4 sprite_center;
     struct Vec4 p0;
-    struct Vec4 p1;
+    struct Vec4 uv_extent_vertex;
     struct Vec4 uv_origin_vertex;
     struct Vec4 p3;
     struct DmaTag *tag;
@@ -38,8 +38,8 @@ void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_regi
     rotated_half_width_offset.y = cx * fast_sin(rotation_angle);
     add_vector_xyz(&p0, &sprite_center, &sz);
     subtract_vector_xyz(&p0, &p0, &rotated_half_width_offset);
-    add_vector_xyz(&p1, &sprite_center, &sz);
-    add_vector_xyz(&p1, &p1, &rotated_half_width_offset);
+    add_vector_xyz(&uv_extent_vertex, &sprite_center, &sz);
+    add_vector_xyz(&uv_extent_vertex, &uv_extent_vertex, &rotated_half_width_offset);
     subtract_vector_xyz(&uv_origin_vertex, &sprite_center, &sz);
     subtract_vector_xyz(&uv_origin_vertex, &uv_origin_vertex, &rotated_half_width_offset);
     subtract_vector_xyz(&p3, &sprite_center, &sz);
@@ -60,7 +60,7 @@ void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_regi
     packet_payload[6] = (((s32)p0.x + screen_extent.left) - 8) | ((u64)(((s32)p0.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_payload[7] = (texture_height << 20) + (texture_width << 4);
-    packet_payload[8] = (((s32)p1.x + screen_extent.left) - 8) | ((u64)(((s32)p1.y + screen_extent.top) - 8) << 16) |
+    packet_payload[8] = (((s32)uv_extent_vertex.x + screen_extent.left) - 8) | ((u64)(((s32)uv_extent_vertex.y + screen_extent.top) - 8) << 16) |
            ((u64)hud_state.z << 32);
     packet_payload[9] = 0;
     packet_payload[10] = (((s32)uv_origin_vertex.x + screen_extent.left) - 8) | ((u64)(((s32)uv_origin_vertex.y + screen_extent.top) - 8) << 16) |

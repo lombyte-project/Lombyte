@@ -178,7 +178,7 @@ extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378"
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
-extern int D_L09_0015F458;
+#include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
 extern int D_L09_0016CDD0;
 extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
@@ -226,7 +226,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     D_L09_001612FC = saved1;
     D_L09_00161300 = saved2;
     D_L09_00161304 = saved3;
-    if (D_L09_0015F458 != 1) {
+    if (textured_grid_view_settings_mode != 1) {
         current[0x218 / 4] = *(float *)(data + 0x20);
         current[0x21c / 4] = *(float *)(data + 0x24);
         current[0x228 / 4] = *(float *)(data + 0x28);
@@ -295,7 +295,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     D_L09_001611C0 = packet + 4;
     color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
-    if (*(volatile int *)&D_L09_0015F458 == 1)
+    if (*(volatile int *)&textured_grid_view_settings_mode == 1)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                 (*(int *)(current + 0x238 / 4) << 16));
     {
@@ -434,7 +434,9 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
-char *FUN_L09_002ea528(struct Moby *owner, float *inherited_velocity) {
+char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) __asm__("FUN_L09_002ea528");
+
+char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
     char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = *(char **)(moby + 0x78);
@@ -483,7 +485,9 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 
-char *FUN_L09_002ea778(void) {
+char *spawn_falling_asteroid(void) __asm__("FUN_L09_002ea778");
+
+char *spawn_falling_asteroid(void) {
     float target_position[4];
     char *moby = func_0020D348_m(random_integer_below_c(4) + 0x107);
     if (moby != 0) {
@@ -568,7 +572,9 @@ extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 /* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
-struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
+struct Moby *spawn_path_following_asteroid(struct Moby *owner) __asm__("FUN_L09_002eaa50");
+
+struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     struct Moby *spawned_moby;
     PebbleVars *ovars;
     PebbleVars *vars;
@@ -1094,7 +1100,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
 extern char *func_0020D348_m(int);
 extern s32 rand();
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
 
@@ -1109,7 +1115,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
         qcopy(moby + 0x40, source_moby + 0x40);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        copy_hero_moby_field_38(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
         if (spawned_moby_class == 0x514) {
             if (rand() & 1) {
@@ -1654,9 +1660,9 @@ typedef struct {
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern float D_0015ED70;
-extern float D_L09_001619F4 __attribute__((sda));
-extern float D_L09_001619F8 __attribute__((sda));
-extern float D_L09_001619FC __attribute__((sda));
+extern float platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") __attribute__((sda));
+extern float platform_sink_speed_gp __asm__("D_L09_001619F8") __attribute__((sda));
+extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribute__((sda));
 extern float D_L09_00161A04 __attribute__((sda));
 extern float D_L09_00161A08 __attribute__((sda));
 extern float D_L09_00161A0C __attribute__((sda));
@@ -1731,7 +1737,7 @@ void platform_update(Moby *moby)
         deg_to_rad = 0.01745329238474369f;
         side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row0));
         front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row1));
-        tilt = D_L09_001619F4;
+        tilt = platform_hero_offset_tilt_gain_gp;
         pitch_target = tilt * side_dot;
         *(u128 *)&old_angles = *(u128 *)&data->ang;
         *(u128 *)&old_pos = *(u128 *)&moby->pos;
@@ -1743,7 +1749,7 @@ void platform_update(Moby *moby)
             D_L09_00161A04 * deg_to_rad * D_0015ED70,
             D_L09_00161A08 * frame_scale_sq,
             D_L09_00161A0C * deg_to_rad * D_0015ED6C_c2);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - D_L09_001619F8 * D_0015ED6C_c2;
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - platform_sink_speed_gp * D_0015ED6C_c2;
         if (sink_level < old_z && (*(Vec_2F9A50 *)&moby->pos).z <= sink_level) {
             func_0022ED80_2F9A50(1, 0, moby);
         }
@@ -1761,7 +1767,7 @@ void platform_update(Moby *moby)
             D_L09_00161A10 * deg_to_rad * D_0015ED70,
             D_L09_00161A14 * frame_scale_sq,
             D_L09_00161A18 * deg_to_rad * D_0015ED6C_c2);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + D_L09_001619FC * D_0015ED6C_c2 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + platform_height_return_gain_gp * D_0015ED6C_c2 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
         if (data->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
             (*(Vec_2F9A50 *)&moby->pos).z = data->baseZ;
         }

@@ -76,7 +76,7 @@ extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
-extern int FUN_L00_00229910(void);
+extern int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
@@ -87,7 +87,7 @@ extern int process_hero_hit_response(int) __asm__("FUN_L01_00231580");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
-extern int FUN_L05_00254358(float *, float *);
+extern int compute_hero_hoverboard_respawn_transform(float *, float *) __asm__("FUN_L05_00254358");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int FUN_L05_002551d0(void);
 extern int FUN_L05_00255208(void);
@@ -106,7 +106,7 @@ extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_0022
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00232640(int id);
 extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
                              unsigned char f) __asm__("FUN_L00_00233288");
@@ -152,7 +152,7 @@ void update_hero_state_machine(void) {
     float positive_shimmy_probe_yaw;
     float negative_shimmy_probe_yaw;
     float shimmy_probe_yaw;
-    int sp38;
+    int predicted_trajectory_steps;
     int sp3C;
 
     moby = ((unsigned char *)hero.moby);
@@ -226,7 +226,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
-                    FUN_L00_00232628();
+                    clear_hero_queued_animation();
                     if (hero.unk22CA != 0) {
                         if (hero.unk308 == 0 || D_0013D4C0[0x1C] == 0) {
                             hero_set_state(0x81, 1);
@@ -468,7 +468,7 @@ void update_hero_state_machine(void) {
                         return;
                     }
                     break;
-                case 51:
+                case HERO_STATE_SWIM:
                 case 53:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
@@ -503,7 +503,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x34, 1);
                     }
                     break;
-                case 52:
+                case HERO_STATE_SWIM_IDLE:
                     if (hero.unkA98 & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0x3C) {
                             set_hero_animation(0x3C, 0, scale_game_frames(0xB));
@@ -684,7 +684,7 @@ void update_hero_state_machine(void) {
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
-                case 46: {
+                case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
                         if (controller_state.held & mask) {
@@ -747,7 +747,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case 33:
+                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
                 case HERO_STATE_WALL_BONK:
                     if (hero.unkA98 & 2) {
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -768,7 +768,7 @@ void update_hero_state_machine(void) {
                     if (!(hero.air_frames.s < scale_game_frames(5)) &&
                         !(hero.state.prev_control_mode == 0x12 && hero.unk20A9 != 0) &&
                         hero.ground_distance > 1.35f) {
-                        if (FUN_L00_00229910() == 0) {
+                        if (check_hero_forward_collision_height() == 0) {
                             hero_set_state(HERO_STATE_FALL, 1);
                             break;
                         }
@@ -1247,7 +1247,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case HERO_STATE_FALL:
-                case 45:
+                case HERO_STATE_ITEM_RELEASE_FALL:
                     if (hero.state.step == 0) {
                         if (!(scale_game_frames(0x12) > hero.state_timer) ||
                             hero.ground_distance > 1.75f) {
@@ -1500,7 +1500,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
@@ -1616,9 +1616,9 @@ void update_hero_state_machine(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp38,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_trajectory_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp38, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_trajectory_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }
@@ -2013,7 +2013,7 @@ void update_hero_state_machine(void) {
                         return;
                     }
                     if (hero.unkA98 & 2) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
@@ -2021,14 +2021,14 @@ void update_hero_state_machine(void) {
                 case 110:
                     if (5.0f > hero.motion.pos.f[0] || 5.0f > hero.motion.pos.f[1] ||
                         hero.state_timer > hero.unk8BE) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 111:
                     if (hero.unkA98 & 2) {
-                        FUN_L05_00254358(v0, v1);
+                        compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.unk874 = v1[2];
                         FUN_L00_00216f90(v0, v1, 0x6B, 1);
                     }
@@ -2153,7 +2153,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x53, 0);
                     }
                     break;
-                case 30:
+                case HERO_STATE_LOOK_RELEASE_WAIT:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
@@ -2182,7 +2182,7 @@ void update_hero_state_machine(void) {
                     }
                     D_L05_0016CB80 = 0;
                     break;
-                case 32:
+                case HERO_STATE_HELD_ITEM_ATTACK:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.unkA9C == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }

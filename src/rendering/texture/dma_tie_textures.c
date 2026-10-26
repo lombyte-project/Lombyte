@@ -3,7 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
 extern struct TagPtr D_00160F68;
-extern s32 D_00160F74;
+#include "rnc/rendering/texture/dma_tie_textures_globals.h"
 extern char D_001E8A50[];
 extern s32 build_tie_texture_dma(s32) __asm__("FUN_002370c0");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
@@ -26,8 +26,8 @@ void dma_tie_textures(void) {
         if (size > 0x400000) {
             DebugPrint(D_001E8A50);
         }
-        if (D_00160F74 < size) {
-            D_00160F74 = size;
+        if (max_tie_texture_dma_size < size) {
+            max_tie_texture_dma_size = size;
         }
     }
     render_packet_cursor.tag->tag = 0x20000000;

@@ -69,7 +69,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
         MOBY_UPDATE_INITIALIZE = 0,
         MOBY_UPDATE_ACTIVE = 1
     };
-    float v[4] __attribute__((aligned(16)));
+    float hero_point_local_offset[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
     char *player;
     unsigned int update_state = moby[0x20];
@@ -82,16 +82,16 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
         if (FUN_001f9b48(moby + 0x10, player) < 8.0f) {
-            subtract_vector_xyz(v, player + 0x50, moby + 0x10);
+            subtract_vector_xyz(hero_point_local_offset, player + 0x50, moby + 0x10);
             transpose_rotation_matrix(mtx, moby + 0xC0);
-            transform_vector(v, v, mtx);
-            if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
-                if (v[1] < 0.5f) {
+            transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
+            if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f && 0.0f < hero_point_local_offset[2] && hero_point_local_offset[2] < 8.0f) {
+                if (hero_point_local_offset[1] < 0.5f) {
                     player[0x224B] = 1;
                 } else {
                     player[0x224B] = 0;
                 }
-            } else if (0.0f < v[1]) {
+            } else if (0.0f < hero_point_local_offset[1]) {
                 hero.unk22CB = 0;
             }
         }
@@ -119,12 +119,12 @@ extern QuadCorner D_L10_001DA350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L10_001DA270[][2];
 extern float D_L10_001DA2F0[][2];
-extern int D_L10_0015F3F8;
+#include "rnc/overlay/shared/gameplay/vendor/002e3de8_globals.h"
 extern int D_L10_001DA250[];
 extern int D_L10_001DA2B0[][2];
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern int D_L10_00161F40 __attribute__((sda));
+extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
 extern int D_L10_00161F48[2] __attribute__((sda));
 extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));
@@ -176,7 +176,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         second_src++;
         second_dst += 4;
     }
-    for (pass = 0; pass < D_L10_00161F40; pass++) {
+    for (pass = 0; pass < quad_layer_count_gp; pass++) {
         int parity = pass & 1;
         int shade;
         first.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
@@ -193,7 +193,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
                 int limit = truncate_float_to_s32(D_L10_001DA270[pass][axis] * 360.0f);
-                float angle = convert_integer_to_float(D_L10_0015F3F8 % limit) / D_L10_001DA270[pass][axis] - 180.0f;
+                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / D_L10_001DA270[pass][axis] - 180.0f;
                 float wave;
                 if (D_L10_001DA2B0[pass][axis] != 0) {
                     wave = fast_cos(angle * 0.017453292f);

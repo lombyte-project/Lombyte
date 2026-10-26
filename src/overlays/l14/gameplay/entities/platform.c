@@ -113,7 +113,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     char *list[4];
     float near[4];
     float path_heading_delta[4];
-    float rot[4];
+    float hero_path_euler_rotation[4];
     int path_segment_index;
     float nearest_segment_distance;
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
@@ -133,13 +133,13 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
             nearest_segment_distance = 0.0f;
             FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &nearest_segment_distance, 0, 20.0f, 5.0f, 0.0f);
             subtract_vector_xyz(path_heading_delta, path + (path_segment_index * 16 + 0x40), path + (path_segment_index * 16 + 0x10));
-            rot[0] = 0.0f;
-            rot[1] = 0.0f;
-            rot[2] = fast_add_rotations(angle_atan2(path_heading_delta[0], path_heading_delta[1]), -1.5707964f);
-            rot[3] = 0.0f;
+            hero_path_euler_rotation[0] = 0.0f;
+            hero_path_euler_rotation[1] = 0.0f;
+            hero_path_euler_rotation[2] = fast_add_rotations(angle_atan2(path_heading_delta[0], path_heading_delta[1]), -1.5707964f);
+            hero_path_euler_rotation[3] = 0.0f;
             hero.unk564 = path_segment_index;
             hero.unk568 = 0.0f;
-            place_6570(path + (path_segment_index * 16 + 0x10), rot, 0x28, 0);
+            place_6570(path + (path_segment_index * 16 + 0x10), hero_path_euler_rotation, 0x28, 0);
         }
         *out++ = o;
     } while ((short)*moby_index_cursor++ >= 0);
@@ -392,15 +392,15 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             add_67e8(&ray, &ray, muzzle);
             muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
-                char *q = muzzle_flash_particle + 0x20;
+                char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
                 *(float *)(muzzle_flash_particle + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
-                *(short *)(q + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
-                *(short *)(q + 0x16) = 1;
+                *(short *)(muzzle_flash_particle_state + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
+                *(short *)(muzzle_flash_particle_state + 0x16) = 1;
                 lifetime_frames = frames_67e8(4);
                 *(short *)(muzzle_flash_particle + 0xA) = lifetime_frames;
-                *(float *)(q + 0x10) = 1.0f / itof_67e8((short)lifetime_frames);
-                *(int *)(q + 0x18) = 0x7F7F7F;
+                *(float *)(muzzle_flash_particle_state + 0x10) = 1.0f / itof_67e8((short)lifetime_frames);
+                *(int *)(muzzle_flash_particle_state + 0x18) = 0x7F7F7F;
             }
             qcopy(&ray.self, muzzle);
             ((float *)&ray.self)[2] -= 0.5f;
@@ -539,7 +539,8 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern float D_L14_00161A60 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
+extern float joint_light_position_w_gp __asm__("D_L14_00161A60") __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
@@ -564,12 +565,12 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
     if ((unsigned int)(moby->state - 3) < 3) {
         joint_position[2] += 1.0f;
         if (*(int *)(moby_data + 0xF0) == -1) {
-            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+            *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(joint_position, joint_light_position_w_gp, 0.0f, 0.5f, 0.5f, 1.0f);
         }
         if (*(int *)(moby_data + 0xF0) >= 0) {
             char *e = D_L14_001809C0 + *(int *)(moby_data + 0xF0) * 32;
             qcopy(e + 0x10, joint_position);
-            *(float *)(e + 0x1C) = D_L14_00161A60;
+            *(float *)(e + 0x1C) = joint_light_position_w_gp;
         }
         joint_position[2] -= 1.0f;
     }
@@ -651,7 +652,9 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
 
 /* The caller passes two floats in f12/f13; this routine never reads them. */
-void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
+void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) __asm__("FUN_L14_002de2b8");
+
+void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *data = *(char **)(moby + 0x78);
     char *hero_state = (char *)((char *)((char *)&hero));
     float target_up_vector[4];

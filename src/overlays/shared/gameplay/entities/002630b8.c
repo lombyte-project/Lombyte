@@ -423,7 +423,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
 
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
     u128_263e30 fragment_spawn_positions[16];
-    float v[4] __attribute__((aligned(16)));
+    float random_fragment_euler_rotation[4] __attribute__((aligned(16)));
     int mode = 0;
     int i, k;
     if (flag) {
@@ -441,11 +441,11 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
         k = generate_random_points_from_shape_entries(source_moby, random_class_fragment_limit, fragment_spawn_positions, 0xFFFF, 1000.0f);
         if (k) {
             for (i = 0; i < random_class_fragment_limit && i < k; i++) {
-                FUN_001f99f8_263e30(v);
-                v[0] = FUN_00213308_263e30();
-                v[1] = FUN_00213308_263e30();
-                v[2] = FUN_00213308_263e30();
-                FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &fragment_spawn_positions[i], v, 0, mode,
+                FUN_001f99f8_263e30(random_fragment_euler_rotation);
+                random_fragment_euler_rotation[0] = FUN_00213308_263e30();
+                random_fragment_euler_rotation[1] = FUN_00213308_263e30();
+                random_fragment_euler_rotation[2] = FUN_00213308_263e30();
+                FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &fragment_spawn_positions[i], random_fragment_euler_rotation, 0, mode,
                                         D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
                                         D_L00_0015F580_263e30);
             }
@@ -578,7 +578,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *pos, void *
 }
 extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
-extern s32 D_L00_00161E08;
+#include "rnc/overlay/shared/gameplay/entities/002630b8_globals.h"
 extern s32 D_L00_00161E04;
 void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
@@ -592,7 +592,7 @@ void update_timed_hud_visibility(void) {
         if (--D_L00_0015F590 == 0)
             D_L00_0015F594 = 0;
     }
-    if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
+    if (D_L00_0015F594 == 0 || timed_hud_visibility_gate == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
         D_L00_00161E04 = queue_animation_update(0xC, 0, initialize_numeric_hud_element, mine_blend_color,

@@ -124,12 +124,13 @@ void rocket_update(char *rocket_moby) {
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern float D_L16_001613E0 __attribute__((sda));
-extern float D_L16_001613E4 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_globals.h"
+extern float class_32_symmetric_angle_bound_degrees_gp __asm__("D_L16_001613E0") __attribute__((sda));
+extern float class_32_zero_based_angle_bound_degrees_gp __asm__("D_L16_001613E4") __attribute__((sda));
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
-char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) {
+char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spawn_position, void *vel, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
@@ -140,17 +141,17 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos,
         spawned_moby[0x20] = 0;
         *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(owner + 0x38);
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 3.0f;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         moby_data = *(char **)(spawned_moby + 0x78);
         qcopy(moby_data, initial_movement_vector);
         qcopy(moby_data + 0x10, vel);
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
         initial_movement_length = fast_vec_length(initial_movement_vector);
-        x = D_L16_001613E0;
+        x = class_32_symmetric_angle_bound_degrees_gp;
         *(float *)(moby_data + 0x24) = initial_movement_length;
         random_angle_radians = random_float_between_alt(-x, x) * DEG_TO_RAD;
-        y = D_L16_001613E4;
+        y = class_32_zero_based_angle_bound_degrees_gp;
         *(float *)(moby_data + 0x28) = random_angle_radians;
         *(float *)(moby_data + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(moby_data + 0x34) = 0;
@@ -553,9 +554,9 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern int D_0015EE10 __attribute__((sda));
+extern int blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L00_0025fcb8(float, char *, void *);
+extern int select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
@@ -648,8 +649,8 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         case HIT_RESPONSE_FATAL_FALL: {
             char *source;
             if (current_level_index == 18 && commando_data->reward_hits) {
-                ++*(int *)&D_0015EE10;
-                if (*(int *)&D_0015EE10 >= 10) {
+                ++*(int *)&blarg_elite_commando_reward_kill_count_gp;
+                if (*(int *)&blarg_elite_commando_reward_kill_count_gp >= 10) {
                     if (D_0013D408[0x1D] == 0) {
                         D_0013D408[0x1D] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
@@ -711,7 +712,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         char *path = D_L16_001B0930[commando_data->path_index];
         FUN_L00_0025ff38(24.0f, commando_moby, commando_data->target, 0, 0, path + 0x10, *(int *)path);
     } else {
-        FUN_L00_0025fcb8(24.0f, commando_moby, commando_data->target);
+        select_moby_combat_target(24.0f, commando_moby, commando_data->target);
     }
     if (range < vector_distance_xy(&commando_moby->pos, commando_data->target))
         commando_data->pursuit_mode = 2;
@@ -866,7 +867,6 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float D_L16_0015F5D0;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
@@ -920,7 +920,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
                              delay);
         } while (remaining != 0);
     }
-    if (D_L16_0015F5D0 < 0.95f && distance > 9.0f) {
+    if (blarg_elite_commando_extra_glow_gate < 0.95f && distance > 9.0f) {
         spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(15), 127, 127, 127, 32);
         spawn_glow_particle(moby, origin, movement, 4.0f, scale_game_frames(24), 127, 32, 0, 32);
     }

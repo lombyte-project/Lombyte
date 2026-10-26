@@ -128,7 +128,7 @@ float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_index, int animation_timing_divisor, int e, float knockback_angle) {
+void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_index, int animation_timing_divisor, int animation_frame_index, float knockback_angle) {
     float *moby_vars_record;
     knockback_state->f0 = FUN_001f9dc8_0025c558(knockback_angle) * knockback_state->f18;
     knockback_state->f4 = FUN_001f9de0_0025c558(knockback_angle) * knockback_state->f18;
@@ -145,9 +145,9 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
         *(int *)(moby + 0x94) = 0;
     }
     if (knockback_state->w24 & 2)
-        FUN_002130d8_0025c558(moby, animation_index, e, animation_timing_divisor, 1);
+        FUN_002130d8_0025c558(moby, animation_index, animation_frame_index, animation_timing_divisor, 1);
     else
-        FUN_00212f90_0025c558(moby, animation_index, e, animation_timing_divisor);
+        FUN_00212f90_0025c558(moby, animation_index, animation_frame_index, animation_timing_divisor);
 }
 #include "rnc/math/vector.h"
 
@@ -157,7 +157,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
 extern Vec4 D_L00_00173E70;
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -210,7 +210,7 @@ int mine_fall(char *moby, char *motion_state) {
     char *collision_metadata;
     int flags = 0;
 
-    float sc, f21, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
+    float sc, ground_reference_height, landing_prediction_divisor, f12, motion_or_record_value, r, rr, one;
     int result_count, i;
 
     *(float *)(motion_state + 0x8) = *(float *)(motion_state + 0x8) - *(float *)(motion_state + 0x10);
@@ -230,18 +230,18 @@ int mine_fall(char *moby, char *motion_state) {
 
     qcopy(height_probe_position, moby + 0x10);
     height_probe_position[2] = height_probe_position[2] + *(float *)(motion_state + 0x28);
-    f21 = probe_ground_height(height_probe_position, 0, 0.5f);
+    ground_reference_height = probe_ground_height(height_probe_position, 0, 0.5f);
     if (collision_hit_material() == 0) {
-        if (*(float *)(motion_state + 0x5C) == 0.0f && f21 <= height_probe_position[2] && height_probe_position[2] + *(float *)(motion_state + 0x8) < f21) {
+        if (*(float *)(motion_state + 0x5C) == 0.0f && ground_reference_height <= height_probe_position[2] && height_probe_position[2] + *(float *)(motion_state + 0x8) < ground_reference_height) {
             *(float *)(motion_state + 0x5C) = 1.0f;
-            height_probe_position[2] = f21;
-            FUN_L00_002d7e90(height_probe_position, 3.0f);
+            height_probe_position[2] = ground_reference_height;
+            spawn_burst_moby(height_probe_position, 3.0f);
         }
-        f21 = func_L00_0025A748_f((moby + 0x10));
+        ground_reference_height = func_L00_0025A748_f((moby + 0x10));
     } else {
         if ((*(int *)(motion_state + 0x24) & 0x10) || *(short *)(motion_state + 0x3E) == 2) {
             add_vector_xyz_c(collision_probe_position, (moby + 0x10), motion_state);
-            if (func_L00_0025A748_f(collision_probe_position) < f21 - 0.25f) {
+            if (func_L00_0025A748_f(collision_probe_position) < ground_reference_height - 0.25f) {
                 set_vector_length_xy((float *)motion_state, (float *)motion_state, 0.0f);
             }
         }
@@ -283,7 +283,7 @@ int mine_fall(char *moby, char *motion_state) {
             } else {
                 float negative_half_gravity_step = *(float *)(motion_state + 0x10) * -0.5f;
                 landing_prediction_divisor = 60.0f;
-                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - f21);
+                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - ground_reference_height);
                 if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
                     landing_prediction_divisor = larger_quadratic_root;
                 }

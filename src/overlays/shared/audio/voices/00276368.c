@@ -96,7 +96,7 @@ extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void FUN_L00_002a09d8(s32);
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
-extern void FUN_L00_002a08c8(void);
+extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 extern void apply_group_entry_adjustment(s32) __asm__("FUN_L00_00235310");
 extern Ent *delete_moby(Ent *) __asm__("FUN_00225530");
@@ -148,7 +148,8 @@ extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
 extern Own D_L00_001B6B38;
 extern Own D_L00_001B86C8;
-extern f32 D_L00_00160280 __attribute__((sda));
+#include "rnc/overlay/shared/audio/voices/00276368_globals.h"
+extern f32 pause_menu_initial_vector_gp __asm__("D_L00_00160280") __attribute__((sda));
 extern f32 D_L00_00160290 __attribute__((sda));
 extern Vec4 D_L00_00180250;
 extern Vec4 D_L00_00180260;
@@ -232,7 +233,7 @@ void initialize_pause_menu(void) {
 
     {
         u8 *row = (u8 *)&D_L00_00180250;
-        fast_vec_scale(row, &D_L00_00160280, 1.0f);
+        fast_vec_scale(row, &pause_menu_initial_vector_gp, 1.0f);
         qcopy(row - 0x10, &D_L00_00160290);
         row += 0x20;
         qzero(row);
@@ -440,7 +441,7 @@ void close_pause_menu(void) {
             s32 *table = (s32 *)((u8 *)&D_L00_00173E40_lui);
             table[4] &= 0x7fffffff;
         }
-        FUN_L00_002a08c8();
+        vu1_send_chain_render_buffer();
         FUN_L00_002a09d8(1);
     }
 }
@@ -650,7 +651,7 @@ typedef struct {
 } PageMobyData;
 
 extern s32 D_L00_001B23C0[];
-extern s32 D_L00_00160270 __attribute__((sda));
+extern s32 pause_menu_rectangle_color_gp __asm__("D_L00_00160270") __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
@@ -753,7 +754,7 @@ void draw_pause_menu_pages(int transfer_only) {
         page_data->y = rect.y;
         page_data->w = rect.w;
         page_data->h = rect.h;
-        append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, D_L00_00160270, 0);
+        append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, pause_menu_rectangle_color_gp, 0);
     }
     for (pass = 0; pass < 2; pass++) {
         Ent **mobys = D_L00_001B9E90;
@@ -805,7 +806,7 @@ void draw_pause_menu_pages(int transfer_only) {
             configure_graphics_render_target_and_projection(width_log2, height_log2, pass != 0, 1.0f);
             target_width = 1 << width_log2;
             target_height = 1 << height_log2;
-            draw_hud_rect_depth(0, 0, target_width, target_height, D_L00_00160270, 0, 0);
+            draw_hud_rect_depth(0, 0, target_width, target_height, pause_menu_rectangle_color_gp, 0, 0);
             draw_result = (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
             begin_draw_frame();
             vu1_add_g_sregister(0x42, 0x8000000064L);

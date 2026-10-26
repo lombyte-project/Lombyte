@@ -215,7 +215,7 @@ void update_hero_bobbing_and_target_position(void) {
 extern int D_L15_0015F5C4;
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
@@ -254,7 +254,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     qcopy(restored_hero_moby + 0x10, hero_state_bytes + 0x80);
     *(int *)(restored_hero_moby + 0x98) = 0;
     *(float *)(hero_state_bytes + 0xA94) = 1.0f;
-    FUN_L00_00232628();
+    clear_hero_queued_animation();
     if (*(int *)(hero_state_bytes + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
         hero_set_state(HERO_STATE_IDLE, 1);
     }
@@ -355,7 +355,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     V_20a328 offset_position, primary_endpoint, b, secondary_endpoint;
     char *hero_position;
     P_20a328 *g;
-    f32 position_z_offset, k, secondary_offset_scale, ang, negative_xy_dot_product;
+    f32 position_z_offset, k, secondary_offset_scale, primary_probe_result_angle, negative_xy_dot_product;
     int r;
 
     if (P.h308 != 0)
@@ -397,10 +397,10 @@ void adjust_hero_planar_velocity_from_probes(int force) {
     r = -1;
     if (FUN_001efa68_20a328(&b, &secondary_endpoint, 4, P.p2080, 0) && D_L15_0017445C > 0)
         r = FUN_001f0b58_20a328();
-    ang = 0.0f;
+    primary_probe_result_angle = 0.0f;
     if (FUN_001efa68_20a328(&offset_position, &primary_endpoint, 4, P.p2080, 0) && X.i1C > 0)
-        ang = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
-    if (0.8726646304130554f <= ang || r == 8 || r == 12) {
+        primary_probe_result_angle = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
+    if (0.8726646304130554f <= primary_probe_result_angle || r == 8 || r == 12) {
         P.i240 = X.i18;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_20a328(&X.v40, &X.v40);
@@ -449,7 +449,7 @@ void update_hero_timers_and_auxiliary_state(void) __asm__("FUN_L15_00215e58");
 
 void update_hero_timers_and_auxiliary_state(void) {
     Vec4 sum;
-    Vec4 d;
+    Vec4 sample_delta;
     struct Moby *spawned_moby;
     s32 i;
     s32 sample_index_base;
@@ -541,9 +541,9 @@ void update_hero_timers_and_auxiliary_state(void) {
             {
                 s32 wrapped_sample_index = (sample_index_base + 0x1F) % 32;
                 s32 previous_sample_index = (sample_index_base + 0x1E) % 32;
-                FUN_001f9a28_215e58(&d, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[previous_sample_index]);
+                FUN_001f9a28_215e58(&sample_delta, &hero.unk1B00[wrapped_sample_index], &hero.unk1B00[previous_sample_index]);
             }
-            FUN_001f9a10_215e58(&sum, &sum, &d);
+            FUN_001f9a10_215e58(&sum, &sum, &sample_delta);
         }
         FUN_001f9a68_215e58(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_215e58(&sum) < frame_time) {

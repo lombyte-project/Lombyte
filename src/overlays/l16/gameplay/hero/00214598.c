@@ -175,9 +175,9 @@ extern void smooth_and_clamp_value_pair(void *, void *, f32) __asm__("FUN_L05_00
 extern void apply_hero_rotation_offset(f32, f32, f32) __asm__("FUN_L00_00211cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
-extern void FUN_L05_00254358(void *, void *);
+extern void compute_hero_hoverboard_respawn_transform(void *, void *) __asm__("FUN_L05_00254358");
 extern void FUN_L00_00216f90(void *, void *, s32, s32);
-extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
+extern void compute_hero_reference_tilt_rotation(void *, void *, f32, f32, f32, s32) __asm__("FUN_L00_00216130");
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 extern Vec4 D_L16_00179BE0[];
@@ -216,7 +216,7 @@ extern f32 FUN_L00_00209018(void *, s32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L16_00208038(f32, f32);
 extern void FUN_L16_00208050(f32, f32);
 extern void FUN_L16_00208068(f32, f32);
@@ -309,7 +309,7 @@ extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8"
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
-extern void FUN_L00_00217368(void *, s32);
+extern void emit_filtered_entry_sparkles(void *, s32) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
@@ -541,7 +541,7 @@ void update_hero_motion_for_current_state(void) {
             f32 lo = frame_time * 0.6981317f;
             f32 m;
             f32 rate;
-            f32 accel;
+            f32 steering_response_coefficient;
             f32 steer;
             f32 old;
             f32 diff;
@@ -553,7 +553,7 @@ void update_hero_motion_for_current_state(void) {
             steer = 0.0f;
             m = PD.f128 < PD.f12C ? PD.f12C : PD.f128;
             rate = frame_scale_sq * 0.2f;
-            accel = frame_scale_sq * 0.015f;
+            steering_response_coefficient = frame_scale_sq * 0.015f;
             lo = lo + (frame_time * 1.2217305f - lo) * m;
             if ((PD.u1A0.d1A0 & 0xC0) == 0x80 || hero.state.step == 1) {
                 f32 s = PD.f12C * 1.5f;
@@ -634,7 +634,7 @@ void update_hero_motion_for_current_state(void) {
                 steer = 0.0f;
             }
             old = hero.motion.rot.f[1];
-            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.unk8E8, 0, accel, rate, lo);
+            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.unk8E8, 0, steering_response_coefficient, rate, lo);
             diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
@@ -920,7 +920,7 @@ void update_hero_motion_for_current_state(void) {
         }
         hero.unk88A = hero.air_frames.s;
         if (hero.air_frames.s == 0) {
-            FUN_L00_0020a1e0(0.008f, 0.1f);
+            set_first_hero_easing_parameters(0.008f, 0.1f);
             AN.f60 = hero.motion.unk184 * -12.0f;
             if (AN.f60 > 0.55850536f) {
                 AN.f60 = 0.55850536f;
@@ -929,7 +929,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         if (hero.air_frames.s != 0 && hero.unk88E == 0) {
-            FUN_L00_0020a1e0(0.015f, 0.08f);
+            set_first_hero_easing_parameters(0.015f, 0.08f);
             transform_vector(&v10, &hero.motion.displacement, (Vec4 *)hero.unk40);
             AN.f64 = -fast_arc_tan(vector_length_xy(&v10), v10.f[2]);
             if (AN.f64 > 0.61086524f) {
@@ -1016,7 +1016,7 @@ void update_hero_motion_for_current_state(void) {
         s32 n;
         f32 an;
         if (hero.motion.pos.f[0] < 5.0f || hero.motion.pos.f[1] < 5.0f) {
-            FUN_L05_00254358(&primary_vector_scratch, &v10);
+            compute_hero_hoverboard_respawn_transform(&primary_vector_scratch, &v10);
             hero.unk874 = v10.f[2];
             FUN_L00_00216f90(&primary_vector_scratch, &v10, 0x6B, 1);
         }
@@ -1096,12 +1096,12 @@ void update_hero_motion_for_current_state(void) {
                 qcopy(&hero.unk780, &hero.unk270);
                 fast_vec_normalize(&hero.unk780, &hero.unk780, 1.0f);
             }
-            FUN_L00_00216130(&hero.unk780, &vector_scratch, frame_time_sq * 52.35988f, frame_time_sq * 0.0034906585f,
+            compute_hero_reference_tilt_rotation(&hero.unk780, &vector_scratch, frame_time_sq * 52.35988f, frame_time_sq * 0.0034906585f,
                              0.0f, 0);
         } else if (hero.unk88D == 0) {
             clear_u64_value(&hero.unk780);
             hero.unk780.f[2] = 1.0f;
-            FUN_L00_00216130(&hero.unk780, &vector_scratch, frame_time_sq * 43.633232f, frame_scale_sq * 0.2f, 0.0f, 0);
+            compute_hero_reference_tilt_rotation(&hero.unk780, &vector_scratch, frame_time_sq * 43.633232f, frame_scale_sq * 0.2f, 0.0f, 0);
         }
         if (hero.wall_hit != 0) {
             approach_value(&hero.unk85C, 0.0f, frame_time_sq * 5.0f);
@@ -1155,7 +1155,7 @@ void update_hero_motion_for_current_state(void) {
         if (an > 0.0f) {
             AN.f270 = an * -22.0f;
         }
-        FUN_L00_0020a1e0(0.008f, 0.1f);
+        set_first_hero_easing_parameters(0.008f, 0.1f);
         AN.f60 = AN.f60 + an * -11.0f;
         if (AN.f60 > 0.6632251f) {
             AN.f60 = 0.6632251f;
@@ -1827,19 +1827,19 @@ void update_hero_motion_for_current_state(void) {
                 vector_matrix_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 vector_matrix_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&vector_matrix_scratch[0], &vector_matrix_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, o, &primary_vector_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, o, &primary_vector_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], -0.87266463f);
                 vector_matrix_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 vector_matrix_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 vector_matrix_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&vector_matrix_scratch[0], &vector_matrix_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, (struct MobyView *)hero.moby, &primary_vector_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, (struct MobyView *)hero.moby, &primary_vector_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], 0.87266463f);
                 vector_matrix_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 vector_matrix_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 vector_matrix_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&vector_matrix_scratch[0], &vector_matrix_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, o, &primary_vector_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &vector_matrix_scratch[0], 0, o, &primary_vector_scratch));
             }
         }
         if (scale_game_frames(10) < hero.state_timer) {
@@ -2158,7 +2158,7 @@ void update_hero_motion_for_current_state(void) {
                 if (a < -0.7853982f) {
                     a = -0.7853982f;
                 }
-                FUN_L00_0020a1e0(0.03f, 0.2f);
+                set_first_hero_easing_parameters(0.03f, 0.2f);
                 if (hero.unk58C != 0) {
                     AN.f64 = -a;
                 } else {

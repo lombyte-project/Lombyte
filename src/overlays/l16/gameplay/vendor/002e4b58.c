@@ -197,7 +197,7 @@ void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
 void draw_level16_visible_textured_batches(void) {
     int *element_counts = (int *)&D_L16_00161F90;
     int *packet_vector_tables = (int *)&D_L16_00161F98;
-    int *c = (int *)D_L16_00161FA0;
+    int *unused_reflection_argument_tables = (int *)D_L16_00161FA0;
     int *input_vector_tables = (int *)D_L16_00161FA8;
     int *packet_word_tables = (int *)D_L16_00161FB0;
     int i;
@@ -209,7 +209,7 @@ void draw_level16_visible_textured_batches(void) {
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
-            compute_level16_reflection_map_coordinates(element_counts[i], input_vector_tables[i], packet_vector_tables[i], c[i], D_L16_001DF2D0);
+            compute_level16_reflection_map_coordinates(element_counts[i], input_vector_tables[i], packet_vector_tables[i], unused_reflection_argument_tables[i], D_L16_001DF2D0);
             FUN_L00_001fde98(element_counts[i], packet_vector_tables[i], packet_word_tables[i], D_L16_001DF2D0, 1);
         }
     }

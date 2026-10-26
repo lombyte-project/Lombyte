@@ -220,7 +220,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x45, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x80: {
+    case HERO_STATE_DYING_SPEED_LIMITED: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -247,7 +247,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
-    case 0x33: {
+    case HERO_STATE_SWIM: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x11;
         p->unk2284 = 0xB;
@@ -290,7 +290,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3D, 0, (float)n);
         break;
     }
-    case 0x34: {
+    case HERO_STATE_SWIM_IDLE: {
         struct Hero *p = &hero;
         int n;
         int t;
@@ -307,7 +307,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)t);
         break;
     }
-    case 0x37: {
+    case HERO_STATE_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
@@ -405,7 +405,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_MOVE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
@@ -459,7 +459,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x82: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
@@ -1990,7 +1990,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(get_hero_idle_animation_index(0), 0, -1.0f);
         break;
     }
-    case 0x78: {
+    case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;

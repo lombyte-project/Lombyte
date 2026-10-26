@@ -15,7 +15,8 @@ typedef struct {
     u8 pad0[0x5C];
     u8 *tint;
 } LevelFx;
-extern f32 D_L02_00161F58 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_globals.h"
+extern f32 shard_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58") __attribute__((sda));
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx D_L02_001B2680;
@@ -56,7 +57,7 @@ void update_shard_debris(struct Moby *moby) {
         return;
     }
     vec_add(&moby->pos, &moby->pos, &shard_vars->vel);
-    approach_value(&shard_vars->vel.z, 0.0f, D_L02_00161F58 * frame_time_sq);
+    approach_value(&shard_vars->vel.z, 0.0f, shard_vertical_velocity_approach_scale_gp * frame_time_sq);
     moby->rot.y = 1.5707964f - angle_atan2(vec_len_xy(&shard_vars->vel), shard_vars->vel.z);
     qcopy(&trail_position, &moby->pos);
     vec_scale(&half, &shard_vars->vel, 0.5f);
@@ -97,7 +98,7 @@ int D_L02_00161F54 = 0x10;
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
 char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) __asm__("FUN_L02_002ec228");
 
-char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) {
+char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *dir) {
     char *moby;
     char *data;
     moby = create_moby_c(0x4B8);
@@ -106,7 +107,7 @@ char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) {
         *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
         FUN_L00_002502f0_c(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
         *(short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, spawn_position);
         *(float *)(moby + 0x48) = atan2_c(dir[0], dir[1]);
         *(float *)(moby + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
         moby[0x20] = 1;
@@ -422,8 +423,8 @@ s32 D_L02_001620FC = 0x804080ff;
 s32 D_L02_00162100 = 0x8040ffff;
 s32 D_L02_00162104 = 0x80204040;
 s32 D_L02_00162108 = 0x80204080;
-extern s32 D_L02_0016210C __attribute__((sda));
-extern s32 D_L02_00162110 __attribute__((sda));
+extern s32 view_gated_smoke_burst_interval_min_gp __asm__("D_L02_0016210C") __attribute__((sda));
+extern s32 view_gated_smoke_burst_interval_max_gp __asm__("D_L02_00162110") __attribute__((sda));
 s32 D_L02_00162114 = 0x10019;
 extern f32 D_L02_00162118 __attribute__((sda));
 extern f32 D_L02_0016211C __attribute__((sda));
@@ -442,8 +443,8 @@ s32 D_L02_0016214C = 0x804080ff;
 s32 D_L02_00162150 = 0x8040ffff;
 s32 D_L02_00162154 = 0x80204040;
 s32 D_L02_00162158 = 0x80204080;
-extern s32 D_L02_0016215C __attribute__((sda));
-extern s32 D_L02_00162160 __attribute__((sda));
+extern s32 alternating_smoke_burst_interval_min_gp __asm__("D_L02_0016215C") __attribute__((sda));
+extern s32 alternating_smoke_burst_interval_max_gp __asm__("D_L02_00162160") __attribute__((sda));
 s32 D_L02_00162164 = 0x10019;
 
 /* Smoke vent: once visible within 120 units it puffs bursts (D_L02_001620C8 / D_L02_00162118 parameter blocks)
@@ -498,7 +499,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016210C, (f32)D_L02_00162110)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)view_gated_smoke_burst_interval_min_gp, (f32)view_gated_smoke_burst_interval_max_gp)));
             count1 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_001620D8 * frame_time);
@@ -550,7 +551,7 @@ void update_smoke_vent(struct Moby *moby) {
             break;
         }
         if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
-            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)D_L02_0016215C, (f32)D_L02_00162160)));
+            *(s32 *)(data + 0xC0) = truncate_time(scale_time(random_float((f32)alternating_smoke_burst_interval_min_gp, (f32)alternating_smoke_burst_interval_max_gp)));
             count2 = random_remainder(7) != 0 ? 1 : random_remainder(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {
                 random_vector_jitter(&vector_perturbation, 0.0f, D_L02_00162128 * frame_time);
@@ -599,8 +600,8 @@ void set_vendor_camera_mode(int mode, int camera_argument_value) {
         VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR = 2,
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
     };
-    char *g = D_L02_00167280;
-    char *vendor_camera = *(char **)(g + 0x180);
+    char *vendor_camera_context = D_L02_00167280;
+    char *vendor_camera = *(char **)(vendor_camera_context + 0x180);
     char *camera_data = *(char **)(vendor_camera + 0x70);
     char *camera_argument_pair = camera_data + 0xE0;
 
@@ -608,7 +609,7 @@ void set_vendor_camera_mode(int mode, int camera_argument_value) {
     switch (mode) {
     case VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION:
         qcopy(camera_data + 0x110, &hero.motion.pos);
-        compute_spherical_offset_from_positions(camera_data + 0xFC, g + 0x140, &hero.motion.pos);
+        compute_spherical_offset_from_positions(camera_data + 0xFC, vendor_camera_context + 0x140, &hero.motion.pos);
     case VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR:
         *(int *)(camera_argument_pair + 4) = camera_argument_value;
         *(int *)(camera_data + 0xE0) = camera_argument_value;

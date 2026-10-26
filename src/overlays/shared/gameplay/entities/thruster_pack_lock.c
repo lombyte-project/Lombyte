@@ -449,7 +449,9 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-int FUN_L11_003192c8(char *moby) {
+int draw_linked_moby_trails(char *moby) __asm__("FUN_L11_003192c8");
+
+int draw_linked_moby_trails(char *moby) {
     TrailQuad quads[16];
     float offset[2][4];
     short *list, *next_list;
@@ -544,7 +546,7 @@ int FUN_L11_003192c8(char *moby) {
 
 
 extern int level_frame __asm__("D_L11_0015F5CC");
-extern int FUN_L11_003192c8();
+extern int draw_linked_moby_trails();
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -600,7 +602,7 @@ void update_moby_trail_points(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int D_0015EE00;
+#include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D408[];
@@ -635,7 +637,7 @@ void update_moby_hit_stats_and_state(char *moby) {
         *(int *)(collection_stats_base + 0x157EC) = *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
         if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
             *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
-            if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
+            if (++level_11_class_ac_hit_count >= 3 && D_0013D408[0x12] == 0) {
                 D_0013D408[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
@@ -655,8 +657,8 @@ void update_moby_hit_stats_and_state(char *moby) {
             }
         }
     } else if (((unsigned char *)moby)[0x20] == 5) {
-        struct Hero *g2 = &hero;
-        if (g2->state.current != 0x32) {
+        struct Hero *hero_for_state_check = &hero;
+        if (hero_for_state_check->state.current != 0x32) {
             moby[0x20] = 4;
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 1;

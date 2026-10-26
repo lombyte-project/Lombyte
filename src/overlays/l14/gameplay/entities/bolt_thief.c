@@ -42,11 +42,12 @@ typedef struct Part_2FF358 {
 } Part_2FF358;
 
 extern float D_L14_0015F580;
-extern float D_L14_00161F90 __attribute__((sda));
-extern float D_L14_00161F94 __attribute__((sda));
-extern float D_L14_00161F98 __attribute__((sda));
-extern float D_L14_00161F9C __attribute__((sda));
-extern float D_L14_00161FA0 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/bolt_thief_globals.h"
+extern float bolt_thief_puff_initial_right_offset_gp __asm__("D_L14_00161F90") __attribute__((sda));
+extern float bolt_thief_puff_forward_offset_gp __asm__("D_L14_00161F94") __attribute__((sda));
+extern float bolt_thief_puff_up_offset_gp __asm__("D_L14_00161F98") __attribute__((sda));
+extern float bolt_thief_puff_middle_right_offset_delta_gp __asm__("D_L14_00161F9C") __attribute__((sda));
+extern float bolt_thief_puff_final_right_offset_gp __asm__("D_L14_00161FA0") __attribute__((sda));
 int D_L14_00161FA4 = 0x7f204080;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -68,12 +69,12 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
     float puff_size;
 
-    scale_vector_xyz(A, source_moby->right, D_L14_00161F90);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_initial_right_offset_gp);
     add_vector_xyz(B, source_moby->pos, A);
-    scale_vector_xyz(A, source_moby->up, D_L14_00161F98);
+    scale_vector_xyz(A, source_moby->up, bolt_thief_puff_up_offset_gp);
     add_vector_xyz(B, B, A);
     qcopy(C, B);
-    scale_vector_xyz(A, source_moby->fwd, D_L14_00161F94);
+    scale_vector_xyz(A, source_moby->fwd, bolt_thief_puff_forward_offset_gp);
     add_vector_xyz(B, B, A);
     for (i = 1; i >= 0; i--) {
         puff_signed_amount = func_002140B0_2FF358(0x10);
@@ -88,7 +89,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
             f->bB = puff->life;
         }
     }
-    scale_vector_xyz(A, source_moby->right, D_L14_00161F9C);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_middle_right_offset_delta_gp);
     puff_size = 100000.0f;
     add_vector_xyz(B, B, A);
     puff_signed_amount = 0x10;
@@ -109,7 +110,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
         puff_size = puff_size - 20000.0f;
     }
     puff_size = 300000.0f;
-    scale_vector_xyz(A, source_moby->right, D_L14_00161FA0);
+    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_final_right_offset_gp);
     add_vector_xyz(B, C, A);
     col = random_int_between(0x40, 0x80);
     k = (col << 8) | 0x7F000000;
@@ -235,8 +236,8 @@ extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 
 extern int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
-extern float D_L14_00161FBC __attribute__((sda));
-extern float D_L14_00161FC0 __attribute__((sda));
+extern float bolt_thief_path_spring_gain_gp __asm__("D_L14_00161FBC") __attribute__((sda));
+extern float bolt_thief_path_spring_damping_gp __asm__("D_L14_00161FC0") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -369,9 +370,9 @@ void bolt_thief_update(L16CrateMoby *moby) {
             update_linked_moby_position(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
-        vendor_spring(moby->position, &settle_data->vx, target[0], D_L14_00161FBC, D_L14_00161FC0, zero);
-        vendor_spring(moby->position + 1, &settle_data->vy, target[1], D_L14_00161FBC, D_L14_00161FC0, zero);
-        vendor_spring(moby->position + 2, &settle_data->vz, target[2], D_L14_00161FBC, D_L14_00161FC0, zero);
+        vendor_spring(moby->position, &settle_data->vx, target[0], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
+        vendor_spring(moby->position + 1, &settle_data->vy, target[1], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
+        vendor_spring(moby->position + 2, &settle_data->vz, target[2], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
             if (settle_data->mode == 1) {
                 moby->state = 1;
@@ -432,7 +433,7 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
-extern float D_L14_00161FB8 __attribute__((sda));
+extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
 extern char *D_L14_001B0BB0[];
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
@@ -441,7 +442,7 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
-    float path_sample_step = D_L14_00161FB8 * frame_time;
+    float path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;
     int path_sample_result;
     char *path;
     if (current_level_index == 0x10)
@@ -453,17 +454,17 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     else
         path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
     path_sample_result = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
-    vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L14_00161FBC,
-                     D_L14_00161FC0, 0.0f);
-    vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L14_00161FBC,
-                     D_L14_00161FC0, 0.0f);
-    vendor_spring(&moby->pos.z, (float *)(data + 0xEC), pos[2], D_L14_00161FBC,
-                     D_L14_00161FC0, 0.0f);
+    vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], bolt_thief_path_spring_gain_gp,
+                     bolt_thief_path_spring_damping_gp, 0.0f);
+    vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], bolt_thief_path_spring_gain_gp,
+                     bolt_thief_path_spring_damping_gp, 0.0f);
+    vendor_spring(&moby->pos.z, (float *)(data + 0xEC), pos[2], bolt_thief_path_spring_gain_gp,
+                     bolt_thief_path_spring_damping_gp, 0.0f);
     subtract_vector_xyz(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {
             FUN_L00_00258278(moby, fast_arc_tan(delta[0], delta[1]), (float *)(data + 0xF0),
-                             D_L14_00161FBC, D_L14_00161FC0, 0.0f);
+                             bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, 0.0f);
         }
     }
     return path_sample_result;

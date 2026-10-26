@@ -1003,7 +1003,7 @@ struct AnimTimer {
 };
 
 extern void update_moby_grids(struct Moby *, u32) __asm__("FUN_0020dc20");
-extern void FUN_L00_0025d1b8(struct Moby *);
+extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 
 /* resets a spawned moby from its class defaults and restarts its animation */
@@ -1027,7 +1027,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     ((struct SpawnMobyView *)moby)->unk71 = 0xFF;
     moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;
-    FUN_L00_0025d1b8(moby);
+    copy_hero_moby_field_38(moby);
     FUN_L00_00250df8(moby);
     animation_timer = suck_get_aim_height(moby);
     if (animation_timer != 0)
@@ -1451,7 +1451,7 @@ extern float D_L07_00161214;
 extern int D_L07_00161208;
 extern void *D_L07_001612D4;
 extern int D_L07_001612D8; /* no foreign declaration */
-extern int D_L07_00161B30 __attribute__((sda)); /* no foreign declaration */
+extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda)); /* no foreign declaration */
 extern unsigned short D_L07_00161B34 __attribute__((sda)); /* no foreign declaration */
 extern int D_L07_00161B38 __attribute__((sda)); /* no foreign declaration */
 extern int D_L07_00204700[][4];
@@ -1465,7 +1465,7 @@ extern unsigned short D_L07_00204680[];
 extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
 extern void enqueue_callback_list_1_c(void *, void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
-int FUN_L07_00281ef8(int id);
+int matches_first_moby_in_group(int id) __asm__("FUN_L07_00281ef8");
 void FUN_L01_0026e090(int i, int v);
 void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
@@ -1670,7 +1670,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         FUN_L01_002b7fe0_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
         enqueue_callback_list_1_c(render_level07_water_grids, water_moby);
     }
-    if (water_data->idx == D_L07_00161B30) {
+    if (water_data->idx == water_grid_override_index) {
         D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00161B34;
         D_L07_00204680[water_data->idx] = D_L07_00161B34;
     }
@@ -3683,7 +3683,7 @@ extern int D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y);
+unsigned char *spawn_color_tween_emitter_particle(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y) __asm__("FUN_L00_002729c8");
 extern float FUN_001fa6c0_2cd2b0(int) __asm__("FUN_001fa6c0");
 extern float FUN_L00_0025e310_2cd2b0(float) __asm__("FUN_L00_0025e310");
 extern float FUN_001f9dc8_2cd2b0(float) __asm__("FUN_001f9dc8");

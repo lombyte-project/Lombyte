@@ -15,12 +15,12 @@ void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
 
-void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) {
+void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *inout_vector) {
     V0025d238 source_copy, scaled_delta;
     f32 *inout_component, *source_component, *delta_component;
     V0025d238 *source_copy_ptr = &source_copy, *scaled_delta_ptr = &scaled_delta;
     s32 i;
-    source_copy.q = src->q;
+    source_copy.q = segment_start->q;
     source_component = source_copy.f;
     inout_component = inout_vector->f;
     delta_component = scaled_delta.f;
@@ -475,7 +475,9 @@ f32 normalize_angle(f32 angle_radians) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int FUN_L00_0025e368(char *moby) {
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) __asm__("FUN_L00_0025e368");
+
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) {
     int predicate_result;
     if (moby == 0) {
         predicate_result = 0;
@@ -487,7 +489,9 @@ int FUN_L00_0025e368(char *moby) {
     return predicate_result;
 }
 /* True for a moby of one of eight listed classes. */
-s32 FUN_L00_0025e3f8(void *moby) {
+s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) __asm__("FUN_L00_0025e3f8");
+
+s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) {
     s16 moby_class_id = *(s16 *)((char *)moby + 0xA6);
     if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE || moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 || moby_class_id == 0xD5 ||
         moby_class_id == 0xDF) {
@@ -575,15 +579,15 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     }
     for (i = 0; i < burst_particle_count; i++) {
         {
-        Q_25e450 dir;
+        Q_25e450 burst_particle_vector;
         float a;
         float b;
         a = random_float_between_25e450(0.2617994f, 1.3962634f);
         b = random_angle_radians_25e450();
-        build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
-        dir.f[2] += frame_time_macro * 3.0f;
+        build_spherical_offset_25e450(&burst_particle_vector, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+        burst_particle_vector.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
-        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &dir, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
+        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &burst_particle_vector, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }

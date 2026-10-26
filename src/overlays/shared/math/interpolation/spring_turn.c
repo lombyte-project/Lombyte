@@ -672,10 +672,10 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 float calculate_triangular_corrected_scalar(float *base_values, float *b, int *out, float triangular_correction_coefficient) __asm__("FUN_L00_00259468");
 
-float calculate_triangular_corrected_scalar(float *base_values, float *b, int *out, float triangular_correction_coefficient) {
-    int truncated_ratio = truncate_float_to_s32(b[2] / triangular_correction_coefficient);
+float calculate_triangular_corrected_scalar(float *base_values, float *linear_term_values, int *out, float triangular_correction_coefficient) {
+    int truncated_ratio = truncate_float_to_s32(linear_term_values[2] / triangular_correction_coefficient);
     float truncated_ratio_float = convert_integer_to_float(truncated_ratio);
-    float corrected_scalar_value = base_values[2] + b[2] * truncated_ratio_float - convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) * triangular_correction_coefficient;
+    float corrected_scalar_value = base_values[2] + linear_term_values[2] * truncated_ratio_float - convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) * triangular_correction_coefficient;
     if (out) {
         *out = truncated_ratio;
     }

@@ -171,7 +171,9 @@ extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_00
 extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
-s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) __asm__("FUN_L00_00261d78");
+
+s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
     OvlVec4 difference;
     OvlVec4 scaled_difference;
     OvlVec4 working;

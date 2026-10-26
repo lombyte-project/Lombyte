@@ -70,7 +70,7 @@ extern int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
-extern int FUN_L00_00229910(void);
+extern int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
@@ -98,7 +98,7 @@ extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm_
 extern void update_hero_locomotion_state(void) __asm__("FUN_L00_002293a8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern void FUN_L00_00232628(void);
+extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00232640(int id);
 extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
                              unsigned char f) __asm__("FUN_L00_00233288");
@@ -135,7 +135,7 @@ void update_hero_state_transitions(void) {
     float probe_heading_1;
     float probe_heading_2;
     float probe_heading_3;
-    int sp34;
+    int predicted_trajectory_steps;
     int jump_press_age_frames;
 
     moby = hero.moby;
@@ -209,7 +209,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
-                    FUN_L00_00232628();
+                    clear_hero_queued_animation();
                     if (hero.unk22CA != 0) {
                         if (hero.unk308 == 0 || D_0013D4C0[0x1C] == 0) {
                             hero_set_state(0x81, 1);
@@ -444,7 +444,7 @@ void update_hero_state_transitions(void) {
                 case 71:
                 case 87:
                 case 98:
-                case 106:
+                case HERO_STATE_DROWN:
                 case 128:
                 case 130:
                     if (hero.unkA98 & 2) {
@@ -758,7 +758,7 @@ void update_hero_state_transitions(void) {
                     if (!(hero.air_frames.s < scale_game_frames(5)) &&
                         !(hero.state.prev_control_mode == 0x12 && hero.unk20A9 != 0) &&
                         hero.ground_distance > 1.35f) {
-                        if (FUN_L00_00229910() == 0) {
+                        if (check_hero_forward_collision_height() == 0) {
                             hero_set_state(HERO_STATE_FALL, 1);
                             break;
                         }
@@ -1544,7 +1544,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
@@ -1660,9 +1660,9 @@ void update_hero_state_transitions(void) {
                             if (hero.state.current == 0xE) {
                                 break;
                             }
-                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &sp34,
+                            predict_hero_trajectory_z(hero.motion.pos.f, hero.motion.velocity.f, &predicted_trajectory_steps,
                                              hero.unk4A0);
-                            adjust_hero_animation_speed_for_target_frame(hero.unk440, sp34, hero.unk494, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(hero.unk440, predicted_trajectory_steps, hero.unk494, -1.0f);
                             if (1.5f < hero.anim_speed) {
                                 hero.anim_speed = 1.5f;
                             }

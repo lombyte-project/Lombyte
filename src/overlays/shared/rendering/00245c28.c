@@ -87,7 +87,7 @@ extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
 extern void do_space_transition(void) __asm__("FUN_00231ff0");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern void music_pause(int) __asm__("FUN_00216050");
-extern void vu1_send_chain(void) __asm__("FUN_L00_002a08c8");
+extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void FUN_00226e08(void);
 
@@ -169,7 +169,7 @@ void run_level_main_loop(void) {
         *(volatile int *)0x10000800 = 0;
         FUN_L00_001f6d70();
         D_L00_0015F5D8 = 0;
-        vu1_send_chain();
+        vu1_send_chain_render_buffer();
         swap_render_buffer_chain();
         put_draw_buffer_small();
         append_palette_transfer_packet();

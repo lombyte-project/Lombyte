@@ -11,7 +11,7 @@ struct S {
     float f378, f37C;
 };
 extern struct S D_00186F40;
-extern s32 D_001872A0;
+#include "rnc/rendering/reset_active_camera_position_and_basis_globals.h"
 extern s32 D_001872B0;
 void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 
@@ -20,7 +20,7 @@ void reset_active_camera_position_and_basis(void) {
     D_00186F40.f148 = 64.0f;
     D_00186F40.f144 = 256.0f;
     qzero(&D_00186F40.f350);
-    qzero(&D_001872A0);
+    qzero(&active_camera_basis_column1_x);
     qzero(&D_001872B0);
     D_00186F40.f350 = 1.0f;
     D_00186F40.f364 = 1.0f;

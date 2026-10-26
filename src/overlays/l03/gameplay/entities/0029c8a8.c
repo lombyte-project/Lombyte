@@ -46,7 +46,9 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
 }
 
 /* True for a moby of class 0x23E in state 9. */
-int FUN_L03_002c6d58(struct Moby *moby) {
+int is_moby_class_23e_in_state_9(struct Moby *moby) __asm__("FUN_L03_002c6d58");
+
+int is_moby_class_23e_in_state_9(struct Moby *moby) {
     if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23e &&
         moby->state == 0x9) {
         return 1;
@@ -55,11 +57,12 @@ int FUN_L03_002c6d58(struct Moby *moby) {
 }
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
 
-extern float D_L03_00161BD8 __attribute__((sda));
-extern float D_L03_00161BDC __attribute__((sda));
-extern float D_L03_00161BE0 __attribute__((sda));
-extern float D_L03_00161BE4 __attribute__((sda));
-extern float D_L03_00161BE8 __attribute__((sda));
+#include "rnc/overlay/l03/gameplay/entities/0029c8a8_globals.h"
+extern float moby_vertical_oscillation_amplitude_gp __asm__("D_L03_00161BD8") __attribute__((sda));
+extern float moby_vertical_oscillation_phase_rate_gp __asm__("D_L03_00161BDC") __attribute__((sda));
+extern float moby_rotation_oscillation_amplitude_gp __asm__("D_L03_00161BE0") __attribute__((sda));
+extern float moby_rotation_oscillation_first_phase_rate_gp __asm__("D_L03_00161BE4") __attribute__((sda));
+extern float moby_rotation_oscillation_second_phase_rate_gp __asm__("D_L03_00161BE8") __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
@@ -67,9 +70,9 @@ void update_moby_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0");
 
 void update_moby_oscillation(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
-    update_moby_vertical_oscillation(D_L03_00161BD8, D_L03_00161BDC * DEG_TO_RAD * frame_time, moby,
+    update_moby_vertical_oscillation(moby_vertical_oscillation_amplitude_gp, moby_vertical_oscillation_phase_rate_gp * DEG_TO_RAD * frame_time, moby,
                      (float *)(moby_pvars + 0xac), (float *)(moby_pvars + 0xa8));
-    update_moby_rotation_oscillation(moby, moby_pvars + 0xb0, moby_pvars + 0xb4, D_L03_00161BE0,
-                     D_L03_00161BE4 * DEG_TO_RAD * frame_time,
-                     D_L03_00161BE8 * DEG_TO_RAD * frame_time);
+    update_moby_rotation_oscillation(moby, moby_pvars + 0xb0, moby_pvars + 0xb4, moby_rotation_oscillation_amplitude_gp,
+                     moby_rotation_oscillation_first_phase_rate_gp * DEG_TO_RAD * frame_time,
+                     moby_rotation_oscillation_second_phase_rate_gp * DEG_TO_RAD * frame_time);
 }

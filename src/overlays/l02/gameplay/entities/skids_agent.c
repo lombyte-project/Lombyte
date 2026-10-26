@@ -591,7 +591,8 @@ void liftcar_platform_update(struct Moby *moby) {
         LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE = 2,
         LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE = 3,
         LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW = 4,
-        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5
+        LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_BELOW = 5,
+        LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY = 6
     };
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_0015FFD8[*(int *)(data + 0xA0)];
@@ -689,14 +690,14 @@ void liftcar_platform_update(struct Moby *moby) {
             moby->command = 1;
         }
         break;
-    case 6:
+    case LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY:
         break;
     }
     add_vectors(&delta, &delta, &moby->pos);
     update_entity_matrix(data + 0x60, &delta, &old_rot, &moby->rot);
 }
 
-extern int D_L02_0015F608;
+#include "rnc/overlay/l02/gameplay/entities/skids_agent_globals.h"
 extern char D_L02_001673C0[];
 extern char D_L02_001F3C00[];
 extern char D_L02_001F3C60[];
@@ -719,17 +720,17 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
     begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
-    if (D_L02_0015F608 != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
+    if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
         draw_2ea048(D_L02_001F3C00);
     }
-    if (D_L02_0015F608 != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
+    if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
         draw_2ea048(D_L02_001F3CD0);
         draw_2ea048(D_L02_001F3D30);
         draw_2ea048(D_L02_001F3D90);
         draw_2ea048(D_L02_001F3DD0);
         draw_2ea048(D_L02_001F3E10);
     }
-    if (D_L02_0015F608 != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
+    if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
         draw_2ea048(D_L02_001F3C60);
     }
     FUN_L02_002a47f8_c();

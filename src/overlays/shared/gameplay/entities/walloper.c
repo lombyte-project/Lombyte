@@ -436,22 +436,20 @@ typedef struct {
     u8 pad[0x3E];
     s16 h3E;
 } S2ba970;
-extern f32 D_L00_001615EC __attribute__((sda));
-extern f32 D_L00_001615F0 __attribute__((sda));
-extern s32 D_L00_001615D4 __attribute__((sda));
-extern s32 D_L00_001615DC __attribute__((sda));
-extern f32 D_L00_001615FC __attribute__((sda));
-extern f32 D_L00_00161600 __attribute__((sda));
-extern f32 D_L00_00161630 __attribute__((sda));
-extern s32 D_L00_00161604 __attribute__((sda));
-extern s32 D_L00_00161608 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_globals.h"
+extern f32 beam_first_pass_texture_u_offset_gp __asm__("D_L00_001615EC") __attribute__((sda));
+extern f32 beam_first_pass_texture_u_scroll_speed_gp __asm__("D_L00_001615F0") __attribute__((sda));
+extern s32 primary_beam_first_pass_alpha_gp __asm__("D_L00_001615D4") __attribute__((sda));
+extern s32 primary_beam_second_pass_alpha_gp __asm__("D_L00_001615DC") __attribute__((sda));
+extern f32 beam_and_arc_first_pass_half_width_gp __asm__("D_L00_001615FC") __attribute__((sda));
+extern f32 primary_beam_second_pass_half_width_gp __asm__("D_L00_00161600") __attribute__((sda));
+extern f32 primary_beam_second_pass_segment_extension_factor_gp __asm__("D_L00_00161630") __attribute__((sda));
+extern s32 secondary_beam_first_pass_alpha_gp __asm__("D_L00_00161604") __attribute__((sda));
+extern s32 secondary_beam_second_pass_alpha_gp __asm__("D_L00_00161608") __attribute__((sda));
 extern f32 D_L00_0016160C __attribute__((sda));
-extern f32 D_L00_00161610 __attribute__((sda));
-extern f32 D_L00_00161634 __attribute__((sda));
+extern f32 secondary_beam_and_arc_second_pass_half_width_gp __asm__("D_L00_00161610") __attribute__((sda));
+extern f32 secondary_beam_second_pass_segment_extension_factor_gp __asm__("D_L00_00161634") __attribute__((sda));
 extern s16 D_L00_00161660;
-extern s16 D_L00_00161662;
-extern s16 D_L00_00161664;
-extern s16 D_L00_00161666;
 extern u8 D_L00_001DB5C0[];
 extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
@@ -462,22 +460,22 @@ void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
 
 void draw_beam_and_arc_effects(u8 *moby) {
     S2ba970 *moby_vars = *(S2ba970 **)(moby + 0x78);
-    D_L00_001615EC -= D_L00_001615F0 * frame_scale;
-    if (D_L00_001615EC <= -8.0f) {
-        D_L00_001615EC += 8.0f;
+    beam_first_pass_texture_u_offset_gp -= beam_first_pass_texture_u_scroll_speed_gp * frame_scale;
+    if (beam_first_pass_texture_u_offset_gp <= -8.0f) {
+        beam_first_pass_texture_u_offset_gp += 8.0f;
     }
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, D_L00_001615D4, D_L00_001615DC, moby_vars->h3E, D_L00_001615FC,
-                     D_L00_00161600, D_L00_00161630);
-    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, moby_vars->h3E, D_L00_0016160C,
-                     D_L00_00161610, D_L00_00161634);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0, primary_beam_first_pass_alpha_gp, primary_beam_second_pass_alpha_gp, moby_vars->h3E, beam_and_arc_first_pass_half_width_gp,
+                     primary_beam_second_pass_half_width_gp, primary_beam_second_pass_segment_extension_factor_gp);
+    draw_beam_and_arc_two_pass_quads(D_L00_001DB5C0 + 0x140, secondary_beam_first_pass_alpha_gp, secondary_beam_second_pass_alpha_gp, moby_vars->h3E, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width_gp, secondary_beam_second_pass_segment_extension_factor_gp);
     draw_beam_and_arc_two_pass_quads(arc_points[0], D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(arc_points[1], D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(arc_points[2], D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
-    draw_beam_and_arc_two_pass_quads(arc_points[3], D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C,
-                     D_L00_00161610, 0.2f);
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
+    draw_beam_and_arc_two_pass_quads(arc_points[1], beam_arc_second_row_alpha, beam_arc_second_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
+    draw_beam_and_arc_two_pass_quads(arc_points[2], beam_arc_third_row_alpha, beam_arc_third_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
+    draw_beam_and_arc_two_pass_quads(arc_points[3], beam_arc_fourth_row_alpha, beam_arc_fourth_row_alpha, 5, D_L00_0016160C,
+                     secondary_beam_and_arc_second_pass_half_width_gp, 0.2f);
     draw_beam_anchor_camera_facing_quads(moby);
 }
 
@@ -513,7 +511,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RT_2baae0 first_pass_render_attributes;
     RW_2baae0 q2[4];
     RT_2baae0 u;
-    RW_2baae0 w120, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
+    RW_2baae0 camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
     float len, len0, segment_start_camera_distance, segment_end_camera_distance, l2;
     first_pass_render_attributes.q0 = tex_2baae0(D_L00_00161638);
@@ -542,33 +540,33 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     u.f[5] = 0;
     u.f[6] = 1.0f;
     u.f[7] = 1.0f;
-    first_pass_render_attributes.f[0] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[0] = beam_first_pass_texture_u_offset_gp + 0;
     first_pass_render_attributes.f[1] = 0;
-    first_pass_render_attributes.f[2] = D_L00_001615EC + 0;
+    first_pass_render_attributes.f[2] = beam_first_pass_texture_u_offset_gp + 0;
     first_pass_render_attributes.f[3] = 1.0f;
-    first_pass_render_attributes.f[4] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[4] = beam_first_pass_texture_u_offset_gp + 1.0f;
     first_pass_render_attributes.f[5] = 0;
-    first_pass_render_attributes.f[6] = D_L00_001615EC + 1.0f;
+    first_pass_render_attributes.f[6] = beam_first_pass_texture_u_offset_gp + 1.0f;
     first_pass_render_attributes.f[7] = 1.0f;
     fast_vec_sub(first_pass_point_camera_offset, point_bytes, g_debug_camera);
     fast_vec_sub(segment_delta, point_bytes + 0x10, point_bytes);
-    fast_vec_cross(w120, segment_delta, first_pass_point_camera_offset);
-    len0 = fast_vec_length(w120);
+    fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+    len0 = fast_vec_length(camera_facing_side_vector);
     if (len0 != 0)
         len0 = 1.0f / len0;
-    fast_vec_scale(D_L00_001615FC * len0, w120, w120);
-    fast_vec_add(first_pass_corners[0], point_bytes, w120);
-    fast_vec_sub(first_pass_corners[1], point_bytes, w120);
+    fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len0, camera_facing_side_vector, camera_facing_side_vector);
+    fast_vec_add(first_pass_corners[0], point_bytes, camera_facing_side_vector);
+    fast_vec_sub(first_pass_corners[1], point_bytes, camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
         fast_vec_sub(first_pass_point_camera_offset, v[i], g_debug_camera);
         fast_vec_sub(segment_delta, v[i + 1], v[i]);
-        fast_vec_cross(w120, segment_delta, first_pass_point_camera_offset);
-        len = fast_vec_length(w120);
+        fast_vec_cross(camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+        len = fast_vec_length(camera_facing_side_vector);
         if (len != 0)
             len = 1.0f / len;
-        fast_vec_scale(D_L00_001615FC * len, w120, w120);
-        fast_vec_add(first_pass_corners[2], v[i], w120);
-        fast_vec_sub(first_pass_corners[3], v[i], w120);
+        fast_vec_scale(beam_and_arc_first_pass_half_width_gp * len, camera_facing_side_vector, camera_facing_side_vector);
+        fast_vec_add(first_pass_corners[2], v[i], camera_facing_side_vector);
+        fast_vec_sub(first_pass_corners[3], v[i], camera_facing_side_vector);
         if (i == 1) {
             first_pass_render_attributes.c[1] = D_L00_001615F4;
             first_pass_render_attributes.c[0] = D_L00_001615F4;
@@ -606,11 +604,11 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         fast_vec_sub(adjusted_segment_start, adjusted_segment_start, s1B0);
         fast_vec_add(adjusted_segment_end, adjusted_segment_end, s1B0);
         fast_vec_sub(s1A0, g_debug_camera, adjusted_segment_start);
-        fast_vec_cross(w120, s1A0, segment_delta);
-        l2 = fast_vec_length(w120);
+        fast_vec_cross(camera_facing_side_vector, s1A0, segment_delta);
+        l2 = fast_vec_length(camera_facing_side_vector);
         if (l2 != 0)
             l2 = 1.0f / l2;
-        fast_vec_scale(sy * l2, second_pass_width_offset, w120);
+        fast_vec_scale(sy * l2, second_pass_width_offset, camera_facing_side_vector);
         fast_vec_add(q2[0], adjusted_segment_start, second_pass_width_offset);
         fast_vec_sub(q2[1], adjusted_segment_start, second_pass_width_offset);
         fast_vec_add(q2[2], adjusted_segment_end, second_pass_width_offset);
@@ -655,8 +653,8 @@ long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float rnd_2bb0b0(float, float) __asm__("FUN_L00_00257c48");
 void draw_2bb0b0(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int D_L00_00161640 __attribute__((sda));
-extern float D_L00_00161648 __attribute__((sda));
-extern float D_L00_0016164C __attribute__((sda));
+extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
+extern float beam_anchor_second_pass_base_corner_scale_gp __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
 extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
 void draw_beam_anchor_camera_facing_quads(void *mv) {
@@ -684,7 +682,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
     quad.color[0] = quad_color;
-    corner_scale = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
+    corner_scale = beam_anchor_first_pass_base_corner_scale_gp + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
@@ -697,7 +695,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
     quad.color[0] = quad_color;
-    corner_scale = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
+    corner_scale = beam_anchor_second_pass_base_corner_scale_gp + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_2bb0b0(corner_scale, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &camera_facing_transform[0]);
@@ -1009,8 +1007,8 @@ void walloper_update(char *m) {
     enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
-extern f32 D_L00_00161690 __attribute__((sda));
-extern f32 D_L00_00161694 __attribute__((sda));
+extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
+extern f32 walloper_arc_second_pass_half_width_gp __asm__("D_L00_00161694") __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
@@ -1025,7 +1023,7 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
             arc_alpha = truncate_float_to_s32(convert_integer_to_float(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            draw_walloper_arc_two_pass_quads(&D_L00_001DBBA0[i], arc_alpha, arc_alpha, 5, walloper_arc_first_pass_half_width_gp, walloper_arc_second_pass_half_width_gp, 0.2f);
         }
     }
     draw_walloper_camera_facing_quad(moby);
@@ -1067,9 +1065,9 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RT first_pass_render_attributes;
     RW q2[4];
     RT second_pass_render_attributes;
-    RW w120, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
+    RW arc_camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
-    float len, len0, segment_start_camera_distance, segment_end_camera_distance;
+    float side_vector_normalization_factor, initial_side_vector_normalization_factor, segment_start_camera_distance, segment_end_camera_distance;
     first_pass_render_attributes.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
     col0 = *(int *)&D_L00_00161680 | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
@@ -1106,23 +1104,23 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.f[7] = 1.0f;
     subtract_vector_xyz(first_pass_point_camera_offset, point_bytes, D_L00_00166DC0);
     subtract_vector_xyz(segment_delta, point_bytes + 0x10, point_bytes);
-    cross_vectors_xyz(w120, segment_delta, first_pass_point_camera_offset);
-    len0 = vector_length_xyz(w120);
-    if (len0 != 0)
-        len0 = 1.0f / len0;
-    scale_vector_xyz(w120, w120, sx * len0);
-    add_vector_xyz(first_pass_corners[0], point_bytes, w120);
-    subtract_vector_xyz(first_pass_corners[1], point_bytes, w120);
+    cross_vectors_xyz(arc_camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+    initial_side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+    if (initial_side_vector_normalization_factor != 0)
+        initial_side_vector_normalization_factor = 1.0f / initial_side_vector_normalization_factor;
+    scale_vector_xyz(arc_camera_facing_side_vector, arc_camera_facing_side_vector, sx * initial_side_vector_normalization_factor);
+    add_vector_xyz(first_pass_corners[0], point_bytes, arc_camera_facing_side_vector);
+    subtract_vector_xyz(first_pass_corners[1], point_bytes, arc_camera_facing_side_vector);
     for (i = 1; i < point_count - 1; i++) {
         subtract_vector_xyz(first_pass_point_camera_offset, point_bytes + i * 16, D_L00_00166DC0);
         subtract_vector_xyz(segment_delta, point_bytes + i * 16 + 16, point_bytes + i * 16);
-        cross_vectors_xyz(w120, segment_delta, first_pass_point_camera_offset);
-        len = vector_length_xyz(w120);
-        if (len != 0)
-            len = 1.0f / len;
-        scale_vector_xyz(w120, w120, sx * len);
-        add_vector_xyz(first_pass_corners[2], point_bytes + i * 16, w120);
-        subtract_vector_xyz(first_pass_corners[3], point_bytes + i * 16, w120);
+        cross_vectors_xyz(arc_camera_facing_side_vector, segment_delta, first_pass_point_camera_offset);
+        side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+        if (side_vector_normalization_factor != 0)
+            side_vector_normalization_factor = 1.0f / side_vector_normalization_factor;
+        scale_vector_xyz(arc_camera_facing_side_vector, arc_camera_facing_side_vector, sx * side_vector_normalization_factor);
+        add_vector_xyz(first_pass_corners[2], point_bytes + i * 16, arc_camera_facing_side_vector);
+        subtract_vector_xyz(first_pass_corners[3], point_bytes + i * 16, arc_camera_facing_side_vector);
         if (i == 1) {
             first_pass_render_attributes.c[1] = *(int *)&D_L00_00161680;
             first_pass_render_attributes.c[0] = *(int *)&D_L00_00161680;
@@ -1160,11 +1158,11 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         subtract_vector_xyz(adjusted_segment_start, adjusted_segment_start, s1B0);
         add_vector_xyz(adjusted_segment_end, adjusted_segment_end, s1B0);
         subtract_vector_xyz(s1A0, D_L00_00166DC0, adjusted_segment_start);
-        cross_vectors_xyz(w120, s1A0, segment_delta);
-        len = vector_length_xyz(w120);
-        if (len != 0)
-            len = 1.0f / len;
-        scale_vector_xyz(second_pass_width_offset, w120, sy * len);
+        cross_vectors_xyz(arc_camera_facing_side_vector, s1A0, segment_delta);
+        side_vector_normalization_factor = vector_length_xyz(arc_camera_facing_side_vector);
+        if (side_vector_normalization_factor != 0)
+            side_vector_normalization_factor = 1.0f / side_vector_normalization_factor;
+        scale_vector_xyz(second_pass_width_offset, arc_camera_facing_side_vector, sy * side_vector_normalization_factor);
         add_vector_xyz(q2[0], adjusted_segment_start, second_pass_width_offset);
         subtract_vector_xyz(q2[1], adjusted_segment_start, second_pass_width_offset);
         add_vector_xyz(q2[2], adjusted_segment_end, second_pass_width_offset);
@@ -1208,9 +1206,9 @@ int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L00_001616BC __attribute__((sda));
-extern float D_L00_001616B8 __attribute__((sda));
-extern int D_L00_001616C8 __attribute__((sda));
+extern float walloper_quad_basis_offset_scale_gp __asm__("D_L00_001616BC") __attribute__((sda));
+extern float walloper_quad_corner_scale_gp __asm__("D_L00_001616B8") __attribute__((sda));
+extern int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0 __attribute__((sda));
 extern unsigned int D_L00_001616C4 __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
@@ -1221,11 +1219,11 @@ void draw_walloper_camera_facing_quad(void *mv) {
     V_2bc1a0 scaled_corner;
     V_2bc1a0 scaled_basis_offset;
     V_2bc1a0 camera_facing_offset;
-    unsigned int c;
+    unsigned int uniform_vertex_color;
     int i;
-    FUN_001f9a68_2bc1a0(D_L00_001616BC, &scaled_basis_offset, moby_bytes + 0xD0);
+    FUN_001f9a68_2bc1a0(walloper_quad_basis_offset_scale_gp, &scaled_basis_offset, moby_bytes + 0xD0);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &scaled_basis_offset, moby_bytes + 0x10);
-    quad.tex = FUN_001f44b8_2bc1a0(D_L00_001616C8);
+    quad.tex = FUN_001f44b8_2bc1a0(walloper_quad_texture_index_gp);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -1238,15 +1236,15 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4))
-        c = D_L00_001616C4;
+        uniform_vertex_color = D_L00_001616C4;
     else
-        c = D_L00_001616C0;
-    c = (c & 0xFFFFFF) |
-        (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_00161660_f[29]) << 24);
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+        uniform_vertex_color = D_L00_001616C0;
+    uniform_vertex_color = (uniform_vertex_color & 0xFFFFFF) |
+        (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)uniform_vertex_color >> 24) * D_L00_00161660_f[29]) << 24);
+    quad.color[3] = uniform_vertex_color;
+    quad.color[2] = uniform_vertex_color;
+    quad.color[1] = uniform_vertex_color;
+    quad.color[0] = uniform_vertex_color;
     FUN_001f9a28_2bc1a0(&camera_facing_offset, &(*(V_2bc1a0 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2bc1a0(&camera_facing_transform[0], &camera_facing_offset, 1.0f);
     FUN_001f9ad8_2bc1a0(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2bc1a0 *)D_0013F5E0));
@@ -1255,7 +1253,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     FUN_001f9a68_2bc1a0(0.2f, &camera_facing_offset, &camera_facing_transform[0]);
     FUN_001f9a10_2bc1a0(&camera_facing_transform[3], &camera_facing_transform[3], &camera_facing_offset);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2bc1a0(D_L00_001616B8, &scaled_corner, &D_L00_001DBB60[3 - i]);
+        FUN_001f9a68_2bc1a0(walloper_quad_corner_scale_gp, &scaled_corner, &D_L00_001DBB60[3 - i]);
         FUN_001f9d20_2bc1a0(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2bc1a0(&quad, 0, 0);
@@ -1284,7 +1282,9 @@ extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch) {
+char *select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) __asm__("FUN_L00_002bc3b0");
+
+char *select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) {
     float start[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float target[4] __attribute__((aligned(16)));
@@ -1448,17 +1448,15 @@ extern float D_0015ED6C;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141680;
 extern int D_0015EEA4;
-extern float D_L00_001616E0 __attribute__((sda));
+extern float morphoray_base_drain_rate_gp __asm__("D_L00_001616E0") __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
 extern int D_L00_001617BC;
-extern int D_L00_001617C0;
-extern int D_L00_001617C4;
 extern int D_L00_001617C8;
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
 extern int FUN_L00_002223f8();
-extern int FUN_L00_00236e50();
+extern int draw_uniform_size_hud_stars() __asm__("FUN_L00_00236e50");
 extern int FUN_L00_0024f7c8();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -1477,7 +1475,7 @@ int allocate_packed_color_point_light_slot(void *v, float a, float b, int col) _
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
-struct Moby *FUN_L00_002c9348(void *a);
+struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
@@ -1544,9 +1542,9 @@ void morphoray_update(Moby *moby) {
     data = (struct Ray_2BDAF0 *)moby->pvars;
     if (moby->state == 0) {
         moby->state = 1;
-        D_L00_001617C0 = -1;
+        morphoray_point_light_slot = -1;
         D_L00_001617C8 = -1;
-        D_L00_001617C4 = 0;
+        morphoray_light_fade_countdown = 0;
     }
     in_range = 1;
     if (moby->prev_seq == 0 && func_0020D830_2BDAF0(moby) < 6.0f) {
@@ -1622,7 +1620,7 @@ void morphoray_update(Moby *moby) {
         }
             {
                 float level_bonus = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
-                float remaining = data->left - D_L00_001616E0 * D_0015ED6C * level_bonus;
+                float remaining = data->left - morphoray_base_drain_rate_gp * D_0015ED6C * level_bonus;
                 data->left = remaining;
                 if (remaining < 0.0f) {
                     data->left = 0.0f;
@@ -1640,17 +1638,17 @@ void morphoray_update(Moby *moby) {
             data->target = 0;
         }
         func_L00_002BE3A8_2BDAF0(moby);
-        if (D_L00_001617C0 == -1) {
-            D_L00_001617C0 = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
+        if (morphoray_point_light_slot == -1) {
+            morphoray_point_light_slot = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
         }
-        if (D_L00_001617C0 >= 0) {
-            D_L00_001617C4 = func_001F9850_2BDAF0(20);
+        if (morphoray_point_light_slot >= 0) {
+            morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
             func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[1].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[1].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[1].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[1].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[1].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
         }
         if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
             D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, moby);
@@ -1664,26 +1662,26 @@ void morphoray_update(Moby *moby) {
             data->snd = -1;
         }
         D_L00_001617BC = 1;
-        if (D_L00_001617C0 >= 0) {
+        if (morphoray_point_light_slot >= 0) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = points[0].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = points[0].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = points[0].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].radius = 7.5f;
-            brightness = func_001FA888_2BDAF0(D_L00_001617C4) * 0.05f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[0] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[1] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].col[2] = brightness * 0.25f;
-            if (func_001F9908_2BDAF0(&D_L00_001617C4) != 0) {
-                release_point_light_slot(D_L00_001617C0);
-                D_L00_001617C0 = -1;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[0].x;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[0].y;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[0].z;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            brightness = func_001FA888_2BDAF0(morphoray_light_fade_countdown) * 0.05f;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[0] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[1] = brightness;
+            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[2] = brightness * 0.25f;
+            if (func_001F9908_2BDAF0(&morphoray_light_fade_countdown) != 0) {
+                release_point_light_slot(morphoray_point_light_slot);
+                morphoray_point_light_slot = -1;
             }
         }
-        if (D_L00_001617C0 >= 0 && D_L00_001617C4 == 0) {
-            release_point_light_slot(D_L00_001617C0);
-            D_L00_001617C0 = -1;
+        if (morphoray_point_light_slot >= 0 && morphoray_light_fade_countdown == 0) {
+            release_point_light_slot(morphoray_point_light_slot);
+            morphoray_point_light_slot = -1;
         }
         if (D_L00_001617C8 >= 0) {
             if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
@@ -1694,9 +1692,9 @@ void morphoray_update(Moby *moby) {
         }
         cancel_hero_item_animation();
     }
-    if (busy && D_L00_001617C0 >= 0) {
-        release_point_light_slot(D_L00_001617C0);
-        D_L00_001617C0 = -1;
+    if (busy && morphoray_point_light_slot >= 0) {
+        release_point_light_slot(morphoray_point_light_slot);
+        morphoray_point_light_slot = -1;
     }
 }
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
@@ -1795,7 +1793,7 @@ extern void cross_vectors_xyz_c(void *, void *, void *) __asm__("func_001F9AD8")
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 unsigned char *FUN_L00_00272060(void *pos, int s, float x, float y, int color, int mode, int b, float *v, float z);
-unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
+unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y) __asm__("FUN_L00_00275910");
 void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
@@ -1887,7 +1885,9 @@ extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 extern int D_L00_00161744 __attribute__((sda));
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern Tab_2BE3A8 D_L00_001E9AB0;
-void FUN_L00_002bd0a0(struct Moby *moby) {
+void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
+
+void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     Vec_2BE3A8 aim;
     Vec_2BE3A8 segment;
     Vec_2BE3A8 wave_offset;
@@ -2333,7 +2333,7 @@ void FUN_L00_002be078(void *mv, int a, int b, float sx, float sy, float sz, int 
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF958). */
 #include "rnc/rendering/geometry_quad.h"
-extern int D_L00_00161760 __attribute__((sda));
+extern int beam_pulse_default_rgb_gp __asm__("D_L00_00161760") __attribute__((sda));
 extern int D_L00_00161764 __attribute__((sda));
 extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
 extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
@@ -2361,7 +2361,7 @@ void draw_beam_pulse_quads(void *unused) {
     quad.texture_coordinates[3][0] = 1.0f;
     quad.texture_coordinates[3][1] = 1.0f;
     {
-        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : D_L00_00161760;
+        int selected_color = D_0013E535 != 0 ? D_L00_00161764 : beam_pulse_default_rgb_gp;
         color = selected_color & 0xFFFFFF;
     }
     origin = &position;
@@ -2410,36 +2410,36 @@ void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L00_001617B4 __attribute__((sda));
-extern float D_L00_001617AC __attribute__((sda));
-extern float D_L00_001617B0 __attribute__((sda));
-extern int D_L00_001617B8 __attribute__((sda));
+extern float beam_origin_quad_basis_offset_length_gp __asm__("D_L00_001617B4") __attribute__((sda));
+extern float beam_origin_quad_first_pass_corner_scale_gp __asm__("D_L00_001617AC") __attribute__((sda));
+extern float beam_origin_quad_second_pass_corner_scale_gp __asm__("D_L00_001617B0") __attribute__((sda));
+extern int beam_origin_quad_first_pass_vertex_color_gp __asm__("D_L00_001617B8") __attribute__((sda));
 void draw_beam_origin_camera_facing_quads(void *mv) {
     char *moby_bytes = mv;
     Q_2be890 quad;
     V_2be890 camera_facing_transform[4];
     V_2be890 scaled_corner;
     V_2be890 offset_vector;
-    int c;
+    int first_pass_vertex_color;
     int i, j;
     quad.tex = FUN_001f44b8_2be890(11);
-    c = D_L00_001617B8;
+    first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color_gp;
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
     quad.unk50 = 0;
     quad.unk54 = 0;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    quad.color[3] = first_pass_vertex_color;
+    quad.color[2] = first_pass_vertex_color;
+    quad.color[1] = first_pass_vertex_color;
+    quad.color[0] = first_pass_vertex_color;
     quad.unk58 = 0;
     quad.unk5C = 1.0f;
     quad.unk60 = 1.0f;
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, D_L00_001617B4);
+    FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);
     FUN_001f9a10_2be890(&camera_facing_transform[3], &D_L00_001DBF60_2be890, &offset_vector);
     FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2be890(&camera_facing_transform[0], &offset_vector, 1.0f);
@@ -2447,7 +2447,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     FUN_001f9bf8_2be890(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
     FUN_001f9ad8_2be890(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2be890(D_L00_001617AC, &scaled_corner, &D_L00_001DBF20[3 - i]);
+        FUN_001f9a68_2be890(beam_origin_quad_first_pass_corner_scale_gp, &scaled_corner, &D_L00_001DBF20[3 - i]);
         FUN_001f9d20_2be890(&quad.corner[3 - i], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
@@ -2456,7 +2456,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.color[1] = -1;
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
-        FUN_001f9a68_2be890(D_L00_001617B0, &scaled_corner, &D_L00_001DBF20[3 - j]);
+        FUN_001f9a68_2be890(beam_origin_quad_second_pass_corner_scale_gp, &scaled_corner, &D_L00_001DBF20[3 - j]);
         FUN_001f9d20_2be890(&quad.corner[3 - j], &scaled_corner, &camera_facing_transform[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
@@ -2743,7 +2743,7 @@ extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
 f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
                      f32 probe_start_horizontal_offset) __asm__("FUN_L00_002bf050");
 
-f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
+f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 probe_heading, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
                      f32 probe_start_horizontal_offset) {
     VU probe_start;
     VU probe_end;
@@ -2762,7 +2762,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     Hit *t;
 
     da = arc / step;
-    best = ang;
+    best = probe_heading;
     sweep_probe_count = FUN_001fa6d0_c(step);
     bestDist = 0.0f;
     x = moby->p78;
@@ -2771,11 +2771,11 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     if (target_position != 0) {
         preferred_heading = FUN_001f9e90_c(target_position[0] - moby->f10, target_position[1] - moby->f14);
     } else {
-        preferred_heading = ang;
+        preferred_heading = probe_heading;
     }
     arc *= 0.5f;
-    fast_add_rotations(ang, arc);
-    arc = fast_subtract_rotations(ang, arc);
+    fast_add_rotations(probe_heading, arc);
+    arc = fast_subtract_rotations(probe_heading, arc);
 
     qcopy(&probe_start, probe_origin);
     probe_start.f[1] += fast_sin(preferred_heading) * probe_start_horizontal_offset;
@@ -2856,10 +2856,10 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
         arc = fast_add_rotations(arc, da);
     }
 
-    ang = fast_subtract_rotations(best, 1.5707964f);
+    probe_heading = fast_subtract_rotations(best, 1.5707964f);
     qcopy(&probe_start, probe_origin);
-    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
-    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
+    probe_start.f[1] += fast_sin(probe_heading) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(probe_heading) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
     probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
@@ -2873,10 +2873,10 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
             best = fast_add_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
     }
-    ang = fast_add_rotations(ang, 3.1415927f);
+    probe_heading = fast_add_rotations(probe_heading, 3.1415927f);
     qcopy(&probe_start, probe_origin);
-    probe_start.f[1] += fast_sin(ang) * probe_start_horizontal_offset;
-    probe_start.f[0] += fast_cos(ang) * probe_start_horizontal_offset;
+    probe_start.f[1] += fast_sin(probe_heading) * probe_start_horizontal_offset;
+    probe_start.f[0] += fast_cos(probe_heading) * probe_start_horizontal_offset;
     probe_start.f[2] += probe_height_offset * 0.125f;
     qcopy(&probe_end, &probe_start);
     probe_end.f[1] += fast_sin(best) * horizontal_probe_distance;
@@ -3113,10 +3113,10 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int ch
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
-void FUN_L00_0025d1b8(unsigned char *);
+void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
 
-unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) {
+unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initial_vector) {
     unsigned char *spawned_moby = create_moby(0xba);
     if (spawned_moby) {
         char *moby_vars;
@@ -3128,9 +3128,9 @@ unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector)
         spawned_moby[0xbc] = 0;
         qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(moby_vars + 0x10, initial_vector);
-        *(int *)(moby_vars + 0x60) = a;
+        *(int *)(moby_vars + 0x60) = linked_moby;
         FUN_L00_00250df8(spawned_moby);
-        FUN_L00_0025d1b8(spawned_moby);
+        copy_hero_moby_field_38(spawned_moby);
         *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
     }
     return spawned_moby;

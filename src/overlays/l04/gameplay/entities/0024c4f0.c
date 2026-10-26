@@ -43,7 +43,7 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
     float perpendicular_offset_point_xy[4];
-    float det, t, clamped_segment_parameter;
+    float det, unclamped_segment_parameter, clamped_segment_parameter;
 
     subtract_vector_xyz(segment_direction, segment_end, segment_start);
     subtract_vector_xyz(query_to_start_offset, segment_start, query_point);
@@ -57,16 +57,16 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
         return 0.0f;
     }
     det = 1.0f / det;
-    t = perpendicular_direction_xy[1] * query_to_start_offset[0] - perpendicular_direction_xy[0] * query_to_start_offset[1];
-    t = t * det;
-    clamped_segment_parameter = t;
+    unclamped_segment_parameter = perpendicular_direction_xy[1] * query_to_start_offset[0] - perpendicular_direction_xy[0] * query_to_start_offset[1];
+    unclamped_segment_parameter = unclamped_segment_parameter * det;
+    clamped_segment_parameter = unclamped_segment_parameter;
     if (clamped_segment_parameter < 0.0f)
         clamped_segment_parameter = 0.0f;
     if (1.0f < clamped_segment_parameter)
         clamped_segment_parameter = 1.0f;
     scale_vector_xyz(closest_point, segment_direction, clamped_segment_parameter);
     add_vector_xyz(closest_point, closest_point, segment_start);
-    return t;
+    return unclamped_segment_parameter;
 }
 #define NOT_SDA
 

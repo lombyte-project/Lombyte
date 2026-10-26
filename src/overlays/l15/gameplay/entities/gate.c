@@ -227,7 +227,8 @@ typedef struct {
 } SoundSlot_2A48B0;
 
 extern float D_0015ED6C;
-extern float D_L15_001614F8 __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/gate_globals.h"
+extern float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") __attribute__((sda));
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -263,7 +264,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             gate_moby->f30 = 0xFF;
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
-            gate_moby->pos.z = gate_moby->pos.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_moby->pos.z - vertical_gate_travel_distance_gp;
             gate_moby->state = 5;
         }
         break;
@@ -288,12 +289,12 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             }
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
-            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance_gp;
             gate_moby->state = 5;
         }
         break;
     case GATE_OPENING:
-        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        step = (vertical_gate_travel_distance_gp / 0.6f) * D_0015ED6C;
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
@@ -301,14 +302,14 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
             ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
-        if (D_L15_001614F8 < (gate_vars->travel = gate_vars->travel + step)) {
+        if (vertical_gate_travel_distance_gp < (gate_vars->travel = gate_vars->travel + step)) {
             if (gate_vars->sound != -1 &&
                 ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
                 ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->sound = -1;
-            gate_vars->travel = D_L15_001614F8;
+            gate_vars->travel = vertical_gate_travel_distance_gp;
             gate_moby->state = 3;
         }
         {
@@ -339,7 +340,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         }
         break;
     case GATE_CLOSING:
-        step = (D_L15_001614F8 / 0.6f) * D_0015ED6C;
+        step = (vertical_gate_travel_distance_gp / 0.6f) * D_0015ED6C;
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
@@ -380,7 +381,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         break;
     case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
-            gate_moby->pos.z = gate_vars->home.z - D_L15_001614F8;
+            gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance_gp;
             D_L15_00184B28_2A48B0 = 1;
         } else {
             if (D_001413F4[0] == 2) {
@@ -410,8 +411,8 @@ extern void *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern char D_L15_001673C0[];
 extern char *D_L15_0015FFE4;
 extern struct Moby *D_L15_0015FFD8;
-extern f32 D_L15_001614FC __attribute__((sda));
-extern f32 D_L15_00161500 __attribute__((sda));
+extern f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") __attribute__((sda));
+extern f32 swinging_door_swing_duration_gp __asm__("D_L15_00161500") __attribute__((sda));
 
 void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
 
@@ -464,7 +465,7 @@ void update_swinging_door(struct Moby *moby) {
         if (vars->reverse) {
             moby->flags |= 0x8000;
         }
-        step = D_L15_001614FC * DEG_TO_RAD;
+        step = swinging_door_swing_angle_degrees_gp * DEG_TO_RAD;
         if (!vars->reverse) {
             step = -step;
         }
@@ -483,8 +484,8 @@ void update_swinging_door(struct Moby *moby) {
         }
         break;
     case SWINGING_DOOR_OPENING:
-        vars->swing = fast_add_rotations(vars->swing, D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time);
-        limit = D_L15_001614FC * DEG_TO_RAD;
+        vars->swing = fast_add_rotations(vars->swing, swinging_door_swing_angle_degrees_gp / swinging_door_swing_duration_gp * DEG_TO_RAD * frame_time);
+        limit = swinging_door_swing_angle_degrees_gp * DEG_TO_RAD;
         if (vars->swing < limit) {
             vars->swing = limit;
             moby->state = 3;
@@ -502,7 +503,7 @@ void update_swinging_door(struct Moby *moby) {
         }
         break;
     case SWINGING_DOOR_CLOSING:
-        vars->swing = fast_add_rotations(vars->swing, -(D_L15_001614FC / D_L15_00161500 * DEG_TO_RAD * frame_time));
+        vars->swing = fast_add_rotations(vars->swing, -(swinging_door_swing_angle_degrees_gp / swinging_door_swing_duration_gp * DEG_TO_RAD * frame_time));
         if (0.0f < vars->swing) {
             vars->swing = 0.0f;
             moby->state = 1;
@@ -865,11 +866,11 @@ typedef struct {
     float direction;
 } UpdateVars_2938;
 extern int D_L15_001619EC __attribute__((sda));
-extern int D_L15_001619F4 __attribute__((sda));
-extern int D_L15_001619F8 __attribute__((sda));
-extern float D_L15_001619FC __attribute__((sda));
-extern float D_L15_00161A00 __attribute__((sda));
-extern float D_L15_00161A04 __attribute__((sda));
+extern int construction_arm_effect_duration_min_frames_gp __asm__("D_L15_001619F4") __attribute__((sda));
+extern int construction_arm_effect_duration_max_frames_gp __asm__("D_L15_001619F8") __attribute__((sda));
+extern float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") __attribute__((sda));
+extern float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") __attribute__((sda));
+extern float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") __attribute__((sda));
 extern unsigned short *D_L15_001ABE40[];
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -930,7 +931,7 @@ void construction_arm_update(struct Moby *moby)
     switch (moby->state) {
     case CONSTRUCTION_ARM_INITIALIZE:
         arm_vars->timer = truncate_float_to_s32(random_float_between(
-            FUN_L15_001f8648(D_L15_00161A00 * 60.0f), FUN_L15_001f8648(D_L15_00161A04 * 60.0f)));
+            FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f), FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f)));
         *(int *)&arm_vars->yaw_velocity = arm_vars->side = *(int *)&arm_vars->yaw = 0;
         moby->update_dist = 0xff;
         moby->state = 1;
@@ -984,8 +985,8 @@ void construction_arm_update(struct Moby *moby)
     case CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION:
         if (FUN_001f9b48(&moby->pos, D_L15_001673C0) < 20.0f &&
             random_integer_below(2) == 0 && moby->visible != 0) {
-            speed = random_float_between(D_L15_001619FC / 5.0f, D_L15_001619FC) * frame_time;
-            spread = random_float_between(0.0f, D_L15_001619FC / 5.0f) * frame_time;
+            speed = random_float_between(construction_arm_effect_speed_max_gp / 5.0f, construction_arm_effect_speed_max_gp) * frame_time;
+            spread = random_float_between(0.0f, construction_arm_effect_speed_max_gp / 5.0f) * frame_time;
             direction = random_angle_radians_7880();
             velocity.f[0] = fast_cos(arm_vars->direction) * speed;
             velocity.f[1] = fast_sin(arm_vars->direction) * speed;
@@ -996,8 +997,8 @@ void construction_arm_update(struct Moby *moby)
             /* Retail computes the sum but passes velocity to the effect helper. */
             FUN_L00_001ff290(&sum, &velocity, &offset);
             moby_point_position(moby, 1, &origin);
-            first = scale_game_frames(D_L15_001619F4);
-            duration = scale_game_frames(D_L15_001619F8);
+            first = scale_game_frames(construction_arm_effect_duration_min_frames_gp);
+            duration = scale_game_frames(construction_arm_effect_duration_max_frames_gp);
             duration = FUN_L00_00257b90(first, duration);
             FUN_0025c2f0(40000.0f, &origin, &velocity, D_L15_001619EC, D_L15_001619EC, duration, 1);
         }
@@ -1010,8 +1011,8 @@ void construction_arm_update(struct Moby *moby)
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
         if (moby->prev_seq == arm_vars->side * 2 + 3 && (moby->anim_flags & 2)) {
-            minimum = FUN_L15_001f8648(D_L15_00161A00 * 60.0f);
-            maximum = FUN_L15_001f8648(D_L15_00161A04 * 60.0f);
+            minimum = FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f);
+            maximum = FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f);
             arm_vars->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);
@@ -1306,15 +1307,15 @@ typedef struct {
 extern UPath *D_L15_001B0AB0[];
 extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
-extern float D_L15_00161A08 __attribute__((sda));
-extern float D_L15_00161A0C __attribute__((sda));
+extern float helicopter_bob_period_gp __asm__("D_L15_00161A08") __attribute__((sda));
+extern float helicopter_bob_amplitude_gp __asm__("D_L15_00161A0C") __attribute__((sda));
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 extern void start_blarg_commander_knockback(void *, struct Moby *) __asm__("FUN_L12_00308708");
 void process_helicopter_hits(struct Moby *moby) __asm__("FUN_L15_002c6900");
 
 void process_helicopter_hits(struct Moby *m) __asm__("FUN_L15_002c6900");
-extern void FUN_L02_00261c80(void *, float *, float);
+extern void select_moby_target_goal(void *, float *, float) __asm__("FUN_L02_00261c80");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
@@ -1391,7 +1392,7 @@ void helicopter_update(struct Moby *moby) {
     if (vars->area_path == -1) {
         vars->range = vars->chase_range;
     near:
-        FUN_L02_00261c80(moby, goal.pos.f, vars->range);
+        select_moby_target_goal(moby, goal.pos.f, vars->range);
     } else {
         UPath *path;
         vars->range = vars->chase_range;
@@ -1675,12 +1676,12 @@ void helicopter_update(struct Moby *moby) {
         }
     }
     {
-        float z = moby->pos.z - D_L15_00161A0C * fast_cos(vars->bob_angle);
-        float period = D_L15_00161A08 * 60.0f;
+        float z = moby->pos.z - helicopter_bob_amplitude_gp * fast_cos(vars->bob_angle);
+        float period = helicopter_bob_period_gp * 60.0f;
         moby->pos.z = z;
         vars->bob_angle = fast_add_rotations(vars->bob_angle, 6.2831855f / scale_time(period));
     }
-    moby->pos.z += D_L15_00161A0C * fast_cos(vars->bob_angle);
+    moby->pos.z += helicopter_bob_amplitude_gp * fast_cos(vars->bob_angle);
     if (vars->pilot != 0) {
         *(u128 *)&vars->pilot->pos = *(u128 *)&moby->pos;
         *(u128 *)&vars->pilot->rot = *(u128 *)&moby->rot;
@@ -1791,7 +1792,7 @@ extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-int FUN_L00_0025fcb8(char *a, char *o, float best);
+int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
 float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");
@@ -2134,16 +2135,16 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     case ULTRAMECH_FOLLOW_ENTRY_PATH: {
         UPath *path = D_L15_001B0AB0[ultramech_vars->path];
         float speed = frame_time * 12.0f;
-        float dist;
+        float entry_path_distance_or_fraction;
         float entry_path_step_length;
         FUN_L00_0025df68(path, &ultramech_moby->pos, &position_or_motion_vector, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-        dist = convert_integer_to_float(seg) * path->pt[0].f[3];
-        dist += frac;
-        dist += 2.0f;
-        seg = func_001FA898_r(dist / path->pt[0].f[3]);
-        dist -= convert_integer_to_float(seg) * path->pt[0].f[3];
-        dist /= path->pt[0].f[3];
-        frac = dist;
+        entry_path_distance_or_fraction = convert_integer_to_float(seg) * path->pt[0].f[3];
+        entry_path_distance_or_fraction += frac;
+        entry_path_distance_or_fraction += 2.0f;
+        seg = func_001FA898_r(entry_path_distance_or_fraction / path->pt[0].f[3]);
+        entry_path_distance_or_fraction -= convert_integer_to_float(seg) * path->pt[0].f[3];
+        entry_path_distance_or_fraction /= path->pt[0].f[3];
+        frac = entry_path_distance_or_fraction;
         if (seg >= path->n - 1) {
             float z = probe_ground_height(&ultramech_moby->pos, 0, 0.5f);
             if (ultramech_moby->pos.f[2] < z)
@@ -2152,8 +2153,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             ultramech_vars->timer = scale_game_frames(0xF);
             break;
         }
-        dist = FUN_001f9b48(&ultramech_moby->pos, (UVec *)path + path->n);
-        if (dist < speed / FUN_L04_001f1978(26.0f) && ultramech_moby->anim != 5) {
+        entry_path_distance_or_fraction = FUN_001f9b48(&ultramech_moby->pos, (UVec *)path + path->n);
+        if (entry_path_distance_or_fraction < speed / FUN_L04_001f1978(26.0f) && ultramech_moby->anim != 5) {
             blend_moby_animation(ultramech_moby, 5, 0, scale_game_frames(6));
         }
         subtract_vector_xyz(&position_or_motion_vector, (UVec *)path + (seg + 2), (UVec *)path + (seg + 1));
@@ -2524,8 +2525,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 extern float D_L15_00161B00 __attribute__((sda));
 extern float D_L15_00161B04 __attribute__((sda));
 extern float D_L15_00161B08 __attribute__((sda));
-extern float D_L15_00161B2C __attribute__((sda));
-extern float D_L15_00161B30 __attribute__((sda));
+extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
+extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;
 extern int D_001413D0 __attribute__((section(".data")));
 extern char D_00178700[] __asm__("D_L15_00178700");
@@ -2575,7 +2576,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     float reaction_product;
     unsigned char state;
 
-    *(float *)((char *)ultramech_moby + 0x2C) = D_L15_00161B2C * *(float *)(ultramech_moby->cls + 0x24);
+    *(float *)((char *)ultramech_moby + 0x2C) = ultramech_pre_hit_scale_multiplier_gp * *(float *)(ultramech_moby->cls + 0x24);
     impact = 0.0f;
     ultramech_vars->w1C8 = 0;
     for (i = 0; i < 64; i++) {
@@ -2670,7 +2671,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     }
     *(unsigned char *)((char *)ultramech_moby + 0xA4) = 0xFF;
     FUN_0024cde0(ultramech_moby, (char *)ultramech_vars + 0x60);
-    *(float *)((char *)ultramech_moby + 0x2C) = *(float *)(ultramech_moby->cls + 0x24) * D_L15_00161B30;
+    *(float *)((char *)ultramech_moby + 0x2C) = *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
     ultramech_vars->w164 = 0;
     if (ultramech_moby->state != 1) {
         if (ultramech_vars->w1D0 != -1)

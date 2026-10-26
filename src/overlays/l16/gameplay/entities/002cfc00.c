@@ -27,7 +27,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     struct Hero *hero_state = &hero;
     float displacement_vector[4];
     char *l1;
-    char *l2;
+    char *group_candidate_moby;
     char *other;
     char *od;
 
@@ -67,14 +67,14 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
         }
     }
     if (*(int *)(od + 0x48) != -1) {
-        get_first_moby_in_group((int *)&l2, *(int *)(od + 0x48), 0, 0);
-        while (l2) {
-            if (*(short *)(l2 + 0xA6) == 0x474) {
+        get_first_moby_in_group((int *)&group_candidate_moby, *(int *)(od + 0x48), 0, 0);
+        while (group_candidate_moby) {
+            if (*(short *)(group_candidate_moby + 0xA6) == 0x474) {
                 float m[16];
-                subtract_vector_xyz(displacement_vector, l2 + 0x10, data + 0x260);
+                subtract_vector_xyz(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
                 if (!(8.0f < vector_length_xyz(displacement_vector))) {
                     set_identity_matrix(m);
-                    transpose_rotation_matrix(m, l2 + 0xC0);
+                    transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);
                     if (absolute_float(displacement_vector[0]) < 2.8f && absolute_float(displacement_vector[1]) < 1.4f &&
                         absolute_float(displacement_vector[2]) < 0.5f) {
@@ -83,7 +83,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&l2, (int)l2, 0, 0);
+            get_next_moby_in_group((int *)&group_candidate_moby, (int)group_candidate_moby, 0, 0);
         }
     }
 }

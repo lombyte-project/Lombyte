@@ -764,7 +764,7 @@ extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00
 extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
 extern void FUN_L00_00216e48(int, int, int);
 extern void stop_hero_motion_without_forward_support(float, float) __asm__("FUN_L00_00217118");
-extern void FUN_L00_00217368(int, int);
+extern void emit_filtered_entry_sparkles(int, int) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002334d0(float *dst, float *src, float h);
@@ -1634,20 +1634,20 @@ void update_hero_state_motion(void) {
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
+                    emit_filtered_entry_sparkles((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], -0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)slot_zero_item_moby,
+                    emit_filtered_entry_sparkles((int)slot_zero_item_moby,
                                      collect_mobies_in_sphere(0.8f, vec[4], 0, ((Moby *)hero.moby), vec[0]));
                     yaw = FUN_001f9b80_cf(hero.motion.rot.f[2], 0.87266463f);
                     vec[4][0] = fast_cos(yaw) * 0.8f;
                     vec[4][1] = fast_sin(yaw) * 0.8f;
                     vec[4][2] = 0.55f;
                     add_vector_xyz(vec[4], vec[4], hero.motion.pos.f);
-                    FUN_L00_00217368((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
+                    emit_filtered_entry_sparkles((int)slot_zero_item_moby, collect_mobies_in_sphere(0.8f, vec[4], 0, slot_zero_item_moby, vec[0]));
                 }
             }
         }
@@ -1756,17 +1756,17 @@ void update_hero_state_motion(void) {
             turn_to(0, frame_scale_sq * 0.008f, frame_scale_sq * 0.15f, frame_time * 9.948377f);
         } else {
             float sp;
-            float st;
+            float acceleration_reduction_angle;
 
             sp = hero.unk229C;
-            st = hero.motion.unk188;
+            acceleration_reduction_angle = hero.motion.unk188;
             if (hero.unk20A8 != 0) {
-                k = 1.0f - st * 0.55f;
+                k = 1.0f - acceleration_reduction_angle * 0.55f;
                 if (k < 0.0f) {
                     k = 0.0f;
                 }
             } else if (sp < 0.8f) {
-                if (st > 0.5235988f) {
+                if (acceleration_reduction_angle > 0.5235988f) {
                     k = 0.0f;
                 }
             }

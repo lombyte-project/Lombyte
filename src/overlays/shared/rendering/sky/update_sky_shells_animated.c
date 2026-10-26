@@ -37,23 +37,23 @@ void update_sky_shells_animated(void) {
         SKY_SHELL_MEDIUM_ROTATION = 3,
         SKY_SHELL_FAST_ROTATION = 4
     };
-    float v[4] __attribute__((aligned(16)));
+    float animated_sky_shell_rotation_angles[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
-    qzero(v);
+    qzero(animated_sky_shell_rotation_angles);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
         case SKY_SHELL_SLOW_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_MEDIUM_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         case SKY_SHELL_FAST_ROTATION:
-            v[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            animated_sky_shell_rotation_angles[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, animated_sky_shell_rotation_angles);
             break;
         default:
             FUN_001f9fc8_c(D_L00_001BD7E0);
@@ -103,19 +103,19 @@ void draw_sky_shells_with_fast_and_slow_rotation(void) {
         SKY_SHELL_FAST_ROTATION = 1,
         SKY_SHELL_SLOW_ROTATION = 2
     };
-    float v[4] __attribute__((aligned(16)));
+    float shell_rotation_angles[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
-    qzero(v);
+    qzero(shell_rotation_angles);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); ++i) {
         switch (i) {
         case SKY_SHELL_FAST_ROTATION:
-            v[2] = (float)*(unsigned short *)&D_L00_0015F5CC * 0.0000958738017f - 3.14159265f;
-            FUN_001f9fc8_cf(D_L00_001BD7E0, v);
+            shell_rotation_angles[2] = (float)*(unsigned short *)&D_L00_0015F5CC * 0.0000958738017f - 3.14159265f;
+            FUN_001f9fc8_cf(D_L00_001BD7E0, shell_rotation_angles);
             break;
         case SKY_SHELL_SLOW_ROTATION:
-            v[2] = (float)(D_L00_0015F5CC & 0x1FFFF) * 0.00004793690085f - 3.14159265f;
-            FUN_001f9fc8_cf(D_L00_001BD7E0, v);
+            shell_rotation_angles[2] = (float)(D_L00_0015F5CC & 0x1FFFF) * 0.00004793690085f - 3.14159265f;
+            FUN_001f9fc8_cf(D_L00_001BD7E0, shell_rotation_angles);
             break;
         default:
             FUN_001fa070_cf(D_L00_001BD7E0);
@@ -136,7 +136,7 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
 
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
-    float v[4] __attribute__((aligned(16)));
+    float shell_rotation_angles[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     if (*(short *)(D_L00_0016051C + 8) == 0)
@@ -144,9 +144,9 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     sky_particles_update();
     sky_sprite_proc();
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
-    qzero(v);
-    v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    qzero(shell_rotation_angles);
+    shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, shell_rotation_angles);
     sky_draw_shell(1);
 }
 extern char D_L00_001BD7E0[];
@@ -159,7 +159,7 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
-    float v[4] __attribute__((aligned(16)));
+    float third_shell_rotation_angles[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
     if (*(short *)(D_L00_0016051C + 8) == 0)
@@ -168,9 +168,9 @@ void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     sky_sprite_proc();
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
     sky_draw_shell(1);
-    qzero(v);
-    v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    qzero(third_shell_rotation_angles);
+    third_shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, third_shell_rotation_angles);
     sky_draw_shell(2);
 }
 typedef union {
@@ -281,23 +281,23 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
         SKY_SHELL_MEDIUM_ROTATION = 2,
         SKY_SHELL_FAST_ROTATION = 3
     };
-    float v[4] __attribute__((aligned(16)));
+    float sky_shell_layer_rotation_angles[4] __attribute__((aligned(16)));
     int i;
     *(short *)(D_L00_0016051C + 4) = 0;
-    qzero(v);
+    qzero(sky_shell_layer_rotation_angles);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
         switch (i) {
         case SKY_SHELL_SLOW_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            sky_shell_layer_rotation_angles[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         case SKY_SHELL_MEDIUM_ROTATION:
-            v[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            sky_shell_layer_rotation_angles[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         case SKY_SHELL_FAST_ROTATION:
-            v[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
-            fun_001fa070(D_L00_001BD7E0, v);
+            sky_shell_layer_rotation_angles[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
+            fun_001fa070(D_L00_001BD7E0, sky_shell_layer_rotation_angles);
             break;
         default:
             set_identity_matrix(D_L00_001BD7E0);
@@ -336,15 +336,15 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
 
 void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
-    float v[4] __attribute__((aligned(16)));
+    float sky_shell_rotation_angles[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(0);
-    qzero(v);
-    v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    qzero(sky_shell_rotation_angles);
+    sky_shell_rotation_angles[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, sky_shell_rotation_angles);
     sky_draw_shell(1);
-    v[2] = (D_L00_0015F5CC % 100000) * 0.0000628318521f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    sky_shell_rotation_angles[2] = (D_L00_0015F5CC % 100000) * 0.0000628318521f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, sky_shell_rotation_angles);
     sky_draw_shell(2);
 }
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
@@ -371,18 +371,18 @@ void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 
 void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) {
-    float v[4] __attribute__((aligned(16)));
+    float animated_shell_rotation_angles[4] __attribute__((aligned(16)));
     *(short *)(D_L00_0016051C + 4) = 0;
     sky_draw_shell(0);
     sky_draw_shell(1);
     sky_draw_shell(2);
     sky_draw_shell(3);
-    qzero(v);
-    v[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    qzero(animated_shell_rotation_angles);
+    animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(4);
-    v[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
-    fun_001fa070(D_L00_001BD7E0, v);
+    animated_shell_rotation_angles[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
+    fun_001fa070(D_L00_001BD7E0, animated_shell_rotation_angles);
     sky_draw_shell(5);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(6);
@@ -400,7 +400,8 @@ void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
 void FUN_001fa070_28b1a0(void *, void *) __asm__("FUN_001fa070");
 void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
 
-extern float D_L00_001604C0 __attribute__((sda));
+#include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated_globals.h"
+extern float sky_shell_rotation_phase_step_gp __asm__("D_L00_001604C0") __attribute__((sda));
 extern OvlQuad D_L00_00160520 __attribute__((section(".sdata")));
 void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 
@@ -412,41 +413,41 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         SKY_SHELL_ONE_AND_A_HALF_SCALE = 4,
         SKY_SHELL_ONE_AND_A_QUARTER_SCALE = 5
     };
-    float v[4] __attribute__((aligned(16)));
+    float sky_shell_transform_rotation_angles[4] __attribute__((aligned(16)));
     int i = 0;
     float *shell_rotation_phase;
     unsigned char *M;
     float k;
     D_L00_0016051C_28b1a0->h4 = 0;
     FUN_001f9fc8_28b1a0(D_L00_001BD7E0_28b1a0);
-    FUN_001f99f8_28b1a0(v);
+    FUN_001f99f8_28b1a0(sky_shell_transform_rotation_angles);
     for (; i < D_L00_0016051C_28b1a0->h6; i++) {
         shell_rotation_phase = (float *)(D_L00_0016051C_28b1a0->e[i] + 8);
         k = 1.0f;
         switch (i) {
         case SKY_SHELL_TRIPLE_SCALE:
-            v[1] = 0.02f;
+            sky_shell_transform_rotation_angles[1] = 0.02f;
             k = 3.0f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.55f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step_gp * 0.55f;
             break;
         case SKY_SHELL_TWO_AND_A_HALF_SCALE:
-            v[1] = -0.02f;
+            sky_shell_transform_rotation_angles[1] = -0.02f;
             k = 2.5f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.6f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step_gp * 0.6f;
             break;
         case SKY_SHELL_DOUBLE_SCALE:
-            v[1] = 0.01f;
+            sky_shell_transform_rotation_angles[1] = 0.01f;
             k = 2.0f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.7f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step_gp * 0.7f;
             break;
         case SKY_SHELL_ONE_AND_A_HALF_SCALE:
-            v[1] = -0.01f;
+            sky_shell_transform_rotation_angles[1] = -0.01f;
             k = 1.5f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.75f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step_gp * 0.75f;
             break;
         case SKY_SHELL_ONE_AND_A_QUARTER_SCALE:
             k = 1.25f;
-            *shell_rotation_phase += D_L00_001604C0 * 0.8f;
+            *shell_rotation_phase += sky_shell_rotation_phase_step_gp * 0.8f;
             break;
         default:
             FUN_001f9fc8_28b1a0(D_L00_001BD7E0_28b1a0);
@@ -454,8 +455,8 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         }
         if (i > 0) {
             M = D_L00_001BD7E0_28b1a0;
-            v[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
-            FUN_001fa070_28b1a0(M, v);
+            sky_shell_transform_rotation_angles[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
+            FUN_001fa070_28b1a0(M, sky_shell_transform_rotation_angles);
             FUN_001f9a80_28b1a0(M, M, k);
             FUN_001f9a80_28b1a0(M + 0x10, M + 0x10, k);
             FUN_001f9a80_28b1a0(M + 0x20, M + 0x20, k);

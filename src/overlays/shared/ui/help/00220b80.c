@@ -359,7 +359,8 @@ struct HeldGadgetVars {
 
 extern int D_00141660 __attribute__((section(".data")));
 extern HeroTableRow2C D_L02_0017C228[];
-extern s32 D_L02_0015F674 __attribute__((sda));
+#include "rnc/overlay/shared/ui/help/00220b80_globals.h"
+extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
@@ -632,8 +633,8 @@ s32 process_hero_item_action_input(void)
     if (hero.state_timer == saved) {
         if (hero_slot_item_id(3) == 3 && hero.state.current != 0x81 &&
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
-            tick_countdown_32_alt(&D_L02_0015F674);
-            if (D_L02_0015F674 != 0) {
+            tick_countdown_32_alt(&hero_button_8_double_press_countdown_gp);
+            if (hero_button_8_double_press_countdown_gp != 0) {
                 if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
                     hero.state.control_mode == 0xC ||
                     ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) {
@@ -643,7 +644,7 @@ s32 process_hero_item_action_input(void)
                 }
             }
             if ((controller_state.pressed & 8) && hero.state.current != 0x81) {
-                D_L02_0015F674 = scale_game_frames(0x1E);
+                hero_button_8_double_press_countdown_gp = scale_game_frames(0x1E);
             }
         } else if (hero.state.current != HERO_STATE_WRENCH_COMBO && hero.state.current != 0x81 && hero.state.current != HERO_STATE_CROUCH_SWING &&
                    hero.state.current != HERO_STATE_HURT) {

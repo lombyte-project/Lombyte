@@ -291,7 +291,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x3C, 0, (float)n);
         break;
     }
-    case 0x37: {
+    case HERO_STATE_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->unk20A7 = 1;
@@ -440,7 +440,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x82: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk20A7 = 1;
@@ -1324,7 +1324,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
-    case 0x20:
+    case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
     case 0x51: {
         struct Hero *p = &hero;
@@ -1401,7 +1401,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x20: {
+        case HERO_STATE_HELD_ITEM_ATTACK: {
             struct Hero *q = &hero;
             if (((void *)q->items[0].moby) == 0)
                 break;
@@ -1717,7 +1717,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(FUN_L12_00227f10(0), 0, -1.0f);
         break;
     }
-    case 0x78: {
+    case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;

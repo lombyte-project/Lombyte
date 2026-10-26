@@ -28,14 +28,14 @@ void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 void emit_moby_sprite_particles(char *moby) {
     L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
-    float e[4] __attribute__((aligned(16)));
+    float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float color_blend_offset;
 
     *(float *)(moby + 0x18) += 0.5f;
     func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
-    func_L00_001FF4B0_298940(e, d, 0.1f);
+    func_L00_001FF4B0_298940(particle_position_step, d, 0.1f);
     func_001F9BD8_298940(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
@@ -54,7 +54,7 @@ void emit_moby_sprite_particles(char *moby) {
         col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - color_blend_offset));
         func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                  sprite_data->d[i]);
-        func_001F9BD8_298940(d, d, e);
+        func_001F9BD8_298940(d, d, particle_position_step);
     }
 }
 #include "sda.h"
@@ -160,7 +160,7 @@ void rocket_update(char *rocket) {
     float aim[4] __attribute__((aligned(16)));
     float speed, intercept_time_squared_coefficient, intercept_time_linear_coefficient, discriminant_sqrt, intercept_time_plus_root, intercept_time_minus_root, intercept_time, yaw, pitch, dist;
     char *rocket_position;
-    unsigned char *g;
+    unsigned char *homing_target_state;
     char *tg;
     float ground_aim_height;
     char *tb;
@@ -172,15 +172,15 @@ void rocket_update(char *rocket) {
             (unsigned char)shot_data->target[0x20] == 0xFD)
             rocket[0x20] = 2;
         rocket_position = rocket + 0x10;
-        g = D_0013F350_cc2e8;
-        if ((unsigned char)(g[0x20A4] - 1) < 2 && (tg = shot_data->target) == *(char **)(g + 0x2080)) {
+        homing_target_state = D_0013F350_cc2e8;
+        if ((unsigned char)(homing_target_state[0x20A4] - 1) < 2 && (tg = shot_data->target) == *(char **)(homing_target_state + 0x2080)) {
             speed = vlen_cc2e8(shot_data);
             qcopy(tp, tg + 0x10);
             ground_aim_height = ground_cc2e8(tp, 0, 0.5f) + 0.2f;
-            *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(g + 0x100);
+            *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(homing_target_state + 0x100);
             hv[2] = 0.0f;
             tp[2] = ground_aim_height;
-            if (g[0x20A4] == 2)
+            if (homing_target_state[0x20A4] == 2)
                 tp[2] = ground_aim_height + 2.0f;
             vsub_cc2e8(diff, tp, rocket_position);
             intercept_time_squared_coefficient = speed * speed - lensq_cc2e8(hv);

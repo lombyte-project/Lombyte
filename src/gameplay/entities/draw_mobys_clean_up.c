@@ -4,7 +4,7 @@
 
 extern u8 D_0015FEE0[];
 extern u8 D_0015FEF0[];
-extern s32 D_0015FF38;
+#include "rnc/gameplay/entities/draw_mobys_clean_up_globals.h"
 extern void noop_core_callback() __asm__("func_001F21B0");
 extern s32 noop_core_callback_secondary() __asm__("func_001F21B8");
 extern s32 dma_moby_textures() __asm__("FUN_0020cdf0");
@@ -20,7 +20,7 @@ void draw_mobys_clean_up(void) {
     noop_core_callback(D_0015FEE0, 5);
     if (draw_config.moby.enabled != 0) {
         process_moby_anim_data();
-        if (D_0015FF38 != 0) {
+        if (moby_word_fill_table_bytes != 0) {
             FUN_002116b8();
         }
     }

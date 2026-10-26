@@ -50,7 +50,7 @@ typedef struct {
 } VoiceSlot;
 
 extern u8 D_0013E550[];
-extern s32 D_L09_0015F5C4;
+#include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
 extern Vec4f D_L09_00166F40;
 extern u8 D_L09_00208320[];
 
@@ -116,7 +116,7 @@ void seeker_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;
     }
-    mode = D_L09_0015F5C4;
+    mode = seeker_state_dispatch_mode;
     if (mode == 2) {
         return;
     }
@@ -348,7 +348,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count);
-int FUN_L04_00252e18(char *a, char *o, float best);
+int select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
@@ -375,7 +375,9 @@ extern float func_001F9B88_2C73D0(float) __asm__("FUN_001f99c0");
 extern Path_2C73D0 *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
-void FUN_L09_002c6230(Moby *moby) {
+void update_seeker_damage_and_target(Moby *moby) __asm__("FUN_L09_002c6230");
+
+void update_seeker_damage_and_target(Moby *moby) {
     enum {
         RESPONSE_NONE = 0,
         RESPONSE_FATAL_KNOCKBACK = 1,
@@ -620,7 +622,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00257b90_c(int lo, int hi) __asm__("FUN_L00_00257b90");
 int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
-int FUN_L00_0025fcb8(char *a, char *o, float best);
+int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 int select_list_point_toward_target(char *a0, void *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
 s32 FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);

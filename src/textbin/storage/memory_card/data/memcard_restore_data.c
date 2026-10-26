@@ -30,7 +30,8 @@ typedef struct {
 } CardState;
 
 extern CardState D_0013D290;
-extern s32 D_0015FE90 __attribute__((sda));
+#include "rnc/textbin/storage/memory_card/data/memcard_restore_data_globals.h"
+extern s32 memcard_restore_differing_block_count_gp __asm__("D_0015FE90") __attribute__((sda));
 extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);
 extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");
@@ -83,7 +84,7 @@ s32 memcard_restore_data(u8 *save_packet, s32 slot, struct RestoreEntry *restore
                 matched_entry->status = -2;
             }
             if (memcmp(slot_destination, ((struct RestoreBlock *)save_packet)->data, copySize) != 0) {
-                D_0015FE90++;
+                memcard_restore_differing_block_count_gp++;
             }
             copy_memory_aligned(slot_destination, ((struct RestoreBlock *)save_packet)->data, copySize);
             total += ((copySize + 3) & ~3) + 8;

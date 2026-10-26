@@ -97,16 +97,15 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_L02_00161F7C __attribute__((sda));
 extern float D_L02_00161F80 __attribute__((sda));
-extern int D_0015EDF4;
-extern int D_0015EDFC;
+#include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
-extern float D_L02_00161F64 __attribute__((sda));
-extern float D_L02_00161F70 __attribute__((sda));
+extern float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") __attribute__((sda));
+extern float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F70") __attribute__((sda));
 extern short D_L02_00161F74 __attribute__((sda));
 extern short D_L02_00161F78 __attribute__((sda));
 extern unsigned char D_0013D408[];
@@ -176,7 +175,7 @@ void background_ship_1_update(char *moby) {
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        path_travel_distance = *(float *)&D_L02_00161F64 * frame_time;
+        path_travel_distance = *(float *)&background_ship_1_path_travel_speed_gp * frame_time;
         *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) + path_travel_distance / *(float *)(moby_data + 0x70);
         if ((float)*(int *)path < *(float *)(moby_data + 0x64)) {
             *(float *)(moby_data + 0x64) = *(float *)(moby_data + 0x64) - (float)*(int *)path;
@@ -205,8 +204,8 @@ void background_ship_1_update(char *moby) {
         break;
     case BACKGROUND_SHIP_1_REMOVE:
         if (current_level_index == 2) {
-            D_0015EDF4 = D_0015EDF4 + 1;
-            if (D_0015EDF4 >= 3) {
+            level_2_ship_removal_count = level_2_ship_removal_count + 1;
+            if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = D_0013D408;
                 if (p[2] == 0) {
                     p[2] = 1;
@@ -217,8 +216,8 @@ void background_ship_1_update(char *moby) {
         }
         if (current_level_index == 9) {
             if (*(int *)(D_001413D4) == 0x32) {
-                D_0015EDFC = D_0015EDFC + 1;
-                if (D_0015EDFC >= 5) {
+                level_9_ship_removal_count = level_9_ship_removal_count + 1;
+                if (level_9_ship_removal_count >= 5) {
                     unsigned char *p = D_0013D408;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
@@ -253,7 +252,7 @@ void background_ship_1_update(char *moby) {
             int tweened_color;
             float k;
             tweened_color = fast_tween_color(*(int *)&D_L02_00161F74, *(int *)&D_L02_00161F78, x);
-            k = *(float *)&D_L02_00161F70 * 0.017453292f * frame_time;
+            k = *(float *)&background_ship_1_color_phase_rate_degrees_gp * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
@@ -364,13 +363,13 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 
-extern float D_L02_00161FC0 __attribute__((sda));
+extern float background_ship_2_path_travel_speed_gp __asm__("D_L02_00161FC0") __attribute__((sda));
 extern char D_L02_001FADB0[];
 extern char D_L02_001FADD0[];
 extern float D_0015ED60_f __asm__("D_0015ED60");
-extern float D_L02_00161FC4 __attribute__((sda));
-extern int D_L02_00161FC8 __attribute__((sda));
-extern int D_L02_00161FCC __attribute__((sda));
+extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161FC4") __attribute__((sda));
+extern int background_ship_2_color_tween_start_gp __asm__("D_L02_00161FC8") __attribute__((sda));
+extern int background_ship_2_color_tween_end_gp __asm__("D_L02_00161FCC") __attribute__((sda));
 extern float D_L02_00161FD0 __attribute__((sda));
 extern float D_L02_00161FD4 __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
@@ -440,7 +439,7 @@ void background_ship_2_update(char *moby) {
         if (voice_is_playing(moby, *(int *)(moby_data + 0x6C)) == 0) {
             *(int *)(moby_data + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
-        path_travel_distance = D_L02_00161FC0 * frame_time;
+        path_travel_distance = background_ship_2_path_travel_speed_gp * frame_time;
         if (current_level_index == 10) {
             path_travel_distance = path_travel_distance * 0.25f;
         }
@@ -476,8 +475,8 @@ void background_ship_2_update(char *moby) {
         break;
     case BACKGROUND_SHIP_2_REMOVE:
         if (current_level_index == 2) {
-            D_0015EDF4 = D_0015EDF4 + 1;
-            if (D_0015EDF4 >= 3) {
+            level_2_ship_removal_count = level_2_ship_removal_count + 1;
+            if (level_2_ship_removal_count >= 3) {
                 unsigned char *p = D_0013D408;
                 if (p[2] == 0) {
                     p[2] = 1;
@@ -488,8 +487,8 @@ void background_ship_2_update(char *moby) {
         }
         if (current_level_index == 9) {
             if (*(int *)D_001413D4 == 0x32) {
-                D_0015EDFC = D_0015EDFC + 1;
-                if (D_0015EDFC >= 5) {
+                level_9_ship_removal_count = level_9_ship_removal_count + 1;
+                if (level_9_ship_removal_count >= 5) {
                     unsigned char *p = D_0013D408;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
@@ -523,8 +522,8 @@ void background_ship_2_update(char *moby) {
         {
             int tweened_color;
             float k;
-            tweened_color = fast_tween_color(D_L02_00161FC8, D_L02_00161FCC, x);
-            k = D_L02_00161FC4 * 0.017453292f * frame_time;
+            tweened_color = fast_tween_color(background_ship_2_color_tween_start_gp, background_ship_2_color_tween_end_gp, x);
+            k = background_ship_2_color_phase_rate_degrees_gp * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
         }
@@ -671,7 +670,9 @@ void white_flower_update(char *moby) {
 
 extern char *D_L02_00167400;
 
-void FUN_L02_002f6570(int value) {
+void set_follow_camera_control_word(int value) __asm__("FUN_L02_002f6570");
+
+void set_follow_camera_control_word(int value) {
     char *moby = D_L02_00167400;
     if (*(short *)(moby + 0x86) == 0) {
         char *data = *(char **)(moby + 0x70);
@@ -798,15 +799,15 @@ void try_select_camera_offset_effect_moby(char *candidate_moby) __asm__("FUN_L02
 
 void try_select_camera_offset_effect_moby(char *candidate_moby) {
     float candidate_displacement[4];
-    char *g = D_L02_00167280_c;
-    char *selection_reference = *(char **)(g + 0x180);
+    char *camera_selection_context = D_L02_00167280_c;
+    char *selection_reference = *(char **)(camera_selection_context + 0x180);
     char *candidate_selection_state;
     float vector_distance;
     float accumulated_amount;
     float candidate_reference_angle_radians;
     if (*(short *)(selection_reference + 0x86) == 0) {
         if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
-            candidate_selection_state = g + 0x380;
+            candidate_selection_state = camera_selection_context + 0x380;
             subtract_vector_xyz(candidate_displacement, candidate_moby + 0x10, &hero.motion.pos);
             vector_distance = vector_length_xyz(candidate_displacement);
             if (vector_distance < 22.0f) {
@@ -823,7 +824,7 @@ void try_select_camera_offset_effect_moby(char *candidate_moby) {
                                 candidate_reference_angle_radians = 1.5707964f - fast_arc_sin(dot_vectors_xyz(selection_reference, candidate_displacement) / vector_distance);
                                 if (candidate_reference_angle_radians < 0.62831855f) {
                                     accumulated_amount = *(float *)(candidate_selection_state + 0xC) + *(float *)&D_L02_0016238C;
-                                    *(char **)(g + 0x380) = selection_reference;
+                                    *(char **)(camera_selection_context + 0x380) = selection_reference;
                                     *(float *)(candidate_selection_state + 8) = vector_distance;
                                     *(char **)(candidate_selection_state + 4) = candidate_moby;
                                     *(float *)(candidate_selection_state + 0xC) = accumulated_amount;
@@ -1125,7 +1126,7 @@ void apply_moby_camera_control(char *moby) {
             *(short *)(data + 0x20) = frames;
         }
     } else if ((unsigned short)(*(short *)(data + 0x3c) - 1) < 2) {
-        FUN_L02_002f6570(176);
+        set_follow_camera_control_word(176);
         set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
         if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
             *(short *)(data + 0x20) = duration;
@@ -1212,7 +1213,7 @@ void apply_moby_camera_control(char *moby) {
                     FUN_L00_002e8450(0, 8.0f, 0.003f);
             }
         }
-        FUN_L02_002f6570(176);
+        set_follow_camera_control_word(176);
     }
     return;
 }

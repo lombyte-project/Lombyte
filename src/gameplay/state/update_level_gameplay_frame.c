@@ -120,7 +120,8 @@ extern f32 D_00160404 MACRO_ADDR;
 #include "rnc/rendering/sky_shell.h"
 extern s32 D_001604E0 __attribute__((sda));
 extern s32 D_001604F0 __attribute__((sda));
-extern s32 D_00160500 __attribute__((sda));
+#include "rnc/gameplay/state/update_level_gameplay_frame_globals.h"
+extern s32 mode4_render_vector_delta_gp __asm__("D_00160500") __attribute__((sda));
 extern s32 current_vu_chain __asm__("D_00160F0C");
 extern LevelGameplayState render_sequence __asm__("D_0018CB20");
 /* Fakematch: a second name for render_sequence keeps the fade loop's own lui/addiu. */
@@ -261,7 +262,7 @@ void update_level_gameplay_frame(void) {
     scale = 1.0f;
     if (level_render_state.mode == 4) {
         scale = (f32)(render_sequence.end - render_sequence.time) / (f32)render_sequence.end;
-        scale_vector(&first_position, &D_00160500, scale);
+        scale_vector(&first_position, &mode4_render_vector_delta_gp, scale);
         add_vectors(&D_001604F0, &D_001604F0, &first_position);
     }
     scale_vector(&D_00160460, &D_001D9AE0[level_render_state.mode],

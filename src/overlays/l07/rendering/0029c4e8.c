@@ -58,20 +58,20 @@ extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
 f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) __asm__("FUN_L07_0029e6d8");
 
 f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *a, Vec4f *b, f32 radius) {
-    Vec4f w, dir, line_projection_point, lower_segment_point, upper_segment_point;
+    Vec4f center_to_segment_start, segment_displacement, line_projection_point, lower_segment_point, upper_segment_point;
     f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, lower_surface_error, upper_surface_error, eps;
     Vec4f *upper_segment_point_ptr;
 
-    seg_vec_sub(&w, a, center);
-    seg_vec_sub(&dir, b, a);
-    dd = seg_dot(&dir, &dir);
-    line_projection_t = -seg_dot(&w, &dir) / dd;
-    seg_vec_scale(&line_projection_point, &dir, line_projection_t);
+    seg_vec_sub(&center_to_segment_start, a, center);
+    seg_vec_sub(&segment_displacement, b, a);
+    dd = seg_dot(&segment_displacement, &segment_displacement);
+    line_projection_t = -seg_dot(&center_to_segment_start, &segment_displacement) / dd;
+    seg_vec_scale(&line_projection_point, &segment_displacement, line_projection_t);
     seg_vec_add(&line_projection_point, &line_projection_point, a);
     dist = seg_dist(&line_projection_point, center);
     if (dist < radius) {
         intersection_t_offset = seg_sqrt(radius * radius - dist * dist);
-        intersection_t_offset /= seg_len(&dir);
+        intersection_t_offset /= seg_len(&segment_displacement);
         lower_segment_t = line_projection_t - intersection_t_offset;
         if (lower_segment_t < 0.0f)
             lower_segment_t = 0.0f;
@@ -82,14 +82,14 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
             upper_segment_t = 0.0f;
         else if (1.0f < upper_segment_t)
             upper_segment_t = 1.0f;
-        seg_vec_scale(&lower_segment_point, &dir, lower_segment_t);
+        seg_vec_scale(&lower_segment_point, &segment_displacement, lower_segment_t);
         seg_vec_add(&lower_segment_point, &lower_segment_point, a);
         lower_surface_error = seg_fabs(seg_dist(&lower_segment_point, center) - radius);
         eps = radius * 0.01f;
         if (lower_surface_error < eps)
             lower_surface_error = 0.0f;
         upper_segment_point_ptr = &upper_segment_point;
-        seg_vec_scale(upper_segment_point_ptr, &dir, upper_segment_t);
+        seg_vec_scale(upper_segment_point_ptr, &segment_displacement, upper_segment_t);
         seg_vec_add(upper_segment_point_ptr, upper_segment_point_ptr, a);
         upper_surface_error = seg_fabs(seg_dist(upper_segment_point_ptr, center) - radius);
         if (upper_surface_error < eps)

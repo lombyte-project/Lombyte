@@ -47,8 +47,9 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
 extern s32 frame_size[] __asm__("D_0013E504");
 extern char D_L02_0015F850[];
-extern s32 D_L02_0015F91C __attribute__((sda));
-extern s32 D_L02_0015F920 __attribute__((sda));
+#include "rnc/overlay/l02/ui/text/0023ccc8_globals.h"
+extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));
+extern s32 hud_counter_text_shade_divisor_gp __asm__("D_L02_0015F920") __attribute__((sda));
 s32 D_L02_0015F944 = 0x18;
 s32 D_L02_0015F948 = 0x1e0;
 s32 D_L02_0015F950 = 0xe08080;
@@ -91,13 +92,13 @@ s32 draw_hud_counter(HudElem *hud_element) {
     }
     bottom = frame_size[0];
     y = pal_mode != 0 ? bottom - 0x2A : bottom - 0x32;
-    grow = convert_integer_to_float(fade[0]) / convert_integer_to_float(D_L02_0015F91C);
+    grow = convert_integer_to_float(fade[0]) / convert_integer_to_float(hud_counter_bar_growth_divisor_gp);
     if (1.0f < grow) {
         grow = 1.0f;
     } else if (grow < 0.0f) {
         grow = 0.0f;
     }
-    shade = convert_integer_to_float(fade[1]) / convert_integer_to_float(D_L02_0015F920);
+    shade = convert_integer_to_float(fade[1]) / convert_integer_to_float(hud_counter_text_shade_divisor_gp);
     if (1.0f < shade) {
         shade = 1.0f;
     } else if (shade < 0.0f) {

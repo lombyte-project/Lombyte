@@ -70,7 +70,8 @@ extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
 
 extern char D_L09_002082A0[];
 extern Pair_2c26c8 D_L09_001613D0 __attribute__((section(".data")));
-extern int D_L09_00161368 __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/airship_part_globals.h"
+extern int airship_part_low_altitude_effect_count_gp __asm__("D_L09_00161368") __attribute__((sda));
 extern int D_L09_0016136C __attribute__((sda));
 extern int D_L09_00161370 __attribute__((sda));
 extern float D_L09_00161374 __attribute__((sda));
@@ -88,10 +89,10 @@ extern float D_L09_001613A0 __attribute__((sda));
 extern float D_L09_001613A4 __attribute__((sda));
 extern float D_L09_001613A8 __attribute__((sda));
 extern float D_L09_001613AC __attribute__((sda));
-extern float D_L09_001613B0 __attribute__((sda));
-extern float D_L09_001613B4 __attribute__((sda));
+extern float airship_part_initial_tumble_x_speed_limit_degrees_gp __asm__("D_L09_001613B0") __attribute__((sda));
+extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09_001613B4") __attribute__((sda));
 extern float D_L09_001613B8 __attribute__((sda));
-extern float D_L09_001613BC __attribute__((sda));
+extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC") __attribute__((sda));
 extern int D_L09_001613C0 __attribute__((sda));
 extern int D_L09_001613C4 __attribute__((sda));
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -176,7 +177,7 @@ void update_airship_part(struct Moby *moby) {
         }
         if (moby->state == 2) {
             if (moby->oclass == 0x4A0) {
-                moby->rot.x = FUN_001fa580_2c26c8(moby->rot.x, D_L09_001613BC * 0.017453292f * frame_time);
+                moby->rot.x = FUN_001fa580_2c26c8(moby->rot.x, airship_hull_breakup_wait_x_rotation_speed_degrees_gp * 0.017453292f * frame_time);
             }
             if (FUN_001f9770_2c26c8(&part_vars->h2A) != 0) {
                 moby->state = 3;
@@ -216,8 +217,8 @@ void update_airship_part(struct Moby *moby) {
         }
         FUN_001f9a10_2c26c8(part_vars->vel, part_vars->vel, transform_and_effect_scratch.m[0]);
         part_vars->vel[2] = 0.0f;
-        part_vars->f20 = FUN_002132a8_2c26c8(-(D_L09_001613B0 * 0.017453292f * frame_time), D_L09_001613B0 * 0.017453292f * frame_time);
-        part_vars->f24 = FUN_002132a8_2c26c8(-(D_L09_001613B4 * 0.017453292f * frame_time), D_L09_001613B4 * 0.017453292f * frame_time);
+        part_vars->f20 = FUN_002132a8_2c26c8(-(airship_part_initial_tumble_x_speed_limit_degrees_gp * 0.017453292f * frame_time), airship_part_initial_tumble_x_speed_limit_degrees_gp * 0.017453292f * frame_time);
+        part_vars->f24 = FUN_002132a8_2c26c8(-(airship_part_initial_tumble_y_speed_limit_degrees_gp * 0.017453292f * frame_time), airship_part_initial_tumble_y_speed_limit_degrees_gp * 0.017453292f * frame_time);
         part_vars->h2A = FUN_002132a8_2c26c8(FUN_001f96f8_2c26c8(0x5A), FUN_001f96f8_2c26c8(0x96));
         part_vars->f64 = FUN_002132a8_2c26c8(D_L09_00161398 * frame_time_sq_macro, D_L09_0016139C * frame_time_sq_macro);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
@@ -244,7 +245,7 @@ void update_airship_part(struct Moby *moby) {
         }
         if (moby->pos.z < 25.0f) {
             int i;
-            for (i = 0; i < D_L09_00161368; i++) {
+            for (i = 0; i < airship_part_low_altitude_effect_count_gp; i++) {
                 float effect_direction_angle = FUN_00213308_2c26c8();
                 qcopy(transform_and_effect_scratch.m[1], ((f32 *)&moby->pos));
                 transform_and_effect_scratch.m[1][0] += FUN_002132a8_2c26c8(-3.0f, 3.0f);

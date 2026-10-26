@@ -38,7 +38,9 @@ char *create_class_5c3_moby(int owner, char *initial_position, int arg, float in
 }
 extern s32 moby_pool_4f60 __asm__("D_L05_0015FFD8");
 
-void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
+void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) __asm__("FUN_L05_002f4f60");
+
+void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
     int moby = moby_pool_4f60 + index * 0x100;
     char *trigger = (char *)trigger_arg;
     short kind;
@@ -95,7 +97,7 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
 
 extern int *D_L05_001ABCC0[];
-extern void FUN_L05_002f4f60(int, int, int);
+extern void apply_spatial_trigger_to_moby(int, int, int) __asm__("FUN_L05_002f4f60");
 
 void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) __asm__("FUN_L05_002f5190");
 
@@ -103,7 +105,7 @@ void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_var
     unsigned short *moby_index_entry = (unsigned short *)D_L05_001ABCC0[i];
     if (moby_index_entry != 0) {
         do {
-            FUN_L05_002f4f60(*moby_index_entry & 0x7FFF, trigger_vars_arg, inside);
+            apply_spatial_trigger_to_moby(*moby_index_entry & 0x7FFF, trigger_vars_arg, inside);
         } while (*(short *)moby_index_entry++ >= 0);
     }
 }
@@ -403,7 +405,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     char *data = *(char **)(moby + 0x78);
     struct Hero *player_hero = &hero;
     float position_delta[4];
-    char *l1;
+    char *group_member_moby;
     char *l2;
     char *other;
     char *od;
@@ -420,18 +422,18 @@ void add_moby_frames_for_group_proximity(char *moby) {
     }
     od = *(char **)(other + 0x78);
     if (*(int *)(od + 0x44) != -1) {
-        get_first_moby_in_group((int *)&l1, *(int *)(od + 0x44), 0, 0);
-        while (l1) {
-            if (*(short *)(l1 + 0xA6) == 0x473) {
+        get_first_moby_in_group((int *)&group_member_moby, *(int *)(od + 0x44), 0, 0);
+        while (group_member_moby) {
+            if (*(short *)(group_member_moby + 0xA6) == 0x473) {
                 float offset_test_position[4];
                 float m[16];
-                char *candidate_moby = l1;
+                char *candidate_moby = group_member_moby;
                 qcopy(offset_test_position, data + 0x200);
                 offset_test_position[2] += 0.8f;
                 subtract_vector_xyz(position_delta, candidate_moby + 0x10, offset_test_position);
                 if (!(8.0f < vector_length_xyz(position_delta))) {
                     set_identity_matrix(m);
-                    transpose_rotation_matrix(m, l1 + 0xC0);
+                    transpose_rotation_matrix(m, group_member_moby + 0xC0);
                     transform_vector(position_delta, position_delta, m);
                     if (absolute_float(position_delta[0]) < 0.5f && absolute_float(position_delta[1]) < 2.5f &&
                         absolute_float(position_delta[2]) < 2.5f) {
@@ -440,7 +442,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&l1, (int)l1, 0, 0);
+            get_next_moby_in_group((int *)&group_member_moby, (int)group_member_moby, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
@@ -530,13 +532,14 @@ extern float D_L05_001D67B0[][2];
 extern float D_L05_001D67D0[][4];
 extern float D_L05_001D6810[][4];
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
-extern int D_L05_00161CF4 __attribute__((sda));
-extern int D_L05_00161CF8 __attribute__((sda));
-extern int D_L05_00161CFC __attribute__((sda));
-extern int D_L05_00161D00 __attribute__((sda));
-extern int D_L05_00161D04 __attribute__((sda));
-extern int D_L05_00161D08 __attribute__((sda));
-extern int D_L05_00161D0C __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_globals.h"
+extern int wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") __attribute__((sda));
+extern int wobble_quad_blend_b_selector_gp __asm__("D_L05_00161CF8") __attribute__((sda));
+extern int wobble_quad_blend_c_selector_gp __asm__("D_L05_00161CFC") __attribute__((sda));
+extern int wobble_quad_blend_d_selector_gp __asm__("D_L05_00161D00") __attribute__((sda));
+extern int wobble_quad_start_color_gp __asm__("D_L05_00161D04") __attribute__((sda));
+extern int wobble_quad_end_color_gp __asm__("D_L05_00161D08") __attribute__((sda));
+extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__((sda));
 
 typedef struct {
     float vertex[4][4];
@@ -578,11 +581,11 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     cross_vector_xyz_30c220(direction, up, side);
     qcopy(matrix + 12, position);
 
-    texture = get_effect_texture_30c220(D_L05_00161D0C);
-    flags = (u64)(s64)D_L05_00161CF4 |
-            ((u64)(s64)D_L05_00161CF8 << 2) |
-            ((u64)(s64)D_L05_00161CFC << 4) |
-            ((u64)(s64)D_L05_00161D00 << 6) |
+    texture = get_effect_texture_30c220(wobble_quad_texture_index_gp);
+    flags = (u64)(s64)wobble_quad_blend_a_selector_gp |
+            ((u64)(s64)wobble_quad_blend_b_selector_gp << 2) |
+            ((u64)(s64)wobble_quad_blend_c_selector_gp << 4) |
+            ((u64)(s64)wobble_quad_blend_d_selector_gp << 6) |
             0x8000000000ULL;
     quad_b.control[0] = 0;
     quad_b.control[2] = 0xff9000000260ULL;
@@ -610,7 +613,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
-            quad_a.color[j] = quad_b.color[j] = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
+            quad_a.color[j] = quad_b.color[j] = fast_tween_color(wobble_quad_start_color_gp, wobble_quad_end_color_gp, phase);
             offset_a_x = phase * 8.0f * sign;
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;

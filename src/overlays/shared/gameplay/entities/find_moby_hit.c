@@ -794,8 +794,8 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
     return arc_motion_state->state;
 }
 /* Linear interpolation: a + (b - a) * t. */
-f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
-f32 FUN_L00_0025b6a8(f32 start_value, f32 end_value, f32 interpolation_factor) {
+f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
+f32 interpolate_scalar_linear(f32 start_value, f32 end_value, f32 interpolation_factor) {
     return start_value + (end_value - start_value) * interpolation_factor;
 }
 #include "rnc/math/vector.h"
@@ -815,13 +815,13 @@ void FUN_L00_0025b6b8(f32 *interpolated_vector, f32 *start_vector, f32 *end_vect
     left.q = *(u128 *)start_vector;
     right.q = *(u128 *)end_vector;
     end_vector = right.f;
-    out.p[0] = FUN_L00_0025b6a8(left.f[0], end_vector[0], interpolation_factor);
+    out.p[0] = interpolate_scalar_linear(left.f[0], end_vector[0], interpolation_factor);
     interpolated_vector = out.p;
     out = (OutPtr){ interpolated_vector };
     interpolated_vector = 0;
-    out.p[1] = FUN_L00_0025b6a8(left.f[1], end_vector[1], interpolation_factor);
-    out.p[2] = FUN_L00_0025b6a8(left.f[2], end_vector[2], interpolation_factor);
-    out.p[3] = FUN_L00_0025b6a8(left.f[3], end_vector[3], interpolation_factor);
+    out.p[1] = interpolate_scalar_linear(left.f[1], end_vector[1], interpolation_factor);
+    out.p[2] = interpolate_scalar_linear(left.f[2], end_vector[2], interpolation_factor);
+    out.p[3] = interpolate_scalar_linear(left.f[3], end_vector[3], interpolation_factor);
 }
 #define NOT_SDA
 

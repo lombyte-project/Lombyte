@@ -225,7 +225,9 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
-int FUN_L00_00229910(void) {
+int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");
+
+int check_hero_forward_collision_height(void) {
     struct Hero *hero_ptr = &hero;
     V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;

@@ -343,7 +343,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x75:
-    case 0x76: {
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
         p->state.control_mode = 7;
@@ -512,7 +512,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_RUN:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1287,7 +1287,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_COMBO:
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
-    case 0x20:
+    case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
     case 0x51: {
         struct Hero *p = &hero;
@@ -1364,7 +1364,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x20: {
+        case HERO_STATE_HELD_ITEM_ATTACK: {
             struct Hero *q = &hero;
             if (((void *)q->items[0].moby) == 0)
                 break;

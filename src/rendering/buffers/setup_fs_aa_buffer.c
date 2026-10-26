@@ -23,7 +23,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
 
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
                         s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
-    u8 *q;
+    u8 *packet_base;
 
     active_fs_aa_buffer = &fs_aa_buffer;
     fs_aa_buffer.display_width = display_width;
@@ -62,24 +62,24 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     FA->giftag1.NREG = 1;
     FA->giftag1.REGS0 = 0xE;
 
-    q = (u8 *)fs_aa_transfer_packet;
-    *(u64 *)(q + 0x0) = 0x408B400000000001UL;
-    *(u64 *)(q + 0x8) = 0xEEEE;
-    *(u64 *)(q + 0x10) = 0x30000;
-    *(u64 *)(q + 0x18) = 0x47;
-    *(u64 *)(q + 0x20) = 5;
-    *(u64 *)(q + 0x28) = 8;
-    *(u64 *)(q + 0x30) = 0x100000261UL;
-    *(u64 *)(q + 0x38) = 0x14;
-    *(u64 *)(q + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+    packet_base = (u8 *)fs_aa_transfer_packet;
+    *(u64 *)(packet_base + 0x0) = 0x408B400000000001UL;
+    *(u64 *)(packet_base + 0x8) = 0xEEEE;
+    *(u64 *)(packet_base + 0x10) = 0x30000;
+    *(u64 *)(packet_base + 0x18) = 0x47;
+    *(u64 *)(packet_base + 0x20) = 5;
+    *(u64 *)(packet_base + 0x28) = 8;
+    *(u64 *)(packet_base + 0x30) = 0x100000261UL;
+    *(u64 *)(packet_base + 0x38) = 0x14;
+    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
            ((s64)FA->psm << 20) | 0xEA8000000UL;
-    *(u64 *)(q + 0x48) = 6;
-    *(u64 *)(q + 0x50) = 0x4400000000008010UL;
-    *(u64 *)(q + 0x58) = 0x5353;
+    *(u64 *)(packet_base + 0x48) = 6;
+    *(u64 *)(packet_base + 0x50) = 0x4400000000008010UL;
+    *(u64 *)(packet_base + 0x58) = 0x5353;
     {
         volatile u64 *p;
         s32 i;
-        for (i = 0, p = (u64 *)q + 12; i < 16; i++) {
+        for (i = 0, p = (u64 *)packet_base + 12; i < 16; i++) {
             *p++ = i * FA->display_width;
             *p++ = (i * FA->storage_width + (0x8000 - FA->storage_width * 8)) |
                    ((s64)(0x7FF8 - FA->storage_height * 8) << 16);
@@ -88,27 +88,27 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
                    ((s64)(FA->storage_height * 8 + 0x7FF8) << 16);
         }
     }
-    *(u64 *)(q + 0x260) = 0x4400000000008001UL;
-    *(u64 *)(q + 0x268) = 0x4410;
-    *(u64 *)(q + 0x270) = 0x181;
-    *(u64 *)(q + 0x278) = 0x80000000UL;
-    *(u64 *)(q + 0x280) = 0x6FF8 | ((s64)(0x7FF8 - FA->storage_height * 8) << 16);
-    *(u64 *)(q + 0x288) = 0x6FF8 | ((s64)(FA->storage_height * 8 + 0x7FF8) << 16);
+    *(u64 *)(packet_base + 0x260) = 0x4400000000008001UL;
+    *(u64 *)(packet_base + 0x268) = 0x4410;
+    *(u64 *)(packet_base + 0x270) = 0x181;
+    *(u64 *)(packet_base + 0x278) = 0x80000000UL;
+    *(u64 *)(packet_base + 0x280) = 0x6FF8 | ((s64)(0x7FF8 - FA->storage_height * 8) << 16);
+    *(u64 *)(packet_base + 0x288) = 0x6FF8 | ((s64)(FA->storage_height * 8 + 0x7FF8) << 16);
 
-    q = (u8 *)fs_aa_resample_packet;
-    *(u64 *)(q + 0x0) = 0x308B400000000001UL;
-    *(u64 *)(q + 0x8) = 0xEEE;
-    *(u64 *)(q + 0x10) = 0x30000;
-    *(u64 *)(q + 0x18) = 0x47;
-    *(u64 *)(q + 0x20) = 0x100000261UL;
-    *(u64 *)(q + 0x28) = 0x14;
-    *(u64 *)(q + 0x30) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+    packet_base = (u8 *)fs_aa_resample_packet;
+    *(u64 *)(packet_base + 0x0) = 0x308B400000000001UL;
+    *(u64 *)(packet_base + 0x8) = 0xEEE;
+    *(u64 *)(packet_base + 0x10) = 0x30000;
+    *(u64 *)(packet_base + 0x18) = 0x47;
+    *(u64 *)(packet_base + 0x20) = 0x100000261UL;
+    *(u64 *)(packet_base + 0x28) = 0x14;
+    *(u64 *)(packet_base + 0x30) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
            ((s64)FA->psm << 20) | 0xEA8000000UL;
-    *(u64 *)(q + 0x38) = 6;
-    *(u64 *)(q + 0x40) = 0x4400000000008010UL;
-    *(u64 *)(q + 0x48) = 0x5353;
+    *(u64 *)(packet_base + 0x38) = 6;
+    *(u64 *)(packet_base + 0x40) = 0x4400000000008010UL;
+    *(u64 *)(packet_base + 0x48) = 0x5353;
     {
-        volatile u64 *p = (u64 *)q + 10;
+        volatile u64 *p = (u64 *)packet_base + 10;
         s32 i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
@@ -121,22 +121,22 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         }
     }
 
-    q = (u8 *)fs_aa_draw_packet;
-    *(u64 *)(q + 0x0) = 0x408B400000000001UL;
-    *(u64 *)(q + 0x8) = 0xEEEE;
-    *(u64 *)(q + 0x10) = 0x30000;
-    *(u64 *)(q + 0x18) = 0x47;
-    *(u64 *)(q + 0x20) = 5;
-    *(u64 *)(q + 0x28) = 8;
-    *(u64 *)(q + 0x30) = 0x100000261UL;
-    *(u64 *)(q + 0x38) = 0x14;
-    *(u64 *)(q + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+    packet_base = (u8 *)fs_aa_draw_packet;
+    *(u64 *)(packet_base + 0x0) = 0x408B400000000001UL;
+    *(u64 *)(packet_base + 0x8) = 0xEEEE;
+    *(u64 *)(packet_base + 0x10) = 0x30000;
+    *(u64 *)(packet_base + 0x18) = 0x47;
+    *(u64 *)(packet_base + 0x20) = 5;
+    *(u64 *)(packet_base + 0x28) = 8;
+    *(u64 *)(packet_base + 0x30) = 0x100000261UL;
+    *(u64 *)(packet_base + 0x38) = 0x14;
+    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
            ((s64)FA->psm << 20) | 0xEA8000000UL;
-    *(u64 *)(q + 0x48) = 6;
-    *(u64 *)(q + 0x50) = 0x4400000000008010UL;
-    *(u64 *)(q + 0x58) = 0x5353;
+    *(u64 *)(packet_base + 0x48) = 6;
+    *(u64 *)(packet_base + 0x50) = 0x4400000000008010UL;
+    *(u64 *)(packet_base + 0x58) = 0x5353;
     {
-        volatile u64 *p = (u64 *)q + 12;
+        volatile u64 *p = (u64 *)packet_base + 12;
         s32 i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x7000;
@@ -151,19 +151,19 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         }
     }
 
-    q = (u8 *)fs_aa_clear_packet;
-    *(u64 *)(q + 0x0) = 0x1000000000000001UL;
-    *(u64 *)(q + 0x8) = 0xE;
-    *(u64 *)(q + 0x10) = 0x30000;
-    *(u64 *)(q + 0x18) = 0x47;
-    *(u64 *)(q + 0x20) = 0x2400000000008001UL;
-    *(u64 *)(q + 0x28) = 0x10;
-    *(u64 *)(q + 0x30) = 0x106;
-    *(u64 *)(q + 0x38) = 0x80008000UL;
-    *(u64 *)(q + 0x40) = 0x2400000000008010UL;
-    *(u64 *)(q + 0x48) = 0x44;
+    packet_base = (u8 *)fs_aa_clear_packet;
+    *(u64 *)(packet_base + 0x0) = 0x1000000000000001UL;
+    *(u64 *)(packet_base + 0x8) = 0xE;
+    *(u64 *)(packet_base + 0x10) = 0x30000;
+    *(u64 *)(packet_base + 0x18) = 0x47;
+    *(u64 *)(packet_base + 0x20) = 0x2400000000008001UL;
+    *(u64 *)(packet_base + 0x28) = 0x10;
+    *(u64 *)(packet_base + 0x30) = 0x106;
+    *(u64 *)(packet_base + 0x38) = 0x80008000UL;
+    *(u64 *)(packet_base + 0x40) = 0x2400000000008010UL;
+    *(u64 *)(packet_base + 0x48) = 0x44;
     {
-        volatile u64 *p = (u64 *)q + 10;
+        volatile u64 *p = (u64 *)packet_base + 10;
         s32 i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
@@ -174,9 +174,9 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         }
     }
 
-    q = (u8 *)first_clear_packet;
+    packet_base = (u8 *)first_clear_packet;
     {
-        volatile u64 *p = (u64 *)q + 8;
+        volatile u64 *p = (u64 *)packet_base + 8;
         s32 i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
@@ -187,9 +187,9 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         }
     }
 
-    q = (u8 *)second_clear_packet;
+    packet_base = (u8 *)second_clear_packet;
     {
-        volatile u64 *p = (u64 *)q + 8;
+        volatile u64 *p = (u64 *)packet_base + 8;
         s32 i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;

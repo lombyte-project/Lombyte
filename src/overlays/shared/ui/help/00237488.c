@@ -1334,13 +1334,15 @@ extern char D_0013F3D0[];
 extern int D_0015ED84;
 extern char *D_L05_001B0930[];
 
-void FUN_L05_00254358(float *out, float *out_rotation) {
+void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) __asm__("FUN_L05_00254358");
+
+void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) {
     char *hero_base = (char *)((char *)((char *)&hero));
     char *path_owner_moby = *(char **)(hero_base + 0x86C);
     char *path;
     float distance;
     int i, best;
-    float tmp[4] __attribute__((aligned(16)));
+    float ground_probe_position[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
         qcopy(out, hero_base + 0x80);
@@ -1383,9 +1385,9 @@ void FUN_L05_00254358(float *out, float *out_rotation) {
         next_point:;
     }
     qcopy(out, path + best * 16 + 0x10);
-    qcopy(tmp, out);
-    tmp[2] += 2.0f;
-    out[2] = probe_ground_height(tmp, 0, 0.5f);
+    qcopy(ground_probe_position, out);
+    ground_probe_position[2] += 2.0f;
+    out[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
     clear_u64_value(out_rotation);
     {
         float *selected_path_record = (float *)(path + best * 16);
@@ -1449,7 +1451,7 @@ extern s32 current_bolt_count_macro __asm__("D_0015ED98") __attribute__((section
 void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 
 void update_hero_hoverboard_race_progress(void) {
-    float v0[4] __attribute__((aligned(16)));
+    float world_position_scratch[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     Data_254608 *race_pvars;
     Path_254608 *path;
@@ -1471,11 +1473,11 @@ void update_hero_hoverboard_race_progress(void) {
     path = ((Path_254608 * *)D_L05_001B0930)[race_pvars->unk20];
     hero.unk8B4 = (void *)path;
     if (D_0015ED84_lui == 0x10) {
-        *(u128_254608 *)v0 = 0;
-        v0[0] = 163.0f;
-        v0[1] = 119.0f;
-        v0[2] = 80.0f;
-        if (distance_xyz_254608(hero.motion.pos.f, v0) < 11.0f) {
+        *(u128_254608 *)world_position_scratch = 0;
+        world_position_scratch[0] = 163.0f;
+        world_position_scratch[1] = 119.0f;
+        world_position_scratch[2] = 80.0f;
+        if (distance_xyz_254608(hero.motion.pos.f, world_position_scratch) < 11.0f) {
             if (hero.unk898 < 3 || hero.unk898 > 0x46) {
                 if (hero.unk898 >= 3) {
                     hero.unk89A++;
@@ -1539,10 +1541,10 @@ void update_hero_hoverboard_race_progress(void) {
             hero.unk8AF = 1;
             if (D_L05_0015F684 == 1) {
                 hero.unk8AF = 0;
-                func_L05_00254B38_254608(v0, v1);
+                func_L05_00254B38_254608(world_position_scratch, v1);
                 hero.unk8AE = 0;
                 hero.unk874 = v1[2];
-                func_L00_00217718_254608(v0, v1, 0x6B, 1);
+                func_L00_00217718_254608(world_position_scratch, v1, 0x6B, 1);
                 if (((Path_254608 *)hero.unk8B4) != 0) {
                     int r = select_point_index_by_distance(hero.motion.pos.f, (Path_254608 *)hero.unk8B4, 0.0f);
 
@@ -1564,8 +1566,8 @@ void update_hero_hoverboard_race_progress(void) {
         n1 = path->n + 1;
         next = (i + n1) % path->n;
         path_segment_heading = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
-        qcopy(v0, D_L05_0015FFD8_254608[race_pvars->f2C[j]].pos);
-        if (fast_difference_between_rotations_254608(path_segment_heading, angle_atan2_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
+        qcopy(world_position_scratch, D_L05_0015FFD8_254608[race_pvars->f2C[j]].pos);
+        if (fast_difference_between_rotations_254608(path_segment_heading, angle_atan2_254608(world_position_scratch[0] - path->p[i].x, world_position_scratch[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk7B0[j] = next;
             if (next == 0) {
                 hero.unk7A0[j]++;

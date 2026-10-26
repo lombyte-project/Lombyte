@@ -305,7 +305,7 @@ extern f32 FUN_L00_00209018(void *, s32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L11_0023b050(f32, f32);
 extern void FUN_L11_0023b068(f32, f32);
 extern void FUN_L11_0023b038(f32, f32);
@@ -397,7 +397,7 @@ extern void FUN_L01_00232290(void);
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
-extern void FUN_L00_00217368(void *, s32);
+extern void emit_filtered_entry_sparkles(void *, s32) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
@@ -584,8 +584,8 @@ void update_hero_motion_by_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
@@ -893,7 +893,7 @@ void update_hero_motion_by_state(void) {
         hero.motion.velocity.f[2] = hero.unk8FC;
         break;
     }
-    case 0x36:
+    case HERO_STATE_WATER_SURFACE_MOVE:
     case 0x37:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
@@ -1526,19 +1526,19 @@ void update_hero_motion_by_state(void) {
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], -0.87266463f);
                 matrix_and_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, MV(hero.moby), &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, MV(hero.moby), &vector_and_hit_descriptor_head_scratch));
                 a = fast_add_rotations(hero.motion.rot.f[2], 0.87266463f);
                 matrix_and_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_and_vector_scratch[0].f[2] = 0.55f;
                 add_vector_xyz(&matrix_and_vector_scratch[0], &matrix_and_vector_scratch[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &matrix_and_vector_scratch[0], 0, o, &vector_and_hit_descriptor_head_scratch));
             }
         }
         if (scale_game_frames(10) < hero.state_timer) {
@@ -1663,8 +1663,8 @@ void update_hero_motion_by_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.unk4E4, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
@@ -1672,8 +1672,8 @@ void update_hero_motion_by_state(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         f32 s;
         f32 a;
         f32 b;

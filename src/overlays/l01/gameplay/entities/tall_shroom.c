@@ -234,9 +234,10 @@ typedef struct {
     Vec4f normal;      /* 0x40 */
 } BlobHitInfo;
 
-extern f32 D_L01_00162058 __attribute__((sda));
-extern f32 D_L01_0016205C __attribute__((sda));
-extern f32 D_L01_00162060 __attribute__((sda));
+#include "rnc/overlay/l01/gameplay/entities/tall_shroom_globals.h"
+extern f32 explosive_moby_gravity_coefficient_gp __asm__("D_L01_00162058") __attribute__((sda));
+extern f32 explosive_moby_velocity_multiplier_gp __asm__("D_L01_0016205C") __attribute__((sda));
+extern f32 explosive_moby_horizontal_damping_threshold_gp __asm__("D_L01_00162060") __attribute__((sda));
 extern BlobHitInfo D_L01_001742C0;
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
@@ -276,16 +277,16 @@ void update_explosive_moby(struct Moby *moby) {
         enqueue_callback_list_1(draw_moby_offset_textured_quad, moby);
     }
     add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
-    if (FUN_001f99c0(blob_vars->vel.x) > D_L01_00162060 * frame_scale) {
-        blob_vars->vel.x *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.x) > explosive_moby_horizontal_damping_threshold_gp * frame_scale) {
+        blob_vars->vel.x *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
-    if (FUN_001f99c0(blob_vars->vel.y) > D_L01_00162060 * frame_scale) {
-        blob_vars->vel.y *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+    if (FUN_001f99c0(blob_vars->vel.y) > explosive_moby_horizontal_damping_threshold_gp * frame_scale) {
+        blob_vars->vel.y *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
     if (blob_vars->vel.z > 0.0f) {
-        blob_vars->vel.z *= (D_L01_0016205C - 1.0f) * frame_scale + 1.0f;
+        blob_vars->vel.z *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
-    blob_vars->vel.z -= D_L01_00162058 * frame_time_sq;
+    blob_vars->vel.z -= explosive_moby_gravity_coefficient_gp * frame_time_sq;
     moby->rot.x = fast_add_rotations(moby->rot.x, blob_vars->spin.x);
     moby->rot.y = fast_add_rotations(moby->rot.y, blob_vars->spin.y);
     moby->rot.z = fast_add_rotations(moby->rot.z, blob_vars->spin.z);
@@ -435,7 +436,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
-extern char *spawn_burst(void *, f32) __asm__("FUN_L00_002d7e90");
+extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_debris_chunk(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");
 extern FxSpark *spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
@@ -458,7 +459,7 @@ void update_level01_cutscene_effects(struct Moby *moby) {
     };
     FxVec effect_position_or_motion_delta;
     FxVec debris_vector_or_effect_position;
-    FxVec c;
+    FxVec primary_trail_position;
     FxVec secondary_effect_position;
     struct Moby *cutscene_moby;
     char *splash;
@@ -504,7 +505,7 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                 if (fx_cutscene.scene == 1 && fx_cutscene.frame == scale_game_frames(472) && fx_cutscene.slot[0] != 0) {
                     moby_point_position(fx_cutscene.slot[0], 1, &effect_position_or_motion_delta);
                     {
-                        char *burst = spawn_burst(&effect_position_or_motion_delta, 3.0f);
+                        char *burst = spawn_burst_moby(&effect_position_or_motion_delta, 3.0f);
 
                         if (burst != 0) {
                             burst[0x23] = 0x70;
@@ -563,22 +564,22 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     }
                     if (fx_cutscene.frame == scale_game_frames(118)) {
-                        clear_vector(&c);
-                        spawn_explosion(cutscene_moby, &c, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
+                        clear_vector(&primary_trail_position);
+                        spawn_explosion(cutscene_moby, &primary_trail_position, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
                         qcopy(&secondary_effect_position, &debris_vector_or_effect_position);
                         secondary_effect_position.f[2] = secondary_effect_position.f[2] - 1.0f;
-                        spawn_explosion(cutscene_moby, &c, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
+                        spawn_explosion(cutscene_moby, &primary_trail_position, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
                     enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
-                    moby_point_position(cutscene_moby, 1, &c);
+                    moby_point_position(cutscene_moby, 1, &primary_trail_position);
                     moby_point_position(cutscene_moby, 2, &secondary_effect_position);
-                    subtract_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                    subtract_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
                     subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     scale_vector_xyz(&effect_position_or_motion_delta, &effect_position_or_motion_delta, 0.25f);
                     for (step = 0; step < 4; step++) {
-                        draw_trail(&c, &c, &D_L01_0015F580, 150000.0f, 60000.0f);
+                        draw_trail(&primary_trail_position, &primary_trail_position, &D_L01_0015F580, 150000.0f, 60000.0f);
                         draw_trail(&secondary_effect_position, &secondary_effect_position, &D_L01_0015F580, 150000.0f, 60000.0f);
-                        add_vector_xyz(&c, &c, &effect_position_or_motion_delta);
+                        add_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
                         add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     }
                 }

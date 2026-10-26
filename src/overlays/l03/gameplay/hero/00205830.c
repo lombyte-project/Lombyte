@@ -18,7 +18,7 @@ struct LedgeSpot {
 };
 
 extern struct LedgeSpot *D_L03_0015F70C;
-extern s32 D_L03_0015F710;
+#include "rnc/overlay/l03/gameplay/hero/00205830_globals.h"
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -36,7 +36,7 @@ s32 find_first_nearby_registered_path(Vec4 *from, s32 **outOwner, Vec4 *to, s32 
     Vec4 *source_position_ptr = &source_position;
 
     *(u128 *)source_position_ptr = *(u128 *)from;
-    for (i = 0; i < D_L03_0015F710; i++) {
+    for (i = 0; i < registered_path_count; i++) {
         if (skip != 0 && D_L03_0015F70C[i].owner == skip)
             continue;
         if (only != 0 && D_L03_0015F70C[i].owner != only)
@@ -249,7 +249,7 @@ extern f32 FUN_L00_00209018(void *, s32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern void FUN_L00_0020a1e0(f32, f32);
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L03_002030a0(f32, f32);
 extern void FUN_L03_00203088(f32, f32);
 extern void FUN_L03_00203070(f32, f32);
@@ -340,7 +340,7 @@ extern void FUN_L01_00232290(void);
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
 extern void update_moby_transform_history(void *, s32) __asm__("FUN_L00_00262608");
-extern void FUN_L00_00217368(void *, s32);
+extern void emit_filtered_entry_sparkles(void *, s32) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
@@ -935,7 +935,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&spatial_scratch_or_hit_descriptor, &MV(hero.unk964)->u10.v10);
@@ -980,7 +980,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.unk97C, hero.unk980, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -1451,19 +1451,19 @@ void update_hero_motion_for_current_state(void) {
                 yaw_matrix_or_spatial_vectors[0].f[1] = fast_sin(a) * 0.8f;
                 yaw_matrix_or_spatial_vectors[0].f[2] = 0.55f;
                 add_vector_xyz(&yaw_matrix_or_spatial_vectors[0], &yaw_matrix_or_spatial_vectors[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, o, &spatial_scratch_or_hit_descriptor));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, o, &spatial_scratch_or_hit_descriptor));
                 a = fast_add_rotations(hero.motion.rot.f[2], -0.87266463f);
                 yaw_matrix_or_spatial_vectors[0].f[0] = fast_cos(a) * 0.8f;
                 yaw_matrix_or_spatial_vectors[0].f[1] = fast_sin(a) * 0.8f;
                 yaw_matrix_or_spatial_vectors[0].f[2] = 0.55f;
                 add_vector_xyz(&yaw_matrix_or_spatial_vectors[0], &yaw_matrix_or_spatial_vectors[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, MV(hero.moby), &spatial_scratch_or_hit_descriptor));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, MV(hero.moby), &spatial_scratch_or_hit_descriptor));
                 a = fast_add_rotations(hero.motion.rot.f[2], 0.87266463f);
                 yaw_matrix_or_spatial_vectors[0].f[0] = fast_cos(a) * 0.8f;
                 yaw_matrix_or_spatial_vectors[0].f[1] = fast_sin(a) * 0.8f;
                 yaw_matrix_or_spatial_vectors[0].f[2] = 0.55f;
                 add_vector_xyz(&yaw_matrix_or_spatial_vectors[0], &yaw_matrix_or_spatial_vectors[0], &hero.motion.pos);
-                FUN_L00_00217368(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, o, &spatial_scratch_or_hit_descriptor));
+                emit_filtered_entry_sparkles(o, collect_mobies_in_sphere(0.8f, &yaw_matrix_or_spatial_vectors[0], 0, o, &spatial_scratch_or_hit_descriptor));
             }
         }
         if (scale_game_frames(10) < hero.state_timer) {
@@ -1712,8 +1712,8 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         f32 s;
         f32 a;
         f32 b;
@@ -2103,7 +2103,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x66:
+    case HERO_STATE_BRAKE_AT_TARGET_POSITION:
         subtract_vector_xyz(&spatial_scratch_or_hit_descriptor, &hero.unk1640, &hero.motion.pos);
         if (fast_vec_dot(&spatial_scratch_or_hit_descriptor, &hero.motion.unk150) < 0.0f) {
             clear_u64_value(&hero.motion.unk150);

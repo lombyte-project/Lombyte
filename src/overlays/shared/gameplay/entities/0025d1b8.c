@@ -8,8 +8,8 @@ typedef struct {
     s64 v;
 } S;
 /* Copies the 64-bit value from the record D_001413D0[0] points to into p. */
-void FUN_L00_0025d1b8(S *p, s64 v);
-void FUN_L00_0025d1b8(S *destination, s64 v) {
+void copy_hero_moby_field_38(S *p, s64 v) __asm__("FUN_L00_0025d1b8");
+void copy_hero_moby_field_38(S *destination, s64 v) {
     v = (((S *)hero.moby))->v;
     destination->v = v;
 }

@@ -342,8 +342,8 @@ void level_draw_dialog_text(void) {
         char line[0x40];
         s32 pulse;
         s32 results_label_color;
-        s32 c2;
-        s32 c3;
+        s32 first_place_or_record_color;
+        s32 other_place_or_no_record_color;
         s32 best;
         s32 record;
         s32 unit;
@@ -366,8 +366,8 @@ void level_draw_dialog_text(void) {
             scale = 0.1f;
         }
         results_label_color = D_L00_0015F4EC;
-        c2 = D_L00_0015F4F4;
-        c3 = D_L00_0015F4FC;
+        first_place_or_record_color = D_L00_0015F4F4;
+        other_place_or_no_record_color = D_L00_0015F4FC;
         if (D_L00_00173040.unk24 != 0) {
             color_blend_factor = (f32)D_L00_00173040.unk24 * 0.125f;
             if (color_blend_factor > 1.0f) {
@@ -376,8 +376,8 @@ void level_draw_dialog_text(void) {
                 color_blend_factor = 0.0f;
             }
             results_label_color = fast_tween_color(D_L00_0015F4EC, D_L00_0015F4F0, color_blend_factor);
-            c2 = fast_tween_color(D_L00_0015F4F4, D_L00_0015F4F8, color_blend_factor);
-            c3 = fast_tween_color(D_L00_0015F4FC, D_L00_0015F500, color_blend_factor);
+            first_place_or_record_color = fast_tween_color(D_L00_0015F4F4, D_L00_0015F4F8, color_blend_factor);
+            other_place_or_no_record_color = fast_tween_color(D_L00_0015F4FC, D_L00_0015F500, color_blend_factor);
         }
         if (hero.unk89A < 3) {
             draw_outlined_rect(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
@@ -404,9 +404,9 @@ void level_draw_dialog_text(void) {
             }
             line[3] = ' ';
             if (hero.unk8C0 == 1) {
-                font_print_center(0x100, D_L00_0015F4DC, c2, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC, first_place_or_record_color, line, -1);
             } else {
-                font_print_center(0x100, D_L00_0015F4DC, c3, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC, other_place_or_no_record_color, line, -1);
             }
             best = freeze_stats_time_ref[(current_level_index ^ 0x10) ? 0 : 1];
             if (best == hero.unk894) {
@@ -417,22 +417,22 @@ void level_draw_dialog_text(void) {
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A3));
-                font_print_center(0x100, D_L00_0015F4DC + 0x26, c2, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x26, first_place_or_record_color, line, -1);
                 sprintf(line, D_L00_0015F550, min, sec, hund);
-                font_print_center(0x100, D_L00_0015F4DC + 0x3A, c2, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x3A, first_place_or_record_color, line, -1);
             } else {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A2));
-                font_print_center(0x100, D_L00_0015F4DC + 0x30, c3, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x30, other_place_or_no_record_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.unk8A8) {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
-                font_print_center(0x100, D_L00_0015F4DC + 0x56, c2, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x56, first_place_or_record_color, line, -1);
                 sprintf(line, D_L00_0015F560, hero.unk8A8);
-                font_print_center(0x100, D_L00_0015F4DC + 0x6A, c2, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x6A, first_place_or_record_color, line, -1);
             } else {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A4));
-                font_print_center(0x100, D_L00_0015F4DC + 0x60, c3, line, -1);
+                font_print_center(0x100, D_L00_0015F4DC + 0x60, other_place_or_no_record_color, line, -1);
             }
             font_print_center(0x100, D_L00_0015F4DC + 0x90, results_label_color, get_help_message_text(0x5249), -1);
             font_print_center(0x100, D_L00_0015F4DC + 0xA8, results_label_color, get_help_message_text(0x5248), -1);

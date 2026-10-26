@@ -35,7 +35,7 @@ extern void FUN_L00_00250df8(void *);
 
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) __asm__("FUN_L15_002e4580");
 
-char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) {
+char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spawn_position) {
     char *spawned_moby = func_0020D348_m(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
@@ -45,7 +45,7 @@ char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos
         spawned_moby[0x20] = 0;
         *(long *)(spawned_moby + 0x38) = *(long *)(source_moby + 0x38);
         *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 20.0f;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, spawn_position);
         moby_vars = *(char **)(spawned_moby + 0x78);
         FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
@@ -113,8 +113,9 @@ extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") __attribute__((section(".data
 extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-extern float D_L15_00161BC8 __attribute__((sda));
-extern float D_L15_00161BCC __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/002d6810_globals.h"
+extern float electric_water_on_duration_seconds_gp __asm__("D_L15_00161BC8") __attribute__((sda));
+extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __attribute__((sda));
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
@@ -224,7 +225,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         vars->light = -1;
@@ -237,7 +238,7 @@ void electric_water_update(struct Moby *moby) {
         inside = 0;
         wet = FUN_L15_002d6770();
         if (fast_dec_timer_s16(&vars->on_timer) != 0) {
-            vars->off_timer = truncate_float_to_s32(scale_time(D_L15_00161BCC * 60.0f));
+            vars->off_timer = truncate_float_to_s32(scale_time(electric_water_off_duration_seconds_gp * 60.0f));
             moby->state = 2;
             if (vars->owner != 0) {
                 if (vars->voice1 != -1) {
@@ -427,7 +428,7 @@ void electric_water_update(struct Moby *moby) {
             vars->voice1 = FUN_L00_0028dc90(1, 5, vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&vars->off_timer) != 0 && moby->state == 2) {
-            vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+            vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
             vars->off_timer = scale_game_frames(200);
             vars->shock_count = 0;
             moby->state = 1;
@@ -512,7 +513,7 @@ void electric_water_update(struct Moby *moby) {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[i]]);
             }
         }
-        vars->on_timer = truncate_float_to_s32(scale_time(D_L15_00161BC8 * 60.0f));
+        vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
         vars->off_timer = scale_game_frames(200);
         vars->shock_count = 0;
         moby->state = 1;
@@ -596,16 +597,15 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
-extern int D_L15_00161BF8 __attribute__((sda));
-extern float D_L15_00161BFC __attribute__((sda));
-extern int D_L15_00161C8C __attribute__((sda));
+extern int electric_water_bolt_init_requested_gp __asm__("D_L15_00161BF8") __attribute__((sda));
+extern float electric_water_bolt_initial_length_scale_gp __asm__("D_L15_00161BFC") __attribute__((sda));
+extern int electric_water_bolt_initial_frame_count_gp __asm__("D_L15_00161C8C") __attribute__((sda));
 extern short D_L15_00161CD2;
 extern short D_L15_00161CD4;
 extern short D_L15_00161CD6;
 extern short D_L15_00161CDA;
 extern short D_L15_00161CDC;
 extern short D_L15_00161CDE;
-extern int D_L15_00161CE0;
 extern int D_L15_00161CE4;
 void initialize_electric_water_bolt_effect(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -613,13 +613,13 @@ void initialize_electric_water_bolt_effect(char *moby) {
     float step[4];
     int i;
     int j;
-    if (D_L15_00161BF8 != 0) {
-        D_L15_00161BF8 = 0;
+    if (electric_water_bolt_init_requested_gp != 0) {
+        electric_water_bolt_init_requested_gp = 0;
         D_L15_00161CE4 = 0;
-        D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
+        electric_water_bolt_initial_scaled_frame_count = scale_frames_r(electric_water_bolt_initial_frame_count_gp);
         D_L15_00161C60_r = 0x7F2020;
         fast_vec_sub(bolt_displacement, moby_vars + 0x100, moby_vars + 0xF0);
-        fast_vec_normalize(step, bolt_displacement, D_L15_00161BFC / 20.0f);
+        fast_vec_normalize(step, bolt_displacement, electric_water_bolt_initial_length_scale_gp / 20.0f);
         qcopy(D_L15_001D3750_r, moby_vars + 0xF0);
         for (i = 1; i < 20; i++) {
             fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
@@ -908,9 +908,6 @@ extern void draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float
                                   float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
-extern int D_L15_00161CCA;
-extern int D_L15_00161CCC;
-extern int D_L15_00161CCE;
 void draw_electric_water_bolt_effect(char *moby) {
     float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = decremented_accumulator;
@@ -925,14 +922,14 @@ void draw_electric_water_bolt_effect(char *moby) {
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710,
                           *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA,
-                          *(short *)&D_L15_00161CCA, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0x50, *(short *)&second_side_arc_fade_level,
+                          *(short *)&second_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC,
-                          *(short *)&D_L15_00161CCC, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xA0, *(short *)&third_side_arc_fade_level,
+                          *(short *)&third_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE,
-                          *(short *)&D_L15_00161CCE, 5, F(D_L15_00161C74_8710),
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xF0, *(short *)&fourth_side_arc_fade_level,
+                          *(short *)&fourth_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
     FUN_L15_002d8e48_8710(moby);
 }
@@ -962,11 +959,13 @@ extern long tex_2d8e48(int) __asm__("FUN_001f44b8");
 extern float rnd_2d8e48(float, float) __asm__("FUN_L00_00257c48");
 extern void draw_2d8e48(void *, void *, int) __asm__("FUN_001f7d30");
 
-void FUN_L15_002d8e48(void *mv) {
+void draw_electric_water_bolt_start_quads(void *mv) __asm__("FUN_L15_002d8e48");
+
+void draw_electric_water_bolt_start_quads(void *mv) {
     Q2d8e48 quad;
     V2d8e48 quad_transform[4];
     V2d8e48 *bolt_start_position;
-    unsigned int c;
+    unsigned int uniform_quad_color;
     float quad_scale;
     int i;
     bolt_start_position = *(V2d8e48 **)((char *)mv + 0x78);
@@ -984,11 +983,11 @@ void FUN_L15_002d8e48(void *mv) {
     fast_vec_cross(&quad_transform[1], &quad_transform[0], (V2d8e48 *)&hero.gravity_dir);
     vscl_2d8e48(&quad_transform[1], &quad_transform[1], -1.0f);
     fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    c = D_L15_00161CAC;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L15_00161CAC;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     quad_scale = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
@@ -997,11 +996,11 @@ void FUN_L15_002d8e48(void *mv) {
         quad.uv[i].v = D_L15_001D3730[i].v;
     }
     draw_2d8e48(&quad, 0, 0);
-    c = D_L15_00161C60;
-    quad.color[3] = c;
-    quad.color[2] = c;
-    quad.color[1] = c;
-    quad.color[0] = c;
+    uniform_quad_color = D_L15_00161C60;
+    quad.color[3] = uniform_quad_color;
+    quad.color[2] = uniform_quad_color;
+    quad.color[1] = uniform_quad_color;
+    quad.color[0] = uniform_quad_color;
     quad_scale = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
