@@ -2814,7 +2814,7 @@ extern s32 directional_particle_color_range_start_gp __asm__("D_L10_00161EF0") _
 extern s32 directional_particle_color_range_end_gp __asm__("D_L10_00161EF4") __attribute__((sda));
 extern f32 directional_particle_speed_range_end_gp __asm__("D_L10_00161EF8") __attribute__((sda));
 extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") __attribute__((sda));
-extern f32 D_L10_00161F00 __attribute__((sda));
+extern f32 directional_particle_gravity_gp __asm__("D_L10_00161F00") __attribute__((sda));
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04") __attribute__((sda));
 extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
@@ -2886,7 +2886,7 @@ void emit_moby_directional_particles(struct Moby *moby) {
             fade_color = fast_tween_color(x, directional_particle_color_range_end_gp, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             spawn_gravity_floor_burst_particle(&position, &velocity, life, amount, pvars[0],
-                               D_L10_00161F00 * frame_time_sq, color, fade_color, variant);
+                               directional_particle_gravity_gp * frame_time_sq, color, fade_color, variant);
         }
     }
 }
