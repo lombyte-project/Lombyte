@@ -85,6 +85,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ITEM_WAIT_IDLE_ANIMATION_REFRESH = 0x27,
         HERO_STATE_IDLE_ANIMATION_WITH_HIT_REACTION_BYPASS = 0x32,
         HERO_STATE_ATTACK_SETUP_ONLY = 0x51,
+        HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION_ALLOW_DYING = 0x64,
         HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION = 0x72
     };
     int old2088;
@@ -1584,7 +1585,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION_ALLOW_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
