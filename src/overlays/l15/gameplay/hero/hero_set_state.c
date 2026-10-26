@@ -354,7 +354,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x75:
+    case HERO_STATE_WATER_SURFACE_HURT:
     case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
@@ -467,7 +467,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x17: {
+    case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -476,7 +476,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x30: {
+    case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -784,7 +784,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xB;
         p->rise_fall_target_frame = 39.0f;
@@ -826,7 +826,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x21, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1A: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -835,7 +835,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -931,9 +931,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP:
-    case 0x1C:
-    case 0x29:
-    case 0x2A:
+    case HERO_STATE_LEDGE_JUMP:
+    case HERO_STATE_GRIND_JUMP:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case 0x3C:
     case 0x49:
     case 0x4C:
@@ -1613,7 +1613,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xC, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x5F: {
+    case HERO_STATE_WAIT_FOR_CIRCLE_RELEASE_AND_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
