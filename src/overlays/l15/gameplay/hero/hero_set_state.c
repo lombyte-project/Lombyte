@@ -96,6 +96,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ITEM_RELEASE_CONTROL_BASE_ANIMATION_ENTRY = 0x27,
         HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_GROUND_CONTACT_REACTION = 0x31,
+        HERO_STATE_CONDITIONAL_BASE_ANIMATION_ENTRY = 0x32,
         HERO_STATE_SWIM_WITH_PREDECESSOR_ADJUSTED_ANIMATION_BLEND = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_SHARED_GROUND_RUN_ENTRY = 0x3F,
@@ -1818,7 +1819,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_CONDITIONAL_BASE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
