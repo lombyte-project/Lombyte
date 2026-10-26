@@ -1813,7 +1813,7 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
-extern int D_L02_0015F594 __attribute__((sda));
+extern int item_selector_hud_inhibit __asm__("D_L02_0015F594") __attribute__((sda));
 extern int D_L02_0016CD80 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -1877,6 +1877,10 @@ extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void update_hero_state_transitions(void) __asm__("FUN_L02_00230988");
 
 void update_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_GROUND_SPEED_ANIMATED_RUN = 63,
+        HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETION = 98
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -1902,7 +1906,7 @@ void update_hero_state_transitions(void) {
             hero_set_state(HERO_STATE_DYING, 1);
         } else if (process_hero_item_action_input() == 0 && try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].switch_lock != 2 && D_L02_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && item_selector_hud_inhibit == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 ||
                      hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 ||
@@ -2192,7 +2196,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETION:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -2504,7 +2508,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 63:
+                case HERO_STATE_GROUND_SPEED_ANIMATED_RUN:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
