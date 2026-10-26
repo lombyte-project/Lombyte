@@ -651,6 +651,8 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT = 8,
+        HERO_STATE_JUMP_WITH_STORED_PLANAR_VELOCITY_COMPONENTS = 0xC,
         HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION = 0x11,
         HERO_STATE_WATER_SPLASH_JUMP = 0x12,
         HERO_STATE_BACKWARD_FACING_DECELERATION = 0x21,
@@ -2211,7 +2213,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
@@ -2253,7 +2255,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
+    case HERO_STATE_JUMP_WITH_STORED_PLANAR_VELOCITY_COMPONENTS:
     case 0xD:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
