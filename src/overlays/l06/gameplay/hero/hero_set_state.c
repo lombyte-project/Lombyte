@@ -90,6 +90,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PLAY_LOOK_ANIMATION_IF_CHANGED = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATION = 0x21,
+        HERO_STATE_GRAPPLE_CAPTURE_TARGET_DISTANCE = 0x26,
+        HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
         HERO_STATE_LAND_WITH_TIMED_BLEND = 0x4F,
         HERO_STATE_RUN_CANCEL_ITEM_ANIMATION = 0x65,
@@ -282,7 +284,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x2E: {
+    case HERO_STATE_RUN_WITH_DISPLACEMENT_SPEED: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -479,7 +481,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_GRAPPLE_CAPTURE_TARGET_DISTANCE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
