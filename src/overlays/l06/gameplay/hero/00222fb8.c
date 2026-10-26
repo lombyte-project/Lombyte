@@ -1026,6 +1026,7 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_GROUND_MATERIAL_LAUNCH = 0x3C,
         HERO_STATE_ALT_LEDGE_ANCHOR_APPROACH = 0x4A,
         HERO_STATE_ANIMATION_WINDOW_FORWARD_JUMP = 0x4C,
+        HERO_STATE_STEERED_MOTION_WITH_GRAVITY_FLATTENING = 0x4F,
         HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND = 0x51,
         HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT = 0x7D
     };
@@ -2689,7 +2690,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_STEERED_MOTION_WITH_GRAVITY_FLATTENING: {
         f32 sp = D_0015ED6C_c * 2.0f;
         FUN_L00_002118c8_c(sp, 0);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, D_0015ED6C_c * 8.726646f);
