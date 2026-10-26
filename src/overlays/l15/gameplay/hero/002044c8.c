@@ -633,6 +633,7 @@ void update_hero_motion_for_current_state(void) {
         HERO_COMBO_KIND_FLAG_OR_ANIMATION_GATED_TARGET_SPEED = 2
     };
     enum {
+        HERO_STATE_JUMP_WITH_TIMER_GATED_TRAIL_CONTROL = 0xD,
         HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
         HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
         HERO_STATE_STEERED_MOVEMENT_WITH_RADIAL_SOUNDS = 0x5B,
@@ -2085,7 +2086,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_TIMER_GATED_TRAIL_CONTROL:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
