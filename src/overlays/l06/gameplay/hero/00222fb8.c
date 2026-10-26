@@ -1020,6 +1020,8 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L06_0022e020");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_DELAYED_SAVED_DIRECTION_JUMP = 0x11,
+        HERO_STATE_GROUND_MATERIAL_LAUNCH = 0x3C,
         HERO_STATE_ALT_LEDGE_ANCHOR_APPROACH = 0x4A,
         HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND = 0x51,
         HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT = 0x7D
@@ -2398,10 +2400,10 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
+    case HERO_STATE_DELAYED_SAVED_DIRECTION_JUMP:
     case 0x12:
     case HERO_STATE_LEDGE_JUMP:
-    case 0x3C:
+    case HERO_STATE_GROUND_MATERIAL_LAUNCH:
     case 0x49:
     case 0x4C:
     case 0x5E:
