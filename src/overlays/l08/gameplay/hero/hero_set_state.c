@@ -96,6 +96,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 0x51,
         HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E,
+        HERO_STATE_SCENE_ENTRY_IDLE = 0x64,
         HERO_STATE_IDLE_POSE_CANCEL_ITEM_ANIMATION = 0x72
     };
     int old2088;
@@ -1856,7 +1857,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_SCENE_ENTRY_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
