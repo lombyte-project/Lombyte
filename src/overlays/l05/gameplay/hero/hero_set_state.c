@@ -105,7 +105,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
+        HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
+        HERO_STATE_HURT_JUMP = 0x3C,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
         HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
@@ -690,7 +692,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x2E: {
+    case HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1139,7 +1141,7 @@ int hero_set_state(int a, int b) {
     case 0x1C:
     case 0x29:
     case 0x2A:
-    case 0x3C:
+    case HERO_STATE_HURT_JUMP:
     case 0x49:
     case 0x4C:
     case 0x5E:
