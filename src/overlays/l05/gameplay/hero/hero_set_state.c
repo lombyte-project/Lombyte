@@ -103,6 +103,8 @@ extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
+        HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
+        HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION_VECTOR = 0x67,
@@ -1828,7 +1830,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xE));
         break;
     }
-    case 0x59: {
+    case HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1901,7 +1903,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_HURT_WITH_UPWARD_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
