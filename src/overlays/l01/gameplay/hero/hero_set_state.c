@@ -87,6 +87,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
     };
+    enum {
+        HERO_STATE_ITEM_ATTACK_ANIMATION_ENTRY = 0x23
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1159,7 +1162,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ITEM_ATTACK_ANIMATION_ENTRY:
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1301,7 +1304,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ITEM_ATTACK_ANIMATION_ENTRY: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
