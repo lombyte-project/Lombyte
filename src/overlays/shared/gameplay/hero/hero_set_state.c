@@ -675,6 +675,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_PACK_JUMP_WITH_TRAIL_EVENTS = 0xD,
+        HERO_STATE_PACK_JUMP_WITH_PAL_ADJUSTED_TIMING = 0xF,
         HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION = 0x1D,
         HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
@@ -694,6 +696,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
+        HERO_STATE_ZERO_GROUND_AND_TARGET_SPEED_ENTRY = 0x68,
         HERO_STATE_JUMP_WITH_CAPTURED_GROUND_HEIGHT_OFFSET = 0x69,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_RUN_WITH_CROUCH_DEPENDENT_ANIMATION = 0x71,
@@ -1692,9 +1695,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_PACK_JUMP_WITH_TRAIL_EVENTS:
     case 0xE:
-    case 0xF:
+    case HERO_STATE_PACK_JUMP_WITH_PAL_ADJUSTED_TIMING:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
@@ -2501,7 +2504,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x68: {
+    case HERO_STATE_ZERO_GROUND_AND_TARGET_SPEED_ENTRY: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
