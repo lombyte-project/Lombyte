@@ -779,6 +779,11 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_ROPE_RETRACT = 4,
         SNAGGLEBEAST_ROPE_RETURN_TO_IDLE = 5
     };
+    enum {
+        SNAGGLEBEAST_PATH_SELECT_FIRST_POINT = 0,
+        SNAGGLEBEAST_PATH_SELECT_SECOND_POINT = 1,
+        SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT = 2
+    };
     Vec4 oldpos;
     ChaserSight sight;
     Vec4 position;
@@ -1463,15 +1468,15 @@ void snagglebeast_update(unsigned char *moby) {
         } else {
             if (tick_countdown_32_alt((int *)(data + 0x160))) {
                 switch (data[0x19D]) {
-                case 0:
+                case SNAGGLEBEAST_PATH_SELECT_FIRST_POINT:
                     qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x10);
                     data[0x19C] &= 0xFE;
                     break;
-                case 1:
+                case SNAGGLEBEAST_PATH_SELECT_SECOND_POINT:
                     qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x20);
                     data[0x19C] &= 0xFD;
                     break;
-                case 2: {
+                case SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT: {
                     float d1 = vector_distance(((char *)&hero) + 0x80, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
                     if (vector_distance(((char *)&hero) + 0x80, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x40) < d1) {
                         qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
