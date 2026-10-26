@@ -394,7 +394,7 @@ extern f32 view_gated_smoke_puff_velocity_magnitude_scale_gp __asm__("D_L02_0016
 extern f32 view_gated_smoke_puff_vertical_acceleration_scale_gp __asm__("D_L02_0016208C") __attribute__((sda));
 extern f32 view_gated_smoke_puff_lateral_acceleration_magnitude_bound_gp __asm__("D_L02_00162090") __attribute__((sda));
 extern f32 view_gated_smoke_puff_motion_variation_fraction_gp __asm__("D_L02_00162094") __attribute__((sda));
-extern s32 D_L02_00162098 __attribute__((sda));
+extern s32 view_gated_smoke_puff_timing_random_span_gp __asm__("D_L02_00162098") __attribute__((sda));
 extern s32 D_L02_0016209C __attribute__((sda));
 extern s32 D_L02_001620A0 __attribute__((sda));
 extern f32 view_gated_smoke_puff_timing_variation_fraction_gp __asm__("D_L02_001620A4") __attribute__((sda));
@@ -411,7 +411,7 @@ extern f32 view_gated_smoke_burst_acceleration_magnitude_scale_gp __asm__("D_L02
 extern f32 view_gated_smoke_burst_vertical_acceleration_decrement_scale_gp __asm__("D_L02_001620D0") __attribute__((sda));
 extern f32 view_gated_smoke_burst_motion_variation_fraction_gp __asm__("D_L02_001620D4") __attribute__((sda));
 extern f32 view_gated_smoke_burst_jitter_magnitude_max_gp __asm__("D_L02_001620D8") __attribute__((sda));
-extern s32 D_L02_001620DC __attribute__((sda));
+extern s32 view_gated_smoke_burst_timing_random_span_gp __asm__("D_L02_001620DC") __attribute__((sda));
 extern s32 D_L02_001620E0 __attribute__((sda));
 extern s32 D_L02_001620E4 __attribute__((sda));
 extern f32 view_gated_smoke_burst_timing_variation_fraction_gp __asm__("D_L02_001620E8") __attribute__((sda));
@@ -431,7 +431,7 @@ extern f32 alternating_smoke_burst_acceleration_magnitude_scale_gp __asm__("D_L0
 extern f32 alternating_smoke_burst_vertical_acceleration_decrement_scale_gp __asm__("D_L02_00162120") __attribute__((sda));
 extern f32 alternating_smoke_burst_motion_variation_fraction_gp __asm__("D_L02_00162124") __attribute__((sda));
 extern f32 alternating_smoke_burst_jitter_magnitude_max_gp __asm__("D_L02_00162128") __attribute__((sda));
-extern s32 D_L02_0016212C __attribute__((sda));
+extern s32 alternating_smoke_burst_timing_random_span_gp __asm__("D_L02_0016212C") __attribute__((sda));
 extern s32 D_L02_00162130 __attribute__((sda));
 extern s32 D_L02_00162134 __attribute__((sda));
 extern f32 alternating_smoke_burst_timing_variation_fraction_gp __asm__("D_L02_00162138") __attribute__((sda));
@@ -511,7 +511,7 @@ void update_smoke_vent(struct Moby *moby) {
                 acc.f[3] = random_float(D_L02_001620F4, D_L02_001620F8);
                 color_a1_burst = lerp_color(D_L02_001620FC, D_L02_00162100, random_float(0.0f, 1.0f));
                 color_b1_burst = lerp_color(D_L02_00162104, D_L02_00162108, random_float(0.0f, 1.0f));
-                time_a1_burst = truncate_time(scale_time((f32)D_L02_001620DC * random_float(0.0f, 1.0f) + 1.0f));
+                time_a1_burst = truncate_time(scale_time((f32)view_gated_smoke_burst_timing_random_span_gp * random_float(0.0f, 1.0f) + 1.0f));
                 time_b1_burst = truncate_time(scale_time((f32)D_L02_001620E0 * (random_float(-view_gated_smoke_burst_timing_variation_fraction_gp, view_gated_smoke_burst_timing_variation_fraction_gp) + 1.0f)));
                 spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a1_burst, color_b1_burst, time_a1_burst, time_b1_burst,
                                truncate_time(scale_time((f32)D_L02_001620E4 * (random_float(-view_gated_smoke_burst_timing_variation_fraction_gp, view_gated_smoke_burst_timing_variation_fraction_gp) + 1.0f))),
@@ -531,7 +531,7 @@ void update_smoke_vent(struct Moby *moby) {
         acc.f[3] = random_float(D_L02_001620B0, D_L02_001620B4);
         color_a1_puff = lerp_color(D_L02_001620B8, D_L02_001620BC, random_float(0.0f, 1.0f));
         color_b1_puff = lerp_color(D_L02_001620C0, D_L02_001620C4, random_float(0.0f, 1.0f));
-        time_a1_puff = truncate_time(scale_time((f32)D_L02_00162098 * random_float(0.0f, 1.0f) + 1.0f));
+        time_a1_puff = truncate_time(scale_time((f32)view_gated_smoke_puff_timing_random_span_gp * random_float(0.0f, 1.0f) + 1.0f));
         time_b1_puff = truncate_time(scale_time((f32)D_L02_0016209C * (random_float(-view_gated_smoke_puff_timing_variation_fraction_gp, view_gated_smoke_puff_timing_variation_fraction_gp) + 1.0f)));
         spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a1_puff, color_b1_puff, time_a1_puff, time_b1_puff,
                        truncate_time(scale_time((f32)D_L02_001620A0 * (random_float(-view_gated_smoke_puff_timing_variation_fraction_gp, view_gated_smoke_puff_timing_variation_fraction_gp) + 1.0f))), -1);
@@ -563,7 +563,7 @@ void update_smoke_vent(struct Moby *moby) {
                 acc.f[3] = random_float(D_L02_00162144, D_L02_00162148);
                 color_a2_burst = lerp_color(D_L02_0016214C, D_L02_00162150, random_float(0.0f, 1.0f));
                 color_b2_burst = lerp_color(D_L02_00162154, D_L02_00162158, random_float(0.0f, 1.0f));
-                time_a2_burst = truncate_time(scale_time((f32)D_L02_0016212C * random_float(0.0f, 1.0f) + 1.0f));
+                time_a2_burst = truncate_time(scale_time((f32)alternating_smoke_burst_timing_random_span_gp * random_float(0.0f, 1.0f) + 1.0f));
                 time_b2_burst = truncate_time(scale_time((f32)D_L02_00162130 * (random_float(-alternating_smoke_burst_timing_variation_fraction_gp, alternating_smoke_burst_timing_variation_fraction_gp) + 1.0f)));
                 spawn_smoke_particle(&moby->pos, &smoke_particle_velocity, &acc, color_a2_burst, color_b2_burst, time_a2_burst, time_b2_burst,
                                truncate_time(scale_time((f32)D_L02_00162134 * (random_float(-alternating_smoke_burst_timing_variation_fraction_gp, alternating_smoke_burst_timing_variation_fraction_gp) + 1.0f))),
