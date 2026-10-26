@@ -90,10 +90,14 @@ extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_SYNCHRONIZED_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE = 0x26,
         HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72
+    };
+    enum {
+        HERO_STATE_ATTACK_TARGET_HEADING_CAPTURE = 0x23
     };
     int old2088;
     char *moby;
@@ -1319,7 +1323,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ATTACK_TARGET_HEADING_CAPTURE:
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1461,7 +1465,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ATTACK_TARGET_HEADING_CAPTURE: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
@@ -1477,7 +1481,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_SYNCHRONIZED_ATTACK_RECORD_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
