@@ -141,6 +141,7 @@ void update_hero_state_machine(void) __asm__("FUN_L05_00255960");
 
 void update_hero_state_machine(void) {
     enum {
+        HERO_STATE_JUMP_FROM_WATER_SURFACE = 18,
         HERO_STATE_HOVERBOARD_RIDING = 107,
         HERO_STATE_HOVERBOARD_BOOST_JUMP = 108,
         HERO_STATE_HOVERBOARD_HEIGHT_GATED_RESPAWN_WAIT = 109,
@@ -1511,7 +1512,7 @@ void update_hero_state_machine(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_JUMP_FROM_WATER_SURFACE:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
