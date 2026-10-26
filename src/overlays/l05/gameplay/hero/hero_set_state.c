@@ -114,6 +114,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_FACE_TARGET_WITH_QUEUED_ANIMATION = 0x24,
         HERO_STATE_TARGET_CONTROL_ANIMATION_ENTRY = 0x25,
         HERO_STATE_CAPTURE_TARGET_DISTANCE_WITH_ANIMATION = 0x26,
+        HERO_STATE_IDLE_ANIMATION_WITHOUT_MOTION_COPY = 0x27,
         HERO_STATE_TARGET_MOBY_MOTION_SETUP = 0x2C,
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
@@ -1979,7 +1980,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_IDLE_ANIMATION_WITHOUT_MOTION_COPY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
