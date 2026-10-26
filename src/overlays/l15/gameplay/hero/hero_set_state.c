@@ -85,11 +85,17 @@ extern char D_L15_0017C520[];
 extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
+        HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
+        HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
+        HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
+        HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION = 0x65,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
+        HERO_STATE_HEIGHT_ADJUSTED_JUMP = 0x69,
         HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72,
         HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
     };
@@ -541,7 +547,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -912,7 +918,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP:
     case 0x1C:
     case 0x29:
     case 0x2A:
@@ -920,7 +926,7 @@ int hero_set_state(int a, int b) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_HEIGHT_ADJUSTED_JUMP: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
@@ -1466,7 +1472,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1734,7 +1740,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
@@ -1815,7 +1821,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x3B: {
+    case HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         char *m;
         int n;
