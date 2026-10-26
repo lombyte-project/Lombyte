@@ -156,6 +156,7 @@ void update_hero_state_transitions(void) {
         HERO_STATE_ALT_LEDGE_JUMP = 76,
         HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
+        HERO_STATE_WAIT_FOR_ANIMATION_OR_TIMEOUT_THEN_SWIM_IDLE = 118,
         HERO_STATE_HEIGHT_DROP_OR_TIMEOUT_RESPAWN_WAIT = 125
     };
     unsigned char *moby;
@@ -629,7 +630,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x37, 1);
                     }
                     break;
-                case 118:
+                case HERO_STATE_WAIT_FOR_ANIMATION_OR_TIMEOUT_THEN_SWIM_IDLE:
                     if (hero.health.hp <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
                             hero_set_state(0x82, 1);
