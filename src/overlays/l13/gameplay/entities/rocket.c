@@ -1240,6 +1240,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     enum {
         GROUND_MATERIAL_DESTROYS_WALKER = 0,
         GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION = 1,
+        GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER = 3,
+        GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11,
         GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
@@ -1335,8 +1337,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         /* These material IDs all destroy the walker; their material names are unknown. */
         case GROUND_MATERIAL_DESTROYS_WALKER:
         case GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION:
-        case 3:
-        case 11:
+        case GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER:
+        case GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION:
         case GROUND_MATERIAL_EXPLODES_WALKER:
             moby->flags &= ~0x1000;
             stop_moby_sound_8d10(moby, 0, -1);
