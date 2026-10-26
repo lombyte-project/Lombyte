@@ -3309,7 +3309,7 @@ void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *
 }
 extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
-extern float D_L18_001623B0 __attribute__((sda));
+extern float drek_boss_scalar_maximum_speed_gp __asm__("D_L18_001623B0") __attribute__((sda));
 extern short D_L18_001623B4 __attribute__((sda));
 extern float drek_boss_scalar_blend_min_hero_distance_gp __asm__("D_L18_001623B8") __attribute__((sda));
 extern float drek_boss_scalar_blend_max_hero_distance_gp __asm__("D_L18_001623BC") __attribute__((sda));
@@ -3395,7 +3395,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
     } else if (boss_state == 0 || boss_state == 10 || boss_state == 11 || boss_state == 1 || boss_state == 0x1b) {
         int i;
         char *g;
-        char *q;
+        char *follow_camera_gate_source;
         first_scalar_value = (float *)(selected_scalar_record + 0x34);
         second_scalar_value = (float *)(selected_scalar_record + 0x38);
         for (i = 0, first_scalar_update_state = (float *)(boss_data + 0x378), second_scalar_update_state = (float *)(boss_data + 0x37c); i < 0x30; i++) {
@@ -3419,8 +3419,8 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                     if (*(unsigned char *)(moby + 0x20) >= 2) {
                         if (*(int *)(boss_data + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
                             char *follow_camera_gate_record;
-                            q = D_L18_00167680;
-                            follow_camera_gate_record = *(char **)(q + 0x180);
+                            follow_camera_gate_source = D_L18_00167680;
+                            follow_camera_gate_record = *(char **)(follow_camera_gate_source + 0x180);
                             if (follow_camera_gate_record != 0 && *(short *)(follow_camera_gate_record + 0x86) == 0) {
                                 follow_camera_set_distance(drek_boss_follow_camera_distance_target_gp, 0.003f, 0);
                                 follow_camera_set_height(drek_boss_follow_camera_height_target_gp, 0.003f);
@@ -3443,9 +3443,9 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
         }
     }
     advance_accelerated_scalar_7288(first_scalar_value, x, first_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
-                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
+                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
     advance_accelerated_scalar_7288(second_scalar_value, y, second_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
-                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], D_L18_001623B0 * D_0015ED6C_e[0]);
+                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
 }
 
 #define NOT_SDA
