@@ -1557,7 +1557,7 @@ void update_hero_motion_by_state(void) {
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
     case HERO_STATE_GRIND_ATTACK:
-    case 0x42: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         s32 has;
         s32 flag;
         s32 near;
