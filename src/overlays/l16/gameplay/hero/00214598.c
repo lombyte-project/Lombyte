@@ -1912,7 +1912,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         s32 slide = 0;
         f32 k;
         if (hero.base_condition != 0 && hero.water_depth < 0.25f) {
@@ -2362,8 +2362,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0.0f, 0, frame_time * 4.712389f);
