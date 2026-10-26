@@ -93,6 +93,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PACK_JUMP_FALLBACK = 0xF,
         HERO_STATE_REPEATABLE_JUMP = 0x11,
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_SET_DEFAULT_POSE_WITH_TRIANGLE_ACTIVATION_GATE = 0x1D,
         HERO_STATE_SET_DEFAULT_POSE = 0x1F,
         HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 0x35,
         HERO_STATE_VEHICLE_MODE_2_RUN = 0x5B,
@@ -1953,7 +1954,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_SET_DEFAULT_POSE_WITH_TRIANGLE_ACTIVATION_GATE: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
