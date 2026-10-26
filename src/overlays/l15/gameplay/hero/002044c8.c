@@ -633,7 +633,10 @@ void update_hero_motion_for_current_state(void) {
         HERO_COMBO_KIND_FLAG_OR_ANIMATION_GATED_TARGET_SPEED = 2
     };
     enum {
+        HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
         HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
+        HERO_STATE_STEERED_MOVEMENT_WITH_RADIAL_SOUNDS = 0x5B,
+        HERO_STATE_FALL_WITH_BELOW_HERO_SOUND = 0x5C,
         HERO_STATE_GIANT_CLANK_HIT_REACTION = 0x5D,
         HERO_STATE_ATTACK_RECORD_GATED_POINT_HITS = 0x60,
         HERO_STATE_ANIMATION_GATED_TRACKED_MOBY_POSITION = 0x61
@@ -2087,7 +2090,7 @@ void update_hero_motion_for_current_state(void) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_JUMP_WITH_TIMED_SPLASH:
     case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
@@ -2461,7 +2464,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x5C:
+    case HERO_STATE_FALL_WITH_BELOW_HERO_SOUND:
         stick_target(frame_time * 6.0f, 0);
         qcopy(&spatial_or_hit_descriptor_work, &hero.motion.pos);
         spatial_or_hit_descriptor_work.f[2] -= 1.0f;
@@ -2474,7 +2477,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = frame_time * -10.0f;
         }
         break;
-    case 0x5B: {
+    case HERO_STATE_STEERED_MOVEMENT_WITH_RADIAL_SOUNDS: {
         f32 d;
         f32 k;
         f32 g;
