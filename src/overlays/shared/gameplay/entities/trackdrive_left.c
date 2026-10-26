@@ -902,7 +902,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     s32 unwrapped_uv_scroll;
     s32 wrapped_uv_scroll_offset;
     s32 strip_texture_tex0;
-    f32 f24, f25, start_corner_cosine_component, f27, f28, start_corner_sine_component, end_corner_cosine_component, end_corner_sine_component;
+    f32 start_cosine_component, start_sine_component, start_corner_cosine_component, end_cosine_component, end_sine_component, start_corner_sine_component, end_corner_cosine_component, end_corner_sine_component;
     f32 trig_value;
 
     unwrapped_uv_scroll = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
@@ -916,26 +916,26 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_uvs[2] = (s32)(D_L02_00161AF4 + wrapped_uv_scroll_offset);
     vertex_uvs[3] = (s32)(D_L02_00161AF8 + wrapped_uv_scroll_offset);
 
-    f25 = fast_sin(angle) * start_distance;
-    f24 = fast_cos(angle) * start_distance;
-    f28 = fast_sin(angle) * end_distance;
-    f27 = fast_cos(angle) * end_distance;
+    start_sine_component = fast_sin(angle) * start_distance;
+    start_cosine_component = fast_cos(angle) * start_distance;
+    end_sine_component = fast_sin(angle) * end_distance;
+    end_cosine_component = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    start_corner_sine_component = f25 + trig_value * 2.0f;
+    start_corner_sine_component = start_sine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f25 = f25 - trig_value * 2.0f;
+    start_sine_component = start_sine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    start_corner_cosine_component = f24 - trig_value * 2.0f;
+    start_corner_cosine_component = start_cosine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f24 = f24 + trig_value * 2.0f;
+    start_cosine_component = start_cosine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    end_corner_sine_component = f28 + trig_value * 2.0f;
+    end_corner_sine_component = end_sine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f28 = f28 - trig_value * 2.0f;
+    end_sine_component = end_sine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    end_corner_cosine_component = f27 - trig_value * 2.0f;
+    end_corner_cosine_component = end_cosine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f27 = f27 + trig_value * 2.0f;
+    end_cosine_component = end_cosine_component + trig_value * 2.0f;
 
     packed_vertices[3] = 0xFFFFF000000000ULL;
     packed_vertices[2] = 0xFFFFF000000000ULL;
@@ -944,12 +944,12 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
 
     NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
     LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
-    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
-    LO4(packed_vertices[1], truncate_float_to_s32(f25));
+    NEG20(packed_vertices[1], truncate_float_to_s32(start_cosine_component));
+    LO4(packed_vertices[1], truncate_float_to_s32(start_sine_component));
     NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
     LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
-    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
-    LO4(packed_vertices[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[3], truncate_float_to_s32(end_cosine_component));
+    LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
     strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
@@ -959,26 +959,26 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_uvs[2] = (s32)D_L02_00161B04;
     vertex_uvs[3] = (s32)D_L02_00161B08;
 
-    f25 = fast_sin(angle) * start_distance;
-    f24 = fast_cos(angle) * start_distance;
-    f28 = fast_sin(angle) * end_distance;
-    f27 = fast_cos(angle) * end_distance;
+    start_sine_component = fast_sin(angle) * start_distance;
+    start_cosine_component = fast_cos(angle) * start_distance;
+    end_sine_component = fast_sin(angle) * end_distance;
+    end_cosine_component = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    start_corner_sine_component = f25 + trig_value * 5.0f;
+    start_corner_sine_component = start_sine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f25 = f25 - trig_value * 5.0f;
+    start_sine_component = start_sine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    start_corner_cosine_component = f24 - trig_value * 5.0f;
+    start_corner_cosine_component = start_cosine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f24 = f24 + trig_value * 5.0f;
+    start_cosine_component = start_cosine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    end_corner_sine_component = f28 + trig_value * 5.0f;
+    end_corner_sine_component = end_sine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f28 = f28 - trig_value * 5.0f;
+    end_sine_component = end_sine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    end_corner_cosine_component = f27 - trig_value * 5.0f;
+    end_corner_cosine_component = end_cosine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f27 = f27 + trig_value * 5.0f;
+    end_cosine_component = end_cosine_component + trig_value * 5.0f;
 
     packed_vertices[3] = 0xFFFFF000000000ULL;
     packed_vertices[2] = 0xFFFFF000000000ULL;
@@ -987,12 +987,12 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
 
     NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
     LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
-    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
-    LO4(packed_vertices[1], truncate_float_to_s32(f25));
+    NEG20(packed_vertices[1], truncate_float_to_s32(start_cosine_component));
+    LO4(packed_vertices[1], truncate_float_to_s32(start_sine_component));
     NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
     LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
-    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
-    LO4(packed_vertices[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[3], truncate_float_to_s32(end_cosine_component));
+    LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 }
