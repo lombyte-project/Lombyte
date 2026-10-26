@@ -214,7 +214,7 @@ void FUN_001f9a10_00259d08(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
-int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void *first_endpoint_start, void *second_endpoint_start, void *e, int f, int sample_count) {
+int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void *first_endpoint_start, void *second_endpoint_start, void *hit_source_moby, int hit_descriptor_address, int sample_count) {
     V4_259d08 da, db, va, vb;
     float k, t;
     int i = 0;
@@ -227,7 +227,7 @@ int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void 
         FUN_001f9a68_00259d08(vb, db, t);
         FUN_001f9a10_00259d08(va, va, first_endpoint_start);
         FUN_001f9a10_00259d08(vb, vb, second_endpoint_start);
-        if (FUN_001efa68_00259d08(va, vb, 0, e, f))
+        if (FUN_001efa68_00259d08(va, vb, 0, hit_source_moby, hit_descriptor_address))
             return 1;
         t += k;
     }
