@@ -96,6 +96,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SET_DEFAULT_POSE_WITH_TRIANGLE_ACTIVATION_GATE = 0x1D,
         HERO_STATE_SET_DEFAULT_POSE = 0x1F,
         HERO_STATE_SET_DEFAULT_POSE_IN_ITEM_RELEASE_WAIT_MODE = 0x27,
+        HERO_STATE_SET_DEFAULT_POSE_WITH_ITEM_RESTORE_ON_EXIT = 0x32,
         HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 0x35,
         HERO_STATE_VEHICLE_MODE_2_RUN = 0x5B,
         HERO_STATE_VEHICLE_MODE_2_FALL = 0x5C,
@@ -1996,7 +1997,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_SET_DEFAULT_POSE_WITH_ITEM_RESTORE_ON_EXIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
