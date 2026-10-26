@@ -47,7 +47,7 @@ void hero_move_state_velocity(void) {
     f32 speed;
     f32 a;
     f32 planar_speed_reduction_step;
-    f32 arg;
+    f32 base_planar_velocity_step;
     s32 state;
 
     state = hero.state.current;
@@ -142,7 +142,7 @@ void hero_move_state_velocity(void) {
         }
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
-        arg = ED70 * 20.0f;
+        base_planar_velocity_step = ED70 * 20.0f;
         if (hero.target_speed < D_L00_0017BDD0[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 planar_speed_reduction_step = hero.stickless_decel;
@@ -154,23 +154,23 @@ void hero_move_state_velocity(void) {
                 return;
             }
             if (hero.on_flagged_ground_moby != 0) {
-                arg = ED70 * 6.0f;
+                base_planar_velocity_step = ED70 * 6.0f;
             } else {
-                arg = ED70 * 2.0f;
+                base_planar_velocity_step = ED70 * 2.0f;
             }
         }
         if (hero.unk4A8 && hero.on_ice_ground) {
-            arg = ED70 * 0.17f;
+            base_planar_velocity_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 FUN_L00_002118c8_214658(0, ED6C * 2.5f);
-                arg = ED70 * 3.0f;
+                base_planar_velocity_step = ED70 * 3.0f;
             }
             if (0.2617994f < hero.ground_slope.f) {
                 hero.target_speed = 0.0f;
-                arg = hero.ground_slope.f * (ED70 * 9.0f) / 0.7853982f;
+                base_planar_velocity_step = hero.ground_slope.f * (ED70 * 9.0f) / 0.7853982f;
             }
         }
-        steer_hero_planar_velocity(arg);
+        steer_hero_planar_velocity(base_planar_velocity_step);
     }
 }
 #undef ED64
