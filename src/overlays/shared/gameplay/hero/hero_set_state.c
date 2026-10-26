@@ -677,6 +677,7 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_IDLE_ANIMATION_WITH_ITEM_INPUT_RESTRICTION = 0x1D,
         HERO_STATE_LOOK_ANIMATION_RESTORE_ENTRY = 0x1E,
+        HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
         HERO_STATE_GRAPPLE_TARGET_ANIMATION_ENTRY = 0x25,
         HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_RUN_WITH_DISPLACEMENT_GROUND_SPEED = 0x2E,
@@ -2912,7 +2913,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
