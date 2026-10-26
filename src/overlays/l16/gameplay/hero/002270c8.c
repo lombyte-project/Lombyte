@@ -154,11 +154,13 @@ void update_hero_state_transitions(void) __asm__("FUN_L16_002270c8");
 
 void update_hero_state_transitions(void) {
     enum {
+        HERO_STATE_DELAYED_ITEM_RELEASE_FALL = 44,
         HERO_STATE_HOVERBOARD_RIDE = 107,
         HERO_STATE_HOVERBOARD_HIGH_JUMP = 108,
         HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT = 109,
         HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT = 110,
-        HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT = 111
+        HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT = 111,
+        HERO_STATE_SWIM_IDLE_ANIMATION_OR_TIMEOUT_RECOVERY = 118
     };
     unsigned char *moby;
     int prevSub;
@@ -610,7 +612,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x37, 1);
                     }
                     break;
-                case 118:
+                case HERO_STATE_SWIM_IDLE_ANIMATION_OR_TIMEOUT_RECOVERY:
                     if (hero.health.hp <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
                             hero_set_state(0x82, 1);
@@ -1149,7 +1151,7 @@ void update_hero_state_transitions(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case 44:
+                case HERO_STATE_DELAYED_ITEM_RELEASE_FALL:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
