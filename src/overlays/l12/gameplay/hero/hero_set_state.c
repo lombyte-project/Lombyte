@@ -88,7 +88,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_BLEND_TO_IDLE_ANIMATION = 0x1D,
         HERO_STATE_SELECT_IDLE_ANIMATION = 0x1F,
+        HERO_STATE_BLEND_TO_IDLE_IN_ITEM_RELEASE_MODE = 0x27,
         HERO_STATE_SWIM_CROUCH_INPUT = 0x35,
+        HERO_STATE_RESET_ATTACK_STATE = 0x51,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCEL = 0x72
     };
     int old2088;
@@ -1335,7 +1337,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case 0x51: {
+    case HERO_STATE_RESET_ATTACK_STATE: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1708,7 +1710,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_BLEND_TO_IDLE_IN_ITEM_RELEASE_MODE: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
