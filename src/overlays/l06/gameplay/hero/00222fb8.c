@@ -1019,6 +1019,11 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L06_0022e020");
 
 void update_hero_motion_for_current_state(void) {
+    enum {
+        HERO_STATE_ALT_LEDGE_ANCHOR_APPROACH = 0x4A,
+        HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND = 0x51,
+        HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT = 0x7D
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -2198,7 +2203,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_0025f730(&hero.motion.velocity, D_0015ED6C_c * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], D_0015ED6C_c * 3.0f);
         break;
-    case 0x4A:
+    case HERO_STATE_ALT_LEDGE_ANCHOR_APPROACH:
     case HERO_STATE_ALT_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, D_0015ED6C_c * 4.712389f);
@@ -2608,7 +2613,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -D_0015ED6C_c;
         break;
-    case 0x7D:
+    case HERO_STATE_VEHICLE_MODE_1_MATERIAL_DESCENT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -(D_0015ED6C_c * 0.35f);
         break;
@@ -2627,7 +2632,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x51: {
+    case HERO_STATE_ATTACK_RECORD_MIDPOINT_SOUND: {
         struct HeroTableRow2C *tb;
         s32 ok;
         tb = &D_L06_0017C3A8[hero.attack_record];
