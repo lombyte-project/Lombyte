@@ -99,6 +99,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SET_DEFAULT_POSE_WITH_ITEM_RESTORE_ON_EXIT = 0x32,
         HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 0x35,
         HERO_STATE_ITEM_GROUND_CONTACT_RUN = 0x3F,
+        HERO_STATE_RESET_ATTACK_CONTROL = 0x51,
         HERO_STATE_VEHICLE_MODE_2_RUN = 0x5B,
         HERO_STATE_VEHICLE_MODE_2_FALL = 0x5C,
         HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT = 0x5D,
@@ -1469,7 +1470,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case 0x51: {
+    case HERO_STATE_RESET_ATTACK_CONTROL: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
