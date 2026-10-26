@@ -96,7 +96,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RUN_ANIMATION_FROM_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
-        HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72
+        HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72,
+        HERO_STATE_LAND_ANIMATION_WITH_SPEED_CAP = 0x81
     };
     enum {
         HERO_STATE_ATTACK_TARGET_HEADING_CAPTURE = 0x23
@@ -929,7 +930,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_LAND_ANIMATION_WITH_SPEED_CAP: {
         struct Hero *p = &hero;
         int animation_timing_value = -2;
         p->state.control_mode = 1;
