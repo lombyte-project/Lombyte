@@ -87,7 +87,10 @@ int hero_set_state(int a, int b) {
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
         HERO_STATE_PLAY_TIMED_IDLE_ANIMATION = 0x27,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_IDLE_ANIMATION = 0x32,
+        HERO_STATE_SWIM_PLAY_TIMED_ANIMATION = 0x35,
+        HERO_STATE_WATER_SURFACE_PLAY_TIMED_ANIMATION = 0x36,
         HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
+        HERO_STATE_ENTER_ATTACK_CONTROL_MODE = 0x51,
         HERO_STATE_VEHICLE_MODE_3_PLAY_AND_QUEUE_ANIMATIONS = 0x59,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_LOCOMOTION_ANIMATION = 0x65,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72
@@ -261,7 +264,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_PLAY_TIMED_ANIMATION: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -389,7 +392,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_PLAY_TIMED_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->item_select_blocked = 1;
@@ -1168,7 +1171,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ITEM_ATTACK_ANIMATION_ENTRY:
-    case 0x51: {
+    case HERO_STATE_ENTER_ATTACK_CONTROL_MODE: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
