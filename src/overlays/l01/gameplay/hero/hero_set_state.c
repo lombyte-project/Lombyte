@@ -81,6 +81,7 @@ extern char D_L01_0017C3A0[];
 extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_WATER_DEPTH_DEPENDENT_JUMP = 0x12,
         HERO_STATE_COPY_DISPLACEMENT_AND_PLAY_IDLE_WITH_TEN_FRAME_TIMING = 0x17,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_TIMED_IDLE_ANIMATION = 0x1D,
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
@@ -94,6 +95,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_SWIM_PLAY_TIMED_ANIMATION = 0x35,
         HERO_STATE_WATER_SURFACE_PLAY_TIMED_ANIMATION = 0x36,
         HERO_STATE_PLAY_PAIRED_WRENCH_ANIMATION = 0x3B,
+        HERO_STATE_HURT_CLEAR_MOTION_AND_LAUNCH_UPWARD = 0x42,
         HERO_STATE_ENTER_ATTACK_CONTROL_MODE = 0x51,
         HERO_STATE_VEHICLE_MODE_3_PLAY_AND_QUEUE_ANIMATIONS = 0x59,
         HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_LOCOMOTION_ANIMATION = 0x65,
@@ -819,7 +821,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_DEPTH_DEPENDENT_JUMP:
     case 0x1C:
     case 0x29:
     case 0x2A:
@@ -1469,7 +1471,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x42: {
+    case HERO_STATE_HURT_CLEAR_MOTION_AND_LAUNCH_UPWARD: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
