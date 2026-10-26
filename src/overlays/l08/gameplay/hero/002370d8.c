@@ -146,6 +146,7 @@ void update_hero_state_transitions(void) __asm__("FUN_L08_002370d8");
 
 void update_hero_state_transitions(void) {
     enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_CROUCH_INPUT_SWIM = 53,
         HERO_STATE_TIMED_RESPAWN_WAIT = 127
     };
@@ -1852,7 +1853,7 @@ void update_hero_state_transitions(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
