@@ -331,6 +331,9 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D,
         HERO_STATE_GROUND_HEIGHT_SPRING_MOVEMENT = 0x81
     };
+    enum {
+        HERO_ATTACK_KIND_STAGED_FORWARD_SPEED = 1
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -1389,7 +1392,7 @@ void update_hero_motion_for_current_state(void) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case HERO_ATTACK_KIND_STAGED_FORWARD_SPEED:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
