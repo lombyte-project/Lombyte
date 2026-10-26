@@ -150,6 +150,10 @@ void update_hero_state_transitions(void) __asm__("FUN_L17_002258a8");
 
 void update_hero_state_transitions(void) {
     enum {
+        HERO_STATE_TRAJECTORY_TIMED_ANIMATION_WAIT_TO_IDLE = 34,
+        HERO_STATE_ITEM_RELEASE_OR_LOW_SPEED_EXIT = 37,
+        HERO_STATE_ITEM_RELEASE_EXIT_WITH_SPEED_CAP = 38,
+        HERO_STATE_DELAYED_ITEM_RELEASE_TO_FALL = 44,
         HERO_STATE_SWIM_CROUCH_INPUT = 53,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
@@ -1214,7 +1218,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case 37:
+                case HERO_STATE_ITEM_RELEASE_OR_LOW_SPEED_EXIT:
                     adjust_hero_animation_speed_for_target_frame(10.0f, hero.target_arrival_frames, 0.5f, -1.0f);
                     if ((float)scale_game_frames(0x16) > hero.target_arrival_frames &&
                         (float)scale_game_frames(0x1E) > hero.target_arrival_frames) {
@@ -1254,7 +1258,7 @@ void update_hero_state_transitions(void) {
                     hero.stickless_decel = frame_time_sq * 42.0f;
                     hero.fall_state_gravity = frame_time_sq * 29.0f;
                     break;
-                case 38:
+                case HERO_STATE_ITEM_RELEASE_EXIT_WITH_SPEED_CAP:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -1269,7 +1273,7 @@ void update_hero_state_transitions(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case 44:
+                case HERO_STATE_DELAYED_ITEM_RELEASE_TO_FALL:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -1282,7 +1286,7 @@ void update_hero_state_transitions(void) {
                         hero.fall_state_gravity = frame_time_sq * 27.0f;
                     }
                     break;
-                case 34:
+                case HERO_STATE_TRAJECTORY_TIMED_ANIMATION_WAIT_TO_IDLE:
                     if (hero.state_timer < scale_game_frames(0xC) &&
                         (hero.state.prev2 != 0x10 ||
                          (hero.state.prev != 8 && hero.state.prev != 6)) &&
