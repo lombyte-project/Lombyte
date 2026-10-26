@@ -517,6 +517,11 @@ extern s32 D_0013CB14[];
 void update_hero_motion_for_current_state(void) __asm__("FUN_L01_002370b8");
 
 void update_hero_motion_for_current_state(void) {
+    enum {
+        HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
+        HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_WATER_BOBBING = 0x75,
+        HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_DECAYING_EFFECT_COUNT = 0x76
+    };
     FVec4 vector_and_hit_scratch[6];
     Moby *moby;
     int prevState;
@@ -716,7 +721,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case 0x35: {
+    case HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY: {
         float lim;
         float turn;
         float trig;
@@ -1012,7 +1017,7 @@ void update_hero_motion_for_current_state(void) {
             D_L01_0017AB00[5].f60[2] = lz;
         }
     } break;
-    case 0x76: {
+    case HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_DECAYING_EFFECT_COUNT: {
         int n;
 
         n = 0xA - hero.state_timer / 3;
@@ -1030,7 +1035,7 @@ void update_hero_motion_for_current_state(void) {
         }
         clip_hero_horizontal_velocity(0);
     } break;
-    case 0x75:
+    case HERO_STATE_DAMP_PLANAR_VELOCITY_WITH_WATER_BOBBING:
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         hero.motion.velocity.f[2] = 0.0f;
         {
