@@ -100,7 +100,7 @@ int hero_set_state(int a, int b) {
     int old2088;
     char *moby;
     int old20A7;
-    float vec[4];
+    float grind_vector_scratch[4];
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
@@ -847,11 +847,11 @@ int hero_set_state(int a, int b) {
         seg = p->rail_segment;
         t = p->rail_seg_frac;
         sample_path(*(int **)&p->rail_spline, pos, &seg, &t, p->rail_spline_loops, 1.0f);
-        subtract_vector_xyz(vec, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(vec)) {
-            normalize_vector_xyz(vec, vec, 1.0f);
+        subtract_vector_xyz(grind_vector_scratch, pos, &p->motion.pos);
+        if (0.001f < vector_length_xyz(grind_vector_scratch)) {
+            normalize_vector_xyz(grind_vector_scratch, grind_vector_scratch, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, vec);
+                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, grind_vector_scratch);
             }
         }
         {
@@ -862,7 +862,7 @@ int hero_set_state(int a, int b) {
                                  *(float *)(((char *)q->grind_look_moby) + 0x14) - q->motion.pos.f[1]);
                 if (1.5707964f < fast_difference_between_rotations(
                                      ang, fast_add_rotations(q->grind_yaw_offset,
-                                                             fast_arc_tan(vec[0], vec[1])))) {
+                                                             fast_arc_tan(grind_vector_scratch[0], grind_vector_scratch[1])))) {
                     q->grind_yaw_offset = 1.5707964f;
                     q->grind_anim_variant = 1;
                 }
@@ -1126,15 +1126,15 @@ int hero_set_state(int a, int b) {
                 u->jump_gravity = frame_time_sq * 27.0f;
                 if (u->selector_5 != 0) {
                     float k = 4.7f;
-                    *(u128 *)vec = 0;
+                    *(u128 *)grind_vector_scratch = 0;
                     u->unk430 = u->unk430 + k;
                     u->jump_height_start = u->jump_height_start + k;
                     u->unk48C = u->unk48C + k;
                     u->jump_gravity = frame_time_sq * 14.0f;
-                    vec[0] = 331.0f;
-                    vec[1] = 104.0f;
-                    vec[2] = 145.0f;
-                    if (FUN_001f9b48(&u->motion.pos, vec) < 10.0f) {
+                    grind_vector_scratch[0] = 331.0f;
+                    grind_vector_scratch[1] = 104.0f;
+                    grind_vector_scratch[2] = 145.0f;
+                    if (FUN_001f9b48(&u->motion.pos, grind_vector_scratch) < 10.0f) {
                         k = 0.7f;
                         u->unk430 = u->unk430 + k;
                         u->jump_height_start = u->jump_height_start + k;
