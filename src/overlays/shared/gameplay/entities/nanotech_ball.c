@@ -2728,7 +2728,7 @@ void suck_beam_draw_mesh(void) {
     float vd[4];
     float ve[4];
     float vf[4];
-    float a, a2, am, b, b2, dot;
+    float row_texture_u, next_row_texture_u, am, segment_texture_v, next_segment_texture_v, dot;
     float step;
     short *row_alpha_counter;
     int i, j, k, row_alpha_or_packed_color;
@@ -2737,16 +2737,16 @@ void suck_beam_draw_mesh(void) {
     quad_packet.word2 = 0x0000FF9000000260L;
     quad_packet.word3 = 0x8000000048L;
     quad_packet.word0 = 0;
-    a = suction_effect_texture_u_offset;
-    suction_effect_texture_u_offset = a + 0.001f;
+    row_texture_u = suction_effect_texture_u_offset;
+    suction_effect_texture_u_offset = row_texture_u + 0.001f;
     if (suction_effect_texture_u_offset > 7.0f) suction_effect_texture_u_offset -= 7.0f;
     step = 0.3f;
-    a += step;
+    row_texture_u += step;
     for (i = 1; i < 10; i++) {
-        b = suction_effect_texture_v_offset;
-        suction_effect_texture_v_offset = b + D_L00_00161B50;
+        segment_texture_v = suction_effect_texture_v_offset;
+        suction_effect_texture_v_offset = segment_texture_v + D_L00_00161B50;
         if (suction_effect_texture_v_offset > 7.0f) suction_effect_texture_v_offset -= 7.0f;
-        a2 = a + step;
+        next_row_texture_u = row_texture_u + step;
         for (j = 0; j < 20; j++) {
             qcopy(quad_packet.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
             qcopy(quad_packet.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
@@ -2758,10 +2758,10 @@ void suck_beam_draw_mesh(void) {
             subtract_vector_xyz_c4(vf, quad_packet.q[1], g_debug_camera);
             dot = fast_vec_dot(ve, vf);
             if (0.0f <= dot) {
-                b += 0.05f;
+                segment_texture_v += 0.05f;
             } else {
-                b2 = b + 0.05f;
-                am = a - step;
+                next_segment_texture_v = segment_texture_v + 0.05f;
+                am = row_texture_u - step;
                 y = D_L00_001E6008[i - 1];
                 row_alpha_counter = &D_L00_001E6008[i];
                 row_alpha_or_packed_color = *row_alpha_counter;
@@ -2780,19 +2780,19 @@ void suck_beam_draw_mesh(void) {
                     quad_packet.col[1] = 0x404040;
                     quad_packet.col[0] = 0x404040;
                 }
-                quad_packet.x0 = a;
-                quad_packet.y0 = b;
-                quad_packet.x1 = a;
-                quad_packet.y1 = b2;
+                quad_packet.x0 = row_texture_u;
+                quad_packet.y0 = segment_texture_v;
+                quad_packet.x1 = row_texture_u;
+                quad_packet.y1 = next_segment_texture_v;
                 quad_packet.x2 = am;
-                quad_packet.y2 = b;
+                quad_packet.y2 = segment_texture_v;
                 quad_packet.x3 = am;
-                quad_packet.y3 = b2;
-                b = b2;
+                quad_packet.y3 = next_segment_texture_v;
+                segment_texture_v = next_segment_texture_v;
                 fast_draw_quad_real(&quad_packet, 0, 0);
             }
         }
-        a = a2;
+        row_texture_u = next_row_texture_u;
     }
     vu1_add_g_sregister(0x47, 0x5360B);
 }
