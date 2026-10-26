@@ -141,6 +141,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE = 0x72,
         HERO_STATE_RUN_WITH_ALTERNATE_ANIMATION = 0x73,
         HERO_STATE_HURT_WITH_DISPLACEMENT_AND_ALTERNATE_ANIMATION = 0x75,
+        HERO_STATE_ANIMATION_ENTRY_WITH_LEVEL_SPECIFIC_PARTICLE_BURST = 0x7B,
         HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
     };
     enum {
@@ -1811,7 +1812,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7B: {
+    case HERO_STATE_ANIMATION_ENTRY_WITH_LEVEL_SPECIFIC_PARTICLE_BURST: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
