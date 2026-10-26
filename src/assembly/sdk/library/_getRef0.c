@@ -24,10 +24,11 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     int cx, cy, cxm, cym, cxr, cyr;
     int cdx, cdy;
     int xh, yh;
+    int cxh, cyh;
     int k;
+    int yidx;
     int mb;
     int ch;
-    int yidx;
 
     work = d->mc_work;
     x = bx + (dx >> 1);
@@ -35,15 +36,13 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     ye = &d->mb_buf[d->mb_buf_index].luma[n];
     ce = &d->mb_buf[d->mb_buf_index].chroma[n];
     if (fieldpred) {
-        y = (((dy >> 1) * 2) + by) + (sfield + yofs);
+        y = ((dy >> 1) * 2 + by) + (yofs + sfield);
     } else {
-        y = (dy >> 1) + by;
-        y += sfield + yofs;
+        y = ((dy >> 1) + by) + (yofs + sfield);
     }
     xm = x >> 4;
-    mb = xm * ref->unk10;
     ym = y >> 4;
-    mb += ym;
+    mb = xm * ref->unk10 + ym;
     xr = x - xm * 16;
     yr = y - ym * 16;
     ye->x = xr;
@@ -91,7 +90,9 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     ce->x = cxr;
     ce->addr = work + (dfield + (yofs >> 1)) * 16 + 0x200;
     ch = h >> 1;
-    if ((cdy & 1)) {
+    cyh = cdy & 1;
+    cxh = cdx & 1;
+    if (cyh) {
         if (cyr + (ch << fieldpred) >= 8) {
             k = (8 >> fieldpred) - (cyr >> fieldpred) - 1;
             ce->n0 = k;
@@ -116,9 +117,9 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     ce->p1 = buf + cyr * 8 + 0x400;
 
     d->mb_buf[d->mb_buf_index].luma_func[n] = D_00132E30[yidx];
-    d->mb_buf[d->mb_buf_index].chroma_func[n] = D_00132E50[avg | (cdx & 1) << 1 | (cdy & 1)];
-    d->mb_buf[d->mb_buf_index].luma_ref[n] = ref->data + mb * 0x180;
+    d->mb_buf[d->mb_buf_index].chroma_func[n] = D_00132E50[avg | cxh << 1 | cyh];
     d->mb_buf[d->mb_buf_index].chroma_ref[n] = ref->data + (mb + ref->unk10) * 0x180;
+    d->mb_buf[d->mb_buf_index].luma_ref[n] = ref->data + mb * 0x180;
     d->mb_buf[d->mb_buf_index].fetch_count++;
 }
 #endif /* NON_MATCHING */
