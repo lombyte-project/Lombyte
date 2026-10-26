@@ -150,7 +150,7 @@ void update_hero_state_transitions(void) {
     int prevState;
     int prevAnim;
     float position_scratch[4] __attribute__((aligned(16)));
-    float v1[4] __attribute__((aligned(16)));
+    float movement_query_scratch[4] __attribute__((aligned(16)));
     int record_index;
     int path_seg;
     float path_t;
@@ -1196,11 +1196,11 @@ void update_hero_state_transitions(void) {
                             if (current_level_index != 0x10) {
                                 qcopy(position_scratch, hero.rail_point.f);
                                 position_scratch[2] += 2.0f;
-                                v1[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
-                                v1[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
-                                v1[2] = 0.0f;
-                                add_vector_xyz(v1, v1, position_scratch);
-                                if (collision_line(position_scratch, v1, 2, 0, 0)) {
+                                movement_query_scratch[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
+                                movement_query_scratch[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
+                                movement_query_scratch[2] = 0.0f;
+                                add_vector_xyz(movement_query_scratch, movement_query_scratch, position_scratch);
+                                if (collision_line(position_scratch, movement_query_scratch, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }
@@ -1292,10 +1292,10 @@ void update_hero_state_transitions(void) {
                                 hero.rail_gap_jump = 1;
                                 rail_jump_velocity_z = FUN_L00_0025abf0(hero.motion.pos.f, hero.jump_target_pos.f, 0,
                                                      hero.motion.flat_speed, -hero.jump_gravity);
-                                *(OvlQuad *)v1 = 0;
+                                *(OvlQuad *)movement_query_scratch = 0;
                                 *(OvlQuad *)position_scratch = 0;
-                                v1[2] = rail_jump_velocity_z;
-                                t = calculate_triangular_corrected_scalar(position_scratch, v1, 0, hero.jump_gravity);
+                                movement_query_scratch[2] = rail_jump_velocity_z;
+                                t = calculate_triangular_corrected_scalar(position_scratch, movement_query_scratch, 0, hero.jump_gravity);
                                 hero.unk48C = t + 0.05f;
                                 hero.unk430 = t;
                                 hero.jump_gravity = hero.rail_jump_gravity;
@@ -1368,14 +1368,14 @@ void update_hero_state_transitions(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, position_scratch, &path_seg,
                                                          &path_t, hero.rail_spline_loops, d)) {
-                                        scale_vector_xyz(v1, hero.motion.displacement.f,
+                                        scale_vector_xyz(movement_query_scratch, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(position_scratch, hero.motion.pos.f, v1);
+                                        add_vector_xyz(position_scratch, hero.motion.pos.f, movement_query_scratch);
                                     }
                                     position_scratch[0] += fast_cos(ang) * f;
                                     position_scratch[1] += fast_sin(ang) * f;
                                     /* Look for another path (not this one) near the probe. */
-                                    if (nearest_rail_point(position_scratch, &new_path, v1, &new_seg, &new_t,
+                                    if (nearest_rail_point(position_scratch, &new_path, movement_query_scratch, &new_seg, &new_t,
                                                          &new_loop, hero.rail_spline, 0)) {
                                         hero.transfer_from_spline = hero.rail_spline;
                                         hero.prev_rail_segment = hero.rail_segment;
@@ -1513,11 +1513,11 @@ void update_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
-                        v1[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        qcopy(movement_query_scratch, hero.motion.pos.f);
+                        movement_query_scratch[0] += fast_cos(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
+                        movement_query_scratch[1] += fast_sin(fast_add_rotations(hero.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         positive_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &positive_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(movement_query_scratch, &positive_shimmy_probe_yaw)) {
                             hero_set_state(0x1A, 1);
                         }
                         break;
@@ -1526,13 +1526,13 @@ void update_hero_state_transitions(void) {
                         fast_difference_between_rotations(
                             hero.motion.move_yaw, fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) <
                             0.7853982f) {
-                        qcopy(v1, hero.motion.pos.f);
-                        v1[0] +=
+                        qcopy(movement_query_scratch, hero.motion.pos.f);
+                        movement_query_scratch[0] +=
                             fast_cos(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
-                        v1[1] +=
+                        movement_query_scratch[1] +=
                             fast_sin(fast_add_rotations(hero.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         negative_shimmy_probe_yaw = hero.motion.rot.f[2];
-                        if (test_hero_ledge_ahead(v1, &negative_shimmy_probe_yaw)) {
+                        if (test_hero_ledge_ahead(movement_query_scratch, &negative_shimmy_probe_yaw)) {
                             hero_set_state(0x1B, 1);
                         }
                     }
