@@ -161,6 +161,7 @@ void update_hero_state_transitions(void) {
         HERO_STATE_ALT_LEDGE_JUMP = 76,
         HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
+        HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETE = 98,
         HERO_STATE_WAIT_FOR_ANIMATION_OR_TIMEOUT_THEN_SWIM_IDLE = 118,
         HERO_STATE_HEIGHT_DROP_OR_TIMEOUT_RESPAWN_WAIT = 125
     };
@@ -509,7 +510,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETE:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
