@@ -677,8 +677,12 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
+        HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY = 0x36,
+        HERO_STATE_SUSPEND_MOTION_WITH_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
+        HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION = 0x65,
+        HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_INHERITED_MOTION = 0x67,
         HERO_STATE_ALTERNATING_WRENCH_ATTACK = 0x70,
         HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION = 0x72,
@@ -997,7 +1001,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x36: {
+    case HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x12;
         p->item_select_blocked = 1;
@@ -1219,7 +1223,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1282,7 +1286,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x66: {
+    case HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED: {
         struct Hero *p = &hero;
         char *v = &p->motion.resolved_velocity;
         p->state.control_mode = 1;
@@ -2946,7 +2950,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x3B: {
+    case HERO_STATE_SUSPEND_MOTION_WITH_WRENCH_ANIMATION: {
         struct Hero *p = &hero;
         char *m;
         int n;
