@@ -105,6 +105,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 0x60,
         HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 0x61,
         HERO_STATE_VEHICLE_MODE_2_DYING = 0x62,
+        HERO_STATE_SET_DEFAULT_POSE_WITH_DYING_OVERRIDE = 0x64,
         HERO_STATE_CANCEL_ITEM_ANIMATION_TO_DEFAULT_POSE = 0x72
     };
     int old2088;
@@ -2034,7 +2035,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case 0x64: {
+    case HERO_STATE_SET_DEFAULT_POSE_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
