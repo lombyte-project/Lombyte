@@ -90,6 +90,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
         HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
+        HERO_STATE_GROUND_CONTACT_REACTION = 0x31,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
         HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE = 0x51,
@@ -575,7 +576,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_GROUND_CONTACT_REACTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
