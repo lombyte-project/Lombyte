@@ -153,6 +153,7 @@ void update_hero_state_transitions(void) {
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
+        HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
         HERO_STATE_HEIGHT_DROP_OR_TIMEOUT_RESPAWN_WAIT = 125
     };
@@ -2521,7 +2522,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 79:
+                case HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT:
                     if (hero.state_timer > scale_game_frames(0x1E) && !(controller_state.held & 0x40)) {
                         hero_set_state(0x45, 1);
                         break;
