@@ -131,6 +131,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION_VECTOR = 0x67,
+        HERO_STATE_ZERO_GROUND_AND_TARGET_SPEED_ANIMATION_ENTRY = 0x68,
         HERO_STATE_JUMP_WITH_SAVED_DESCENT_HEIGHT = 0x69,
         HERO_STATE_HOVERBOARD_RIDE = 0x6B,
         HERO_STATE_HOVERBOARD_VARIANT_ANIMATION = 0x6C,
@@ -1787,7 +1788,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x68: {
+    case HERO_STATE_ZERO_GROUND_AND_TARGET_SPEED_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
