@@ -1749,8 +1749,8 @@ extern int is_pokitaru_boat_target_group_clear(struct Moby *) __asm__("FUN_L11_0
 extern float pokitaru_boat_path_speed_gp __asm__("D_L11_00161DD4") __attribute__((sda));
 extern float pokitaru_boat_turn_acceleration_degrees_gp __asm__("D_L11_00161DD8") __attribute__((sda));
 extern float pokitaru_boat_max_turn_speed_degrees_gp __asm__("D_L11_00161DDC") __attribute__((sda));
-extern float D_L11_00161DEC __attribute__((sda));
-extern float D_L11_00161DF0 __attribute__((sda));
+extern float pokitaru_boat_camera_distance_gp __asm__("D_L11_00161DEC") __attribute__((sda));
+extern float pokitaru_boat_camera_height_gp __asm__("D_L11_00161DF0") __attribute__((sda));
 void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
 void pokitaru_boat_update(struct Moby *moby) {
     enum {
@@ -1897,8 +1897,8 @@ void pokitaru_boat_update(struct Moby *moby) {
                          pokitaru_boat_turn_acceleration_degrees_gp * 0.017453292f * frame_time_sq,
                          pokitaru_boat_max_turn_speed_degrees_gp * 0.017453292f * frame_time);
         if (boat_vars->flag_c0 != 0) {
-            FUN_L00_002e8450_309ac0(0, D_L11_00161DEC, 0.003f);
-            FUN_L00_002e84b8_309ac0(D_L11_00161DF0, 0.003f);
+            FUN_L00_002e8450_309ac0(0, pokitaru_boat_camera_distance_gp, 0.003f);
+            FUN_L00_002e84b8_309ac0(pokitaru_boat_camera_height_gp, 0.003f);
         }
         tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
         tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
