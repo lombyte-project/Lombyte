@@ -103,6 +103,7 @@ extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
+        HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION_VECTOR = 0x67,
         HERO_STATE_HOVERBOARD_RIDE = 0x6B,
@@ -110,7 +111,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HOVERBOARD_JUMP = 0x6D,
         HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E,
         HERO_STATE_HOVERBOARD_VOICE_RESET_ANIMATION = 0x6F,
-        HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE = 0x72
+        HERO_STATE_CANCEL_ITEM_ANIMATION_TO_IDLE_POSE = 0x72,
+        HERO_STATE_HURT_WITH_DISPLACEMENT_AND_ALTERNATE_ANIMATION = 0x75,
+        HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
     };
     int old2088;
     char *moby;
@@ -379,7 +382,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x75:
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_AND_ALTERNATE_ANIMATION:
     case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         struct Hero *p = &hero;
         char *r;
@@ -752,7 +755,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1082,7 +1085,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL: {
         struct Hero *p = &hero;
         int animation_timing_parameter = -2;
         p->state.control_mode = 1;
