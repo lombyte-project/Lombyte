@@ -784,6 +784,17 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_PATH_SELECT_SECOND_POINT = 1,
         SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT = 2
     };
+    enum {
+        SNAGGLEBEAST_PHASE_BEFORE_FIRST_HEALTH_THRESHOLD = 0,
+        SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD = 1,
+        SNAGGLEBEAST_PHASE_FIRST_TIMED_DAMAGE_SEQUENCE = 2,
+        SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE = 3,
+        SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD = 4,
+        SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE = 5,
+        SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE = 6,
+        SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD = 7,
+        SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE = 8
+    };
     Vec4 oldpos;
     ChaserSight sight;
     Vec4 position;
@@ -863,11 +874,11 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     switch (moby[0xBC]) {
-    case 0:
+    case SNAGGLEBEAST_PHASE_BEFORE_FIRST_HEALTH_THRESHOLD:
         follow_target = 0;
         sight_ready = 0;
         break;
-    case 3:
+    case SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE:
         if (*(int *)(data + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
@@ -878,7 +889,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         sight_ready = 0;
         break;
-    case 6:
+    case SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE:
         if (*(int *)(data + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
@@ -888,16 +899,16 @@ void snagglebeast_update(unsigned char *moby) {
             follow_target = 0;
         }
         break;
-    case 1:
-    case 4:
-    case 7:
+    case SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD:
+    case SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD:
+    case SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD:
         timer194 = 0;
         sight_ready = 0;
         if (moby[0x20] != 1) timer19a = 0;
         break;
-    case 2:
-    case 5:
-    case 8:
+    case SNAGGLEBEAST_PHASE_FIRST_TIMED_DAMAGE_SEQUENCE:
+    case SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE:
+    case SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE:
         target_close = 0;
         timer194 = 0;
         sight_ready = 0;
