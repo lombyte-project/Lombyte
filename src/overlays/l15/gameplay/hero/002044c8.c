@@ -634,7 +634,8 @@ void update_hero_motion_for_current_state(void) {
     };
     enum {
         HERO_STATE_GIANT_CLANK_HIT_REACTION = 0x5D,
-        HERO_STATE_ATTACK_RECORD_GATED_POINT_HITS = 0x60
+        HERO_STATE_ATTACK_RECORD_GATED_POINT_HITS = 0x60,
+        HERO_STATE_ANIMATION_GATED_TRACKED_MOBY_POSITION = 0x61
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -2408,7 +2409,7 @@ void update_hero_motion_for_current_state(void) {
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
-    case 0x61:
+    case HERO_STATE_ANIMATION_GATED_TRACKED_MOBY_POSITION:
         hero.target_speed = 0.0f;
         speed_step(hero.target_speed, frame_time_sq * 12.6f);
         clear_u64_value(&hero.motion.velocity);
