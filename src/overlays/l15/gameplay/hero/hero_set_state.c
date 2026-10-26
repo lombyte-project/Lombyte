@@ -87,7 +87,9 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
-        HERO_STATE_THREE_STAGE_ATTACK = 0x60
+        HERO_STATE_THREE_STAGE_ATTACK = 0x60,
+        HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
+        HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72
     };
     int old2088;
     char *moby;
@@ -170,7 +172,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x67: {
+    case HERO_STATE_IDLE_WITH_CLEARED_MOTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1770,7 +1772,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
