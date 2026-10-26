@@ -7362,8 +7362,8 @@ extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
 extern float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") __attribute__((sda));
 extern int shuttle_breakup_particle_timing_random_span_frames_gp __asm__("D_L06_00162160") __attribute__((sda));
-extern int D_L06_00162164 __attribute__((sda));
-extern int D_L06_00162168 __attribute__((sda));
+extern int shuttle_breakup_particle_timing_base_a_frames_gp __asm__("D_L06_00162164") __attribute__((sda));
+extern int shuttle_breakup_particle_timing_base_b_frames_gp __asm__("D_L06_00162168") __attribute__((sda));
 extern float shuttle_breakup_particle_timing_variation_fraction_gp __asm__("D_L06_0016216C") __attribute__((sda));
 extern float shuttle_breakup_particle_velocity_w_random_bound_a_gp __asm__("D_L06_00162170") __attribute__((sda));
 extern float shuttle_breakup_particle_velocity_w_random_bound_b_gp __asm__("D_L06_00162174") __attribute__((sda));
@@ -7453,9 +7453,9 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
                 fast_tween_color_03b68(shuttle_breakup_particle_second_color_blend_a_gp, shuttle_breakup_particle_second_color_blend_b_gp, random_float_between_03b68(0.0f, 1.0f)),
                 float_to_int_03b68(scale_time_03b68((float)shuttle_breakup_particle_timing_random_span_frames_gp * random_float_between_03b68(0.0f, 1.0f) + 1.0f)),
                 float_to_int_03b68(scale_time_03b68(
-                    (float)D_L06_00162164 * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
+                    (float)shuttle_breakup_particle_timing_base_a_frames_gp * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
                 float_to_int_03b68(scale_time_03b68(
-                    (float)D_L06_00162168 * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
+                    (float)shuttle_breakup_particle_timing_base_b_frames_gp * (random_float_between_03b68(-shuttle_breakup_particle_timing_variation_fraction_gp, shuttle_breakup_particle_timing_variation_fraction_gp) + 1.0f))),
                 shuttle_breakup_particle_table_index_and_flags_gp);
             if (particle != 0) {
                 particle[9] = float_to_int_03b68(4.0f) - 0x20;
