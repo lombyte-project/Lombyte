@@ -89,6 +89,8 @@ extern char D_L03_0017C020[];
 extern char D_L03_0017C060[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72
     };
     int old2088;
@@ -257,7 +259,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -960,7 +962,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case 0x1C:
     case 0x29:
     case 0x2A:
