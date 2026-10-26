@@ -104,9 +104,11 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
+        HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
         HERO_STATE_FACE_TARGET_WITH_QUEUED_ANIMATION = 0x24,
         HERO_STATE_CAPTURE_TARGET_DISTANCE_WITH_ANIMATION = 0x26,
+        HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
@@ -115,6 +117,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION_VECTOR = 0x67,
+        HERO_STATE_JUMP_WITH_SAVED_DESCENT_HEIGHT = 0x69,
         HERO_STATE_HOVERBOARD_RIDE = 0x6B,
         HERO_STATE_HOVERBOARD_VARIANT_ANIMATION = 0x6C,
         HERO_STATE_HOVERBOARD_JUMP = 0x6D,
@@ -983,7 +986,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2D: {
+    case HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
@@ -1147,7 +1150,7 @@ int hero_set_state(int a, int b) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_WITH_SAVED_DESCENT_HEIGHT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
@@ -1950,7 +1953,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
