@@ -1199,42 +1199,42 @@ extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
 extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
-extern float D_L17_001620AC __attribute__((sda));
-extern float D_L17_001620B0 __attribute__((sda));
+extern float fighter_jet_horizontal_steering_error_gain_gp __asm__("D_L17_001620AC") __attribute__((sda));
+extern float fighter_jet_horizontal_steering_velocity_damping_gp __asm__("D_L17_001620B0") __attribute__((sda));
 extern float fighter_jet_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B4") __attribute__((sda));
 extern float fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B8") __attribute__((sda));
-extern float D_L17_001620BC __attribute__((sda));
-extern float D_L17_001620C0 __attribute__((sda));
+extern float fighter_jet_vertical_steering_error_gain_gp __asm__("D_L17_001620BC") __attribute__((sda));
+extern float fighter_jet_vertical_steering_velocity_damping_gp __asm__("D_L17_001620C0") __attribute__((sda));
 extern float fighter_jet_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C4") __attribute__((sda));
 extern float fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C8") __attribute__((sda));
-extern float D_L17_001620CC __attribute__((sda));
-extern float D_L17_001620D0 __attribute__((sda));
+extern float fighter_jet_roll_error_gain_gp __asm__("D_L17_001620CC") __attribute__((sda));
+extern float fighter_jet_roll_velocity_damping_gp __asm__("D_L17_001620D0") __attribute__((sda));
 extern float fighter_jet_roll_settle_threshold_scale_gp __asm__("D_L17_001620D4") __attribute__((sda));
-extern float D_L17_001620F0 __attribute__((sda));
-extern float D_L17_001620F4 __attribute__((sda));
+extern float fighter_jet_camera_roll_error_gain_gp __asm__("D_L17_001620F0") __attribute__((sda));
+extern float fighter_jet_camera_roll_velocity_damping_gp __asm__("D_L17_001620F4") __attribute__((sda));
 extern float fighter_jet_camera_roll_settle_threshold_scale_gp __asm__("D_L17_001620F8") __attribute__((sda));
-extern float D_L17_001620FC __attribute__((sda));
-extern float D_L17_00162100 __attribute__((sda));
+extern float fighter_jet_camera_pitch_error_gain_gp __asm__("D_L17_001620FC") __attribute__((sda));
+extern float fighter_jet_camera_pitch_velocity_damping_gp __asm__("D_L17_00162100") __attribute__((sda));
 extern float fighter_jet_camera_pitch_settle_threshold_scale_gp __asm__("D_L17_00162104") __attribute__((sda));
-extern float D_L17_00162108 __attribute__((sda));
-extern float D_L17_0016210C __attribute__((sda));
+extern float fighter_jet_camera_yaw_error_gain_gp __asm__("D_L17_00162108") __attribute__((sda));
+extern float fighter_jet_camera_yaw_velocity_damping_gp __asm__("D_L17_0016210C") __attribute__((sda));
 extern float fighter_jet_camera_yaw_settle_threshold_scale_gp __asm__("D_L17_00162110") __attribute__((sda));
-extern float D_L17_00162114 __attribute__((sda));
-extern float D_L17_00162118 __attribute__((sda));
+extern float fighter_jet_camera_offset_x_error_gain_gp __asm__("D_L17_00162114") __attribute__((sda));
+extern float fighter_jet_camera_offset_x_velocity_damping_gp __asm__("D_L17_00162118") __attribute__((sda));
 extern float fighter_jet_camera_offset_x_settle_threshold_scale_gp __asm__("D_L17_0016211C") __attribute__((sda));
-extern float D_L17_00162120 __attribute__((sda));
-extern float D_L17_00162124 __attribute__((sda));
+extern float fighter_jet_camera_offset_y_error_gain_gp __asm__("D_L17_00162120") __attribute__((sda));
+extern float fighter_jet_camera_offset_y_velocity_damping_gp __asm__("D_L17_00162124") __attribute__((sda));
 extern float fighter_jet_camera_offset_y_settle_threshold_scale_gp __asm__("D_L17_00162128") __attribute__((sda));
-extern float D_L17_0016212C __attribute__((sda));
-extern float D_L17_00162130 __attribute__((sda));
+extern float fighter_jet_camera_offset_z_error_gain_gp __asm__("D_L17_0016212C") __attribute__((sda));
+extern float fighter_jet_camera_offset_z_velocity_damping_gp __asm__("D_L17_00162130") __attribute__((sda));
 extern float fighter_jet_camera_offset_z_settle_threshold_scale_gp __asm__("D_L17_00162134") __attribute__((sda));
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
 extern float fighter_jet_cruise_fov_gp __asm__("D_L17_00162144") __attribute__((sda));
 extern float fighter_jet_boost_fov_gp __asm__("D_L17_00162148") __attribute__((sda));
-extern float D_L17_0016214C __attribute__((sda));
-extern float D_L17_00162150 __attribute__((sda));
+extern float fighter_jet_fov_error_gain_gp __asm__("D_L17_0016214C") __attribute__((sda));
+extern float fighter_jet_fov_velocity_damping_gp __asm__("D_L17_00162150") __attribute__((sda));
 extern float fighter_jet_fov_settle_threshold_scale_gp __asm__("D_L17_00162154") __attribute__((sda));
 extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
@@ -1377,10 +1377,10 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             kb = fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp;
         }
         adjust_fighter_jet_steering_for_flight_bounds((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
-        vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
-        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L17_001620BC, D_L17_001620C0, kb);
+        vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, fighter_jet_horizontal_steering_error_gain_gp, fighter_jet_horizontal_steering_velocity_damping_gp, ka);
+        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, fighter_jet_vertical_steering_error_gain_gp, fighter_jet_vertical_steering_velocity_damping_gp, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
-                         D_L17_001620CC, D_L17_001620D0, fighter_jet_roll_settle_threshold_scale_gp);
+                         fighter_jet_roll_error_gain_gp, fighter_jet_roll_velocity_damping_gp, fighter_jet_roll_settle_threshold_scale_gp);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L17_00162024);
         ship_vars->f38 = fast_subtract_rotations(ship_vars->f38, ship_vars->f6C * D_L17_00162028);
         if (ship_vars->f34 > 1.3962634f) {
@@ -1453,11 +1453,11 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         wr.e[1].v[2] = fighter_jet_camera_secondary_offset_z_gp * D_L17_0016209C;
         camera_offset_targets.e[0].q = wr.e[0].q;
         camera_offset_targets.e[1].q = wr.e[1].q;
-        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
+        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], fighter_jet_camera_offset_x_error_gain_gp, fighter_jet_camera_offset_x_velocity_damping_gp,
                          fighter_jet_camera_offset_x_settle_threshold_scale_gp);
-        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], D_L17_00162120, D_L17_00162124,
+        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], fighter_jet_camera_offset_y_error_gain_gp, fighter_jet_camera_offset_y_velocity_damping_gp,
                          fighter_jet_camera_offset_y_settle_threshold_scale_gp);
-        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], D_L17_0016212C, D_L17_00162130,
+        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], fighter_jet_camera_offset_z_error_gain_gp, fighter_jet_camera_offset_z_velocity_damping_gp,
                          fighter_jet_camera_offset_z_settle_threshold_scale_gp);
         target_record_sum_or_camera_local_offset[0] = ship_vars->fB4;
         target_record_sum_or_camera_local_offset[1] = ship_vars->fB8;
@@ -1471,19 +1471,19 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, fighter_jet_camera_pitch_bias_gp),
                                                ship_vars->f70 * D_L17_00162024);
         wr.e[1].v[2] = ship_vars->f38;
-        FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
-                         D_L17_001620F4, fighter_jet_camera_roll_settle_threshold_scale_gp);
-        FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], D_L17_001620FC,
-                         D_L17_00162100, fighter_jet_camera_pitch_settle_threshold_scale_gp);
-        FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], D_L17_00162108,
-                         D_L17_0016210C, fighter_jet_camera_yaw_settle_threshold_scale_gp);
+        FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], fighter_jet_camera_roll_error_gain_gp,
+                         fighter_jet_camera_roll_velocity_damping_gp, fighter_jet_camera_roll_settle_threshold_scale_gp);
+        FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], fighter_jet_camera_pitch_error_gain_gp,
+                         fighter_jet_camera_pitch_velocity_damping_gp, fighter_jet_camera_pitch_settle_threshold_scale_gp);
+        FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], fighter_jet_camera_yaw_error_gain_gp,
+                         fighter_jet_camera_yaw_velocity_damping_gp, fighter_jet_camera_yaw_settle_threshold_scale_gp);
     }
     camera_rotation[0] = ship_vars->f20;
     camera_rotation[2] = ship_vars->f28;
     camera_rotation[1] = ship_vars->f24;
     FUN_L00_002eaa30(camera_rotation);
     vendor_spring(&ship_vars->fB0, &ship_vars->fC0, fighter_jet_cruise_fov_gp + (fighter_jet_boost_fov_gp - fighter_jet_cruise_fov_gp) * ratio,
-                     D_L17_0016214C, D_L17_00162150, fighter_jet_fov_settle_threshold_scale_gp);
+                     fighter_jet_fov_error_gain_gp, fighter_jet_fov_velocity_damping_gp, fighter_jet_fov_settle_threshold_scale_gp);
     half_fov = ship_vars->fB0 * 0.5f;
     tn = fast_sin(half_fov) / fast_cos(half_fov);
     D_L17_0016D3F0 = tn;
