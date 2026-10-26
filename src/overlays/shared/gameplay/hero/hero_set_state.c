@@ -696,6 +696,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
         HERO_STATE_DYING_WITH_INHERITED_MOTION = 0x62,
+        HERO_STATE_ITEM_RESTRICTED_IDLE_ANIMATION_ENTRY = 0x63,
         HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE = 0x64,
         HERO_STATE_RUN_WITH_ON_FOOT_ITEM_ANIMATION_CANCELLATION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANAR_SPEED = 0x66,
@@ -2986,7 +2987,7 @@ int hero_set_state(int a, int b) {
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
-    case 0x63:
+    case HERO_STATE_ITEM_RESTRICTED_IDLE_ANIMATION_ENTRY:
     case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
