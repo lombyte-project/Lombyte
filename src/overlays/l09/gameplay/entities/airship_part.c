@@ -88,13 +88,13 @@ extern float airship_part_initial_downward_acceleration_range_end_gp __asm__("D_
 extern float airship_part_downward_acceleration_override_range_start_gp __asm__("D_L09_001613A0") __attribute__((sda));
 extern float airship_part_downward_acceleration_override_range_end_gp __asm__("D_L09_001613A4") __attribute__((sda));
 extern float airship_part_breakup_offset_velocity_scale_gp __asm__("D_L09_001613A8") __attribute__((sda));
-extern float D_L09_001613AC __attribute__((sda));
+extern float airship_part_breakup_away_from_hero_speed_gp __asm__("D_L09_001613AC") __attribute__((sda));
 extern float airship_part_initial_tumble_x_speed_limit_degrees_gp __asm__("D_L09_001613B0") __attribute__((sda));
 extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09_001613B4") __attribute__((sda));
-extern float D_L09_001613B8 __attribute__((sda));
+extern float airship_part_breakup_away_from_hero_speed_override_gp __asm__("D_L09_001613B8") __attribute__((sda));
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC") __attribute__((sda));
-extern int D_L09_001613C0 __attribute__((sda));
-extern int D_L09_001613C4 __attribute__((sda));
+extern int airship_part_breakup_delay_range_start_gp __asm__("D_L09_001613C0") __attribute__((sda));
+extern int airship_part_breakup_delay_range_end_gp __asm__("D_L09_001613C4") __attribute__((sda));
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L09_001613C8 __attribute__((sda));
@@ -185,7 +185,7 @@ void update_airship_part(struct Moby *moby) {
         } else if (moby->command == 1) {
             int i;
             moby->update_dist = 0xFF;
-            part_vars->h2A = FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(D_L09_001613C0), FUN_001f96f8_2c26c8(D_L09_001613C4));
+            part_vars->h2A = FUN_L00_00257b90_2c26c8(FUN_001f96f8_2c26c8(airship_part_breakup_delay_range_start_gp), FUN_001f96f8_2c26c8(airship_part_breakup_delay_range_end_gp));
             for (i = 0; i < 9; i++) {
                 if (part_vars->parts[i] != 0) {
                     part_vars->parts[i]->update_dist = 0xFF;
@@ -211,9 +211,9 @@ void update_airship_part(struct Moby *moby) {
         FUN_001f9a68_2c26c8(part_vars->vel, part_vars->vel, airship_part_breakup_offset_velocity_scale_gp * frame_time / 20.0f);
         FUN_001f9a28_2c26c8(transform_and_effect_scratch.m[0], point_offset_and_effect_scratch, &hero.motion.pos);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
-            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], D_L09_001613B8 * frame_time);
+            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], airship_part_breakup_away_from_hero_speed_override_gp * frame_time);
         } else {
-            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], D_L09_001613AC * frame_time);
+            FUN_001f9bf8_2c26c8(transform_and_effect_scratch.m[0], transform_and_effect_scratch.m[0], airship_part_breakup_away_from_hero_speed_gp * frame_time);
         }
         FUN_001f9a10_2c26c8(part_vars->vel, part_vars->vel, transform_and_effect_scratch.m[0]);
         part_vars->vel[2] = 0.0f;
