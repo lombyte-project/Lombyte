@@ -633,6 +633,7 @@ void update_hero_motion_for_current_state(void) {
         HERO_COMBO_KIND_FLAG_OR_ANIMATION_GATED_TARGET_SPEED = 2
     };
     enum {
+        HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY = 0x35,
         HERO_STATE_GIANT_CLANK_HIT_REACTION = 0x5D,
         HERO_STATE_ATTACK_RECORD_GATED_POINT_HITS = 0x60,
         HERO_STATE_ANIMATION_GATED_TRACKED_MOBY_POSITION = 0x61
@@ -779,7 +780,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case 0x35:
+    case HERO_STATE_SWIM_WITH_DIRECT_GROUND_SPEED_VELOCITY:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
         } else {
