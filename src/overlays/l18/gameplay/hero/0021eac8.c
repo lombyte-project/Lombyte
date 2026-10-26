@@ -721,13 +721,13 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(0);
         break;
     }
-    case 0x75:
+    case HERO_STATE_WATER_SURFACE_HURT:
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         adjust_hero_planar_velocity_from_probes(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x6A:
+    case HERO_STATE_DROWN:
     case 0x82: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
@@ -1621,8 +1621,8 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRIND:
-    case 0x29:
-    case 0x2A:
+    case HERO_STATE_GRIND_JUMP:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
@@ -1925,8 +1925,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
@@ -1989,7 +1989,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_ITEM_RELEASE_FALL:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
             if (hero.ground_distance > 4.0f) {
