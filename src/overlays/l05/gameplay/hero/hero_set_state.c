@@ -109,11 +109,13 @@ int hero_set_state(int a, int b) {
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
         HERO_STATE_FACE_TARGET_WITH_QUEUED_ANIMATION = 0x24,
         HERO_STATE_CAPTURE_TARGET_DISTANCE_WITH_ANIMATION = 0x26,
+        HERO_STATE_TARGET_MOBY_MOTION_SETUP = 0x2C,
         HERO_STATE_FALL_WITH_CLEARED_MOTION_VECTOR = 0x2D,
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
+        HERO_STATE_ATTACK_CONTROL_INITIALIZATION = 0x51,
         HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
         HERO_STATE_RUN_WITH_VEHICLE_ANIMATION_SELECTION = 0x65,
         HERO_STATE_STOP_WITH_GRAVITY_PLANE_SPEED = 0x66,
@@ -923,7 +925,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_TARGET_MOBY_MOTION_SETUP: {
         struct Hero *p = &hero;
         char *d;
         p->state.control_mode = 0xE;
@@ -1561,7 +1563,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ATTACK_ANIMATION_WITH_OPTIONAL_TARGET_HEADING:
-    case 0x51: {
+    case HERO_STATE_ATTACK_CONTROL_INITIALIZATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
