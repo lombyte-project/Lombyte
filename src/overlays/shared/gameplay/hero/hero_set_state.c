@@ -675,6 +675,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY = 0x26,
         HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
         HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_WATER_SURFACE_SPRING_SETTLE_ENTRY = 0x36,
@@ -1366,7 +1367,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_GRAPPLE_TARGET_DISTANCE_CAPTURE_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
