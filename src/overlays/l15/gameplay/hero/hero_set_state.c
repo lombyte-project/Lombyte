@@ -84,6 +84,11 @@ extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 extern char D_L15_0017C520[];
 extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
+        HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
+        HERO_STATE_THREE_STAGE_ATTACK = 0x60
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1554,7 +1559,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x60: {
+    case HERO_STATE_THREE_STAGE_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
@@ -1591,7 +1596,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(8, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x5C: {
+    case HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1626,7 +1631,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(7, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case 0x5D: {
+    case HERO_STATE_RECOIL_WITH_INVULNERABILITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 7;
         p->unk2284 = 0;
