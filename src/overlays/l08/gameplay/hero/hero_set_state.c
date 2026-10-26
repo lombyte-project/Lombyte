@@ -91,7 +91,9 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_VISIBOMB_LAUNCH_IDLE = 0x1D,
+        HERO_STATE_REFRESH_IDLE_ANIMATION = 0x1F,
         HERO_STATE_CANNON_MOUNT_IDLE = 0x32,
+        HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 0x49,
         HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
         HERO_STATE_VEHICLE_MODE_1_ATTACK = 0x51,
@@ -266,7 +268,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_WITH_MODIFIER_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -1797,7 +1799,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_REFRESH_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
