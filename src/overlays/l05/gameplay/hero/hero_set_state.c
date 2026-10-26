@@ -102,6 +102,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_JUMP_WITH_PAIRED_TRANSFORM_HISTORY = 0xD,
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
@@ -1137,7 +1138,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_PAIRED_TRANSFORM_HISTORY:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
