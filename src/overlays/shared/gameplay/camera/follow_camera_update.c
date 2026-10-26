@@ -31,16 +31,16 @@ void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
 extern u8 D_L00_00166E30[];
 void follow_camera_build_view(u8 *camera) {
-    u8 *q40;
+    u8 *follow_state_block;
     u8 *camera_state;
     u8 *reloaded_camera_state;
-    u8 *q20;
+    u8 *view_blend_and_smoothing_state;
     u8 *reference_orbit_offset;
     u8 *tb;
     u8 *base;
     u8 *side_axis;
     u8 *view_up_axis;
-    u8 *w;     /* scratch vector pointer: p + 0x10, later v4 */
+    u8 *side_axis_or_aim_position;     /* scratch vector pointer: p + 0x10, later v4 */
     u8 *up;    /* up vector (D_L00_00166E30), set on both paths */
     f32 projected_view_length;
     f32 smoothed_height_baseline, reference_orbit_up_component, remaining_view_blend_frames, view_blend_fraction;
@@ -53,14 +53,14 @@ void follow_camera_build_view(u8 *camera) {
 
     base = D_L00_00166E10_2e9010;
     camera_state = *(u8 **)(camera + 0x70);
-    q40 = camera_state + 0x40;
-    q20 = camera_state + 0x20;
-    if (q40[0xC4] == 0xB) {
+    follow_state_block = camera_state + 0x40;
+    view_blend_and_smoothing_state = camera_state + 0x20;
+    if (follow_state_block[0xC4] == 0xB) {
         FUN_001f9a28_2e9010(camera, D_0013F3D0_2e9010, camera + 0x30);
         side_axis = camera + 0x10;
         FUN_001f9bf8_2e9010(camera, camera, 1.0f);
         view_up_axis = camera + 0x20;
-        fast_dec_timer(q20);
+        fast_dec_timer(view_blend_and_smoothing_state);
         up = D_L00_00166E30;
     } else {
         up = D_L00_00166E30;
@@ -78,24 +78,24 @@ void follow_camera_build_view(u8 *camera) {
         if (0.05f <= projected_view_length) {
             FUN_001f9a68_2e9010(camera, view_direction, 1.0f / projected_view_length);
         }
-        w = camera + 0x10;
-        FUN_001f9ad8_2e9010(w, camera, up);
-        FUN_001f9bf8_2e9010(w, w, 1.0f);
-        side_axis = w;
-        *(f32 *)(q20 + 0x8) = FUN_001ebd78_2e9010(camera_state + 0x30, *(f32 *)(q20 + 0x8), *(f32 *)(reference_orbit_offset + 0x30),
+        side_axis_or_aim_position = camera + 0x10;
+        FUN_001f9ad8_2e9010(side_axis_or_aim_position, camera, up);
+        FUN_001f9bf8_2e9010(side_axis_or_aim_position, side_axis_or_aim_position, 1.0f);
+        side_axis = side_axis_or_aim_position;
+        *(f32 *)(view_blend_and_smoothing_state + 0x8) = FUN_001ebd78_2e9010(camera_state + 0x30, *(f32 *)(view_blend_and_smoothing_state + 0x8), *(f32 *)(reference_orbit_offset + 0x30),
                                0.004f, 0.2f, 0.0f);
         view_up_axis = camera + 0x20;
-        smoothed_height_baseline = FUN_001ebd78_2e9010(camera_state + 0x2C, *(f32 *)(q20 + 0x4), *(f32 *)(q40 + 0xB0),
+        smoothed_height_baseline = FUN_001ebd78_2e9010(camera_state + 0x2C, *(f32 *)(view_blend_and_smoothing_state + 0x4), *(f32 *)(follow_state_block + 0xB0),
                                0.004f, 0.2f, 0.0f);
-        smoothed_height_difference = *(f32 *)(q20 + 0x8) - smoothed_height_baseline;
-        *(f32 *)(q20 + 0x4) = smoothed_height_baseline;
+        smoothed_height_difference = *(f32 *)(view_blend_and_smoothing_state + 0x8) - smoothed_height_baseline;
+        *(f32 *)(view_blend_and_smoothing_state + 0x4) = smoothed_height_baseline;
         FUN_001f9a68_2e9010(vector_scratch, up, -FUN_001f9ab0_2e9010(reloaded_camera_state + 0x140, up));
         FUN_001f9a28_2e9010(vector_scratch, vector_scratch, view_direction);
-        w = (u8 *)adjusted_aim_position;
-        FUN_001f9a28_2e9010(w, camera + 0x30, vector_scratch);
+        side_axis_or_aim_position = (u8 *)adjusted_aim_position;
+        FUN_001f9a28_2e9010(side_axis_or_aim_position, camera + 0x30, vector_scratch);
         FUN_001f9a68_2e9010(vector_scratch, up, -smoothed_height_difference);
-        FUN_001f9a28_2e9010(w, w, vector_scratch);
-        FUN_001f9a28_2e9010(view_direction, w, camera + 0x30);
+        FUN_001f9a28_2e9010(side_axis_or_aim_position, side_axis_or_aim_position, vector_scratch);
+        FUN_001f9a28_2e9010(view_direction, side_axis_or_aim_position, camera + 0x30);
         adjusted_view_length = FUN_001f9af0_2e9010(view_direction);
         if (adjusted_view_length != 0.0f) {
             view_rotation_angle = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(camera, view_direction) / adjusted_view_length);
@@ -114,8 +114,8 @@ void follow_camera_build_view(u8 *camera) {
                 x = x + x;
                 target_view_angle_offset = x * 0.2617994f + target_view_angle_offset;
             }
-            smoothed_view_angle_offset = FUN_L00_001eb328_2e9010(q20 + 0x18, *(f32 *)(q20 + 0x14), target_view_angle_offset, 0.005f, 0.2f, 0.0f);
-            *(f32 *)(q20 + 0x14) = smoothed_view_angle_offset;
+            smoothed_view_angle_offset = FUN_L00_001eb328_2e9010(view_blend_and_smoothing_state + 0x18, *(f32 *)(view_blend_and_smoothing_state + 0x14), target_view_angle_offset, 0.005f, 0.2f, 0.0f);
+            *(f32 *)(view_blend_and_smoothing_state + 0x14) = smoothed_view_angle_offset;
             view_rotation_angle = FUN_001fa5c8_2e9010(view_rotation_angle, smoothed_view_angle_offset);
             if (1.2217305f < view_rotation_angle) {
                 view_rotation_angle = 1.2217305f;
@@ -126,9 +126,9 @@ void follow_camera_build_view(u8 *camera) {
             FUN_001f9bf8_2e9010(camera, camera, 1.0f);
         }
     }
-    if (*(s16 *)q20 != 0) {
-        fast_dec_timer(q20);
-        remaining_view_blend_frames = FUN_001fa6c0_2e9010(*(s16 *)q20);
+    if (*(s16 *)view_blend_and_smoothing_state != 0) {
+        fast_dec_timer(view_blend_and_smoothing_state);
+        remaining_view_blend_frames = FUN_001fa6c0_2e9010(*(s16 *)view_blend_and_smoothing_state);
         view_blend_fraction = remaining_view_blend_frames / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_gp));
         lerp_vector(camera, camera, camera + 0x40, view_blend_fraction);
         FUN_001f9bf8_2e9010(camera, camera, 1.0f);
