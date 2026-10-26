@@ -89,7 +89,7 @@ extern s32 D_L18_0015FC98;
 extern s32 D_L18_0015FC9C;
 extern s32 D_L18_0015FCA0;
 extern s32 D_L18_0015FCA4;
-extern s32 D_L18_0015FCA8;
+extern s32 level_two_int_two_float_payload_base __asm__("D_L18_0015FCA8");
 extern char *D_L18_0015F604;
 extern Slot2463f8 *D_L18_0015F5F4;
 extern s32 level_sound_slot_count __asm__("D_L18_0015F5F0");
@@ -313,7 +313,7 @@ s32 load_level_core_data(s32 full, s32 keep) {
             D_L18_0015FC9C = 0;
             D_L18_0015FCA4 = 0;
             D_L18_0015FCA0 = 0;
-            D_L18_0015FCA8 = 0;
+            level_two_int_two_float_payload_base = 0;
         }
         if (level_header[0x2A])
             D_L18_0015F604 = base + level_header[0x2A];
