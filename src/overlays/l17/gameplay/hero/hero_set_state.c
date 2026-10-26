@@ -106,9 +106,12 @@ extern char D_L17_0017C860[];
 extern char D_L17_0017C820[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_JUMP_WITH_TRANSFORM_HISTORY = 0xD,
         HERO_STATE_JUMP_WITH_GROUND_DISTANCE_ADJUSTMENT = 0xE,
+        HERO_STATE_JUMP_WITH_PAL_ADJUSTED_TIMING = 0xF,
         HERO_STATE_JUMP_WITH_CONDITIONAL_VERTICAL_VELOCITY_RESET = 0x12,
         HERO_STATE_REFRESH_LOOK_ANIMATION = 0x1E,
+        HERO_STATE_SELECT_IDLE_ANIMATION = 0x1F,
         HERO_STATE_WRENCH_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_FACE_TARGET_MOBY_ENTRY = 0x24,
         HERO_STATE_SAVE_TARGET_MOBY_DISTANCE_ENTRY = 0x26,
@@ -1118,9 +1121,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case 0xD:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_HISTORY:
     case HERO_STATE_JUMP_WITH_GROUND_DISTANCE_ADJUSTMENT:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_PAL_ADJUSTED_TIMING:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case HERO_STATE_JUMP_WITH_CONDITIONAL_VERTICAL_VELOCITY_RESET:
@@ -2234,7 +2237,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_SELECT_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
