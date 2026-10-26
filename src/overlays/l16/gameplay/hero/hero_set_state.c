@@ -110,7 +110,8 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
         HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C,
         HERO_STATE_HOVERBOARD_UPWARD_LAUNCH = 0x6D,
-        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E
+        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E,
+        HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT = 0x6F
     };
     int old2088;
     char *moby;
@@ -623,7 +624,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x6F: {
+    case HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->item_select_blocked = 1;
         p->unk2284 = 0;
