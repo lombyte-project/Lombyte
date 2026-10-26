@@ -59,7 +59,7 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
 
 f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *center, Vec4f *segment_start, Vec4f *segment_end, f32 radius) {
     Vec4f center_to_segment_start, segment_displacement, line_projection_point, lower_segment_point, upper_segment_point;
-    f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, dist, lower_surface_error, upper_surface_error, eps;
+    f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, center_distance_or_surface_error, lower_surface_error, upper_surface_error, eps;
     Vec4f *upper_segment_point_ptr;
 
     seg_vec_sub(&center_to_segment_start, segment_start, center);
@@ -68,9 +68,9 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
     line_projection_t = -seg_dot(&center_to_segment_start, &segment_displacement) / dd;
     seg_vec_scale(&line_projection_point, &segment_displacement, line_projection_t);
     seg_vec_add(&line_projection_point, &line_projection_point, segment_start);
-    dist = seg_dist(&line_projection_point, center);
-    if (dist < radius) {
-        intersection_t_offset = seg_sqrt(radius * radius - dist * dist);
+    center_distance_or_surface_error = seg_dist(&line_projection_point, center);
+    if (center_distance_or_surface_error < radius) {
+        intersection_t_offset = seg_sqrt(radius * radius - center_distance_or_surface_error * center_distance_or_surface_error);
         intersection_t_offset /= seg_len(&segment_displacement);
         lower_segment_t = line_projection_t - intersection_t_offset;
         if (lower_segment_t < 0.0f)
@@ -96,23 +96,23 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
             upper_surface_error = 0.0f;
         if (lower_surface_error < upper_surface_error || (lower_surface_error == upper_surface_error && seg_dist(&lower_segment_point, ref) < seg_dist(upper_segment_point_ptr, ref))) {
             qcopy(out, &lower_segment_point);
-            dist = lower_surface_error;
+            center_distance_or_surface_error = lower_surface_error;
         } else {
             qcopy(out, upper_segment_point_ptr);
-            dist = upper_surface_error;
+            center_distance_or_surface_error = upper_surface_error;
         }
     } else {
     if (line_projection_t < 0.0f) {
         qcopy(out, segment_start);
-        dist = seg_fabs(seg_dist(out, center) - radius);
+        center_distance_or_surface_error = seg_fabs(seg_dist(out, center) - radius);
     } else if (1.0f < line_projection_t) {
         qcopy(out, segment_end);
-        dist = seg_fabs(seg_dist(out, center) - radius);
+        center_distance_or_surface_error = seg_fabs(seg_dist(out, center) - radius);
     } else {
         qcopy(out, &line_projection_point);
     }
-    if (dist < radius * 0.01f)
-        dist = 0.0f;
+    if (center_distance_or_surface_error < radius * 0.01f)
+        center_distance_or_surface_error = 0.0f;
     }
-    return dist;
+    return center_distance_or_surface_error;
 }
