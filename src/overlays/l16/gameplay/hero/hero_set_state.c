@@ -105,7 +105,9 @@ extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
-        HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C
+        HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C,
+        HERO_STATE_HOVERBOARD_UPWARD_LAUNCH = 0x6D,
+        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E
     };
     int old2088;
     char *moby;
@@ -565,7 +567,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(select_hero_hoverboard_animation_variant(), 5, (float)scale_game_frames(8));
         break;
     }
-    case 0x6D: {
+    case HERO_STATE_HOVERBOARD_UPWARD_LAUNCH: {
         struct Hero *p = &hero;
         p->item_select_blocked = 1;
         p->unk2284 = 0;
@@ -576,7 +578,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x61, 3, (float)scale_game_frames(4));
         break;
     }
-    case 0x6E: {
+    case HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY: {
         struct Hero *p = &hero;
         int n;
         int v;
