@@ -809,6 +809,8 @@ void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");
 
 void update_hero_state_motion(void) {
     enum {
+        HERO_STATE_JUMP_WITH_STORED_MOVE_BASIS = 0x11,
+        HERO_STATE_FALL_WITH_HEIGHT_DEPENDENT_PITCH = 0x2D,
         HERO_STATE_ANGLE_LIMITED_GROUND_MOTION = 0x3F,
         HERO_STATE_DAMPED_FALL_WITH_POSE_TARGETS = 0x77,
         HERO_STATE_AIR_CONTROL_WITH_GROUND_HEIGHT_SPRING = 0x81
@@ -1888,7 +1890,7 @@ void update_hero_state_motion(void) {
         FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.resolved_velocity_z.f, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_FALL_WITH_HEIGHT_DEPENDENT_PITCH:
         if (hero.state.current == 0x2D) {
             float t;
 
@@ -2027,7 +2029,7 @@ void update_hero_state_motion(void) {
     case 0xE:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
+    case HERO_STATE_JUMP_WITH_STORED_MOVE_BASIS:
     case 0x12:
     case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
