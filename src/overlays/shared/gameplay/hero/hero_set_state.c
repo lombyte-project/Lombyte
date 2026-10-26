@@ -676,6 +676,7 @@ extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_SUSPEND_MOTION_WITH_IDLE_ANIMATION = 0x32,
+        HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
         HERO_STATE_VEHICLE_MODE_2_HURT = 0x5D,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 0x60,
         HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 0x7D
@@ -865,7 +866,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x35: {
+    case HERO_STATE_SWIM_WITH_MODIFIER_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
