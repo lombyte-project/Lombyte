@@ -144,6 +144,7 @@ void update_hero_state_machine(void) {
     enum {
         HERO_STATE_SLOT_3_ITEM_3_JUMP = 13,
         HERO_STATE_SLOT_3_ITEM_2_JUMP = 15,
+        HERO_STATE_BUFFERED_AIRBORNE_JUMP_REENTRY = 17,
         HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_SWIM_FROM_CROUCH_INPUT = 53,
         HERO_STATE_VEHICLE_MODE_2_RUN = 91,
@@ -1494,7 +1495,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case HERO_STATE_SLOT_3_ITEM_2_JUMP:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_BUFFERED_AIRBORNE_JUMP_REENTRY:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
