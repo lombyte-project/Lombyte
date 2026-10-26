@@ -102,6 +102,9 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern char D_L05_0017C3C0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
+        HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
+        HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
         HERO_STATE_VEHICLE_MODE_3_IDLE_WITH_QUEUED_ANIMATION = 0x59,
@@ -1132,7 +1135,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_JUMP_FROM_WATER_SURFACE:
     case 0x1C:
     case 0x29:
     case 0x2A:
@@ -1707,7 +1710,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1933,7 +1936,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_LOOK_ANIMATION_REFRESH: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
