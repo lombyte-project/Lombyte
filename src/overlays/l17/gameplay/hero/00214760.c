@@ -332,7 +332,9 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_GROUND_HEIGHT_SPRING_MOVEMENT = 0x81
     };
     enum {
-        HERO_ATTACK_KIND_STAGED_FORWARD_SPEED = 1
+        HERO_ATTACK_KIND_FRAME_LIMITED_CONSTANT_FORWARD_SPEED = 0,
+        HERO_ATTACK_KIND_STAGED_FORWARD_SPEED = 1,
+        HERO_ATTACK_KIND_OVERRIDE_ENABLED_CONSTANT_FORWARD_SPEED = 2
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1387,7 +1389,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case HERO_ATTACK_KIND_FRAME_LIMITED_CONSTANT_FORWARD_SPEED:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
@@ -1403,7 +1405,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case 2:
+        case HERO_ATTACK_KIND_OVERRIDE_ENABLED_CONSTANT_FORWARD_SPEED:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
