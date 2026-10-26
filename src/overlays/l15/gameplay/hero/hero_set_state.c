@@ -85,11 +85,15 @@ extern char D_L15_0017C520[];
 extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
         HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
         HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
         HERO_STATE_THREE_STAGE_ATTACK = 0x60,
         HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
         HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72
+    };
+    enum {
+        HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING = 0x23
     };
     int old2088;
     char *moby;
@@ -675,7 +679,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -1303,7 +1307,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING:
     case 0x51: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1445,7 +1449,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
