@@ -90,6 +90,7 @@ extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
+        HERO_STATE_VISIBOMB_LAUNCH_IDLE = 0x1D,
         HERO_STATE_CANNON_MOUNT_IDLE = 0x32,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 0x49,
         HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
@@ -1777,7 +1778,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_VISIBOMB_LAUNCH_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
