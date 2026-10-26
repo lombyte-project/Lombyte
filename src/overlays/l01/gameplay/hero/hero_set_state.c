@@ -81,6 +81,7 @@ extern char D_L01_0017C3A0[];
 extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_TIMED_IDLE_ANIMATION = 0x1D,
         HERO_STATE_ENSURE_LOOK_IDLE_ANIMATION = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_PLAY_ATTACK_RECORD_ANIMATIONS = 0x21,
@@ -1476,7 +1477,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_GATE_GADGET_BUTTON_AND_PLAY_TIMED_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
