@@ -158,7 +158,9 @@ edit fails at once.
 
 ## Moving files
 
-See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example.
+See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example
+and [point-light links](../game/point-lights.md) for grouping related functions
+while retaining their existing type and calling-convention views.
 
 - Folders follow the subsystem, for example `ui/menus/<screen>` or
   `gameplay/...`.
