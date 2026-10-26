@@ -497,8 +497,8 @@ void update_hero_motion_for_current_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
@@ -776,7 +776,7 @@ void update_hero_motion_for_current_state(void) {
         clip_hero_horizontal_velocity(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x6A:
+    case HERO_STATE_DROWN:
     case 0x82: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
@@ -806,8 +806,8 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_MOVE:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -1292,7 +1292,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x24:
+    case HERO_STATE_GRAPPLE_TARGET_ENTRY:
     case 0x2E:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
@@ -1370,7 +1370,7 @@ void update_hero_motion_for_current_state(void) {
         subtract_vector_xyz(&hero.motion.velocity, &auxiliary_vector_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1512,7 +1512,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1780,7 +1780,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
@@ -2058,9 +2058,9 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRIND:
-    case 0x29:
-    case 0x2A:
-    case 0x2B:
+    case HERO_STATE_GRIND_JUMP:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
+    case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
         s32 flag;
