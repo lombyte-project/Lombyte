@@ -83,7 +83,7 @@ void hero_update_hop_movement(void) {
     HopVec_235c08 velocity_offset;
     f32 x;
     f32 speed;
-    f32 a;
+    f32 velocity_scale_or_yaw_delta;
     f32 speed_decay_step;
     f32 velocity_change_step;
     s32 state;
@@ -136,9 +136,9 @@ void hero_update_hop_movement(void) {
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_235c08(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
         hero.motion.velocity.f[1] = FUN_001f9de0_235c08(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        a = hero.air_target_speed * FUN_001f9de0_235c08(FUN_001fa688_235c08(hero.takeoff_yaw, hero.high_jump_drift_yaw));
-        hero.motion.velocity.f[0] += FUN_001f9dc8_235c08(hero.takeoff_yaw) * a;
-        hero.motion.velocity.f[1] += FUN_001f9de0_235c08(hero.takeoff_yaw) * a;
+        velocity_scale_or_yaw_delta = hero.air_target_speed * FUN_001f9de0_235c08(FUN_001fa688_235c08(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        hero.motion.velocity.f[0] += FUN_001f9dc8_235c08(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
+        hero.motion.velocity.f[1] += FUN_001f9de0_235c08(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == 0x11) {
@@ -163,8 +163,8 @@ void hero_update_hop_movement(void) {
             x = hero.motion.rot.f[2];
             hero.motion.yaw_error = FUN_L00_0025bc98_235c08(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
-            a = FUN_001fa5c8_235c08(x, hero.motion.rot.f[2]);
-            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
+            velocity_scale_or_yaw_delta = FUN_001fa5c8_235c08(x, hero.motion.rot.f[2]);
+            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, velocity_scale_or_yaw_delta);
         } else {
             FUN_L00_00211e30_235c08(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
         }
