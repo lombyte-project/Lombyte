@@ -156,6 +156,7 @@ void update_hero_state_transitions(void) {
         HERO_STATE_ITEM_RELEASE_EXIT_WITH_SPEED_CAP = 38,
         HERO_STATE_DELAYED_ITEM_RELEASE_TO_FALL = 44,
         HERO_STATE_SWIM_CROUCH_INPUT = 53,
+        HERO_STATE_RUN_WITH_MINIMUM_ANIMATION_SPEED = 63,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
@@ -1067,7 +1068,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 63:
+                case HERO_STATE_RUN_WITH_MINIMUM_ANIMATION_SPEED:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
