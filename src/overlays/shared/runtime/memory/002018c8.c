@@ -130,7 +130,7 @@ void level_draw_dialog_text(void) {
         s32 top;
         s32 mid;
         f32 alpha;
-        f32 pos;
+        f32 rotated_sprite_y;
         f32 angle;
         f32 pivot;
 
@@ -164,9 +164,9 @@ void level_draw_dialog_text(void) {
         vu1_add_g_sregister(0x47, 0x3004B);
         top = mid - 0x20;
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x755D, 0), 0xE0, top, 0x40, 0x40, 0x80);
-        pos = (f32)(mid << 4);
+        rotated_sprite_y = (f32)(mid << 4);
         angle = (f32)(D_L00_0015F3F8 % 55) * -6.2831855f / 55.0f;
-        draw_rotated_sprite(4096.0f, pos, pivot, pivot, angle, 0x40, 0x40,
+        draw_rotated_sprite(4096.0f, rotated_sprite_y, pivot, pivot, angle, 0x40, 0x40,
                             get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
         break;
     }
