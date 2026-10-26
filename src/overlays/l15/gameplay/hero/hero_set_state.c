@@ -103,6 +103,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_HEIGHT_TRIGGERED_STOP = 0x68,
         HERO_STATE_HEIGHT_ADJUSTED_JUMP = 0x69,
         HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72,
+        HERO_STATE_MATERIAL_OR_FATAL_HEIGHT_REACTION = 0x7B,
         HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
     };
     enum {
@@ -1557,7 +1558,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x7B: {
+    case HERO_STATE_MATERIAL_OR_FATAL_HEIGHT_REACTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
