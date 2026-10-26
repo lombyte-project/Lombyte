@@ -661,7 +661,9 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT = 0x81
     };
     enum {
-        WRENCH_COMBO_TAPERED_FORWARD_SPEED = 1
+        WRENCH_COMBO_FRAME_LIMITED_FORWARD_SPEED = 0,
+        WRENCH_COMBO_TAPERED_FORWARD_SPEED = 1,
+        WRENCH_COMBO_TRANSITION_ENABLED_FORWARD_SPEED = 2
     };
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -1713,7 +1715,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case WRENCH_COMBO_FRAME_LIMITED_FORWARD_SPEED:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
@@ -1729,7 +1731,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case 2:
+        case WRENCH_COMBO_TRANSITION_ENABLED_FORWARD_SPEED:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
