@@ -79,6 +79,10 @@ extern void clear_vector(void *);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
+    enum {
+        HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER = 0x11,
+        HERO_STATE_GROUND_SPEED_ANIMATED_RUN = 0x3F
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -266,7 +270,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x3F:
+    case HERO_STATE_GROUND_SPEED_ANIMATED_RUN:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -700,7 +704,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
+    case HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER:
     case 0x12:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
