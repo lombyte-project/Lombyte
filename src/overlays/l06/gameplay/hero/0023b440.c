@@ -135,6 +135,8 @@ void update_hero_state_machine(void) __asm__("FUN_L06_0023b440");
 
 void update_hero_state_machine(void) {
     enum {
+        HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT = 32,
+        HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY = 34,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_VEHICLE_MODE_1_LEDGE_JUMP = 76,
@@ -938,7 +940,7 @@ void update_hero_state_machine(void) {
                         hero.fall_state_gravity = frame_time_sq * 27.0f;
                     }
                     break;
-                case 34:
+                case HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY:
                     if (hero.state_timer < scale_game_frames(0xC) &&
                         (hero.state.prev2 != 0x10 ||
                          (hero.state.prev != 8 && hero.state.prev != 6)) &&
@@ -2533,7 +2535,7 @@ void update_hero_state_machine(void) {
                     }
                     D_L06_0016CF00 = 0;
                     break;
-                case 32:
+                case HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.anim_changing == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
