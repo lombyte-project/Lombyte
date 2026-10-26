@@ -674,7 +674,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x47, 0, (float)scale_game_frames(8));
         break;
     }
-    case 0x3A: {
+    case HERO_STATE_ANIMATION_WAIT_TO_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x13;
         p->unk2284 = 0;
@@ -1045,7 +1045,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x19: {
+    case HERO_STATE_LEDGE_HANG: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -1055,7 +1055,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x21, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1A: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -1064,7 +1064,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -1160,9 +1160,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_LONG_JUMP:
     case HERO_STATE_JUMP_WITH_COPIED_VECTOR_SNAPSHOT:
     case HERO_STATE_JUMP_FROM_WATER_SURFACE:
-    case 0x1C:
-    case 0x29:
-    case 0x2A:
+    case HERO_STATE_LEDGE_JUMP:
+    case HERO_STATE_GRIND_JUMP:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case HERO_STATE_HURT_JUMP:
     case 0x49:
     case 0x4C:
