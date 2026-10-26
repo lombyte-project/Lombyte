@@ -87,15 +87,21 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern char D_L06_0017C6A0[];
 int hero_set_state(int a, int b) {
     enum {
+        HERO_STATE_PLAY_LOOK_ANIMATION_IF_CHANGED = 0x1E,
         HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
+        HERO_STATE_PLAY_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
         HERO_STATE_LAND_WITH_TIMED_BLEND = 0x4F,
+        HERO_STATE_RUN_CANCEL_ITEM_ANIMATION = 0x65,
         HERO_STATE_CANCEL_ITEM_AND_PLAY_IDLE_ANIMATION = 0x72,
         HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D,
         HERO_STATE_RUN_WITH_LANDING_ANIMATION = 0x81
     };
     enum {
         HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
+    };
+    enum {
+        HERO_STATE_ATTACK_CAPTURE_ITEM_TARGET_HEADING = 0x23
     };
     int old2088;
     char *moby;
@@ -345,7 +351,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_RUN_CANCEL_ITEM_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1210,7 +1216,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
+    case HERO_STATE_ATTACK_CAPTURE_ITEM_TARGET_HEADING:
     case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
@@ -1378,7 +1384,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ATTACK_CAPTURE_ITEM_TARGET_HEADING: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
@@ -1414,7 +1420,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_PLAY_ATTACK_RECORD_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1748,7 +1754,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_PLAY_LOOK_ANIMATION_IF_CHANGED: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
