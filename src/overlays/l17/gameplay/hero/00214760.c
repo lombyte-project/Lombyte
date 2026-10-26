@@ -305,6 +305,11 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
 
 void update_hero_motion_for_current_state(void) {
+    enum {
+        HERO_STATE_FAST_SWIM = 0x35,
+        HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
+        HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
+    };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -497,7 +502,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case 0x35:
+    case HERO_STATE_FAST_SWIM:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
         } else {
@@ -1122,7 +1127,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1423,7 +1428,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
@@ -1523,7 +1528,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 0x3F: {
+    case HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT: {
         f32 a;
         f32 f;
         update_hero_target_speed_from_stick();
@@ -2587,7 +2592,7 @@ void update_hero_motion_for_current_state(void) {
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;
-    case 0x7D:
+    case HERO_STATE_SLOW_VERTICAL_DESCENT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -(frame_time * 0.35f);
         break;
