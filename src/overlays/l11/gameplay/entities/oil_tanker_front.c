@@ -1127,11 +1127,11 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FUN_L11_00318e98");
 
-void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) {
+void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
     char *moby_vars;
     moby->state = 2;
     moby_vars = (char *)moby->pvars;
-    qcopy(moby_vars, src);
+    qcopy(moby_vars, movement_step);
     *(int *)(moby_vars + 0x20) = scale_ticks(0x3C);
 }
 /* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
