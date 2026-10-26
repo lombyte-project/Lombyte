@@ -1781,10 +1781,10 @@ extern int D_L18_00161C10 __attribute__((sda));
 extern int D_L18_00161C14 __attribute__((sda));
 extern int D_L18_00161C18 __attribute__((sda));
 extern float ballistic_ring_trail_spark_relative_variation_limit_gp __asm__("D_L18_00161C1C") __attribute__((sda));
-extern float D_L18_00161C20 __attribute__((sda));
-extern float D_L18_00161C24;
-extern float D_L18_00161C28 __attribute__((sda));
-extern float D_L18_00161C2C __attribute__((sda));
+extern float ballistic_ring_trail_first_spark_w_range_start_gp __asm__("D_L18_00161C20") __attribute__((sda));
+extern float ballistic_ring_trail_first_spark_w_range_end __asm__("D_L18_00161C24");
+extern float ballistic_ring_trail_second_spark_w_range_start_gp __asm__("D_L18_00161C28") __attribute__((sda));
+extern float ballistic_ring_trail_second_spark_w_range_end_gp __asm__("D_L18_00161C2C") __attribute__((sda));
 extern int ballistic_ring_trail_initial_color_start_gp __asm__("D_L18_00161C30") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_start_gp __asm__("D_L18_00161C38") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_end_gp __asm__("D_L18_00161C3C") __attribute__((sda));
@@ -1833,8 +1833,8 @@ void update_ballistic_ring_projectile(struct Moby *moby) {
             FUN_L00_00257d78(spark_spawn_position, 0.0f, 0.5f);
             add_vector_xyz(spark_spawn_position, spark_spawn_position, &moby->pos);
             clear_vector(second_spark_vector);
-            first_spark_vector[3] = random_float_between(D_L18_00161C20, D_L18_00161C24);
-            second_spark_vector[3] = random_float_between(D_L18_00161C28, D_L18_00161C2C);
+            first_spark_vector[3] = random_float_between(ballistic_ring_trail_first_spark_w_range_start_gp, ballistic_ring_trail_first_spark_w_range_end);
+            second_spark_vector[3] = random_float_between(ballistic_ring_trail_second_spark_w_range_start_gp, ballistic_ring_trail_second_spark_w_range_end_gp);
             i0 = FUN_001fa6e0(ballistic_ring_trail_initial_color_start_gp, ballistic_ring_trail_initial_color_end,
                               random_float_between(0.0f, 1.0f));
             i1 = FUN_001fa6e0(ballistic_ring_trail_second_color_start_gp, ballistic_ring_trail_second_color_end_gp,
