@@ -245,7 +245,7 @@ void update_hero_state_machine(void) {
                     {
                         int flag;
                         unsigned char *m;
-                        int r;
+                        int current_animation_id_or_intercept_time;
 
                         flag = 1;
                         if (hero_slot_item_id(0) == 0x1B) {
@@ -275,8 +275,8 @@ void update_hero_state_machine(void) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(0xC));
                             }
                         }
-                        r = return_hero_animation_id_unchanged(moby[0x53]);
-                        if (r == get_hero_idle_animation_index(0) && flag) {
+                        current_animation_id_or_intercept_time = return_hero_animation_id_unchanged(moby[0x53]);
+                        if (current_animation_id_or_intercept_time == get_hero_idle_animation_index(0) && flag) {
                             if (pick_idle_fidget(&record_index)) {
                                 HeroTableEntry70 *rec;
 
@@ -707,14 +707,14 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_WRENCH_SLAM:
                 case HERO_STATE_CROUCH_SWING:
                     if (hero.state.current == HERO_STATE_WRENCH_SLAM) {
-                        int r = truncate_float_to_s32(
+                        int current_animation_id_or_intercept_time = truncate_float_to_s32(
                             predict_hero_trajectory_intercept_time(60.0f, frame_time_sq * 130.0f, -1.0f));
                         int n = 0x1A;
                         if (hero.slam_descending == 0.0f) {
                             hero.anim_speed = 0.33f;
-                        } else if (hero.slam_descending != 0.0f && hero.air_frames.s != 0 && r != 0 &&
+                        } else if (hero.slam_descending != 0.0f && hero.air_frames.s != 0 && current_animation_id_or_intercept_time != 0 &&
                                    (float)n - hero.anim_frame > 1.0f) {
-                            adjust_hero_animation_speed_for_target_frame(n, r, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(n, current_animation_id_or_intercept_time, 0.5f, -1.0f);
                             if (hero.ground_distance < 0.7f && hero.anim_speed < 0.75f) {
                                 hero.anim_speed = 0.75f;
                             }
@@ -1132,11 +1132,11 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_PACK_LONG_JUMP, 1);
                     }
                     {
-                        int r =
+                        int current_animation_id_or_intercept_time =
                             truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero.rise_fall_gravity, -1.0f));
-                        hero.predicted_land_frames = r;
-                        if (hero.past_apex != 0.0f && hero.frames_off_ground.s != 0 && r != 0) {
-                            if (r == 2) {
+                        hero.predicted_land_frames = current_animation_id_or_intercept_time;
+                        if (hero.past_apex != 0.0f && hero.frames_off_ground.s != 0 && current_animation_id_or_intercept_time != 0) {
+                            if (current_animation_id_or_intercept_time == 2) {
                                 scale_game_frames(0xA);
                             }
                             adjust_hero_animation_speed_for_target_frame(hero.rise_fall_target_frame, hero.predicted_land_frames, 0.5f, -1.0f);
@@ -1665,10 +1665,10 @@ void update_hero_state_machine(void) {
                                 if (hero.state.current == 0xE && hero.anim_frame < 37.0f) {
                                     approach_value(&hero.anim_speed, 1.0f, frame_scale_sq * 0.15f);
                                 } else {
-                                    int r = truncate_float_to_s32(
+                                    int current_animation_id_or_intercept_time = truncate_float_to_s32(
                                         predict_hero_trajectory_intercept_time(60.0f, hero.jump_gravity, -1.0f));
-                                    hero.frames_to_land = r;
-                                    adjust_hero_animation_speed_for_target_frame(hero.target_anim_frame, r, hero.jump_anim_retime_scale,
+                                    hero.frames_to_land = current_animation_id_or_intercept_time;
+                                    adjust_hero_animation_speed_for_target_frame(hero.target_anim_frame, current_animation_id_or_intercept_time, hero.jump_anim_retime_scale,
                                                      frame_scale_sq * 0.2f);
                                 }
                                 if (!isNear) {
