@@ -134,7 +134,7 @@ struct LevelTable_QS {
 extern struct Hero hero_b __asm__("D_0013F350");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern s32 D_L00_0015F688 __attribute__((sda));
-extern s32 D_L00_0015F68C __attribute__((sda));
+extern s32 look_usage_stat_update_count __asm__("D_L00_0015F68C") __attribute__((sda));
 extern u8 D_L00_00166DD8[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -359,7 +359,7 @@ void hero_update_movement(void) {
                     }
                     D_L00_0015F688 = -1;
                     usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L00_0015F68C++;
+                    look_usage_stat_update_count++;
                 }
             }
         }
@@ -494,8 +494,8 @@ void hero_update_movement(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
@@ -803,7 +803,7 @@ void hero_update_movement(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
+    case HERO_STATE_WATER_SURFACE_MOVE:
     case 0x37:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
@@ -920,7 +920,7 @@ void hero_update_movement(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&v0, &((struct MobyView *)hero.grapple_target)->u10.v10);
@@ -1121,7 +1121,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1422,7 +1422,7 @@ void hero_update_movement(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || (struct MobyView *)hero.melee_target != NULL) {
@@ -1754,7 +1754,7 @@ void hero_update_movement(void) {
     case HERO_STATE_GRIND:
     case 0x29:
     case 0x2A:
-    case 0x2B:
+    case HERO_STATE_GRIND_ATTACK:
     case 0x42: {
         s32 has;
         s32 flag;
