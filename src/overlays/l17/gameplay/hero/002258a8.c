@@ -149,6 +149,12 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void update_hero_state_transitions(void) __asm__("FUN_L17_002258a8");
 
 void update_hero_state_transitions(void) {
+    enum {
+        HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
+        HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
+        HERO_STATE_ALT_LEDGE_JUMP = 76,
+        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81
+    };
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -192,7 +198,7 @@ void update_hero_state_transitions(void) {
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0)) {
                     switch (hero.vehicle_mode) {
-                    case 0:
+                    case HERO_VEHICLE_MODE_ON_FOOT:
                     case 3: {
                         int id;
 
@@ -210,7 +216,7 @@ void update_hero_state_transitions(void) {
                                                     (int)&current_bolt_count, 0x98967F);
                         hud_keep_visible(id, scale_game_frames(0xB4));
                     } break;
-                    case 1:
+                    case HERO_VEHICLE_MODE_CLANK:
                         queue_animation_update(3, 0, (int)initialize_four_slot_hud_selector, (int)update_hud_radial_selector_selection_and_visibility,
                                                (int)draw_hud_radial_selector_panel, 0, 0);
                         break;
@@ -492,8 +498,8 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_DYING:
-                case 71:
-                case 87:
+                case HERO_STATE_VEHICLE_MODE_1_DYING:
+                case HERO_STATE_VEHICLE_MODE_3_DYING:
                 case 98:
                 case HERO_STATE_DROWN:
                 case 128:
@@ -559,7 +565,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x33, 1);
                     }
                     break;
-                case 55:
+                case HERO_STATE_WATER_SURFACE_ENTRY:
                     if (hero.jump_lockout_timer == 0) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             if (scale_game_frames(0xA) < hero.state_timer) {
@@ -592,7 +598,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 54:
+                case HERO_STATE_WATER_SURFACE_MOVE:
                     if (hero.jump_lockout_timer == 0) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             hero_set_state(0x12, 1);
@@ -638,7 +644,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x34, 0);
                     }
                     break;
-                case 117:
+                case HERO_STATE_WATER_SURFACE_HURT:
                     if (hero.health.hp <= 0) {
                         hero_set_state(0x6A, 1);
                         set_hero_animation(0x5F, 0x25, scale_game_frames(0x12));
@@ -796,7 +802,7 @@ void update_hero_state_transitions(void) {
                     break;
                 case HERO_STATE_RUN:
                 case 47:
-                case 115:
+                case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
                         (*(float *)(moby + 0x54) > 0.9f || moby[0x52] != 0xFF)) {
@@ -1036,7 +1042,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 124:
+                case HERO_STATE_DEATH_DESCENT:
                     if (hero.sink_surface_z - 1.2f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x64)) {
                         hero_respawn();
@@ -1989,7 +1995,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
                 case 13:
-                case 14:
+                case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
@@ -2341,7 +2347,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }
                     break;
-                case 67:
+                case HERO_STATE_VEHICLE_MODE_1_IDLE:
                     if (hero.unk22FC > scale_game_frames(0x39) - scale_game_frames(0xF)) {
                         set_hero_animation(0x12, 0, scale_game_frames(0xA));
                         break;
@@ -2382,7 +2388,7 @@ void update_hero_state_transitions(void) {
                         set_hero_animation(0, 0, scale_game_frames(0xC));
                     }
                     break;
-                case 81:
+                case HERO_STATE_VEHICLE_MODE_1_ATTACK:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
                         break;
@@ -2415,8 +2421,8 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 73:
-                case 76:
+                case HERO_STATE_VEHICLE_MODE_1_JUMP:
+                case HERO_STATE_ALT_LEDGE_JUMP:
                     if (!(hero.state_timer > hero.takeoff_frame)) {
                         break;
                     }
@@ -2537,7 +2543,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x43, 1);
                     }
                     break;
-                case 69:
+                case HERO_STATE_VEHICLE_MODE_1_FALL:
                     if (current_level_index == 6 && 115.0f > hero.motion.pos.f[2]) {
                         goto respawn;
                     }
@@ -2572,7 +2578,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case 82:
+                case HERO_STATE_VEHICLE_MODE_1_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -2585,7 +2591,7 @@ void update_hero_state_transitions(void) {
                     }
                     hero_set_state(0x43, 1);
                     break;
-                case 68:
+                case HERO_STATE_VEHICLE_MODE_1_RUN:
                 case 80:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
@@ -2636,7 +2642,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x43, 1);
                     }
                     break;
-                case 70:
+                case HERO_STATE_VEHICLE_MODE_1_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x45, 1);
@@ -2650,7 +2656,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x43, 0);
                     }
                     break;
-                case 74:
+                case HERO_STATE_ALT_LEDGE_HANG_ENTRY:
                     if (hero.anim_flags & 2) {
                         hero_set_state(0x4B, 1);
                     }
@@ -2741,7 +2747,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x4C, 1);
                     }
                     break;
-                case 83:
+                case HERO_STATE_VEHICLE_MODE_3_IDLE:
                     if (hero.anim_flags & 2) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
@@ -2775,7 +2781,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x54, 1);
                     }
                     break;
-                case 88:
+                case HERO_STATE_VEHICLE_MODE_3_SLIP:
                     if (scale_game_frames(0x12C) < hero.state_timer) {
                         hero_respawn();
                     }
@@ -2794,7 +2800,7 @@ void update_hero_state_transitions(void) {
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
                     break;
-                case 85:
+                case HERO_STATE_VEHICLE_MODE_3_FALL:
                     if (hero.air_frames.s != 0) {
                         break;
                     }
@@ -2818,7 +2824,7 @@ void update_hero_state_transitions(void) {
                     hero.anim_speed = 0.35f;
                     hero.move_lock_timer = scale_game_frames(0x14);
                     break;
-                case 84:
+                case HERO_STATE_VEHICLE_MODE_3_RUN:
                     hero.anim_speed = hero.motion.speed_xy * 54.0f;
                     if (!(hero.air_frames.s < scale_game_frames(5))) {
                         if (hero.ground_distance > 0.8f || hero.ground_slope.f > 0.87266463f) {
@@ -2843,7 +2849,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x53, 1);
                     }
                     break;
-                case 86:
+                case HERO_STATE_VEHICLE_MODE_3_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.0f) {
                         hero_set_state(0x55, 1);
