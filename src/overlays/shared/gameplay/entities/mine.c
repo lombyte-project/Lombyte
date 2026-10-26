@@ -1857,10 +1857,10 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
                         Colors6_2adb30 c1 = D_L00_001E9920;
-                        Colors6_2adb30 c2 = D_L00_001E9938;
+                        Colors6_2adb30 blast_effect_secondary_palette = D_L00_001E9938;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
-                                          FUN_L00_0025c0e8_2adb30(c2.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
+                                          FUN_L00_0025c0e8_2adb30(blast_effect_secondary_palette.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           s * 400000.0f,
                                           FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0xF), FUN_001f96f8_2adb30(0x14)),
                                           FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x19), FUN_001f96f8_2adb30(0x1E)),
