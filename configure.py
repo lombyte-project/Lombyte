@@ -1061,7 +1061,10 @@ def hoist_sda_externs(assembly, source):
         start = index
         while start > 0 and re.match(r"\s*\.(?:globl|align|type)\b", lines[start - 1]):
             start -= 1
-        body = re.search(r"^[^\n;#]*\b" + re.escape(match.group(1)) + r"\s*\([^;{]*\)\s*\{", source, re.M)
+        # A named function is defined under its C name and labelled with __asm__("FUN_...").
+        names = [match.group(1)] + re.findall(
+            r"\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*__asm__\s*\(\s*\"" + re.escape(match.group(1)) + r"\"", source)
+        body = re.search(r"^[^\n;#]*\b(?:" + "|".join(map(re.escape, names)) + r")\s*\([^;{]*\)\s*\{", source, re.M)
         functions.append((start, body.start() if body else -1))
     placed = {}
     for line in lines:
