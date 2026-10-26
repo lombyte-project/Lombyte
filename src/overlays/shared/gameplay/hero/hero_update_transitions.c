@@ -159,6 +159,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
     enum {
+        HERO_STATE_WATER_SURFACE_JUMP = 18,
         HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
         HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
         HERO_STATE_ALT_LEDGE_JUMP = 76,
@@ -169,7 +170,9 @@ void hero_update_transitions(void) {
         HERO_STATE_VEHICLE_MODE_2_HURT = 93,
         HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
         HERO_STATE_THREE_STEP_ATTACK_COMBO = 96,
-        HERO_STATE_VEHICLE_MODE_2_DYING = 98
+        HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT = 97,
+        HERO_STATE_VEHICLE_MODE_2_DYING = 98,
+        HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 125
     };
     unsigned char *moby;
     int prevSub;
@@ -1066,7 +1069,7 @@ void hero_update_transitions(void) {
                         return;
                     }
                     break;
-                case 125:
+                case HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY:
                     if (hero.sink_surface_z - 0.8f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -2016,7 +2019,7 @@ void hero_update_transitions(void) {
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case 18:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
@@ -2934,7 +2937,7 @@ void hero_update_transitions(void) {
                         hero_set_state(0x5A, 0);
                     }
                     break;
-                case 97:
+                case HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT:
                     if (hero.anim_flags & 2) {
                         hero.vehicle_triangle_cooldown = scale_game_frames(0x12D);
                         hero_set_state(0x5A, 1);
