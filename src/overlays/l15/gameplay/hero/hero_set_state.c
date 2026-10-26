@@ -88,6 +88,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL = 0xD,
         HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE = 0xF,
         HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
+        HERO_STATE_RESTORE_LOOK_ANIMATION_IF_NEEDED = 0x1E,
         HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
         HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
         HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED = 0x2E,
@@ -1777,7 +1778,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_RESTORE_LOOK_ANIMATION_IF_NEEDED: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
