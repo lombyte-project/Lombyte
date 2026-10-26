@@ -311,10 +311,12 @@ void update_hero_motion_for_current_state(void) {
         HERO_STATE_OPPOSITE_HEADING_RECOIL = 0x21,
         HERO_STATE_TARGET_AIMED_DECELERATION = 0x23,
         HERO_STATE_HEIGHT_DEPENDENT_PITCH_FALL = 0x2D,
+        HERO_STATE_MOVEMENT_WITH_COMPLETED_ANIMATION_REFRESH = 0x30,
         HERO_STATE_PLATFORM_HEADING_DESCENT = 0x31,
         HERO_STATE_FAST_SWIM = 0x35,
         HERO_STATE_RISING_TIMED_EFFECT_JUMP = 0x3C,
         HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
+        HERO_STATE_GRIND_WITH_ALTERNATE_SPEED_AND_DOWNWARD_ACCELERATION = 0x42,
         HERO_STATE_DESCENT_LIMITED_FALL = 0x45,
         HERO_STATE_GRAVITY_FLATTENED_SLOW_MOVEMENT = 0x4F,
         HERO_STATE_ATTACK_JOINT_SOUND_WINDOW = 0x51,
@@ -899,7 +901,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
         break;
-    case 0x30: {
+    case HERO_STATE_MOVEMENT_WITH_COMPLETED_ANIMATION_REFRESH: {
         s32 anim = -1;
         s32 frames = 0;
         if (hero.on_ice_ground != 0) {
@@ -1780,7 +1782,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x29:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
     case HERO_STATE_GRIND_ATTACK:
-    case 0x42: {
+    case HERO_STATE_GRIND_WITH_ALTERNATE_SPEED_AND_DOWNWARD_ACCELERATION: {
         s32 has;
         s32 flag;
         s32 near;
