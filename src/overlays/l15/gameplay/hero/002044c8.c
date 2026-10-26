@@ -650,15 +650,15 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
-    case 0x17:
+    case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
     case 0x1D:
-    case 0x1E:
+    case HERO_STATE_LOOK_RELEASE_WAIT:
     case 0x1F:
     case HERO_STATE_DYING:
-    case 0x70:
-    case 0x71:
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
+    case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
     case 0x72:
-    case 0x80:
+    case HERO_STATE_DYING_SPEED_LIMITED:
         if (hero.wading != 0) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -1052,7 +1052,7 @@ void update_hero_motion_for_current_state(void) {
         update_hero_water_height_and_bobbing();
         break;
     case HERO_STATE_DROWN:
-    case 0x82: {
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
         fast_vec_normalize(&hero.motion.momentum, &hero.motion.momentum, len);
@@ -1132,7 +1132,7 @@ void update_hero_motion_for_current_state(void) {
         adjust_hero_planar_velocity_from_probes(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x30: {
+    case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         s32 anim = -1;
         s32 frames = 0;
         if (hero.on_ice_ground != 0) {
@@ -1160,7 +1160,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRAPPLE_TARGET_ENTRY:
-    case 0x2E:
+    case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
@@ -1634,7 +1634,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x21:
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -1721,7 +1721,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x23:
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
@@ -1831,7 +1831,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT: {
         f32 f;
         f32 old;
         f32 d;
@@ -1948,7 +1948,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_ITEM_RELEASE_FALL:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
             if (hero.ground_distance > 4.0f) {
@@ -1989,7 +1989,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         s32 big;
         f32 sp;
         f32 m;
@@ -2077,17 +2077,17 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
-    case 0x1C:
+    case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         s32 jump_timer_or_trail_control;
         s32 jump_frame_threshold;
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
@@ -2303,7 +2303,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_AT_TARGET_POSE:
         clear_u64_value(&hero.motion.velocity);
         break;
-    case 0x68: {
+    case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN: {
         clear_u64_value(&hero.motion.velocity);
         if ((f32)(hero.sink_jump_count + 1) * 0.5f < hero.sink_surface_z - hero.motion.pos.f[2]) {
             hero.motion.velocity.f[2] = -(frame_time * 0.25f);
@@ -2312,7 +2312,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x7B:
+    case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;
@@ -2427,7 +2427,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x5F: {
+    case HERO_STATE_WAIT_FOR_CIRCLE_RELEASE_AND_ANIMATION: {
         f32 z;
         hero.target_speed = 0.0f;
         z = hero.target_speed;
@@ -2543,8 +2543,8 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_VEHICLE_MODE_3_IDLE:
-    case 0x57:
-    case 0x59:
+    case HERO_STATE_VEHICLE_MODE_3_DYING:
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         hero.target_speed = 0.0f;
