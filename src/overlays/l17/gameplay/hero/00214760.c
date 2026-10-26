@@ -306,9 +306,16 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_PLATFORM_HEADING_DESCENT = 0x31,
         HERO_STATE_FAST_SWIM = 0x35,
         HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
-        HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
+        HERO_STATE_ATTACK_JOINT_SOUND_WINDOW = 0x51,
+        HERO_STATE_HEIGHT_DEPENDENT_VERTICAL_DESCENT = 0x68,
+        HERO_STATE_PIVOT_ROTATION_FALL = 0x77,
+        HERO_STATE_VERTICAL_DESCENT = 0x7B,
+        HERO_STATE_RADIAL_BURST_VERTICAL_DESCENT = 0x7C,
+        HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D,
+        HERO_STATE_GROUND_HEIGHT_SPRING_MOVEMENT = 0x81
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1704,7 +1711,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x31: {
+    case HERO_STATE_PLATFORM_HEADING_DESCENT: {
         f32 f;
         f32 old;
         f32 d;
@@ -2223,7 +2230,7 @@ void update_hero_motion_for_current_state(void) {
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, -(frame_time * 50.0f));
         }
         break;
-    case 0x77: {
+    case HERO_STATE_PIVOT_ROTATION_FALL: {
         f32 len;
         hero.item_use_locked = 1;
         approach_value(&hero.fatal_fall_roll_rate, hero.pivot_rot_x_target, frame_time_sq * 8.726646f);
@@ -2237,7 +2244,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_GROUND_HEIGHT_SPRING_MOVEMENT: {
         s32 big;
         f32 sp;
         f32 m;
@@ -2574,7 +2581,7 @@ void update_hero_motion_for_current_state(void) {
     case 0x67:
         clear_u64_value(&hero.motion.velocity);
         break;
-    case 0x68: {
+    case HERO_STATE_HEIGHT_DEPENDENT_VERTICAL_DESCENT: {
         clear_u64_value(&hero.motion.velocity);
         if ((f32)(hero.sink_jump_count + 1) * 0.5f < hero.sink_surface_z - hero.motion.pos.f[2]) {
             hero.motion.velocity.f[2] = -(frame_time * 0.25f);
@@ -2583,11 +2590,11 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x7B:
+    case HERO_STATE_VERTICAL_DESCENT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;
-    case 0x7C:
+    case HERO_STATE_RADIAL_BURST_VERTICAL_DESCENT:
         spawn_hero_radial_particle_burst();
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
@@ -2611,7 +2618,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case 0x51: {
+    case HERO_STATE_ATTACK_JOINT_SOUND_WINDOW: {
         struct HeroTableRow2C *tb;
         s32 ok;
         tb = &D_L17_0017C528[hero.attack_record];
