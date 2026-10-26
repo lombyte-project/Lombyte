@@ -91,12 +91,14 @@ int hero_set_state(int a, int b) {
     enum {
         HERO_STATE_WATER_SURFACE_JUMP = 0x12,
         HERO_STATE_REFRESH_LOOK_ANIMATION = 0x1E,
+        HERO_STATE_PLAY_IDLE_ANIMATION = 0x1F,
         HERO_STATE_SYNCHRONIZED_ATTACK_RECORD_ANIMATION = 0x21,
         HERO_STATE_CAPTURE_GRAPPLE_TARGET_DISTANCE = 0x26,
         HERO_STATE_RUN_ANIMATION_FROM_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_SWIM_WITH_CROUCH_INPUT = 0x35,
         HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
         HERO_STATE_HURT_WITH_UPWARD_VELOCITY = 0x42,
+        HERO_STATE_ENTER_ATTACK_MODE = 0x51,
         HERO_STATE_VEHICLE_MODE_3_QUEUE_IDLE_ANIMATION = 0x59,
         HERO_STATE_CANCEL_ITEM_ANIMATION_AND_PLAY_IDLE = 0x72,
         HERO_STATE_LAND_ANIMATION_WITH_SPEED_CAP = 0x81
@@ -1329,7 +1331,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ATTACK_TARGET_HEADING_CAPTURE:
-    case 0x51: {
+    case HERO_STATE_ENTER_ATTACK_MODE: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1659,7 +1661,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_PLAY_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
