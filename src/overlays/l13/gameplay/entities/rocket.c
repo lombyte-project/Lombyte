@@ -2535,9 +2535,9 @@ extern float moby_spark_second_batch_vertical_acceleration_base_gp __asm__("D_L1
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
 extern float moby_spark_second_batch_discarded_random_bound_gp __asm__("D_L13_00161F58") __attribute__((sda));
-extern float D_L13_00161F5C __attribute__((sda));
+extern float moby_spark_first_batch_discarded_velocity_w_initializer_gp __asm__("D_L13_00161F5C") __attribute__((sda));
 extern float D_L13_00161F60 __attribute__((sda));
-extern float D_L13_00161F64 __attribute__((sda));
+extern float moby_spark_second_batch_discarded_velocity_w_initializer_gp __asm__("D_L13_00161F64") __attribute__((sda));
 extern float D_L13_00161F68 __attribute__((sda));
 extern int D_L13_00161F08 __attribute__((sda));
 extern int D_L13_00161F0C __attribute__((sda));
@@ -2561,7 +2561,7 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
     int i;
     qcopy(&old_pos, &moby->pos);
     if (moby->command == 1) {
-        velocity.f[3] = D_L13_00161F5C;
+        velocity.f[3] = moby_spark_first_batch_discarded_velocity_w_initializer_gp;
         acceleration.f[3] = D_L13_00161F60;
         i = 0;
         do {
@@ -2591,7 +2591,7 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
                            D_L13_00161F0C, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i < 2);
         amount = 0.017453292f;
-        velocity.f[3] = D_L13_00161F64;
+        velocity.f[3] = moby_spark_second_batch_discarded_velocity_w_initializer_gp;
         acceleration.f[3] = D_L13_00161F68;
         i = 1;
         do {
