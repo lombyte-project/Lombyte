@@ -697,7 +697,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
     float particle_direction_length;
     float base_elevation_angle;
     float elevation_angle_offset;
-    float f20;
+    float particle_direction_sign_or_minimum_speed;
     int particle_lifetime;
     char *particle_vector_scratch_destination;
 
@@ -761,29 +761,29 @@ void update_fleet_rotating_radial_effect(char *moby) {
                         transform_vector_by_basis(spF0, spF0, (moby + 0xC0));
                         {
                             for (k = 0; k < *(int *)&D_L17_00161B88; k++) {
-                                f20 = -1.0f;
+                                particle_direction_sign_or_minimum_speed = -1.0f;
                                 if (rand() & 1)
-                                    f20 = 1.0f;
+                                    particle_direction_sign_or_minimum_speed = 1.0f;
                                 particle_lifetime = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
                                     *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
                                 if (particle_lifetime <= 0)
                                     particle_lifetime = 1;
                                 subtract_vector_xyz(particle_vector_scratch, spC0, (moby + 0x10));
                                 spF0[0] = particle_vector_scratch[0];
-                                scale_vector_xyz(spF0, spF0, f20);
+                                scale_vector_xyz(spF0, spF0, particle_direction_sign_or_minimum_speed);
                                 particle_direction_length = vector_length_xyz(spF0);
-                                if (f20 < 0.0f)
+                                if (particle_direction_sign_or_minimum_speed < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 particle_vector_scratch_destination = (char *)particle_vector_scratch;
                                 FUN_L00_001ff290(particle_vector_scratch_destination, spE0, spF0);
-                                f20 = frame_time;
-                                f20 *= 10.0f;
+                                particle_direction_sign_or_minimum_speed = frame_time;
+                                particle_direction_sign_or_minimum_speed *= 10.0f;
                                 normalize_vector_xyz(
                                     spF0, spF0,
-                                    random_float_between(f20, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
+                                    random_float_between(particle_direction_sign_or_minimum_speed, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
                                 spawn_moving_hero_relative_alpha_fade_particle((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
