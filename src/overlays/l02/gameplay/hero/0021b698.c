@@ -809,7 +809,9 @@ void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");
 
 void update_hero_state_motion(void) {
     enum {
-        HERO_STATE_ANGLE_LIMITED_GROUND_MOTION = 0x3F
+        HERO_STATE_ANGLE_LIMITED_GROUND_MOTION = 0x3F,
+        HERO_STATE_DAMPED_FALL_WITH_POSE_TARGETS = 0x77,
+        HERO_STATE_AIR_CONTROL_WITH_GROUND_HEIGHT_SPRING = 0x81
     };
     enum {
         WRENCH_COMBO_MOTION_LONG_CONSTANT_ADVANCE = 0,
@@ -1915,7 +1917,7 @@ void update_hero_state_motion(void) {
             gravity_set_z(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
         }
         break;
-    case 0x77:
+    case HERO_STATE_DAMPED_FALL_WITH_POSE_TARGETS:
         hero.item_use_locked = 1;
         approach_value(&hero.fatal_fall_roll_rate, hero.pivot_rot_x_target, frame_time_sq * 8.726646f);
         approach_value(&hero.fixed_pivot_rot_y, hero.fatal_fall_tumble_target_y, frame_time_sq * 8.726646f);
@@ -1932,7 +1934,7 @@ void update_hero_state_motion(void) {
             gravity_set_z(hero.motion.velocity.f, hero.motion.velocity.f, -(frame_time * 50.0f));
         }
         break;
-    case 0x81: {
+    case HERO_STATE_AIR_CONTROL_WITH_GROUND_HEIGHT_SPRING: {
         float a;
         float b;
         float v;
