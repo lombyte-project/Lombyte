@@ -137,6 +137,7 @@ void update_hero_state_machine(void) {
     enum {
         HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT = 32,
         HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY = 34,
+        HERO_STATE_REQUIRED_ITEM_EQUIPPED_WAIT = 36,
         HERO_STATE_TIMED_ITEM_RELEASE_RECOVERY = 37,
         HERO_STATE_ITEM_RELEASE_RECOVERY = 38,
         HERO_STATE_DELAYED_ITEM_RELEASE_FALL_TRANSITION = 44,
@@ -870,7 +871,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                     }
                     break;
-                case 36:
+                case HERO_STATE_REQUIRED_ITEM_EQUIPPED_WAIT:
                     if (hero.items[0].item_id != 0xC) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
