@@ -284,7 +284,7 @@ void update_child_set_poses(struct Moby *parent_moby) {
     int i;
     int j;
     int attached_child_index;
-    int q;
+    int final_child_index;
 
     for (i = 0; i < 6; i++) {
         int s = (i >= 3) ? 1 : -1;
@@ -342,23 +342,23 @@ void update_child_set_poses(struct Moby *parent_moby) {
             -(attached_child_rotation_y_degrees_gp * 0.017453292f) * rotation_y_progress);
         FUN_L00_00250df8(D_L11_00161F30[attached_child_index]);
     }
-    for (q = 0; q < 4; q++) {
+    for (final_child_index = 0; final_child_index < 4; final_child_index++) {
         float sgn;
         float signed_axis0_offset;
         sgn = -1.0f;
-        if (q >= 2) {
+        if (final_child_index >= 2) {
             sgn = 1.0f;
         }
-        signed_axis0_offset = (float)(q & 1) * 7.5f + 3.75f + (1.0f - D_L11_00161ED8) * 13.25f;
+        signed_axis0_offset = (float)(final_child_index & 1) * 7.5f + 3.75f + (1.0f - D_L11_00161ED8) * 13.25f;
         if (20.0f < signed_axis0_offset) {
             signed_axis0_offset = 20.0f;
         }
         signed_axis0_offset *= sgn;
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, signed_axis0_offset + 14.0f);
         child_placement_vector_scratch.z = final_child_set_z_offset_gp;
-        add_vector_xyz(&D_L11_00161F10[q]->pos, &child_placement_vector_scratch, &parent_moby->pos);
-        qcopy_nc(&D_L11_00161F10[q]->rot, &parent_moby->rot);
-        FUN_L00_00250df8(D_L11_00161F10[q]);
+        add_vector_xyz(&D_L11_00161F10[final_child_index]->pos, &child_placement_vector_scratch, &parent_moby->pos);
+        qcopy_nc(&D_L11_00161F10[final_child_index]->rot, &parent_moby->rot);
+        FUN_L00_00250df8(D_L11_00161F10[final_child_index]);
     }
 }
 typedef struct {
