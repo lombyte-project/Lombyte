@@ -90,6 +90,9 @@ int hero_set_state(int a, int b) {
         HERO_STATE_DAMAGING_GROUND_BOUNCE = 0x3C,
         HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT = 0x7D
     };
+    enum {
+        HERO_STATE_TWO_STEP_ATTACK_COMBO = 0x51
+    };
     int old2088;
     char *moby;
     int old20A7;
@@ -1204,7 +1207,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case 0x23:
-    case 0x51: {
+    case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1345,7 +1348,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x51: {
+        case HERO_STATE_TWO_STEP_ATTACK_COMBO: {
             struct Hero *q = &hero;
             T2C_235E08 *e = &D_L06_0017C3A8[q->attack_record];
             int k = 0;
