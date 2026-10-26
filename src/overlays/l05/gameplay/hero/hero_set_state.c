@@ -108,6 +108,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
         HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT = 0x17,
         HERO_STATE_ANIMATION_ENTRY_WITH_PRESERVED_JUMP_HEIGHT = 0x18,
+        HERO_STATE_UNCONDITIONAL_IDLE_ANIMATION_ENTRY = 0x1D,
         HERO_STATE_LOOK_ANIMATION_REFRESH = 0x1E,
         HERO_STATE_IDLE_ANIMATION_ENTRY = 0x1F,
         HERO_STATE_ATTACK_RECORD_SELECTED_ANIMATION = 0x21,
@@ -121,6 +122,7 @@ int hero_set_state(int a, int b) {
         HERO_STATE_GROUND_ANIMATION_WITH_DISPLACEMENT_SPEED = 0x2E,
         HERO_STATE_IDLE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT_SHORT_TIMING = 0x30,
         HERO_STATE_ANIMATION_WITH_DISPLACEMENT_SNAPSHOT = 0x31,
+        HERO_STATE_CONDITIONAL_IDLE_ANIMATION_ENTRY = 0x32,
         HERO_STATE_SWIM_ALTERNATE_ANIMATION = 0x35,
         HERO_STATE_HURT_JUMP = 0x3C,
         HERO_STATE_RUN_VARIANT = 0x3F,
@@ -1952,7 +1954,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_UNCONDITIONAL_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1993,7 +1995,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_CONDITIONAL_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
