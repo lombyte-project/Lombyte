@@ -2226,7 +2226,7 @@ extern float minibomber_retrace_path_step_distance_gp __asm__("D_L14_00161554") 
 extern int minibomber_bomb_aim_duration_frames __asm__("D_L14_0016155C") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_aim_return_duration_frames __asm__("D_L14_00161560") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_0016156C __attribute__((sda)); /* no foreign declaration */
+extern int minibomber_bomb_initial_fade_timer_frames __asm__("D_L14_0016156C") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_path_traversal_trigger_distance __asm__("D_L14_00161570") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_intro_exit_position_error_gain_gp __asm__("D_L14_00161574") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_position_velocity_damping_gp __asm__("D_L14_00161578") __attribute__((sda)); /* no foreign declaration */
@@ -2527,7 +2527,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             bomb_gravity = minibomber_bomb_gravity_gp * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
-            func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(D_L14_0016156C));
+            func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(minibomber_bomb_initial_fade_timer_frames));
             FUN_L14_002b5968_u((char *)moby, v, d->f104);
             d->f100++;
             if (d->f100 >= D_L14_001B0F30_2B5938[d->fD8]->n) {
