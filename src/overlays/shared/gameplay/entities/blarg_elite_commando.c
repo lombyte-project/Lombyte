@@ -130,7 +130,7 @@ extern float class_32_zero_based_angle_bound_degrees_gp __asm__("D_L16_001613E4"
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
-char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spawn_position, void *vel, int blend_duration_ticks, float unused) {
+char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spawn_position, void *target_position, int blend_duration_ticks, float unused) {
     char *spawned_moby = (char *)func_0020D348_m(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
@@ -144,7 +144,7 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spaw
         qcopy(spawned_moby + 0x10, spawn_position);
         moby_data = *(char **)(spawned_moby + 0x78);
         qcopy(moby_data, initial_movement_vector);
-        qcopy(moby_data + 0x10, vel);
+        qcopy(moby_data + 0x10, target_position);
         *(int *)(moby_data + 0x30) = blend_duration_ticks;
         *(int *)(moby_data + 0x20) = blend_duration_ticks;
         initial_movement_length = fast_vec_length(initial_movement_vector);
