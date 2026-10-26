@@ -837,8 +837,8 @@ void update_hero_motion_for_current_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
@@ -881,7 +881,7 @@ void update_hero_motion_for_current_state(void) {
             f32 lo = frame_time * 0.6981317f;
             f32 m;
             f32 rate;
-            f32 accel;
+            f32 swim_pitch_smoothing_coefficient;
             f32 steer;
             f32 old;
             f32 diff;
@@ -893,7 +893,7 @@ void update_hero_motion_for_current_state(void) {
             steer = 0.0f;
             m = PD.f128 < PD.f12C ? PD.f12C : PD.f128;
             rate = frame_scale_sq * 0.2f;
-            accel = frame_scale_sq * 0.015f;
+            swim_pitch_smoothing_coefficient = frame_scale_sq * 0.015f;
             lo = lo + (frame_time * 1.2217305f - lo) * m;
             if ((PD.u1A0.d1A0 & 0xC0) == 0x80 || hero.state.step == 1) {
                 f32 s = PD.f12C * 1.5f;
@@ -974,7 +974,7 @@ void update_hero_motion_for_current_state(void) {
                 steer = 0.0f;
             }
             old = hero.motion.rot.f[1];
-            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, accel, rate, lo);
+            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, swim_pitch_smoothing_coefficient, rate, lo);
             diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
@@ -1116,7 +1116,7 @@ void update_hero_motion_for_current_state(void) {
         clip_hero_horizontal_velocity(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x6A:
+    case HERO_STATE_DROWN:
     case 0x82: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
@@ -1147,7 +1147,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_WATER_SURFACE_MOVE:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -1322,7 +1322,7 @@ void update_hero_motion_for_current_state(void) {
         subtract_vector_xyz(&hero.motion.velocity, &geometry_rotation_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1464,7 +1464,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1765,7 +1765,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || MV(hero.melee_target) != NULL) {
@@ -1906,7 +1906,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         s32 slide = 0;
         f32 k;
         if (hero.base_condition != 0 && hero.water_depth < 0.25f) {
@@ -1998,7 +1998,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x2F: {
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z: {
         f32 a;
         update_hero_planar_movement_velocity();
         set_first_hero_easing_parameters(0.04f, 0.2f);
@@ -2132,7 +2132,7 @@ void update_hero_motion_for_current_state(void) {
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, -(frame_time * 50.0f));
         }
         break;
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         f32 len;
         hero.item_use_locked = 1;
         approach_value(&hero.fatal_fall_roll_rate, hero.pivot_rot_x_target, frame_time_sq * 8.726646f);
