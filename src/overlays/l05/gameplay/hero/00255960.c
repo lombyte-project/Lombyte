@@ -64,7 +64,7 @@ extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L05_0015F678") = 0;
-extern int D_L05_0015F594 __attribute__((sda));
+extern int item_selector_hud_open_blocker __asm__("D_L05_0015F594") __attribute__((sda));
 extern int D_L05_0016CB80 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -173,7 +173,7 @@ void update_hero_state_machine(void) {
         } else if (process_hero_primary_item_input() == 0 && try_apply_hero_water_and_ground_transitions() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].switch_lock != 2 && D_L05_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && item_selector_hud_open_blocker == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {
