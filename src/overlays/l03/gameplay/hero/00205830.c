@@ -1404,7 +1404,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || MV(hero.melee_target) != NULL) {
@@ -1767,7 +1767,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_ITEM_RELEASE_FALL:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
             if (hero.ground_distance > 4.0f) {
@@ -1901,7 +1901,7 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
-    case 0x1C:
+    case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
     case 0x4C:
