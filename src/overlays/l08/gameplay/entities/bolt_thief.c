@@ -1089,8 +1089,8 @@ extern float falling_debris_burst_secondary_vertical_scale __asm__("D_L08_00161C
 extern float falling_debris_burst_primary_planar_scale __asm__("D_L08_00161C14") __attribute__((sda));
 extern float falling_debris_burst_secondary_planar_scale __asm__("D_L08_00161C18") __attribute__((sda));
 extern int falling_debris_burst_frame_count_random_min __asm__("D_L08_00161C1C") __attribute__((sda));
-extern int D_L08_00161C20 __attribute__((sda));
-extern int D_L08_00161C24 __attribute__((sda));
+extern int falling_debris_burst_secondary_frame_count_random_min __asm__("D_L08_00161C20") __attribute__((sda));
+extern int falling_debris_burst_tertiary_frame_count_random_min __asm__("D_L08_00161C24") __attribute__((sda));
 extern float falling_debris_burst_primary_vector_w __asm__("D_L08_00161C28") __attribute__((sda));
 extern float falling_debris_burst_secondary_vector_w __asm__("D_L08_00161C2C") __attribute__((sda));
 extern int spawn_spark() __asm__("FUN_00218888");
@@ -1158,8 +1158,8 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
             for (i = 0; i < falling_debris_burst_particle_count; i++) {
                 float particle_planar_angle = random_angle_radians_c();
                 int burst_frame_count;
-                int c2;
-                int c3;
+                int burst_secondary_frame_count;
+                int burst_tertiary_frame_count;
                 qcopy(particle_spawn_position, debris_moby->pos);
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
@@ -1172,9 +1172,9 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                 particle_primary_vector[3] = falling_debris_burst_primary_vector_w;
                 particle_secondary_vector[3] = falling_debris_burst_secondary_vector_w;
                 burst_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_frame_count_random_min, (float)(falling_debris_burst_frame_count_random_min * 2))));
-                c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
-                c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
-                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, burst_frame_count, c2, c3, -1);
+                burst_secondary_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_secondary_frame_count_random_min, (float)(falling_debris_burst_secondary_frame_count_random_min * 2))));
+                burst_tertiary_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_tertiary_frame_count_random_min, (float)(falling_debris_burst_tertiary_frame_count_random_min * 2))));
+                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, burst_frame_count, burst_secondary_frame_count, burst_tertiary_frame_count, -1);
             }
             debris_moby->state = 3;
         }
