@@ -808,6 +808,14 @@ extern s32 D_0013CB14[];
 void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");
 
 void update_hero_state_motion(void) {
+    enum {
+        HERO_STATE_ANGLE_LIMITED_GROUND_MOTION = 0x3F
+    };
+    enum {
+        WRENCH_COMBO_MOTION_LONG_CONSTANT_ADVANCE = 0,
+        WRENCH_COMBO_MOTION_STAGED_DECELERATING_ADVANCE = 1,
+        WRENCH_COMBO_MOTION_SHORT_CONSTANT_ADVANCE = 2
+    };
     FVec4 motion_geometry_scratch[14];
     Moby *moby;
     int prevState;
@@ -1281,7 +1289,7 @@ void update_hero_state_motion(void) {
             }
         }
     } break;
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         int t0;
         int t1;
         float a;
@@ -1509,12 +1517,12 @@ void update_hero_state_motion(void) {
             }
         }
         switch (r->kind) {
-        case 0:
+        case WRENCH_COMBO_MOTION_LONG_CONSTANT_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case WRENCH_COMBO_MOTION_STAGED_DECELERATING_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1525,7 +1533,7 @@ void update_hero_state_motion(void) {
                 }
             }
             break;
-        case 2:
+        case WRENCH_COMBO_MOTION_SHORT_CONSTANT_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
@@ -1679,7 +1687,7 @@ void update_hero_state_motion(void) {
             hero.motion.velocity.f[2] -= frame_time_sq * 54.0f;
         }
         break;
-    case 0x3F: {
+    case HERO_STATE_ANGLE_LIMITED_GROUND_MOTION: {
         float a;
         float t;
         float lim;
