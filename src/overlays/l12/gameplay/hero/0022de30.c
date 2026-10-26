@@ -651,6 +651,9 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION = 0x11,
+        HERO_STATE_WATER_SPLASH_JUMP = 0x12,
+        HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION = 0x35,
         HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT = 0x3F
     };
     struct MobyView *moby = MV(hero.moby);
@@ -842,7 +845,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case 0x35:
+    case HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
         } else {
@@ -2246,8 +2249,8 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
-    case 0x12:
+    case HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION:
+    case HERO_STATE_WATER_SPLASH_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
