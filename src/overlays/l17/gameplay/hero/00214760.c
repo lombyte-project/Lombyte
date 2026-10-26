@@ -306,11 +306,15 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L17_00214760");
 
 void update_hero_motion_for_current_state(void) {
     enum {
+        HERO_STATE_HEIGHT_DEPENDENT_PITCH_FALL = 0x2D,
         HERO_STATE_PLATFORM_HEADING_DESCENT = 0x31,
         HERO_STATE_FAST_SWIM = 0x35,
         HERO_STATE_BASIS_ANGLE_LIMITED_MOVEMENT = 0x3F,
+        HERO_STATE_GRAVITY_FLATTENED_SLOW_MOVEMENT = 0x4F,
         HERO_STATE_ATTACK_JOINT_SOUND_WINDOW = 0x51,
         HERO_STATE_HEIGHT_DEPENDENT_VERTICAL_DESCENT = 0x68,
+        HERO_STATE_WATER_BOBBING_WITH_PLANAR_DAMPING = 0x75,
+        HERO_STATE_PLANAR_DAMPING_WITH_DECAYING_EFFECT_COUNT = 0x76,
         HERO_STATE_PIVOT_ROTATION_FALL = 0x77,
         HERO_STATE_VERTICAL_DESCENT = 0x7B,
         HERO_STATE_RADIAL_BURST_VERTICAL_DESCENT = 0x7C,
@@ -773,14 +777,14 @@ void update_hero_motion_for_current_state(void) {
             AN.f3D8 = t * 1.1f;
         }
         break;
-    case 0x76: {
+    case HERO_STATE_PLANAR_DAMPING_WITH_DECAYING_EFFECT_COUNT: {
         s32 n = 10 - hero.state_timer / 3;
         emit_hero_randomized_motion_effects(n > 8 ? 8 : n, 0);
         GROUND_FRICTION();
         adjust_hero_velocity_from_collision_probes(0);
         break;
     }
-    case 0x75:
+    case HERO_STATE_WATER_BOBBING_WITH_PLANAR_DAMPING:
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         adjust_hero_velocity_from_collision_probes(0);
@@ -2203,7 +2207,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_HEIGHT_DEPENDENT_PITCH_FALL:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
             if (hero.ground_distance > 4.0f) {
@@ -2665,7 +2669,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x4F: {
+    case HERO_STATE_GRAVITY_FLATTENED_SLOW_MOVEMENT: {
         f32 sp = frame_time * 2.0f;
         stick_target(sp, 0);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 8.726646f);
