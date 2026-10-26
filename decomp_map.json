@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4500,
-  "matching_c": 4168,
+  "matching_c": 4176,
   "intentional_asm": 309,
-  "pending_c": 23,
+  "pending_c": 15,
   "bytes_total": 3669032,
-  "bytes_matching_c": 3510004,
+  "bytes_matching_c": 3529076,
   "bytes_intentional_asm": 121100,
-  "bytes_pending_c": 37928,
-  "c_exact_percent_of_recoverable": 98.931,
-  "c_fuzzy_percent_of_recoverable": 98.9924,
+  "bytes_pending_c": 18856,
+  "c_exact_percent_of_recoverable": 99.4685,
+  "c_fuzzy_percent_of_recoverable": 99.53,
   "data": {
     "bytes_total": 12433372,
     "bytes_matching_c": 5418333,
@@ -2034,12 +2034,12 @@
   },
   "overlays": {
     "functions_total": 3014,
-    "matching_c": 2997,
-    "pending_c": 17,
+    "matching_c": 3005,
+    "pending_c": 9,
     "bytes_total": 3193428,
-    "bytes_matching_c": 3158936,
-    "bytes_pending_c": 34492,
-    "c_exact_percent_of_recoverable": 98.9199,
+    "bytes_matching_c": 3178008,
+    "bytes_pending_c": 15420,
+    "c_exact_percent_of_recoverable": 99.5171,
     "intentional_asm": 61,
     "bytes_intentional_asm": 27396,
     "shared": {
@@ -2048,12 +2048,12 @@
       "planet": "Shared code",
       "description": "Functions present in two or more levels",
       "functions": 1583,
-      "matching_c": 1570,
-      "pending_c": 13,
+      "matching_c": 1576,
+      "pending_c": 7,
       "bytes_total": 1130492,
-      "bytes_matching_c": 1104452,
-      "bytes_pending_c": 26040,
-      "c_exact_percent_of_recoverable": 97.6966,
+      "bytes_matching_c": 1121708,
+      "bytes_pending_c": 8784,
+      "c_exact_percent_of_recoverable": 99.223,
       "files": [
         {
           "file": "src/overlays/shared/sdk/debug/001eb0b0.c",
@@ -2233,9 +2233,9 @@
         {
           "file": "src/overlays/shared/gameplay/hero/hero_check_damage.c",
           "functions": 68,
-          "matching_c": 66,
+          "matching_c": 67,
           "bytes_total": 32996,
-          "bytes_matching_c": 29572
+          "bytes_matching_c": 31400
         },
         {
           "file": "src/overlays/shared/ui/help/00214658.c",
@@ -2457,9 +2457,9 @@
         {
           "file": "src/overlays/shared/ui/map/002484e0.c",
           "functions": 1,
-          "matching_c": 0,
+          "matching_c": 1,
           "bytes_total": 1808,
-          "bytes_matching_c": 0
+          "bytes_matching_c": 1808
         },
         {
           "file": "src/overlays/shared/ui/text/00249738.c",
@@ -3178,9 +3178,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/devastator.c",
           "functions": 26,
-          "matching_c": 25,
+          "matching_c": 26,
           "bytes_total": 29580,
-          "bytes_matching_c": 26956
+          "bytes_matching_c": 29580
         },
         {
           "file": "src/overlays/shared/runtime/dma/002b7a48.c",
@@ -3213,9 +3213,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/walloper.c",
           "functions": 31,
-          "matching_c": 29,
+          "matching_c": 31,
           "bytes_total": 27300,
-          "bytes_matching_c": 20524
+          "bytes_matching_c": 27300
         },
         {
           "file": "src/overlays/shared/rendering/effects/002bc210.c",
@@ -3297,9 +3297,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/nanotech_ball.c",
           "functions": 37,
-          "matching_c": 36,
+          "matching_c": 37,
           "bytes_total": 29756,
-          "bytes_matching_c": 25536
+          "bytes_matching_c": 29756
         },
         {
           "file": "src/overlays/shared/gameplay/entities/gadgebot_spawn_container.c",
@@ -3903,12 +3903,12 @@
         "planet": "Rilgar",
         "description": "Blackwater City: canals and the hoverboard race",
         "functions": 78,
-        "matching_c": 76,
-        "pending_c": 2,
+        "matching_c": 77,
+        "pending_c": 1,
         "bytes_total": 135164,
-        "bytes_matching_c": 132336,
-        "bytes_pending_c": 2828,
-        "c_exact_percent_of_recoverable": 97.9077,
+        "bytes_matching_c": 133204,
+        "bytes_pending_c": 1960,
+        "c_exact_percent_of_recoverable": 98.5499,
         "files": [
           {
             "file": "src/overlays/l05/gameplay/hero/00239fc0.c",
@@ -3976,9 +3976,9 @@
           {
             "file": "src/overlays/l05/gameplay/entities/electric_gate.c",
             "functions": 27,
-            "matching_c": 26,
+            "matching_c": 27,
             "bytes_total": 20484,
-            "bytes_matching_c": 19616
+            "bytes_matching_c": 20484
           },
           {
             "file": "src/overlays/l05/hoverboard_girl.c",
@@ -4356,12 +4356,12 @@
         "planet": "Orxon",
         "description": "Toxic Blarg homeworld, first with Clank",
         "functions": 54,
-        "matching_c": 53,
-        "pending_c": 1,
+        "matching_c": 54,
+        "pending_c": 0,
         "bytes_total": 56384,
-        "bytes_matching_c": 55436,
-        "bytes_pending_c": 948,
-        "c_exact_percent_of_recoverable": 98.3187,
+        "bytes_matching_c": 56384,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l10/runtime/startup/00230fd0.c",
@@ -4373,9 +4373,9 @@
           {
             "file": "src/overlays/l10/gameplay/entities/platform.c",
             "functions": 27,
-            "matching_c": 26,
+            "matching_c": 27,
             "bytes_total": 20084,
-            "bytes_matching_c": 19136
+            "bytes_matching_c": 20084
           },
           {
             "file": "src/overlays/l10/gameplay/entities/screamer.c",
@@ -5118,15 +5118,15 @@
   },
   "total": {
     "units_total": 4500,
-    "matching_c": 4168,
+    "matching_c": 4176,
     "intentional_asm": 309,
-    "pending_c": 23,
+    "pending_c": 15,
     "bytes_total": 3669032,
-    "bytes_matching_c": 3510004,
+    "bytes_matching_c": 3529076,
     "bytes_intentional_asm": 121100,
-    "bytes_pending_c": 37928,
-    "c_exact_percent_of_recoverable": 98.931,
-    "c_fuzzy_percent_of_recoverable": 98.9924,
+    "bytes_pending_c": 18856,
+    "c_exact_percent_of_recoverable": 99.4685,
+    "c_fuzzy_percent_of_recoverable": 99.53,
     "data": {
       "bytes_total": 12433372,
       "bytes_matching_c": 5418333,
