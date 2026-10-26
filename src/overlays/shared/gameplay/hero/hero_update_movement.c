@@ -305,6 +305,9 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void hero_update_movement(void) __asm__("FUN_L00_00217970");
 void hero_update_movement(void) {
     enum {
+        HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
+        HERO_STATE_SWIM_WITH_ITEM_EFFECTS = 0x35,
+        HERO_STATE_LOCAL_HEADING_LIMITED_MOVE = 0x3F,
         HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
     };
     struct MobyView *moby = (struct MobyView *)hero.moby;
@@ -499,7 +502,7 @@ void hero_update_movement(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case 0x35:
+    case HERO_STATE_SWIM_WITH_ITEM_EFFECTS:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
         } else {
@@ -1525,7 +1528,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 0x3F: {
+    case HERO_STATE_LOCAL_HEADING_LIMITED_MOVE: {
         f32 a;
         f32 f;
         update_hero_target_speed_from_stick();
@@ -2332,7 +2335,7 @@ void hero_update_movement(void) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case 0x12:
+    case HERO_STATE_JUMP_WITH_TIMED_SPLASH:
     case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
