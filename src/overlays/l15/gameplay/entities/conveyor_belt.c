@@ -979,7 +979,7 @@ typedef struct {
 } KillFlags;
 extern KillFlags D_L15_001BB830;
 extern unsigned int D_L15_001BAAD0[];
-extern unsigned int D_L15_0014C190[];
+extern unsigned int l15_banked_moby_save_bits[] __asm__("D_L15_0014C190");
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern int D_L15_0015FFD8;
@@ -1034,7 +1034,7 @@ void codebot_slot_update(struct Moby *moby) {
         int i;
         save_index = ((int)((unsigned int)moby->save_id << 16)) >> 16;
         if (D_L15_001BB830.killed[save_index] != 0 ||
-            ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)D_L15_0014C190) >> (moby->save_id & 31) & 1) != 0)) {
+            ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)l15_banked_moby_save_bits) >> (moby->save_id & 31) & 1) != 0)) {
             moby->state = 4;
             break;
         }
@@ -1088,7 +1088,7 @@ void codebot_slot_update(struct Moby *moby) {
             *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)position_rotation_work_vector;
             if (angle < 0.5f) {
                 unsigned int *bits;
-                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)D_L15_0014C190);
+                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)l15_banked_moby_save_bits);
                 *bits |= 1u << (moby->save_id & 31);
                 {
                     unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
