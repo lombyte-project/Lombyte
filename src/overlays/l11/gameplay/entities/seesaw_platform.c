@@ -2684,7 +2684,7 @@ typedef struct {
 } Block400_3290;
 
 extern ShipLevelEntry_3290 D_L11_0016DA80[];
-extern char *D_L11_0015F420;
+extern char *ship_hp_bar_palette_address_base __asm__("D_L11_0015F420");
 extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
 extern char D_0013E550[];
@@ -2798,7 +2798,7 @@ void jet_fighter_update(struct Moby *moby) {
             qcopy_nc(&ship_vars->f30, &moby->rot);
             qcopy_nc(ship_vars->home_rot, &moby->rot);
             qcopy_nc(ship_vars->home_pos, &moby->pos);
-            hp_bar_palette.clut = (s32 *)(D_L11_0015F420 + D_L11_0016DA80[0x4C].idx * 16);
+            hp_bar_palette.clut = (s32 *)(ship_hp_bar_palette_address_base + D_L11_0016DA80[0x4C].idx * 16);
             if (hp_bar_saved == 0) {
                 *(Block400_3290 *)ship_hp_bar_saved_palette = *(Block400_3290 *)hp_bar_palette.clut;
             }
