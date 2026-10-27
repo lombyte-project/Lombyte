@@ -705,7 +705,7 @@ typedef struct {
 } S17BEB8;
 
 extern Cam D_L02_00167280;
-extern Moby *D_L02_00178500[];
+extern Moby *l02_sphere_query_moby_results[] __asm__("D_L02_00178500");
 extern HeroTableRow2C D_L02_0017C228[];
 extern S17BEB8 D_L02_0017C3B8;
 extern char D_0013E550[];
@@ -2143,8 +2143,8 @@ void update_hero_state_motion(void) {
 
                     scale_vector_xyz(motion_geometry_scratch[1], hero.motion.displacement.f, 7.0f);
                     for (i = 0; i < n; i++) {
-                        if (is_moby_in_class_range_500_to_540((int)D_L02_00178500[i])) {
-                            FUN_L00_00214108_cf(D_L02_00178500[i], (int)((Moby *)hero.moby), 0x10000,
+                        if (is_moby_in_class_range_500_to_540((int)l02_sphere_query_moby_results[i])) {
+                            FUN_L00_00214108_cf(l02_sphere_query_moby_results[i], (int)((Moby *)hero.moby), 0x10000,
                                                 hero.motion.pos.f, motion_geometry_scratch[1], 1.0f);
                         }
                     }
