@@ -1584,8 +1584,8 @@ extern float fighter_jet_starting_hp_gp __asm__("D_L17_00162058") __attribute__(
 /* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
    the load after the stores to the ship vars like retail. */
 extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
-extern unsigned char D_L17_00162064 __attribute__((sda));
-extern unsigned char D_L17_00162068 __attribute__((sda));
+extern unsigned char l17_fighter_jet_starting_ammo_gp __asm__("D_L17_00162064") __attribute__((sda));
+extern unsigned char l17_fighter_jet_ammo_capacity_gp __asm__("D_L17_00162068") __attribute__((sda));
 extern float fighter_jet_max_hp_gp __asm__("D_L17_00162084") __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;
@@ -1644,7 +1644,7 @@ extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
 extern char *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F420");
-extern ShipLevelEntry D_L17_0016DA80[];
+extern ShipLevelEntry l17_fighter_jet_hp_bar_clut_entries[] __asm__("D_L17_0016DA80");
 extern ShipShake D_L17_00167580;
 void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
 void fighter_jet_update(ShipMoby *moby) {
@@ -1738,7 +1738,7 @@ void fighter_jet_update(ShipMoby *moby) {
             qcopy_nc(ship_vars->home_pos, moby->pos);
             {
                 int hp_bar_level_entry_index = ship_vars->i104 + 0x28;
-                hp_bar_clut = fighter_jet_hp_bar_clut_lookup_base + (D_L17_0016DA80 + hp_bar_level_entry_index)->idx * 16;
+                hp_bar_clut = fighter_jet_hp_bar_clut_lookup_base + (l17_fighter_jet_hp_bar_clut_entries + hp_bar_level_entry_index)->idx * 16;
             }
             if (hp_bar_saved == 0) {
                 *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)hp_bar_clut;
@@ -1777,10 +1777,10 @@ void fighter_jet_update(ShipMoby *moby) {
                 struct Hero *g = &hero;
                 g->ship_moby = (struct Moby *)moby;
                 g->ship_oclass = moby->oclass;
-                g->ship_ammo = D_L17_00162064;
+                g->ship_ammo = l17_fighter_jet_starting_ammo_gp;
                 g->unk160E = 1;
-                g->ship_ammo_max = D_L17_00162068;
-                g->unk15F8 = D_L17_00162068;
+                g->ship_ammo_max = l17_fighter_jet_ammo_capacity_gp;
+                g->unk15F8 = l17_fighter_jet_ammo_capacity_gp;
                 g->ship_hp = fighter_jet_starting_hp_gp;
                 ship_vars->iF0 = 0;
                 ship_vars->iF4 = 0xFF;
