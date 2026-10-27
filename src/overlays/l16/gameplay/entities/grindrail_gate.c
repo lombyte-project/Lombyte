@@ -864,7 +864,7 @@ void prepare_taxi_departure_path(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L16_001D9750[];
+extern float grindrail_gate_local_trigger_bounds[] __asm__("D_L16_001D9750");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
@@ -907,9 +907,9 @@ void update_grindrail_gate(struct Moby *gate_moby) {
             transpose_rotation_matrix(pos, &gate_moby->rot_row0);
             subtract_vector_xyz(hero_offset_from_gate, hero_position, &gate_moby->pos);
             transform_vector(hero_offset_from_gate, hero_offset_from_gate, pos);
-            if (D_L16_001D9750[0] < hero_offset_from_gate[0] && hero_offset_from_gate[0] < D_L16_001D9750[1] &&
-                D_L16_001D9750[2] < hero_offset_from_gate[1] && hero_offset_from_gate[1] < D_L16_001D9750[3] &&
-                D_L16_001D9750[4] < hero_offset_from_gate[2] && hero_offset_from_gate[2] < D_L16_001D9750[5]) {
+            if (grindrail_gate_local_trigger_bounds[0] < hero_offset_from_gate[0] && hero_offset_from_gate[0] < grindrail_gate_local_trigger_bounds[1] &&
+                grindrail_gate_local_trigger_bounds[2] < hero_offset_from_gate[1] && hero_offset_from_gate[1] < grindrail_gate_local_trigger_bounds[3] &&
+                grindrail_gate_local_trigger_bounds[4] < hero_offset_from_gate[2] && hero_offset_from_gate[2] < grindrail_gate_local_trigger_bounds[5]) {
                 gate_moby->command = 1;
                 gate_moby->state = 2;
                 *(int *)command_timer = scale_game_frames(D_L16_00161DD8);
