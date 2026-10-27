@@ -1227,7 +1227,7 @@ typedef struct {
     int target_timer;
 } WD8;
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
-extern char D_L08_001621E0[];
+extern char commando_name_string[] __asm__("D_L08_001621E0");
 extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
@@ -1272,7 +1272,7 @@ void commando_update(WM *moby) {
             return;
         }
         commando_vars->f2C = 3.0f;
-        commando_vars->p40 = D_L08_001621E0;
+        commando_vars->p40 = commando_name_string;
         if (!D_0013D3B4) {
             moby->state = 1;
         } else {
