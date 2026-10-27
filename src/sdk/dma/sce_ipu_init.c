@@ -2,7 +2,7 @@
 #include "eetypes.h"
 
 extern volatile u128 D_00133050[];
-extern u128 D_001330A0[];
+extern u128 ipu_default_vq_table[] __asm__("D_001330A0");
 extern void SetD4ChcrVariant(s32);
 
 #define IPU_CMD     ((volatile u32 *)0x10002000)
@@ -31,8 +31,8 @@ void sceIpuInit(void) {
     *IPU_CMD = 0x58000000;
     while (*IPU_CTRL < 0) {
     }
-    *IPU_IN_FIFO = D_001330A0[0];
-    *IPU_IN_FIFO = D_001330A0[1];
+    *IPU_IN_FIFO = ipu_default_vq_table[0];
+    *IPU_IN_FIFO = ipu_default_vq_table[1];
     *IPU_CMD = 0x60000000;
     while (*IPU_CTRL < 0) {
     }
