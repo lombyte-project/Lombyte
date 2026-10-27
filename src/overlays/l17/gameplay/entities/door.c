@@ -3253,8 +3253,8 @@ typedef struct {
     float z;
 } RingPt;
 
-extern RingPt D_L17_001DBE20[];
-extern RingPt D_L17_001DC680[];
+extern RingPt l17_ripple_ring_template_vertices[] __asm__("D_L17_001DBE20");
+extern RingPt l17_ripple_ring_world_vertices[] __asm__("D_L17_001DC680");
 T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -3267,7 +3267,7 @@ extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
 int D_L17_00162280[2] = {0x59, 0};
-int D_L17_001622A0[2] = {(int)D_L17_001DC680, 0};
+int D_L17_001622A0[2] = {(int)l17_ripple_ring_world_vertices, 0};
 int D_L17_001622A8[2] = {(int)ring_scrolled_uvs, 0};
 extern int ring_vertex_colors[] __asm__("D_L17_001DCD78");
 int D_L17_001622B0[2] = {(int)ring_vertex_colors, 0x80};
@@ -3301,16 +3301,16 @@ void draw_ripple_ring(struct Moby *moby) {
     get_moby_color(moby, &r, &g, &b);
     color = (D_L17_001622BC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < D_L17_00162280[0]; i++) {
-        RingPt *p = &D_L17_001DBE20[i];
+        RingPt *p = &l17_ripple_ring_template_vertices[i];
         float w = ring_ripple_z_amplitude_gp *
                   fast_sin(fast_add_rotations(
                       wrap_angle(FUN_L00_00200260(square_root(p->x * p->x + p->y * p->y),
                                                   ring_ripple_radial_phase_distance_scale_gp) *
                                  6.2831855f / ring_ripple_radial_phase_distance_scale_gp),
                       ring_ripple_vars->f4));
-        D_L17_001DC680[i].x = p->x + moby->pos.x;
-        D_L17_001DC680[i].y = p->y + moby->pos.y;
-        D_L17_001DC680[i].z = p->z + moby->pos.z + w;
+        l17_ripple_ring_world_vertices[i].x = p->x + moby->pos.x;
+        l17_ripple_ring_world_vertices[i].y = p->y + moby->pos.y;
+        l17_ripple_ring_world_vertices[i].z = p->z + moby->pos.z + w;
         ring_vertex_colors[i] = color;
     }
     for (j = 0; j < 2; j++) {
