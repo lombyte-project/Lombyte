@@ -2389,7 +2389,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     *(int *)(moby + 0x90) = fast_tween_color((fast_sin_c(color_cycle_phase) + 1.0f) * 0.5f,
                                            *(int *)&amoeboid_color_cycle_start_gp, *(int *)&amoeboid_color_cycle_end_gp);
 }
-extern short *D_L01_001ABCC0[];
+extern short *l01_moby_index_lists_by_group[] __asm__("D_L01_001ABCC0");
 extern void FUN_L00_00250df8(void *);
 
 char *activate_smaller_amoeboid(void *source_moby) __asm__("FUN_L01_002ef350");
@@ -2406,7 +2406,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
         next_class = 0x362;
     }
     entry = *(volatile u8 *)&self->group;
-    entities = (char *)(D_L01_001ABCC0 + entry);
+    entities = (char *)(l01_moby_index_lists_by_group + entry);
     /* Fakematch: the dead touch of the entity base gives retail's register for the list slot. */
     D_L01_0015FFD8++;
     D_L01_0015FFD8--;
@@ -2468,7 +2468,7 @@ extern char *D_L01_0015FFD8;
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
 char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) {
-    short *list = D_L01_001ABCC0[candidate_list_index];
+    short *list = l01_moby_index_lists_by_group[candidate_list_index];
     float best = 120.0f;
     char *nearest_entity = 0;
     if (list == 0) {
