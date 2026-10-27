@@ -1302,7 +1302,7 @@ extern f32 lightning_main_arc_z_displacement_limit_gp __asm__("D_L14_00161C94") 
 extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
 extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
-extern char *D_L14_00161CE8;
+extern char *lightning_arc_owner_moby __asm__("D_L14_00161CE8");
 extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
 extern s16 D_L14_001E0000[40];
@@ -1349,7 +1349,7 @@ void update_branched_lightning_arc(char *moby) {
     if (*(int *)&lightning_arc_initialized_gp == 0) {
         *(int *)&lightning_arc_initialized_gp = 1;
         lightning_arc_sound_pending = 1;
-        D_L14_00161CE8 = moby;
+        lightning_arc_owner_moby = moby;
         i = 0;
         starts = D_L14_00161CF8_macro;
         *(int *)&lightning_arc_alpha_pulse_sweep_gp = 0;
@@ -1412,7 +1412,7 @@ void update_branched_lightning_arc(char *moby) {
             sign = -sign;
         }
     }
-    if (moby == D_L14_00161CE8) {
+    if (moby == lightning_arc_owner_moby) {
         arc_tick(&lightning_arc_remaining_frames);
         for (i = 0; i < 40; i++) {
             s16 v = ++D_L14_001E0000[i];
