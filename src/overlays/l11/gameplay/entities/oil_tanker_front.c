@@ -1727,8 +1727,8 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern char D_L11_00162420[4] __attribute__((sda));
-extern char D_L11_00162424[4] __attribute__((sda));
+extern char bubble_surface_effect_color_range_start_gp[4] __asm__("D_L11_00162420") __attribute__((sda));
+extern char bubble_surface_effect_color_range_end_gp[4] __asm__("D_L11_00162424") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void add_vector_xyz(void *, void *, void *);
@@ -1758,7 +1758,7 @@ void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int s
         if (spawned_ground_effect != 0) {
             spawned_ground_effect[9] = func_001FA898_r(4.0f) + 0x40;
             *(short *)(spawned_ground_effect + 0xA) = func_001FA898_r(multiply_global_factor_ed64(random_float_between(30.0f, 90.0f)));
-            *(int *)(spawned_ground_effect + 4) = fast_tween_color(*(int *)&D_L11_00162420, *(int *)&D_L11_00162424,
+            *(int *)(spawned_ground_effect + 4) = fast_tween_color(*(int *)&bubble_surface_effect_color_range_start_gp, *(int *)&bubble_surface_effect_color_range_end_gp,
                                            random_float_between(0.0f, 1.0f));
         }
     }
