@@ -45,7 +45,9 @@ extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
-void FUN_L03_002002f8(void) {
+void update_hero_frame_pipeline(void) __asm__("FUN_L03_002002f8");
+
+void update_hero_frame_pipeline(void) {
     char *hero_state = (char *)D_0013E533 + 0xE1D;
     if (*(float *)(hero_state + 0x80) < 2.0f || *(float *)(hero_state + 0x84) < 2.0f ||
         *(float *)(hero_state + 0x80) > 1022.0f || *(float *)(hero_state + 0x84) > 1022.0f) {
