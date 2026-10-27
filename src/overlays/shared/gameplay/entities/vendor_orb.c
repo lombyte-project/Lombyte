@@ -2085,9 +2085,9 @@ extern void FUN_L00_002e42c0_c(void *, int) __asm__("FUN_L00_002e42c0");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_002E5770_r(void *, int) __asm__("FUN_L00_002e42c0");
 
-extern short D_L00_00161D0C __attribute__((sda));
-extern short D_L00_00161D10 __attribute__((sda));
-extern short D_L00_00161D80 __attribute__((sda));
+extern short follow_camera_ground_focus_angle_upper_bound_gp __asm__("D_L00_00161D0C") __attribute__((sda));
+extern short follow_camera_ground_focus_angle_lower_bound_gp __asm__("D_L00_00161D10") __attribute__((sda));
+extern short follow_camera_projected_focus_blend_fraction_gp __asm__("D_L00_00161D80") __attribute__((sda));
 void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     float hero_position[4];
     float target_position_or_up_offset[4];
@@ -2125,8 +2125,8 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         padb = &hero;
         if (padb->state.current == 0x11 ||
             (padb->past_jump_apex != 0 && padb->ground_distance > 0.2f &&
-             ((y = FUN_L00_002e4580_u(camera, *(float *)(attach_state + 0xB0))) < *(float *)&D_L00_00161D10 ||
-              *(float *)&D_L00_00161D0C < y))) {
+             ((y = FUN_L00_002e4580_u(camera, *(float *)(attach_state + 0xB0))) < *(float *)&follow_camera_ground_focus_angle_lower_bound_gp ||
+              *(float *)&follow_camera_ground_focus_angle_upper_bound_gp < y))) {
             int v;
             *(unsigned char *)(attach_state + 0xC4) = 1;
             v = *(unsigned short *)&D_L00_00161D3C_gp;
@@ -2215,7 +2215,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
         FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
-        lerp_vector(*(float *)&D_L00_00161D80, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
+        lerp_vector(*(float *)&follow_camera_projected_focus_blend_fraction_gp, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
         break;
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:
