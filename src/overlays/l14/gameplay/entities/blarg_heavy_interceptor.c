@@ -2773,7 +2773,7 @@ extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
-extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
+extern char l14_minibomber_bomb_release_blast_template[] __asm__("D_L14_001D88D0");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
                                 int) __asm__("FUN_L00_0026d000");
@@ -2834,7 +2834,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
         spawn_two_point_effect_particle(effect_spawn_position, direction);
     }
-    mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
+    mine_camera_blast((int)l14_minibomber_bomb_release_blast_template, original_pos, 0, 0);
 }
 /* Points the mover at the second-to-last node of its active path and clears its offset. */
 
