@@ -21,8 +21,8 @@ extern float D_L01_0015F3FC;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/overlay/shared/gameplay/vendor/002aea70_globals.h"
-extern int D_L01_00174280[];
-extern int D_L01_001CA4A0[];
+extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
+extern int level_table_pair_indices[] __asm__("D_L01_001CA4A0");
 extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
@@ -88,9 +88,9 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     fill_transfer_words_alt(D_L01_0017C7C0, 0, 0x40);
     calculate_dma_transfer_address();
     adjusted_address_base = relocated_address_base + (int)0xFFFC0000;
-    *(int *)(relocated_address_block + 0x58) = D_L01_00174280[1] + adjusted_address_base;
-    level_table_pair_index = D_L01_001CA4A0[lvl];
-    *(int *)(relocated_address_block + 0x5C) = D_L01_00174280[2] + adjusted_address_base;
+    *(int *)(relocated_address_block + 0x58) = vendor_relocation_offsets[1] + adjusted_address_base;
+    level_table_pair_index = level_table_pair_indices[lvl];
+    *(int *)(relocated_address_block + 0x5C) = vendor_relocation_offsets[2] + adjusted_address_base;
     D_L01_0015F3FC = 1.0f;
     relocated_address_base = adjusted_address_base;
     *(int *)&D_L01_0015F400 = 0;
