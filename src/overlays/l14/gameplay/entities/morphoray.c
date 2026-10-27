@@ -1835,8 +1835,8 @@ extern float D_L14_001624BC __attribute__((section(".sdata")));
 extern float D_L14_001624C0 __attribute__((section(".sdata")));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
-extern float D_L14_001F6C38[][3];
-extern float D_L14_001F6C08[][3];
+extern float path_key_camera_angle_override_progress_thresholds[][3] __asm__("D_L14_001F6C38");
+extern float path_key_camera_linked_moby_event_progress_thresholds[][3] __asm__("D_L14_001F6C08");
 extern CamKey5d48 D_L14_001F6488[];
 extern char D_L14_0017AD80[];
 extern int scale_ticks_5d48(int) __asm__("FUN_001f96f8");
@@ -1888,14 +1888,14 @@ void update_path_key_camera(char *path_key_camera) {
         side = 2;
     }
     D_L14_001624C0 = (D_L14_001F6C80[side][hero.rail_segment] + hero.rail_seg_frac) / D_L14_001F6C80[side][999];
-    if (rec->n32 < 2 && D_L14_001F6C38[rec->n32][side] <= D_L14_001624C0) {
+    if (rec->n32 < 2 && path_key_camera_angle_override_progress_thresholds[rec->n32][side] <= D_L14_001624C0) {
         rec->n32++;
     }
     if (rec->n32 == 1) {
         ((CamBones5d48 *)D_L14_0017AD80)->f274 = D_L14_001624B0 * 0.017453292f;
         ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
-    if (rec->n30 < 3 && D_L14_001F6C08[rec->n30][side] <= D_L14_001624C0) {
+    if (rec->n30 < 3 && path_key_camera_linked_moby_event_progress_thresholds[rec->n30][side] <= D_L14_001624C0) {
         struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
         struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
         struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
