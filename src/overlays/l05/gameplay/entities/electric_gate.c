@@ -252,10 +252,10 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214
 extern unsigned char D_L05_0015F444;
 extern unsigned char D_L05_0015F445;
 extern unsigned char D_L05_0015F446;
-extern unsigned char D_L05_00161202;
-extern unsigned char D_L05_00161203;
-extern unsigned char D_L05_00161201;
-extern unsigned char D_L05_00161200;
+extern unsigned char l05_volume_blended_color_upper_middle_byte __asm__("D_L05_00161202");
+extern unsigned char l05_volume_blended_color_high_byte __asm__("D_L05_00161203");
+extern unsigned char l05_volume_blended_color_lower_middle_byte __asm__("D_L05_00161201");
+extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
@@ -297,7 +297,7 @@ void update_fog_zone(char *moby) {
         *(int *)(data + 0x10) = 0;
         *(int *)(data + 0x1C) = 0;
         {
-            int c = D_L05_00161200 + (D_L05_00161201 << 8) + (D_L05_00161202 << 16) + (D_L05_00161203 << 24);
+            int c = l05_volume_blended_color_low_byte + (l05_volume_blended_color_lower_middle_byte << 8) + (l05_volume_blended_color_upper_middle_byte << 16) + (l05_volume_blended_color_high_byte << 24);
             *(int *)(data + 0x34) = 0x40408070;
             *(int *)(data + 0x30) = c;
         }
@@ -347,10 +347,10 @@ void update_fog_zone(char *moby) {
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space, hero_offset_from_volume_origin, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x40);
         c = fast_tween_color(*(int *)(data + 0x30), *(int *)(data + 0x34), (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
-        D_L05_00161201 = c >> 8;
-        D_L05_00161202 = c >> 16;
-        D_L05_00161200 = c;
-        D_L05_00161203 = c >> 24;
+        l05_volume_blended_color_lower_middle_byte = c >> 8;
+        l05_volume_blended_color_upper_middle_byte = c >> 16;
+        l05_volume_blended_color_low_byte = c;
+        l05_volume_blended_color_high_byte = c >> 24;
     }
 }
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
