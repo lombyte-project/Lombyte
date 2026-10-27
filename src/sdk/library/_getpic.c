@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8 D_00153A58[];
+extern u8 image_buffer_alignment_error_format[] __asm__("D_00153A58");
 extern s32 _Error1();
 extern s32 _decodeOrSkip();
 extern s32 _nextHeader();
@@ -26,7 +26,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
     temp_6_13 = temp_16_12->unkD8;
     temp_16_12->unk0 = 0;
     if (temp_6_13 & 0x3F) {
-        _Error1(temp_16_12, D_00153A58, temp_6_13);
+        _Error1(temp_16_12, image_buffer_alignment_error_format, temp_6_13);
         return -1;
     }
     temp_16_12->unk820 = 0;
