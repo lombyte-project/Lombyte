@@ -1967,9 +1967,9 @@ void handle_moby_destruction(char *moby) {
         delete_moby(moby);
     }
 }
-extern char D_L10_001DD1D0[] __asm__("D_L10_001DD1D0");
-extern char D_L10_001DD210[] __asm__("D_L10_001DD210");
-extern unsigned char D_L10_00161CA8[] __asm__("D_L10_00161CA8");
+extern char l10_data_processor_linked_effect_missing_processor_link_message[] __asm__("D_L10_001DD1D0");
+extern char l10_data_processor_linked_effect_deleted_instance_message[] __asm__("D_L10_001DD210");
+extern unsigned char l10_data_processor_linked_effect_initial_strip_order[] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
 void render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 extern int stub_printf() __asm__("FUN_001e93b0");
@@ -2002,8 +2002,8 @@ void update_data_processor_linked_effect(struct Moby *moby) {
     int pass, i, copy_index;
 
     if (*(int *)(data + 0xC) == -1) {
-        stub_printf(D_L10_001DD1D0);
-        stub_printf(D_L10_001DD210, *(short *)&moby->save_id);
+        stub_printf(l10_data_processor_linked_effect_missing_processor_link_message);
+        stub_printf(l10_data_processor_linked_effect_deleted_instance_message, *(short *)&moby->save_id);
         delete_moby(moby);
     }
     switch (moby->state) {
@@ -2012,7 +2012,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
             delete_moby(moby);
             break;
         }
-        memcpy(scratch.order, D_L10_00161CA8, 10);
+        memcpy(scratch.order, l10_data_processor_linked_effect_initial_strip_order, 10);
         for (pass = 0; pass < 10; pass++) {
             for (i = 0; i < random_integer_below(9); i++) {
                 unsigned char saved_next_order_byte = scratch.order[i + 1];
