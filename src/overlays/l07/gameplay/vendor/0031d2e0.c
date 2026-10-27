@@ -18,11 +18,11 @@ extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int FUN_00120478(float);
 extern char *D_L07_001B0530[];
-extern char D_L07_00211AF0[];
+extern char equalizer_ammo_spawner_missing_trigger_message[] __asm__("D_L07_00211AF0");
 extern char D_L07_00211B30[];
-extern char D_L07_00211B50[];
+extern char equalizer_ammo_spawn_counts_format[] __asm__("D_L07_00211B50");
 extern char D_L07_00211B78[];
-extern char D_L07_00211BA8[];
+extern char equalizer_ammo_batch_reduced_format[] __asm__("D_L07_00211BA8");
 /* Item id list ended by -1; sized so Ps2EeAs reaches it through $gp like retail. */
 extern int D_L07_00161CA0[2] __attribute__((section(".sdata"))) __attribute__((sda));
 extern char D_0013F3D0[];
@@ -46,11 +46,11 @@ void update_equalizer_ammo_spawner(char *moby) {
         int bad = 0;
         int i;
         if (data[0] == -1) {
-            debug_print(D_L07_00211AF0);
+            debug_print(equalizer_ammo_spawner_missing_trigger_message);
             bad = 1;
         }
         if (data[1] == -1) {
-            debug_print(D_L07_00211AF0);
+            debug_print(equalizer_ammo_spawner_missing_trigger_message);
             bad = 1;
         }
         if (bad) {
@@ -104,7 +104,7 @@ state_one:
                 path = D_L07_001B0530[data[1]];
                 if (quotient != 0)
                     batch = quotient;
-                debug_print(D_L07_00211B50, total, batch);
+                debug_print(equalizer_ammo_spawn_counts_format, total, batch);
                 if (total > 0) {
                     float near = 12.0f;
                     float retry_step = 10.0f;
@@ -128,7 +128,7 @@ state_one:
                         step += random_float_between(*(float *)(data + 8) / retry_step, 2.0f);
                         if (remaining < batch) {
                             batch = remaining;
-                            debug_print(D_L07_00211BA8, remaining);
+                            debug_print(equalizer_ammo_batch_reduced_format, remaining);
                         }
                     } while (remaining > 0);
                 }
