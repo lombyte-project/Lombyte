@@ -1285,10 +1285,10 @@ extern u8 npc_dialogue_suppression_flags[] __asm__("D_0013D4CC");
 extern char *D_001413D0[];
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
-extern s32 D_L03_001BA720[];
+extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
 extern char D_L03_00161BB8[];
 #include "rnc/gameplay/state/game_globals.h"
-extern u8 D_L03_0015FC88[];
+extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
 extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
@@ -1347,7 +1347,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                 }
             }
             taxi_kill(helga_moby);
@@ -1358,7 +1358,7 @@ void helga_update(struct Moby *helga_moby) {
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
-                record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
             }
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
@@ -1377,7 +1377,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                 }
             }
         }
@@ -1391,7 +1391,7 @@ void helga_update(struct Moby *helga_moby) {
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
-                        record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                        record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                     }
                 }
                 if (helga_vars->talk.warp != -1) {
@@ -1416,7 +1416,7 @@ void helga_update(struct Moby *helga_moby) {
                     do {
                         group = reward_moby->mission;
                     } while (0);
-                    if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
+                    if (mission_collection_recording_filter[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                         /* Fakematch: see above. */
                         do {
                         record:
@@ -1767,7 +1767,7 @@ void big_al_update(struct Moby *guide_moby) {
                 {
                     s32 k = reward_moby->mission;
                     u32 u = k & 0xFF;
-                    if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
+                    if (k == 0xFF || (mission_collection_recording_filter[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
                         D_L03_001BB330.collected[(s16)reward_moby->save_id] = k + 2;
                     }
                 }
@@ -1823,7 +1823,7 @@ void big_al_update(struct Moby *guide_moby) {
                 do {
                     group = reward_moby->mission;
                 } while (0);
-                if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
+                if (mission_collection_recording_filter[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                 rec2:
                     D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                 }
