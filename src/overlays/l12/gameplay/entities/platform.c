@@ -36,7 +36,7 @@ extern void copy_slot_c(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void finish_slots_c(void *, int) __asm__("FUN_L01_002b7fe0");
 extern float water_tile_direction_inputs[8] __asm__("D_L12_00180340");
 extern int D_L12_001612D0;
-extern void *D_L12_001612D4;
+extern void *l12_water_tile_position_records __asm__("D_L12_001612D4");
 extern int D_L12_001612D8;
 extern float D_L12_0016120C;
 extern float D_L12_00161210;
@@ -107,7 +107,7 @@ void update_level_12_water_tile(struct Moby *moby) {
             *(u8 *)(D_L12_001CAD00_c + 0x3c) = 0x1c;
             *(u8 *)(D_L12_001CAD00_c + 0x3d) = 0x40;
             D_L12_001612D0 = (int)D_L12_001CBF40_c;
-            D_L12_001612D4 = D_L12_001CBE00_c;
+            l12_water_tile_position_records = D_L12_001CBE00_c;
             D_L12_001612D8 = 17;
             D_L12_0016120C = 32768.0f;
             D_L12_00161210 = 255.0f;
