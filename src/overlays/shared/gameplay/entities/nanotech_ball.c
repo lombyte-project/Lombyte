@@ -2912,7 +2912,7 @@ typedef struct Particle41 {
 
 
 
-extern V41 D_L00_001E4B40[];
+extern V41 l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
 extern E04 D_L00_001E4C80_lui[] __asm__("D_L00_001E4C80");
 extern char D_0013E533[] NOT_SDA;
 extern char D_L00_00161B60[] MACRO_ADDR;
@@ -3035,7 +3035,7 @@ void suck_beam_update(void *moby,void *position) {
     cross_vectors_xyz(&frame[0],&frame[2],&frame[1]);
     { int k;
     for(k=0;k<20;k++) {
-        fast_vec_scale(&tmp_a,&D_L00_001E4B40[k],0.1f);
+        fast_vec_scale(&tmp_a,&l00_suck_beam_ring_source_offsets[k],0.1f);
         transform_vector_by_basis(&tmp_a,&tmp_a,frame);
         add_vector_xyz(&((V41 *)D_L00_001E6020)[k],D_L00_001E5F40,&tmp_a);
     }
@@ -3070,7 +3070,7 @@ void suck_beam_update(void *moby,void *position) {
         for(j=0;j<20;j++) {
             angle=(float)i*0.3f+0.1f;
             angle+=fast_sin(fast_add_rotations((*(float *)&D_L00_00161B58_gp)+(float)i*0.7f,0.0f))*0.1f;
-            fast_vec_scale(&tmp_f,&D_L00_001E4B40[j],angle);
+            fast_vec_scale(&tmp_f,&l00_suck_beam_ring_source_offsets[j],angle);
             transform_vector_by_basis(&tmp_f,&tmp_f,&interp);
             add_vector_xyz(&((V41 (*)[20])D_L00_001E6020)[i][j],D_L00_001E5F40+i*16,&tmp_f);
         }
