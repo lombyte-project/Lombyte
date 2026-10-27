@@ -123,7 +123,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void FUN_L00_00233660_2215c8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_2215c8 D_L00_001798F0[];
+extern Entry70_2215c8 l00_hero_countdown_records[] __asm__("D_L00_001798F0");
 void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
 
 void update_hero_timers_and_reach_state(void) {
@@ -208,7 +208,7 @@ void update_hero_timers_and_reach_state(void) {
         fast_dec_timer(&hero.vehicle_triangle_cooldown);
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_2215c8(&D_L00_001798F0[i].w0);
+        FUN_001f9740_2215c8(&l00_hero_countdown_records[i].w0);
     }
     hero.current_path_dist = 9999.0f;
     if (hero.air_frames.s != 0 && gravity_z(&hero.motion.velocity) < 0.0f) {
