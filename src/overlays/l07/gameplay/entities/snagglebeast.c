@@ -652,7 +652,7 @@ typedef struct {
 
 extern L07MobyList D_L07_0016C8E0;
 extern int scene_state __asm__("D_L07_0015F5C4");
-extern unsigned char D_L07_0020C6C0[];
+extern unsigned char l07_snagglebeast_big_head_manipulator[] __asm__("D_L07_0020C6C0");
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 void apply_snagglebeast_big_head_cheat(char *moby) __asm__("FUN_L07_00314058");
@@ -665,7 +665,7 @@ void apply_snagglebeast_big_head_cheat(char *moby) {
             char *candidate_moby = D_L07_0016C8E0.mobys[i];
 
             if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *big_head_manipulator = D_L07_0020C6C0;
+                unsigned char *big_head_manipulator = l07_snagglebeast_big_head_manipulator;
 
                 if (big_head_cheat_enabled != 0 && big_head_manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0xB, big_head_manipulator);
