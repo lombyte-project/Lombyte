@@ -16,7 +16,7 @@ extern char textured_effect_gs_state_packet[] __asm__("D_L12_001CB7A0");
 struct Pkt611c0 {
     int *p;
 };
-extern struct Pkt611c0 D_L12_001611C0;
+extern struct Pkt611c0 l12_render_packet_cursor __asm__("D_L12_001611C0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
@@ -32,11 +32,11 @@ void draw_textured_effect_list(void *list_, int count, int context_one_texture_s
     int sphere_check_result;
     vu1_add_g_sregister(6, context_one_texture_state);
     vu1_add_g_sregister(7, context_two_texture_state);
-    D_L12_001611C0.p[0] = 0x30000009;
-    D_L12_001611C0.p[1] = (int)textured_effect_gs_state_packet;
-    D_L12_001611C0.p[2] = 0;
-    D_L12_001611C0.p[3] = 0x50000009;
-    D_L12_001611C0.p += 4;
+    l12_render_packet_cursor.p[0] = 0x30000009;
+    l12_render_packet_cursor.p[1] = (int)textured_effect_gs_state_packet;
+    l12_render_packet_cursor.p[2] = 0;
+    l12_render_packet_cursor.p[3] = 0x50000009;
+    l12_render_packet_cursor.p += 4;
     font_queue_vu_state();
     sp = (int *)0x70000000;
     for (i = 0xB3; i >= 0; i--) {
