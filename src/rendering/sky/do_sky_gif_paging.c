@@ -3,7 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 
 extern struct TagPtr D_00160470;
-extern struct TagPtr D_00160474;
+extern struct TagPtr sky_gif_paging_bypass_tag __asm__("D_00160474");
 extern s32 D_0018A2B4[];
 struct SkyPagingState {
     s32 current_page;
@@ -19,7 +19,7 @@ void do_sky_gif_paging(void) {
     struct DmaTag *tag;
 
     tag = render_packet_cursor.tag;
-    D_00160474.p = tag;
+    sky_gif_paging_bypass_tag.p = tag;
     tag = tag + 1;
     render_packet_cursor.tag = tag;
     D_00160470.p->tag = 0x20000000;
@@ -35,10 +35,10 @@ void do_sky_gif_paging(void) {
     render_packet_cursor.tag->vif0 = 0;
     render_packet_cursor.tag->vif1 = 0;
     render_packet_cursor.tag = render_packet_cursor.tag + 1;
-    D_00160474.p->tag = 0x20000000;
-    D_00160474.p->addr = (u32)render_packet_cursor.tag;
-    D_00160474.p->vif0 = 0;
-    D_00160474.p->vif1 = 0;
+    sky_gif_paging_bypass_tag.p->tag = 0x20000000;
+    sky_gif_paging_bypass_tag.p->addr = (u32)render_packet_cursor.tag;
+    sky_gif_paging_bypass_tag.p->vif0 = 0;
+    sky_gif_paging_bypass_tag.p->vif1 = 0;
     D_0015EE74.current_page = D_0015EE74.next_page;
 }
 
