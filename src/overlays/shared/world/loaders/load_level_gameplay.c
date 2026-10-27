@@ -370,7 +370,7 @@ extern int D_L00_00160014  MACRO_ADDR;
 extern int D_L00_0015F63C  MACRO_ADDR;
 extern Cuboid *D_L00_0015EF50 MACRO_ADDR;
 extern HeroSpawn D_0013F350;
-extern Light D_L00_0017EEC0[];
+extern Light l00_gameplay_lights[] __asm__("D_L00_0017EEC0");
 extern LevelState16CB40 D_L00_0016CA40;
 extern LevelLoad173E00 D_L00_00173E00;
 /* Level load state at D_L00_00173E40; this function sets its header pointers (+0x4, +0x8) and clears +0xC..+0x14. */
@@ -401,9 +401,9 @@ extern char *D_L00_001600FC MACRO_ADDR;
 extern char *D_L00_00160108_macro __asm__("D_L00_00160108") MACRO_ADDR;
 extern char *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
 extern char *D_L00_0015F318  MACRO_ADDR;
-extern char *D_L00_001B04B0[];
+extern char *toad_paths[] __asm__("D_L00_001B04B0");
 extern char *func_0020D348_m(int);
-extern char D_L00_00166C80[];
+extern char player_camera[] __asm__("D_L00_00166C80");
 extern char D_L00_0016C780[];
 extern char D_L00_0016C7B0[];
 extern char D_L00_00173EC0[];
@@ -507,7 +507,7 @@ extern GameState137B80 D_00137B80;
 
 char *load_level_gameplay(int arg0) __asm__("FUN_L00_00241940");
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-extern unsigned char D_L00_001BB684[];
+extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
@@ -532,7 +532,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     fast_decompress(level_root[1], hdr);
     FlushCache(0);
     FillTransferWords(&D_0013F350, 0, 0x2310);
-    FillTransferWords(D_L00_00166C80, 0, 0x3A0);
+    FillTransferWords(player_camera, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
     set_global_state_slot(0x4D2);
     if (pal_mode != 0) {
@@ -607,9 +607,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int i;
 
             copy_memory_aligned(D_L00_0017ECC0, p, D_L00_0015FBC4 << 4);
-            copy_memory_aligned(D_L00_0017EEC0, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
+            copy_memory_aligned(l00_gameplay_lights, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
             for (i = 0; i < D_L00_0015FBC4; i++) {
-                current_light = &D_L00_0017EEC0[i];
+                current_light = &l00_gameplay_lights[i];
                 if (current_light->f48 < 0) {
                     current_light->f48 = 11;
                 }
@@ -971,7 +971,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 } else {
                     vis = 0xFF;
                 }
-                if (D_L00_001BB684[uid] != 0) {
+                if (l00_moby_load_exclusion_flags_by_uid[uid] != 0) {
                     skip = 1;
                 } else if (flags & 3) {
                     if (mission_state[mission] == 0xFF) {
@@ -1289,7 +1289,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             copy_blocks_16_forward(D_L00_00160108_macro, src, size);
         }
         for (i = 0; i < D_L00_00160104; i++) {
-            D_L00_001B04B0[i] = D_L00_00160108_macro + *(int *)q;
+            toad_paths[i] = D_L00_00160108_macro + *(int *)q;
             q += 4;
         }
     }
