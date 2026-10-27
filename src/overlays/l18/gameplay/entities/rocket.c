@@ -2748,26 +2748,26 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 extern void FUN_L00_00257d78(float *, float, float);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L18_00161F1C __attribute__((sda));
-extern short D_L18_00161F20 __attribute__((sda));
-extern short D_L18_00161F24 __attribute__((sda));
-extern short D_L18_00161F28 __attribute__((sda));
-extern short D_L18_00161F2C __attribute__((sda));
-extern short D_L18_00161F30 __attribute__((sda));
-extern short D_L18_00161F34 __attribute__((sda));
-extern short D_L18_00161F38 __attribute__((sda));
-extern short D_L18_00161F3C __attribute__((sda));
-extern short D_L18_00161F40 __attribute__((sda));
-extern short D_L18_00161F44 __attribute__((sda));
-extern short D_L18_00161F48 __attribute__((sda));
-extern short D_L18_00161F4C __attribute__((sda));
-extern short D_L18_00161F50 __attribute__((sda));
-extern short D_L18_00161F54 __attribute__((sda));
-extern short D_L18_00161F58 __attribute__((sda));
-extern short D_L18_00161F5C __attribute__((sda));
-extern short D_L18_00161F60 __attribute__((sda));
-extern short D_L18_00161F64 __attribute__((sda));
-extern short D_L18_00161F68 __attribute__((sda));
+extern short target_direction_spark_initial_color_range_start_gp __asm__("D_L18_00161F1C") __attribute__((sda));
+extern short target_direction_spark_initial_color_range_end_gp __asm__("D_L18_00161F20") __attribute__((sda));
+extern short target_direction_spark_second_color_range_start_gp __asm__("D_L18_00161F24") __attribute__((sda));
+extern short target_direction_spark_second_color_range_end_gp __asm__("D_L18_00161F28") __attribute__((sda));
+extern short target_direction_spark_first_vector_w_range_start_gp __asm__("D_L18_00161F2C") __attribute__((sda));
+extern short target_direction_spark_first_vector_w_range_end_gp __asm__("D_L18_00161F30") __attribute__((sda));
+extern short target_direction_spark_second_vector_w_range_start_gp __asm__("D_L18_00161F34") __attribute__((sda));
+extern short target_direction_spark_second_vector_w_range_end_gp __asm__("D_L18_00161F38") __attribute__((sda));
+extern short target_direction_spark_frame_count_range_start_gp __asm__("D_L18_00161F3C") __attribute__((sda));
+extern short target_direction_spark_frame_count_range_end_gp __asm__("D_L18_00161F40") __attribute__((sda));
+extern short target_direction_spark_second_frame_count_range_start_gp __asm__("D_L18_00161F44") __attribute__((sda));
+extern short target_direction_spark_second_frame_count_range_end_gp __asm__("D_L18_00161F48") __attribute__((sda));
+extern short target_direction_spark_third_frame_count_range_start_gp __asm__("D_L18_00161F4C") __attribute__((sda));
+extern short target_direction_spark_third_frame_count_range_end_gp __asm__("D_L18_00161F50") __attribute__((sda));
+extern short target_direction_spark_speed_range_start_gp __asm__("D_L18_00161F54") __attribute__((sda));
+extern short target_direction_spark_speed_range_end_gp __asm__("D_L18_00161F58") __attribute__((sda));
+extern short target_direction_spark_second_vector_scale_gp __asm__("D_L18_00161F5C") __attribute__((sda));
+extern short target_direction_spark_downward_z_rate_range_start_gp __asm__("D_L18_00161F60") __attribute__((sda));
+extern short target_direction_spark_downward_z_rate_range_end_gp __asm__("D_L18_00161F64") __attribute__((sda));
+extern short target_direction_spark_lookup_index_and_flags_gp __asm__("D_L18_00161F68") __attribute__((sda));
 void spawn_sparks_along_target_direction(struct Moby *moby) __asm__("FUN_L18_002ea598");
 
 void spawn_sparks_along_target_direction(struct Moby *moby) {
@@ -2780,31 +2780,31 @@ void spawn_sparks_along_target_direction(struct Moby *moby) {
     float speed_min, speed_max, sink_min, sink_max;
     fast_vec_sub(scaled_target_direction, (void *)moby->pvars, &moby->pos);
     fast_vec_normalize(scaled_target_direction, scaled_target_direction, frame_time * 60.0f);
-    speed_min = (*(float *)&(D_L18_00161F54)) * frame_time;
-    speed_max = (*(float *)&(D_L18_00161F58)) * frame_time;
-    sink_min = (*(float *)&(D_L18_00161F60)) * frame_time;
-    sink_max = (*(float *)&(D_L18_00161F64)) * frame_time;
+    speed_min = (*(float *)&(target_direction_spark_speed_range_start_gp)) * frame_time;
+    speed_max = (*(float *)&(target_direction_spark_speed_range_end_gp)) * frame_time;
+    sink_min = (*(float *)&(target_direction_spark_downward_z_rate_range_start_gp)) * frame_time;
+    sink_max = (*(float *)&(target_direction_spark_downward_z_rate_range_end_gp)) * frame_time;
     for (i = 0; i < 3; i++) {
         FUN_L00_00257d78(first_spark_vector, speed_min, speed_max);
-        fast_vec_scale(second_spark_vector, first_spark_vector, (*(float *)&(D_L18_00161F5C)));
+        fast_vec_scale(second_spark_vector, first_spark_vector, (*(float *)&(target_direction_spark_second_vector_scale_gp)));
         second_spark_vector[2] -= random_float_between(sink_min, sink_max);
         spark_frame_count = func_001FA898_r(FUN_L04_001f1978(random_float_between(
-            (*(float *)&(D_L18_00161F3C)), (*(float *)&(D_L18_00161F40)))));
+            (*(float *)&(target_direction_spark_frame_count_range_start_gp)), (*(float *)&(target_direction_spark_frame_count_range_end_gp)))));
         second_spark_frame_count = func_001FA898_r(FUN_L04_001f1978(random_float_between(
-            (*(float *)&(D_L18_00161F44)), (*(float *)&(D_L18_00161F48)))));
+            (*(float *)&(target_direction_spark_second_frame_count_range_start_gp)), (*(float *)&(target_direction_spark_second_frame_count_range_end_gp)))));
         third_spark_frame_count = func_001FA898_r(FUN_L04_001f1978(random_float_between(
-            (*(float *)&(D_L18_00161F4C)), (*(float *)&(D_L18_00161F50)))));
-        first_spark_vector[3] = random_float_between((*(float *)&(D_L18_00161F2C)),
-                                          (*(float *)&(D_L18_00161F30)));
-        second_spark_vector[3] = random_float_between((*(float *)&(D_L18_00161F34)),
-                                          (*(float *)&(D_L18_00161F38)));
+            (*(float *)&(target_direction_spark_third_frame_count_range_start_gp)), (*(float *)&(target_direction_spark_third_frame_count_range_end_gp)))));
+        first_spark_vector[3] = random_float_between((*(float *)&(target_direction_spark_first_vector_w_range_start_gp)),
+                                          (*(float *)&(target_direction_spark_first_vector_w_range_end_gp)));
+        second_spark_vector[3] = random_float_between((*(float *)&(target_direction_spark_second_vector_w_range_start_gp)),
+                                          (*(float *)&(target_direction_spark_second_vector_w_range_end_gp)));
         fast_vec_scale(spark_spawn_position, scaled_target_direction, random_float_between(0.0f, 1.0f));
         fast_vec_add(spark_spawn_position, spark_spawn_position, &moby->pos);
-        initial_spark_color = FUN_001fa6e0((*(int *)&(D_L18_00161F1C)), (*(int *)&(D_L18_00161F20)),
+        initial_spark_color = FUN_001fa6e0((*(int *)&(target_direction_spark_initial_color_range_start_gp)), (*(int *)&(target_direction_spark_initial_color_range_end_gp)),
                           random_float_between(0.0f, 1.0f));
-        second_spark_color = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
+        second_spark_color = FUN_001fa6e0((*(int *)&(target_direction_spark_second_color_range_start_gp)), (*(int *)&(target_direction_spark_second_color_range_end_gp)),
                           random_float_between(0.0f, 1.0f));
-        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, (*(int *)&(D_L18_00161F68)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, (*(int *)&(target_direction_spark_lookup_index_and_flags_gp)));
     }
 }
 extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
@@ -2866,7 +2866,7 @@ void spawn_explosion_burst(void *source_moby) {
             a = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_frame_count_gp) * scale);
             b = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_second_frame_count_gp) * scale);
             third_spark_frame_count = truncate_float_to_s32((float)scale_ticks(explosion_burst_spark_third_frame_count_gp) * scale);
-            spawn_spark(&moby->pos, velocity, offset, explosion_burst_spark_initial_color_gp, explosion_burst_spark_second_color_gp, a, b, third_spark_frame_count, *(int *)&D_L18_00161F68);
+            spawn_spark(&moby->pos, velocity, offset, explosion_burst_spark_initial_color_gp, explosion_burst_spark_second_color_gp, a, b, third_spark_frame_count, *(int *)&target_direction_spark_lookup_index_and_flags_gp);
         } while (i < explosion_burst_spark_count_gp);
     }
     j = 0;
