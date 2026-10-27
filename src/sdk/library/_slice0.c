@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-extern u8 D_00153848[];
+extern u8 too_many_macroblocks_error_message[] __asm__("D_00153848");
 extern s32 _Error();
 extern s32 _decMB0();
 extern s32 _doMC();
@@ -47,7 +47,7 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
             }
         }
         if (mbx >= nmb) {
-            _Error(mp, D_00153848);
+            _Error(mp, too_many_macroblocks_error_message);
             return 2;
         }
         if (inc == 1) {
