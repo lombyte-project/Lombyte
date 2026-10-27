@@ -3001,7 +3001,7 @@ typedef struct {
 } HitInfo;
 
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/gunship_follow_path.h"
-extern char D_L01_0020B3E0[];
+extern char gunship_missing_path_warning_format[] __asm__("D_L01_0020B3E0");
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
@@ -3146,7 +3146,7 @@ void gunship_follow_path(struct Moby *moby) {
             if (FUN_001f9b48(&pn->node[0], &pn->node[pn->count - 1]) < 0.5f)
                 pn->count--;
         } else {
-            FUN_001e93b0(D_L01_0020B3E0, moby->oclass, FUN_001fa6d0((f32)(moby - (struct Moby *)D_L01_0015FFD8)));
+            FUN_001e93b0(gunship_missing_path_warning_format, moby->oclass, FUN_001fa6d0((f32)(moby - (struct Moby *)D_L01_0015FFD8)));
         }
         moby->update_dist = 0xFF;
         v->unk11E = -1;
