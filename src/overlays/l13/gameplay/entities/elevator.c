@@ -2440,7 +2440,7 @@ skip:
 extern char *msg_string(s32) __asm__("func_001FDD10");
 extern char D_L13_001CBC60[];
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int D_L13_001CBE70[];
+extern int fighter_jet_health_palette_backup[] __asm__("D_L13_001CBE70");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -2551,7 +2551,7 @@ void draw_fighter_jet_hud(char *moby) {
     for (j = lo; j <= hi; j++) {
         health_palette_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < health_palette_fill_end) {
-            hp_bar_clut[0][health_palette_index] = D_L13_001CBE70[health_palette_index];
+            hp_bar_clut[0][health_palette_index] = fighter_jet_health_palette_backup[health_palette_index];
         } else {
             hp_bar_clut[0][health_palette_index] = 0x80000000;
         }
@@ -3105,7 +3105,7 @@ void fighter_jet_update(Jet *jet_moby) {
         initialized=hp_bar_saved;
         palette=(int*)(palette_data+(texture_table[texture_index].palette<<4));
         hp_bar_clut[0]=palette;
-        if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
+        if (!initialized) __builtin_memcpy(fighter_jet_health_palette_backup,palette,1024);
         hp_bar_saved=1; jet_data->wait_timer=1; jet_data->energy=1;
         if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(persistence_table_row_index<<4)]==0xFF) jet_moby->state=9;
         if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
