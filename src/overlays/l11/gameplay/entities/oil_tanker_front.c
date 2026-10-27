@@ -1016,7 +1016,7 @@ extern void tick_countdown_32_u(void *) __asm__("func_001F9740");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-extern short D_L11_00162388 __attribute__((sda));
+extern short energy_sphere_particle_scale_target_gp __asm__("D_L11_00162388") __attribute__((sda));
 void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
 void energy_sphere_update(unsigned char *moby) {
     enum {
@@ -1036,8 +1036,8 @@ void energy_sphere_update(unsigned char *moby) {
             float scale_approach_step = (*(float **)(moby + 0x24))[9] / scale_approach_frames;
             scale_approach_pointer = (float *)(data + 0x1C);
             approach_value((float *)(moby + 0x2C), target_scale, scale_approach_step);
-            approach_value(scale_approach_pointer, *(float *)&D_L11_00162388,
-                           *(float *)&D_L11_00162388 / (float)scale_game_frames(0x14));
+            approach_value(scale_approach_pointer, *(float *)&energy_sphere_particle_scale_target_gp,
+                           *(float *)&energy_sphere_particle_scale_target_gp / (float)scale_game_frames(0x14));
         }
         if (func_001F9908_i(data + 0x28)) {
             mark_moby_for_removal(moby);
