@@ -463,8 +463,8 @@ extern int D_0015EEA4;
 extern int D_L13_0015FFD8; /* no foreign declaration */
 int D_L13_00161950 = 0;
 int D_L13_00161954 = -1;
-extern int D_L13_001D3448[];
-extern int D_L13_001D34D8[];
+extern int qwarks_starfighter_command_path_slots[] __asm__("D_L13_001D3448");
+extern int qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -557,7 +557,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         }
         moby->scale = *(float *)(moby->cls + 0x24) * 4.0f;
         for (i = 0; i < 10; i++) {
-            data->parts[i] = spawn_moby_joint_attachment((char *)moby, i, D_L13_001D34D8[i]);
+            data->parts[i] = spawn_moby_joint_attachment((char *)moby, i, qwarks_starfighter_attachment_class_ids[i]);
         }
         data->owner = (char *)moby;
         for (j = 0; j < 5; j++) {
@@ -647,7 +647,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             *(int *)(ship + 0xEC) = 0;
             *(int *)(ship + 0x8C) = 0;
             *(int *)(ship + 0x118) = 0;
-            data->b13B = D_L13_001D3448[moby->bBC];
+            data->b13B = qwarks_starfighter_command_path_slots[moby->bBC];
             data->iF8 = scale_game_frames_alt(0x14);
             moby->state = 3;
             data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[data->b13B]], 0.0f);
@@ -670,14 +670,14 @@ void update_qwarks_starfighter(Moby388 *moby) {
         }
         update_qwarks_starfighter_attack_commands(moby, data);
         if (update_moby_path_following_away_from_hero(moby, data, data->b13B, 1) & 2) {
-            if (data->b13B != D_L13_001D3448[moby->bBC]) {
-                data->b13B = D_L13_001D3448[moby->bBC];
-                data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
+            if (data->b13B != qwarks_starfighter_command_path_slots[moby->bBC]) {
+                data->b13B = qwarks_starfighter_command_path_slots[moby->bBC];
+                data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]], 0.0f);
                 data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
-                data->s9C = data->s9C % *(int *)walker_paths[data->paths[D_L13_001D3448[moby->bBC]]];
+                data->s9C = data->s9C % *(int *)walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]];
                 data->s9E = data->s9C - 1;
                 if (data->s9E < 0) {
-                    data->s9E = *(unsigned short *)walker_paths[data->paths[D_L13_001D3448[moby->bBC]]] - 1;
+                    data->s9E = *(unsigned short *)walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]] - 1;
                 }
             }
         }
@@ -725,14 +725,14 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 data->bFF = 1;
             }
             if (advance_moby_along_selected_path(moby, data, data->b13B, 1) & 2) {
-                if (data->b13B != D_L13_001D3448[moby->bBC]) {
-                    data->b13B = D_L13_001D3448[moby->bBC];
-                    data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[D_L13_001D3448[moby->bBC]]], 0.0f);
+                if (data->b13B != qwarks_starfighter_command_path_slots[moby->bBC]) {
+                    data->b13B = qwarks_starfighter_command_path_slots[moby->bBC];
+                    data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]], 0.0f);
                     data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
-                    data->s9C = data->s9C % *(int *)walker_paths[data->paths[D_L13_001D3448[moby->bBC]]];
+                    data->s9C = data->s9C % *(int *)walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]];
                     data->s9E = data->s9C - 1;
                     if (data->s9E < 0) {
-                        data->s9E = *(unsigned short *)walker_paths[data->paths[D_L13_001D3448[moby->bBC]]] - 1;
+                        data->s9E = *(unsigned short *)walker_paths[data->paths[qwarks_starfighter_command_path_slots[moby->bBC]]] - 1;
                     }
                 }
             }
