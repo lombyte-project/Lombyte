@@ -423,7 +423,7 @@ void update_unlock_sequence_controller(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_0015FFD8;
-extern float D_L14_001EE5E0[];
+extern float unlock_sequence_saved_moby_heights[] __asm__("D_L14_001EE5E0");
 extern unsigned short *D_L14_001ABF40[];
 
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
@@ -431,7 +431,7 @@ void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
     float *out;
     if (moby_id_cursor != 0) {
         int base = D_L14_0015FFD8;
-        out = D_L14_001EE5E0;
+        out = unlock_sequence_saved_moby_heights;
         do {
             float *target_moby = (float *)(base + ((*moby_id_cursor & 0x7FFF) << 8));
             *out++ = target_moby[6];
@@ -457,7 +457,7 @@ void raise_unlock_sequence_mobys(struct Moby *moby) {
     x = convert_integer_to_float(unlock_sequence_data[1]) * ((float *)unlock_sequence_data)[2];
     height_blend_factor = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
     base = D_L14_0015FFD8;
-    saved_height_cursor = D_L14_001EE5E0;
+    saved_height_cursor = unlock_sequence_saved_moby_heights;
     do {
         char *target_moby = base + ((*(unsigned short *)moby_id_cursor & 0x7FFF) << 8);
         float saved_height = *saved_height_cursor++;
