@@ -78,7 +78,7 @@ union double_union {
 #define bigtens     D_00152490
 #define Bcopy(x, y) memcpy(&(x)->_sign, &(y)->_sign, (y)->_wds * sizeof(u32) + 2 * sizeof(s32))
 extern const f64 tens[23], bigtens[5];
-extern const f64 D_001524B0[];
+extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
 extern char D_00152310[], D_00152320[], D_00152328[];
 extern _Bigint *Balloc(struct _reent *, s32);
 extern void Bfree(struct _reent *, _Bigint *);
@@ -361,7 +361,7 @@ if (ilim >= 0 && ilim <= Quick_max && try_quick) {
         if (j & Bletch) {
             /* prevent overflows */
             j &= Bletch - 1;
-            d.d /= D_001524B0[0];
+            d.d /= dtoa_quick_overflow_divisor[0];
             ieps++;
         }
         for (; j; j >>= 1, i++)
