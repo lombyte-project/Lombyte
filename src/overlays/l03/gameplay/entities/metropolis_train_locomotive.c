@@ -446,8 +446,8 @@ typedef struct {
 
 extern Slot292e98 *D_L03_001600EC_292e98 __asm__("D_L03_001600EC");
 extern int D_L03_0015FDFC;
-extern char D_L03_001E2448[];
-extern char D_L03_001E2478[];
+extern char train_missing_master_warning_format[] __asm__("D_L03_001E2448");
+extern char train_end_path_missing_stop_node_warning[] __asm__("D_L03_001E2478");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -550,7 +550,7 @@ void metropolis_train_locomotive_update(char *moby) {
         return;
     }
     if (data->iC4 == -1) {
-        debug_printf_292e98(D_L03_001E2448, ident);
+        debug_printf_292e98(train_missing_master_warning_format, ident);
         mark_moby_for_removal_292e98(moby);
     }
     coupling = D_L03_0015FFD8_292e98 + (data->iC4 << 8);
@@ -678,7 +678,7 @@ void metropolis_train_locomotive_update(char *moby) {
             }
         }
         if (data->iD4 == -1) {
-            debug_printf_292e98(D_L03_001E2478);
+            debug_printf_292e98(train_end_path_missing_stop_node_warning);
             break;
         }
         ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 1;
