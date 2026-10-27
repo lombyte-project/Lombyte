@@ -2003,9 +2003,9 @@ extern char D_L11_00167680[];
 extern int D_L11_00162610; /* no foreign declaration */
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern char D_L11_001625C8[4] __attribute__((sda));
-extern char D_L11_001625E8[4] __attribute__((sda));
-extern char D_L11_001625F8[4] __attribute__((sda));
+extern char distance_faded_effect_texture_2c_fixed_alpha_gp[4] __asm__("D_L11_001625C8") __attribute__((sda));
+extern char distance_faded_effect_texture_2a_pair_zero_fixed_alpha_gp[4] __asm__("D_L11_001625E8") __attribute__((sda));
+extern char distance_faded_effect_texture_2b_fixed_alpha_gp[4] __asm__("D_L11_001625F8") __attribute__((sda));
 extern void draw_scrolled_mesh_batch(int arg) __asm__("FUN_L08_002f0b40");
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -2030,7 +2030,7 @@ void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
     }
     if (flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
-        vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625C8 << 32) | 0x44);
+        vu1_add_g_sregister(0x42, ((long)*(int *)&distance_faded_effect_texture_2c_fixed_alpha_gp << 32) | 0x44);
         draw_scrolled_mesh_batch(0);
     }
     if (*(unsigned char *)&D_L11_00162610 != 0 && flag) {
@@ -2043,13 +2043,13 @@ void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
         draw_scrolled_mesh_batch(2);
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2A));
-    vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625E8 << 32) | 0x48);
+    vu1_add_g_sregister(0x42, ((long)*(int *)&distance_faded_effect_texture_2a_pair_zero_fixed_alpha_gp << 32) | 0x48);
     emit_oil_tanker_render_batches_with_pair_offset(0);
     vu1_add_g_sregister(0x42, ((long)distance_faded_effect_texture_2a_pair_one_fixed_alpha << 32) | 0x48);
     emit_oil_tanker_render_batches_with_pair_offset(1);
     if (flag) {
         vu1_add_g_sregister(6, get_effect_texture(0x2B));
-        vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625F8 << 32) | 0x48);
+        vu1_add_g_sregister(0x42, ((long)*(int *)&distance_faded_effect_texture_2b_fixed_alpha_gp << 32) | 0x48);
         queue_oil_tanker_front_texture_2b_batches(0);
     }
 }
