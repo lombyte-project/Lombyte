@@ -41,8 +41,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
     __asm__("FUN_L00_0025e450");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int)
     __asm__("FUN_L00_0026d000");
-extern struct Moby *D_L18_0015FFE4;
-extern struct Moby *D_L18_00162528;
+extern struct Moby *l18_moby_list_head __asm__("D_L18_0015FFE4");
+extern struct Moby *l18_deplanetizer_class_059b_glow_moby __asm__("D_L18_00162528");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_globals.h"
 extern float deplanetizer_camera_quad_scale_ramp_start_value_gp __asm__("D_L18_00162490") __attribute__((sda));
 extern float deplanetizer_camera_quad_scale_ramp_end_value_gp __asm__("D_L18_00162494") __attribute__((sda));
@@ -61,7 +61,7 @@ extern float D_L18_0015ED60;
 extern Vec4 D_L18_00162530 __attribute__((section(".sdata")));
 extern Vec4 D_L18_00162540 __attribute__((section(".sdata")));
 typedef struct { float radius[5]; } EffectRadii;
-extern EffectRadii D_L18_001F2C20;
+extern EffectRadii l18_deplanetizer_object_trail_base_radii __asm__("D_L18_001F2C20");
 extern char D_L18_0015F580[] __attribute__((section(".sdata")));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
@@ -110,9 +110,9 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
         if (D_L18_0016D260_update.n == 1) {
             {
                 struct Moby *target;
-                for (target = D_L18_0015FFE4; target; target = target->next) {
+                for (target = l18_moby_list_head; target; target = target->next) {
                     if (target->oclass == 0x59B) {
-                        D_L18_00162528 = target;
+                        l18_deplanetizer_class_059b_glow_moby = target;
                         break;
                     }
                 }
@@ -121,7 +121,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
         if (frames_9780(500) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n <= frames_9780(860)) {
             int i;
-            scratch.radii = D_L18_001F2C20;
+            scratch.radii = l18_deplanetizer_object_trail_base_radii;
             for (i = 3; i < 8; i++) {
                 if (D_L18_0016D260_update.objects[i]) {
                     moby_point_position(D_L18_0016D260_update.objects[i], 0, &direction);
@@ -193,7 +193,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             denominator = convert_integer_to_float(frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp));
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
-            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, l18_deplanetizer_class_059b_glow_moby);
         }
         if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
@@ -203,7 +203,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator *= 200.0f;
             numerator += 0.25f;
             deplanetizer_three_quad_local_x_scale = numerator;
-            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, l18_deplanetizer_class_059b_glow_moby);
         }
         if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
@@ -228,9 +228,9 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             deplanetizer_camera_quad_scale_ramp_end_frame_gp = deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp;
             {
                 struct Moby *target;
-                for (target = D_L18_0015FFE4; target; target = target->next) {
+                for (target = l18_moby_list_head; target; target = target->next) {
                     if (target->oclass == 0x59B) {
-                        D_L18_00162528 = target;
+                        l18_deplanetizer_class_059b_glow_moby = target;
                         break;
                     }
                 }
@@ -242,7 +242,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             denominator = convert_integer_to_float(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp);
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
-            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, l18_deplanetizer_class_059b_glow_moby);
         }
         if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
@@ -252,7 +252,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             numerator *= 200.0f;
             numerator += 0.25f;
             deplanetizer_three_quad_local_x_scale = numerator;
-            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, D_L18_00162528);
+            enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, l18_deplanetizer_class_059b_glow_moby);
         }
         if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
