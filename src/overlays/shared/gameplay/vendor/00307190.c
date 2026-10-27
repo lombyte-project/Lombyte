@@ -122,8 +122,8 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 
-extern short D_L08_0016234C __attribute__((sda));
-extern short D_L08_00162350 __attribute__((sda));
+extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") __attribute__((sda));
+extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") __attribute__((sda));
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
 
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
@@ -141,10 +141,10 @@ void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_prese
         count_interpolation_end = 3.0f;
         count_interpolation_start = 2.0f;
     }
-    if (*(float *)&D_L08_0016234C >= 0.0f)
-        count_interpolation_start = *(float *)&D_L08_0016234C;
-    if (*(float *)&D_L08_00162350 >= 0.0f)
-        count_interpolation_end = *(float *)&D_L08_00162350;
+    if (*(float *)&ground_particle_scatter_count_interpolation_start_override_gp >= 0.0f)
+        count_interpolation_start = *(float *)&ground_particle_scatter_count_interpolation_start_override_gp;
+    if (*(float *)&ground_particle_scatter_count_interpolation_end_override_gp >= 0.0f)
+        count_interpolation_end = *(float *)&ground_particle_scatter_count_interpolation_end_override_gp;
     ground_particle_scatter_spawn_vector_xy_bias[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     ground_particle_scatter_spawn_vector_xy_bias[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     countdown_range_start = multiply_global_factor_ed64(countdown_range_start);
