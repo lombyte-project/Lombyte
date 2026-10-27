@@ -530,15 +530,15 @@ void electric_water_update(struct Moby *moby) {
     }
 }
 extern int D_L15_0015F5CC;
-extern short D_L15_00161BD4 __attribute__((sda));
-extern short D_L15_00161BD8 __attribute__((sda));
-extern short D_L15_00161BDC __attribute__((sda));
-extern short D_L15_00161BE0 __attribute__((sda));
-extern short D_L15_00161BE4 __attribute__((sda));
-extern short D_L15_00161BE8 __attribute__((sda));
-extern short D_L15_00161BEC __attribute__((sda));
-extern short D_L15_00161BF0 __attribute__((sda));
-extern short D_L15_00161BF4 __attribute__((sda));
+extern short electric_water_countdown_text_x __asm__("D_L15_00161BD4") __attribute__((sda));
+extern short electric_water_countdown_text_y __asm__("D_L15_00161BD8") __attribute__((sda));
+extern short electric_water_countdown_text_color_start __asm__("D_L15_00161BDC") __attribute__((sda));
+extern short electric_water_countdown_text_color_end __asm__("D_L15_00161BE0") __attribute__((sda));
+extern short electric_water_countdown_frame_x_offset __asm__("D_L15_00161BE4") __attribute__((sda));
+extern short electric_water_countdown_frame_y_offset __asm__("D_L15_00161BE8") __attribute__((sda));
+extern short electric_water_countdown_frame_left_x_offset __asm__("D_L15_00161BEC") __attribute__((sda));
+extern short electric_water_countdown_frame_right_x_offset __asm__("D_L15_00161BF0") __attribute__((sda));
+extern short electric_water_countdown_frame_color __asm__("D_L15_00161BF4") __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -557,16 +557,16 @@ void draw_electric_water_countdown(char *moby) {
     float color_blend_factor;
     int col;
 
-    draw_ui_frame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
-                W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4),
-                W(D_L15_00161BF4));
+    draw_ui_frame(W(electric_water_countdown_frame_x_offset) + W(electric_water_countdown_text_y), W(electric_water_countdown_frame_y_offset) + W(electric_water_countdown_text_y),
+                W(electric_water_countdown_frame_left_x_offset) + W(electric_water_countdown_text_x), W(electric_water_countdown_frame_right_x_offset) + W(electric_water_countdown_text_x),
+                W(electric_water_countdown_frame_color));
     color_blend_factor = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (color_blend_factor > 1.0f) {
         color_blend_factor = 1.0f;
     } else if (color_blend_factor < 0.0f) {
         color_blend_factor = 0.0f;
     }
-    col = fast_tween_color(W(D_L15_00161BDC), W(D_L15_00161BE0), color_blend_factor);
+    col = fast_tween_color(W(electric_water_countdown_text_color_start), W(electric_water_countdown_text_color_end), color_blend_factor);
     countdown_text[0] = 0x30;
     countdown_text[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
     countdown_text[2] = 0x3A;
@@ -575,7 +575,7 @@ void draw_electric_water_countdown(char *moby) {
     countdown_text[5] = 0x3A;
     countdown_text[6] = *(short *)(data + 0x12) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     countdown_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)countdown_text, 8);
+    font_print_center_large_001f6c20(W(electric_water_countdown_text_x), W(electric_water_countdown_text_y), col, (int)countdown_text, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
 extern int D_L15_00161C14_r __asm__("D_L15_00161C14") __attribute__((sda));
