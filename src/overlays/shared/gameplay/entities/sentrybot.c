@@ -1297,7 +1297,7 @@ void update_sentrybot_joint_aim(void *mv) {
 extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_sentrybot_hit_response_and_target_visibility.h"
 extern char D_001413F4[];
-extern short D_0013F658[];
+extern short sentrybot_target_visibility_height_check_gate[] __asm__("D_0013F658");
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -1480,7 +1480,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         target_angle = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                               *(float *)(data + 0xD4) - *(float *)(moby + 0x14));
         if ((fast_difference_between_rotations(*(float *)(moby + 0x48), target_angle) < 1.5707964f &&
-             (D_0013F658[0] == 0 || FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
+             (sentrybot_target_visibility_height_check_gate[0] == 0 || FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
             moby[0x20] == 0x10 || moby[0x20] == 0x11) {
             seen = data[0x15A];
         }
