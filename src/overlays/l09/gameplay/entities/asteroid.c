@@ -186,13 +186,13 @@ extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
 extern u64 D_L09_001612F0;
 extern unsigned short D_L09_0010E800[];
-extern int D_L09_0010E810[];
-extern int D_L09_001CB470[];
+extern int scaled_entries_vu1_setup_data[] __asm__("D_L09_0010E810");
+extern int scaled_entries_gs_setup_packet[] __asm__("D_L09_001CB470");
 extern char D_L09_00166E40[];
 extern char D_L09_00166EC0[];
 
 extern float D_L09_00166F40[];
-extern float D_L09_0016CBC0[];
+extern float level09_view_context[] __asm__("D_L09_0016CBC0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_data/build_packet_and_draw_scaled_entries.h"
 extern float D_L09_00161304 __attribute__((section(".sdata")));
 #include "rnc/overlay/quad.h"
@@ -215,7 +215,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     int *scratch;
     int scratch_color;
     float *old = (float *)0x001612f8;
-    float *current = D_L09_0016CBC0;
+    float *current = level09_view_context;
     float saved0 = current[0x218 / 4];
     float saved1 = current[0x21c / 4];
     float saved2 = current[0x228 / 4];
@@ -235,7 +235,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     set_scale_matrix(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    vu1_add_data_ref(D_L09_0010E810, D_L09_0010E800[0]);
+    vu1_add_data_ref(scaled_entries_vu1_setup_data, D_L09_0010E800[0]);
     {
         int *packet;
         int *packet_end;
@@ -277,7 +277,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
         D_L09_001611C0 = packet_end;
         packet[60] = 0x30000003;
     }
-    PACKET_CURSOR[1] = (int)D_L09_001CB470;
+    PACKET_CURSOR[1] = (int)scaled_entries_gs_setup_packet;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
     {
