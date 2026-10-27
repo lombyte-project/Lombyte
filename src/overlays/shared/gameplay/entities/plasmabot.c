@@ -1959,7 +1959,7 @@ typedef struct {
     struct Moby *moby;
 } MobyHit_ff640;
 
-extern char *D_L14_0015FFDC;
+extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
@@ -2016,7 +2016,7 @@ void update_floating_mine(struct Moby *moby) {
             if (vars->rest_z < 0.0f)
                 vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
             ease_ff640(&moby->pos.z, &vars->z_speed, vars->rest_z, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, 0.0f);
-            if ((char *)moby > D_L14_0015FFDC && hero.state.control_mode != 15)
+            if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != 15)
                 goto remove;
         }
         hit = find_moby_hit_ff640(moby, 0x230000, 0);
@@ -2034,7 +2034,7 @@ void update_floating_mine(struct Moby *moby) {
                 explode_ff640(moby, explosion_vector, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             else
                 explode_ff640(moby, explosion_vector, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            if ((char *)moby < D_L14_0015FFDC) {
+            if ((char *)moby < floating_mine_respawn_address_limit) {
                 moby->state = 2;
                 moby->flags |= 0x41;
                 moby->hit_slot = 0xFF;
