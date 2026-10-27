@@ -71,7 +71,7 @@ extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002
 
 extern int deplanetizer_camera_quad_start_frame_gp __asm__("D_L18_00162498") __attribute__((sda));
 extern int deplanetizer_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624BC") __attribute__((sda));
-extern char D_L18_001679D0[];
+extern char deplanetizer_camera_rotation_basis[] __asm__("D_L18_001679D0");
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
 
@@ -326,12 +326,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     enqueue_callback_list_1_overlay(draw_moby_color_cycling_bone_glows, D_L18_0016D260_update.objects[2]);
 burst:
     if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == frames_9780(586)) {
-        char *matrix = D_L18_001679D0;
+        char *matrix = deplanetizer_camera_rotation_basis;
         rot_9780(&scratch.vectors.pos, &deplanetizer_burst_local_spawn_offset_x_gp, matrix);
         add_9780(&scratch.vectors.pos, &scratch.vectors.pos, matrix - 0x210);
         qcopy(&scratch.vectors.velocity, matrix + 0x10);
         for (i = 0; i < 32; i++) {
-            rotate_vector_about_axis(&direction, &scratch.vectors.velocity, D_L18_001679D0,
+            rotate_vector_about_axis(&direction, &scratch.vectors.velocity, deplanetizer_camera_rotation_basis,
                 convert_integer_to_float(i) * 0.19634955f);
             norm_9780(&direction, &direction, deplanetizer_burst_velocity_scale_gp * D_L18_0015ED60);
             n = random_integer_below(16);
@@ -409,8 +409,8 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.a = 0;
     gs_9780(0x4A, 0);
     gs_9780(0x47, 0x51001);
-    rot_9780(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, D_L18_001679D0);
-    target = D_L18_001679D0;
+    rot_9780(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, deplanetizer_camera_rotation_basis);
+    target = deplanetizer_camera_rotation_basis;
     target -= 0x210;
     add_9780(quad_transform[3], quad_transform[3], target);
     sub_9780(quad_transform[0], quad_transform[3], target);
