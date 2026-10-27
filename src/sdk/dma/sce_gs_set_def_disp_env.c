@@ -14,7 +14,7 @@ extern s32 checkModelVersion(void);
 extern void InvokeKernelSyscall0080(s32 mode, s32 *horizontal, s32 *vertical,
                                      s32 *display_width, s32 *display_height);
 extern void scePrintf(const char *format, ...);
-extern char D_00153040[];
+extern char unsupported_display_mode_format[] __asm__("D_00153040");
 
 /* The progressive arms spell this out three times: cc1 merges the divides but keeps
    each zero check, and retail's load order needs all three. */
@@ -125,7 +125,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                                    ((s64)(horizontal_offset * 2) + 0xe8))) & 0xfff)) |
                           ((u64)(s64)(width * 2 - 1) << 32);
     } else {
-        scePrintf(D_00153040);
+        scePrintf(unsupported_display_mode_format);
     }
     output->bgcolor = 0;
 }
