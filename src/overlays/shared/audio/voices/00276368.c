@@ -650,7 +650,7 @@ typedef struct {
     int h;
 } PageMobyData;
 
-extern s32 D_L00_001B23C0[];
+extern s32 pause_menu_page_render_enabled[] __asm__("D_L00_001B23C0");
 extern s32 pause_menu_rectangle_color_gp __asm__("D_L00_00160270") __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
@@ -714,7 +714,7 @@ void draw_pause_menu_pages(int transfer_only) {
     init_moby_class_dists();
     stash_moby_class_dists();
     for (i = 0; i < 14; i++) {
-        if (D_L00_001B23C0[i] != 0 && D_L00_001B9E90[i] != 0 && (i != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+        if (pause_menu_page_render_enabled[i] != 0 && D_L00_001B9E90[i] != 0 && (i != 6 || D_L00_001B9CF0.unkD8 != 0)) {
             draw_moby_list((int)D_L00_001B9E90[i], 1);
         }
     }
@@ -727,7 +727,7 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     for (k = 0; k < 14; k++) {
         PageMobyData *page_data;
-        if (D_L00_001B9E90[k] == 0 || D_L00_001B23C0[k] == 0) {
+        if (D_L00_001B9E90[k] == 0 || pause_menu_page_render_enabled[k] == 0) {
             continue;
         }
         if (k == 6 && D_L00_001B9CF0.unkD8 == 0) {
@@ -771,7 +771,7 @@ void draw_pause_menu_pages(int transfer_only) {
             if (flags & 4) {
                 continue;
             }
-            if (D_L00_001B23C0[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
+            if (pause_menu_page_render_enabled[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
                 continue;
             }
             if (j == 6 && D_L00_001B9CF0.unkD8 == 0) {
@@ -860,7 +860,7 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     setup_gif_paging(0);
     for (flashing_panel_index = 0; flashing_panel_index < 14; flashing_panel_index++) {
-        if (D_L00_001B23C0[flashing_panel_index] != 0 && (flashing_panel_index != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+        if (pause_menu_page_render_enabled[flashing_panel_index] != 0 && (flashing_panel_index != 6 || D_L00_001B9CF0.unkD8 != 0)) {
             draw_menu_flashing_panel((int)D_L00_001B9E90[flashing_panel_index]);
         }
     }
