@@ -7,9 +7,9 @@
 /* libmpeg motion compensation: builds the forward and backward
    predictions of one macroblock (the MPEG-2 reference decoder's
    form_predictions, on the library's decoder state). */
-extern char D_00153710[];
-extern char D_00153730[];
-extern char D_00153750[];
+extern char forward_frame_invalid_motion_type_format[] __asm__("D_00153710");
+extern char forward_field_invalid_motion_type_format[] __asm__("D_00153730");
+extern char backward_field_invalid_motion_type_format[] __asm__("D_00153750");
 extern void _Error1(struct MpegDecoder *d, char *fmt, int code);
 extern void _dualPrimeVector(struct MpegDecoder *d, int dmv[2][2], int *dmvector, int mvx, int mvy);
 extern void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int dfield,
@@ -47,7 +47,7 @@ void _getAllRefs(struct MpegDecoder *decoder, int bx, int by, int mb_type, int m
                          same, 0);
                 _getRef0(decoder, decoder->ref_images[0], 0, 1, 0, 8, bx, by, dmv[1][0], dmv[1][1], same, one);
             } else {
-                _Error1(decoder, D_00153710, motion_type);
+                _Error1(decoder, forward_frame_invalid_motion_type_format, motion_type);
             }
         } else {
             currentfield = decoder->picture_structure == 2;
@@ -79,7 +79,7 @@ void _getAllRefs(struct MpegDecoder *decoder, int bx, int by, int mb_type, int m
                 _getRef0(decoder, refs[same][!currentfield], 0, 0, 0, 16, bx, by, dmv[0][0], dmv[0][1], 0,
                          1);
             } else {
-                _Error1(decoder, D_00153730, motion_type);
+                _Error1(decoder, forward_field_invalid_motion_type_format, motion_type);
             }
         }
         avg = 1;
@@ -106,7 +106,7 @@ void _getAllRefs(struct MpegDecoder *decoder, int bx, int by, int mb_type, int m
             _getRef0(decoder, mvfs[1][1] ? decoder->ref_images[9] : decoder->ref_images[5], 0, 0, 8, 8, bx, by,
                      pmv[1][1][0], pmv[1][1][1], 0, avg);
         } else {
-            _Error1(decoder, D_00153750, motion_type);
+            _Error1(decoder, backward_field_invalid_motion_type_format, motion_type);
         }
     }
 }
