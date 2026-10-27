@@ -3037,7 +3037,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-extern short D_L02_00161C68 __attribute__((sda));
+extern short crane_animation_speed_gp __asm__("D_L02_00161C68") __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
     enum {
@@ -3050,7 +3050,7 @@ void crane_update(struct Moby *moby) {
         CRANE_ANIM_TRANSITION_TO_RESTART_WAIT = 7
     };
     int *crane_vars = (int *)moby->pvars;
-    moby->anim_speed = *(float *)&D_L02_00161C68;
+    moby->anim_speed = *(float *)&crane_animation_speed_gp;
     switch (moby->prev_seq) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
     case CRANE_ANIM_TRANSITION_TO_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT:
