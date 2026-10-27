@@ -111,7 +111,7 @@ char D_L18_001F1100[] = "moby insts:     %.1fK\n";
 char D_L18_001F1118[] = "moby pvars:     %.1fK\n";
 char D_L18_001F1130[] = "paths:          %.1fK\n";
 char D_L18_001F1160[] = "end of mem:     %.1fM\n";
-extern s32 D_L18_001B2480[];
+extern s32 l18_particle_texture_ranges[] __asm__("D_L18_001B2480");
 extern char *D_L18_001C6200[] __asm__("D_L18_001C6200");
 extern char *D_L18_001BCA30_2463f8[] __asm__("D_L18_001BCA30");
 extern char *D_L18_00160FC0_2463f8 __asm__("D_L18_00160FC0");
@@ -383,8 +383,8 @@ s32 load_level_core_data(s32 full, s32 keep) {
         if (level_header[4])
             printf_1e93b0(D_L18_001F0FF8, KB(D_L18_00174840_2463f8[0] - (char *)level_sky_data_base));
         printf_1e93b0(D_L18_001F1010, KB(level_texture_data_base - (s32)D_L18_00174840_2463f8[0]));
-        printf_1e93b0(D_L18_001F1028, KB((D_L18_001B2480[1] >> 4) - level_texture_data_base));
-        printf_1e93b0(D_L18_001F1040, KB((s32)level_effects_texture_data_base - (D_L18_001B2480[1] >> 4)));
+        printf_1e93b0(D_L18_001F1028, KB((l18_particle_texture_ranges[1] >> 4) - level_texture_data_base));
+        printf_1e93b0(D_L18_001F1040, KB((s32)level_effects_texture_data_base - (l18_particle_texture_ranges[1] >> 4)));
         printf_1e93b0(D_L18_001F1058, KB((char *)l18_moby_classes_by_index[0] - level_effects_texture_data_base));
         printf_1e93b0(D_L18_001F1070, KB(D_L18_001C6200[0] - (char *)l18_moby_classes_by_index[0]));
         if (level_header[0xA])
