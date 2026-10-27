@@ -89,7 +89,7 @@ extern void draw_electric_gate_beams(char *moby) __asm__("FUN_L05_0030de90");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
-extern short D_L05_00161D38 __attribute__((sda));
+extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 void electric_gate_update(char *gate_moby) {
     enum {
@@ -114,8 +114,8 @@ void electric_gate_update(char *gate_moby) {
         **(int **)(data + 4) = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
-        if (*(int *)&D_L05_00161D38 != D_L05_0015F5CC_e[2]) {
-            *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
+        if (*(int *)&electric_gate_beam_callback_frame_gp != D_L05_0015F5CC_e[2]) {
+            *(int *)&electric_gate_beam_callback_frame_gp = D_L05_0015F5CC_e[2];
             enqueue_callback_list_1(draw_electric_gate_beams, gate_moby);
         }
         gate_position = gate_moby + 0x10;
