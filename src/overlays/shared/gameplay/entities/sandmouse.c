@@ -23,7 +23,7 @@ extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
 
-extern char D_L01_00180740[];
+extern char point_light_slot_parameters[] __asm__("D_L01_00180740");
 void update_moby_interpolated_point_light(u8 *moby) __asm__("FUN_L01_0030b618");
 
 void update_moby_interpolated_point_light(u8 *moby) {
@@ -134,7 +134,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
             return;
         }
         {
-            char *effect_entry = D_L01_00180740 + slot * 0x20;
+            char *effect_entry = point_light_slot_parameters + slot * 0x20;
             qcopy(effect_entry + 0x10, moby + 0x10);
             *(f32 *)(effect_entry + 0x1c) = *(f32 *)(effect_vars + 0x60);
             qcopy(effect_entry, effect_vars + 0x40);
