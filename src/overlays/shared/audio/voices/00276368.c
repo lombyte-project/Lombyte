@@ -143,7 +143,7 @@ extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_002994
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
-extern Own D_L00_001B2588;
+extern Own l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
 extern Own D_L00_001B6B38;
@@ -210,7 +210,7 @@ void initialize_pause_menu(void) {
         state->owner = page;
         state->unk8 = page;
     } else {
-        page = &D_L00_001B2588;
+        page = &l00_pause_menu_default_page_owner;
         D_L00_001B9CF0.state = 2;
         state->owner = page;
         state->unk8 = page;
