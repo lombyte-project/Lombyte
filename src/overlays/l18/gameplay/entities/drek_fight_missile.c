@@ -852,7 +852,7 @@ f32 D_L18_001DA350[4][2] = {
     {7.0f, 0.0f},
     {7.0f, 1.0f},
 };
-extern u128 D_L18_001DA370[4];
+extern u128 glow_moby_quad_base_positions[4] __asm__("D_L18_001DA370");
 
 void draw_glow_moby_layered_quads(struct Moby *moby) {
     struct GeometryQuad quads[4];
@@ -895,7 +895,7 @@ void draw_glow_moby_layered_quads(struct Moby *moby) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA350[j][0] + i * step;
             quads[i].texture_coordinates[j][1] = D_L18_001DA350[j][1];
             quads[i].colors[j] = color;
-            qcopy_nc(&quads[i].positions[j], &D_L18_001DA370[j]);
+            qcopy_nc(&quads[i].positions[j], &glow_moby_quad_base_positions[j]);
             if (j & 1) {
                 quads[i].positions[j].f[2] += phase * D_L18_001622D4;
             } else {
