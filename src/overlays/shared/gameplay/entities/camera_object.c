@@ -747,7 +747,7 @@ typedef struct {
 
 extern s32 D_L00_0015F5C4;
 extern CollisionHit D_L00_00173E40 __attribute__((section(".data")));
-extern Vec4 D_L00_001D73D0[];
+extern Vec4 l00_bolt_glint_local_offsets_by_class[] __asm__("D_L00_001D73D0");
 extern BoltTrailSlot glints[] __asm__("D_L00_0016EA40");
 extern u8 *D_L00_0015FFDC;
 extern s32 D_L00_0015FFBC;
@@ -981,7 +981,7 @@ void bolt_update(Bolt *bolt_moby) {
             v->hop_left--;
         }
         if (v->slot >= 0) {
-            transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+            transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
             fast_vec_add(&glints[v->slot], &geometry_scratch, &bolt_moby->pos);
             if (glints[v->slot].moby != (((u8 *)bolt_moby - D_L00_0015FFD8) >> 8)) {
                 v->slot = -1;
@@ -991,7 +991,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (--v->slot_timer > 0) {
             return;
         }
-        transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+        transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
         v->slot = allocate_glint_slot(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
