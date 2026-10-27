@@ -178,7 +178,7 @@ typedef struct {
 extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
-extern int D_L00_00169890[];
+extern int level_camera_present_flags[] __asm__("D_L00_00169890");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
@@ -201,7 +201,7 @@ void setup_level_cameras(void) {
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
         D_L00_00167150[k].s8E = 0;
-        D_L00_00169890[k] = 0;
+        level_camera_present_flags[k] = 0;
     }
     camera_system_state_alias = (char *)&D_L00_00166C80;
     base = &hero;
@@ -255,7 +255,7 @@ void setup_level_cameras(void) {
             el->c7C = level_camera_data[0x1C];
             el->i74 = (unsigned char)level_camera_data[0x1F];
             camera_id = *(unsigned short *)(level_camera_entry + 0xC);
-            D_L00_00169890[i] = 1;
+            level_camera_present_flags[i] = 1;
             el->s86 = camera_id;
             el->s8C = find_camera_table_index_by_id((short)camera_id);
             i++;
