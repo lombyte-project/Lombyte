@@ -5,7 +5,7 @@ struct BufferPool {
     s32 unk8;
 };
 
-extern u8 D_00153A38[];
+extern u8 work_area_too_small_message[] __asm__("D_00153A38");
 extern s32 _Error();
 s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size,
                                  u32 alignment) __asm__("FUN_0012bc20");
@@ -20,6 +20,6 @@ s32 reserve_aligned_buffer_space(s32 decoder_state, struct BufferPool *pool, s32
         pool->unk8 = new_end;
         return start;
     }
-    _Error(decoder_state, D_00153A38);
+    _Error(decoder_state, work_area_too_small_message);
     return 0;
 }
