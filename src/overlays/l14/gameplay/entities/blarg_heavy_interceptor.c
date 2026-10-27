@@ -907,7 +907,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418") __attribute__((sda));
 extern float blarg_heavy_interceptor_light_ring_vertex_positions[][3] __asm__("D_L14_001D7A60");
 extern s32 blarg_heavy_interceptor_light_ring_vertex_colors[] __asm__("D_L14_001D80C8");
-extern char D_L14_001D7E38[];
+extern char blarg_heavy_interceptor_light_ring_texture_coordinates[] __asm__("D_L14_001D7E38");
 extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
 void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) __asm__("FUN_L14_002ae0a8");
 
@@ -966,9 +966,9 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         }
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     }
     scale_r(f.mat[1], f.mat[1], -1.0f);
     scale_r(f.mat[2], f.mat[2], -1.0f);
@@ -985,9 +985,9 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[2] = ring_vertex_scratch[2];
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     }
 }
 /* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
