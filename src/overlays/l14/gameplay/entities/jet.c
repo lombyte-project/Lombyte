@@ -3164,32 +3164,32 @@ extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float 
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-extern short D_L14_00161F48 __attribute__((sda));
-extern short D_L14_00161F4C __attribute__((sda));
-extern short D_L14_00161F50 __attribute__((sda));
-extern short D_L14_00161F54 __attribute__((sda));
-extern short D_L14_00161F58 __attribute__((sda));
+extern short enemy_fighter_path_step_rate_gp __asm__("D_L14_00161F48") __attribute__((sda));
+extern short enemy_fighter_flight_spring_strength_gp __asm__("D_L14_00161F4C") __attribute__((sda));
+extern short enemy_fighter_flight_spring_damping_gp __asm__("D_L14_00161F50") __attribute__((sda));
+extern short enemy_fighter_bank_angle_scale_gp __asm__("D_L14_00161F54") __attribute__((sda));
+extern short enemy_fighter_bank_yaw_error_scale_gp __asm__("D_L14_00161F58") __attribute__((sda));
 void advance_enemy_fighter_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[3];
     float path_position_delta[3];
     float target_yaw, yaw_error_factor, path_vertical_angle;
-    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(moby_vars + 0x68)], (char *)path_target_position, moby_vars + 0x60, moby_vars + 0x64, 1, (*(float *)&D_L14_00161F48) * D_0015ED6C_c2);
-    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
+    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(moby_vars + 0x68)], (char *)path_target_position, moby_vars + 0x60, moby_vars + 0x64, 1, (*(float *)&enemy_fighter_path_step_rate_gp) * D_0015ED6C_c2);
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
     subtract_vector_xyz_c(path_position_delta, path_target_position, &moby->pos);
     if (absolute_float(path_position_delta[0]) > 0.01f) {
         if (absolute_float(path_position_delta[1]) > 0.01f) {
             target_yaw = fast_arc_tan(path_position_delta[0], path_position_delta[1]);
             yaw_error_factor = fast_subtract_rotations(moby->rot.z, target_yaw);
-            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), target_yaw, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
+            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), target_yaw, (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
             path_vertical_angle = fast_arc_tan(vector_length_xy_c(path_position_delta), path_position_delta[2]);
-            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -path_vertical_angle, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-            yaw_error_factor = yaw_error_factor / (*(float *)&D_L14_00161F58);
+            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -path_vertical_angle, (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+            yaw_error_factor = yaw_error_factor / (*(float *)&enemy_fighter_bank_yaw_error_scale_gp);
             if (yaw_error_factor > 1.0f) yaw_error_factor = 1.0f;
             if (yaw_error_factor < -1.0f) yaw_error_factor = -1.0f;
-            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * (*(float *)&D_L14_00161F54), 0.003f, (*(float *)&D_L14_00161F50), 0.0f);
+            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * (*(float *)&enemy_fighter_bank_angle_scale_gp), 0.003f, (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
         }
     }
 }
