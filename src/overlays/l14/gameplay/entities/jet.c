@@ -2146,7 +2146,7 @@ void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
     D_0014C190_257218[D_0015ED84_m][(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
     D_L14_001BABD0[(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
 }
-extern u8 D_L14_001E03B0[];
+extern u8 elevator_local_path_points[] __asm__("D_L14_001E03B0");
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
 extern void transform_vector_by_basis(u8 *, u8 *, u8 *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
@@ -2158,7 +2158,7 @@ extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
  * program. */
 void rebuild_elevator_world_path(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    u8 *local_path_point_cursor = D_L14_001E03B0;
+    u8 *local_path_point_cursor = elevator_local_path_points;
     u8 *world_path_point_cursor = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
     s32 i = 10;
     f32 one = 1.0f;
