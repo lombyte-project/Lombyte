@@ -36,7 +36,7 @@ extern s32 draw_callback4_count __asm__("D_0015F470") __attribute__((sda));
 extern f32 D_0015F614 MACRO_ADDR;
 extern s32 font_state __asm__("D_0015F620") MACRO_ADDR;
 extern s32 D_0015F648 MACRO_ADDR;
-extern SpriteFile *D_0016045C;
+extern SpriteFile *level_sky_effect_data __asm__("D_0016045C");
 extern u8 D_001610C0 MACRO_ADDR;
 extern u8 D_001610C1 MACRO_ADDR;
 extern u8 D_001610C2 MACRO_ADDR;
@@ -113,7 +113,7 @@ void draw_debug_profiler(void) {
     f32 rcnt1_count_float;
     f32 div;
 
-    if (D_0016045C == NULL || D_0016045C->unk4 != 0 || ((draw_enable_mask ^ 1) & 1) ||
+    if (level_sky_effect_data == NULL || level_sky_effect_data->unk4 != 0 || ((draw_enable_mask ^ 1) & 1) ||
         draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
@@ -124,7 +124,7 @@ void draw_debug_profiler(void) {
     font_state = -1;
     noop_core_callback(render_setup_label, 0xF);
     noop_core_callback_secondary(render_setup_label, 0xF);
-    if (D_0016045C != NULL && (draw_enable_mask & 1)) {
+    if (level_sky_effect_data != NULL && (draw_enable_mask & 1)) {
         if (draw_config.unk8 != 0) {
             transition_draw_sky();
         }
