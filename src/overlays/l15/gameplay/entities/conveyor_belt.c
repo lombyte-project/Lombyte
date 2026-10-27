@@ -2158,13 +2158,13 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
-extern char *D_L15_0015EF50;
+extern char *moby_slot_entry_table __asm__("D_L15_0015EF50");
 
 int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
-    slot_state_data = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
+    slot_state_data = *(char **)(*(char **)(*(char **)(moby_slot_entry_table + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
     if (*(short *)(slot_state_data + 0x14) == 1 && codebot_slot_effect_spawn_gate != 0.0f)
         return 1;
     return *(short *)(slot_state_data + 0x14) == 3;
@@ -2297,7 +2297,7 @@ extern void zoom_s(int, float, float) __asm__("FUN_L00_002e84f0");
 void update_moby_follow_camera(char *moby) __asm__("FUN_L15_002f88e8");
 
 void update_moby_follow_camera(char *moby) {
-    char *slot_data = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *slot_data = *(char **)(moby_slot_entry_table + *(short *)(moby + 0x84) * 32 + 0x1C);
     char *target_record = D_L15_001600EC + (*(int *)(slot_data + 0x48) << 7);
     int done;
     int hold_start_frames;
