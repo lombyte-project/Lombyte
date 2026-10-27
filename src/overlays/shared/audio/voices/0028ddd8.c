@@ -78,15 +78,15 @@ typedef struct {
     int v;
 } TE;
 
-extern TE D_L00_001EA980[];
+extern TE l00_lookup_record_key_value_table[] __asm__("D_L00_001EA980");
 
 /* Looks a[0] up in the -1-terminated D_L00_001EA980 table; stores the index and its value in a. */
 void resolve_lookup_record(short *lookup_record) __asm__("FUN_L00_0028df58");
 
 void resolve_lookup_record(short *lookup_record) {
     int i;
-    for (i = 0; D_L00_001EA980[i].k != -1 && D_L00_001EA980[i].k != lookup_record[0]; i++) {
+    for (i = 0; l00_lookup_record_key_value_table[i].k != -1 && l00_lookup_record_key_value_table[i].k != lookup_record[0]; i++) {
     }
     lookup_record[1] = i;
-    *(int *)(lookup_record + 2) = D_L00_001EA980[i].v;
+    *(int *)(lookup_record + 2) = l00_lookup_record_key_value_table[i].v;
 }
