@@ -2078,7 +2078,7 @@ typedef struct {
     short x;
     short y;
 } IconEC5D0;
-extern IconEC5D0 D_L13_001CBDB8[];
+extern IconEC5D0 l13_fighter_jet_radar_icon_definitions[] __asm__("D_L13_001CBDB8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float vector_length_xyz(void *a);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -2122,7 +2122,7 @@ void draw_fighter_jet_radar_icon(char *radar_rotation, char *from, char *moby, i
             color &= 0xFFFFFF;
             color = (func_001FA898_r(distance_weighted_alpha * 0.125f) << 24) | color;
         }
-        icon_definition = &D_L13_001CBDB8[icon];
+        icon_definition = &l13_fighter_jet_radar_icon_definitions[icon];
         y -= 0x50;
         y += *(int *)(frame_size);
         x += 0x1B0;
