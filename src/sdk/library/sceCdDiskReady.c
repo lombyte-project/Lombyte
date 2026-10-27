@@ -4,7 +4,7 @@
 extern s32 D_001312D0[];
 extern volatile s32 D_001312EC[];
 extern s32 D_00131304[];
-extern struct sceSifClientData D_00159990;
+extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");
 extern s32 D_001599D0[];
 extern u8 D_001324C0[];
 extern u8 cd_disk_ready_entry_message[] __asm__("D_00152F80");
@@ -45,7 +45,7 @@ s32 sceCdDiskReady(s32 mode) {
     sceSifInitRpc(0);
     if (D_00131304[0] < 0) {
         for (;;) {
-            if (sceSifBindRpc(&D_00159990, 0x8000059A, 0) < 0) {
+            if (sceSifBindRpc(&cd_disk_ready_rpc_client, 0x8000059A, 0) < 0) {
                 if (D_001312D0[0] > 0) {
                     scePrintf(cd_disk_ready_bind_error_message);
                 }
@@ -53,7 +53,7 @@ s32 sceCdDiskReady(s32 mode) {
                 }
                 continue;
             }
-            if (D_00159990.serve != 0) {
+            if (cd_disk_ready_rpc_client.serve != 0) {
                 D_00131304[0] = 0;
                 break;
             }
@@ -63,7 +63,7 @@ s32 sceCdDiskReady(s32 mode) {
     }
     D_001599D0[0] = mode;
     sceSifWriteBackDCache(D_001599D0, 4);
-    if (sceSifCallRpc(&D_00159990, 0, 0, D_001599D0, 4, D_001324C0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, D_001324C0, 4, 0, 0) < 0) {
         SignalSema(D_001312EC[0]);
         if (mode == 8) {
             return -1;
