@@ -46,7 +46,7 @@ extern S17AF00 D_L08_0017AE80;
 extern S17C638 D_L08_0017C5B8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float hero_fatal_fall_z_threshold __asm__("D_L08_0015F638");
+#include "rnc/overlay/l08/gameplay/hero/002370d8_globals.h"
 extern float D_L08_001675D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
@@ -145,11 +145,7 @@ int r1_repeat_timer __asm__("D_L08_0015F678") = 0;
 void update_hero_state_transitions(void) __asm__("FUN_L08_002370d8");
 
 void update_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_CROUCH_INPUT_SWIM = 53,
-        HERO_STATE_TIMED_RESPAWN_WAIT = 127
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -483,14 +479,14 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_TIMED_RESPAWN_WAIT:
+                case HERO_STATE_SINK:
                     if (hero.state_timer > scale_game_frames(0xDC)) {
                         hero_respawn();
                         return;
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_CROUCH_INPUT_SWIM:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {

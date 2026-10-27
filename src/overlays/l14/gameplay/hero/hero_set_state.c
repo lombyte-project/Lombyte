@@ -80,15 +80,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_REFRESH_IDLE_ANIMATION = 0x1F,
-        HERO_STATE_ITEM_WAIT_IDLE_ANIMATION_REFRESH = 0x27,
-        HERO_STATE_IDLE_ANIMATION_WITH_HIT_REACTION_BYPASS = 0x32,
-        HERO_STATE_ATTACK_SETUP_ONLY = 0x51,
-        HERO_STATE_CANCEL_ITEM_AND_CONDITIONALLY_REFRESH_IDLE_ANIMATION = 0x63,
-        HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION_ALLOW_DYING = 0x64,
-        HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION = 0x72
-    };
+
     int old2088;
     char *moby;
     int old20A7;
@@ -1163,7 +1155,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case HERO_STATE_ATTACK_SETUP_ONLY: {
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1540,14 +1532,14 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_REFRESH_IDLE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1556,14 +1548,14 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_ITEM_WAIT_IDLE_ANIMATION_REFRESH: {
+    case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_IDLE_ANIMATION_WITH_HIT_REACTION_BYPASS: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1585,8 +1577,8 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case HERO_STATE_CANCEL_ITEM_AND_CONDITIONALLY_REFRESH_IDLE_ANIMATION:
-    case HERO_STATE_CANCEL_ITEM_AND_REFRESH_IDLE_ANIMATION_ALLOW_DYING: {
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;

@@ -38,7 +38,7 @@ extern HeroTableEntry70 D_L11_0017A290[];
 extern S17B100 D_L11_0017B080;
 extern S17C838 D_L11_0017C7B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float hero_fatal_fall_entry_z_threshold __asm__("D_L11_0015F638");
+#include "rnc/overlay/l11/gameplay/hero/00253a18_globals.h"
 extern float D_L11_001677D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -123,13 +123,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void update_hero_state_transitions(void) __asm__("FUN_L11_00253a18");
 
 void update_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_PACK_LONG_JUMP_FALLBACK = 13,
-        HERO_STATE_PACK_JUMP_FALLBACK = 15,
-        HERO_STATE_JUMP_FROM_WATER_SURFACE = 18,
-        HERO_STATE_SWIM_FROM_CROUCH_INPUT = 53,
-        HERO_STATE_ANIMATION_COMPLETION_RESPAWN = 98
-    };
+
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -442,7 +436,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case HERO_STATE_ANIMATION_COMPLETION_RESPAWN:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -458,7 +452,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_FROM_CROUCH_INPUT:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1439,12 +1433,12 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
-                case HERO_STATE_PACK_LONG_JUMP_FALLBACK:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case HERO_STATE_PACK_JUMP_FALLBACK:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case 17:
-                case HERO_STATE_JUMP_FROM_WATER_SURFACE:
+                case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:

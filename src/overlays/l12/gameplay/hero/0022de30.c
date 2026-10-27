@@ -650,25 +650,8 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
 void update_hero_motion_for_current_state(void) {
-    enum {
-        HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT = 8,
-        HERO_STATE_JUMP_WITH_STORED_PLANAR_VELOCITY_COMPONENTS = 0xC,
-        HERO_STATE_JUMP_WITH_FRAME_GATED_TRANSFORM_HISTORY = 0xD,
-        HERO_STATE_JUMP_WITH_SPECIAL_GROUND_SPEED_OVERRIDE = 0xF,
-        HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION = 0x11,
-        HERO_STATE_WATER_SPLASH_JUMP = 0x12,
-        HERO_STATE_BACKWARD_FACING_DECELERATION = 0x21,
-        HERO_STATE_ATTACK_HEADING_DECELERATION = 0x23,
-        HERO_STATE_STATIONARY_TARGET_FACING = 0x2E,
-        HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION = 0x35,
-        HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT = 0x3F,
-        HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT = 0x81
-    };
-    enum {
-        WRENCH_COMBO_FRAME_LIMITED_FORWARD_SPEED = 0,
-        WRENCH_COMBO_TAPERED_FORWARD_SPEED = 1,
-        WRENCH_COMBO_TRANSITION_ENABLED_FORWARD_SPEED = 2
-    };
+
+
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -858,7 +841,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case HERO_STATE_SWIM_WITH_DIRECT_SPEED_PROPULSION:
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
         } else {
@@ -1264,7 +1247,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_GRAPPLE_TARGET_ENTRY:
-    case HERO_STATE_STATIONARY_TARGET_FACING:
+    case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
@@ -1719,12 +1702,12 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case WRENCH_COMBO_FRAME_LIMITED_FORWARD_SPEED:
+        case HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case WRENCH_COMBO_TAPERED_FORWARD_SPEED:
+        case HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1735,7 +1718,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case WRENCH_COMBO_TRANSITION_ENABLED_FORWARD_SPEED:
+        case HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
@@ -1771,7 +1754,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case HERO_STATE_BACKWARD_FACING_DECELERATION:
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -1867,7 +1850,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case HERO_STATE_ATTACK_HEADING_DECELERATION:
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
@@ -1884,7 +1867,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case HERO_STATE_FORWARD_ANGLE_LIMITED_MOVEMENT: {
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE: {
         f32 a;
         f32 f;
         update_hero_target_speed_from_stick();
@@ -2165,7 +2148,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case HERO_STATE_GROUND_HEIGHT_TRACKING_MOVEMENT: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         s32 big;
         f32 sp;
         f32 m;
@@ -2215,7 +2198,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case HERO_STATE_ITEM_SCALED_GRAVITY_FLATTENED_MOVEMENT: {
+    case HERO_STATE_LAND: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
@@ -2257,13 +2240,13 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case HERO_STATE_JUMP_WITH_STORED_PLANAR_VELOCITY_COMPONENTS:
-    case HERO_STATE_JUMP_WITH_FRAME_GATED_TRANSFORM_HISTORY:
+    case HERO_STATE_STORED_HEADING_JUMP:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case HERO_STATE_JUMP_WITH_SPECIAL_GROUND_SPEED_OVERRIDE:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
-    case HERO_STATE_JUMP_WITH_STORED_MOVE_DIRECTION:
-    case HERO_STATE_WATER_SPLASH_JUMP:
+    case HERO_STATE_REPEATABLE_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:

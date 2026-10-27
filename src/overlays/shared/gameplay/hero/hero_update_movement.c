@@ -134,7 +134,7 @@ struct LevelTable_QS {
 extern struct Hero hero_b __asm__("D_0013F350");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern s32 D_L00_0015F688 __attribute__((sda));
-extern s32 look_usage_stat_update_count __asm__("D_L00_0015F68C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/hero/hero_update_movement_globals.h"
 extern u8 D_L00_00166DD8[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
@@ -304,33 +304,13 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 
 void hero_update_movement(void) __asm__("FUN_L00_00217970");
 void hero_update_movement(void) {
-    enum {
-        HERO_STATE_JUMP_WITH_TIMED_TRAIL_UPDATE = 0xD,
-        HERO_STATE_JUMP_WITH_TIMED_SPLASH = 0x12,
-        HERO_STATE_SWIM_WITH_ITEM_EFFECTS = 0x35,
-        HERO_STATE_JUMP_WITH_ASCENT_EFFECTS = 0x3C,
-        HERO_STATE_LOCAL_HEADING_LIMITED_MOVE = 0x3F,
-        HERO_STATE_ALT_LEDGE_POSITION_HOLD = 0x4A,
-        HERO_STATE_GRAVITY_FLATTENED_STICK_MOVE = 0x4F,
-        HERO_STATE_SPEED_DEPENDENT_STICK_MOVE = 0x50,
-        HERO_STATE_ATTACK_RECORD_POINT_PAIR_SOUND = 0x51,
-        HERO_STATE_STICK_MOVE_WITH_RADIAL_SOUND = 0x5B,
-        HERO_STATE_FALL_WITH_LOWERED_SOUND_ORIGIN = 0x5C,
-        HERO_STATE_PLANAR_DAMPING_WITH_ZERO_VERTICAL_VELOCITY = 0x5D,
-        HERO_STATE_ANIMATION_TIMED_POINT_ATTACK = 0x60,
-        HERO_STATE_ANIMATION_TRACKED_MOBY_POSITION_UPDATE = 0x61,
-        HERO_STATE_SLOW_VERTICAL_DESCENT = 0x7D
-    };
+
     enum {
         HERO_ATTACK_RECORD_POINT_3_STRIKE = 0,
         HERO_ATTACK_RECORD_POINT_4_STRIKE = 1,
         HERO_ATTACK_RECORD_PAIRED_POINT_STRIKE = 2
     };
-    enum {
-        HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE = 0,
-        HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION = 1,
-        HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE = 2
-    };
+
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -523,7 +503,7 @@ void hero_update_movement(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case HERO_STATE_SWIM_WITH_ITEM_EFFECTS:
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, (struct MobyView *)hero.moby, 0x13);
         } else {
@@ -1549,7 +1529,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case HERO_STATE_LOCAL_HEADING_LIMITED_MOVE: {
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE: {
         f32 a;
         f32 f;
         update_hero_target_speed_from_stick();
@@ -2154,7 +2134,7 @@ void hero_update_movement(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case HERO_STATE_ALT_LEDGE_POSITION_HOLD:
+    case HERO_STATE_ALT_LEDGE_HANG_ENTRY:
     case HERO_STATE_ALT_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, frame_time * 4.712389f);
@@ -2351,14 +2331,14 @@ void hero_update_movement(void) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case HERO_STATE_JUMP_WITH_TIMED_TRAIL_UPDATE:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case HERO_STATE_JUMP_WITH_TIMED_SPLASH:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
-    case HERO_STATE_JUMP_WITH_ASCENT_EFFECTS:
+    case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
     case 0x49:
     case 0x4C:
     case 0x5E:
@@ -2613,7 +2593,7 @@ void hero_update_movement(void) {
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -frame_time;
         break;
-    case HERO_STATE_SLOW_VERTICAL_DESCENT:
+    case HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT:
         clear_u64_value(&hero.motion.velocity);
         hero.motion.velocity.f[2] = -(frame_time * 0.35f);
         break;
@@ -2632,7 +2612,7 @@ void hero_update_movement(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case HERO_STATE_ATTACK_RECORD_POINT_PAIR_SOUND: {
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct HeroTableRow2C *tb;
         s32 ok;
         tb = &attack_records[hero.attack_record];
@@ -2679,7 +2659,7 @@ void hero_update_movement(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case HERO_STATE_GRAVITY_FLATTENED_STICK_MOVE: {
+    case HERO_STATE_VEHICLE_MODE_1_LAND: {
         f32 sp = frame_time * 2.0f;
         stick_target(sp, 0);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 8.726646f);
@@ -2706,7 +2686,7 @@ void hero_update_movement(void) {
         }
         break;
     case HERO_STATE_VEHICLE_MODE_1_RUN:
-    case HERO_STATE_SPEED_DEPENDENT_STICK_MOVE: {
+    case HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN: {
         f32 k = 1.0f;
         f32 d = fast_difference_between_rotations(hero.motion.rot.f[2], hero.motion.move_yaw);
         f32 sp = frame_time * 3.0f;
@@ -2821,7 +2801,7 @@ void hero_update_movement(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
         break;
-    case HERO_STATE_ANIMATION_TIMED_POINT_ATTACK:
+    case HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION:
         stick_target(1.0f, 0);
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, frame_time * 1.9198622f);
         hero.target_speed = 0.0f;
@@ -2893,7 +2873,7 @@ void hero_update_movement(void) {
         }
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
-    case HERO_STATE_ANIMATION_TRACKED_MOBY_POSITION_UPDATE:
+    case HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT:
         hero.target_speed = 0.0f;
         speed_step(hero.target_speed, frame_time_sq * 12.6f);
         clear_u64_value(&hero.motion.velocity);
@@ -2944,7 +2924,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case HERO_STATE_FALL_WITH_LOWERED_SOUND_ORIGIN:
+    case HERO_STATE_VEHICLE_MODE_2_FALL:
         stick_target(frame_time * 6.0f, 0);
         qcopy(&v0, &hero.motion.pos);
         v0.f[2] -= 1.0f;
@@ -2957,7 +2937,7 @@ void hero_update_movement(void) {
             hero.motion.velocity.f[2] = frame_time * -10.0f;
         }
         break;
-    case HERO_STATE_STICK_MOVE_WITH_RADIAL_SOUND: {
+    case HERO_STATE_VEHICLE_MODE_2_RUN: {
         f32 d;
         f32 k;
         f32 g;
@@ -3014,7 +2994,7 @@ void hero_update_movement(void) {
         }
         break;
     }
-    case HERO_STATE_PLANAR_DAMPING_WITH_ZERO_VERTICAL_VELOCITY: {
+    case HERO_STATE_VEHICLE_MODE_2_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 l2 = len;
         if (hero.air_frames.s != 0) {

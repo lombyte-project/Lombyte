@@ -48,21 +48,10 @@ extern float deplanetizer_camera_quad_scale_ramp_start_value_gp __asm__("D_L18_0
 extern float deplanetizer_camera_quad_scale_ramp_end_value_gp __asm__("D_L18_00162494") __attribute__((sda));
 extern int deplanetizer_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_0016249C") __attribute__((sda));
 extern int deplanetizer_camera_quad_end_frame_gp __asm__("D_L18_001624A0") __attribute__((sda));
-extern int deplanetizer_state_7_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624A4") __attribute__((sda));
-extern int deplanetizer_state_7_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624A8") __attribute__((sda));
-extern int deplanetizer_state_7_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624AC") __attribute__((sda));
-extern int deplanetizer_state_7_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B0") __attribute__((sda));
-extern int deplanetizer_state_7_camera_quad_start_frame_gp __asm__("D_L18_001624B4") __attribute__((sda));
-extern int deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B8") __attribute__((sda));
 extern int deplanetizer_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624C0") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624C4") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624C8") __attribute__((sda));
-extern float deplanetizer_joint_trail_base_size_gp __asm__("D_L18_001624D0") __attribute__((sda));
 /* First component of the vector passed at gp - 0x4720. */
-extern float deplanetizer_burst_local_spawn_offset_x_gp __asm__("D_L18_001624E0") __attribute__((sda));
-extern float deplanetizer_burst_velocity_scale_gp __asm__("D_L18_001624F0") __attribute__((sda));
-extern float deplanetizer_burst_particle_size_gp __asm__("D_L18_001624F4") __attribute__((sda));
-extern float beam_effect_default_length __asm__("D_L18_0016174C");
 extern int D_L18_001617F4, D_L18_001617F8;
 extern float D_L18_0015ED60;
 
@@ -379,10 +368,8 @@ extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
-extern float deplanetizer_camera_quad_local_offset_x __asm__("D_L18_00162550");
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
-extern float deplanetizer_camera_quad_local_offset_w __asm__("D_L18_0016255C");
 extern int deplanetizer_camera_quad_first_color_gp __asm__("D_L18_001624F8") __attribute__((sda));
 extern int deplanetizer_camera_quad_smaller_color_gp __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
@@ -987,7 +974,6 @@ extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
-extern float gadgebot_sequence_2_start_frame_gp __asm__("D_L18_00162600") __attribute__((sda));
 extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
@@ -1215,10 +1201,6 @@ extern int gadgebot_glow_tint_end_gp __asm__("D_L18_00162610") __attribute__((sd
 extern float D_L18_001625FC __attribute__((sda));
 extern float gadgebot_glow_default_phase_speed_degrees_per_second_gp __asm__("D_L18_00162614") __attribute__((sda));
 extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm__("D_L18_00162618") __attribute__((sda));
-extern float gadgebot_death_fall_gravity_gp __asm__("D_L18_0016261C") __attribute__((sda));
-extern float gadgebot_death_fall_horizontal_speed_approach_rate_gp __asm__("D_L18_00162620") __attribute__((sda));
-extern float gadgebot_death_fall_base_horizontal_speed_gp __asm__("D_L18_00162624") __attribute__((sda));
-extern float gadgebot_death_fall_base_vertical_speed_gp __asm__("D_L18_00162628") __attribute__((sda));
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;

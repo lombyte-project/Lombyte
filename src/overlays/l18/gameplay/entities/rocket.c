@@ -689,10 +689,6 @@ extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
-extern int rocket_target_pulse_blend_minuend_selector_gp __asm__("D_L18_00161970") __attribute__((sda));
-extern int rocket_target_pulse_blend_subtrahend_selector_gp __asm__("D_L18_00161974") __attribute__((sda));
-extern int rocket_target_pulse_blend_alpha_factor_selector_gp __asm__("D_L18_00161978") __attribute__((sda));
-extern int rocket_target_pulse_blend_addend_selector_gp __asm__("D_L18_0016197C") __attribute__((sda));
 extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
 extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
@@ -1526,13 +1522,7 @@ int poll_moby_state_and_rearm(struct Moby *moby) {
     return 0;
 }
 extern float D_L18_0015F638 __attribute__((sda));
-extern float floating_platform_sink_acceleration_config_84_nonzero_gp __asm__("D_L18_00161A40") __attribute__((sda));
-extern float floating_platform_sink_acceleration_config_84_zero_gp __asm__("D_L18_00161A44") __attribute__((sda));
-extern float floating_platform_tilt_rate_degrees_config_84_nonzero_gp __asm__("D_L18_00161A50") __attribute__((sda));
-extern float floating_platform_tilt_rate_degrees_config_84_zero_gp __asm__("D_L18_00161A58") __attribute__((sda));
 extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C") __attribute__((sda));
-extern float floating_platform_motion_scale_input_start_gp __asm__("D_L18_00161A60") __attribute__((sda));
-extern float floating_platform_motion_scale_input_end_gp __asm__("D_L18_00161A64") __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
 void spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
@@ -1776,20 +1766,12 @@ extern short D_L18_00161BFC __attribute__((sda));
 extern int ballistic_ring_glow_color_end_gp __asm__("D_L18_00161C00") __attribute__((sda));
 extern float ballistic_ring_trail_spark_gravity_gp __asm__("D_L18_00161C04") __attribute__((sda));
 extern float ballistic_ring_trail_movement_step_scale_gp __asm__("D_L18_00161C08") __attribute__((sda));
-extern float ballistic_ring_trail_vector_offset_rate_gp __asm__("D_L18_00161C0C") __attribute__((sda));
 extern int D_L18_00161C10 __attribute__((sda));
-extern int ballistic_ring_trail_spark_gravity_multiplier_base_gp __asm__("D_L18_00161C14") __attribute__((sda));
 extern int D_L18_00161C18 __attribute__((sda));
-extern float ballistic_ring_trail_spark_relative_variation_limit_gp __asm__("D_L18_00161C1C") __attribute__((sda));
-extern float ballistic_ring_trail_first_spark_w_range_start_gp __asm__("D_L18_00161C20") __attribute__((sda));
-extern float ballistic_ring_trail_first_spark_w_range_end __asm__("D_L18_00161C24");
-extern float ballistic_ring_trail_second_spark_w_range_start_gp __asm__("D_L18_00161C28") __attribute__((sda));
-extern float ballistic_ring_trail_second_spark_w_range_end_gp __asm__("D_L18_00161C2C") __attribute__((sda));
 extern int ballistic_ring_trail_initial_color_start_gp __asm__("D_L18_00161C30") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_start_gp __asm__("D_L18_00161C38") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_end_gp __asm__("D_L18_00161C3C") __attribute__((sda));
 extern int ballistic_ring_trail_sparks_per_update_gp __asm__("D_L18_00161C40") __attribute__((sda));
-extern int ballistic_ring_trail_spark_resource_selector_gp __asm__("D_L18_00161C44") __attribute__((sda));
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
@@ -1970,10 +1952,6 @@ extern void matrix_mul_dba20(void *, void *, void *) __asm__("FUN_001fa328");
 
 extern float D_L18_001D4310[];
 
-extern int expanding_projectile_ring_blend_minuend_selector_gp __asm__("D_L18_00161C48") __attribute__((sda));
-extern int expanding_projectile_ring_blend_subtrahend_selector_gp __asm__("D_L18_00161C4C") __attribute__((sda));
-extern int expanding_projectile_ring_blend_alpha_factor_selector_gp __asm__("D_L18_00161C50") __attribute__((sda));
-extern int expanding_projectile_ring_blend_addend_selector_gp __asm__("D_L18_00161C54") __attribute__((sda));
 extern int expanding_projectile_ring_color_start_gp __asm__("D_L18_00161C5C") __attribute__((sda));
 extern int expanding_projectile_ring_color_end_gp __asm__("D_L18_00161C60") __attribute__((sda));
 extern float expanding_projectile_ring_segment_angle_degrees_gp __asm__("D_L18_00161C64") __attribute__((sda));
@@ -1982,7 +1960,6 @@ extern float D_L18_00161C6C __attribute__((sda));
 extern float expanding_projectile_ring_layer_radius_offset_gp __asm__("D_L18_00161C70") __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
-extern float expanding_projectile_ring_fade_duration_input_gp __asm__("D_L18_00161C7C") __attribute__((sda));
 void draw_expanding_projectile_ring(M_dba20 *moby) {
     Q_dba20 quad_packets[4];
     V_dba20 draw_matrix[4];
@@ -2171,10 +2148,6 @@ extern void euler_basis_dc4b8(void *, void *) __asm__("FUN_001fa030");
 extern float D_L18_001D4330[];
 extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
 
-extern int class_274_ring_blend_minuend_selector_gp __asm__("D_L18_00161CA4") __attribute__((sda));
-extern int class_274_ring_blend_subtrahend_selector_gp __asm__("D_L18_00161CA8") __attribute__((sda));
-extern int class_274_ring_blend_alpha_factor_selector_gp __asm__("D_L18_00161CAC") __attribute__((sda));
-extern int class_274_ring_blend_addend_selector_gp __asm__("D_L18_00161CB0") __attribute__((sda));
 extern int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
 extern int class_274_ring_color_end_gp __asm__("D_L18_00161CBC") __attribute__((sda));
 extern float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") __attribute__((sda));
@@ -2604,8 +2577,6 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
 extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
-extern float target_effect_first_rotation_rate_degrees_gp __asm__("D_L18_00161ED0") __attribute__((sda));
-extern float target_effect_second_rotation_rate_degrees_gp __asm__("D_L18_00161ED4") __attribute__((sda));
 extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __attribute__((sda));
 extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
@@ -2829,32 +2800,17 @@ extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char *spawn_glow_particle(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002ac910");
 extern int explosion_burst_spark_count_gp __asm__("D_L18_00161F6C") __attribute__((sda));
-extern int explosion_burst_spark_initial_color_gp __asm__("D_L18_00161F78") __attribute__((sda));
-extern int explosion_burst_spark_second_color_gp __asm__("D_L18_00161F7C") __attribute__((sda));
 extern int explosion_burst_spark_frame_count_gp __asm__("D_L18_00161F80") __attribute__((sda));
 extern int explosion_burst_spark_second_frame_count_gp __asm__("D_L18_00161F84") __attribute__((sda));
 extern int explosion_burst_spark_third_frame_count_gp __asm__("D_L18_00161F88") __attribute__((sda));
 extern int explosion_burst_particle_count_gp __asm__("D_L18_00161F98") __attribute__((sda));
-extern int explosion_burst_particle_frame_count_range_start_gp __asm__("D_L18_00161FAC") __attribute__((sda));
-extern int explosion_burst_particle_frame_count_range_end_gp __asm__("D_L18_00161FB0") __attribute__((sda));
-extern int explosion_burst_particle_second_frame_count_range_start_gp __asm__("D_L18_00161FB4") __attribute__((sda));
-extern int explosion_burst_particle_second_frame_count_range_end_gp __asm__("D_L18_00161FB8") __attribute__((sda));
-extern int explosion_burst_first_glow_duration_frames_gp __asm__("D_L18_00161FC4") __attribute__((sda));
-extern int explosion_burst_second_glow_duration_frames_gp __asm__("D_L18_00161FD0") __attribute__((sda));
-extern int explosion_burst_third_glow_duration_frames_gp __asm__("D_L18_00161FDC") __attribute__((sda));
 extern int explosion_burst_camera_shake_duration_frames_gp __asm__("D_L18_00161FE8") __attribute__((sda));
 extern float explosion_burst_spark_speed_min_gp __asm__("D_L18_00161F70") __attribute__((sda));
 extern float explosion_burst_spark_speed_max_gp __asm__("D_L18_00161F74") __attribute__((sda));
-extern float explosion_burst_spark_vector_w_gp __asm__("D_L18_00161F8C") __attribute__((sda));
-extern float explosion_burst_spark_second_vector_z_rate_gp __asm__("D_L18_00161F90") __attribute__((sda));
 extern float explosion_burst_spark_second_vector_scale_gp __asm__("D_L18_00161F94") __attribute__((sda));
 extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __attribute__((sda));
 extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
-extern float explosion_burst_particle_scale_multiplier_gp __asm__("D_L18_00161FA8") __attribute__((sda));
 extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
-extern float explosion_burst_first_glow_scale_multiplier_gp __asm__("D_L18_00161FC0") __attribute__((sda));
-extern float explosion_burst_second_glow_scale_multiplier_gp __asm__("D_L18_00161FCC") __attribute__((sda));
-extern float explosion_burst_third_glow_scale_multiplier_gp __asm__("D_L18_00161FD8") __attribute__((sda));
 extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4") __attribute__((sda));
 extern int D_L18_001D9C70[];
 extern int D_L18_001D9C88[];
@@ -2965,15 +2921,12 @@ extern int scale_frames_q(int) __asm__("FUN_001f96f8");
 extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
-extern float electric_bolt_initial_length_scale_gp __asm__("D_L18_00161FF0") __attribute__((sda));
-extern int electric_bolt_initial_frame_count_gp __asm__("D_L18_00162080") __attribute__((sda));
 extern short D_L18_001620CA;
 extern short D_L18_001620CC;
 extern short D_L18_001620CE;
 extern short D_L18_001620D2;
 extern short D_L18_001620D4;
 extern short D_L18_001620D6;
-extern int electric_bolt_scaled_initial_frame_count __asm__("D_L18_001620D8");
 extern int D_L18_001620DC;
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
@@ -3052,10 +3005,7 @@ extern float secondary_bolt_lateral_amplitude_gp __asm__("D_L18_00162020") __att
 extern s32 D_L18_00162024 __attribute__((sda));
 extern float secondary_bolt_z_phase_increment_gp __asm__("D_L18_00162028") __attribute__((sda));
 extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribute__((sda));
-extern float primary_bolt_z_jitter_range_start_gp __asm__("D_L18_00162040") __attribute__((sda));
-extern float primary_bolt_z_jitter_range_end_gp __asm__("D_L18_00162044") __attribute__((sda));
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
-extern float electric_bolt_particle_direction_scale_gp __asm__("D_L18_00162084") __attribute__((sda));
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));
 extern short D_L18_001620C0[] __attribute__((section(".sdata")));

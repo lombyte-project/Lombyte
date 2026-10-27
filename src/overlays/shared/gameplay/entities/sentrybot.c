@@ -69,9 +69,7 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern int sentrybot_alert_level_frame_stamp_gp __asm__("D_L15_001613E8") __attribute__((sda));
-extern float sentrybot_emission_vector_speed_gp __asm__("D_L15_00161410") __attribute__((sda));
-extern int sentrybot_update_disabled_gp __asm__("D_L15_00161414") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void compute_selected_world_matrices(void *, int, void *, void *) __asm__("FUN_L00_0024f8f0");
 extern void FUN_L00_00257470(void *, int, int);
@@ -1297,14 +1295,6 @@ void update_sentrybot_joint_aim(void *mv) {
 }
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
 extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
-extern float sentrybot_knockback_gravity_gp __asm__("D_L15_001613F0") __attribute__((sda));
-extern float sentrybot_death_knockback_gravity_gp __asm__("D_L15_001613F4") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_vertical_speed_gp __asm__("D_L15_001613F8") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_horizontal_speed_gp __asm__("D_L15_001613FC") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_00161400") __attribute__((sda));
-extern float sentrybot_death_knockback_vertical_speed_gp __asm__("D_L15_00161404") __attribute__((sda));
-extern float sentrybot_death_knockback_horizontal_speed_gp __asm__("D_L15_00161408") __attribute__((sda));
-extern float sentrybot_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_0016140C") __attribute__((sda));
 extern char D_001413F4[];
 extern short D_0013F658[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
@@ -1612,8 +1602,6 @@ extern float rocket_trail_spark_frame_count_range_start_gp __asm__("D_L15_001614
 extern float rocket_trail_spark_third_frame_count_range_start_gp __asm__("D_L15_00161438") __attribute__((sda));
 extern float rocket_trail_spark_first_velocity_scale_gp __asm__("D_L15_00161448") __attribute__((sda));
 extern int rocket_trail_spark_second_configuration_word_gp __asm__("D_L15_0016141C") __attribute__((sda));
-extern float rocket_trail_spark_first_vector_fourth_component_gp __asm__("D_L15_00161420") __attribute__((sda));
-extern float rocket_trail_spark_second_vector_fourth_component_gp __asm__("D_L15_00161424") __attribute__((sda));
 extern float rocket_trail_spark_frame_count_range_end_gp __asm__("D_L15_0016142C") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_start_gp __asm__("D_L15_00161430") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_end_gp __asm__("D_L15_00161434") __attribute__((sda));
@@ -1752,12 +1740,10 @@ extern f32 vector_length_xy_c2(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float missile_distant_gray_glow_gate __asm__("D_L15_0015F5D0");
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(float *, float *) __asm__("FUN_001f9b80");
-extern int missile_target_reticle_enabled __asm__("D_L15_0015F30C");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
@@ -2802,7 +2788,6 @@ extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
-extern int spark_emitter_uv_phase_input __asm__("D_L15_0015F3F8");
 extern int D_L15_001CE230[];
 extern float D_L15_001CE250[][2];
 extern int D_L15_001CE290[][2];

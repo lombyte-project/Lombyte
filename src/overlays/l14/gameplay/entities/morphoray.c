@@ -107,7 +107,6 @@ extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__(
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
-extern float spark_first_bounce_horizontal_speed_gp __asm__("D_L14_001620A4") __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
@@ -973,9 +972,6 @@ extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
 extern int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") __attribute__((sda));
-extern float flying_car_rotation_oscillation_amplitude_gp __asm__("D_L14_00162290") __attribute__((sda));
-extern float flying_car_rotation_oscillation_common_phase_update_gp __asm__("D_L14_00162294") __attribute__((sda));
-extern float flying_car_rotation_oscillation_axis_phase_update_gp __asm__("D_L14_00162298") __attribute__((sda));
 extern char *D_L14_0015FFD8_6ee0 __asm__("D_L14_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
@@ -1171,13 +1167,7 @@ void initialize_flying_car_path(struct Moby *moby) {
  * otherwise, sinks by its speed, eases onto the path point and banks into the turns, and returns 1. */
 extern char *D_L14_001B0BB0_7620[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
-extern float flying_car_tracking_spring_gain_gp __asm__("D_L14_0016226C") __attribute__((sda));
-extern float flying_car_motion_spring_damping_gp __asm__("D_L14_00162270") __attribute__((sda));
 extern float D_L14_00162274 __attribute__((sda));
-extern float flying_car_full_bank_yaw_error_gp __asm__("D_L14_00162278") __attribute__((sda));
-extern float flying_car_max_sink_offset_rate_gp __asm__("D_L14_00162280") __attribute__((sda));
-extern float flying_car_sink_offset_recovery_rate_gp __asm__("D_L14_00162288") __attribute__((sda));
-extern float flying_car_burst_height_threshold_gp __asm__("D_L14_0016228C") __attribute__((sda));
 extern int path_step_7620(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -1843,12 +1833,6 @@ extern int D_L14_001624B4 __attribute__((section(".sdata")));
 extern int D_L14_001624B8 __attribute__((section(".sdata")));
 extern float D_L14_001624BC __attribute__((section(".sdata")));
 extern float D_L14_001624C0 __attribute__((section(".sdata")));
-extern float path_key_camera_heading_offset_spring_gain __asm__("D_L14_00162490") __attribute__((sda));
-extern float path_key_camera_placement_elevation_spring_gain __asm__("D_L14_00162494") __attribute__((sda));
-extern float path_key_camera_placement_distance_spring_gain __asm__("D_L14_00162498") __attribute__((sda));
-extern float path_key_camera_lateral_axis_rotation_spring_gain __asm__("D_L14_0016249C") __attribute__((sda));
-extern float path_key_camera_up_axis_rotation_spring_gain __asm__("D_L14_001624A0") __attribute__((sda));
-extern float path_key_camera_heading_blend_step_factor __asm__("D_L14_001624A4") __attribute__((sda));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
 extern float D_L14_001F6C38[][3];

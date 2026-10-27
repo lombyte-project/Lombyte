@@ -74,7 +74,6 @@ extern f32 D_L06_00161FA8 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/blarg_space_commando_globals.h"
 extern s32 ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") __attribute__((sda));
 extern f32 melee_attack_distance_threshold_gp __asm__("D_L06_00161FC4") __attribute__((sda));
-extern f32 movement_max_horizontal_speed_gp __asm__("D_L06_00161FC8") __attribute__((sda));
 extern f32 vehicle_melee_windup_animation_speed_gp __asm__("D_L06_00161FCC") __attribute__((sda));
 extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
@@ -447,11 +446,6 @@ extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
-extern float base_home_distance_limit_gp __asm__("D_L06_00161FAC") __attribute__((sda));
-extern float nonfatal_knockback_horizontal_speed_gp __asm__("D_L06_00161FB0") __attribute__((sda));
-extern float nonfatal_knockback_vertical_speed_gp __asm__("D_L06_00161FB4") __attribute__((sda));
-extern float fatal_knockback_horizontal_speed_gp __asm__("D_L06_00161FB8") __attribute__((sda));
-extern float fatal_knockback_vertical_speed_gp __asm__("D_L06_00161FBC") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -787,11 +781,6 @@ typedef struct {
     u64 tag[4];
 } QuadPacket_f680;
 
-extern s32 beam_blend_minuend_selector_gp __asm__("D_L06_00161FDC") __attribute__((sda));
-extern s32 beam_blend_subtrahend_selector_gp __asm__("D_L06_00161FE0") __attribute__((sda));
-extern s32 beam_blend_alpha_multiplier_selector_gp __asm__("D_L06_00161FE4") __attribute__((sda));
-extern s32 beam_blend_addend_selector_gp __asm__("D_L06_00161FE8") __attribute__((sda));
-extern s32 beam_blend_fixed_alpha_gp __asm__("D_L06_00161FEC") __attribute__((sda));
 extern s32 beam_effect_texture_index_gp __asm__("D_L06_00161FF0") __attribute__((sda));
 extern s32 beam_outer_corner_color_at_zero_weight_gp __asm__("D_L06_00161FF4") __attribute__((sda));
 extern s32 beam_outer_corner_color_at_unit_weight_gp __asm__("D_L06_00161FF8") __attribute__((sda));
@@ -887,8 +876,6 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern int beam_spark_initial_word_gp __asm__("D_L06_00162004") __attribute__((sda));
-extern int beam_spark_second_word_gp __asm__("D_L06_00162008") __attribute__((sda));
 extern float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") __attribute__((sda));
 extern float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") __attribute__((sda));
 extern float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") __attribute__((sda));
@@ -902,7 +889,6 @@ extern float beam_spark_horizontal_scale_range_end_gp __asm__("D_L06_00162030") 
 extern float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") __attribute__((sda));
 extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attribute__((sda));
 extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
-extern int beam_spark_lookup_index_and_flags_gp __asm__("D_L06_00162040") __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");

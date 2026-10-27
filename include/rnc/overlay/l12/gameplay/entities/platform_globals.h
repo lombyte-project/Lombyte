@@ -28,4 +28,8 @@ extern int helicopter_help_message_hit_count __asm__("D_0015EE04");
 extern float helicopter_path_speed __asm__("D_L12_001619A8");
 extern float helicopter_rotation_smoothing_divisor __asm__("D_L12_001619B0");
 
+/* Additional scalar data read by this unit. */
+extern f32 hoven_anklebiter_nonlethal_knockback_z_scale_gp __asm__("D_L12_001618D0") __attribute__((sda));
+extern f32 hoven_anklebiter_nonlethal_knockback_scale_gp __asm__("D_L12_001618D4") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L12_GAMEPLAY_ENTITIES_PLATFORM_GLOBALS_H */

@@ -53,7 +53,7 @@ extern S17AD00 D_L15_0017AC80;
 extern S17C438 D_L15_0017C3B8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float hero_fatal_fall_trigger_z __asm__("D_L15_0015F638");
+#include "rnc/overlay/l15/gameplay/hero/0021d040_globals.h"
 extern float D_L15_001673D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -141,20 +141,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
 
 void update_hero_state_machine(void) {
-    enum {
-        HERO_STATE_SLOT_3_ITEM_3_JUMP = 13,
-        HERO_STATE_SLOT_3_ITEM_2_JUMP = 15,
-        HERO_STATE_BUFFERED_AIRBORNE_JUMP_REENTRY = 17,
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_SWIM_FROM_CROUCH_INPUT = 53,
-        HERO_STATE_VEHICLE_MODE_2_RUN = 91,
-        HERO_STATE_VEHICLE_MODE_2_FALL = 92,
-        HERO_STATE_VEHICLE_MODE_2_AIRBORNE_OR_TIMEOUT_RECOVERY = 93,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
-        HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 96,
-        HERO_STATE_VEHICLE_MODE_2_ANIMATION_WAIT_THEN_SET_COOLDOWN = 97,
-        HERO_STATE_VEHICLE_MODE_2_RESPAWN_ANIMATION_WAIT = 98
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -469,7 +456,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case HERO_STATE_VEHICLE_MODE_2_RESPAWN_ANIMATION_WAIT:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -479,7 +466,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_FROM_CROUCH_INPUT:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1491,11 +1478,11 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
-                case HERO_STATE_SLOT_3_ITEM_3_JUMP:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case HERO_STATE_SLOT_3_ITEM_2_JUMP:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case HERO_STATE_BUFFERED_AIRBORNE_JUMP_REENTRY:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
@@ -1997,7 +1984,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(0x5A, 0);
                     }
                     break;
-                case HERO_STATE_VEHICLE_MODE_2_ANIMATION_WAIT_THEN_SET_COOLDOWN:
+                case HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT:
                     if (hero.anim_flags & 2) {
                         hero.vehicle_triangle_cooldown = scale_game_frames(0x12D);
                         hero_set_state(0x5A, 1);
@@ -2044,7 +2031,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case HERO_STATE_VEHICLE_MODE_2_AIRBORNE_OR_TIMEOUT_RECOVERY:
+                case HERO_STATE_VEHICLE_MODE_2_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.5f) {
                         hero_set_state(0x5C, 1);

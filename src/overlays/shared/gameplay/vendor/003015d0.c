@@ -158,9 +158,7 @@ extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attr
 extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
-extern float vendor_beam_spark_step_w_gp __asm__("D_L14_00162114") __attribute__((sda));
 extern int D_L14_0016211C __attribute__((sda));
-extern int vendor_beam_branch_end_spark_color_gp __asm__("D_L14_00162120") __attribute__((sda));
 
 extern char D_L14_001674C0[];
 
@@ -357,10 +355,6 @@ extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
-extern int vendor_beam_blend_minuend_selector_gp __asm__("D_L14_001620E0") __attribute__((sda));
-extern int vendor_beam_blend_subtrahend_selector_gp __asm__("D_L14_001620E4") __attribute__((sda));
-extern int vendor_beam_blend_alpha_factor_selector_gp __asm__("D_L14_001620E8") __attribute__((sda));
-extern int vendor_beam_blend_addend_selector_gp __asm__("D_L14_001620EC") __attribute__((sda));
 
 extern char D_L14_001674C0[];
 

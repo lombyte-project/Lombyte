@@ -183,9 +183,6 @@ extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 #include "rnc/gameplay/state/options.h"
-extern int blarg_elite_commando_bobbing_and_voice_enabled_gp __asm__("D_L16_00161A74") __attribute__((sda));
-extern int blarg_elite_commando_joint_aim_enabled_gp __asm__("D_L16_00161A78") __attribute__((sda));
-extern int blarg_elite_commando_joint_sparks_enabled_gp __asm__("D_L16_00161A7C") __attribute__((sda));
 extern int D_L16_0015F5C4;
 extern int D_L16_0016CC90 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");

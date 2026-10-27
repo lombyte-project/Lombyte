@@ -45,7 +45,7 @@ extern S17A800 D_L03_0017A780;
 extern S17BF38 D_L03_0017BEB8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float hero_low_altitude_respawn_z_threshold __asm__("D_L03_0015F638");
+#include "rnc/overlay/l03/gameplay/hero/0021c668_globals.h"
 extern float D_L03_00166ED8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -134,10 +134,7 @@ int r1_repeat_timer __asm__("D_L03_0015F678") = 0;
 void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
 
 void update_hero_state_machine(void) {
-    enum {
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_SWIM_WITH_CROUCH_INPUT = 53
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;

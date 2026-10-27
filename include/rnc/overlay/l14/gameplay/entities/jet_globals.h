@@ -51,4 +51,18 @@ extern s32 rocket_initial_timer_frames __asm__("D_L14_00161FB0");
 extern f32 rocket_travel_speed __asm__("D_L14_00161FA8");
 extern f32 rocket_steering_blend_fraction __asm__("D_L14_00161FAC");
 
+/* Additional scalar data read by this unit. */
+extern f32 lightning_main_arc_z_step_range_start_gp __asm__("D_L14_00161C8C") __attribute__((sda));
+extern f32 lightning_main_arc_z_step_range_end_gp __asm__("D_L14_00161C90") __attribute__((sda));
+extern int lightning_arc_outer_base_color_gp __asm__("D_L14_00161C78") __attribute__((sda));
+extern int lightning_arc_inner_base_color_gp __asm__("D_L14_00161C7C") __attribute__((sda));
+extern float lightning_arc_outer_half_width_end_gp __asm__("D_L14_00161C80") __attribute__((sda));
+extern float lightning_arc_outer_half_width_start_gp __asm__("D_L14_00161C84") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_base_row0_offset_gp __asm__("D_L14_00161F30") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_paired_emitter_offset_gp __asm__("D_L14_00161F34") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_base_row2_offset_gp __asm__("D_L14_00161F38") __attribute__((sda));
+extern f32 enemy_fighter_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F3C") __attribute__((sda));
+extern s32 enemy_fighter_exhaust_paired_puff_color_gp __asm__("D_L14_00161F44") __attribute__((sda));
+extern s32 moby_exhaust_paired_puff_color_gp __asm__("D_L14_00161F74") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L14_GAMEPLAY_ENTITIES_JET_GLOBALS_H */

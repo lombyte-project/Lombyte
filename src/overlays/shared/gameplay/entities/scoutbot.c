@@ -692,8 +692,6 @@ extern int D_L08_00161CF4 __attribute__((sda));
 extern int D_L08_00161CF8 __attribute__((sda));
 extern int D_L08_00161CFC __attribute__((sda));
 extern float moby_creation_particle_spread_speed_base_gp __asm__("D_L08_00161D04") __attribute__((sda));
-extern float moby_creation_particle_primary_motion_w_gp __asm__("D_L08_00161D14") __attribute__((sda));
-extern float moby_creation_particle_secondary_motion_w_gp __asm__("D_L08_00161D18") __attribute__((sda));
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
 
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) {
@@ -793,8 +791,6 @@ extern float homing_projectile_trail_spread_speed_limit_gp __asm__("D_L08_00161D
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
 extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
 extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
-extern float homing_projectile_trail_primary_motion_w_gp __asm__("D_L08_00161D1C") __attribute__((sda));
-extern float homing_projectile_trail_secondary_motion_w_gp __asm__("D_L08_00161D20") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
 
 extern float D_L08_00174660[4];
@@ -1061,12 +1057,7 @@ extern f32 spark_emitter_default_primary_z_increment_base_gp __asm__("D_L08_0016
 extern f32 spark_emitter_default_primary_magnitude_base_gp __asm__("D_L08_00161F80") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_z_increment_base_gp __asm__("D_L08_00161F84") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_magnitude_base_gp __asm__("D_L08_00161F88") __attribute__((sda));
-extern s32 spark_emitter_default_frame_count_base_gp __asm__("D_L08_00161F8C") __attribute__((sda));
-extern s32 spark_emitter_default_second_frame_count_base_gp __asm__("D_L08_00161F90") __attribute__((sda));
-extern s32 spark_emitter_default_third_frame_count_base_gp __asm__("D_L08_00161F94") __attribute__((sda));
 extern s32 spark_emitter_default_timer_reset_gp __asm__("D_L08_00161F98") __attribute__((sda));
-extern f32 spark_emitter_default_primary_motion_w_gp __asm__("D_L08_00161F9C") __attribute__((sda));
-extern f32 spark_emitter_default_secondary_motion_w_gp __asm__("D_L08_00161FA0") __attribute__((sda));
 extern f32 spark_emitter_default_primary_spread_limit_gp __asm__("D_L08_00161FA4") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_spread_limit_gp __asm__("D_L08_00161FA8") __attribute__((sda));
 

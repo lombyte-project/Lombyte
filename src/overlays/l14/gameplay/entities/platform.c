@@ -183,13 +183,7 @@ typedef struct {
     int pad[3];
 } Ray_67e8;
 int D_L14_00161A3C = 0x8c;
-extern float weapon_aim_final_path_step __asm__("D_L14_00161A40") __attribute__((sda));
-extern float muzzle_flash_joint_axis_offset __asm__("D_L14_00161A44") __attribute__((sda));
-extern float muzzle_flash_particle_full_blend_endpoint __asm__("D_L14_00161A48") __attribute__((sda));
-extern float muzzle_light_full_blend_position_w __asm__("D_L14_00161A4C") __attribute__((sda));
-extern float muzzle_light_color_component_x __asm__("D_L14_00161A50") __attribute__((sda));
-extern float muzzle_light_color_component_y __asm__("D_L14_00161A54") __attribute__((sda));
-extern float muzzle_light_color_component_z __asm__("D_L14_00161A58") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -603,7 +597,6 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern float unused_platform_tilt_argument __asm__("D_L14_00161AFC") __attribute__((sda));
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
@@ -643,8 +636,6 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern float platform_max_tilt_degrees __asm__("D_L14_00161B00") __attribute__((sda));
-extern float platform_tilt_direction_z_offset __asm__("D_L14_00161B04") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");

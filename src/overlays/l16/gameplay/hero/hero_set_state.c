@@ -103,16 +103,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 extern char D_L16_0017C380[];
 extern char D_L16_0017C3C0[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_WATER_DEPTH_JUMP = 0x12,
-        HERO_STATE_SWIM_ANIMATION_VARIANT = 0x35,
-        HERO_STATE_RUN_WITH_GROUND_ITEM_CONTACT = 0x3F,
-        HERO_STATE_HOVERBOARD_RACE_ENTRY = 0x6B,
-        HERO_STATE_HOVERBOARD_ANIMATION_VARIANT = 0x6C,
-        HERO_STATE_HOVERBOARD_UPWARD_LAUNCH = 0x6D,
-        HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY = 0x6E,
-        HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT = 0x6F
-    };
+
     int old2088;
     char *moby;
     int old20A7;
@@ -280,7 +271,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_SWIM_ANIMATION_VARIANT: {
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -491,7 +482,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x52, 0, (float)scale_game_frames(5));
         break;
     }
-    case HERO_STATE_HOVERBOARD_RACE_ENTRY: {
+    case HERO_STATE_HOVERBOARD_RIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x16;
         p->unk2284 = 8;
@@ -571,7 +562,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(select_hero_hoverboard_animation_variant(), 5, (float)scale_game_frames(8));
         break;
     }
-    case HERO_STATE_HOVERBOARD_UPWARD_LAUNCH: {
+    case HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->item_select_blocked = 1;
         p->unk2284 = 0;
@@ -582,7 +573,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(0x61, 3, (float)scale_game_frames(4));
         break;
     }
-    case HERO_STATE_HOVERBOARD_WATER_SURFACE_ENTRY: {
+    case HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT: {
         struct Hero *p = &hero;
         int n;
         int v;
@@ -679,7 +670,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case HERO_STATE_RUN_WITH_GROUND_ITEM_CONTACT:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -1179,7 +1170,7 @@ int hero_set_state(int a, int b) {
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case HERO_STATE_WATER_DEPTH_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:

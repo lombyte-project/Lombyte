@@ -128,7 +128,6 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
 extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
-extern int plasmabot_beam_cooldown_frames __asm__("D_L14_001614E0");
 
 void FUN_L14_002b3890(int selected_moby_list_index) {
     short *listed_moby_entry_cursor;
@@ -721,10 +720,6 @@ typedef struct {
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
-extern f32 plasmabot_nozzle_bone_x_offset_gp __asm__("D_L14_001614A8") __attribute__((sda));
-extern f32 plasmabot_beam_bone_x_offset_gp __asm__("D_L14_001614B0") __attribute__((sda));
-extern f32 plasmabot_beam_endpoint_bone_y_offset_gp __asm__("D_L14_001614B4") __attribute__((sda));
-extern f32 plasmabot_beam_bone_z_offset_gp __asm__("D_L14_001614B8") __attribute__((sda));
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
@@ -1961,7 +1956,6 @@ typedef struct {
 } MobyHit_ff640;
 
 extern char *D_L14_0015FFDC;
-extern float floating_mine_glow_phase_step_gp __asm__("D_L14_00162000") __attribute__((sda));
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");

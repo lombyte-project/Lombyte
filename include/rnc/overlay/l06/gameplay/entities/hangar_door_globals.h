@@ -39,4 +39,12 @@ extern float moby_pair_reset_enabled __asm__("D_L06_00161F5C");
 extern float height_cycle_max_speed __asm__("D_L06_00161F64");
 extern float height_cycle_acceleration __asm__("D_L06_00161F68");
 
+/* Additional scalar data read by this unit. */
+extern float alien_snapper_glow_phase_speed_degrees_gp __asm__("D_L06_00161EE4") __attribute__((sda));
+extern float alien_queen_glow_phase_speed_degrees_gp __asm__("D_L06_00161F0C") __attribute__((sda));
+extern float moby_pair_phase_distance_acceleration_gp __asm__("D_L06_00161F34") __attribute__((sda));
+extern float moby_pair_phase_distance_deceleration_gp __asm__("D_L06_00161F38") __attribute__((sda));
+extern float moby_pair_phase_rotation_y_acceleration_degrees_gp __asm__("D_L06_00161F40") __attribute__((sda));
+extern float moby_pair_phase_rotation_y_deceleration_degrees_gp __asm__("D_L06_00161F44") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L06_GAMEPLAY_ENTITIES_HANGAR_DOOR_GLOBALS_H */

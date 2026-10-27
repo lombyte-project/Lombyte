@@ -3,6 +3,14 @@
 
 #include "types.h"
 
+/* attack_records.kind selects the forward-motion profile, independently of
+ * hero state IDs and the attack-record index. Keep the stored field as s32. */
+enum HeroComboKind {
+    HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE = 0,
+    HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION = 1,
+    HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE = 2
+};
+
 /*
  * Per-level data tables the hero code reads (one copy per level overlay,
  * e.g. idle_fidgets, item_defs, attack_records in level 0).
@@ -48,7 +56,7 @@ typedef struct HeroAnimRow {
  */
 typedef struct HeroTableRow2C {
     u8 pad_0[0x4];
-    s32 kind;            /* 0 or 1; 1 adds a turn-direction test */
+    s32 kind;            /* HeroComboKind; 1 also adds a turn-direction test */
     u8 pad_8[0x4];
     s32 fC;
     s32 f10;

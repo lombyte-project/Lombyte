@@ -79,7 +79,7 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L18_0015F678") = 0;
 extern int D_L18_0015F6DC_d __asm__("D_L18_0015F6DC");
-extern int hero_triangle_hud_activation_inhibit __asm__("D_L18_0015F594") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/hero/0022e8f8_globals.h"
 extern int D_L18_0016D180 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -154,20 +154,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void process_hero_state_transitions(void) __asm__("FUN_L18_0022e8f8");
 
 void process_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_PACK_LONG_JUMP_FALLBACK = 13,
-        HERO_STATE_PACK_JUMP_FALLBACK = 15,
-        HERO_STATE_REPEATABLE_JUMP = 17,
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_SWIM_CROUCH_INPUT_ACTION = 53,
-        HERO_STATE_VEHICLE_MODE_2_RUN = 91,
-        HERO_STATE_VEHICLE_MODE_2_FALL = 92,
-        HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT = 93,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
-        HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION = 96,
-        HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT = 97,
-        HERO_STATE_VEHICLE_MODE_2_DYING = 98
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -504,7 +491,7 @@ void process_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_CROUCH_INPUT_ACTION:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1895,9 +1882,9 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
                 case 12:
-                case HERO_STATE_PACK_LONG_JUMP_FALLBACK:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case HERO_STATE_PACK_JUMP_FALLBACK:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
@@ -2410,7 +2397,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(0x5A, 0);
                     }
                     break;
-                case HERO_STATE_VEHICLE_MODE_2_TRIANGLE_ACTION_COOLDOWN_ON_EXIT:
+                case HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT:
                     if (hero.anim_flags & 2) {
                         hero.vehicle_triangle_cooldown = scale_game_frames(0x12D);
                         hero_set_state(0x5A, 1);
@@ -2457,7 +2444,7 @@ void process_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case HERO_STATE_VEHICLE_MODE_2_ANIMATION_OR_TIMEOUT_EXIT_WAIT:
+                case HERO_STATE_VEHICLE_MODE_2_HURT:
                     if (!(hero.state_timer < scale_game_frames(0x20)) && hero.air_frames.s != 0 &&
                         hero.ground_distance > 1.5f) {
                         hero_set_state(0x5C, 1);

@@ -27,4 +27,12 @@ extern int hoverboard_dummy_spray_initial_color __asm__("D_L16_00161A08");
 extern float class_0287_group_activation_value __asm__("D_L16_00161A80");
 extern float triggered_scene_rotation_y __asm__("D_L16_00161A8C");
 
+/* Additional scalar data read by this unit. */
+extern int conveyor_belt_alpha_blend_a_selector __asm__("D_L16_00161998") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_b_selector __asm__("D_L16_0016199C") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_c_selector __asm__("D_L16_001619A0") __attribute__((sda));
+extern int conveyor_belt_alpha_blend_d_selector __asm__("D_L16_001619A4") __attribute__((sda));
+extern float test_dummy_path_movement_speed_limit_gp __asm__("D_L16_001619D0") __attribute__((sda));
+extern float test_dummy_spray_range_gp __asm__("D_L16_001619D4") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L16_GAMEPLAY_ENTITIES_ROCKET_GLOBALS_H */

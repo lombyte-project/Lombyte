@@ -21,4 +21,16 @@ extern int red_orb_pulse_color_start __asm__("D_L00_00161B90");
 extern int red_orb_pulse_color_end __asm__("D_L00_00161B94");
 extern float red_orb_pulse_angular_speed_degrees __asm__("D_L00_00161B98");
 
+/* Additional scalar data read by this unit. */
+extern int nanotech_ball_collection_first_particle_color __asm__("D_L00_00161A6C") __attribute__((sda));
+extern int nanotech_ball_collection_second_particle_color __asm__("D_L00_00161A70") __attribute__((sda));
+extern s32 nanotech_ball_collection_second_particle_mode_selector __asm__("D_L00_00161A84") __attribute__((sda));
+extern s32 nanotech_ball_collection_particle_byte_source_index __asm__("D_L00_00161A88") __attribute__((sda));
+extern int nanotech_ball_particle_color_gp __asm__("D_L00_00161A00") __attribute__((sda));
+extern int nanotech_ball_full_health_invulnerable_collection_min_frames_gp __asm__("D_L00_00161A40") __attribute__((sda));
+extern float nanotech_ball_collection_curve_radius_gp __asm__("D_L00_00161A50") __attribute__((sda));
+extern float nanotech_ball_collection_target_gravity_offset_gp __asm__("D_L00_00161A54") __attribute__((sda));
+extern float suction_effect_texture_u_offset __asm__("D_L00_00161B48") __attribute__((sda));
+extern float suction_effect_texture_v_offset __asm__("D_L00_00161B4C") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_NANOTECH_BALL_GLOBALS_H */

@@ -25,11 +25,7 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Packet_2fd1a0;
 
-extern int dual_texture_mesh_blend_color_a_selector_gp __asm__("D_L06_00161F7C") __attribute__((sda));
-extern int dual_texture_mesh_blend_color_b_selector_gp __asm__("D_L06_00161F80") __attribute__((sda));
-extern int dual_texture_mesh_blend_alpha_c_selector_gp __asm__("D_L06_00161F84") __attribute__((sda));
-extern int dual_texture_mesh_blend_color_d_selector_gp __asm__("D_L06_00161F88") __attribute__((sda));
-extern int dual_texture_mesh_blend_fixed_alpha_gp __asm__("D_L06_00161F8C") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 #include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
 extern unsigned int D_L06_00161F94 __attribute__((sda));
@@ -5724,7 +5720,6 @@ extern void draw_backdrop_mesh(void) __asm__("FUN_L06_003003f0");
 
 extern int D_L06_0015F408;
 extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048") __attribute__((sda));
-extern int camera_sequence_scalar_ramp_duration_frames_gp __asm__("D_L06_00162044") __attribute__((sda));
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
@@ -5942,14 +5937,7 @@ typedef struct {
 typedef struct {
     short v, uv;
 } I3003f0;
-extern int backdrop_mesh_blend_color_a_selector_gp __asm__("D_L06_00162054") __attribute__((sda));
-extern int backdrop_mesh_blend_color_b_selector_gp __asm__("D_L06_00162058") __attribute__((sda));
-extern int backdrop_mesh_blend_alpha_c_selector_gp __asm__("D_L06_0016205C") __attribute__((sda));
-extern int backdrop_mesh_blend_color_d_selector_gp __asm__("D_L06_00162060") __attribute__((sda));
-extern int backdrop_mesh_effect_texture_index_gp __asm__("D_L06_00162064") __attribute__((sda));
-extern int backdrop_mesh_blend_fixed_alpha_gp __asm__("D_L06_00162068") __attribute__((sda));
 extern unsigned int D_L06_0016206C __attribute__((sda));
-extern float backdrop_mesh_vertex_position_scale_gp __asm__("D_L06_00162074") __attribute__((sda));
 extern V3003f0 D_L06_001F2EB0[];
 extern I3003f0 D_L06_001F34B0[];
 extern UV3003f0 D_L06_001F38B0[];
@@ -6819,11 +6807,8 @@ extern void normalize_vector_xyz_302578(void *, void *, float) __asm__("FUN_001f
 extern void add_vector_xyz_302578(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
-extern float shuttle_second_stop_ride_scale_multiplier_gp __asm__("D_L06_001620F4") __attribute__((sda));
 extern float D_L06_001620F8 __attribute__((sda));
 extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attribute__((sda));
-extern int class_076a_moby_spawn_requested_gp __asm__("D_L06_00162104") __attribute__((sda));
-extern int class_076a_moby_rate_input_frames_gp __asm__("D_L06_00162108") __attribute__((sda));
 extern int D_L06_0016210C __attribute__((sda));
 extern int D_L06_00162110 __attribute__((sda));
 extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
@@ -7361,20 +7346,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
 extern float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") __attribute__((sda));
-extern int shuttle_breakup_particle_timing_random_span_frames_gp __asm__("D_L06_00162160") __attribute__((sda));
-extern int shuttle_breakup_particle_timing_base_a_frames_gp __asm__("D_L06_00162164") __attribute__((sda));
-extern int shuttle_breakup_particle_timing_base_b_frames_gp __asm__("D_L06_00162168") __attribute__((sda));
-extern float shuttle_breakup_particle_timing_variation_fraction_gp __asm__("D_L06_0016216C") __attribute__((sda));
-extern float shuttle_breakup_particle_velocity_w_random_bound_a_gp __asm__("D_L06_00162170") __attribute__((sda));
-extern float shuttle_breakup_particle_velocity_w_random_bound_b_gp __asm__("D_L06_00162174") __attribute__((sda));
-extern float shuttle_breakup_particle_acceleration_w_random_bound_a_gp __asm__("D_L06_00162178") __attribute__((sda));
-extern float shuttle_breakup_particle_acceleration_w_random_bound_b_gp __asm__("D_L06_0016217C") __attribute__((sda));
-extern int shuttle_breakup_particle_first_color_blend_a_gp __asm__("D_L06_00162180") __attribute__((sda));
-extern int shuttle_breakup_particle_first_color_blend_b_gp __asm__("D_L06_00162184") __attribute__((sda));
-extern int shuttle_breakup_particle_second_color_blend_a_gp __asm__("D_L06_00162188") __attribute__((sda));
-extern int shuttle_breakup_particle_second_color_blend_b_gp __asm__("D_L06_0016218C") __attribute__((sda));
 extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
-extern int shuttle_breakup_particle_table_index_and_flags_gp __asm__("D_L06_00162194") __attribute__((sda));
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void clear_vector_03b68(void *) __asm__("FUN_001f99f8");
@@ -7769,7 +7741,6 @@ typedef struct {
 extern char D_0013E550[];
 extern float D_L06_00167540[];
 extern float D_0015ED6C;
-extern float vector_stream_increment_random_scale_bound_gp __asm__("D_L06_00162200") __attribute__((sda));
 extern float D_L06_001FE890[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_vec_dist(void *, void *);
@@ -7779,18 +7750,7 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern float D_L06_001621F8 __attribute__((sda));
-extern float vector_stream_phase_rate_gp __asm__("D_L06_001621FC") __attribute__((sda));
-extern float vector_stream_x_extent_gp __asm__("D_L06_00162204") __attribute__((sda));
 extern float D_L06_00162208 __attribute__((sda));
-extern float vector_stream_moby_scale_multiplier_gp __asm__("D_L06_00162210") __attribute__((sda));
-extern int vector_stream_burst_color_blend_a_gp __asm__("D_L06_00162214") __attribute__((sda));
-extern int vector_stream_burst_color_blend_b_gp __asm__("D_L06_00162218") __attribute__((sda));
-extern float vector_stream_burst_min_particle_scale_gp __asm__("D_L06_0016221C") __attribute__((sda));
-extern float vector_stream_burst_max_particle_scale_gp __asm__("D_L06_00162220") __attribute__((sda));
-extern int vector_stream_burst_min_lifetime_frames_gp __asm__("D_L06_00162224") __attribute__((sda));
-extern int vector_stream_burst_max_lifetime_frames_gp __asm__("D_L06_00162228") __attribute__((sda));
-extern float vector_stream_burst_velocity_random_scale_bound_a_gp __asm__("D_L06_0016222C") __attribute__((sda));
-extern float vector_stream_burst_velocity_random_scale_bound_b_gp __asm__("D_L06_00162230") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);

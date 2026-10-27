@@ -83,13 +83,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern float burst_spark_vertical_vector_z_scale_gp __asm__("D_L10_00161F68") __attribute__((sda));
-extern float burst_spark_random_vector_z_bias_scale_gp __asm__("D_L10_00161F6C") __attribute__((sda));
-extern float burst_spark_random_vector_radius_scale_gp __asm__("D_L10_00161F70") __attribute__((sda));
-extern float burst_spark_vertical_vector_fourth_component_min_gp __asm__("D_L10_00161F74") __attribute__((sda));
-extern float burst_spark_vertical_vector_fourth_component_max_gp __asm__("D_L10_00161F78") __attribute__((sda));
-extern float burst_spark_random_vector_fourth_component_min_gp __asm__("D_L10_00161F7C") __attribute__((sda));
-extern float burst_spark_random_vector_fourth_component_max_gp __asm__("D_L10_00161F80") __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/vendor/002ea1f0_globals.h"
 #include "rnc/overlay/l10/gameplay/vendor/002ea1f0_globals.h"
 extern int burst_spark_base_frame_count_gp __asm__("D_L10_00161F84") __attribute__((sda));
 extern int burst_spark_base_second_frame_count_gp __asm__("D_L10_00161F88") __attribute__((sda));

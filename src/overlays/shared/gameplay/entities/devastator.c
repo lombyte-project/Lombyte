@@ -1855,7 +1855,6 @@ void blaster_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B69C0), where it is exact; names translated to the US level program. */
 
-extern int visibomb_render_override_active __asm__("D_L00_0015F30C");
 extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444")
     __attribute__((section(".sdata")));
 extern float D_L00_0015F448;
@@ -2244,7 +2243,6 @@ extern void send_blast_hits_2b6140(void *, void *, void *, int, int, int, int, i
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));
-extern float visibomb_missile_speed_voice_control_scale_gp __asm__("D_L00_00161498") __attribute__((sda));
 extern float visibomb_missile_max_speed_gp __asm__("D_L00_001614A0") __attribute__((sda));
 extern float visibomb_missile_speed_target_blend_factor_gp __asm__("D_L00_001614A4") __attribute__((sda));
 extern float visibomb_missile_speed_blend_factor_gp __asm__("D_L00_001614A8") __attribute__((sda));

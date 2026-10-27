@@ -33,4 +33,12 @@ extern float particle_trio_moby_c0_offset_scale __asm__("D_L14_00161FD4");
 extern float particle_trio_moby_e0_offset_scale __asm__("D_L14_00161FD8");
 extern int particle_pair_color __asm__("D_L14_00161FE4");
 
+/* Additional scalar data read by this unit. */
+extern int plasmabot_beam_cooldown_frames __asm__("D_L14_001614E0");
+extern f32 plasmabot_nozzle_bone_x_offset_gp __asm__("D_L14_001614A8") __attribute__((sda));
+extern f32 plasmabot_beam_bone_x_offset_gp __asm__("D_L14_001614B0") __attribute__((sda));
+extern f32 plasmabot_beam_endpoint_bone_y_offset_gp __asm__("D_L14_001614B4") __attribute__((sda));
+extern f32 plasmabot_beam_bone_z_offset_gp __asm__("D_L14_001614B8") __attribute__((sda));
+extern float floating_mine_glow_phase_step_gp __asm__("D_L14_00162000") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_PLASMABOT_GLOBALS_H */

@@ -158,26 +158,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
-    enum {
-        HERO_STATE_JUMP_WITH_BUFFERED_REPEAT = 17,
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 53,
-        HERO_STATE_RUN_WITH_GROUNDED_EXIT = 63,
-        HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
-        HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
-        HERO_STATE_ALT_LEDGE_JUMP = 76,
-        HERO_STATE_VEHICLE_MODE_1_LAND = 79,
-        HERO_STATE_VEHICLE_MODE_1_RUN_WITH_PLANAR_SPEED_ANIMATION = 80,
-        HERO_STATE_TWO_STEP_ATTACK_COMBO = 81,
-        HERO_STATE_VEHICLE_MODE_2_RUN = 91,
-        HERO_STATE_VEHICLE_MODE_2_FALL = 92,
-        HERO_STATE_VEHICLE_MODE_2_HURT = 93,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 94,
-        HERO_STATE_THREE_STEP_ATTACK_COMBO = 96,
-        HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT = 97,
-        HERO_STATE_VEHICLE_MODE_2_DYING = 98,
-        HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY = 125
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -540,7 +521,7 @@ void hero_update_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_WITH_MODIFIER_INPUT:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -1073,14 +1054,14 @@ void hero_update_transitions(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_DYING_WITH_POSITION_COPY_TO_MOBY:
+                case HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT:
                     if (hero.sink_surface_z - 0.8f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
                         return;
                     }
                     break;
-                case HERO_STATE_RUN_WITH_GROUNDED_EXIT:
+                case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -2022,7 +2003,7 @@ void hero_update_transitions(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case HERO_STATE_JUMP_WITH_BUFFERED_REPEAT:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:
@@ -2412,7 +2393,7 @@ void hero_update_transitions(void) {
                         set_hero_animation(0, 0, scale_game_frames(0xC));
                     }
                     break;
-                case HERO_STATE_TWO_STEP_ATTACK_COMBO:
+                case HERO_STATE_VEHICLE_MODE_1_ATTACK:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
                         break;
@@ -2616,7 +2597,7 @@ void hero_update_transitions(void) {
                     hero_set_state(0x43, 1);
                     break;
                 case HERO_STATE_VEHICLE_MODE_1_RUN:
-                case HERO_STATE_VEHICLE_MODE_1_RUN_WITH_PLANAR_SPEED_ANIMATION:
+                case HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN:
                     if (hero.on_slip_ground != 0) {
                         hero_set_state(0x52, 1);
                         break;
@@ -2923,7 +2904,7 @@ void hero_update_transitions(void) {
                     }
                     hero_set_state(0x5A, 1);
                     break;
-                case HERO_STATE_THREE_STEP_ATTACK_COMBO: {
+                case HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION: {
                     float lim = 21.0f;
                     if (((unsigned char *)hero.moby)[0x53] == 0xB) {
                         lim = 25.5f;

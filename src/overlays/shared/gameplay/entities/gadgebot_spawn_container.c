@@ -732,9 +732,7 @@ struct RespawnVars {
 };
 
 extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
-extern f32 frog_glow_phase_rate_degrees_gp __asm__("D_L06_00161C04") __attribute__((sda));
-extern int frog_glow_color_start_gp __asm__("D_L06_00161C08") __attribute__((sda));
-extern int frog_glow_color_end_gp __asm__("D_L06_00161C0C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_globals.h"
 extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -1023,16 +1021,8 @@ extern f32 moby_spark_horizontal_speed_range_start_gp __asm__("D_L06_00161C2C") 
 extern f32 moby_spark_horizontal_speed_range_end_gp __asm__("D_L06_00161C30") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_start_gp __asm__("D_L06_00161C34") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_end_gp __asm__("D_L06_00161C38") __attribute__((sda));
-extern f32 moby_spark_vertical_velocity_correction_scale_gp __asm__("D_L06_00161C3C") __attribute__((sda));
 extern f32 D_L06_00161C40 __attribute__((sda));
 extern f32 D_L06_00161C44 __attribute__((sda));
-extern s32 moby_spark_first_color_range_start_gp __asm__("D_L06_00161C48") __attribute__((sda));
-extern s32 moby_spark_second_color_range_start_gp __asm__("D_L06_00161C4C") __attribute__((sda));
-extern s32 moby_spark_first_color_range_end_gp __asm__("D_L06_00161C50") __attribute__((sda));
-extern s32 moby_spark_second_color_range_end_gp __asm__("D_L06_00161C54") __attribute__((sda));
-extern s32 moby_spark_first_frame_count_base_gp __asm__("D_L06_00161C58") __attribute__((sda));
-extern s32 moby_spark_second_frame_count_base_gp __asm__("D_L06_00161C5C") __attribute__((sda));
-extern s32 moby_spark_third_frame_count_base_gp __asm__("D_L06_00161C60") __attribute__((sda));
 extern f32 moby_spark_push_scale_range_end_gp __asm__("D_L06_00161C64") __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1391,7 +1381,6 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern float gadgebot_position_snapshot_z_offset_gp __asm__("D_L06_00161CE0") __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -2886,13 +2875,9 @@ extern char D_0013F3D0[];
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern float D_0015ED6C;
-extern float rotation_group_angular_deceleration_degrees_gp __asm__("D_L06_00161D3C") __attribute__((sda));
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
-extern float rotation_group_angular_velocity_adjustment_degrees_gp __asm__("D_L06_00161D38") __attribute__((sda));
-extern float rotation_group_max_angular_speed_degrees_gp __asm__("D_L06_00161D40") __attribute__((sda));
-extern float rotation_group_fallback_proximity_trigger_inhibit_gp __asm__("D_L06_00161D44") __attribute__((sda));
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3110,7 +3095,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
 extern int energy_sphere_holder_beam_color_start_gp __asm__("D_L06_00161E58") __attribute__((sda));
 extern int energy_sphere_holder_beam_color_end_gp __asm__("D_L06_00161E5C") __attribute__((sda));
-extern int energy_sphere_holder_beam_particle_variant_flag_gp __asm__("D_L06_00161E60") __attribute__((sda));
 extern int energy_sphere_holder_beam_texture_index_gp __asm__("D_L06_00161E64") __attribute__((sda));
 extern int energy_sphere_holder_spark_color_gp __asm__("D_L06_00161E68") __attribute__((sda));
 extern float energy_sphere_holder_spark_size_scale_gp __asm__("D_L06_00161E6C") __attribute__((sda));

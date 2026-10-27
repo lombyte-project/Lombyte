@@ -1496,10 +1496,7 @@ typedef struct {
 } Mob577Target;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern f32 peckbot_nonfatal_knockback_vertical_speed_gp __asm__("D_L01_00161A60") __attribute__((sda));
-extern f32 peckbot_nonfatal_knockback_horizontal_speed_gp __asm__("D_L01_00161A64") __attribute__((sda));
-extern f32 peckbot_home_knockback_speed_gp __asm__("D_L01_00161A68") __attribute__((sda));
-extern f32 peckbot_home_knockback_acceleration_gp __asm__("D_L01_00161A6C") __attribute__((sda));
+#include "rnc/overlay/l01/gameplay/entities/birdbot_globals.h"
 s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;

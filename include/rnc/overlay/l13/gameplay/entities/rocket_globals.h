@@ -16,4 +16,27 @@ extern int gemlik_pool_tile_count __asm__("D_L13_001612D8");
 extern float moby_spark_first_batch_spread_degrees __asm__("D_L13_00161F50");
 extern float moby_spark_second_batch_spread_degrees __asm__("D_L13_00161F54");
 
+/* Additional scalar data read by this unit. */
+extern f32 blarg_space_commando_stun_horizontal_knockback_speed __asm__("D_L13_00161E60") __attribute__((sda));
+extern f32 blarg_space_commando_stun_vertical_knockback_speed __asm__("D_L13_00161E64") __attribute__((sda));
+extern f32 blarg_space_commando_dying_horizontal_knockback_speed __asm__("D_L13_00161E68") __attribute__((sda));
+extern f32 blarg_space_commando_dying_vertical_knockback_speed __asm__("D_L13_00161E6C") __attribute__((sda));
+extern float moby_spark_first_batch_frame_count_base_gp __asm__("D_L13_00161F18") __attribute__((sda));
+extern float moby_spark_first_batch_second_frame_count_base_gp __asm__("D_L13_00161F1C") __attribute__((sda));
+extern float moby_spark_first_batch_third_frame_count_base_gp __asm__("D_L13_00161F20") __attribute__((sda));
+extern float moby_spark_first_batch_horizontal_acceleration_gp __asm__("D_L13_00161F24") __attribute__((sda));
+extern float moby_spark_first_batch_vertical_acceleration_base_gp __asm__("D_L13_00161F28") __attribute__((sda));
+extern float moby_spark_first_batch_vertical_velocity_base_gp __asm__("D_L13_00161F30") __attribute__((sda));
+extern float moby_spark_second_batch_frame_count_base_gp __asm__("D_L13_00161F34") __attribute__((sda));
+extern float moby_spark_second_batch_second_frame_count_base_gp __asm__("D_L13_00161F38") __attribute__((sda));
+extern float moby_spark_second_batch_third_frame_count_base_gp __asm__("D_L13_00161F3C") __attribute__((sda));
+extern float moby_spark_second_batch_vertical_velocity_base_gp __asm__("D_L13_00161F44") __attribute__((sda));
+extern float moby_spark_second_batch_horizontal_acceleration_gp __asm__("D_L13_00161F48") __attribute__((sda));
+extern float moby_spark_second_batch_vertical_acceleration_base_gp __asm__("D_L13_00161F4C") __attribute__((sda));
+extern float moby_spark_second_batch_discarded_random_bound_gp __asm__("D_L13_00161F58") __attribute__((sda));
+extern float moby_spark_first_batch_discarded_velocity_w_initializer_gp __asm__("D_L13_00161F5C") __attribute__((sda));
+extern float moby_spark_first_batch_acceleration_w_initializer_gp __asm__("D_L13_00161F60") __attribute__((sda));
+extern float moby_spark_second_batch_discarded_velocity_w_initializer_gp __asm__("D_L13_00161F64") __attribute__((sda));
+extern float moby_spark_second_batch_acceleration_w_initializer_gp __asm__("D_L13_00161F68") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L13_GAMEPLAY_ENTITIES_ROCKET_GLOBALS_H */

@@ -150,11 +150,10 @@ void update_ambience_target_cycle(void) {
         break;
     }
 }
-extern int fetch_add_accumulator __asm__("D_L00_00161390");
+#include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
 extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
-extern int configured_reciprocal_denominator_frames __asm__("D_L00_00161370") __attribute__((sda));
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
@@ -552,9 +551,6 @@ f32 FUN_001fa688_2a57a8(f32, f32) __asm__("FUN_001fa688");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
-extern f32 vendor_color_pulse_phase __asm__("D_L00_001613A4") __attribute__((sda));
-extern f32 vendor_manipulator_rotation_phase __asm__("D_L00_0016139C") __attribute__((sda));
-extern f32 vendor_manipulator_counter_rotation_phase __asm__("D_L00_001613A0") __attribute__((sda));
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *vendor_moby) {
     enum {

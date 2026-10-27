@@ -84,44 +84,8 @@ extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 extern char D_L15_0017C520[];
 extern char D_L15_0017C560[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL = 0xD,
-        HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE = 0xF,
-        HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP = 0x12,
-        HERO_STATE_UNCONDITIONAL_BASE_ANIMATION_ENTRY = 0x1D,
-        HERO_STATE_RESTORE_LOOK_ANIMATION_IF_NEEDED = 0x1E,
-        HERO_STATE_RESTORE_BASE_ANIMATION = 0x1F,
-        HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION = 0x21,
-        HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE = 0x26,
-        HERO_STATE_ITEM_RELEASE_CONTROL_BASE_ANIMATION_ENTRY = 0x27,
-        HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED = 0x2E,
-        HERO_STATE_GROUND_CONTACT_REACTION = 0x31,
-        HERO_STATE_CONDITIONAL_BASE_ANIMATION_ENTRY = 0x32,
-        HERO_STATE_SWIM_WITH_PREDECESSOR_ADJUSTED_ANIMATION_BLEND = 0x35,
-        HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION = 0x3B,
-        HERO_STATE_SHARED_GROUND_RUN_ENTRY = 0x3F,
-        HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY = 0x42,
-        HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE = 0x51,
-        HERO_STATE_VEHICLE_MODE_3_ANIMATION_WITH_QUEUED_SEQUENCE = 0x59,
-        HERO_STATE_GROUND_MOVE_WITH_MOTION_DERIVED_SPEED = 0x5B,
-        HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION = 0x5C,
-        HERO_STATE_RECOIL_WITH_INVULNERABILITY = 0x5D,
-        HERO_STATE_THREE_STAGE_ATTACK = 0x60,
-        HERO_STATE_ATTACK_WITH_FIXED_ENTRY_ANIMATION = 0x61,
-        HERO_STATE_TERMINAL_ENTRY_WITH_COPIED_MOTION = 0x62,
-        HERO_STATE_CANCEL_ITEM_AND_ENTER_EXIT_CONTROL = 0x63,
-        HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION = 0x64,
-        HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION = 0x65,
-        HERO_STATE_IDLE_WITH_CLEARED_MOTION = 0x67,
-        HERO_STATE_HEIGHT_TRIGGERED_STOP = 0x68,
-        HERO_STATE_HEIGHT_ADJUSTED_JUMP = 0x69,
-        HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION = 0x72,
-        HERO_STATE_MATERIAL_OR_FATAL_HEIGHT_REACTION = 0x7B,
-        HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL = 0x81
-    };
-    enum {
-        HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING = 0x23
-    };
+
+
     int old2088;
     char *moby;
     int old20A7;
@@ -203,7 +167,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_IDLE_WITH_CLEARED_MOTION: {
+    case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -261,7 +225,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_SWIM_WITH_PREDECESSOR_ADJUSTED_ANIMATION_BLEND: {
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -493,7 +457,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case HERO_STATE_GROUND_MOVE_WITH_DISPLACEMENT_SPEED: {
+    case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -505,7 +469,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case HERO_STATE_SHARED_GROUND_RUN_ENTRY:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -567,7 +531,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GROUND_MOVE_WITH_OPTIONAL_ITEM_CANCELLATION: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -588,7 +552,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GROUND_CONTACT_REACTION: {
+    case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
         p->unk2284 = 3;
@@ -706,7 +670,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_TARGET_APPROACH_WITH_SAVED_DISTANCE: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -897,7 +861,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_LANDING_ANIMATION_WITH_GROUND_CONTROL: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         struct Hero *p = &hero;
         int animation_blend_selector = -2;
         p->state.control_mode = 1;
@@ -935,10 +899,10 @@ int hero_set_state(int a, int b) {
     case 0xC:
     case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_TABLE:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case HERO_STATE_WATER_DEPTH_ADJUSTED_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
@@ -946,7 +910,7 @@ int hero_set_state(int a, int b) {
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case HERO_STATE_HEIGHT_ADJUSTED_JUMP: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
@@ -1334,8 +1298,8 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING:
-    case HERO_STATE_ATTACK_RESET_WITHOUT_ANIMATION_CHANGE: {
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1476,7 +1440,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case HERO_STATE_ATTACK_WITH_OPTIONAL_TARGET_HEADING: {
+        case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
@@ -1492,7 +1456,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_ATTACK_STAGE_SELECTED_HERO_AND_WRENCH_ANIMATION: {
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1548,7 +1512,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_HEIGHT_TRIGGERED_STOP: {
+    case HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN: {
         struct Hero *p = &hero;
         if (p->state.prev == 0x69 ||
             (p->state.prev2 == 0x69 && p->state.prev_control_mode != 0 &&
@@ -1571,7 +1535,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_MATERIAL_OR_FATAL_HEIGHT_REACTION: {
+    case HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x19;
         p->unk2284 = 0;
@@ -1592,7 +1556,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case HERO_STATE_THREE_STAGE_ATTACK: {
+    case HERO_STATE_VEHICLE_MODE_2_REPEATABLE_SQUARE_ACTION: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
@@ -1613,7 +1577,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_ATTACK_WITH_FIXED_ENTRY_ANIMATION: {
+    case HERO_STATE_VEHICLE_MODE_2_COOLDOWN_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unk2284 = 0;
@@ -1629,7 +1593,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(8, 0, (float)scale_game_frames(8));
         break;
     }
-    case HERO_STATE_FALL_WITH_HEIGHT_SELECTED_ANIMATION: {
+    case HERO_STATE_VEHICLE_MODE_2_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1645,7 +1609,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_GROUND_MOVE_WITH_MOTION_DERIVED_SPEED: {
+    case HERO_STATE_VEHICLE_MODE_2_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -1655,7 +1619,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(3, 0x12, (float)scale_game_frames(8));
         break;
     }
-    case HERO_STATE_TERMINAL_ENTRY_WITH_COPIED_MOTION: {
+    case HERO_STATE_VEHICLE_MODE_2_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x14;
         p->unk2284 = 0;
@@ -1664,7 +1628,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(7, 0, (float)scale_game_frames(0xC));
         break;
     }
-    case HERO_STATE_RECOIL_WITH_INVULNERABILITY: {
+    case HERO_STATE_VEHICLE_MODE_2_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = 7;
         p->unk2284 = 0;
@@ -1687,7 +1651,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xE));
         break;
     }
-    case HERO_STATE_VEHICLE_MODE_3_ANIMATION_WITH_QUEUED_SEQUENCE: {
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1760,7 +1724,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_UPWARD_RECOIL_WITH_INVULNERABILITY: {
+    case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xF;
         p->unk2284 = 0;
@@ -1778,7 +1742,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case HERO_STATE_UNCONDITIONAL_BASE_ANIMATION_ENTRY: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1786,7 +1750,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_RESTORE_LOOK_ANIMATION_IF_NEEDED: {
+    case HERO_STATE_LOOK_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
@@ -1796,14 +1760,14 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_RESTORE_BASE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_CANCEL_ITEM_AND_RESTORE_BASE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1812,14 +1776,14 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_ITEM_RELEASE_CONTROL_BASE_ANIMATION_ENTRY: {
+    case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_CONDITIONAL_BASE_ANIMATION_ENTRY: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1841,7 +1805,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case HERO_STATE_SYNCHRONIZED_HERO_AND_WRENCH_ANIMATION: {
+    case HERO_STATE_CRANK: {
         struct Hero *p = &hero;
         char *m;
         int n;
@@ -1855,8 +1819,8 @@ int hero_set_state(int a, int b) {
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
-    case HERO_STATE_CANCEL_ITEM_AND_ENTER_EXIT_CONTROL:
-    case HERO_STATE_TERMINAL_MODE_EXIT_WITH_ITEM_CANCELLATION: {
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;

@@ -39,7 +39,7 @@ extern HeroTableEntry70 D_L06_0017A010[];
 extern S17AF00 D_L06_0017AE00;
 extern S17C638 D_L06_0017C538;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float death_fall_trigger_z __asm__("D_L06_0015F638");
+#include "rnc/overlay/l06/gameplay/hero/0023b440_globals.h"
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -61,7 +61,6 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-extern int landing_run_animation_start_frame __asm__("D_L06_0015F6DC");
 extern int D_L06_0016CF00 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -134,22 +133,7 @@ extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section
 void update_hero_state_machine(void) __asm__("FUN_L06_0023b440");
 
 void update_hero_state_machine(void) {
-    enum {
-        HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT = 32,
-        HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY = 34,
-        HERO_STATE_REQUIRED_ITEM_EQUIPPED_WAIT = 36,
-        HERO_STATE_TIMED_ITEM_RELEASE_RECOVERY = 37,
-        HERO_STATE_ITEM_RELEASE_RECOVERY = 38,
-        HERO_STATE_DELAYED_ITEM_RELEASE_FALL_TRANSITION = 44,
-        HERO_STATE_VEHICLE_MODE_1_JUMP = 73,
-        HERO_STATE_ALT_LEDGE_HANG_ENTRY = 74,
-        HERO_STATE_VEHICLE_MODE_1_LEDGE_JUMP = 76,
-        HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT = 79,
-        HERO_STATE_VEHICLE_MODE_1_SPEED_SCALED_RUN = 80,
-        HERO_STATE_VEHICLE_MODE_1_ATTACK = 81,
-        HERO_STATE_ANIMATION_COMPLETION_RESPAWN_WAIT = 98,
-        HERO_STATE_RESPAWN_ON_DESCENT_OR_TIMEOUT = 125
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -486,7 +470,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case HERO_STATE_ANIMATION_COMPLETION_RESPAWN_WAIT:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -782,7 +766,7 @@ void update_hero_state_machine(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_RESPAWN_ON_DESCENT_OR_TIMEOUT:
+                case HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT:
                     if (hero.sink_surface_z - 0.8f > hero.motion.pos.f[2] ||
                         hero.state_timer > scale_game_frames(0x96)) {
                         hero_respawn();
@@ -871,12 +855,12 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                     }
                     break;
-                case HERO_STATE_REQUIRED_ITEM_EQUIPPED_WAIT:
+                case HERO_STATE_GRAPPLE_TARGET_ENTRY:
                     if (hero.items[0].item_id != 0xC) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     break;
-                case HERO_STATE_TIMED_ITEM_RELEASE_RECOVERY:
+                case HERO_STATE_APPROACH_TARGET_MOBY:
                     adjust_hero_animation_speed_for_target_frame(10.0f, hero.target_arrival_frames, 0.5f, -1.0f);
                     if ((float)scale_game_frames(0x16) > hero.target_arrival_frames &&
                         (float)scale_game_frames(0x1E) > hero.target_arrival_frames) {
@@ -916,7 +900,7 @@ void update_hero_state_machine(void) {
                     hero.stickless_decel = frame_time_sq * 42.0f;
                     hero.fall_state_gravity = frame_time_sq * 29.0f;
                     break;
-                case HERO_STATE_ITEM_RELEASE_RECOVERY:
+                case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -931,7 +915,7 @@ void update_hero_state_machine(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case HERO_STATE_DELAYED_ITEM_RELEASE_FALL_TRANSITION:
+                case HERO_STATE_GRAPPLE_SWING_ENTRY:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -944,7 +928,7 @@ void update_hero_state_machine(void) {
                         hero.fall_state_gravity = frame_time_sq * 27.0f;
                     }
                     break;
-                case HERO_STATE_TRAJECTORY_TIMED_ANIMATION_RECOVERY:
+                case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY:
                     if (hero.state_timer < scale_game_frames(0xC) &&
                         (hero.state.prev2 != 0x10 ||
                          (hero.state.prev != 8 && hero.state.prev != 6)) &&
@@ -2065,7 +2049,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_VEHICLE_MODE_1_JUMP:
-                case HERO_STATE_VEHICLE_MODE_1_LEDGE_JUMP:
+                case HERO_STATE_ALT_LEDGE_JUMP:
                     if (!(hero.state_timer > hero.takeoff_frame)) {
                         break;
                     }
@@ -2163,7 +2147,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     break;
-                case HERO_STATE_VEHICLE_MODE_1_JUMP_HOLD_LANDING_WAIT:
+                case HERO_STATE_VEHICLE_MODE_1_LAND:
                     if (hero.state_timer > scale_game_frames(0x1E) && !(controller_state.held & 0x40)) {
                         hero_set_state(0x45, 1);
                         break;
@@ -2539,7 +2523,7 @@ void update_hero_state_machine(void) {
                     }
                     D_L06_0016CF00 = 0;
                     break;
-                case HERO_STATE_HELD_ITEM_ANIMATION_FRAME_WAIT:
+                case HERO_STATE_HELD_ITEM_ATTACK:
                     if (((unsigned char *)hero.items[0].moby) != 0 && hero.anim_changing == 0 && hero.anim_frame > 20.0f) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                     }

@@ -30,7 +30,7 @@ typedef struct {
 } EnvironmentCameraState;
 
 extern s32 ship_substate[] __asm__("D_0013E050");
-extern s32 environment_mapping_uv_refresh_state __asm__("D_001604A4") __attribute__((sda));
+#include "rnc/rendering/render_environment_mapped_object_globals.h"
 #include "rnc/rendering/render_environment_mapped_object_globals.h"
 extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));

@@ -317,9 +317,7 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L16_00214598");
 
 void update_hero_motion_for_current_state(void) {
-    enum {
-        HERO_STATE_HOVERBOARD_RACE_MOVE = 0x6B
-    };
+
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -1013,7 +1011,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case HERO_STATE_HOVERBOARD_RACE_MOVE:
+    case HERO_STATE_HOVERBOARD_RIDE:
     case 0x6C: {
         s32 c;
         s32 n;

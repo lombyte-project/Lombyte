@@ -79,10 +79,7 @@ extern void clear_vector(void *);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern char D_L02_0017C520[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER = 0x11,
-        HERO_STATE_GROUND_SPEED_ANIMATED_RUN = 0x3F
-    };
+
     int old2088;
     char *moby;
     int old20A7;
@@ -270,7 +267,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case HERO_STATE_GROUND_SPEED_ANIMATED_RUN:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -704,7 +701,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER:
+    case HERO_STATE_REPEATABLE_JUMP:
     case 0x12:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
@@ -1799,7 +1796,7 @@ extern HeroTableEntry70 D_L02_00179E90[];
 extern S17AD00 D_L02_0017AC80;
 extern S17C438 D_L02_0017C3B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fatal_fall_height_threshold __asm__("D_L02_0015F638");
+#include "rnc/overlay/l02/gameplay/hero/hero_set_state_globals.h"
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1817,7 +1814,6 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
-extern int item_selector_hud_inhibit __asm__("D_L02_0015F594") __attribute__((sda));
 extern int D_L02_0016CD80 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -1881,11 +1877,7 @@ extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((sda));
 void update_hero_state_transitions(void) __asm__("FUN_L02_00230988");
 
 void update_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER = 17,
-        HERO_STATE_GROUND_SPEED_ANIMATED_RUN = 63,
-        HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETION = 98
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -2201,7 +2193,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case HERO_STATE_RESPAWN_ON_ANIMATION_COMPLETION:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -2513,7 +2505,7 @@ void update_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case HERO_STATE_GROUND_SPEED_ANIMATED_RUN:
+                case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -3105,7 +3097,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DOUBLE_JUMP:
                 case 15:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case HERO_STATE_JUMP_WITH_BUFFERED_RETRIGGER:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case 18:
                 case HERO_STATE_LEDGE_JUMP:
                 case 60:

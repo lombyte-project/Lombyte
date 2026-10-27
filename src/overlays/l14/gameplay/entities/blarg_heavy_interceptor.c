@@ -444,23 +444,6 @@ extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_00161
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
-extern s32 blarg_heavy_interceptor_target_tracking_duration_frames_gp __asm__("D_L14_001613D0") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_death_fall_duration_frames_gp __asm__("D_L14_001613D4") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_launch_vector_magnitude_range_start_gp __asm__("D_L14_001613D8") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_launch_vector_magnitude_range_end_gp __asm__("D_L14_001613DC") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_launch_vertical_velocity_range_start_gp __asm__("D_L14_001613E0") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_launch_vertical_velocity_range_end_gp __asm__("D_L14_001613E4") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_fall_gravity_gp __asm__("D_L14_001613E8") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp __asm__("D_L14_001613EC") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp __asm__("D_L14_001613F0") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp __asm__("D_L14_001613F4") __attribute__((sda));
-extern f32 blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp __asm__("D_L14_001613F8") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_patrol_glow_red_gp __asm__("D_L14_00161400") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_patrol_glow_green_gp __asm__("D_L14_00161404") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_patrol_glow_blue_gp __asm__("D_L14_00161408") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp __asm__("D_L14_0016140C") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp __asm__("D_L14_00161410") __attribute__((sda));
-extern s32 blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp __asm__("D_L14_00161414") __attribute__((sda));
 extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
@@ -3221,8 +3204,6 @@ struct L14RaceState {
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
-extern s32 level14_racer_path_follow_initial_timer_frames_gp __asm__("D_L14_00161A34") __attribute__((sda));
-extern s32 level14_racer_exit_debris_path_initialization_scale_gp __asm__("D_L14_00161A5C") __attribute__((sda));
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");

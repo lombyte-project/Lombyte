@@ -82,14 +82,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 extern char D_L11_0017C960[];
 extern char D_L11_0017C920[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_PACK_LONG_JUMP_FALLBACK = 0xD,
-        HERO_STATE_PACK_JUMP_FALLBACK = 0xF,
-        HERO_STATE_JUMP_FROM_WATER_SURFACE = 0x12,
-        HERO_STATE_SET_IDLE_ANIMATION = 0x1F,
-        HERO_STATE_SWIM_FROM_CROUCH_INPUT = 0x35,
-        HERO_STATE_CANCEL_ITEM_AND_SET_IDLE_ANIMATION = 0x72
-    };
+
     int old2088;
     char *moby;
     int old20A7;
@@ -256,7 +249,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_SWIM_FROM_CROUCH_INPUT: {
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -936,12 +929,12 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
-    case HERO_STATE_PACK_LONG_JUMP_FALLBACK:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case HERO_STATE_PACK_JUMP_FALLBACK:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
-    case HERO_STATE_JUMP_FROM_WATER_SURFACE:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
@@ -1627,14 +1620,14 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_SET_IDLE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_CANCEL_ITEM_AND_SET_IDLE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;

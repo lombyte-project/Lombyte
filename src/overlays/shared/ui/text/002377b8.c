@@ -942,12 +942,7 @@ extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30")
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
 extern int pal_mode __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
-extern s32 health_hud_base_y_offset __asm__("D_L00_0015F808") __attribute__((sda));
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
-extern s32 health_hud_panel_max_alpha __asm__("D_L00_0015F820") __attribute__((sda));
-extern s32 health_hud_panel_y_offset __asm__("D_L00_0015F810") __attribute__((sda));
-extern s32 health_hud_panel_row_y_step __asm__("D_L00_0015F80C") __attribute__((sda));
-extern s32 health_hud_panel_cap_size __asm__("D_L00_0015F81C") __attribute__((sda));
 extern s32 D_L00_0015F7F8[1] __attribute__((sda));
 extern Pt D_L00_0017E478[];
 extern Pt D_L00_0017E460[];

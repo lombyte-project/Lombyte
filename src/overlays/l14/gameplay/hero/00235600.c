@@ -38,7 +38,7 @@ extern HeroTableEntry70 D_L14_00179F90[];
 extern S17AE80 D_L14_0017AD80;
 extern S17C5B8 D_L14_0017C4B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float hero_fatal_fall_height_threshold __asm__("D_L14_0015F638");
+#include "rnc/overlay/l14/gameplay/hero/00235600_globals.h"
 extern float D_L14_001674D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
@@ -132,9 +132,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 void process_hero_state_transitions(void) __asm__("FUN_L14_00235600");
 
 void process_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_WAIT_FOR_ANIMATION_THEN_RESPAWN = 98
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -465,7 +463,7 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case HERO_STATE_WAIT_FOR_ANIMATION_THEN_RESPAWN:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:

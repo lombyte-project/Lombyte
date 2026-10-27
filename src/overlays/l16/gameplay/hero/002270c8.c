@@ -149,20 +149,11 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-extern int run_animation_start_frame_after_landing __asm__("D_L16_0015F6EC");
+#include "rnc/overlay/l16/gameplay/hero/002270c8_globals.h"
 void update_hero_state_transitions(void) __asm__("FUN_L16_002270c8");
 
 void update_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_DELAYED_ITEM_RELEASE_FALL = 44,
-        HERO_STATE_SWIM_CROUCH_INPUT_VARIANT = 53,
-        HERO_STATE_HOVERBOARD_RIDE = 107,
-        HERO_STATE_HOVERBOARD_HIGH_JUMP = 108,
-        HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT = 109,
-        HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT = 110,
-        HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT = 111,
-        HERO_STATE_SWIM_IDLE_ANIMATION_OR_TIMEOUT_RECOVERY = 118
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -503,7 +494,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_CROUCH_INPUT_VARIANT:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {
@@ -613,7 +604,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x37, 1);
                     }
                     break;
-                case HERO_STATE_SWIM_IDLE_ANIMATION_OR_TIMEOUT_RECOVERY:
+                case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY:
                     if (hero.health.hp <= 0) {
                         if (current_level_index == 0xF || current_level_index == 0x11) {
                             hero_set_state(0x82, 1);
@@ -1152,7 +1143,7 @@ void update_hero_state_transitions(void) {
                     hero_set_state(HERO_STATE_FALL, 1);
                     hero.unk2284 = 0;
                     break;
-                case HERO_STATE_DELAYED_ITEM_RELEASE_FALL:
+                case HERO_STATE_GRAPPLE_SWING_ENTRY:
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
@@ -2342,7 +2333,7 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     break;
-                case HERO_STATE_HOVERBOARD_HIGH_JUMP:
+                case HERO_STATE_HOVERBOARD_ANIMATION_VARIANT:
                     if (((unsigned char *)hero.moby)[0x53] == 0x55 || ((unsigned char *)hero.moby)[0x53] == 0x7F) {
                         hero.board_jump_land_frames =
                             truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero.board_gravity, -1.0f));

@@ -49,4 +49,24 @@ extern float level02_elevator_ring_segment_half_height __asm__("D_L02_00161BF0")
 extern float level02_elevator_ring_segment_angle_degrees __asm__("D_L02_00161C10");
 extern f32 rocket_launcher_projectile_speed __asm__("D_L02_00161C6C");
 
+/* Additional scalar data read by this unit. */
+extern float sand_shark_height_offset_gp __asm__("D_L02_0016191C") __attribute__((sda));
+extern int sand_shark_particle_emission_throttle_input __asm__("D_L02_00160178");
+extern float sand_shark_death_knockback_vertical_speed_gp __asm__("D_L02_00161908") __attribute__((sda));
+extern float sand_shark_death_knockback_horizontal_speed_gp __asm__("D_L02_0016190C") __attribute__((sda));
+extern float sand_shark_death_knockback_gravity_gp __asm__("D_L02_00161914") __attribute__((sda));
+extern float sand_shark_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161918") __attribute__((sda));
+extern float level02_bot_attack_shot_nominal_length_gp __asm__("D_L02_00161A80") __attribute__((sda));
+extern float level02_bot_gravity_gp __asm__("D_L02_00161A84") __attribute__((sda));
+extern float level02_bot_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161A74") __attribute__((sda));
+extern float level02_bot_hit_knockback_horizontal_speed_approach_rate_gp __asm__("D_L02_00161A78") __attribute__((sda));
+extern float level02_bot_knockback_horizontal_target_speed_gp __asm__("D_L02_00161A9C") __attribute__((sda));
+extern float transport_pod_configured_rail_a_height_offset_gp __asm__("D_L02_00161C20") __attribute__((sda));
+extern float transport_pod_configured_rail_b_height_offset_gp __asm__("D_L02_00161C24") __attribute__((sda));
+extern float transport_pod_rail_cycle_enabled_gp __asm__("D_L02_00161C40") __attribute__((sda));
+extern float transport_pod_path_markers_enabled_gp __asm__("D_L02_00161C44") __attribute__((sda));
+extern f32 rocket_launcher_yaw_acceleration_gp __asm__("D_L02_00161C70") __attribute__((sda));
+extern f32 rocket_launcher_max_yaw_speed_gp __asm__("D_L02_00161C74") __attribute__((sda));
+extern f32 rocket_launcher_shot_sound_initial_distance_gp __asm__("D_L02_00161C84") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L02_GAMEPLAY_ENTITIES_SAND_SHARK_GLOBALS_H */

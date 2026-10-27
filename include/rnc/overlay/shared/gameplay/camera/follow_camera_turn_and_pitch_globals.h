@@ -8,4 +8,9 @@
 extern float follow_camera_input_stiffness __asm__("D_L00_00161CAC");
 extern float follow_camera_input_damping __asm__("D_L00_00161CB0");
 
+/* Additional scalar data read by this unit. */
+extern float follow_camera_pitch_input_tracking_step_limit __asm__("D_L00_00161CBC") __attribute__((sda));
+extern float follow_camera_pitch_input_return_step_limit __asm__("D_L00_00161CC0") __attribute__((sda));
+extern float follow_camera_pitch_angle_step_limit __asm__("D_L00_00161CC4") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_CAMERA_FOLLOW_CAMERA_TURN_AND_PITCH_GLOBALS_H */

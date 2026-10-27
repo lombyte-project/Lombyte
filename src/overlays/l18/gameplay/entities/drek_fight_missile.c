@@ -517,7 +517,6 @@ typedef struct {
 } Level18VendorMoby;
 
 extern char *D_L18_001600EC;
-extern float group_transform_debris_scale_multiplier_gp __asm__("D_L18_001622C0") __attribute__((sda));
 extern float D_L18_001677D8 __attribute__((section(".data")));
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -531,16 +530,6 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
 extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") __attribute__((section(".sdata")));
-extern int group_transform_advance_enabled_gp __asm__("D_L18_00162288") __attribute__((sda));
-extern float group_transform_initial_acceleration_gp __asm__("D_L18_00162290") __attribute__((sda));
-extern float group_transform_initial_braking_gp __asm__("D_L18_00162294") __attribute__((sda));
-extern float group_transform_initial_maximum_speed_gp __asm__("D_L18_00162298") __attribute__((sda));
-extern float group_transform_later_acceleration_gp __asm__("D_L18_0016229C") __attribute__((sda));
-extern float group_transform_later_braking_gp __asm__("D_L18_001622A0") __attribute__((sda));
-extern float group_transform_later_maximum_speed_gp __asm__("D_L18_001622A4") __attribute__((sda));
-extern float group_transform_fall_progress_threshold_gp __asm__("D_L18_001622B4") __attribute__((sda));
-extern float group_transform_debris_start_progress_threshold_gp __asm__("D_L18_001622B8") __attribute__((sda));
-extern int group_transform_debris_initial_random_bound_gp __asm__("D_L18_001622BC") __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
@@ -850,10 +839,6 @@ extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
 extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
-extern int glow_moby_blend_minuend_selector_gp __asm__("D_L18_001622E4") __attribute__((sda));
-extern int glow_moby_blend_subtrahend_selector_gp __asm__("D_L18_001622E8") __attribute__((sda));
-extern int glow_moby_blend_factor_selector_gp __asm__("D_L18_001622EC") __attribute__((sda));
-extern int glow_moby_blend_addend_selector_gp __asm__("D_L18_001622F0") __attribute__((sda));
 extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
 extern int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") __attribute__((sda));
 extern f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") __attribute__((sda));
@@ -2724,8 +2709,6 @@ extern float probe_ground_height_5e80(void *, int, float) __asm__("FUN_00213508"
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 
 extern short D_L18_00162330 __attribute__((sda));
-extern int drek_boss_arena_transition_frame_count_gp __asm__("D_L18_00162388") __attribute__((sda));
-extern int drek_boss_arena_phase_reset_requested_gp __asm__("D_L18_0016238C") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void update_drek_boss_damage_and_phase_transitions(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
@@ -3049,12 +3032,6 @@ typedef struct {
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 drek_boss_circling_default_near_hero_speed_gp __asm__("D_L18_00162350") __attribute__((sda));
-extern f32 drek_boss_circling_default_far_hero_speed_gp __asm__("D_L18_00162354") __attribute__((sda));
-extern f32 drek_boss_circling_base_far_hero_distance_gp __asm__("D_L18_00162358") __attribute__((sda));
-extern f32 drek_boss_circling_base_near_hero_distance_gp __asm__("D_L18_0016235C") __attribute__((sda));
-extern f32 drek_boss_circle_and_fire_radius_gp __asm__("D_L18_00162370") __attribute__((sda));
-extern f32 drek_boss_default_circling_radius_gp __asm__("D_L18_00162374") __attribute__((sda));
 
 /* Steers the boss around its node on the far side from the hero (at most 10
  * degrees per step), faster the closer the hero is, and eases it to the
@@ -3309,18 +3286,8 @@ void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *
 }
 extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
-extern float drek_boss_scalar_maximum_speed_gp __asm__("D_L18_001623B0") __attribute__((sda));
 extern short D_L18_001623B4 __attribute__((sda));
-extern float drek_boss_scalar_blend_min_hero_distance_gp __asm__("D_L18_001623B8") __attribute__((sda));
-extern float drek_boss_scalar_blend_max_hero_distance_gp __asm__("D_L18_001623BC") __attribute__((sda));
-extern float drek_boss_first_scalar_far_hero_target_gp __asm__("D_L18_001623C0") __attribute__((sda));
-extern float drek_boss_second_scalar_far_hero_target_gp __asm__("D_L18_001623C4") __attribute__((sda));
-extern float drek_boss_first_scalar_near_hero_target_gp __asm__("D_L18_001623C8") __attribute__((sda));
-extern float drek_boss_first_scalar_gated_follow_target_gp __asm__("D_L18_001623D0") __attribute__((sda));
-extern float drek_boss_second_scalar_gated_follow_target_gp __asm__("D_L18_001623D4") __attribute__((sda));
-extern float drek_boss_first_scalar_near_node_follow_target_gp __asm__("D_L18_001623D8") __attribute__((sda));
 extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
-extern float drek_boss_follow_camera_distance_target_gp __asm__("D_L18_001623E0") __attribute__((sda));
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
@@ -3336,8 +3303,6 @@ extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");
 
-extern float drek_boss_second_scalar_near_hero_target_gp __asm__("D_L18_001623CC") __attribute__((sda));
-extern float drek_boss_follow_camera_height_target_gp __asm__("D_L18_001623E4") __attribute__((sda));
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void update_drek_boss_state_dependent_scalars(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);

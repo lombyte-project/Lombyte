@@ -88,20 +88,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 extern char D_L08_0017C760[];
 extern char D_L08_0017C720[];
 int hero_set_state(int a, int b) {
-    enum {
-        HERO_STATE_JUMP_WITH_BUFFERED_REPEAT = 0x11,
-        HERO_STATE_WATER_SURFACE_JUMP = 0x12,
-        HERO_STATE_VISIBOMB_LAUNCH_IDLE = 0x1D,
-        HERO_STATE_REFRESH_IDLE_ANIMATION = 0x1F,
-        HERO_STATE_CANNON_MOUNT_IDLE = 0x32,
-        HERO_STATE_SWIM_WITH_MODIFIER_INPUT = 0x35,
-        HERO_STATE_VEHICLE_MODE_1_JUMP = 0x49,
-        HERO_STATE_ALT_LEDGE_JUMP = 0x4C,
-        HERO_STATE_VEHICLE_MODE_1_ATTACK = 0x51,
-        HERO_STATE_VEHICLE_MODE_2_JUMP = 0x5E,
-        HERO_STATE_SCENE_ENTRY_IDLE = 0x64,
-        HERO_STATE_IDLE_POSE_CANCEL_ITEM_ANIMATION = 0x72
-    };
+
     int old2088;
     char *moby;
     int old20A7;
@@ -269,7 +256,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_SWIM_WITH_MODIFIER_INPUT: {
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT: {
         struct Hero *p = &hero;
         int n;
         p->state.control_mode = 0x11;
@@ -1012,7 +999,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
-    case HERO_STATE_JUMP_WITH_BUFFERED_REPEAT:
+    case HERO_STATE_REPEATABLE_JUMP:
     case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
@@ -1782,7 +1769,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case HERO_STATE_VISIBOMB_LAUNCH_IDLE: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1800,14 +1787,14 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case HERO_STATE_REFRESH_IDLE_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_IDLE_POSE_CANCEL_ITEM_ANIMATION: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1823,7 +1810,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case HERO_STATE_CANNON_MOUNT_IDLE: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1860,7 +1847,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case 0x63:
-    case HERO_STATE_SCENE_ENTRY_IDLE: {
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;

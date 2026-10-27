@@ -2089,10 +2089,6 @@ extern f32 D_L10_001DA010[];
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-extern int data_processor_linked_effect_blend_minuend_selector_gp __asm__("D_L10_00161C70") __attribute__((sda));
-extern int data_processor_linked_effect_blend_subtrahend_selector_gp __asm__("D_L10_00161C74") __attribute__((sda));
-extern int data_processor_linked_effect_blend_alpha_factor_selector_gp __asm__("D_L10_00161C78") __attribute__((sda));
-extern int data_processor_linked_effect_blend_addend_selector_gp __asm__("D_L10_00161C7C") __attribute__((sda));
 extern int data_processor_linked_effect_color_at_zero_progress_gp __asm__("D_L10_00161C90") __attribute__((sda));
 extern int data_processor_linked_effect_color_at_full_progress_gp __asm__("D_L10_00161C94") __attribute__((sda));
 

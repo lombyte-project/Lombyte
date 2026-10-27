@@ -45,7 +45,7 @@ extern S17AB80 D_L01_0017AB00;
 extern S17C2B8 D_L01_0017C238;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fatal_fall_trigger_z __asm__("D_L01_0015F638");
+#include "rnc/overlay/l01/gameplay/hero/00242930_globals.h"
 extern float D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -131,10 +131,7 @@ int r1_repeat_timer __asm__("D_L01_0015F678") = 0;
 void update_hero_state_machine(void) __asm__("FUN_L01_00242930");
 
 void update_hero_state_machine(void) {
-    enum {
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_CROUCH_TRIGGERED_SWIM = 53
-    };
+
     unsigned char *moby;
     int prevSub;
     int prevState;
@@ -463,7 +460,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_CROUCH_TRIGGERED_SWIM:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {

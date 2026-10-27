@@ -38,7 +38,7 @@ extern HeroTableEntry70 D_L12_00179D10[];
 extern S17AB80 D_L12_0017AB00;
 extern S17C2B8 D_L12_0017C238;
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fatal_fall_entry_z __asm__("D_L12_0015F638");
+#include "rnc/overlay/l12/gameplay/hero/002461f0_globals.h"
 extern float D_L12_00167258 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -124,10 +124,7 @@ int r1_repeat_timer __asm__("D_L12_0015F678") = 0;
 void update_hero_state_transitions(void) __asm__("FUN_L12_002461f0");
 
 void update_hero_state_transitions(void) {
-    enum {
-        HERO_STATE_WATER_SURFACE_JUMP = 18,
-        HERO_STATE_SWIM_CROUCH_INPUT = 53
-    };
+
     struct Moby *moby;
     int prevSub;
     int prevState;
@@ -463,7 +460,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_SWIM:
-                case HERO_STATE_SWIM_CROUCH_INPUT:
+                case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
                     if (hero.state.current == 0x33) {
                         hero.anim_speed = hero.ground_speed * 15.0f;
                         if (hero.anim_speed < 0.25f) {

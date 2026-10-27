@@ -21,4 +21,10 @@ extern f32 data_processor_linked_effect_row_uv_phase_step __asm__("D_L10_00161D6
 extern int data_processor_linked_effect_color_at_zero_progress __asm__("D_L10_00161C90");
 extern int data_processor_linked_effect_color_at_full_progress __asm__("D_L10_00161C94");
 
+/* Additional scalar data read by this unit. */
+extern int data_processor_linked_effect_blend_minuend_selector_gp __asm__("D_L10_00161C70") __attribute__((sda));
+extern int data_processor_linked_effect_blend_subtrahend_selector_gp __asm__("D_L10_00161C74") __attribute__((sda));
+extern int data_processor_linked_effect_blend_alpha_factor_selector_gp __asm__("D_L10_00161C78") __attribute__((sda));
+extern int data_processor_linked_effect_blend_addend_selector_gp __asm__("D_L10_00161C7C") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L10_GAMEPLAY_ENTITIES_PLATFORM_GLOBALS_H */

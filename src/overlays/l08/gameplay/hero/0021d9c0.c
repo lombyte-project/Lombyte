@@ -422,15 +422,8 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L08_002284e0");
 
 void update_hero_motion_for_current_state(void) {
-    enum {
-        HERO_STATE_FAST_SWIM = 0x35,
-        HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE = 0x3F
-    };
-    enum {
-        WRENCH_COMBO_PROFILE_SUSTAINED_ADVANCE = 0,
-        WRENCH_COMBO_PROFILE_STAGED_DECELERATING_ADVANCE = 1,
-        WRENCH_COMBO_PROFILE_BRIEF_ADVANCE = 2
-    };
+
+
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -612,7 +605,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case HERO_STATE_SWIM:
     case HERO_STATE_SWIM_IDLE:
-    case HERO_STATE_FAST_SWIM:
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
         } else {
@@ -1420,12 +1413,12 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case WRENCH_COMBO_PROFILE_SUSTAINED_ADVANCE:
+        case HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case WRENCH_COMBO_PROFILE_STAGED_DECELERATING_ADVANCE:
+        case HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1436,7 +1429,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case WRENCH_COMBO_PROFILE_BRIEF_ADVANCE:
+        case HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }

@@ -47,4 +47,21 @@ extern int moby_motion_spark_initial_color_end __asm__("D_L08_00161A78");
 extern int moby_motion_spark_second_color_start __asm__("D_L08_00161A7C");
 extern int moby_motion_spark_second_color_end __asm__("D_L08_00161A80");
 
+/* Additional scalar data read by this unit. */
+extern float bolt_pickup_collision_clearance_distance_gp __asm__("D_L08_0016144C") __attribute__((sda));
+extern int bomber_tank_joint_particle_initial_color_gp __asm__("D_L08_001618D4") __attribute__((sda));
+extern int bomber_tank_joint_particle_second_color_gp __asm__("D_L08_001618D8") __attribute__((sda));
+extern int bomber_tank_joint_particle_duration_frames_range_start_gp __asm__("D_L08_001618EC") __attribute__((sda));
+extern int bomber_tank_joint_particle_second_frame_count_range_start_gp __asm__("D_L08_001618F0") __attribute__((sda));
+extern int bomber_tank_joint_particle_third_frame_count_range_start_gp __asm__("D_L08_001618F4") __attribute__((sda));
+extern float bomber_tank_joint_particle_velocity_w_gp __asm__("D_L08_001618F8") __attribute__((sda));
+extern float bomber_tank_joint_particle_spread_vector_w_gp __asm__("D_L08_001618FC") __attribute__((sda));
+extern float rocket_configured_heading_speed_base_gp __asm__("D_L08_00161A00") __attribute__((sda));
+extern float rocket_guidance_effect_velocity_w_gp __asm__("D_L08_00161A24") __attribute__((sda));
+extern float rocket_guidance_effect_auxiliary_vector_w_gp __asm__("D_L08_00161A28") __attribute__((sda));
+extern int rocket_guidance_effect_frame_count_gp __asm__("D_L08_00161A20") __attribute__((sda));
+extern int rocket_guidance_effect_initial_color_gp __asm__("D_L08_00161A2C") __attribute__((sda));
+extern int rocket_guidance_effect_second_color_gp __asm__("D_L08_00161A30") __attribute__((sda));
+extern float path_following_moby_speed_gp __asm__("D_L08_00161A44") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L08_GAMEPLAY_ENTITIES_BOMB_GLOBALS_H */

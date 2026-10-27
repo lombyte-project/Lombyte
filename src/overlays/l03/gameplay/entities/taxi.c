@@ -362,10 +362,6 @@ typedef struct {
 
 extern f32 mine_layer_lethal_knockback_speed_scale_gp __asm__("D_L03_001618F8") __attribute__((sda));
 extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC") __attribute__((sda));
-extern f32 mine_layer_nonlethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161900") __attribute__((sda));
-extern f32 mine_layer_nonlethal_knockback_vertical_launch_input_gp __asm__("D_L03_00161904") __attribute__((sda));
-extern f32 mine_layer_lethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161908") __attribute__((sda));
-extern f32 mine_layer_lethal_knockback_vertical_launch_input_gp __asm__("D_L03_0016190C") __attribute__((sda));
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern f32 trooper_atan2(f32, f32) __asm__("FUN_001f9e90");

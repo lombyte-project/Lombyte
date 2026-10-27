@@ -2522,9 +2522,6 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         play_entity_sound((int)ultramech_moby, 2.5f, &ultramech_moby->pos, 0x10000, 40.0f, 1.0f, 0, 1, 0);
     }
 }
-extern float ultramech_knockback_gravity_gp __asm__("D_L15_00161B00") __attribute__((sda));
-extern float ultramech_knockback_vertical_speed_gp __asm__("D_L15_00161B04") __attribute__((sda));
-extern float ultramech_knockback_horizontal_speed_gp __asm__("D_L15_00161B08") __attribute__((sda));
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;

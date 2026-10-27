@@ -29,4 +29,13 @@ extern float timed_spark_frame_count_scale_spread __asm__("D_L10_00161FE4");
 extern int timed_spark_timer_reset_min __asm__("D_L10_00161FF8");
 extern int timed_spark_timer_reset_max __asm__("D_L10_00161FFC");
 
+/* Additional scalar data read by this unit. */
+extern float burst_spark_vertical_vector_z_scale_gp __asm__("D_L10_00161F68") __attribute__((sda));
+extern float burst_spark_random_vector_z_bias_scale_gp __asm__("D_L10_00161F6C") __attribute__((sda));
+extern float burst_spark_random_vector_radius_scale_gp __asm__("D_L10_00161F70") __attribute__((sda));
+extern float burst_spark_vertical_vector_fourth_component_min_gp __asm__("D_L10_00161F74") __attribute__((sda));
+extern float burst_spark_vertical_vector_fourth_component_max_gp __asm__("D_L10_00161F78") __attribute__((sda));
+extern float burst_spark_random_vector_fourth_component_min_gp __asm__("D_L10_00161F7C") __attribute__((sda));
+extern float burst_spark_random_vector_fourth_component_max_gp __asm__("D_L10_00161F80") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_L10_GAMEPLAY_VENDOR_002EA1F0_GLOBALS_H */

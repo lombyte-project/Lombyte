@@ -307,11 +307,7 @@ void update_hero_motion_for_current_state(void) {
         ATTACK_RECORD_POINT_4_STRIKE = 1,
         ATTACK_RECORD_POINTS_3_AND_4_STRIKE = 2
     };
-    enum {
-        WRENCH_COMBO_EXTENDED_LUNGE = 0,
-        WRENCH_COMBO_STAGED_LUNGE = 1,
-        WRENCH_COMBO_BRIEF_LUNGE = 2
-    };
+
 
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
@@ -1283,12 +1279,12 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case WRENCH_COMBO_EXTENDED_LUNGE:
+        case HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case WRENCH_COMBO_STAGED_LUNGE:
+        case HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1299,7 +1295,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case WRENCH_COMBO_BRIEF_LUNGE:
+        case HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }

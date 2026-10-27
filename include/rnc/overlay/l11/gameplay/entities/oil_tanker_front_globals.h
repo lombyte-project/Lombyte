@@ -28,4 +28,14 @@ extern float distance_faded_effect_position_y __asm__("D_L11_001625BC");
 extern float distance_faded_effect_position_z __asm__("D_L11_001625C0");
 extern int distance_faded_effect_color_tables_initialized __asm__("D_L11_001625FC");
 
+/* Additional scalar data read by this unit. */
+extern float puffoid_hit_motion_time_squared_scale_gp __asm__("D_L11_001622D0") __attribute__((sda));
+extern float puffoid_hit_knockback_horizontal_scale_gp __asm__("D_L11_001622D8") __attribute__((sda));
+extern float puffoid_death_knockback_horizontal_scale_gp __asm__("D_L11_001622E0") __attribute__((sda));
+extern float oil_tanker_link_spacing_threshold_gp __asm__("D_L11_00162324") __attribute__((sda));
+extern float oil_tanker_spacing_reference_offset_gp __asm__("D_L11_00162328") __attribute__((sda));
+extern s32 oil_tanker_link_marker_cooldown_frames_gp __asm__("D_L11_0016232C") __attribute__((sda));
+extern float layered_effect_bounds_radius __asm__("D_L11_001624F4");
+extern float distance_faded_effect_bounds_radius __asm__("D_L11_001625C4");
+
 #endif /* LOMBYTE_RNC_OVERLAY_L11_GAMEPLAY_ENTITIES_OIL_TANKER_FRONT_GLOBALS_H */

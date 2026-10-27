@@ -563,18 +563,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
 
 int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
-    enum {
-        MOBY_CLASS_RADAR_DISPATCH_BYPASS = 0x189,
-        MOBY_CLASS_RADAR_AND_MARKER_DRAW_BYPASS = 0x18A,
-        MOBY_CLASS_RADAR_AND_SCREEN_MARKER_BYPASS = 0x18B,
-        MOBY_CLASS_RADAR_AND_PROJECTED_MARKER_BYPASS = 0x18C,
-        MOBY_CLASS_RADAR_CONTACT_SUPPRESSED = 0x535,
-        MOBY_CLASS_RADAR_ICON_DRAW_BYPASS = 0x536,
-        MOBY_CLASS_RADAR_ICON_RENDER_BYPASS = 0x537,
-        MOBY_CLASS_SCREEN_AND_RADAR_MARKERS_SUPPRESSED = 0x538,
-        MOBY_CLASS_HUD_CONTACT_DRAW_BYPASS = 0x539,
-        MOBY_CLASS_HUD_CONTACT_RENDER_BYPASS = 0x53A
-    };
+
     float v[4];
     float arrow_target_position_scratch[4];
     float arrow_direction_rotation_matrix[16];
@@ -1172,70 +1161,23 @@ extern float interpolate_value_with_repeated_squaring(int, int, float, float, fl
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-extern float fighter_jet_startup_speed_step_gp __asm__("D_L17_00161FF8") __attribute__((sda));
-extern float fighter_jet_cruise_speed_step_gp __asm__("D_L17_00161FFC") __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_globals.h"
 int D_L17_00162000 = 120;
-extern float fighter_jet_cruise_speed_gp __asm__("D_L17_00162004") __attribute__((sda));
-extern float fighter_jet_boost_speed_limit_gp __asm__("D_L17_00162008") __attribute__((sda));
-extern float fighter_jet_boost_speed_step_gp __asm__("D_L17_0016200C") __attribute__((sda));
-extern float fighter_jet_cruise_speed_return_factor_gp __asm__("D_L17_00162010") __attribute__((sda));
 int D_L17_00162014 = 5;
-extern float fighter_jet_impact_yaw_response_scale_gp __asm__("D_L17_00162018") __attribute__((sda));
-extern float fighter_jet_impact_pitch_response_scale_gp __asm__("D_L17_0016201C") __attribute__((sda));
 extern float D_L17_00162024 __attribute__((sda));
 extern float D_L17_00162028 __attribute__((sda));
 extern float D_L17_0016202C __attribute__((sda));
 extern float D_L17_00162030 __attribute__((sda));
-extern float fighter_jet_camera_base_offset_x_gp __asm__("D_L17_00162034") __attribute__((sda));
-extern float fighter_jet_camera_base_offset_z_gp __asm__("D_L17_00162038") __attribute__((sda));
-extern float fighter_jet_camera_secondary_offset_x_gp __asm__("D_L17_0016203C") __attribute__((sda));
-extern float fighter_jet_camera_secondary_offset_z_gp __asm__("D_L17_00162040") __attribute__((sda));
 extern float D_L17_00162044 __attribute__((sda));
 extern float D_L17_00162048 __attribute__((sda));
-extern float fighter_jet_camera_pitch_bias_gp __asm__("D_L17_0016204C") __attribute__((sda));
 extern float D_L17_0016205C __attribute__((sda));
-extern float fighter_jet_collision_damage_gp __asm__("D_L17_00162060") __attribute__((sda));
 extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
 extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
-extern float fighter_jet_horizontal_steering_error_gain_gp __asm__("D_L17_001620AC") __attribute__((sda));
-extern float fighter_jet_horizontal_steering_velocity_damping_gp __asm__("D_L17_001620B0") __attribute__((sda));
-extern float fighter_jet_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B4") __attribute__((sda));
-extern float fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp __asm__("D_L17_001620B8") __attribute__((sda));
-extern float fighter_jet_vertical_steering_error_gain_gp __asm__("D_L17_001620BC") __attribute__((sda));
-extern float fighter_jet_vertical_steering_velocity_damping_gp __asm__("D_L17_001620C0") __attribute__((sda));
-extern float fighter_jet_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C4") __attribute__((sda));
-extern float fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp __asm__("D_L17_001620C8") __attribute__((sda));
-extern float fighter_jet_roll_error_gain_gp __asm__("D_L17_001620CC") __attribute__((sda));
-extern float fighter_jet_roll_velocity_damping_gp __asm__("D_L17_001620D0") __attribute__((sda));
-extern float fighter_jet_roll_settle_threshold_scale_gp __asm__("D_L17_001620D4") __attribute__((sda));
-extern float fighter_jet_camera_roll_error_gain_gp __asm__("D_L17_001620F0") __attribute__((sda));
-extern float fighter_jet_camera_roll_velocity_damping_gp __asm__("D_L17_001620F4") __attribute__((sda));
-extern float fighter_jet_camera_roll_settle_threshold_scale_gp __asm__("D_L17_001620F8") __attribute__((sda));
-extern float fighter_jet_camera_pitch_error_gain_gp __asm__("D_L17_001620FC") __attribute__((sda));
-extern float fighter_jet_camera_pitch_velocity_damping_gp __asm__("D_L17_00162100") __attribute__((sda));
-extern float fighter_jet_camera_pitch_settle_threshold_scale_gp __asm__("D_L17_00162104") __attribute__((sda));
-extern float fighter_jet_camera_yaw_error_gain_gp __asm__("D_L17_00162108") __attribute__((sda));
-extern float fighter_jet_camera_yaw_velocity_damping_gp __asm__("D_L17_0016210C") __attribute__((sda));
-extern float fighter_jet_camera_yaw_settle_threshold_scale_gp __asm__("D_L17_00162110") __attribute__((sda));
-extern float fighter_jet_camera_offset_x_error_gain_gp __asm__("D_L17_00162114") __attribute__((sda));
-extern float fighter_jet_camera_offset_x_velocity_damping_gp __asm__("D_L17_00162118") __attribute__((sda));
-extern float fighter_jet_camera_offset_x_settle_threshold_scale_gp __asm__("D_L17_0016211C") __attribute__((sda));
-extern float fighter_jet_camera_offset_y_error_gain_gp __asm__("D_L17_00162120") __attribute__((sda));
-extern float fighter_jet_camera_offset_y_velocity_damping_gp __asm__("D_L17_00162124") __attribute__((sda));
-extern float fighter_jet_camera_offset_y_settle_threshold_scale_gp __asm__("D_L17_00162128") __attribute__((sda));
-extern float fighter_jet_camera_offset_z_error_gain_gp __asm__("D_L17_0016212C") __attribute__((sda));
-extern float fighter_jet_camera_offset_z_velocity_damping_gp __asm__("D_L17_00162130") __attribute__((sda));
-extern float fighter_jet_camera_offset_z_settle_threshold_scale_gp __asm__("D_L17_00162134") __attribute__((sda));
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
-extern float fighter_jet_cruise_fov_gp __asm__("D_L17_00162144") __attribute__((sda));
-extern float fighter_jet_boost_fov_gp __asm__("D_L17_00162148") __attribute__((sda));
-extern float fighter_jet_fov_error_gain_gp __asm__("D_L17_0016214C") __attribute__((sda));
-extern float fighter_jet_fov_velocity_damping_gp __asm__("D_L17_00162150") __attribute__((sda));
-extern float fighter_jet_fov_settle_threshold_scale_gp __asm__("D_L17_00162154") __attribute__((sda));
 extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
@@ -1692,7 +1634,6 @@ extern void release_voice_ed(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
 extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float fighter_jet_transition_fade_value __asm__("D_L17_0015F3FC");
 extern int D_L17_0015F608;
 extern char *D_L17_0015F420;
 extern ShipLevelEntry D_L17_0016DA80[];
@@ -3309,7 +3250,6 @@ extern RingPt D_L17_001DC680[];
 T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float ring_ripple_uv_scroll_rate_gp __asm__("D_L17_001622CC") __attribute__((sda));
 extern float D_L17_001DC250[][2];
 extern float D_L17_001DCAB0[][2];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -3325,9 +3265,6 @@ int D_L17_001622B0[2] = {(int)D_L17_001DCD78, 0x80};
 int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
-extern float ring_ripple_radial_phase_distance_scale_gp __asm__("D_L17_001622C0") __attribute__((sda));
-extern float ring_ripple_phase_period_gp __asm__("D_L17_001622C4") __attribute__((sda));
-extern float ring_ripple_z_amplitude_gp __asm__("D_L17_001622C8") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
