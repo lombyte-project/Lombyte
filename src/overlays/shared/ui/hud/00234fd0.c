@@ -123,12 +123,12 @@ extern volatile int D_L00_0015FA7C;
 extern int D_L00_0015FFD8;
 extern volatile int D_L00_0015FFE0;
 extern volatile int D_L00_0015FFE8;
-extern volatile int D_L00_0015F728 __attribute__((sda));
+extern volatile int l00_active_moby_context_selector __asm__("D_L00_0015F728") __attribute__((sda));
 
 void select_moby_context(int state) __asm__("FUN_L00_00235668");
 
 void select_moby_context(int state) {
-    int oldState = D_L00_0015F728;
+    int oldState = l00_active_moby_context_selector;
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
         oldDC = D_L00_0015FFD8;
@@ -141,7 +141,7 @@ void select_moby_context(int state) {
         old78 = D_L00_0015FA78;
         oldE8 = D_L00_0015FFE8;
         old7C = D_L00_0015FA7C;
-        D_L00_0015F728 = oldState ^ 1;
+        l00_active_moby_context_selector = oldState ^ 1;
         *(volatile int *)&D_L00_0015FFD8 = old70;
         D_L00_0015FFDC = old74;
         D_L00_0015FFE0 = old78;
