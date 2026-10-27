@@ -61,12 +61,12 @@ extern int FUN_001f6250(char *, int);
 extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
 extern int D_0015ED84;
 extern char D_L05_0015F860[];
-extern char D_L05_0015F9E0[];
-extern char D_L05_0015F9E8[];
-extern char D_L05_0015F9F0[];
-extern char D_L05_0015F9F8[];
-extern char D_L05_0015FA00[];
-extern char D_L05_0015FA08[];
+extern char hud_race_lap_progress_format[] __asm__("D_L05_0015F9E0");
+extern char hud_race_first_place_format[] __asm__("D_L05_0015F9E8");
+extern char hud_race_second_place_format[] __asm__("D_L05_0015F9F0");
+extern char hud_race_third_place_format[] __asm__("D_L05_0015F9F8");
+extern char hud_race_other_place_format[] __asm__("D_L05_0015FA00");
+extern char hud_race_rank_label_format[] __asm__("D_L05_0015FA08");
 extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
@@ -109,26 +109,26 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     x += measure_text_width_regular(formatted_hud_text, -1);
     count = hero.race_lap + 1;
     if (count > 3) count = 3;
-    sprintf(formatted_hud_text, D_L05_0015F9E0, count);
+    sprintf(formatted_hud_text, hud_race_lap_progress_format, count);
     print_text_with_texture_3(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     {
         int count = hero.race_position;
         x = D_L05_0015F9B0;
         if (count == 1) {
-            sprintf(formatted_hud_text, D_L05_0015F9E8, 1);
+            sprintf(formatted_hud_text, hud_race_first_place_format, 1);
         } else if (count == 2) {
-            sprintf(formatted_hud_text, D_L05_0015F9F0, 2);
+            sprintf(formatted_hud_text, hud_race_second_place_format, 2);
         } else if (count == 3) {
-            sprintf(formatted_hud_text, D_L05_0015F9F8, 3);
+            sprintf(formatted_hud_text, hud_race_third_place_format, 3);
         } else {
-            sprintf(formatted_hud_text, D_L05_0015FA00, count);
+            sprintf(formatted_hud_text, hud_race_other_place_format, count);
         }
     }
     x -= measure_text_width_regular(formatted_hud_text, -1);
     print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
-    sprintf(formatted_hud_text, D_L05_0015FA08, get_help_message_text(0x5240));
+    sprintf(formatted_hud_text, hud_race_rank_label_format, get_help_message_text(0x5240));
     x -= measure_text_width_regular(formatted_hud_text, -1);
     print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
