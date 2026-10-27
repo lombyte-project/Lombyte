@@ -3276,30 +3276,30 @@ f32 FUN_001f9b48(void *, void *);
 void begin_bolt_attraction(O_2df1e0 *, void *, f32, f32) __asm__("FUN_L00_002a7210");
 void try_collect_ammo_pickup(O_2df1e0 *) __asm__("FUN_L00_002c5be8");
 void scatter_moby_from_hazards(O_2df1e0 *p) __asm__("FUN_L00_002df1e0");
-void scatter_moby_from_hazards(O_2df1e0 *p) {
+void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
     s32 i;
-    f32 f;
-    if (p == 0)
+    f32 beam_segment_collection_radius;
+    if (pickup_moby == 0)
         return;
-    if (p->b20 == 0xFE)
+    if (pickup_moby->b20 == 0xFE)
         return;
-    if (p->b20 == 0xFD)
+    if (pickup_moby->b20 == 0xFD)
         return;
     if (random_integer_below(10))
         return;
-    if (!(p->p24 && p->p24->h46 == 0x13) && !is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(p))
+    if (!(pickup_moby->p24 && pickup_moby->p24->h46 == 0x13) && !is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(pickup_moby))
         return;
-    if (!(FUN_001f9b48(p->v10, &hero.motion.pos) < 30.0f))
+    if (!(FUN_001f9b48(pickup_moby->v10, &hero.motion.pos) < 30.0f))
         return;
     for (i = 0; i < 10 && D_L00_001E6008[i] >= 8; i++) {
-        f = i * 0.3f + 0.1f;
-        if (f < 2.0f)
-            f = 2.0f;
-        if (FUN_001f9b48(p->v10, D_L00_001E5F40_2df1e0[i]) < f) {
-            if (p && p->p24 && p->p24->h46 == 0x13) {
-                begin_bolt_attraction(p, hero.moby, 0.0f, 0.0f);
+        beam_segment_collection_radius = i * 0.3f + 0.1f;
+        if (beam_segment_collection_radius < 2.0f)
+            beam_segment_collection_radius = 2.0f;
+        if (FUN_001f9b48(pickup_moby->v10, D_L00_001E5F40_2df1e0[i]) < beam_segment_collection_radius) {
+            if (pickup_moby && pickup_moby->p24 && pickup_moby->p24->h46 == 0x13) {
+                begin_bolt_attraction(pickup_moby, hero.moby, 0.0f, 0.0f);
             } else {
-                try_collect_ammo_pickup(p);
+                try_collect_ammo_pickup(pickup_moby);
             }
         }
     }
