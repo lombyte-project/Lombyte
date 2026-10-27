@@ -50,11 +50,11 @@ extern short D_L01_00161220_d __asm__("D_L01_00161220") __attribute__((sda));
 extern void FUN_L01_00261d78(char *, char *, char *, float);
 extern void func_L01_002B90E8_2B9198(void) __asm__("FUN_L01_002b7f30");
 
-extern short D_L01_00161224 __attribute__((sda));
+extern short pool_wave_step_accumulator __asm__("D_L01_00161224") __attribute__((sda));
 void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
 void pool_flush(char *records_base, int record_count) {
-    if (1.0f - pool_light[8] <= *(float *)&D_L01_00161224) {
-        *(float *)&D_L01_00161224 = pool_light[8];
+    if (1.0f - pool_light[8] <= *(float *)&pool_wave_step_accumulator) {
+        *(float *)&pool_wave_step_accumulator = pool_light[8];
         func_L01_002B90E8_2B9198();
         *(int *)&D_L01_00161220_d = *(int *)&pool_wave_next_source_slot_index;
     } else {
@@ -67,14 +67,14 @@ void pool_flush(char *records_base, int record_count) {
                     FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
                                      current_record + (*(int *)&pool_wave_next_source_slot_index * 0x5C0 + 0x50),
                                      current_record + (*(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50),
-                                     *(float *)&D_L01_00161224);
+                                     *(float *)&pool_wave_step_accumulator);
                 }
                 k--;
                 current_record += 0x1190;
             } while (k != 0);
         }
     }
-    *(float *)&D_L01_00161224 = *(float *)&D_L01_00161224 + pool_light[8];
+    *(float *)&pool_wave_step_accumulator = *(float *)&pool_wave_step_accumulator + pool_light[8];
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
 
