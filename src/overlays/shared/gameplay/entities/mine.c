@@ -1608,11 +1608,11 @@ extern short bomb_spark_secondary_color_start __asm__("D_L00_00161424") __attrib
 extern short bomb_spark_secondary_color_end __asm__("D_L00_00161428") __attribute__((sda));
 extern short bomb_sparks_per_emission __asm__("D_L00_0016142C") __attribute__((sda));
 extern short bomb_spark_texture_selector __asm__("D_L00_00161430") __attribute__((sda));
-extern B910 D_L00_001E98D0;
-extern Colors6_2adb30 D_L00_001E9920;
-extern Colors6_2adb30 D_L00_001E9938;
+extern B910 l00_bomb_camera_blast_parameters __asm__("D_L00_001E98D0");
+extern Colors6_2adb30 l00_bomb_blast_effect_primary_palette __asm__("D_L00_001E9920");
+extern Colors6_2adb30 l00_bomb_blast_effect_secondary_palette __asm__("D_L00_001E9938");
 void bomb_update(BombMoby_2adb30 *bomb_moby) {
-    B910 rec = D_L00_001E98D0;
+    B910 rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
     Vec_2adb30 old;
     Vec_2adb30 blast_velocity;
@@ -1856,8 +1856,8 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     }
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
-                        Colors6_2adb30 c1 = D_L00_001E9920;
-                        Colors6_2adb30 blast_effect_secondary_palette = D_L00_001E9938;
+                        Colors6_2adb30 c1 = l00_bomb_blast_effect_primary_palette;
+                        Colors6_2adb30 blast_effect_secondary_palette = l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           FUN_L00_0025c0e8_2adb30(blast_effect_secondary_palette.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
