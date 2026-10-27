@@ -219,7 +219,7 @@ void update_hero_target_heading(float a, float b, float c) {
 }
 extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
+extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 
@@ -232,7 +232,7 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     transformed_negative_z_vector.q = 0;
     vector_components[2] = -1.0f;
     FUN_001f9d20_214fe8(vector_components, vector_components, (char *)state + 0x40);
-    FUN_L00_0020a1f8_214fe8(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
+    set_second_hero_easing_parameters(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
     limit = 0.43633232f;
     if (state->state.current == 0x3f) limit = 0.29670596f;
     else if (state->state.current == 0x70) limit = 0.08726646f;

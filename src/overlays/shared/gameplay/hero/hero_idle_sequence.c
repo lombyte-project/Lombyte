@@ -2764,7 +2764,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern void FUN_00213ed8_a540(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_L00_0020a1e0_a540(f32, f32) __asm__("FUN_L00_0020a1e0");
-extern void FUN_L00_0020a1e0_a540_0020a1f8(f32, f32) __asm__("FUN_L00_0020a1f8");
+extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 extern void FUN_L00_0020a1e0_a540_0020a228(f32, f32) __asm__("FUN_L00_0020a228");
 extern s32 FUN_L00_00257b90_a540(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 FUN_L00_00257c48_a540(f32, f32) __asm__("FUN_L00_00257c48");
@@ -2800,7 +2800,7 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
         if ((1.0f - G.f25c) * 35.0f * DEG_TO_RAD < pitch_target_radians)
             pitch_target_radians = (1.0f - G.f25c) * 35.0f * DEG_TO_RAD;
         P.f274 = pitch_target_radians;
-        FUN_L00_0020a1e0_a540_0020a1f8(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
+        set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
         P.f114 = P.f274 * 0.7f;
         return;
     }
@@ -2838,7 +2838,7 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
     FUN_L00_0020a1e0_a540_0020a228(G.f1014, G.f1018);
     P.f278 = G.f1008;
     P.f274 = G.f1004;
-    FUN_L00_0020a1e0_a540_0020a1f8(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
+    set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
     P.f118 = P.f278 * 0.52f;
     P.f114 = P.f274 * 0.55f;
 }
