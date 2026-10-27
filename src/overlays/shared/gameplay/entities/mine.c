@@ -197,8 +197,8 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
 extern s32 D_L00_001612D8_gp __asm__("D_L00_001612D8") __attribute__((sda));
-extern short D_L00_001613D0 __attribute__((sda));
-extern short D_L00_001613D4 __attribute__((sda));
+extern short mine_force_burst __asm__("D_L00_001613D0") __attribute__((sda));
+extern short mine_bounce_ramp_duration __asm__("D_L00_001613D4") __attribute__((sda));
 extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *D_L00_001B2080[];
 extern unsigned char *FUN_002141f8_cf(unsigned char *) __asm__("FUN_L00_002603d0");
@@ -341,7 +341,7 @@ void mine_update(M910 *mine_moby) {
             mine_moby->pos.f[2] -= 0.4f;
             q.dir[2] = 1.0f;
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
@@ -725,7 +725,7 @@ void mine_update(M910 *mine_moby) {
                 }
             }
             v->i78 = 0;
-            if (v->i5C < 0 || *(int *)&D_L00_001613D0 != 0) {
+            if (v->i5C < 0 || *(int *)&mine_force_burst != 0) {
                 cart_burst(mine_moby, &mine_moby->pos, -1, 0.33f, 13.0f);
                 mine_spawn_drops(mine_moby, D_L00_001B07B0);
                 mark_moby_for_removal(mine_moby);
@@ -743,7 +743,7 @@ void mine_update(M910 *mine_moby) {
                 }
             }
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
