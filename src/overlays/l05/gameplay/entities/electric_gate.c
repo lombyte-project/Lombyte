@@ -183,7 +183,7 @@ void draw_electric_gate_beams(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
     u64 texture;
-    int i, j, k, n, outer_color, inner_color, offset;
+    int i, j, k, vertex_index, outer_color, inner_color, offset;
     float angle, blend;
     unsigned short *list;
     unsigned short *next;
@@ -202,17 +202,17 @@ void draw_electric_gate_beams(char *moby) {
             quads[j][i].texture = texture;
             quads[j][i].texture_state = 0xFF9000000260LL;
             quads[j][i].reserved.value = 0;
-            for (n = 0; n < 4; n++) {
-                quads[j][i].texture_coordinates[n][0] = D_L05_0020B740[n][0];
-                quads[j][i].texture_coordinates[n][1] = D_L05_0020B740[n][1];
+            for (vertex_index = 0; vertex_index < 4; vertex_index++) {
+                quads[j][i].texture_coordinates[vertex_index][0] = D_L05_0020B740[vertex_index][0];
+                quads[j][i].texture_coordinates[vertex_index][1] = D_L05_0020B740[vertex_index][1];
                 if (j != 0) {
-                    quads[j][i].colors[n] = outer_color;
-                    qcopy(&quads[j][i].positions[n], &D_L05_0020B760[n]);
-                    quads[j][i].positions[n].f[2] += (float)(i + 1);
+                    quads[j][i].colors[vertex_index] = outer_color;
+                    qcopy(&quads[j][i].positions[vertex_index], &D_L05_0020B760[vertex_index]);
+                    quads[j][i].positions[vertex_index].f[2] += (float)(i + 1);
                 } else {
-                    quads[0][i].colors[n] = inner_color;
-                    qcopy(&quads[0][i].positions[n], &D_L05_0020B7A0[n]);
-                    quads[0][i].positions[n].f[2] += (float)(i + 1);
+                    quads[0][i].colors[vertex_index] = inner_color;
+                    qcopy(&quads[0][i].positions[vertex_index], &D_L05_0020B7A0[vertex_index]);
+                    quads[0][i].positions[vertex_index].f[2] += (float)(i + 1);
                 }
             }
         }
