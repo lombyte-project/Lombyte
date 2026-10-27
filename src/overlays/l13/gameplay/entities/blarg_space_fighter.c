@@ -116,7 +116,7 @@ typedef struct Hero_2C27B0 { char pad0[0x15F0]; Moby_2C27B0 *veh; } Hero_2C27B0;
 typedef struct Tex_2C27B0 { char pad0[0x5C]; unsigned char *p5C; } Tex_2C27B0;
 
 extern Moby_2C27B0 *D_L13_00174158 __attribute__((section(".data")));
-extern Tex_2C27B0 D_L13_001B2380;
+extern Tex_2C27B0 l13_homing_rocket_trail_particle_header_source __asm__("D_L13_001B2380");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern char D_0013F350[];
@@ -183,7 +183,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
         add_vector_xyz(&scratch_vector, &scratch_vector, &rocket_moby->pos);
         particle = FUN_L00_002712b8(&scratch_vector, (float *)&particle_initial_velocity, scale_game_frames_alt(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
-            Tex_2C27B0 *trail_particle_header_source = &D_L13_001B2380;
+            Tex_2C27B0 *trail_particle_header_source = &l13_homing_rocket_trail_particle_header_source;
             particle[2] = *trail_particle_header_source->p5C;
             particle[3] = 0x44;
         }
