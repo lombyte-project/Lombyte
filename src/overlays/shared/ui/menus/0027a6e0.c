@@ -22,7 +22,7 @@ extern short unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sd
 extern short unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013C940[];
-extern unsigned char D_L00_001B9BA0[];
+extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
 extern void FUN_L00_002607d0(int);
 extern void FUN_L00_00263d40(int, int);
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
@@ -56,7 +56,7 @@ void process_unlock_code_input(void) {
         for (; index < candidate_index_limit; index++) {
             matched = 1;
             for (j = 0; j < 20; j++) {
-                if (unlock_code_input_sequence[j] != D_L00_001B9BA0[(j * index + index) & 0xff]) {
+                if (unlock_code_input_sequence[j] != l00_unlock_code_comparison_table[(j * index + index) & 0xff]) {
                     matched = 0;
                     break;
                 }
