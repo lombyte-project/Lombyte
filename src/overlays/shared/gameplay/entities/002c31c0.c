@@ -125,15 +125,15 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 /* Moby state 9 while FUN_L00_002db8f8 reports a hit, back to 5 when it stops. */
 int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_002d56e0");
 
-int process_suck_cannon_suction_and_update_moby_state(char *a) {
-    int r = process_moby_suck_cannon_suction(a);
-    if (r == 0) {
-        if (*(unsigned char *)(a + 0x20) == 0x9)
-            a[0x20] = 0x5;
+int process_suck_cannon_suction_and_update_moby_state(char *moby) {
+    int suction_result = process_moby_suck_cannon_suction(moby);
+    if (suction_result == 0) {
+        if (*(unsigned char *)(moby + 0x20) == 0x9)
+            moby[0x20] = 0x5;
     } else {
-        a[0x20] = 0x9;
+        moby[0x20] = 0x9;
     }
-    return r;
+    return suction_result;
 }
 
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
