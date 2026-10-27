@@ -292,7 +292,7 @@ extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FU
 extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
-extern f32 D_L17_0017C6C4[];
+extern f32 l17_run_stick_turn_threshold[] __asm__("D_L17_0017C6C4");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void initialize_moby_transform_history(void *, void *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(void *, s32, s32) __asm__("FUN_L00_00262528");
@@ -1615,7 +1615,7 @@ void update_hero_motion_for_current_state(void) {
             } else if (c < 0.8f && r > 0.5235988f) {
                 k = 0.0f;
             }
-            if (c > D_L17_0017C6C4[0]) {
+            if (c > l17_run_stick_turn_threshold[0]) {
                 turn_hero_toward_move_direction_with_stick_scale();
             } else {
                 f32 f = hero.stick_magnitude + 0.35f;
