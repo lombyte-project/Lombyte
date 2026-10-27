@@ -776,6 +776,8 @@ class UnitListHelpersTests(unittest.TestCase):
             'void f(void) { register int x __asm__("$5"); }\n': True,
             'void f(int p) { __asm__ volatile("" : "+r"(p)); }\n': True,
             'int f(void) { int r; __asm__("mfc0 %0, $12" : "=r"(r)); return r; }\n': True,
+            'void f(void) {\n    /* Fakematch: pin. */\n    register int x __asm__("$5");\n}\n': False,
+            'void f(void) {\n    /* Fakematch: barrier. */\n    __asm__ volatile("");\n}\n': False,
         }
         with tempfile.TemporaryDirectory() as name:
             for index, (text, expected) in enumerate(cases.items()):

@@ -361,9 +361,11 @@ def load_categories(path: Path | None):
 # solely as a label binding a declaration to its linked name
 # (`__asm__("FUN_00202d10")`). Any other asm in the file (instructions, empty
 # memory barriers, `.extern` directives, register pins) keeps the unit pending
-# however exact its bytes are. The approved exceptions live in headers, not in
+# however exact its bytes are, unless marked as below. The approved exceptions live in headers, not in
 # units: include/qcopy.h and include/qzero.h (the quadword idiom) and
 # include/kernel.h (privileged instructions: ei, di, sync, mfc0, syscall).
+# An asm marked by a `Fakematch:` comment in the 15 lines above it (a register pin
+# or a small helper that forces retail's schedule) counts as C, as in rac1-decomp.
 _ASM_START_RE = re.compile(r"\b(?:__asm__|__asm|asm)\b(?:\s*(?:__volatile__|volatile))?\s*\(")
 _ASM_LABEL_RE = re.compile(r'\s*"[A-Za-z_.$][\w.$]*"\s*')
 _COMMENT_RE = re.compile(r"/\*.*?\*/|//[^\n]*", re.S)
@@ -375,9 +377,10 @@ _ASM_REGISTER_RE = re.compile(
 def non_label_asm(source: Path) -> bool:
     """True when the source holds inline asm other than a name label."""
     try:
-        text = _COMMENT_RE.sub(" ", source.read_text(encoding="utf-8", errors="replace"))
+        original = source.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return False
+    text = _COMMENT_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group()), original)
     for match in _ASM_START_RE.finditer(text):
         depth, index = 1, match.end()
         while index < len(text) and depth:
@@ -385,7 +388,9 @@ def non_label_asm(source: Path) -> bool:
             index += 1
         body = text[match.end():index - 1]
         if not _ASM_LABEL_RE.fullmatch(body) or _ASM_REGISTER_RE.fullmatch(body.strip()[1:-1]):
-            return True
+            above = original[:match.start()].split("\n")[-16:]
+            if not any("Fakematch:" in line for line in above):
+                return True
     return False
 
 
