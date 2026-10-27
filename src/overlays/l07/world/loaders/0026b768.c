@@ -115,7 +115,7 @@ char D_L07_0020FC70[] = "moby insts:     %.1fK\n";
 char D_L07_0020FC88[] = "moby pvars:     %.1fK\n";
 char D_L07_0020FCA0[] = "paths:          %.1fK\n";
 char D_L07_0020FCD0[] = "end of mem:     %.1fM\n";
-extern s32 D_L07_001B1B00[];
+extern s32 l07_particle_texture_range_words[] __asm__("D_L07_001B1B00");
 extern char *D_L18_001C6200_26b768[] __asm__("D_L07_001C5880");
 extern char *D_L18_001BCA30_26b768[] __asm__("D_L07_001BC0B0");
 extern char *D_L18_00160FC0_26b768 __asm__("D_L07_00160FC0");
@@ -386,8 +386,8 @@ s32 load_level_assets(s32 full, s32 keep) {
         if (level_header[4])
             printf_1e93b0(D_L07_0020FB68, KB(D_L18_00174840_26b768[0] - (char *)l07_sky_definition_base));
         printf_1e93b0(D_L07_0020FB80, KB(l07_texture_data_base - (s32)D_L18_00174840_26b768[0]));
-        printf_1e93b0(D_L07_0020FB98, KB((D_L07_001B1B00[1] >> 4) - l07_texture_data_base));
-        printf_1e93b0(D_L07_0020FBB0, KB((s32)l07_effects_texture_data_base - (D_L07_001B1B00[1] >> 4)));
+        printf_1e93b0(D_L07_0020FB98, KB((l07_particle_texture_range_words[1] >> 4) - l07_texture_data_base));
+        printf_1e93b0(D_L07_0020FBB0, KB((s32)l07_effects_texture_data_base - (l07_particle_texture_range_words[1] >> 4)));
         printf_1e93b0(D_L07_0020FBC8, KB((char *)D_L07_00197380[0] - l07_effects_texture_data_base));
         printf_1e93b0(D_L07_0020FBE0, KB(D_L18_001C6200_26b768[0] - (char *)D_L07_00197380[0]));
         if (level_header[0xA])
