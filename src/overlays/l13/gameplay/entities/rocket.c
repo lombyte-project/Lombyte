@@ -469,8 +469,8 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char D_L13_001670C0[];
 typedef struct { int v[6]; } L13EffectColors;
-extern L13EffectColors D_L13_001F5560;
-extern L13EffectColors D_L13_001F5578;
+extern L13EffectColors l13_poison_vessel_particle_first_color_palette __asm__("D_L13_001F5560");
+extern L13EffectColors l13_poison_vessel_particle_second_color_palette __asm__("D_L13_001F5578");
 char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) __asm__("FUN_L13_0030c138");
 
 extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("FUN_L13_0030c138");
@@ -579,8 +579,8 @@ void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) {
             int lo, hi, duration, duration2;
             i--;
             speed = (scale * random_float_between(8.0f, 10.0f)) * D_0015ED6C - extra * D_0015ED6C;
-            colors = D_L13_001F5560;
-            second_colors = D_L13_001F5578;
+            colors = l13_poison_vessel_particle_first_color_palette;
+            second_colors = l13_poison_vessel_particle_second_color_palette;
             amount = scale * magnitude;
             color = &colors.v[random_integer_below(6)];
             second_color = &second_colors.v[random_integer_below(6)];
