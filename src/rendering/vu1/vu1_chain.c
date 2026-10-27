@@ -13,7 +13,7 @@ struct DmaChannel {
    gp-relative, which needs its definition ahead of them. */
 volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
 #include "rnc/rendering/vu1_chain_globals.h"
-extern char D_001E89E0[];
+extern char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
 extern u8 vu1_chain_overflow_message[] __asm__("D_001E89C8");
 extern void DebugPrint(char *, ...);
 extern void FlushCache(s32);
@@ -66,7 +66,7 @@ void vu1_sync_chain(s32 mask) {
     for (poll_count = 0; vif_chain_flags & mask; poll_count++) {
         SpinWait(0x400);
         if (poll_count > 100000) {
-            DebugPrint(D_001E89E0);
+            DebugPrint(vu1_chain_sync_timeout_message);
             reset_graphics();
             break;
         }
