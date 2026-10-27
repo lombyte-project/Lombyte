@@ -887,7 +887,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
-extern SparkleRowC860 D_L00_001DBB90[];
+extern SparkleRowC860 l00_walloper_arc_predecessor_rows[] __asm__("D_L00_001DBB90");
 void walloper_update(char *m) __asm__("FUN_L00_002bb558");
 void walloper_update(char *walloper_moby) {
     enum {
@@ -974,12 +974,12 @@ void walloper_update(char *walloper_moby) {
                 sign = 1.0f;
                 for (k = 1; k < 5; k++) {
                     float bend_angle;
-                    subtract_vector_xyz(arc_point_camera_offset, D_L00_001DBB90[i].point[k - 1], D_L00_00166DC0);
+                    subtract_vector_xyz(arc_point_camera_offset, l00_walloper_arc_predecessor_rows[i].point[k - 1], D_L00_00166DC0);
                     bend_angle = random_float_between(0.17453292f, 0.7853982f) * sign;
                     sign = -sign;
                     build_look_at_matrix(arc_step, arc_step, arc_point_camera_offset, bend_angle);
                     add_vector_xyz(D_L00_001DBBA0[i].point[k],
-                                   D_L00_001DBB90[i].point[k - 1], arc_step);
+                                   l00_walloper_arc_predecessor_rows[i].point[k - 1], arc_step);
                 }
             } else {
                 next_arc_index = i + 1;
@@ -990,7 +990,7 @@ void walloper_update(char *walloper_moby) {
             for (k = 1; k < 5; k++) {
                 float *point_offset = workspace[k];
                 subtract_vector_xyz(point_offset, D_L00_001DBBA0[i].point[k],
-                                    D_L00_001DBB90[i].point[k - 1]);
+                                    l00_walloper_arc_predecessor_rows[i].point[k - 1]);
                 point_offset[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 point_offset[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 point_offset[2] += FUN_L00_00257c48(0.0f, 0.1f);
@@ -999,7 +999,7 @@ void walloper_update(char *walloper_moby) {
             qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
             for (k = 1; k < 5; k++) {
                 add_vector_xyz(D_L00_001DBBA0[i].point[k],
-                               D_L00_001DBB90[i].point[k - 1], workspace[k]);
+                               l00_walloper_arc_predecessor_rows[i].point[k - 1], workspace[k]);
             }
             if (D_L00_001DBEC0[i] > 0)
                 D_L00_001DBED8[i] = 0x20;
