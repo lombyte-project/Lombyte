@@ -385,7 +385,7 @@ extern float D_0015ED70;
 extern float D_0015ED6C;
 float D_L11_001613E0 = 3.2f;
 int D_L11_001613F0 = 0;
-extern int D_L11_0016D260[];
+extern int resort_owner_completion_rotation_trigger_state[] __asm__("D_L11_0016D260");
 extern int D_L11_0015FFD8;
 
 int try_activate_pokitaru_gate(struct Moby *moby) __asm__("FUN_L11_0030a480");
@@ -469,9 +469,9 @@ void update_resort_owner_state_actions(void *mp) {
             FUN_00212f90(moby, 5, 0, scale_game_frames(0x14));
         break;
     case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
-        if (D_L11_0016D260[12] != 1)
+        if (resort_owner_completion_rotation_trigger_state[12] != 1)
             break;
-        if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
+        if (resort_owner_completion_rotation_trigger_state[13] != scale_game_frames(0x7D0))
             break;
         trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
         break;
