@@ -10,8 +10,8 @@ typedef struct {
     short id;         /* +6 */
     short idx;        /* +8 */
 } Item0A;
-extern Item0A D_001CF120[];
-extern Item0A D_001D60E0[];
+extern Item0A pause_item_candidate_entries[] __asm__("D_001CF120");
+extern Item0A pause_item_list_entries[] __asm__("D_001D60E0");
 extern int pause_item_variant_values[] __asm__("D_001D6178");
 extern char pause_item_count_storage_base[] __asm__("D_001D0D00");
 /* Builds the pause-menu item list from the 15 entries of D_001CF120
@@ -25,9 +25,9 @@ int build_pause_item_list(void) {
     char *item_count_storage_base;
 
     for (i = 0; i < 15; i++) {
-        int id = D_001CF120[i].id;
+        int id = pause_item_candidate_entries[i].id;
         if (item_available[id] != 0) {
-            Item0A *out = &D_001D60E0[item_count];
+            Item0A *out = &pause_item_list_entries[item_count];
             MenuItemInfo *rec = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
             int has_text_variant = b != 0;
