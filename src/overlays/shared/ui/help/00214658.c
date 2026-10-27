@@ -39,7 +39,7 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 #define ED6C frame_time
 #define ED70 frame_time_sq
 
-extern f32 D_L00_0017BDD0[];
+extern f32 hero_deceleration_speed_reference[] __asm__("D_L00_0017BDD0");
 void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
 void hero_move_state_velocity(void) {
     HopVec_214658 velocity_addend;
@@ -143,7 +143,7 @@ void hero_move_state_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         base_planar_velocity_step = ED70 * 20.0f;
-        if (hero.target_speed < D_L00_0017BDD0[0] * ED6C * 0.2f) {
+        if (hero.target_speed < hero_deceleration_speed_reference[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 planar_speed_reduction_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
