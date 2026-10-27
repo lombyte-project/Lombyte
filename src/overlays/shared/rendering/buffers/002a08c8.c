@@ -11,7 +11,7 @@ void FUN_00118a80_002a08c8(int) __asm__("FUN_00118a80");
 void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
 extern u32 D_L00_001611B8[] __attribute__((section(".data")));
 #include "rnc/overlay/shared/rendering/buffers/002a08c8_globals.h"
-extern char D_L00_001E9530[];
+extern char vu1_render_buffer_overflow_message[] __asm__("D_L00_001E9530");
 void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 
 void vu1_send_chain_render_buffer(void) {
@@ -24,7 +24,7 @@ void vu1_send_chain_render_buffer(void) {
     if (render_buffer_high_water_bytes < buffer_used_bytes) {
         render_buffer_high_water_bytes = buffer_used_bytes;
         if (D_L00_001611CC < buffer_used_bytes) {
-            FUN_001e93b0_002a08c8(D_L00_001E9530);
+            FUN_001e93b0_002a08c8(vu1_render_buffer_overflow_message);
             buffer_limit_exceeded = 1;
         }
     }
