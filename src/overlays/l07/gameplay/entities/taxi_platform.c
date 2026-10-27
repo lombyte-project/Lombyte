@@ -372,7 +372,7 @@ void rumble_by_distance(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
 
-extern char D_L07_00180340[];
+extern char point_light_slot_table[] __asm__("D_L07_00180340");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -402,7 +402,7 @@ void update_timed_point_light_color(char *light_effect_state) {
             phase_remaining_fraction /= convert_integer_to_float(color_phase_threshold);
             interpolated_packed_color = fast_tween_color(*(int *)(light_effect_state + 0x288), *(int *)(light_effect_state + 0x28C), 1.0f - phase_remaining_fraction);
         }
-        rgb_destination = (float *)(D_L07_00180340 + *(short *)(light_effect_state + 0x280) * 32);
+        rgb_destination = (float *)(point_light_slot_table + *(short *)(light_effect_state + 0x280) * 32);
         rgb_destination[0] = convert_integer_to_float(interpolated_packed_color & 0xFF) * 0.0078125f;
         rgb_destination[1] = convert_integer_to_float((interpolated_packed_color >> 8) & 0xFF) * 0.0078125f;
         rgb_destination[2] = convert_integer_to_float((interpolated_packed_color >> 16) & 0xFF) * 0.0078125f;
@@ -3609,7 +3609,7 @@ void configure_timed_point_light(float radius, void *moby_, void *obj_, short pa
         }
     }
     if (*(short *)(light_effect_state + 0x280) != -1) {
-        effect_slot_entry = D_L07_00180340 + (*(short *)(light_effect_state + 0x280) << 5);
+        effect_slot_entry = point_light_slot_table + (*(short *)(light_effect_state + 0x280) << 5);
         if (*(short *)(light_effect_state + 0x282) == pa && (pa == -1 || *(short *)(light_effect_state + 0x284) == 0) || *(short *)(light_effect_state + 0x282) != pa) {
             if (duration_frames != -1) {
                 *(short *)(light_effect_state + 0x284) = duration_frames;
