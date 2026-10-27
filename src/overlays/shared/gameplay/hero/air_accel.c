@@ -1453,7 +1453,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_23c710 D_L01_00179D70[];
+extern Entry70_23c710 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
 void update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
 
 void update_hero_timers_and_vehicle_transitions(void) {
@@ -1535,7 +1535,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
         }
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_23c710(&D_L01_00179D70[i].w0);
+        FUN_001f9740_23c710(&l01_countdown_timer_records[i].w0);
     }
     hero.current_path_dist = 9999.0f;
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_23c710(&hero.motion.velocity) < 0.0f) {
