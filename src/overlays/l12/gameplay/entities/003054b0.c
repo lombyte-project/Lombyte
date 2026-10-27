@@ -1096,7 +1096,7 @@ extern int hoven_jittered_second_packet_blend_minuend_selector_gp __asm__("D_L12
 extern int hoven_jittered_second_packet_blend_subtrahend_selector_gp __asm__("D_L12_00161FD0") __attribute__((sda));
 extern int hoven_jittered_second_packet_blend_alpha_factor_selector_gp __asm__("D_L12_00161FD4") __attribute__((sda));
 extern int hoven_jittered_second_packet_blend_addend_selector_gp __asm__("D_L12_00161FD8") __attribute__((sda));
-extern float D_L12_001FB6D0[4][2];
+extern float hoven_jittered_quad_base_uvs[4][2] __asm__("D_L12_001FB6D0");
 extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
 extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
 extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
@@ -1130,8 +1130,8 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
         float u, v;
         qcopy(packets[1].corner[vertex], &D_L12_001FB6F0[vertex]);
         qcopy(packets[0].corner[vertex], &D_L12_001FB730[vertex]);
-        u = D_L12_001FB6D0[vertex][0];
-        v = D_L12_001FB6D0[vertex][1];
+        u = hoven_jittered_quad_base_uvs[vertex][0];
+        v = hoven_jittered_quad_base_uvs[vertex][1];
         packets[0].uv[vertex][0] = u;
         packets[0].uv[vertex][1] = v;
         packets[1].uv[vertex][0] = u;
@@ -1144,8 +1144,8 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
             float (*second)[4] = packets[1].corner;
             first[corner][2] = first[corner][2] + 1.0f;
             second[corner][2] = second[corner][2] + 1.0f;
-            packets[0].uv[corner][0] = D_L12_001FB6D0[corner][0] + u_offset;
-            packets[0].uv[corner][1] = D_L12_001FB6D0[corner][1];
+            packets[0].uv[corner][0] = hoven_jittered_quad_base_uvs[corner][0] + u_offset;
+            packets[0].uv[corner][1] = hoven_jittered_quad_base_uvs[corner][1];
         }
         jitter = 0.0f;
         row = -3;
