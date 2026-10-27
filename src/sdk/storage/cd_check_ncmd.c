@@ -7,7 +7,7 @@ extern volatile s32 D_001312E8[];
 extern s32 D_001312F8[];
 extern struct sceSifClientData D_00132490;
 const u8 D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
-extern u8 D_00152ED8[];
+extern u8 cd_ncmd_bind_error_message[] __asm__("D_00152ED8");
 extern s32 D_00159750[];
 extern u8 D_00159758[];
 extern s32 PollSema();
@@ -44,7 +44,7 @@ s32 cd_check_ncmd(s32 cmd) {
     for (;;) {
         if (sceSifBindRpc(&D_00132490, 0x80000595, 0) < 0) {
             if (D_001312D0[0] > 0) {
-                scePrintf(D_00152ED8);
+                scePrintf(cd_ncmd_bind_error_message);
             }
             for (spin = 0x100000; spin != -1; spin--) {
             }
