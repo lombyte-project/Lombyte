@@ -123,7 +123,9 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 9 while FUN_L00_002db8f8 reports a hit, back to 5 when it stops. */
-int FUN_L00_002d56e0(char *a) {
+int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_002d56e0");
+
+int process_suck_cannon_suction_and_update_moby_state(char *a) {
     int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 0x9)
