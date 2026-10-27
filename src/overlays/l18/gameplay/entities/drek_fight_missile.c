@@ -3942,8 +3942,8 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int *D_L18_001B0EB0[];
 extern float D_0015ED6C_g __asm__("D_0015ED6C");
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
-extern short D_L18_00162478 __attribute__((sda));
-extern short D_L18_00162480 __attribute__((sda));
+extern short rocket_tank_path_target_speed_gp __asm__("D_L18_00162478") __attribute__((sda));
+extern short rocket_tank_attached_moby_speed_reference_gp __asm__("D_L18_00162480") __attribute__((sda));
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
@@ -3959,7 +3959,7 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     path_target_yaw = fast_arc_tan(path_target_position[0] - moby->pos.x, path_target_position[1] - moby->pos.y);
     approach_angle(&moby->rot.z, (float *)(moby_vars + 0x128), path_target_yaw, D_0015ED6C_e[1] * 3.1415927f,
                      D_0015ED6C_e[1] * 3.1415927f, frame_time * 6.2831855f);
-    target_movement_step = *(float *)&D_L18_00162478 * frame_time;
+    target_movement_step = *(float *)&rocket_tank_path_target_speed_gp * frame_time;
     if (fast_difference_between_rotations(path_target_yaw, moby->rot.z) > 0.2617994f) {
         target_movement_step = D_0015ED6C_g;
     }
@@ -3971,7 +3971,7 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
         int k = random_integer_below_c(*D_L18_001B0EB0[*(int *)(moby_vars + 0x100)] - 1) + 1;
         *(int *)(moby_vars + 0x120) = (*(int *)(moby_vars + 0x120) + k) % *D_L18_001B0EB0[*(int *)(moby_vars + 0x100)];
     }
-    sc = *(float *)(moby_vars + 0x12C) / (*(float *)&D_L18_00162480 * frame_time);
+    sc = *(float *)(moby_vars + 0x12C) / (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
     if (sc > 2.0f)
         sc = 2.0f;
     else if (sc < z)
