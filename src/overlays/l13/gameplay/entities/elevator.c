@@ -2676,10 +2676,10 @@ extern char *D_L13_001600EC_gp __asm__("D_L13_001600EC") __attribute__((section(
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern f32 frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern u64 D_L13_00161430 __attribute__((sda));
+extern u64 fighter_jet_steering_reference_position __asm__("D_L13_00161430") __attribute__((sda));
 extern char *D_L13_00167100 __attribute__((section(".data")));
 extern char D_L13_00174140[];
-extern char D_L13_001F4450[];
+extern char fighter_jet_camera_mode_correction_message[] __asm__("D_L13_001F4450");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
@@ -2817,10 +2817,10 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         add_vector_xyz(offset, (data->target_path << 7) + D_L13_001600EC_gp, (data->target_path << 7) + D_L13_001600EC_gp + 0x10);
         yaw_limit = fast_vec_length(offset);
     } else {
-        qcopy(target, &D_L13_00161430);
+        qcopy(target, &fighter_jet_steering_reference_position);
     }
 
-    distance = vector_distance(moby->pos, &D_L13_00161430);
+    distance = vector_distance(moby->pos, &fighter_jet_steering_reference_position);
     data->yaw = interpolate_value_with_repeated_squaring(1, 5, distance, data->yaw, fast_arc_tan(target[0] - moby->pos[0], target[1] - moby->pos[1]), 50.0f, yaw_limit);
     moby->rot_z = interpolate_value_with_repeated_squaring(1, 5, distance, moby->rot_z, fast_arc_tan(target[0] - moby->pos[0], target[1] - moby->pos[1]), 50.0f, yaw_limit);
     height = absolute_float(target[2] - moby->pos[2]);
@@ -2897,7 +2897,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         camera_angles[1] = data->camera_pitch;
         FUN_L00_002eaa30(camera_angles);
         if (*(short *)(D_L13_00167100 + 0x86) != 5) {
-            stub_printf(D_L13_001F4450);
+            stub_printf(fighter_jet_camera_mode_correction_message);
             jet_mount(camera.v.pos, camera_angles, 0, 0, 0);
         }
     }
