@@ -215,7 +215,7 @@ extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30"
 extern s32 D_L05_0015FAE4 __attribute__((section(".sdata")));
 extern s32 D_L05_0015FAE8 __attribute__((section(".sdata")));
 extern s32 D_L05_0015FAEC __attribute__((section(".sdata")));
-extern s32 D_L05_0017E918[15];
+extern s32 trick_combo_base_reward_points[15] __asm__("D_L05_0017E918");
 extern s32 frame_number __asm__("D_L05_0015F5CC") __attribute__((section(".sdata")));
 extern char D_L05_0015F860[];
 extern char D_L05_0015F8D0[];
@@ -294,7 +294,7 @@ s32 draw_trick_combo_hud(char *element) {
                 }
                 trick_index = trick + tier * 5;
                 D_L05_0015FAF0 = trick_index;
-                D_L05_0015FB00 = D_L05_0017E918[trick_index];
+                D_L05_0015FB00 = trick_combo_base_reward_points[trick_index];
                 repeats = 1;
                 for (i = 1; i < 4; i++) {
                     if ((&D_L05_0015FAF0)[i] == D_L05_0015FAF0) {
