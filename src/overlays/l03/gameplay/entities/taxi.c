@@ -485,7 +485,7 @@ extern MineBlast D_L03_001E32B0;
 extern struct Moby *D_L03_00178000[];
 extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
 extern char D_L03_00166EC0[];
-extern char D_L03_001B08B0[];
+extern char mine_moby_index_list[] __asm__("D_L03_001B08B0");
 extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern s32 mine_frames(s32) __asm__("FUN_001f96f8");
 extern s32 mine_tick(s32 *) __asm__("FUN_001f9740");
@@ -654,14 +654,14 @@ void update_mine(struct Moby *mine_moby) {
         D_L03_00166D80_cbea8.shake = explosion_reference_distance < 20.0f ? 0.4f - explosion_reference_distance * 0.0175f : 0.050000012f;
         D_L03_00166D80_cbea8.shake_frames = mine_frames(0x19);
         mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
-        mine_spawn_drops(mine_moby, D_L03_001B08B0);
+        mine_spawn_drops(mine_moby, mine_moby_index_list);
         mine_kill(mine_moby);
         return;
     }
     case MINE_SHRINK_AND_REMOVE:
         mine_moby->scale *= frame_scale * -0.074f + 1.0f;
         if (mine_moby->scale < mine_moby->pclass->scale * 0.01f) {
-            mine_spawn_drops(mine_moby, D_L03_001B08B0);
+            mine_spawn_drops(mine_moby, mine_moby_index_list);
             mine_kill(mine_moby);
         }
         break;
