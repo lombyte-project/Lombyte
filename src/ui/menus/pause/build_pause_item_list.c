@@ -12,7 +12,7 @@ typedef struct {
 } Item0A;
 extern Item0A D_001CF120[];
 extern Item0A D_001D60E0[];
-extern int D_001D6178[];
+extern int pause_item_variant_values[] __asm__("D_001D6178");
 extern char D_001D0D00[];
 /* Builds the pause-menu item list from the 15 entries of D_001CF120
    that item_available enables. The flag needs its own `f = b != 0`:
@@ -36,7 +36,7 @@ int build_pause_item_list(void) {
             out->c = 0;
             out->id = id;
             out->idx = i;
-            D_001D6178[item_count] = b ? rec->unk42 : rec->unk40;
+            pause_item_variant_values[item_count] = b ? rec->unk42 : rec->unk40;
             item_count++;
         }
     }
