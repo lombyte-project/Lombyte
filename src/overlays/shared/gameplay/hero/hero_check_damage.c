@@ -691,7 +691,7 @@ void update_hero_condition_animation(void) {
 }
 extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
-extern u8 *D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
+extern char *D_L00_00197300[];
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
 struct AngleFields_20dd20 {
     u8 pad[0x5e4];
@@ -726,10 +726,10 @@ void FUN_L00_0020dd20(void) {
         s32 k;
         s32 j;
         f32 out;
-        u8 *t0 = hero.item_slot_blends[i];
+        u8 *blend = hero.item_slot_blends[i];
 
-        if (t0 != 0 && *(s32 *)(t0 + 0x34) != 0) {
-            if (FUN_00213ed8_20dd20((f32 *)(t0 + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
+        if (blend != 0 && *(s32 *)(blend + 0x34) != 0) {
+            if (FUN_00213ed8_20dd20((f32 *)(blend + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
                 FUN_L00_0024f0e8_20dd20(g->moby, &hero.item_slot_blends[i]);
             }
         } else {
@@ -742,11 +742,11 @@ void FUN_L00_0020dd20(void) {
             {
                 struct Hero *h = &hero;
                 if (h->unk20AF != 0) {
-                    u8 *t1;
+                    u8 *cancelled;
                     want = 0;
-                    t1 = hero.item_slot_blends[i];
-                    if (t1 != 0) {
-                        *(s32 *)(t1 + 0x34) = 1;
+                    cancelled = hero.item_slot_blends[i];
+                    if (cancelled != 0) {
+                        *(s32 *)(cancelled + 0x34) = 1;
                     }
                 }
             }
@@ -756,15 +756,15 @@ void FUN_L00_0020dd20(void) {
                     u8 *n = FUN_L00_0024f028_20dd20(h->moby, D_L00_0015F6A0_gp[i]);
                     hero.item_slot_blends[i] = n;
                     *(f32 *)(n + 8) = 0.0f;
-                    *(u8 **)(hero.item_slot_blends[i] + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_lui[i + 1]];
+                    *(u8 **)(hero.item_slot_blends[i] + 0x18) = (u8 *)D_L00_00197300[D_L00_00197BC0_lui[i + 1]];
                 }
             } else {
                 struct Hero *h = &hero;
-                u8 *t2 = hero.item_slot_blends[i];
-                if (t2 == 0) {
+                u8 *fading = hero.item_slot_blends[i];
+                if (fading == 0) {
                     continue;
                 }
-                if (FUN_00213ed8_20dd20((f32 *)(t2 + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
+                if (FUN_00213ed8_20dd20((f32 *)(fading + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
                     FUN_L00_0024f0e8_20dd20(h->moby, &hero.item_slot_blends[i]);
                 }
             }
