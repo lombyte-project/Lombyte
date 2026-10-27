@@ -2,7 +2,7 @@
 #include "rnc/gameplay/camera/update_cam.h"
 
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
-extern struct UpdateCam D_00187410[];
+extern struct UpdateCam camera_selection_records[] __asm__("D_00187410");
 extern s32 D_00189B50[];
 extern void camera_exit(struct UpdateCam *) __asm__("func_001EC3D8");
 extern s32 camera_activation_check_priority(struct UpdateCam *,
@@ -24,9 +24,9 @@ s32 update_all_cameras(void) {
     changed = 0;
     camera_exit(best);
     for (i = 0; i < 48; i++) {
-        if (D_00189B50[i] != 0 && &D_00187410[i] != best &&
-            camera_activation_check_priority(&D_00187410[i], best) != 0) {
-            best = &D_00187410[i];
+        if (D_00189B50[i] != 0 && &camera_selection_records[i] != best &&
+            camera_activation_check_priority(&camera_selection_records[i], best) != 0) {
+            best = &camera_selection_records[i];
             changed = 1;
         }
     }
