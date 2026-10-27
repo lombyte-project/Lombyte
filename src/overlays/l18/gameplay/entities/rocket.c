@@ -2154,7 +2154,7 @@ extern int tween_color_dc4b8(int, int, float) __asm__("FUN_001fa6e0");
 extern int truncate_dc4b8(float) __asm__("FUN_001fa6d0");
 extern void clear_vector_dc4b8(void *) __asm__("FUN_001f99f8");
 extern void euler_basis_dc4b8(void *, void *) __asm__("FUN_001fa030");
-extern float D_L18_001D4330[];
+extern float class_274_ring_quad_uvs[] __asm__("D_L18_001D4330");
 extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
 
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_class_274_ring_effect.h"
@@ -2204,8 +2204,8 @@ void draw_class_274_ring_effect(char *moby) {
         layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
         for (j = 0; j < 4; j++) {
             float corner_angle;
-            quad[i].uv[j].u = D_L18_001D4330[j * 2];
-            quad[i].uv[j].v = D_L18_001D4330[j * 2 + 1];
+            quad[i].uv[j].u = class_274_ring_quad_uvs[j * 2];
+            quad[i].uv[j].v = class_274_ring_quad_uvs[j * 2 + 1];
             quad[i].corner[j].f[2] = (j & 1) ? layer_phase * D_L18_00161CC8 : -layer_phase * D_L18_00161CC8;
             corner_angle = add_rotations_dc4b8((float)(j >> 1) * (class_274_ring_segment_angle_degrees_gp * 0.017453292f) - 3.14159f,
                               class_274_ring_segment_angle_degrees_gp * 0.25f * (float)i * 0.017453292f);
