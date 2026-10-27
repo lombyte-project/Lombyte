@@ -2328,7 +2328,7 @@ void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position,
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001B0DB0[];
-extern char D_L17_001D9F70[];
+extern char magnet_elevator_local_path_points[] __asm__("D_L17_001D9F70");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void rebuild_magnet_elevator_world_path(struct Moby *moby) __asm__("FUN_L17_002eea70");
@@ -2340,7 +2340,7 @@ void rebuild_magnet_elevator_world_path(struct Moby *moby) {
         char *point = &moby->rot_row0;
         int i;
         for (i = 10; i >= 0; i--) {
-            transform_vector_by_basis(world_path_point, D_L17_001D9F70 + (10 - i) * 0x10, point);
+            transform_vector_by_basis(world_path_point, magnet_elevator_local_path_points + (10 - i) * 0x10, point);
             add_vector_xyz(world_path_point, world_path_point, &moby->pos);
             *(float *)(world_path_point + 0xC) = 1.0f;
             world_path_point += 0x10;
