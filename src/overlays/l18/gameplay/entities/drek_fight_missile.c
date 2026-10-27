@@ -296,7 +296,7 @@ extern int drek_missile_trail_blend_addend_selector_gp __asm__("D_L18_0016224C")
 extern int drek_missile_trail_blend_start_color_gp __asm__("D_L18_00162250") __attribute__((sda));
 extern int drek_missile_trail_blend_end_color_gp __asm__("D_L18_00162254") __attribute__((sda));
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern float D_L18_001DA2F0[4][2];
+extern float drek_missile_trail_texture_coordinates[4][2] __asm__("D_L18_001DA2F0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float_group_quad(int) __asm__("FUN_001fa6c0");
 extern int interpolate_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -332,8 +332,8 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
                              ((u64)drek_missile_trail_blend_addend_selector_gp << 6) | 0x8000000000ULL;
         offset = convert_integer_to_float_group_quad((game_frame + 3) & 3) * 0.0625f;
         for (j = 0; j < 4; j++) {
-            quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
-            quads[i].texture_coordinates[j][1] = D_L18_001DA2F0[j][1];
+            quads[i].texture_coordinates[j][0] = drek_missile_trail_texture_coordinates[j][0];
+            quads[i].texture_coordinates[j][1] = drek_missile_trail_texture_coordinates[j][1];
             color_blend_factor = convert_integer_to_float_group_quad(i + 1 - (j >> 1)) * 0.25f + offset;
             if (color_blend_factor > 1.0f) {
                 color_blend_factor = 1.0f;
