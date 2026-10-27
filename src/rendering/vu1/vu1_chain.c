@@ -14,7 +14,7 @@ struct DmaChannel {
 volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
 #include "rnc/rendering/vu1_chain_globals.h"
 extern char D_001E89E0[];
-extern u8 D_001E89C8[];
+extern u8 vu1_chain_overflow_message[] __asm__("D_001E89C8");
 extern void DebugPrint(char *, ...);
 extern void FlushCache(s32);
 extern struct DmaChannel *sceDmaGetChan(s32);
@@ -35,7 +35,7 @@ void vu1_send_chain(void) {
     if (vu1_chain_peak_bytes < remaining) {
         vu1_chain_peak_bytes = remaining;
         if (current_vu_chain < remaining) {
-            DebugPrint(D_001E89C8);
+            DebugPrint(vu1_chain_overflow_message);
             overflow = 1;
         }
     }
