@@ -2,7 +2,7 @@ extern float square_root(float) __asm__("FUN_001f9988");
 typedef struct {
     int next[3];
 } QuatNext;
-extern QuatNext D_0015FFD8;
+extern QuatNext matrix_to_quaternion_next_axis_table __asm__("D_0015FFD8");
 /* Rotation matrix (rows of four floats) to quaternion (x, y, z, w), by
    Shoemake's method: from the trace when it is positive, else from the
    largest diagonal element, working on a packed 3x3 copy. */
@@ -11,7 +11,7 @@ void matrix_to_quaternion(void *arg0, void *arg1) __asm__("FUN_00214260");
 void matrix_to_quaternion(void *output_quaternion, void *rotation_matrix) {
     float *quaternion_components = output_quaternion;
     float(*m)[4] = rotation_matrix;
-    QuatNext next_axis_indices = D_0015FFD8;
+    QuatNext next_axis_indices = matrix_to_quaternion_next_axis_table;
     float packed_rotation_matrix[3][3];
     float trace;
     float quaternion_scale;
