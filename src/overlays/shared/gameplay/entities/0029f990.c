@@ -280,7 +280,7 @@ extern u32 frame_size[] __asm__("D_0013E504");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
-extern u128 D_L00_00166FE0[];
+extern u128 camera_lateral_axis[] __asm__("D_L00_00166FE0");
 extern u128 D_L00_00166FF0[];
 extern u128 D_L00_00166FD0[];
 extern f32 D_L00_00166C80[];
@@ -362,7 +362,7 @@ void draw_vendor_screen(void) {
                 D_L00_00165F80[2] = s[2];
                 qzero(s);
             }
-            qzero(D_L00_00166FE0);
+            qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
             D_L00_00166C80[0x350 / 4] = 1.0f;
             D_L00_00166C80[0x364 / 4] = 1.0f;
