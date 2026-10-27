@@ -469,16 +469,16 @@ extern void subtract_vector_30e7f8(void *, void *, void *) __asm__("FUN_001f9a28
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void *allocate_entity(int) __asm__("FUN_0020c4f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern float D_L05_00161DAC __asm__("D_L05_00161DAC") __attribute__((sda));
-extern float D_L05_00161DB0 __asm__("D_L05_00161DB0") __attribute__((sda));
+extern float l05_drain_cover_gravity __asm__("D_L05_00161DAC") __attribute__((sda));
+extern float l05_drain_cover_hover_acceleration __asm__("D_L05_00161DB0") __attribute__((sda));
 extern int D_L05_00161DB8 __asm__("D_L05_00161DB8") __attribute__((sda));
-extern float D_L05_00161DE8 __asm__("D_L05_00161DE8") __attribute__((sda));
-extern float D_L05_00161DEC __asm__("D_L05_00161DEC") __attribute__((sda));
-extern float D_L05_00161DF0 __asm__("D_L05_00161DF0") __attribute__((sda));
-extern int D_L05_00161DF4 __asm__("D_L05_00161DF4") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_height_span __asm__("D_L05_00161DE8") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_radial_speed_lower_bound __asm__("D_L05_00161DEC") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_radial_speed_upper_bound __asm__("D_L05_00161DF0") __attribute__((sda));
+extern int l05_drain_cover_pre_rise_particle_configuration __asm__("D_L05_00161DF4") __attribute__((sda));
 extern int D_L05_00161DF8 __asm__("D_L05_00161DF8") __attribute__((sda));
-extern float D_L05_00161DFC __asm__("D_L05_00161DFC") __attribute__((sda));
-extern float D_L05_00161E00 __asm__("D_L05_00161E00") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_vertical_speed_upper_bound __asm__("D_L05_00161DFC") __attribute__((sda));
+extern float l05_drain_cover_nearby_effect_distance_limit __asm__("D_L05_00161E00") __attribute__((sda));
 extern float D_L05_00161DD4 __asm__("D_L05_00161DD4") __attribute__((sda));
 extern float D_0013F3D0[];
 extern int D_L05_0015F5C4;
@@ -586,12 +586,12 @@ void drain_cover_update(DrainCoverMoby *moby) {
         if (D_L05_0015F5C4 == 0 && vector_distance_xyz(moby->pos, D_0013F3D0) < 24.0f && timer_finished(&data->timer) != 0) {
             moby->state = 2;
             clear_vector_30e7f8(data->vel);
-            data->vel[2] = sqrt_30e7f8(data->f80 * 2.0f * (D_L05_00161DAC * frame_time_sq));
+            data->vel[2] = sqrt_30e7f8(data->f80 * 2.0f * (l05_drain_cover_gravity * frame_time_sq));
         } else if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f) {
-            emit_drain_cover_particles((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
-            emit_drain_cover_particles((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
+            emit_drain_cover_particles((char *)moby, data->home[2], l05_drain_cover_pre_rise_particle_height_span + data->home[2]);
+            emit_drain_cover_particles((char *)moby, data->home[2], l05_drain_cover_pre_rise_particle_height_span + data->home[2]);
             if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.2f) {
-                particle_configuration = D_L05_00161DF4;
+                particle_configuration = l05_drain_cover_pre_rise_particle_configuration;
                 b = D_L05_00161DF8;
                 r = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
                 g = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
@@ -601,8 +601,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
                     particle_position[0] = angle_cos(particle_offset_angle) * 0.75f;
                     particle_position[1] = angle_sin(particle_offset_angle) * 0.75f;
                     particle_position[2] = 0.0f;
-                    rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(D_L05_00161DEC, D_L05_00161DF0) * frame_time);
-                    effect_velocity[2] = random_float_between_30e7f8(0.0f, D_L05_00161DFC) * frame_time;
+                    rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(l05_drain_cover_pre_rise_particle_radial_speed_lower_bound, l05_drain_cover_pre_rise_particle_radial_speed_upper_bound) * frame_time);
+                    effect_velocity[2] = random_float_between_30e7f8(0.0f, l05_drain_cover_pre_rise_particle_vertical_speed_upper_bound) * frame_time;
                     transform_vector(effect_position, effect_velocity, 0.0f);
                     add_vector(particle_position, moby->pos, particle_position);
                     particle_position[2] = random_float_between_30e7f8(moby->pos[2] - 0.25f, moby->pos[2] + 0.5f);
@@ -619,7 +619,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         emit_drain_cover_particles((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
         add_vector(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (data->vel[2] <= 0.0f) {
             moby->state = 3;
             data->home[3] = data->f84 - 0.5f;
@@ -629,7 +629,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     case DRAIN_COVER_HOVER:
         emit_drain_cover_particles((char *)moby, data->home[2], moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
-        approach_position(data->home[2] + data->home[3], D_L05_00161DB0 * frame_time_sq, D_L05_00161DB0 * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
+        approach_position(data->home[2] + data->home[3], l05_drain_cover_hover_acceleration * frame_time_sq, l05_drain_cover_hover_acceleration * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
         if (data->vel[2] == 0.0f) {
             if (data->home[3] > data->f84) {
                 data->home[3] = data->f84 - 0.5f;
@@ -645,7 +645,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         emit_drain_cover_particles((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) + moby->pos[2]);
         update_drain_cover_tilt((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
         add_vector(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (moby->pos[2] < data->home[2]) {
             allocate_target_entry(1, 0, moby);
             moby->state = 1;
@@ -659,7 +659,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         break;
     }
     hero = (DrainCoverHero *)(D_0013E550 + 0xE00);
-    if (moby->pos[2] - 2.0f > hero->pos[2] && vector_distance_xyz(moby->pos, hero->pos) < D_L05_00161E00) {
+    if (moby->pos[2] - 2.0f > hero->pos[2] && vector_distance_xyz(moby->pos, hero->pos) < l05_drain_cover_nearby_effect_distance_limit) {
         effect_velocity[0] = angle_cos(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
         effect_velocity[1] = angle_sin(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
         effect_velocity[2] = 0.0f;
