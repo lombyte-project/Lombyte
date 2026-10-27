@@ -1770,7 +1770,7 @@ typedef struct {
 } Ryno_2cc608;
 typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 
-extern char D_L00_00166C80[];
+extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float camera_pos_2cc608[] __asm__("D_L00_00166DC0");
 extern int play_frames_2cc608 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
@@ -1823,7 +1823,7 @@ void ryno_update(struct Moby *ryno_moby) {
     float yaw, pitch;
     int i;
 
-    matcopy_2cc608(&launch_direction_basis, D_L00_00166C80);
+    matcopy_2cc608(&launch_direction_basis, player_camera);
     transpose_2cc608(&view, &launch_direction_basis);
     if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (timer32_2cc608(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {
