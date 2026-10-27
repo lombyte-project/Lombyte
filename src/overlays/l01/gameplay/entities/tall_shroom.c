@@ -647,7 +647,7 @@ typedef struct {
     f32 x, y, z, w;
 } EnvVec;
 
-extern EnvVec D_L01_00167240;
+extern EnvVec camera_pos __asm__("D_L01_00167240");
 extern f32 level01_environment_map_uv_scroll_offsets[2] __asm__("D_L01_00162110");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
@@ -669,7 +669,7 @@ void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f
         vertex_position.x = verts[i][0];
         vertex_position.y = verts[i][1];
         vertex_position.z = verts[i][2];
-        fast_vec_sub(&eye, &vertex_position, &D_L01_00167240);
+        fast_vec_sub(&eye, &vertex_position, &camera_pos);
         fast_vec_normalize(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
