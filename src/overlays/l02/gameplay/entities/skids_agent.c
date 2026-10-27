@@ -706,7 +706,7 @@ extern char D_L02_001F3D30[];
 extern char D_L02_001F3D90[];
 extern char D_L02_001F3DD0[];
 extern char D_L02_001F3E10[];
-extern char D_L02_001F3E80[];
+extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
 extern void begin_animated_frame_rendering(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
 extern int in_clip_2ea048(void *, int) __asm__("FUN_00214720");
@@ -719,7 +719,7 @@ void draw_aridia_ocean_parts(struct Moby *moby) __asm__("FUN_L02_002ea048");
 void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
-    begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
+    begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, aridia_ocean_animated_frame_packet);
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
         draw_2ea048(D_L02_001F3C00);
     }
