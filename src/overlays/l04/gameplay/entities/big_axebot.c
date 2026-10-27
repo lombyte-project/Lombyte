@@ -3009,7 +3009,7 @@ typedef struct {
 } MobyClassHeader;
 
 extern char *moby_array __asm__("D_L04_0015FFD8") MACRO_ADDR;
-extern u8 D_L04_00197D40[];                 /* class slot by oclass */
+extern u8 level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40");                 /* class slot by oclass */
 extern struct MobyClass *D_L04_00197480[];  /* class header by slot */
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
 extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -3043,7 +3043,7 @@ void eudora_bridge_update(struct Moby *moby) {
         switch_follower_vars->voice = -1;
         if (moby->oclass == 0x1B0) {
             moby->oclass = 0x41C;
-            moby->class_slot = D_L04_00197D40[0x41C];
+            moby->class_slot = level04_moby_class_slot_by_oclass[0x41C];
             moby->pclass = D_L04_00197480[moby->class_slot];
             moby->unk71 = 0xFF;
             moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
@@ -3076,7 +3076,7 @@ void eudora_bridge_update(struct Moby *moby) {
                 play_moby_voice(1, 0, moby);
                 if (moby->oclass == 0x41C && *linked_switch_travel == 1.0f) {
                     moby->oclass = 0x1B0;
-                    moby->class_slot = D_L04_00197D40[0x1B0];
+                    moby->class_slot = level04_moby_class_slot_by_oclass[0x1B0];
                     moby->pclass = D_L04_00197480[moby->class_slot];
                     moby->unk71 = 0xFF;
                     moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
