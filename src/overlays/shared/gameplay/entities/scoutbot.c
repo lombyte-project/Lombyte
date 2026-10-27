@@ -687,9 +687,9 @@ typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16
 
 extern float moby_creation_default_timer_frames_gp __asm__("D_L08_00161CD8") __attribute__((sda));
 extern float moby_creation_particle_count_limit_gp __asm__("D_L08_00161CE0") __attribute__((sda));
-extern int D_L08_00161CF0 __attribute__((sda));
+extern int moby_creation_initial_spark_word_gp __asm__("D_L08_00161CF0") __attribute__((sda));
 extern int D_L08_00161CF4 __attribute__((sda));
-extern int D_L08_00161CF8 __attribute__((sda));
+extern int moby_creation_initial_particle_word_gp __asm__("D_L08_00161CF8") __attribute__((sda));
 extern int D_L08_00161CFC __attribute__((sda));
 extern float moby_creation_particle_spread_speed_base_gp __asm__("D_L08_00161D04") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/scoutbot_data/create_moby_with_particles.h"
@@ -751,12 +751,12 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
                 velocity[3] = moby_creation_particle_primary_motion_w_gp;
                 offset[3] = moby_creation_particle_secondary_motion_w_gp;
                 i++;
-                spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8, D_L08_00161CFC,
+                spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, moby_creation_initial_particle_word_gp, D_L08_00161CFC,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
                 particle_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
                 particle_second_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
                 particle_third_frame_count = truncate_float_to_s32_002e7eb0(FUN_L08_00211a20(random_float_between_002e7eb0((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0, D_L08_00161CF4, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
+                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, moby_creation_initial_spark_word_gp, D_L08_00161CF4, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
             } while ((float)i < moby_creation_particle_count_limit_gp);
         }
         if (current_level_index == 12)
