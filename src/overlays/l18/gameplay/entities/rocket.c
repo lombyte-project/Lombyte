@@ -2828,8 +2828,8 @@ extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __a
 extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst.h"
 extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4") __attribute__((sda));
-extern int D_L18_001D9C70[];
-extern int D_L18_001D9C88[];
+extern int explosion_burst_particle_first_color_choices[] __asm__("D_L18_001D9C70");
+extern int explosion_burst_particle_second_color_choices[] __asm__("D_L18_001D9C88");
 extern unsigned char D_L18_00161FC8 __attribute__((sda));
 extern unsigned char D_L18_00161FD4 __attribute__((sda));
 extern unsigned char D_L18_00161FE0 __attribute__((sda));
@@ -2891,8 +2891,8 @@ void spawn_explosion_burst(void *source_moby) {
             offset[1] = offset_y;
             offset[2] = 0.0f;
             add_vector_xyz(offset, offset, &moby->pos);
-            color1 = D_L18_001D9C70[random_integer_below(6)];
-            color2 = D_L18_001D9C88[random_integer_below(6)];
+            color1 = explosion_burst_particle_first_color_choices[random_integer_below(6)];
+            color2 = explosion_burst_particle_second_color_choices[random_integer_below(6)];
             scale = explosion_burst_particle_scale_multiplier_gp * 400000.0f;
             a = scale_ticks(random_int_between(explosion_burst_particle_frame_count_range_start_gp, explosion_burst_particle_frame_count_range_end_gp));
             b = scale_ticks(random_int_between(explosion_burst_particle_second_frame_count_range_start_gp, explosion_burst_particle_second_frame_count_range_end_gp));
