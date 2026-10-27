@@ -834,14 +834,14 @@ extern int D_L00_00161AE4_gp __asm__("D_L00_00161AE4") __attribute__((sda));
 extern float D_L00_00161AE8_gp __asm__("D_L00_00161AE8") __attribute__((sda));
 extern float D_L00_00161AEC_gp __asm__("D_L00_00161AEC") __attribute__((sda));
 extern char D_L00_00161AF0_macro[] __asm__("D_L00_00161AF0") __attribute__((section(".sdata")));
-extern char D_L00_001E14C0[];
+extern char nanotech_ball_mesh_source_vertices[] __asm__("D_L00_001E14C0");
 extern char D_L00_001E26E0[];
 extern char D_L00_001E2FF0[];
-extern char D_L00_001E3480[];
-extern char D_L00_001E3A80[];
-extern char D_L00_001E3B80[];
-extern char D_L00_001E3C80[];
-extern char D_L00_001E3DA0[];
+extern char nanotech_ball_pulse_quad_source_vertices[] __asm__("D_L00_001E3480");
+extern char nanotech_ball_pulse_quad_vertex_indices[] __asm__("D_L00_001E3A80");
+extern char nanotech_ball_state_one_quad_source_vertices[] __asm__("D_L00_001E3B80");
+extern char nanotech_ball_state_one_quad_vertex_indices[] __asm__("D_L00_001E3C80");
+extern char nanotech_ball_transformed_mesh_vertices[] __asm__("D_L00_001E3DA0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -909,20 +909,20 @@ void draw_nanotech_ball(Moby *moby) {
     vu1_add_g_sregister(0x4a, 0);
     font_queue_vu_state();
     for (j = 0; j < 0x122; j++) {
-        transform_vector(&vertex, D_L00_001E14C0 + j * 16, basis);
+        transform_vector(&vertex, nanotech_ball_mesh_source_vertices + j * 16, basis);
         {
             float x = vertex[0], y = vertex[1], z = vertex[2];
-            ((Vec3 *)D_L00_001E3DA0)[j].x = x;
-            ((Vec3 *)D_L00_001E3DA0)[j].y = y;
-            ((Vec3 *)D_L00_001E3DA0)[j].z = z;
+            ((Vec3 *)nanotech_ball_transformed_mesh_vertices)[j].x = x;
+            ((Vec3 *)nanotech_ball_transformed_mesh_vertices)[j].y = y;
+            ((Vec3 *)nanotech_ball_transformed_mesh_vertices)[j].z = z;
         }
     }
-    FUN_L00_001fde98(0x94, D_L00_001E3DA0,
+    FUN_L00_001fde98(0x94, nanotech_ball_transformed_mesh_vertices,
                                 D_L00_001E2FF0, D_L00_001E26E0, 1);
-    FUN_L00_001fde98(0x6d, D_L00_001E3DA0 + 0x6d8,
+    FUN_L00_001fde98(0x6d, nanotech_ball_transformed_mesh_vertices + 0x6d8,
                                 D_L00_001E2FF0 + 0x248,
                                 D_L00_001E26E0 + 0x490, 1);
-    FUN_L00_001fde98(0x24, D_L00_001E3DA0 + 0xbe8,
+    FUN_L00_001fde98(0x24, nanotech_ball_transformed_mesh_vertices + 0xbe8,
                                 D_L00_001E2FF0 + 0x3f8,
                                 D_L00_001E26E0 + 0x7f0, 1);
     quad.texture[1] = get_effect_texture(0xb);
@@ -934,17 +934,17 @@ void draw_nanotech_ball(Moby *moby) {
     quad.colors[1] = color;
     quad.colors[0] = color;
     for (i = 0; i < 32; i++) {
-        indices = (short *)(D_L00_001E3A80 + i * 8);
+        indices = (short *)(nanotech_ball_pulse_quad_vertex_indices + i * 8);
         j = 0;
         inner = (char *)quad.points;
         outer = (char *)quad.points;
         for (; j < 4; j++) {
             short index = *indices;
             if (j >= 2)
-                fast_vec_scale(outer, D_L00_001E3480 + index * 16,
+                fast_vec_scale(outer, nanotech_ball_pulse_quad_source_vertices + index * 16,
                              D_L00_00161ADC_gp * D_L00_00161AEC_gp);
             else
-                fast_vec_scale(inner, D_L00_001E3480 + index * 16, D_L00_00161ADC_gp);
+                fast_vec_scale(inner, nanotech_ball_pulse_quad_source_vertices + index * 16, D_L00_00161ADC_gp);
             inner += 16;
             outer += 16;
             indices++;
@@ -975,14 +975,14 @@ void draw_nanotech_ball(Moby *moby) {
         center[2] = moby->pos.z;
         v_base = &quad.texcoords[0];
         u_base = &quad.texcoords[1];
-        rows = (short *)D_L00_001E3C80;
+        rows = (short *)nanotech_ball_state_one_quad_vertex_indices;
         for (i = 0; i < 4; i++) {
             u = u_base;
             v = v_base;
             row = (short *)(i * 8 + (u32)rows);
             corner = (char *)quad.points;
             for (j = 3; j >= 0; j--) {
-                transform_vector(corner, D_L00_001E3B80 + (*row++) * 16,
+                transform_vector(corner, nanotech_ball_state_one_quad_source_vertices + (*row++) * 16,
                                        basis);
                 fast_vec_sub(view_dir, corner, g_debug_camera);
                 corner += 16;
