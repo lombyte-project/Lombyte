@@ -1064,7 +1064,7 @@ void update_fighter_jet_aim_and_fire_projectile(char *moby, char *ship_vars, flo
 extern int spawn_ship_rocket(void *, void *, int, void *, float, int) __asm__("FUN_L13_002e6a58");
 extern unsigned char D_0013E533_u[] __asm__("D_0013E533");
 
-extern short D_L17_00162074 __attribute__((sda));
+extern short fighter_jet_rocket_base_scale_gp __asm__("D_L17_00162074") __attribute__((sda));
 int D_L17_00162078 = 30;
 void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) __asm__("FUN_L17_002ec150");
 
@@ -1081,7 +1081,7 @@ void try_fire_fighter_jet_rocket(char *moby, char *ship_vars) {
             moby_point_position(moby, t + 7, projectile_spawn_position);
             fast_vec_normalize(projectile_spawn_offset, ship_vars, 0.3f);
             fast_vec_add(projectile_spawn_position, projectile_spawn_position, projectile_spawn_offset);
-            projectile_scale = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_gp;
+            projectile_scale = *(float *)&fighter_jet_rocket_base_scale_gp * *(float *)&D_L17_001620A0_gp;
             scaled_frame_count = scale_game_frames(300);
             if (spawn_ship_rocket(moby, projectile_spawn_position, *(int *)(ship_vars + 0xEC), projectile_initial_rotation, projectile_scale, scaled_frame_count)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
