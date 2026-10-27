@@ -2525,10 +2525,10 @@ extern float D_L13_00161F40 __attribute__((sda));
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks.h"
-extern int D_L13_00161F08 __attribute__((sda));
-extern int D_L13_00161F0C __attribute__((sda));
-extern int D_L13_00161F10 __attribute__((sda));
-extern int D_L13_00161F14 __attribute__((sda));
+extern int moby_spark_first_batch_initial_word_gp __asm__("D_L13_00161F08") __attribute__((sda));
+extern int moby_spark_first_batch_second_word_gp __asm__("D_L13_00161F0C") __attribute__((sda));
+extern int moby_spark_second_batch_initial_word_gp __asm__("D_L13_00161F10") __attribute__((sda));
+extern int moby_spark_second_batch_second_word_gp __asm__("D_L13_00161F14") __attribute__((sda));
 
 typedef union {
     OvlQuad quad;
@@ -2573,8 +2573,8 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
                                                                      moby_spark_first_batch_second_frame_count_base_gp * 1.2f)));
             third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_third_frame_count_base_gp,
                                                                      moby_spark_first_batch_third_frame_count_base_gp * 1.2f)));
-            spawn_spark(&position, &velocity, &acceleration, D_L13_00161F08,
-                           D_L13_00161F0C, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
+            spawn_spark(&position, &velocity, &acceleration, moby_spark_first_batch_initial_word_gp,
+                           moby_spark_first_batch_second_word_gp, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i < 2);
         amount = 0.017453292f;
         velocity.f[3] = moby_spark_second_batch_discarded_velocity_w_initializer_gp;
@@ -2606,8 +2606,8 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
                                                                      moby_spark_second_batch_second_frame_count_base_gp * 1.2f)));
             third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_third_frame_count_base_gp,
                                                                      moby_spark_second_batch_third_frame_count_base_gp * 1.2f)));
-            spawn_spark(&second_pos, &velocity, &acceleration, D_L13_00161F10,
-                           D_L13_00161F14, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
+            spawn_spark(&second_pos, &velocity, &acceleration, moby_spark_second_batch_initial_word_gp,
+                           moby_spark_second_batch_second_word_gp, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i >= 0);
     }
     moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
