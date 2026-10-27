@@ -1212,8 +1212,8 @@ void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
 extern float walloper_quad_basis_offset_scale_gp __asm__("D_L00_001616BC") __attribute__((sda));
 extern float walloper_quad_corner_scale_gp __asm__("D_L00_001616B8") __attribute__((sda));
 extern int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") __attribute__((sda));
-extern unsigned int D_L00_001616C0 __attribute__((sda));
-extern unsigned int D_L00_001616C4 __attribute__((sda));
+extern unsigned int l00_walloper_quad_common_base_vertex_color __asm__("D_L00_001616C0") __attribute__((sda));
+extern unsigned int l00_walloper_quad_rare_base_vertex_color __asm__("D_L00_001616C4") __attribute__((sda));
 extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
 void draw_walloper_camera_facing_quad(void *mv) {
     char *moby_bytes = mv;
@@ -1239,9 +1239,9 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4))
-        uniform_vertex_color = D_L00_001616C4;
+        uniform_vertex_color = l00_walloper_quad_rare_base_vertex_color;
     else
-        uniform_vertex_color = D_L00_001616C0;
+        uniform_vertex_color = l00_walloper_quad_common_base_vertex_color;
     uniform_vertex_color = (uniform_vertex_color & 0xFFFFFF) |
         (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)uniform_vertex_color >> 24) * D_L00_00161660_f[29]) << 24);
     quad.color[3] = uniform_vertex_color;
