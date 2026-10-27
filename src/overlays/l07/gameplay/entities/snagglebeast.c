@@ -2339,7 +2339,7 @@ void detach_snagglebeast_rope_particles(int target_entry) {
     suck_beam_queue_draw(target_entry);
 }
 extern Vec4 D_L07_00166E40;
-extern Vec4 D_L07_00173EF0;
+extern Vec4 l07_sphere_collision_resolved_center __asm__("D_L07_00173EF0");
 extern f32 D_0015ED6C;
 extern s32 sight_19040(struct Moby *, void *, f32) __asm__("FUN_L07_002886d8");
 extern char *hit_lookup_19040(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -2491,7 +2491,7 @@ void homing_mine_update(struct Moby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.55f;
         if (coll_sphere(0.55f, &probe, 0, moby)) {
-            subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
+            subtract_vector_xyz(&push, &l07_sphere_collision_resolved_center, &probe);
             add_vector_xyz(&moby->pos, &moby->pos, &push);
         }
         if (!tick_countdown_32_alt(&vars->timeout)) break;
@@ -2718,7 +2718,7 @@ void update_swooper(struct Moby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.55f;
         if (coll_sphere(0.55f, &probe, 0, moby)) {
-            subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
+            subtract_vector_xyz(&push, &l07_sphere_collision_resolved_center, &probe);
             add_vector_xyz(&moby->pos, &moby->pos, &push);
         }
         if (vars->life_timer == 0) {
