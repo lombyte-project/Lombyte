@@ -370,9 +370,9 @@ extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata"
 extern f32 D_0015EE18 __asm__("D_0015EE18");
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence_globals.h"
 extern s32 hero_extra_manipulator_attachment_indices_gp __asm__("D_L00_0015F6F8") __attribute__((sda));
-extern u128 D_L00_0017C1E0[];
-extern u128 D_L00_0017C220[];
-extern u128 D_L00_0017C260[];
+extern u128 hero_extra_manipulator_initial_quaternions[] __asm__("D_L00_0017C1E0");
+extern u128 hero_extra_manipulator_initial_scales[] __asm__("D_L00_0017C220");
+extern u128 hero_extra_manipulator_initial_translations[] __asm__("D_L00_0017C260");
 extern f32 hero_extra_manipulator_blend_by_phase[] __asm__("D_L00_0017C2A0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
@@ -477,9 +477,9 @@ void update_hero_glow_and_extra_manipulators(void) {
             if (EXTRA_MANIPS[i].attached == 0) {
                 attach_manipulator((s32)moby, ((s32 *)&hero_extra_manipulator_attachment_indices_gp)[i], &EXTRA_MANIPS[i]);
                 EXTRA_MANIPS[i].absolute = 1;
-                qcopy(&EXTRA_MANIPS[i].quat, &D_L00_0017C1E0[i]);
-                qcopy(&EXTRA_MANIPS[i].scale3, &D_L00_0017C220[i]);
-                qcopy(&EXTRA_MANIPS[i].translation, &D_L00_0017C260[i]);
+                qcopy(&EXTRA_MANIPS[i].quat, &hero_extra_manipulator_initial_quaternions[i]);
+                qcopy(&EXTRA_MANIPS[i].scale3, &hero_extra_manipulator_initial_scales[i]);
+                qcopy(&EXTRA_MANIPS[i].translation, &hero_extra_manipulator_initial_translations[i]);
                 fast_vec_scale(&EXTRA_MANIPS[i].translation, &EXTRA_MANIPS[i].translation, moby->scale);
             }
         }
