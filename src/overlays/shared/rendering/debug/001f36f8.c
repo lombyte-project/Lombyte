@@ -139,7 +139,7 @@ typedef struct {
     u8 unk0[0x140];
     DebugCameraState camera;
 } DebugCameraBlock;
-extern DebugCameraBlock D_L00_00166C80;
+extern DebugCameraBlock l00_debug_camera_block __asm__("D_L00_00166C80");
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -187,64 +187,64 @@ void update_debug_camera(void) {
         if ((pad->buttons.held_pressed & 3) != 3) {
             if (D_0013C940.buttons.w.held & 0x1000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis,
+                    fast_vec_normalize(&step, l00_debug_camera_block.camera.basis,
                                  g_debug_menu.movement_speed);
-                    add_vector_xyz(D_L00_00166C80.camera.position,
-                                 D_L00_00166C80.camera.position, &step);
+                    add_vector_xyz(l00_debug_camera_block.camera.position,
+                                 l00_debug_camera_block.camera.position, &step);
                 } else {
-                    D_L00_00166C80.camera.position[0] +=
-                        fast_cos(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[0] +=
+                        fast_cos(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
-                    D_L00_00166C80.camera.position[1] +=
-                        fast_sin(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[1] +=
+                        fast_sin(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 0x4000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis,
+                    fast_vec_normalize(&step, l00_debug_camera_block.camera.basis,
                                  g_debug_menu.movement_speed);
-                    subtract_vector_xyz(D_L00_00166C80.camera.position,
-                                 D_L00_00166C80.camera.position, &step);
+                    subtract_vector_xyz(l00_debug_camera_block.camera.position,
+                                 l00_debug_camera_block.camera.position, &step);
                 } else {
-                    D_L00_00166C80.camera.position[0] -=
-                        fast_cos(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[0] -=
+                        fast_cos(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
-                    D_L00_00166C80.camera.position[1] -=
-                        fast_sin(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[1] -=
+                        fast_sin(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 1) {
                 if (free_look) {
-                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis + 4,
+                    fast_vec_normalize(&step, l00_debug_camera_block.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    add_vector_xyz(D_L00_00166C80.camera.position,
-                                 D_L00_00166C80.camera.position, &step);
+                    add_vector_xyz(l00_debug_camera_block.camera.position,
+                                 l00_debug_camera_block.camera.position, &step);
                 } else {
-                    D_L00_00166C80.camera.position[0] -=
-                        fast_sin(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[0] -=
+                        fast_sin(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
-                    D_L00_00166C80.camera.position[1] +=
-                        fast_cos(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[1] +=
+                        fast_cos(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 2) {
                 if (free_look) {
-                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis + 4,
+                    fast_vec_normalize(&step, l00_debug_camera_block.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    subtract_vector_xyz(D_L00_00166C80.camera.position,
-                                 D_L00_00166C80.camera.position, &step);
+                    subtract_vector_xyz(l00_debug_camera_block.camera.position,
+                                 l00_debug_camera_block.camera.position, &step);
                 } else {
-                    D_L00_00166C80.camera.position[0] +=
-                        fast_sin(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[0] +=
+                        fast_sin(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
-                    D_L00_00166C80.camera.position[1] -=
-                        fast_cos(D_L00_00166C80.camera.angles[2]) *
+                    l00_debug_camera_block.camera.position[1] -=
+                        fast_cos(l00_debug_camera_block.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
@@ -280,12 +280,12 @@ void update_debug_camera(void) {
                 r[1].f[0] = sine;
                 r[0].f[0] = cosine;
                 r[1].f[1] = cosine;
-                copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+                copy_matrix_rotation(m, l00_debug_camera_block.camera.basis);
                 multiply_matrix(m, m, r);
-                copy_matrix3x4(D_L00_00166C80.camera.basis, m);
+                copy_matrix3x4(l00_debug_camera_block.camera.basis, m);
             } else {
-                D_L00_00166C80.camera.angles[2] = fast_subtract_rotations(
-                    D_L00_00166C80.camera.angles[2], g_debug_menu.yaw_speed);
+                l00_debug_camera_block.camera.angles[2] = fast_subtract_rotations(
+                    l00_debug_camera_block.camera.angles[2], g_debug_menu.yaw_speed);
             }
         } else {
             g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
@@ -313,12 +313,12 @@ void update_debug_camera(void) {
             r[0].f[2] = sine;
             r[2].f[0] = -sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+            copy_matrix_rotation(m, l00_debug_camera_block.camera.basis);
             multiply_matrix(m, m, r);
-            copy_matrix3x4(D_L00_00166C80.camera.basis, m);
+            copy_matrix3x4(l00_debug_camera_block.camera.basis, m);
         } else {
-            D_L00_00166C80.camera.angles[1] = fast_subtract_rotations(
-                D_L00_00166C80.camera.angles[1], g_debug_menu.pitch_speed);
+            l00_debug_camera_block.camera.angles[1] = fast_subtract_rotations(
+                l00_debug_camera_block.camera.angles[1], g_debug_menu.pitch_speed);
         }
     } else {
         g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
@@ -347,9 +347,9 @@ void update_debug_camera(void) {
             r[1].f[2] = -sine;
             r[2].f[1] = sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+            copy_matrix_rotation(m, l00_debug_camera_block.camera.basis);
             multiply_matrix(rolled_basis, m, r);
-            copy_matrix3x4(D_L00_00166C80.camera.basis, rolled_basis);
+            copy_matrix3x4(l00_debug_camera_block.camera.basis, rolled_basis);
         }
     } else {
         g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
@@ -375,29 +375,29 @@ void update_debug_camera(void) {
     {
         Vec4 r[3];
         if (free_look) {
-            fast_vec_normalize(&r[0], D_L00_00166C80.camera.basis + 8, g_debug_menu.vertical_speed);
-            add_vector_xyz(D_L00_00166C80.camera.position, D_L00_00166C80.camera.position,
+            fast_vec_normalize(&r[0], l00_debug_camera_block.camera.basis + 8, g_debug_menu.vertical_speed);
+            add_vector_xyz(l00_debug_camera_block.camera.position, l00_debug_camera_block.camera.position,
                          &r[0]);
         } else {
-            D_L00_00166C80.camera.position[2] += g_debug_menu.vertical_speed;
+            l00_debug_camera_block.camera.position[2] += g_debug_menu.vertical_speed;
         }
         if (!free_look) {
-            euler_rotation_matrix(r, D_L00_00166C80.camera.angles);
+            euler_rotation_matrix(r, l00_debug_camera_block.camera.angles);
             fast_vec_normalize(&r[0], &r[0], 1.0f);
             fast_vec_normalize(&r[1], &r[1], 1.0f);
             fast_vec_normalize(&r[2], &r[2], 1.0f);
-            copy_matrix3x4(D_L00_00166C80.camera.basis, r);
+            copy_matrix3x4(l00_debug_camera_block.camera.basis, r);
         }
     }
-    if (g_debug_menu.control_mode == 2 && D_L00_00166C80.camera.target != 0) {
-        target = D_L00_00166C80.camera.target;
-        qcopy(target->position, D_L00_00166C80.camera.position);
-        qcopy(target->basis, D_L00_00166C80.camera.basis);
-        qcopy(target->basis + 4, D_L00_00166C80.camera.basis + 4);
-        qcopy(target->basis + 8, D_L00_00166C80.camera.basis + 8);
-        qcopy(target->previous_basis, D_L00_00166C80.camera.basis);
-        copy_vector3(target->camera_position, D_L00_00166C80.camera.position);
-        reset_follow_camera_state_from_position(D_L00_00166C80.camera.target);
+    if (g_debug_menu.control_mode == 2 && l00_debug_camera_block.camera.target != 0) {
+        target = l00_debug_camera_block.camera.target;
+        qcopy(target->position, l00_debug_camera_block.camera.position);
+        qcopy(target->basis, l00_debug_camera_block.camera.basis);
+        qcopy(target->basis + 4, l00_debug_camera_block.camera.basis + 4);
+        qcopy(target->basis + 8, l00_debug_camera_block.camera.basis + 8);
+        qcopy(target->previous_basis, l00_debug_camera_block.camera.basis);
+        copy_vector3(target->camera_position, l00_debug_camera_block.camera.position);
+        reset_follow_camera_state_from_position(l00_debug_camera_block.camera.target);
     }
 }
 #include "qcopy.h"
@@ -415,7 +415,7 @@ void FUN_L00_00250df8(void *);
 void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
 void update_hero_from_debug_camera(void) {
-    DebugCameraBlock *debug_camera_block = &D_L00_00166C80;
+    DebugCameraBlock *debug_camera_block = &l00_debug_camera_block;
     B001f4490 *hero_camera_offsets = &D_L00_0016C058;
     struct Hero *hero_state;
     u8 *hero_moby;
@@ -549,9 +549,9 @@ void update_debug_menu(void) {
                              level_view_context.background_color[2]);
         g_debug_menu.start_capture_status = 110;
         g_debug_menu.sample_capture_status = 110;
-        g_debug_menu.unknown_94 = (s32)D_L00_00166C80.camera.position[0] >> 2;
-        g_debug_menu.unknown_98 = (s32)D_L00_00166C80.camera.position[1] >> 2;
-        g_debug_menu.unknown_9c = (s32)D_L00_00166C80.camera.position[2] >> 2;
+        g_debug_menu.unknown_94 = (s32)l00_debug_camera_block.camera.position[0] >> 2;
+        g_debug_menu.unknown_98 = (s32)l00_debug_camera_block.camera.position[1] >> 2;
+        g_debug_menu.unknown_9c = (s32)l00_debug_camera_block.camera.position[2] >> 2;
         return;
     }
     row_counts = l00_debug_menu_column_row_counts;
@@ -614,14 +614,14 @@ void update_debug_menu(void) {
                 case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
                     g_debug_menu.update_flags = 0;
                     subtract_vector_xyz(scratch.sample.hero_offset, &hero.motion.pos,
-                                        D_L00_00166C80.camera.position);
+                                        l00_debug_camera_block.camera.position);
                     g_debug_menu.target_distance = vector_length_xy(scratch.sample.hero_offset);
                     g_debug_menu.target_angle = fast_subtract_rotations(
                         fast_arc_tan(scratch.sample.hero_offset[0], scratch.sample.hero_offset[1]),
-                        D_L00_00166C80.camera.angles[2]);
-                    g_debug_menu.target_height = hero.motion.pos.f[2] - D_L00_00166C80.camera.position[2];
+                        l00_debug_camera_block.camera.angles[2]);
+                    g_debug_menu.target_height = hero.motion.pos.f[2] - l00_debug_camera_block.camera.position[2];
                     g_debug_menu.target_yaw =
-                        fast_subtract_rotations(hero.motion.rot.f[2], D_L00_00166C80.camera.angles[2]);
+                        fast_subtract_rotations(hero.motion.rot.f[2], l00_debug_camera_block.camera.angles[2]);
                     break;
                 case DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS:
                     g_debug_menu.update_flags = 6;
@@ -886,12 +886,12 @@ void update_debug_menu(void) {
                 if (count > 0) {
                     sample = occlusion_samples;
                     do {
-                        if (sample[0] < D_L00_00166C80.camera.position[0] + 0.5f &&
-                            sample[0] > D_L00_00166C80.camera.position[0] - 0.5f &&
-                            sample[1] < D_L00_00166C80.camera.position[1] + 0.5f &&
-                            sample[1] > D_L00_00166C80.camera.position[1] - 0.5f &&
-                            sample[2] < D_L00_00166C80.camera.position[2] + 0.5f &&
-                            sample[2] > D_L00_00166C80.camera.position[2] - 0.5f) {
+                        if (sample[0] < l00_debug_camera_block.camera.position[0] + 0.5f &&
+                            sample[0] > l00_debug_camera_block.camera.position[0] - 0.5f &&
+                            sample[1] < l00_debug_camera_block.camera.position[1] + 0.5f &&
+                            sample[1] > l00_debug_camera_block.camera.position[1] - 0.5f &&
+                            sample[2] < l00_debug_camera_block.camera.position[2] + 0.5f &&
+                            sample[2] > l00_debug_camera_block.camera.position[2] - 0.5f) {
                             found = 1;
                             break;
                         }
@@ -903,8 +903,8 @@ void update_debug_menu(void) {
                 break;
             sprintf(scratch.sample.path, path_format, directory, current_level_index,
                     occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.sample.line, add_sample_format, fptodp(D_L00_00166C80.camera.position[0]),
-                    fptodp(D_L00_00166C80.camera.position[1]), fptodp(D_L00_00166C80.camera.position[2]));
+            sprintf(scratch.sample.line, add_sample_format, fptodp(l00_debug_camera_block.camera.position[0]),
+                    fptodp(l00_debug_camera_block.camera.position[1]), fptodp(l00_debug_camera_block.camera.position[2]));
             fd = sceOpen(scratch.sample.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
@@ -919,9 +919,9 @@ void update_debug_menu(void) {
                 fd = sceOpen(scratch.sample.path, 0x303);
                 if (fd >= 0) {
                     sceLseek(fd, 0, 2);
-                    sceWrite(fd, &D_L00_00166C80.camera.position[0], 4);
-                    sceWrite(fd, &D_L00_00166C80.camera.position[1], 4);
-                    sceWrite(fd, &D_L00_00166C80.camera.position[2], 4);
+                    sceWrite(fd, &l00_debug_camera_block.camera.position[0], 4);
+                    sceWrite(fd, &l00_debug_camera_block.camera.position[1], 4);
+                    sceWrite(fd, &l00_debug_camera_block.camera.position[2], 4);
                     sceLseek(fd, 0, 0);
                     size = sceLseek(fd, 0, 2);
                     if (size <= 0x100000) {
@@ -939,8 +939,8 @@ void update_debug_menu(void) {
             s32 fd;
             sprintf(scratch.start_point.path, level_file_path_format, level_directory, current_level_index,
                     occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.start_point.line, start_point_format, fptodp(D_L00_00166C80.camera.position[0]),
-                    fptodp(D_L00_00166C80.camera.position[1]), fptodp(D_L00_00166C80.camera.position[2]));
+            sprintf(scratch.start_point.line, start_point_format, fptodp(l00_debug_camera_block.camera.position[0]),
+                    fptodp(l00_debug_camera_block.camera.position[1]), fptodp(l00_debug_camera_block.camera.position[2]));
             fd = sceOpen(scratch.start_point.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
