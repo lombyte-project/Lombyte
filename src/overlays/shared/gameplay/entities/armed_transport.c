@@ -523,14 +523,14 @@ typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } Ri
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
-extern float D_L16_001D9780[4][2];
+extern float grindrail_barrier_ring_uvs[4][2] __asm__("D_L16_001D9780");
 extern float D_L16_001D9A70[4][2];
-extern float D_L16_001D97C0[4][4];
+extern float grindrail_barrier_ring_vertex_positions[4][4] __asm__("D_L16_001D97C0");
 extern float D_L16_001D9AD0[4][4];
 extern float D_L16_001D9A50[4][2];
-extern float D_L16_001D97A0[4][2];
+extern float grindrail_barrier_accent_uvs[4][2] __asm__("D_L16_001D97A0");
 extern float D_L16_001D9A90[4][4];
-extern float D_L16_001D9800[4][4];
+extern float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D9800");
 #include "rnc/overlay/shared/gameplay/entities/armed_transport_data/draw_grindrail_barrier_effect.h"
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -566,10 +566,10 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     {
         int k;
         for (k = 0; k < 4; ++k) {
-            u[k * 2] = D_L16_001D9780[k][0];
-            v[k * 2] = D_L16_001D9780[k][1];
+            u[k * 2] = grindrail_barrier_ring_uvs[k][0];
+            v[k * 2] = grindrail_barrier_ring_uvs[k][1];
             color_base[k] = *(int *)&grindrail_barrier_ring_base_color;
-            qcopy(quad.position[k], D_L16_001D97C0[k]);
+            qcopy(quad.position[k], grindrail_barrier_ring_vertex_positions[k]);
             scale_vector_xyz(quad.position[k], quad.position[k], scale);
         }
     }
@@ -598,10 +598,10 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         int k;
         int solid_color = *(int *)&grindrail_barrier_accent_color;
         for (k = 0; k < 4; ++k) {
-            u[k * 2] = D_L16_001D97A0[k][0];
-            v[k * 2] = D_L16_001D97A0[k][1];
+            u[k * 2] = grindrail_barrier_accent_uvs[k][0];
+            v[k * 2] = grindrail_barrier_accent_uvs[k][1];
             color_base[k] = solid_color;
-            qcopy(quad.position[k], D_L16_001D9800[k]);
+            qcopy(quad.position[k], grindrail_barrier_accent_vertex_positions[k]);
         }
     }
     {
