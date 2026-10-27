@@ -3229,7 +3229,7 @@ extern float D_L05_0016120C __attribute__((section(".sdata")));
 extern float D_L05_00161210 __attribute__((section(".sdata")));
 extern float D_L05_00161214 __attribute__((section(".sdata")));
 int D_L05_00161D10 = -1;
-extern unsigned short D_L05_00161D14 __attribute__((sda));
+extern unsigned short l05_water_record_draw_value_override __asm__("D_L05_00161D14") __attribute__((sda));
 int hero_hits __asm__("D_L05_00161D1C") = 0;
 int rise_step __asm__("D_L05_00161D20") = 0;
 extern float rise_checkpoint __asm__("D_L05_00161D24") __attribute__((sda));
@@ -3483,8 +3483,8 @@ void water_update(struct Moby *moby) {
             enqueue_callback_list_1_30ca80(render_level_water_grids, moby);
         }
         if (water_vars->record_index == D_L05_00161D10) {
-            water_records_30ca80[water_vars->record_index].h1E = D_L05_00161D14;
-            record_draw_values[water_vars->record_index] = D_L05_00161D14;
+            water_records_30ca80[water_vars->record_index].h1E = l05_water_record_draw_value_override;
+            record_draw_values[water_vars->record_index] = l05_water_record_draw_value_override;
         }
     }
 }
