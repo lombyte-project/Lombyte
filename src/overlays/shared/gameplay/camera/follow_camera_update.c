@@ -628,46 +628,46 @@ extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
 #define P D_0013F350_2ea488
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
-int camera_transition_update(u8 *m, char *mode_check_object) {
+int camera_transition_update(u8 *transition_camera_record, char *mode_check_object) {
     Q_2ea488 *q;
-    char *o;
+    char *active_transition_camera_record;
     char *r;
-    s32 st;
-    int t;
-    int s;
-    V_2ea488 v;
-    V_2ea488 d1, d2;
-    f32 l, x;
+    s32 requested_camera_mode;
+    int checked_object_mode;
+    int active_camera_mode;
+    V_2ea488 transition_vector_scratch;
+    V_2ea488 transition_camera_vector_residual, transition_hero_vector_residual;
+    f32 transition_residual_length_product, x;
     P_2ea488 *g;
-    char *b, *b2, *vec;
+    char *b, *transition_camera_globals, *alignment_comparison_axis;
 
-    q = D_L00_0015EF50_2ea488[*(s16 *)(m + 0x84)].q;
+    q = D_L00_0015EF50_2ea488[*(s16 *)(transition_camera_record + 0x84)].q;
     g = &P;
-    st = g->i2284;
-    if (st == *(s16 *)(m + 0x86) || st == 0x51) {
-        o = D_L00_00166E00_2ea488;
-        t = *(s16 *)(mode_check_object + 0x86);
-        if (t != 0 && t != 10 && t != 14 && t != 2)
+    requested_camera_mode = g->i2284;
+    if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) || requested_camera_mode == 0x51) {
+        active_transition_camera_record = D_L00_00166E00_2ea488;
+        checked_object_mode = *(s16 *)(mode_check_object + 0x86);
+        if (checked_object_mode != 0 && checked_object_mode != 10 && checked_object_mode != 14 && checked_object_mode != 2)
             goto off;
-        s = *(s16 *)(o + 0x86);
-        if (s != 0 && s != 10 && s != 14 && s != 2)
+        active_camera_mode = *(s16 *)(active_transition_camera_record + 0x86);
+        if (active_camera_mode != 0 && active_camera_mode != 10 && active_camera_mode != 14 && active_camera_mode != 2)
             goto off;
-        *(OvlQuad *)&v = D_0013F3D0_2ea488;
-        r = find_camera_collision_volume_for_point(&v, 0.25f);
+        *(OvlQuad *)&transition_vector_scratch = D_0013F3D0_2ea488;
+        r = find_camera_collision_volume_for_point(&transition_vector_scratch, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
         q->i24 = 0;
         q->h22 = 1;
         q->h20++;
         if (q->h20 >= FUN_001f96f8_2ea488(7)) {
-            if (*(s16 *)(o + 0x86) == 0)
-                m[0x7C] = 5;
+            if (*(s16 *)(active_transition_camera_record + 0x86) == 0)
+                transition_camera_record[0x7C] = 5;
             return 1;
         }
-        v.f[0] = FUN_001f9dc8_2ea488(P.f98);
-        v.f[1] = FUN_001f9de0_2ea488(P.f98);
-        *(s32 *)&v.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&v, 0.06981316953897476f, v.f[2]);
+        transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
+        transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
+        *(s32 *)&transition_vector_scratch.f[2] = 0;
+        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
         goto tail;
     off:
         q->h20 = 0;
@@ -679,18 +679,18 @@ int camera_transition_update(u8 *m, char *mode_check_object) {
         goto tail;
     q->h22 = 0;
     b = D_L00_00166E10_2ea488;
-    b2 = b - 0x190;
-    vec = b + 0x30;
-    FUN_001f9a68_2ea488(&v, vec, FUN_001f9ab0_2ea488(vec, *(char **)(b2 + 0x180)));
-    FUN_001f9a28_2ea488(&d1, *(char **)(b2 + 0x180), &v);
-    FUN_001f9a68_2ea488(&v, vec, FUN_001f9ab0_2ea488(vec, g->p2080 + 0xC0));
-    FUN_001f9a28_2ea488(&d2, g->p2080 + 0xC0, &v);
-    l = FUN_001f9af0_2ea488(&d2);
-    if (l != 0.0f) {
-        l *= FUN_001f9af0_2ea488(&d1);
+    transition_camera_globals = b - 0x190;
+    alignment_comparison_axis = b + 0x30;
+    FUN_001f9a68_2ea488(&transition_vector_scratch, alignment_comparison_axis, FUN_001f9ab0_2ea488(alignment_comparison_axis, *(char **)(transition_camera_globals + 0x180)));
+    FUN_001f9a28_2ea488(&transition_camera_vector_residual, *(char **)(transition_camera_globals + 0x180), &transition_vector_scratch);
+    FUN_001f9a68_2ea488(&transition_vector_scratch, alignment_comparison_axis, FUN_001f9ab0_2ea488(alignment_comparison_axis, g->p2080 + 0xC0));
+    FUN_001f9a28_2ea488(&transition_hero_vector_residual, g->p2080 + 0xC0, &transition_vector_scratch);
+    transition_residual_length_product = FUN_001f9af0_2ea488(&transition_hero_vector_residual);
+    if (transition_residual_length_product != 0.0f) {
+        transition_residual_length_product *= FUN_001f9af0_2ea488(&transition_camera_vector_residual);
     }
-    if (l != 0.0f) {
-        x = FUN_001f9df8_2ea488(FUN_001f9ab0_2ea488(&d2, &d1) / l);
+    if (transition_residual_length_product != 0.0f) {
+        x = FUN_001f9df8_2ea488(FUN_001f9ab0_2ea488(&transition_hero_vector_residual, &transition_camera_vector_residual) / transition_residual_length_product);
         if (1.3962633609771729f <= 1.5707964f - x) {
             FUN_L00_001ed280_2ea488();
             return 0;
@@ -700,10 +700,10 @@ int camera_transition_update(u8 *m, char *mode_check_object) {
 tail:
     if (q->i24) {
         FUN_001f9740_2ea488(&q->i24);
-        v.f[0] = FUN_001f9dc8_2ea488(P.f98);
-        v.f[1] = FUN_001f9de0_2ea488(P.f98);
-        *(s32 *)&v.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&v, 0.13962633907794952f, v.f[2]);
+        transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
+        transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
+        *(s32 *)&transition_vector_scratch.f[2] = 0;
+        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.13962633907794952f, transition_vector_scratch.f[2]);
     }
     return 0;
 }
