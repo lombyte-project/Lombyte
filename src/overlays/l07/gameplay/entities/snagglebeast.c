@@ -695,7 +695,7 @@ extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern Vec4 D_L07_00166E40;
 extern int D_L07_00161B64 __attribute__((sda));
 extern ChaserSpawnRecord D_L07_00179B40[];
-extern int D_L07_0020C600[][4];
+extern int snagglebeast_ammo_drain_entries[][4] __asm__("D_L07_0020C600");
 #include "rnc/gameplay/state/item_state.h"
 extern void FUN_L00_00263ac8(float, int, int, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1575,7 +1575,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *(float *)(captured_hero + 0x98) = fast_add_rotations(*(float *)(captured_hero + 0x1D48), frame_time * 25.132742f);
                 }
                 *(float *)(data + 0x16C) = hero_distance;
-                slot = D_L07_0020C600[*(int *)(data + 0x164)][0];
+                slot = snagglebeast_ammo_drain_entries[*(int *)(data + 0x164)][0];
                 if (slot == -1) {
                     *(int *)(data + 0x164) = 0;
                     *(short *)(data + 0x196) = scale_ticks(0x320);
