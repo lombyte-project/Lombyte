@@ -8,12 +8,12 @@
 
 extern char D_L12_001CBF40[];
 extern int D_L12_0015FFD8; /* no foreign declaration */
-extern short *D_L12_001ABCC0[];
+extern short *group_record_index_lists[] __asm__("D_L12_001ABCC0");
 
 void copy_moby_z_to_group_records(struct Moby *moby) __asm__("FUN_L12_002bf6d0");
 
 void copy_moby_z_to_group_records(struct Moby *moby) {
-    short *group_index_cursor = D_L12_001ABCC0[moby->group];
+    short *group_index_cursor = group_record_index_lists[moby->group];
     int base = D_L12_0015FFD8;
     do {
         int i = (*group_index_cursor & 0x7FFF) * 256;
