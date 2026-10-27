@@ -1477,7 +1477,7 @@ typedef struct {
 extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
 extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
-extern char D_L14_001676D0[];
+extern char path_camera_target_offset_basis[] __asm__("D_L14_001676D0");
 extern float D_L14_001675D8 __attribute__((section(".data")));
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
 extern int path_step_5290(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
@@ -1527,7 +1527,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
             t[1] = ofs[1];
             t[2] = ofs[2];
             t[3] = 0.0f;
-            transform_vector_by_basis(t, t, D_L14_001676D0);
+            transform_vector_by_basis(t, t, path_camera_target_offset_basis);
             add_5290(u, &o->pos, t);
             sub_5290(initial_look_direction_or_previous_position, u, &path_camera->pos);
         } else {
@@ -1601,7 +1601,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         u[1] = ofs[1];
         u[2] = ofs[2];
         u[3] = 0.0f;
-        transform_vector_by_basis(u, u, D_L14_001676D0);
+        transform_vector_by_basis(u, u, path_camera_target_offset_basis);
         add_5290(v, &o->pos, u);
         sub_5290(t, v, &path_camera->pos);
     } else {
