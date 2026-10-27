@@ -307,7 +307,7 @@ extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__(
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
 
-extern short D_L08_00162300 __attribute__((sda));
+extern short batalia_plumber_manipulator_replicated_value __asm__("D_L08_00162300") __attribute__((sda));
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L08_003063f0");
 
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
@@ -331,7 +331,7 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
                 if (D_L08_0017CC40_d[1] == 0) {
                     float replicated_value;
                     attach_manipulator(candidate_moby, 0, D_L08_0017CC40_d);
-                    replicated_value = *(float *)&D_L08_00162300;
+                    replicated_value = *(float *)&batalia_plumber_manipulator_replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x20) = replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x24) = replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x28) = replicated_value;
