@@ -1197,7 +1197,7 @@ typedef struct {
 char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
 extern char D_L08_001675C0[];
 extern char D_L08_001FC8F0[];
-extern char D_L08_001FC630[];
+extern char paratrooper_invalid_jump_path_format[] __asm__("D_L08_001FC630");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
@@ -1284,7 +1284,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void effect302618(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void *FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 
-extern char D_L08_001FC600[];
+extern char paratrooper_invalid_wake_path_format[] __asm__("D_L08_001FC600");
 void blarg_paratrooper_update(char *moby) __asm__("FUN_L08_00301158");
 void blarg_paratrooper_update(char *moby) {
     enum {
@@ -1338,8 +1338,8 @@ void blarg_paratrooper_update(char *moby) {
         data->f20=2.0f; data->f24=2;
         data->f58=randomf302618(15.0f);
         data->f5A=randomf302618(12.0f);
-        if(data->f1D0==-1) { log302618(D_L08_001FC600,(*(short *)((char *)(moby)+0xB2))); goto delete_moby; }
-        if(data->f1D4==-1) { log302618(D_L08_001FC630,(*(short *)((char *)(moby)+0xB2))); goto delete_moby; }
+        if(data->f1D0==-1) { log302618(paratrooper_invalid_wake_path_format,(*(short *)((char *)(moby)+0xB2))); goto delete_moby; }
+        if(data->f1D4==-1) { log302618(paratrooper_invalid_jump_path_format,(*(short *)((char *)(moby)+0xB2))); goto delete_moby; }
         FUN_L01_0026d930_c((char *)data+0xD0);
         data->fDC=0.5f; data->fD8=0.5f;
         data->fD0=randomf302618(512.0f);
