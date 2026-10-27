@@ -19,7 +19,7 @@ typedef struct {
     long gs[4];
 } QuadPkt;
 
-extern float D_L00_001CA318[][4];
+extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
 extern float vector_length_xyz(void *);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
@@ -56,13 +56,13 @@ void draw_vendor_inset_quads(char *vertex_batch) {
         subtract_vector_xyz(A, P[1], P[0]);
         subtract_vector_xyz(B, P[2], P[0]);
         edge_length = vector_length_xyz(A);
-        normalize_vector_xyz(E, A, D_L00_001CA318[i][0]);
+        normalize_vector_xyz(E, A, vendor_quad_inset_parameters[i][0]);
         add_vector_xyz(C, C, E);
-        normalize_vector_xyz(A, A, edge_length - D_L00_001CA318[i][2] * 2.0f);
+        normalize_vector_xyz(A, A, edge_length - vendor_quad_inset_parameters[i][2] * 2.0f);
         edge_length = vector_length_xyz(B);
-        normalize_vector_xyz(E, B, D_L00_001CA318[i][1]);
+        normalize_vector_xyz(E, B, vendor_quad_inset_parameters[i][1]);
         add_vector_xyz(C, C, E);
-        normalize_vector_xyz(B, B, edge_length - D_L00_001CA318[i][3] * 2.0f);
+        normalize_vector_xyz(B, B, edge_length - vendor_quad_inset_parameters[i][3] * 2.0f);
         add_vector_xyz(E, C, A);
         add_vector_xyz(E, E, B);
         project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
