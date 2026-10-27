@@ -133,7 +133,7 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     }
     return particle;
 }
-extern u8 *D_L01_001B25E4[];
+extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 void *create_part(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -153,7 +153,7 @@ Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 s
         particle->alpha = truncate_float_to_s32(12.0f) + 0x20;
         particle->kind = 0x48;
         particle->active = 1;
-        particle->tex = *D_L01_001B25E4[0];
+        particle->tex = *pool_bubbles_texture_table[0];
         particle->life = 0x80;
         particle->scale = scale * 210000.0f;
         qcopy(&m->pos, motion_position_source);
