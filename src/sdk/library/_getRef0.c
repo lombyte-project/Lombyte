@@ -32,7 +32,7 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     }
     mbx = x >> 4;
     mby = y >> 4;
-    mb = mbx * ref->unk10 + mby;
+    mb = mbx * ref->mb_height + mby;
     fl->x = x - (mbx << 4);
     fl->addr = mc + ((dfield + yofs) << 5);
     ly = y - (mby << 4);
@@ -107,13 +107,13 @@ void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int d
     {
         int c0 = (ly << 3) + 0x100;
         int c1 = (ly << 3) + 0x400;
-        u8 *a0 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c0);
-        u8 *a1 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c1);
-        fc->p1 = a1;
-        fc->p0 = a0;
+        u8 *dst0 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c0);
+        u8 *dst1 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c1);
+        fc->p1 = dst1;
+        fc->p0 = dst0;
     }
     d->mb_buf[d->mb_buf_index].luma_ref[n] = data + mb * 0x180;
-    d->mb_buf[d->mb_buf_index].chroma_ref[n] = data + (mb + ref->unk10) * 0x180;
+    d->mb_buf[d->mb_buf_index].chroma_ref[n] = data + (mb + ref->mb_height) * 0x180;
     d->mb_buf[d->mb_buf_index].chroma_func[n] = D_00132E50[(avg << 2) | (xh << 1) | yh];
     d->mb_buf[d->mb_buf_index].fetch_count++;
 }

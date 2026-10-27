@@ -326,7 +326,7 @@ void draw_vendor_effects(char *m) {
     V_2A62D0 T[4];
     float zero;
     char *g, *h;
-    float (*t4)[2]; float (*t0)[2];
+    float (*uv_v)[2]; float (*uvs)[2];
     int izero;
     float off;
     /* Fakematch: the sparkle radius 1.1 lives in $f22, copied from the glow block's 1.1. */
@@ -379,16 +379,16 @@ void draw_vendor_effects(char *m) {
         qd.col[1] = vendor_sparkle_colors[i1];
         qd.col[2] = vendor_sparkle_colors[i2];
         qd.col[3] = vendor_sparkle_colors[i3];
-        t0 = D_L00_001D73F0;
-        t4 = (float (*)[2])&t0[0][1];
-        qd.uv[0][0] = t0[i0][0];
-        qd.uv[0][1] = t4[i0][0] + off;
-        qd.uv[1][0] = t0[i1][0];
-        qd.uv[1][1] = t4[i1][0] + off;
-        qd.uv[2][0] = t0[i2][0];
-        qd.uv[2][1] = t4[i2][0] + off;
-        qd.uv[3][0] = t0[i3][0];
-        qd.uv[3][1] = t4[i3][0] + off;
+        uvs = D_L00_001D73F0;
+        uv_v = (float (*)[2])&uvs[0][1];
+        qd.uv[0][0] = uvs[i0][0];
+        qd.uv[0][1] = uv_v[i0][0] + off;
+        qd.uv[1][0] = uvs[i1][0];
+        qd.uv[1][1] = uv_v[i1][0] + off;
+        qd.uv[2][0] = uvs[i2][0];
+        qd.uv[2][1] = uv_v[i2][0] + off;
+        qd.uv[3][0] = uvs[i3][0];
+        qd.uv[3][1] = uv_v[i3][0] + off;
         fast_draw_quad_real(&qd, 0, 1);
     }
 

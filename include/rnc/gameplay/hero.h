@@ -727,7 +727,7 @@ struct Hero {
     u8 item_anim_active;           /* 0x20A8 */
     u8 wading;                     /* 0x20A9 */
     u8 unk20AA;                    /* 0x20AA */
-    u8 unk20AB;                    /* 0x20AB */
+    u8 item_slot_anim_count;       /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
     u8 item_use_locked;            /* 0x20AC */
     u8 tilt_disabled;              /* 0x20AD */
     u8 unk20AE;                    /* 0x20AE */

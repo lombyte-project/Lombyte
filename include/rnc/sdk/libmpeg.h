@@ -31,9 +31,9 @@ struct MpegRefImage {
     u8 *data;                           /* picture base; _getRef0 adds macroblock index * 0x180 */
     s32 width;
     s32 height;
-    s32 unkC;
-    s32 unk10;                          /* non-zero: sized check in _isOutSizeOK;
-                                           _getRef0 macroblock index x * unk10 + y */
+    s32 mb_width;                       /* picture size in macroblocks */
+    s32 mb_height;                      /* non-zero: sized check in _isOutSizeOK;
+                                           _getRef0 macroblock index x * mb_height + y */
     u8 pad_14[0x14];
     s32 status;                         /* 1: output by _dispRefImage; ClearMpegReferenceBuffer zeroes it */
     u8 pad_2C[0x18];
@@ -114,7 +114,7 @@ struct MpegDecoder {
     /* Output size limits, checked by _isOutSizeOK against the picture. */
     s32 out_max_width;                  /* >= picture width when out_max_height != 0 */
     s32 out_max_height;                 /* >= picture height; 0: check out_max_size */
-    s32 out_max_size;                   /* >= unkC * unk10 of the picture */
+    s32 out_max_size;                   /* >= mb_width * mb_height of the picture */
 
     u8 pad_E8[0x10];
     s32 unkF8;                          /* 1 -> 2 in _outputFrame */
