@@ -88,9 +88,9 @@ extern char level02_camera_view_state[] __asm__("D_L02_0016D040");
 extern char D_L02_001673C0[];
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
-extern char D_L02_001CB8F0[];
+extern char interpolated_draw_gif_preamble[] __asm__("D_L02_001CB8F0");
 extern QuadFrame D_L02_0016D780[];
-extern char *D_L02_0015F420;
+extern char *interpolated_frame_source_data __asm__("D_L02_0015F420");
 #include "rnc/rendering/dma_tag.h"
 
 extern union PacketCursor l02_packet __asm__("D_L02_001611C0") __attribute__((section(".sdata")));
@@ -171,7 +171,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     PACKET_CURSOR[0] |= ((char *)cursor - (char *)PACKET_CURSOR >> 4) - 1;
     PACKET_CURSOR = cursor;
     PACKET_CURSOR[0] = 0x30000003;
-    PACKET_CURSOR[1] = (int)D_L02_001CB8F0;
+    PACKET_CURSOR[1] = (int)interpolated_draw_gif_preamble;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
     PACKET_CURSOR += 4;
@@ -193,10 +193,10 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
         fraction = (float)frame / (float)draw_parameters->frames - (float)step;
         frame_from = &D_L02_0016D780[draw_parameters->first + step % draw_parameters->count];
         frame_to = &D_L02_0016D780[draw_parameters->first + (step + 1) % draw_parameters->count];
-        from_a = D_L02_0015F420 + frame_from->a * 16;
-        from_b = D_L02_0015F420 + frame_from->b * 16;
-        to_b = D_L02_0015F420 + frame_to->b * 16;
-        to_a = D_L02_0015F420 + frame_to->a * 16;
+        from_a = interpolated_frame_source_data + frame_from->a * 16;
+        from_b = interpolated_frame_source_data + frame_from->b * 16;
+        to_b = interpolated_frame_source_data + frame_to->b * 16;
+        to_a = interpolated_frame_source_data + frame_to->a * 16;
         dst = draw_parameters->dst;
         *(long *)dst = 0x0800000000000400;
         *(long *)(draw_parameters->dst + 8) = 0;
