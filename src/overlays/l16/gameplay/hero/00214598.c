@@ -548,7 +548,7 @@ void update_hero_motion_for_current_state(void) {
             f32 steering_response_coefficient;
             f32 steer;
             f32 old;
-            f32 diff;
+            f32 swim_roll_delta;
             f32 k;
             f32 yaw;
             f32 t;
@@ -639,7 +639,7 @@ void update_hero_motion_for_current_state(void) {
             }
             old = hero.motion.rot.f[1];
             FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, steering_response_coefficient, rate, lo);
-            diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
+            swim_roll_delta = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
             hero.unk8EC = hero.motion.yaw_rate;
@@ -749,7 +749,7 @@ void update_hero_motion_for_current_state(void) {
             FUN_L16_00208038(0.009f, 0.22f);
             FUN_L16_00208050(0.04f, 0.2f);
             FUN_L16_00208068(0.02f, 0.2f);
-            AN.f114 = diff * 47.0f;
+            AN.f114 = swim_roll_delta * 47.0f;
             AN.f118 = t * 1.5f;
             AN.f110 = t * 1.4f;
             if (AN.f114 > 0.87266463f) {
@@ -760,9 +760,9 @@ void update_hero_motion_for_current_state(void) {
             AN.f364 = 0.03f;
             AN.f414 = 0.03f;
             AN.f368 = 0.22f;
-            AN.f324 = diff * 40.0f;
+            AN.f324 = swim_roll_delta * 40.0f;
             AN.f418 = 0.22f;
-            AN.f3D4 = diff * 40.0f;
+            AN.f3D4 = swim_roll_delta * 40.0f;
             AN.f328 = t * 1.1f;
             AN.f3D8 = t * 1.1f;
         }
@@ -1690,7 +1690,7 @@ void update_hero_motion_for_current_state(void) {
             f32 off;
             f32 tol;
             f32 mx;
-            f32 diff;
+            f32 combo_spacing_error;
             if (d < 0.0f) {
                 d = 0.0f;
             }
@@ -1707,9 +1707,9 @@ void update_hero_motion_for_current_state(void) {
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
-            if (FUN_001f99c0(diff) < tol + 3.0f) {
-                f32 s = diff / 0.9f;
+            combo_spacing_error = d - off;
+            if (FUN_001f99c0(combo_spacing_error) < tol + 3.0f) {
+                f32 s = combo_spacing_error / 0.9f;
                 if (s > mx) {
                     s = mx;
                 }
