@@ -2989,8 +2989,8 @@ extern JetTransition D_001516D0[];
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013A4E0[];
 #include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
-extern JetTexture D_L13_0016D480[];
-extern unsigned int D_L13_0015F420;
+extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
+extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");
 int hp_bar_saved __asm__("D_L13_001613C4") = 0;
 extern char fighter_jet_hidden_moby_classes[] __asm__("D_L13_001CBDE8");
 short D_L13_00161440 = 0x7f;
@@ -3098,10 +3098,10 @@ void fighter_jet_update(Jet *jet_moby) {
         jet_data->counterC0=0; jet_data->hit_class=0; *(float*)((char*)jet_data+0xAC)=limit; *(float*)((char*)jet_data+0xB0)=limit;
         qcopy(jet_data->angles,jet_moby->rotation); qcopy(jet_data->spawn_rotation,jet_moby->rotation); qcopy(jet_data->spawn_position,jet_moby->position);
         texture_index=jet_data->texture_id;
-        texture_table=D_L13_0016D480;
+        texture_table=l13_texture_descriptors;
         jet_data->blend=0.0f;
         texture_index+=40;
-        palette_data=D_L13_0015F420;
+        palette_data=l13_texture_palette_data_base;
         initialized=hp_bar_saved;
         palette=(int*)(palette_data+(texture_table[texture_index].palette<<4));
         hp_bar_clut[0]=palette;
