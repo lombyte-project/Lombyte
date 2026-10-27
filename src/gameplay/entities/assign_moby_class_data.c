@@ -10,7 +10,7 @@ struct Obj {
     u8 pad0[0x2C];
     s32 extra;
 };
-extern struct MapEntry D_001E8B80[];
+extern struct MapEntry resident_class_defaults[] __asm__("D_001E8B80");
 
 void assign_moby_class_data(s32 id) __asm__("FUN_00212d68");
 
@@ -19,11 +19,11 @@ void assign_moby_class_data(s32 id) {
     s32 i;
 
     class_resource = moby_class_resources[D_0015FF00];
-    for (i = 0; D_001E8B80[i].id != -1 && D_001E8B80[i].id != id; i++) {
+    for (i = 0; resident_class_defaults[i].id != -1 && resident_class_defaults[i].id != id; i++) {
     }
-    D_001B3580[D_0015FF00] = D_001E8B80[i].value;
+    D_001B3580[D_0015FF00] = resident_class_defaults[i].value;
     if (class_resource != 0) {
-        ((struct Obj *)moby_class_resources[D_0015FF00])->extra = D_001E8B80[i].extra;
+        ((struct Obj *)moby_class_resources[D_0015FF00])->extra = resident_class_defaults[i].extra;
     }
 }
 
