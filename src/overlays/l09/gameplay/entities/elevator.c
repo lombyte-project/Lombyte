@@ -940,7 +940,7 @@ extern s32 D_0015EDDC;
 #include "rnc/overlay/l09/gameplay/entities/elevator_globals.h"
 extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute__((sda));
 extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
-extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
+extern f32 turret_beam_local_offset_gp[2] __asm__("D_L09_00161CC0") __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
 extern TurretBeam D_L09_00180440[];
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
@@ -1063,7 +1063,7 @@ void turret_update(struct Moby *moby) {
                     fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y),
                     moby->rot.z), 1.5707964f) * 0.01f) * 0.9f;
             moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
-            transform_vector_by_basis(&work_vector, D_L09_00161CC0, &moby->rot_row0);
+            transform_vector_by_basis(&work_vector, turret_beam_local_offset_gp, &moby->rot_row0);
             add_vector_xyz(&work_vector, &work_vector, &seat);
             if (vars->beam == -1) {
                 vars->beam_frames = 0;
