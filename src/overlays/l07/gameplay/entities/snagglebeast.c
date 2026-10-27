@@ -694,7 +694,7 @@ typedef struct { char pad[0x3C]; short count; char pad2[0xE]; } ChaserSpawnRecor
 extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern Vec4 D_L07_00166E40;
 extern int D_L07_00161B64 __attribute__((sda));
-extern ChaserSpawnRecord D_L07_00179B40[];
+extern ChaserSpawnRecord l07_ammo_transfer_records[] __asm__("D_L07_00179B40");
 extern int snagglebeast_ammo_drain_entries[][4] __asm__("D_L07_0020C600");
 #include "rnc/gameplay/state/item_state.h"
 extern void FUN_L00_00263ac8(float, int, int, void *);
@@ -1592,7 +1592,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *(int *)(data + 0x1F8) = -1;
                     moby[0x20] = 1;
                 } else {
-                    int ammo_transfer_count = (D_L07_00179B40 + slot)->count;
+                    int ammo_transfer_count = (l07_ammo_transfer_records + slot)->count;
                     int rem;
                     int pos;
                     if (*(short *)(data + 0x19E) == 0) {
