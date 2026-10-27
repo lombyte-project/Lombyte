@@ -1253,7 +1253,7 @@ void update_hud_panel_visibility(u8 *hud_element) {
 }
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
-extern char D_L00_0015F918[];
+extern char bolt_exclamation_label_format[] __asm__("D_L00_0015F918");
 extern s32 bolt_exclamation_panel_max_alpha_gp __asm__("D_L00_0015F8F8") __attribute__((sda));
 extern s32 bolt_exclamation_panel_open_slide_distance_gp __asm__("D_L00_0015F8FC") __attribute__((sda));
 extern s32 bolt_exclamation_panel_right_x_offset_gp __asm__("D_L00_0015F900") __attribute__((sda));
@@ -1313,7 +1313,7 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
     draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
-    sprintf_alt(formatted_label_text, D_L00_0015F918);
+    sprintf_alt(formatted_label_text, bolt_exclamation_label_format);
     text_x = x + bolt_exclamation_label_x_offset_gp;
     text_y = y + bolt_exclamation_label_y_offset_gp;
     period = scale_game_frames(bolt_exclamation_label_pulse_base_period_frames_gp);
