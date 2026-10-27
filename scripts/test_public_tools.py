@@ -415,6 +415,64 @@ class ProgressReportTests(unittest.TestCase):
             self.assertEqual(self.report.zero_level_data(repo), 4 * 2 + 4 + 16)
 
 
+class OverlayHelperTimestampTests(unittest.TestCase):
+    """Reconfiguring preserves the helper dependency unless its bytes change."""
+
+    @classmethod
+    def setUpClass(cls):
+        if importlib.util.find_spec("splat") is None:
+            raise unittest.SkipTest("splat is not installed")
+        cls.configure = load_module("rnc_configure_overlay_helper", ROOT / "configure.py")
+
+    def _check_helper(self, initial):
+        cfg = self.configure
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            sources = root / "src/overlays"
+            sources.mkdir(parents=True)
+            (sources / "sample.c").write_text("void sample(void) {}\n")
+            (root / "config/us/overlays/asm").mkdir(parents=True)
+            catalogue = root / "config/overlays/us/functions.tsv"
+            catalogue.parent.mkdir(parents=True)
+            catalogue.write_text("")
+            build = root / "build/overlays"
+            build.mkdir(parents=True)
+            helper = build / "padless-asm.py"
+            sentinel = 946684800000000000
+            if initial is not None:
+                helper.write_text(initial)
+                os.utime(helper, ns=(sentinel, sentinel))
+            previous = Path.cwd()
+            try:
+                os.chdir(root)
+                with mock.patch.multiple(cfg, ROOT=root, OVERLAYS_SRC=sources,
+                                         OVERLAYS_BUILD=build), \
+                        mock.patch.object(cfg, "game_compiler_configured", return_value=True), \
+                        mock.patch.object(cfg, "overlay_sn_units", return_value=set()), \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    cfg.build_overlays()
+                    graph = (build / "build.ninja").read_bytes()
+                    self.assertEqual(helper.read_text(), cfg.PADLESS_ASM_HELPER)
+                    if initial == cfg.PADLESS_ASM_HELPER:
+                        self.assertEqual(helper.stat().st_mtime_ns, sentinel)
+                    elif initial is not None:
+                        self.assertNotEqual(helper.stat().st_mtime_ns, sentinel)
+                    cfg.build_overlays()
+                    self.assertEqual((build / "build.ninja").read_bytes(), graph)
+                    self.assertIn(b"| padless-asm.py", graph)
+            finally:
+                os.chdir(previous)
+
+    def test_creates_missing_helper(self):
+        self._check_helper(None)
+
+    def test_unchanged_helper_preserves_timestamp(self):
+        self._check_helper(self.configure.PADLESS_ASM_HELPER)
+
+    def test_changed_helper_is_replaced(self):
+        self._check_helper("# obsolete helper\n")
+
+
 class ConfigureDataLayoutTests(unittest.TestCase):
     """configure.py cuts C-owned bytes out of the preserved data blobs."""
 
