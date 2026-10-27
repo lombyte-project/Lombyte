@@ -152,7 +152,7 @@ void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, v
 
 extern float D_L02_001D3230[][4] __attribute__((section(".data")));
 float D_L02_001619C0[4] __attribute__((section(".sdata"))) = {-3.25f, 0.0f, 0.2f, 0.0f};
-extern short D_L02_001619D0 __attribute__((sda));
+extern short sand_shark_dust_endpoint_size_scale_gp __asm__("D_L02_001619D0") __attribute__((sda));
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -176,8 +176,8 @@ void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, in
     fast_vec_sub(vb, vb, D_L02_001619C0);
     transform_vector_by_basis(vb, vb, &moby->rot_row0);
     fast_vec_add(vb, vb, &moby->pos);
-    emit_sand_shark_dust_puffs_along_segment(moby, va, vb, puff_count, pa[3] * *(float *)&D_L02_001619D0,
-                     pb[3] * *(float *)&D_L02_001619D0);
+    emit_sand_shark_dust_puffs_along_segment(moby, va, vb, puff_count, pa[3] * *(float *)&sand_shark_dust_endpoint_size_scale_gp,
+                     pb[3] * *(float *)&sand_shark_dust_endpoint_size_scale_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
 
