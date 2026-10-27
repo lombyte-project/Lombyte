@@ -1702,11 +1702,11 @@ extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, i
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L14_00161CA0 __attribute__((sda));
-extern short D_L14_00161CA4 __attribute__((sda));
+extern short lightning_arc_particle_speed_range_start_gp __asm__("D_L14_00161CA0") __attribute__((sda));
+extern short lightning_arc_particle_speed_range_end_gp __asm__("D_L14_00161CA4") __attribute__((sda));
 extern short D_L14_00161CA8 __attribute__((sda));
-extern short D_L14_00161CAC __attribute__((sda));
-extern short D_L14_00161CB0 __attribute__((sda));
+extern short lightning_arc_particle_scale_range_start_gp __asm__("D_L14_00161CAC") __attribute__((sda));
+extern short lightning_arc_particle_scale_range_end_gp __asm__("D_L14_00161CB0") __attribute__((sda));
 void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) {
     float initial_velocity[4];
     float saved_position[4];
@@ -1716,12 +1716,12 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
     if (spawn_pair_count > 0) {
     i = spawn_pair_count;
     do {
-        particle_scale = random_float_between_c(*(float *)&D_L14_00161CAC, *(float *)&D_L14_00161CB0);
+        particle_scale = random_float_between_c(*(float *)&lightning_arc_particle_scale_range_start_gp, *(float *)&lightning_arc_particle_scale_range_end_gp);
         random_sign = random_integer_below(2);
         if (random_sign == 0) random_sign--;
         velocity_horizontal_angle = random_angle_radians();
         velocity_vertical_angle = random_float_between_c(0.34906584f, 1.5358897f);
-        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&D_L14_00161CA0, *(float *)&D_L14_00161CA4), velocity_horizontal_angle, velocity_vertical_angle);
+        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&lightning_arc_particle_speed_range_start_gp, *(float *)&lightning_arc_particle_speed_range_end_gp), velocity_horizontal_angle, velocity_vertical_angle);
         qcopy(saved_position, particle_spawn_position);
         particle_spawn_position[0] += FUN_L00_00257c48(0.0f, 0.15f);
         particle_spawn_position[1] += FUN_L00_00257c48(0.0f, 0.15f);
