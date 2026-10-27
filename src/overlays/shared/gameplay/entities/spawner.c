@@ -111,7 +111,7 @@ extern void FUN_L00_0025e450_307d68(void *, void *, void *, f32, f32, s32, s32, 
                                     f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern s32 FUN_L00_001f2868_307d68(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 
-extern OvlVec4 D_L09_00173FE0;
+extern OvlVec4 l09_projectile_impact_position __asm__("D_L09_00173FE0");
 /*
  * Update of the shot FUN_L09_00307ba8 spawns (cf. FUN_L04_002af058): moves
  * along vel, plays its sound once it starts moving away from the hero within
@@ -175,7 +175,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     if (collision_line_307d68(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
         return;
 
-    qcopy(&projectile_moby->pos, &D_L09_00173FE0);
+    qcopy(&projectile_moby->pos, &l09_projectile_impact_position);
     if (projectile_moby->command == 0) {
         for (i = 0; i < 5; i++) {
             spark_scatter_vector.q = 0;
