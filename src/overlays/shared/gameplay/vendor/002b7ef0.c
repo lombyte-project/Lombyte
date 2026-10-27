@@ -79,10 +79,10 @@ void pool_flush(char *records_base, int record_count) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_L01_001CAFE0[];
+extern float pool_base_uv_pairs[] __asm__("D_L01_001CAFE0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L01_001CB1B0[];
+extern int pool_uv_offset_selectors[] __asm__("D_L01_001CB1B0");
 
 void update_animated_offset_pairs(float *offset_animation_state) __asm__("FUN_L01_002b80d0");
 
@@ -114,12 +114,12 @@ void update_animated_offset_pairs(float *offset_animation_state) {
     second_u_offset = offset_animation_state[8] + fast_cos(offset_animation_state[13]) * offset_animation_state[16];
     second_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[13]) * offset_animation_state[16];
     for (i = 0; i < 0x5C; i += 2) {
-        if (D_L01_001CB1B0[i >> 1] == 0) {
-            pool_uv_pairs[i] = D_L01_001CAFE0[i] + first_u_offset;
-            pool_uv_pairs[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
+        if (pool_uv_offset_selectors[i >> 1] == 0) {
+            pool_uv_pairs[i] = pool_base_uv_pairs[i] + first_u_offset;
+            pool_uv_pairs[i + 1] = pool_base_uv_pairs[i + 1] + first_v_offset;
         } else {
-            pool_uv_pairs[i] = D_L01_001CAFE0[i] + second_u_offset;
-            pool_uv_pairs[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
+            pool_uv_pairs[i] = pool_base_uv_pairs[i] + second_u_offset;
+            pool_uv_pairs[i + 1] = pool_base_uv_pairs[i + 1] + second_v_offset;
         }
     }
 }
