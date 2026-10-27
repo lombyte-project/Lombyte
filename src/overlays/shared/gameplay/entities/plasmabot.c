@@ -1220,7 +1220,7 @@ typedef struct {
 } Pk_2af4a0;
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
-extern float D_L14_001D8890[4][4];
+extern float plasmabot_glow_quad_vertex_offsets[4][4] __asm__("D_L14_001D8890");
 extern float plasmabot_glow_quad_scale_gp __asm__("D_L14_001614F8") __attribute__((sda));
 extern float plasmabot_glow_camera_pull_distance_limit_gp __asm__("D_L14_001614FC") __attribute__((sda));
 extern float plasmabot_glow_camera_clearance_distance_gp __asm__("D_L14_00161500") __attribute__((sda));
@@ -1280,7 +1280,7 @@ void draw_plasmabot_glow_quad(char *m) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
-        scale_vector_xyz(pk.m[j], D_L14_001D8890[j], plasmabot_glow_quad_scale_gp);
+        scale_vector_xyz(pk.m[j], plasmabot_glow_quad_vertex_offsets[j], plasmabot_glow_quad_scale_gp);
         add_vector_xyz(pk.m[j], pk.m[j], glow_position);
     }
     draw_geometry_quad(&pk, 0, 0);
