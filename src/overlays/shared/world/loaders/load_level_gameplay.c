@@ -1722,7 +1722,7 @@ extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 #include "rnc/overlay/shared/world/loaders/load_level_gameplay_globals.h"
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
-extern u64 D_L00_001827C0[3];
+extern u64 level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0");
 extern u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8");
 extern u64 D_L00_001827F0[3];
 extern s32 tfrag_packed_texture_refs[] __asm__("D_L00_001C4A00");
@@ -1871,10 +1871,10 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         used = FUN_L00_0024d8d0_244110((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         D_L00_0015F40C = (s32)(base + core_header[0x18]);
 
-        D_L00_001827C0[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
+        level_texture_128x128_descriptor[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + core_header[0x25]) >> 8, 0, 0, 0, 4);
-        D_L00_001827C0[1] = 0x0000FFA0000000E0;
-        D_L00_001827C0[2] = 0x0040000400004000;
+        level_texture_128x128_descriptor[1] = 0x0000FFA0000000E0;
+        level_texture_128x128_descriptor[2] = 0x0040000400004000;
         level_texture_64x64_descriptor[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
             (gs_texture_allocation_base + core_header[0x27]) >> 8, 0, 0, 0, 4);
         level_texture_64x64_descriptor[1] = 0x0000FFA0000000E0;
