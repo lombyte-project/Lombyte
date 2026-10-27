@@ -814,7 +814,7 @@ extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__(
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
-extern char D_L05_001BAAA0[];
+extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
 
 void pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_0030f5c8");
 void pipe_mounted_grating_update(struct Moby *moby) {
@@ -896,7 +896,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             }
         }
         moby->command = 1;
-        record_moby_context_bytes(&moby->command, 1, moby, 1, D_L05_001BAAA0);
+        record_moby_context_bytes(&moby->command, 1, moby, 1, pipe_mounted_grating_command_records);
         mark_moby_for_removal_f5c8(moby);
     } else if (moby->command) {
         mark_moby_for_removal_f5c8(moby);
