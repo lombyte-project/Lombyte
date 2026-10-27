@@ -6,7 +6,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 
 extern u8 moby_draw_vu0_micro_program[] __asm__("D_00100080");
-extern u8 D_0015FED0[];
+extern u8 moby_texture_label[] __asm__("D_0015FED0");
 extern s32 vu1_chain_limit __asm__("D_00160F08");
 extern void noop_core_callback_secondary() __asm__("func_001F21B8");
 extern void vu0_load_micro_program() __asm__("func_002334D8");
@@ -28,7 +28,7 @@ void draw_mobys_setup(void) {
     current += 0x10;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     render_packet_cursor.addr = current;
-    noop_core_callback_secondary(D_0015FED0, callbackArg);
+    noop_core_callback_secondary(moby_texture_label, callbackArg);
     D_0015FF40 = 0;
     vu1_chain_limit = D_0015F63C + 0xFFFF0000;
     moby_anim_head = D_0015F638;
