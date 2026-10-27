@@ -1188,8 +1188,8 @@ extern void normalize_vector_xyz_q(void *out, void *a, f32 len) __asm__("FUN_001
 extern void subtract_vector_xyz_q(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
-extern short D_L11_00162384 __attribute__((sda));
-extern short D_L11_00162380 __attribute__((sda));
+extern short energy_sphere_particle_color_end_gp __asm__("D_L11_00162384") __attribute__((sda));
+extern short energy_sphere_particle_color_start_gp __asm__("D_L11_00162380") __attribute__((sda));
 void spawn_energy_sphere_particles(struct Moby *moby) __asm__("FUN_L11_00319028");
 
 void spawn_energy_sphere_particles(struct Moby *moby) {
@@ -1206,7 +1206,7 @@ void spawn_energy_sphere_particles(struct Moby *moby) {
     add_vector_xyz_q(effect_position, effect_position, moby_position);
     for (i = 0; i < 4; i++) {
         int a =
-            FUN_001fa6e0_q(*(int *)&D_L11_00162380, *(int *)&D_L11_00162384, (float)i * 0.333f);
+            FUN_001fa6e0_q(*(int *)&energy_sphere_particle_color_start_gp, *(int *)&energy_sphere_particle_color_end_gp, (float)i * 0.333f);
         unsigned char updated_effect_byte;
         effect_byte_cursor[0] += effect_byte_cursor[4];
         updated_effect_byte = func_001FA898_r_q((float)effect_byte_cursor[0]);
