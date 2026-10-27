@@ -2361,7 +2361,7 @@ typedef struct {
 
 extern unsigned short D_00141C10 __attribute__((section(".data")));
 extern float D_L11_0016D4F0 __attribute__((section(".data")));
-extern char D_L11_00174840[];
+extern char jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int D_L11_00161FF0 = 120;
 int D_L11_00162004 = 5;
@@ -2614,7 +2614,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     ship_moby->rot.y = fast_add_rot_2838(ship_vars->f34, -ship_vars->f70 * D_L11_00162154);
     ship_moby->rot.z = fast_add_rot_2838(ship_vars->f38, -ship_vars->f6C * D_L11_00162158);
     if (coll_sphere(2.0f, &ship_moby->pos, 0, ship_moby)) {
-        collision_result = D_L11_00174840;
+        collision_result = jet_fighter_collision_query_result;
         if (*(char **)(collision_result + 0x18) == 0) {
             spawn_explosion(ship_moby, D_L11_0015F580, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                              9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
