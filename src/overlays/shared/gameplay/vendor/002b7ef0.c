@@ -3,14 +3,14 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-extern float D_L01_001CAE60[];
+extern float pool_uv_pairs[] __asm__("D_L01_001CAE60");
 
 void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
 void pool_set_scale(float requested_scale) {
     unsigned int i;
-    float k = requested_scale / D_L01_001CAE60[16];
+    float k = requested_scale / pool_uv_pairs[16];
     for (i = 0; i < 0x5C; i++) {
-        D_L01_001CAE60[i] = D_L01_001CAE60[i] * k;
+        pool_uv_pairs[i] = pool_uv_pairs[i] * k;
     }
 }
 #define NOT_SDA
@@ -115,11 +115,11 @@ void update_animated_offset_pairs(float *offset_animation_state) {
     second_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[13]) * offset_animation_state[16];
     for (i = 0; i < 0x5C; i += 2) {
         if (D_L01_001CB1B0[i >> 1] == 0) {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + first_u_offset;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
+            pool_uv_pairs[i] = D_L01_001CAFE0[i] + first_u_offset;
+            pool_uv_pairs[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
         } else {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + second_u_offset;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
+            pool_uv_pairs[i] = D_L01_001CAFE0[i] + second_u_offset;
+            pool_uv_pairs[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
         }
     }
 }
