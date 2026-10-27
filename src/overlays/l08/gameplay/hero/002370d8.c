@@ -470,7 +470,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -926,7 +926,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 63:
+                case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -1843,15 +1843,15 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_RUN_JUMP:
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
-                case 12:
-                case 13:
+                case HERO_STATE_STORED_HEADING_JUMP:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case 15:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
-                case 60:
+                case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();
