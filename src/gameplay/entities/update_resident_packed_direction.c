@@ -5,7 +5,7 @@ struct Vec3 {
     f32 y;
     f32 z;
 };
-extern struct Vec3 D_001CAA80;
+extern struct Vec3 resident_packed_direction __asm__("D_001CAA80");
 extern void FUN_0020d510(s32, f32 *);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -18,9 +18,9 @@ void update_resident_packed_direction(void) {
 
     FUN_0020d510(D_001413D0[0], angle_source_vector);
     angle = fast_arc_tan(angle_source_vector[0], angle_source_vector[1]);
-    D_001CAA80.x = fast_cos(angle) * 0.14f;
-    D_001CAA80.y = fast_sin(angle) * 0.14f;
-    D_001CAA80.z = -0.99f;
+    resident_packed_direction.x = fast_cos(angle) * 0.14f;
+    resident_packed_direction.y = fast_sin(angle) * 0.14f;
+    resident_packed_direction.z = -0.99f;
 }
 
 extern __typeof__(update_resident_packed_direction) func_0020CFD0 __attribute__((alias("FUN_0020cfd0")));
