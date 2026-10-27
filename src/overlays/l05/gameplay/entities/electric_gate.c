@@ -175,8 +175,8 @@ extern int l05_electric_gate_blend_alpha_factor_selector __asm__("D_L05_00161D78
 extern int l05_electric_gate_blend_addend_selector __asm__("D_L05_00161D7C") __attribute__((sda));
 extern int l05_electric_gate_beam_effect_texture_index __asm__("D_L05_00161D98") __attribute__((sda));
 extern float D_L05_0020B740[4][2];
-extern Vec4 D_L05_0020B760[4];
-extern Vec4 D_L05_0020B7A0[4];
+extern Vec4 l05_electric_gate_outer_beam_base_positions[4] __asm__("D_L05_0020B760");
+extern Vec4 l05_electric_gate_inner_beam_base_positions[4] __asm__("D_L05_0020B7A0");
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
 void draw_electric_gate_beams(char *moby) {
@@ -207,11 +207,11 @@ void draw_electric_gate_beams(char *moby) {
                 quads[j][i].texture_coordinates[vertex_index][1] = D_L05_0020B740[vertex_index][1];
                 if (j != 0) {
                     quads[j][i].colors[vertex_index] = outer_color;
-                    qcopy(&quads[j][i].positions[vertex_index], &D_L05_0020B760[vertex_index]);
+                    qcopy(&quads[j][i].positions[vertex_index], &l05_electric_gate_outer_beam_base_positions[vertex_index]);
                     quads[j][i].positions[vertex_index].f[2] += (float)(i + 1);
                 } else {
                     quads[0][i].colors[vertex_index] = inner_color;
-                    qcopy(&quads[0][i].positions[vertex_index], &D_L05_0020B7A0[vertex_index]);
+                    qcopy(&quads[0][i].positions[vertex_index], &l05_electric_gate_inner_beam_base_positions[vertex_index]);
                     quads[0][i].positions[vertex_index].f[2] += (float)(i + 1);
                 }
             }
