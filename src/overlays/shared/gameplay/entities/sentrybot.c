@@ -1729,7 +1729,7 @@ typedef struct {
 } LevelView;
 extern LevelView D_L15_00167280;
 extern char D_L15_00174440[];
-extern char D_L15_001B0D70[];
+extern char missile_drop_spawn_parameters[] __asm__("D_L15_001B0D70");
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c3(f32) __asm__("func_001F9DC8");
@@ -1922,7 +1922,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
     }
     add_vector_xyz(missile_moby->pos, missile_moby->pos, missile_movement_delta);
     if (missile_moby->pos[0] < 0.0f || missile_moby->pos[1] < 0.0f || missile_moby->pos[2] < 0.0f) {
-        mine_spawn_drops(missile_moby, D_L15_001B0D70);
+        mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
         mark_moby_for_removal_c3(missile_moby);
         return;
     }
@@ -1964,7 +1964,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 fast_vec_normalize(burst_rotation_axis, hit + 0x40, 1.0f);
             }
         } else if (tick_countdown_32_alt(&missile_data->timer) != 0 || vector_distance_xy_alt(missile_moby->pos, (float *)(hero + 0x80)) > 260.0f) {
-            mine_spawn_drops(missile_moby, D_L15_001B0D70);
+            mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
             mark_moby_for_removal_c3(missile_moby);
             return;
         }
@@ -2106,7 +2106,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             }
             allocate_voice_for_target_entry(0, 0, (int)missile_moby);
             mine_camera_blast(&camera_blast_parameters, missile_moby->pos, 0, 0);
-            mine_spawn_drops(missile_moby, D_L15_001B0D70);
+            mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
             mark_moby_for_removal_c3(missile_moby);
             }
         }
