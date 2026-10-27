@@ -142,7 +142,7 @@ typedef struct {
 extern struct Moby *D_L03_0015FFD8_mb __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern struct Moby *D_L03_0015FFE4;
 extern s32 D_L03_0015F5CC;
-extern char D_L03_001E2FA0[];
+extern char spawner_spawn_failure_format[] __asm__("D_L03_001E2FA0");
 
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern SpawnTarget *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
@@ -252,7 +252,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
     }
     if (spawned == NULL) {
-        debug_print(D_L03_001E2FA0, D_L03_0015F5CC, (s16)spawner_moby->save_id, spawner_moby->oclass);
+        debug_print(spawner_spawn_failure_format, D_L03_0015F5CC, (s16)spawner_moby->save_id, spawner_moby->oclass);
     }
     return spawned;
 }
