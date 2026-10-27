@@ -1143,13 +1143,13 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-extern short D_L11_0016238C __attribute__((sda));
-extern short D_L11_00162390 __attribute__((sda));
-extern short D_L11_00162394 __attribute__((sda));
-extern short D_L11_00162398 __attribute__((sda));
-extern short D_L11_0016239C __attribute__((sda));
-extern short D_L11_001623A0 __attribute__((sda));
-extern short D_L11_001623A4 __attribute__((sda));
+extern short moby_radial_spark_initial_word_gp __asm__("D_L11_0016238C") __attribute__((sda));
+extern short moby_radial_spark_second_word_gp __asm__("D_L11_00162390") __attribute__((sda));
+extern short moby_radial_spark_frame_count_gp __asm__("D_L11_00162394") __attribute__((sda));
+extern short moby_radial_spark_second_frame_count_gp __asm__("D_L11_00162398") __attribute__((sda));
+extern short moby_radial_spark_third_frame_count_gp __asm__("D_L11_0016239C") __attribute__((sda));
+extern short moby_radial_spark_first_vector_w_gp __asm__("D_L11_001623A0") __attribute__((sda));
+extern short moby_radial_spark_second_vector_w_gp __asm__("D_L11_001623A4") __attribute__((sda));
 extern short spark_lookup_index_and_flags_gp __asm__("D_L11_001623A8") __attribute__((sda));
 void spawn_moby_radial_spark(struct Moby *source_moby) __asm__("FUN_L11_00318ed8");
 
@@ -1166,13 +1166,13 @@ void spawn_moby_radial_spark(struct Moby *source_moby) {
     fast_vec_add(radial_offset, radial_offset, row1_offset);
     fast_vec_sub(spark_position, &source_moby->pos, radial_offset);
     fast_vec_scale(first_spark_vector, radial_offset,
-                 1.0f / (float)scale_game_frames(*(int *)&D_L11_00162394 + *(int *)&D_L11_00162398 +
-                                            *(int *)&D_L11_0016239C));
+                 1.0f / (float)scale_game_frames(*(int *)&moby_radial_spark_frame_count_gp + *(int *)&moby_radial_spark_second_frame_count_gp +
+                                            *(int *)&moby_radial_spark_third_frame_count_gp));
     qcopy(second_spark_vector, first_spark_vector);
-    first_spark_vector[3] = *(float *)&D_L11_001623A0;
-    second_spark_vector[3] = *(float *)&D_L11_001623A4;
-    spawn_spark(spark_position, first_spark_vector, second_spark_vector, *(int *)&D_L11_0016238C, *(int *)&D_L11_00162390,
-                 *(int *)&D_L11_00162394, *(int *)&D_L11_00162398, *(int *)&D_L11_0016239C,
+    first_spark_vector[3] = *(float *)&moby_radial_spark_first_vector_w_gp;
+    second_spark_vector[3] = *(float *)&moby_radial_spark_second_vector_w_gp;
+    spawn_spark(spark_position, first_spark_vector, second_spark_vector, *(int *)&moby_radial_spark_initial_word_gp, *(int *)&moby_radial_spark_second_word_gp,
+                 *(int *)&moby_radial_spark_frame_count_gp, *(int *)&moby_radial_spark_second_frame_count_gp, *(int *)&moby_radial_spark_third_frame_count_gp,
                  *(int *)&spark_lookup_index_and_flags_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
