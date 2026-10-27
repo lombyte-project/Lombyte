@@ -2938,12 +2938,12 @@ extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested_2.h"
-extern short D_L18_001620CA;
-extern short D_L18_001620CC;
-extern short D_L18_001620CE;
-extern short D_L18_001620D2;
-extern short D_L18_001620D4;
-extern short D_L18_001620D6;
+extern short electric_bolt_second_side_arc_reset_frames __asm__("D_L18_001620CA");
+extern short electric_bolt_third_side_arc_reset_frames __asm__("D_L18_001620CC");
+extern short electric_bolt_fourth_side_arc_reset_frames __asm__("D_L18_001620CE");
+extern short electric_bolt_second_side_arc_timer_distance_reference __asm__("D_L18_001620D2");
+extern short electric_bolt_third_side_arc_timer_distance_reference __asm__("D_L18_001620D4");
+extern short electric_bolt_fourth_side_arc_timer_distance_reference __asm__("D_L18_001620D6");
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested.h"
 extern int D_L18_001620DC;
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
@@ -2970,12 +2970,12 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
             D_L18_001620B8_b[j] = -1;
         D_L18_001620C8_q = 8;
         D_L18_001620D0_q = 4;
-        D_L18_001620CA = 4;
-        D_L18_001620D2 = 2;
-        D_L18_001620D4 = 4;
-        D_L18_001620CC = 8;
-        D_L18_001620CE = 4;
-        D_L18_001620D6 = 2;
+        electric_bolt_second_side_arc_reset_frames = 4;
+        electric_bolt_second_side_arc_timer_distance_reference = 2;
+        electric_bolt_third_side_arc_timer_distance_reference = 4;
+        electric_bolt_third_side_arc_reset_frames = 8;
+        electric_bolt_fourth_side_arc_reset_frames = 4;
+        electric_bolt_fourth_side_arc_timer_distance_reference = 2;
         D_L18_00162008_q = 0;
         D_L18_00162010_q = 0;
         D_L18_00162024_q = 0;
