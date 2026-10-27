@@ -18,7 +18,7 @@ extern char D_L12_001CBF40_c[] __asm__("D_L12_001CBF40");
 extern char D_L12_001CAD00_c[] __asm__("D_L12_001CAD00");
 extern char D_L12_001CBE00_c[] __asm__("D_L12_001CBE00");
 
-extern char D_L12_0020BC90[];
+extern char water_tile_limit_message[] __asm__("D_L12_0020BC90");
 extern char D_L12_00167240[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("FUN_L12_002bf770");
@@ -75,7 +75,7 @@ void update_level_12_water_tile(struct Moby *moby) {
         i = (data[3] = next_water_tile_index_gp) + 1;
         next_water_tile_index_gp = i;
         if (i > 0x7f) {
-            slot_limit_c((int)D_L12_0020BC90);
+            slot_limit_c((int)water_tile_limit_message);
         }
         moby->scale = moby->pclass->scale * 2.0f;
         data[0] = 3;
