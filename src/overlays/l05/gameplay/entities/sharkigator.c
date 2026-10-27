@@ -818,7 +818,7 @@ int D_L05_00161400 = 0;
 int D_L05_00161404 = 1;
 int D_L05_00161408 = 0x40806060;
 int D_L05_0016140C = 0x802020;
-extern unsigned char D_L05_0015EDB2;
+extern unsigned char l05_scenery_ship_extended_trail_selector __asm__("D_L05_0015EDB2");
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern struct Moby *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
@@ -853,7 +853,7 @@ void draw_group_scenery_ship_trails(char *moby) {
 
     if (D_L05_001613F0 != 0)
         return;
-    if (D_L05_0015EDB2 != 0)
+    if (l05_scenery_ship_extended_trail_selector != 0)
         D_L05_001613E0 = 16.0f;
     else
         D_L05_001613E0 = 5.0f;
