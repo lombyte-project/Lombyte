@@ -2888,9 +2888,9 @@ void update_path_following_moby(char *moby) {
     float previous_position[4];
     float frame_displacement[4];
     char *moby_vars = *(char **)(moby + 0x78);
-    char *pos = moby + 0x10;
+    char *moby_position = moby + 0x10;
     int *path;
-    qcopy(previous_position, pos);
+    qcopy(previous_position, moby_position);
     path = (int *)D_L08_001B0CB0[*(int *)moby_vars];
     switch (*(unsigned char *)(moby + 0x20)) {
     case MOBY_STATE_INITIALIZE_PATH:
@@ -2930,13 +2930,13 @@ void update_path_following_moby(char *moby) {
         dd = fast_add_rotations(*(float *)(moby + 0x40), falling_rotation_step);
         *(float *)(moby + 0x40) = *(float *)(moby + 0x40) + dd;
         *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
-        add_vector_xyz(pos, pos, falling_velocity);
+        add_vector_xyz(moby_position, moby_position, falling_velocity);
         if (*(float *)(moby + 0x18) < falling_removal_height) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (coll_sphere(1.25f, pos, 0, moby)) {
-            spawn_explosion(moby, falling_velocity, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, falling_removal_height, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
+        if (coll_sphere(1.25f, moby_position, 0, moby)) {
+            spawn_explosion(moby, falling_velocity, moby_position, 0.0f, 0.0f, 0x14, 0x28, 0x10, falling_removal_height, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
         }
