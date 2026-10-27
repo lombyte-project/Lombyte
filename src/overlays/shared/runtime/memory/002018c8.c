@@ -24,16 +24,16 @@ typedef struct {
 
 extern MessageBox D_L00_00173040;
 #include "rnc/overlay/shared/runtime/memory/002018c8_globals.h"
-extern char D_L00_0015F508[];
-extern char D_L00_0015F510[];
-extern char D_L00_0015F520[];
-extern char D_L00_0015F528[];
-extern char D_L00_0015F530[];
-extern char D_L00_0015F538[];
-extern char D_L00_0015F540[];
-extern char D_L00_0015F548[];
-extern char D_L00_0015F550[];
-extern char D_L00_0015F560[];
+extern char freeze_dialog_default_body_text[] __asm__("D_L00_0015F508");
+extern char freeze_dialog_body_format[] __asm__("D_L00_0015F510");
+extern char results_indented_label_format[] __asm__("D_L00_0015F520");
+extern char results_first_place_format[] __asm__("D_L00_0015F528");
+extern char results_second_place_format[] __asm__("D_L00_0015F530");
+extern char results_third_place_format[] __asm__("D_L00_0015F538");
+extern char results_other_place_format[] __asm__("D_L00_0015F540");
+extern char results_record_label_format[] __asm__("D_L00_0015F548");
+extern char results_record_time_format[] __asm__("D_L00_0015F550");
+extern char results_record_score_format[] __asm__("D_L00_0015F560");
 extern u8 dialog_font_glyph_metrics[] __asm__("D_L00_001C3150");
 extern struct TextRegion D_L00_001E7A50;
 extern struct TextRegion D_L00_001E7A68;
@@ -158,7 +158,7 @@ void level_draw_dialog_text(void) {
         s32 h;
         f32 alpha;
 
-        text = D_L00_0015F508;
+        text = freeze_dialog_default_body_text;
         left = 0;
         mid = 0;
         right = 0;
@@ -213,7 +213,7 @@ void level_draw_dialog_text(void) {
             } else if (D_L00_0015F5A8 != 0) {
                 left = 0x524E;
                 right = 0x524B;
-                sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
+                sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
                 text = formatted_dialog_body;
             } else {
                 mid = 0x4FA8;
@@ -231,7 +231,7 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS:
             left = 0x524E;
             right = 0x524B;
-            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
+            sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
             text = formatted_dialog_body;
             break;
         case FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS:
@@ -252,7 +252,7 @@ void level_draw_dialog_text(void) {
             break;
         case FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON:
             mid = 0x4FA8;
-            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
+            sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
             text = formatted_dialog_body;
             break;
         }
@@ -370,15 +370,15 @@ void level_draw_dialog_text(void) {
                          results_rank_and_records_frame_center_y + truncate_float_to_s32((f32)results_rank_and_records_frame_half_height * scale),
                          results_rank_and_records_frame_center_x - truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale),
                          results_rank_and_records_frame_center_x + truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale), pulse);
-            sprintf(line, D_L00_0015F520, get_help_message_text(0x5240));
+            sprintf(line, results_indented_label_format, get_help_message_text(0x5240));
             if (hero.race_position == 1) {
-                sprintf(line, D_L00_0015F528, 1);
+                sprintf(line, results_first_place_format, 1);
             } else if (hero.race_position == 2) {
-                sprintf(line, D_L00_0015F530, 2);
+                sprintf(line, results_second_place_format, 2);
             } else if (hero.race_position == 3) {
-                sprintf(line, D_L00_0015F538, 3);
+                sprintf(line, results_third_place_format, 3);
             } else {
-                sprintf(line, D_L00_0015F540, hero.race_position);
+                sprintf(line, results_other_place_format, hero.race_position);
             }
             line[3] = ' ';
             if (hero.race_position == 1) {
@@ -394,22 +394,22 @@ void level_draw_dialog_text(void) {
                 rem = best - min * unit;
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A3));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A3));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x26, first_place_or_record_color, line, -1);
-                sprintf(line, D_L00_0015F550, min, sec, hund);
+                sprintf(line, results_record_time_format, min, sec, hund);
                 font_print_center(0x100, results_rank_and_records_base_y + 0x3A, first_place_or_record_color, line, -1);
             } else {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A2));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A2));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x30, other_place_or_no_record_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.race_score) {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A5));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x56, first_place_or_record_color, line, -1);
-                sprintf(line, D_L00_0015F560, hero.race_score);
+                sprintf(line, results_record_score_format, hero.race_score);
                 font_print_center(0x100, results_rank_and_records_base_y + 0x6A, first_place_or_record_color, line, -1);
             } else {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A4));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A4));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x60, other_place_or_no_record_color, line, -1);
             }
             font_print_center(0x100, results_rank_and_records_base_y + 0x90, results_label_color, get_help_message_text(0x5249), -1);
