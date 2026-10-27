@@ -1992,7 +1992,7 @@ extern RopeVec D_L07_0020DAE0[];
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float D_L07_0020DBA0[];
+extern float rope_segment_angular_velocities[] __asm__("D_L07_0020DBA0");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float select_segment_point_near_sphere_surface(void *, void *, void *, void *, void *, float) __asm__("FUN_L07_0029e6d8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2101,7 +2101,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
         dot = fast_vec_dot(delta, basis);
         length = fast_vec_length(delta);
         angle = 1.5707964f - fast_arc_sin(dot / (length * 2.8f));
-        turn = rope_spring_turn(&D_L07_0020DBA0[i], 0.0f, angle, 0.06f, 0.2f, 0.0f);
+        turn = rope_spring_turn(&rope_segment_angular_velocities[i], 0.0f, angle, 0.06f, 0.2f, 0.0f);
         difference = fast_subtract_rotations(angle, turn);
         if (FUN_001f99c0(difference) > 0.31415927f) {
             turn = fast_add_rotations(turn, fast_subtract_rotations(difference, 0.31415927f));
