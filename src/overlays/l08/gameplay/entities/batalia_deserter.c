@@ -150,7 +150,7 @@ typedef struct {
     int target_timer;
 } WD8;
 extern unsigned char D_0013DD49 __attribute__((section(".data")));
-extern char D_L08_001622E8[];
+extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
 extern void FUN_L00_0025a120(void *);
@@ -194,7 +194,7 @@ void batalia_deserter_update(WM *moby) {
             return;
         }
         deserter_data->f2C = 4.0f;
-        deserter_data->p40 = (void *)D_L08_001622E8;
+        deserter_data->p40 = (void *)batalia_deserter_name_text;
         moby->state = 1;
         if (deserter_data->i64 >= 0)
             initialize_npc_dialogue(moby, (char *)deserter_data + 0x20);
