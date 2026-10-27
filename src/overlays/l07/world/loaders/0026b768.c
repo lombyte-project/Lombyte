@@ -61,7 +61,7 @@ extern Ldg26b768 D_0015EE48;
 #include "rnc/overlay/l07/world/loaders/0026b768_globals.h"
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L07_00182840[3];
-extern u64 D_L07_00182858[3];
+extern u64 l07_64x64_texture_state[3] __asm__("D_L07_00182858");
 extern u64 D_L07_00182870[3];
 extern s32 l07_tfrag_texture_address_words[] __asm__("D_L07_001C4A80");
 extern s32 l07_moby_texture_address_words[] __asm__("D_L07_00199B00");
@@ -225,10 +225,10 @@ s32 load_level_assets(s32 full, s32 keep) {
             (gs_texture_allocation_base + level_header[0x25]) >> 8, 0, 0, 0, 4);
         D_L07_00182840[1] = 0x0000FFA0000000E0;
         D_L07_00182840[2] = 0x0040000400004000;
-        D_L07_00182858[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+        l07_64x64_texture_state[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
             (gs_texture_allocation_base + level_header[0x27]) >> 8, 0, 0, 0, 4);
-        D_L07_00182858[1] = 0x0000FFA0000000E0;
-        D_L07_00182858[2] = 0x0040000400004000;
+        l07_64x64_texture_state[1] = 0x0000FFA0000000E0;
+        l07_64x64_texture_state[2] = 0x0040000400004000;
         D_L07_00182870[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + level_header[0x31]) >> 8, 0, 0, 0, 4);
         D_L07_00182870[1] = 0x0000FFA0000000E0;
