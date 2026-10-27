@@ -2229,8 +2229,8 @@ extern unsigned char D_001413F4[];
 extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
-extern float D_L10_00161D58 __attribute__((sda));
-extern float D_L10_00161D5C __attribute__((sda));
+extern float jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") __attribute__((sda));
+extern float jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
@@ -2245,11 +2245,15 @@ typedef struct {
 
 void update_jitter_strand_grid_moby(struct Moby *moby) __asm__("FUN_L10_002dcc58");
 void update_jitter_strand_grid_moby(struct Moby *moby) {
+    enum {
+        JITTER_STRAND_GRID_STATE_INITIALIZE = 0,
+        JITTER_STRAND_GRID_STATE_UPDATE = 1
+    };
     PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
     Vec4 jitter[20][10];
 
     switch (moby->state) {
-    case 0:
+    case JITTER_STRAND_GRID_STATE_INITIALIZE:
         if (current_level_index == 10 && D_001413F4[0] == 1) {
             delete_moby(moby);
             break;
@@ -2268,17 +2272,17 @@ void update_jitter_strand_grid_moby(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 1: {
+    case JITTER_STRAND_GRID_STATE_UPDATE: {
         int group, item, row;
 
-        vars->phase += D_L10_00161D5C * frame_time;
+        vars->phase += jitter_strand_phase_advance_rate_gp * frame_time;
         if (vars->phase > 1.0f) vars->phase -= 1.0f;
         for (group = 0; group < 4; group++) {
             for (item = 0; item < 10; item++) {
                 if (fast_dec_timer(&vars->timers[group][item])) {
                     for (row = 0; row < 20; row++) {
                         clear_u64_value(&vars->pos[group][row][item]);
-                        vars->pos[group][row][item].f[1] = row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
+                        vars->pos[group][row][item].f[1] = row * (jitter_strand_row_y_span_gp / 20.0f) - jitter_strand_row_y_span_gp * 0.5f;
                         vars->pos[group][row][item].f[3] = 1.0f;
                         random_vector(&jitter[row][item], 0.0f, D_L10_00161D54 * frame_time);
                     }
