@@ -1917,7 +1917,7 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern unsigned char D_L11_00162590;
+extern unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590");
 void update_level11_layered_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031e2f0");
 
 void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
@@ -1978,11 +1978,11 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
             advance_wrapped_sine_pair(layered_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
             advance_scroll_offsets(2);
             if (effect_distance < 15.0f) {
-                D_L11_00162590 = 0xFF;
+                l11_layered_effect_texture_29_distance_fade_alpha = 0xFF;
             } else if (effect_distance < 35.0f) {
                 D_L11_0016258C[4] = func_001FA898_r((1.0f - (effect_distance - 15.0f) / 20.0f) * 255.0f);
             } else {
-                D_L11_00162590 = 0;
+                l11_layered_effect_texture_29_distance_fade_alpha = 0;
             }
         }
         advance_scroll_entry(0);
