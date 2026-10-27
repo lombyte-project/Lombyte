@@ -1897,7 +1897,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
 /* squared distance from a point to a projected target, or a large value when out of range */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
 
-extern char D_L11_001679E0[];
+extern char ship_target_projection_offset_reference[] __asm__("D_L11_001679E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1921,8 +1921,8 @@ float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
             dx = -dx;
         if (dy < 0)
             dy = -dy;
-        qcopy(target_projection_point, D_L11_001679E0);
-        scale_vector_xyz(target_projection_point, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
+        qcopy(target_projection_point, ship_target_projection_offset_reference);
+        scale_vector_xyz(target_projection_point, ship_target_projection_offset_reference, *(float *)(target_moby + 0xC) / 1280.0f);
         add_vector_xyz(target_projection_point, target_projection_point, target_moby + 0x10);
         project_world_point_to_screen_pixels(target_projection_point, &cx, &cy, 0);
         cx = cx - ax;
