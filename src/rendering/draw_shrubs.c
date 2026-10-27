@@ -4,8 +4,8 @@
 #include "rnc/data_labels.h"
 
 extern volatile s32 D_0015EE74;
-extern u8 D_001603B0[];
-extern u8 D_001603C0[];
+extern u8 shrub_textures_label[] __asm__("D_001603B0");
+extern u8 shrub_draw_label[] __asm__("D_001603C0");
 struct ShrubDrawState {
     s32 unk0;
     s32 pad[2];
@@ -28,15 +28,15 @@ void draw_shrubs(void) {
     D_0015EE74 = gs_texture_allocation_start;
     packet += 0x10;
     render_packet_cursor.addr = packet;
-    noop_core_callback_secondary(D_001603B0, 1);
+    noop_core_callback_secondary(shrub_textures_label, 1);
     if (D_0018A2D0.unk0 != 0) {
         flush_cache(0);
         shrub_proc();
         WriteDmaChannel(D_001D8EB0, 0x3200, 0x40);
     }
-    noop_core_callback_secondary(D_001603C0, 7);
+    noop_core_callback_secondary(shrub_draw_label, 7);
     dma_shrub_textures();
-    noop_core_callback(D_001603C0, 7);
+    noop_core_callback(shrub_draw_label, 7);
 }
 
 extern __typeof__(draw_shrubs) func_00228B38 __attribute__((alias("FUN_00228b38")));
