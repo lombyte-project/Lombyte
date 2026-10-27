@@ -702,9 +702,9 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
 
 
-extern char D_L01_001620E0 __attribute__((sda));
-extern char D_L01_001620F0 __attribute__((sda));
-extern char D_L01_00162100 __attribute__((sda));
+extern char sandmouse_first_particle_config __asm__("D_L01_001620E0") __attribute__((sda));
+extern char sandmouse_second_particle_config __asm__("D_L01_001620F0") __attribute__((sda));
+extern char sandmouse_third_particle_config __asm__("D_L01_00162100") __attribute__((sda));
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_type_74_particle(void *, void *, void *, void *, int) __asm__("FUN_L01_0028a7a8");
@@ -720,9 +720,9 @@ void emit_sandmouse_particles(char *source_moby) {
         z[2] = -(random_float_between_alt(1.0f, 2.0f) * frame_time);
         *(OvlQuad *)particle_velocity = *(OvlQuad *)z;
         moby_point_position(source_moby, 0, particle_spawn_position);
-        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620E0, 1);
-        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_001620F0, 1);
-        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &D_L01_00162100, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &sandmouse_first_particle_config, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &sandmouse_second_particle_config, 1);
+        spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &sandmouse_third_particle_config, 1);
     }
 }
 #define NOT_SDA
