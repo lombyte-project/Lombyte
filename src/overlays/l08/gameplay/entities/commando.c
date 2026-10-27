@@ -843,7 +843,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
         phase=data->phase_start; amp=data->amp_start; amp2=data->amp2_start;
         phase0=data->phase0; phase1=data->phase1;
         {
-        /* Unused: 30 pseudos before i, so i+1 hashes after &data->puff_timer (HARD.md). */
+        /* Fakematch: 30 unused locals before i, so i+1 hashes after &data->puff_timer. */
         int pad0,pad1,pad2,pad3,pad4,pad5,pad6,pad7,pad8,pad9,pad10,pad11,pad12,pad13,pad14,pad15,pad16,pad17,pad18,pad19,pad20,pad21,pad22,pad23,pad24,pad25,pad26,pad27,pad28,pad29;
         int i;
         register int j;
@@ -925,7 +925,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             /* Fakematch: a never-taken branch (the cmov folds at combine, jump2 deletes it).
                Retail had about 50 more insns at gcse time that vanish later; they size the PRE
                expression hash table (n_insns/2|1 = 583 buckets), whose walk order numbers the
-               PRE pseudos and so orders the spill slots (see HARD.md). 42 one-insn calls (41..44 equal). */
+               PRE pseudos and so orders the spill slots. 42 one-insn calls (41..44 equal). */
             int dead = 0;
             if (data->flags & 0x8000) dead = 0;
             if (dead) {
