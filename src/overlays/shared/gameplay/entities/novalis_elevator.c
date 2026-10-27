@@ -1006,7 +1006,7 @@ extern int probe_vertical_ground_collision(Vs *p, int x, int y, float f, float g
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-extern float D_L01_001DEB40[];
+extern float sand_mouse_follow_ground_probe_up_distance[] __asm__("D_L01_001DEB40");
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) __asm__("FUN_L01_002e3110");
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) {
     Vs scaled_hero_follow_offset;
@@ -1017,7 +1017,7 @@ void sand_mouse_compute_target(char *following_moby, char *follow_movement_state
     add_vector_xyz(follow_movement_state, &scaled_hero_follow_offset, &unit_hero_follow_offset);
     add_vector_xyz(follow_movement_state, follow_movement_state, &hero_context->motion.pos);
     if (*(int *)(follow_movement_state + 0x68) == 0) {
-        if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, D_L01_001DEB40[0], 2.0f)) {
+        if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, sand_mouse_follow_ground_probe_up_distance[0], 2.0f)) {
             *(float *)(follow_movement_state + 8) = D_L01_001742E8;
         }
     } else {
