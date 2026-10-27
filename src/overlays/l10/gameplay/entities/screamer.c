@@ -1287,7 +1287,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int tick_countdown_32(void *);
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float D_L10_00161E24 __attribute__((sda));
+extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
 extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update.h"
@@ -1344,7 +1344,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
 
     update_toxic_crab_hit_reactions_and_targeting(m);
     target_moby = crab_data->tgt;
-    m->f2C = *(float *)(m->p24 + 0x24) * D_L10_00161E24;
+    m->f2C = *(float *)(m->p24 + 0x24) * l10_toxic_crab_size_scale;
     FUN_L00_00263ac8(2.5f, (int)m, 2, crab_data->q2B0);
     *(OvlQuad *)from = *(OvlQuad *)m->pos;
     from[2] += 1.0f;
@@ -1379,17 +1379,17 @@ void toxic_crab_update(Moby2E30F8 *m) {
         crab_data->v170[3] = m->f48;
         FUN_L01_0026d930((char *)&crab_data->iD0);
         {
-            float k = D_L10_00161E24 * 1024.0f;
+            float k = l10_toxic_crab_size_scale * 1024.0f;
             float initial_movement_step;
-            float e;
+            float initial_movement_size_scale;
             int r;
             crab_data->fDC = 0.5f;
             crab_data->fD8 = 2.0f;
             r = truncate_float_to_s32(k);
             initial_movement_step = crab_data->f1A4 * frame_time;
-            e = D_L10_00161E24;
+            initial_movement_size_scale = l10_toxic_crab_size_scale;
             crab_data->iD0 = r;
-            crab_data->fD4 = e;
+            crab_data->fD4 = initial_movement_size_scale;
             crab_data->fF4 = initial_movement_step;
         }
         {
