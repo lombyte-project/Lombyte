@@ -873,7 +873,7 @@ skip:
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED498), where it is exact; names translated to the US level program. */
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern char D_L17_001D99E0[];
+extern char fighter_jet_ammo_icon_strip_data[] __asm__("D_L17_001D99E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L17_001D9B68[];
@@ -967,9 +967,9 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     x = 0x18;
     for (i = 0; i < hero.ship_ammo_max; i++) {
         if (i < hero.ship_ammo) {
-            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x50008F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, fighter_jet_ammo_icon_strip_data, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
-            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x20004F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, fighter_jet_ammo_icon_strip_data, 0x19, 0xFFFFF3, 0x20004F00);
         }
         ammo_capacity = hero.ship_ammo_max;
         if (i == ammo_capacity >> 1) {
