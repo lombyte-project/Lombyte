@@ -1315,7 +1315,7 @@ extern void add_vector_xyz_2cb418(void *, void *, void *) __asm__("FUN_001f9a10"
 extern void subtract_vector_xyz_2cb418(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void mark_moby_for_removal_2cb418(Moby *) __asm__("FUN_0020c828");
 
-extern f32 D_L00_00161894[2];
+extern f32 homing_shot_pitch_bias[2] __asm__("D_L00_00161894");
 extern f32 D_L00_00161890[2];
 extern f32 jitter __asm__("D_L00_0016187C") __attribute__((sda));
 extern f32 trail_speed __asm__("D_L00_00161880") __attribute__((sda));
@@ -1339,7 +1339,7 @@ void update_homing_shot(Moby *shot_moby) {
     int left;
 
     vars = *(ShotVars_2cb418 **)&shot_moby->pvars;
-    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, -D_L00_00161894[0]);
+    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, -homing_shot_pitch_bias[0]);
     if (vector_length_xyz_2cb418(vars) < 0.1f) {
         if (vars->timer < scale_game_frames_2cb418(0x23) - scale_game_frames_2cb418(1) && vars->bounces == 0) {
             yaw = vars->rest_yaw;
