@@ -34,7 +34,7 @@ typedef struct Pad {
     u8 rep_timer; /* 0x34F */
 } Pad;
 
-extern volatile u8 D_0015EDB4;
+extern volatile u8 draw_map51 __asm__("D_0015EDB4");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -82,7 +82,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
             pad_state->axes[i] = convert_integer_to_float(pad_read_data[i + 2]) * 0.003921569f;
         }
     }
-    if (D_0015EDB4) {
+    if (draw_map51) {
         pad_state->axes[2] = -pad_state->axes[2];
         pad_state->axes[0] = -pad_state->axes[0];
         SWAPLR(pad_state->held);
@@ -117,7 +117,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
     pad_state->x1C8 = pad_state->released;
     pad_state->x1C0 = pad_state->held;
     pad_state->x348 = pad_state->held;
-    if (D_0015EDB4) {
+    if (draw_map51) {
         pad_state->prev[2] = -pad_state->prev[2];
         pad_state->prev[0] = -pad_state->prev[0];
         SWAPLR(pad_state->x1C0);
