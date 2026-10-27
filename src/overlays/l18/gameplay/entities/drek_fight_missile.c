@@ -1069,7 +1069,7 @@ extern short lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") __att
 extern short lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") __attribute__((sda));
 extern short lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") __attribute__((sda));
 extern short lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") __attribute__((sda));
-extern short D_L18_00162320 __attribute__((sda));
+extern short lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") __attribute__((sda));
 extern short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") __attribute__((sda));
 extern short lift_mesh_quad_color_gp __asm__("D_L18_00162328") __attribute__((sda));
 extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
@@ -1094,7 +1094,7 @@ void draw_lift_25_quad_mesh(struct Moby *moby) {
     pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
-    pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_upper_word_gp) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
@@ -1140,7 +1140,7 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
     pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
-    pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_upper_word_gp) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
@@ -1189,7 +1189,7 @@ void draw_lift_22_quad_mesh(struct Moby *moby) {
     pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
     pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
-    pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_upper_word_gp) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
