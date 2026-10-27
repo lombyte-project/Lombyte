@@ -1987,7 +1987,11 @@ def build_overlays() -> Path:
         )
     sn_root = SN_COMPILER
     OVERLAYS_BUILD.mkdir(parents=True, exist_ok=True)
-    (OVERLAYS_BUILD / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
+    helper = OVERLAYS_BUILD / "padless-asm.py"
+    # Every overlay C object depends on this helper; preserve its timestamp
+    # when reconfiguring without a content change.
+    if not helper.is_file() or helper.read_text() != PADLESS_ASM_HELPER:
+        helper.write_text(PADLESS_ASM_HELPER)
     game_root = GAME_COMPILER
     rel_root = os.path.relpath(ROOT, OVERLAYS_BUILD)
     includes = (f"-I{game_root}/include -I{rel_root}/src -I{rel_root}/include "
