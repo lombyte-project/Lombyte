@@ -2990,8 +2990,8 @@ typedef struct { V_ec290 p[5]; } P_ec290;
 
 typedef struct { V_ec290 hdr; V_ec290 p[4]; } H_ec290;
 
-extern H_ec290 D_L18_001DA150[];
-extern P_ec290 D_L18_001DA160[];
+extern H_ec290 l18_electric_bolt_side_arc_predecessor_view[] __asm__("D_L18_001DA150");
+extern P_ec290 l18_electric_bolt_side_arc_points[] __asm__("D_L18_001DA160");
 extern V_ec290 D_L18_001D9CF0[];
 extern V_ec290 D_L18_001D9D00[2][20];
 extern V_ec290 D_L18_001D9FD0[];
@@ -3157,27 +3157,27 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             scale_vector_xyz_c(&scratch_vectors[5], &scratch_vectors[0], side_arc_scale);
             build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[6], rotation_angle_or_particle_scale);
             build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[7], scale);
-            qcopy(&D_L18_001DA160[k].p[0], &scratch_vectors[8]);
-            add_vector_xyz(&D_L18_001DA160[k].p[1], &scratch_vectors[8], &scratch_vectors[5]);
+            qcopy(&l18_electric_bolt_side_arc_points[k].p[0], &scratch_vectors[8]);
+            add_vector_xyz(&l18_electric_bolt_side_arc_points[k].p[1], &scratch_vectors[8], &scratch_vectors[5]);
             side_arc_scale = 1.0f;
             for (j = 2; j < 5; j++) {
-                subtract_vector_xyz(&scratch_vectors[9], &D_L18_001DA150[k].p[j - 1], D_L18_001677C0_c);
+                subtract_vector_xyz(&scratch_vectors[9], &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1], D_L18_001677C0_c);
                 rotation_angle_or_particle_scale = random_float_between_c(0.17453292f, 0.959931076f) * side_arc_scale;
                 side_arc_scale = -side_arc_scale;
                 build_look_at_matrix(&scratch_vectors[5], &scratch_vectors[5], &scratch_vectors[9], rotation_angle_or_particle_scale);
-                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &scratch_vectors[5]);
+                add_vector_xyz((l18_electric_bolt_side_arc_points[k].p + j), &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1], &scratch_vectors[5]);
             }
         } else {
             int j;
             for (j = 1; j < 5; j++) {
-                subtract_vector_xyz(&side_arc_segment_offsets[j], (D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1]);
+                subtract_vector_xyz(&side_arc_segment_offsets[j], (l18_electric_bolt_side_arc_points[k].p + j), &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1]);
                 side_arc_segment_offsets[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 side_arc_segment_offsets[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 side_arc_segment_offsets[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
-            qcopy(&D_L18_001DA160[k].p[0], &scratch_vectors[8]);
+            qcopy(&l18_electric_bolt_side_arc_points[k].p[0], &scratch_vectors[8]);
             for (j = 1; j < 5; j++) {
-                add_vector_xyz((D_L18_001DA160[k].p + j), &D_L18_001DA150[k].p[j - 1], &side_arc_segment_offsets[j]);
+                add_vector_xyz((l18_electric_bolt_side_arc_points[k].p + j), &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1], &side_arc_segment_offsets[j]);
             }
             {
                 int x = D_L18_001620D0[k];
