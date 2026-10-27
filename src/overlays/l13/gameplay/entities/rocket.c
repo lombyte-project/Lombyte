@@ -843,8 +843,8 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern void func_L00_0025A8C0_30A9B0(void *, void *, int, void *, float) __asm__("FUN_L13_00265990");
 extern float D_L13_00161E58_gp __asm__("D_L13_00161E58") __attribute__((sda));
-extern float D_L13_00161E74_gp __asm__("D_L13_00161E74") __attribute__((sda));
-extern float D_L13_00161E78_gp __asm__("D_L13_00161E78") __attribute__((sda));
+extern float l13_blarg_space_commando_probe_trigger_distance_xy __asm__("D_L13_00161E74") __attribute__((sda));
+extern float l13_blarg_space_commando_horizontal_speed_limit_base __asm__("D_L13_00161E78") __attribute__((sda));
 extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float, float) __asm__("FUN_L13_00263fc8");
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
@@ -894,7 +894,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         vars->ctl.unkC = 0.5f;
         vars->ctl.unk0 = func_001FA898_r(D_L13_00161E58_gp * 716.8f);
         vars->ctl.unk4 = D_L13_00161E58_gp * 0.7f;
-        vars->ctl.unk24 = D_L13_00161E78_gp * frame_time * random_float_between(0.95f, 1.05f);
+        vars->ctl.unk24 = l13_blarg_space_commando_horizontal_speed_limit_base * frame_time * random_float_between(0.95f, 1.05f);
         qcopy(&vars->home, &moby->pos);
         FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
         moby->state = 1;
@@ -904,7 +904,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
             f32 dist = vector_distance_xy_alt(&moby->pos, &target->pos);
-            if (D_L13_00161E74_gp < dist) {
+            if (l13_blarg_space_commando_probe_trigger_distance_xy < dist) {
                 if (fast_difference_between_rotations(moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x,
                                                                  target->pos.y - moby->pos.y)) < 0.2617994f) {
                     moby->state = 2;
@@ -965,7 +965,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 5) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
             }
-        } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < D_L13_00161E74_gp) {
+        } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < l13_blarg_space_commando_probe_trigger_distance_xy) {
             FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
             moby->state = 5;
             if (moby->prev_seq != 6) {
@@ -1047,7 +1047,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
-        } else if (dist < D_L13_00161E74_gp) {
+        } else if (dist < l13_blarg_space_commando_probe_trigger_distance_xy) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -1076,7 +1076,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < D_L13_00161E74_gp) {
+        } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < l13_blarg_space_commando_probe_trigger_distance_xy) {
             FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
             moby->state = 12;
             if (moby->prev_seq != 6) {
