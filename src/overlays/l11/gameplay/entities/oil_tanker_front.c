@@ -1619,14 +1619,14 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
 
-extern short D_L11_00162400 __attribute__((sda));
-extern short D_L11_00162404 __attribute__((sda));
-extern short D_L11_00162408 __attribute__((sda));
-extern short D_L11_0016240C __attribute__((sda));
-extern short D_L11_00162410 __attribute__((sda));
+extern short bubble_pre_surface_vertical_acceleration_gp __asm__("D_L11_00162400") __attribute__((sda));
+extern short bubble_shrink_vertical_acceleration_gp __asm__("D_L11_00162404") __attribute__((sda));
+extern short bubble_horizontal_deceleration_gp __asm__("D_L11_00162408") __attribute__((sda));
+extern short bubble_surface_crossing_velocity_scale_gp __asm__("D_L11_0016240C") __attribute__((sda));
+extern short bubble_spark_spawn_random_limit_gp __asm__("D_L11_00162410") __attribute__((sda));
 extern short D_L11_00162414 __attribute__((sda));
-extern short D_L11_00162418 __attribute__((sda));
-extern short D_L11_0016241C __attribute__((sda));
+extern short bubble_shrink_effect_color_range_start_gp __asm__("D_L11_00162418") __attribute__((sda));
+extern short bubble_shrink_effect_color_range_end_gp __asm__("D_L11_0016241C") __attribute__((sda));
 void update_bubble_motion_and_scale(struct Moby *bubble_moby) __asm__("FUN_L11_0031ab08");
 
 void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
@@ -1649,20 +1649,20 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
     }
     switch (bubble_moby->state) {
     case BUBBLE_MOVE_UNTIL_SURFACE_CROSSING:
-        *(float *)(bubble_vars + 8) -= *(float *)&D_L11_00162400 * frame_time_sq;
+        *(float *)(bubble_vars + 8) -= *(float *)&bubble_pre_surface_vertical_acceleration_gp * frame_time_sq;
         if (**(float **)(bubble_vars + 0x24) + 3.0f < bubble_moby->pos.z) {
-            if (random_integer_below_c3(*(int *)&D_L11_00162410) == 0) {
+            if (random_integer_below_c3(*(int *)&bubble_spark_spawn_random_limit_gp) == 0) {
                 FUN_L11_0031b098_c(bubble_moby);
             }
         }
         if (bubble_moby->pos.z < **(float **)(bubble_vars + 0x24)) {
-            scale_vector_xyz(bubble_vars, bubble_vars, *(float *)&D_L11_0016240C);
+            scale_vector_xyz(bubble_vars, bubble_vars, *(float *)&bubble_surface_crossing_velocity_scale_gp);
             bubble_moby->state = 2;
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 8, 4);
         }
         break;
     case BUBBLE_SHRINK_TO_REMOVAL:
-        *(float *)(bubble_vars + 8) -= *(float *)&D_L11_00162404 * frame_time_sq;
+        *(float *)(bubble_vars + 8) -= *(float *)&bubble_shrink_vertical_acceleration_gp * frame_time_sq;
         rate = bubble_moby->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
@@ -1671,7 +1671,7 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
             spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos, randomized_effect_vector, *(float *)&D_L11_00162414,
                                     **(float **)(bubble_vars + 0x24));
             if (spawned_effect != 0) {
-                *(int *)(spawned_effect + 4) = fast_tween_color(*(int *)&D_L11_00162418, *(int *)&D_L11_0016241C,
+                *(int *)(spawned_effect + 4) = fast_tween_color(*(int *)&bubble_shrink_effect_color_range_start_gp, *(int *)&bubble_shrink_effect_color_range_end_gp,
                                                random_float_between(0.0f, 1.0f));
             }
         }
@@ -1684,7 +1684,7 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
     }
     add_vector_xyz(&bubble_moby->pos, &bubble_moby->pos, bubble_vars);
     horizontal_speed = vector_length_xy(bubble_vars);
-    approach_value(&horizontal_speed, 0.0f, *(float *)&D_L11_00162408 * frame_time_sq);
+    approach_value(&horizontal_speed, 0.0f, *(float *)&bubble_horizontal_deceleration_gp * frame_time_sq);
     set_vector_length_xy(bubble_vars, bubble_vars, horizontal_speed);
 }
 extern void *create_moby() __asm__("FUN_0020c4f8");
