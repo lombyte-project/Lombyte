@@ -442,7 +442,7 @@ void update_hero_from_debug_camera(void) {
 typedef struct {
     s32 rows[6];
 } DebugRowCounts;
-extern DebugRowCounts D_L00_001E7920;
+extern DebugRowCounts l00_debug_menu_column_row_counts __asm__("D_L00_001E7920");
 /* The screen half size and background color of the level's view context. */
 typedef struct {
     u8 pad0[0x200];
@@ -554,7 +554,7 @@ void update_debug_menu(void) {
         g_debug_menu.unknown_9c = (s32)D_L00_00166C80.camera.position[2] >> 2;
         return;
     }
-    row_counts = D_L00_001E7920;
+    row_counts = l00_debug_menu_column_row_counts;
     if (pressed & 0x2000) {
         if (++g_debug_menu.selected_column == 3)
             g_debug_menu.selected_column = 0;
