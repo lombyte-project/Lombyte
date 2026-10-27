@@ -1037,9 +1037,9 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C3E0), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_L07_00211550[];
+extern char mine_group_not_found_message[] __asm__("D_L07_00211550");
 extern char D_L07_00211580[];
-extern char D_L07_002115D0[];
+extern char mine_group_extra_mines_message[] __asm__("D_L07_002115D0");
 extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
@@ -1154,7 +1154,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                               path + 0x10 + ((j + 1) % *(int *)path) * 16);
         }
         if (get_first_moby_in_group(&current, *(int *)(data + 0x74), 1, 0)) {
-            debug_print(D_L07_00211550, *(int *)(data + 0x74));
+            debug_print(mine_group_not_found_message, *(int *)(data + 0x74));
             return;
         }
         first = *(int *)(data + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
@@ -1172,7 +1172,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                 if (placed < child_count - 1) {
                     debug_print(D_L07_00211580, placed + 1, *(int *)(data + 0x74), child_count);
                 } else if (placed == child_count - 1) {
-                    debug_print(D_L07_002115D0, *(int *)(data + 0x74), child_count);
+                    debug_print(mine_group_extra_mines_message, *(int *)(data + 0x74), child_count);
                 }
                 *(int *)(data + 0x78) = placed + 1;
                 break;
