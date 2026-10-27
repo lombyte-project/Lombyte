@@ -5,7 +5,7 @@
 <rect width="800" height="1104" rx="10" fill="url(#card-face)"/>
 <defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3632"/><stop offset="1" stop-color="#d87620"/></linearGradient><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#de812f" stop-opacity="0.10"/><stop offset="0.5" stop-color="#de812f" stop-opacity="0.02"/><stop offset="1" stop-color="#000000" stop-opacity="0.08"/></linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#231a12"/><stop offset="1" stop-color="#17110c"/></linearGradient><radialGradient id="drawer-halo"><stop offset="0" stop-color="#0d1117" stop-opacity="0.6"/><stop offset="1" stop-color="#0d1117" stop-opacity="0"/></radialGradient></defs>
 <defs><radialGradient id="panel-glow"><stop offset="0" stop-color="#de812f" stop-opacity="0.28"/><stop offset="1" stop-color="#de812f" stop-opacity="0"/></radialGradient></defs>
-<polygon points="10,10 790,10 790,96 10,96" fill="url(#drawer-face)"><title>Executable and level overlays: 3,533,752 of 3,547,932 recoverable bytes are matching C (99.6%)</title></polygon>
+<polygon points="10,10 790,10 790,96 10,96" fill="url(#drawer-face)"><title>Executable and level overlays: 3,535,712 of 3,547,932 recoverable bytes are matching C (99.7%)</title></polygon>
 <clipPath id="drawer-clip"><polygon points="10,10 790,10 790,96 10,96"/></clipPath>
 <g clip-path="url(#drawer-clip)" opacity="0.24">
 <rect x="10.00" y="10.00" width="138.49" height="21.50" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.6" shape-rendering="geometricPrecision"><title>SDK / Dma · exact · 45 functions · 11,136 B · C_EXACT 100.00% · C_FUZZY 100.00% · 38 matching C · 0 pending · 7 intentional asm</title></rect>
@@ -145,18 +145,18 @@
 <polygon points="10,10 790,10 790,96 10,96" fill="url(#sheen)" pointer-events="none"/>
 <g clip-path="url(#drawer-clip)" pointer-events="none"><ellipse cx="400.0" cy="53.0" rx="156.0" ry="51.6" fill="url(#drawer-halo)"/><ellipse cx="400.0" cy="57.0" rx="109.2" ry="60.2" fill="url(#panel-glow)"/></g>
 <text x="400.0" y="35" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5"><tspan font-size="12" font-weight="800" fill="#c3cbd8">43.6%</tspan> data in C<title>Data in C: 5,418,333 of 12,433,372 B, of which 4,595,735 B are zeros (zero-initialised level data).</title></text>
-<text x="400.0" y="67" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="30" font-weight="800" fill="#de812f">99.6%</text>
+<text x="400.0" y="67" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="30" font-weight="800" fill="#de812f">99.7%</text>
 <text x="400.0" y="83" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">exe + overlays in C</text>
 <linearGradient id="legend-shade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#0d1117" stop-opacity="0"/><stop offset="0.4" stop-color="#0d1117" stop-opacity="0.5"/><stop offset="1" stop-color="#0d1117" stop-opacity="0.5"/></linearGradient>
 <rect x="565" y="10" width="225" height="86" fill="url(#legend-shade)" clip-path="url(#drawer-clip)" pointer-events="none"/>
 <rect x="635" y="29.0" width="10" height="10" rx="2" fill="#de812f"></rect>
-<text x="650" y="38.0" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">matching C &#183; 3,533,752 B</text>
+<text x="650" y="38.0" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">matching C &#183; 3,535,712 B</text>
 <rect x="635" y="48.0" width="10" height="10" rx="2" fill="#c3cbd8"></rect>
 <text x="650" y="57.0" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">intentional asm &#183; 93,704 B</text>
 <rect x="635" y="67.0" width="10" height="10" rx="2" fill="url(#progress-range)"><title>Pending C: dark plate to copper shows C_EXACT coverage; bolt orange marks 100% exact.</title></rect>
-<text x="650" y="76.0" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">pending C &#183; 14,180 B</text>
+<text x="650" y="76.0" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">pending C &#183; 12,220 B</text>
 <text x="10" y="114" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">EXECUTABLE</text>
-<text x="10" y="184" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 3,182,684 of 3,193,428 B matching C (99.7%)</text>
+<text x="10" y="184" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 3,184,644 of 3,193,428 B matching C (99.7%)</text>
 <line x1="24" y1="120" x2="24" y2="136" stroke="#3a3632" stroke-width="2"/>
 <line x1="24" y1="190" x2="24" y2="1042" stroke="#3a3632" stroke-width="2"/>
 <path d="M 24 136 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
@@ -580,17 +580,17 @@
 <rect x="624.88" y="438" width="43.59" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay/entities/lieutenant.c: 4/4 functions matching C, 4,272/4,272 B</title></rect>
 <rect x="669.47" y="438" width="2.53" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay/vendor/002e79a8.c: 1/1 functions matching C, 248/248 B</title></rect>
 <path d="M 24 470 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
-<circle cx="24" cy="470" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
+<circle cx="24" cy="470" r="3.5" fill="#de812f" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="474" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">05 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Rilgar</tspan><tspan fill="#a6adc8"> &#183; Blackwater City: canals and the hoverboard race</tspan></text>
-<text x="790" y="474" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">98.5%</text>
-<text x="790" y="490" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">77/78 fn &#183; 135,164 B</text>
+<text x="790" y="474" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#de812f">100.0%</text>
+<text x="790" y="490" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">78/78 fn &#183; 135,164 B</text>
 <rect x="44.00" y="482" width="27.95" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00239fc0.c: 4/4 functions matching C, 6,124/6,124 B</title></rect>
 <rect x="72.95" y="482" width="134.74" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00244a70.c: 1/1 functions matching C, 29,516/29,516 B</title></rect>
 <rect x="208.69" y="482" width="79.01" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/hero_set_state.c: 1/1 functions matching C, 17,308/17,308 B</title></rect>
 <rect x="288.70" y="482" width="101.91" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00255960.c: 1/1 functions matching C, 22,324/22,324 B</title></rect>
 <rect x="391.60" y="482" width="0.57" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/runtime/startup/00267520.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="393.17" y="482" width="2.81" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/rendering/0029bbe0.c: 2/2 functions matching C, 616/616 B</title></rect>
-<rect x="396.98" y="482" width="147.33" height="10" rx="1" fill="#ca7022" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/entities/sharkigator.c: 32/33 functions matching C, 30,316/32,276 B</title></rect>
+<rect x="396.98" y="482" width="147.33" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/entities/sharkigator.c: 33/33 functions matching C, 32,276/32,276 B</title></rect>
 <rect x="545.32" y="482" width="5.06" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/hydrodisplacer_faucet.c: 3/3 functions matching C, 1,108/1,108 B</title></rect>
 <rect x="551.37" y="482" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/vendor/0030d678.c: 1/1 functions matching C, 36/36 B</title></rect>
 <rect x="552.54" y="482" width="93.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/entities/electric_gate.c: 27/27 functions matching C, 20,484/20,484 B</title></rect>
@@ -793,6 +793,6 @@
 <rect x="623.53" y="1054" width="46.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/entities/deplanetizer_gun.c: 18/18 functions matching C, 12,096/12,096 B</title></rect>
 <rect x="671.30" y="1054" width="0.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/vendor/002fcbb0.c: 2/2 functions matching C, 180/180 B</title></rect>
 <line x1="10" y1="1082.0" x2="790" y2="1082.0" stroke="#3a3632" stroke-width="1" opacity="0.8"/>
-<text x="10" y="1096" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 99.0% &#183; overlays 99.7% &#183; 3,533,752 of 3,641,636 B in C</text>
+<text x="10" y="1096" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 99.0% &#183; overlays 99.7% &#183; 3,535,712 of 3,641,636 B in C</text>
 <text x="790" y="1096" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-10-27 &#183; scripts/generate_treemap.py</text>
 </svg>
