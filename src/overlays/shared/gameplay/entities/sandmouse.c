@@ -1503,7 +1503,7 @@ extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") __attribute__((
 extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_L01_001672B0[];
+extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
@@ -1681,7 +1681,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         hero_fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
         sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
-    normalize_vector_xyz(look_offset, D_L01_001672B0, follow->unk4C);
+    normalize_vector_xyz(look_offset, camera_basis_reference_direction, follow->unk4C);
     add_vector_xyz(path_point, look_offset, look_target);
     subtract_vector_xyz(look_dir, path_point, camera_to_update->pos);
     look_length = vector_length_xyz(look_dir);
@@ -1703,7 +1703,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
     build_look_at_matrix(camera_to_update->unk0, camera_to_update->unk40, delta, pitch_step);
     normalize_vector_xyz(camera_to_update->unk40, camera_to_update->unk0, 1.0f);
     normalize_vector_xyz(camera_to_update->unk0, camera_to_update->unk0, 1.0f);
-    cross_vectors_xyz(camera_to_update->unk10, camera_to_update->unk0, D_L01_001672B0);
+    cross_vectors_xyz(camera_to_update->unk10, camera_to_update->unk0, camera_basis_reference_direction);
     normalize_vector_xyz(camera_to_update->unk10, camera_to_update->unk10, 1.0f);
     cross_vectors_xyz(camera_to_update->unk20, camera_to_update->unk10, camera_to_update->unk0);
 }
