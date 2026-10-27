@@ -376,7 +376,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern char D_L17_00161980[4] __attribute__((sda));
+extern char fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -455,7 +455,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             float turn;
             float off;
 
-            transform_scaled_vertex_batch(turret_moby, 2, D_L17_00161980, (char *)j);
+            transform_scaled_vertex_batch(turret_moby, 2, fleet_turret_aim_vertex_indices, (char *)j);
             scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7),
                              random_float_between(0.0f, 1.0f));
             add_vector_xyz(acc, tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x30);
@@ -514,7 +514,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             float turn;
             float off;
 
-            transform_scaled_vertex_batch(turret_moby, 2, D_L17_00161980, (char *)j);
+            transform_scaled_vertex_batch(turret_moby, 2, fleet_turret_aim_vertex_indices, (char *)j);
             select_moby_combat_target(turret_moby, &aim, 512.0f);
             subtract_vector_xyz(targeting_vector_scratch, aim.pos, j);
             qcopy(from, j + 4);
