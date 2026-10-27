@@ -12,15 +12,15 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
 
-int update_moby_suck_cannon_state(struct Moby *a) {
-    int r = process_moby_suck_cannon_suction(a);
-    if (r == 0) {
-        if (a->state == 0x7)
-            a->state = 0x2;
+int update_moby_suck_cannon_state(struct Moby *moby) {
+    int suction_result = process_moby_suck_cannon_suction(moby);
+    if (suction_result == 0) {
+        if (moby->state == 0x7)
+            moby->state = 0x2;
     } else {
-        a->state = 0x7;
+        moby->state = 0x7;
     }
-    return r;
+    return suction_result;
 }
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
