@@ -529,7 +529,7 @@ extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__
 extern char D_L11_0016D440[];
 extern char D_L11_001679D0[];
 extern Pos_30a908 D_L11_001D9B08[];
-extern int D_L11_001D9E08[];
+extern int ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
 extern UV_30a908 D_L11_001DA310[];
 extern Pos_30a908 D_L11_001D9F08[];
 extern int D_L11_001DA208[];
@@ -606,7 +606,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         float strip_fraction = FUN_001fa6c0_30a908(i) / 10.0f;
         int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
         FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
-        D_L11_001D9E08[i] = col;
+        ocean_strip_vertex_colors[i] = col;
         D_L11_001DA310[i].u = 0.0f;
         D_L11_001DA310[i].v = 0.0f;
         FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[0]);
@@ -614,7 +614,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         D_L11_001D9B08[i].y = scratch_vector.y;
         D_L11_001D9B08[i].z = scratch_vector.z;
         FUN_001f9a68_30a908(&scratch_vector, &second_strip_edge_delta, strip_fraction);
-        D_L11_001D9E08[i + 1] = col;
+        ocean_strip_vertex_colors[i + 1] = col;
         D_L11_001DA310[i + 1].u = 0.0f;
         D_L11_001DA310[i + 1].v = 0.0f;
         FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[2]);
@@ -622,7 +622,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         D_L11_001D9B08[i + 1].y = scratch_vector.y;
         D_L11_001D9B08[i + 1].z = scratch_vector.z;
     }
-    func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, D_L11_001D9E08, D_L11_001DA310, 1);
+    func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, ocean_strip_vertex_colors, D_L11_001DA310, 1);
     far_quad.z78 = FUN_001f44b8_30a908(0x16);
     far_quad.q80 = 0xFF9000000260L;
     far_quad.q88 = 0x8000000044L;
