@@ -280,7 +280,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x3F:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -749,20 +749,20 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
+    case HERO_STATE_STORED_HEADING_JUMP:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
-    case 0x12:
+    case HERO_STATE_REPEATABLE_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
     case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
-    case 0x49:
-    case 0x4C:
-    case 0x5E:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
+    case HERO_STATE_ALT_LEDGE_JUMP:
+    case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
@@ -1732,7 +1732,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1773,7 +1773,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_help_value(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1795,8 +1795,8 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x63:
-    case 0x64: {
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
