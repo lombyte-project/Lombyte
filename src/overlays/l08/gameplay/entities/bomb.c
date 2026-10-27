@@ -293,7 +293,7 @@ typedef struct {
 
 #include "rnc/overlay/collision.h"
 extern CollisionHit D_L08_00174640;
-extern blk16 D_L08_00161868;
+extern blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
@@ -366,7 +366,7 @@ void update_bomb(char *moby) {
             float lo = -1.0f;
             float hi = 1.0f;
             int *selected_table_entry;
-            table_or_bounce_scratch = D_L08_00161868;
+            table_or_bounce_scratch = l08_bomb_moving_particle_initial_colors;
             *(v128_36F8 *)random_direction = 0;
             random_direction[0] = random_float_between_c5(lo, hi);
             random_direction[1] = random_float_between_c5(lo, hi);
