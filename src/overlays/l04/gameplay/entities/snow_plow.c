@@ -1626,7 +1626,7 @@ struct RiserVars {
     s32 timer;
 };
 
-extern s32 D_L04_001BA650[];
+extern s32 level_completed_save_id_bits[] __asm__("D_L04_001BA650");
 extern LevelCollected D_L04_001BB3B0;
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -1670,7 +1670,7 @@ void upper_door_update(struct Moby *moby) {
         moby->pos.z += riser_rise_speed(moby) * frame_time;
         if (fast_dec_timer(&riser_vars->timer)) {
             D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
-            D_L04_001BA650[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+            level_completed_save_id_bits[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             if (moby->oclass == 0x44D)
                 allocate_voice_for_target_entry(1, 0, moby);
             moby->state = 3;
