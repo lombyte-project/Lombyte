@@ -3,7 +3,7 @@
 
 extern s32 D_0015B080[];
 extern u8 D_0015B008[];
-extern u8 D_00153578[];
+extern u8 socket_create_rpc_error_message[] __asm__("D_00153578");
 extern s32 sceSifCallRpc();
 extern void debug_print_stub(u8 *) __asm__("func_00124A20");
 
@@ -26,7 +26,7 @@ s32 sceDbcCreateSocket(void *params, s32 port, s32 mode) {
         name_target[i] = name_source[i];
     }
     if (sceSifCallRpc(D_0015B008, 0x80000901, 0, D_0015B080, 0x400, D_0015B080, 0x400, 0, 0) < 0) {
-        debug_print_stub(D_00153578);
+        debug_print_stub(socket_create_rpc_error_message);
         return 0;
     }
     return socket_rpc_buffer[9];
