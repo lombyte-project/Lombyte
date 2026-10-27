@@ -24,7 +24,7 @@ typedef struct {
     char pad[0x20];
 } T2C_231228;
 
-extern T2C_231228 l08_hero_attack_records[] __asm__("D_L08_0017C428");
+extern T2C_231228 D_L08_0017C428[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float hero_animation_blend_curves[][25] __asm__("D_L08_0017C5F0");
@@ -1510,7 +1510,7 @@ int hero_set_state(int a, int b) {
             q = &hero;
             *(unsigned int *)(h + 0x44) =
                 *(unsigned int *)(h + 0x44) | (1 << current_level_index) | 0x80000000;
-            e = &l08_hero_attack_records[q->attack_record];
+            e = &D_L08_0017C428[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
             if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
@@ -1573,7 +1573,7 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         if (p->state.prev == 0x70) {
             int v = 5;
-            if (l08_hero_attack_records[p->attack_record].b == 0)
+            if (D_L08_0017C428[p->attack_record].b == 0)
                 v = 6;
             p->attack_record = v;
         } else {
@@ -1581,7 +1581,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *q = &hero;
-            int e = l08_hero_attack_records[q->attack_record].b;
+            int e = D_L08_0017C428[q->attack_record].b;
             if (b) {
                 char *m;
                 int z = e == 0;
@@ -1621,7 +1621,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_231228 *e = &l08_hero_attack_records[p->attack_record];
+            T2C_231228 *e = &D_L08_0017C428[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)
