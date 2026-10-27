@@ -2540,11 +2540,11 @@ typedef struct { char pad0[0x100]; V1688 previous; char pad110[0x30]; V1688 curr
 
 typedef struct { char pad0[0x18]; M910 *moby; int kind; V1688 position; char pad30[0x10]; V1688 normal, velocity_end, velocity_start; } Impact1688;
 
-extern B910 D_L00_001E9950;
-extern B910 D_L00_001E99A0;
+extern B910 l00_devastator_missile_camera_blast_parameters __asm__("D_L00_001E9950");
+extern B910 l00_gold_devastator_missile_camera_blast_parameters __asm__("D_L00_001E99A0");
 extern Cam910 D_L00_00166C80;
-extern Colors1688 D_L00_001E99F0;
-extern Colors1688 D_L00_001E9A08;
+extern Colors1688 l00_devastator_missile_impact_color_palette __asm__("D_L00_001E99F0");
+extern Colors1688 l00_devastator_missile_impact_fade_palette __asm__("D_L00_001E9A08");
 extern E D_0013E520;
 extern P D_0013F350;
 extern V1688 D_L00_00160660 __attribute__((section(".sdata")));
@@ -2632,8 +2632,8 @@ extern void FUN_L00_0026a4c8_c(void *,void *,int,int,float,int) __asm__("FUN_L00
 
 void gold_devastator_missile_update(M910 *m) __asm__("FUN_L00_002b03a0");
 void gold_devastator_missile_update(M910 *missile_moby) {
-    B910 effect=D_L00_001E9950;
-    B910 gold_effect=D_L00_001E99A0;
+    B910 effect=l00_devastator_missile_camera_blast_parameters;
+    B910 gold_effect=l00_gold_devastator_missile_camera_blast_parameters;
     V1688 camera_delta;
     V1688 previous;
     V1688 blast_velocity;
@@ -2890,8 +2890,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         if(reduced) j/=2;
         for(i=0;i<j;i++) {
             float speed=random_float_between(8.0f,10.0f)*size*D_0015ED6C-near_adjust*D_0015ED6C;
-            Colors1688 color=D_L00_001E99F0;
-            Colors1688 fade=D_L00_001E9A08;
+            Colors1688 color=l00_devastator_missile_impact_color_palette;
+            Colors1688 fade=l00_devastator_missile_impact_fade_palette;
             int c=swap_packed_color_channels(color.colors[random_integer_below(6)],D_0013E520.bB);
             int f=swap_packed_color_channels(fade.colors[random_integer_below(6)],D_0013E520.bB);
             int life=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
@@ -2903,8 +2903,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             FUN_L00_0026a9f0((&missile_moby->pos),&blast_velocity,0x7FFFFFFF,0xFFFFFF,400000.0f,white_life,white_end,0,0,speed*0.5f);
         }
         for(i=0;i<particles;i++) {
-            Colors1688 color=D_L00_001E99F0;
-            Colors1688 fade=D_L00_001E9A08;
+            Colors1688 color=l00_devastator_missile_impact_color_palette;
+            Colors1688 fade=l00_devastator_missile_impact_fade_palette;
             V1688 v;
             int c,f,life;
             float debris_scale;
