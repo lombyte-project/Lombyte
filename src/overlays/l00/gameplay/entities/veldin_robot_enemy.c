@@ -684,7 +684,7 @@ typedef struct {
 } GlowMoby;
 
 extern GlowVec glow_origin __asm__("D_L00_00166DC0");
-extern GlowVec D_L00_001E6CA0[4];
+extern GlowVec l00_veldin_robot_effect_quad_template_corners[4] __asm__("D_L00_001E6CA0");
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
@@ -723,7 +723,7 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     quad.unk64 = 0;
     quad.unk68 = one;
     quad.unk6C = one;
-    template_corner = D_L00_001E6CA0;
+    template_corner = l00_veldin_robot_effect_quad_template_corners;
     quad_corner = quad.corner;
     for (i = 0; i < 4; i++) {
         fast_vec_scale(0.2f, quad_corner++, template_corner++);
