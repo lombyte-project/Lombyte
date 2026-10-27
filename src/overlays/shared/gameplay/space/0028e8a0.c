@@ -284,7 +284,7 @@ extern struct {
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
-extern u8 D_0013D3F0[];
+extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
 void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 
 void prepare_level_entry_transition(void) {
@@ -299,7 +299,7 @@ void prepare_level_entry_transition(void) {
     }
     if (level_index != 0) {
         if (level_index == 0xE) {
-            if (D_0013D3F0[0] == 0)
+            if (level_14_entry_transition_gate[0] == 0)
                 goto out;
         }
         if (level_index < 0x14)
