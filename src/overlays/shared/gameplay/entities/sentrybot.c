@@ -3162,7 +3162,7 @@ typedef struct {
 } Quad;
 
 extern float D_L15_001673C0[4];
-extern float D_L15_001E27F0[];
+extern float spiderbot_effect_quad_uvs[] __asm__("D_L15_001E27F0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -3203,8 +3203,8 @@ void draw_spiderbot_effect_quad(char *moby) {
     effect_quad.col[1] = 0x80243278;
     effect_quad.col[0] = 0x80243278;
     for (i = 0; i < 4; i++) {
-        effect_quad.uv[i][0] = D_L15_001E27F0[i * 2];
-        effect_quad.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
+        effect_quad.uv[i][0] = spiderbot_effect_quad_uvs[i * 2];
+        effect_quad.uv[i][1] = spiderbot_effect_quad_uvs[i * 2 + 1];
     }
     subtract_vector_xyz(D, C, A);
     *(OvlQuad *)effect_quad.v[0] = *(OvlQuad *)D;
