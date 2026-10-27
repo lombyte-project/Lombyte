@@ -2991,7 +2991,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 
-extern short D_L18_0016237C __attribute__((sda));
+extern short drek_boss_hero_follow_mode_0f_radius_gp __asm__("D_L18_0016237C") __attribute__((sda));
 void update_drek_boss_hero_follow_movement(struct Moby *moby) {
     float follow_target_position[4];
     char *moby_vars = (char *)moby->pvars;
@@ -3001,7 +3001,7 @@ void update_drek_boss_hero_follow_movement(struct Moby *moby) {
     subtract_vector_xyz(follow_target_position, hero_position_bytes, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
     follow_target_position[2] = 0.0f;
     if (*(int *)(hero_position_bytes + 0x200C) == 0xF) {
-        FUN_L00_0025f730(follow_target_position, *(float *)&D_L18_0016237C);
+        FUN_L00_0025f730(follow_target_position, *(float *)&drek_boss_hero_follow_mode_0f_radius_gp);
     } else {
         FUN_L00_0025f730(follow_target_position, *(float *)&D_L18_00162378_gp);
     }
