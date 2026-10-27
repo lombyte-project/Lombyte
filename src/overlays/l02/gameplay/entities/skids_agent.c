@@ -100,7 +100,7 @@ extern void spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void drive_joint(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((section(".data"))); /* dialogue camera spot */
-extern char D_L02_00161CF0[];
+extern char skids_agent_dialogue_data[] __asm__("D_L02_00161CF0");
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
@@ -147,7 +147,7 @@ void skids_agent_update(struct Moby *moby) {
         if (items_owned[0x2D] != 0) {
             goto kill;
         }
-        *(char **)(data + 0x20) = D_L02_00161CF0;
+        *(char **)(data + 0x20) = skids_agent_dialogue_data;
         moby->state = 1;
         initialize_npc_dialogue(moby, data);
         initialize_moby_grounding(moby);
