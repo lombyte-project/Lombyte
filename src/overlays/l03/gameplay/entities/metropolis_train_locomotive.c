@@ -115,7 +115,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L03_0015FFD8; /* no foreign declaration */
-extern short D_L03_00161368 __attribute__((sda));
+extern short metropolis_train_carriage_spacing __asm__("D_L03_00161368") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -162,8 +162,8 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
         char *car_data = *(char **)(car + 0x78);
         qcopy(car_data + 0xA0, car + 0x10);
         qcopy(car_data + 0xB0, car + 0x40);
-        car_pos[0] = fast_cos(heading) * -*(float *)&D_L03_00161368;
-        car_pos[1] = fast_sin(heading) * -*(float *)&D_L03_00161368;
+        car_pos[0] = fast_cos(heading) * -*(float *)&metropolis_train_carriage_spacing;
+        car_pos[1] = fast_sin(heading) * -*(float *)&metropolis_train_carriage_spacing;
         car_pos[2] = 0.0f;
         add_vector_xyz(car_pos, car_pos, offset);
         car_off[0] = fast_cos(heading) * -*(float *)(car_data + 0xC4);
@@ -290,7 +290,7 @@ void update_metropolis_train_motion(char *moby) {
             car_data = *(Car292890 **)(car + 0x78);
             moby_point_position(car, 0, rear);
             subtract_vector_xyz(hitch, rear, front);
-            set_vector_length_xy(hitch, hitch, *(float *)&D_L03_00161368);
+            set_vector_length_xy(hitch, hitch, *(float *)&metropolis_train_carriage_spacing);
             add_vector_xyz(hitch, hitch, front);
             hitch[2] = front[2];
             subtract_vector_xyz(car_position_adjustment, hitch, car + 0x10);
