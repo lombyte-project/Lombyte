@@ -648,7 +648,7 @@ typedef struct {
 } EnvVec;
 
 extern EnvVec D_L01_00167240;
-extern f32 D_L01_00162110[2];
+extern f32 level01_environment_map_uv_scroll_offsets[2] __asm__("D_L01_00162110");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -681,8 +681,8 @@ void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f
         fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
         uv_projection_denominator = fast_vec_length(&refl) * 2.0f;
-        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[0];
-        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[1];
+        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + level01_environment_map_uv_scroll_offsets[0];
+        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + level01_environment_map_uv_scroll_offsets[1];
     }
 }
 extern s32 level01_environment_mesh_vertex_counts[] __asm__("D_L01_00202EA0");
@@ -734,25 +734,25 @@ void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
 
     switch (moby->state) {
     case UV_SCROLL_STATE_INITIALIZE:
-        D_L01_00162110[0] = 0.0f;
-        D_L01_00162110[1] = 0.0f;
+        level01_environment_map_uv_scroll_offsets[0] = 0.0f;
+        level01_environment_map_uv_scroll_offsets[1] = 0.0f;
         moby->state = 1;
         break;
     case UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW:
         uv_scroll_delta = frame_delta_time * 0.025f;
-        D_L01_00162110[0] += uv_scroll_delta;
-        D_L01_00162110[1] += uv_scroll_delta;
-        if (D_L01_00162110[0] > 1.0f) {
-            D_L01_00162110[0] -= 1.0f;
+        level01_environment_map_uv_scroll_offsets[0] += uv_scroll_delta;
+        level01_environment_map_uv_scroll_offsets[1] += uv_scroll_delta;
+        if (level01_environment_map_uv_scroll_offsets[0] > 1.0f) {
+            level01_environment_map_uv_scroll_offsets[0] -= 1.0f;
         }
-        if (D_L01_00162110[0] < -1.0f) {
-            D_L01_00162110[0] += 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[0] < -1.0f) {
+            level01_environment_map_uv_scroll_offsets[0] += 1.0f;
         }
-        if (D_L01_00162110[1] > 1.0f) {
-            D_L01_00162110[1] -= 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[1] > 1.0f) {
+            level01_environment_map_uv_scroll_offsets[1] -= 1.0f;
         }
-        if (D_L01_00162110[1] < -1.0f) {
-            D_L01_00162110[1] += 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[1] < -1.0f) {
+            level01_environment_map_uv_scroll_offsets[1] += 1.0f;
         }
         enqueue_callback_list_1(draw_level01_environment_mapped_meshes, moby);
         break;
