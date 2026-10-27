@@ -3023,7 +3023,7 @@ extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") __attribute__((section
 extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */
-extern Moby *D_L10_0015FFE4;
+extern Moby *l10_conditional_help_moby_list_head __asm__("D_L10_0015FFE4");
 extern int hero_inside_conditional_help_volume __asm__("D_L10_00161F38") __attribute__((sda)); /* no foreign declaration */
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D504[];
@@ -3039,11 +3039,11 @@ extern unsigned char D_0014171B_2E9978[] __asm__("D_0013D504");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sda));
 extern unsigned char D_0013D605_2E9978[] __asm__("D_0013D388");
 
-extern unsigned char D_00141B10[];
-extern unsigned char D_00141B18[];
+extern unsigned char l10_help_message_2710_gate[] __asm__("D_00141B10");
+extern unsigned char l10_help_message_2711_gate[] __asm__("D_00141B18");
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_00141C48[];
-extern unsigned char D_00141CB8[];
+extern unsigned char l10_help_message_2717_gate[] __asm__("D_00141CB8");
 void update_conditional_help_messages(Moby *moby) __asm__("FUN_L10_002e85b8");
 
 void update_conditional_help_messages(Moby *moby)
@@ -3072,7 +3072,7 @@ void update_conditional_help_messages(Moby *moby)
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
-            && *(unsigned short *)(D_00141B10) == 0) {
+            && *(unsigned short *)(l10_help_message_2710_gate) == 0) {
             func_L00_00203F20_2E9978(0x2710, 0x35);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f4) != 0
@@ -3092,7 +3092,7 @@ void update_conditional_help_messages(Moby *moby)
         if (D_L10_0015F5C4_vendor == 0 && D_0013D504_r[0] != 0
             && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
-            && *(unsigned short *)(D_00141B18) == 0) {
+            && *(unsigned short *)(l10_help_message_2711_gate) == 0) {
             func_L00_00203F20_2E9978(0x2711, 0x36);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f8) != 0
@@ -3104,7 +3104,7 @@ void update_conditional_help_messages(Moby *moby)
             func_L00_00203F20_2E9978(0x2715, 0x5C);
         }
         any_active = 0;
-        for (other = D_L10_0015FFE4; other != 0; other = other->next) {
+        for (other = l10_conditional_help_moby_list_head; other != 0; other = other->next) {
             if (other->oclass == 0x359 && other->state != 1) any_active = 1;
         }
         if (any_active == 0) break;
@@ -3112,7 +3112,7 @@ void update_conditional_help_messages(Moby *moby)
             && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f10].pos) < 15.0f
             && data->f14 != -1
             && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f14].pos) < 15.0f
-            && *(unsigned short *)(D_00141CB8) == 0) {
+            && *(unsigned short *)(l10_help_message_2717_gate) == 0) {
             func_L00_00203F20_2E9978(0x2717, 0x6A);
         }
         if (any_active == 0) break;
