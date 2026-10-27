@@ -42,13 +42,13 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 8 while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int carried_moby_place_and_set_state(struct Moby *a) __asm__("FUN_L12_002e1758");
-int carried_moby_place_and_set_state(struct Moby *a) {
-    int r = store_moby_in_suck_cannon(a);
-    if (r == 0) {
-        if (a->state == 0x8)
-            a->state = 1;
+int carried_moby_place_and_set_state(struct Moby *carried_moby) {
+    int suck_cannon_store_result = store_moby_in_suck_cannon(carried_moby);
+    if (suck_cannon_store_result == 0) {
+        if (carried_moby->state == 0x8)
+            carried_moby->state = 1;
     } else {
-        a->state = 0x8;
+        carried_moby->state = 0x8;
     }
-    return r;
+    return suck_cannon_store_result;
 }
