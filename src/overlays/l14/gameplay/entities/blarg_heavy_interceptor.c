@@ -905,7 +905,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 /* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
  * vertices through it and draws them, then flips the matrix and draws the back face. */
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418") __attribute__((sda));
-extern float D_L14_001D7A60[][3];
+extern float blarg_heavy_interceptor_light_ring_vertex_positions[][3] __asm__("D_L14_001D7A60");
 extern s32 blarg_heavy_interceptor_light_ring_vertex_colors[] __asm__("D_L14_001D80C8");
 extern char D_L14_001D7E38[];
 extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
@@ -951,7 +951,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     sreg_r(0x4A, 0);
     font_queue_vu_state();
     for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
-        float *s = D_L14_001D7A60[i];
+        float *s = blarg_heavy_interceptor_light_ring_vertex_positions[i];
         float *o = f.verts[i];
         ring_vertex_scratch[0] = s[0];
         ring_vertex_scratch[1] = s[1];
@@ -974,7 +974,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     scale_r(f.mat[2], f.mat[2], -1.0f);
     for (j = 0; j < blarg_heavy_interceptor_light_ring_vertex_count_gp; j++) {
         float *o = f.verts[j];
-        float *s = D_L14_001D7A60[j];
+        float *s = blarg_heavy_interceptor_light_ring_vertex_positions[j];
         ring_vertex_scratch[0] = s[0];
         ring_vertex_scratch[1] = s[1];
         ring_vertex_scratch[2] = s[2];
