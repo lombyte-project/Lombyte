@@ -1675,24 +1675,24 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_001fa6e0(int, int, float);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L18_00161A68 __attribute__((sda));
+extern short floating_platform_spark_first_vector_length_base_rate_gp __asm__("D_L18_00161A68") __attribute__((sda));
 extern short D_L18_00161A6C_gp __asm__("D_L18_00161A6C") __attribute__((sda));
-extern short D_L18_00161A70 __attribute__((sda));
-extern short D_L18_00161A74 __attribute__((sda));
-extern short D_L18_00161A78 __attribute__((sda));
-extern short D_L18_00161A7C __attribute__((sda));
-extern short D_L18_00161A80 __attribute__((sda));
-extern short D_L18_00161A84 __attribute__((sda));
-extern short D_L18_00161A88 __attribute__((sda));
-extern short D_L18_00161A8C __attribute__((sda));
-extern short D_L18_00161A90 __attribute__((sda));
-extern short D_L18_00161A94 __attribute__((sda));
-extern short D_L18_00161A98 __attribute__((sda));
-extern short D_L18_00161A9C __attribute__((sda));
-extern short D_L18_00161AA0 __attribute__((sda));
-extern short D_L18_00161AA4 __attribute__((sda));
-extern short D_L18_00161AA8 __attribute__((sda));
-extern short D_L18_00161AB4 __attribute__((sda));
+extern short floating_platform_spark_second_vector_downward_z_rate_gp __asm__("D_L18_00161A70") __attribute__((sda));
+extern short floating_platform_spark_vector_length_relative_variation_limit_gp __asm__("D_L18_00161A74") __attribute__((sda));
+extern short floating_platform_spark_vector_offset_range_end_rate_gp __asm__("D_L18_00161A78") __attribute__((sda));
+extern short floating_platform_spark_frame_count_random_span_gp __asm__("D_L18_00161A7C") __attribute__((sda));
+extern short floating_platform_spark_second_frame_count_base_gp __asm__("D_L18_00161A80") __attribute__((sda));
+extern short floating_platform_spark_third_frame_count_base_gp __asm__("D_L18_00161A84") __attribute__((sda));
+extern short floating_platform_spark_frame_count_relative_variation_limit_gp __asm__("D_L18_00161A88") __attribute__((sda));
+extern short floating_platform_spark_first_vector_w_range_start_gp __asm__("D_L18_00161A8C") __attribute__((sda));
+extern short floating_platform_spark_first_vector_w_range_end_gp __asm__("D_L18_00161A90") __attribute__((sda));
+extern short floating_platform_spark_second_vector_w_range_start_gp __asm__("D_L18_00161A94") __attribute__((sda));
+extern short floating_platform_spark_second_vector_w_range_end_gp __asm__("D_L18_00161A98") __attribute__((sda));
+extern short floating_platform_spark_initial_color_range_start_gp __asm__("D_L18_00161A9C") __attribute__((sda));
+extern short floating_platform_spark_initial_color_range_end_gp __asm__("D_L18_00161AA0") __attribute__((sda));
+extern short floating_platform_spark_second_color_range_start_gp __asm__("D_L18_00161AA4") __attribute__((sda));
+extern short floating_platform_spark_second_color_range_end_gp __asm__("D_L18_00161AA8") __attribute__((sda));
+extern short floating_platform_spark_lookup_index_and_flags_gp __asm__("D_L18_00161AB4") __attribute__((sda));
 extern void set_vector_unit_z(void *) __asm__("FUN_001f9a00");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1720,40 +1720,40 @@ void spawn_floating_platform_sparks(struct Moby *moby) {
     set_vector_unit_z(world_emission_direction);
     transform_vector_by_basis(world_emission_direction, world_emission_direction, moby_rotation_basis);
     for (i = 0; i < spark_count; i++) {
-        FUN_L00_00257d78(spark_vector_offset, 0.0f, (*(float *)&(D_L18_00161A78)) * frame_time);
+        FUN_L00_00257d78(spark_vector_offset, 0.0f, (*(float *)&(floating_platform_spark_vector_offset_range_end_rate_gp)) * frame_time);
         normalize_vector_xyz(first_spark_vector, world_emission_direction,
-                             (*(float *)&(D_L18_00161A68)) *
-                                 (random_float_between(-(*(float *)&(D_L18_00161A74)),
-                                                           (*(float *)&(D_L18_00161A74))) +
+                             (*(float *)&(floating_platform_spark_first_vector_length_base_rate_gp)) *
+                                 (random_float_between(-(*(float *)&(floating_platform_spark_vector_length_relative_variation_limit_gp)),
+                                                           (*(float *)&(floating_platform_spark_vector_length_relative_variation_limit_gp))) +
                                   1.0f) *
                                  frame_time);
         add_vector_xyz(first_spark_vector, first_spark_vector, spark_vector_offset);
         normalize_vector_xyz(second_spark_vector, first_spark_vector,
                              (*(float *)&(D_L18_00161A6C_gp)) *
-                                 (random_float_between(-(*(float *)&(D_L18_00161A74)),
-                                                           (*(float *)&(D_L18_00161A74))) +
+                                 (random_float_between(-(*(float *)&(floating_platform_spark_vector_length_relative_variation_limit_gp)),
+                                                           (*(float *)&(floating_platform_spark_vector_length_relative_variation_limit_gp))) +
                                   1.0f) *
                                  frame_time);
-        second_spark_vector[2] = second_spark_vector[2] - (*(float *)&(D_L18_00161A70)) * frame_time;
+        second_spark_vector[2] = second_spark_vector[2] - (*(float *)&(floating_platform_spark_second_vector_downward_z_rate_gp)) * frame_time;
         first_spark_vector[3] =
-            random_float_between((*(float *)&(D_L18_00161A8C)), (*(float *)&(D_L18_00161A90)));
+            random_float_between((*(float *)&(floating_platform_spark_first_vector_w_range_start_gp)), (*(float *)&(floating_platform_spark_first_vector_w_range_end_gp)));
         second_spark_vector[3] =
-            random_float_between((*(float *)&(D_L18_00161A94)), (*(float *)&(D_L18_00161A98)));
-        i0 = FUN_001fa6e0((*(int *)&(D_L18_00161A9C)), (*(int *)&(D_L18_00161AA0)),
+            random_float_between((*(float *)&(floating_platform_spark_second_vector_w_range_start_gp)), (*(float *)&(floating_platform_spark_second_vector_w_range_end_gp)));
+        i0 = FUN_001fa6e0((*(int *)&(floating_platform_spark_initial_color_range_start_gp)), (*(int *)&(floating_platform_spark_initial_color_range_end_gp)),
                           random_float_between(0.0f, 1.0f));
-        i1 = FUN_001fa6e0((*(int *)&(D_L18_00161AA4)), (*(int *)&(D_L18_00161AA8)),
+        i1 = FUN_001fa6e0((*(int *)&(floating_platform_spark_second_color_range_start_gp)), (*(int *)&(floating_platform_spark_second_color_range_end_gp)),
                           random_float_between(0.0f, 1.0f));
         i2 = func_001FA898_r(FUN_L04_001f1978(
-            (float)(*(int *)&(D_L18_00161A7C)) * random_float_between(0.0f, 1.0f) + 1.0f));
-        i3 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(D_L18_00161A80)) *
-                                          (random_float_between(-(*(float *)&(D_L18_00161A88)),
-                                                                    (*(float *)&(D_L18_00161A88))) +
+            (float)(*(int *)&(floating_platform_spark_frame_count_random_span_gp)) * random_float_between(0.0f, 1.0f) + 1.0f));
+        i3 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(floating_platform_spark_second_frame_count_base_gp)) *
+                                          (random_float_between(-(*(float *)&(floating_platform_spark_frame_count_relative_variation_limit_gp)),
+                                                                    (*(float *)&(floating_platform_spark_frame_count_relative_variation_limit_gp))) +
                                            1.0f)));
-        i4 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(D_L18_00161A84)) *
-                                          (random_float_between(-(*(float *)&(D_L18_00161A88)),
-                                                                    (*(float *)&(D_L18_00161A88))) +
+        i4 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(floating_platform_spark_third_frame_count_base_gp)) *
+                                          (random_float_between(-(*(float *)&(floating_platform_spark_frame_count_relative_variation_limit_gp)),
+                                                                    (*(float *)&(floating_platform_spark_frame_count_relative_variation_limit_gp))) +
                                            1.0f)));
-        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, i0, i1, i2, i3, i4, (*(int *)&(floating_platform_spark_lookup_index_and_flags_gp)));
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DC850), where it is exact; names translated to the US level program. */
