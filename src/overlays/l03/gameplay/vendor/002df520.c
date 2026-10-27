@@ -31,7 +31,7 @@ struct L03ItemEntry {
     u8 rest[0x40];
 };
 
-extern struct L03HelpState D_L03_00179510;
+extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_00179510");
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
@@ -77,18 +77,18 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         }
         if (D_0013D388[0x1A] == 0) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[0]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-                D_L03_00179510.cur == -1 && help_records[0x14].v >= 0) {
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                l03_help_message_playback_state.cur == -1 && help_records[0x14].v >= 0) {
                 help_request(0xBB8, 0x14);
             }
             if (is_point_inside_clip_volume(&hero.motion.pos, data[3]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-                D_L03_00179510.cur == -1 && help_records[0x15].v >= 0) {
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                l03_help_message_playback_state.cur == -1 && help_records[0x15].v >= 0) {
                 help_request(0xBB9, 0x15);
             }
             if (is_point_inside_clip_volume(&hero.motion.pos, data[6]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-                D_L03_00179510.cur == -1 && help_records[0x17].v >= 0) {
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                l03_help_message_playback_state.cur == -1 && help_records[0x17].v >= 0) {
                 help_request(0xBBB, 0x17);
             }
         }
@@ -110,12 +110,12 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && usage_stats.stat[3].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[20] % 6 == 0 && data[20] != 0 &&
-            D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x16].id == 0) {
+            l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x16].id == 0) {
             help_request(0xBBA, 0x16);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[10]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x18].id == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x18].id == 0) {
             scaled_time_value = scale_game_frames(D_0015EEA4) - usage_stats.stat[9].unk2 * 600;
             if (scale_game_frames(216000) < scaled_time_value) {
                 help_request(0xBBC, 0x18);
@@ -130,8 +130,8 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) && count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current != 0x1E &&
-            D_0013D4C0[0xF] != 0 && get_ammo(0xF) >= 0x15 && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x4A].id == 0 && usage_stats.stat[19].count == 0) {
+            D_0013D4C0[0xF] != 0 && get_ammo(0xF) >= 0x15 && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x4A].id == 0 && usage_stats.stat[19].count == 0) {
             help_request(0x4E20, 0x4A);
         } else if (hero.state.current == 0x1E) {
             if (usage_stats.stat[19].count < 0xFFFF) {
@@ -145,22 +145,22 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_0015F68C < 3 &&
-            D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x40].id == 0) {
+            l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x40].id == 0) {
             help_request(0x3EC, 0x40);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == HERO_STATE_LOOK &&
-            D_L03_0015F688 == -1 && D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 &&
+            D_L03_0015F688 == -1 && l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 &&
             help_records[0x40].id != 0 && help_records[0x41].id == 0) {
             help_request(0x3ED, 0x41);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[16]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x54].id == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x54].id == 0) {
             help_request(0xBC0, 0x54);
         }
-        if (D_L03_0015F5C4 == 0 && D_0013D4C0[0x34] != 0 && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x19].id == 0) {
+        if (D_L03_0015F5C4 == 0 && D_0013D4C0[0x34] != 0 && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x19].id == 0) {
             help_request(0xBBD, 0x19);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[13]) && usage_stats.stat[15].count == 0 &&
@@ -177,7 +177,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
             data[21]++;
         }
         if (usage_stats.stat[15].count == 0 && ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            data[21] >= 3 && D_L03_00179510.state == 0 && D_L03_00179510.cur == -1 && help_records[0x1A].id == 0) {
+            data[21] >= 3 && l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x1A].id == 0) {
             help_request(0xBBE, 0x1A);
         }
         if (hero.state.current == 0x74 && usage_stats.stat[16].count == 0) {
@@ -189,13 +189,13 @@ void update_kerwan_tutorial_hints(u8 *moby) {
             usage_stats.stat[16].level_mask = usage_stats.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[11]) && usage_stats.stat[16].count == 0 &&
-            hero.state.control_mode == 6 && hero.items[0].item_id == 8 && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x1B].id == 0) {
+            hero.state.control_mode == 6 && hero.items[0].item_id == 8 && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x1B].id == 0) {
             help_request(0xBBF, 0x1B);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[17]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_00179510.state == 0 &&
-            D_L03_00179510.cur == -1 && help_records[0x79].id == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x79].id == 0) {
             help_request(0x4E2F, 0x79);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[31]) && (u32)hero.state.control_mode < 2 &&
