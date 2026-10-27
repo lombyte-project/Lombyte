@@ -1830,7 +1830,7 @@ float D_L15_001DEA88[46][2] = {
     {1.7922f, 1.7922f},
 };
 float D_L15_001DEED8[46][2] = {0};
-extern Quad4_2edbe0 D_L15_00162208;
+extern Quad4_2edbe0 l15_scaled_ripple_uv_scroll_factors __asm__("D_L15_00162208");
 int D_L15_001621B0[1] = {0x2e};
 int D_L15_001621D0[1] = {(int)D_L15_001DECB0};
 int D_L15_001621D8[1] = {(int)D_L15_001DEED8};
@@ -1881,7 +1881,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     }
     for (j = 0; j < 2; j++) {
         for (uv_vertex_index = 0; uv_vertex_index < 46; uv_vertex_index++) {
-            Quad4_2edbe0 uv_scroll_factors = D_L15_00162208;
+            Quad4_2edbe0 uv_scroll_factors = l15_scaled_ripple_uv_scroll_factors;
             D_L15_001DEED8[uv_vertex_index][0] = D_L15_001DEA88[uv_vertex_index][0] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][0], 1.0f);
             D_L15_001DEED8[uv_vertex_index][1] = D_L15_001DEA88[uv_vertex_index][1] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
