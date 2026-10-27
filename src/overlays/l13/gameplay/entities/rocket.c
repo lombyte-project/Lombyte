@@ -2649,7 +2649,7 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 extern void FUN_0020c828(void *);
 
 #include "qzero.h"
-extern s32 D_L13_001BA7D0[];
+extern s32 blarg_ship_destroyed_save_id_bits[] __asm__("D_L13_001BA7D0");
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -2704,7 +2704,7 @@ void blarg_ship_update(struct Moby *moby) {
         zero_vector = D_L13_0015F580;
         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
             1 << (moby->save_id & 31);
-        D_L13_001BA7D0[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
+        blarg_ship_destroyed_save_id_bits[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
         for (j = 0; j < 2; j++) {
             for (i = 0x709; i < 0x70d; i++) {
                 qzero(&vector);
