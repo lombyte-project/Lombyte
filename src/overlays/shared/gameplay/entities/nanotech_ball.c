@@ -232,7 +232,7 @@ void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_globals.h"
 extern float nanotech_ball_collection_gravity_scale_range_start_gp __asm__("D_L00_00161A60") __attribute__((sda));
 extern float nanotech_ball_collection_gravity_scale_range_end_gp __asm__("D_L00_00161A64") __attribute__((sda));
-extern unsigned char D_L00_00161A68 __attribute__((sda));
+extern unsigned char l00_nanotech_ball_collection_particle_lifetime_frames __asm__("D_L00_00161A68") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/spawn_nanotech_ball_collection_effect_pair.h"
 extern float nanotech_ball_collection_first_particle_scale_factor_gp __asm__("D_L00_00161A74") __attribute__((sda));
 extern float nanotech_ball_collection_second_particle_scale_factor_gp __asm__("D_L00_00161A78") __attribute__((sda));
@@ -248,9 +248,9 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
                           FUN_002132a8_002d8418(nanotech_ball_collection_gravity_scale_range_start_gp * frame_time,
                                                 nanotech_ball_collection_gravity_scale_range_end_gp * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
-    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_first_particle_color, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_first_particle_color, l00_nanotech_ball_collection_particle_lifetime_frames,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_first_particle_scale_factor_gp);
-    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_second_particle_color, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_second_particle_color, l00_nanotech_ball_collection_particle_lifetime_frames,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_second_particle_scale_factor_gp);
 }
 typedef struct {
