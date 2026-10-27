@@ -1137,7 +1137,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
 void FUN_L05_00303b08_c(struct Moby *m, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 extern float D_0013F3D0[];
-extern char D_001404A8[];
+extern char extermibot_strike_flags_selector[] __asm__("D_001404A8");
 
 void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *moby) {
@@ -1439,7 +1439,7 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[3] = 5627.9248f;
             qcopy(out, target_moby + 0x10);
             out[2] += 0.75f;
-            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&D_001404A8)) != 6 ? 0x10001 : 0x10000, out, path_goal_or_facing_vector, 1.0f);
+            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&extermibot_strike_flags_selector)) != 6 ? 0x10001 : 0x10000, out, path_goal_or_facing_vector, 1.0f);
         }
         if (moby[0x70] & 2) {
             moby[0x20] = 9;
