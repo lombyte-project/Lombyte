@@ -787,7 +787,7 @@ extern s32 beam_outer_corner_color_at_unit_weight_gp __asm__("D_L06_00161FF8") _
 extern s32 beam_inset_corner_color_at_zero_weight_gp __asm__("D_L06_00161FFC") __attribute__((sda));
 extern s32 beam_inset_corner_color_at_unit_weight_gp __asm__("D_L06_00162000") __attribute__((sda));
 /* Scrolling texture coordinates of the four corners. */
-extern f32 D_L06_001F2E90[4][2];
+extern f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90");
 
 extern void vu1_add_gs_register(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -829,8 +829,8 @@ void draw_blarg_space_commando_beam(char *moby) {
     pk[0].tag[3] = regs;
     set_identity_matrix(quad_identity_matrix);
     do {
-        D_L06_001F2E90[1][1] = D_L06_001F2E90[3][1];
-        D_L06_001F2E90[3][1] = random_float_between(0.0f, 0.2f);
+        beam_quad_corner_uvs[1][1] = beam_quad_corner_uvs[3][1];
+        beam_quad_corner_uvs[3][1] = random_float_between(0.0f, 0.2f);
         for (j = 0; j < 4; j++) {
             corner_position = pk[0].pos[j];
             source_point_byte_offset = (i + j / 2) * 16;
@@ -849,10 +849,10 @@ void draw_blarg_space_commando_beam(char *moby) {
                 pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_outer_corner_color_at_zero_weight_gp,
                                                 beam_outer_corner_color_at_unit_weight_gp);
             }
-            pk[0].uv[j][0] = D_L06_001F2E90[j][0];
-            pk[0].uv[j][1] = D_L06_001F2E90[j][1];
-            pk[1].uv[j][0] = D_L06_001F2E90[j][0];
-            pk[1].uv[j][1] = D_L06_001F2E90[j][1];
+            pk[0].uv[j][0] = beam_quad_corner_uvs[j][0];
+            pk[0].uv[j][1] = beam_quad_corner_uvs[j][1];
+            pk[1].uv[j][0] = beam_quad_corner_uvs[j][0];
+            pk[1].uv[j][1] = beam_quad_corner_uvs[j][1];
         }
         draw_geometry_quad(pk, quad_identity_matrix, 0);
         for (j = 0; j < 4; j++) {
