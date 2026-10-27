@@ -2001,7 +2001,7 @@ typedef struct {
 
 extern s32 D_L08_0015F5C4;
 extern s32 D_L08_0015F594 __attribute__((sda));
-extern LiftLock D_L08_00179C10;
+extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
 extern s32 D_0013CAE4[];
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
@@ -2069,7 +2069,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         if (hero.ground_moby == moby) {
-            if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
+            if (l08_shuttle_departure_lock.busy == 0 && l08_shuttle_departure_lock.owner == -1) {
                 qcopy(&hero_position_probe, &hero.motion.pos);
                 resolve_point_path_segment_xy_clearance(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (distance_xyz(&hero.motion.pos, &hero_position_probe) < 0.001f) {
