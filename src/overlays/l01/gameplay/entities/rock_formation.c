@@ -511,7 +511,7 @@ void update_birdbot_projectile(DropMoby *projectile) {
         }
     }
 }
-extern DebrisColors D_L01_00161C70;
+extern DebrisColors l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70");
 extern u8 D_0013D388[];
 
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
@@ -561,7 +561,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
             DebrisVec pos;
             DebrisVec off;
 
-            colors = D_L01_00161C70;
+            colors = l01_cave_wall_debris_oclass_choices;
             pos.q = 0;
             pos.f[0] = random_float_between(-1.0f, 1.0f);
             pos.f[1] = random_float_between(-1.0f, 1.0f);
