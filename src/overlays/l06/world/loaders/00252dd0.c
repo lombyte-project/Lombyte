@@ -62,7 +62,7 @@ extern Ldg252dd0 D_0015EE48;
 #include "rnc/overlay/l06/world/loaders/00252dd0_globals.h"
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L06_00182F40[3];
-extern u64 D_L06_00182F58[3];
+extern u64 level_06_texture_64x64_gs_state[3] __asm__("D_L06_00182F58");
 extern u64 D_L06_00182F70[3];
 extern s32 level_06_tfrag_texture_references[] __asm__("D_L06_001C5180");
 extern s32 level_06_moby_texture_references[] __asm__("D_L06_0019A200");
@@ -226,10 +226,10 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             (gs_texture_allocation_base + level_header[0x25]) >> 8, 0, 0, 0, 4);
         D_L06_00182F40[1] = 0x0000FFA0000000E0;
         D_L06_00182F40[2] = 0x0040000400004000;
-        D_L06_00182F58[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+        level_06_texture_64x64_gs_state[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
             (gs_texture_allocation_base + level_header[0x27]) >> 8, 0, 0, 0, 4);
-        D_L06_00182F58[1] = 0x0000FFA0000000E0;
-        D_L06_00182F58[2] = 0x0040000400004000;
+        level_06_texture_64x64_gs_state[1] = 0x0000FFA0000000E0;
+        level_06_texture_64x64_gs_state[2] = 0x0040000400004000;
         D_L06_00182F70[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + level_header[0x31]) >> 8, 0, 0, 0, 4);
         D_L06_00182F70[1] = 0x0000FFA0000000E0;
