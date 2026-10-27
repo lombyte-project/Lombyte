@@ -15,16 +15,16 @@ typedef struct PatchPair {
 } PatchPair;
 
 extern PatchPair D_00131258[];
-extern u8 D_00130AF0[];
-extern u8 D_00131230[];
+extern u8 alarm_kernel_patch_payload[] __asm__("D_00130AF0");
+extern u8 alarm_call_trampoline_payload[] __asm__("D_00131230");
 
 void InitAlarm(void) {
     u32 i;
 
     if ((*(volatile u32 *)0x10001810 & 0x100) == 0) {
         Rfu116SetSyscallTail(D_00131258[0].a, D_00131258[0].b);
-        InvokeKernelSyscall005A_RfuTail((void *)0x80076000, D_00130AF0, 0x740);
-        InvokeKernelSyscall005A_RfuTail((void *)0x00082000, D_00131230, 0x28);
+        InvokeKernelSyscall005A_RfuTail((void *)0x80076000, alarm_kernel_patch_payload, 0x740);
+        InvokeKernelSyscall005A_RfuTail((void *)0x00082000, alarm_call_trampoline_payload, 0x28);
         FlushCache(0);
         FlushCache(2);
         Rfu116SetSyscallTail(D_00131258[1].a, D_00131258[1].b);
