@@ -2896,16 +2896,16 @@ typedef struct FlameHit {
 
 typedef Vec_2b2100 Vec_2b77f0;
 extern Vec_2b77f0 D_L00_0015F580 __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-extern f32 D_L00_001614F0 __attribute__((sda));
-extern f32 D_L00_00161500 __attribute__((sda));
+extern f32 pyrocitor_light_color_start_x_gp __asm__("D_L00_001614F0") __attribute__((sda));
+extern f32 pyrocitor_light_color_end_x_gp __asm__("D_L00_00161500") __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));
-extern f32 D_L00_00161514 __attribute__((sda));
-extern s32 D_L00_00161518 __attribute__((sda));
-extern s32 D_L00_0016151C __attribute__((sda));
-extern f32 D_L00_00161520 __attribute__((sda));
-extern f32 D_L00_00161524 __attribute__((sda));
-extern f32 D_L00_00161528 __attribute__((sda));
-extern s32 D_L00_00161530 __attribute__((sda));
+extern f32 pyrocitor_flame_maximum_speed_gp __asm__("D_L00_00161514") __attribute__((sda));
+extern s32 pyrocitor_flame_primary_particle_count_gp __asm__("D_L00_00161518") __attribute__((sda));
+extern s32 pyrocitor_flame_extra_particle_count_gp __asm__("D_L00_0016151C") __attribute__((sda));
+extern f32 pyrocitor_flame_base_range_gp __asm__("D_L00_00161520") __attribute__((sda));
+extern f32 pyrocitor_flame_full_length_random_range_gp __asm__("D_L00_00161524") __attribute__((sda));
+extern f32 pyrocitor_flame_zero_length_random_range_gp __asm__("D_L00_00161528") __attribute__((sda));
+extern s32 pyrocitor_ammo_use_interval_frames_gp __asm__("D_L00_00161530") __attribute__((sda));
 extern f32 D_L00_001601E8;
 
 void update_pyrocitor_usage_and_cleanup(unsigned char *) __asm__("FUN_L00_002b8230");
@@ -2931,28 +2931,34 @@ extern void FUN_L00_00250df8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern struct PadState controller_state_lui __asm__("D_0013C940");
 void pyrocitor_update(struct Moby *moby) __asm__("FUN_L00_002b77f0");
 void pyrocitor_update(struct Moby *moby) {
-    PyrocitorVars *v = (PyrocitorVars *)moby->pvars;
+    enum {
+        PYROCITOR_STATE_INITIALIZE = 0,
+        PYROCITOR_STATE_WAIT_FOR_READY = 1,
+        PYROCITOR_STATE_READY = 2,
+        PYROCITOR_STATE_FIRING = 3
+    };
+    PyrocitorVars *pyrocitor_vars = (PyrocitorVars *)moby->pvars;
     Vec_2b2100 pos, dir, scratch, endpoint, particle_pos, random_vec;
     FlameHit hit;
     f32 pos_out, vel_out;
-    f32 speed, length, accel, damping;
+    f32 speed, length, flame_braking_step, damping;
     s32 gate;
     s32 i;
     s32 fl;
     void *effect;
     s32 ready;
-    s32 h;
+    s32 firing_voice_slot_index;
     struct Moby *other;
 
     update_pyrocitor_usage_and_cleanup((unsigned char *)moby);
     moby_point_position(moby, 0, &pos);
     switch (moby->state) {
-    case 0:
-        v->light = -1;
-        v->voice = -1;
+    case PYROCITOR_STATE_INITIALIZE:
+        pyrocitor_vars->light = -1;
+        pyrocitor_vars->voice = -1;
         moby->state = 1;
         break;
-    case 1:
+    case PYROCITOR_STATE_WAIT_FOR_READY:
         if (moby->seq == 1)
             moby->state = 2;
         if (moby->seq != 0)
@@ -2961,45 +2967,45 @@ void pyrocitor_update(struct Moby *moby) {
             moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(5));
         break;
-    case 2:
-        if (v->other == 0) {
-            v->other = spawn_linked_moby_from_basis(moby);
-            if (v->other != 0) {
-                v->other->flags |= 0x100;
-                *(f32 *)(v->other->pvars + 0xC) = D_L00_00161510;
+    case PYROCITOR_STATE_READY:
+        if (pyrocitor_vars->other == 0) {
+            pyrocitor_vars->other = spawn_linked_moby_from_basis(moby);
+            if (pyrocitor_vars->other != 0) {
+                pyrocitor_vars->other->flags |= 0x100;
+                *(f32 *)(pyrocitor_vars->other->pvars + 0xC) = D_L00_00161510;
             }
         }
-        if (v->light != -1) {
-            lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &D_L00_0015F580, 0.1f);
-            if (fast_vec_length(&lights_2b2100[v->light]) < 0.001f) {
-                release_point_light_slot(v->light);
+        if (pyrocitor_vars->light != -1) {
+            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &D_L00_0015F580, 0.1f);
+            if (fast_vec_length(&lights_2b2100[pyrocitor_vars->light]) < 0.001f) {
+                release_point_light_slot(pyrocitor_vars->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
-                if (moby) v->light = -1; else v->light = -1;
+                if (moby) pyrocitor_vars->light = -1; else pyrocitor_vars->light = -1;
             }
         }
         if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.item_use_locked && get_ammo(-1)) {
             moby->state = 3;
             start_equipped_item_animation();
-            v->timer = scale_game_frames(10);
-            if (v->light == -1)
-                v->light = FUN_L00_0023e5e0(&moby->pos, 7.5f, 0.0f, 0);
+            pyrocitor_vars->timer = scale_game_frames(10);
+            if (pyrocitor_vars->light == -1)
+                pyrocitor_vars->light = FUN_L00_0023e5e0(&moby->pos, 7.5f, 0.0f, 0);
         } else if ((controller_state_lui.pressed & hero.items[0].button_mask) && !get_ammo(-1)) {
             FUN_0022da68(0, 0, moby);
         }
         break;
-    case 3:
-        if (!voice_is_playing(moby, v->voice))
-            v->voice = FUN_0022da68(1, 4, moby);
-        if (v->light != -1 && moby->state == 3) {
+    case PYROCITOR_STATE_FIRING:
+        if (!voice_is_playing(moby, pyrocitor_vars->voice))
+            pyrocitor_vars->voice = FUN_0022da68(1, 4, moby);
+        if (pyrocitor_vars->light != -1 && moby->state == 3) {
             dir.q = 0;
             dir.f.x = 2.0f;
             dir.f.z = 2.0f;
             transform_vector_by_basis(&dir, &dir, hero.basis);
-            add_vector_xyz(&lights_2b2100[v->light].pos, &hero.motion.pos, &dir);
-            lights_2b2100[v->light].pos.f.w = 7.5f;
-            lerp_vector(&scratch, &D_L00_001614F0, &D_L00_00161500,
+            add_vector_xyz(&lights_2b2100[pyrocitor_vars->light].pos, &hero.motion.pos, &dir);
+            lights_2b2100[pyrocitor_vars->light].pos.f.w = 7.5f;
+            lerp_vector(&scratch, &pyrocitor_light_color_start_x_gp, &pyrocitor_light_color_end_x_gp,
                 fast_sin(((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f) * 0.5f + 0.5f);
-            lerp_vector(&lights_2b2100[v->light], &lights_2b2100[v->light], &scratch, 0.1f);
+            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &scratch, 0.1f);
         }
         pos_out = vel_out = 0.0f;
         speed = convert_integer_to_float(item_text_variant[16]) * 4.0f;
@@ -3010,11 +3016,11 @@ void pyrocitor_update(struct Moby *moby) {
         if (hero.state.current == 1 && (moby->flags & 1)) {
             normalize_vector_xyz(&scratch, player_camera + 0x370, -1.0f);
             add_vector_xyz(&scratch, &scratch, player_camera + 0x140);
-            normalize_vector_xyz(&dir, player_camera + 0x350, D_L00_00161520 + speed + 0.75f);
+            normalize_vector_xyz(&dir, player_camera + 0x350, pyrocitor_flame_base_range_gp + speed + 0.75f);
             add_vector_xyz(&endpoint, &dir, &scratch);
         } else {
             qcopy(&scratch, &pos);
-            normalize_vector_xyz(&dir, &hero.facing_x, D_L00_00161520 + speed + 0.75f);
+            normalize_vector_xyz(&dir, &hero.facing_x, pyrocitor_flame_base_range_gp + speed + 0.75f);
             add_vector_xyz(&endpoint, &dir, &pos);
         }
         if (collision_line(&hero.motion.body_center, &scratch, 2, 0, 0)) {
@@ -3024,21 +3030,21 @@ void pyrocitor_update(struct Moby *moby) {
             if (length < 0.0f)
                 length = 0.0f;
         } else {
-            length = D_L00_00161520 + speed;
+            length = pyrocitor_flame_base_range_gp + speed;
         }
-        accel = D_L00_001601E8 * frame_time_sq;
-        damping = D_L00_00161514 * frame_time;
-        advance_accelerated_scalar(&pos_out, &vel_out, length, 1.0f, accel, damping);
+        flame_braking_step = D_L00_001601E8 * frame_time_sq;
+        damping = pyrocitor_flame_maximum_speed_gp * frame_time;
+        advance_accelerated_scalar(&pos_out, &vel_out, length, 1.0f, flame_braking_step, damping);
         normalize_vector_xyz(&dir, &dir, vel_out);
         {
             s32 initial_count, extra;
-            initial_count = D_L00_00161518;
-            extra = D_L00_0016151C;
+            initial_count = pyrocitor_flame_primary_particle_count_gp;
+            extra = pyrocitor_flame_extra_particle_count_gp;
             if (length < 4.0f || (moby->flags & 1))
                 initial_count = 1;
             for (i = 0; i < extra + initial_count; i++) {
                 random_vector(&random_vec, 0.0f,
-                    ((D_L00_00161524 - D_L00_00161528) * (length / (D_L00_00161520 + speed)) + D_L00_00161528) *
+                    ((pyrocitor_flame_full_length_random_range_gp - pyrocitor_flame_zero_length_random_range_gp) * (length / (pyrocitor_flame_base_range_gp + speed)) + pyrocitor_flame_zero_length_random_range_gp) *
                         frame_time);
                 add_vector_xyz(&random_vec, &random_vec, &dir);
                 fast_vec_scale(&particle_pos, &dir, random_float_between(0.0f, 1.0f));
@@ -3071,37 +3077,37 @@ void pyrocitor_update(struct Moby *moby) {
         transform_vector_by_basis(&random_vec, &particle_pos, hero.basis);
         add_vector_xyz(&random_vec, &random_vec, &pos);
         collect_mobies_in_sphere(&random_vec, 0.42f, 5, hero.moby, &hit);
-        if (fast_dec_timer_s16(&v->spark)) {
-            v->spark = truncate_float_to_s32(scale_time(random_float_between(10.0f, 30.0f)));
+        if (fast_dec_timer_s16(&pyrocitor_vars->spark)) {
+            pyrocitor_vars->spark = truncate_float_to_s32(scale_time(random_float_between(10.0f, 30.0f)));
             random_vector(&random_vec, 0.0f, frame_time + frame_time);
             fast_vec_scale(&particle_pos, &dir, random_float_between(0.5f, 0.1f));
             add_vector_xyz(&particle_pos, &particle_pos, &random_vec);
             spawn_color_decaying_effect_particle(&scratch, &particle_pos, item_text_variant[16]);
         }
-        if (D_L00_0015F5CC % scale_game_frames(D_L00_00161530) == 0)
+        if (D_L00_0015F5CC % scale_game_frames(pyrocitor_ammo_use_interval_frames_gp) == 0)
             use_ammo(-1, 1);
         ready = get_ammo(-1);
-        if (fast_dec_timer_s16(&v->timer)) {
+        if (fast_dec_timer_s16(&pyrocitor_vars->timer)) {
             if ((controller_state.held & hero.items[0].button_mask) && !hero.item_use_locked && ready)
                 break;
             moby->state = 2;
             cancel_hero_item_animation();
-            h = v->voice;
-            if (h != -1) {
-                u8 *slot = D_0013E550 + h * 0x70;
+            firing_voice_slot_index = pyrocitor_vars->voice;
+            if (firing_voice_slot_index != -1) {
+                u8 *slot = D_0013E550 + firing_voice_slot_index * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74])
-                    release_voice_slot(h);
+                    release_voice_slot(firing_voice_slot_index);
             }
-            v->voice = -1;
+            pyrocitor_vars->voice = -1;
             if (!ready)
                 FUN_0022da68(0, 0, moby);
         }
         break;
     }
-    if (v->other) {
-        euler_rotation_basis(&v->other->rot_row0, &v->other->rot);
-        multiply_matrix3x3(&v->other->rot_row0, &moby->rot_row0, &v->other->rot_row0);
-        other = v->other;
+    if (pyrocitor_vars->other) {
+        euler_rotation_basis(&pyrocitor_vars->other->rot_row0, &pyrocitor_vars->other->rot);
+        multiply_matrix3x3(&pyrocitor_vars->other->rot_row0, &moby->rot_row0, &pyrocitor_vars->other->rot_row0);
+        other = pyrocitor_vars->other;
         qcopy(&other->pos, &pos);
         FUN_L00_00250df8(other);
     }
