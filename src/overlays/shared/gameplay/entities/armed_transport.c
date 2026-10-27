@@ -27,7 +27,7 @@ extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
-extern float D_L16_001D9680[4];
+extern float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float distance_xyz(void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
@@ -131,7 +131,7 @@ void armed_transport_update(char *transport_moby) {
             vector.f[2] = 3.14159f;
             for (i = 0; i < 4; i++) {
                 if (((int *)(transport_data + 0xC0))[i] >= 0) {
-                    set_blarg_elite_commando_parent_transform(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, D_L16_001D9680,
+                    set_blarg_elite_commando_parent_transform(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, armed_transport_passenger_attachment_offset,
                                       (char *)vector.f);
                 }
             }
@@ -172,7 +172,7 @@ void armed_transport_update(char *transport_moby) {
 
                 clear_u64_value(rotation.f);
                 rotation.f[2] = fast_add_rotations(*(float *)(transport_moby + 0x48), 3.14159f);
-                transform_vector_by_basis(vector.f, D_L16_001D9680, transport_moby + 0xC0);
+                transform_vector_by_basis(vector.f, armed_transport_passenger_attachment_offset, transport_moby + 0xC0);
                 add_vector_xyz(vector.f, vector.f, transport_moby + 0x10);
                 start_blarg_elite_commando_return_to_initial_position(passenger, scale_game_frames(90));
                 *slot = -1;
