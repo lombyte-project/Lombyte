@@ -1171,7 +1171,7 @@ typedef struct Snd_2C56B0 { char pad0[0x74]; unsigned char b74; char pad75[0x13]
 
 extern char *D_L13_0015FFD8;
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
-extern char D_L13_001F4700[];
+extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
 extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1245,7 +1245,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
             return;
         }
         if (path == 0) {
-            func_001E9730_d(D_L13_001F4700, moby->hB2);
+            func_001E9730_d(blarg_space_fighter_missing_path_debug_format, moby->hB2);
             mark_moby_for_removal(moby);
             return;
         }
