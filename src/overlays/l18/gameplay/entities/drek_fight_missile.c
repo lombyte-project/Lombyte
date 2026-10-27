@@ -3302,7 +3302,7 @@ extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void follow_camera_set_distance(float, float, int) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L06_00316330(void *);
-extern int D_L18_0016A290[];
+extern int drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
 extern char D_L18_00167B50[];
 extern char D_L18_00167680[];
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
@@ -3382,7 +3382,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                     *(int *)(boss_data + 0x3ec) = 1;
                 }
             }
-            if (D_L18_0016A290[i] != 0) {
+            if (drek_boss_scalar_scan_entry_gates[i] != 0) {
                 scanned_entry = D_L18_00167B50 + i * 0xa0;
                 if (*(short *)(scanned_entry + 0x86) == 0x12) {
                     FUN_L06_00316330(scanned_entry);
