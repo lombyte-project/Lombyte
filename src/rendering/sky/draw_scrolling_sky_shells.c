@@ -18,7 +18,7 @@ struct SkyShellSet {
 
 #include "rnc/rendering/sky/draw_scrolling_sky_shells_globals.h"
 extern f32 sky_shell_angle_step_gp __asm__("D_00160400") __attribute__((sda));
-extern struct SkyShellSet *D_0016045C;
+extern struct SkyShellSet *level_sky_effect_data __asm__("D_0016045C");
 extern u8 sky_matrix[] __asm__("D_001D96E0");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -43,11 +43,11 @@ void draw_scrolling_sky_shells(void) {
     s32 shell_index;
 
     shell_index = 0;
-    D_0016045C->relocation_state = 0;
+    level_sky_effect_data->relocation_state = 0;
     set_identity_matrix(sky_matrix);
     clear_u64_value(rotation_angles);
 
-    shell_set = D_0016045C;
+    shell_set = level_sky_effect_data;
     if (shell_set->shell_count > 0) {
         do {
             shell_scale = 1.0f;
@@ -96,7 +96,7 @@ void draw_scrolling_sky_shells(void) {
             }
             sky_draw_shell(shell_index);
             shell_index++;
-            shell_set = D_0016045C;
+            shell_set = level_sky_effect_data;
         } while (shell_index < shell_set->shell_count);
     }
 }
