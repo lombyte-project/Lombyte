@@ -8,8 +8,8 @@ extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
 extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern char D_001CE5B8[];
-extern char D_001CE748[];
+extern char pause_menu_chain_head[] __asm__("D_001CE5B8");
+extern char pause_menu_chain_tail[] __asm__("D_001CE748");
 extern char D_001CE798[];
 extern s32 D_001A0314[];
 extern s32 D_001D0398[];
@@ -50,14 +50,14 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        char *menu_entry_base = D_001CE5B8;
+        char *menu_entry_base = pause_menu_chain_head;
         g->unkDC = mode == 0x23;
-        *(char **)(menu_entry_base + 0x38) = g->unkD8 ? D_001CE798 : D_001CE748;
+        *(char **)(menu_entry_base + 0x38) = g->unkD8 ? D_001CE798 : pause_menu_chain_tail;
     }
     {
         struct MenuSystem *g = &menu_system;
-        char *menu_record_base = D_001CE748;
-        *(char **)(menu_record_base + 0x3C) = g->unkD8 ? D_001CE798 : D_001CE5B8;
+        char *menu_record_base = pause_menu_chain_tail;
+        *(char **)(menu_record_base + 0x3C) = g->unkD8 ? D_001CE798 : pause_menu_chain_head;
     }
     {
         struct MenuSystem *g = &menu_system;
