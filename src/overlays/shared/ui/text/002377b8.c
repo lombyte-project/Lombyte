@@ -945,7 +945,7 @@ extern s32 hero_max_health __asm__("D_0015EDA0");
 #include "rnc/overlay/shared/ui/text/002377b8_data/draw_health_hud_panel_2.h"
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 #include "rnc/overlay/shared/ui/text/002377b8_data/draw_health_hud_panel.h"
-extern s32 D_L00_0015F7F8[1] __attribute__((sda));
+extern s32 health_hud_default_icon_offsets[1] __asm__("D_L00_0015F7F8") __attribute__((sda));
 extern Pt D_L00_0017E478[];
 extern Pt D_L00_0017E460[];
 
@@ -1016,7 +1016,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
         second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
     } else {
         second_panel_half_width = 0;
-        tab = (Pt *)D_L00_0015F7F8;
+        tab = (Pt *)health_hud_default_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     }
     yy = y + health_hud_panel_y_offset;
