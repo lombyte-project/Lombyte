@@ -2,7 +2,7 @@
 
 #include "qcopy.h"
 
-extern char D_00187098[];
+extern char camera_lighting_reference_angle[] __asm__("D_00187098");
 extern char dir_lights[] __asm__("D_0019BDC0");
 extern char point_lights[] __asm__("D_0019C1C0");
 extern char point_light_data[] __asm__("D_0019C3C0");
@@ -23,7 +23,7 @@ void update_all_point_lights(void) {
     *(float *)(lighting_presets_base + 0x340) = 0.8f;
     *(float *)(lighting_presets_base + 0x344) = 0.8f;
     *(float *)(lighting_presets_base + 0x348) = 0.8f;
-    lighting_direction_angle = fast_add_rotations(*(float *)D_00187098, -0.8f);
+    lighting_direction_angle = fast_add_rotations(*(float *)camera_lighting_reference_angle, -0.8f);
     *(float *)(lighting_presets_base + 0x350) = fast_cos(lighting_direction_angle) * 0.866f;
     *(float *)(lighting_presets_base + 0x354) = fast_sin(lighting_direction_angle) * 0.866f;
     *(float *)(lighting_presets_base + 0x358) = -0.5f;
