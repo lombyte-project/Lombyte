@@ -919,12 +919,12 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern char D_L11_0015FFBC[4] __attribute__((sda));
-extern char D_L11_00162340[4] __attribute__((sda));
-extern char D_L11_00162350[4] __attribute__((sda));
-extern char D_L11_00162360[4] __attribute__((sda));
-extern char D_L11_00162364[4] __attribute__((sda));
-extern char D_L11_00162368[4] __attribute__((sda));
-extern char D_L11_0016236C[4] __attribute__((sda));
+extern char oil_tanker_link_effect_spawn_random_limit_gp[4] __asm__("D_L11_00162340") __attribute__((sda));
+extern char oil_tanker_link_effect_local_spawn_offset_gp[4] __asm__("D_L11_00162350") __attribute__((sda));
+extern char oil_tanker_link_effect_scale_range_start_gp[4] __asm__("D_L11_00162360") __attribute__((sda));
+extern char oil_tanker_link_effect_scale_range_end_gp[4] __asm__("D_L11_00162364") __attribute__((sda));
+extern char oil_tanker_link_effect_random_motion_radius_scale_gp[4] __asm__("D_L11_00162368") __attribute__((sda));
+extern char oil_tanker_link_fragment_velocity_scale_gp[4] __asm__("D_L11_0016236C") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void add_vector_xyz(void *, void *, void *);
@@ -952,17 +952,17 @@ void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
     float random_motion_offset[4];
     switch (moby->state) {
     case TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION:
-        if (func_001F9908_i(link_vars + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0 &&
+        if (func_001F9908_i(link_vars + 0x28) == 0 && random_integer_below(*(int *)&oil_tanker_link_effect_spawn_random_limit_gp) == 0 &&
             moby->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
-            transform_vector_by_basis(effect_scratch_vector, &D_L11_00162350, &moby->rot_row0);
+            transform_vector_by_basis(effect_scratch_vector, &oil_tanker_link_effect_local_spawn_offset_gp, &moby->rot_row0);
             add_vector_xyz(effect_scratch_vector, effect_scratch_vector, &moby->pos);
-            random_vector(random_motion_offset, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C_n[1]);
+            random_vector(random_motion_offset, 0.0f, *(float *)&oil_tanker_link_effect_random_motion_radius_scale_gp * D_0015ED6C_n[1]);
             subtract_vector_xyz(effect_motion_vector, &moby->pos, link_vars);
             effect_motion_vector[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
             add_vector_xyz(effect_motion_vector, effect_motion_vector, random_motion_offset);
             func_L11_0031C210_5(
                 effect_scratch_vector, effect_motion_vector, D_L11_00161E18, 0,
-                random_float_between(*(float *)&D_L11_00162360, *(float *)&D_L11_00162364));
+                random_float_between(*(float *)&oil_tanker_link_effect_scale_range_start_gp, *(float *)&oil_tanker_link_effect_scale_range_end_gp));
         }
         qcopy(link_vars, &moby->pos);
         break;
@@ -973,7 +973,7 @@ void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
         cart_burst(moby, link_position, -1, 5.0f, 13.0f);
         scale_vector_xyz(
             effect_scratch_vector, &moby->rot_row0,
-            (dv = D_L11_0015F580, link_rotation = &moby->rot, *(float *)&D_L11_0016236C * frame_scale));
+            (dv = D_L11_0015F580, link_rotation = &moby->rot, *(float *)&oil_tanker_link_fragment_velocity_scale_gp * frame_scale));
         effect_scratch_vector[2] += frame_scale * 0.08f;
         func_L00_00265050_s(moby, 0x785, link_position, link_rotation, scale_game_frames(0x5A), 0, effect_scratch_vector, dv, frame_time_sq * 12.0f,
                             dv);
