@@ -133,7 +133,7 @@ void hero_change_health(s32 health_decrement) {
     }
 }
 extern s32 D_001413D0[];
-extern s32 D_001404D4[];
+extern s32 hero_slot_three_secondary_moby[] __asm__("D_001404D4");
 extern s32 D_001403E0[];
 
 /* Returns D_001413D0[0] for a = 0, 2, 3, 4, D_001404D4[0] for 1, D_001403E0[0] for 5, else 0. */
@@ -144,7 +144,7 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
         return D_001413D0[0];
     }
     if (ease_kind == 1) {
-        return D_001404D4[0];
+        return hero_slot_three_secondary_moby[0];
     }
     if (ease_kind == 5) {
         return D_001403E0[0];
