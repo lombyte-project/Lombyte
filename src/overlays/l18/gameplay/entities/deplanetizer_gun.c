@@ -476,7 +476,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern float D_L18_00162454 ;
 extern float D_L18_00162450 ;
 
-extern short D_L18_00162500 __attribute__((sda));
+extern short deplanetizer_bone_glow_offset_scale_gp __asm__("D_L18_00162500") __attribute__((sda));
 void draw_moby_color_cycling_bone_glows(void *moby) {
     char glow_position[16];
     char bone_transform_rows0_1[32];
@@ -491,11 +491,11 @@ void draw_moby_color_cycling_bone_glows(void *moby) {
     color_cycle_value = fast_sin(color_cycle_value - 3.14159f);
     tweened_color = fast_tween_color(D_L18_00162458, D_L18_0016245C, color_cycle_value * 0.5f + 0.5f);
     build_moby_bone_transform(moby, 1, bone_transform_rows0_1);
-    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
+    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
     subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
     draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
     build_moby_bone_transform(moby, 2, bone_transform_rows0_1);
-    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&D_L18_00162500);
+    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
     subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
     draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
 }
