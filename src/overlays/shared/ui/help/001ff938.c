@@ -445,7 +445,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_215e58(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_215e58 D_L15_00179EF0[];
+extern Entry70_215e58 l15_hero_auxiliary_countdown_records[] __asm__("D_L15_00179EF0");
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning. */
 void update_hero_timers_and_auxiliary_state(void) __asm__("FUN_L15_00215e58");
 
@@ -531,7 +531,7 @@ void update_hero_timers_and_auxiliary_state(void) {
         FUN_001f9770_215e58(&hero.vehicle_triangle_cooldown);
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_215e58(&D_L15_00179EF0[i].w0);
+        FUN_001f9740_215e58(&l15_hero_auxiliary_countdown_records[i].w0);
     }
     hero.current_path_dist = 9999.0f;
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_215e58(&hero.motion.velocity) < 0.0f) {
