@@ -109,7 +109,7 @@ typedef struct {
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern u8 *D_L01_001B25E0[];
+extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
 Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
@@ -126,7 +126,7 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
         particle->alpha = truncate_float_to_s32(4.0f) + 0x20;
         particle->kind = 0x48;
         particle->active = 0;
-        particle->tex = *D_L01_001B25E0[0];
+        particle->tex = *pool_bubble_texture_table[0];
         particle->scale = scale;
         qcopy(&particle->m.pos, motion_position_source);
         particle->spin = random_integer_below(0x100);
