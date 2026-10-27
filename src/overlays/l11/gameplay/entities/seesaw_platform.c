@@ -618,13 +618,13 @@ typedef struct {
     u8 unk3D;
 } Light_e088;
 
-extern Light_e088 D_L11_001CB280;
+extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
 int D_L11_00161F64 = 0;
 char D_L11_0021B4C0[] = "I'm really sorry, but you can't have more than 128 water tiles in this level";
 extern char water_tile_binding_records[] __asm__("D_L11_001DA740");
 extern float water_light_heading_reference[] __asm__("D_L11_001808C0");
 extern void *D_L11_001612D0;
-extern void *D_L11_001612D4;
+extern void *l11_water_tile_binding_record_base __asm__("D_L11_001612D4");
 extern int D_L11_001612D8;
 extern float D_L11_0016120C;
 extern float D_L11_00161210;
@@ -682,7 +682,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             }
             pool_init_tiles(D_L11_001DA880, 20);
             pool_set_scale(1.0f);
-            water_tile_light = &D_L11_001CB280;
+            water_tile_light = &l11_water_tile_light;
             water_tile_light->unk0 = 16.0f;
             water_tile_light->unk4 = 16.0f;
             water_tile_light->unk8 = -8.0f;
@@ -700,7 +700,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             water_tile_light->unk3C = 0x1C;
             water_tile_light->unk3D = 0x40;
             D_L11_001612D0 = D_L11_001DA880;
-            D_L11_001612D4 = water_tile_binding_records;
+            l11_water_tile_binding_record_base = water_tile_binding_records;
             D_L11_001612D8 = 20;
             D_L11_0016120C = 32768.0f;
             D_L11_00161210 = 255.0f;
