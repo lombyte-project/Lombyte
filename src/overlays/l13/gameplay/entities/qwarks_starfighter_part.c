@@ -1596,7 +1596,7 @@ void update_moby_state_relay(char *moby) {
  * closes on one of its six "close" states, fading its light with the opening and spinning its wheel. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9F10), where it is exact; names translated to the US level program. */
 
-extern char D_L13_001F51E0[];
+extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -1642,7 +1642,7 @@ void update_controller_linked_gate(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case GATE_STATE_INITIALIZE:
         if (controller_moby == 0) {
-            debug_print_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
+            debug_print_alt(gate_missing_controller_format, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
             mark_moby_for_removal(moby);
             return;
         }
