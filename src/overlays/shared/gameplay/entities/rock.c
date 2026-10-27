@@ -1968,15 +1968,15 @@ extern int shared_teleporter_help_message_ids[] __asm__("D_L01_00201600");
 extern int level_17_teleporter_help_message_ids[] __asm__("D_L01_00201618");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-extern short D_L01_00161F98 __attribute__((sda));
-extern short D_L01_00161FA0 __attribute__((sda));
-extern short D_L01_00161FA8 __attribute__((sda));
-extern short D_L01_00161FB0 __attribute__((sda));
+extern short level_8_teleporter_help_message_ids __asm__("D_L01_00161F98") __attribute__((sda));
+extern short level_12_teleporter_help_message_ids __asm__("D_L01_00161FA0") __attribute__((sda));
+extern short level_16_teleporter_help_message_ids __asm__("D_L01_00161FA8") __attribute__((sda));
+extern short level_18_teleporter_help_message_ids __asm__("D_L01_00161FB0") __attribute__((sda));
 void try_set_teleporter_help_message(char *moby) {
     int *data = *(int **)(moby + 0x78);
     switch (D_0015ED84) {
     case 12:
-        try_set_help_message(4, ((int *)&D_L01_00161FA0)[data[4]]);
+        try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[data[4]]);
         break;
     case 17:
         try_set_help_message(4, level_17_teleporter_help_message_ids[data[4]]);
@@ -1987,13 +1987,13 @@ void try_set_teleporter_help_message(char *moby) {
         try_set_help_message(4, shared_teleporter_help_message_ids[data[4]]);
         break;
     case 8:
-        try_set_help_message(4, ((int *)&D_L01_00161F98)[data[4]]);
+        try_set_help_message(4, ((int *)&level_8_teleporter_help_message_ids)[data[4]]);
         break;
     case 16:
-        try_set_help_message(4, ((int *)&D_L01_00161FA8)[data[4]]);
+        try_set_help_message(4, ((int *)&level_16_teleporter_help_message_ids)[data[4]]);
         break;
     case 18:
-        try_set_help_message(4, ((int *)&D_L01_00161FB0)[data[4]]);
+        try_set_help_message(4, ((int *)&level_18_teleporter_help_message_ids)[data[4]]);
         break;
     }
 }
