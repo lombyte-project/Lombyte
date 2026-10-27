@@ -524,7 +524,7 @@ extern u8 D_0013E550[];
 extern s32 D_L12_001612D0;
 extern s32 D_L12_001612D8;
 extern s32 D_L12_0015F5CC;
-extern u8 D_L12_0017C440[];
+extern u8 hero_swim_speed_animation_curve[] __asm__("D_L12_0017C440");
 
 extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -621,7 +621,7 @@ extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
-extern f32 D_L12_001C4130[];
+extern f32 hero_ledge_shimmy_speed_by_frame[] __asm__("D_L12_001C4130");
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern void rotate_hero_about_fixed_local_pivot(f32, f32, f32) __asm__("FUN_L00_002091d8");
 extern void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
@@ -1064,7 +1064,7 @@ void update_hero_motion_for_current_state(void) {
             if (hero.state.current == 0x35) {
                 build_spherical_offset(&hero.motion.velocity, hero.ground_speed, hero.motion.rot.f[2], yaw);
             } else if (hero.state.current == 0x33) {
-                f32 sp = hero.ground_speed * FUN_L00_00209018(D_L12_0017C440, 0x1E) * 5.0f;
+                f32 sp = hero.ground_speed * FUN_L00_00209018(hero_swim_speed_animation_curve, 0x1E) * 5.0f;
                 if (hero.state.prev == 0x35 && scale_game_frames(15) > hero.state_timer) {
                     if (sp < frame_time * 4.5f) {
                         sp = frame_time * 4.5f;
@@ -1181,7 +1181,7 @@ void update_hero_motion_for_current_state(void) {
             }
             speed_step(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
             {
-                f32 sp = hero.ground_speed * FUN_L00_00209018(D_L12_0017C440, 0x1E) * 5.5f;
+                f32 sp = hero.ground_speed * FUN_L00_00209018(hero_swim_speed_animation_curve, 0x1E) * 5.5f;
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[2] = 0.0f;
@@ -2097,7 +2097,7 @@ void update_hero_motion_for_current_state(void) {
         fl = hero.motion.flat_speed;
         approach_value(&fl, hero.target_speed * frame_time, frame_time_sq * 5.0f);
         subtract_vector_xyz(&hero.motion.velocity, &rotation_matrix_and_geometry_scratch[1], &hero.motion.pos);
-        set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, D_L12_001C4130[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
+        set_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, hero_ledge_shimmy_speed_by_frame[truncate_float_to_s32(hero.anim_frame)] * 0.5f);
         break;
     }
     case HERO_STATE_SLIP:
