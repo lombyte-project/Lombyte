@@ -1011,7 +1011,7 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern char D_L05_00215C00[];
+extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -1026,7 +1026,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             int i;
             struct Hero *player_hero;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, D_L05_00215C00 + i * 16, moby + 0xC0);
+                transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, moby_vector_table_local_vectors + i * 16, moby + 0xC0);
                 fast_vec_add(vector_table_entry + 0x10 + i * 16, vector_table_entry + 0x10 + i * 16, moby + 0x10);
             }
             player_hero = &hero;
