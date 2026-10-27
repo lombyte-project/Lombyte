@@ -823,15 +823,15 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 collision_line(void *, void *, s32, void *, s32);
 extern s32 rand(void);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L01_00162098 __attribute__((sda));
-extern short D_L01_0016209C __attribute__((sda));
-extern short D_L01_001620A4 __attribute__((sda));
-extern short D_L01_001620A8 __attribute__((sda));
-extern short D_L01_001620AC __attribute__((sda));
-extern short D_L01_001620B0 __attribute__((sda));
-extern short D_L01_001620B4 __attribute__((sda));
-extern short D_L01_001620B8 __attribute__((sda));
-extern short D_L01_001620BC __attribute__((sda));
+extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
+extern short sandmouse_projectile_count_limit_gp __asm__("D_L01_0016209C") __attribute__((sda));
+extern short sandmouse_fade_duration_frames_gp __asm__("D_L01_001620A4") __attribute__((sda));
+extern short sandmouse_fade_particle_min_lifetime_gp __asm__("D_L01_001620A8") __attribute__((sda));
+extern short sandmouse_fade_particle_max_lifetime_gp __asm__("D_L01_001620AC") __attribute__((sda));
+extern short sandmouse_fade_particle_position_offset_distance_gp __asm__("D_L01_001620B0") __attribute__((sda));
+extern short sandmouse_fade_particle_min_size_gp __asm__("D_L01_001620B4") __attribute__((sda));
+extern short sandmouse_fade_particle_max_size_gp __asm__("D_L01_001620B8") __attribute__((sda));
+extern short sandmouse_fade_particle_color_high_byte_gp __asm__("D_L01_001620BC") __attribute__((sda));
 extern short D_L01_001620C0 __attribute__((sda));
 extern unsigned char D_0013D4C5 __attribute__((section(".data")));
 extern unsigned char D_0014C190[] __attribute__((section(".data")));
@@ -952,7 +952,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 if (*(int *)(hero_bytes + 0x1158) != 5) break;
             }
             sandmouse_vars->k5C = 0;
-            sandmouse_vars->k58 = scale_game_frames(*(int *)&D_L01_00162098);
+            sandmouse_vars->k58 = scale_game_frames(*(int *)&sandmouse_follow_duration_frames_gp);
             if (sandmouse_moby->visible != 0) {
                 if ((sandmouse_moby->anim_flags & 2) && sandmouse_moby->prev_seq != 2) {
                     blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(10));
@@ -1087,7 +1087,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
         }
-        if (sandmouse_vars->timer == scale_game_frames(20) || *(int *)&D_L01_0016209C - 5 < sandmouse_vars->k5C) {
+        if (sandmouse_vars->timer == scale_game_frames(20) || *(int *)&sandmouse_projectile_count_limit_gp - 5 < sandmouse_vars->k5C) {
             if (sandmouse_moby->prev_seq != 2) {
                 blend_moby_animation(sandmouse_moby, 2, 0, scale_game_frames(5));
             }
@@ -1102,12 +1102,12 @@ void sandmouse_update(Moby *sandmouse_moby) {
             if (*(int *)(hero_bytes + 0x1130) != 0 && *(int *)(hero_bytes + 0x1158) == 5
                 && *(int *)(hero_bytes + 0x208C) != 0x16 && *(int *)(hero_bytes + 0x208C) != 0x14
                 && *(u8 *)(hero_bytes + 0x20A4) == 0 && *(s16 *)(D_L01_00167280 + 0x86) != 0x14
-                && fast_dec_timer(&sandmouse_vars->k58) == 0 && sandmouse_vars->k5C < *(int *)&D_L01_0016209C) {
+                && fast_dec_timer(&sandmouse_vars->k58) == 0 && sandmouse_vars->k5C < *(int *)&sandmouse_projectile_count_limit_gp) {
                 compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
                 update_sandmouse_hover_movement(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             } else {
                 qzero(&sandmouse_vars->vel);
-                sandmouse_vars->timer = *(int *)&D_L01_001620A4;
+                sandmouse_vars->timer = *(int *)&sandmouse_fade_duration_frames_gp;
                 if (sandmouse_vars->slot != -1) {
                     char *v = VOICE(sandmouse_vars->slot);
                     if (*(Moby **)(v + 0x88) == sandmouse_moby && *(u8 *)(v + 0x74) != 0) {
@@ -1145,18 +1145,18 @@ void sandmouse_update(Moby *sandmouse_moby) {
             int fade_particle_color_low_byte, fade_particle_color_second_byte, fade_particle_color_third_byte, color, life, spin;
             f32 size;
             qcopy(&pos, &sandmouse_moby->pos);
-            add_random_offset_to_vector_xyz(&pos, *(f32 *)&D_L01_001620B0);
+            add_random_offset_to_vector_xyz(&pos, *(f32 *)&sandmouse_fade_particle_position_offset_distance_gp);
             fade_particle_color_low_byte = (rand() + 0x30) & 0x3F;
             fade_particle_color_second_byte = (rand() + 0x20) & 0x3F;
             fade_particle_color_third_byte = rand() & 0x2F;
-            color = fade_particle_color_low_byte | (fade_particle_color_second_byte << 8) | (fade_particle_color_third_byte << 16) | (*(int *)&D_L01_001620BC << 24);
+            color = fade_particle_color_low_byte | (fade_particle_color_second_byte << 8) | (fade_particle_color_third_byte << 16) | (*(int *)&sandmouse_fade_particle_color_high_byte_gp << 24);
             spin = rand() % 2;
             if (sandmouse_vars->timer & 1) spin = -spin;
-            life = FUN_L00_00257b90(*(int *)&D_L01_001620A8, *(int *)&D_L01_001620AC);
-            size = random_float_between(*(f32 *)&D_L01_001620B4, *(f32 *)&D_L01_001620B8);
+            life = FUN_L00_00257b90(*(int *)&sandmouse_fade_particle_min_lifetime_gp, *(int *)&sandmouse_fade_particle_max_lifetime_gp);
+            size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp, *(f32 *)&sandmouse_fade_particle_max_size_gp);
             FUN_L00_00272060(&pos, life, size, 0.001f, color,
                 2, spin, &vel, *(f32 *)&D_L01_001620C0 * frame_time_sq);
-            dv = *(int *)&D_L01_001620A4;
+            dv = *(int *)&sandmouse_fade_duration_frames_gp;
             sandmouse_moby->flags |= 0x200;
             sandmouse_moby->alpha -= 0x80 / dv;
             sandmouse_moby->rot.z = fast_add_rotations(sandmouse_moby->rot.z, frame_time * 25.132742f);
