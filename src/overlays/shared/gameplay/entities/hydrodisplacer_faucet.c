@@ -231,11 +231,11 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern short D_L05_001618C0 __attribute__((sda));
-extern short D_L05_001618C4 __attribute__((sda));
-extern short D_L05_001618C8 __attribute__((sda));
-extern short D_L05_001618CC __attribute__((sda));
-extern short D_L05_001618D0 __attribute__((sda));
+extern short faucet_base_color_gp __asm__("D_L05_001618C0") __attribute__((sda));
+extern short faucet_item_16_pulse_start_color_gp __asm__("D_L05_001618C4") __attribute__((sda));
+extern short faucet_item_16_pulse_end_color_gp __asm__("D_L05_001618C8") __attribute__((sda));
+extern short faucet_fallback_pulse_start_color_gp __asm__("D_L05_001618CC") __attribute__((sda));
+extern short faucet_fallback_pulse_end_color_gp __asm__("D_L05_001618D0") __attribute__((sda));
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 void update_hydrodisplacer_faucet_pulse_color(void *mv) {
@@ -261,13 +261,13 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
         pulse_phase = fast_add_rotations(*(float *)(data + 0x18), frame_time * 6.2831855f);
         *(float *)(data + 0x18) = pulse_phase;
         if (((unsigned char *)moby)[0xBC] == 1) {
-            pulse_color = fast_tween_color(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&faucet_item_16_pulse_start_color_gp, *(int *)&faucet_item_16_pulse_end_color_gp, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         } else {
-            pulse_color = fast_tween_color(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&faucet_fallback_pulse_start_color_gp, *(int *)&faucet_fallback_pulse_end_color_gp, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
-        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&D_L05_001618C0, pulse_color, *(float *)(data + 0x1C));
+        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(data + 0x1C));
     } else {
-        *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
+        *(int *)(moby + 0x90) = *(int *)&faucet_base_color_gp;
     }
 }
 #include "rnc/gameplay/state/item_state.h"
