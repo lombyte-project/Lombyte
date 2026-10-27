@@ -985,7 +985,7 @@ void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
 
-extern char D_L17_001DE8A0[];
+extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
@@ -1014,7 +1014,7 @@ void draw_reflection_strips(void) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
-    reflection_uv_coordinates = (float *)D_L17_001DE8A0;
+    reflection_uv_coordinates = (float *)reflection_strip_uv_buffer;
     for (i = 0; i < 2; i++) {
         compute_reflection_sphere_map_uvs(D_L17_001623F0[i], ((int *)D_L17_00162408)[i],
                          ((int *)D_L17_001623F8)[i], ((int *)D_L17_00162400)[i], reflection_uv_coordinates);
