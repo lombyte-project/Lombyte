@@ -22,8 +22,8 @@ void pool_set_scale(float requested_scale) {
 extern void FUN_L01_00261c10(char *a, char *b);
 extern void FUN_L01_00262038(char *a, int i, int c, char *base);
 
-extern short D_L01_00161218 __attribute__((sda));
-extern short D_L01_0016121C __attribute__((sda));
+extern short pool_wave_source_slot_index __asm__("D_L01_00161218") __attribute__((sda));
+extern short pool_wave_next_source_slot_index __asm__("D_L01_0016121C") __attribute__((sda));
 void step_pool_wave_simulation(char *base, int record_count) __asm__("FUN_L01_002b7f30");
 
 void step_pool_wave_simulation(char *base, int record_count) {
@@ -31,16 +31,16 @@ void step_pool_wave_simulation(char *base, int record_count) {
     for (i = 0; i < record_count; i++) {
         char *current_record = base + i * 0x1190;
         if (*(unsigned short *)(current_record + 0x1E) != 0) {
-            int source_slot_offset = *(int *)&D_L01_00161218 * 0x5C0 + 0x50;
+            int source_slot_offset = *(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50;
             FUN_L01_00261c10((char *)0x70000000, current_record + source_slot_offset);
-            FUN_L01_00262038((char *)0x70000000, i, *(int *)&D_L01_0016121C, base);
+            FUN_L01_00262038((char *)0x70000000, i, *(int *)&pool_wave_next_source_slot_index, base);
         }
     }
     {
-        int saved_source_slot_index = *(int *)&D_L01_00161218;
-        int saved_next_source_slot_index = *(int *)&D_L01_0016121C;
-        *(int *)&D_L01_0016121C = saved_source_slot_index;
-        *(int *)&D_L01_00161218 = saved_next_source_slot_index;
+        int saved_source_slot_index = *(int *)&pool_wave_source_slot_index;
+        int saved_next_source_slot_index = *(int *)&pool_wave_next_source_slot_index;
+        *(int *)&pool_wave_next_source_slot_index = saved_source_slot_index;
+        *(int *)&pool_wave_source_slot_index = saved_next_source_slot_index;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
@@ -56,7 +56,7 @@ void pool_flush(char *records_base, int record_count) {
     if (1.0f - pool_light[8] <= *(float *)&D_L01_00161224) {
         *(float *)&D_L01_00161224 = pool_light[8];
         func_L01_002B90E8_2B9198();
-        *(int *)&D_L01_00161220_d = *(int *)&D_L01_0016121C;
+        *(int *)&D_L01_00161220_d = *(int *)&pool_wave_next_source_slot_index;
     } else {
         *(int *)&D_L01_00161220_d = 2;
         if (record_count > 0) {
@@ -65,8 +65,8 @@ void pool_flush(char *records_base, int record_count) {
             do {
                 if (*(unsigned short *)(current_record + 0x1E) != 0) {
                     FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
-                                     current_record + (*(int *)&D_L01_0016121C * 0x5C0 + 0x50),
-                                     current_record + (*(int *)&D_L01_00161218 * 0x5C0 + 0x50),
+                                     current_record + (*(int *)&pool_wave_next_source_slot_index * 0x5C0 + 0x50),
+                                     current_record + (*(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50),
                                      *(float *)&D_L01_00161224);
                 }
                 k--;
