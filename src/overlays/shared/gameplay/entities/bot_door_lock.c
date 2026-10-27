@@ -495,11 +495,11 @@ void draw_projected_fading_quad(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015EF50;
+extern char *target_reference_table __asm__("D_L06_0015EF50");
 
 void FUN_L06_00316330(char *moby) {
     if (*(short *)(moby + 0x86) == 0x12) {
-        *(int *)(*(char **)(D_L06_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
+        *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
     }
 }
 
