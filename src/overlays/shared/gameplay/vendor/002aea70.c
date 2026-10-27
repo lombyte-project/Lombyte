@@ -14,7 +14,7 @@ typedef struct {
 } R_2afd00;
 
 extern R_2afd00 D_L01_00179F40[];
-extern char D_L01_0016CCE0[];
+extern char fx_cutscene[] __asm__("D_L01_0016CCE0");
 extern char D_L01_0017C7C0[];
 extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
 extern float D_L01_0015F3FC;
@@ -54,7 +54,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002ae
 void initialize_vendor_screen(char *vendor_moby, int lvl) {
     struct Hero *hero_state = &hero;
     char *vendor_screen_state = vendor_screen_state_storage;
-    char *relocated_address_block = D_L01_0016CCE0;
+    char *relocated_address_block = fx_cutscene;
     char *sc;
     char *relocated_address_source_block;
     struct Hero *hero_moby_owner;
@@ -105,7 +105,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
         sound_update();
         sceGsSyncV_alt(0);
     }
-    relocated_address_source_block = D_L01_0016CCE0;
+    relocated_address_source_block = fx_cutscene;
     hero_moby_owner = &hero;
     update_item_tint_from_hero(*(int *)(relocated_address_source_block + 0x17C), ((int)hero_moby_owner->moby));
     continue_audio_stream_if_ready();
