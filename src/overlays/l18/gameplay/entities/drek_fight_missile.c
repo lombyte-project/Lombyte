@@ -3441,8 +3441,8 @@ extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern char D_L18_001623EC[4] __attribute__((sda));
-extern char D_L18_001623F0[4] __attribute__((sda));
+extern char drek_boss_firing_secondary_effect_initial_color_gp[4] __asm__("D_L18_001623EC") __attribute__((sda));
+extern char drek_boss_firing_secondary_effect_final_color_gp[4] __asm__("D_L18_001623F0") __attribute__((sda));
 extern char drek_boss_firing_particle_count_gp[4] __asm__("D_L18_00162408") __attribute__((sda));
 extern char drek_boss_firing_particle_speed_range_start_gp[4] __asm__("D_L18_0016240C") __attribute__((sda));
 extern char drek_boss_firing_particle_speed_range_end_gp[4] __asm__("D_L18_00162410") __attribute__((sda));
@@ -3503,7 +3503,7 @@ void spawn_drek_boss_firing_effects(char *moby, void *effect_position) {
         for (j = 0; j < *(int *)&drek_boss_firing_secondary_effect_count_gp; j++) {
             normalize_vector_xyz(
                 scaled_emission_direction, &emission_direction, random_float_between(*(float *)&drek_boss_firing_secondary_effect_emission_length_range_start_gp, *(float *)&drek_boss_firing_secondary_effect_emission_length_range_end_gp));
-            FUN_L00_0026cbb0(effect_position, scaled_emission_direction, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
+            FUN_L00_0026cbb0(effect_position, scaled_emission_direction, *(int *)&drek_boss_firing_secondary_effect_initial_color_gp, *(int *)&drek_boss_firing_secondary_effect_final_color_gp,
                              scale_game_frames(random_int_between(*(int *)&drek_boss_firing_secondary_effect_lifetime_range_start_frames_gp,
                                                                 *(int *)&drek_boss_firing_secondary_effect_lifetime_range_end_frames_gp)),
                              1, *(float *)&D_L18_0016244C);
