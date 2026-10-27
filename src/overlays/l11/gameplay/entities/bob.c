@@ -342,7 +342,7 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
-extern float D_L11_001677C0[];
+extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern void FUN_L00_0025a120(void *);
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void update_resort_owner_state_actions(void *mp) __asm__("FUN_L11_002d1030");
@@ -359,7 +359,7 @@ void update_resort_owner_look_tracking(WM11 *m) __asm__("FUN_L11_002d27b0");
 void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 void resort_owner_update(struct Moby *moby) {
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
-    if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
+    if (moby->visible && distance_xyz(&moby->pos, camera_pos_b358) < 38.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 30;
     }
@@ -1144,7 +1144,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     int tracking;
 
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
-    if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
+    if (moby->visible && distance_xyz(&moby->pos, camera_pos_b358) < 30.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 24;
     }
@@ -2019,7 +2019,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
             FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
-    if (vector_distance(&moby->pos, D_L11_001677C0) > 38.0f)
+    if (vector_distance(&moby->pos, camera_pos_b358) > 38.0f)
         return;
     if (moby->state == 1 && (level_frame & 1))
         return;
