@@ -3289,10 +3289,10 @@ void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *
     *(float *)(dest + 0x68) =
         fast_subtract_rotations(fast_arc_tan(to_position.f[0] - from_position.f[0], to_position.f[1] - from_position.f[1]), source->rot.z);
 }
-extern char *D_L18_0015EF50;
+extern char *l18_drek_boss_scalar_record_lookup_table __asm__("D_L18_0015EF50");
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_4.h"
-extern short D_L18_001623B4 __attribute__((sda));
+extern short l18_drek_boss_scalar_acceleration_and_braking_gp __asm__("D_L18_001623B4") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_3.h"
 extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_2.h"
@@ -3303,7 +3303,7 @@ extern void follow_camera_set_distance(float, float, int) __asm__("FUN_L00_002e8
 extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L06_00316330(void *);
 extern int drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
-extern char D_L18_00167B50[];
+extern char l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
 extern char D_L18_00167680[];
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
@@ -3315,7 +3315,7 @@ extern float advance_accelerated_scalar_7288(float *, float, float *, float, flo
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void update_drek_boss_state_dependent_scalars(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
-    char *selected_scalar_record = *(char **)(D_L18_0015EF50 + *(int *)(boss_data + 0x224) * 32 + 0x1c);
+    char *selected_scalar_record = *(char **)(l18_drek_boss_scalar_record_lookup_table + *(int *)(boss_data + 0x224) * 32 + 0x1c);
     float f;
     float x;
     float y;
@@ -3383,7 +3383,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                 }
             }
             if (drek_boss_scalar_scan_entry_gates[i] != 0) {
-                scanned_entry = D_L18_00167B50 + i * 0xa0;
+                scanned_entry = l18_drek_boss_scalar_scan_records + i * 0xa0;
                 if (*(short *)(scanned_entry + 0x86) == 0x12) {
                     FUN_L06_00316330(scanned_entry);
                     if (*(int *)(boss_data + 0x368) != -1) {
@@ -3416,10 +3416,10 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                      boss_data + 0x36c, 0x15e);
         }
     }
-    advance_accelerated_scalar_7288(first_scalar_value, x, first_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
-                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
-    advance_accelerated_scalar_7288(second_scalar_value, y, second_scalar_update_state, *(float *)&D_L18_001623B4 * D_0015ED6C_e[1],
-                     *(float *)&D_L18_001623B4 * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
+    advance_accelerated_scalar_7288(first_scalar_value, x, first_scalar_update_state, *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
+                     *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
+    advance_accelerated_scalar_7288(second_scalar_value, y, second_scalar_update_state, *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
+                     *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
 }
 
 #define NOT_SDA
