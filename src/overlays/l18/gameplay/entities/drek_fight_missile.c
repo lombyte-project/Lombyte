@@ -3111,8 +3111,8 @@ extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern int request_floating_platform_sink(void *obj) __asm__("FUN_L18_002d8858");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L18_001AC240_c2[] __asm__("D_L18_001AC240");
-extern short D_L18_00162338 __attribute__((sda));
-extern short D_L18_0016233C __attribute__((sda));
+extern short drek_boss_platform_target_range_gp __asm__("D_L18_00162338") __attribute__((sda));
+extern short drek_boss_platform_tilt_frame_count_gp __asm__("D_L18_0016233C") __attribute__((sda));
 extern void request_floating_platform_tilt(void *, int, int) __asm__("FUN_L18_002d8888");
 
 unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
@@ -3134,7 +3134,7 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
             unsigned char *candidate_moby;
             request_floating_platform_sink(listed_moby);
             candidate_moby = D_L18_0015FFD8 + group_moby_byte_offset;
-            if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&D_L18_00162338) {
+            if (vector_distance(candidate_moby + 0x10, selection_origin) < *(float *)&drek_boss_platform_target_range_gp) {
                 unsigned char *in_range_moby;
                 int tilt_delay_frames, scaled_frame_count;
                 float dot;
@@ -3142,7 +3142,7 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
                 subtract_vector_xyz(candidate_displacement, candidate_moby + 0x10, selection_origin);
                 in_range_moby = D_L18_0015FFD8 + group_moby_byte_offset;
                 tilt_delay_frames = scale_game_frames(0x3C);
-                scaled_frame_count = scale_game_frames(*(int *)&D_L18_0016233C);
+                scaled_frame_count = scale_game_frames(*(int *)&drek_boss_platform_tilt_frame_count_gp);
                 request_floating_platform_tilt(in_range_moby, tilt_delay_frames, scaled_frame_count);
                 dot = dot_vectors_xyz(candidate_displacement, &self->rot_row0);
                 if (0.333f < dot) {
