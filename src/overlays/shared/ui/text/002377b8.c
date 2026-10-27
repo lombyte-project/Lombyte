@@ -364,14 +364,14 @@ extern int D_L00_0015F724_gp __asm__("D_L00_0015F724") __attribute__((sda));
 extern int D_L00_0015F72C_gp __asm__("D_L00_0015F72C") __attribute__((sda));
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern float D_L00_0015F78C_gp __asm__("D_L00_0015F78C") __attribute__((sda));
-extern int D_L00_0015F790_gp __asm__("D_L00_0015F790") __attribute__((sda));
-extern int D_L00_0015F794_gp __asm__("D_L00_0015F794") __attribute__((sda));
-extern int D_L00_0015F798_gp __asm__("D_L00_0015F798") __attribute__((sda));
-extern int D_L00_0015F7A0_gp __asm__("D_L00_0015F7A0") __attribute__((sda));
-extern int D_L00_0015F7A4_gp __asm__("D_L00_0015F7A4") __attribute__((sda));
-extern int D_L00_0015F7A8_gp __asm__("D_L00_0015F7A8") __attribute__((sda));
+extern int l00_hud_item_selector_title_color_from __asm__("D_L00_0015F790") __attribute__((sda));
+extern int l00_hud_item_selector_title_color_to __asm__("D_L00_0015F794") __attribute__((sda));
+extern int l00_hud_item_selector_text_shadow_color_from __asm__("D_L00_0015F798") __attribute__((sda));
+extern int l00_hud_item_selector_zero_ammo_text_color_from __asm__("D_L00_0015F7A0") __attribute__((sda));
+extern int l00_hud_item_selector_zero_ammo_text_color_to __asm__("D_L00_0015F7A4") __attribute__((sda));
+extern int l00_hud_item_selector_nonzero_ammo_text_color_from __asm__("D_L00_0015F7A8") __attribute__((sda));
 extern int D_L00_0015F7B0_gp __asm__("D_L00_0015F7B0") __attribute__((sda));
-extern int D_L00_0015F7BC_gp __asm__("D_L00_0015F7BC") __attribute__((sda));
+extern int l00_hud_item_selector_single_line_title_without_ammo_y_offset __asm__("D_L00_0015F7BC") __attribute__((sda));
 extern float D_L00_0015F7C0;
 extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
@@ -446,7 +446,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     }
     selected = rec->unk74;
     if (selected >= 0 && *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C) != 0) {
-        color = fast_tween_color_c(D_L00_0015F798_gp, hud_item_selector_text_shadow_color_to, open * fade);
+        color = fast_tween_color_c(l00_hud_item_selector_text_shadow_color_from, hud_item_selector_text_shadow_color_to, open * fade);
         {
         int id;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
@@ -456,15 +456,15 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             item = weapon_ammo_counts[id];
             sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(weapon_entry + 0xE));
             if (item != 0)
-                shadow = fast_tween_color_c(D_L00_0015F7A8_gp, hud_item_selector_nonzero_ammo_text_color_to, open * fade);
+                shadow = fast_tween_color_c(l00_hud_item_selector_nonzero_ammo_text_color_from, hud_item_selector_nonzero_ammo_text_color_to, open * fade);
             else
-                shadow = fast_tween_color_c(D_L00_0015F7A0_gp, D_L00_0015F7A4_gp, open * fade);
+                shadow = fast_tween_color_c(l00_hud_item_selector_zero_ammo_text_color_from, l00_hud_item_selector_zero_ammo_text_color_to, open * fade);
             font_print_center(x + D_L00_0015F720_gp + 1, y + D_L00_0015F724_gp + 13, color, formatted, -1);
             font_print_center(x + D_L00_0015F720_gp, y + D_L00_0015F724_gp + 12, shadow, formatted, -1);
         }
         }
         prefix_length = 0;
-        shadow = fast_tween_color_c(D_L00_0015F790_gp, D_L00_0015F794_gp, open * fade);
+        shadow = fast_tween_color_c(l00_hud_item_selector_title_color_from, l00_hud_item_selector_title_color_to, open * fade);
         {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C + 0x18);
@@ -511,7 +511,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
         else if (prefix_length != 0)
             text_y += hud_item_selector_split_title_without_ammo_y_offset;
         else
-            text_y += D_L00_0015F7BC_gp;
+            text_y += l00_hud_item_selector_single_line_title_without_ammo_y_offset;
         }
         if (prefix_length != 0) {
             font_print_center(x + D_L00_0015F720_gp + 1, text_y + 1, color, (void *)text, prefix_length);
