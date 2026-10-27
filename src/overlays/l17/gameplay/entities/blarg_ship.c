@@ -11,10 +11,10 @@
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
 
-extern char *D_L17_0015FFDC;
+extern char *fleet_moby_array_end __asm__("D_L17_0015FFDC");
 extern char D_0013E52B[];
 extern char D_L17_00167580[];
-extern char D_L17_001E6F60[];
+extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_00141DC4 __attribute__((section(".data")));
@@ -36,8 +36,8 @@ extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
-extern char D_00141D54[];
-extern char D_00141D7C[];
+extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
+extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 #include "rnc/gameplay/state/game_globals.h"
 extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
@@ -110,7 +110,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
                 *(int *)(pvars + 0x74) += 1;
             }
             next_moby_index = *(int *)(pvars + 0x70) + 1;
-            wrap = D_L17_0015FFD8 + (next_moby_index << 8) < D_L17_0015FFDC;
+            wrap = D_L17_0015FFD8 + (next_moby_index << 8) < fleet_moby_array_end;
             *(int *)(pvars + 0x70) = next_moby_index;
             if (!wrap) {
                 if (*(int *)(pvars + 0x74) == 0 && sk[0x1B] == 0) {
@@ -131,7 +131,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         *(unsigned char *)(pvars + 0x4C) = 0;
         if (*(int *)(pvars + 0x44) == -1 || *(int *)(pvars + 0x40) == -1 || *(int *)(pvars + 0x3C) == -1 ||
             *(int *)(pvars + 0x48) == -1) {
-            DebugPrint(D_L17_001E6F60, *(int *)(pvars + 0x3C), *(int *)(pvars + 0x48), *(int *)(pvars + 0x40),
+            DebugPrint(fleet_camera_box_configuration_error_format, *(int *)(pvars + 0x3C), *(int *)(pvars + 0x48), *(int *)(pvars + 0x40),
                        *(int *)(pvars + 0x44));
             *(unsigned char *)(pvars + 0x4C) = 1;
         }
@@ -177,7 +177,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
              hero.state.control_mode == 9) &&
             fleet_help_request_gate_state[0] == 0 && fleet_help_request_gate_state[9] == -1 && D_0013D4DF != 0) {
             *(int *)(pvars + 0x38) = scale_game_frames(0x708);
-            if (*(int *)(((char *)&D_00141D54)) >= 0) {
+            if (*(int *)(((char *)&fleet_dwell_help_gate_value)) >= 0) {
                 help_request(0x3A9A, 0x7D);
             }
             *(int *)(pvars + 0x30) = pending_help_clip_volume_index;
@@ -186,7 +186,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
     skip1:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && fleet_help_request_gate_state[0] == 0 &&
             fleet_help_request_gate_state[9] == -1 && D_0013D408_b[0xBC] == 0) {
-            int help_gate_flags = *(int *)(((char *)&D_00141D7C));
+            int help_gate_flags = *(int *)(((char *)&fleet_clip_volume_help_suppression_flags));
             mask = 1 << D_0015ED80_e[1];
             if (!(help_gate_flags & mask)) {
                 help_request(0x3A9D, 0x82);
