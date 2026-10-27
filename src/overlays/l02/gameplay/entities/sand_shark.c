@@ -58,7 +58,7 @@ extern void FUN_L02_002101b8(void *, int, int);
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
-extern char D_L02_001CB400[];
+extern char animated_frame_scratchpad_dma_source[] __asm__("D_L02_001CB400");
 extern void build_interpolated_dma_packet(void *) __asm__("FUN_L02_002a40f0");
 
 void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
@@ -82,7 +82,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
     ((unsigned char *)scratch)[0x3F] = 0x80;
     *(int *)(scratch + 0x1C) = frame_packet_address;
     build_interpolated_dma_packet(scratch);
-    FUN_L02_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
+    FUN_L02_002101b8(animated_frame_scratchpad_dma_source, 0x70002800, 0xF8);
 }
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_globals.h"
