@@ -517,7 +517,7 @@ void draw_target_beam(char *moby) {
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern float D_L08_00174670[];
+extern float scoutbot_probe_correction_target_position[] __asm__("D_L08_00174670");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -560,7 +560,7 @@ void update_scoutbot_movement(char *moby) {
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
         float z;
-        subtract_vector_xyz(probe_position_or_correction, D_L08_00174670, (float *)(moby + 0x10));
+        subtract_vector_xyz(probe_position_or_correction, scoutbot_probe_correction_target_position, (float *)(moby + 0x10));
         z = frame_time * 3.0f;
         if (z < probe_position_or_correction[2]) {
             probe_position_or_correction[2] = z;
