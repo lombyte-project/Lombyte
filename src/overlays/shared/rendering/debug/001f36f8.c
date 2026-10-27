@@ -65,8 +65,8 @@ typedef struct {
 } DebugFontTexture;
 
 extern DebugViewport D_0013E500;
-extern s32 D_L00_00169980[];
-extern s32 D_L00_00169B00[];
+extern s32 debug_font_glyph_texture_coordinates[] __asm__("D_L00_00169980");
+extern s32 debug_font_glyph_advances[] __asm__("D_L00_00169B00");
 /* Struct views of the two globals: retail reads them after the packet stores. */
 #define debug_packet (*(PacketBuffer *)&D_L00_001611C0)
 #define debug_font_texture (*(DebugFontTexture *)&debug_font_pif_header)
@@ -105,7 +105,7 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
         glyph = (u8)(*text - 0x20);
         if (glyph >= 0x60)
             glyph = 0x20;
-        texture_coordinates = D_L00_00169980[glyph];
+        texture_coordinates = debug_font_glyph_texture_coordinates[glyph];
         text++;
         if (texture_coordinates != -1) {
             cursor[0] = (s64)texture_coordinates;
@@ -119,7 +119,7 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
                         0xFFFFF300000000ULL;
             debug_packet.cursor = debug_packet.cursor + 4;
         }
-        x += D_L00_00169B00[glyph];
+        x += debug_font_glyph_advances[glyph];
     }
     ((u32 *)packet)[0] = quadwords | 0x10000000;
     ((u32 *)packet)[1] = 0;
