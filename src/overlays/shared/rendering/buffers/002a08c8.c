@@ -45,7 +45,7 @@ void vu1_send_chain_render_buffer(void) {
     }
 }
 extern int D_L00_001611A0 __attribute__((sda));
-extern char D_L00_001E9548[];
+extern char vu1_sync_timeout_message[] __asm__("D_L00_001E9548");
 void FUN_L00_001ff018(int);
 void debug_print(char *) __asm__("FUN_001e93b0");
 void reset_graphics(void) __asm__("FUN_001f21c0");
@@ -57,7 +57,7 @@ void vu1_sync_chain(int mask) {
     for (i = 0; D_L00_001611A0 & mask; i++) {
         FUN_L00_001ff018(0x400);
         if (i > 100000) {
-            debug_print(D_L00_001E9548);
+            debug_print(vu1_sync_timeout_message);
             reset_graphics();
             break;
         }
