@@ -2757,7 +2757,7 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
     }
 }
 /* Places the attached pieces on their bones, keeping each position inside a box, and copies the moby's pose to them. */
-extern int D_L13_001D34A8[];
+extern int attachment_joint_indices_by_command[] __asm__("D_L13_001D34A8");
 extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern void FUN_0020c828(char *);
 
@@ -2790,7 +2790,7 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             *(OvlQuad *)(attached_moby + 0xE0) = *(OvlQuad *)&parent_moby->rot_row2;
         }
     }
-    attachment_joint_index = D_L13_001D34A8[parent_moby->command];
+    attachment_joint_index = attachment_joint_indices_by_command[parent_moby->command];
     if (parent_moby->state == 5)
         attachment_joint_index = -1;
     if (attachment_joint_index != -1) {
