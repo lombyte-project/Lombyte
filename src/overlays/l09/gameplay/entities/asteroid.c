@@ -1413,9 +1413,9 @@ void update_tumbling_debris(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
 
-extern char D_L09_001F3080[];
-extern char D_L09_001F63C0[];
-extern char D_L09_001FC740[];
+extern char level09_scrolling_strip_entries[] __asm__("D_L09_001F3080");
+extern char level09_scaled_surface_entries[] __asm__("D_L09_001F63C0");
+extern char level09_textured_surface_draw_settings[] __asm__("D_L09_001FC740");
 extern int D_L09_0015F5CC;
 extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 extern void build_packet_and_draw_scaled_entries(void *, void *, int) __asm__("FUN_L09_002c1978");
@@ -1427,9 +1427,9 @@ void draw_level09_textured_surfaces(void) {
     int texture_sequence_step = texture_sequence_numerator / 20;
     float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
     float texture_sequence_step_float = (float)texture_sequence_step;
-    draw_level09_scrolling_textured_strips(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
-    draw_textured_grid(D_L09_001FC740);
-    build_packet_and_draw_scaled_entries(D_L09_001FC740, D_L09_001F63C0, 10);
+    draw_level09_scrolling_textured_strips(level09_scrolling_strip_entries, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
+    draw_textured_grid(level09_textured_surface_draw_settings);
+    build_packet_and_draw_scaled_entries(level09_textured_surface_draw_settings, level09_scaled_surface_entries, 10);
 }
 struct DebrisVars {
     Vec4 vel;           /* 0x00 */
