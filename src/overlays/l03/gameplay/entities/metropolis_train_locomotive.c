@@ -2227,7 +2227,7 @@ typedef struct Moby2C8398 {
 extern char *D_L03_001B05B0[];
 extern char D_L03_00166EC0[];
 extern CollisionHit D_L03_00173F40;
-extern char D_L03_00173F70[];
+extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern float FUN_001efa68_cf(void *) __asm__("FUN_001f9af0");
@@ -2896,7 +2896,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 qcopy(b, &D_L03_00173F40.point);
             }
             if (coll_sphere(FUN_L00_0025a120_cf(q->i20) * 0.0009765625f, b, 0x24, m)) {
-                qcopy(m->pos, D_L03_00173F70);
+                qcopy(m->pos, sphere_collision_resolved_position);
                 m->pos[2] = a[2] + q->f8 - q->f28;
             }
             if (m->pos[2] < 5.0f) {
