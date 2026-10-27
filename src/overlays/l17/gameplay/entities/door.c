@@ -3518,7 +3518,7 @@ extern char D_L17_001B0DB0[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float);
-extern int D_L17_001BADD0[];
+extern int shuttle_travel_completion_bits[] __asm__("D_L17_001BADD0");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int);
@@ -3700,7 +3700,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             *(int *)(((char *)&D_0014C190) +
                      (((short)shuttle_moby->save_id >> 5) * 4 + (current_level_index << 8))) |=
                 1 << (shuttle_moby->save_id & 0x1F);
-            D_L17_001BADD0[(short)shuttle_moby->save_id >> 5] |=
+            shuttle_travel_completion_bits[(short)shuttle_moby->save_id >> 5] |=
                 1 << (shuttle_moby->save_id & 0x1F);
         }
         break;
