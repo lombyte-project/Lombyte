@@ -333,7 +333,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013D418 __attribute__((section(".data")));
 typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
 extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
-#include "rnc/overlay/l10/gameplay/entities/screamer_globals.h"
+#include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"
 extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time_2DFC38(float) __asm__("FUN_001f96b0");
 extern int truncate_float_2DFC38(float) __asm__("FUN_001fa6d0");
@@ -1288,7 +1288,9 @@ extern int tick_countdown_32(void *);
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float D_L10_00161E24 __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
 extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
@@ -2810,6 +2812,7 @@ extern s32 directional_particle_color_range_start_gp __asm__("D_L10_00161EF0") _
 extern s32 directional_particle_color_range_end_gp __asm__("D_L10_00161EF4") __attribute__((sda));
 extern f32 directional_particle_speed_range_end_gp __asm__("D_L10_00161EF8") __attribute__((sda));
 extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") __attribute__((sda));
+#include "rnc/overlay/l10/gameplay/entities/screamer_data/emit_moby_directional_particles.h"
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04") __attribute__((sda));
 extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");

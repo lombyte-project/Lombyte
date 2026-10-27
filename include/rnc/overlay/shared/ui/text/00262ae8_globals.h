@@ -16,11 +16,4 @@ extern s32 trick_combo_pose_count_y __asm__("D_L05_0015F8C0");
 extern s32 trick_combo_reward_text_x __asm__("D_L05_0015F8C4");
 extern s32 trick_combo_reward_label_y __asm__("D_L05_0015F8C8");
 
-/* Additional scalar data read by this unit. */
-extern int animation_parameter_target_id __asm__("D_L05_0015F980");
-extern s32 trick_combo_text_color_at_zero_delay_gp __asm__("D_L05_0015F894") __attribute__((sda));
-extern s32 trick_combo_text_color_at_full_delay_gp __asm__("D_L05_0015F898") __attribute__((sda));
-extern s32 trick_combo_pulsing_label_trough_color_gp __asm__("D_L05_0015F8AC") __attribute__((sda));
-extern s32 trick_combo_pulsing_label_peak_color_gp __asm__("D_L05_0015F8B0") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_TEXT_00262AE8_GLOBALS_H */

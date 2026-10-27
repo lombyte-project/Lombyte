@@ -114,9 +114,11 @@ extern s32 D_L00_00177F00[];
 extern s32 D_0013CAE0[];
 extern f32 D_L00_00166E10[];
 extern f32 D_L00_0015EF40;
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides_2.h"
 extern f32 follow_camera_vehicle_offset_scale_gp __asm__("D_L00_00161D98") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_distance_gp __asm__("D_L00_00161D9C") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_height_gp __asm__("D_L00_00161DA0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides.h"
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");

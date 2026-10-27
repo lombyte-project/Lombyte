@@ -375,8 +375,10 @@ extern void add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void random_vector_jitter(void *out, f32 a, f32 b) __asm__("FUN_L00_00257d78");
 extern char *spawn_smoke_particle(void *pos, void *vel, void *acc, s32, s32, s32, s32, s32, s32) __asm__("FUN_00218888");
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_8.h"
 extern s32 D_L02_0016205C __attribute__((sda));
 extern s32 D_L02_00162060 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_7.h"
 extern f32 D_L02_00162068 __attribute__((sda));
 extern f32 D_L02_0016206C __attribute__((sda));
 extern f32 D_L02_00162070 __attribute__((sda));
@@ -385,8 +387,10 @@ s32 D_L02_00162078 = 0x404080ff;
 s32 D_L02_0016207C = 0x404080c0;
 s32 D_L02_00162080 = 0x20804050;
 s32 D_L02_00162084 = 0x20603038;
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_6.h"
 extern s32 D_L02_0016209C __attribute__((sda));
 extern s32 D_L02_001620A0 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_5.h"
 extern f32 D_L02_001620A8 __attribute__((sda));
 extern f32 D_L02_001620AC __attribute__((sda));
 extern f32 D_L02_001620B0 __attribute__((sda));
@@ -395,8 +399,10 @@ s32 D_L02_001620B8 = 0x6000ff80;
 s32 D_L02_001620BC = 0x6020ff40;
 s32 D_L02_001620C0 = 0x20408040;
 s32 D_L02_001620C4 = 0x20206020;
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_4.h"
 extern s32 D_L02_001620E0 __attribute__((sda));
 extern s32 D_L02_001620E4 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_3.h"
 extern f32 D_L02_001620EC __attribute__((sda));
 extern f32 D_L02_001620F0 __attribute__((sda));
 extern f32 D_L02_001620F4 __attribute__((sda));
@@ -408,8 +414,10 @@ s32 D_L02_00162108 = 0x80204080;
 extern s32 view_gated_smoke_burst_interval_min_gp __asm__("D_L02_0016210C") __attribute__((sda));
 extern s32 view_gated_smoke_burst_interval_max_gp __asm__("D_L02_00162110") __attribute__((sda));
 s32 D_L02_00162114 = 0x10019;
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_2.h"
 extern s32 D_L02_00162130 __attribute__((sda));
 extern s32 D_L02_00162134 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent.h"
 extern f32 D_L02_0016213C __attribute__((sda));
 extern f32 D_L02_00162140 __attribute__((sda));
 extern f32 D_L02_00162144 __attribute__((sda));

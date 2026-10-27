@@ -463,6 +463,7 @@ extern int D_L15_0015F5CC;
 int D_L15_001620EC = 128;
 int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh_buffers.h"
 extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
@@ -647,6 +648,7 @@ int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
 extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh.h"
 extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -1837,6 +1839,7 @@ int D_L15_001621E4 = 128;
 int D_L15_001621E8 = 45;
 int D_L15_001621EC = 64;
 extern float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_scaled_moby_radial_ripple_mesh.h"
 extern float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") __attribute__((sda));
 extern float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") __attribute__((sda));
 extern float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") __attribute__((sda));
@@ -2100,6 +2103,7 @@ int D_L15_00162254 = 128;
 int D_L15_00162258 = 45;
 int D_L15_0016225C = 64;
 extern float ripple_88_radial_wavelength_gp __asm__("D_L15_00162260") __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_scaled_88_vertex_moby_radial_ripple_mesh.h"
 extern float ripple_88_z_amplitude_gp __asm__("D_L15_00162268") __attribute__((sda));
 extern float ripple_88_uv_scroll_rate_gp __asm__("D_L15_0016226C") __attribute__((sda));
 extern float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") __attribute__((sda));

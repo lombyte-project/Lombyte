@@ -517,6 +517,7 @@ typedef struct {
 } Level18VendorMoby;
 
 extern char *D_L18_001600EC;
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall_2.h"
 extern float D_L18_001677D8 __attribute__((section(".data")));
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -530,6 +531,7 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
 extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") __attribute__((section(".sdata")));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall.h"
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
@@ -839,6 +841,7 @@ extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
 extern float D_L18_001677C0[];
 extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/draw_glow_moby_layered_quads.h"
 extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
 extern int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") __attribute__((sda));
 extern f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") __attribute__((sda));
@@ -2709,6 +2712,7 @@ extern float probe_ground_height_5e80(void *, int, float) __asm__("FUN_00213508"
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 
 extern short D_L18_00162330 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_damage_and_phase_transitions.h"
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F72E0) */
 void update_drek_boss_damage_and_phase_transitions(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);
@@ -3032,6 +3036,7 @@ typedef struct {
 extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_arena_circling_movement.h"
 
 /* Steers the boss around its node on the far side from the hero (at most 10
  * degrees per step), faster the closer the hero is, and eases it to the
@@ -3286,8 +3291,11 @@ void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *
 }
 extern char *D_L18_0015EF50;
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_4.h"
 extern short D_L18_001623B4 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_3.h"
 extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_2.h"
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
@@ -3303,6 +3311,7 @@ extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");
 
+#include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars.h"
 /* Ported from rac1-decomp src/overlays/l18_veldin2/vendor_002F2AE0.c (func_L18_002F86E8) */
 void update_drek_boss_state_dependent_scalars(char *moby) {
     char *boss_data = *(char **)(moby + 0x78);

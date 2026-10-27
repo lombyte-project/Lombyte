@@ -294,7 +294,7 @@ u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
 extern T_2d0538 D_L00_001E9E30;
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/crate_drop_bolts.h"
 void crate_drop_bolts(u8 *crate_moby) {
     enum {
         CRATE_DROP_AUTO_SELECT = 0,
@@ -1349,6 +1349,7 @@ typedef struct Moby_2D3F40 {
 } Moby_2D3F40;
 
 extern float D_0015ED6C;
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/draw_metal_detector_trail.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
 extern int metal_detector_trail_initial_quad_color_gp __asm__("D_L00_00161914") __attribute__((sda));
 extern int metal_detector_trail_texture_selector_gp __asm__("D_L00_00161918") __attribute__((sda));
@@ -1498,6 +1499,7 @@ typedef struct VoiceSlot2d2ee8 {
 extern u8 D_0013E550[] __attribute__((section(".data")));
 extern u128 D_L00_001E1160 __attribute__((section(".data")));
 extern u8 D_L00_001E1170[] __attribute__((section(".data")));
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/metal_detector_update.h"
 
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
@@ -2748,6 +2750,7 @@ extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/update_infobot_slot_path_motion.h"
 void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) __asm__("FUN_L00_002d5988");
 
 void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
@@ -3377,7 +3380,9 @@ u8 D_L14_001D2F60[1200] = {0};
 s16 D_L00_001D5740[1200] = {0};
 s16 D_L01_001D5BC0[1200] = {0};
 s16 D_L14_001D5E40[1200] = {0};
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/particle_spawner_smoke_fire_update_2.h"
 extern int smoke_fire_emission_attempts_per_update_gp __asm__("D_L00_001619BC") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/particle_spawner_smoke_fire_update.h"
 extern V D_L00_00166DC0;
 void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
 float fast_vec_length(void *) __asm__("FUN_001f9af0");

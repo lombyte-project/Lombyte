@@ -83,7 +83,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-#include "rnc/overlay/l10/gameplay/vendor/002ea1f0_globals.h"
+#include "rnc/overlay/l10/gameplay/vendor/002ea1f0_data/emit_burst_spark_particle.h"
 #include "rnc/overlay/l10/gameplay/vendor/002ea1f0_globals.h"
 extern int burst_spark_base_frame_count_gp __asm__("D_L10_00161F84") __attribute__((sda));
 extern int burst_spark_base_second_frame_count_gp __asm__("D_L10_00161F88") __attribute__((sda));

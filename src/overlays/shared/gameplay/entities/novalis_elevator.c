@@ -1181,6 +1181,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
         *(int *)(state + 0x68) = 0;
     }
 }
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/update_hover_moby_steering.h"
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -1347,6 +1348,7 @@ typedef struct {
 #define mover_2e3f20 (*(Mover_2e3f20 *)&D_L01_001DEB38)
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
 extern int D_0015ED84;
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/sand_mouse_update.h"
 extern char D_L01_0020AE80[];
 extern char D_L01_0020AEA0[];
 extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
@@ -1789,6 +1791,7 @@ extern float D_L01_0015F580[] __attribute__((section(".sdata")));
 
 extern char D_L01_00161A40 __attribute__((sda));
 extern char D_L01_00161A50 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/large_amoeboid_update.h"
 
 void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 void large_amoeboid_update(unsigned char *moby) {
@@ -2495,9 +2498,12 @@ extern int amoeboid_first_movement_particle_spawn_gate_modulus_plus_one_gp __asm
 extern int amoeboid_second_movement_particle_spawn_gate_modulus_plus_one_gp __asm__("D_L01_001619E4") __attribute__((sda));
 extern float amoeboid_movement_particle_max_spawn_radius_gp __asm__("D_L01_001619E8") __attribute__((sda));
 extern float amoeboid_first_movement_particle_base_scale_max_gp __asm__("D_L01_001619B8") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_movement_particles_3.h"
 extern int amoeboid_first_movement_particle_lifetime_min_gp __asm__("D_L01_001619C0") __attribute__((sda));
 extern int amoeboid_first_movement_particle_lifetime_max_gp __asm__("D_L01_001619C4") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_movement_particles_2.h"
 extern float amoeboid_second_movement_particle_base_scale_max_gp __asm__("D_L01_001619D0") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_movement_particles.h"
 extern int amoeboid_second_movement_particle_lifetime_min_gp __asm__("D_L01_001619D8") __attribute__((sda));
 extern int amoeboid_second_movement_particle_lifetime_max_gp __asm__("D_L01_001619DC") __attribute__((sda));
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2552,7 +2558,9 @@ extern f32 amoeboid_burst_vertical_speed_max_gp __asm__("D_L01_00161A0C") __attr
 extern f32 amoeboid_burst_downward_velocity_adjustment_factor_gp __asm__("D_L01_00161A10") __attribute__((sda));
 extern f32 D_L01_00161A14 __attribute__((sda));
 extern f32 D_L01_00161A18 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_burst_sparks_2.h"
 extern s32 D_L01_00161A2C __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_burst_sparks.h"
 extern s32 amoeboid_burst_spark_duration_base_gp __asm__("D_L01_00161A34") __attribute__((sda));
 extern f32 amoeboid_burst_input_motion_scale_max_gp __asm__("D_L01_00161A38") __attribute__((sda));
 
@@ -2992,6 +3000,7 @@ typedef struct {
     u16 kind;
 } HitInfo;
 
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/gunship_follow_path.h"
 extern char D_L01_0020B3E0[];
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;

@@ -316,6 +316,7 @@ extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
 
 int D_L02_001619A8 = 0;
 extern unsigned char D_L02_00161900 __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/sand_shark_update.h"
 int D_L02_001619B0 = 0xa000000;
 int D_L02_001619E4 = 0x40306058;
 int D_L02_001619E8 = 0x306058;
@@ -973,6 +974,7 @@ extern float rand_between_d57f8(float, float) __asm__("FUN_002132a8");
 extern void clear_vec_d57f8(void *) __asm__("FUN_001f99f8");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
 extern float D_0015ED6C;
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/emit_sand_shark_radial_particles.h"
 extern float sand_shark_vertical_motion_z_range_start_gp __asm__("D_L02_00161920") __attribute__((sda));
 extern float sand_shark_vertical_motion_z_range_end_gp __asm__("D_L02_00161924") __attribute__((sda));
 extern float sand_shark_radial_motion_z_range_start_gp __asm__("D_L02_00161928") __attribute__((sda));
@@ -1135,6 +1137,7 @@ typedef struct {
     int i29C;             /* 0x29C */
 } Vars5c88;
 
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/handle_sand_shark_damage_and_targeting.h"
 extern int *D_L02_001B0AB0_5c88[] __asm__("D_L02_001B0AB0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1396,6 +1399,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_L02_0015F580[] __attribute__((section(".sdata")));
 extern int D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/update_level02_bot.h"
 int D_L02_00161A88 = 0x40808080;
 int D_L02_00161A90 = 0x3c;
 int D_L02_00161A94 = 0x78;
@@ -1749,6 +1753,7 @@ extern float level02_bot_death_knockback_horizontal_speed_gp __asm__("D_L02_0016
 extern float level02_bot_death_knockback_vertical_speed_gp __asm__("D_L02_00161A68") __attribute__((sda));
 extern float level02_bot_hit_knockback_horizontal_speed_gp __asm__("D_L02_00161A6C") __attribute__((sda));
 extern float level02_bot_hit_knockback_vertical_speed_gp __asm__("D_L02_00161A70") __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/handle_level02_bot_damage_and_retargeting.h"
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
@@ -2570,6 +2575,7 @@ typedef struct {
     float cam_max;       /* 0xB4 */
 } Varsdc88;
 
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/transport_pod_update.h"
 extern float D_L02_00161C48 __attribute__((sda));
 extern float D_L02_00161C4C __attribute__((sda));
 extern float D_L02_00161C50 __attribute__((sda));
@@ -3125,8 +3131,10 @@ typedef struct {
 
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern f32 rocket_launcher_projectile_speed_gp __asm__("D_L02_00161C6C") __attribute__((sda));
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/rocket_launcher_update_2.h"
 s32 D_L02_00161C78 = 0x800000ff;
 s32 D_L02_00161C7C = 0x80329600;
+#include "rnc/overlay/l02/gameplay/entities/sand_shark_data/rocket_launcher_update.h"
 void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
 
 extern void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");

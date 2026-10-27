@@ -732,7 +732,7 @@ struct RespawnVars {
 };
 
 extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
-#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_frog_health_respawn_and_target.h"
 extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -1021,8 +1021,10 @@ extern f32 moby_spark_horizontal_speed_range_start_gp __asm__("D_L06_00161C2C") 
 extern f32 moby_spark_horizontal_speed_range_end_gp __asm__("D_L06_00161C30") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_start_gp __asm__("D_L06_00161C34") __attribute__((sda));
 extern f32 moby_spark_vertical_speed_range_end_gp __asm__("D_L06_00161C38") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/spawn_moby_directional_spark_bursts_2.h"
 extern f32 D_L06_00161C40 __attribute__((sda));
 extern f32 D_L06_00161C44 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/spawn_moby_directional_spark_bursts.h"
 extern f32 moby_spark_push_scale_range_end_gp __asm__("D_L06_00161C64") __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1381,6 +1383,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/gadgebot_update.h"
 #include "rnc/gameplay/state/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -2875,9 +2878,11 @@ extern char D_0013F3D0[];
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern float D_0015ED6C;
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_moby_rotation_group_2.h"
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_moby_rotation_group.h"
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3095,6 +3100,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int level_frame_count __asm__("D_L06_0015F5CC");
 extern int energy_sphere_holder_beam_color_start_gp __asm__("D_L06_00161E58") __attribute__((sda));
 extern int energy_sphere_holder_beam_color_end_gp __asm__("D_L06_00161E5C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_energy_sphere_holder_beam_effects.h"
 extern int energy_sphere_holder_beam_texture_index_gp __asm__("D_L06_00161E64") __attribute__((sda));
 extern int energy_sphere_holder_spark_color_gp __asm__("D_L06_00161E68") __attribute__((sda));
 extern float energy_sphere_holder_spark_size_scale_gp __asm__("D_L06_00161E6C") __attribute__((sda));

@@ -291,7 +291,7 @@ extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 __attribute__((section(".data")));
 extern unsigned short D_00141C60 __attribute__((section(".data")));
 extern int D_L05_0015F6A8;
-#include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_data/hoverboard_update.h"
 extern int D_L05_0016190C __attribute__((sda));
 extern int D_L05_00161910 __attribute__((sda));
 

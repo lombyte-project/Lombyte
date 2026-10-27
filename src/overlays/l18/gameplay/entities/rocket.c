@@ -689,6 +689,7 @@ extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_rocket_target_pulse_quad.h"
 extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
 extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
@@ -1522,7 +1523,9 @@ int poll_moby_state_and_rearm(struct Moby *moby) {
     return 0;
 }
 extern float D_L18_0015F638 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/floating_platform_update_2.h"
 extern float floating_platform_sink_trigger_distance_gp __asm__("D_L18_00161A5C") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/floating_platform_update.h"
 extern int D_L18_001623A8 __attribute__((sda));
 void spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
@@ -1766,12 +1769,16 @@ extern short D_L18_00161BFC __attribute__((sda));
 extern int ballistic_ring_glow_color_end_gp __asm__("D_L18_00161C00") __attribute__((sda));
 extern float ballistic_ring_trail_spark_gravity_gp __asm__("D_L18_00161C04") __attribute__((sda));
 extern float ballistic_ring_trail_movement_step_scale_gp __asm__("D_L18_00161C08") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_ballistic_ring_projectile_4.h"
 extern int D_L18_00161C10 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_ballistic_ring_projectile_3.h"
 extern int D_L18_00161C18 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_ballistic_ring_projectile_2.h"
 extern int ballistic_ring_trail_initial_color_start_gp __asm__("D_L18_00161C30") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_start_gp __asm__("D_L18_00161C38") __attribute__((sda));
 extern int ballistic_ring_trail_second_color_end_gp __asm__("D_L18_00161C3C") __attribute__((sda));
 extern int ballistic_ring_trail_sparks_per_update_gp __asm__("D_L18_00161C40") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_ballistic_ring_projectile.h"
 extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
@@ -1952,6 +1959,7 @@ extern void matrix_mul_dba20(void *, void *, void *) __asm__("FUN_001fa328");
 
 extern float D_L18_001D4310[];
 
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_expanding_projectile_ring_2.h"
 extern int expanding_projectile_ring_color_start_gp __asm__("D_L18_00161C5C") __attribute__((sda));
 extern int expanding_projectile_ring_color_end_gp __asm__("D_L18_00161C60") __attribute__((sda));
 extern float expanding_projectile_ring_segment_angle_degrees_gp __asm__("D_L18_00161C64") __attribute__((sda));
@@ -1960,6 +1968,7 @@ extern float D_L18_00161C6C __attribute__((sda));
 extern float expanding_projectile_ring_layer_radius_offset_gp __asm__("D_L18_00161C70") __attribute__((sda));
 extern float D_L18_00161C74 __attribute__((sda));
 extern float D_L18_00161C78 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_expanding_projectile_ring.h"
 void draw_expanding_projectile_ring(M_dba20 *moby) {
     Q_dba20 quad_packets[4];
     V_dba20 draw_matrix[4];
@@ -2148,6 +2157,7 @@ extern void euler_basis_dc4b8(void *, void *) __asm__("FUN_001fa030");
 extern float D_L18_001D4330[];
 extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
 
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_class_274_ring_effect.h"
 extern int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
 extern int class_274_ring_color_end_gp __asm__("D_L18_00161CBC") __attribute__((sda));
 extern float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") __attribute__((sda));
@@ -2577,6 +2587,7 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
 extern void spark_s(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_moby_target_travel_and_electric_effects.h"
 extern float electric_arc_endpoint_radius_scale_gp __asm__("D_L18_00161ED8") __attribute__((sda));
 extern float target_travel_speed_gp __asm__("D_L18_00161EE0") __attribute__((sda));
 void update_moby_target_travel_and_electric_effects(struct Moby *moby) __asm__("FUN_L18_002e9e70");
@@ -2800,17 +2811,22 @@ extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char *spawn_glow_particle(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L00_002ac910");
 extern int explosion_burst_spark_count_gp __asm__("D_L18_00161F6C") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst_5.h"
 extern int explosion_burst_spark_frame_count_gp __asm__("D_L18_00161F80") __attribute__((sda));
 extern int explosion_burst_spark_second_frame_count_gp __asm__("D_L18_00161F84") __attribute__((sda));
 extern int explosion_burst_spark_third_frame_count_gp __asm__("D_L18_00161F88") __attribute__((sda));
 extern int explosion_burst_particle_count_gp __asm__("D_L18_00161F98") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst_4.h"
 extern int explosion_burst_camera_shake_duration_frames_gp __asm__("D_L18_00161FE8") __attribute__((sda));
 extern float explosion_burst_spark_speed_min_gp __asm__("D_L18_00161F70") __attribute__((sda));
 extern float explosion_burst_spark_speed_max_gp __asm__("D_L18_00161F74") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst_3.h"
 extern float explosion_burst_spark_second_vector_scale_gp __asm__("D_L18_00161F94") __attribute__((sda));
 extern float explosion_burst_particle_speed_min_gp __asm__("D_L18_00161FA0") __attribute__((sda));
 extern float explosion_burst_particle_speed_max_gp __asm__("D_L18_00161FA4") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst_2.h"
 extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/spawn_explosion_burst.h"
 extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4") __attribute__((sda));
 extern int D_L18_001D9C70[];
 extern int D_L18_001D9C88[];
@@ -2921,12 +2937,14 @@ extern int scale_frames_q(int) __asm__("FUN_001f96f8");
 extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested_2.h"
 extern short D_L18_001620CA;
 extern short D_L18_001620CC;
 extern short D_L18_001620CE;
 extern short D_L18_001620D2;
 extern short D_L18_001620D4;
 extern short D_L18_001620D6;
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested.h"
 extern int D_L18_001620DC;
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
@@ -3005,7 +3023,9 @@ extern float secondary_bolt_lateral_amplitude_gp __asm__("D_L18_00162020") __att
 extern s32 D_L18_00162024 __attribute__((sda));
 extern float secondary_bolt_z_phase_increment_gp __asm__("D_L18_00162028") __attribute__((sda));
 extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_electric_bolt_geometry_and_particles_2.h"
 extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/rocket_data/update_electric_bolt_geometry_and_particles.h"
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));
 extern short D_L18_001620C0[] __attribute__((section(".sdata")));

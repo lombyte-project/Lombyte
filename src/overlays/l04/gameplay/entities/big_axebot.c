@@ -2214,6 +2214,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
 extern f32 smoke_trail_puff_vertical_velocity_scale_gp __asm__("D_L04_001618B4") __attribute__((sda));
+#include "rnc/overlay/l04/gameplay/entities/big_axebot_data/spawn_smoke_puff_trail_with_endpoint_bursts.h"
 
 /* Lays a trail of smoke puffs from FROM to TO with a burst at each end. */
 void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) __asm__("FUN_L04_002c41e0");

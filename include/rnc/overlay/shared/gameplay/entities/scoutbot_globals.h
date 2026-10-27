@@ -21,15 +21,4 @@ extern s32 spark_emitter_default_timer_reset __asm__("D_L08_00161F98");
 extern f32 spark_emitter_default_primary_spread_limit __asm__("D_L08_00161FA4");
 extern f32 spark_emitter_default_secondary_spread_limit __asm__("D_L08_00161FA8");
 
-/* Additional scalar data read by this unit. */
-extern float moby_creation_particle_primary_motion_w_gp __asm__("D_L08_00161D14") __attribute__((sda));
-extern float moby_creation_particle_secondary_motion_w_gp __asm__("D_L08_00161D18") __attribute__((sda));
-extern float homing_projectile_trail_primary_motion_w_gp __asm__("D_L08_00161D1C") __attribute__((sda));
-extern float homing_projectile_trail_secondary_motion_w_gp __asm__("D_L08_00161D20") __attribute__((sda));
-extern s32 spark_emitter_default_frame_count_base_gp __asm__("D_L08_00161F8C") __attribute__((sda));
-extern s32 spark_emitter_default_second_frame_count_base_gp __asm__("D_L08_00161F90") __attribute__((sda));
-extern s32 spark_emitter_default_third_frame_count_base_gp __asm__("D_L08_00161F94") __attribute__((sda));
-extern f32 spark_emitter_default_primary_motion_w_gp __asm__("D_L08_00161F9C") __attribute__((sda));
-extern f32 spark_emitter_default_secondary_motion_w_gp __asm__("D_L08_00161FA0") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_SCOUTBOT_GLOBALS_H */

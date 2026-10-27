@@ -37,23 +37,4 @@ extern int energy_sphere_destruction_zero_branch_color_end __asm__("D_L06_00161E
 extern float energy_sphere_destruction_scale_range_start __asm__("D_L06_00161EA8");
 extern float energy_sphere_destruction_scale_range_end __asm__("D_L06_00161EAC");
 
-/* Additional scalar data read by this unit. */
-extern f32 frog_glow_phase_rate_degrees_gp __asm__("D_L06_00161C04") __attribute__((sda));
-extern int frog_glow_color_start_gp __asm__("D_L06_00161C08") __attribute__((sda));
-extern int frog_glow_color_end_gp __asm__("D_L06_00161C0C") __attribute__((sda));
-extern f32 moby_spark_vertical_velocity_correction_scale_gp __asm__("D_L06_00161C3C") __attribute__((sda));
-extern s32 moby_spark_first_color_range_start_gp __asm__("D_L06_00161C48") __attribute__((sda));
-extern s32 moby_spark_second_color_range_start_gp __asm__("D_L06_00161C4C") __attribute__((sda));
-extern s32 moby_spark_first_color_range_end_gp __asm__("D_L06_00161C50") __attribute__((sda));
-extern s32 moby_spark_second_color_range_end_gp __asm__("D_L06_00161C54") __attribute__((sda));
-extern s32 moby_spark_first_frame_count_base_gp __asm__("D_L06_00161C58") __attribute__((sda));
-extern s32 moby_spark_second_frame_count_base_gp __asm__("D_L06_00161C5C") __attribute__((sda));
-extern s32 moby_spark_third_frame_count_base_gp __asm__("D_L06_00161C60") __attribute__((sda));
-extern float gadgebot_position_snapshot_z_offset_gp __asm__("D_L06_00161CE0") __attribute__((sda));
-extern float rotation_group_angular_deceleration_degrees_gp __asm__("D_L06_00161D3C") __attribute__((sda));
-extern float rotation_group_angular_velocity_adjustment_degrees_gp __asm__("D_L06_00161D38") __attribute__((sda));
-extern float rotation_group_max_angular_speed_degrees_gp __asm__("D_L06_00161D40") __attribute__((sda));
-extern float rotation_group_fallback_proximity_trigger_inhibit_gp __asm__("D_L06_00161D44") __attribute__((sda));
-extern int energy_sphere_holder_beam_particle_variant_flag_gp __asm__("D_L06_00161E60") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_GADGEBOT_SPAWN_CONTAINER_GLOBALS_H */

@@ -531,6 +531,7 @@ extern float D_L16_001D9A50[4][2];
 extern float D_L16_001D97A0[4][2];
 extern float D_L16_001D9A90[4][4];
 extern float D_L16_001D9800[4][4];
+#include "rnc/overlay/shared/gameplay/entities/armed_transport_data/draw_grindrail_barrier_effect.h"
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");

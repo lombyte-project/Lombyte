@@ -1081,8 +1081,10 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/update_falling_debris_2.h"
 extern int D_L08_00161C04 __attribute__((sda));
 extern int D_L08_00161C08 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/update_falling_debris.h"
 extern int spawn_spark() __asm__("FUN_00218888");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -2613,6 +2615,7 @@ extern float add_angle_5188(float, float) __asm__("FUN_001fa580");
 extern void vu1_add_g_sregister_5188(int, u64) __asm__("FUN_00233980");
 extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/draw_batalia_bolt_pickup_rotating_quad.h"
 extern char D_L08_0016D240[] __attribute__((section(".data")));
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) __asm__("FUN_L08_002e5188");

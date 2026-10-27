@@ -13,7 +13,4 @@ extern int wobble_quad_start_color __asm__("D_L05_00161D04");
 extern int wobble_quad_end_color __asm__("D_L05_00161D08");
 extern int wobble_quad_texture_index __asm__("D_L05_00161D0C");
 
-/* Additional scalar data read by this unit. */
-extern int hoverboard_effect_displacement_w_gp __asm__("D_L05_00161928") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_HYDRODISPLACER_FAUCET_GLOBALS_H */

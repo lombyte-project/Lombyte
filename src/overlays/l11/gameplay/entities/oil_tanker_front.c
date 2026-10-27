@@ -17,10 +17,12 @@ extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata
 extern char *D_L11_0015FFD8;
 extern char *path_table[] __asm__("D_L11_001B0EB0");
 extern float D_L11_001622CC __attribute__((sda));
-#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal_3.h"
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
 extern float puffoid_hit_knockback_vertical_scale_gp __asm__("D_L11_001622D4") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal_2.h"
 extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal.h"
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
@@ -674,6 +676,7 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) {
         fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(chain_vars + 0x6C), x);
     lerp_vector(&moby->pos, current_path_point, pb, *(float *)(chain_vars + 0x6C));
 }
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_oil_tanker_link_path_poses.h"
 extern s32 D_L11_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern s32 FUN_001fa6d0(float);
@@ -1900,6 +1903,7 @@ extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_layered_effect_and_queue_draw.h"
 extern char D_L11_00167680[];
 extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
@@ -2076,6 +2080,7 @@ extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
 extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_distance_faded_effect_and_queue_draw.h"
 extern char D_L11_00167680[];
 extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");

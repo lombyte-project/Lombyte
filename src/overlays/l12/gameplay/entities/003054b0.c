@@ -571,6 +571,7 @@ extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_002
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
+#include "rnc/overlay/l12/gameplay/entities/003054b0_data/planetbuster_maximus_part_update.h"
 extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L12_00161F30") __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);

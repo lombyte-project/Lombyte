@@ -22,11 +22,4 @@ extern float ripple_88_uv_scroll_rate __asm__("D_L15_0016226C");
 extern float ripple_88_template_vertex_scale __asm__("D_L15_00162270");
 extern float codebot_slot_effect_spawn_gate __asm__("D_L15_0015F3FC");
 
-/* Additional scalar data read by this unit. */
-extern float ripple_mesh_buffers_radial_wavelength_gp __asm__("D_L15_001620F8") __attribute__((sda));
-extern float ripple_mesh_buffers_phase_advance_divisor_gp __asm__("D_L15_001620FC") __attribute__((sda));
-extern float ripple_mesh_phase_advance_divisor_gp __asm__("D_L15_00162164") __attribute__((sda));
-extern float scaled_ripple_phase_advance_divisor_gp __asm__("D_L15_001621F4") __attribute__((sda));
-extern float ripple_88_phase_advance_divisor_gp __asm__("D_L15_00162264") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L15_GAMEPLAY_ENTITIES_CONVEYOR_BELT_GLOBALS_H */

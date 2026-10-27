@@ -28,10 +28,4 @@ extern float helga_big_head_cutscene_adjustment __asm__("D_L03_0015F5A0");
 extern float helga_big_head_attachment_uniform_value __asm__("D_L03_00161BB4");
 extern float path_mover_distance_step __asm__("D_L03_00161BC0");
 
-/* Additional scalar data read by this unit. */
-extern f32 mine_layer_nonlethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161900") __attribute__((sda));
-extern f32 mine_layer_nonlethal_knockback_vertical_launch_input_gp __asm__("D_L03_00161904") __attribute__((sda));
-extern f32 mine_layer_lethal_knockback_horizontal_speed_scale_gp __asm__("D_L03_00161908") __attribute__((sda));
-extern f32 mine_layer_lethal_knockback_vertical_launch_input_gp __asm__("D_L03_0016190C") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L03_GAMEPLAY_ENTITIES_TAXI_GLOBALS_H */

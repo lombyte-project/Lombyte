@@ -265,8 +265,11 @@ extern void FUN_L00_00250df8(void *);
 extern float D_L11_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_globals.h"
 extern float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_child_set_poses_3.h"
 extern float D_L11_00161EB4 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_child_set_poses_2.h"
 extern float child_set_base_rotation_y_degrees_gp __asm__("D_L11_00161EBC") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_child_set_poses.h"
 extern float final_child_set_z_offset_gp __asm__("D_L11_00161F08") __attribute__((sda));
 extern void zero_vector_d1b0(void *) __asm__("FUN_001f99f8");
 
@@ -1500,6 +1503,7 @@ extern void FUN_L00_00257470_p(struct Moby *, int, int) __asm__("FUN_L00_0025747
 extern void FUN_L00_0025f3e8_p(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void remove_0180(struct Moby *) __asm__("FUN_0020c828");
 
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/psytcopus_update.h"
 extern float D_L11_00161F9C __attribute__((sda));
 extern int FUN_001f9740_p(void *) __asm__("FUN_001f9740");
 extern void set_moby_position_and_refresh_removal_timer(void *, void *) __asm__("FUN_L11_00318e78");
@@ -2362,39 +2366,54 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int D_L11_00161FF0 = 120;
 int D_L11_00162004 = 5;
 int D_L11_0016214C = 10;
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_15.h"
 extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_14.h"
 extern float D_L11_00162014 __attribute__((sda));
 extern float D_L11_00162018 __attribute__((sda));
 extern float D_L11_0016201C __attribute__((sda));
 extern float D_L11_00162020 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_13.h"
 extern float D_L11_00162034 __attribute__((sda));
 extern float D_L11_00162038 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_12.h"
 extern float D_L11_0016204C __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_11.h"
 extern float D_L11_0016207C __attribute__((sda));
 extern float D_L11_00162080 __attribute__((sda));
 extern float D_L11_0016208C __attribute__((sda));
 extern float D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern float D_L11_0016209C __attribute__((sda));
 extern float D_L11_001620A0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_10.h"
 extern float D_L11_001620AC __attribute__((sda));
 extern float D_L11_001620B0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_9.h"
 extern float D_L11_001620BC __attribute__((sda));
 extern float D_L11_001620C0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_8.h"
 extern float D_L11_001620E0 __attribute__((sda));
 extern float D_L11_001620E4 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_7.h"
 extern float D_L11_001620EC __attribute__((sda));
 extern float D_L11_001620F0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_6.h"
 extern float D_L11_001620F8 __attribute__((sda));
 extern float D_L11_001620FC __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_5.h"
 extern float D_L11_00162104 __attribute__((sda));
 extern float D_L11_00162108 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_4.h"
 extern float D_L11_00162110 __attribute__((sda));
 extern float D_L11_00162114 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_3.h"
 extern float D_L11_0016211C __attribute__((sda));
 extern float D_L11_00162120 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight_2.h"
 extern float D_L11_00162128 __attribute__((sda));
 extern float D_L11_0016212C __attribute__((sda));
 extern float D_L11_00162130 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_player_ship_flight.h"
 extern float D_L11_00162150 __attribute__((sda));
 extern float D_L11_00162154 __attribute__((sda));
 extern float D_L11_00162158 __attribute__((sda));
@@ -2673,8 +2692,10 @@ extern char D_L11_001677C0[];
 extern char D_L11_0021B610[];
 extern char D_L11_0021B648[];
 extern int D_L11_0015F608;
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update_2.h"
 extern unsigned char D_L11_00162054 __attribute__((sda));
 extern unsigned char D_L11_00162058 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update.h"
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
@@ -3150,6 +3171,7 @@ extern char D_L11_001677C0_4318[] __asm__("D_L11_001677C0");
 extern char D_0013F3D0_4318[] __asm__("D_0013F3D0");
 float D_L11_001622C0 = 0;
 extern float D_L11_001622CC __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/puffoid_update.h"
 extern float D_L11_001622F0 __attribute__((sda));
 extern void update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
 extern void update_moby_target_heading_and_conditional_movement(char *a0, float *a1) __asm__("FUN_L11_00315f58");

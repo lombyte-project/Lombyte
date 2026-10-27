@@ -90,6 +90,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_bolt_pickup.h"
 extern float bolt_pickup_collision_stop_speed_threshold_gp __asm__("D_L08_00161458") __attribute__((sda));
 extern float bolt_pickup_collision_speed_reduction_gp __asm__("D_L08_0016145C") __attribute__((sda));
 extern int bolt_pickup_bob_period_ticks_gp __asm__("D_L08_00161460") __attribute__((sda));
@@ -1103,9 +1104,11 @@ extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles_2.h"
 extern float bomber_tank_joint_particle_jitter_magnitude_base_gp __asm__("D_L08_001618DC") __attribute__((sda));
 extern float bomber_tank_joint_particle_vertical_spread_gp __asm__("D_L08_001618E0") __attribute__((sda));
 extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("D_L08_001618E8") __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles.h"
 extern int FUN_L00_0024f7c8();
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -2519,14 +2522,17 @@ extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket_3.h"
 extern float rocket_guidance_velocity_correction_limit_gp __asm__("D_L08_00161A04") __attribute__((sda));
 extern float rocket_route_speed_gp __asm__("D_L08_00161A08") __attribute__((sda));
 extern float rocket_target_hit_distance_gp __asm__("D_L08_00161A0C") __attribute__((sda));
 extern float rocket_effect_radial_speed_range_end_gp __asm__("D_L08_00161A14") __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket_2.h"
 extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket.h"
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned int D_L08_0015FFDC __attribute__((section(".sdata")));
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
@@ -2863,6 +2869,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int D_001413D4 __attribute__((section(".data")));
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_path_following_moby.h"
 extern unsigned char D_0013D408[];
 extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
 extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");

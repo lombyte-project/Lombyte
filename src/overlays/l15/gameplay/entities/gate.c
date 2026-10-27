@@ -2522,6 +2522,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         play_entity_sound((int)ultramech_moby, 2.5f, &ultramech_moby->pos, 0x10000, 40.0f, 1.0f, 0, 1, 0);
     }
 }
+#include "rnc/overlay/l15/gameplay/entities/gate_data/process_ultramech_hits_and_update_target.h"
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;

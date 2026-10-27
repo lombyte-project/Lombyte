@@ -1496,7 +1496,7 @@ typedef struct {
 } Mob577Target;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-#include "rnc/overlay/l01/gameplay/entities/birdbot_globals.h"
+#include "rnc/overlay/l01/gameplay/entities/birdbot_data/peckbot_update.h"
 s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;

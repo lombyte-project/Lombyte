@@ -41,7 +41,7 @@ extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L12_001FB530[][4];
 extern float D_L12_001FB5B0[][4];
-#include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase_gp __asm__("D_L12_00161DF8") __attribute__((sda));
@@ -514,6 +514,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
@@ -855,8 +856,10 @@ extern short D_L12_00161E1C __attribute__((sda));
 extern short D_L12_00161E20 __attribute__((sda));
 extern short D_L12_00161E24 __attribute__((sda));
 extern short D_L12_00161E28 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud_2.h"
 extern short D_L12_00161E44 __attribute__((sda));
 extern short D_L12_00161E48 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud.h"
 extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
 extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");

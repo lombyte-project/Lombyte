@@ -18,9 +18,4 @@ extern float helicopter_bob_amplitude __asm__("D_L15_00161A0C");
 extern float ultramech_pre_hit_scale_multiplier __asm__("D_L15_00161B2C");
 extern float ultramech_post_hit_scale_multiplier __asm__("D_L15_00161B30");
 
-/* Additional scalar data read by this unit. */
-extern float ultramech_knockback_gravity_gp __asm__("D_L15_00161B00") __attribute__((sda));
-extern float ultramech_knockback_vertical_speed_gp __asm__("D_L15_00161B04") __attribute__((sda));
-extern float ultramech_knockback_horizontal_speed_gp __asm__("D_L15_00161B08") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L15_GAMEPLAY_ENTITIES_GATE_GLOBALS_H */

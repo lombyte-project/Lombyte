@@ -870,6 +870,7 @@ extern char *D_L02_00161AFC __attribute__((sda));
 extern char *D_L02_00161B00 __attribute__((sda));
 extern char *D_L02_00161B04 __attribute__((sda));
 extern char *D_L02_00161B08 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle_radial_strip.h"
 
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -1537,6 +1538,7 @@ f32 D_L18_001D37A0[1] __attribute__((section(".data"))) = {0};
 typedef struct { int slot[12]; } Ring12;
 
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle.h"
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void draw_tresspasser_puzzle_arrow(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void draw_tresspasser_puzzle_radial_strip(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");

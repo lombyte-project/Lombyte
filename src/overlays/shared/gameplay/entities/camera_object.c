@@ -150,10 +150,11 @@ void update_ambience_target_cycle(void) {
         break;
     }
 }
-#include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/update_frame_timing_and_wrapped_value_2.h"
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
 extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/update_frame_timing_and_wrapped_value.h"
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
@@ -551,6 +552,7 @@ f32 FUN_001fa688_2a57a8(f32, f32) __asm__("FUN_001fa688");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/vendor_update.h"
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *vendor_moby) {
     enum {

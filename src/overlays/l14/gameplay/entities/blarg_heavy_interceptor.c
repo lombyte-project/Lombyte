@@ -444,6 +444,7 @@ extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_00161
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
+#include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
 extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
@@ -3204,6 +3205,7 @@ struct L14RaceState {
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_level14_racer.h"
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");

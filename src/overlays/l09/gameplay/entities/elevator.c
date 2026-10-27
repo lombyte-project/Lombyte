@@ -1318,6 +1318,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
+#include "rnc/overlay/l09/gameplay/entities/elevator_data/barrier_update.h"
 extern int FUN_L00_001fefc8();
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -1451,6 +1452,7 @@ extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
 extern float floating_ship_piece_hero_offset_tilt_gain_gp __asm__("D_L09_00161DC4") __attribute__((sda));
 extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attribute__((sda));
 extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC") __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/elevator_data/update_floating_ship_piece.h"
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0013F350[];

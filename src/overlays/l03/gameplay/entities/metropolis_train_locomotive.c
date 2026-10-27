@@ -3164,7 +3164,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
 }
 
 extern float D_L03_001618E0 __attribute__((sda));
-#include "rnc/overlay/l03/gameplay/entities/metropolis_train_locomotive_globals.h"
+#include "rnc/overlay/l03/gameplay/entities/metropolis_train_locomotive_data/update_kerwan_path_enemy_hit_reaction.h"
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");

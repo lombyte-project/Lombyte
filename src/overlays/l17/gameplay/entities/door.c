@@ -1161,23 +1161,30 @@ extern float interpolate_value_with_repeated_squaring(int, int, float, float, fl
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-#include "rnc/overlay/l17/gameplay/entities/door_globals.h"
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_8.h"
 int D_L17_00162000 = 120;
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_7.h"
 int D_L17_00162014 = 5;
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_6.h"
 extern float D_L17_00162024 __attribute__((sda));
 extern float D_L17_00162028 __attribute__((sda));
 extern float D_L17_0016202C __attribute__((sda));
 extern float D_L17_00162030 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_5.h"
 extern float D_L17_00162044 __attribute__((sda));
 extern float D_L17_00162048 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_4.h"
 extern float D_L17_0016205C __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_3.h"
 extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
 extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_2.h"
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight.h"
 extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
@@ -1634,6 +1641,7 @@ extern void release_voice_ed(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
 extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 
+#include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
 extern char *D_L17_0015F420;
 extern ShipLevelEntry D_L17_0016DA80[];
@@ -3250,6 +3258,7 @@ extern RingPt D_L17_001DC680[];
 T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+#include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring_2.h"
 extern float D_L17_001DC250[][2];
 extern float D_L17_001DCAB0[][2];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -3265,6 +3274,7 @@ int D_L17_001622B0[2] = {(int)D_L17_001DCD78, 0x80};
 int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
+#include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring.h"
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");

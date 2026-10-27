@@ -2414,6 +2414,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int level_frame_count __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern float D_L06_00161ED0 __attribute__((sda));
 extern int D_001413D0[];
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_snapper_hit_response_and_targeting.h"
 int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
 extern int FUN_001fa6e0(int, int, float);
@@ -3073,6 +3074,7 @@ extern int D_L06_00140408 __attribute__((section(".data")));
 extern int D_0013CAE0 __attribute__((section(".data")));
 extern float D_L06_0015F3FC;
 extern int D_L06_001413D0 __attribute__((section(".data")));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_queen_hit_response_and_recovery.h"
 int D_L06_00161F10 = 0x80808080;
 int D_L06_00161F14 = 0x80804080;
 extern char *D_L06_001600EC;
@@ -3354,7 +3356,9 @@ extern float moby_pair_parent_phase_target_distance_gp __asm__("D_L06_00161F24")
 extern float moby_pair_child_phase_target_distance_gp __asm__("D_L06_00161F28") __attribute__((sda));
 extern float moby_pair_parent_phase_two_target_rotation_y_gp __asm__("D_L06_00161F2C") __attribute__((sda));
 extern float moby_pair_child_phase_two_target_rotation_y_gp __asm__("D_L06_00161F30") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_moby_pair_transforms_2.h"
 extern float moby_pair_phase_distance_max_speed_gp __asm__("D_L06_00161F3C") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_moby_pair_transforms.h"
 extern float moby_pair_phase_rotation_y_max_speed_degrees_gp __asm__("D_L06_00161F48") __attribute__((sda));
 extern int moby_pair_phase_one_duration_min_frames_gp __asm__("D_L06_00161F4C") __attribute__((sda));
 extern int moby_pair_phase_one_duration_max_frames_gp __asm__("D_L06_00161F50") __attribute__((sda));

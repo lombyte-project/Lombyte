@@ -150,6 +150,7 @@ extern Own D_L00_001B6B38;
 extern Own D_L00_001B86C8;
 #include "rnc/overlay/shared/audio/voices/00276368_globals.h"
 extern f32 pause_menu_initial_vector_gp __asm__("D_L00_00160280") __attribute__((sda));
+#include "rnc/overlay/shared/audio/voices/00276368_data/initialize_pause_menu.h"
 extern Vec4 D_L00_00180250;
 extern Vec4 D_L00_00180260;
 extern u8 D_L00_0016CA40[];

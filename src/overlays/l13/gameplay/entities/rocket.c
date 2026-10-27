@@ -1192,6 +1192,7 @@ struct WalkerVars_8d10 {
 };
 
 extern f32 D_L13_00161E58 __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_blarg_space_commando_damage_targeting_and_ground_motion.h"
 extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
@@ -2516,10 +2517,14 @@ extern void FUN_L13_0030c2b0(void *);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED70;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_4.h"
 extern float D_L13_00161F2C __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_3.h"
 extern float D_L13_00161F40 __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_2.h"
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks.h"
 extern int D_L13_00161F08 __attribute__((sda));
 extern int D_L13_00161F0C __attribute__((sda));
 extern int D_L13_00161F10 __attribute__((sda));

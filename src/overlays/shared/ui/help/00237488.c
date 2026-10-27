@@ -1441,7 +1441,7 @@ extern void mode_freeze_init_254608(int, void *) __asm__("FUN_001fbab8");
 extern void set_animation_parameter_254608(int, int) __asm__("FUN_001ff570");
 extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
 
-#include "rnc/overlay/shared/ui/help/00237488_globals.h"
+#include "rnc/overlay/shared/ui/help/00237488_data/update_hero_hoverboard_race_progress.h"
 extern float D_L05_0015F67C __attribute__((sda));
 extern int D_L05_0015F6A8 __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));

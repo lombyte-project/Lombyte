@@ -492,6 +492,7 @@ typedef struct {
 } RT_2baae0;
 
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_and_arc_two_pass_quads.h"
 extern int D_L00_001615F8 __attribute__((sda));
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern long tex_2baae0(int) __asm__("FUN_001f44b8");
@@ -821,12 +822,14 @@ SparkleArc D_L16_001D04A0[10] = {0};
 SparkleArc D_L17_001D0D20[10] = {0};
 SparkleArc D_L18_001D0A20[10] = {0};
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/walloper_update_2.h"
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC __attribute__((section(".data")));
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L00_001616CC;
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/walloper_update.h"
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32();
 extern float D_L00_001616A4 __attribute__((sda));
@@ -1276,6 +1279,7 @@ extern int D_L00_00173E40[];
 extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int fun_002141f8(char *) __asm__("FUN_002141f8");
 extern float D_L00_001616DC __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/select_morphoray_target_and_adjust_aim.h"
 extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -1880,6 +1884,7 @@ extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct Moby *, float, float) __asm__("FUN_L00_00275910");
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/update_beam_ring_rail_and_pulse_effects.h"
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern Tab_2BE3A8 D_L00_001E9AB0;
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
@@ -2103,10 +2108,14 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Quad;
 extern u8 D_0013E535 __attribute__((section(".data")));
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_4.h"
 extern float D_L00_00161718 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_3.h"
 extern float D_L00_00161720 __attribute__((sda));
 extern float D_L00_00161724 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_2.h"
 extern int D_L00_00161798 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects.h"
 extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));

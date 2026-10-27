@@ -1110,7 +1110,7 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-#include "rnc/overlay/shared/gameplay/entities/bomb_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/bomb_data/spawn_homing_shot.h"
 extern unsigned char *spawn_random_size_rotated_particle(char *a, char *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];

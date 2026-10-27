@@ -1013,6 +1013,7 @@ extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
 extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
+#include "rnc/overlay/l05/gameplay/entities/electric_gate_data/update_triggered_particle_spray_emitter.h"
 
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 

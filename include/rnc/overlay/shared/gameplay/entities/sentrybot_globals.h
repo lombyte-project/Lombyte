@@ -32,22 +32,4 @@ extern float spiderbot_effect_scale __asm__("D_L15_0016155C");
 extern float spiderbot_effect_lifetime_range_end __asm__("D_L15_00161560");
 extern int sentrybot_alarm_voice_slot_index __asm__("D_L15_00161AC4");
 
-/* Additional scalar data read by this unit. */
-extern int sentrybot_alert_level_frame_stamp_gp __asm__("D_L15_001613E8") __attribute__((sda));
-extern float sentrybot_emission_vector_speed_gp __asm__("D_L15_00161410") __attribute__((sda));
-extern int sentrybot_update_disabled_gp __asm__("D_L15_00161414") __attribute__((sda));
-extern float sentrybot_knockback_gravity_gp __asm__("D_L15_001613F0") __attribute__((sda));
-extern float sentrybot_death_knockback_gravity_gp __asm__("D_L15_001613F4") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_vertical_speed_gp __asm__("D_L15_001613F8") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_horizontal_speed_gp __asm__("D_L15_001613FC") __attribute__((sda));
-extern float sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_00161400") __attribute__((sda));
-extern float sentrybot_death_knockback_vertical_speed_gp __asm__("D_L15_00161404") __attribute__((sda));
-extern float sentrybot_death_knockback_horizontal_speed_gp __asm__("D_L15_00161408") __attribute__((sda));
-extern float sentrybot_death_knockback_horizontal_speed_approach_rate_gp __asm__("D_L15_0016140C") __attribute__((sda));
-extern float rocket_trail_spark_first_vector_fourth_component_gp __asm__("D_L15_00161420") __attribute__((sda));
-extern float rocket_trail_spark_second_vector_fourth_component_gp __asm__("D_L15_00161424") __attribute__((sda));
-extern float missile_distant_gray_glow_gate __asm__("D_L15_0015F5D0");
-extern int missile_target_reticle_enabled __asm__("D_L15_0015F30C");
-extern int spark_emitter_uv_phase_input __asm__("D_L15_0015F3F8");
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_SENTRYBOT_GLOBALS_H */

@@ -39,33 +39,4 @@ extern f32 amoeboid_burst_downward_velocity_adjustment_factor __asm__("D_L01_001
 extern s32 amoeboid_burst_spark_duration_base __asm__("D_L01_00161A34");
 extern f32 amoeboid_burst_input_motion_scale_max __asm__("D_L01_00161A38");
 
-/* Additional scalar data read by this unit. */
-extern f32 hover_target_yaw_spring_strength_degrees_gp __asm__("D_L01_00161944") __attribute__((sda));
-extern f32 hover_target_yaw_damping_degrees_gp __asm__("D_L01_00161948") __attribute__((sda));
-extern f32 hover_target_yaw_turn_rate_limit_degrees_gp __asm__("D_L01_0016194C") __attribute__((sda));
-extern f32 hover_ground_animation_height_threshold_gp __asm__("D_L01_00161920") __attribute__((sda));
-extern int sand_mouse_follow_duration_frames_gp __asm__("D_L01_00161918") __attribute__((sda));
-extern int sand_mouse_follow_projectile_count_limit_gp __asm__("D_L01_0016191C") __attribute__((sda));
-extern int sand_mouse_fade_duration_frames_gp __asm__("D_L01_00161924") __attribute__((sda));
-extern int sand_mouse_fade_particle_random_integer_min_gp __asm__("D_L01_00161928") __attribute__((sda));
-extern int sand_mouse_fade_particle_random_integer_max_gp __asm__("D_L01_0016192C") __attribute__((sda));
-extern float sand_mouse_fade_particle_position_jitter_gp __asm__("D_L01_00161930") __attribute__((sda));
-extern float sand_mouse_fade_particle_random_float_range_start_gp __asm__("D_L01_00161934") __attribute__((sda));
-extern float sand_mouse_fade_particle_random_float_range_end_gp __asm__("D_L01_00161938") __attribute__((sda));
-extern int sand_mouse_fade_particle_color_alpha_gp __asm__("D_L01_0016193C") __attribute__((sda));
-extern float sand_mouse_fade_particle_time_squared_coefficient_gp __asm__("D_L01_00161940") __attribute__((sda));
-extern float large_amoeboid_path_lunge_distance_threshold_gp __asm__("D_L01_001619AC") __attribute__((sda));
-extern float amoeboid_first_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619BC") __attribute__((sda));
-extern int amoeboid_first_movement_particle_header_and_data_value_gp __asm__("D_L01_001619B0") __attribute__((sda));
-extern int amoeboid_first_movement_particle_data_value_gp __asm__("D_L01_001619B4") __attribute__((sda));
-extern int amoeboid_second_movement_particle_header_and_data_value_gp __asm__("D_L01_001619C8") __attribute__((sda));
-extern int amoeboid_second_movement_particle_data_value_gp __asm__("D_L01_001619CC") __attribute__((sda));
-extern float amoeboid_second_movement_particle_secondary_sample_max_gp __asm__("D_L01_001619D4") __attribute__((sda));
-extern s32 amoeboid_burst_spark_spawn_color_randomization_start_gp __asm__("D_L01_00161A1C") __attribute__((sda));
-extern s32 amoeboid_burst_spark_secondary_color_randomization_start_gp __asm__("D_L01_00161A20") __attribute__((sda));
-extern s32 amoeboid_burst_spark_spawn_color_randomization_end_gp __asm__("D_L01_00161A24") __attribute__((sda));
-extern s32 amoeboid_burst_spark_secondary_color_randomization_end_gp __asm__("D_L01_00161A28") __attribute__((sda));
-extern s32 amoeboid_burst_downward_velocity_adjustment_frames_gp __asm__("D_L01_00161A30") __attribute__((sda));
-extern s32 gunship_path_updates_disabled __asm__("D_L01_00161B00");
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_NOVALIS_ELEVATOR_GLOBALS_H */

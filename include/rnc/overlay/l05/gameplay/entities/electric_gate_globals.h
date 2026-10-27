@@ -18,16 +18,4 @@ extern f32 elevator_camera_transition_fade __asm__("D_L05_0015F3FC");
 extern int hero_inside_clip_volume __asm__("D_L05_001612DC");
 extern float hero_clip_volume_output_w __asm__("D_L05_001612EC");
 
-/* Additional scalar data read by this unit. */
-extern int spray_big_particle_kind_gp __asm__("D_L05_00161E98") __attribute__((sda));
-extern int spray_small_particle_kind_gp __asm__("D_L05_00161E9C") __attribute__((sda));
-extern float spray_big_particle_base_scale_gp __asm__("D_L05_00161EA0") __attribute__((sda));
-extern float spray_small_particle_base_scale_gp __asm__("D_L05_00161EA4") __attribute__((sda));
-extern float spray_particle_speed_upper_bound_gp __asm__("D_L05_00161EA8") __attribute__((sda));
-extern float spray_big_particle_speed_lower_bound_gp __asm__("D_L05_00161EAC") __attribute__((sda));
-extern float spray_small_particle_speed_lower_bound_gp __asm__("D_L05_00161EB0") __attribute__((sda));
-extern float spray_particle_lateral_spread_and_height_offset_gp __asm__("D_L05_00161EB4") __attribute__((sda));
-extern float spray_particle_count_limit_per_update_gp __asm__("D_L05_00161EB8") __attribute__((sda));
-extern float spray_big_particle_selection_threshold_percent_gp __asm__("D_L05_00161EBC") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_ENTITIES_ELECTRIC_GATE_GLOBALS_H */

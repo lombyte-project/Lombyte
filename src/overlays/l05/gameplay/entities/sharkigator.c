@@ -599,6 +599,7 @@ extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int frame_number __asm__("D_L05_0015F5CC");
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/scenery_ship_update.h"
 int D_L05_001613D8 = 0x80000080;
 int D_L05_001613DC = 0x80202020;
 float D_L05_001613E0 = 5.0f;
@@ -1105,8 +1106,10 @@ extern s32 spawn_spark_c(void *, void *, void *, s32, s32, s32, s32, s32, s32) _
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern int D_L05_00161A84 __attribute__((sda));
 extern float D_L05_00161A98 __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermibot_update_2.h"
 extern float D_L05_00161AB0 __attribute__((sda));
 extern float D_L05_00161AB4 __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermibot_update.h"
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257d78(float *, float, float);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
@@ -1590,7 +1593,9 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 int D_L05_00161A74 = 0x80004000;
 int D_L05_00161A78 = 0x80008000;
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/handle_extermibot_hits_and_update_targeting_2.h"
 extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/handle_extermibot_hits_and_update_targeting.h"
 extern int coll_line_fix() __asm__("FUN_001efa68");
 extern int fun_00213928() __asm__("FUN_00213928");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
@@ -2046,15 +2051,21 @@ extern int FUN_L00_00259740(void *, void *, int);
 extern s32 spawn_spark_c2(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
 extern float D_L05_00161AF8 __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update_6.h"
 extern float D_L05_00161B18 __attribute__((sda));
 extern float D_L05_00161B1C __attribute__((sda));
 extern float extermitank_tracked_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B20") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update_5.h"
 extern float extermitank_tracked_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B28") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update_4.h"
 extern float extermitank_tracked_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B38") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update_3.h"
 extern float D_L05_00161B48 __attribute__((sda));
 extern float D_L05_00161B4C __attribute__((sda));
 extern float extermitank_secondary_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B50") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update_2.h"
 extern float extermitank_secondary_particle_vector_b_xy_scale_gp __asm__("D_L05_00161B58") __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermitank_update.h"
 extern float extermitank_secondary_particle_vector_b_spread_degrees_gp __asm__("D_L05_00161B68") __attribute__((sda));
 extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("D_L05_00161B6C") __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));

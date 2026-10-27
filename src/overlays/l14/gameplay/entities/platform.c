@@ -183,7 +183,7 @@ typedef struct {
     int pad[3];
 } Ray_67e8;
 int D_L14_00161A3C = 0x8c;
-#include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_racer_path_and_weapon.h"
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -597,6 +597,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_tilting_platform.h"
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
@@ -636,6 +637,7 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");

@@ -83,9 +83,12 @@ extern int D_L09_00161388 __attribute__((sda));
 extern int D_L09_0016138C __attribute__((sda));
 extern float D_L09_00161390 __attribute__((sda));
 extern float D_L09_00161394 __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part_3.h"
 extern float airship_part_initial_tumble_x_speed_limit_degrees_gp __asm__("D_L09_001613B0") __attribute__((sda));
 extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09_001613B4") __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part_2.h"
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC") __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part.h"
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L09_001613C8 __attribute__((sda));

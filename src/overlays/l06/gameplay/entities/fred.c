@@ -25,7 +25,7 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Packet_2fd1a0;
 
-#include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
+#include "rnc/overlay/l06/gameplay/entities/fred_data/draw_dual_texture_50_quad_mesh.h"
 #include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
 extern unsigned int D_L06_00161F94 __attribute__((sda));
@@ -5720,6 +5720,7 @@ extern void draw_backdrop_mesh(void) __asm__("FUN_L06_003003f0");
 
 extern int D_L06_0015F408;
 extern float camera_sequence_moby_scale_multiplier_gp __asm__("D_L06_00162048") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_camera_sequence_and_draw_selection.h"
 extern float camera_sequence_rotation_x_degrees_gp __asm__("D_L06_00162050") __attribute__((sda));
 void update_moby_camera_sequence_and_draw_selection(char *moby) __asm__("FUN_L06_002ffcb0");
 
@@ -5937,7 +5938,9 @@ typedef struct {
 typedef struct {
     short v, uv;
 } I3003f0;
+#include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh_2.h"
 extern unsigned int D_L06_0016206C __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh.h"
 extern V3003f0 D_L06_001F2EB0[];
 extern I3003f0 D_L06_001F34B0[];
 extern UV3003f0 D_L06_001F38B0[];
@@ -6807,8 +6810,10 @@ extern void normalize_vector_xyz_302578(void *, void *, float) __asm__("FUN_001f
 extern void add_vector_xyz_302578(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
+#include "rnc/overlay/l06/gameplay/entities/fred_data/shuttle_update_2.h"
 extern float D_L06_001620F8 __attribute__((sda));
 extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/shuttle_update.h"
 extern int D_L06_0016210C __attribute__((sda));
 extern int D_L06_00162110 __attribute__((sda));
 extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
@@ -7346,7 +7351,9 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
 extern float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/break_apart_shuttle_linked_mobys_2.h"
 extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/break_apart_shuttle_linked_mobys.h"
 extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void clear_vector_03b68(void *) __asm__("FUN_001f99f8");
@@ -7741,6 +7748,7 @@ typedef struct {
 extern char D_0013E550[];
 extern float D_L06_00167540[];
 extern float D_0015ED6C;
+#include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst_3.h"
 extern float D_L06_001FE890[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_vec_dist(void *, void *);
@@ -7750,7 +7758,9 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern float D_L06_001621F8 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst_2.h"
 extern float D_L06_00162208 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst.h"
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);

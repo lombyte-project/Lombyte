@@ -233,6 +233,7 @@ void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int
 extern float nanotech_ball_collection_gravity_scale_range_start_gp __asm__("D_L00_00161A60") __attribute__((sda));
 extern float nanotech_ball_collection_gravity_scale_range_end_gp __asm__("D_L00_00161A64") __attribute__((sda));
 extern unsigned char D_L00_00161A68 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/spawn_nanotech_ball_collection_effect_pair.h"
 extern float nanotech_ball_collection_first_particle_scale_factor_gp __asm__("D_L00_00161A74") __attribute__((sda));
 extern float nanotech_ball_collection_second_particle_scale_factor_gp __asm__("D_L00_00161A78") __attribute__((sda));
 void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
@@ -285,6 +286,7 @@ s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
 extern s32 nanotech_ball_collection_color_range_start_gp __asm__("D_L00_00161A7C") __attribute__((sda));
 extern s32 nanotech_ball_collection_color_range_end_gp __asm__("D_L00_00161A80") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/update_nanotech_ball_collection_effects.h"
 extern f32 D_L00_00161A90[1] __attribute__((sda));
 extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
@@ -446,12 +448,15 @@ extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_3.h"
 extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribute__((sda));
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 extern int nanotech_ball_collection_lifetime_frames_gp __asm__("D_L00_00161A3C") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_2.h"
 extern int nanotech_ball_slot_collection_min_frames_gp __asm__("D_L00_00161A44") __attribute__((sda));
 extern int nanotech_ball_slot_collection_max_frames_gp __asm__("D_L00_00161A48") __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update.h"
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float nanotech_ball_slot_scale_pulse_amplitude_gp __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
@@ -2705,6 +2710,7 @@ extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".
 extern char D_L00_001E5EE0[] __attribute__((section(".data")));
 extern char D_L00_001E6020[] __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/suck_beam_draw_mesh.h"
 extern float D_L00_00161B50 __attribute__((sda));
 extern short D_L00_001E6008[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);

@@ -32,10 +32,13 @@ int D_L12_001619D0 = 105;
 extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
 extern int D_L12_001619DC __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update_3.h"
 int D_L12_001619E8 = 1;
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update_2.h"
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
 int D_L12_001619F8 = 0x10022;
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update.h"
 extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");

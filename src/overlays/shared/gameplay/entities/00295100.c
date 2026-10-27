@@ -1385,6 +1385,7 @@ typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
 extern f32 vendor_camera_eye_local_offset_x_gp __asm__("D_L00_00161060") __attribute__((sda));
 extern Vec4 D_L00_00180250;
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/open_vendor_menu.h"
 extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -1945,7 +1946,9 @@ extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase_2.h"
 extern s32 D_L00_00161E18;
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase.h"
 extern s32 D_L00_00161E20;
 extern f32 D_L00_00161E24;
 extern s32 D_L00_00161E30;

@@ -17,12 +17,4 @@ extern f32 directional_particle_speed_range_start __asm__("D_L10_00161EFC");
 extern s32 directional_particle_variant_threshold_percent __asm__("D_L10_00161F04");
 extern int purchased_nanotech_health __asm__("D_0013EDA0");
 
-/* Additional scalar data read by this unit. */
-extern int screamer_death_message_gate __asm__("D_00151F38") __attribute__((sda));
-extern float toxic_crab_death_knockback_gravity_gp __asm__("D_L10_00161E28") __attribute__((sda));
-extern float toxic_crab_obstacle_pause_distance_gp __asm__("D_L10_00161E34") __attribute__((sda));
-extern float toxic_crab_back_away_distance_limit_gp __asm__("D_L10_00161E44") __attribute__((sda));
-extern float toxic_crab_pursuit_heading_threshold_degrees_gp __asm__("D_L10_00161E4C") __attribute__((sda));
-extern f32 directional_particle_gravity_gp __asm__("D_L10_00161F00") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L10_GAMEPLAY_ENTITIES_SCREAMER_GLOBALS_H */

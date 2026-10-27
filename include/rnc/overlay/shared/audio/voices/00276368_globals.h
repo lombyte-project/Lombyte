@@ -8,7 +8,4 @@
 extern f32 pause_menu_initial_vector __asm__("D_L00_00160280");
 extern s32 pause_menu_rectangle_color __asm__("D_L00_00160270");
 
-/* Additional scalar data read by this unit. */
-extern f32 pause_menu_vector_copy_source_gp __asm__("D_L00_00160290") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_AUDIO_VOICES_00276368_GLOBALS_H */

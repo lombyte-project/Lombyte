@@ -3327,7 +3327,7 @@ extern int f_fun_001f9740_227fa0(int *) __asm__("FUN_001f9740");
 extern int f_fun_001f96f8_227fa0(int) __asm__("FUN_001f96f8");
 extern int f_fun_001fa6d0_227fa0(float) __asm__("FUN_001fa6d0");
 
-#include "rnc/overlay/shared/gameplay/hero/hero_set_state_globals.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state_data/process_hero_equipped_item_input.h"
 extern s32 D_00141660 __attribute__((section(".data")));
 int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 

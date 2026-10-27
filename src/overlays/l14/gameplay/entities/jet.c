@@ -1297,6 +1297,7 @@ extern f32 lightning_arc_alpha_pulse_angle_step_gp __asm__("D_L14_00161C68") __a
 extern f32 lightning_arc_alpha_pulse_sweep_gp __asm__("D_L14_00161C6C") __attribute__((sda));
 extern s32 D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern f32 lightning_main_arc_point_spacing_gp __asm__("D_L14_00161C74") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/update_branched_lightning_arc.h"
 extern f32 lightning_main_arc_z_displacement_limit_gp __asm__("D_L14_00161C94") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
@@ -1486,6 +1487,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/draw_branched_lightning_arc.h"
 extern float D_L14_00161C88 __attribute__((sda));
 extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")__attribute__((section(".sdata")));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -3033,6 +3035,7 @@ typedef struct {
     L14PuffTail tail; /* 0x20 */
 } L14Puff;
 
+#include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_enemy_fighter_exhaust.h"
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern void exhaust_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3420,6 +3423,7 @@ extern f32 moby_exhaust_paired_emitter_offset_gp __asm__("D_L14_00161F64") __att
 extern f32 moby_exhaust_base_row2_offset_gp __asm__("D_L14_00161F68") __attribute__((sda));
 extern f32 moby_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F6C") __attribute__((sda));
 extern f32 moby_exhaust_grey_puff_row0_offset_gp __asm__("D_L14_00161F70") __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_moby_exhaust_puffs.h"
 extern int FUN_L00_00257b90(int, int);
 
 /* Exhaust of the second engine moby: puffs and rings on both sides plus a grey puff in the middle. */

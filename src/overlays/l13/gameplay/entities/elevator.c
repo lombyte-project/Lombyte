@@ -1117,6 +1117,7 @@ extern float D_L13_0015F630;
 extern float robosquawker_damage_knockback_vertical_speed_gp __asm__("D_L13_00161390") __attribute__((sda));
 extern float robosquawker_damage_knockback_horizontal_speed_gp __asm__("D_L13_00161394") __attribute__((sda));
 extern float robosquawker_home_hop_horizontal_speed_gp __asm__("D_L13_00161398") __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/elevator_data/robosquawker_update.h"
 extern float D_L13_001670C0[];
 extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -2987,6 +2988,7 @@ extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013A4E0[];
+#include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
 int hp_bar_saved __asm__("D_L13_001613C4") = 0;

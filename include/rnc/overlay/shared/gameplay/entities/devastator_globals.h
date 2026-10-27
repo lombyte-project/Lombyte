@@ -23,8 +23,4 @@ extern u32 taunter_effect_quad_rgb __asm__("D_L00_001614C0");
 extern int tesla_beam_initial_frame_count __asm__("D_L00_00161624");
 extern int tesla_beam_scaled_initial_frame_count __asm__("D_L00_00161678");
 
-/* Additional scalar data read by this unit. */
-extern int visibomb_render_override_active __asm__("D_L00_0015F30C");
-extern float visibomb_missile_speed_voice_control_scale_gp __asm__("D_L00_00161498") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_DEVASTATOR_GLOBALS_H */

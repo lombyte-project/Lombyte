@@ -1033,6 +1033,7 @@ extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L12_002e3098(struct Moby *);
 
+#include "rnc/overlay/l12/gameplay/entities/platform_data/process_hoven_anklebiter_damage_and_alerts.h"
 /* Damage and alert step of the Hoven anklebiter: refreshes its speed while alerted, now and then calls for help behind
    itself, and takes hits (dying, or staggering back). */
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");

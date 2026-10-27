@@ -46,24 +46,4 @@ extern float gadgebot_launch_glow_z_offset __asm__("D_L18_00162648");
 extern float gadgebot_launch_glow_vertical_scale_adjustment __asm__("D_L18_0016264C");
 extern float gadgebot_launch_glow_horizontal_scale_adjustment __asm__("D_L18_00162650");
 
-/* Additional scalar data read by this unit. */
-extern int deplanetizer_state_7_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624A4") __attribute__((sda));
-extern int deplanetizer_state_7_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624A8") __attribute__((sda));
-extern int deplanetizer_state_7_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624AC") __attribute__((sda));
-extern int deplanetizer_state_7_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B0") __attribute__((sda));
-extern int deplanetizer_state_7_camera_quad_start_frame_gp __asm__("D_L18_001624B4") __attribute__((sda));
-extern int deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624B8") __attribute__((sda));
-extern float deplanetizer_joint_trail_base_size_gp __asm__("D_L18_001624D0") __attribute__((sda));
-extern float deplanetizer_burst_local_spawn_offset_x_gp __asm__("D_L18_001624E0") __attribute__((sda));
-extern float deplanetizer_burst_velocity_scale_gp __asm__("D_L18_001624F0") __attribute__((sda));
-extern float deplanetizer_burst_particle_size_gp __asm__("D_L18_001624F4") __attribute__((sda));
-extern float beam_effect_default_length __asm__("D_L18_0016174C");
-extern float deplanetizer_camera_quad_local_offset_x __asm__("D_L18_00162550");
-extern float deplanetizer_camera_quad_local_offset_w __asm__("D_L18_0016255C");
-extern float gadgebot_sequence_2_start_frame_gp __asm__("D_L18_00162600") __attribute__((sda));
-extern float gadgebot_death_fall_gravity_gp __asm__("D_L18_0016261C") __attribute__((sda));
-extern float gadgebot_death_fall_horizontal_speed_approach_rate_gp __asm__("D_L18_00162620") __attribute__((sda));
-extern float gadgebot_death_fall_base_horizontal_speed_gp __asm__("D_L18_00162624") __attribute__((sda));
-extern float gadgebot_death_fall_base_vertical_speed_gp __asm__("D_L18_00162628") __attribute__((sda));
-
 #endif /* LOMBYTE_RNC_OVERLAY_L18_GAMEPLAY_ENTITIES_DEPLANETIZER_GUN_GLOBALS_H */
