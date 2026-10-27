@@ -808,7 +808,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
 
 extern char *msg_string(s32) __asm__("func_001FDD10");
-extern char D_L15_00162190[];
+extern char quartu_cutscene_message_format[] __asm__("D_L15_00162190");
 extern char D_L15_0016CE60[];
 extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern int strlen_alt(char *) __asm__("FUN_001166cc");
@@ -832,7 +832,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0xB5) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x104)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526A));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526A));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
@@ -840,7 +840,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x1C2) < *(int *)(second_message_timing_state + 0x34)) {
             if (*(int *)(second_message_timing_state + 0x34) < scale_game_frames(0x280)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526B));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526B));
                 val = (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
@@ -848,7 +848,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x2EE) < *(int *)(third_message_timing_state + 0x34)) {
             if (*(int *)(third_message_timing_state + 0x34) < scale_game_frames(0x3A2)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526C));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526C));
                 val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
@@ -856,7 +856,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x8FC) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x960)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526E));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526E));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
             }
         }
