@@ -451,7 +451,7 @@ extern int D_L00_0016017C MACRO_ADDR;
 extern int D_L00_00160490 MACRO_ADDR;
 extern int D_L00_00160540 MACRO_ADDR;
 extern int first_class_ids[] __asm__("D_L00_00160548");
-extern int D_L00_00160B70[];
+extern int shrub_color_buffer_descriptor[] __asm__("D_L00_00160B70");
 extern int D_L00_00160F50 MACRO_ADDR;
 extern int D_L00_00160FCC MACRO_ADDR;
 extern int D_L00_0016C058[];
@@ -764,7 +764,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             FillTransferWords(D_L00_001604A0, 0, D_L00_00160490 * 0x60);
         }
         last = -1;
-        D_L00_00160B70[1] = (int)D_L00_001604A0;
+        shrub_color_buffer_descriptor[1] = (int)D_L00_001604A0;
         D_L00_00160498 = D_L00_00160494 + D_L00_00160490;
         for (i = 0; i < D_L00_00160490; i++) {
             ShrubInst *inst = D_L00_00160494 + i;
