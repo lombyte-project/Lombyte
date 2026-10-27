@@ -763,7 +763,7 @@ extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
 extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
-extern void FUN_L00_00216e48(int, int, int);
+extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
 extern void stop_hero_motion_without_forward_support(float, float) __asm__("FUN_L00_00217118");
 extern void emit_filtered_entry_sparkles(int, int) __asm__("FUN_L00_00217368");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
@@ -1933,7 +1933,7 @@ void update_hero_state_motion(void) {
         float v;
 
         fast = 1;
-        FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
+        release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
         if (!(hero.ground_distance > 0.7f)) {
             fast = 0;
         }
@@ -1983,7 +1983,7 @@ void update_hero_state_motion(void) {
                 }
             }
             hero.voice_slot4 = -1;
-            FUN_L00_00216e48(3, (int)((Moby *)hero.moby), 2);
+            release_voice_slot_cf(3, (int)((Moby *)hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
                 Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -1993,7 +1993,7 @@ void update_hero_state_motion(void) {
                 }
             }
             hero.unk2224 = -1;
-            FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
+            release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
         }
         v = frame_time * 3.0f;
         if (hero.items[3].item_id == 3) {

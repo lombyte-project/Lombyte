@@ -283,7 +283,7 @@ extern s32 D_L11_001612D8;
 extern s32 level_frame __asm__("D_L11_0015F5CC");
 extern u8 D_L11_0017C9C0[];
 
-extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
+extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void emit_hero_randomized_motion_effects(s32, s32) __asm__("FUN_L00_00209a40");
@@ -588,7 +588,7 @@ void update_hero_motion_by_state(void) {
     case HERO_STATE_SWIM_IDLE:
     case 0x35:
         if (hero.state.current == 0x35) {
-            FUN_L00_00216e48(5, MV(hero.moby), 0x13);
+            release_voice_slot_cf(5, MV(hero.moby), 0x13);
         } else {
             s32 voice_slot_index = hero.pack_swim_voice;
             if (voice_slot_index != -1) {
@@ -1772,7 +1772,7 @@ void update_hero_motion_by_state(void) {
         s32 big;
         f32 sp;
         f32 m;
-        FUN_L00_00216e48(4, MV(hero.moby), 0x12);
+        release_voice_slot_cf(4, MV(hero.moby), 0x12);
         big = 1;
         if (!(hero.ground_distance > 0.7f)) {
             big = 0;
@@ -1822,7 +1822,7 @@ void update_hero_motion_by_state(void) {
                 }
             }
             hero.voice_slot4 = -1;
-            FUN_L00_00216e48(3, MV(hero.moby), 2);
+            release_voice_slot_cf(3, MV(hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -1831,7 +1831,7 @@ void update_hero_motion_by_state(void) {
                 }
             }
             hero.unk2224 = -1;
-            FUN_L00_00216e48(4, MV(hero.moby), 0x12);
+            release_voice_slot_cf(4, MV(hero.moby), 0x12);
         }
         sp = frame_time * 3.0f;
         if (hero.items[3].item_id == 3) {

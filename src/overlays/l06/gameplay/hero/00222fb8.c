@@ -894,7 +894,7 @@ struct VoiceSlot {
 };
 extern u8 D_0013E550[];
 
-extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
+extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void emit_hero_randomized_motion_effects(s32, s32) __asm__("FUN_L00_00209a40");
@@ -1898,7 +1898,7 @@ void update_hero_motion_for_current_state(void) {
         s32 grind_heading_point_index;
         f32 r;
         if (hero.state.current != 0x29 && hero.state.current != 0x2A && hero.state.current != 0x42) {
-            FUN_L00_00216e48(0, (struct MobyView *)hero.moby, 0);
+            release_voice_slot_cf(0, (struct MobyView *)hero.moby, 0);
         } else {
             if (hero.grind_voice != -1) {
                 struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.grind_voice * 0x70);
@@ -2308,7 +2308,7 @@ void update_hero_motion_for_current_state(void) {
         s32 big;
         f32 sp;
         f32 m;
-        FUN_L00_00216e48(4, (struct MobyView *)hero.moby, 0x12);
+        release_voice_slot_cf(4, (struct MobyView *)hero.moby, 0x12);
         big = 1;
         if (!(hero.ground_distance > 0.7f)) {
             big = 0;
@@ -2358,7 +2358,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             hero.voice_slot4 = -1;
-            FUN_L00_00216e48(3, (struct MobyView *)hero.moby, 2);
+            release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -2367,7 +2367,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             hero.unk2224 = -1;
-            FUN_L00_00216e48(4, (struct MobyView *)hero.moby, 0x12);
+            release_voice_slot_cf(4, (struct MobyView *)hero.moby, 0x12);
         }
         sp = D_0015ED6C_c * 3.0f;
         if (hero.items[3].item_id == 3) {
