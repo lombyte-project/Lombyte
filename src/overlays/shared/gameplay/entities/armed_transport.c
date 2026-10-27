@@ -671,11 +671,15 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
 void moby_update_draw_only(unsigned char *moby) {
+    enum {
+        MOBY_DRAW_ONLY_STATE_INITIALIZE = 0,
+        MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case MOBY_DRAW_ONLY_STATE_INITIALIZE:
         moby[0x20] = 1;
         break;
-    case 1:
+    case MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK:
         enqueue_callback_list_1((int)draw_level16_reflection_mesh_batch, (int)moby);
         break;
     }
