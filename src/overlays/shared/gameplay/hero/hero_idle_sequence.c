@@ -2849,7 +2849,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern char D_001403B0[];
+extern char hero_idle_rotation_timers[] __asm__("D_001403B0");
 
 void update_hero_idle_random_rotation_targets(void) {
     char *base = (char *)((char *)&D_0013F350_002062b0);
@@ -2869,7 +2869,7 @@ void update_hero_idle_random_rotation_targets(void) {
             if (i == 0) {
                 int *first_motion_timer;
                 *(float *)(hero_state_base + 0x1028) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
-                first_motion_timer = (int *)(((char *)&D_001403B0));
+                first_motion_timer = (int *)(((char *)&hero_idle_rotation_timers));
                 *first_motion_timer = FUN_L00_00257b90(scale_game_frames_c(0x46), scale_game_frames_c(0x96));
             } else if (i == 1) {
                 *(float *)((char *)motion_timers - 0x28) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
