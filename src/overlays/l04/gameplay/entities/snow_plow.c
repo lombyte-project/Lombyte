@@ -1474,7 +1474,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern float D_L04_001CB940[6];
+extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");
 extern char D_L04_00173FE0[];
 
 /* Three-state motion update. The saved position is restored when the timer expires. */
@@ -1524,30 +1524,30 @@ void leaf_update(struct Moby *moby) {
         moby->scale = 0.0f;
         motion = (float *)moby->pvars;
         initialDirection.q = direction.q;
-        normalize_vector_xyz(&initialDirection, &initialDirection, D_L04_001CB940[5] / 5.0f);
-        motion[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
-        motion[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        normalize_vector_xyz(&initialDirection, &initialDirection, leaf_motion_parameters[5] / 5.0f);
+        motion[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
+        motion[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         motion[2] = frame_time * -0.5f;
         normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
         normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
-        normalize_vector_xyz(motion + 4, &initialDirection, D_L04_001CB940[5] * 0.5f);
+        normalize_vector_xyz(motion + 4, &initialDirection, leaf_motion_parameters[5] * 0.5f);
         *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
         moby->state = 2;
         return;
     case LEAF_UPDATE_MOTION:
         fast_dec_timer((int *)(data + 0x44));
-        normalize_vector_xyz(&random, &random, D_L04_001CB940[5] / 10.0f);
+        normalize_vector_xyz(&random, &random, leaf_motion_parameters[5] / 10.0f);
         add_vector_xyz(data + 0x10, data + 0x10, &random);
         normalize_vector_xyz(&work, data + 0x10, 5.0f);
-        normalize_vector_xyz(data + 0x10, data + 0x10, D_L04_001CB940[5] * 0.5f);
+        normalize_vector_xyz(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
         add_vector_xyz(&work, &work, &moby->pos);
         if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
             FUN_L00_001ff660(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
-            *(float *)(data + 0x18) += D_L04_001CB940[5] / 10.0f;
+            *(float *)(data + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
         add_vector_xyz(data, data, data + 0x10);
-        work.f[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
-        work.f[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        work.f[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
+        work.f[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         work.f[2] = frame_time * -0.5f;
         scale_vector_xyz(&work, &work, 0.4f);
         scale_vector_xyz(data, data, 0.6f);
@@ -1558,10 +1558,10 @@ void leaf_update(struct Moby *moby) {
             FUN_L00_001ff660(data, data, D_L04_00173FE0 + 0x20);
             scale_vector_xyz(data, data, 0.25f);
             add_vector_xyz(&moby->pos, &moby->pos, data);
-            *(float *)(data + 8) += D_L04_001CB940[5] / 5.0f;
+            *(float *)(data + 8) += leaf_motion_parameters[5] / 5.0f;
         }
-        if (D_L04_001CB940[5] < speed)
-            normalize_vector_xyz(data, data, D_L04_001CB940[5]);
+        if (leaf_motion_parameters[5] < speed)
+            normalize_vector_xyz(data, data, leaf_motion_parameters[5]);
         {
             float amount = frame_time * -0.5f;
             if (amount < *(float *)(data + 8))
