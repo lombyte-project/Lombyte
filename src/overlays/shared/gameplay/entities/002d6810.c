@@ -656,7 +656,7 @@ typedef struct { V_2d8fa0 hdr; V_2d8fa0 p[4]; } H_2d8fa0;
 
 typedef struct { char pad[0xF0]; V_2d8fa0 a; V_2d8fa0 b; V_2d8fa0 c; } Data_2d8fa0;
 
-extern H_2d8fa0 D_L15_001D3BA0[];
+extern H_2d8fa0 l15_electric_water_side_arc_predecessor_points[] __asm__("D_L15_001D3BA0");
 extern V_2d8fa0 D_L15_001D3740[];
 extern V_2d8fa0 D_L15_001D3750[2][20];
 extern V_2d8fa0 D_L15_001D3A20[];
@@ -838,23 +838,23 @@ void update_electric_water_bolt_effect(Moby *moby) {
             add_vector_xyz(&D_L15_001D3E80_2d8fa0[k].p[1], &vectors[8], &vectors[5]);
             bend = 1.0f;
             for (j = 2; j < 5; j++) {
-                subtract_vector_xyz(&vectors[9], &D_L15_001D3BA0[k].p[j - 1], D_L15_00167440_2d8fa0);
+                subtract_vector_xyz(&vectors[9], &l15_electric_water_side_arc_predecessor_points[k].p[j - 1], D_L15_00167440_2d8fa0);
                 angle = random_float_between(0.17453292f, 0.959931076f) * bend;
                 bend = -bend;
                 build_look_at_matrix(&vectors[5], &vectors[5], &vectors[9], angle);
-                add_vector_xyz((D_L15_001D3E80_2d8fa0[k].p + j), &D_L15_001D3BA0[k].p[j - 1], &vectors[5]);
+                add_vector_xyz((D_L15_001D3E80_2d8fa0[k].p + j), &l15_electric_water_side_arc_predecessor_points[k].p[j - 1], &vectors[5]);
             }
         } else {
             int j;
             for (j = 1; j < 5; j++) {
-                subtract_vector_xyz(&jitter[j], (D_L15_001D3E80_2d8fa0[k].p + j), &D_L15_001D3BA0[k].p[j - 1]);
+                subtract_vector_xyz(&jitter[j], (D_L15_001D3E80_2d8fa0[k].p + j), &l15_electric_water_side_arc_predecessor_points[k].p[j - 1]);
                 jitter[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 jitter[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 jitter[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
             qcopy(&D_L15_001D3E80_2d8fa0[k].p[0], &vectors[8]);
             for (j = 1; j < 5; j++) {
-                add_vector_xyz((D_L15_001D3E80_2d8fa0[k].p + j), &D_L15_001D3BA0[k].p[j - 1], &jitter[j]);
+                add_vector_xyz((D_L15_001D3E80_2d8fa0[k].p + j), &l15_electric_water_side_arc_predecessor_points[k].p[j - 1], &jitter[j]);
             }
             {
                 int elapsed = D_L15_00161CD8[k];
