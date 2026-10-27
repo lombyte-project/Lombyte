@@ -1495,7 +1495,7 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
 
 extern int D_L18_0015FFD8;
-extern short D_L18_00162654;
+extern short gadgebot_joint_glow_alpha_gp __asm__("D_L18_00162654");
 extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
@@ -1507,7 +1507,7 @@ void draw_group_class_0772_joint_glows(struct Moby *moby) {
             unsigned short *next = group_moby_entry + 1;
             if (*(short *)(group_moby + 0xA6) == 0x772 && group_moby[0x20] != 0 && group_moby[0x20] < 6) {
                 int i;
-                int col = (*(int *)(group_moby + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
+                int col = (*(int *)(group_moby + 0x90) & 0xFFFFFF) + (*(int *)&gadgebot_joint_glow_alpha_gp << 24);
                 float joint_world_position[4];
                 for (i = 2; i < 5; i++) {
                     moby_point_position(group_moby, i, joint_world_position);
