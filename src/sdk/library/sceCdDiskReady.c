@@ -7,9 +7,9 @@ extern s32 D_00131304[];
 extern struct sceSifClientData D_00159990;
 extern s32 D_001599D0[];
 extern u8 D_001324C0[];
-extern u8 D_00152F80[];
-extern u8 D_00152F90[];
-extern u8 D_00152FB0[];
+extern u8 cd_disk_ready_entry_message[] __asm__("D_00152F80");
+extern u8 cd_disk_ready_bind_error_message[] __asm__("D_00152F90");
+extern u8 cd_disk_ready_completion_message[] __asm__("D_00152FB0");
 extern s32 PollSema();
 extern void SignalSema();
 extern void cmd_sem_init();
@@ -29,7 +29,7 @@ s32 sceCdDiskReady(s32 mode) {
     s32 spin;
 
     if (D_001312D0[0] > 0) {
-        scePrintf(D_00152F80);
+        scePrintf(cd_disk_ready_entry_message);
     }
     cmd_sem_init();
     if (D_001312EC[0] != PollSema(D_001312EC[0])) {
@@ -47,7 +47,7 @@ s32 sceCdDiskReady(s32 mode) {
         for (;;) {
             if (sceSifBindRpc(&D_00159990, 0x8000059A, 0) < 0) {
                 if (D_001312D0[0] > 0) {
-                    scePrintf(D_00152F90);
+                    scePrintf(cd_disk_ready_bind_error_message);
                 }
                 for (spin = 0x100000; spin != -1; spin--) {
                 }
@@ -71,7 +71,7 @@ s32 sceCdDiskReady(s32 mode) {
         return 6;
     }
     if (D_001312D0[0] > 0) {
-        scePrintf(D_00152FB0);
+        scePrintf(cd_disk_ready_completion_message);
     }
     response = *(s32 *)((u32)D_001324C0 | 0x20000000);
     SignalSema(D_001312EC[0]);
