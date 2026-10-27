@@ -43,8 +43,8 @@ extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute_
 extern EnvironmentCameraState D_00186F40;
 extern FloatVector4 camera_position __asm__("D_00187080");
 extern Vec4 D_001DC4E0[];
-extern float D_001DCB40[][2];
-extern float D_001DCE70[][2];
+extern float environment_mapping_vertex_uvs[][2] __asm__("D_001DCB40");
+extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");
 
 extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
@@ -132,15 +132,15 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             reflection[2] += 1.0f;
             sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
             if (environment_mapping_uv_refresh_state == 1 || D_001604AC == 0) {
-                D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
+                environment_mapping_vertex_uvs[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
+                environment_mapping_vertex_uvs[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
             } else {
                 coordinate = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][0] =
-                    coordinate + (D_001DCE70[element_index][0] - coordinate) * transition_fraction;
+                environment_mapping_vertex_uvs[element_index][0] =
+                    coordinate + (environment_mapping_saved_vertex_uvs[element_index][0] - coordinate) * transition_fraction;
                 coordinate = reflection[1] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][1] =
-                    coordinate + (D_001DCE70[element_index][1] - coordinate) * transition_fraction;
+                environment_mapping_vertex_uvs[element_index][1] =
+                    coordinate + (environment_mapping_saved_vertex_uvs[element_index][1] - coordinate) * transition_fraction;
             }
         }
         if (environment_mapping_uv_refresh_state == 1) {
@@ -150,8 +150,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
         if (environment_mapping_was_active_gp == 1) {
             environment_mapping_was_active_gp = 0;
             for (element_index = 0; element_index < vertex_count; element_index++) {
-                D_001DCE70[element_index][0] = D_001DCB40[element_index][0];
-                D_001DCE70[element_index][1] = D_001DCB40[element_index][1];
+                environment_mapping_saved_vertex_uvs[element_index][0] = environment_mapping_vertex_uvs[element_index][0];
+                environment_mapping_saved_vertex_uvs[element_index][1] = environment_mapping_vertex_uvs[element_index][1];
                 transform_vector(&D_001DC4E0[element_index], &positions[element_index],
                                  object_transform);
             }
@@ -168,8 +168,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             int vertex_index = indexed_quads[element_index].corners[corner_index].vertex_index;
 
             qcopy(&quad_positions[corner_index], &D_001DC4E0[vertex_index]);
-            texture_coordinates[corner_index][0] = D_001DCB40[vertex_index][0];
-            texture_coordinates[corner_index][1] = D_001DCB40[vertex_index][1];
+            texture_coordinates[corner_index][0] = environment_mapping_vertex_uvs[vertex_index][0];
+            texture_coordinates[corner_index][1] = environment_mapping_vertex_uvs[vertex_index][1];
         }
         draw_geometry_quad(quad_positions, 0, 0);
     }
