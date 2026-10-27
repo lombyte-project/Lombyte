@@ -270,19 +270,19 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern short D_L18_0016221C __attribute__((sda));
-extern short D_L18_00162220 __attribute__((sda));
-extern short D_L18_00162224 __attribute__((sda));
-extern short D_L18_00162228 __attribute__((sda));
+extern short drek_missile_wander_z_offset_range_start_gp __asm__("D_L18_0016221C") __attribute__((sda));
+extern short drek_missile_wander_z_offset_range_end_gp __asm__("D_L18_00162220") __attribute__((sda));
+extern short drek_missile_wander_radius_range_start_gp __asm__("D_L18_00162224") __attribute__((sda));
+extern short drek_missile_wander_radius_range_end_gp __asm__("D_L18_00162228") __attribute__((sda));
 void select_drek_fight_missile_wander_target(char *moby, void *out) {
     char *data = *(char **)(moby + 0x78);
     float wander_target_offset[3];
-    float wander_radius = random_float_between_alt(*(float *)&D_L18_00162224, *(float *)&D_L18_00162228);
+    float wander_radius = random_float_between_alt(*(float *)&drek_missile_wander_radius_range_start_gp, *(float *)&drek_missile_wander_radius_range_end_gp);
     float wander_target_angle = random_angle_radians();
     wander_target_offset[0] = fast_cos(wander_target_angle) * wander_radius;
     wander_target_offset[1] = fast_sin(wander_target_angle) * wander_radius;
     wander_target_offset[2] = 0.0f;
-    wander_target_offset[2] = random_float_between_alt(*(float *)&D_L18_0016221C, *(float *)&D_L18_00162220);
+    wander_target_offset[2] = random_float_between_alt(*(float *)&drek_missile_wander_z_offset_range_start_gp, *(float *)&drek_missile_wander_z_offset_range_end_gp);
     fast_vec_add(out, wander_target_offset, data + 0x120);
     *(int *)(data + 0x160) = scale_game_frames(180);
 }
