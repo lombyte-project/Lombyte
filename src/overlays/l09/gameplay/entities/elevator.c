@@ -942,7 +942,7 @@ extern s32 D_0015EDDC;
 extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute__((sda));
 extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
 extern f32 turret_beam_local_offset_gp[2] __asm__("D_L09_00161CC0") __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
-extern TurretShake D_L09_00166E00;
+extern TurretShake l09_turret_shot_response_state __asm__("D_L09_00166E00");
 extern TurretBeam l09_turret_beam_light_slots[] __asm__("D_L09_00180440");
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
@@ -1139,10 +1139,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 1, &muzzle);
                     spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    D_L09_00166E00.unk160 = 0.03f;
-                    D_L09_00166E00.unk168 = scale_game_frames(10);
-                    D_L09_00166E00.unk170 = 0.03f;
-                    D_L09_00166E00.unk178 = scale_game_frames(7);
+                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.unk168 = scale_game_frames(10);
+                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.unk178 = scale_game_frames(7);
                     vars->barrel = 0;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
@@ -1166,10 +1166,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 2, &muzzle);
                     spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    D_L09_00166E00.unk160 = 0.03f;
-                    D_L09_00166E00.unk168 = scale_game_frames(10);
-                    D_L09_00166E00.unk170 = 0.03f;
-                    D_L09_00166E00.unk178 = scale_game_frames(7);
+                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.unk168 = scale_game_frames(10);
+                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.unk178 = scale_game_frames(7);
                     vars->barrel = 1;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
