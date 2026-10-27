@@ -1420,7 +1420,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];
-extern char D_00141CE4[];
+extern char statistics_level_flags[] __asm__("D_00141CE4");
 
 void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) __asm__("FUN_L13_002f3778");
 
@@ -1460,7 +1460,7 @@ void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
             } else {
             direct:
                 if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
-                    if (*(int *)(((char *)&D_00141CE4)) >= 0) {
+                    if (*(int *)(((char *)&statistics_level_flags)) >= 0) {
                         help_request(0x32C8, 0x6F);
                     }
                 }
