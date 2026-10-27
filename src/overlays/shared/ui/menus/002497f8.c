@@ -27,8 +27,8 @@ typedef struct {
 
 
 extern Menu D_L00_001841F0;
-extern char D_L00_0015FE38[];
-extern char D_L00_0015FE40[];
+extern char menu_bolt_cost_format[] __asm__("D_L00_0015FE38");
+extern char menu_label_escape_error_text[] __asm__("D_L00_0015FE40");
 extern u8 *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 
@@ -55,10 +55,10 @@ void format_menu_item_label(s32 menu_item_index, u8 *out) {
     }
     label_cursor++;
     if (*label_cursor == 'b') {
-        sprintf_alt((char *)substitution_text, D_L00_0015FE38,
+        sprintf_alt((char *)substitution_text, menu_bolt_cost_format,
                     D_L00_001C40B0[D_L00_001841F0.items[menu_item_index].cost_index].f0);
     } else {
-        sprintf_alt((char *)substitution_text, D_L00_0015FE40);
+        sprintf_alt((char *)substitution_text, menu_label_escape_error_text);
     }
     label_cursor++;
     while (*substitution_cursor != 0) {
