@@ -432,7 +432,7 @@ extern f32 fast_difference_between_rotations_30d308(f32, f32) __asm__("FUN_001fa
 extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
-extern struct Moby *D_L01_001ABE80[];
+extern struct Moby *l01_sandmouse_projectile_target_candidates[] __asm__("D_L01_001ABE80");
 extern CollisionHit D_L01_001742C0;
 /* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
    best lock-on target for moby seen from `from` along `ang`. */
@@ -447,7 +447,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
     s32 i;
     struct Moby *candidate_moby;
 
-    for (i = 0; (candidate_moby = D_L01_001ABE80[i]) != 0; i++) {
+    for (i = 0; (candidate_moby = l01_sandmouse_projectile_target_candidates[i]) != 0; i++) {
         f32 *hp;
         s32 candidate_target_kind;
         f32 candidate_distance, score, pitch_error_squared;
