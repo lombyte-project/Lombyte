@@ -3190,17 +3190,17 @@ extern void FUN_L00_00257d78(float *, float, float);
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern short D_L00_0016152C __attribute__((sda));
-extern short D_L00_00161538 __attribute__((sda));
-extern short D_L00_0016153C __attribute__((sda));
-extern short D_L00_00161540 __attribute__((sda));
-extern short D_L00_00161544 __attribute__((sda));
-extern short D_L00_00161548 __attribute__((sda));
-extern short D_L00_0016154C __attribute__((sda));
-extern short D_L00_00161550 __attribute__((sda));
-extern short D_L00_00161554 __attribute__((sda));
-extern short D_L00_00161558 __attribute__((sda));
-extern short D_L00_0016155C __attribute__((sda));
+extern short pyrocitor_spark_lookup_index_and_flags_gp __asm__("D_L00_0016152C") __attribute__((sda));
+extern short pyrocitor_spark_random_vector_magnitude_scale_gp __asm__("D_L00_00161538") __attribute__((sda));
+extern short pyrocitor_spark_direction_vector_w_gp __asm__("D_L00_0016153C") __attribute__((sda));
+extern short pyrocitor_spark_random_vector_w_gp __asm__("D_L00_00161540") __attribute__((sda));
+extern short pyrocitor_spark_initial_color_start_gp __asm__("D_L00_00161544") __attribute__((sda));
+extern short pyrocitor_spark_initial_color_end_gp __asm__("D_L00_00161548") __attribute__((sda));
+extern short pyrocitor_spark_second_color_start_gp __asm__("D_L00_0016154C") __attribute__((sda));
+extern short pyrocitor_spark_second_color_end_gp __asm__("D_L00_00161550") __attribute__((sda));
+extern short pyrocitor_spark_random_frame_count_min_gp __asm__("D_L00_00161554") __attribute__((sda));
+extern short pyrocitor_spark_random_frame_count_max_gp __asm__("D_L00_00161558") __attribute__((sda));
+extern short pyrocitor_spark_burst_count_gp __asm__("D_L00_0016155C") __attribute__((sda));
 /* Walks the 15 entry pointers in the moby's data; for each live type-0xC entry builds a hit record and, for sub-type 10,
    spawns a burst of particles. Entries that are invalid or have sub-type < 2 are cleared. */
 void update_pyrocitor_flame_effect_slots(char *moby) __asm__("FUN_L00_002b8438");
@@ -3235,25 +3235,25 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             sub_type = *(short *)(entry + 0xA);
             if (sub_type == 10) {
                 int j;
-                for (j = 0; j < *(int *)&D_L00_0016155C; j++) {
+                for (j = 0; j < *(int *)&pyrocitor_spark_burst_count_gp; j++) {
                     int spark_initial_color;
                     int spark_interpolated_color;
                     int spark_second_frame_count;
                     int spark_third_frame_count;
                     qcopy(qv, entry_direction_vector);
-                    FUN_L00_00257d78(spark_random_vector, 0.0f, *(float *)&D_L00_00161538 * D_0015ED6C_c2);
-                    *(float *)(qv + 0xC) = *(float *)&D_L00_0016153C;
+                    FUN_L00_00257d78(spark_random_vector, 0.0f, *(float *)&pyrocitor_spark_random_vector_magnitude_scale_gp * D_0015ED6C_c2);
+                    *(float *)(qv + 0xC) = *(float *)&pyrocitor_spark_direction_vector_w_gp;
                     spark_random_vector[2] = D_0015ED6C_c2 * 4.0f;
-                    spark_random_vector[3] = *(float *)&D_L00_00161540;
-                    spark_initial_color = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
+                    spark_random_vector[3] = *(float *)&pyrocitor_spark_random_vector_w_gp;
+                    spark_initial_color = fast_tween_color(*(int *)&pyrocitor_spark_initial_color_start_gp, *(int *)&pyrocitor_spark_initial_color_end_gp, random_float_between_c(0.0f, 1.0f));
                     swap_packed_color_channels(spark_initial_color, item_variant_bytes[0x10]);
-                    spark_interpolated_color = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
+                    spark_interpolated_color = fast_tween_color(*(int *)&pyrocitor_spark_second_color_start_gp, *(int *)&pyrocitor_spark_second_color_end_gp, random_float_between_c(0.0f, 1.0f));
                     swap_packed_color_channels(spark_interpolated_color, item_variant_bytes[0x10]);
-                    spark_second_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
-                    spark_third_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
+                    spark_second_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&pyrocitor_spark_random_frame_count_min_gp, (float)*(int *)&pyrocitor_spark_random_frame_count_max_gp)));
+                    spark_third_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&pyrocitor_spark_random_frame_count_min_gp, (float)*(int *)&pyrocitor_spark_random_frame_count_max_gp)));
                     FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
                     add_vector_xyz(spark_position, spark_position, (entry + 0x10));
-                    spawn_spark(spark_position, qv, spark_random_vector, spark_initial_color, spark_interpolated_color, 0xA, spark_second_frame_count, spark_third_frame_count, *(int *)&D_L00_0016152C);
+                    spawn_spark(spark_position, qv, spark_random_vector, spark_initial_color, spark_interpolated_color, 0xA, spark_second_frame_count, spark_third_frame_count, *(int *)&pyrocitor_spark_lookup_index_and_flags_gp);
                 }
             } else if (sub_type < 2) {
                 *(int *)(slots_base - (-(i * 4))) = 0;
