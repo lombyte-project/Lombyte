@@ -288,9 +288,7 @@ void camera_object_update(char *camera_object) {
         *(float *)(camera_object + 0x10) = 5.0f;
     }
 }
-/* Ported from rac1-decomp (src/overlays/shared/bolts_and_wrench.c: func_L00_002A62D0), where it is exact; names translated to the US level program. */
-
-typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+/* Ported from rac1-decomp (src/overlays/shared/bolts_and_wrench.c: func_L00_002A62D0). */
 
 typedef unsigned int Q_2A62D0 __attribute__((mode(TI), aligned(16)));
 
@@ -302,22 +300,22 @@ typedef struct {
     float uv[4][2];
 } Quad_2A62D0;
 
-extern S D_L00_00166C80_d __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L00_001D7360[][4];
 extern float D_L00_001D73F0[][2];
 extern int D_L00_001D7438_d[] __asm__("D_L00_001D7438") __attribute__((section(".data")));
 extern int D_L00_001D7460_c[][4] __asm__("D_L00_001D7460");
-extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern short D_L00_00161394_d __asm__("D_L00_00161394") __attribute__((sda));
-extern short D_L00_00161398_d __asm__("D_L00_00161398") __attribute__((sda));
-extern void FUN_L00_00263618(void *, int, float, float);
+extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern float vendor_sparkle_uv_scroll __asm__("D_L00_00161394") __attribute__((sda));
+extern float vendor_glow_phase __asm__("D_L00_00161398") __attribute__((sda));
+void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void fast_draw_quad_real(void *, void *, int);
-extern void transform_vector_by_basis_c(void *, void *, void *) __asm__("func_001F9CF8");
-extern void vu_euler_rotation_basis_c(void *, void *) __asm__("func_001FA030");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 
-void FUN_L00_002a5040(char *m) {
+void draw_vendor_effects(char *m) __asm__("FUN_L00_002a5040");
+void draw_vendor_effects(char *m) {
     char *p = *(char **)(m + 0x78);
     Quad_2A62D0 qd;
     long pk[4];
@@ -331,33 +329,33 @@ void FUN_L00_002a5040(char *m) {
     float (*t4)[2]; float (*t0)[2];
     int izero;
     float off;
-    /* register pin: the sparkle 1.1 lives in $f22, copied from the glow block's 1.1 */
-    register float kk __asm__("$f22");
-    /* register pin: &d0 for the second vu_euler_rotation_basis_c call */
-    register float *ap __asm__("$5");
+    /* Fakematch: the sparkle radius 1.1 lives in $f22, copied from the glow block's 1.1. */
+    register float sparkle_radius __asm__("$f22");
+    /* Fakematch: d0's address for the second vu_euler_rotation_basis call. */
+    register float *d0_arg __asm__("$5");
     int k, i, i0, i1, i2, i3, col;
 
-    h = (char *)&D_L00_00166C80_d;
+    h = (char *)&D_166C80_2a4e48;
     d0[2] = *(float *)(h + 0x158);
     d0[0] = 0.0f;
     d0[1] = 0.0f;
-    vu_euler_rotation_basis_c(mtx, d0);
+    vu_euler_rotation_basis(mtx, d0);
 
-    (*(float *)&D_L00_00161394_d) = (*(float *)&D_L00_00161394_d) + 0.01f;
-    if (1.0f < (*(float *)&D_L00_00161394_d)) {
-        (*(float *)&D_L00_00161394_d) = (*(float *)&D_L00_00161394_d) - 1.0f;
+    vendor_sparkle_uv_scroll = vendor_sparkle_uv_scroll + 0.01f;
+    if (1.0f < vendor_sparkle_uv_scroll) {
+        vendor_sparkle_uv_scroll = vendor_sparkle_uv_scroll - 1.0f;
     }
 
     pk[2] = 1;
     pk[3] = 0x4000000044L;
     pk[0] = 0;
-    pk[1] = get_effect_texture_c(0x18);
+    pk[1] = get_effect_texture(0x18);
 
     for (k = 0; k < 4; k++) {
-        transform_vector_by_basis_c(q[0], D_L00_001D7360[D_L00_001D7460_c[k][0]], mtx);
-        transform_vector_by_basis_c(q[1], D_L00_001D7360[D_L00_001D7460_c[k][1]], mtx);
-        transform_vector_by_basis_c(q[2], D_L00_001D7360[D_L00_001D7460_c[k][2]], mtx);
-        transform_vector_by_basis_c(q[3], D_L00_001D7360[D_L00_001D7460_c[k][3]], mtx);
+        transform_vector_by_basis(q[0], D_L00_001D7360[D_L00_001D7460_c[k][0]], mtx);
+        transform_vector_by_basis(q[1], D_L00_001D7360[D_L00_001D7460_c[k][1]], mtx);
+        transform_vector_by_basis(q[2], D_L00_001D7360[D_L00_001D7460_c[k][2]], mtx);
+        transform_vector_by_basis(q[3], D_L00_001D7360[D_L00_001D7460_c[k][3]], mtx);
 
         qd.v[0][0] = *(float *)(m + 0x10) + q[0][0] * *(float *)(p + 0x90);
         qd.v[0][1] = *(float *)(m + 0x14) + q[0][1] * *(float *)(p + 0x90);
@@ -376,7 +374,7 @@ void FUN_L00_002a5040(char *m) {
         i1 = D_L00_001D7460_c[k][1];
         i2 = D_L00_001D7460_c[k][2];
         i3 = D_L00_001D7460_c[k][3];
-        off = (*(float *)&D_L00_00161394_d);
+        off = vendor_sparkle_uv_scroll;
         qd.col[0] = D_L00_001D7438_d[i0];
         qd.col[1] = D_L00_001D7438_d[i1];
         qd.col[2] = D_L00_001D7438_d[i2];
@@ -394,20 +392,20 @@ void FUN_L00_002a5040(char *m) {
         fast_draw_quad_real(&qd, 0, 1);
     }
 
-    pk[1] = get_effect_texture_c(0x1B);
+    pk[1] = get_effect_texture(0x1B);
 
-    (*(float *)&D_L00_00161398_d) = (*(float *)&D_L00_00161398_d) + 0.01f;
-    if (1.0f < (*(float *)&D_L00_00161398_d)) {
-        (*(float *)&D_L00_00161398_d) = 0.0f;
+    vendor_glow_phase = vendor_glow_phase + 0.01f;
+    if (1.0f < vendor_glow_phase) {
+        vendor_glow_phase = 0.0f;
     }
 
     {
-        float g = (*(float *)&D_L00_00161398_d);
+        float g = vendor_glow_phase;
         float n = -g * 1.2f;
         float pp = g * 1.2f;
         float z = g * 1.4f + 1.1f;
         float zz = z - 0.2f;
-        kk = 1.1f;
+        sparkle_radius = 1.1f;
 
         T[0].q = 0;
         T[0].f[0] = n * *(float *)(p + 0x90);
@@ -433,21 +431,21 @@ void FUN_L00_002a5040(char *m) {
         M[3].q = T[3].q;
     }
 
-    g = (char *)&D_L00_00166C80_d;
+    g = (char *)&D_166C80_2a4e48;
     off = *(float *)(g + 0x158);
     d0[0] = 0.0f;
     d0[2] = off;
     d0[1] = 0.0f;
-    /* inline asm: ap = d0 (frame slot 0xD0). The kk input puts it after retail's mov.s $f22,$f5;
+    /* Fakematch: d0_arg = d0 (frame slot 0xD0). The sparkle_radius input puts it after retail's mov.s $f22,$f5;
      * the $4 clobber keeps addiu $a0 (mtx) after it. */
-    __asm__("addiu %0,$sp,0xD0" : "=r"(ap) : "f"(kk) : "$4");
-    vu_euler_rotation_basis_c(mtx, ap);
-    transform_vector_by_basis_c(q[0], M[0].f, mtx);
-    transform_vector_by_basis_c(q[1], M[1].f, mtx);
-    transform_vector_by_basis_c(q[2], M[2].f, mtx);
-    transform_vector_by_basis_c(q[3], M[3].f, mtx);
+    __asm__("addiu %0,$sp,0xD0" : "=r"(d0_arg) : "f"(sparkle_radius) : "$4");
+    vu_euler_rotation_basis(mtx, d0_arg);
+    transform_vector_by_basis(q[0], M[0].f, mtx);
+    transform_vector_by_basis(q[1], M[1].f, mtx);
+    transform_vector_by_basis(q[2], M[2].f, mtx);
+    transform_vector_by_basis(q[3], M[3].f, mtx);
 
-    col = ((int)((1.0f - (*(float *)&D_L00_00161398_d)) * 128.0f) << 24) | 0x808080;
+    col = ((int)((1.0f - vendor_glow_phase) * 128.0f) << 24) | 0x808080;
     qd.v[0][0] = *(float *)(m + 0x10) + q[0][0];
     qd.v[0][1] = *(float *)(m + 0x14) + q[0][1];
     qd.v[0][2] = *(float *)(m + 0x18) + q[0][2];
@@ -479,12 +477,12 @@ void FUN_L00_002a5040(char *m) {
     zero = *(float *)&izero;
     for (i = 0; i < 4; i++) {
         float ang = (float)i * 3.14159f * 0.5f - 3.14159f;
-        T[0].f[0] = fast_cos(ang) * kk;
-        T[0].f[1] = fast_sin(ang) * kk;
+        T[0].f[0] = fast_cos(ang) * sparkle_radius;
+        T[0].f[1] = fast_sin(ang) * sparkle_radius;
         T[0].f[2] = 0.59f;
-        transform_vector_by_basis_c(T[0].f, T[0].f, m + 0xC0);
+        transform_vector_by_basis(T[0].f, T[0].f, m + 0xC0);
         add_vector_xyz(T[0].f, T[0].f, m + 0x10);
-        FUN_L00_00263618(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zero);
+        draw_offset_textured_effect_quad(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zero);
     }
 }
 typedef struct {
