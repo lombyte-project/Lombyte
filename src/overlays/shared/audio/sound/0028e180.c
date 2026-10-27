@@ -13,7 +13,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
-extern char D_L00_001BD880[];
+extern char ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
@@ -57,7 +57,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         }
         moby_position = (float *)(moby + 0x10);
         if (*(short *)(proximity_state_data + 0xC) != 0) {
-            transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+            transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
             add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
             if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
                 *(short *)(proximity_state_data + 0xC) = 0;
@@ -65,7 +65,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         } else {
             hero_position_or_scene_flags = (unsigned char *)(&hero.motion.pos);
             if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
-                transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+                transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
                 add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
                 if (FUN_001f9b48(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
                     *(short *)(proximity_state_data + 0xC) = 1;
