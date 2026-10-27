@@ -1055,8 +1055,8 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-extern s32 D_L08_00161F74 __attribute__((sda));
-extern s32 D_L08_00161F78 __attribute__((sda));
+extern s32 spark_emitter_default_initial_spark_word_gp __asm__("D_L08_00161F74") __attribute__((sda));
+extern s32 spark_emitter_default_second_spark_word_gp __asm__("D_L08_00161F78") __attribute__((sda));
 extern f32 spark_emitter_default_primary_z_increment_base_gp __asm__("D_L08_00161F7C") __attribute__((sda));
 extern f32 spark_emitter_default_primary_magnitude_base_gp __asm__("D_L08_00161F80") __attribute__((sda));
 extern f32 spark_emitter_default_secondary_z_increment_base_gp __asm__("D_L08_00161F84") __attribute__((sda));
@@ -1104,7 +1104,7 @@ void update_spark_emitter(char *moby) {
             multiply_global_factor_ed64(random_float_between((f32)spark_emitter_default_second_frame_count_base_gp, (f32)spark_emitter_default_second_frame_count_base_gp * 1.2f)));
         spark_third_frame_count = truncate_float_to_s32(
             multiply_global_factor_ed64(random_float_between((f32)spark_emitter_default_third_frame_count_base_gp, (f32)spark_emitter_default_third_frame_count_base_gp * 1.2f)));
-        spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, D_L08_00161F74, D_L08_00161F78, spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
+        spawn_spark(spark_position, spark_motion_primary, spark_motion_secondary, spark_emitter_default_initial_spark_word_gp, spark_emitter_default_second_spark_word_gp, spark_frame_count, spark_second_frame_count, spark_third_frame_count, -1);
     } else {
         *(s32 *)(spark_data + 0x3C) = *(s32 *)(spark_data + 0x14);
         euler_rotation_matrix(spark_rotation_matrix, moby + 0x40);
