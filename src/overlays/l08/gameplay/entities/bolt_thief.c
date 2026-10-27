@@ -730,7 +730,7 @@ extern void func_L00_00251E30_2E16A0(void *) __asm__("FUN_L00_00250df8");
 extern void func_001F49B0_2E16A0(void *,void *) __asm__("FUN_001f4600");
 extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
 
-extern unsigned char D_0014095F[];
+extern unsigned char l08_cannon_hero_interaction_flags[] __asm__("D_0014095F");
 void update_batalia_cannon(Moby *moby) __asm__("FUN_L08_002e0328");
 
 void update_batalia_cannon(Moby *moby) {
@@ -776,7 +776,7 @@ void update_batalia_cannon(Moby *moby) {
             return;
         }
         if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero52.interact & 1)) func_L00_00211908_2E16A0();
-        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(D_0014095F) & 1)) && visited52[D_0015ED84][moby->mission] == 0xFF) {
+        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) && visited52[D_0015ED84][moby->mission] == 0xFF) {
             hero52.interact = 0;
             FUN_L08_00230b38_c(0, 1);
             moby->command = 2; (*(float (*)[4])&moby->rot)[1] = 0.0f;
