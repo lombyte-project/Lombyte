@@ -16,7 +16,7 @@ typedef struct {
     u8 collected[1];
 } L09LevelState;
 extern L09LevelState D_L09_001BB3B0;
-extern int D_L09_001BA650[];
+extern int elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -65,7 +65,7 @@ void elevator_update(unsigned char *moby) {
             if (*(int *)(data + 0xC0) != -1) {
                 D_0014C190_257218[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                D_L09_001BA650[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                elevator_activation_save_id_bits[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
                 *(int *)(data + 0xC0) = -1;
             }
