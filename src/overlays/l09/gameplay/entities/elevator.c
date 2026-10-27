@@ -1213,7 +1213,7 @@ extern void FUN_001f9bf8(f32, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern char D_L09_002090B0[];
+extern char damage_causer_contact_log_format[] __asm__("D_L09_002090B0");
 
 typedef struct { char pad[0x18]; char *hit; } CollisionState;
 extern CollisionState D_L09_00173FC0;
@@ -1253,7 +1253,7 @@ void update_damage_causer(struct Moby *moby) {
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
             char *hit = D_L09_00173FC0.hit;
-            stub_printf(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
+            stub_printf(damage_causer_contact_log_format, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
                         *(s16 *)(hit + 0xb2), F(data, 0xc));
         }
         i++;
