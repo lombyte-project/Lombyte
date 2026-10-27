@@ -18,7 +18,7 @@ extern char D_L17_001E6F60[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_00141DC4 __attribute__((section(".data")));
-extern int D_L17_00179D10[];
+extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -175,7 +175,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         if (*(int *)(pvars + 0xC) > *(int *)(pvars + 0x38) && pending_help_clip_volume_index != -1 &&
             ((unsigned int)hero.state.control_mode < 2 ||
              hero.state.control_mode == 9) &&
-            D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D4DF != 0) {
+            fleet_help_request_gate_state[0] == 0 && fleet_help_request_gate_state[9] == -1 && D_0013D4DF != 0) {
             *(int *)(pvars + 0x38) = scale_game_frames(0x708);
             if (*(int *)(((char *)&D_00141D54)) >= 0) {
                 help_request(0x3A9A, 0x7D);
@@ -184,8 +184,8 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             *(int *)(pvars + 0xC) = 0;
         }
     skip1:
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && D_L17_00179D10[0] == 0 &&
-            D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && fleet_help_request_gate_state[0] == 0 &&
+            fleet_help_request_gate_state[9] == -1 && D_0013D408_b[0xBC] == 0) {
             int help_gate_flags = *(int *)(((char *)&D_00141D7C));
             mask = 1 << D_0015ED80_e[1];
             if (!(help_gate_flags & mask)) {
@@ -210,7 +210,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             *(int *)(pvars + 0x30) = -1;
         }
         if (scale_game_frames(0xE10) < *(int *)(pvars + 0x2C) && pending_help_clip_volume_index != -1 && hero_is_in_special_state() &&
-            D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] != 0) {
+            fleet_help_request_gate_state[0] == 0 && fleet_help_request_gate_state[9] == -1 && D_0013D408_b[0xBC] != 0) {
             help_request(0x4E2E, 0x78);
             *(int *)(pvars + 0x30) = pending_help_clip_volume_index;
             *(int *)(pvars + 0x2C) = 0;
@@ -225,7 +225,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 help_request(0x4268, 0x8B);
             }
-            if (D_L17_00179D10[0] != 0 || D_L17_00179D10[9] != -1) {
+            if (fleet_help_request_gate_state[0] != 0 || fleet_help_request_gate_state[9] != -1) {
                 *(int *)(pvars + 0x50) = 0;
                 moby->state = 2;
                 *(int *)(pvars + 0x5C) = scale_game_frames(0xB4);
