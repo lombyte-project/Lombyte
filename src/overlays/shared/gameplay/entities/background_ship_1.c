@@ -89,8 +89,8 @@ void prepare_background_ship_1_joint_billboards(char *moby) {
 extern char *D_L02_001B0AB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_001413D4[];
-extern char D_L02_001FAD60[];
-extern char D_L02_001FAD80[];
+extern char background_ship_1_missing_path_message[] __asm__("D_L02_001FAD60");
+extern char background_ship_1_empty_path_message[] __asm__("D_L02_001FAD80");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -105,8 +105,8 @@ extern float D_0015ED60;
 extern float D_L02_0015F580;
 extern float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") __attribute__((sda));
 extern float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F70") __attribute__((sda));
-extern short D_L02_00161F74 __attribute__((sda));
-extern short D_L02_00161F78 __attribute__((sda));
+extern short background_ship_1_color_tween_start_gp __asm__("D_L02_00161F74") __attribute__((sda));
+extern short background_ship_1_color_tween_end_gp __asm__("D_L02_00161F78") __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -148,12 +148,12 @@ void background_ship_1_update(char *moby) {
         *(short *)(moby + 0x32) = 0xFF;
         invalid_index = -1;
         if (*(int *)(moby_data + 0x60) == invalid_index) {
-            stub_printf(D_L02_001FAD60, *(short *)(moby + 0xB2));
+            stub_printf(background_ship_1_missing_path_message, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
         if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
-            stub_printf(D_L02_001FAD80, *(short *)(moby + 0xB2));
+            stub_printf(background_ship_1_empty_path_message, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
@@ -250,7 +250,7 @@ void background_ship_1_update(char *moby) {
         {
             int tweened_color;
             float k;
-            tweened_color = fast_tween_color(*(int *)&D_L02_00161F74, *(int *)&D_L02_00161F78, x);
+            tweened_color = fast_tween_color(*(int *)&background_ship_1_color_tween_start_gp, *(int *)&background_ship_1_color_tween_end_gp, x);
             k = *(float *)&background_ship_1_color_phase_rate_degrees_gp * 0.017453292f * frame_time;
             *(int *)(moby + 0x90) = tweened_color;
             *(float *)(moby_data + 0x68) = fast_add_rotations(*(float *)(moby_data + 0x68), k);
