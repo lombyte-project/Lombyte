@@ -2210,113 +2210,113 @@ void draw_beam_ring_and_rail_effects(void *moby) {
         y += beam_ring_band_texture_u_step_gp;
     }
 }
-extern int D_L00_00161780 __attribute__((sda));
-extern int D_L00_001617A4 __attribute__((sda));
-extern int D_L00_001617A8 __attribute__((sda));
+extern int beam_rail_first_pass_base_vertex_color_gp __asm__("D_L00_00161780") __attribute__((sda));
+extern int beam_rail_first_pass_texture_index_gp __asm__("D_L00_001617A4") __attribute__((sda));
+extern int beam_rail_second_pass_texture_index_gp __asm__("D_L00_001617A8") __attribute__((sda));
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BF380). */
-void draw_scrolling_ribbon_colored(void *mv, int a, int b, float sx, float sy, float sz, int n, int col) {
-    RW_2baae0 *m = mv;
-    RW_2baae0 q[4];
-    RT_2baae0 t;
+void draw_scrolling_ribbon_colored(void *mv, int ribbon_first_pass_alpha, int ribbon_second_pass_alpha, float sx, float sy, float sz, int ribbon_point_count, int col) {
+    RW_2baae0 *ribbon_points = mv;
+    RW_2baae0 ribbon_first_pass_corners[4];
+    RT_2baae0 ribbon_first_pass_render_attributes;
     RW_2baae0 q2[4];
-    RT_2baae0 u;
-    RW_2baae0 w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    RT_2baae0 ribbon_second_pass_render_attributes;
+    RW_2baae0 ribbon_camera_facing_side_vector, ribbon_second_pass_width_offset, ribbon_first_pass_point_camera_offset, ribbon_segment_delta, ribbon_adjusted_segment_start, ribbon_adjusted_segment_end, ribbon_segment_start_camera_offset, ribbon_segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
-    float len, len0, len2, l0, l1;
-    t.q0 = tex_2baae0(D_L00_001617A4);
-    col0 = D_L00_00161780 | (a << 24);
-    t.q2 = 0x8000000048L;
-    t.q1 = 0xFF9000000260L;
-    t.z4 = 0;
-    t.c[3] = col0;
-    t.c[2] = col0;
-    t.c[1] = col0;
-    t.c[0] = col0;
-    u.q0 = tex_2baae0(D_L00_001617A8);
-    col1 = col | (b << 24);
-    u.q2 = t.q2;
-    u.q1 = t.q1;
-    u.z4 = t.z4;
-    u.c[3] = col1;
-    u.c[2] = col1;
-    u.c[1] = col1;
-    u.c[0] = col1;
-    u.f[0] = 0; u.f[1] = 0; u.f[2] = 0; u.f[3] = 1.0f; u.f[4] = 1.0f; u.f[5] = 0; u.f[6] = 1.0f; u.f[7] = 1.0f;
-    t.f[0] = u.f[0] + beam_rail_first_pass_texture_u_offset_gp;
-    t.f[1] = u.f[1];
-    t.f[2] = u.f[2] + beam_rail_first_pass_texture_u_offset_gp;
-    t.f[3] = u.f[3];
-    t.f[4] = u.f[4] + beam_rail_first_pass_texture_u_offset_gp;
-    t.f[5] = u.f[5];
-    t.f[6] = u.f[6] + beam_rail_first_pass_texture_u_offset_gp;
-    t.f[7] = u.f[7];
-    fast_vec_sub(w140, m, g_debug_camera);
-    fast_vec_sub(w150, &m[1], m);
-    fast_vec_cross(w120, w150, w140);
-    len0 = fast_vec_length(w120);
-    if (len0 != 0) len0 = 1.0f / len0;
-    fast_vec_scale(beam_rail_first_pass_half_width_gp * len0, w120, w120);
-    fast_vec_add(q[0], m, w120);
-    fast_vec_sub(q[1], m, w120);
-    for (i = 1; i < n - 1; i++) {
-        fast_vec_sub(w140, &m[i], g_debug_camera);
-        fast_vec_sub(w150, &m[i + 1], &m[i]);
-        fast_vec_cross(w120, w150, w140);
-        len = fast_vec_length(w120);
-        if (len != 0) len = 1.0f / len;
-        fast_vec_scale(beam_rail_first_pass_half_width_gp * len, w120, w120);
-        fast_vec_add(q[2], &m[i], w120);
-        fast_vec_sub(q[3], &m[i], w120);
+    float ribbon_first_pass_side_normalization_factor, ribbon_initial_side_normalization_factor, ribbon_second_pass_side_normalization_factor, ribbon_segment_start_camera_distance, ribbon_segment_end_camera_distance;
+    ribbon_first_pass_render_attributes.q0 = tex_2baae0(beam_rail_first_pass_texture_index_gp);
+    col0 = beam_rail_first_pass_base_vertex_color_gp | (ribbon_first_pass_alpha << 24);
+    ribbon_first_pass_render_attributes.q2 = 0x8000000048L;
+    ribbon_first_pass_render_attributes.q1 = 0xFF9000000260L;
+    ribbon_first_pass_render_attributes.z4 = 0;
+    ribbon_first_pass_render_attributes.c[3] = col0;
+    ribbon_first_pass_render_attributes.c[2] = col0;
+    ribbon_first_pass_render_attributes.c[1] = col0;
+    ribbon_first_pass_render_attributes.c[0] = col0;
+    ribbon_second_pass_render_attributes.q0 = tex_2baae0(beam_rail_second_pass_texture_index_gp);
+    col1 = col | (ribbon_second_pass_alpha << 24);
+    ribbon_second_pass_render_attributes.q2 = ribbon_first_pass_render_attributes.q2;
+    ribbon_second_pass_render_attributes.q1 = ribbon_first_pass_render_attributes.q1;
+    ribbon_second_pass_render_attributes.z4 = ribbon_first_pass_render_attributes.z4;
+    ribbon_second_pass_render_attributes.c[3] = col1;
+    ribbon_second_pass_render_attributes.c[2] = col1;
+    ribbon_second_pass_render_attributes.c[1] = col1;
+    ribbon_second_pass_render_attributes.c[0] = col1;
+    ribbon_second_pass_render_attributes.f[0] = 0; ribbon_second_pass_render_attributes.f[1] = 0; ribbon_second_pass_render_attributes.f[2] = 0; ribbon_second_pass_render_attributes.f[3] = 1.0f; ribbon_second_pass_render_attributes.f[4] = 1.0f; ribbon_second_pass_render_attributes.f[5] = 0; ribbon_second_pass_render_attributes.f[6] = 1.0f; ribbon_second_pass_render_attributes.f[7] = 1.0f;
+    ribbon_first_pass_render_attributes.f[0] = ribbon_second_pass_render_attributes.f[0] + beam_rail_first_pass_texture_u_offset_gp;
+    ribbon_first_pass_render_attributes.f[1] = ribbon_second_pass_render_attributes.f[1];
+    ribbon_first_pass_render_attributes.f[2] = ribbon_second_pass_render_attributes.f[2] + beam_rail_first_pass_texture_u_offset_gp;
+    ribbon_first_pass_render_attributes.f[3] = ribbon_second_pass_render_attributes.f[3];
+    ribbon_first_pass_render_attributes.f[4] = ribbon_second_pass_render_attributes.f[4] + beam_rail_first_pass_texture_u_offset_gp;
+    ribbon_first_pass_render_attributes.f[5] = ribbon_second_pass_render_attributes.f[5];
+    ribbon_first_pass_render_attributes.f[6] = ribbon_second_pass_render_attributes.f[6] + beam_rail_first_pass_texture_u_offset_gp;
+    ribbon_first_pass_render_attributes.f[7] = ribbon_second_pass_render_attributes.f[7];
+    fast_vec_sub(ribbon_first_pass_point_camera_offset, ribbon_points, g_debug_camera);
+    fast_vec_sub(ribbon_segment_delta, &ribbon_points[1], ribbon_points);
+    fast_vec_cross(ribbon_camera_facing_side_vector, ribbon_segment_delta, ribbon_first_pass_point_camera_offset);
+    ribbon_initial_side_normalization_factor = fast_vec_length(ribbon_camera_facing_side_vector);
+    if (ribbon_initial_side_normalization_factor != 0) ribbon_initial_side_normalization_factor = 1.0f / ribbon_initial_side_normalization_factor;
+    fast_vec_scale(beam_rail_first_pass_half_width_gp * ribbon_initial_side_normalization_factor, ribbon_camera_facing_side_vector, ribbon_camera_facing_side_vector);
+    fast_vec_add(ribbon_first_pass_corners[0], ribbon_points, ribbon_camera_facing_side_vector);
+    fast_vec_sub(ribbon_first_pass_corners[1], ribbon_points, ribbon_camera_facing_side_vector);
+    for (i = 1; i < ribbon_point_count - 1; i++) {
+        fast_vec_sub(ribbon_first_pass_point_camera_offset, &ribbon_points[i], g_debug_camera);
+        fast_vec_sub(ribbon_segment_delta, &ribbon_points[i + 1], &ribbon_points[i]);
+        fast_vec_cross(ribbon_camera_facing_side_vector, ribbon_segment_delta, ribbon_first_pass_point_camera_offset);
+        ribbon_first_pass_side_normalization_factor = fast_vec_length(ribbon_camera_facing_side_vector);
+        if (ribbon_first_pass_side_normalization_factor != 0) ribbon_first_pass_side_normalization_factor = 1.0f / ribbon_first_pass_side_normalization_factor;
+        fast_vec_scale(beam_rail_first_pass_half_width_gp * ribbon_first_pass_side_normalization_factor, ribbon_camera_facing_side_vector, ribbon_camera_facing_side_vector);
+        fast_vec_add(ribbon_first_pass_corners[2], &ribbon_points[i], ribbon_camera_facing_side_vector);
+        fast_vec_sub(ribbon_first_pass_corners[3], &ribbon_points[i], ribbon_camera_facing_side_vector);
         if (i == 1) {
-            t.c[1] = D_L00_00161780;
-            t.c[0] = D_L00_00161780;
-        } else if (i == n - 2) {
-            t.c[3] = D_L00_00161780;
-            t.c[2] = D_L00_00161780;
+            ribbon_first_pass_render_attributes.c[1] = beam_rail_first_pass_base_vertex_color_gp;
+            ribbon_first_pass_render_attributes.c[0] = beam_rail_first_pass_base_vertex_color_gp;
+        } else if (i == ribbon_point_count - 2) {
+            ribbon_first_pass_render_attributes.c[3] = beam_rail_first_pass_base_vertex_color_gp;
+            ribbon_first_pass_render_attributes.c[2] = beam_rail_first_pass_base_vertex_color_gp;
         } else if (i == 2) {
-            t.c[1] = col0;
-            t.c[0] = col0;
+            ribbon_first_pass_render_attributes.c[1] = col0;
+            ribbon_first_pass_render_attributes.c[0] = col0;
         }
-        draw_geometry_quad(q, 0, 0);
-        qcopy(q[0], q[2]);
-        qcopy(q[1], q[3]);
+        draw_geometry_quad(ribbon_first_pass_corners, 0, 0);
+        qcopy(ribbon_first_pass_corners[0], ribbon_first_pass_corners[2]);
+        qcopy(ribbon_first_pass_corners[1], ribbon_first_pass_corners[3]);
     }
-    for (i = 0; i < n - 1; i++) {
-        fast_vec_sub(a180, &m[i], g_debug_camera);
-        fast_vec_sub(b190, &m[i + 1], g_debug_camera);
-        l0 = fast_vec_length(a180);
-        l1 = fast_vec_length(b190);
-        if (l1 < l0) {
-            if (l1 == 0) qcopy(b190, a180);
-            else fast_vec_scale(l0 / l1, b190, b190);
+    for (i = 0; i < ribbon_point_count - 1; i++) {
+        fast_vec_sub(ribbon_segment_start_camera_offset, &ribbon_points[i], g_debug_camera);
+        fast_vec_sub(ribbon_segment_end_camera_offset, &ribbon_points[i + 1], g_debug_camera);
+        ribbon_segment_start_camera_distance = fast_vec_length(ribbon_segment_start_camera_offset);
+        ribbon_segment_end_camera_distance = fast_vec_length(ribbon_segment_end_camera_offset);
+        if (ribbon_segment_end_camera_distance < ribbon_segment_start_camera_distance) {
+            if (ribbon_segment_end_camera_distance == 0) qcopy(ribbon_segment_end_camera_offset, ribbon_segment_start_camera_offset);
+            else fast_vec_scale(ribbon_segment_start_camera_distance / ribbon_segment_end_camera_distance, ribbon_segment_end_camera_offset, ribbon_segment_end_camera_offset);
         } else {
-            if (l0 == 0) qcopy(a180, b190);
-            else fast_vec_scale(l1 / l0, a180, a180);
+            if (ribbon_segment_start_camera_distance == 0) qcopy(ribbon_segment_start_camera_offset, ribbon_segment_end_camera_offset);
+            else fast_vec_scale(ribbon_segment_end_camera_distance / ribbon_segment_start_camera_distance, ribbon_segment_start_camera_offset, ribbon_segment_start_camera_offset);
         }
-        fast_vec_add(r160, g_debug_camera, a180);
-        fast_vec_add(r170, g_debug_camera, b190);
-        fast_vec_sub(w150, r170, r160);
-        fast_vec_scale(sz, s1B0, w150);
-        fast_vec_sub(r160, r160, s1B0);
-        fast_vec_add(r170, r170, s1B0);
-        fast_vec_sub(s1A0, g_debug_camera, r160);
-        fast_vec_cross(w120, s1A0, w150);
-        len2 = fast_vec_length(w120);
-        if (len2 != 0) len2 = 1.0f / len2;
-        fast_vec_scale(sy * len2, w130, w120);
-        fast_vec_add(q2[0], r160, w130);
-        fast_vec_sub(q2[1], r160, w130);
-        fast_vec_add(q2[2], r170, w130);
-        fast_vec_sub(q2[3], r170, w130);
+        fast_vec_add(ribbon_adjusted_segment_start, g_debug_camera, ribbon_segment_start_camera_offset);
+        fast_vec_add(ribbon_adjusted_segment_end, g_debug_camera, ribbon_segment_end_camera_offset);
+        fast_vec_sub(ribbon_segment_delta, ribbon_adjusted_segment_end, ribbon_adjusted_segment_start);
+        fast_vec_scale(sz, s1B0, ribbon_segment_delta);
+        fast_vec_sub(ribbon_adjusted_segment_start, ribbon_adjusted_segment_start, s1B0);
+        fast_vec_add(ribbon_adjusted_segment_end, ribbon_adjusted_segment_end, s1B0);
+        fast_vec_sub(s1A0, g_debug_camera, ribbon_adjusted_segment_start);
+        fast_vec_cross(ribbon_camera_facing_side_vector, s1A0, ribbon_segment_delta);
+        ribbon_second_pass_side_normalization_factor = fast_vec_length(ribbon_camera_facing_side_vector);
+        if (ribbon_second_pass_side_normalization_factor != 0) ribbon_second_pass_side_normalization_factor = 1.0f / ribbon_second_pass_side_normalization_factor;
+        fast_vec_scale(sy * ribbon_second_pass_side_normalization_factor, ribbon_second_pass_width_offset, ribbon_camera_facing_side_vector);
+        fast_vec_add(q2[0], ribbon_adjusted_segment_start, ribbon_second_pass_width_offset);
+        fast_vec_sub(q2[1], ribbon_adjusted_segment_start, ribbon_second_pass_width_offset);
+        fast_vec_add(q2[2], ribbon_adjusted_segment_end, ribbon_second_pass_width_offset);
+        fast_vec_sub(q2[3], ribbon_adjusted_segment_end, ribbon_second_pass_width_offset);
         if (i == 0) {
-            u.c[1] = col;
-            u.c[0] = col;
-        } else if (i == n - 2) {
-            u.c[3] = col;
-            u.c[2] = col;
+            ribbon_second_pass_render_attributes.c[1] = col;
+            ribbon_second_pass_render_attributes.c[0] = col;
+        } else if (i == ribbon_point_count - 2) {
+            ribbon_second_pass_render_attributes.c[3] = col;
+            ribbon_second_pass_render_attributes.c[2] = col;
         } else if (i == 1) {
-            u.c[1] = col1;
-            u.c[0] = col1;
+            ribbon_second_pass_render_attributes.c[1] = col1;
+            ribbon_second_pass_render_attributes.c[0] = col1;
         }
         draw_geometry_quad(q2, 0, 0);
     }
