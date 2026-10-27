@@ -12,7 +12,7 @@ typedef struct {
     char pad0[0xB0];
     float fB0; /* tan of half the field of view */
 } VendorView_5290;
-extern VendorView_5290 D_L14_0016D140;
+extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
 #include "qcopy.h"
 
 /* Oltanis (level 14) vendor code.  Both bodies below were written from the
@@ -1404,7 +1404,7 @@ void initialize_path_camera(char *camera) {
        the atan2 call into retail's v0/a0/a1. */
     D_L14_001600EC++;
     D_L14_001600EC--;
-    fov_stops->fov_end = atan2_4f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
+    fov_stops->fov_end = atan2_4f00(1.0f, l14_camera_projection_state.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
         fov_stop_count = 0;
@@ -1551,7 +1551,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         float ang = fov_stops->fov_end * 0.5f;
         char *hp;
         char *mb;
-        D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+        l14_camera_projection_state.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
         update_view_context();
         D_L14_001675D8 = 0.25f;
         path_camera->transition_state = 4;
@@ -1589,7 +1589,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
             for (remaining_segment_index = camera_run->seg; remaining_segment_index < fov_stops->seg[i + 1]; remaining_segment_index++)
                 total += *(float *)(path + (remaining_segment_index * 16 + 0x1C));
             ang = cosine_interpolate(fov_stops->fov[i], fov_stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
-            D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+            l14_camera_projection_state.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
             update_view_context();
         }
     }
