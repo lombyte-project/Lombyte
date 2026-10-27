@@ -1574,7 +1574,7 @@ typedef struct {
     char padC[4];
 } ShipLevelEntry;
 extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
-extern char D_L17_001E6E00[];
+extern char fighter_jet_missing_victory_placement_message[] __asm__("D_L17_001E6E00");
 char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
 #include "rnc/overlay/l17/gameplay/entities/door_globals.h"
 extern float fighter_jet_boarding_distance_limit_gp __asm__("D_L17_00161FE0") __attribute__((sda));
@@ -1643,7 +1643,7 @@ extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 
 #include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
-extern char *D_L17_0015F420;
+extern char *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F420");
 extern ShipLevelEntry D_L17_0016DA80[];
 extern ShipShake D_L17_00167580;
 void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
@@ -1738,7 +1738,7 @@ void fighter_jet_update(ShipMoby *moby) {
             qcopy_nc(ship_vars->home_pos, moby->pos);
             {
                 int hp_bar_level_entry_index = ship_vars->i104 + 0x28;
-                hp_bar_clut = D_L17_0015F420 + (D_L17_0016DA80 + hp_bar_level_entry_index)->idx * 16;
+                hp_bar_clut = fighter_jet_hp_bar_clut_lookup_base + (D_L17_0016DA80 + hp_bar_level_entry_index)->idx * 16;
             }
             if (hp_bar_saved == 0) {
                 *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)hp_bar_clut;
@@ -1939,7 +1939,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 FUN_L00_002eac18(0);
                 jet_game_state(0, 5);
                 if (ship_vars->exit_path2 == -1) {
-                    debug_print(D_L17_001E6E00);
+                    debug_print(fighter_jet_missing_victory_placement_message);
                     qcopy_nc(moby->pos, ship_vars->home_pos);
                     qcopy_nc(moby->rot, ship_vars->home_rot);
                 } else {
