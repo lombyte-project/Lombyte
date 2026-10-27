@@ -13,7 +13,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F9438.c: func_L07_002F9438), where it is exact; names translated to the US level program. */
 
-extern char D_L07_001D3400[];
+extern char draw_registration_value_target[] __asm__("D_L07_001D3400");
 extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
@@ -21,13 +21,17 @@ void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");
 
 void update_moby_draw_registration(unsigned char *moby) {
+    enum {
+        DRAW_REGISTRATION_INITIALIZE = 0,
+        DRAW_REGISTRATION_ENQUEUE_CALLBACK = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case DRAW_REGISTRATION_INITIALIZE:
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
-        prepare_scaled_float_table_with_target_byte(D_L07_001D3400, 0x80, 1.0f);
+        prepare_scaled_float_table_with_target_byte(draw_registration_value_target, 0x80, 1.0f);
         break;
-    case 1:
+    case DRAW_REGISTRATION_ENQUEUE_CALLBACK:
         enqueue_callback_list_1(l07_moby_draw_callback, moby);
         break;
     }
