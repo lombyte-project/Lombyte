@@ -2070,7 +2070,7 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *init
 
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L00_0016024C __attribute__((sda));
+extern short proximity_correction_length_gp __asm__("D_L00_0016024C") __attribute__((sda));
 extern char D_0013F5E0[] __attribute__((section(".data"))  );
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -2116,7 +2116,7 @@ void update_proximity_corrected_size_alpha_tween_particle(char *particle) {
         subtract_vector_xyz(reference_position_delta, *(char **)(particle_data + 0x18) + 0x10, particle_position);
         if (reference_position_delta[0] <= 2.0f && reference_position_delta[1] <= 2.0f) {
             cross_vectors_xyz(proximity_correction_offset, reference_position_delta, ((unsigned char *)D_0013F5E0));
-            fast_vec_normalize_c(proximity_correction_offset, proximity_correction_offset, *(float *)&D_L00_0016024C);
+            fast_vec_normalize_c(proximity_correction_offset, proximity_correction_offset, *(float *)&proximity_correction_length_gp);
             add_vector_xyz_c(particle_position, particle_position, proximity_correction_offset);
             if (reference_position_delta[0] <= 0.5f && reference_position_delta[1] <= 0.5f) {
                 fast_vec_normalize_c(particle_velocity_scratch, reference_position_delta, 0.03f);
