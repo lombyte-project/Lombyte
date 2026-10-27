@@ -1264,7 +1264,7 @@ struct HeroTally {
     s32 active;           /* 0x8A8 */
 };
 
-extern struct ScoreTable D_L05_002169F8;
+extern struct ScoreTable l05_hoverboard_score_multipliers_by_trick_count __asm__("D_L05_002169F8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int D_0015ED84;
 extern int D_0015EEA4;
@@ -1314,7 +1314,7 @@ void update_hero_hoverboard_trick_score(void) {
         if (TALLY->flags[i] != 0) TALLY->flag_count++;
     }
     {
-        struct ScoreTable table = D_L05_002169F8;
+        struct ScoreTable table = l05_hoverboard_score_multipliers_by_trick_count;
         TALLY->rank_scale = table.values[TALLY->flag_count];
         TALLY->score = truncate_float_to_s32((float)((TALLY->time_score_base * 100) / (int)(scale_time(1.0f) * 60.0f)));
         TALLY->score += TALLY->flag_count * 25;
