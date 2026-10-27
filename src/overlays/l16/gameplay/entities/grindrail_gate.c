@@ -1465,9 +1465,9 @@ typedef struct {
 } L16ChallengeScratch;
 
 extern char D_0013D50F[], D_0014161B[];
-extern char D_L16_001D9840[];
+extern char gadgetron_ceo_challenge_start_pose[] __asm__("D_L16_001D9840");
 extern char D_L16_001671C0[];
-extern char D_L16_001D9860[];
+extern char gadgetron_ceo_challenge_return_pose[] __asm__("D_L16_001D9860");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1575,7 +1575,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             activation->mode = 2;
             activation->pending = pending;
             ceo_moby->event = 0;
-            pose = D_L16_001D9840;
+            pose = gadgetron_ceo_challenge_start_pose;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
@@ -1628,7 +1628,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         event = ceo_moby->event;
         if (event == 1) {
             ceo_moby->state = event;
-            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             if (!D_0013D507) {
                 int pending;
@@ -1644,13 +1644,13 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         }
         if (ceo_moby->event == 2) {
             ceo_moby->state = 1;
-            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         if (ceo_moby->event == 3) {
             char *camera;
-            char *pose = D_L16_001D9840;
+            char *pose = gadgetron_ceo_challenge_start_pose;
             ceo_moby->event = 0;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
