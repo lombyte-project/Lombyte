@@ -483,7 +483,7 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L04_0015FFD8; /* no foreign declaration */
-extern short D_L04_0016195C __attribute__((sda));
+extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -523,7 +523,7 @@ void floating_platform_update(char *moby) {
         int i;
         for (i = 0; i < 3; i++) {
             float *ring_angle_ptr = (float *)(data + 0x224) + i;
-            float ring_angle = fast_add_rotations(*ring_angle_ptr, *(float *)&D_L04_0016195C * DEG_TO_RAD * frame_time);
+            float ring_angle = fast_add_rotations(*ring_angle_ptr, *(float *)&floating_platform_ring_rotation_rate_degrees * DEG_TO_RAD * frame_time);
             float joint_animation_frame_scale = frame_scale_sq;
             *ring_angle_ptr = ring_angle;
             *(float *)(data + 0x108 + i * 0x80) = ring_angle;
