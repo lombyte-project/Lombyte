@@ -12,7 +12,7 @@
 /* draw a list of effect entries into the scratchpad */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
 
-extern char D_L12_001CB7A0[];
+extern char textured_effect_gs_state_packet[] __asm__("D_L12_001CB7A0");
 struct Pkt611c0 {
     int *p;
 };
@@ -33,7 +33,7 @@ void draw_textured_effect_list(void *list_, int count, int context_one_texture_s
     vu1_add_g_sregister(6, context_one_texture_state);
     vu1_add_g_sregister(7, context_two_texture_state);
     D_L12_001611C0.p[0] = 0x30000009;
-    D_L12_001611C0.p[1] = (int)D_L12_001CB7A0;
+    D_L12_001611C0.p[1] = (int)textured_effect_gs_state_packet;
     D_L12_001611C0.p[2] = 0;
     D_L12_001611C0.p[3] = 0x50000009;
     D_L12_001611C0.p += 4;
