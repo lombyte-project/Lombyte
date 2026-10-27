@@ -680,23 +680,23 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L15_00161C08 __attribute__((sda));
-extern short D_L15_00161C0C __attribute__((sda));
-extern short D_L15_00161C10 __attribute__((sda));
+extern short electric_water_bolt_height_wave_point_phase_step_gp __asm__("D_L15_00161C08") __attribute__((sda));
+extern short electric_water_bolt_height_wave_start_amplitude_gp __asm__("D_L15_00161C0C") __attribute__((sda));
+extern short electric_water_bolt_height_wave_end_amplitude_gp __asm__("D_L15_00161C10") __attribute__((sda));
 extern s32 D_L15_00161C14 __attribute__((sda));
-extern short D_L15_00161C18 __attribute__((sda));
+extern short electric_water_bolt_height_wave_frame_phase_step_gp __asm__("D_L15_00161C18") __attribute__((sda));
 extern s32 D_L15_00161C1C __attribute__((sda));
-extern short D_L15_00161C20 __attribute__((sda));
-extern short D_L15_00161C24 __attribute__((sda));
-extern short D_L15_00161C28 __attribute__((sda));
-extern short D_L15_00161C2C __attribute__((sda));
+extern short electric_water_bolt_paired_path_frame_phase_decrement_gp __asm__("D_L15_00161C20") __attribute__((sda));
+extern short electric_water_bolt_paired_path_point_phase_step_gp __asm__("D_L15_00161C24") __attribute__((sda));
+extern short electric_water_bolt_paired_path_height_amplitude_gp __asm__("D_L15_00161C28") __attribute__((sda));
+extern short electric_water_bolt_paired_path_lateral_amplitude_gp __asm__("D_L15_00161C2C") __attribute__((sda));
 extern s32 D_L15_00161C30 __attribute__((sda));
-extern short D_L15_00161C34 __attribute__((sda));
-extern short D_L15_00161C38 __attribute__((sda));
-extern short D_L15_00161C4C __attribute__((sda));
-extern short D_L15_00161C50 __attribute__((sda));
-extern short D_L15_00161C90 __attribute__((sda));
-extern short D_L15_00161C98 __attribute__((sda));
+extern short electric_water_bolt_paired_height_frame_phase_step_gp __asm__("D_L15_00161C34") __attribute__((sda));
+extern short electric_water_bolt_paired_height_point_phase_step_gp __asm__("D_L15_00161C38") __attribute__((sda));
+extern short electric_water_bolt_height_jitter_lower_bound_gp __asm__("D_L15_00161C4C") __attribute__((sda));
+extern short electric_water_bolt_height_jitter_upper_bound_gp __asm__("D_L15_00161C50") __attribute__((sda));
+extern short electric_water_bolt_particle_motion_length_scale_gp __asm__("D_L15_00161C90") __attribute__((sda));
+extern short electric_water_bolt_random_step_blend_factor_gp __asm__("D_L15_00161C98") __attribute__((sda));
 extern short D_L15_00161CC0[] __attribute__((section(".sdata")));
 extern short D_L15_00161CC8[] __attribute__((section(".sdata")));
 extern short D_L15_00161CD0[] __attribute__((section(".sdata")));
@@ -727,9 +727,9 @@ void update_electric_water_bolt_effect(Moby *moby) {
     float angle;
     int spin;
 
-    *(float *)&D_L15_00161C14 = fast_add_rotations(*(float *)&D_L15_00161C14, *(float *)&D_L15_00161C18);
-    *(float *)&D_L15_00161C1C = fast_subtract_rotations(*(float *)&D_L15_00161C1C, *(float *)&D_L15_00161C20);
-    *(float *)&D_L15_00161C30 = fast_add_rotations(*(float *)&D_L15_00161C30, *(float *)&D_L15_00161C34);
+    *(float *)&D_L15_00161C14 = fast_add_rotations(*(float *)&D_L15_00161C14, *(float *)&electric_water_bolt_height_wave_frame_phase_step_gp);
+    *(float *)&D_L15_00161C1C = fast_subtract_rotations(*(float *)&D_L15_00161C1C, *(float *)&electric_water_bolt_paired_path_frame_phase_decrement_gp);
+    *(float *)&D_L15_00161C30 = fast_add_rotations(*(float *)&D_L15_00161C30, *(float *)&electric_water_bolt_paired_height_frame_phase_step_gp);
     scale = distance_xyz(&data->a, &data->c) * 0.05f;
     if (flag) {
         *(int *)&D_L15_00161CE0_2d8fa0 = 0x7F2040;
@@ -749,17 +749,17 @@ void update_electric_water_bolt_effect(Moby *moby) {
         float step_length;
         float yaw;
         float pitch;
-        wave = *(float *)&D_L15_00161C0C
-              + (*(float *)&D_L15_00161C10 - *(float *)&D_L15_00161C0C) * (convert_integer_to_float(i) * 0.05f);
-        wave = wave * fast_sin(normalize_angle(*(float *)&D_L15_00161C14 + (float)i * *(float *)&D_L15_00161C08));
-        wave = wave + FUN_L00_00257c48(*(float *)&D_L15_00161C4C, *(float *)&D_L15_00161C50);
+        wave = *(float *)&electric_water_bolt_height_wave_start_amplitude_gp
+              + (*(float *)&electric_water_bolt_height_wave_end_amplitude_gp - *(float *)&electric_water_bolt_height_wave_start_amplitude_gp) * (convert_integer_to_float(i) * 0.05f);
+        wave = wave * fast_sin(normalize_angle(*(float *)&D_L15_00161C14 + (float)i * *(float *)&electric_water_bolt_height_wave_point_phase_step_gp));
+        wave = wave + FUN_L00_00257c48(*(float *)&electric_water_bolt_height_jitter_lower_bound_gp, *(float *)&electric_water_bolt_height_jitter_upper_bound_gp);
         D_L15_001D3750[0][i].f[2] = D_L15_001D3750[0][i].f[2] - D_L15_001D39D0[i];
         D_L15_001D39D0[i] = wave;
         yaw = random_angle_radians();
         pitch = random_angle_radians();
         build_spherical_offset(&vectors[1], scale, yaw, pitch);
         vectors[1].f[2] = vectors[1].f[2] * 0.5f;
-        lerp_vector(&vectors[2], &vectors[3], &vectors[1], *(float *)&D_L15_00161C98);
+        lerp_vector(&vectors[2], &vectors[3], &vectors[1], *(float *)&electric_water_bolt_random_step_blend_factor_gp);
         step_length = vector_length_xyz(&vectors[2]);
         if (step_length == 0.0f) {
             qcopy(&D_L15_001D3750[0][i], &D_L15_001D3750[0][i - 1]);
@@ -791,15 +791,15 @@ void update_electric_water_bolt_effect(Moby *moby) {
             float height;
             float side_angle;
             float swing;
-            phase = normalize_angle(*(float *)&D_L15_00161C1C + (float)i * *(float *)&D_L15_00161C24);
-            height = *(float *)&D_L15_00161C28
-                * fast_sin(normalize_angle(*(float *)&D_L15_00161C30 + (float)i * *(float *)&D_L15_00161C38));
+            phase = normalize_angle(*(float *)&D_L15_00161C1C + (float)i * *(float *)&electric_water_bolt_paired_path_point_phase_step_gp);
+            height = *(float *)&electric_water_bolt_paired_path_height_amplitude_gp
+                * fast_sin(normalize_angle(*(float *)&D_L15_00161C30 + (float)i * *(float *)&electric_water_bolt_paired_height_point_phase_step_gp));
             qcopy(&D_L15_001D3750[1][i], &D_L15_001D3750[0][i]);
             height = height * fast_sin(phase) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L15_001D3750[1][i].f[2] = D_L15_001D3750[1][i].f[2] + height;
             D_L15_001D3B60[i] = height;
             side_angle = fast_add_rotations(fast_arc_tan(vectors[1].f[0], vectors[1].f[1]), 1.5707964f);
-            swing = *(float *)&D_L15_00161C2C * fast_cos(phase);
+            swing = *(float *)&electric_water_bolt_paired_path_lateral_amplitude_gp * fast_cos(phase);
             vectors[4].f[0] = fast_cos(side_angle) * swing;
             vectors[4].f[1] = fast_sin(side_angle) * swing;
             vectors[4].f[2] = 0.0f;
@@ -873,7 +873,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
     }
     scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
     angle = random_float_between(-0.52359879f, 1.04719758f);
-    scale_vector_xyz(&vectors[5], &vectors[0], *(float *)&D_L15_00161C90 * D_0015ED60);
+    scale_vector_xyz(&vectors[5], &vectors[0], *(float *)&electric_water_bolt_particle_motion_length_scale_gp * D_0015ED60);
     build_look_at_matrix(&vectors[5], &vectors[5], &vectors[6], angle);
     build_look_at_matrix(&vectors[5], &vectors[5], &vectors[7], scale);
     spin = random_int_between(1, 8);
