@@ -635,7 +635,7 @@ typedef struct {
     Vec4 pos;
 } PointLight;
 
-extern PointLight D_L08_00180AC0[];
+extern PointLight l08_point_light_slots[] __asm__("D_L08_00180AC0");
 
 /* Builds the animated grid, draws its quads, and updates attached effects. */
 /* Ported from rac1-decomp (nonmatching/l08_batalia/func_L08_002F7318.c: func_L08_002F7318). */
@@ -1022,7 +1022,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 }
             }
             if (data->light!=-1) {
-                PointLight *light=&D_L08_00180AC0[data->light];
+                PointLight *light=&l08_point_light_slots[data->light];
                 if (fast_vec_dist(&data->light_pos,&light->pos)<data->light_speed*D_0015ED60) {
                     float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->size_x)*0.5f;
                     float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->size_y)*0.5f;
@@ -1122,7 +1122,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
                                             light_vars->intensity * convert_integer_to_float(light_vars->light_green) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->light_blue) / 100.0f);
             } else {
-                point_light_slot = &D_L08_00180AC0[light_vars->light];
+                point_light_slot = &l08_point_light_slots[light_vars->light];
                 point_light_slot->red = light_vars->intensity * convert_integer_to_float(light_vars->light_red) / 100.0f;
                 point_light_slot->green = light_vars->intensity * convert_integer_to_float(light_vars->light_green) / 100.0f;
                 point_light_slot->blue = light_vars->intensity * convert_integer_to_float(light_vars->light_blue) / 100.0f;
