@@ -367,7 +367,7 @@ typedef struct {
     char *slots[4];
 } SpawnerVars_30ab80;
 
-extern char *D_L09_001600EC __attribute__((sda));
+extern char *spawner_target_region_records __asm__("D_L09_001600EC") __attribute__((sda));
 extern float D_L09_0015F580[] MACRO_ADDR;
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
@@ -442,7 +442,7 @@ void spawner_update(char *moby)
             for (i = 0; i < 4; i++) {
                 int idx = *(int *)(spawner_vars + 0xA0 + i * 4);
                 if (idx != -1) {
-                    char *q = D_L09_001600EC + (idx << 7);
+                    char *q = spawner_target_region_records + (idx << 7);
                     float candidate_distance = distance_30ab80(D_0013E533 + 0xE9D, q + 0x30);
                     if (candidate_distance < best) {
                         sel = q;
@@ -468,7 +468,7 @@ void spawner_update(char *moby)
                 int k = (i + start) % 4;
                 int idx = *(int *)(spawner_vars + (k << 2) + 0xA0);
                 if (idx != -1) {
-                    sel = D_L09_001600EC + (idx << 7);
+                    sel = spawner_target_region_records + (idx << 7);
                     break;
                 }
             }
