@@ -409,16 +409,16 @@ extern char D_L00_0016C7B0[];
 extern char D_L00_00173EC0[];
 extern char D_L00_00173F00[];
 extern char D_L00_0017ECC0[];
-extern char D_L00_0017FEC0[];
+extern char level_directional_lights[] __asm__("D_L00_0017FEC0");
 extern char D_L00_0018EB40[];
 extern char D_L00_0019B7E0[];
 extern char D_L00_001AB7E0[];
 extern char D_L00_001B1880[];
-extern char D_L00_001E8658[];
-extern char D_L00_001E86A8[];
-extern char D_L00_001E86E0[];
-extern char D_L00_001E8708[];
-extern char D_L00_001E8740[];
+extern char level_gameplay_directional_light_overflow_message[] __asm__("D_L00_001E8658");
+extern char level_gameplay_moby_occlusion_outdated_format[] __asm__("D_L00_001E86A8");
+extern char level_gameplay_tfrag_occlusion_outdated_message[] __asm__("D_L00_001E86E0");
+extern char level_gameplay_tie_occlusion_outdated_format[] __asm__("D_L00_001E8708");
+extern char level_gameplay_no_occlusion_message[] __asm__("D_L00_001E8740");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L00_0015F448 MACRO_ADDR;
@@ -460,7 +460,7 @@ extern int D_L00_001BA4D0[];
 extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L00_001AC780[];
+extern short gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
 extern short D_L00_001B0770[];
 extern short D_L00_001B07B0[];
 extern short D_L00_001B0830[];
@@ -515,7 +515,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     LevelHeader *hdr;
     char *mem;
     float *ship;
-    short *moby_index_remap = D_L00_001AC780; /* moby index by file order; a pointer local, so its address is formed at each use */
+    short *moby_index_remap = gameplay_moby_index_remap; /* moby index by file order; a pointer local, so its address is formed at each use */
     int level_or_group_scratch; /* scratch int: the level number in the moby loop, a group's offset and end flag in the group loop */
 
     hdr = D_L00_00173E00.f4;
@@ -583,18 +583,18 @@ char *load_level_gameplay(int skip_gameplay_read) {
     vu0_load_micro_program(D_00100AE0);
     clear_blocks_16(D_L00_001802C0, 0x100);
     clear_blocks_16(D_L00_001804C0, 0x180);
-    clear_blocks_16(D_L00_0017FEC0, 0x400);
+    clear_blocks_16(level_directional_lights, 0x400);
     {
         char *p = (char *)hdr + hdr->f4;
         int n = *(int *)p;
 
         p += 0x10;
         if (n >= 12) {
-            debug_print(D_L00_001E8658);
+            debug_print(level_gameplay_directional_light_overflow_message);
             n = 12;
         }
         if (n != 0) {
-            copy_memory_aligned(D_L00_0017FEC0, p, n << 6);
+            copy_memory_aligned(level_directional_lights, p, n << 6);
         }
     }
     if (hdr->f80 != 0) {
@@ -1564,13 +1564,13 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
             }
             if (flag) {
-                debug_print(D_L00_001E86A8, cnt, k);
+                debug_print(level_gameplay_moby_occlusion_outdated_format, cnt, k);
             }
         }
         if (bad1) {
             int i;
 
-            debug_print(D_L00_001E86E0);
+            debug_print(level_gameplay_tfrag_occlusion_outdated_message);
             for (i = 0; i < D_L00_00160F50; i++) {
                 D_L00_00160F4C[i].f3A = 0x7F80;
             }
@@ -1610,7 +1610,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     t->f18 = ((w >> 3) << 8) | (1 << (w & 7));
                 }
             }
-            debug_print(D_L00_001E8708, cnt, k);
+            debug_print(level_gameplay_tie_occlusion_outdated_format, cnt, k);
         } else {
             int i;
 
@@ -1628,7 +1628,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         TieInst *t;
         int i;
 
-        debug_print(D_L00_001E8740);
+        debug_print(level_gameplay_no_occlusion_message);
         for (m = D_L00_0015FFD8; m != D_L00_0015FFE0; m++) {
             m->f36 = 0x7F80;
         }
