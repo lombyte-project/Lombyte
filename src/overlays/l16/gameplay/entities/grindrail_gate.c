@@ -2187,7 +2187,7 @@ typedef struct {
     short grounded;
 } L16PlatformHero;
 
-extern char *D_L16_001600FC;
+extern char *elevator_reference_transform_table __asm__("D_L16_001600FC");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float elevator_height_offset __asm__("D_L16_00161EAC") __attribute__((sda)); /* no foreign declaration */
@@ -2228,9 +2228,9 @@ void elevator_update(L16PlatformMoby *moby) {
             motion.q = 0;
             motion.v[2] = 1.0f;
             elevator_data->particle = -1;
-            transform_vector_by_basis(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-            elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+            transform_vector_by_basis(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+            elevator_data->goal = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38);
+            moby->position[2] = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
             moby->reverse = 1;
             moby->state = 2;
             break;
@@ -2246,8 +2246,8 @@ void elevator_update(L16PlatformMoby *moby) {
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+                transform_vector(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+                motion.v[2] = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_data->goal = motion.v[2];
@@ -2264,8 +2264,8 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+                transform_vector(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+                elevator_data->goal = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 elevator_data->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2274,7 +2274,7 @@ void elevator_update(L16PlatformMoby *moby) {
             float *hero_position = hero.motion.pos.f;
             float speed;
 
-            if (vector_distance(hero_position, D_L16_001600FC + (elevator_data->joint << 7) + 0x30) > 2.25f
+            if (vector_distance(hero_position, elevator_reference_transform_table + (elevator_data->joint << 7) + 0x30) > 2.25f
                 || absolute_float(moby->position[2] - hero_position[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_data->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_data->speed, elevator_data->goal,
@@ -2359,7 +2359,7 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
     L16RingMatrix matrix;
     char *elevator_data = (char *)elevator_moby->pvars;
     int bound_index = (*(int *)((char *)elevator_data + 0xA0)) << 7;
-    char *entry = (char *)(bound_index + (int)D_L16_001600FC);
+    char *entry = (char *)(bound_index + (int)elevator_reference_transform_table);
     float translation = (*(float *)((char *)elevator_data + 0xB8));
     float lower = (*(float *)((char *)entry + 0x38));
     float half = (*(float *)((char *)entry + 0x28));
