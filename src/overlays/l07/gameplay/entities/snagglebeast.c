@@ -330,7 +330,7 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
 extern int D_001413D4 __attribute__((section(".data")));
 extern char *D_L07_001600EC;
-extern char D_0013E5C4[];
+extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 
 void process_snagglebeast_damage(char *moby, char *data, float *health) __asm__("FUN_L07_00313420");
 
@@ -415,7 +415,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                     *(float *)(data + 0x1c8) = 0.0f;
                     data[0x1c5] = 1;
                     if (slot != -1) {
-                        owner = D_0013E5C4 - 0x74 + slot * 0x70;
+                        owner = voice_slot_state_base - 0x74 + slot * 0x70;
                         if (*(char **)(owner + 0x88) == moby && *(u8 *)(owner + 0x74) != 0)
                             release_voice_slot(slot);
                     }
@@ -941,7 +941,7 @@ void snagglebeast_update(unsigned char *moby) {
         *(float *)(data + 0x1C8) -= frame_scale * 0.01f;
         if (*(float *)(data + 0x1C8) <= 0.0f) {
             if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
                     release_voice_slot(*(int *)(data + 0x1F8));
                 }
@@ -1584,7 +1584,7 @@ void snagglebeast_update(unsigned char *moby) {
                     { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
                     data[0x1C7] = 0;
                     if (*(int *)(data + 0x1F8) != -1) {
-                        char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+                        char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
                         if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
                             release_voice_slot(*(int *)(data + 0x1F8));
                         }
@@ -1662,7 +1662,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x160) = scale_ticks(0x46);
             data[0x1C7] = 0;
             if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
                     release_voice_slot(*(int *)(data + 0x1F8));
                 }
@@ -1679,7 +1679,7 @@ void snagglebeast_update(unsigned char *moby) {
             detach_snagglebeast_rope_particles((int)moby);
             { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
             if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
                     release_voice_slot(*(int *)(data + 0x1F8));
                 }
