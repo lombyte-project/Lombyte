@@ -1410,7 +1410,7 @@ extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
 extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-extern short D_L14_001613FC __attribute__((sda));
+extern short blarg_heavy_interceptor_return_path_position_damping_coefficient_gp __asm__("D_L14_001613FC") __attribute__((sda));
 void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
@@ -1424,11 +1424,11 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
         }
     }
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), target_position[0], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), target_position[1], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
 }
 extern f32 blarg_heavy_interceptor_vertical_oscillation_amplitude_gp __asm__("D_L14_001613A8") __attribute__((sda));
 extern f32 blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp __asm__("D_L14_001613AC") __attribute__((sda));
