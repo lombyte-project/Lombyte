@@ -1121,7 +1121,7 @@ void update_mode_controlled_alpha_fade_particle(char *particle) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern unsigned char *D_L00_001B2180[];
+extern unsigned char *l00_gravity_floor_burst_particle_texture_refs[] __asm__("D_L00_001B2180");
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
 unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) __asm__("FUN_L00_002738e8");
@@ -1139,7 +1139,7 @@ unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *
         }
         particle[3] = big ? 0x48 : 0x44;
         particle[1] = 0;
-        particle[2] = D_L00_001B2180[0][1];
+        particle[2] = l00_gravity_floor_burst_particle_texture_refs[0][1];
         *(int *)(particle + 4) = col;
         *(float *)(particle + 0xC) = scale * 210000.0f;
         particle[8] = (int)random_float_between(0.0f, 255.0f);
