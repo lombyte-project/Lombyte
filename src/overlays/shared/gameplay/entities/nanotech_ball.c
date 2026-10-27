@@ -2920,7 +2920,7 @@ extern int D_L00_00161B54 __attribute__((sda));
 extern int D_L00_00161B58_gp __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00161B70[] MACRO_ADDR;
 extern char D_L00_00166FD0[];
-extern char D_L00_00173E60[];
+extern char collision_hit_point[] __asm__("D_L00_00173E60");
 extern char D_L00_001E5EE0[];
 extern char D_L00_001E5F30[];
 extern char D_L00_001E5F40[];
@@ -2995,7 +2995,7 @@ void suck_beam_update(void *moby,void *position) {
     add_vector_xyz(&ray_end,&ray_end,position);
     if(collision_line_ddf60(position,&ray_end,20,(int)((Hero41 *)&hero)->moby,0)) {
         int n,i,k;
-        n=truncate_float_to_s32(vector_distance(D_L00_00173E60,position)/D_L00_00161B84);
+        n=truncate_float_to_s32(vector_distance(collision_hit_point,position)/D_L00_00161B84);
         for(i=n;i<10;i++) {
             if(D_L00_001E6008[i]>64)D_L00_001E6008[i]=64;
             D_L00_001E6008[i]=(u16)D_L00_001E6008[i]-4;
