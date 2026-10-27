@@ -373,7 +373,7 @@ extern s32 hero_extra_manipulator_attachment_indices_gp __asm__("D_L00_0015F6F8"
 extern u128 D_L00_0017C1E0[];
 extern u128 D_L00_0017C220[];
 extern u128 D_L00_0017C260[];
-extern f32 D_L00_0017C2A0[];
+extern f32 hero_extra_manipulator_blend_by_phase[] __asm__("D_L00_0017C2A0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -484,7 +484,7 @@ void update_hero_glow_and_extra_manipulators(void) {
             }
         }
         for (j = 0; j < 4; j++)
-            EXTRA_MANIPS[j].blend = D_L00_0017C2A0[HERO_EXTRA->timer];
+            EXTRA_MANIPS[j].blend = hero_extra_manipulator_blend_by_phase[HERO_EXTRA->timer];
     }
 }
 #undef EXTRA_MANIPS
