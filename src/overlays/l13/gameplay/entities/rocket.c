@@ -2332,7 +2332,7 @@ typedef struct {
     int target;
 } L13Action;
 
-extern L13Action D_L13_0016CB60;
+extern L13Action l13_cutscene_target_effect_controller __asm__("D_L13_0016CB60");
 extern int D_L13_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
@@ -2349,8 +2349,8 @@ void update_cutscene_target_effects(struct Moby *moby) {
         moby->state = 1;
         break;
     case UPDATE_CUTSCENE_CAMERA_TARGET:
-        if (D_L13_0015F5C4 == 2 && D_L13_0016CB60.state == 2) {
-            cutscene_set_camera_target(D_L13_0016CB60.target);
+        if (D_L13_0015F5C4 == 2 && l13_cutscene_target_effect_controller.state == 2) {
+            cutscene_set_camera_target(l13_cutscene_target_effect_controller.target);
         }
         break;
     }
