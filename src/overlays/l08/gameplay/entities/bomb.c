@@ -1609,10 +1609,10 @@ extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
 extern f32 fast_vec_length_c2(void *) __asm__("func_001F9AF0");
 extern float D_L08_00161978_gp __asm__("D_L08_00161978") __attribute__((sda));
-extern float D_L08_0016197C_gp __asm__("D_L08_0016197C") __attribute__((sda));
-extern float D_L08_00161988_gp __asm__("D_L08_00161988") __attribute__((sda));
-extern float D_L08_0016198C_gp __asm__("D_L08_0016198C") __attribute__((sda));
-extern float D_L08_00161990_gp __asm__("D_L08_00161990") __attribute__((sda));
+extern float l08_bombthrower_throw_timing_speed_gp __asm__("D_L08_0016197C") __attribute__((sda));
+extern float l08_bombthrower_aim_shortening_rate_gp __asm__("D_L08_00161988") __attribute__((sda));
+extern float l08_bombthrower_death_horizontal_knockback_speed_gp __asm__("D_L08_0016198C") __attribute__((sda));
+extern float l08_bombthrower_death_vertical_knockback_speed_gp __asm__("D_L08_00161990") __attribute__((sda));
 extern float D_L08_001675C0[];
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -1725,8 +1725,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i94 = 9;
             vars->f84 = 0.0005f;
             vars->f80 = frame_time_sq * 30.0f;
-            vars->f88 = D_L08_0016198C_gp * frame_time;
-            vars->f8C = D_L08_00161990_gp * frame_time;
+            vars->f88 = l08_bombthrower_death_horizontal_knockback_speed_gp * frame_time;
+            vars->f8C = l08_bombthrower_death_vertical_knockback_speed_gp * frame_time;
             vars->bAD = 0;
             hero_bytes = (char *)&hero;
             trooper_start_knockback(moby, vars->blk70,
@@ -1890,8 +1890,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
             subtract_vector_xyz(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length_c2(aim);
-            time = distance / FUN_L04_001f1978(D_L08_0016197C_gp);
-            distance = distance - (D_L08_00161988_gp * time + 2.0f);
+            time = distance / FUN_L04_001f1978(l08_bombthrower_throw_timing_speed_gp);
+            distance = distance - (l08_bombthrower_aim_shortening_rate_gp * time + 2.0f);
             if (10.0f < distance) {
                 distance = 10.0f;
             } else if (distance < 3.0f) {
