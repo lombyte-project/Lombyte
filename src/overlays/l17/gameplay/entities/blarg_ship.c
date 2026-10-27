@@ -1024,7 +1024,7 @@ void draw_reflection_strips(void) {
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
-extern char D_L17_001DF6A0[];
+extern char reflection_sphere_map_uv_buffer[] __asm__("D_L17_001DF6A0");
 extern float D_L17_001DED50[];
 float *D_L17_00162440[2] = {D_L17_001DED50, 0};
 extern float D_L17_001DF280[];
@@ -1046,7 +1046,7 @@ void draw_reflection_strip(void) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
-    sphere_map_uv_coordinates = (float *)D_L17_001DF6A0;
+    sphere_map_uv_coordinates = (float *)reflection_sphere_map_uv_buffer;
     for (i = 0; i < 1; i++) {
         compute_reflection_sphere_map_uvs(D_L17_00162420[i], (V3 *)((int *)D_L17_00162450)[i],
                          (V3 *)((int *)D_L17_00162440)[i], ((int *)D_L17_00162448)[i], sphere_map_uv_coordinates);
