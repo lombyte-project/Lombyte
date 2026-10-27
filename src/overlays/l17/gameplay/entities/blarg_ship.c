@@ -334,15 +334,15 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 void vu1_add_g_sregister_c(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 extern float D_L17_0016D3E4 __attribute__((section(".data")));
-extern float D_L17_001DDFF8[];
+extern float backdrop_quad_side_lengths[] __asm__("D_L17_001DDFF8");
 extern float backdrop_quad_color_blend_factors[] __asm__("D_L17_001DE040");
 extern float D_L17_001DE0A0[];
-extern float D_L17_001DE0B8[];
+extern float backdrop_scrolling_quad_start_half_widths[] __asm__("D_L17_001DE0B8");
 extern float backdrop_quad_uv_rotation_angles[] __asm__("D_L17_001DE0D0");
-extern float D_L17_001E6FA0[];
-extern int D_L17_001DE010[];
-extern int D_L17_001DE028[];
-extern int D_L17_001DE088[];
+extern float backdrop_scrolling_quad_base_uv_coordinates[] __asm__("D_L17_001E6FA0");
+extern int backdrop_quad_color_blend_source_colors[] __asm__("D_L17_001DE010");
+extern int backdrop_quad_color_blend_target_colors[] __asm__("D_L17_001DE028");
+extern int backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
 int D_L17_001623B8 = 0x807e4931;
 void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
@@ -369,7 +369,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         subtract_vector_xyz(&vv[0], data, D_L17_001676C0);
         subtract_vector_xyz(&vv[1], backdrop_endpoint_position, D_L17_001676C0);
         cross_vectors_xyz(&vv[0], &vv[0], vb);
-        normalize_vector_xyz(&vv[0], &vv[0], D_L17_001DE0B8[i]);
+        normalize_vector_xyz(&vv[0], &vv[0], backdrop_scrolling_quad_start_half_widths[i]);
         cross_vectors_xyz(&vv[1], &vv[1], vb);
         normalize_vector_xyz(&vv[1], &vv[1], *(float *)(data + 0x28));
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
@@ -384,8 +384,8 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
             float *qv = &pkt.uv[1];
             int m;
             for (m = 0; m < 4; m++) {
-                qu[m * 2] = D_L17_001E6FA0[m * 2];
-                qv[m * 2] = D_L17_001E6FA0[m * 2 + 1];
+                qu[m * 2] = backdrop_scrolling_quad_base_uv_coordinates[m * 2];
+                qv[m * 2] = backdrop_scrolling_quad_base_uv_coordinates[m * 2 + 1];
             }
         }
         subtract_vector_xyz(&vv[3], data, &vv[0]);
@@ -396,17 +396,17 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         pkt.m[2] = vv[3];
         add_vector_xyz(&vv[3], backdrop_endpoint_position, &vv[1]);
         pkt.m[3] = vv[3];
-        *(long *)&pkt.q[2] = get_effect_texture_alt(D_L17_001DE088[i]);
+        *(long *)&pkt.q[2] = get_effect_texture_alt(backdrop_scrolling_quad_texture_indices[i]);
         for (j = 0; j < 4; j++) {
-            pu[j * 2] = D_L17_001E6FA0[j * 2] + D_L17_001DE0A0[i];
-            quad_vertex_v_coordinates[j * 2] = D_L17_001E6FA0[j * 2 + 1];
+            pu[j * 2] = backdrop_scrolling_quad_base_uv_coordinates[j * 2] + D_L17_001DE0A0[i];
+            quad_vertex_v_coordinates[j * 2] = backdrop_scrolling_quad_base_uv_coordinates[j * 2 + 1];
         }
         D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
     }
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
     for (k = 0; k < 5; k++) {
-        float quad_side_length = D_L17_001DDFF8[k];
+        float quad_side_length = backdrop_quad_side_lengths[k];
         float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
         float x = *(float *)(data + 0x10) - quad_side_length * 0.5f;
         float z;
@@ -435,7 +435,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         pkt.uv[6] = fast_sin_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
         pkt.uv[7] = fast_cos_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
         {
-            int interpolated_vertex_color = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], backdrop_quad_color_blend_factors[k]);
+            int interpolated_vertex_color = fast_tween_color(backdrop_quad_color_blend_source_colors[k], backdrop_quad_color_blend_target_colors[k], backdrop_quad_color_blend_factors[k]);
             pkt.col[3] = interpolated_vertex_color;
             pkt.col[2] = interpolated_vertex_color;
             pkt.col[1] = interpolated_vertex_color;
