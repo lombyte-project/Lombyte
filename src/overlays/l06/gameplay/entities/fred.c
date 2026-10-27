@@ -28,7 +28,7 @@ typedef struct {
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_dual_texture_50_quad_mesh.h"
 #include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
-extern unsigned int D_L06_00161F94 __attribute__((sda));
+extern unsigned int l06_dual_texture_mesh_first_pass_vertex_color __asm__("D_L06_00161F94") __attribute__((sda));
 extern int dual_texture_mesh_second_pass_vertex_color_gp __asm__("D_L06_00161F98") __attribute__((sda));
 extern float dual_texture_mesh_position_scale_gp __asm__("D_L06_00161F9C") __attribute__((sda));
 extern float dual_texture_mesh_first_pass_u_offset_multiplier_gp __asm__("D_L06_00161FA0") __attribute__((sda));
@@ -526,7 +526,7 @@ void draw_dual_texture_50_quad_mesh(void) {
     first.unk70 = 0;
     matrix_ptr = matrix;
     initialize_matrix_2fd1a0(matrix);
-    first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
+    first.color[0] = first.color[1] = first.color[2] = first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
@@ -1047,10 +1047,10 @@ void draw_dual_texture_58_quad_mesh(void) {
     second.unk70 = 0;
     first.unk70 = 0;
     initialize_matrix_2fd1a0(matrix_ptr);
-    first.color[3] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[0] = D_L06_00161F94;
+    first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
@@ -5552,10 +5552,10 @@ void draw_dual_texture_864_quad_mesh(void) {
     second.unk70 = 0;
     first.unk70 = 0;
     initialize_matrix_2fd1a0(matrix_ptr);
-    first.color[3] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[0] = D_L06_00161F94;
+    first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
