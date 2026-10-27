@@ -62,7 +62,7 @@ extern int D_L12_00161F04;
 extern int D_L12_00161F20 __attribute__((section(".sdata")));
 extern int D_L12_00161F24 __attribute__((section(".sdata")));
 extern int D_L12_00161F34 __attribute__((sda));
-extern int D_L12_001FB670[];
+extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int D_L12_001FB688[];
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
@@ -235,7 +235,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                 float dmg = 1.0f;
                 char *r = FUN_L00_0025a420(gun_moby, 0x50000, 0);
                 if (r == 0) {
-                    int k = D_L12_001FB670[i];
+                    int k = planetbuster_maximus_gun_part_slots[i];
                     char *fallback_moby = 0;
                     if (k == 0x11) {
                         fallback_moby = moby;
@@ -269,7 +269,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                     }
                     allocate_voice_for_target_entry(1, 0, gun_moby);
                     if (*(short *)(owner_data + 0x5FC) > 0) {
-                        int k = D_L12_001FB670[i];
+                        int k = planetbuster_maximus_gun_part_slots[i];
                         if (k != 0x11) {
                             D_L12_001FB688[k] = *(int *)(owner_data + k * 0x30 + 0x20);
                             *(int *)(owner_data + k * 0x30 + 0x20) = -1;
