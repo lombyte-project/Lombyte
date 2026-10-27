@@ -1001,7 +1001,7 @@ typedef struct { long a, b, c, d; } Q_2dae88;
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
-extern Q_2dae88 D_L02_001D3310[];
+extern Q_2dae88 l02_tresspasser_textured_quad_packed_vertices[] __asm__("D_L02_001D3310");
 extern int tresspasser_textured_quad_color_gp __asm__("D_L02_00161B94") __attribute__((sda));
 extern int tresspasser_quad_first_vertex_uv_gp __asm__("D_L02_00161AAC") __attribute__((sda));
 extern int tresspasser_quad_second_vertex_uv_gp __asm__("D_L02_00161AB0") __attribute__((sda));
@@ -1013,7 +1013,7 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     Q_2dae88 packed_vertices;
     int vertex_colors[4];
     int vertex_uvs[4];
-    Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
+    Q_2dae88 *vertex_quad_cursor = l02_tresspasser_textured_quad_packed_vertices;
     int i;
     for (i = 3; i >= 0; i--) {
         vertex_uvs[0] = tresspasser_quad_first_vertex_uv_gp;
