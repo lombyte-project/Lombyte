@@ -51,7 +51,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int D_L15_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern s32 D_L15_0015F688 __attribute__((sda));
 struct HeroVelocityKey D_L15_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
-extern unsigned char D_L15_0017C3D8[];
+extern unsigned char l15_run_jump_animation_ids_by_frame[] __asm__("D_L15_0017C3D8");
 extern void *D_L15_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -1243,7 +1243,7 @@ int hero_set_state(int a, int b) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
                     if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
-                        id = D_L15_0017C3D8[n];
+                        id = l15_run_jump_animation_ids_by_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0x5E) {
                     set_hero_animation(4, 0, (float)scale_game_frames(8));
