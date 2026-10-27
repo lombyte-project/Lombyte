@@ -481,7 +481,7 @@ typedef struct {
     s32 shake_frames;     /* 0x168 */
 } MineCamera;
 
-extern MineBlast D_L03_001E32B0;
+extern MineBlast l03_mine_camera_blast_template __asm__("D_L03_001E32B0");
 extern struct Moby *D_L03_00178000[];
 extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
 extern char D_L03_00166EC0[];
@@ -532,7 +532,7 @@ void update_mine(struct Moby *mine_moby) {
         MINE_DEBRIS_RANDOM_PALETTE_COLOR = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
-    MineBlast blast = D_L03_001E32B0;
+    MineBlast blast = l03_mine_camera_blast_template;
     MineVec vector_scratch;
     MineVars *mine_vars = (MineVars *)mine_moby->pvars;
     struct Moby *target_moby;
