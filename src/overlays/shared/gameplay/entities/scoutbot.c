@@ -1031,14 +1031,14 @@ void advance_scroll_offsets(int scroll_pair_index) {
 extern float scroll_pos_x[] __asm__("D_L08_00161E10") __attribute__((section(".sdata")));
 extern float scroll_pos_y[] __asm__("D_L08_00161E14") __attribute__((section(".sdata")));
 
-extern float D_L08_00161DE0[2] __attribute__((sda));
+extern float scroll_entry_x_rates_gp[2] __asm__("D_L08_00161DE0") __attribute__((sda));
 extern float D_L08_00161DE4[] __attribute__((section(".sdata")));
 /* Advances the X and Y scroll offsets of entry `i` by speed * frame step, wrapping them into [-1, 1]. */
 void advance_scroll_entry(int i) __asm__("FUN_L08_002f1378");
 void advance_scroll_entry(int i) {
     float *scroll_offset_ptr;
     scroll_offset_ptr = &scroll_pos_x[i * 2];
-    *scroll_offset_ptr += D_L08_00161DE0[i * 2] * frame_delta_time;
+    *scroll_offset_ptr += scroll_entry_x_rates_gp[i * 2] * frame_delta_time;
     if (*scroll_offset_ptr > 1.0f) *scroll_offset_ptr -= 1.0f;
     if (*scroll_offset_ptr < -1.0f) *scroll_offset_ptr += 1.0f;
     scroll_offset_ptr = &scroll_pos_y[i * 2];
