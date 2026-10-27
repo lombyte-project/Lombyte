@@ -2076,7 +2076,7 @@ extern s32 D_L11_00200728[];
 extern s32 D_L11_002078D8[];
 extern s32 D_L11_00207900[];
 extern s32 D_L11_00215220[];
-extern char D_L11_00217760[];
+extern char distance_faded_effect_sine_output_pair[] __asm__("D_L11_00217760");
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
 extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
@@ -2152,7 +2152,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         effect_distance = vector_length_xyz(effect_to_reference_delta);
         if (effect_distance <= 100.0f) {
             advance_scroll_offsets(0);
-            advance_wrapped_sine_pair(D_L11_00217760, 0.52f, 0.62f, 0.06f, (void *)D_L11_00162630);
+            advance_wrapped_sine_pair(distance_faded_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)D_L11_00162630);
             advance_scroll_offsets(2);
             if (effect_distance < 80.0f) {
                 D_L11_00162610_c = 0xFF;
