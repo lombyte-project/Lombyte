@@ -862,14 +862,14 @@ void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int
 }
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
-extern char *D_L02_00161AEC __attribute__((sda));
-extern char *D_L02_00161AF0 __attribute__((sda));
-extern char *D_L02_00161AF4 __attribute__((sda));
-extern char *D_L02_00161AF8 __attribute__((sda));
-extern char *D_L02_00161AFC __attribute__((sda));
-extern char *D_L02_00161B00 __attribute__((sda));
-extern char *D_L02_00161B04 __attribute__((sda));
-extern char *D_L02_00161B08 __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_first_vertex_uv_base_gp __asm__("D_L02_00161AEC") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_second_vertex_uv_base_gp __asm__("D_L02_00161AF0") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_third_vertex_uv_base_gp __asm__("D_L02_00161AF4") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_fourth_vertex_uv_base_gp __asm__("D_L02_00161AF8") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_first_vertex_uv_gp __asm__("D_L02_00161AFC") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_second_vertex_uv_gp __asm__("D_L02_00161B00") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_third_vertex_uv_gp __asm__("D_L02_00161B04") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_fourth_vertex_uv_gp __asm__("D_L02_00161B08") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle_radial_strip.h"
 
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -911,10 +911,10 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_colors[2] = color;
     vertex_colors[1] = color;
     vertex_colors[0] = color;
-    vertex_uvs[0] = (s32)(D_L02_00161AEC + wrapped_uv_scroll_offset);
-    vertex_uvs[1] = (s32)(D_L02_00161AF0 + wrapped_uv_scroll_offset);
-    vertex_uvs[2] = (s32)(D_L02_00161AF4 + wrapped_uv_scroll_offset);
-    vertex_uvs[3] = (s32)(D_L02_00161AF8 + wrapped_uv_scroll_offset);
+    vertex_uvs[0] = (s32)(tresspasser_radial_strip_scrolling_first_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[1] = (s32)(tresspasser_radial_strip_scrolling_second_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[2] = (s32)(tresspasser_radial_strip_scrolling_third_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[3] = (s32)(tresspasser_radial_strip_scrolling_fourth_vertex_uv_base_gp + wrapped_uv_scroll_offset);
 
     start_sine_component = fast_sin(angle) * start_distance;
     start_cosine_component = fast_cos(angle) * start_distance;
@@ -954,10 +954,10 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
-    vertex_uvs[0] = (s32)D_L02_00161AFC;
-    vertex_uvs[1] = (s32)D_L02_00161B00;
-    vertex_uvs[2] = (s32)D_L02_00161B04;
-    vertex_uvs[3] = (s32)D_L02_00161B08;
+    vertex_uvs[0] = (s32)tresspasser_radial_strip_fixed_first_vertex_uv_gp;
+    vertex_uvs[1] = (s32)tresspasser_radial_strip_fixed_second_vertex_uv_gp;
+    vertex_uvs[2] = (s32)tresspasser_radial_strip_fixed_third_vertex_uv_gp;
+    vertex_uvs[3] = (s32)tresspasser_radial_strip_fixed_fourth_vertex_uv_gp;
 
     start_sine_component = fast_sin(angle) * start_distance;
     start_cosine_component = fast_cos(angle) * start_distance;
