@@ -528,9 +528,9 @@ extern void cross_vector_xyz_30c220(float *, float *, float *) __asm__("FUN_001f
 extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture_30c220(int) __asm__("FUN_001f44b8");
 extern void draw_quad_30c220(void *, float *, int) __asm__("FUN_001f7d30");
-extern float D_L05_001D67B0[][2];
-extern float D_L05_001D67D0[][4];
-extern float D_L05_001D6810[][4];
+extern float wobble_quad_texcoords[][2] __asm__("D_L05_001D67B0");
+extern float wobble_quad_a_base_vertices[][4] __asm__("D_L05_001D67D0");
+extern float wobble_quad_b_base_vertices[][4] __asm__("D_L05_001D6810");
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
 #include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_globals.h"
 extern int wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") __attribute__((sda));
@@ -596,8 +596,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     quad_b.control[3] = flags;
     quad_a.control[3] = flags;
     for (k = 0; k < 4; k++) {
-        float u = D_L05_001D67B0[k][0];
-        float v = D_L05_001D67B0[k][1];
+        float u = wobble_quad_texcoords[k][0];
+        float v = wobble_quad_texcoords[k][1];
         quad_a.texcoord[k][0] = u;
         quad_a.texcoord[k][1] = v;
         quad_b.texcoord[k][0] = u;
@@ -608,8 +608,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
         j = 0;
         do {
             vertex_a = quad_a.vertex[j];
-            qcopy(vertex_a, D_L05_001D67D0[j]);
-            qcopy(quad_b.vertex[j], D_L05_001D6810[j]);
+            qcopy(vertex_a, wobble_quad_a_base_vertices[j]);
+            qcopy(quad_b.vertex[j], wobble_quad_b_base_vertices[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
