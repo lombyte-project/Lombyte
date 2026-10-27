@@ -32,7 +32,7 @@ void remove_moby_when_near_hero(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
 
-extern char *D_L11_0015FFE4;
+extern char *target_search_moby_list_head __asm__("D_L11_0015FFE4");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
@@ -44,7 +44,7 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
 char *select_homing_missile_target(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) {
     char *best = 0;
     char *candidate_position;
-    char *candidate_moby = D_L11_0015FFE4;
+    char *candidate_moby = target_search_moby_list_head;
     float bestd = 10.0f;
     while (candidate_moby != 0) {
         if ((*(unsigned short *)(candidate_moby + 0x34) & 0x1000) && candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 &&
