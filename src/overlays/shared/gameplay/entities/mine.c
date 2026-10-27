@@ -146,8 +146,8 @@ typedef struct {
     u8 bB;
 } E;
 
-extern B910 D_L00_001E9830;
-extern B910 D_L00_001E9880;
+extern B910 l00_mine_camera_blast_parameters __asm__("D_L00_001E9830");
+extern B910 l00_mine_alternate_camera_blast_parameters __asm__("D_L00_001E9880");
 extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
@@ -246,8 +246,8 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
-    B910 camera_blast_parameters = D_L00_001E9830;
-    B910 alternate_camera_blast_parameters = D_L00_001E9880;
+    B910 camera_blast_parameters = l00_mine_camera_blast_parameters;
+    B910 alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;
     U910 collision_response_velocity;
     U910 old;
     U910 up;
