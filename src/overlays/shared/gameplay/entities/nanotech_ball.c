@@ -2831,52 +2831,52 @@ extern void fast_vec_normalize_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c2(void *, void *, f32) __asm__("func_001F9A68");
 
 void suck_beam_build(char *a, char *b) __asm__("FUN_L00_002ddcb8");
-void suck_beam_build(char *a, char *b) {
-    u128_DF168 s[7];
-    char *v;
+void suck_beam_build(char *cannon_moby, char *suction_origin) {
+    u128_DF168 beam_initialization_vectors[7];
+    char *orientation_up_vector;
     short *w;
-    int i, st, j;
+    int i, hero_state, j;
     if (D_L00_00161B40 == 0) return;
     D_L00_00161B84 = 1.7f;
     D_L00_00161B40 = 0;
-    st = hero.state.current;
-    if ((st == 0x1E || st == 1) && (hero.moby->flags & 1)) {
-        qcopy((char *)s, D_L00_00166FD0);
-        qcopy((char *)s + 0x10, D_L00_00166FD0 + 0x10);
-        qcopy((char *)s + 0x20, D_L00_00166FD0 + 0x20);
-        v = (char *)s + 0x20;
+    hero_state = hero.state.current;
+    if ((hero_state == 0x1E || hero_state == 1) && (hero.moby->flags & 1)) {
+        qcopy((char *)beam_initialization_vectors, D_L00_00166FD0);
+        qcopy((char *)beam_initialization_vectors + 0x10, D_L00_00166FD0 + 0x10);
+        qcopy((char *)beam_initialization_vectors + 0x20, D_L00_00166FD0 + 0x20);
+        orientation_up_vector = (char *)beam_initialization_vectors + 0x20;
     } else {
         if (hero.unk22C8 == 1) {
-            fast_vec_scale_c2(s, a + 0xD0, -1.0f);
-            qcopy((char *)s + 0x10, a + 0xC0);
-            qcopy((char *)s + 0x20, a + 0xE0);
-            v = (char *)s + 0x20;
+            fast_vec_scale_c2(beam_initialization_vectors, cannon_moby + 0xD0, -1.0f);
+            qcopy((char *)beam_initialization_vectors + 0x10, cannon_moby + 0xC0);
+            qcopy((char *)beam_initialization_vectors + 0x20, cannon_moby + 0xE0);
+            orientation_up_vector = (char *)beam_initialization_vectors + 0x20;
         } else {
-            qcopy((char *)s, &hero.basis[0]);
-            qcopy((char *)s + 0x10, &hero.basis[1]);
-            qcopy((char *)s + 0x20, &hero.basis[2]);
-            v = (char *)s + 0x20;
+            qcopy((char *)beam_initialization_vectors, &hero.basis[0]);
+            qcopy((char *)beam_initialization_vectors + 0x10, &hero.basis[1]);
+            qcopy((char *)beam_initialization_vectors + 0x20, &hero.basis[2]);
+            orientation_up_vector = (char *)beam_initialization_vectors + 0x20;
         }
     }
-    fast_vec_normalize_c2((char *)s + 0x30, s, D_L00_00161B84);
-    fast_vec_normalize_c2((char *)s + 0x40, v, 1.0f);
-    qcopy(D_L00_001E5F40, b);
+    fast_vec_normalize_c2((char *)beam_initialization_vectors + 0x30, beam_initialization_vectors, D_L00_00161B84);
+    fast_vec_normalize_c2((char *)beam_initialization_vectors + 0x40, orientation_up_vector, 1.0f);
+    qcopy(D_L00_001E5F40, suction_origin);
     D_L00_001E6008[0] = 0;
     for (i = 1; i < 10; i++) {
-        add_vector_xyz(D_L00_001E5F40 + i * 0x10, D_L00_001E5F30 + i * 0x10, (char *)s + 0x30);
+        add_vector_xyz(D_L00_001E5F40 + i * 0x10, D_L00_001E5F30 + i * 0x10, (char *)beam_initialization_vectors + 0x30);
         D_L00_001E6008[i] = 0;
     }
     clear_u64_value_c2(D_L00_00161B60);
-    s[5] = 0;
-    s[6] = 0;
-    *(float *)((char *)s + 0x58) = 0.1f;
-    *(float *)((char *)s + 0x5C) = 1.0f;
-    *(float *)((char *)s + 0x60) = 1.0f;
-    *(float *)((char *)s + 0x6C) = 1.0f;
+    beam_initialization_vectors[5] = 0;
+    beam_initialization_vectors[6] = 0;
+    *(float *)((char *)beam_initialization_vectors + 0x58) = 0.1f;
+    *(float *)((char *)beam_initialization_vectors + 0x5C) = 1.0f;
+    *(float *)((char *)beam_initialization_vectors + 0x60) = 1.0f;
+    *(float *)((char *)beam_initialization_vectors + 0x6C) = 1.0f;
     {
-        float f = random_angle_radians();
-        build_look_at_matrix_c2(D_L00_00161B70, (char *)s + 0x50, f, (char *)s + 0x60);
-        D_L00_00161B80 = f;
+        float initial_random_angle = random_angle_radians();
+        build_look_at_matrix_c2(D_L00_00161B70, (char *)beam_initialization_vectors + 0x50, initial_random_angle, (char *)beam_initialization_vectors + 0x60);
+        D_L00_00161B80 = initial_random_angle;
     }
     D_L00_00161B50 = 0.006f;
     D_L00_00161B54 = 0;
