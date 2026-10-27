@@ -19,7 +19,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern int FUN_001fa820(void *, int *, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern float D_001D97D0[][4][4];
+extern float light_flare_corner_offsets[][4][4] __asm__("D_001D97D0");
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it
    returns. In D_0015F604 mode 6 with flare set 3, the flare fades as
@@ -63,7 +63,7 @@ void draw_light_flare(char *object) {
 
         quad.colors[corner_index] = ((alpha >> 1) << 24) | 0x808080;
         vertex_position = quad.positions[corner_index];
-        transform_vector_by_basis(vertex_position, D_001D97D0[level_render_state.content_variant][corner_index],
+        transform_vector_by_basis(vertex_position, light_flare_corner_offsets[level_render_state.content_variant][corner_index],
                      object + 0xC0);
         add_vector_xyz(vertex_position, vertex_position, object + 0x10);
         vertex_position[2] = depth;
