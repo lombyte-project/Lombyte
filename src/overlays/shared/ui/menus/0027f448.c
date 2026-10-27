@@ -13,7 +13,7 @@ extern S_27f448 D_L00_001841F0_27f448 __asm__("D_L00_001841F0") NOT_SDA;
 typedef struct { char pad0[0x30]; int x30; char pad34[0xC]; int x40; } P_27f448;
 extern E_27f448 D_L00_001BA3B8[] NOT_SDA;
 extern T_27f448 D_L00_001C1E40[] NOT_SDA;
-extern int *D_L00_001602A0 __attribute__((sda));
+extern int *selection_values __asm__("D_L00_001602A0") __attribute__((sda));
 extern s32 D_0013D510_lui[]  __asm__("D_0013D510")NOT_SDA;
 int FUN_L00_0027f448(P_27f448 *selection_state) {
     int i;
@@ -26,8 +26,8 @@ int FUN_L00_0027f448(P_27f448 *selection_state) {
     D_L00_001BA3B8[i].a = 0;
     selection_state->x40 = 0;
     selection_state->x30 |= 0x8000;
-    for (i = 0; D_L00_001602A0[i]; i++) {
-        if (D_L00_001841F0_27f448.x224 == D_L00_001602A0[i]) {
+    for (i = 0; selection_values[i]; i++) {
+        if (D_L00_001841F0_27f448.x224 == selection_values[i]) {
             selection_state->x40 = i;
             break;
         }
