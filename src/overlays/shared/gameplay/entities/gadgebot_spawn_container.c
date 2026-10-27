@@ -180,11 +180,11 @@ extern float gadgebot_container_face_positions[][4] __asm__("D_L06_001D40C0");
 extern float gadgebot_container_reflection_uvs[][2] __asm__("D_L06_001D4360");
 extern float gadgebot_container_transformed_vertices[][4] __asm__("D_L06_001D4530");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern short D_L06_00161870 __attribute__((sda));
-extern short D_L06_00161874 __attribute__((sda));
-extern short D_L06_00161878 __attribute__((sda));
-extern short D_L06_0016187C __attribute__((sda));
-extern short D_L06_00161880 __attribute__((sda));
+extern short gadgebot_container_blend_minuend_selector_gp __asm__("D_L06_00161870") __attribute__((sda));
+extern short gadgebot_container_blend_subtrahend_selector_gp __asm__("D_L06_00161874") __attribute__((sda));
+extern short gadgebot_container_blend_factor_selector_gp __asm__("D_L06_00161878") __attribute__((sda));
+extern short gadgebot_container_blend_addend_selector_gp __asm__("D_L06_0016187C") __attribute__((sda));
+extern short gadgebot_container_blend_fixed_alpha_gp __asm__("D_L06_00161880") __attribute__((sda));
 extern short gadgebot_container_texture_index_gp __asm__("D_L06_00161884") __attribute__((sda));
 extern short gadgebot_container_quad_color_gp __asm__("D_L06_00161888") __attribute__((sda));
 extern short gadgebot_container_vertex_normal_scale_gp __asm__("D_L06_0016188C") __attribute__((sda));
@@ -248,9 +248,9 @@ void draw_gadgebot_spawn_container(char *moby) {
     }
     quad.tex = get_effect_texture(*(int *)&gadgebot_container_texture_index_gp);
     quad.unk80 = 0xff9000000260L;
-    quad.unk88 = (long)*(int *)&D_L06_00161870 | (long)*(int *)&D_L06_00161874 << 2 |
-                 (long)*(int *)&D_L06_00161878 << 4 | (long)*(int *)&D_L06_0016187C << 6 |
-                 (long)*(int *)&D_L06_00161880 << 32;
+    quad.unk88 = (long)*(int *)&gadgebot_container_blend_minuend_selector_gp | (long)*(int *)&gadgebot_container_blend_subtrahend_selector_gp << 2 |
+                 (long)*(int *)&gadgebot_container_blend_factor_selector_gp << 4 | (long)*(int *)&gadgebot_container_blend_addend_selector_gp << 6 |
+                 (long)*(int *)&gadgebot_container_blend_fixed_alpha_gp << 32;
     quad.unk70 = 0;
     quad.color[3] = *(int *)&gadgebot_container_quad_color_gp;
     quad.color[2] = *(int *)&gadgebot_container_quad_color_gp;
