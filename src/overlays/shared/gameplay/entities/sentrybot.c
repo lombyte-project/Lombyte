@@ -1717,9 +1717,9 @@ typedef struct M_29E8A0 {
     float mtx[16];
 } M_29E8A0;
 
-extern Cols_29E8A0 D_L15_001E2660;
-extern Cols_29E8A0 D_L15_001E2678;
-extern Tbl_29E8A0 D_L15_001E2610;
+extern Cols_29E8A0 l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
+extern Cols_29E8A0 l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678");
+extern Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610");
 extern int D_L15_00178500[];
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
 extern char D_0013E533[];
@@ -1807,7 +1807,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
     float pitch;
     int k;
 
-    camera_blast_parameters = D_L15_001E2610;
+    camera_blast_parameters = l15_missile_camera_blast_parameter_template;
     owner = 0;
     *(u128_29E8A0 *)burst_rotation_axis = 0;
     burst_rotation_axis[2] = D_0015ED6C * 8.0f;
@@ -2052,8 +2052,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 i = 0;
                 while (i < burst_effect_pair_count) {
                     float sz = random_float_between(8.0f, 10.0f) * D_0015ED6C - under * D_0015ED6C;
-                    Cols_29E8A0 c1 = D_L15_001E2660;
-                    Cols_29E8A0 c2 = D_L15_001E2678;
+                    Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
+                    Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
                     int *p1 = &c1.c[random_integer_below_c3(6)];
                     int *p2 = &c2.c[random_integer_below_c3(6)];
                     int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
@@ -2067,8 +2067,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 }
             }
             for (j = 0; j < 10; j++) {
-                Cols_29E8A0 c1 = D_L15_001E2660;
-                Cols_29E8A0 c2 = D_L15_001E2678;
+                Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
+                Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
                 float burst_particle_velocity[4];
                 {
                     float random_burst_direction[4];
