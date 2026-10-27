@@ -19,10 +19,5 @@ fills all-visible output. Mode 2 selects an octant mask when that table exists,
 otherwise using the same previous-mask/all-visible choice. The builder always
 sets bit 0x80 in the final byte of the output.
 
-The function names, numeric modes, private camera view and declarations are
-unchanged. Some declarations intentionally remain inconsistent across units:
-`parse_occlusion_grid` defines an integer return while its builder caller uses
-a pointer; `get_occlusion_grid_from_pair` defines a void return while that
-caller uses a pointer. The pair helper also retains a zero-argument lookup call.
-This grouping does not reconcile those compiler-sensitive views, add return
-statements or change the arguments passed by existing code.
+The lookup helpers have compiler-sensitive return declarations that differ
+between units; the pair helper also calls `parse_occlusion_grid()` without arguments.

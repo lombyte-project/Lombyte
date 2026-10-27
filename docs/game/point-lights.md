@@ -1,8 +1,7 @@
 # Point-light links
 
 `src/rendering/lights/` groups the four boot functions that maintain point-light
-links to ties, tfrags and shrubs. Their existing C names and linker symbols stay
-unchanged.
+links to ties, tfrags and shrubs.
 
 | Function | USA symbol | Role |
 |---|---|---|
@@ -25,8 +24,5 @@ byte to 1; the broader meaning of that byte remains unnamed. Tfrag records
 use a 0x40-byte stride and links at +0x36; ties and shrubs use a 0x20-byte stride
 and links at +0x1E.
 
-The private types retain their original partial layouts and signed address
-views. In particular, `refresh_point_light` retains its old-style declarations
-and its call to `detach_point_light()` without an explicit argument. Changing
-that call or consolidating the declarations requires separate compiler and
-calling-convention evidence.
+`refresh_point_light` uses old-style declarations and calls
+`detach_point_light()` without an explicit argument; these are compiler-sensitive.
