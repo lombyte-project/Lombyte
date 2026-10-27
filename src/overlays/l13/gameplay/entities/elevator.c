@@ -2356,7 +2356,7 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
 /* Per-frame target tracking: validates the current target, re-picks one and drops it when lost. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BA828), where it is exact; names translated to the US level program. */
 
-extern char D_L13_001670D0[];
+extern char fighter_jet_radar_rotation[] __asm__("D_L13_001670D0");
 extern int D_L13_0015F5C4;
 extern char D_0013C940[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -2401,8 +2401,8 @@ void update_fighter_jet_target_tracking(int source_moby, char *moby_vars) {
     W(moby_vars, 0x124) = -1;
     W(moby_vars, 0x88) = 0;
 skip:
-    qcopy(radar_rotation_copy, D_L13_001670D0);
-    selected_target_moby = (char *)select_fighter_jet_target_and_draw_indicators(source_moby, moby_vars, D_L13_001670D0 - 0x10, radar_rotation_copy, 0.19634955f, 0.19634955f, 255.0f,
+    qcopy(radar_rotation_copy, fighter_jet_radar_rotation);
+    selected_target_moby = (char *)select_fighter_jet_target_and_draw_indicators(source_moby, moby_vars, fighter_jet_radar_rotation - 0x10, radar_rotation_copy, 0.19634955f, 0.19634955f, 255.0f,
                                  P(moby_vars, 0x88), excluded_target_moby);
     if ((selected_target_moby != P(moby_vars, 0x88) && W(moby_vars, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(moby_vars, 0xEC) = 0;
