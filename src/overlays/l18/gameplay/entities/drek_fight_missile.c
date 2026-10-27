@@ -1219,7 +1219,7 @@ typedef struct {
 
 extern ML D_L18_0016D260;
 extern int D_L18_0015F5C4;
-extern unsigned char D_L18_0017CE40[];
+extern unsigned char l18_drek_boss_big_head_manipulator[] __asm__("D_L18_0017CE40");
 extern short drek_boss_big_head_manipulator_scale_gp __asm__("D_L18_001623A4") __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
@@ -1233,7 +1233,7 @@ void attach_drek_boss_big_head_manipulator(char *moby) {
             char *listed_moby = D_L18_0016D260.mobys[i];
 
             if (*(short *)(listed_moby + 0xA6) == 0x4E1) {
-                unsigned char *big_head_manipulator = D_L18_0017CE40;
+                unsigned char *big_head_manipulator = l18_drek_boss_big_head_manipulator;
 
                 if (big_head_manipulator[1] == 0) {
                     attach_manipulator(listed_moby, 0, big_head_manipulator);
