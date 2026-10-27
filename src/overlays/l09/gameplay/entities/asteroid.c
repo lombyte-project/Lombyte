@@ -184,7 +184,7 @@ extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
 extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
-extern u64 D_L09_001612F0;
+extern u64 scaled_entries_texture_register_value __asm__("D_L09_001612F0");
 extern unsigned short D_L09_0010E800[];
 extern int scaled_entries_vu1_setup_data[] __asm__("D_L09_0010E810");
 extern int scaled_entries_gs_setup_packet[] __asm__("D_L09_001CB470");
@@ -307,7 +307,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
         *(volatile u64 *)&words[2] = (blend << 32) | 100;
         alpha = alpha <= 0x60U ? 0x5370b : 0x5360a;
         blend = alpha;
-        words[4] = *(volatile u64 *)&D_L09_001612F0;
+        words[4] = *(volatile u64 *)&scaled_entries_texture_register_value;
         scratch_color = 0x757c8e;
         words[5] = 6;
         words[6] = (long)color;
