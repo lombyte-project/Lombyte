@@ -1836,7 +1836,7 @@ continue_fall:
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
-extern char D_L05_0017C068[];
+extern char hero_hoverboard_animation_link_table[] __asm__("D_L05_0017C068");
 #include "rnc/data_labels.h"
 
 void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
@@ -1849,7 +1849,7 @@ void hero_update_linked_target(void) {
     if (path_owner_moby != 0) {
         if ((unsigned)(*(int *)(hero_base + 0x208C) - 0x15) < 2) {
             *(int *)(hero_base + 0x2278) = path_owner_moby;
-            *(int *)(hero_base + 0x227C) = (int)D_L05_0017C068;
+            *(int *)(hero_base + 0x227C) = (int)hero_hoverboard_animation_link_table;
         }
     }
 }
