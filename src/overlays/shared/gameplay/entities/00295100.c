@@ -1715,7 +1715,7 @@ extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern unsigned char D_001516EC[];
+extern unsigned char queued_dialogue_id[] __asm__("D_001516EC");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void handle_vendor_auxiliary_moby_event(int vendor_event) __asm__("FUN_L00_0029b4d8");
@@ -1748,7 +1748,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
                     *(int *)(vendor_state_base + 0x3C) = selection_variant_index;
                     vendor_auxiliary_reaction_started = 1;
                     D_L00_00161194 = 0;
-                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
+                    *(int *)(queued_dialogue_id) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
                 }
             }
@@ -1759,7 +1759,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
         *(int *)(vendor_state_base + 0x3C) = ready_variant_index;
         vendor_auxiliary_reaction_started = vendor_event;
         D_L00_00161194 = 0;
-        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
+        *(int *)(queued_dialogue_id) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
         auxiliary_moby[0x20] = 10;
