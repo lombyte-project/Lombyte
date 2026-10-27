@@ -450,7 +450,7 @@ extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_3.h"
 extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribute__((sda));
-extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
+extern float l00_nanotech_ball_bob_amplitude __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 extern int nanotech_ball_collection_lifetime_frames_gp __asm__("D_L00_00161A3C") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_2.h"
@@ -659,7 +659,7 @@ void nanotech_ball_update(Moby *moby) {
                 }
             }
         }
-        data->bob_offset = D_L00_00161A10_gp * func_001F9FA8_2D9EA0(data->bob_phase);
+        data->bob_offset = l00_nanotech_ball_bob_amplitude * func_001F9FA8_2D9EA0(data->bob_phase);
         data->bob_phase = func_001FA748_2D9EA0(data->bob_phase, nanotech_ball_bob_phase_step_gp);
         if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         qcopy(&slot_rotation_basis_or_cull_position_or_start_tangent, &moby->pos);
@@ -821,17 +821,17 @@ typedef struct {
     u64 texture[4];
 } __attribute__((aligned(16))) GeometryQuad;
 extern int D_L00_00161B10_macro __asm__("D_L00_00161B10") __attribute__((section(".sdata")));
-extern int D_L00_00161AC0_gp __asm__("D_L00_00161AC0") __attribute__((sda));
-extern int D_L00_00161AC4_gp __asm__("D_L00_00161AC4") __attribute__((sda));
-extern int D_L00_00161AC8_gp __asm__("D_L00_00161AC8") __attribute__((sda));
-extern int D_L00_00161ACC_gp __asm__("D_L00_00161ACC") __attribute__((sda));
-extern int D_L00_00161AD0_gp __asm__("D_L00_00161AD0") __attribute__((sda));
-extern int D_L00_00161AD4_gp __asm__("D_L00_00161AD4") __attribute__((sda));
-extern u32 D_L00_00161AD8_gp __asm__("D_L00_00161AD8") __attribute__((sda));
-extern float D_L00_00161ADC_gp __asm__("D_L00_00161ADC") __attribute__((sda));
-extern u32 D_L00_00161AE0_gp __asm__("D_L00_00161AE0") __attribute__((sda));
-extern int D_L00_00161AE4_gp __asm__("D_L00_00161AE4") __attribute__((sda));
-extern float D_L00_00161AE8_gp __asm__("D_L00_00161AE8") __attribute__((sda));
+extern int l00_nanotech_ball_blend_minuend_color_selector __asm__("D_L00_00161AC0") __attribute__((sda));
+extern int l00_nanotech_ball_blend_subtrahend_color_selector __asm__("D_L00_00161AC4") __attribute__((sda));
+extern int l00_nanotech_ball_blend_alpha_selector __asm__("D_L00_00161AC8") __attribute__((sda));
+extern int l00_nanotech_ball_blend_addend_color_selector __asm__("D_L00_00161ACC") __attribute__((sda));
+extern int l00_nanotech_ball_blend_fixed_alpha __asm__("D_L00_00161AD0") __attribute__((sda));
+extern int l00_nanotech_ball_mesh_texture_index __asm__("D_L00_00161AD4") __attribute__((sda));
+extern u32 l00_nanotech_ball_initial_quad_color __asm__("D_L00_00161AD8") __attribute__((sda));
+extern float l00_nanotech_ball_pulse_quad_base_scale __asm__("D_L00_00161ADC") __attribute__((sda));
+extern u32 l00_nanotech_ball_pulse_quad_base_color __asm__("D_L00_00161AE0") __attribute__((sda));
+extern int l00_nanotech_ball_state_one_quad_texture_index __asm__("D_L00_00161AE4") __attribute__((sda));
+extern float l00_nanotech_ball_state_one_quad_uv_vector_length __asm__("D_L00_00161AE8") __attribute__((sda));
 extern float D_L00_00161AEC_gp __asm__("D_L00_00161AEC") __attribute__((sda));
 extern char D_L00_00161AF0_macro[] __asm__("D_L00_00161AF0") __attribute__((section(".sdata")));
 extern char nanotech_ball_mesh_source_vertices[] __asm__("D_L00_001E14C0");
@@ -866,7 +866,7 @@ void draw_nanotech_ball(Moby *moby) {
     float vertex[4] __attribute__((aligned(16)));
     D_2D9EA0 *vars = (D_2D9EA0 *)moby->pvars;
     Moby *owner;
-    float pulse = vars->bob_offset / D_L00_00161A10_gp;
+    float pulse = vars->bob_offset / l00_nanotech_ball_bob_amplitude;
     int i, j, color;
     short *indices;
     short *row;
@@ -876,13 +876,13 @@ void draw_nanotech_ball(Moby *moby) {
     float *u, *v;
     float *v_base, *u_base;
 
-    quad.texture[1] = get_effect_texture(D_L00_00161AD4_gp);
+    quad.texture[1] = get_effect_texture(l00_nanotech_ball_mesh_texture_index);
     quad.texture[2] = 0xff9000000260ULL;
-    quad.texture[3] = (u64)D_L00_00161AC0_gp |
-                      ((u64)D_L00_00161AC4_gp << 2) |
-                      ((u64)D_L00_00161AC8_gp << 4) |
-                      ((u64)D_L00_00161ACC_gp << 6) |
-                      ((u64)D_L00_00161AD0_gp << 32);
+    quad.texture[3] = (u64)l00_nanotech_ball_blend_minuend_color_selector |
+                      ((u64)l00_nanotech_ball_blend_subtrahend_color_selector << 2) |
+                      ((u64)l00_nanotech_ball_blend_alpha_selector << 4) |
+                      ((u64)l00_nanotech_ball_blend_addend_color_selector << 6) |
+                      ((u64)l00_nanotech_ball_blend_fixed_alpha << 32);
     quad.texture[0] = 0;
     vu1_add_g_sregister(0x47, 0x53001);
     forward = basis;
@@ -898,11 +898,11 @@ void draw_nanotech_ball(Moby *moby) {
     fast_vec_cross(&side, forward, &owner->rot_row2);
     fast_vec_normalize(&side, &side, 1.0f);
     fast_vec_cross(&up, &side, forward);
-    quad.colors[3] = D_L00_00161AD8_gp;
-    quad.colors[2] = D_L00_00161AD8_gp;
-    quad.colors[1] = D_L00_00161AD8_gp;
-    quad.colors[0] = D_L00_00161AD8_gp;
-    vu1_add_g_sregister(6, get_effect_texture(D_L00_00161AD4_gp));
+    quad.colors[3] = l00_nanotech_ball_initial_quad_color;
+    quad.colors[2] = l00_nanotech_ball_initial_quad_color;
+    quad.colors[1] = l00_nanotech_ball_initial_quad_color;
+    quad.colors[0] = l00_nanotech_ball_initial_quad_color;
+    vu1_add_g_sregister(6, get_effect_texture(l00_nanotech_ball_mesh_texture_index));
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xff9000000260ULL);
@@ -928,7 +928,7 @@ void draw_nanotech_ball(Moby *moby) {
     quad.texture[1] = get_effect_texture(0xb);
     quad.texture[3] = 0x8000000048ULL;
     color = truncate_float_to_s32(pulse * 64.0f + 128.0f);
-    color = ((u32)(color + D_L00_00161B10_macro) << 24) | D_L00_00161AE0_gp;
+    color = ((u32)(color + D_L00_00161B10_macro) << 24) | l00_nanotech_ball_pulse_quad_base_color;
     quad.colors[3] = 0;
     quad.colors[2] = 0;
     quad.colors[1] = color;
@@ -942,9 +942,9 @@ void draw_nanotech_ball(Moby *moby) {
             short index = *indices;
             if (j >= 2)
                 fast_vec_scale(outer, nanotech_ball_pulse_quad_source_vertices + index * 16,
-                             D_L00_00161ADC_gp * D_L00_00161AEC_gp);
+                             l00_nanotech_ball_pulse_quad_base_scale * D_L00_00161AEC_gp);
             else
-                fast_vec_scale(inner, nanotech_ball_pulse_quad_source_vertices + index * 16, D_L00_00161ADC_gp);
+                fast_vec_scale(inner, nanotech_ball_pulse_quad_source_vertices + index * 16, l00_nanotech_ball_pulse_quad_base_scale);
             inner += 16;
             outer += 16;
             indices++;
@@ -960,7 +960,7 @@ void draw_nanotech_ball(Moby *moby) {
         draw_geometry_quad(&quad, basis, 0);
     }
     if (is_moby_in_state_one((u8 *)moby)) {
-        quad.texture[1] = get_effect_texture(D_L00_00161AE4_gp);
+        quad.texture[1] = get_effect_texture(l00_nanotech_ball_state_one_quad_texture_index);
         quad.colors[3] = 0x107f7f7f;
         quad.colors[2] = 0x107f7f7f;
         quad.colors[1] = 0x107f7f7f;
@@ -987,7 +987,7 @@ void draw_nanotech_ball(Moby *moby) {
                 fast_vec_sub(view_dir, corner, g_debug_camera);
                 corner += 16;
                 view_dir[1] = view_dir[2];
-                set_vector_length_xy(view_dir, view_dir, D_L00_00161AE8_gp);
+                set_vector_length_xy(view_dir, view_dir, l00_nanotech_ball_state_one_quad_uv_vector_length);
                 *v = view_dir[0] * 0.5f + 0.5f;
                 *v = FUN_L00_00200260(*v, 8.0f);
                 v += 2;
