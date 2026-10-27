@@ -4,11 +4,11 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-extern u8 D_L02_001CB9C0[];
+extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
 extern s32 scaled_table_header_leading_word_gp __asm__("D_L02_001612A0") __attribute__((sda));
 
-extern float D_L02_001CB500[];
+extern float scaled_table_source[] __asm__("D_L02_001CB500");
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
 
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) {
@@ -17,12 +17,12 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     float *source;
     float *base;
     value_target[0x3F] = val;
-    *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word_gp;
-    *(s32 *)(D_L02_001CB9C0 + 0x4) = scaled_table_header_second_word;
-    *(s32 *)(D_L02_001CB9C0 + 0x8) = scaled_table_header_third_word;
-    *(s32 *)(D_L02_001CB9C0 + 0xC) = scaled_table_header_final_word;
-    destination = (float *)(D_L02_001CB9C0 + 0x10);
-    base = D_L02_001CB500;
+    *(s32 *)(scaled_table_output + 0x0) = scaled_table_header_leading_word_gp;
+    *(s32 *)(scaled_table_output + 0x4) = scaled_table_header_second_word;
+    *(s32 *)(scaled_table_output + 0x8) = scaled_table_header_third_word;
+    *(s32 *)(scaled_table_output + 0xC) = scaled_table_header_final_word;
+    destination = (float *)(scaled_table_output + 0x10);
+    base = scaled_table_source;
     source = base + 4;
     for (i = 0xF7; i >= 0; i--) {
         *destination = *source * scale;
