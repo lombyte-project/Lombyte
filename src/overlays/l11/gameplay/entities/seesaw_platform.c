@@ -2031,7 +2031,7 @@ typedef struct {
    health). */
 extern struct UsageStat help_stats[] __asm__("D_00141968");
 extern s32 D_0015EEA4;
-extern short D_L11_001F0CF8[];  /* outline of an ammo pip */
+extern short ship_ammo_pip_points[] __asm__("D_L11_001F0CF8");  /* outline of an ammo pip */
 /* The health bar's palette: jet_fighter_update points clut at it in texture
    memory and, the first time (saved), copies it to D_L11_001F1088. */
 typedef struct {
@@ -2110,9 +2110,9 @@ void draw_ship_hud(struct Moby *moby) {
     x = 0x18;
     for (i = 0; i < hero.ship_ammo_max; i++) {
         if (i < hero.ship_ammo) {
-            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
+            append_scaled_screen_triangle_strip(ship_ammo_pip_points, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
         } else {
-            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
+            append_scaled_screen_triangle_strip(ship_ammo_pip_points, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
         }
         pips = hero.ship_ammo_max;
         if (i == pips >> 1) {
