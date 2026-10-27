@@ -369,7 +369,7 @@ extern char D_L00_001E8B00[];
 extern float map_points[] __asm__("D_L00_00182810");
 extern float map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
-extern int D_L00_00183EF0[];
+extern int map_parameter_pair_defaults[] __asm__("D_L00_00183EF0");
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
 extern s32 D_0015ED84;
@@ -401,9 +401,9 @@ void initialize_level_map_archive(void) {
     D_L00_001841F0.initialized = 1;
     { int i;
     for (i = 0; i < 20; i++) {
-        D_L00_001841F0.unk104[i] = D_L00_00183EF0[i * 2];
+        D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
         D_L00_001841F0.unkB4[i] = 0.65f;
-        D_L00_001841F0.unk154[i] = D_L00_00183EF0[i * 2 + 1];
+        D_L00_001841F0.unk154[i] = map_parameter_pair_defaults[i * 2 + 1];
     } }
     level = current_level_index;
     D_L00_001841F0.file_handle = -1;
