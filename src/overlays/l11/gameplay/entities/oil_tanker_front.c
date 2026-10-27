@@ -1895,13 +1895,13 @@ extern Fl D_L11_001625AC[] __attribute__((section(".sdata")));
 extern Pair D_L11_00162598[] __attribute__((section(".sdata")));
 extern Pair D_L11_001625A8[] __attribute__((section(".sdata")));
 extern Pair D_L11_001FF750[];
-extern char D_L11_001F9A78[];
-extern char D_L11_001FF730[];
+extern char layered_effect_quarter_gray_table_entry_counts[] __asm__("D_L11_001F9A78");
+extern char layered_effect_quarter_gray_rgba_tables[] __asm__("D_L11_001FF730");
 extern char D_L11_00162530[4] __attribute__((sda));
 extern char D_L11_00162570[4] __attribute__((sda));
-extern char D_L11_001FF758[];
-extern char D_L11_001F9A48[];
-extern char D_L11_001F4978[];
+extern char layered_effect_sine_output_pair[] __asm__("D_L11_001FF758");
+extern char layered_effect_half_gray_rgba_tables[] __asm__("D_L11_001F9A48");
+extern char layered_effect_half_gray_table_entry_counts[] __asm__("D_L11_001F4978");
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_layered_effect_and_queue_draw.h"
 extern char D_L11_00167680[];
@@ -1935,8 +1935,8 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
     case EFFECT_INITIALIZE:
         if (layered_effect_color_tables_initialized_gp == 0) {
             scale_rgba_tables(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            scale_rgba_tables(D_L11_001F9A48, 0xB, D_L11_001F4978, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            scale_rgba_tables(D_L11_001FF730, 8, D_L11_001F9A78, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            scale_rgba_tables(layered_effect_half_gray_rgba_tables, 0xB, layered_effect_half_gray_table_entry_counts, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            scale_rgba_tables(layered_effect_quarter_gray_rgba_tables, 8, layered_effect_quarter_gray_table_entry_counts, 0.25f, 0.25f, 0.25f, 0.7f, 1);
             layered_effect_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
@@ -1975,7 +1975,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         effect_distance = vector_length_xyz(effect_to_reference_delta);
         if (effect_distance <= 35.0f) {
             advance_scroll_offsets(0);
-            advance_wrapped_sine_pair(D_L11_001FF758, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
+            advance_wrapped_sine_pair(layered_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
             advance_scroll_offsets(2);
             if (effect_distance < 15.0f) {
                 D_L11_00162590 = 0xFF;
