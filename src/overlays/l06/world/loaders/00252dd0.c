@@ -64,21 +64,21 @@ extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L06_00182F40[3];
 extern u64 D_L06_00182F58[3];
 extern u64 D_L06_00182F70[3];
-extern s32 D_L06_001C5180[];
-extern s32 D_L06_0019A200[];
-extern u8 D_L06_001AF340[];
-extern s32 D_L06_001C6E80[];
-extern s32 D_L06_001BCD30[];
+extern s32 level_06_tfrag_texture_references[] __asm__("D_L06_001C5180");
+extern s32 level_06_moby_texture_references[] __asm__("D_L06_0019A200");
+extern u8 level_06_serialized_moby_texture_references[] __asm__("D_L06_001AF340");
+extern s32 level_06_object_texture_references[] __asm__("D_L06_001C6E80");
+extern s32 level_06_shrub_texture_references[] __asm__("D_L06_001BCD30");
 extern char *D_L18_0015F600_252dd0 __asm__("D_L06_0015F600");
 extern Class252dd0 *D_L06_00197A80[];
 extern s32 D_L06_0016000C;
 extern s32 D_L06_00160010;
-extern s32 D_L06_001B0340[];
+extern s32 level_06_class_mapping_class_numbers[] __asm__("D_L06_001B0340");
 extern char *D_L06_001B03A0[];
 extern s32 D_L06_001B0400[];
 typedef int Q252dd0 __attribute__((mode(TI)));
 extern Q252dd0 D_L06_001B0460[];
-extern u8 D_L06_00198340[];
+extern u8 level_06_moby_class_entry_indices[] __asm__("D_L06_00198340");
 extern char *D_L06_0015F420;
 extern s32 D_L06_0015FC98;
 extern s32 D_L06_0015FC9C;
@@ -86,8 +86,8 @@ extern s32 D_L06_0015FCA0;
 extern s32 D_L06_0015FCA4;
 extern char *D_L06_0015F604;
 extern Slot252dd0 *D_L06_0015F5F4;
-extern s16 D_L06_00198180[];
-extern u16 D_L06_001B05E0[][16];
+extern s16 level_06_moby_class_numbers[] __asm__("D_L06_00198180");
+extern u16 level_06_class_mapping_sound_ids[][16] __asm__("D_L06_001B05E0");
 extern char D_L06_001FFB80[], D_L06_001FFBD0[], D_L06_001FFC90[], D_L06_001FFE18[],
     D_L06_001FFE48[];
 extern char D_L06_0015FC80[];
@@ -238,20 +238,20 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         tfrag_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0xD]);
         tfrag_texture_reference_count = level_header[0xC];
         for (tfrag_texture_index = 0; tfrag_texture_index < tfrag_texture_reference_count; tfrag_texture_index++)
-            D_L06_001C5180[tfrag_texture_index] = level_06_texture_reference_base + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
+            level_06_tfrag_texture_references[tfrag_texture_index] = level_06_texture_reference_base + tfrag_texture_refs[tfrag_texture_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_index].kind) << 28);
         moby_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0xF]);
         moby_texture_reference_count = level_header[0xE];
         for (moby_texture_index = 0; moby_texture_index < moby_texture_reference_count; moby_texture_index++)
-            D_L06_0019A200[moby_texture_index] = level_06_texture_reference_base + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
-        fast_mem_copy(D_L06_001AF340, moby_texture_refs, moby_texture_reference_count * 16);
+            level_06_moby_texture_references[moby_texture_index] = level_06_texture_reference_base + moby_texture_refs[moby_texture_index].offset + (log2dim(moby_texture_refs[moby_texture_index].kind) << 28);
+        fast_mem_copy(level_06_serialized_moby_texture_references, moby_texture_refs, moby_texture_reference_count * 16);
         object_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0x11]);
         object_texture_reference_count = level_header[0x10];
         for (object_texture_index = 0; object_texture_index < object_texture_reference_count; object_texture_index++)
-            D_L06_001C6E80[object_texture_index] = level_06_texture_reference_base + object_texture_refs[object_texture_index].offset + (log2dim(object_texture_refs[object_texture_index].kind) << 28);
+            level_06_object_texture_references[object_texture_index] = level_06_texture_reference_base + object_texture_refs[object_texture_index].offset + (log2dim(object_texture_refs[object_texture_index].kind) << 28);
         shrub_texture_refs = (TexRef252dd0 *)((char *)level_header + level_header[0x13]);
         shrub_texture_reference_count = level_header[0x12];
         for (shrub_texture_index = 0; shrub_texture_index < shrub_texture_reference_count; shrub_texture_index++)
-            D_L06_001BCD30[shrub_texture_index] = level_06_texture_reference_base + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
+            level_06_shrub_texture_references[shrub_texture_index] = level_06_texture_reference_base + shrub_texture_refs[shrub_texture_index].offset + (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
 
         initialize_tfrag_render_data(base + level_header[2], (char *)level_header + level_header[0xD]);
         if (level_header[3])
@@ -277,10 +277,10 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         D_L06_00160010 = 0;
         level_class_mapping_count = level_header[0x20];
         for (class_mapping_index = 0; class_mapping_index < level_header[0x20]; class_mapping_index++, class_mapping_entry_cursor += 0x10) {
-            D_L06_001B0340[class_mapping_index] = *(s32 *)(class_mapping_entry_cursor + 4);
+            level_06_class_mapping_class_numbers[class_mapping_index] = *(s32 *)(class_mapping_entry_cursor + 4);
             D_L06_001B03A0[class_mapping_index] = base + *(s32 *)class_mapping_entry_cursor;
             D_L06_001B0400[class_mapping_index] = *(s32 *)(class_mapping_entry_cursor + 8);
-            { s32 o = D_L06_00198340[*(s32 *)(class_mapping_entry_cursor + 4)] * 32 + 0x10;
+            { s32 o = level_06_moby_class_entry_indices[*(s32 *)(class_mapping_entry_cursor + 4)] * 32 + 0x10;
             qcopy(&D_L06_001B0460[class_mapping_index], (char *)level_header + level_header[7] + o); }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9]; i < level_header[8]; i++, class_entry_cursor += 0x20)
@@ -341,17 +341,17 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             Class252dd0 *moby_class = D_L06_00197A80[ci];
             if (moby_class == 0) {
                 for (j = 0; j < level_class_mapping_count; j++)
-                    if (D_L06_001B0340[j] == D_L06_00198180[ci])
+                    if (level_06_class_mapping_class_numbers[j] == level_06_moby_class_numbers[ci])
                         break;
                 if (j < level_class_mapping_count) {
-                    fill_transfer_words(D_L06_001B05E0[j], -1, 0x20);
+                    fill_transfer_words(level_06_class_mapping_sound_ids[j], -1, 0x20);
                     sound_remap_cursor = sound_table_base + span->off;
                     for (k = 0; k < span->count && k < 15; k++, sound_remap_cursor += 4)
-                        D_L06_001B05E0[j][k] = *(u16 *)sound_remap_cursor;
+                        level_06_class_mapping_sound_ids[j][k] = *(u16 *)sound_remap_cursor;
                 }
             } else {
                 if (span->count != moby_class->count0D)
-                    printf_1e93b0(D_L06_001FFBA0, D_L06_00198180[ci]);
+                    printf_1e93b0(D_L06_001FFBA0, level_06_moby_class_numbers[ci]);
                 sound_remap_cursor = sound_table_base + span->off;
                 for (k = 0; k < D_L06_00197A80[ci]->count0D; k++, sound_remap_cursor += 4) {
                     D_L06_00197A80[ci]->f28[k].sound = *(u16 *)sound_remap_cursor;
