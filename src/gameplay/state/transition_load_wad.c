@@ -120,9 +120,9 @@ extern HelpState D_001996D0;
 extern s32 D_001B5980[];
 extern s32 D_001B6180[];
 #include "rnc/rendering/resident_class.h"
-extern s32 D_001D84B0[];
+extern s32 shrub_render_texture_lookup_table[] __asm__("D_001D84B0");
 extern s32 tfrag_texture_size_table[] __asm__("D_001E0900");
-extern s32 D_001E2600[];
+extern s32 object_render_texture_lookup_table[] __asm__("D_001E2600");
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
@@ -236,7 +236,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001E2600[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
+      object_render_texture_lookup_table[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < object_render_texture_definition_count);
@@ -247,7 +247,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001D84B0[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
+      shrub_render_texture_lookup_table[k] = (((s32) base) + texture_definition_entries[k].offset) + (log2dim(texture_definition_entries[k].x4) << 28);
       k++;
     }
     while (k < shrub_render_texture_definition_count);
