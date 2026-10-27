@@ -1319,7 +1319,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-extern char D_L13_001F4FB0[];
+extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
 void forcefield_update(unsigned char *moby) {
     enum {
@@ -1350,7 +1350,7 @@ void forcefield_update(unsigned char *moby) {
         } else {
             *(float *)(forcefield_data + 4) = 1.0f;
             moby[0x20] = 2;
-            stub_printf(D_L13_001F4FB0, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2));
+            stub_printf(forcefield_missing_trigger_format, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2));
         }
         spawn_forcefield_contact_effects(moby, forcefield_data);
         break;
