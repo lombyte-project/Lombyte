@@ -206,9 +206,6 @@ void blend_racer_and_child_animations(char *moby, int animation_index, int frame
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
-#else
 typedef unsigned int U128_2d1688 __attribute__((mode(TI)));
 extern char *D_L05_001B0930[];
 extern float D_L05_00161388 __attribute__((sda));
@@ -376,11 +373,26 @@ state_three:
                     v[2] = h->water_surface_z;
                     spawn_sharkigator_splash_effects((int)moby, (char *)v);
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
+                    /* Fakematch: the two join statements are repeated in both branches so
+                       that a real insn sits between set_camera (the last call of this
+                       block) and the block-ending branch; jump2 cross-jumps the identical
+                       tails back into one join (same bytes). With the call adjacent to the
+                       branch, haifa add_branch_dependences makes it depend on every insn,
+                       including the a0=moby move, which then ties with a1 and the water
+                       store for the 2-wide issue and the store takes the jal delay slot;
+                       retail has a0 in the slot. Sibling rocket.c FUN_L18_002a7220 gets the
+                       same order from a real intermediate call. */
+                    h->unk20A5 = one;
+                    h->motion.pos.f[2] += 20.0f;
                 } else {
                     qcopy(&h->motion.pos, moby + 0x10);
+                    h->unk20A5 = one;
+                    h->motion.pos.f[2] += 20.0f;
                 }
-                h->unk20A5 = one;
-                h->motion.pos.f[2] += 20.0f;
+                /* Fakematch: a gcse-time set of moby so PRE does not hoist the
+                   *(moby + 0x18) load below out of the join; folds to nothing. */
+                moby++;
+                moby--;
                 speed = *(float *)(data + 0x78);
             } else {
                 speed = *(float *)(data + 0x78);
@@ -419,7 +431,6 @@ state_three:
             set_action_2d1688(moby, 1, 0, timer_2d1688(10));
     }
 }
-#endif
 
 typedef float V2d1e30[4] __attribute__((aligned(16)));
 extern int tick_2d1e30(void *) __asm__("FUN_001f9740");
