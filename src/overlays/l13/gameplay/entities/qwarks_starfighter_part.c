@@ -1414,7 +1414,7 @@ void purple_ship_update(Level13VendorMoby *moby) {
 extern char D_0013E533[];
 extern int D_0015EEA4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
-extern int D_L13_00179710[];
+extern int help_request_state[] __asm__("D_L13_00179710");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
@@ -1429,7 +1429,7 @@ void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
     unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
     data = (char *)moby->pvars;
-    if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
+    if (help_request_state[0] == 0 && help_request_state[9] == -1) {
         unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
         if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
             int linked_moby_index = *(int *)(data + 4);
