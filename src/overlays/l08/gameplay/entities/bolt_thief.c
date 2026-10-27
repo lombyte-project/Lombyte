@@ -1998,7 +1998,7 @@ typedef struct {
     unsigned char killed[1];
 } KillFlags_4BE8;
 
-extern BoltSourceStats_4BE8 D_0014D590[][64];
+extern BoltSourceStats_4BE8 bolt_source_stats[][64] __asm__("D_0014D590");
 typedef struct {
     float pos[4];              /* 0x00 */
     char pad10[0x10];
@@ -2346,7 +2346,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 FUN_L00_00272060(scratch + 4, scale_game_frames_c(0x19), size * 0.14f, size * shrink, 0x7F7F7F7F, 1, spin, scratch, 0.0f);
                 source = moby->parent;
                 if (source && !(source->id & 0x80)) {
-                    D_0014D590[current_level_index][source->id].bolts += value;
+                    bolt_source_stats[current_level_index][source->id].bolts += value;
                 }
                 D_0015ED98 += value;
                 level_bolts[current_level_index] += value;
@@ -2387,7 +2387,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             }
             source = moby->parent;
             if (source && !(source->id & 0x80)) {
-                D_0014D590[current_level_index][source->id].bolts += value;
+                bolt_source_stats[current_level_index][source->id].bolts += value;
             }
             D_0015ED98 += value;
             level_bolts[current_level_index] += value;
