@@ -1330,7 +1330,7 @@ void spawn_lightning_arc_particle_pairs(float *pos, int n) __asm__("FUN_L14_002e
 void draw_branched_lightning_arc() __asm__("FUN_L14_002edc18");
 extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 
-extern float D_L14_001DFFE0[];
+extern float lightning_main_arc_penultimate_point[] __asm__("D_L14_001DFFE0");
 /* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
 void update_branched_lightning_arc(char *moby) {
     Vec4 delta;
@@ -1374,7 +1374,7 @@ void update_branched_lightning_arc(char *moby) {
             path_fraction = arc_itof(i) / arc_itof(40);
             *main_arc_age = arc_ftoi((float)-arc_frames(D_L14_00161C70_gp) * path_fraction + 0.0f);
         }
-        arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
+        arc_lerp(lightning_main_arc_penultimate_point, lightning_main_arc_penultimate_point - 4, lightning_main_arc_penultimate_point + 4, 0.5f);
         sign = -1.0f;
         lightning_arc_remaining_frames = lightning_arc_initial_lifetime_frames = arc_frames(FUN_L00_00257b90_d530(lightning_arc_lifetime_range_start_gp, lightning_arc_lifetime_range_end_gp));
         lightning_arc_inverse_fade_duration = 1.0f / arc_itof(lightning_arc_remaining_frames - arc_frames(D_L14_00161C70_gp));
