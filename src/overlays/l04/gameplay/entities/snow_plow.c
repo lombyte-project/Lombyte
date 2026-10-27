@@ -1690,8 +1690,8 @@ struct PortalMobyView {
 };
 
 extern s32 D_L04_0015F5C4;
-extern u8 D_0013D4F1[];
-extern u8 D_0013D4C9[];
+extern u8 suck_cannon_in_inventory[] __asm__("D_0013D4F1");
+extern u8 suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
 extern char D_L04_001DC760[];
 extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
 extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
@@ -1723,7 +1723,7 @@ void suck_cannon_update(struct Moby *moby) {
     switch (moby->state) {
     case SUCK_CANNON_INITIALIZE:
         initialize_moby_particle_effect(moby);
-        if (D_0013D4F1[0]) {
+        if (suck_cannon_in_inventory[0]) {
             remove_moby_2e1a10(moby);
             break;
         }
@@ -1741,7 +1741,7 @@ void suck_cannon_update(struct Moby *moby) {
     case SUCK_CANNON_WAIT_TO_RESET_CAMERA:
         if (D_L04_0015F5C4 == 2)
             break;
-        if (!D_0013D4C9[0])
+        if (!suck_cannon_first_acquisition_recorded[0])
             queue_dialogue_message(0xFA7, -1);
         else
             queue_dialogue_message(0x53DF, -1);
