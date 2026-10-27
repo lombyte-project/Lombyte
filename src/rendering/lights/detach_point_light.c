@@ -31,9 +31,9 @@ struct PointLightIndexRanges {
     s32 instance_indices_address;
 };
 
-extern u8 D_001E7B50[];
-extern u8 D_001E7B70[];
-extern u8 D_001E7B98[];
+extern u8 tie_point_light_missing_message[] __asm__("D_001E7B50");
+extern u8 tfrag_point_light_missing_message[] __asm__("D_001E7B70");
+extern u8 shrub_point_light_missing_message[] __asm__("D_001E7B98");
 extern s32 DebugPrint();
 void detach_point_light(s32 light_index) __asm__("FUN_00201f88");
 
@@ -80,7 +80,7 @@ void detach_point_light(s32 light_index) {
             } else if ((tie_packed_lights & 0xF000) == light_fourth_nibble) {
                 tie_packed_lights |= 0xF000;
             } else {
-                DebugPrint(D_001E7B50);
+                DebugPrint(tie_point_light_missing_message);
             }
             tie_index_cursor += 1;
             if (tie_packed_lights == 0xFFFF) {
@@ -107,7 +107,7 @@ void detach_point_light(s32 light_index) {
             } else if ((tfrag_packed_lights & 0xF000) == light_fourth_nibble) {
                 tfrag_packed_lights |= 0xF000;
             } else {
-                DebugPrint(D_001E7B70);
+                DebugPrint(tfrag_point_light_missing_message);
             }
             tfrag_index_cursor += 1;
             if (tfrag_packed_lights == 0xFFFF) {
@@ -134,7 +134,7 @@ void detach_point_light(s32 light_index) {
             } else if ((shrub_packed_lights & 0xF000) == light_fourth_nibble) {
                 shrub_packed_lights |= 0xF000;
             } else {
-                DebugPrint(D_001E7B98);
+                DebugPrint(shrub_point_light_missing_message);
             }
             shrub_index_cursor += 1;
             if (shrub_packed_lights == 0xFFFF) {
