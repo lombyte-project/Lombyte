@@ -33,9 +33,9 @@ typedef struct {
 extern VendorDisplayMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 extern s32 D_L00_00161E34_macro __asm__("D_L00_00161E34") MACRO_ADDR;
-extern char D_L00_00161160[];
-extern char D_L00_00161168[];
-extern char D_L00_00161170[];
+extern char vendor_purchase_decimal_format[] __asm__("D_L00_00161160");
+extern char vendor_ammo_quantity_left_arrow_text[] __asm__("D_L00_00161168");
+extern char vendor_ammo_quantity_right_arrow_text[] __asm__("D_L00_00161170");
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_001fb8f0");
 extern void *memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
@@ -87,7 +87,7 @@ void draw_vendor_purchase_text(void *moby, s32 x, s32 y) {
     box.half_y = 6;
     box.style = 1;
     font_print_window_small((void *)&box, 0x80F0F0F0L, get_help_message_text(0x5237), -1);
-    sprintf(text, D_L00_00161160, D_L00_00161E34_macro);
+    sprintf(text, vendor_purchase_decimal_format, D_L00_00161E34_macro);
     if (D_L00_00161E34_macro >= 100)
         text_x = 0x17;
     else {
@@ -100,9 +100,9 @@ void draw_vendor_purchase_text(void *moby, s32 x, s32 y) {
 quantity_small:
     font_print_small(0x25, 0x32, 0x80F0F0F0L, text, -1);
 quantity_done:
-    font_print_small(0xc, 0x32, 0x80F0F0F0L, D_L00_00161168, -1);
-    font_print_small(0x40, 0x32, 0x80F0F0F0L, D_L00_00161170, -1);
-    format = D_L00_00161160;
+    font_print_small(0xc, 0x32, 0x80F0F0F0L, vendor_ammo_quantity_left_arrow_text, -1);
+    font_print_small(0x40, 0x32, 0x80F0F0F0L, vendor_ammo_quantity_right_arrow_text, -1);
+    format = vendor_purchase_decimal_format;
     if (vendor_menu.f40)
         total = D_L00_00161E34_macro * SELECTED_ITEM.hA;
     else
