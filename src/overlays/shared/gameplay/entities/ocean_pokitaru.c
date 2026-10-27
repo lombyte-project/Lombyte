@@ -405,8 +405,8 @@ extern void FUN_L00_0025e450_94f8(void *, void *, void *, float, float, int, int
                                     float, float, float, float, int, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
 
-extern char D_L11_001B2A80[];
-extern char D_L11_00174860[];
+extern char rocket_smoke_texture[] __asm__("D_L11_001B2A80");
+extern char rocket_impact_effect_origin[] __asm__("D_L11_00174860");
 /* Homing missile: turns toward its target while the target lives and stays within 3 units of
    where it was last frame, leaves a smoke trail, and bursts on a hit, when its timer runs out
    or outside the level box. */
@@ -431,7 +431,7 @@ void rocket_update(struct Moby *moby) {
     add_vector_xyz(&velocity, &velocity, &offset);
     FUN_L00_002712b8_94f8(&moby->pos, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
                            3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
-    texture = D_L11_001B2A80;
+    texture = rocket_smoke_texture;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
         normalize_vector_xyz(&offset, &data->step, random_float_between(fraction, fraction + 0.33333334f) * data->speed);
@@ -473,7 +473,7 @@ void rocket_update(struct Moby *moby) {
     }
     moby_point_position_94f8(moby, 1, &spray);
     if (collision_line(&previous_pos, &spray, 0, data->collision, 0)) {
-        FUN_L00_0025e450_94f8(moby, data, D_L11_00174860, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
+        FUN_L00_0025e450_94f8(moby, data, rocket_impact_effect_origin, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                                -1, 20.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         return;
