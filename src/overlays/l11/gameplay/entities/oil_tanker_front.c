@@ -1150,7 +1150,7 @@ extern short D_L11_00162398 __attribute__((sda));
 extern short D_L11_0016239C __attribute__((sda));
 extern short D_L11_001623A0 __attribute__((sda));
 extern short D_L11_001623A4 __attribute__((sda));
-extern short D_L11_001623A8 __attribute__((sda));
+extern short spark_lookup_index_and_flags_gp __asm__("D_L11_001623A8") __attribute__((sda));
 void spawn_moby_radial_spark(struct Moby *source_moby) __asm__("FUN_L11_00318ed8");
 
 void spawn_moby_radial_spark(struct Moby *source_moby) {
@@ -1173,7 +1173,7 @@ void spawn_moby_radial_spark(struct Moby *source_moby) {
     second_spark_vector[3] = *(float *)&D_L11_001623A4;
     spawn_spark(spark_position, first_spark_vector, second_spark_vector, *(int *)&D_L11_0016238C, *(int *)&D_L11_00162390,
                  *(int *)&D_L11_00162394, *(int *)&D_L11_00162398, *(int *)&D_L11_0016239C,
-                 *(int *)&D_L11_001623A8);
+                 *(int *)&spark_lookup_index_and_flags_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
 
@@ -1222,15 +1222,15 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-extern short D_L11_001623AC __attribute__((sda));
-extern short D_L11_001623B0 __attribute__((sda));
-extern short D_L11_001623B4 __attribute__((sda));
-extern short D_L11_001623B8 __attribute__((sda));
-extern short D_L11_001623BC __attribute__((sda));
-extern short D_L11_001623C0 __attribute__((sda));
-extern short D_L11_001623C4 __attribute__((sda));
-extern short D_L11_001623C8 __attribute__((sda));
-extern short D_L11_001623CC __attribute__((sda));
+extern short energy_sphere_spark_radial_range_start_gp __asm__("D_L11_001623AC") __attribute__((sda));
+extern short energy_sphere_spark_radial_range_end_gp __asm__("D_L11_001623B0") __attribute__((sda));
+extern short energy_sphere_spark_first_vector_w_gp __asm__("D_L11_001623B4") __attribute__((sda));
+extern short energy_sphere_spark_second_vector_w_gp __asm__("D_L11_001623B8") __attribute__((sda));
+extern short energy_sphere_spark_color_range_start_gp __asm__("D_L11_001623BC") __attribute__((sda));
+extern short energy_sphere_spark_color_range_end_gp __asm__("D_L11_001623C0") __attribute__((sda));
+extern short energy_sphere_spark_frame_count_gp __asm__("D_L11_001623C4") __attribute__((sda));
+extern short energy_sphere_spark_second_frame_count_gp __asm__("D_L11_001623C8") __attribute__((sda));
+extern short energy_sphere_spark_third_frame_count_gp __asm__("D_L11_001623CC") __attribute__((sda));
 void spawn_energy_sphere_spark(struct Moby *moby) __asm__("FUN_L11_003191c0");
 
 void spawn_energy_sphere_spark(struct Moby *moby) {
@@ -1238,18 +1238,18 @@ void spawn_energy_sphere_spark(struct Moby *moby) {
     float second_spark_vector[4];
     int first_spark_color;
     int second_spark_color;
-    random_vector(first_spark_vector, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
-                     *(float *)&D_L11_001623B0 * D_0015ED6C_n[1]);
-    random_vector(second_spark_vector, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
-                     *(float *)&D_L11_001623B0 * D_0015ED6C_n[1]);
-    first_spark_vector[3] = *(float *)&D_L11_001623B4;
-    second_spark_vector[3] = *(float *)&D_L11_001623B8;
-    first_spark_color = fast_tween_color(*(int *)&D_L11_001623BC, *(int *)&D_L11_001623C0,
+    random_vector(first_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * D_0015ED6C_n[1],
+                     *(float *)&energy_sphere_spark_radial_range_end_gp * D_0015ED6C_n[1]);
+    random_vector(second_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * D_0015ED6C_n[1],
+                     *(float *)&energy_sphere_spark_radial_range_end_gp * D_0015ED6C_n[1]);
+    first_spark_vector[3] = *(float *)&energy_sphere_spark_first_vector_w_gp;
+    second_spark_vector[3] = *(float *)&energy_sphere_spark_second_vector_w_gp;
+    first_spark_color = fast_tween_color(*(int *)&energy_sphere_spark_color_range_start_gp, *(int *)&energy_sphere_spark_color_range_end_gp,
                       random_float_between_alt(0.0f, 1.0f));
-    second_spark_color = fast_tween_color(*(int *)&D_L11_001623BC, *(int *)&D_L11_001623C0,
+    second_spark_color = fast_tween_color(*(int *)&energy_sphere_spark_color_range_start_gp, *(int *)&energy_sphere_spark_color_range_end_gp,
                       random_float_between_alt(0.0f, 1.0f));
-    spawn_spark(&moby->pos, first_spark_vector, second_spark_vector, first_spark_color, second_spark_color, *(int *)&D_L11_001623C4, *(int *)&D_L11_001623C8,
-                 *(int *)&D_L11_001623CC, *(int *)&D_L11_001623A8);
+    spawn_spark(&moby->pos, first_spark_vector, second_spark_vector, first_spark_color, second_spark_color, *(int *)&energy_sphere_spark_frame_count_gp, *(int *)&energy_sphere_spark_second_frame_count_gp,
+                 *(int *)&energy_sphere_spark_third_frame_count_gp, *(int *)&spark_lookup_index_and_flags_gp);
 }
 #include "sda.h"
 
