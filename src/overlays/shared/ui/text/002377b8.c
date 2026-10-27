@@ -946,8 +946,8 @@ extern s32 hero_max_health __asm__("D_0015EDA0");
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 #include "rnc/overlay/shared/ui/text/002377b8_data/draw_health_hud_panel.h"
 extern s32 health_hud_default_icon_offsets[1] __asm__("D_L00_0015F7F8") __attribute__((sda));
-extern Pt D_L00_0017E478[];
-extern Pt D_L00_0017E460[];
+extern Pt l00_health_hud_eight_capacity_icon_offsets[] __asm__("D_L00_0017E478");
+extern Pt l00_health_hud_five_capacity_icon_offsets[] __asm__("D_L00_0017E460");
 
 s32 draw_health_hud_panel(Hud *hud_element) __asm__("FUN_L00_00239810");
 
@@ -1007,11 +1007,11 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     if (hero.vehicle_mode == 1)
         mode = hero.health.vehicle_mode_hp;
     if (mode == 8) {
-        tab = D_L00_0017E478;
+        tab = l00_health_hud_eight_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
     } else if (mode == 5) {
-        tab = D_L00_0017E460;
+        tab = l00_health_hud_five_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
     } else {
