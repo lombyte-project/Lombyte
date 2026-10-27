@@ -15,7 +15,7 @@ extern volatile u32 D_001312E8[];
 extern volatile u32 D_001312F0[];
 extern volatile u32 D_001312F4[];
 extern volatile u32 D_00131314[];
-extern struct CdReadCommand D_001313C0;
+extern struct CdReadCommand native_cd_read_request __asm__("D_001313C0");
 extern u8 native_cd_read_completion_buffer[] __asm__("D_001323C0");
 extern u8 native_cd_read_response[] __asm__("D_00132480");
 extern u8 D_00132490[];
@@ -35,7 +35,7 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
         CD_READ_PATTERN_2328_BYTES_PER_SECTOR = 1,
         CD_READ_PATTERN_2340_BYTES_PER_SECTOR = 2
     };
-    struct CdReadCommand *command = &D_001313C0;
+    struct CdReadCommand *command = &native_cd_read_request;
     s32 size;
 
     if (!(D_001312F4[0] & 1) && sceCdNcmdDiskReady() == 6) {
