@@ -8,7 +8,7 @@ struct MpegDisplayState {
     s64 unk20;
 };
 
-extern u32 D_00132E98[];
+extern u32 display_values_by_picture_flags[] __asm__("D_00132E98");
 extern s32 _cpr8();
 extern s32 _csc_storeRefImage();
 extern s32 _getPtsDtsFlags();
@@ -23,7 +23,7 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *ref_image) 
                     (s32 *)((u8 *)temp_7_9 + 0x20));
     ref_info = (struct MpegDisplayState *)decoder->mpeg;
     decoder->unk80 = (s32)ref_info->unk10;
-    temp_6_28 = D_00132E98[(s32)(ref_info->unk20 >> 5) & 0xF];
+    temp_6_28 = display_values_by_picture_flags[(s32)(ref_info->unk20 >> 5) & 0xF];
     decoder->unkCC = (s32)ref_image->unk5C;
     decoder->unk88 = temp_6_28;
     decoder->unkD0 = (s32)ref_image->unk60;
