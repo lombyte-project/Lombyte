@@ -1282,10 +1282,10 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 
 extern float D_L12_00162108[2] __attribute__((section(".sdata")));
 extern char D_L12_00208B00[];
-extern int D_L12_001FBD10[];
-extern int D_L12_002059E0[];
-extern int D_L12_00205A08[];
-extern int D_L12_00205A58[];
+extern int hoven_scrolling_clipped_vertex_counts[] __asm__("D_L12_001FBD10");
+extern int hoven_scrolling_clipped_vertex_position_tables[] __asm__("D_L12_002059E0");
+extern int hoven_scrolling_clipped_base_uv_tables[] __asm__("D_L12_00205A08");
+extern int hoven_scrolling_clipped_vertex_color_tables[] __asm__("D_L12_00205A58");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
@@ -1306,8 +1306,8 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     if (is_point_inside_clip_volume(D_L12_00167240, moby_data[0])) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
-            FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
-            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i],
+            FUN_L08_00258090(D_L12_00208B00, hoven_scrolling_clipped_base_uv_tables[i], hoven_scrolling_clipped_vertex_counts[i], D_L12_00162108);
+            FUN_L00_001fde98(hoven_scrolling_clipped_vertex_counts[i], hoven_scrolling_clipped_vertex_position_tables[i], hoven_scrolling_clipped_vertex_color_tables[i],
                              D_L12_00208B00, 1);
         }
     }
@@ -1349,7 +1349,7 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
     case INITIALIZE_SCROLL_PHASES:
         if (hoven_scrolling_color_tables_initialized_gp == 0) {
             scale_rgba_tables(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
-            scale_rgba_tables(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
+            scale_rgba_tables(hoven_scrolling_clipped_vertex_color_tables, 10, hoven_scrolling_clipped_vertex_counts, 0.1f, 0.6f, 0.4f, 0.5f, 1);
             hoven_scrolling_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
