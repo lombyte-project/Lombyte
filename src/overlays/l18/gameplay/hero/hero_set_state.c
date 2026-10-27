@@ -26,7 +26,7 @@ typedef struct {
 extern T2C_2284E0 D_L18_0017C628[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L18_0017C7F0[][25];
+extern float hero_hurt_animation_blend_curves[][25] __asm__("D_L18_0017C7F0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -358,7 +358,7 @@ int hero_set_state(int a, int b) {
                 {
                     struct Hero *w = &hero;
                     *(float *)(((char *)w->moby) + 0x54) =
-                        D_L18_0017C7F0[w->anim_blend_curve][(w->anim_blend_step)++];
+                        hero_hurt_animation_blend_curves[w->anim_blend_curve][(w->anim_blend_step)++];
                 }
             }
         }
@@ -991,7 +991,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
+    case HERO_STATE_STORED_HEADING_JUMP:
     case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
     case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
@@ -1001,9 +1001,9 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
-    case 0x3C:
-    case 0x49:
-    case 0x4C:
+    case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
+    case HERO_STATE_ALT_LEDGE_JUMP:
     case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
@@ -1703,7 +1703,7 @@ int hero_set_state(int a, int b) {
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
                 *(float *)(((char *)q->moby) + 0x54) =
-                    D_L18_0017C7F0[q->anim_blend_curve][(q->anim_blend_step)++];
+                    hero_hurt_animation_blend_curves[q->anim_blend_curve][(q->anim_blend_step)++];
             }
         }
         break;
@@ -1835,7 +1835,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(6, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L18_0017C7F0[p->anim_blend_curve][(p->anim_blend_step)++];
+                hero_hurt_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -1916,7 +1916,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(2, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L18_0017C7F0[p->anim_blend_curve][(p->anim_blend_step)++];
+                hero_hurt_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
