@@ -1692,7 +1692,7 @@ struct PortalMobyView {
 extern s32 D_L04_0015F5C4;
 extern u8 suck_cannon_in_inventory[] __asm__("D_0013D4F1");
 extern u8 suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
-extern char D_L04_001DC760[];
+extern char suck_cannon_missing_segment_switch_warning_format[] __asm__("D_L04_001DC760");
 extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
 extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
@@ -1751,7 +1751,7 @@ void suck_cannon_update(struct Moby *moby) {
             exit = &portal_mobys_2e1a10[vars->exitMoby];
             jet_reset_camera(&exit->pos, &exit->rot);
         } else {
-            debug_print(D_L04_001DC760, ((struct PortalMobyView *)moby)->uid);
+            debug_print(suck_cannon_missing_segment_switch_warning_format, ((struct PortalMobyView *)moby)->uid);
         }
         moby->state = 3;
         memcard_save_data(0, -1);
