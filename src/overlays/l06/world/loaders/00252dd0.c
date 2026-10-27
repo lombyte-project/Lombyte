@@ -116,7 +116,7 @@ char D_L06_001FFDD0[] = "moby insts:     %.1fK\n";
 char D_L06_001FFDE8[] = "moby pvars:     %.1fK\n";
 char D_L06_001FFE00[] = "paths:          %.1fK\n";
 char D_L06_001FFE30[] = "end of mem:     %.1fM\n";
-extern s32 D_L06_001B2200[];
+extern s32 level_06_particle_texture_ranges[] __asm__("D_L06_001B2200");
 extern char *D_L18_001C6200_252dd0[] __asm__("D_L06_001C5F80");
 extern char *D_L18_001BCA30_252dd0[] __asm__("D_L06_001BC7B0");
 extern char *D_L18_00160FC0_252dd0 __asm__("D_L06_00160FC0");
@@ -387,8 +387,8 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         if (level_header[4])
             printf_1e93b0(D_L06_001FFCC8, KB(D_L18_00174840_252dd0[0] - (char *)level_06_sky_definition_base));
         printf_1e93b0(D_L06_001FFCE0, KB(level_06_texture_reference_base - (s32)D_L18_00174840_252dd0[0]));
-        printf_1e93b0(D_L06_001FFCF8, KB((D_L06_001B2200[1] >> 4) - level_06_texture_reference_base));
-        printf_1e93b0(D_L06_001FFD10, KB((s32)level_06_effects_texture_data_base - (D_L06_001B2200[1] >> 4)));
+        printf_1e93b0(D_L06_001FFCF8, KB((level_06_particle_texture_ranges[1] >> 4) - level_06_texture_reference_base));
+        printf_1e93b0(D_L06_001FFD10, KB((s32)level_06_effects_texture_data_base - (level_06_particle_texture_ranges[1] >> 4)));
         printf_1e93b0(D_L06_001FFD28, KB((char *)level_06_moby_class_table[0] - level_06_effects_texture_data_base));
         printf_1e93b0(D_L06_001FFD40, KB(D_L18_001C6200_252dd0[0] - (char *)level_06_moby_class_table[0]));
         if (level_header[0xA])
