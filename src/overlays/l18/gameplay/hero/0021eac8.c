@@ -2480,13 +2480,13 @@ void update_hero_motion_for_current_state(void) {
         reduce_and_apply_hero_planar_velocity_addend(frame_time_sq * 12.6f);
         if (test_hero_animation_frame_window(4.0f) != 0) {
             s32 i;
-            f32 w = z;
+            f32 bolt_pitch = z;
             z = 1.0f;
             for (i = 0; i < 2; i++) {
                 moby_point_position((struct MobyView *)hero.moby, i + 3, &general_vector_or_hit_descriptor_scratch);
                 general_vector_or_hit_descriptor_scratch.f[0] += fast_cos(hero.motion.rot.f[2]) * 1.4f;
                 general_vector_or_hit_descriptor_scratch.f[1] += fast_sin(hero.motion.rot.f[2]) * 1.4f;
-                spawn_homing_bolt((struct MobyView *)hero.moby, &general_vector_or_hit_descriptor_scratch, hero.motion.rot.f[2], w, 0, 0.5f, hero.motion.rot.f[2], w);
+                spawn_homing_bolt((struct MobyView *)hero.moby, &general_vector_or_hit_descriptor_scratch, hero.motion.rot.f[2], bolt_pitch, 0, 0.5f, hero.motion.rot.f[2], bolt_pitch);
             }
         }
         if (hero.air_frames.s != 0) {
