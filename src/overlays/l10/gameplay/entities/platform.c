@@ -106,7 +106,7 @@ extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern char D_L10_001DC510[];
+extern char cycling_platform_missing_pvars_message[] __asm__("D_L10_001DC510");
 void update_cycling_platform(char *platform_moby) __asm__("FUN_L10_00295a38");
 
 void update_cycling_platform(char *platform_moby) {
@@ -119,7 +119,7 @@ void update_cycling_platform(char *platform_moby) {
     };
     char *platform_vars = *(char **)(platform_moby + 0x78);
     if (platform_vars == 0) {
-        stub_printf(D_L10_001DC510, *(short *)(platform_moby + 0xA6), *(short *)(platform_moby + 0xB2));
+        stub_printf(cycling_platform_missing_pvars_message, *(short *)(platform_moby + 0xA6), *(short *)(platform_moby + 0xB2));
         delete_moby(platform_moby);
         return;
     }
