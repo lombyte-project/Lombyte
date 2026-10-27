@@ -3510,7 +3510,7 @@ typedef struct {
     int timer;
 } Vars1448;
 
-extern LevelState D_L17_001BBB30;
+extern LevelState l17_save_id_collection_state __asm__("D_L17_001BBB30");
 extern char *D_L17_001600EC;
 extern char D_0013A4E0[];
 extern char D_0013E533[];
@@ -3570,7 +3570,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     shuttle_moby->scale = shuttle_moby->pclass->scale * *(float *)&shuttle_first_stop_departure_scale_multiplier;
     switch (shuttle_moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
-        if (D_L17_001BBB30.collected[(short)shuttle_moby->save_id] != 0 ||
+        if (l17_save_id_collection_state.collected[(short)shuttle_moby->save_id] != 0 ||
             (*(int *)(((char *)&D_0014C190) +
                       (((short)shuttle_moby->save_id >> 5) * 4 + (current_level_index << 8))) >>
              (shuttle_moby->save_id & 0x1F)) &
@@ -3652,7 +3652,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,
                              D_L17_001600EC + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
-        } else if (D_L17_001BBB30.collected[(short)shuttle_moby->save_id] != 0 ||
+        } else if (l17_save_id_collection_state.collected[(short)shuttle_moby->save_id] != 0 ||
                    (*(int *)(((char *)&D_0014C190) +
                              (((short)shuttle_moby->save_id >> 5) * 4 +
                               (current_level_index << 8))) >>
