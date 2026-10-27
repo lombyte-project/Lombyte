@@ -823,7 +823,7 @@ typedef struct {
 } RingPrim;
 
 extern float D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
-extern RingUV D_L17_001D3F70[4];
+extern RingUV l17_fleet_radial_quad_base_uvs[4] __asm__("D_L17_001D3F70");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_globals.h"
 extern float fleet_radial_uv_scroll_rate_gp __asm__("D_L17_00161BBC") __attribute__((sda));
@@ -862,7 +862,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
         for (k = 0; k < 4; k++) {
             RingStep step = D_L17_00161BC0;
 
-            quad_primitive.uv[k].y = D_L17_001D3F70[k].y + scroll * step.v[pass];
+            quad_primitive.uv[k].y = l17_fleet_radial_quad_base_uvs[k].y + scroll * step.v[pass];
         }
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 4; j++) {
@@ -872,7 +872,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
                 float *vj;
                 float radius;
 
-                quad_primitive.uv[j].x = D_L17_001D3F70[j].x + scroll * step.v[pass];
+                quad_primitive.uv[j].x = l17_fleet_radial_quad_base_uvs[j].x + scroll * step.v[pass];
                 radius = 0.0f;
                 if (j != 0) {
                     radius = *(float *)&fleet_radial_radius;
