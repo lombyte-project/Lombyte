@@ -180,7 +180,7 @@ extern void FUN_L00_00216f90(void *, void *, s32, s32);
 extern void compute_hero_reference_tilt_rotation(void *, void *, f32, f32, f32, s32) __asm__("FUN_L00_00216130");
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
-extern Vec4 D_L16_00179BE0[];
+extern Vec4 l16_hoverboard_trick_pivots_by_air_pose[] __asm__("D_L16_00179BE0");
 extern struct PadState D_0013C940;
 #define PD D_0013C940
 extern struct PlayerJointTable D_L16_0017AAE0;
@@ -1174,7 +1174,7 @@ void update_hero_motion_for_current_state(void) {
             f32 x;
             f32 y;
             hero.motion.yaw_rate = 0.0f;
-            qcopy(&primary_vector_scratch, &D_L16_00179BE0[hero.air_pose_index]);
+            qcopy(&primary_vector_scratch, &l16_hoverboard_trick_pivots_by_air_pose[hero.air_pose_index]);
             smooth_and_clamp_value_pair(&v10, &hero.smoothed_spin_stick, frame_scale_sq * 0.2f);
             x = -v10.f[0] * (frame_time * 12.217304f);
             y = -v10.f[1] * (frame_time * 12.217304f);
