@@ -3208,7 +3208,7 @@ void show_drek_boss_moby_group(int unused, int group_index) {
 extern char *D_L18_001600EC;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
-extern short D_L18_001DFB40[];
+extern short drek_boss_action_eligibility_by_phase[] __asm__("D_L18_001DFB40");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 int select_drek_boss_next_action(struct Moby *moby) {
@@ -3247,7 +3247,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
             state = 0x13;
             break;
         }
-        ok = *(short *)((char *)D_L18_001DFB40 + boss_action_choice_index * 2 + *(int *)(data + 0x34C) * 12);
+        ok = *(short *)((char *)drek_boss_action_eligibility_by_phase + boss_action_choice_index * 2 + *(int *)(data + 0x34C) * 12);
         if (state == *(int *)(data + 0x350))
             ok = 0;
         if (state == 0x13) {
