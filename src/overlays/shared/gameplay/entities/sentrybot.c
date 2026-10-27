@@ -2583,8 +2583,8 @@ typedef struct {
     unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
 } EffectQuad;
 
-extern float D_L15_001CE110[4][4][4];
-extern float D_L15_001CE210[8];
+extern float group_moby_effect_quad_vertices[4][4][4] __asm__("D_L15_001CE110");
+extern float group_moby_effect_quad_uvs[8] __asm__("D_L15_001CE210");
 extern int group_moby_effect_first_quad_color_gp __asm__("D_L15_001614C8") __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -2607,7 +2607,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     effect_quad.r70 = 0;
     {
         int count = 3;
-        float *source = D_L15_001CE210;
+        float *source = group_moby_effect_quad_uvs;
         float *v = &effect_quad.uv[0][1];
         float *u = &effect_quad.uv[0][0];
         do {
@@ -2637,7 +2637,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
                 int color = (&group_moby_effect_first_quad_color_gp)[i];
                 for (j = 0; j < 4; j++) {
                     colors[j] = color;
-                    qcopy(effect_quad.v[j], D_L15_001CE110[i][j]);
+                    qcopy(effect_quad.v[j], group_moby_effect_quad_vertices[i][j]);
                 }
                 draw_geometry_quad(&effect_quad, rotation, 0);
             }
