@@ -1034,7 +1034,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-extern short D_L17_0016206C __attribute__((sda));
+extern short fighter_jet_aim_direction_base_length_gp __asm__("D_L17_0016206C") __attribute__((sda));
 int D_L17_00162070 = 4;
 void update_fighter_jet_aim_and_fire_projectile(char *moby, char *ship_vars, float aim_azimuth, float aim_elevation) __asm__("FUN_L17_002ec000");
 
@@ -1043,7 +1043,7 @@ void update_fighter_jet_aim_and_fire_projectile(char *moby, char *ship_vars, flo
     char projectile_spawn_position[16];
     char projectile_spawn_offset[16];
     char aim_world_position[16];
-    build_spherical_offset(aim_direction, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_gp, aim_azimuth, aim_elevation);
+    build_spherical_offset(aim_direction, *(float *)&fighter_jet_aim_direction_base_length_gp * *(float *)&D_L17_001620A0_gp, aim_azimuth, aim_elevation);
     fast_vec_add(aim_direction, aim_direction, ship_vars);
     if (fast_dec_timer(ship_vars + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
