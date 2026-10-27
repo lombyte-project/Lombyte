@@ -355,7 +355,7 @@ extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void draw_scrolled_mesh_batch(int) __asm__("FUN_L08_002f0b40");
-extern void FUN_L08_002f0c18(int);
+extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
@@ -377,9 +377,9 @@ void draw_layered_mesh_effect(void) {
     draw_scrolled_mesh_batch(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)offset_mesh_first_pass_fixed_alpha_gp << 32 | 0x48);
-    FUN_L08_002f0c18(0);
+    draw_eleven_entry_scrolled_texture_batch(0);
     vu1_add_g_sregister(0x42, (long)offset_mesh_second_pass_fixed_alpha << 32 | 0x48);
-    FUN_L08_002f0c18(1);
+    draw_eleven_entry_scrolled_texture_batch(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)pair_offset_mesh_fixed_alpha_gp << 32 | 0x48);
     emit_pair_offset_render_batch(0);

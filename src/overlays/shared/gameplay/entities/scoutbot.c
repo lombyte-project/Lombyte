@@ -923,7 +923,9 @@ extern int D_L08_001DDF40[];
 extern int D_L08_001E27C8[];
 extern int D_L08_001E2798[];
 extern int D_L08_001E2828[];
-void FUN_L08_002f0c18(int scroll_pair_index) {
+void draw_eleven_entry_scrolled_texture_batch(int scroll_pair_index) __asm__("FUN_L08_002f0c18");
+
+void draw_eleven_entry_scrolled_texture_batch(int scroll_pair_index) {
     int i;
     for (i = 0; i < 11; i++) {
         FUN_L08_00258090(D_L08_001E8360, D_L08_001E27C8[i], D_L08_001DDF40[i], &D_L08_00161E10[scroll_pair_index]);

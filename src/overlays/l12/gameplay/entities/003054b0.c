@@ -1289,7 +1289,7 @@ extern int D_L12_00205A58[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
-extern void FUN_L08_002f0c18(int);
+extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
@@ -1312,10 +1312,10 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
         }
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));
-    FUN_L08_002f0c18(0);
+    draw_eleven_entry_scrolled_texture_batch(0);
     vu1_add_g_sregister(0x42, ((long)hoven_scrolling_second_layer_fixed_alpha << 32) | 0x68);
     vu1_add_g_sregister(6, get_effect_texture(0x30));
-    FUN_L08_002f0c18(1);
+    draw_eleven_entry_scrolled_texture_batch(1);
 }
 /* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
 extern int hoven_scrolling_color_tables_initialized_gp __asm__("D_L12_001620F0") __attribute__((sda));
