@@ -3041,7 +3041,7 @@ void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890")
 int count_2b1de0(float) __asm__("FUN_001fa6d0");
 int random_bit_2b1de0(int) __asm__("FUN_00213260");
 
-extern V_2b1af0 D_0013F9B0;
+extern V_2b1af0 l00_object_offset_burst_reference_direction __asm__("D_0013F9B0");
 void emit_object_offset_particle_burst(unsigned char *source_object) __asm__("FUN_L00_002b1de0");
 
 void emit_object_offset_particle_burst(unsigned char *source_object) {
@@ -3062,14 +3062,14 @@ void emit_object_offset_particle_burst(unsigned char *source_object) {
     add_2b1af0(&emission_position, source_object + 0x10, &emission_offset);
     for (i = 0; i < count_2b1de0(24.0f); i++) {
         angle = rnd_2b1af0(0.0f, 0.1308997f);
-        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &l00_object_offset_burst_reference_direction, (char *)&l00_object_offset_burst_reference_direction - 0x20,
                          (float)i * 0.2617994f + angle);
         ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         signed_random_particle_argument = rndi_2b1af0(0, 3);
         if (random_bit_2b1de0(2) != 0)
             signed_random_particle_argument = -signed_random_particle_argument;
-        if (*(int *)((char *)&D_0013F9B0 - 0x360) != 0) {
-            scale_2b1af0(&scaled_global_vector, (char *)&D_0013F9B0 - 0x560, 1.7f);
+        if (*(int *)((char *)&l00_object_offset_burst_reference_direction - 0x360) != 0) {
+            scale_2b1af0(&scaled_global_vector, (char *)&l00_object_offset_burst_reference_direction - 0x560, 1.7f);
             add_2b1af0(&particle_velocity, &particle_velocity, &scaled_global_vector);
         }
         {
@@ -3081,7 +3081,7 @@ void emit_object_offset_particle_burst(unsigned char *source_object) {
     }
     for (j = 0; j < count_2b1de0(6.0f); j++) {
         angle = rndf_2b1af0(0.0f, 0.7853982f);
-        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &l00_object_offset_burst_reference_direction, (char *)&l00_object_offset_burst_reference_direction - 0x20,
                          (float)j * 1.0471976f + angle);
         ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         {
