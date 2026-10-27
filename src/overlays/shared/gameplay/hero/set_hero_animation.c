@@ -402,7 +402,7 @@ extern char D_L00_00196D00[] __attribute__((section(".data")));
 extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") __attribute__((section(".sdata")));
 extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L00_0015F6E0 __attribute__((sda));
+extern short hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
@@ -467,7 +467,7 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
         *(unsigned char *)(*(int *)(*(int *)(hero_animation_moby + 0x24) + sequence_pointer_byte_offset + 0x48) + 0x11);
     hero_animation_dispatch_state->anim_changing = 1;
     if (blend_frames_or_selector < 0.0f) {
-        blend_frames_or_selector = *(int *)((char *)&D_L00_0015F6E0 + hero_animation_dispatch_state->anim_blend_curve * 4);
+        blend_frames_or_selector = *(int *)((char *)&hero_blend_curve_frame_counts + hero_animation_dispatch_state->anim_blend_curve * 4);
     }
     if (hero_animation_dispatch_state->vehicle_mode == 0) {
         blend_hero_slot3_mapped_animation_pair(requested_animation_id, starting_frame_index, blend_frames_or_selector);
