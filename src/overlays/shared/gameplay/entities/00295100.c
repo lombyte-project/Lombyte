@@ -1571,7 +1571,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     f12dc80_29ab70();
 }
 extern s32 D_L00_0015F3FC;
-extern s32 D_L00_001CA020[];
+extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
@@ -1638,7 +1638,7 @@ void start_vendor_exit_cutscene(void) {
     index = D_L00_001CA4C0_29ad08.f48;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
-    item = D_L00_001CA020[index];
+    item = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
@@ -2336,7 +2336,7 @@ void update_vendor_menu(void) {
         } else if (vendor_menu_state == 2) {
             ok = 0;
             if (vendor_menu.f40 == 0 && vendor_menu.f48 >= 0) {
-                if (D_L00_001CA020[vendor_menu.f48] >= 0) { ok = 1; }
+                if (vendor_exit_cutscene_ids_by_item[vendor_menu.f48] >= 0) { ok = 1; }
             }
             vendor_menu.f4++;
             if (vendor_menu.f4 >= scale_game_frames(40) || vendor_menu.f40 != 0) {
