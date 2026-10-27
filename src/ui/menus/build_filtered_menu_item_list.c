@@ -32,7 +32,7 @@ extern struct Slot D_001CEC80[];
 extern struct Slot D_001CECA0[];
 #include "rnc/gameplay/state/item_state.h"
 extern struct Info D_001863D0[];
-extern struct Item D_001D61B8[];
+extern struct Item filtered_menu_item_records[] __asm__("D_001D61B8");
 extern s32 D_001D6248[];
 extern s32 D_001D6280[];
 extern struct Menu D_001D1088;
@@ -58,13 +58,13 @@ s32 build_filtered_menu_item_list(void) {
         }
         if (item_available[id] != 0) {
             item_info = &D_001863D0[id];
-            D_001D61B8[filtered_item_count].icon = item_info->icon;
-            D_001D61B8[filtered_item_count].unk2 = 0;
-            D_001D61B8[filtered_item_count].unk4 = 0;
-            D_001D61B8[filtered_item_count].id = id;
+            filtered_menu_item_records[filtered_item_count].icon = item_info->icon;
+            filtered_menu_item_records[filtered_item_count].unk2 = 0;
+            filtered_menu_item_records[filtered_item_count].unk4 = 0;
+            filtered_menu_item_records[filtered_item_count].id = id;
             D_001D6248[filtered_item_count] = item_info->a;
             D_001D6280[filtered_item_count] = item_info->b;
-            D_001D61B8[filtered_item_count].index = i;
+            filtered_menu_item_records[filtered_item_count].index = i;
             filtered_item_count++;
         }
     }
