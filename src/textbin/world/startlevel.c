@@ -82,7 +82,7 @@ static inline void clear_bytes(u8 *p, s32 n) {
 
 void startlevel(void) __asm__("FUN_001e9658");
 
-extern u8 D_00165430[];
+extern u8 level_bss_end[] __asm__("D_00165430");
 extern volatile SoundSlot D_00186100[];
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
@@ -101,7 +101,7 @@ void startlevel(void) {
     boot_level_active = 1;
     init_once();
     InitializeStreamingState();
-    for (i = 0; i < D_00165430 - level_bss_start; i++) {
+    for (i = 0; i < level_bss_end - level_bss_start; i++) {
         level_bss_start[i] = 0;
     }
     previous_memory_card_notice = 0;
