@@ -537,7 +537,7 @@ extern char *D_L17_0015FFE4;
 extern char D_L17_001678D0[];
 extern char D_L17_001D9AC0[];
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern float D_L17_001678E0[];
+extern float fighter_jet_aim_radius_offset_vector[] __asm__("D_L17_001678E0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -597,8 +597,8 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                 dx = -dx;
             if (dy < 0)
                 dy = -dy;
-            qcopy(v, D_L17_001678E0);
-            fast_vec_scale(v, D_L17_001678E0, *(float *)(scanned_moby + 0xC) / 1280.0f);
+            qcopy(v, fighter_jet_aim_radius_offset_vector);
+            fast_vec_scale(v, fighter_jet_aim_radius_offset_vector, *(float *)(scanned_moby + 0xC) / 1280.0f);
             fast_vec_add(v, v, scanned_moby + 0x10);
             project_world_point_to_screen_pixels(v, &tx, &ty, 0);
             tx -= sx;
