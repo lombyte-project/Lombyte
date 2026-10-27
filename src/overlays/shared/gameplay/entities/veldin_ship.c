@@ -957,7 +957,7 @@ typedef struct M2d1e80 {
     u8 bc;
 } M2d1e80;
 extern s32 D_L00_0015F5C4;
-extern s32 D_L00_0016C890[];
+extern s32 veldin_ship_visibility_selector[] __asm__("D_L00_0016C890");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
@@ -968,7 +968,7 @@ void veldin_ship_update(M2d1e80 *moby) {
         moby->bc = 1;
         ship_vars[0x10] = 0;
     }
-    if (D_L00_0015F5C4 == 2 && (D_L00_0016C890[0] < 3 || D_L00_0016C890[0] == 4)) {
+    if (D_L00_0015F5C4 == 2 && (veldin_ship_visibility_selector[0] < 3 || veldin_ship_visibility_selector[0] == 4)) {
         moby->vis = 0;
         moby->flags |= 1;
     } else {
