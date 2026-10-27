@@ -47,7 +47,7 @@ typedef struct {
 
 extern HeroTableRow2C D_L15_0017C228[];
 extern HeroAnimRow D_L15_0017A0C0[];
-extern HeroTableEntry70 D_L15_00179E90[];
+extern HeroTableEntry70 l15_hero_idle_fidget_entries[] __asm__("D_L15_00179E90");
 extern S167300 D_L15_00167280;
 extern S17AD00 D_L15_0017AC80;
 extern S17C438 D_L15_0017C3B8;
@@ -275,7 +275,7 @@ void update_hero_state_machine(void) {
                                 HeroTableEntry70 *rec;
 
                                 hero.fidget_index = record_index;
-                                rec = &D_L15_00179E90[record_index];
+                                rec = &l15_hero_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
