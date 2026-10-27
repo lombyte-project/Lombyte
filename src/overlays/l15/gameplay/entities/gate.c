@@ -871,7 +871,7 @@ extern int construction_arm_effect_duration_max_frames_gp __asm__("D_L15_001619F
 extern float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") __attribute__((sda));
 extern float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") __attribute__((sda));
 extern float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") __attribute__((sda));
-extern unsigned short *D_L15_001ABE40[];
+extern unsigned short *l15_moby_group_member_lists[] __asm__("D_L15_001ABE40");
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_00251fd0(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -940,7 +940,7 @@ void construction_arm_update(struct Moby *moby)
         if (fast_dec_timer_s16(&arm_vars->timer) && FUN_001f9b48(D_L15_001673C0, &moby->pos) < 42.0f) {
             ready = 1;
             if (moby->group != 0xff) {
-                slot = (char *)D_L15_001ABE40[moby->group];
+                slot = (char *)l15_moby_group_member_lists[moby->group];
                 count = 0;
                 if (slot == 0) return;
                 list = (unsigned short *)slot;
