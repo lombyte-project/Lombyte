@@ -129,7 +129,7 @@ typedef struct {
     long g[4];
 } Quad;
 
-extern char D_L12_001F5B20[];
+extern char water_reservoir_quad_vertex_template[] __asm__("D_L12_001F5B20");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -140,7 +140,7 @@ int D_L12_00161A0C = 0;
 int D_L12_00161A18 = 1;
 int D_L12_00161A1C = 0x40602020;
 int D_L12_00161A20 = 0x40681818;
-extern short D_L12_00161A24 __attribute__((sda));
+extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
@@ -167,7 +167,7 @@ void draw_water_reservoir(struct Moby *moby) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;
         quad.c[i] = col;
-        qcopy(&quad.v[i * 4], D_L12_001F5B20 + i * 16);
+        qcopy(&quad.v[i * 4], water_reservoir_quad_vertex_template + i * 16);
     }
     for (segment_start_y = -0.4f; segment_start_y < 0.36f; segment_start_y += 0.1f) {
         segment_end_y = segment_start_y + 0.1f;
@@ -176,11 +176,11 @@ void draw_water_reservoir(struct Moby *moby) {
         quad.v[13] = segment_end_y;
         quad.v[5] = segment_end_y;
         if (moby->command & 1) {
-            quad.v[2] = -fast_cos(segment_start_y * *(float *)&D_L12_00161A24) + 2.0f;
-            quad.v[6] = -fast_cos(segment_end_y * *(float *)&D_L12_00161A24) + 2.0f;
+            quad.v[2] = -fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp) + 2.0f;
+            quad.v[6] = -fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp) + 2.0f;
         } else {
-            quad.v[2] = fast_cos(segment_start_y * *(float *)&D_L12_00161A24);
-            quad.v[6] = fast_cos(segment_end_y * *(float *)&D_L12_00161A24);
+            quad.v[2] = fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
+            quad.v[6] = fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
         }
         draw_geometry_quad(&quad, rotation_matrix, 0);
     }
