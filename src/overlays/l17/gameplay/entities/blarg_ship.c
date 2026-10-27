@@ -536,8 +536,8 @@ done:
 
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char D_L17_001676C0[];
-extern char D_L17_001DE110[];
-extern char D_L17_001DE120[];
+extern char blarg_ship_positive_y_launch_offset[] __asm__("D_L17_001DE110");
+extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -734,9 +734,9 @@ void blarg_ship_update(struct Moby *moby) {
                 normalize_vector_xyz(sB0, hero_position_delta, *(float *)(moby_pvars + 0x94));
                 add_vector_xyz(sB0, sB0, hero_position);
                 if (D_L17_0015F5CC % 20 == 0) {
-                    transform_vector_by_basis(sA0, D_L17_001DE110, &moby->rot_row0);
+                    transform_vector_by_basis(sA0, blarg_ship_positive_y_launch_offset, &moby->rot_row0);
                 } else {
-                    transform_vector_by_basis(sA0, D_L17_001DE120, &moby->rot_row0);
+                    transform_vector_by_basis(sA0, blarg_ship_negative_y_launch_offset, &moby->rot_row0);
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
                 subtract_vector_xyz(firing_target_delta, sB0, sA0);
