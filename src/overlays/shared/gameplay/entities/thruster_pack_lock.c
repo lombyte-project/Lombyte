@@ -429,7 +429,7 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
     }
 }
 extern unsigned char D_0015EDB2;
-extern float D_L11_001F1490[];
+extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -480,8 +480,8 @@ int draw_linked_moby_trails(char *moby) {
         base = integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
-            quads[i].texture_coordinates[j][0] = ((float (*)[2])D_L11_001F1490)[j][0];
-            quads[i].texture_coordinates[j][1] = ((float (*)[2])D_L11_001F1490)[j][1];
+            quads[i].texture_coordinates[j][0] = ((float (*)[2])trail_quad_texture_coordinates)[j][0];
+            quads[i].texture_coordinates[j][1] = ((float (*)[2])trail_quad_texture_coordinates)[j][1];
             blend = integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
             if (1.0f < blend) {
                 blend = 1.0f;
