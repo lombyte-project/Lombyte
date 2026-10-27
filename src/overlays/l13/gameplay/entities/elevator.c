@@ -2438,7 +2438,7 @@ skip:
 /* Draws the Gemlik turret HUD: target marker, ammo icons, gauge sprites and warning, refreshes the gauge colour table, then the two frame halves. */
 
 extern char *msg_string(s32) __asm__("func_001FDD10");
-extern char D_L13_001CBC60[];
+extern char fighter_jet_ammo_icon_vertices[] __asm__("D_L13_001CBC60");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int fighter_jet_health_palette_backup[] __asm__("D_L13_001CBE70");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -2516,9 +2516,9 @@ void draw_fighter_jet_hud(char *moby) {
     for (i = 0; i < ammo_icon_count; i++) {
         player_ammo_state = D_0013F350;
         if (i < player_ammo_state[0x15F6]) {
-            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x50008F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, fighter_jet_ammo_icon_vertices, 0x19, 0xFFFFF3, 0x50008F00);
         } else {
-            append_scaled_screen_triangle_strip(x, y, 0.5f, D_L13_001CBC60, 0x19, 0xFFFFF3, 0x20004F00);
+            append_scaled_screen_triangle_strip(x, y, 0.5f, fighter_jet_ammo_icon_vertices, 0x19, 0xFFFFF3, 0x20004F00);
         }
         ammo_icon_count = player_ammo_state[0x15F7];
         if (i == ammo_icon_count >> 1) {
