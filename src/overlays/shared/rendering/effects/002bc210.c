@@ -63,7 +63,7 @@ typedef struct {
 } L12MobyList;
 
 extern L12MobyList D_L12_0016CCE0;
-extern unsigned char D_L12_0017C8C0[];
+extern unsigned char l12_npc_big_head_manipulator[] __asm__("D_L12_0017C8C0");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void apply_npc_big_head_cheat(char *moby) __asm__("FUN_L12_002e6b60");
@@ -76,7 +76,7 @@ void apply_npc_big_head_cheat(char *moby) {
             char *candidate_moby = D_L12_0016CCE0.mobys[i];
 
             if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *manipulator = D_L12_0017C8C0;
+                unsigned char *manipulator = l12_npc_big_head_manipulator;
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 1, manipulator);
