@@ -10,7 +10,7 @@ extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 
-extern unsigned char D_0013D389[];
+extern unsigned char l11_proximity_removal_flag[] __asm__("D_0013D389");
 extern char D_L11_00179B18[];
 extern char raritanium_acquired_text[] __asm__("D_L11_0021A900");
 #include "rnc/overlay/shared/gameplay/entities/ocean_pokitaru_globals.h"
@@ -18,7 +18,7 @@ void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
 void remove_moby_when_near_hero(char *moby) {
     if (FUN_001f9b48_b7(moby + 0x10, &hero.motion.pos) < 2.0f) {
-        D_0013D389[0] = 1;
+        l11_proximity_removal_flag[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, raritanium_acquired_text);
         proximity_removal_frame_count = FUN_001f96f8_b7(0xB4);
         FUN_0020c828_b7(moby);
