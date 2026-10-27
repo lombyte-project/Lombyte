@@ -2678,7 +2678,7 @@ extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdat
 extern f32 frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern u64 fighter_jet_steering_reference_position __asm__("D_L13_00161430") __attribute__((sda));
 extern char *D_L13_00167100 __attribute__((section(".data")));
-extern char D_L13_00174140[];
+extern char coll_hit_1638[] __asm__("D_L13_00174140");
 extern char fighter_jet_camera_mode_correction_message[] __asm__("D_L13_001F4450");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -2910,7 +2910,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     moby->rot_y = fast_add_rotations(data->pitch, -data->steer_y * 0.5f);
     moby->rot_z = fast_add_rotations(data->yaw, -data->steer_x * 0.0f);
     if (coll_sphere(1.2f, moby->pos, 0, moby)) {
-        hit = D_L13_00174140;
+        hit = coll_hit_1638;
         if (*(char **)(hit + 0x18) == 0 || (hit_class = *(short *)(*(char **)(hit + 0x18) + 0xA6), hit_class != 0 && hit_class != 0x192 && hit_class != 0x4C2 && hit_class != 0x4C3 && hit_class != 0x52 && hit_class != 0x53)) {
             qcopy(moby->pos, hit + 0x30);
             jet_reflect_vector(velocity, velocity, hit + 0x40);
