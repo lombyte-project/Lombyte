@@ -701,11 +701,11 @@ void liftcar_platform_update(struct Moby *moby) {
 extern char D_L02_001673C0[];
 extern char aridia_ocean_first_clip_draw_data[] __asm__("D_L02_001F3C00");
 extern char aridia_ocean_last_clip_draw_data[] __asm__("D_L02_001F3C60");
-extern char D_L02_001F3CD0[];
+extern char aridia_ocean_middle_clip_first_draw_data[] __asm__("D_L02_001F3CD0");
 extern char D_L02_001F3D30[];
 extern char D_L02_001F3D90[];
 extern char D_L02_001F3DD0[];
-extern char D_L02_001F3E10[];
+extern char aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
 extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
 extern void begin_animated_frame_rendering(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
@@ -724,11 +724,11 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
         draw_2ea048(aridia_ocean_first_clip_draw_data);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
-        draw_2ea048(D_L02_001F3CD0);
+        draw_2ea048(aridia_ocean_middle_clip_first_draw_data);
         draw_2ea048(D_L02_001F3D30);
         draw_2ea048(D_L02_001F3D90);
         draw_2ea048(D_L02_001F3DD0);
-        draw_2ea048(D_L02_001F3E10);
+        draw_2ea048(aridia_ocean_middle_clip_last_draw_data);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
         draw_2ea048(aridia_ocean_last_clip_draw_data);
