@@ -13,9 +13,9 @@ typedef struct {
     s32 rdata_table_idx;
 } SifRpcData;
 
-extern u8 D_00155000[];
-extern u8 D_00155800[];
-extern u8 D_00156000[];
+extern u8 sif_rpc_request_packets[] __asm__("D_00155000");
+extern u8 sif_rpc_reply_packets[] __asm__("D_00155800");
+extern u8 sif_rpc_client_table[] __asm__("D_00156000");
 extern SifRpcData D_00156800;
 extern void _request_end();
 extern void _request_bind();
@@ -42,13 +42,13 @@ void sceSifInitRpc(u32 mode) {
     EnableInterrupts();
     sceSifInitCmd();
     DIntr();
-    D_00156800.pkt_table = (void *)((u32)D_00155000 | 0x20000000);
+    D_00156800.pkt_table = (void *)((u32)sif_rpc_request_packets | 0x20000000);
     D_00156800.pkt_table_len = 32;
     D_00156800.unk0C = 0;
     D_00156800.unk10 = 0;
-    D_00156800.rdata_table = (void *)((u32)D_00155800 | 0x20000000);
+    D_00156800.rdata_table = (void *)((u32)sif_rpc_reply_packets | 0x20000000);
     D_00156800.rdata_table_len = 32;
-    D_00156800.client_table = (void *)((u32)D_00156000 | 0x20000000);
+    D_00156800.client_table = (void *)((u32)sif_rpc_client_table | 0x20000000);
     D_00156800.client_table_len = 32;
     D_00156800.rdata_table_idx = 0;
     D_00156800.pid = 1;
@@ -60,7 +60,7 @@ void sceSifInitRpc(u32 mode) {
     if (sceSifGetReg(0x80000002)) {
         return;
     }
-    packet = (s32 *)(D_00155000 + 64);
+    packet = (s32 *)(sif_rpc_request_packets + 64);
     packet[3] = 1;
     sceSifSendCmd(0x80000002, packet, 16, 0, 0, 0);
     while (func_0011A458(0) == 0) {
