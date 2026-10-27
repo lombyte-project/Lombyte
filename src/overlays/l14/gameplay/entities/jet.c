@@ -3217,8 +3217,8 @@ extern int tram_sound(int, int, void *) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int D_L14_001BABD0[];
 extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
-extern char D_L14_001FCE98[];
-extern char D_L14_001FCED0[];
+extern char enemy_fighter_921_missing_flight_path_error_format[] __asm__("D_L14_001FCE98");
+extern char enemy_fighter_921_empty_flight_path_error_format[] __asm__("D_L14_001FCED0");
 extern s32 enemy_fighter_921_respawn_delay_frames_gp __asm__("D_L14_00161F8C") __attribute__((sda));
 extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
@@ -3312,12 +3312,12 @@ void update_enemy_fighter_921(struct Moby *moby) {
     switch (moby->state) {
     case TRAM_STATE_INITIALIZE:
         if (moby_vars->path == -1) {
-            tram_print(D_L14_001FCE98, moby->save_id);
+            tram_print(enemy_fighter_921_missing_flight_path_error_format, moby->save_id);
             tram_remove(moby);
             return;
         }
         if (*(int *)D_L14_001B0BB0_t[moby_vars->path] == 0) {
-            tram_print(D_L14_001FCED0, moby->save_id);
+            tram_print(enemy_fighter_921_empty_flight_path_error_format, moby->save_id);
             tram_remove(moby);
             return;
         }
