@@ -354,16 +354,16 @@ int update_moby_suck_cannon_suction_state(struct Moby *moby) {
 extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 void *moby_park_state_on_find(struct Moby *arg) __asm__("FUN_L11_00316210");
-void *moby_park_state_on_find(struct Moby *arg) {
-    void *found = store_moby_in_suck_cannon(arg);
+void *moby_park_state_on_find(struct Moby *suction_moby) {
+    void *found = store_moby_in_suck_cannon(suction_moby);
     if (found != 0) {
-        unsigned char state = arg->state;
+        unsigned char state = suction_moby->state;
         if (state != 0x14) {
-            arg->command = state;
-            arg->state = 0x14;
+            suction_moby->command = state;
+            suction_moby->state = 0x14;
         }
-    } else if (arg->state == 0x14) {
-        arg->state = arg->command;
+    } else if (suction_moby->state == 0x14) {
+        suction_moby->state = suction_moby->command;
     }
     return found;
 }
