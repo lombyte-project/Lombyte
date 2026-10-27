@@ -1822,14 +1822,14 @@ extern short D_L11_00162570_d __asm__("D_L11_00162570") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-extern short D_L11_00162540 __attribute__((sda));
-extern short D_L11_00162550 __attribute__((sda));
+extern short layered_effect_triple_word_source_tables_gp __asm__("D_L11_00162540") __attribute__((sda));
+extern short layered_effect_pair_source_tables_gp __asm__("D_L11_00162550") __attribute__((sda));
 void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__("FUN_L11_0031d8d8");
 
 void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) {
     int *element_counts = (int *)&D_L11_00162530_d;
-    int *triple_word_source_tables = (int *)&D_L11_00162540;
-    int *pair_source_tables = (int *)&D_L11_00162550;
+    int *triple_word_source_tables = (int *)&layered_effect_triple_word_source_tables_gp;
+    int *pair_source_tables = (int *)&layered_effect_pair_source_tables_gp;
     int *word_source_tables = (int *)&D_L11_00162570_d;
     int i;
     for (i = 0; i < 4; i++) {
