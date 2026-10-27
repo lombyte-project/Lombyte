@@ -1941,9 +1941,9 @@ extern VendorItemSlot30 D_L00_001C9930[];
 extern VendorRow D_L00_00165E80[];
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern char D_0013D1D0[];
-extern u8 D_L00_00161128[];
-extern u8 D_L00_00161138[];
-extern u8 D_L00_00161148[];
+extern u8 vendor_moby_update_label[] __asm__("D_L00_00161128");
+extern u8 vendor_hero_update_label[] __asm__("D_L00_00161138");
+extern u8 vendor_part_update_label[] __asm__("D_L00_00161148");
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
 #include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase_2.h"
@@ -2305,15 +2305,15 @@ void update_vendor_menu(void) {
                 update_visible_resident_objects();
                 FUN_0022dc50();
             }
-            noop_main_callback(D_L00_00161128, 3);
+            noop_main_callback(vendor_moby_update_label, 3);
             if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 coordinate_hero_frame_update();
             }
-            noop_main_callback(D_L00_00161138, 7);
+            noop_main_callback(vendor_hero_update_label, 7);
             if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 update_parts();
             }
-            noop_main_callback(D_L00_00161148, 5);
+            noop_main_callback(vendor_part_update_label, 5);
         }
         vendor_menu_state = vendor_menu.state;
         if (vendor_menu_state == 0) {
