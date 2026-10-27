@@ -3448,12 +3448,12 @@ extern char drek_boss_firing_particle_speed_range_start_gp[4] __asm__("D_L18_001
 extern char drek_boss_firing_particle_speed_range_end_gp[4] __asm__("D_L18_00162410") __attribute__((sda));
 extern char D_L18_00162414[4] __attribute__((sda));
 extern char D_L18_00162418[4] __attribute__((sda));
-extern char D_L18_0016241C[4] __attribute__((sda));
+extern char drek_boss_firing_particle_gravity_direction_scale_gp[4] __asm__("D_L18_0016241C") __attribute__((sda));
 extern char drek_boss_firing_particle_increment_range_start_gp[4] __asm__("D_L18_00162420") __attribute__((sda));
 extern char drek_boss_firing_particle_increment_range_end_gp[4] __asm__("D_L18_00162424") __attribute__((sda));
 extern char drek_boss_firing_particle_lifetime_range_start_frames_gp[4] __asm__("D_L18_00162428") __attribute__((sda));
 extern char drek_boss_firing_particle_lifetime_range_end_frames_gp[4] __asm__("D_L18_0016242C") __attribute__((sda));
-extern char D_L18_00162430[4] __attribute__((sda));
+extern char drek_boss_firing_particle_velocity_multiplier_gp[4] __asm__("D_L18_00162430") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_count_gp[4] __asm__("D_L18_00162438") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_emission_length_range_start_gp[4] __asm__("D_L18_0016243C") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_emission_length_range_end_gp[4] __asm__("D_L18_00162440") __attribute__((sda));
@@ -3494,8 +3494,8 @@ void spawn_drek_boss_firing_effects(char *moby, void *effect_position) {
                              scale_game_frames(random_int_between(*(int *)&drek_boss_firing_particle_lifetime_range_start_frames_gp,
                                                                 *(int *)&drek_boss_firing_particle_lifetime_range_end_frames_gp)),
                              0x7F, 0xFFFFFF, random_particle_parameter, *(float *)&D_L18_00162414,
-                             *(float *)&D_L18_00162418, *(float *)&D_L18_00162430,
-                             *(float *)&D_L18_0016241C, 0.85f);
+                             *(float *)&D_L18_00162418, *(float *)&drek_boss_firing_particle_velocity_multiplier_gp,
+                             *(float *)&drek_boss_firing_particle_gravity_direction_scale_gp, 0.85f);
         }
     }
     {
