@@ -2334,7 +2334,7 @@ typedef struct {
 } L16RingMatrix;
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L16_001D9880[][2];
+extern float elevator_ring_quad_uvs[][2] __asm__("D_L16_001D9880");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
@@ -2385,7 +2385,7 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
     packet.mode = (long)D_L16_00161ECC | ((long)D_L16_00161ED0 << 2) | ((long)D_L16_00161ED4 << 4) |
                   ((long)D_L16_00161ED8 << 6) | 0x8000000000L;
     packet.zero = 0;
-    uv = D_L16_001D9880;
+    uv = elevator_ring_quad_uvs;
     point = packet.position;
     v = &packet.uv[0].v;
     u = &packet.uv[0].u;
