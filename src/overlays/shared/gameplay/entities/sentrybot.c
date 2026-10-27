@@ -2793,17 +2793,17 @@ extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/draw_spark_emitter_effect_quads.h"
-extern int D_L15_001CE230[];
-extern float D_L15_001CE250[][2];
-extern int D_L15_001CE290[][2];
-extern float D_L15_001CE2D0[][2];
-extern float D_L15_001CE2F0[4][4];
-extern float D_L15_001CE330[4][4];
+extern int spark_emitter_pass_colors[] __asm__("D_L15_001CE230");
+extern float spark_emitter_uv_phase_divisors_by_pass[][2] __asm__("D_L15_001CE250");
+extern int spark_emitter_uv_cosine_flags_by_pass[][2] __asm__("D_L15_001CE290");
+extern float spark_emitter_base_uvs[][2] __asm__("D_L15_001CE2D0");
+extern float spark_emitter_second_quad_vertex_template[4][4] __asm__("D_L15_001CE2F0");
+extern float spark_emitter_first_quad_vertex_template[4][4] __asm__("D_L15_001CE330");
 
-extern int D_L15_001614D8[2] __attribute__((sda));
-extern int D_L15_001614E0[2] __attribute__((sda));
-extern int D_L15_001614E8[2] __attribute__((sda));
-extern int D_L15_001614F0[2] __attribute__((sda));
+extern int spark_emitter_alpha_a_by_pass_parity[2] __asm__("D_L15_001614D8") __attribute__((sda));
+extern int spark_emitter_alpha_b_by_pass_parity[2] __asm__("D_L15_001614E0") __attribute__((sda));
+extern int spark_emitter_alpha_c_by_pass_parity[2] __asm__("D_L15_001614E8") __attribute__((sda));
+extern int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") __attribute__((sda));
 
 int draw_spark_emitter_effect_quads(unsigned char *moby) {
     EffectQuad first, second;
@@ -2839,33 +2839,33 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     second.col[3] = 0;
     second.col[1] = 0;
     for (corner = 0; corner < 4; corner++) {
-        qcopy(first.v[corner], D_L15_001CE330[corner]);
-        qcopy(secondVertices[corner], D_L15_001CE2F0[corner]);
+        qcopy(first.v[corner], spark_emitter_first_quad_vertex_template[corner]);
+        qcopy(secondVertices[corner], spark_emitter_second_quad_vertex_template[corner]);
     }
     for (pass = 0; pass < 6; pass = nextPass) {
         int parity = pass & 1;
         first.alpha =
-            (unsigned long long)D_L15_001614D8[parity] |
-            ((unsigned long long)D_L15_001614E0[parity] << 2) |
-            ((unsigned long long)D_L15_001614E8[parity] << 4) |
-            ((unsigned long long)D_L15_001614F0[parity] << 6) |
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
             0x8000000000ULL;
         second.alpha =
-            (unsigned long long)D_L15_001614D8[parity] |
-            ((unsigned long long)D_L15_001614E0[parity] << 2) |
-            ((unsigned long long)D_L15_001614E8[parity] << 4) |
-            ((unsigned long long)D_L15_001614F0[parity] << 6) |
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
             0x8000000000ULL;
         if (data[5] != 0) {
             second.col[2] = interpolate_color_2a3138((float)data[5] / 60.0f,
-                                                   D_L15_001CE230[pass], 0);
+                                                   spark_emitter_pass_colors[pass], 0);
             second.col[0] = second.col[2];
             first.col[3] = second.col[2];
             first.col[2] = second.col[2];
             first.col[1] = second.col[2];
             first.col[0] = second.col[2];
         } else {
-            second.col[2] = D_L15_001CE230[pass];
+            second.col[2] = spark_emitter_pass_colors[pass];
             second.col[0] = second.col[2];
             first.col[3] = second.col[2];
             first.col[2] = second.col[2];
@@ -2877,7 +2877,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
         nextPass = pass + 1;
         for (; corner < 4; corner++) {
             float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
-            float *frequency = (float *)((char *)D_L15_001CE250 + passOffset);
+            float *frequency = (float *)((char *)spark_emitter_uv_phase_divisors_by_pass + passOffset);
             int waveform = passOffset;
             int base = corner * 8;
             axis = 1;
@@ -2891,7 +2891,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                 angle = integer_to_float_2a3138(spark_emitter_uv_phase_input % limit)
                     / *frequency - 180.0f;
                 frequency++;
-                value = *(int *)((char *)D_L15_001CE290 + waveform);
+                value = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
                 waveform += 4;
                 radians = 0.017453292f;
                 step = 0.125f;
@@ -2901,7 +2901,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                     angle = fast_sin_2a3138(angle * radians);
                 }
                 delta = angle * step;
-                *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
+                *uv++ = *(float *)((char *)spark_emitter_base_uvs + base) + delta;
                 base += 4;
             } while (axis >= 0);
         }
