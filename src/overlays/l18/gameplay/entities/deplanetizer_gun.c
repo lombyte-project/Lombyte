@@ -913,9 +913,9 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
-extern short D_L18_00162578 __attribute__((sda));
-extern short D_L18_0016257C __attribute__((sda));
-extern short D_L18_00162580 __attribute__((sda));
+extern short deplanetizer_selected_joint_trail_velocity_scale_gp __asm__("D_L18_00162578") __attribute__((sda));
+extern short deplanetizer_selected_joint_trail_first_spawn_particle_value_gp __asm__("D_L18_0016257C") __attribute__((sda));
+extern short deplanetizer_selected_joint_trail_second_spawn_particle_value_gp __asm__("D_L18_00162580") __attribute__((sda));
 void update_selected_moby_joint_trail(M2 *moby) __asm__("FUN_L18_002fad28");
 
 void update_selected_moby_joint_trail(M2 *moby) {
@@ -946,9 +946,9 @@ void update_selected_moby_joint_trail(M2 *moby) {
                 moby_point_position(trail_source_moby, 8, joint_eight_world_position);
                 moby_point_position(trail_source_moby, 9, joint_nine_world_position);
                 fast_vec_sub(trail_velocity, joint_eight_world_position, joint_nine_world_position);
-                fast_vec_normalize(trail_velocity, trail_velocity, *(float *)&D_L18_00162578);
-                draw_trail(joint_eight_world_position, joint_eight_world_position, trail_velocity, *(float *)&D_L18_0016257C,
-                                 *(float *)&D_L18_00162580);
+                fast_vec_normalize(trail_velocity, trail_velocity, *(float *)&deplanetizer_selected_joint_trail_velocity_scale_gp);
+                draw_trail(joint_eight_world_position, joint_eight_world_position, trail_velocity, *(float *)&deplanetizer_selected_joint_trail_first_spawn_particle_value_gp,
+                                 *(float *)&deplanetizer_selected_joint_trail_second_spawn_particle_value_gp);
             }
         }
         break;
