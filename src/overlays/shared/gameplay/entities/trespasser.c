@@ -1150,7 +1150,7 @@ void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
 void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
-extern const float D_L00_00161828 __attribute__((sda));
+extern const float l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
 extern float trespasser_pickup_z_rotation_step_gp __asm__("D_L00_00161830") __attribute__((sda));
 void update_trespasser_pickup(void *mv) {
@@ -1166,7 +1166,7 @@ void update_trespasser_pickup(void *mv) {
         FUN_00213508_2c1778(trespasser_moby + 0x10, 0, 0.5f);
         *(float *)(trespasser_moby + 0x40) = 1.5707964f;
         *(float *)(trespasser_moby + 0x44) = 3.1415927f;
-        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
+        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + l00_trespasser_pickup_initial_height_offset;
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
