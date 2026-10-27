@@ -607,7 +607,7 @@ extern void FUN_L01_00234358_2b438(f32) __asm__("FUN_L01_00234358");
 #define ED6C D_0015ED6C_2b438
 #define ED70 frame_time_sq
 
-extern f32 D_L06_0017C550[];
+extern f32 hero_airborne_deceleration_speed_reference[] __asm__("D_L06_0017C550");
 void update_hero_airborne_planar_velocity(void) __asm__("FUN_L06_0022b438");
 
 void update_hero_airborne_planar_velocity(void) {
@@ -712,7 +712,7 @@ void update_hero_airborne_planar_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         velocity_adjustment_step = ED70 * 20.0f;
-        if (hero.target_speed < D_L06_0017C550[0] * ED6C * 0.2f) {
+        if (hero.target_speed < hero_airborne_deceleration_speed_reference[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_decay_step = hero.stickless_decel;
                 speed = FUN_001f9b20_2b438(&hero.motion.velocity);
