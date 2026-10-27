@@ -1812,7 +1812,7 @@ void snagglebeast_update(unsigned char *moby) {
 float scroll_phase __asm__("D_L07_00161B74") = 0;
 float row_start_phase __asm__("D_L07_00161B78") = 0;
 float row_phase_step_gp __asm__("D_L07_00161B7C") = 0.006f;
-extern short D_L07_0020DBC8[];
+extern short rope_row_alpha[] __asm__("D_L07_0020DBC8");
 
 typedef struct {
     RopeVec pos[4];
@@ -1859,13 +1859,13 @@ void draw_rope_strips(void) {
             qcopy(packet.pos[2], rope_grid[row - 1][column]);
             qcopy(packet.pos[3], rope_grid[row - 1][(column + 1) % 20]);
             end_phase = row_phase + column_step;
-            color = D_L07_0020DBC8[row];
+            color = rope_row_alpha[row];
             for (k = 0; k < 2; k++) {
                 if (color < 0) color = 0;
                 if (color > 64) color = 64;
                 color = (color << 24) | 0x404040;
                 packet.color[k * 2 + 1] = packet.color[k * 2] = color;
-                color = D_L07_0020DBC8[row - 1];
+                color = rope_row_alpha[row - 1];
             }
             if (row == 1) {
                 packet.color[3] = 0x20404040;
@@ -1938,10 +1938,10 @@ void initialize_snagglebeast_rope(char *moby, void *anchor) {
     qcopy(rope_points, anchor);
     pc = &rotation_input_vector;
     pd = &rotation_axis;
-    D_L07_0020DBC8[0] = 0;
+    rope_row_alpha[0] = 0;
     for (i = 1; i < 10; i++) {
         add_vector_xyz(rope_points[i], rope_previous_points[i], step);
-        D_L07_0020DBC8[i] = 0;
+        rope_row_alpha[i] = 0;
     }
     clear_u64_value(D_L07_00161B90);
     rotation_input_vector.q = 0;
@@ -2032,11 +2032,11 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     initialize_snagglebeast_rope(moby, anchor);
     qcopy(center, D_0013F3D0);
     center[2] += 0.6f;
-    D_L07_0020DBC8[0] += 4;
+    rope_row_alpha[0] += 4;
     {
         int row;
         for (row = 1; row < 10; row++) {
-            D_L07_0020DBC8[row] = D_L07_0020DBC8[row - 1] - 0x20;
+            rope_row_alpha[row] = rope_row_alpha[row - 1] - 0x20;
         }
     }
     subtract_vector_xyz(step, D_0013F3D0, anchor);
@@ -2182,7 +2182,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     for (k = 0; k < 200; k++) {
         if (rope_particles[k].particle == 0 && created < 5) {
             for (segment = 9; segment >= 0; segment--) {
-                if (D_L07_0020DBC8[segment] >= 0x40) {
+                if (rope_row_alpha[segment] >= 0x40) {
                     break;
                 }
             }
