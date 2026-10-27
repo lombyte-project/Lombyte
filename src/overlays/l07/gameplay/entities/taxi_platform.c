@@ -1244,7 +1244,7 @@ extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern Vec4 D_L07_00173EE0;
-extern char D_L07_00173F00[];
+extern char projectile_impact_reflection_normal[] __asm__("D_L07_00173F00");
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
 void update_linear_projectile(struct Moby *moby) __asm__("FUN_L07_0030b6a8");
@@ -1289,7 +1289,7 @@ void update_linear_projectile(struct Moby *moby) {
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
                 particle_motion_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L07_00173F00);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, projectile_impact_reflection_normal);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector, vector_length_xyz(&spark) * 0.5f);
                 add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
