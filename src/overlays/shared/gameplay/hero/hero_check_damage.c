@@ -1707,36 +1707,36 @@ void update_hero_item_mobys(void)
             }
             if ((i == 3) && (j == 1) && (moby != 0))
             {
-                struct Hero *p = &hero;
-                if ((*((s32 *) (((u8 *) p) + 0x118c))) == 0)
+                struct Hero *hero_state = &hero;
+                if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) == 0)
                 {
-                    *((s32 *) (((u8 *) p) + 0x118c)) = (s32) FUN_0024e838_f580(0x4b4);
-                    if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                    *((s32 *) (((u8 *) hero_state) + 0x118c)) = (s32) FUN_0024e838_f580(0x4b4);
+                    if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) != 0)
                     {
-                    *((u32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x90)) = 0x801432d7;
-                    created = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
-                    qcopy(created + 0x10, &p->motion.pos);
-                    qcopy(created + 0x40, &p->motion.rot);
+                    *((u32 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x90)) = 0x801432d7;
+                    created = (u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)));
+                    qcopy(created + 0x10, &hero_state->motion.pos);
+                    qcopy(created + 0x40, &hero_state->motion.rot);
                     *((u16 *) (created + 0x32)) = 0x40;
-                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x31)) = 1;
-                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x30)) = 0;
-                    *((u16 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x34)) = 0;
-                    *((f32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x2c)) *= 1.3f;
-                    FUN_L00_00250df8((u8 *) (*((s32 *) (((u8 *) p) + 0x118c))));
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x31)) = 1;
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x30)) = 0;
+                    *((u16 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x34)) = 0;
+                    *((f32 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x2c)) *= 1.3f;
+                    FUN_L00_00250df8((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c))));
                     }
                 }
-                if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) != 0)
                 {
-                    effect = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
+                    effect = (u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)));
                     if ((((*((u16 *) (effect + 0x34))) ^ 1) & 1) != 0)
                     {
                         build_moby_bone_transform(moby, 6, mtx);
-                        qcopy(((u8 *) p) + 0x1d80, mtx[3]);
+                        qcopy(((u8 *) hero_state) + 0x1d80, mtx[3]);
                         enqueue_hero_glow_draw_callback_once();
                         qcopy(effect + 0x10, mtx[3]);
                         copy_matrix3x4(effect + 0xc0, mtx);
                         FUN_L00_00250df8(effect);
-                        *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) p->moby) + 0x38));
+                        *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) hero_state->moby) + 0x38));
                         random_range = scale_game_frames(0x78);
                         angle = fast_sin((((((f32) (game_frame % random_range)) / convert_integer_to_float(random_range)) * 2.0f) * 3.1415927f) + (-3.1415927f));
                         color_red = truncate_float_to_s32(angle * 90.0f);
