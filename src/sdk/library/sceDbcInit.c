@@ -6,7 +6,7 @@ typedef struct {
 } SifClientData;
 
 extern SifClientData D_0015B008;
-extern SifClientData D_0015B030;
+extern SifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
 extern char dbc_rpc_bind_failure_message[] __asm__("D_001534D8");
 extern char dbc_module_version_mismatch_message[] __asm__("D_001534F0");
 const char D_00153518[] = "[libdbc.a = %d.%d, dbcman.irx = %d.%d]\n";
@@ -38,11 +38,11 @@ s32 sceDbcInit(void) {
         } while (--i != -1);
     }
     while (1) {
-        if (sceSifBindRpc(&D_0015B030, 0x8000091B, 0) < 0) {
+        if (sceSifBindRpc(&dbc_transfer_rpc_client, 0x8000091B, 0) < 0) {
             debug_print_stub(dbc_rpc_bind_failure_message);
             exit(-1);
         }
-        if (D_0015B030.server != 0) {
+        if (dbc_transfer_rpc_client.server != 0) {
             break;
         }
         i = 0x10000;
