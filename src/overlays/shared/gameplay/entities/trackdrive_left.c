@@ -1235,7 +1235,7 @@ typedef struct {
 
 extern int level_game_mode __asm__("D_L02_0015F5C4");
 #include "rnc/gameplay/state/options.h"
-extern unsigned char D_L02_0017CA40[];
+extern unsigned char l02_big_head_cheat_manipulator[] __asm__("D_L02_0017CA40");
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
@@ -1247,7 +1247,7 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
         for (i = 0; i < talk_camera.count; i++) {
             char *candidate_moby = talk_camera.mobys[i];
             if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *manipulator = D_L02_0017CA40;
+                unsigned char *manipulator = l02_big_head_cheat_manipulator;
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0, manipulator);
                     *(float *)(manipulator + 0x20) = 2.75f;
