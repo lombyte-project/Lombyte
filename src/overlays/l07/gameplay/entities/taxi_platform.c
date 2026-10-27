@@ -1455,7 +1455,7 @@ extern int D_L07_001612D8; /* no foreign declaration */
 extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda)); /* no foreign declaration */
 extern unsigned short D_L07_00161B34 __attribute__((sda)); /* no foreign declaration */
 extern int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") __attribute__((sda)); /* no foreign declaration */
-extern int D_L07_00204700[][4];
+extern int water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
 extern int pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int pool_init_tiles() __asm__("FUN_L01_002b7a48");
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
@@ -1544,7 +1544,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             cab->f38 = -0.57735f;
             cab->i28 = 0x28;
             cab->i2C = 0x29;
-            p = D_L07_00204700;
+            p = water_grid_geometry_descriptors;
             D_L07_001612D8 = 0x24;
             D_L07_0016120C = 32768.0f;
             D_L07_00161210 = 255.0f;
