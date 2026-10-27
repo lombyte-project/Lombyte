@@ -685,12 +685,12 @@ void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f
         uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[1];
     }
 }
-extern s32 D_L01_00202EA0[];
-extern s32 D_L01_00208108[];
+extern s32 level01_environment_mesh_vertex_counts[] __asm__("D_L01_00202EA0");
+extern s32 level01_environment_mesh_position_addresses[] __asm__("D_L01_00208108");
 extern s32 D_L01_00208120[];
-extern s32 D_L01_00208138[];
-extern s32 D_L01_00208150[];
-extern u8 D_L01_00208170[];
+extern s32 level01_environment_mesh_normal_addresses[] __asm__("D_L01_00208138");
+extern s32 level01_environment_mesh_vertex_attribute_addresses[] __asm__("D_L01_00208150");
+extern u8 level01_environment_mesh_uv_scratch[] __asm__("D_L01_00208170");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -708,9 +708,9 @@ void draw_level01_environment_mapped_meshes(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 5; i++) {
-        generate_level01_environment_map_uvs(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i],
-                         D_L01_00208170);
-        FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170,
+        generate_level01_environment_map_uvs(level01_environment_mesh_vertex_counts[i], level01_environment_mesh_normal_addresses[i], level01_environment_mesh_position_addresses[i], D_L01_00208120[i],
+                         level01_environment_mesh_uv_scratch);
+        FUN_L00_001fde98(level01_environment_mesh_vertex_counts[i], level01_environment_mesh_position_addresses[i], level01_environment_mesh_vertex_attribute_addresses[i], level01_environment_mesh_uv_scratch,
                          1);
     }
 }
