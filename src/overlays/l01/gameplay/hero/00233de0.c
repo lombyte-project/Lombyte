@@ -393,7 +393,7 @@ typedef struct {
 
 extern Bone D_L01_0017AB00[];
 extern Cam D_L01_00167100;
-extern Moby *D_L01_00178380[];
+extern Moby *l01_sphere_query_moby_results[] __asm__("D_L01_00178380");
 extern HeroTableRow2C D_L01_0017C0A8[];
 extern S17BEB8 D_L01_0017C238;
 extern char D_0013E550[];
@@ -2062,8 +2062,8 @@ void update_hero_motion_for_current_state(void) {
 
                     scale_vector_xyz(vector_and_hit_scratch[1], hero.motion.displacement.f, 7.0f);
                     for (i = 0; i < n; i++) {
-                        if (is_moby_in_class_range_500_to_540((int)D_L01_00178380[i])) {
-                            FUN_L00_00214108_cf(D_L01_00178380[i], (int)((Moby *)hero.moby), 0x10000,
+                        if (is_moby_in_class_range_500_to_540((int)l01_sphere_query_moby_results[i])) {
+                            FUN_L00_00214108_cf(l01_sphere_query_moby_results[i], (int)((Moby *)hero.moby), 0x10000,
                                                 hero.motion.pos.f, vector_and_hit_scratch[1], 1.0f);
                         }
                     }
