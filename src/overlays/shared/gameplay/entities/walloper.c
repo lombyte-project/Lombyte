@@ -1050,10 +1050,10 @@ typedef struct {
 extern float D_L00_00166DC0[];
 extern float vector_length_xyz(void *);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern char D_L00_00161680[4] __attribute__((sda));
-extern char D_L00_00161684[4] __attribute__((sda));
-extern char D_L00_001616B0[4] __attribute__((sda));
-extern char D_L00_001616B4[4] __attribute__((sda));
+extern char walloper_arc_first_pass_base_vertex_color_gp[4] __asm__("D_L00_00161680") __attribute__((sda));
+extern char walloper_arc_second_pass_base_vertex_color_gp[4] __asm__("D_L00_00161684") __attribute__((sda));
+extern char walloper_arc_first_pass_texture_index_gp[4] __asm__("D_L00_001616B0") __attribute__((sda));
+extern char walloper_arc_second_pass_texture_index_gp[4] __asm__("D_L00_001616B4") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
@@ -1070,8 +1070,8 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RW arc_camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
     float side_vector_normalization_factor, initial_side_vector_normalization_factor, segment_start_camera_distance, segment_end_camera_distance;
-    first_pass_render_attributes.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
-    col0 = *(int *)&D_L00_00161680 | (first_pass_alpha << 24);
+    first_pass_render_attributes.q0 = get_effect_texture(*(int *)&walloper_arc_first_pass_texture_index_gp);
+    col0 = *(int *)&walloper_arc_first_pass_base_vertex_color_gp | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
     first_pass_render_attributes.q1 = 0xFF9000000260L;
     first_pass_render_attributes.z4 = 0;
@@ -1079,8 +1079,8 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.c[2] = col0;
     first_pass_render_attributes.c[1] = col0;
     first_pass_render_attributes.c[0] = col0;
-    second_pass_render_attributes.q0 = get_effect_texture(*(int *)&D_L00_001616B4);
-    col1 = *(int *)&D_L00_00161684 | (second_pass_alpha << 24);
+    second_pass_render_attributes.q0 = get_effect_texture(*(int *)&walloper_arc_second_pass_texture_index_gp);
+    col1 = *(int *)&walloper_arc_second_pass_base_vertex_color_gp | (second_pass_alpha << 24);
     second_pass_render_attributes.q2 = first_pass_render_attributes.q2;
     second_pass_render_attributes.q1 = first_pass_render_attributes.q1;
     second_pass_render_attributes.z4 = first_pass_render_attributes.z4;
@@ -1124,11 +1124,11 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         add_vector_xyz(first_pass_corners[2], point_bytes + i * 16, arc_camera_facing_side_vector);
         subtract_vector_xyz(first_pass_corners[3], point_bytes + i * 16, arc_camera_facing_side_vector);
         if (i == 1) {
-            first_pass_render_attributes.c[1] = *(int *)&D_L00_00161680;
-            first_pass_render_attributes.c[0] = *(int *)&D_L00_00161680;
+            first_pass_render_attributes.c[1] = *(int *)&walloper_arc_first_pass_base_vertex_color_gp;
+            first_pass_render_attributes.c[0] = *(int *)&walloper_arc_first_pass_base_vertex_color_gp;
         } else if (i == point_count - 2) {
-            first_pass_render_attributes.c[3] = *(int *)&D_L00_00161680;
-            first_pass_render_attributes.c[2] = *(int *)&D_L00_00161680;
+            first_pass_render_attributes.c[3] = *(int *)&walloper_arc_first_pass_base_vertex_color_gp;
+            first_pass_render_attributes.c[2] = *(int *)&walloper_arc_first_pass_base_vertex_color_gp;
         } else if (i == 2) {
             first_pass_render_attributes.c[1] = col0;
             first_pass_render_attributes.c[0] = col0;
@@ -1170,11 +1170,11 @@ void draw_walloper_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
         add_vector_xyz(q2[2], adjusted_segment_end, second_pass_width_offset);
         subtract_vector_xyz(q2[3], adjusted_segment_end, second_pass_width_offset);
         if (i == 0) {
-            second_pass_render_attributes.c[1] = *(int *)&D_L00_00161684;
-            second_pass_render_attributes.c[0] = *(int *)&D_L00_00161684;
+            second_pass_render_attributes.c[1] = *(int *)&walloper_arc_second_pass_base_vertex_color_gp;
+            second_pass_render_attributes.c[0] = *(int *)&walloper_arc_second_pass_base_vertex_color_gp;
         } else if (i == point_count - 2) {
-            second_pass_render_attributes.c[3] = *(int *)&D_L00_00161684;
-            second_pass_render_attributes.c[2] = *(int *)&D_L00_00161684;
+            second_pass_render_attributes.c[3] = *(int *)&walloper_arc_second_pass_base_vertex_color_gp;
+            second_pass_render_attributes.c[2] = *(int *)&walloper_arc_second_pass_base_vertex_color_gp;
         } else if (i == 1) {
             second_pass_render_attributes.c[1] = col1;
             second_pass_render_attributes.c[0] = col1;
