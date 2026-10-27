@@ -938,8 +938,8 @@ typedef struct {
 } L14MineHit;
 
 extern L14MinePath *D_L14_001B0BB0_mine[] __asm__("D_L14_001B0BB0");
-extern char D_L14_001FCA98[];
-extern char D_L14_001FCAD8[];
+extern char looping_path_moby_missing_path_error_format[] __asm__("D_L14_001FCA98");
+extern char looping_path_moby_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
 extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
 extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
@@ -983,13 +983,13 @@ void update_looping_path_moby(struct Moby *moby) {
     switch (moby->state) {
     case MINE_STATE_INITIALIZE:
         if (mine_vars->path == -1) {
-            mine_print(D_L14_001FCA98, moby->save_id);
+            mine_print(looping_path_moby_missing_path_error_format, moby->save_id);
             mine_remove(moby);
             return;
         }
         path = D_L14_001B0BB0_mine[mine_vars->path];
         if (path->count == 0) {
-            mine_print(D_L14_001FCAD8, moby->save_id);
+            mine_print(looping_path_moby_empty_path_error_format, moby->save_id);
             mine_remove(moby);
             return;
         }
