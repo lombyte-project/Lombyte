@@ -2060,9 +2060,9 @@ typedef struct { int v[6]; } I6_DD3D8;
 
 typedef struct { char p0[0x160]; float f160; int p164; int i168; } Cam_DD3D8;
 
-extern B50_DD3D8 D_L00_001EA0B0;
-extern I6_DD3D8 D_L00_001EA100;
-extern I6_DD3D8 D_L00_001EA118;
+extern B50_DD3D8 l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
+extern I6_DD3D8 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100");
+extern I6_DD3D8 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118");
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
 extern char *mine_camera_blast(char *, char *, int, char *) __asm__("FUN_L00_002d3838");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
@@ -2105,7 +2105,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
     float variant_effect_scale, camera_distance, near_camera_distance_deficit, sc, dt;
     int step, i, j, k;
 
-    blk = D_L00_001EA0B0;
+    blk = l00_suck_cannon_explosion_blast_parameters;
     *(u128_DD3D8 *)spray_axis = 0;
     spray_axis[2] = D_0015ED6C + D_0015ED6C;
     i = 0;
@@ -2181,8 +2181,8 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
             float sh = variant_effect_scale * random_float_between(8.0f, 10.0f) * D_0015ED6C - near_camera_distance_deficit * D_0015ED6C;
             int A, B, r1, color_effect_random_frames;
             float big;
-            first_color_choices = D_L00_001EA100;
-            second_color_choices = D_L00_001EA118;
+            first_color_choices = l00_suck_cannon_explosion_first_color_choices;
+            second_color_choices = l00_suck_cannon_explosion_second_color_choices;
             A = swap_packed_color_channels(first_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             B = swap_packed_color_channels(second_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = variant_effect_scale * 400000.0f;
