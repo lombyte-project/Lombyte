@@ -547,7 +547,7 @@ struct PokPathPoint {
 extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
 extern int D_L11_0015FFD8;
 extern int D_001413D4_14b0 __asm__("D_001413D4") __attribute__((section(".data")));
-extern char D_L11_0016D270[];
+extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
 extern float resort_owner_gate_jump_target_local_z_offset_gp __asm__("D_L11_00161410") __attribute__((sda));
 extern float resort_owner_gate_jump_target_local_y_offset_gp __asm__("D_L11_00161414") __attribute__((sda));
@@ -741,9 +741,9 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             fast_vec_add(position_scratch, position_scratch, &moby->pos);
             qcopy(dialogue_rotation, &moby->rot);
             dialogue_rotation[2] = fast_add_rotations(dialogue_rotation[2], 3.14159f);
-            qcopy(D_L11_0016D270, position_scratch);
-            qcopy(D_L11_0016D270 + 0x10, dialogue_rotation);
-            *(short *)(D_L11_0016D270 + 0x36) = 1;
+            qcopy(resort_owner_completion_dialogue_pose, position_scratch);
+            qcopy(resort_owner_completion_dialogue_pose + 0x10, dialogue_rotation);
+            *(short *)(resort_owner_completion_dialogue_pose + 0x36) = 1;
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xD);
         }
