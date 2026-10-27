@@ -131,7 +131,7 @@ extern LevelProjectionState view_context __asm__("D_0018CD00");
 extern LevelRenderArchive D_001940C0;
 extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
 extern u128 D_001D9AE0[];
-extern f32 D_001D9B30[];
+extern f32 level_render_depth_by_mode[] __asm__("D_001D9B30");
 extern f32 cam_mode_min_fov[] __asm__("D_001D9B48");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -267,7 +267,7 @@ void update_level_gameplay_frame(void) {
     }
     scale_vector(&D_00160460, &D_001D9AE0[level_render_state.mode],
                  (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
-    D_00160404 = D_001D9B30[level_render_state.mode];
+    D_00160404 = level_render_depth_by_mode[level_render_state.mode];
     for (object_index = 0; object_index < render_sequence.count; object_index++) {
         object = D_0018CC98[object_index];
         for (subframe = 0; subframe < 2; subframe++) {
