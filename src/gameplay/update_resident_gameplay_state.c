@@ -126,10 +126,10 @@ extern s32 playback_skip_target_frames[1] __asm__("D_00160510") __attribute__((s
 extern ResidentCameraState D_00186F40;
 extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
 extern f32 view_tan_half_fov[4] __asm__("D_0018CDB0");
-extern ScriptedPath *D_001CC3B0[];
-extern PositionPair D_001D99B0[];
-extern Vector4 D_001D9C80[];
-extern Vector4 D_001D9CB0[];
+extern ScriptedPath *resident_scripted_path_table[] __asm__("D_001CC3B0");
+extern PositionPair resident_path_history_local_offset_pairs[] __asm__("D_001D99B0");
+extern Vector4 resident_path_companion_a_local_offsets[] __asm__("D_001D9C80");
+extern Vector4 resident_path_companion_b_local_offsets[] __asm__("D_001D9CB0");
 extern void build_variant_effect_quads() __asm__("FUN_0022e1b0");
 
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
@@ -583,7 +583,7 @@ void update_resident_gameplay_state(void) {
             level_render_state.blend = 0.0f;
             level_render_state.interpolation_velocity = 0.0f;
             if (level_render_state.path >= 0) {
-                path = D_001CC3B0[level_render_state.path];
+                path = resident_scripted_path_table[level_render_state.path];
                 maximum_turn = level_render_state.blend;
                 path->p[0].components[3] = maximum_turn;
                 for (path_point_index = 1; path_point_index < path->point_count - 1;
@@ -697,7 +697,7 @@ void update_resident_gameplay_state(void) {
             } else {
                 ScriptedPath *active_path;
                 level_render_state.speed += 0.8f;
-                active_path = D_001CC3B0[level_render_state.path];
+                active_path = resident_scripted_path_table[level_render_state.path];
                 if (level_render_state.speed > 100.0f) {
                     level_render_state.speed = 100.0f;
                 }
@@ -730,14 +730,14 @@ void update_resident_gameplay_state(void) {
                         level_render_state.history_count++;
                     }
                     transform_vector_by_basis(&level_render_state.primary_history[level_render_state.history_index],
-                                  &D_001D99B0[level_render_state.content_variant].a,
+                                  &resident_path_history_local_offset_pairs[level_render_state.content_variant].a,
                                   level_render_state.player->transform);
                     add_vectors(&level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
                     level_render_state.primary_history[level_render_state.history_index].f[3] = 1.0f;
                     transform_vector_by_basis(&level_render_state.secondary_history[level_render_state.history_index],
-                                  &D_001D99B0[level_render_state.content_variant].b,
+                                  &resident_path_history_local_offset_pairs[level_render_state.content_variant].b,
                                   level_render_state.player->transform);
                     add_vectors(&level_render_state.secondary_history[level_render_state.history_index],
                                 &level_render_state.secondary_history[level_render_state.history_index],
@@ -758,7 +758,7 @@ void update_resident_gameplay_state(void) {
                 ResidentRenderObject *scratch_vectors = level_render_state.companion_a;
                 qcopy(&scratch_vectors->rotation, &p->rotation);
                 transform_vector_by_basis(&scratch_vectors->position,
-                              &D_001D9C80[level_render_state.content_variant], p->transform);
+                              &resident_path_companion_a_local_offsets[level_render_state.content_variant], p->transform);
             }
             add_vectors(&level_render_state.companion_a->position,
                         &level_render_state.companion_a->position,
@@ -769,7 +769,7 @@ void update_resident_gameplay_state(void) {
                 ResidentRenderObject *p = level_render_state.player;
                 qcopy(&scratch_vectors->rotation, &p->rotation);
                 transform_vector_by_basis(&scratch_vectors->position,
-                              &D_001D9CB0[level_render_state.content_variant], p->transform);
+                              &resident_path_companion_b_local_offsets[level_render_state.content_variant], p->transform);
             }
             add_vectors(&level_render_state.companion_b->position,
                         &level_render_state.companion_b->position,
