@@ -1054,7 +1054,7 @@ typedef struct {
 } SndPair_254030;
 
 
-extern SndPair_254030 D_L05_00179BC0[];
+extern SndPair_254030 l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_00179BC0");
 extern char D_0013CAE0[];
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
@@ -1083,8 +1083,8 @@ void update_hero_hoverboard_trick_animations(void) {
             int a = h->air_pose_index + 0x69;
             if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
                 set_hero_animation(a, 2, (float)scale_game_frames(5));
-                hero_queue_sequence(D_L05_00179BC0[h->air_pose_index].bank,
-                                 D_L05_00179BC0[h->air_pose_index].seq);
+                hero_queue_sequence(l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].bank,
+                                 l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].seq);
             } else if ((float)h->anim_loop_frame - 2.0f < h->anim_frame) {
                 h->tricks_landed[h->air_pose_index] = 1;
                 h->unk6F8 += 1;
