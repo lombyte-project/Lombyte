@@ -287,9 +287,9 @@ u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("F
 extern s32 nanotech_ball_collection_color_range_start_gp __asm__("D_L00_00161A7C") __attribute__((sda));
 extern s32 nanotech_ball_collection_color_range_end_gp __asm__("D_L00_00161A80") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/update_nanotech_ball_collection_effects.h"
-extern f32 D_L00_00161A90[1] __attribute__((sda));
-extern f32 D_L00_00161AA0[1] __attribute__((sda));
-extern f32 D_L00_00161AB0[1] __attribute__((sda));
+extern f32 nanotech_ball_collection_particle_rotation_steps[1] __asm__("D_L00_00161A90") __attribute__((sda));
+extern f32 nanotech_ball_collection_particle_scale_factors[1] __asm__("D_L00_00161AA0") __attribute__((sda));
+extern f32 nanotech_ball_collection_particle_z_offsets[1] __asm__("D_L00_00161AB0") __attribute__((sda));
 s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) __asm__("FUN_L00_002d8510");
 
 s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
@@ -310,7 +310,7 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             continue;
         if (effect_data->h58[i] > FUN_001f96f8_2d8510(0x30))
             any_effect_timer_above_threshold = 1;
-        unwrapped_effect_value = effect_data->f60[i] += D_L00_00161A90[i];
+        unwrapped_effect_value = effect_data->f60[i] += nanotech_ball_collection_particle_rotation_steps[i];
         if (255.0f <= unwrapped_effect_value)
             effect_data->f60[i] = unwrapped_effect_value - 255.0f;
         else if (unwrapped_effect_value <= 0.0f)
@@ -323,14 +323,14 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
         color_progress_or_size_factor = 1.0f - effect_data->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
         al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - color_progress_or_size_factor)) << 24;
         c = al | (c & 0xFFFFFF);
-        effect_position.z = z + D_L00_00161AB0[i];
+        effect_position.z = z + nanotech_ball_collection_particle_z_offsets[i];
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
-                                    2, 1, D_L00_00161AA0[i] * color_progress_or_size_factor);
+                                    2, 1, nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
                                     nanotech_ball_collection_particle_byte_source_index, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
-                                    D_L00_00161AA0[i] * (color_progress_or_size_factor * 0.7f));
+                                    nanotech_ball_collection_particle_scale_factors[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);
