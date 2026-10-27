@@ -78,7 +78,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
-extern char D_L14_0017C620[];
+extern char level14_transform_trail_jump_velocity_keys[] __asm__("D_L14_0017C620");
 int hero_set_state(int a, int b) {
 
     int old2088;
@@ -1001,7 +1001,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                *(char **)&u->unk3E4 = D_L14_0017C620;
+                *(char **)&u->unk3E4 = level14_transform_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
