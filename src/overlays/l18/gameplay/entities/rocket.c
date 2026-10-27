@@ -1381,9 +1381,9 @@ char *find_nearest_class_247_moby_in_list(void *reference_position, int moby_lis
             return best;
     }
 }
-extern float D_L18_00161A10 __asm__("D_L18_00161A10") __attribute__((sda));
-extern float D_L18_00161A14 __asm__("D_L18_00161A14") __attribute__((sda));
-extern float D_L18_00161A18 __asm__("D_L18_00161A18") __attribute__((sda));
+extern float l18_thruster_pack_lock_red_scale_multiplier __asm__("D_L18_00161A10") __attribute__((sda));
+extern float l18_thruster_pack_lock_red_grounded_trigger_wait_height_offset __asm__("D_L18_00161A14") __attribute__((sda));
+extern float l18_thruster_pack_lock_red_approach_height_offset __asm__("D_L18_00161A18") __attribute__((sda));
 extern unsigned int D_L18_00162390 __asm__("D_L18_00162390") __attribute__((sda));
 extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
 extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") __attribute__((section(".data")));
@@ -1416,7 +1416,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         *(unsigned short *)(data + 0x3E) |= 8;
         if (*(int *)(data + 0x60) != 0) {
             moby->state = 1;
-            moby->scale = *(float *)((char *)moby->pclass + 0x24) * D_L18_00161A10;
+            moby->scale = *(float *)((char *)moby->pclass + 0x24) * l18_thruster_pack_lock_red_scale_multiplier;
             return;
         }
         moby->state = 4;
@@ -1424,13 +1424,13 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
     case STATE_APPROACH_CONFIGURED_HEIGHT:
     case STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT:
         advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
-                                   *(float *)(data + 0x64) + D_L18_00161A18,
+                                   *(float *)(data + 0x64) + l18_thruster_pack_lock_red_approach_height_offset,
                                    frame_time_sq * 20.0f, frame_time_sq * 40.0f,
                                    frame_time * 20.0f);
         break;
     case STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER:
         advance_accelerated_scalar(&moby->pos.z, (float *)(data + 0x68),
-                                   *(float *)(data + 0x64) + D_L18_00161A14,
+                                   *(float *)(data + 0x64) + l18_thruster_pack_lock_red_grounded_trigger_wait_height_offset,
                                    frame_time_sq * 5.0f, frame_time_sq * 10.0f,
                                    frame_time * 20.0f);
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
