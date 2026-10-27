@@ -1488,7 +1488,7 @@ int D_L11_00161924 = 2;
 int D_L11_00161928 = 0;
 int D_L11_0016192C = 1;
 int D_L11_00161930 = 0x13;
-extern unsigned int D_L11_00161934 __attribute__((sda));
+extern unsigned int l11_teleporter_ring_vertex_color __asm__("D_L11_00161934") __attribute__((sda));
 extern float teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") __attribute__((sda));
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
 void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
@@ -1523,7 +1523,7 @@ void draw_teleporter_ring(struct Moby *moby) {
             uv += 2;
             *dest1 = v;
             dest0 += 2;
-            *colors++ = D_L11_00161934;
+            *colors++ = l11_teleporter_ring_vertex_color;
             dest1 += 2;
             k--;
         } while (k >= 0);
