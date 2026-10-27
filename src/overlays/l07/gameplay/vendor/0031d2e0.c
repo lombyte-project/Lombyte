@@ -236,9 +236,9 @@ extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern short D_L07_00161CD8 __attribute__((sda));
-extern short D_L07_00161CDC __attribute__((sda));
-extern short D_L07_00161CE0 __attribute__((sda));
+extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));
+extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __attribute__((sda));
+extern short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") __attribute__((sda));
 void update_scene_moby_trails(unsigned char *moby) __asm__("FUN_L07_0031f900");
 
 void update_scene_moby_trails(unsigned char *moby) {
@@ -267,21 +267,21 @@ void update_scene_moby_trails(unsigned char *moby) {
                 moby_point_position(trail_source_moby, 0, point_0_position);
                 moby_point_position(trail_source_moby, 3, point_3_position);
                 subtract_vector_xyz(point_0_trail_velocity, point_0_position, point_3_position);
-                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
                 moby_point_position(trail_source_moby, 1, point_1_position);
                 moby_point_position(trail_source_moby, 4, point_4_position);
                 subtract_vector_xyz(point_1_trail_velocity, point_1_position, point_4_position);
-                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
                 moby_point_position(trail_source_moby, 2, point_2_position);
                 moby_point_position(trail_source_moby, 5, point_5_position);
                 subtract_vector_xyz(point_2_trail_velocity, point_2_position, point_5_position);
-                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
             }
         }
         break;
