@@ -2198,7 +2198,7 @@ char D_L14_001FBE80[] = "Hovertank with a bound path that has no points. UID: %d
 char D_L14_001FBEC0[] = "Hovertank with no bombPath. UID: %d\n";
 char D_L14_001FBEE8[] = "Hovertank with a bomb path that has no points. UID: %d\n";
 char D_L14_001FBF20[] = "Hovertank with no exit Path. UID: %d\n";
-extern char D_L14_001FBF48[];
+extern char minibomber_empty_exit_path_diagnostic[] __asm__("D_L14_001FBF48");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
@@ -2339,7 +2339,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             return;
         }
         if (D_L14_001B0F30_2B5938[d->f150]->n == 0) {
-            debug_print_alt(D_L14_001FBF48, moby->fB2);
+            debug_print_alt(minibomber_empty_exit_path_diagnostic, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
