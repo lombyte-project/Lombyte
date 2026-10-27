@@ -2747,7 +2747,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         blend_moby_animation_cf(carrier_moby, 0, 0, scale_game_frames(0x14));
     }
 }
-extern ScrollLayer D_L01_001E2FC0[];
+extern ScrollLayer l01_scrolling_overlay_layers[] __asm__("D_L01_001E2FC0");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void update_and_draw_scrolling_overlay_layers(s32, ScrollLayer *) __asm__("FUN_L01_002b96e0");
 
@@ -2755,7 +2755,7 @@ void update_and_draw_level01_scrolling_layers(void) __asm__("FUN_L01_002f60f8");
 
 void update_and_draw_level01_scrolling_layers(void) {
     mine_blend_color();
-    update_and_draw_scrolling_overlay_layers(8, D_L01_001E2FC0);
+    update_and_draw_scrolling_overlay_layers(8, l01_scrolling_overlay_layers);
 }
 #include "eetypes.h"
 #include "qzero.h"
