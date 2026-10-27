@@ -161,7 +161,7 @@ extern void vu1_add_data_ref(void *, s32) __asm__("FUN_00233830");
 extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
 extern void FUN_L01_002b4c28(void);
 
-extern L01Camera D_L01_0016CEC0;
+extern L01Camera l01_water_render_camera_state __asm__("D_L01_0016CEC0");
 void build_water_render_setup_packet(void) __asm__("FUN_L01_002b8f98");
 
 void build_water_render_setup_packet(void) {
@@ -191,7 +191,7 @@ void build_water_render_setup_packet(void) {
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
     base[10].vif0 = 0x412;
-    camera = &D_L01_0016CEC0;
+    camera = &l01_water_render_camera_state;
     *(f32 *)&base[10].vif1 = camera->f210;
     packet_write_cursor = (u8 *)(base + 11);
     qcopy(packet_write_cursor, camera->v190);
