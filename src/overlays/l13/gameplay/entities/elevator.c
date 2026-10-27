@@ -2992,7 +2992,7 @@ extern unsigned char D_0013A4E0[];
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
 int hp_bar_saved __asm__("D_L13_001613C4") = 0;
-extern char D_L13_001CBDE8[];
+extern char fighter_jet_hidden_moby_classes[] __asm__("D_L13_001CBDE8");
 short D_L13_00161440 = 0x7f;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F608;
@@ -3110,7 +3110,7 @@ void fighter_jet_update(Jet *jet_moby) {
         if (jet_moby->persistent!=0xFF && (visited52)[jet_moby->persistent+(persistence_table_row_index<<4)]==0xFF) jet_moby->state=9;
         if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
         if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
-        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+        jet_group_switch(fighter_jet_hidden_moby_classes,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
         jet_data->lock_index=-1; jet_data->start_timer=jet_scale_ticks(575);
         break;
     }
@@ -3154,7 +3154,7 @@ void fighter_jet_update(Jet *jet_moby) {
             build_spherical_offset(jet_data,fighter_jet_frame_scale*0.1f,jet_data->angles[2],-jet_data->angles[1]);
             if (jet_data->group_a>0) jet_group_state(jet_data->group_a,1,1,1);
             if (jet_data->group_b>0) jet_group_state(jet_data->group_b,1,1,1);
-            jet_group_switch(D_L13_001CBDE8,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
+            jet_group_switch(fighter_jet_hidden_moby_classes,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
             jet_moby->position[2]+=3.0f; jet_moby->scale=jet_moby->model->scale*0.25f; ((JetPlayer*)(&jet_player47))->in_craft=1;
             if (jet_data->engine_sound==-1) jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby);
             D_L13_0015F608=2; update_fighter_jet_flight(jet_moby,jet_data); jet_camera_mode(); jet_game_state(2,4); jet_moby->state=4;
@@ -3178,7 +3178,7 @@ void fighter_jet_update(Jet *jet_moby) {
         jet_moby->scale=jet_moby->model->scale; jet_update_moby(jet_moby);
         if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
         if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
-        jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+        jet_group_switch(fighter_jet_hidden_moby_classes,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
         if (jet_data->exit_path!=-1) { JetPath *path=&D_L13_001600EC[jet_data->exit_path]; jet_place_camera(path->position,path->rotation,0,1); }
         else jet_place_camera(jet_data->spawn_position,D_L13_001600EC[jet_data->destination_path].rotation,0,1);
         {
@@ -3239,7 +3239,7 @@ void fighter_jet_update(Jet *jet_moby) {
             JetPath *path;
             if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
             if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
-            jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
+            jet_group_switch(fighter_jet_hidden_moby_classes,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
             path=&D_L13_001600EC[jet_data->destination_path]; jet_place_camera(path->position,path->rotation,0,1);
         }
         if (jet_moby->persistent!=0xFF) jet_clear_persistent(jet_moby->persistent);
