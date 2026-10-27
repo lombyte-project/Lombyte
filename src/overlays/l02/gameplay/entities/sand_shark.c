@@ -3237,11 +3237,11 @@ extern int D_001413D4 __attribute__((section(".data")));
 extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern int FUN_L02_0028d618(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L02_00161C80 __attribute__((sda));
-extern short D_L02_00161C88 __attribute__((sda));
-extern short D_L02_00161C8C __attribute__((sda));
-extern short D_L02_00161C90 __attribute__((sda));
-extern short D_L02_00161C94 __attribute__((sda));
+extern short rocket_launcher_shot_sound_distance_threshold_rate_gp __asm__("D_L02_00161C80") __attribute__((sda));
+extern short rocket_launcher_shot_sound_0_scalar_full_distance_gp __asm__("D_L02_00161C88") __attribute__((sda));
+extern short rocket_launcher_shot_sound_0_scalar_zero_distance_gp __asm__("D_L02_00161C8C") __attribute__((sda));
+extern short rocket_launcher_shot_sound_1_scalar_zero_distance_gp __asm__("D_L02_00161C90") __attribute__((sda));
+extern short rocket_launcher_shot_sound_1_scalar_full_distance_gp __asm__("D_L02_00161C94") __attribute__((sda));
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                     void *target) __asm__("FUN_0022da68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -3252,16 +3252,16 @@ void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
     int sound_a, sound_b, gain_a, gain_b;
     if (*(float *)(data + 0x10) >= 0.0f) {
         distance = distance_xyz(D_L02_001673C0, &moby->pos);
-        *(float *)(data + 0x10) += *(float *)&D_L02_00161C80 * D_0015ED6C;
+        *(float *)(data + 0x10) += *(float *)&rocket_launcher_shot_sound_distance_threshold_rate_gp * D_0015ED6C;
         if (distance < *(float *)(data + 0x10) && D_001413D4 != 0x72) {
             sound_a = allocate_voice_for_target_entry(0, 0x10, (int)moby);
             sound_b = allocate_voice_for_target_entry(1, 0x10, (int)moby);
             gain_a = func_001FA898_r(
-                (1.0f - (distance - *(float *)&D_L02_00161C88) /
-                            (*(float *)&D_L02_00161C8C - *(float *)&D_L02_00161C88)) *
+                (1.0f - (distance - *(float *)&rocket_launcher_shot_sound_0_scalar_full_distance_gp) /
+                            (*(float *)&rocket_launcher_shot_sound_0_scalar_zero_distance_gp - *(float *)&rocket_launcher_shot_sound_0_scalar_full_distance_gp)) *
                 1024.0f);
-            gain_b = func_001FA898_r(((distance - *(float *)&D_L02_00161C90) /
-                                      (*(float *)&D_L02_00161C94 - *(float *)&D_L02_00161C90)) *
+            gain_b = func_001FA898_r(((distance - *(float *)&rocket_launcher_shot_sound_1_scalar_zero_distance_gp) /
+                                      (*(float *)&rocket_launcher_shot_sound_1_scalar_full_distance_gp - *(float *)&rocket_launcher_shot_sound_1_scalar_zero_distance_gp)) *
                                      1024.0f);
             if (gain_a > 1024)
                 gain_a = 1024;
