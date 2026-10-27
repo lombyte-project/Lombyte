@@ -1475,12 +1475,12 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
-extern short D_L18_00162360 __attribute__((sda));
+extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attribute__((sda));
 extern short D_L18_00162390 __attribute__((sda));
-extern short D_L18_00162394 __attribute__((sda));
+extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_00162394") __attribute__((sda));
 extern short D_L18_00162398 __attribute__((sda));
 extern s32 D_L18_001623A0 __asm__("D_L18_001623A0");
-extern short D_L18_0016239C __attribute__((sda));
+extern short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C") __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 
@@ -1947,7 +1947,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             qcopy(boss_data->f3C0, (char *)p + *p * 16);
             boss_data->f344 = boss_data->f250[boss_data->f34C];
             if (boss_data->f34C == 2) {
-                if (*(int *)&D_L18_00162360 == 0) {
+                if (*(int *)&l18_drek_boss_scene_2_started_gp == 0) {
                     moby->f20 = 4;
                 } else {
                     moby->f20 = 0x15;
@@ -1962,7 +1962,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         if (hero.air_frames.s == 0 && (((BossMoby *)hero.ground_moby) == 0 || ((BossMoby *)hero.ground_moby)->fA6 != 0x24B)) {
             int i;
 
-            *(int *)&D_L18_00162360 = 1;
+            *(int *)&l18_drek_boss_scene_2_started_gp = 1;
             moby->f20 = 7;
             boss_data->f39C = 5;
             boss_data->f330 = (BossMoby *)find_nearest_class_247_moby_in_list(hero.motion.pos.f, boss_data->f200);
@@ -2002,7 +2002,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             qcopy(node_position_and_yaw, recs + idx * 0x80 + 0x30);
             node_position_and_yaw[3] = *(float *)(recs + idx * 0x80 + 0x78);
         }
-        start_position_and_rotation_transition((char *)boss_data->f334, position_and_displacement_scratch, position_displacement_direction_and_rotation_scratch, position_direction_and_rotation_scratch, second_rotation_angles, node_position_and_yaw, *(int *)&D_L18_00162394,
+        start_position_and_rotation_transition((char *)boss_data->f334, position_and_displacement_scratch, position_displacement_direction_and_rotation_scratch, position_direction_and_rotation_scratch, second_rotation_angles, node_position_and_yaw, *(int *)&l18_drek_boss_paired_transition_duration_frames_gp,
                          *(int *)&D_L18_00162398, 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
@@ -2146,7 +2146,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             if (boss_data->f33C == 0) {
                 moby_point_position(moby, 1, position_displacement_direction_and_rotation_scratch);
                 boss_data->f33C = (unsigned char *)create_class_3d7_moby(
-                    moby, position_displacement_direction_and_rotation_scratch, scale_game_frames(*(int *)&D_L18_0016239C));
+                    moby, position_displacement_direction_and_rotation_scratch, scale_game_frames(*(int *)&l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp));
             } else if (tick_countdown_32_alt(&boss_data->f354) != 0) {
                 if (moby->f53 != 9) {
                     blend_moby_animation(moby, 9, 0, 0);
@@ -2581,7 +2581,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                 queue_movie_with_game_language(0xB);
                 boss_data->f34C = 0xB;
             } else if (k == 0xB && D_L18_0015F5C4 == 0) {
-                *(int *)&D_L18_00162360 = 0;
+                *(int *)&l18_drek_boss_scene_2_started_gp = 0;
                 *(int *)&D_L18_001623A0 = 0;
                 pause_all_sounds(0x21);
                 mark_moby_for_removal(boss_data->f3A0);
