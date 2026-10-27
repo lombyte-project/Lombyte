@@ -5,7 +5,7 @@ struct Table16 {
 };
 
 extern u8 *D_001A00FC[];
-extern struct Table16 D_001E8080;
+extern struct Table16 map_coverage_nibble_contribution_table __asm__("D_001E8080");
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 
 /* Builds a 1bpp mask from the 4bpp map at D_001A00FC[0]: each nibble is
@@ -26,7 +26,7 @@ void downsample_map_coverage(u8 *out) {
 
     coverage_mask_cursor = out;
     packed_map_cursor = D_001A00FC[0];
-    nibble_contributions = D_001E8080;
+    nibble_contributions = map_coverage_nibble_contribution_table;
     for (i = 0; i < 0x200; i++) {
         if ((i & 3) == 0) {
             fill_transfer_words(acc, 0, 0x200);
