@@ -68,7 +68,7 @@ extern float FUN_001f96b0_2c26c8(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32_r(float) __asm__("FUN_001fa6d0");
 extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
 
-extern char D_L09_002082A0[];
+extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
 extern Pair_2c26c8 D_L09_001613D0 __attribute__((section(".data")));
 #include "rnc/overlay/l09/gameplay/entities/airship_part_globals.h"
 extern int airship_part_low_altitude_effect_count_gp __asm__("D_L09_00161368") __attribute__((sda));
@@ -140,7 +140,7 @@ void update_airship_part(struct Moby *moby) {
                 part_vars->parent = p;
                 (*(Data_2c26c8 **)&p->pvars)->parts[moby->oclass - 0x49E] = moby;
             } else {
-                FUN_001e93b0_2c26c8(D_L09_002082A0, (*(short *)&moby->save_id), moby->oclass, FUN_00120478_2c26c8(nearest_parent_distance));
+                FUN_001e93b0_2c26c8(airship_part_missing_parent_format, (*(short *)&moby->save_id), moby->oclass, FUN_00120478_2c26c8(nearest_parent_distance));
             }
         }
         joint = 0;
