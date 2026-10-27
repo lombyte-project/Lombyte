@@ -20,7 +20,7 @@ typedef struct {
     float fade;
 } CamVars_c788;
 
-extern struct Moby *D_L11_001DA710[];
+extern struct Moby *l11_three_per_side_child_mobys[] __asm__("D_L11_001DA710");
 extern struct Moby *D_L11_00161F10[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F20[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F30[] __attribute__((section(".sdata")));
@@ -92,15 +92,15 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
         D_L11_00161EDC = 0.0f;
         child_sets_controller->command = 0;
         for (i = 0; i < 6; i++) {
-            D_L11_001DA710[i] = create_moby_c788(0x480);
-            D_L11_001DA710[i]->draw_dist = 0x40;
-            D_L11_001DA710[i]->visible = 1;
-            D_L11_001DA710[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_001DA710[i]->pos, &child_sets_controller->pos);
-            qcopy_nc(&D_L11_001DA710[i]->rot, &child_sets_controller->rot);
-            D_L11_001DA710[i]->flags |= 1;
-            D_L11_001DA710[i]->visible = 0;
-            D_L11_001DA710[i]->collision = 0;
+            l11_three_per_side_child_mobys[i] = create_moby_c788(0x480);
+            l11_three_per_side_child_mobys[i]->draw_dist = 0x40;
+            l11_three_per_side_child_mobys[i]->visible = 1;
+            l11_three_per_side_child_mobys[i]->spawn_frame = hero.moby->spawn_frame;
+            qcopy_nc(&l11_three_per_side_child_mobys[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&l11_three_per_side_child_mobys[i]->rot, &child_sets_controller->rot);
+            l11_three_per_side_child_mobys[i]->flags |= 1;
+            l11_three_per_side_child_mobys[i]->visible = 0;
+            l11_three_per_side_child_mobys[i]->collision = 0;
         }
         for (i = 0; i < 4; i++) {
             D_L11_00161F20[i] = create_moby_c788(0x481);
@@ -163,9 +163,9 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
             jet_mount((char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
                              (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, 1, 0, 0);
             for (j = 0; j < 6; j++) {
-                D_L11_001DA710[j]->flags &= ~1;
-                D_L11_001DA710[j]->visible = 1;
-                D_L11_001DA710[j]->collision = D_L11_001DA710[j]->pclass->collision;
+                l11_three_per_side_child_mobys[j]->flags &= ~1;
+                l11_three_per_side_child_mobys[j]->visible = 1;
+                l11_three_per_side_child_mobys[j]->collision = l11_three_per_side_child_mobys[j]->pclass->collision;
             }
             for (j = 0; j < 4; j++) {
                 D_L11_00161F20[j]->flags &= ~1;
@@ -287,21 +287,21 @@ void update_child_set_poses(struct Moby *parent_moby) {
     for (i = 0; i < 6; i++) {
         int s = (i >= 3) ? 1 : -1;
         float ang = (float)(i % 3) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
-        qcopy_nc(&D_L11_001DA710[i]->rot, &parent_moby->rot);
-        D_L11_001DA710[i]->rot.z = fast_add_rotations(D_L11_001DA710[i]->rot.z, (float)s * 1.5707964f);
-        D_L11_001DA710[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
-        D_L11_001DA710[i]->rot.x = ang;
-        euler_rotation_basis(&D_L11_001DA710[i]->rot_row0, &D_L11_001DA710[i]->rot);
+        qcopy_nc(&l11_three_per_side_child_mobys[i]->rot, &parent_moby->rot);
+        l11_three_per_side_child_mobys[i]->rot.z = fast_add_rotations(l11_three_per_side_child_mobys[i]->rot.z, (float)s * 1.5707964f);
+        l11_three_per_side_child_mobys[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
+        l11_three_per_side_child_mobys[i]->rot.x = ang;
+        euler_rotation_basis(&l11_three_per_side_child_mobys[i]->rot_row0, &l11_three_per_side_child_mobys[i]->rot);
         zero_vector_d1b0(&child_placement_vector_scratch);
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
         child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, child_set_child_axis2_offset_length_gp);
+        normalize_vector_xyz(&child_position_scratch, &l11_three_per_side_child_mobys[i]->rot_row2, child_set_child_axis2_offset_length_gp);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
-        qcopy_nc(&D_L11_001DA710[i]->pos, &child_position_scratch);
-        FUN_L00_00250df8(D_L11_001DA710[i]);
+        qcopy_nc(&l11_three_per_side_child_mobys[i]->pos, &child_position_scratch);
+        FUN_L00_00250df8(l11_three_per_side_child_mobys[i]);
     }
     for (j = 0; j < 4; j++) {
         int s = (j >= 2) ? 1 : -1;
