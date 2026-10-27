@@ -46,7 +46,9 @@ void start_indexed_disc_stream(s32 i) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 9 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
-int FUN_L02_002d61c0(char *a) {
+int update_moby_suck_cannon_state(char *a) __asm__("FUN_L02_002d61c0");
+
+int update_moby_suck_cannon_state(char *a) {
     int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 0x9)
