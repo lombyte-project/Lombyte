@@ -185,10 +185,10 @@ extern short D_L06_00161874 __attribute__((sda));
 extern short D_L06_00161878 __attribute__((sda));
 extern short D_L06_0016187C __attribute__((sda));
 extern short D_L06_00161880 __attribute__((sda));
-extern short D_L06_00161884 __attribute__((sda));
-extern short D_L06_00161888 __attribute__((sda));
-extern short D_L06_0016188C __attribute__((sda));
-extern short D_L06_001D3620[][8];
+extern short gadgebot_container_texture_index_gp __asm__("D_L06_00161884") __attribute__((sda));
+extern short gadgebot_container_quad_color_gp __asm__("D_L06_00161888") __attribute__((sda));
+extern short gadgebot_container_vertex_normal_scale_gp __asm__("D_L06_0016188C") __attribute__((sda));
+extern short gadgebot_container_face_vertex_uv_indices[][8] __asm__("D_L06_001D3620");
 extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -230,7 +230,7 @@ void draw_gadgebot_spawn_container(char *moby) {
             subtract_vector_xyz(direction, gadgebot_container_transformed_vertices[i], D_L06_00167540);
             fast_vec_normalize(direction, direction, 1.0f);
             transform_vector(normal, gadgebot_container_vertex_normals[i], matrix);
-            fast_vec_normalize(normal, normal, *(float *)&D_L06_0016188C);
+            fast_vec_normalize(normal, normal, *(float *)&gadgebot_container_vertex_normal_scale_gp);
             scale = fast_vec_dot(normal, direction);
             fast_vec_scale(projected, normal, scale + scale);
             subtract_vector_xyz(projected, direction, projected);
@@ -246,16 +246,16 @@ void draw_gadgebot_spawn_container(char *moby) {
             transform_vector(gadgebot_container_transformed_vertices[i], gadgebot_container_local_vertices[i], matrix);
         }
     }
-    quad.tex = get_effect_texture(*(int *)&D_L06_00161884);
+    quad.tex = get_effect_texture(*(int *)&gadgebot_container_texture_index_gp);
     quad.unk80 = 0xff9000000260L;
     quad.unk88 = (long)*(int *)&D_L06_00161870 | (long)*(int *)&D_L06_00161874 << 2 |
                  (long)*(int *)&D_L06_00161878 << 4 | (long)*(int *)&D_L06_0016187C << 6 |
                  (long)*(int *)&D_L06_00161880 << 32;
     quad.unk70 = 0;
-    quad.color[3] = *(int *)&D_L06_00161888;
-    quad.color[2] = *(int *)&D_L06_00161888;
-    quad.color[1] = *(int *)&D_L06_00161888;
-    quad.color[0] = *(int *)&D_L06_00161888;
+    quad.color[3] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[2] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[1] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[0] = *(int *)&gadgebot_container_quad_color_gp;
     i = 0;
     do {
         float *center = facePos;
@@ -264,7 +264,7 @@ void draw_gadgebot_spawn_container(char *moby) {
         fast_vec_normalize(direction, direction, 1.0f);
         transform_vector_by_basis(center, gadgebot_container_face_normals[i], matrix);
         if (!(0.0f < fast_vec_dot(direction, center))) {
-            short *indices = D_L06_001D3620[i];
+            short *indices = gadgebot_container_face_vertex_uv_indices[i];
             int j;
             for (j = 0; j < 4; j++, indices += 2) {
                 short vertex = indices[0];
