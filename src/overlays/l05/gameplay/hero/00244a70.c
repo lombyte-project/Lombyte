@@ -2141,7 +2141,7 @@ void update_hero_motion_by_state(void) {
                     hero_integrate_velocity();
                 }
             } else {
-                f32 lim = frame_time * 12.0f;
+                f32 grind_base_speed_target = frame_time * 12.0f;
                 f32 tt;
                 f32 e;
                 f32 sp;
@@ -2173,7 +2173,7 @@ void update_hero_motion_by_state(void) {
                 }
                 FUN_L00_0025bc98(&hero.rail_lean, tt, &hero.grind_lean_vel, 0, frame_scale_sq * 0.015f, frame_scale_sq * 0.3f,
                                  0.0f);
-                approach_value(&hero.grind_base_speed, lim, frame_time_sq * 15.0f);
+                approach_value(&hero.grind_base_speed, grind_base_speed_target, frame_time_sq * 15.0f);
                 si = hero.rail_segment;
                 sf = hero.rail_seg_frac;
                 qcopy(&vector_matrix_and_hit_scratch, &hero.motion.pos);
