@@ -637,8 +637,8 @@ extern float D_0015ED6C_bf __asm__("D_0015ED6C");
 extern unsigned char D_0014C190_bf[] __asm__("D_0014C190");
 extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
 
-extern BfState D_L10_001BAA50;
-extern unsigned char D_L10_0015FC88[8];
+extern BfState l10_gate_completion_records __asm__("D_L10_001BAA50");
+extern unsigned char l10_gate_persistence_eligibility_by_mission[8] __asm__("D_L10_0015FC88");
 void gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
 void gate_update(unsigned char *gate_moby) {
     enum {
@@ -660,8 +660,8 @@ void gate_update(unsigned char *gate_moby) {
     case GATE_STATE_MOVING_TO_LOWER_Y:
         *(float *)(gate_moby + 0x14) += D_0015ED6C_bf * -1.0f;
         if (*(float *)(gate_moby + 0x14) <= saved_position[1] + -3.75f) {
-            D_L10_001BAA50.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
-            if (gate_moby[0xB0] == 0xFF || (D_L10_0015FC88[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
+            l10_gate_completion_records.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
+            if (gate_moby[0xB0] == 0xFF || (l10_gate_persistence_eligibility_by_mission[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
                 D_L10_001BB6B0_bf.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
             }
             gate_moby[0x20] = 2;
