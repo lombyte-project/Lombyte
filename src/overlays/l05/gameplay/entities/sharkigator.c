@@ -3214,7 +3214,7 @@ extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 extern Cam_30ca80 D_L05_00180340;
 extern Light_30ca80 light __asm__("D_L05_001CAD00");
-extern int D_L05_0020B440[][4];
+extern int water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
 extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
 extern int rise_frames[] __asm__("D_L05_0020B3E0");
 extern float rise_speeds[] __asm__("D_L05_0020B3F8");
@@ -3280,7 +3280,7 @@ void water_update(struct Moby *moby) {
             light.b3C = 0x1C;
             light.b3D = 0x40;
             D_L05_001612D0_30ca80 = water_records_30ca80;
-            D_L05_001612D4 = D_L05_0020B440;
+            D_L05_001612D4 = water_grid_fixed_point_bounds;
             D_L05_001612D8 = 0x30;
             D_L05_00161204[0] = 0;
             D_L05_00161205[0] = 0xB;
@@ -3290,7 +3290,7 @@ void water_update(struct Moby *moby) {
             D_L05_00161210 = 255.0f;
             D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
-                copy_slot_30ca80(&water_records_30ca80[i].x, D_L05_0020B440[i]);
+                copy_slot_30ca80(&water_records_30ca80[i].x, water_grid_fixed_point_bounds[i]);
                 water_records_30ca80[water_vars->record_index].h1E = record_draw_values[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
