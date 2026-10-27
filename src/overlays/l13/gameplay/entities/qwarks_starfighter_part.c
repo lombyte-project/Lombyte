@@ -1160,7 +1160,7 @@ extern float fast_add_rotations_ece00(float, float) __asm__("FUN_001fa580");
 extern int tick_ece00(void *) __asm__("FUN_001f9740");
 extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
 extern void burst_ece00(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern char D_L13_00174140[];
+extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
 struct PieceVars {
     u8 pad0[0x10];
@@ -1206,7 +1206,7 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
         scale_vector_ece00(&vars->vel, &vars->vel, 0.995f);
         if (coll_sphere_ece00(&moby->pos, 2.0f, 0, moby) != 0) {
-            coll = D_L13_00174140;
+            coll = coll_hit_1638;
             hit = *(struct Moby **)(coll + 0x18);
             if (hit == 0 || (hit->oclass != 0x191 && hit->oclass != 0x184 && hit->oclass != 0x185 &&
                              hit->oclass != 0x186 && hit->oclass != 0x187 && hit->oclass != 0x188 &&
