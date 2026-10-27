@@ -398,10 +398,10 @@ extern HeroTableRow2C D_L01_0017C0A8[];
 extern S17BEB8 D_L01_0017C238;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L01_001C4130[];
+extern float hero_ledge_shimmy_speed_by_animation_frame[] __asm__("D_L01_001C4130");
 extern float D_L01_00167450;
 extern float D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
-extern float D_L01_0017C440[];
+extern float hero_swim_animation_speed_weights[] __asm__("D_L01_0017C440");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -536,13 +536,13 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
     case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
-    case 0x1D:
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION:
     case HERO_STATE_LOOK_RELEASE_WAIT:
-    case 0x1F:
+    case HERO_STATE_IDLE_ANIMATION_ENTRY:
     case HERO_STATE_DYING:
     case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
     case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
-    case 0x72:
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION:
     case HERO_STATE_DYING_SPEED_LIMITED: {
         float speed;
 
@@ -965,7 +965,7 @@ void update_hero_motion_for_current_state(void) {
         } else if (hero.state.current == 0x33) {
             float v;
 
-            v = hero.ground_speed * vector_length_xyz_cf(D_L01_0017C440, 0x1E) * 5.0f;
+            v = hero.ground_speed * vector_length_xyz_cf(hero_swim_animation_speed_weights, 0x1E) * 5.0f;
             if (hero.state.prev == 0x35 && hero.state_timer < scale_game_frames(0xF)) {
                 if (v < frame_time * 4.5f) {
                     v = frame_time * 4.5f;
@@ -1120,7 +1120,7 @@ void update_hero_motion_for_current_state(void) {
                 hero.target_speed = 0.0f;
             }
             speed_step(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
-            v = hero.ground_speed * vector_length_xyz_cf(D_L01_0017C440, 0x1E) * 5.5f;
+            v = hero.ground_speed * vector_length_xyz_cf(hero_swim_animation_speed_weights, 0x1E) * 5.5f;
             hero.motion.velocity.f[0] = FUN_L00_0020a1e0_cf(hero.motion.rot.f[2]) * v;
             hero.motion.velocity.f[1] = FUN_L00_002121c0_cf(hero.motion.rot.f[2]) * v;
             hero.motion.velocity.f[2] = 0.0f;
@@ -1784,7 +1784,7 @@ void update_hero_motion_for_current_state(void) {
                     fast_cos_cf(&spd, hero.target_speed * frame_time, frame_time_sq * 5.0f);
                     subtract_vector_xyz(hero.motion.velocity.f, vector_and_hit_scratch[5], hero.motion.pos.f);
                     set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f,
-                                 D_L01_001C4130[vector_length_xy_cf(hero.anim_frame)] * 0.5f);
+                                 hero_ledge_shimmy_speed_by_animation_frame[vector_length_xy_cf(hero.anim_frame)] * 0.5f);
                 }
             }
         }
@@ -1916,15 +1916,15 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_STORED_HEADING_JUMP:
     case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
     case HERO_STATE_REPEATABLE_JUMP:
     case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
-    case 0x3C:
-    case 0x49:
+    case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
     case HERO_STATE_ALT_LEDGE_JUMP:
-    case 0x5E:
+    case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
             if (test_hero_animation_frame_window(10.0f)) {
@@ -2246,8 +2246,8 @@ void update_hero_motion_for_current_state(void) {
             FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.velocity.f, 0.004f);
         }
     } break;
-    case 0x63:
-    case 0x64:
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE:
         clear_vector(hero.motion.velocity.f);
         break;
     }
