@@ -1040,14 +1040,14 @@ typedef struct {
     char pad2[0x1190 - 12];
 } E;
 
-extern E D_L18_001DB500[];
+extern E l18_lift_height_records[] __asm__("D_L18_001DB500");
 extern short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern unsigned char *D_L18_0015FFD8;
 
 void synchronize_lift_group_height(void *source_moby) {
     unsigned char *source_moby_bytes = source_moby;
     short *group_entry = D_L18_001AC240_c[source_moby_bytes[0x21]];
-    E *height_records = D_L18_001DB500;
+    E *height_records = l18_lift_height_records;
     do {
         Mx *group_moby = (Mx *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
         group_moby->f = *(float *)(source_moby_bytes + 0x18);
