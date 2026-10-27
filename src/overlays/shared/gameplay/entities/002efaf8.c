@@ -11,15 +11,15 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 0xE while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int moby_hold_state_if_found(char *a) __asm__("FUN_L01_002efaf8");
-int moby_hold_state_if_found(char *a) {
-    int r = store_moby_in_suck_cannon(a);
-    if (r == 0) {
-        if (*(unsigned char *)(a + 0x20) == 0xe)
-            a[0x20] = 1;
+int moby_hold_state_if_found(char *target_moby) {
+    int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
+    if (suck_cannon_store_result == 0) {
+        if (*(unsigned char *)(target_moby + 0x20) == 0xe)
+            target_moby[0x20] = 1;
     } else {
-        a[0x20] = 0xe;
+        target_moby[0x20] = 0xe;
     }
-    return r;
+    return suck_cannon_store_result;
 }
 
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
