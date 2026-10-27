@@ -2634,10 +2634,10 @@ extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("
 extern void FUN_L00_00262b80_c(void *, char *, char *, float, float,
                                float) __asm__("FUN_L00_00262b80");
 
-extern short D_L14_00161538 __attribute__((sda));
-extern short D_L14_0016153C __attribute__((sda));
-extern short D_L14_00161544 __attribute__((sda));
-extern short D_L14_00161548 __attribute__((sda));
+extern short minibomber_vertical_oscillation_amplitude_gp __asm__("D_L14_00161538") __attribute__((sda));
+extern short minibomber_vertical_oscillation_phase_increment_target_gp __asm__("D_L14_0016153C") __attribute__((sda));
+extern short minibomber_rotation_oscillation_first_phase_increment_gp __asm__("D_L14_00161544") __attribute__((sda));
+extern short minibomber_rotation_oscillation_second_phase_increment_gp __asm__("D_L14_00161548") __attribute__((sda));
 void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428");
 
 void update_minibomber_oscillation(struct Moby *moby) {
@@ -2652,13 +2652,13 @@ void update_minibomber_oscillation(struct Moby *moby) {
         spring_target = spring_target * 1.5f;
     } else {
         FUN_L00_0025b8c0_c((float *)(data + 0x168), (float *)(data + 0x16C),
-                           *(float *)&D_L14_0016153C, 0.002f, 0.2f, 0.0f);
-        FUN_L00_00262b00_c(*(float *)&D_L14_00161538, *(float *)(data + 0x168), moby,
+                           *(float *)&minibomber_vertical_oscillation_phase_increment_target_gp, 0.002f, 0.2f, 0.0f);
+        FUN_L00_00262b00_c(*(float *)&minibomber_vertical_oscillation_amplitude_gp, *(float *)(data + 0x168), moby,
                            (float *)(data + 0xC0), (float *)(data + 0xC4));
     }
     FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160),
-                       *(float *)&D_L14_00161544, *(float *)&D_L14_00161548);
+                       *(float *)&minibomber_rotation_oscillation_first_phase_increment_gp, *(float *)&minibomber_rotation_oscillation_second_phase_increment_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
