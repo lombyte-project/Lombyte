@@ -3212,7 +3212,7 @@ extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690"
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
-extern Cam_30ca80 D_L05_00180340;
+extern Cam_30ca80 l05_water_light_heading_source __asm__("D_L05_00180340");
 extern Light_30ca80 light __asm__("D_L05_001CAD00");
 extern int water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
 extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
@@ -3271,7 +3271,7 @@ void water_update(struct Moby *moby) {
             light.f14 = 1.0f;
             light.f18 = 0.9f;
             light.f20 = 0.1f;
-            light_direction_angle = angle_atan2_30ca80(D_L05_00180340.f10, D_L05_00180340.f14);
+            light_direction_angle = angle_atan2_30ca80(l05_water_light_heading_source.f10, l05_water_light_heading_source.f14);
             light.dir_x = fast_cos_30ca80(light_direction_angle) * 0.57735002f;
             light.dir_y = fast_sin_30ca80(light_direction_angle) * 0.57735002f;
             light.dir_z = -0.57735002f;
