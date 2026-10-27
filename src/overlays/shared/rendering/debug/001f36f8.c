@@ -12,7 +12,7 @@ typedef struct {
 #include "rnc/overlay/shared/rendering/debug/001f36f8_globals.h"
 extern s32 debug_text_queue_count_gp __asm__("D_L00_0015EFC4") __attribute__((sda));
 extern void *D_L00_0015EFC0 __attribute__((sda));
-extern E001f36f8 D_L00_0016A840[];
+extern E001f36f8 l00_debug_text_queue_entries[] __asm__("D_L00_0016A840");
 u8 D_L00_0016A040[0x800] = {0};
 u8 D_L01_0016A4C0[0x800] = {0};
 u8 D_L02_0016A640[0x800] = {0};
@@ -42,8 +42,8 @@ void flush_debug_text_queue(void) {
     s32 i;
     E001f36f8 *unused_text_entry;
     for (i = 0; i < debug_text_queue_count_gp; i++)
-        draw_debug_text(D_L00_0016A840[i].a, D_L00_0016A840[i].b, D_L00_0016A840[i].c,
-                         D_L00_0016A840[i].d);
+        draw_debug_text(l00_debug_text_queue_entries[i].a, l00_debug_text_queue_entries[i].b, l00_debug_text_queue_entries[i].c,
+                         l00_debug_text_queue_entries[i].d);
     debug_text_queue_count_gp = 0;
     D_L00_0015EFC0 = D_L00_0016A040;
 }
