@@ -526,8 +526,8 @@ extern void FUN_001f7d30_30a908(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
 extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
 
-extern char D_L11_0016D440[];
-extern char D_L11_001679D0[];
+extern char render_fog_context[] __asm__("D_L11_0016D440");
+extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
 extern Pos_30a908 D_L11_001D9B08[];
 extern int ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
 extern UV_30a908 D_L11_001DA310[];
@@ -549,8 +549,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     Vec4f second_strip_edge_delta;
     Quad_30a908 far_quad;
     Data_30a908 *ocean_vars = (Data_30a908 *)moby->pvars;
-    float saved_fog_228 = ((Fog_30a908 *)D_L11_0016D440)->f228;
-    float s22C = ((Fog_30a908 *)D_L11_0016D440)->f22C;
+    float saved_fog_228 = ((Fog_30a908 *)render_fog_context)->f228;
+    float s22C = ((Fog_30a908 *)render_fog_context)->f22C;
     int i;
     int layer;
     int colA;
@@ -561,8 +561,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     float y;
 
     if (hero.state.current != 0x1D && D_L11_0016D180 == 0) {
-        ((Fog_30a908 *)D_L11_0016D440)->f228 = 255.0f;
-        ((Fog_30a908 *)D_L11_0016D440)->f22C = 249.9f;
+        ((Fog_30a908 *)render_fog_context)->f228 = 255.0f;
+        ((Fog_30a908 *)render_fog_context)->f22C = 249.9f;
     }
     FUN_00233980_30a908(0x42, 0x3200000044L);
     FUN_00233980_30a908(8, 0);
@@ -574,12 +574,12 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     strip_length_direction.y = 0.0f;
     strip_length_direction.z = 0.0f;
     strip_length_direction.w = 1.0f;
-    FUN_001f9cf8_30a908(&strip_length_direction, &strip_length_direction, D_L11_001679D0);
+    FUN_001f9cf8_30a908(&strip_length_direction, &strip_length_direction, ocean_strip_orientation_basis);
     strip_width_direction.x = 0.0f;
     strip_width_direction.y = 1.0f;
     strip_width_direction.z = 0.0f;
     strip_width_direction.w = 1.0f;
-    FUN_001f9cf8_30a908(&strip_width_direction, &strip_width_direction, D_L11_001679D0);
+    FUN_001f9cf8_30a908(&strip_width_direction, &strip_width_direction, ocean_strip_orientation_basis);
     strip_length_direction.z = 0.0f;
     FUN_001f9bf8_30a908(&strip_length_direction, &strip_length_direction, 1.0f);
     strip_width_direction.z = 0.0f;
@@ -711,8 +711,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
             }
         }
     }
-    ((Fog_30a908 *)D_L11_0016D440)->f228 = saved_fog_228;
-    ((Fog_30a908 *)D_L11_0016D440)->f22C = s22C;
+    ((Fog_30a908 *)render_fog_context)->f228 = saved_fog_228;
+    ((Fog_30a908 *)render_fog_context)->f22C = s22C;
     FUN_00233980_30a908(0x47, 0x5360B);
 }
 /* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
