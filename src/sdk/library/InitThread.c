@@ -23,7 +23,7 @@ extern s32 GetThreadId();
 extern s32 ChangeThreadPriority(s32 id, s32 priority);
 extern void topThread(TopThreadQueue *queue);
 
-extern s32 D_00154100[];
+extern s32 top_thread_stack[] __asm__("D_00154100");
 extern s32 D_00166C00[];
 
 s32 InitThread(void) {
@@ -40,7 +40,7 @@ s32 InitThread(void) {
         return -1;
 
     th.entry = topThread;
-    th.stack = D_00154100;
+    th.stack = top_thread_stack;
     th.stackSize = 0x400;
     th.gp = D_00166C00;
     th.priority = 0;
