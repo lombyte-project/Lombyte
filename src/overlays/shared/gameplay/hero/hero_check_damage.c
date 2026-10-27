@@ -714,7 +714,8 @@ extern s32 FUN_L00_0020d5b8_20dd20(struct Moby *, s32) __asm__("FUN_L00_0020d5b8
 extern s32 FUN_001f96f8_20dd20(s32) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/shared/hero_animation_slots.c: update_hero_item_slot_animation_blends). */
-void FUN_L00_0020dd20(void) {
+void update_hero_item_slot_blends(void) __asm__("FUN_L00_0020dd20");
+void update_hero_item_slot_blends(void) {
     s32 i;
 
     for (i = 0; i < 2; i++) {

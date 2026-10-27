@@ -18,7 +18,7 @@ extern char D_L00_00160118[];
 extern char D_L00_001E90B0[];
 extern char D_L00_001E90C8[];
 
-extern void FUN_L00_00264848(void);
+extern void update_all_mobys(void) __asm__("FUN_L00_00264848");
 extern void FUN_L00_001eb078(const char *, ...);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern struct Moby *FUN_L00_00250768(void);
@@ -27,7 +27,8 @@ extern void FUN_L00_00250df8(struct Moby *);
 extern f32 FUN_L00_00200240(s32);
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 
-void FUN_L00_002648e0(void) {
+void update_all_mobys_profiled(void) __asm__("FUN_L00_002648e0");
+void update_all_mobys_profiled(void) {
     struct Moby *moby;
     MobyProfile *profile;
     s32 i;
@@ -41,7 +42,7 @@ void FUN_L00_002648e0(void) {
     s16 profile_label;
 
     if ((D_0013CAE0[0] & 0x800000007LL) != 0x800000007LL) {
-        FUN_L00_00264848();
+        update_all_mobys();
         return;
     }
 
