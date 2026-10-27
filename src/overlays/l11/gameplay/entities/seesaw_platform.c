@@ -2693,8 +2693,8 @@ extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11
 extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
 extern int D_L11_0015F608;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update_2.h"
-extern unsigned char D_L11_00162054 __attribute__((sda));
-extern unsigned char D_L11_00162058 __attribute__((sda));
+extern unsigned char l11_jet_fighter_initial_ammo __asm__("D_L11_00162054") __attribute__((sda));
+extern unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update.h"
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;
@@ -2858,10 +2858,10 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->state = 4;
                 g->ship_moby = moby;
                 g->ship_oclass = moby->oclass;
-                g->ship_ammo = D_L11_00162054;
+                g->ship_ammo = l11_jet_fighter_initial_ammo;
                 g->unk160E = 1;
-                g->ship_ammo_max = D_L11_00162058;
-                g->unk15F8 = D_L11_00162058;
+                g->ship_ammo_max = l11_jet_fighter_max_ammo;
+                g->unk15F8 = l11_jet_fighter_max_ammo;
                 g->ship_hp = jet_fighter_initial_health_gp;
                 ship_vars->shown_hp = 0.0f;
                 ship_vars->hp_bar_fill = 0xFF;
