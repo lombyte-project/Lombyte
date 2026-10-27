@@ -198,7 +198,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern short D_L06_00161ED8 __attribute__((sda));
+extern short alien_snapper_gap_angle_limit_degrees_gp __asm__("D_L06_00161ED8") __attribute__((sda));
 float compute_alien_snapper_target_gap_angle(char *self) __asm__("FUN_L06_002f96f8");
 
 float compute_alien_snapper_target_gap_angle(char *self) {
@@ -209,8 +209,8 @@ float compute_alien_snapper_target_gap_angle(char *self) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                             *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     }
-    lo = -(*(float *)&D_L06_00161ED8 * DEG_TO_RAD);
-    hi = *(float *)&D_L06_00161ED8 * DEG_TO_RAD;
+    lo = -(*(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD);
+    hi = *(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD;
     owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, self + 0x10);
