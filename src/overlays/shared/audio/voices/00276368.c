@@ -116,7 +116,7 @@ extern s32 D_L00_0015F578 __attribute__((sda));
 extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
 extern s32 D_L00_0016000C __attribute__((sda));
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
-extern u8 D_L00_001E91B0[];
+extern u8 level_transition_debug_format[] __asm__("D_L00_001E91B0");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
@@ -500,7 +500,7 @@ void update_pause_menu(void) {
         D_L00_001B9CF0.unk104 = 0;
         D_L00_001B9CF0.unk10 = 0;
         if (D_L00_001B9CF0.unkC == 2) {
-            debug_print(D_L00_001E91B0, D_L00_001841F0.w224);
+            debug_print(level_transition_debug_format, D_L00_001841F0.w224);
             prepare_target_level_transition(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
             previous_decode_mode = decode_mode;
