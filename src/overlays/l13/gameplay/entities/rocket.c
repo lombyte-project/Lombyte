@@ -1550,7 +1550,7 @@ extern Tile_9e88 Tiles_9e88[] __asm__("D_L13_001D9BC0");
 extern Light_9e88 D_L13_001CAB80;
 extern float D_L13_001801C0[];
 extern unsigned short D_L13_001F1E20[];
-extern char D_L13_001F1E80[];
+extern char gemlik_pool_tile_binding_records[] __asm__("D_L13_001F1E80");
 extern int D_L13_00161208;
 extern float D_L13_0016120C;
 extern float D_L13_00161210;
@@ -1628,7 +1628,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             tile_lighting->i2C = 0x2E;
             tile_lighting->c3C = 0x60;
             tile_lighting->c3D = 0x40;
-            tb = D_L13_001F1E80;
+            tb = gemlik_pool_tile_binding_records;
             gemlik_pool_tile_count = 22;
             D_L13_0016120C = 32768.0f;
             D_L13_00161210 = 255.0f;
