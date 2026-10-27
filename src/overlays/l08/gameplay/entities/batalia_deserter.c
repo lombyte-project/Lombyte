@@ -408,7 +408,7 @@ extern int FUN_001fa6d0(float);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern char D_L08_00162308[];
+extern char batalia_plumber_name_text[] __asm__("D_L08_00162308");
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
@@ -440,7 +440,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        watch_data->p20 = (void *)D_L08_00162308;
+        watch_data->p20 = (void *)batalia_plumber_name_text;
         moby->state = 1;
         FUN_L00_002668a0_c(moby, watch_data);
         break;
