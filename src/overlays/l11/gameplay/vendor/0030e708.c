@@ -73,15 +73,15 @@ void emit_render_batches_with_pair_offset(int pair_index) {
     }
 }
 extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
-extern int D_L11_00207888[];
-extern int D_L11_00207860[];
+extern int oil_tanker_render_batch_pair_sources[] __asm__("D_L11_00207888");
+extern int oil_tanker_render_batch_triplet_sources[] __asm__("D_L11_00207860");
 void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e780");
 
 void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) {
     int i;
     for (i = 0; i < 0x9; i++) {
-        FUN_L08_00258090(D_L11_00217770, D_L11_00207888[i], D_L11_00200728[i], &D_L11_00162618[pair_index]);
-        FUN_L00_001fde98(D_L11_00200728[i], D_L11_00207860[i], D_L11_002078D8[i], D_L11_00217770,
+        FUN_L08_00258090(D_L11_00217770, oil_tanker_render_batch_pair_sources[i], D_L11_00200728[i], &D_L11_00162618[pair_index]);
+        FUN_L00_001fde98(D_L11_00200728[i], oil_tanker_render_batch_triplet_sources[i], D_L11_002078D8[i], D_L11_00217770,
                          1);
     }
 }
