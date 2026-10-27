@@ -1752,7 +1752,7 @@ extern ML D_L03_0016C960;
 extern int D_L03_0015F5C4;
 extern unsigned char D_0015EDB0;
 extern unsigned char D_L03_0017C540[];
-extern short D_L03_00161BC4 __attribute__((sda));
+extern short shared_manipulator_attachment_scale __asm__("D_L03_00161BC4") __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void attach_shared_manipulator_to_matching_class_moby(char *moby) __asm__("FUN_L03_002db480");
@@ -1769,9 +1769,9 @@ void attach_shared_manipulator_to_matching_class_moby(char *moby) {
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 1, manipulator);
-                    *(float *)(manipulator + 0x20) = *(float *)&D_L03_00161BC4;
-                    *(float *)(manipulator + 0x24) = *(float *)&D_L03_00161BC4;
-                    *(float *)(manipulator + 0x28) = *(float *)&D_L03_00161BC4;
+                    *(float *)(manipulator + 0x20) = *(float *)&shared_manipulator_attachment_scale;
+                    *(float *)(manipulator + 0x24) = *(float *)&shared_manipulator_attachment_scale;
+                    *(float *)(manipulator + 0x28) = *(float *)&shared_manipulator_attachment_scale;
                 }
             }
         }
