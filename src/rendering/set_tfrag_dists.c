@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern f32 D_00160EA0[3];
+extern f32 tfrag_render_ranges[3] __asm__("D_00160EA0");
 extern s32 tfrag_lod_dists_raw[3] __asm__("D_00160EB0");
 extern f32 fog_params[] __asm__("D_0018CF20");
 extern f32 tfrag_range_coefficients[4][4] __asm__("D_001DE7F0");
@@ -12,12 +12,12 @@ void set_tfrag_dists(void) __asm__("FUN_00233068");
 void set_tfrag_dists(void) {
     float scaled_far_range, scaled_middle_range, scaled_near_range, ab, bc;
 
-    tfrag_lod_dists_raw[0] = truncate_float_to_s32(D_00160EA0[0] * 1024.0f);
-    tfrag_lod_dists_raw[1] = truncate_float_to_s32(D_00160EA0[1] * 1024.0f);
-    tfrag_lod_dists_raw[2] = truncate_float_to_s32(D_00160EA0[2] * 1024.0f);
-    scaled_far_range = D_00160EA0[0] * fog_params[0];
-    scaled_middle_range = D_00160EA0[1] * fog_params[0];
-    scaled_near_range = D_00160EA0[2] * fog_params[0];
+    tfrag_lod_dists_raw[0] = truncate_float_to_s32(tfrag_render_ranges[0] * 1024.0f);
+    tfrag_lod_dists_raw[1] = truncate_float_to_s32(tfrag_render_ranges[1] * 1024.0f);
+    tfrag_lod_dists_raw[2] = truncate_float_to_s32(tfrag_render_ranges[2] * 1024.0f);
+    scaled_far_range = tfrag_render_ranges[0] * fog_params[0];
+    scaled_middle_range = tfrag_render_ranges[1] * fog_params[0];
+    scaled_near_range = tfrag_render_ranges[2] * fog_params[0];
     ab = 1.0f / (scaled_far_range - scaled_middle_range);
     bc = 1.0f / (scaled_middle_range - scaled_near_range);
     fast_mem_zero16(tfrag_range_coefficients, 0x40);
