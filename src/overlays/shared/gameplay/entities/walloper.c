@@ -891,7 +891,8 @@ extern SparkleRowC860 D_L00_001DBB90[];
 void walloper_update(char *m) __asm__("FUN_L00_002bb558");
 void walloper_update(char *walloper_moby) {
     enum {
-        WALLOPER_STATE_INITIALIZE = 0
+        WALLOPER_STATE_INITIALIZE = 0,
+        WALLOPER_STATE_ANIMATION_DRIVEN_EFFECTS = 2
     };
     int flag = 0;
     float arc_origin[4] __attribute__((aligned(16)));
@@ -919,7 +920,7 @@ void walloper_update(char *walloper_moby) {
         D_L00_001616CC = scale_game_frames(*(int *)&walloper_effect_fade_in_duration_frames);
         walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&walloper_effect_fade_out_duration_frames);
         break;
-    case 2:
+    case WALLOPER_STATE_ANIMATION_DRIVEN_EFFECTS:
         if (walloper_hero_state->state.current == 0x20) {
             float interpolated_record_value = compute_interpolated_record_value(walloper_moby);
             if (6.0f <= interpolated_record_value) {
