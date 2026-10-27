@@ -10,7 +10,7 @@ typedef struct {
     s32 c;
     s32 d;
 } E_27adb0;
-extern u16 D_L00_00179452[];
+extern u16 message_list_value_lookup[] __asm__("D_L00_00179452");
 extern E_27adb0 D_L00_001B3D40[];
 /* Fills D_L00_001B3D40 from the D_00141E08 table in reverse order, then ends it with 0. */
 s32 build_reversed_active_message_list(void) __asm__("FUN_L00_0027adb0");
@@ -20,7 +20,7 @@ s32 build_reversed_active_message_list(void) {
     for (i = 0; i < active_message_record_count; i = j) {
         j = i + 1;
         D_L00_001B3D40[i].b = 1;
-        D_L00_001B3D40[i].a = *(u16 *)((char *)D_L00_00179452 + active_message_records[active_message_record_count - j] * 4);
+        D_L00_001B3D40[i].a = *(u16 *)((char *)message_list_value_lookup + active_message_records[active_message_record_count - j] * 4);
     }
     D_L00_001B3D40[*(volatile s32 *)&active_message_record_count].a = 0;
     return 0;
