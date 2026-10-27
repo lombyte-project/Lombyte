@@ -15,7 +15,7 @@ struct ParticleTex {
 
 #include "rnc/rendering/texture/parse_particle_textures_globals.h"
 extern u8 resident_lookup_payload[] __asm__("D_001CE180");
-extern struct ParticleTex D_001CD980[];
+extern struct ParticleTex resident_particle_texture_ranges[] __asm__("D_001CD980");
 extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 
@@ -53,8 +53,8 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *range_sourc
         start_offset = *range_source_cursor++;
         end_page = base + *range_source_cursor++;
         end_extent = *range_source_cursor++;
-        D_001CD980[particle_texture_range_count].tex0 = (start_page << 4) + start_offset;
-        D_001CD980[particle_texture_range_count].tex1 = (end_page << 4) + log2dim(end_extent);
+        resident_particle_texture_ranges[particle_texture_range_count].tex0 = (start_page << 4) + start_offset;
+        resident_particle_texture_ranges[particle_texture_range_count].tex1 = (end_page << 4) + log2dim(end_extent);
         particle_texture_range_count = particle_texture_range_count + 1;
     }
 }
