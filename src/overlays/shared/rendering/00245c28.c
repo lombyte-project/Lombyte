@@ -365,7 +365,7 @@ typedef struct {
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
 
 extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
-extern char D_L00_001E8B00[];
+extern char map_archive_stash_tag[] __asm__("D_L00_001E8B00");
 extern float map_points[] __asm__("D_L00_00182810");
 extern float map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
@@ -435,7 +435,7 @@ void initialize_level_map_archive(void) {
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = file->size << 7;
         load(archive, file->sector, file->size);
-        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
+        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = scratch;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
