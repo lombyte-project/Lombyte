@@ -2327,9 +2327,9 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern unsigned char D_0013D408 __attribute__((section(".data")));
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8");
-extern short D_L01_00161AF4 __attribute__((sda));
-extern short D_L01_00161AF8 __attribute__((sda));
-extern short D_L01_00161AFC __attribute__((sda));
+extern short fighter_jet_minimum_distance_scale_gp __asm__("D_L01_00161AF4") __attribute__((sda));
+extern short fighter_jet_minimum_scale_camera_distance_gp __asm__("D_L01_00161AF8") __attribute__((sda));
+extern short fighter_jet_full_scale_camera_distance_gp __asm__("D_L01_00161AFC") __attribute__((sda));
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263d40(int, int);
@@ -2355,9 +2355,9 @@ void fighter_jet_update(char *moby) {
     }
     {
         float camera_distance = distance_xyz(moby + 0x10, D_L01_00167240);
-        float min_scale = *(float *)&D_L01_00161AF4;
-        float near_dist = *(float *)&D_L01_00161AFC;
-        float slope = -((1.0f - min_scale) / (*(float *)&D_L01_00161AF8 - near_dist));
+        float min_scale = *(float *)&fighter_jet_minimum_distance_scale_gp;
+        float near_dist = *(float *)&fighter_jet_full_scale_camera_distance_gp;
+        float slope = -((1.0f - min_scale) / (*(float *)&fighter_jet_minimum_scale_camera_distance_gp - near_dist));
         speed_scale = slope * camera_distance + (1.0f - slope * near_dist);
         if (1.0f < speed_scale) speed_scale = 1.0f;
         if (speed_scale < min_scale) speed_scale = min_scale;
