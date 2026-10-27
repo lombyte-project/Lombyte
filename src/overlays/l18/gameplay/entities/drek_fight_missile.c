@@ -48,10 +48,10 @@ extern int update_drek_fight_missile_wander_movement(char *moby, float *vec) __a
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L18_00162210 __attribute__((sda));
+extern short l18_drek_missile_roll_rate_degrees_gp __asm__("D_L18_00162210") __attribute__((sda));
 extern short D_L18_00162214_gp __asm__("D_L18_00162214") __attribute__((sda));
-extern short D_L18_00162218 __attribute__((sda));
-extern short D_L18_00162234 __attribute__((sda));
+extern short l18_drek_missile_dive_speed_gp __asm__("D_L18_00162218") __attribute__((sda));
+extern short l18_drek_missile_wander_to_dive_random_bound_gp __asm__("D_L18_00162234") __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
@@ -72,7 +72,7 @@ void drek_fight_missile_update(struct Moby *moby) {
     char *missile_vars = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
-                                  *(float *)&D_L18_00162210 * DEG_TO_RAD * frame_time);
+                                  *(float *)&l18_drek_missile_roll_rate_degrees_gp * DEG_TO_RAD * frame_time);
     }
     if (D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) {
         mark_moby_for_removal(moby);
@@ -104,7 +104,7 @@ void drek_fight_missile_update(struct Moby *moby) {
             select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
         update_drek_fight_missile_trail_and_queue_effects(moby);
-        if (random_integer_below(*(int *)&D_L18_00162234)) {
+        if (random_integer_below(*(int *)&l18_drek_missile_wander_to_dive_random_bound_gp)) {
             return;
         }
         moby->state = 3;
@@ -118,7 +118,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         float dive_movement_step[4];
         float ground_check_position[4];
         subtract_vector_xyz(dive_movement_step, missile_vars + 0x120, &moby->pos);
-        normalize_vector_xyz(dive_movement_step, dive_movement_step, *(float *)&D_L18_00162218 * frame_time);
+        normalize_vector_xyz(dive_movement_step, dive_movement_step, *(float *)&l18_drek_missile_dive_speed_gp * frame_time);
         approach_value_alt((float *)(missile_vars + 0x14C), 1.0f, frame_time);
         lerp_vector(dive_movement_step, missile_vars + 0x130, dive_movement_step, *(float *)(missile_vars + 0x14C));
         add_vector_xyz(&moby->pos, &moby->pos, dive_movement_step);
