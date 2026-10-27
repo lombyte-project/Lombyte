@@ -14,19 +14,19 @@ extern u8 subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR;
 extern s32 screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
 extern s32 screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
 extern s32 occl_debug_overlay_enabled[2] __asm__("D_0015F370") __attribute__((sda));
-extern u8 D_0015F380[];
-extern u8 D_0015F390[];
-extern u8 D_0015F3A0[];
-extern u8 D_0015F3B0[];
-extern u8 D_0015F3C0[];
-extern u8 D_0015F3D0[];
-extern u8 D_0015F3E0[];
-extern u8 D_0015F3F0[];
-extern u8 D_0015F3F8[];
-extern u8 D_0015F400[];
-extern u8 D_0015F410[];
-extern u8 D_0015F418[];
-extern u8 D_0015F428[];
+extern u8 render_setup_label[] __asm__("D_0015F380");
+extern u8 sky_draw_label[] __asm__("D_0015F390");
+extern u8 pre_effects_label[] __asm__("D_0015F3A0");
+extern u8 vu_effects_label[] __asm__("D_0015F3B0");
+extern u8 moby_effects_label[] __asm__("D_0015F3C0");
+extern u8 part_draw_label[] __asm__("D_0015F3D0");
+extern u8 post_effects_label[] __asm__("D_0015F3E0");
+extern u8 aa_blur_label[] __asm__("D_0015F3F0");
+extern u8 hud_label[] __asm__("D_0015F3F8");
+extern u8 screen_overlays_label[] __asm__("D_0015F400");
+extern u8 dma_sync_empty_label[] __asm__("D_0015F410");
+extern u8 tie_patch_light_label[] __asm__("D_0015F418");
+extern u8 moby_patch_label[] __asm__("D_0015F428");
 extern s32 draw_enable_mask __asm__("D_0015F434") MACRO_ADDR;
 extern f32 D_0015F440 MACRO_ADDR;
 extern s32 draw_callback_count __asm__("D_0015F464") __attribute__((sda));
@@ -46,8 +46,8 @@ extern s32 D_0018C34C[];
 extern u8 D_001D8EB0[];
 extern u8 D_001E1300[];
 extern u8 tie_light_data[] __asm__("D_001E3200");
-extern u8 D_001E78A0[];
-extern u8 D_001E78B8[];
+extern u8 tfrag_patch_light_label[] __asm__("D_001E78A0");
+extern u8 shrub_patch_light_label[] __asm__("D_001E78B8");
 
 extern void AppendDmaTag(u32);
 extern void FlushCache(s32);
@@ -122,14 +122,14 @@ void draw_debug_profiler(void) {
     update_occlusion();
     reset_gs_registers();
     font_state = -1;
-    noop_core_callback(D_0015F380, 0xF);
-    noop_core_callback_secondary(D_0015F380, 0xF);
+    noop_core_callback(render_setup_label, 0xF);
+    noop_core_callback_secondary(render_setup_label, 0xF);
     if (D_0016045C != NULL && (draw_enable_mask & 1)) {
         if (draw_config.unk8 != 0) {
             transition_draw_sky();
         }
-        noop_core_callback_secondary(D_0015F390, 0xE);
-        noop_core_callback(D_0015F390, 0xE);
+        noop_core_callback_secondary(sky_draw_label, 0xE);
+        noop_core_callback(sky_draw_label, 0xE);
     }
     if (draw_enable_mask & 2) {
         draw_tfrag();
@@ -150,8 +150,8 @@ void draw_debug_profiler(void) {
         do_gif_paging();
         vu1_gs_regs_normal();
     }
-    noop_core_callback(D_0015F3A0, 6);
-    noop_core_callback_secondary(D_0015F3A0, 6);
+    noop_core_callback(pre_effects_label, 6);
+    noop_core_callback_secondary(pre_effects_label, 6);
     if (draw_enable_mask & 8) {
         draw_shrubs();
     }
@@ -180,8 +180,8 @@ void draw_debug_profiler(void) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
         font_state = 6;
     }
-    noop_core_callback_secondary(D_0015F3B0, 4);
-    noop_core_callback(D_0015F3B0, 4);
+    noop_core_callback_secondary(vu_effects_label, 4);
+    noop_core_callback(vu_effects_label, 4);
     if (draw_enable_mask & 0x20) {
         vu1_gs_regs_alt();
         if (draw_config.unk34 != 0) {
@@ -193,8 +193,8 @@ void draw_debug_profiler(void) {
             vu1_gs_regs_alt();
             draw_light_quads();
         }
-        noop_core_callback(D_0015F3C0, 6);
-        noop_core_callback_secondary(D_0015F3C0, 6);
+        noop_core_callback(moby_effects_label, 6);
+        noop_core_callback_secondary(moby_effects_label, 6);
         if (draw_config.unk38 != 0) {
             vu1_add_g_sregister(8, 5);
             vu1_gs_regs_alt();
@@ -202,8 +202,8 @@ void draw_debug_profiler(void) {
             part_proc();
             font_state = 8;
         }
-        noop_core_callback(D_0015F3D0, 8);
-        noop_core_callback_secondary(D_0015F3D0, 8);
+        noop_core_callback(part_draw_label, 8);
+        noop_core_callback_secondary(part_draw_label, 8);
         if (draw_config.unk3C != 0) {
             if (draw_callback2_count != 0) {
                 vu1_gs_regs_alt();
@@ -215,13 +215,13 @@ void draw_debug_profiler(void) {
             vu1_add_g_sregister(0x42, 0x8000000044);
             render_queued_rotated_sprites();
         }
-        noop_core_callback(D_0015F3E0, 6);
-        noop_core_callback_secondary(D_0015F3E0, 6);
+        noop_core_callback(post_effects_label, 6);
+        noop_core_callback_secondary(post_effects_label, 6);
     }
     if (draw_config.unk48 != 0) {
         aa_blur_pass();
     }
-    noop_core_callback_secondary(D_0015F3F0, 0xF);
+    noop_core_callback_secondary(aa_blur_label, 0xF);
     vu1_gs_regs_alt();
     if (draw_enable_mask & 0x10000) {
         noop_graphics_callback();
@@ -234,8 +234,8 @@ void draw_debug_profiler(void) {
     if (game_mode_macro == 2 && subtitles_enabled != 0) {
         draw_subtitles();
     }
-    noop_core_callback_secondary(D_0015F3F8, 0xE);
-    noop_core_callback(D_0015F3F8, 0xE);
+    noop_core_callback_secondary(hud_label, 0xE);
+    noop_core_callback(hud_label, 0xE);
     do_gif_paging();
     if (draw_enable_mask & 0x40) {
         if (draw_config.unk44 != 0) {
@@ -259,23 +259,23 @@ void draw_debug_profiler(void) {
                 draw_screen_effect();
             }
         }
-        noop_core_callback_secondary(D_0015F400, 0xA);
+        noop_core_callback_secondary(screen_overlays_label, 0xA);
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
     rcnt1_count_float = convert_integer_to_float(*(volatile s32 *)0x10000800);
     D_0015F614 = rcnt1_count_float / (pal_mode != 0 ? 11520.0f : 9600.0f);
     vu1_sync_chain(2);
-    noop_core_callback(D_0015F410, 0x11);
+    noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 2) {
         if (draw_config.tfrag.enabled != 0) {
             light_tfrags(D_001E1300);
             patch_tfrag_gifs();
         }
-        noop_core_callback(D_001E78A0, 2);
+        noop_core_callback(tfrag_patch_light_label, 2);
     }
     vu1_sync_chain(4);
-    noop_core_callback(D_0015F410, 0x11);
+    noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 4) {
         if (draw_config.tie.enabled != 0) {
             if (pal_mode != 0) {
@@ -286,24 +286,24 @@ void draw_debug_profiler(void) {
                 patch_tie_texture_fields();
             }
         }
-        noop_core_callback(D_0015F418, 5);
+        noop_core_callback(tie_patch_light_label, 5);
     }
     vu1_sync_chain(8);
-    noop_core_callback(D_0015F410, 0x11);
+    noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 8) {
         if (draw_config.shrub.enabled != 0) {
             FUN_0022a5e0(D_001D8EB0);
             patch_shrub_gifs();
         }
-        noop_core_callback(D_001E78B8, 7);
+        noop_core_callback(shrub_patch_light_label, 7);
     }
     vu1_sync_chain(0x10);
-    noop_core_callback(D_0015F410, 0x11);
+    noop_core_callback(dma_sync_empty_label, 0x11);
     if (draw_enable_mask & 0x10) {
         if (draw_config.moby.enabled != 0) {
             patch_moby_gifs();
         }
-        noop_core_callback(D_0015F428, 3);
+        noop_core_callback(moby_patch_label, 3);
     }
     update_fog();
     D_0015F648 = 0;
