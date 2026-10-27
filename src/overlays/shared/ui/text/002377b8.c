@@ -816,7 +816,7 @@ int draw_hud_radial_selector_panel(Elem_239918 *element) {
 typedef struct {
     short a, b, c, d;
 } Q2395b0;
-extern Q2395b0 D_L00_0015FAB0;
+extern Q2395b0 l00_hud_element_counter_state __asm__("D_L00_0015FAB0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void initialize_numeric_hud_values_and_dimensions() __asm__("FUN_L00_00235c80");
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
@@ -830,11 +830,11 @@ void initialize_hud_element_with_counters(char *hud_element) {
     *(short *)(hud_element + 0x48) = 32;
     *(short *)(hud_element + 0x4A) = 0;
     initialize_numeric_hud_values_and_dimensions(hud_element);
-    *(Q2395b0 **)(hud_element + 0x80) = &D_L00_0015FAB0;
-    D_L00_0015FAB0.d = 1;
-    D_L00_0015FAB0.a = 0;
-    D_L00_0015FAB0.b = 0;
-    D_L00_0015FAB0.c = 0;
+    *(Q2395b0 **)(hud_element + 0x80) = &l00_hud_element_counter_state;
+    l00_hud_element_counter_state.d = 1;
+    l00_hud_element_counter_state.a = 0;
+    l00_hud_element_counter_state.b = 0;
+    l00_hud_element_counter_state.c = 0;
 }
 #define NOT_SDA
 
