@@ -649,9 +649,9 @@ extern int rand(void);
 extern int random_integer_below(int);
 extern int truncate_float_to_s32();
 extern short D_L17_00161B78 __attribute__((sda));
-extern short D_L17_00161B7C __attribute__((sda));
+extern short fleet_radial_base_elevation_degrees __asm__("D_L17_00161B7C") __attribute__((sda));
 extern f32 D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
-extern short D_L17_00161B84 __attribute__((sda));
+extern short fleet_radial_radius __asm__("D_L17_00161B84") __attribute__((sda));
 extern short D_L17_00161B88 __attribute__((sda));
 extern short D_L17_00161B8C __attribute__((sda));
 extern short D_L17_00161B90 __attribute__((sda));
@@ -741,9 +741,9 @@ void update_fleet_rotating_radial_effect(char *moby) {
                     elevation_angle_offset = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
                                      convert_integer_to_float(j) * 0.5f) -
                           *(float *)&D_L17_00161B80_gp * DEG_TO_RAD;
-                    base_elevation_angle = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
+                    base_elevation_angle = *(float *)&fleet_radial_base_elevation_degrees * DEG_TO_RAD;
                     build_spherical_offset(
-                        spC0, *(float *)&D_L17_00161B84, 1.5707964f,
+                        spC0, *(float *)&fleet_radial_radius, 1.5707964f,
                         fast_add_rotations(
                             fast_add_rotations(base_elevation_angle,
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
@@ -754,7 +754,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                         collision_line((moby + 0x10), spC0, 9, moby, &blk);
                     }
                     spD0[0] = *(OvlQuad *)(moby + 0x10);
-                    *(float *)((char *)spD0 + 0xC) = *(float *)&D_L17_00161B84;
+                    *(float *)((char *)spD0 + 0xC) = *(float *)&fleet_radial_radius;
                     if (fast_bsphere_check((char *)spD0, 20.0f) != -1 && (j == 0 || j == 4)) {
                         spF0[0] = 0;
                         *(float *)((char *)spF0 + 8) = 12.0f;
@@ -875,11 +875,11 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
                 quad_primitive.uv[j].x = D_L17_001D3F70[j].x + scroll * step.v[pass];
                 radius = 0.0f;
                 if (j != 0) {
-                    radius = *(float *)&D_L17_00161B84;
+                    radius = *(float *)&fleet_radial_radius;
                 }
                 vj = quad_primitive.v[j];
                 wrap_angle_alt(vj, radius, 1.5707964f,
-                               build_spherical_offset_alt(*(float *)&D_L17_00161B7C * DEG_TO_RAD +
+                               build_spherical_offset_alt(*(float *)&fleet_radial_base_elevation_degrees * DEG_TO_RAD +
                                                           convert_integer_to_float(i) * 2.0943952f +
                                                           spread[j]));
                 vj[3] = 1.0f;
