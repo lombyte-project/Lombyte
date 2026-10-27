@@ -121,7 +121,7 @@ extern unsigned char D_L15_001BBC84[];
 extern int D_L15_001BAAD0[];
 extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
 extern Light29FF90 D_L15_001808C0[];
-extern unsigned char D_L15_0015F444[4];
+extern unsigned char l15_fog_color[4] __asm__("D_L15_0015F444");
 extern float D_L15_0015F448;
 extern float D_L15_0015F44C;
 extern float D_L15_0015F450;
@@ -340,14 +340,14 @@ void electric_water_update(struct Moby *moby) {
                 vars->saved_fog[1] = D_L15_0015F44C;
                 vars->saved_fog[2] = D_L15_0015F450;
                 vars->saved_fog[3] = D_L15_0015F454;
-                vars->saved_fog_color[0] = D_L15_0015F444[0];
-                vars->saved_fog_color[1] = D_L15_0015F444[1];
-                vars->saved_fog_color[2] = D_L15_0015F444[2];
+                vars->saved_fog_color[0] = l15_fog_color[0];
+                vars->saved_fog_color[1] = l15_fog_color[1];
+                vars->saved_fog_color[2] = l15_fog_color[2];
             }
             vars->shock_count = vars->shock_count + 1;
-            D_L15_0015F444[0] = 0x7F;
-            D_L15_0015F444[1] = 0x7F;
-            D_L15_0015F444[2] = 0x7F;
+            l15_fog_color[0] = 0x7F;
+            l15_fog_color[1] = 0x7F;
+            l15_fog_color[2] = 0x7F;
             D_L15_0015F44C = 131072.0f;
             D_L15_0015F448 = 0.0f;
             D_L15_0015F450 = random_float_between(128.0f, 255.0f);
@@ -380,9 +380,9 @@ void electric_water_update(struct Moby *moby) {
                 D_L15_0015F44C = vars->saved_fog[1];
                 D_L15_0015F450 = vars->saved_fog[2];
                 D_L15_0015F454 = vars->saved_fog[3];
-                D_L15_0015F444[0] = vars->saved_fog_color[0];
-                D_L15_0015F444[1] = vars->saved_fog_color[1];
-                D_L15_0015F444[2] = vars->saved_fog_color[2];
+                l15_fog_color[0] = vars->saved_fog_color[0];
+                l15_fog_color[1] = vars->saved_fog_color[1];
+                l15_fog_color[2] = vars->saved_fog_color[2];
             }
         }
         /* fall through: the hum and the switches, as in state 2 */
