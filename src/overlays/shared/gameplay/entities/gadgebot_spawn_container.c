@@ -2674,7 +2674,7 @@ extern char *D_L06_001AC180_2f34d8[] __asm__("D_L06_001AC180");
 
 extern s32 gadgebot_target_cache_frame_gp __asm__("D_L06_00161CE8") __attribute__((sda));
 extern s32 cached_gadgebot_target_count_gp __asm__("D_L06_00161CE4") __attribute__((sda));
-extern char *D_L06_001DAE60[];
+extern char *cached_gadgebot_target_mobies[] __asm__("D_L06_001DAE60");
 /* Picks the best target for moby among this frame's live class-0x359 mobys and the hero
  * (current is the target it has now), and stores it in *current. */
 void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) __asm__("FUN_L06_002f34d8");
@@ -2689,14 +2689,14 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
             if (*(s16 *)(candidate_moby + 0xA6) == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
                 s32 candidate_slot_index = cached_gadgebot_target_count_gp;
                 cached_gadgebot_target_count_gp = candidate_slot_index + 1;
-                D_L06_001DAE60[candidate_slot_index] = candidate_moby;
+                cached_gadgebot_target_mobies[candidate_slot_index] = candidate_moby;
             }
         }
     }
     best.score = 999999.0f;
     best.moby = 0;
     for (i = 0; i < cached_gadgebot_target_count_gp; i++) {
-        consider_moby_target_candidate(moby, *current, D_L06_001DAE60[i], (int *)&best.moby, &best.score, range);
+        consider_moby_target_candidate(moby, *current, cached_gadgebot_target_mobies[i], (int *)&best.moby, &best.score, range);
     }
     consider_moby_target_candidate(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
     *current = best.moby;
