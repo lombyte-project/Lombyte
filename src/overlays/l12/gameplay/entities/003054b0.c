@@ -1189,7 +1189,7 @@ typedef struct {
 } Obj;
 
 extern char D_0013D388[];
-extern char D_L12_0016CCF0[];
+extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int D_L12_0015F5C4;
 extern int D_L12_0015F5CC;
 extern void start_scene(int) __asm__("FUN_L00_00298840");
@@ -1211,10 +1211,10 @@ void trigger_scene_once_in_clip_volume(struct Moby *moby) {
         hero_position = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(hero_position, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
-            qcopy(D_L12_0016CCF0, hero_position);
-            destination_base = D_L12_0016CCF0 - 0x10;
+            qcopy(scene_trigger_saved_hero_data, hero_position);
+            destination_base = scene_trigger_saved_hero_data - 0x10;
             *(float *)(destination_base + 0x18) = *(float *)(hero_position + 0x258);
-            qcopy(D_L12_0016CCF0 + 0x10, hero_position + 0x10);
+            qcopy(scene_trigger_saved_hero_data + 0x10, hero_position + 0x10);
             *(short *)(destination_base + 0x46) = 1;
             start_scene(*(int *)(data + 8));
         }
