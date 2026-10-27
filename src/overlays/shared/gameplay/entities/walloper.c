@@ -651,7 +651,7 @@ void xform_2bb0b0(void *, void *, void *) __asm__("FUN_001f9d20");
 long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float rnd_2bb0b0(float, float) __asm__("FUN_L00_00257c48");
 void draw_2bb0b0(void *, void *, int) __asm__("FUN_001f7d30");
-extern unsigned int D_L00_00161640 __attribute__((sda));
+extern unsigned int l00_beam_anchor_first_pass_vertex_color __asm__("D_L00_00161640") __attribute__((sda));
 extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
 extern float beam_anchor_second_pass_base_corner_scale_gp __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
@@ -676,7 +676,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     cross_2bb0b0(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2bb0b0 *)D_0013F5E0));
     fast_vec_normalize(&camera_facing_transform[1], &camera_facing_transform[1], -1.0f);
     cross_2bb0b0(&camera_facing_transform[2], &camera_facing_transform[1], &camera_facing_transform[0]);
-    quad_color = D_L00_00161640;
+    quad_color = l00_beam_anchor_first_pass_vertex_color;
     quad.color[3] = quad_color;
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
