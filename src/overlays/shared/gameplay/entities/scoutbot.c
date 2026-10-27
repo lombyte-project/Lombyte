@@ -786,8 +786,8 @@ extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int,
     __asm__("FUN_L00_0025e450");
 extern float homing_projectile_trail_particle_count_limit_gp __asm__("D_L08_00161CDC") __attribute__((sda));
 extern float homing_projectile_spin_rate_degrees_gp __asm__("D_L08_00161CE4") __attribute__((sda));
-extern int D_L08_00161CE8 __attribute__((sda));
-extern int D_L08_00161CEC __attribute__((sda));
+extern int homing_projectile_trail_initial_spark_word_gp __asm__("D_L08_00161CE8") __attribute__((sda));
+extern int homing_projectile_trail_second_spark_word_gp __asm__("D_L08_00161CEC") __attribute__((sda));
 extern float homing_projectile_trail_spread_speed_limit_gp __asm__("D_L08_00161D00") __attribute__((sda));
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
 extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
@@ -840,8 +840,8 @@ void update_homing_projectile(char *moby) {
             (float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
         particle_third_frame_count = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
             (float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
-        spawn_particle_002e8210(position, velocity, offset, D_L08_00161CE8,
-                               D_L08_00161CEC, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
+        spawn_particle_002e8210(position, velocity, offset, homing_projectile_trail_initial_spark_word_gp,
+                               homing_projectile_trail_second_spark_word_gp, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
     }
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40),
         homing_projectile_spin_rate_degrees_gp * 0.017453292f * frame_time * (float)*(int *)(data + 0x1c));
