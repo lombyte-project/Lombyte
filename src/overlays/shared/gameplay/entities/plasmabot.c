@@ -130,7 +130,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/fun_l14_002b3890.h"
 
-void FUN_L14_002b3890(int selected_moby_list_index) {
+void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) __asm__("FUN_L14_002b3890");
+
+void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
     short *listed_moby_entry_cursor;
     if (selected_moby_list_index != -1) {
         listed_moby_entry_cursor = D_L14_001ABF40[selected_moby_list_index];
@@ -308,7 +310,7 @@ void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 void update_plasmabot_aim_joint_rotation(char *moby, float angle) __asm__("FUN_L14_002b37b0");
-void FUN_L14_002b3890_c(int idx) __asm__("FUN_L14_002b3890");
+void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 #define call_4BF0(m) FUN_L14_002b39a0_c((unsigned char *)(m))
@@ -571,7 +573,7 @@ void update_plasmabot(char *moby) {
         if (!(fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.017453292f)) break;
         if (!(aim < 0.017453292f)) break;
         if (test_path_segment_strict_crossing(*(int *)(data + 0x244), moby + 0x10, owner + 0x10) != 0) break;
-        FUN_L14_002b3890_c(((unsigned char *)moby)[0x21]);
+        reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
         *(float *)(data + 0x278) = ang;
         ((unsigned char *)moby)[0x20] = 5;
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
