@@ -1349,8 +1349,8 @@ typedef struct {
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
 extern int D_0015ED84;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/sand_mouse_update.h"
-extern char D_L01_0020AE80[];
-extern char D_L01_0020AEA0[];
+extern char sand_mouse_already_completed_message[] __asm__("D_L01_0020AE80");
+extern char sand_mouse_missing_start_house_message[] __asm__("D_L01_0020AEA0");
 extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
 extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
 extern void rig_probe_setup(void *, int, int *, float *, float *, int *) __asm__("FUN_L01_00263a28");
@@ -1434,12 +1434,12 @@ void sand_mouse_update(struct Moby *moby) {
             moby->pos.z = moby->pos.z + 0.02f;
             if (D_L01_001BB6B0.collected[(short)(id = moby->save_id)] != 0
                 || (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1) {
-                debug_print_2e3f20(D_L01_0020AE80);
+                debug_print_2e3f20(sand_mouse_already_completed_message);
                 mark_moby_for_removal(moby);
                 return;
             }
         } else {
-            debug_print_2e3f20(D_L01_0020AEA0);
+            debug_print_2e3f20(sand_mouse_missing_start_house_message);
             mark_moby_for_removal(moby);
             return;
         }
