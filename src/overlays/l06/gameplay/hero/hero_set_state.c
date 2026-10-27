@@ -30,7 +30,7 @@ typedef struct {
 
 extern T2C_235E08 D_L06_0017C3A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern float D_L06_0017C570[][25];
+extern float level06_hero_animation_blend_curves[][25] __asm__("D_L06_0017C570");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -84,7 +84,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
-extern char D_L06_0017C6A0[];
+extern char level06_hero_transform_trail_jump_velocity_keys[] __asm__("D_L06_0017C6A0");
 int hero_set_state(int a, int b) {
 
 
@@ -1043,7 +1043,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                *(char **)&u->unk3E4 = D_L06_0017C6A0;
+                *(char **)&u->unk3E4 = level06_hero_transform_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
@@ -1457,7 +1457,7 @@ int hero_set_state(int a, int b) {
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
                 *(float *)(((char *)q->moby) + 0x54) =
-                    D_L06_0017C570[q->anim_blend_curve][(q->anim_blend_step)++];
+                    level06_hero_animation_blend_curves[q->anim_blend_curve][(q->anim_blend_step)++];
             }
         }
         break;
@@ -1560,7 +1560,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(6, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L06_0017C570[p->anim_blend_curve][(p->anim_blend_step)++];
+                level06_hero_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -1710,7 +1710,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(2, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L06_0017C570[p->anim_blend_curve][(p->anim_blend_step)++];
+                level06_hero_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
