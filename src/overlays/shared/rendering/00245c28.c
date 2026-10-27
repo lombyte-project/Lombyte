@@ -376,7 +376,7 @@ extern s32 D_0015ED84;
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0014161B[];
-extern unsigned char D_L00_00184394[];
+extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
@@ -466,7 +466,7 @@ void initialize_level_map_archive(void) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (float)x) * (15.5f - (float)x) +
                     (15.5f - (float)y) * (15.5f - (float)y) > radius_sq) {
-                    D_L00_00184394[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
+                    l00_map_outside_circle_mask[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }
         }
