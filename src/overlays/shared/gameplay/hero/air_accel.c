@@ -1600,7 +1600,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 s32 FUN_001f96f8_242198(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_242198(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void FUN_L00_002118c8_242198(s32, f32) __asm__("FUN_L00_002118c8");
-void FUN_L00_002325e0_242198(s32, s32) __asm__("FUN_L00_002325e0");
+void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
 void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
@@ -1614,7 +1614,7 @@ void select_hero_locomotion_state(void) {
     if (D_0013CAE0_242198 & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_242198(0xD, 2, -2.0f);
-        FUN_L00_002325e0_242198(3, 0x12);
+        hero_queue_sequence(3, 0x12);
         return;
     }
     run_hero = &hero;

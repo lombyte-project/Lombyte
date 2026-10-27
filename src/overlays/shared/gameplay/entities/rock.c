@@ -502,80 +502,80 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it
    comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
 void rock_update(struct Moby *m) __asm__("FUN_L01_002f8718");
-void rock_update(struct Moby *m) {
-    DebrisVars_2f8530 *d = (DebrisVars_2f8530 *)m->pvars;
+void rock_update(struct Moby *debris_moby) {
+    DebrisVars_2f8530 *debris_vars = (DebrisVars_2f8530 *)debris_moby->pvars;
     Vec4 old;
-    Vec4 v;
-    Vec4 p;
-    Vec4 t;
-    f32 ang;
+    Vec4 bounce_or_particle_velocity;
+    Vec4 particle_position;
+    Vec4 particle_offset_direction;
+    f32 velocity_heading;
     f32 spin;
     s32 i;
 
-    qcopy(&old, &m->pos);
-    d->vel.z -= d->gravity;
-    fast_vec_add(&m->pos, &m->pos, &d->vel);
-    m->rot.z = fast_add_rotations(m->rot.z, d->spin);
-    if (m->pos.x < 2.0f || 1021.0f < m->pos.x || m->pos.y < 2.0f || 1021.0f < m->pos.y || m->pos.z < 2.0f ||
-        1021.0f < m->pos.z) {
-        mark_moby_for_removal(m);
+    qcopy(&old, &debris_moby->pos);
+    debris_vars->vel.z -= debris_vars->gravity;
+    fast_vec_add(&debris_moby->pos, &debris_moby->pos, &debris_vars->vel);
+    debris_moby->rot.z = fast_add_rotations(debris_moby->rot.z, debris_vars->spin);
+    if (debris_moby->pos.x < 2.0f || 1021.0f < debris_moby->pos.x || debris_moby->pos.y < 2.0f || 1021.0f < debris_moby->pos.y || debris_moby->pos.z < 2.0f ||
+        1021.0f < debris_moby->pos.z) {
+        mark_moby_for_removal(debris_moby);
         return;
     }
-    if (fast_dec_timer(&d->life)) {
-        if (collision_line(&old, &m->pos, 0, m, 0) != 0 || coll_sphere(d->scale, &m->pos, 0, m) != 0) {
-            ang = fast_arc_tan(d->vel.x, d->vel.y);
-            v.f[0] = fast_cos(fast_add_rotations(ang, random_float_between(-3.1415927f, 3.1415927f))) *
-                     random_float_between(0.0f, d->vel.z * 0.35f);
-            v.f[1] = fast_sin(fast_add_rotations(ang, random_float_between(-3.1415927f, 3.1415927f))) *
-                     random_float_between(0.0f, d->vel.z * 0.35f);
-            v.f[2] = 0.0f;
-            m->rot.x = random_float_between(-3.1415927f, 3.1415927f);
-            m->rot.y = random_float_between(-3.1415927f, 3.1415927f);
-            m->rot.z = random_float_between(-3.1415927f, 3.1415927f);
-            FUN_L00_001ff660(&d->vel, &d->vel, &D_L01_001742C0.normal_x);
-            fast_vec_scale(&d->vel, &d->vel, random_float_between(0.07f, 0.13f));
-            fast_vec_add(&d->vel, &d->vel, &v);
+    if (fast_dec_timer(&debris_vars->life)) {
+        if (collision_line(&old, &debris_moby->pos, 0, debris_moby, 0) != 0 || coll_sphere(debris_vars->scale, &debris_moby->pos, 0, debris_moby) != 0) {
+            velocity_heading = fast_arc_tan(debris_vars->vel.x, debris_vars->vel.y);
+            bounce_or_particle_velocity.f[0] = fast_cos(fast_add_rotations(velocity_heading, random_float_between(-3.1415927f, 3.1415927f))) *
+                     random_float_between(0.0f, debris_vars->vel.z * 0.35f);
+            bounce_or_particle_velocity.f[1] = fast_sin(fast_add_rotations(velocity_heading, random_float_between(-3.1415927f, 3.1415927f))) *
+                     random_float_between(0.0f, debris_vars->vel.z * 0.35f);
+            bounce_or_particle_velocity.f[2] = 0.0f;
+            debris_moby->rot.x = random_float_between(-3.1415927f, 3.1415927f);
+            debris_moby->rot.y = random_float_between(-3.1415927f, 3.1415927f);
+            debris_moby->rot.z = random_float_between(-3.1415927f, 3.1415927f);
+            FUN_L00_001ff660(&debris_vars->vel, &debris_vars->vel, &D_L01_001742C0.normal_x);
+            fast_vec_scale(&debris_vars->vel, &debris_vars->vel, random_float_between(0.07f, 0.13f));
+            fast_vec_add(&debris_vars->vel, &debris_vars->vel, &bounce_or_particle_velocity);
             fast_vec_normalize(&D_L01_001742C0.normal_x, &D_L01_001742C0.normal_x, 0.1f);
-            fast_vec_add(&m->pos, &D_L01_001742C0.normal_x, &D_L01_001742C0.point);
+            fast_vec_add(&debris_moby->pos, &D_L01_001742C0.normal_x, &D_L01_001742C0.point);
             spin = random_float_between(frame_time * 1.5707964f, frame_time * 6.2831855f);
-            if (0.0f < d->spin) {
+            if (0.0f < debris_vars->spin) {
                 spin = -spin;
             }
-            d->spin = spin;
+            debris_vars->spin = spin;
         }
     }
-    if (d->unk20 == 0) {
-        if (fast_dec_timer(&d->unk10) == 0) {
-            if (!(fast_vec_length(&d->vel) < frame_time * 0.5f)) {
+    if (debris_vars->unk20 == 0) {
+        if (fast_dec_timer(&debris_vars->unk10) == 0) {
+            if (!(fast_vec_length(&debris_vars->vel) < frame_time * 0.5f)) {
                 return;
             }
-            if (d->life != 0) {
+            if (debris_vars->life != 0) {
                 return;
             }
         }
         for (i = 0; i < 40; i++) {
-            p.q = 0;
-            p.f[0] = random_float_between(-1.0f, 1.0f);
-            p.f[1] = random_float_between(-1.0f, 1.0f);
-            p.f[2] = random_float_between(-1.0f, 1.0f);
-            t.q = 0;
-            v.q = p.q;
-            t.f[0] = random_float_between(-1.0f, 1.0f);
-            t.f[1] = random_float_between(-1.0f, 1.0f);
-            t.f[2] = random_float_between(-1.0f, 1.0f);
-            p.q = t.q;
-            fast_vec_normalize(&p, &p, random_float_between(0.0f, 0.5f));
-            fast_vec_add(&p, &p, &m->pos);
-            fast_vec_normalize(&v, &v, random_float_between(0.0f, 0.5f) * frame_time);
-            fast_vec_add(&v, &v, &d->vel);
-            spawn_effect_particle_with_target_scalar(&p, &v, 0x1F0C1820, 0x81020, random_float_between(70000.0f, 140000.0f),
+            particle_position.q = 0;
+            particle_position.f[0] = random_float_between(-1.0f, 1.0f);
+            particle_position.f[1] = random_float_between(-1.0f, 1.0f);
+            particle_position.f[2] = random_float_between(-1.0f, 1.0f);
+            particle_offset_direction.q = 0;
+            bounce_or_particle_velocity.q = particle_position.q;
+            particle_offset_direction.f[0] = random_float_between(-1.0f, 1.0f);
+            particle_offset_direction.f[1] = random_float_between(-1.0f, 1.0f);
+            particle_offset_direction.f[2] = random_float_between(-1.0f, 1.0f);
+            particle_position.q = particle_offset_direction.q;
+            fast_vec_normalize(&particle_position, &particle_position, random_float_between(0.0f, 0.5f));
+            fast_vec_add(&particle_position, &particle_position, &debris_moby->pos);
+            fast_vec_normalize(&bounce_or_particle_velocity, &bounce_or_particle_velocity, random_float_between(0.0f, 0.5f) * frame_time);
+            fast_vec_add(&bounce_or_particle_velocity, &bounce_or_particle_velocity, &debris_vars->vel);
+            spawn_effect_particle_with_target_scalar(&particle_position, &bounce_or_particle_velocity, 0x1F0C1820, 0x81020, random_float_between(70000.0f, 140000.0f),
                              scale_game_frames(FUN_L00_00257b90(20, 60)));
         }
-        mark_moby_for_removal(m);
-    } else if (fast_dec_timer(&d->unk10) != 0) {
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(debris_moby);
+    } else if (fast_dec_timer(&debris_vars->unk10) != 0) {
+        mark_moby_for_removal(debris_moby);
     } else {
-        m->alpha = d->unk10 * 127 / d->unk28;
+        debris_moby->alpha = debris_vars->unk10 * 127 / debris_vars->unk28;
     }
 }
 typedef struct {

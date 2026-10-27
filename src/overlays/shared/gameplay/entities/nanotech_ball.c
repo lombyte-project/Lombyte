@@ -233,8 +233,7 @@ void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int
 extern float nanotech_ball_collection_gravity_scale_range_start_gp __asm__("D_L00_00161A60") __attribute__((sda));
 extern float nanotech_ball_collection_gravity_scale_range_end_gp __asm__("D_L00_00161A64") __attribute__((sda));
 extern unsigned char D_L00_00161A68 __attribute__((sda));
-extern int D_L00_00161A6C __attribute__((sda));
-extern int D_L00_00161A70 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/spawn_nanotech_ball_collection_effect_pair.h"
 extern float nanotech_ball_collection_first_particle_scale_factor_gp __asm__("D_L00_00161A74") __attribute__((sda));
 extern float nanotech_ball_collection_second_particle_scale_factor_gp __asm__("D_L00_00161A78") __attribute__((sda));
 void spawn_nanotech_ball_collection_effect_pair(char *moby) __asm__("FUN_L00_002d8418");
@@ -249,9 +248,9 @@ void spawn_nanotech_ball_collection_effect_pair(char *moby) {
                           FUN_002132a8_002d8418(nanotech_ball_collection_gravity_scale_range_start_gp * frame_time,
                                                 nanotech_ball_collection_gravity_scale_range_end_gp * frame_time));
     FUN_00214890_002d8418(&effect_vector, &scaled_gravity_vector, &to_camera, FUN_00213308_002d8418());
-    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A6C, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_first_particle_color, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_first_particle_scale_factor_gp);
-    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, D_L00_00161A70, D_L00_00161A68,
+    spawn_moving_hero_relative_alpha_fade_particle(moby_position, &effect_vector, nanotech_ball_collection_second_particle_color, D_L00_00161A68,
                               FUN_00213260_002d8418(0xFF) & 0xFF, 1, nanotech_ball_collection_second_particle_scale_factor_gp);
 }
 typedef struct {
@@ -287,8 +286,7 @@ s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
 extern s32 nanotech_ball_collection_color_range_start_gp __asm__("D_L00_00161A7C") __attribute__((sda));
 extern s32 nanotech_ball_collection_color_range_end_gp __asm__("D_L00_00161A80") __attribute__((sda));
-extern s32 D_L00_00161A84 __attribute__((sda));
-extern s32 D_L00_00161A88 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/update_nanotech_ball_collection_effects.h"
 extern f32 D_L00_00161A90[1] __attribute__((sda));
 extern f32 D_L00_00161AA0[1] __attribute__((sda));
 extern f32 D_L00_00161AB0[1] __attribute__((sda));
@@ -326,12 +324,12 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
         al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - color_progress_or_size_factor)) << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + D_L00_00161AB0[i];
-        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), D_L00_00161A88, 0,
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
                                     2, 1, D_L00_00161AA0[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
-                                    D_L00_00161A88, D_L00_00161A84, 2, 1,
+                                    nanotech_ball_collection_particle_byte_source_index, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
                                     D_L00_00161AA0[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_2d8510.pF8;
@@ -450,16 +448,15 @@ extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
-extern int D_L00_00161A00 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_3.h"
 extern float nanotech_ball_bob_phase_step_gp __asm__("D_L00_00161A0C") __attribute__((sda));
 extern float D_L00_00161A10_gp __asm__("D_L00_00161A10") __attribute__((sda));
 extern float D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 extern int nanotech_ball_collection_lifetime_frames_gp __asm__("D_L00_00161A3C") __attribute__((sda));
-extern int D_L00_00161A40 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update_2.h"
 extern int nanotech_ball_slot_collection_min_frames_gp __asm__("D_L00_00161A44") __attribute__((sda));
 extern int nanotech_ball_slot_collection_max_frames_gp __asm__("D_L00_00161A48") __attribute__((sda));
-extern float D_L00_00161A50 __attribute__((sda));
-extern float D_L00_00161A54 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/nanotech_ball_update.h"
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float nanotech_ball_slot_scale_pulse_amplitude_gp __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
@@ -629,15 +626,15 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (D_0015EDB6 != 0) player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
-                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -D_L00_00161A54);
+                func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -nanotech_ball_collection_target_gravity_offset_gp);
                 func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &player->motion.pos, &collection_target_or_end_tangent);
-                func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &player->gravity_dir, -D_L00_00161A50);
+                func_001F9C30_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &player->gravity_dir, -nanotech_ball_collection_curve_radius_gp);
                 func_001F9BF0_2D9EA0(&v20, &collection_target_or_end_tangent, &moby->pos);
                 v20.z -= 0.5f;
                 fast_vec_cross(&cross_product_or_particle_midpoint, &v20, &slot_rotation_basis_or_cull_position_or_start_tangent);
                 fast_vec_cross(&slot_rotation_basis_or_cull_position_or_start_tangent, &cross_product_or_particle_midpoint, &v20);
                 func_002156E0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, -1.5707964f, &v20);
-                func_L00_001FF4B0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, D_L00_00161A50);
+                func_L00_001FF4B0_2D9EA0(&slot_rotation_basis_or_cull_position_or_start_tangent, &slot_rotation_basis_or_cull_position_or_start_tangent, nanotech_ball_collection_curve_radius_gp);
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
@@ -686,7 +683,7 @@ void nanotech_ball_update(Moby *moby) {
                     ext->b.z = part->pos.z - moby->pos.z;
                     if (moby->state == 2) ext->u.s.owner = moby;
                     else ext->u.s.owner = data->owner;
-                    part->f4 = D_L00_00161A00;
+                    part->f4 = nanotech_ball_particle_color_gp;
                     part->fC = D_L00_001619F8;
                 }
                 slot = data->slots[i];
@@ -697,7 +694,7 @@ void nanotech_ball_update(Moby *moby) {
                         ext->u.s.scale = D_L00_00161A14_gp;
                         ext->u.s.ang = 0.0f;
                         data->slots[i]->fC = D_L00_001619FC;
-                        data->slots[i]->f4 = D_L00_00161A00;
+                        data->slots[i]->f4 = nanotech_ball_particle_color_gp;
                     }
                 } else {
                     qcopy(&slot->pos, &rotated_slot_offset_or_particle_position);
@@ -709,7 +706,7 @@ void nanotech_ball_update(Moby *moby) {
     case NANOTECH_BALL_STATE_COLLECTING:
         if (D_L00_0015F63C == moby) update_nanotech_ball_slot_offsets();
         if (data->h56 != 0) {
-            func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -D_L00_00161A54);
+            func_001F9C30_2D9EA0(&moby->pos, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&moby->pos, D_0013F5E0 - 0x210, &moby->pos);
             moby->rot.w = 0.52359879f;
             if (func_L00_002D99C0_2D9EA0(moby) != 0 && func_002140B0_2D9EA0(5) == 0) func_L00_002D98C8_2D9EA0(moby);
@@ -719,7 +716,7 @@ void nanotech_ball_update(Moby *moby) {
             int max_hp = hero_max_health;
             if (player->vehicle_mode == 1) max_hp = 4;
             if (player->health.hp == max_hp && player->invulnerable_frames != 0 && D_0015EDB6 != 0) {
-                int duration = func_001F9850_2D9EA0(D_L00_00161A40);
+                int duration = func_001F9850_2D9EA0(nanotech_ball_full_health_invulnerable_collection_min_frames_gp);
                 if (data->h54 < duration) {
                     int i;
                     data->h54 = duration;
@@ -739,7 +736,7 @@ void nanotech_ball_update(Moby *moby) {
             else func_0020D678_2D9EA0(moby);
         } else {
             int i;
-            func_001F9C30_2D9EA0(&v20, D_0013F5E0, -D_L00_00161A54);
+            func_001F9C30_2D9EA0(&v20, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&v20, D_0013F5E0 - 0x210, &v20);
             for (i = 0; i < 8; i++) {
                 Part_2D9EA0 *part = data->slots[i];
@@ -794,7 +791,7 @@ void nanotech_ball_update(Moby *moby) {
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
-                        spark->f4 = D_L00_00161A00;
+                        spark->f4 = nanotech_ball_particle_color_gp;
                         spark->fC = D_L00_001619F8;
                     }
                     func_001F9BD8_2D9EA0(&cross_product_or_particle_midpoint, &part->pos, &cross_product_or_particle_midpoint);
@@ -804,7 +801,7 @@ void nanotech_ball_update(Moby *moby) {
                     half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
-                        spark->f4 = D_L00_00161A00;
+                        spark->f4 = nanotech_ball_particle_color_gp;
                         spark->fC = D_L00_001619F8;
                     }
                 }
@@ -2713,8 +2710,7 @@ extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".
 extern char D_L00_001E5EE0[] __attribute__((section(".data")));
 extern char D_L00_001E6020[] __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern float D_L00_00161B48 __attribute__((sda));
-extern float D_L00_00161B4C __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/suck_beam_draw_mesh.h"
 extern float D_L00_00161B50 __attribute__((sda));
 extern short D_L00_001E6008[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
@@ -2723,76 +2719,76 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void suck_beam_draw_mesh(void) __asm__("FUN_L00_002dd8e8");
 void suck_beam_draw_mesh(void) {
-    Pkt s;
+    Pkt quad_packet;
     float vc[4];
     float vd[4];
     float ve[4];
     float vf[4];
-    float a, a2, am, b, b2, dot;
+    float row_texture_u, next_row_texture_u, am, segment_texture_v, next_segment_texture_v, dot;
     float step;
-    short *pv;
-    int i, j, k, v;
+    short *row_alpha_counter;
+    int i, j, k, row_alpha_or_packed_color;
     unsigned short y;
-    s.word1 = get_effect_texture(0x15);
-    s.word2 = 0x0000FF9000000260L;
-    s.word3 = 0x8000000048L;
-    s.word0 = 0;
-    a = D_L00_00161B48;
-    D_L00_00161B48 = a + 0.001f;
-    if (D_L00_00161B48 > 7.0f) D_L00_00161B48 -= 7.0f;
+    quad_packet.word1 = get_effect_texture(0x15);
+    quad_packet.word2 = 0x0000FF9000000260L;
+    quad_packet.word3 = 0x8000000048L;
+    quad_packet.word0 = 0;
+    row_texture_u = suction_effect_texture_u_offset;
+    suction_effect_texture_u_offset = row_texture_u + 0.001f;
+    if (suction_effect_texture_u_offset > 7.0f) suction_effect_texture_u_offset -= 7.0f;
     step = 0.3f;
-    a += step;
+    row_texture_u += step;
     for (i = 1; i < 10; i++) {
-        b = D_L00_00161B4C;
-        D_L00_00161B4C = b + D_L00_00161B50;
-        if (D_L00_00161B4C > 7.0f) D_L00_00161B4C -= 7.0f;
-        a2 = a + step;
+        segment_texture_v = suction_effect_texture_v_offset;
+        suction_effect_texture_v_offset = segment_texture_v + D_L00_00161B50;
+        if (suction_effect_texture_v_offset > 7.0f) suction_effect_texture_v_offset -= 7.0f;
+        next_row_texture_u = row_texture_u + step;
         for (j = 0; j < 20; j++) {
-            qcopy(s.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
-            qcopy(s.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
-            qcopy(s.q[2], D_L00_001E5EE0 + (j * 16 + i * 0x140));
-            qcopy(s.q[3], D_L00_001E5EE0 + ((j + 1) % 20 * 16 + i * 0x140));
-            subtract_vector_xyz_c4(vc, s.q[0], s.q[1]);
-            subtract_vector_xyz_c4(vd, s.q[2], s.q[1]);
+            qcopy(quad_packet.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
+            qcopy(quad_packet.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
+            qcopy(quad_packet.q[2], D_L00_001E5EE0 + (j * 16 + i * 0x140));
+            qcopy(quad_packet.q[3], D_L00_001E5EE0 + ((j + 1) % 20 * 16 + i * 0x140));
+            subtract_vector_xyz_c4(vc, quad_packet.q[0], quad_packet.q[1]);
+            subtract_vector_xyz_c4(vd, quad_packet.q[2], quad_packet.q[1]);
             cross_vectors_xyz(ve, vd, vc);
-            subtract_vector_xyz_c4(vf, s.q[1], g_debug_camera);
+            subtract_vector_xyz_c4(vf, quad_packet.q[1], g_debug_camera);
             dot = fast_vec_dot(ve, vf);
             if (0.0f <= dot) {
-                b += 0.05f;
+                segment_texture_v += 0.05f;
             } else {
-                b2 = b + 0.05f;
-                am = a - step;
+                next_segment_texture_v = segment_texture_v + 0.05f;
+                am = row_texture_u - step;
                 y = D_L00_001E6008[i - 1];
-                pv = &D_L00_001E6008[i];
-                v = *pv;
+                row_alpha_counter = &D_L00_001E6008[i];
+                row_alpha_or_packed_color = *row_alpha_counter;
                 for (k = 0; k < 2; k++) {
-                    if (v < 0) v = 0;
-                    if (v > 0x40) v = 0x40;
-                    v = (v << 24) | 0x404040;
-                    s.col[k * 2] = v;
-                    s.col[k * 2 + 1] = v;
-                    v = (short)y;
+                    if (row_alpha_or_packed_color < 0) row_alpha_or_packed_color = 0;
+                    if (row_alpha_or_packed_color > 0x40) row_alpha_or_packed_color = 0x40;
+                    row_alpha_or_packed_color = (row_alpha_or_packed_color << 24) | 0x404040;
+                    quad_packet.col[k * 2] = row_alpha_or_packed_color;
+                    quad_packet.col[k * 2 + 1] = row_alpha_or_packed_color;
+                    row_alpha_or_packed_color = (short)y;
                 }
                 if (i == 1) {
-                    s.col[3] = 0x20404040;
-                    s.col[2] = 0x20404040;
+                    quad_packet.col[3] = 0x20404040;
+                    quad_packet.col[2] = 0x20404040;
                 } else if (i == 9) {
-                    s.col[1] = 0x404040;
-                    s.col[0] = 0x404040;
+                    quad_packet.col[1] = 0x404040;
+                    quad_packet.col[0] = 0x404040;
                 }
-                s.x0 = a;
-                s.y0 = b;
-                s.x1 = a;
-                s.y1 = b2;
-                s.x2 = am;
-                s.y2 = b;
-                s.x3 = am;
-                s.y3 = b2;
-                b = b2;
-                fast_draw_quad_real(&s, 0, 0);
+                quad_packet.x0 = row_texture_u;
+                quad_packet.y0 = segment_texture_v;
+                quad_packet.x1 = row_texture_u;
+                quad_packet.y1 = next_segment_texture_v;
+                quad_packet.x2 = am;
+                quad_packet.y2 = segment_texture_v;
+                quad_packet.x3 = am;
+                quad_packet.y3 = next_segment_texture_v;
+                segment_texture_v = next_segment_texture_v;
+                fast_draw_quad_real(&quad_packet, 0, 0);
             }
         }
-        a = a2;
+        row_texture_u = next_row_texture_u;
     }
     vu1_add_g_sregister(0x47, 0x5360B);
 }
@@ -3181,7 +3177,7 @@ extern void FUN_L00_002dd8e8_u(void) __asm__("FUN_L00_002dd8e8");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* When D_L00_001E6008[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
-void suck_beam_queue_draw(int arg0) {
+void suck_beam_queue_draw(int draw_callback_context) {
     int i;
     if (D_L00_001E6008[0] > 0) {
         for (i = 0; i < 10; i++) {
@@ -3189,7 +3185,7 @@ void suck_beam_queue_draw(int arg0) {
                 D_L00_001E6008[i] = 0x40;
             D_L00_001E6008[i] = (unsigned short)D_L00_001E6008[i] - 4;
         }
-        enqueue_callback_list_1(FUN_L00_002dd8e8_u, arg0);
+        enqueue_callback_list_1(FUN_L00_002dd8e8_u, draw_callback_context);
     }
 }
 

@@ -107,7 +107,6 @@ extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__(
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
-extern float D_L14_001620A4 __attribute__((sda));
 extern Rgb_0e00 D_L14_001620A8;
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
@@ -216,7 +215,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
           spark_moby->state = 1;
           if ((++spark_data->bounces) == 1)
           {
-            cap_0e00(&spark_data->vel, &spark_data->vel, D_L14_001620A4 * frame_time);
+            cap_0e00(&spark_data->vel, &spark_data->vel, spark_first_bounce_horizontal_speed_gp * frame_time);
             spark_data->vel.z = spark_data->vel.z * D_L14_001620A0;
           }
           else
@@ -973,9 +972,6 @@ extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
 extern int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") __attribute__((sda));
-extern float D_L14_00162290 __attribute__((sda));
-extern float D_L14_00162294 __attribute__((sda));
-extern float D_L14_00162298 __attribute__((sda));
 extern char *D_L14_0015FFD8_6ee0 __asm__("D_L14_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
@@ -1068,7 +1064,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
     case FLYING_CAR_FOLLOW_PATH:
         flying_car_data->fx.b2 = 1;
         flying_car_data->fx.f20 = flying_car_data->fx.f24 = flying_car_data->fx.f28 = 0.0001f;
-        update_moby_rotation_oscillation(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, D_L14_00162290, D_L14_00162294, D_L14_00162298);
+        update_moby_rotation_oscillation(flying_car_moby, &flying_car_data->fBC, &flying_car_data->fC0, flying_car_rotation_oscillation_amplitude_gp, flying_car_rotation_oscillation_common_phase_update_gp, flying_car_rotation_oscillation_axis_phase_update_gp);
         if (FUN_L14_00307620_6ee0(flying_car_moby)) {
             if (flying_car_data->part >= 0) {
                 struct Moby *o = (struct Moby *)(D_L14_0015FFD8_6ee0 + (flying_car_data->part << 8));
@@ -1171,13 +1167,7 @@ void initialize_flying_car_path(struct Moby *moby) {
  * otherwise, sinks by its speed, eases onto the path point and banks into the turns, and returns 1. */
 extern char *D_L14_001B0BB0_7620[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
-extern float D_L14_0016226C __attribute__((sda));
-extern float D_L14_00162270 __attribute__((sda));
 extern float D_L14_00162274 __attribute__((sda));
-extern float D_L14_00162278 __attribute__((sda));
-extern float D_L14_00162280 __attribute__((sda));
-extern float D_L14_00162288 __attribute__((sda));
-extern float D_L14_0016228C __attribute__((sda));
 extern int path_step_7620(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -1203,7 +1193,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
 
     end = path_step_7620(D_L14_001B0BB0_7620[*(int *)(flying_car_data + 0x78)], pos, flying_car_data + 0x70, flying_car_data + 0x74, *(short *)(flying_car_data + 0x8E),
                          *(float *)(flying_car_data + 0xC8) * frame_time);
-    if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) || moby->pos.z <= D_L14_0016228C) {
+    if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) || moby->pos.z <= flying_car_burst_height_threshold_gp) {
         cart_burst(moby, &moby->pos, 5.0f, 13.0f, -1);
         moby->state = 3;
         moby->flags |= 0x41;
@@ -1231,13 +1221,13 @@ int update_flying_car_path_motion(struct Moby *moby) {
         float lim;
         float s;
         s = *(float *)(flying_car_data + 0xB4) + *(float *)(flying_car_data + 0xB8) * frame_scale_sq;
-        lim = D_L14_00162280 * frame_time;
+        lim = flying_car_max_sink_offset_rate_gp * frame_time;
         *(float *)(flying_car_data + 0xB4) = s;
         if (lim < s)
             *(float *)(flying_car_data + 0xB4) = lim;
         *(float *)(flying_car_data + 0xB0) += *(float *)(flying_car_data + 0xB4);
     } else {
-        *(float *)(flying_car_data + 0xB0) -= D_L14_00162288 * frame_time;
+        *(float *)(flying_car_data + 0xB0) -= flying_car_sink_offset_recovery_rate_gp * frame_time;
         *(int *)(flying_car_data + 0xB4) = 0;
         if (*(float *)(flying_car_data + 0xB0) < *(float *)(flying_car_data + 0xB4))
             *(float *)(flying_car_data + 0xB0) = *(float *)(flying_car_data + 0xB4);
@@ -1245,22 +1235,22 @@ int update_flying_car_path_motion(struct Moby *moby) {
     pos[2] -= *(float *)(flying_car_data + 0xB0);
     if (pos[2] < 10.0f)
         pos[2] = 10.0f;
-    vendor_spring(&moby->pos.x, (f32 *)(flying_car_data + 0x80), pos[0], D_L14_0016226C, D_L14_00162270, 0.0f);
-    vendor_spring(&moby->pos.y, (f32 *)(flying_car_data + 0x84), pos[1], D_L14_0016226C, D_L14_00162270, 0.0f);
-    vendor_spring(&moby->pos.z, (f32 *)(flying_car_data + 0x88), pos[2], D_L14_0016226C, D_L14_00162270, 0.0f);
+    vendor_spring(&moby->pos.x, (f32 *)(flying_car_data + 0x80), pos[0], flying_car_tracking_spring_gain_gp, flying_car_motion_spring_damping_gp, 0.0f);
+    vendor_spring(&moby->pos.y, (f32 *)(flying_car_data + 0x84), pos[1], flying_car_tracking_spring_gain_gp, flying_car_motion_spring_damping_gp, 0.0f);
+    vendor_spring(&moby->pos.z, (f32 *)(flying_car_data + 0x88), pos[2], flying_car_tracking_spring_gain_gp, flying_car_motion_spring_damping_gp, 0.0f);
     subtract_vector_xyz(delta, pos, &moby->pos);
     if (0.01f < AbsoluteFloat(delta[0]) && 0.01f < AbsoluteFloat(delta[1])) {
         yaw = atan2_7620(delta[0], delta[1]);
         bank = fast_subtract_rotations(moby->rot.z, yaw);
-        FUN_L00_00258278(moby, yaw, (f32 *)(flying_car_data + 0x98), D_L14_0016226C, D_L14_00162270, 0.0f);
+        FUN_L00_00258278(moby, yaw, (f32 *)(flying_car_data + 0x98), flying_car_tracking_spring_gain_gp, flying_car_motion_spring_damping_gp, 0.0f);
         pitch = -atan2_7620(vector_length_xy(delta), delta[2]);
-        vendor_spring(&moby->rot.y, (f32 *)(flying_car_data + 0x94), pitch, D_L14_0016226C, D_L14_00162270, 0.0f);
-        bank /= D_L14_00162278;
+        vendor_spring(&moby->rot.y, (f32 *)(flying_car_data + 0x94), pitch, flying_car_tracking_spring_gain_gp, flying_car_motion_spring_damping_gp, 0.0f);
+        bank /= flying_car_full_bank_yaw_error_gp;
         if (1.0f < bank)
             bank = 1.0f;
         if (bank < -1.0f)
             bank = -1.0f;
-        vendor_spring(&moby->rot.x, (f32 *)(flying_car_data + 0x90), bank * D_L14_00162274, 0.003f, D_L14_00162270, 0.0f);
+        vendor_spring(&moby->rot.x, (f32 *)(flying_car_data + 0x90), bank * D_L14_00162274, 0.003f, flying_car_motion_spring_damping_gp, 0.0f);
     }
     return 1;
 }
@@ -1843,12 +1833,6 @@ extern int D_L14_001624B4 __attribute__((section(".sdata")));
 extern int D_L14_001624B8 __attribute__((section(".sdata")));
 extern float D_L14_001624BC __attribute__((section(".sdata")));
 extern float D_L14_001624C0 __attribute__((section(".sdata")));
-extern float D_L14_00162490 __attribute__((sda));
-extern float D_L14_00162494 __attribute__((sda));
-extern float D_L14_00162498 __attribute__((sda));
-extern float D_L14_0016249C __attribute__((sda));
-extern float D_L14_001624A0 __attribute__((sda));
-extern float D_L14_001624A4 __attribute__((sda));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
 extern float D_L14_001F6C38[][3];
@@ -2028,17 +2012,17 @@ void update_path_key_camera(char *path_key_camera) {
         }
         key_interpolation_fraction = num / den;
     }
-    k = D_L14_00162490;
+    k = path_key_camera_heading_offset_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, key_interpolation_fraction);
     cur->f0 = cam_interp_angle_5d48(vel, cur->f0, x, k, 0.2f, 0.0f);
-    k = D_L14_00162494;
+    k = path_key_camera_placement_elevation_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, key_interpolation_fraction);
     cur->f4 = cam_interp_angle_5d48(vel + 1, cur->f4, x, k, 0.2f, 0.0f);
-    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * key_interpolation_fraction, D_L14_00162498, 0.2f, 0.0f);
-    k = D_L14_0016249C;
+    cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * key_interpolation_fraction, path_key_camera_placement_distance_spring_gain, 0.2f, 0.0f);
+    k = path_key_camera_lateral_axis_rotation_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, key_interpolation_fraction);
     cur->fC = cam_interp_angle_5d48(vel + 3, cur->fC, x, k, 0.2f, 0.0f);
-    k = D_L14_001624A0;
+    k = path_key_camera_up_axis_rotation_spring_gain;
     x = interpolate_angle(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, key_interpolation_fraction);
     cur->f10 = cam_interp_angle_5d48(vel + 4, cur->f10, x, k, 0.2f, 0.0f);
     camera_placement_heading = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
@@ -2055,16 +2039,16 @@ void update_path_key_camera(char *path_key_camera) {
     }
     if (heading_blend_target == 0.0f && current_key_heading_override == 0.0f) {
         heading_blend_target = (st->fC != 0.0f) ? st->fC : st->f8;
-        st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+        st->f10 += (0.0f - st->f10) * path_key_camera_heading_blend_step_factor;
         camera_placement_heading = interpolate_angle(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
     } else {
         if (heading_blend_target != 0.0f) {
-            st->f10 += (1.0f - st->f10) * D_L14_001624A4;
+            st->f10 += (1.0f - st->f10) * path_key_camera_heading_blend_step_factor;
             camera_placement_heading = interpolate_angle(camera_placement_heading, heading_blend_target, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
             st->fC = heading_blend_target;
         } else {
-            st->f10 += (0.0f - st->f10) * D_L14_001624A4;
+            st->f10 += (0.0f - st->f10) * path_key_camera_heading_blend_step_factor;
             camera_placement_heading = interpolate_angle(camera_placement_heading, current_key_heading_override, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = current_key_heading_override;
             st->fC = heading_blend_target;

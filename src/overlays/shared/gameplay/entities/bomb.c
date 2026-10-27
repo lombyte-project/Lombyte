@@ -1048,9 +1048,9 @@ extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da
 
 int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) __asm__("FUN_L00_002cae60");
 
-int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) {
+int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int launch_vector_address, int target_moby, float target_height_offset) {
     char *class_callback_data = get_moby_suck_cannon_record(moby);
-    int projectile_launch_result = launch_suck_cannon_projectile(moby, a, target_moby, target_height_offset);
+    int projectile_launch_result = launch_suck_cannon_projectile(moby, launch_vector_address, target_moby, target_height_offset);
     if (projectile_launch_result != 0) {
         moby[0x20] = 5;
     } else if ((unsigned char)moby[0x20] == 5) {
@@ -1110,10 +1110,7 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern float D_L00_00161870 __attribute__((sda));
-extern float D_L00_00161874 __attribute__((sda));
-extern float D_L00_00161878 __attribute__((sda));
-extern float D_L00_00161888 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/bomb_data/spawn_homing_shot.h"
 extern unsigned char *spawn_random_size_rotated_particle(char *a, char *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
@@ -1229,15 +1226,15 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
             *(float *)(moby + 0x44) = -fast_arc_tan_c2(length, direction[2]);
             return moby;
         } else {
-            spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
+            spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, homing_shot_attached_particle_size);
             for (i = 0; i < 17; i++) {
                 trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (trail != 0) {
-                    *(float *)(trail + 0xC) = random_float_between_c2(D_L00_00161870, D_L00_00161874);
+                    *(float *)(trail + 0xC) = random_float_between_c2(homing_shot_trail_initial_size_min, homing_shot_trail_initial_size_max);
                     index = convert_integer_to_float_c(i);
                     fraction = index / convert_integer_to_float_c(16);
                     blend = cubic_hermite_scalar(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
-                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (D_L00_00161878 - *(float *)(trail + 0xC)) * blend;
+                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (homing_shot_trail_size_blend_target - *(float *)(trail + 0xC)) * blend;
                     result = truncate_float_to_s32_c(blend * -64.0f + 128.0f);
                     *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
                     ((int *)(vars + 0x2C))[i] = (int)trail;

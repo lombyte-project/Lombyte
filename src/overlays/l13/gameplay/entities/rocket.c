@@ -1192,10 +1192,7 @@ struct WalkerVars_8d10 {
 };
 
 extern f32 D_L13_00161E58 __attribute__((sda));
-extern f32 D_L13_00161E60 __attribute__((sda));
-extern f32 D_L13_00161E64 __attribute__((sda));
-extern f32 D_L13_00161E68 __attribute__((sda));
-extern f32 D_L13_00161E6C __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_blarg_space_commando_damage_targeting_and_ground_motion.h"
 extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1238,7 +1235,11 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         HIT_RESULT_NO_REACTION = 11
     };
     enum {
-        GROUND_MATERIAL_DESTROYS_WALKER = 0
+        GROUND_MATERIAL_DESTROYS_WALKER = 0,
+        GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION = 1,
+        GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER = 3,
+        GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11,
+        GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
     struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -1283,8 +1284,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 10:
             moby->state = 0xF;
             vars->stun_timer = scale_game_frames_8d10(0x3C);
-            vars->knock_up = D_L13_00161E60 * frame_time;
-            vars->knock_back = D_L13_00161E64 * frame_time;
+            vars->knock_up = blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
+            vars->knock_back = blarg_space_commando_stun_vertical_knockback_speed * frame_time;
             vars->knock_min = 8.0f;
             vars->knock_max = 15.0f;
             knock_back_8d10(moby, vars->anim, 7, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
@@ -1294,8 +1295,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case HIT_RESULT_DYING_KNOCKBACK:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
-            vars->knock_up = D_L13_00161E68 * frame_time;
-            vars->knock_back = D_L13_00161E6C * frame_time;
+            vars->knock_up = blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
+            vars->knock_back = blarg_space_commando_dying_vertical_knockback_speed * frame_time;
             vars->knock_min = 9.0f;
             vars->knock_max = 17.0f;
             knock_back_8d10(moby, vars->anim, 8, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
@@ -1332,10 +1333,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         switch (ground_material_8d10()) {
         /* These material IDs all destroy the walker; their material names are unknown. */
         case GROUND_MATERIAL_DESTROYS_WALKER:
-        case 1:
-        case 3:
-        case 11:
-        case 13:
+        case GROUND_MATERIAL_TRIGGERS_WALKER_EXPLOSION:
+        case GROUND_MATERIAL_EXPLODES_AND_REMOVES_WALKER:
+        case GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION:
+        case GROUND_MATERIAL_EXPLODES_WALKER:
             moby->flags &= ~0x1000;
             stop_moby_sound_8d10(moby, 0, -1);
             spawn_explosion(moby, D_L13_00160680, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
@@ -2516,27 +2517,14 @@ extern void FUN_L13_0030c2b0(void *);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED70;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
-extern float D_L13_00161F18 __attribute__((sda));
-extern float D_L13_00161F1C __attribute__((sda));
-extern float D_L13_00161F20 __attribute__((sda));
-extern float D_L13_00161F24 __attribute__((sda));
-extern float D_L13_00161F28 __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_4.h"
 extern float D_L13_00161F2C __attribute__((sda));
-extern float D_L13_00161F30 __attribute__((sda));
-extern float D_L13_00161F34 __attribute__((sda));
-extern float D_L13_00161F38 __attribute__((sda));
-extern float D_L13_00161F3C __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_3.h"
 extern float D_L13_00161F40 __attribute__((sda));
-extern float D_L13_00161F44 __attribute__((sda));
-extern float D_L13_00161F48 __attribute__((sda));
-extern float D_L13_00161F4C __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_2.h"
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
-extern float D_L13_00161F58 __attribute__((sda));
-extern float D_L13_00161F5C __attribute__((sda));
-extern float D_L13_00161F60 __attribute__((sda));
-extern float D_L13_00161F64 __attribute__((sda));
-extern float D_L13_00161F68 __attribute__((sda));
+#include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks.h"
 extern int D_L13_00161F08 __attribute__((sda));
 extern int D_L13_00161F0C __attribute__((sda));
 extern int D_L13_00161F10 __attribute__((sda));
@@ -2559,8 +2547,8 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
     int i;
     qcopy(&old_pos, &moby->pos);
     if (moby->command == 1) {
-        velocity.f[3] = D_L13_00161F5C;
-        acceleration.f[3] = D_L13_00161F60;
+        velocity.f[3] = moby_spark_first_batch_discarded_velocity_w_initializer_gp;
+        acceleration.f[3] = moby_spark_first_batch_acceleration_w_initializer_gp;
         i = 0;
         do {
             qcopy(&position, &moby->pos);
@@ -2569,55 +2557,55 @@ void update_moby_motion_and_emit_sparks(struct Moby *moby) {
             position.f[2] += random_float_between_alt(-0.065f, 0.065f);
             qzero(&velocity);
             i++;
-            velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
-                                                       D_L13_00161F30 * frame_time * 1.1f);
+            velocity.f[2] = random_float_between_alt(moby_spark_first_batch_vertical_velocity_base_gp * frame_time * 0.9f,
+                                                       moby_spark_first_batch_vertical_velocity_base_gp * frame_time * 1.1f);
             angle = random_float_between_alt(-moby_spark_first_batch_spread_degrees_gp, moby_spark_first_batch_spread_degrees_gp) * 0.017453292f;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
-            acceleration.f[0] = fast_cos(direction) * (D_L13_00161F24 * frame_time);
+            acceleration.f[0] = fast_cos(direction) * (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
-            acceleration.f[1] = fast_sin(direction) * (D_L13_00161F24 * frame_time);
+            acceleration.f[1] = fast_sin(direction) * (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
-            acceleration.f[2] = random_float_between_alt(D_L13_00161F28 * frame_time * 0.9f,
-                                                          D_L13_00161F28 * frame_time * 1.1f);
-            spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F18,
-                                                                     D_L13_00161F18 + D_L13_00161F18)));
-            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F1C,
-                                                                     D_L13_00161F1C * 1.2f)));
-            third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F20,
-                                                                     D_L13_00161F20 * 1.2f)));
+            acceleration.f[2] = random_float_between_alt(moby_spark_first_batch_vertical_acceleration_base_gp * frame_time * 0.9f,
+                                                          moby_spark_first_batch_vertical_acceleration_base_gp * frame_time * 1.1f);
+            spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_frame_count_base_gp,
+                                                                     moby_spark_first_batch_frame_count_base_gp + moby_spark_first_batch_frame_count_base_gp)));
+            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_second_frame_count_base_gp,
+                                                                     moby_spark_first_batch_second_frame_count_base_gp * 1.2f)));
+            third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_first_batch_third_frame_count_base_gp,
+                                                                     moby_spark_first_batch_third_frame_count_base_gp * 1.2f)));
             spawn_spark(&position, &velocity, &acceleration, D_L13_00161F08,
                            D_L13_00161F0C, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i < 2);
         amount = 0.017453292f;
-        velocity.f[3] = D_L13_00161F64;
-        acceleration.f[3] = D_L13_00161F68;
+        velocity.f[3] = moby_spark_second_batch_discarded_velocity_w_initializer_gp;
+        acceleration.f[3] = moby_spark_second_batch_acceleration_w_initializer_gp;
         i = 1;
         do {
             qcopy(&second_pos, &moby->pos);
             second_pos.f[0] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[1] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[2] += random_float_between_alt(-0.1f, 0.1f);
-            random_float_between_alt(-D_L13_00161F58, D_L13_00161F58);
+            random_float_between_alt(-moby_spark_second_batch_discarded_random_bound_gp, moby_spark_second_batch_discarded_random_bound_gp);
             qzero(&velocity);
             i--;
-            velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
-                                                       D_L13_00161F44 * frame_time * 1.5f);
+            velocity.f[2] = random_float_between_alt(moby_spark_second_batch_vertical_velocity_base_gp * frame_time * 0.7f,
+                                                       moby_spark_second_batch_vertical_velocity_base_gp * frame_time * 1.5f);
             angle = random_float_between_alt(-moby_spark_second_batch_spread_degrees_gp, moby_spark_second_batch_spread_degrees_gp) * amount;
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)),
                                       angle);
-            acceleration.f[0] = fast_cos(direction) * (D_L13_00161F48 * frame_time);
+            acceleration.f[0] = fast_cos(direction) * (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
             direction = fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)),
                                       angle);
-            acceleration.f[1] = fast_sin(direction) * (D_L13_00161F48 * frame_time);
+            acceleration.f[1] = fast_sin(direction) * (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
-            acceleration.f[2] = random_float_between_alt(D_L13_00161F4C * frame_time * 0.7f,
-                                                          D_L13_00161F4C * frame_time * 1.5f);
-            spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F34,
-                                                                     D_L13_00161F34 + D_L13_00161F34)));
-            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F38,
-                                                                     D_L13_00161F38 * 1.2f)));
-            third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(D_L13_00161F3C,
-                                                                     D_L13_00161F3C * 1.2f)));
+            acceleration.f[2] = random_float_between_alt(moby_spark_second_batch_vertical_acceleration_base_gp * frame_time * 0.7f,
+                                                          moby_spark_second_batch_vertical_acceleration_base_gp * frame_time * 1.5f);
+            spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_frame_count_base_gp,
+                                                                     moby_spark_second_batch_frame_count_base_gp + moby_spark_second_batch_frame_count_base_gp)));
+            second_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_second_frame_count_base_gp,
+                                                                     moby_spark_second_batch_second_frame_count_base_gp * 1.2f)));
+            third_spark_frame_count = FUN_001fa6d0(FUN_001f96b0_c3b8(random_float_between_alt(moby_spark_second_batch_third_frame_count_base_gp,
+                                                                     moby_spark_second_batch_third_frame_count_base_gp * 1.2f)));
             spawn_spark(&second_pos, &velocity, &acceleration, D_L13_00161F10,
                            D_L13_00161F14, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
         } while (i >= 0);

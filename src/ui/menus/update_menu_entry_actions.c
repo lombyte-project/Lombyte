@@ -30,6 +30,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
         MENU_ACTION_ALLOCATE_VOICE = 2,
         MENU_ACTION_SET_NEXT_PAGE = 3,
         MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_FREEZE = 4,
+        MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_TIMED_FREEZE = 5,
         MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE = 6,
         MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD = 7,
         MENU_ACTION_SET_LANGUAGE = 9,
@@ -101,7 +102,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
                 mode_freeze_init(3, menu->data.list.items[menu->data.list.selected].param.value);
             }
             break;
-        case 5:
+        case MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_TIMED_FREEZE:
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
                 menu_system.next =

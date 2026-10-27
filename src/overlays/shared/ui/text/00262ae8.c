@@ -7,15 +7,15 @@
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
 extern int D_L05_0015F97C;
-extern int D_L05_0015F980;
+#include "rnc/overlay/shared/ui/text/00262ae8_data/hud_release_held_element.h"
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 extern short D_L05_0015F978 __attribute__((sda));
 void hud_release_held_element(void) __asm__("FUN_L05_00264298");
 void hud_release_held_element(void) {
-    if (D_L05_0015F980 != -1) {
-        set_animation_parameter(D_L05_0015F980, 0);
-        D_L05_0015F980 = -1;
+    if (animation_parameter_target_id != -1) {
+        set_animation_parameter(animation_parameter_target_id, 0);
+        animation_parameter_target_id = -1;
     }
     D_L05_0015F97C = 0;
     *(int *)&D_L05_0015F978 = *(int *)&D_L05_0015F978 + 1;
@@ -222,13 +222,11 @@ extern char D_L05_0015F8D0[];
 extern char D_L05_0015F8E0[];
 extern char D_L05_0015F8E8[];
 extern char D_L05_00216C50[];
-extern s32 D_L05_0015F894 __attribute__((sda));
-extern s32 D_L05_0015F898 __attribute__((sda));
+#include "rnc/overlay/shared/ui/text/00262ae8_data/draw_trick_combo_hud_2.h"
 extern s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") __attribute__((sda));
 extern s32 trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") __attribute__((sda));
 extern s32 trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") __attribute__((sda));
-extern s32 D_L05_0015F8AC __attribute__((sda));
-extern s32 D_L05_0015F8B0 __attribute__((sda));
+#include "rnc/overlay/shared/ui/text/00262ae8_data/draw_trick_combo_hud.h"
 extern s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") __attribute__((sda));
 extern s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") __attribute__((sda));
 extern s32 trick_combo_pose_count_center_x_gp __asm__("D_L05_0015F8BC") __attribute__((sda));
@@ -261,7 +259,7 @@ s32 draw_trick_combo_hud(char *element) {
         delay_total = scale_game_frames(*(s32 *)&trick_combo_hud_delay_reload_gp);
         blend = delay_left / (f32)delay_total;
         if (state_bytes[2] == 1 || state_bytes[2] == 3) {
-            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, blend);
+            color = fast_tween_color(trick_combo_text_color_at_zero_delay_gp, trick_combo_text_color_at_full_delay_gp, blend);
         } else {
             color = trick_combo_result_text_color_gp;
         }
@@ -351,7 +349,7 @@ s32 draw_trick_combo_hud(char *element) {
         blink_period = scale_game_frames(0x3C);
         pulse = convert_integer_to_float(frame_number % blink_period) / (f32)blink_period;
         pulse = fast_sin(pulse * 6.283180236816406f - 3.141590118408203f);
-        blink_color = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
+        blink_color = fast_tween_color(trick_combo_pulsing_label_trough_color_gp, trick_combo_pulsing_label_peak_color_gp, pulse * 0.5f + 0.5f);
         sprintf_alt(text, get_help_message_text(0x531A));
         draw_framed_text(trick_combo_pulsing_label_x_gp + 1, trick_combo_pulsing_label_y_gp + 1, 0x80000000, text);
         draw_framed_text(trick_combo_pulsing_label_x_gp, trick_combo_pulsing_label_y_gp, blink_color, text);

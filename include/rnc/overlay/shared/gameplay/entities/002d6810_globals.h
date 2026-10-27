@@ -15,4 +15,7 @@ extern int second_side_arc_fade_level __asm__("D_L15_00161CCA");
 extern int third_side_arc_fade_level __asm__("D_L15_00161CCC");
 extern int fourth_side_arc_fade_level __asm__("D_L15_00161CCE");
 
+/* Additional scalar data read by this unit. */
+extern float electric_water_path_arc_inhibit_gp __asm__("D_L15_00161BD0") __attribute__((sda));
+
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAMEPLAY_ENTITIES_002D6810_GLOBALS_H */

@@ -281,7 +281,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         DRONE_STATE_FLIGHT = 0,
         DRONE_STATE_SPARKS_UNTIL_REMOVAL = 1
     };
-    float a[4];
+    float flight_position_or_spark_velocity[4];
     float b[4];
     float flight_offset_scratch[4];
     float lowered_hero_position[4];
@@ -317,22 +317,22 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
         }
         scale_vector_xyz_q(flight_offset_scratch, drone_vars, -20.0f);
         step = 0;
-        add_vector_xyz_q(a, &moby->pos, drone_vars);
+        add_vector_xyz_q(flight_position_or_spark_velocity, &moby->pos, drone_vars);
         add_vector_xyz_q(b, &moby->pos, flight_offset_scratch);
-        FUN_001f9a40_q(movement_midpoint, a, &moby->pos, 0.5f);
+        FUN_001f9a40_q(movement_midpoint, flight_position_or_spark_velocity, &moby->pos, 0.5f);
         if (*(int *)(drone_vars + 0x38) < 0x3C) {
             step = (0x3C - *(int *)(drone_vars + 0x38)) >> 2;
         }
-        create_drone_flight_trail_record((char *)a, 1, step);
+        create_drone_flight_trail_record((char *)flight_position_or_spark_velocity, 1, step);
         create_drone_flight_trail_record((char *)movement_midpoint, 1, step);
-        create_drone_flight_trail_record((char *)a, 0, step);
+        create_drone_flight_trail_record((char *)flight_position_or_spark_velocity, 0, step);
         b[2] = b[2] + 0.25f;
         func_L00_0025A8C0_alt_q((char *)hit_descriptor, (int)moby, 1, 6.0f, drone_vars);
         *(short *)((char *)hit_descriptor + 0x1A) = moby->oclass;
-        qcopy(&moby->pos, a);
+        qcopy(&moby->pos, flight_position_or_spark_velocity);
         r = D_L17_00174740_lui;
         *(int *)(r + 0x18) = 0;
-        if (FUN_001efa68_q(b, a, 0, moby, hit_descriptor) != 0 ||
+        if (FUN_001efa68_q(b, flight_position_or_spark_velocity, 0, moby, hit_descriptor) != 0 ||
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
@@ -397,8 +397,8 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
     case DRONE_STATE_SPARKS_UNTIL_REMOVAL: {
         float x = random_float_between_alt_q(frame_time + frame_time, frame_time * 10.0f);
         float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
-        build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
-        spawn_moving_hero_relative_alpha_fade_particle(&moby->pos.x, (char *)a, 0x60FF3020, 0xF,
+        build_spherical_offset_q(flight_position_or_spark_velocity, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
+        spawn_moving_hero_relative_alpha_fade_particle(&moby->pos.x, (char *)flight_position_or_spark_velocity, 0x60FF3020, 0xF,
                            random_integer_below_q(0xFF), 0, 3.0f);
         if (tick_countdown_32_q(drone_vars + 0x38) != 0) {
             mmr_q_q(moby);
@@ -563,6 +563,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
 
 int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
                      char *excluded_target) {
+
     float v[4];
     float arrow_target_position_scratch[4];
     float arrow_direction_rotation_matrix[16];
@@ -723,19 +724,19 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
         case MOBY_CLASS_RADAR_RENDER_BYPASS:
         case MOBY_CLASS_RADAR_ICON_SUPPRESSED:
         case MOBY_CLASS_RADAR_CONTACT_DRAW_BYPASS:
-        case 0x189:
-        case 0x18A:
-        case 0x18B:
-        case 0x18C:
+        case MOBY_CLASS_RADAR_DISPATCH_BYPASS:
+        case MOBY_CLASS_RADAR_AND_MARKER_DRAW_BYPASS:
+        case MOBY_CLASS_RADAR_AND_SCREEN_MARKER_BYPASS:
+        case MOBY_CLASS_RADAR_AND_PROJECTED_MARKER_BYPASS:
         case MOBY_CLASS_CONTACT_DRAW_BYPASS:
         case MOBY_CLASS_CONTACT_RENDER_SUPPRESSED:
         case MOBY_CLASS_RADAR_DRAW_SUPPRESSED:
-        case 0x535:
-        case 0x536:
-        case 0x537:
-        case 0x538:
-        case 0x539:
-        case 0x53A:
+        case MOBY_CLASS_RADAR_CONTACT_SUPPRESSED:
+        case MOBY_CLASS_RADAR_ICON_DRAW_BYPASS:
+        case MOBY_CLASS_RADAR_ICON_RENDER_BYPASS:
+        case MOBY_CLASS_SCREEN_AND_RADAR_MARKERS_SUPPRESSED:
+        case MOBY_CLASS_HUD_CONTACT_DRAW_BYPASS:
+        case MOBY_CLASS_HUD_CONTACT_RENDER_BYPASS:
             break;
         default:
             if (scanned_moby != 0 && *(char **)(scanned_moby + 0x24) != 0 &&
@@ -1160,70 +1161,30 @@ extern float interpolate_value_with_repeated_squaring(int, int, float, float, fl
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-extern float D_L17_00161FF8 __attribute__((sda));
-extern float D_L17_00161FFC __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_8.h"
 int D_L17_00162000 = 120;
-extern float D_L17_00162004 __attribute__((sda));
-extern float D_L17_00162008 __attribute__((sda));
-extern float D_L17_0016200C __attribute__((sda));
-extern float D_L17_00162010 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_7.h"
 int D_L17_00162014 = 5;
-extern float D_L17_00162018 __attribute__((sda));
-extern float D_L17_0016201C __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_6.h"
 extern float D_L17_00162024 __attribute__((sda));
 extern float D_L17_00162028 __attribute__((sda));
 extern float D_L17_0016202C __attribute__((sda));
 extern float D_L17_00162030 __attribute__((sda));
-extern float D_L17_00162034 __attribute__((sda));
-extern float D_L17_00162038 __attribute__((sda));
-extern float D_L17_0016203C __attribute__((sda));
-extern float D_L17_00162040 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_5.h"
 extern float D_L17_00162044 __attribute__((sda));
 extern float D_L17_00162048 __attribute__((sda));
-extern float D_L17_0016204C __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_4.h"
 extern float D_L17_0016205C __attribute__((sda));
-extern float D_L17_00162060 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_3.h"
 extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
 extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
-extern float D_L17_001620AC __attribute__((sda));
-extern float D_L17_001620B0 __attribute__((sda));
-extern float D_L17_001620B4 __attribute__((sda));
-extern float D_L17_001620B8 __attribute__((sda));
-extern float D_L17_001620BC __attribute__((sda));
-extern float D_L17_001620C0 __attribute__((sda));
-extern float D_L17_001620C4 __attribute__((sda));
-extern float D_L17_001620C8 __attribute__((sda));
-extern float D_L17_001620CC __attribute__((sda));
-extern float D_L17_001620D0 __attribute__((sda));
-extern float D_L17_001620D4 __attribute__((sda));
-extern float D_L17_001620F0 __attribute__((sda));
-extern float D_L17_001620F4 __attribute__((sda));
-extern float D_L17_001620F8 __attribute__((sda));
-extern float D_L17_001620FC __attribute__((sda));
-extern float D_L17_00162100 __attribute__((sda));
-extern float D_L17_00162104 __attribute__((sda));
-extern float D_L17_00162108 __attribute__((sda));
-extern float D_L17_0016210C __attribute__((sda));
-extern float D_L17_00162110 __attribute__((sda));
-extern float D_L17_00162114 __attribute__((sda));
-extern float D_L17_00162118 __attribute__((sda));
-extern float D_L17_0016211C __attribute__((sda));
-extern float D_L17_00162120 __attribute__((sda));
-extern float D_L17_00162124 __attribute__((sda));
-extern float D_L17_00162128 __attribute__((sda));
-extern float D_L17_0016212C __attribute__((sda));
-extern float D_L17_00162130 __attribute__((sda));
-extern float D_L17_00162134 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_2.h"
 extern float D_L17_00162138 __attribute__((sda));
 extern float D_L17_0016213C __attribute__((sda));
 extern float D_L17_00162140 __attribute__((sda));
-extern float D_L17_00162144 __attribute__((sda));
-extern float D_L17_00162148 __attribute__((sda));
-extern float D_L17_0016214C __attribute__((sda));
-extern float D_L17_00162150 __attribute__((sda));
-extern float D_L17_00162154 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight.h"
 extern float D_L17_00162160 __attribute__((sda));
 extern float D_L17_00162164 __attribute__((sda));
 extern float D_L17_00162168 __attribute__((sda));
@@ -1266,13 +1227,13 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) __asm__("FUN_L17
 
 void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     W4 old;
-    W4 vel;
+    W4 death_explosion_velocity;
     UQ_c4 movement_delta;
     W4 side;
     UQ_c4 up;
-    W4 ang;
+    W4 camera_rotation;
     W4 target;
-    W4 diff;
+    W4 target_record_sum_or_camera_local_offset;
     float horizontal_steering_input;
     float vertical_steering_input;
     float ka;
@@ -1298,7 +1259,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     movement_delta.v[2] = frame_time * 8.0f * D_L17_001620A0_gp;
     up.v[2] = 1.0f;
     ship_moby->flags &= 0xFEFF;
-    *(Q_c4 *)vel = movement_delta.q;
+    *(Q_c4 *)death_explosion_velocity = movement_delta.q;
     if (ship_moby->bc == 0) {
         if (D_L17_00162000 < ship_vars->count) {
             pad = (char *)((char *)&D_0013C940);
@@ -1324,26 +1285,26 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             }
             pad = (char *)((char *)&D_0013C940);
             if (*(int *)(pad + 0x1B0) & 0x40) {
-                float accelerated_speed = ship_vars->speed + D_L17_0016200C * D_L17_001620A0_gp;
-                float max = D_L17_00162008 * D_L17_001620A0_gp;
+                float accelerated_speed = ship_vars->speed + fighter_jet_boost_speed_step_gp * D_L17_001620A0_gp;
+                float max = fighter_jet_boost_speed_limit_gp * D_L17_001620A0_gp;
                 ship_vars->speed = accelerated_speed;
                 if (max < accelerated_speed) {
                     ship_vars->speed = max;
                 }
             } else {
-                float hi = D_L17_00162004 * D_L17_001620A0_gp;
-                float step = D_L17_00161FFC * D_L17_001620A0_gp;
+                float hi = fighter_jet_cruise_speed_gp * D_L17_001620A0_gp;
+                float step = fighter_jet_cruise_speed_step_gp * D_L17_001620A0_gp;
                 float current_speed = ship_vars->speed;
                 if (current_speed < hi - step) {
                     ship_vars->speed = current_speed + step;
                 } else if (hi < current_speed) {
-                    ship_vars->speed = current_speed + (hi - current_speed) * D_L17_00162010;
+                    ship_vars->speed = current_speed + (hi - current_speed) * fighter_jet_cruise_speed_return_factor_gp;
                 } else {
                     ship_vars->speed = hi;
                 }
             }
         } else {
-            ship_vars->speed += D_L17_00161FF8 * D_L17_001620A0_gp;
+            ship_vars->speed += fighter_jet_startup_speed_step_gp * D_L17_001620A0_gp;
             ship_vars->count += 1;
         }
     } else {
@@ -1354,21 +1315,21 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         steering_input_hero = &hero;
         x = steering_input_hero->stick_x;
         y = steering_input_hero->stick_y;
-        ka = D_L17_001620B4;
-        kb = D_L17_001620C4;
+        ka = fighter_jet_horizontal_steering_settle_threshold_scale_gp;
+        kb = fighter_jet_vertical_steering_settle_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
         if (*(int *)(((char *)&D_0013CAE0)) & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
             vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
-            ka = D_L17_001620B8;
-            kb = D_L17_001620C8;
+            ka = fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp;
+            kb = fighter_jet_rescaled_vertical_steering_settle_threshold_scale_gp;
         }
         adjust_fighter_jet_steering_for_flight_bounds((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
-        vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, D_L17_001620AC, D_L17_001620B0, ka);
-        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, D_L17_001620BC, D_L17_001620C0, kb);
+        vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, fighter_jet_horizontal_steering_error_gain_gp, fighter_jet_horizontal_steering_velocity_damping_gp, ka);
+        vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, fighter_jet_vertical_steering_error_gain_gp, fighter_jet_vertical_steering_velocity_damping_gp, kb);
         FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
-                         D_L17_001620CC, D_L17_001620D0, D_L17_001620D4);
+                         fighter_jet_roll_error_gain_gp, fighter_jet_roll_velocity_damping_gp, fighter_jet_roll_settle_threshold_scale_gp);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L17_00162024);
         ship_vars->f38 = fast_subtract_rotations(ship_vars->f38, ship_vars->f6C * D_L17_00162028);
         if (ship_vars->f34 > 1.3962634f) {
@@ -1390,9 +1351,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         char *base = D_L17_001600EC;
         qcopy(target, ((char(*)[128])base)[ship_vars->i110] + 0x30);
         lenA = vector_length_xyz(base + target_record_byte_offset + 0x20);
-        add_vector_xyz(diff, (ship_vars->i110 << 7) + D_L17_001600EC,
+        add_vector_xyz(target_record_sum_or_camera_local_offset, (ship_vars->i110 << 7) + D_L17_001600EC,
                        (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
-        lenB = vector_length_xyz(diff);
+        lenB = vector_length_xyz(target_record_sum_or_camera_local_offset);
     } else {
         qcopy(target, D_L17_001621F0);
     }
@@ -1417,9 +1378,9 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         add_vector_xyz(ship_moby->pos, ship_moby->pos, movement_delta.v);
     }
     {
-        float lo = D_L17_00162004;
+        float lo = fighter_jet_cruise_speed_gp;
         float sp = ship_vars->speed - lo;
-        float range = D_L17_00162008 - lo;
+        float range = fighter_jet_boost_speed_limit_gp - lo;
         if (sp < 0.0f) {
             ratio = 0.0f / range;
         } else {
@@ -1428,50 +1389,50 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
     }
     ship_vars->fC4 = ratio;
     {
-        T2_c4 tbl;
+        T2_c4 camera_offset_targets;
         T2_c4 wr;
         float ship_rotation_basis[12];
         wr.e[0].q = 0;
         wr.e[1].q = 0;
         wr.e[0].v[0] =
-            (D_L17_00162034 - ship_vars->f70 * D_L17_00162138 - ratio * D_L17_00162140) * D_L17_0016209C;
+            (fighter_jet_camera_base_offset_x_gp - ship_vars->f70 * D_L17_00162138 - ratio * D_L17_00162140) * D_L17_0016209C;
         wr.e[0].v[1] = ship_vars->f6C * D_L17_00162090 * D_L17_0016209C;
-        wr.e[0].v[2] = (D_L17_00162038 + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
-        wr.e[1].v[0] = D_L17_0016203C * D_L17_0016209C;
-        wr.e[1].v[2] = D_L17_00162040 * D_L17_0016209C;
-        tbl.e[0].q = wr.e[0].q;
-        tbl.e[1].q = wr.e[1].q;
-        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, tbl.e[ship_vars->sel].v[0], D_L17_00162114, D_L17_00162118,
-                         D_L17_0016211C);
-        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, tbl.e[ship_vars->sel].v[1], D_L17_00162120, D_L17_00162124,
-                         D_L17_00162128);
-        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, tbl.e[ship_vars->sel].v[2], D_L17_0016212C, D_L17_00162130,
-                         D_L17_00162134);
-        diff[0] = ship_vars->fB4;
-        diff[1] = ship_vars->fB8;
-        diff[2] = ship_vars->fBC;
-        diff[3] = 0.0f;
+        wr.e[0].v[2] = (fighter_jet_camera_base_offset_z_gp + ship_vars->f70 * D_L17_0016213C) * D_L17_0016209C;
+        wr.e[1].v[0] = fighter_jet_camera_secondary_offset_x_gp * D_L17_0016209C;
+        wr.e[1].v[2] = fighter_jet_camera_secondary_offset_z_gp * D_L17_0016209C;
+        camera_offset_targets.e[0].q = wr.e[0].q;
+        camera_offset_targets.e[1].q = wr.e[1].q;
+        vendor_spring(&ship_vars->fB4, &ship_vars->fC8, camera_offset_targets.e[ship_vars->sel].v[0], fighter_jet_camera_offset_x_error_gain_gp, fighter_jet_camera_offset_x_velocity_damping_gp,
+                         fighter_jet_camera_offset_x_settle_threshold_scale_gp);
+        vendor_spring(&ship_vars->fB8, &ship_vars->fCC, camera_offset_targets.e[ship_vars->sel].v[1], fighter_jet_camera_offset_y_error_gain_gp, fighter_jet_camera_offset_y_velocity_damping_gp,
+                         fighter_jet_camera_offset_y_settle_threshold_scale_gp);
+        vendor_spring(&ship_vars->fBC, &ship_vars->fD0, camera_offset_targets.e[ship_vars->sel].v[2], fighter_jet_camera_offset_z_error_gain_gp, fighter_jet_camera_offset_z_velocity_damping_gp,
+                         fighter_jet_camera_offset_z_settle_threshold_scale_gp);
+        target_record_sum_or_camera_local_offset[0] = ship_vars->fB4;
+        target_record_sum_or_camera_local_offset[1] = ship_vars->fB8;
+        target_record_sum_or_camera_local_offset[2] = ship_vars->fBC;
+        target_record_sum_or_camera_local_offset[3] = 0.0f;
         vu_euler_rotation_basis(ship_rotation_basis, (char *)&ship_vars->f30);
-        transform_vector_by_basis(target, diff, ship_rotation_basis);
+        transform_vector_by_basis(target, target_record_sum_or_camera_local_offset, ship_rotation_basis);
         add_vector_xyz(wr.e[0].v, ship_moby->pos, target);
         FUN_L00_002ea9d8(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rotations(ship_vars->f30 * D_L17_00162048, ship_vars->f6C * D_L17_00162044);
-        wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, D_L17_0016204C),
+        wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, fighter_jet_camera_pitch_bias_gp),
                                                ship_vars->f70 * D_L17_00162024);
         wr.e[1].v[2] = ship_vars->f38;
-        FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
-                         D_L17_001620F4, D_L17_001620F8);
-        FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], D_L17_001620FC,
-                         D_L17_00162100, D_L17_00162104);
-        FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], D_L17_00162108,
-                         D_L17_0016210C, D_L17_00162110);
+        FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], fighter_jet_camera_roll_error_gain_gp,
+                         fighter_jet_camera_roll_velocity_damping_gp, fighter_jet_camera_roll_settle_threshold_scale_gp);
+        FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], fighter_jet_camera_pitch_error_gain_gp,
+                         fighter_jet_camera_pitch_velocity_damping_gp, fighter_jet_camera_pitch_settle_threshold_scale_gp);
+        FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], fighter_jet_camera_yaw_error_gain_gp,
+                         fighter_jet_camera_yaw_velocity_damping_gp, fighter_jet_camera_yaw_settle_threshold_scale_gp);
     }
-    ang[0] = ship_vars->f20;
-    ang[2] = ship_vars->f28;
-    ang[1] = ship_vars->f24;
-    FUN_L00_002eaa30(ang);
-    vendor_spring(&ship_vars->fB0, &ship_vars->fC0, D_L17_00162144 + (D_L17_00162148 - D_L17_00162144) * ratio,
-                     D_L17_0016214C, D_L17_00162150, D_L17_00162154);
+    camera_rotation[0] = ship_vars->f20;
+    camera_rotation[2] = ship_vars->f28;
+    camera_rotation[1] = ship_vars->f24;
+    FUN_L00_002eaa30(camera_rotation);
+    vendor_spring(&ship_vars->fB0, &ship_vars->fC0, fighter_jet_cruise_fov_gp + (fighter_jet_boost_fov_gp - fighter_jet_cruise_fov_gp) * ratio,
+                     fighter_jet_fov_error_gain_gp, fighter_jet_fov_velocity_damping_gp, fighter_jet_fov_settle_threshold_scale_gp);
     half_fov = ship_vars->fB0 * 0.5f;
     tn = fast_sin(half_fov) / fast_cos(half_fov);
     D_L17_0016D3F0 = tn;
@@ -1488,24 +1449,24 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             FUN_L00_001ff660(movement_delta.v, movement_delta.v, collision_result + 0x40);
             ship_vars->f38 = fast_add_rotations(
                 ship_vars->f38,
-                fast_subtract_rotations(fast_arc_tan(movement_delta.v[0], movement_delta.v[1]), ship_vars->f38) * D_L17_00162018);
+                fast_subtract_rotations(fast_arc_tan(movement_delta.v[0], movement_delta.v[1]), ship_vars->f38) * fighter_jet_impact_yaw_response_scale_gp);
             collision_adjusted_pitch = fast_add_rotations(
                 ship_vars->f34,
                 fast_subtract_rotations(-fast_arc_tan(vector_length_xy(movement_delta.v), movement_delta.v[2]), ship_vars->f34) *
-                    D_L17_0016201C);
+                    fighter_jet_impact_pitch_response_scale_gp);
             k = ship_vars->speed * D_L17_0016205C;
             ship_vars->f34 = collision_adjusted_pitch;
             ship_vars->speed = k;
             if (*(char **)(collision_result + 0x18) != 0 && *(short *)(*(char **)(collision_result + 0x18) + 0xA6) != 0x15B) {
                 if (ship_vars->iDC == 0) {
-                    hero.ship_hp = hero.ship_hp - D_L17_00162060;
+                    hero.ship_hp = hero.ship_hp - fighter_jet_collision_damage_gp;
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_xyz(side, collision_result + 0x50, collision_result + 0x60);
                         normalize_vector_xyz(side, side, 1.0f);
-                        FUN_L00_001ff660(vel, movement_delta.v, collision_result + 0x40);
-                        normalize_vector_xyz(vel, vel, frame_time + frame_time);
+                        FUN_L00_001ff660(death_explosion_velocity, movement_delta.v, collision_result + 0x40);
+                        normalize_vector_xyz(death_explosion_velocity, death_explosion_velocity, frame_time + frame_time);
                         normalize_vector_xyz(up.v, collision_result + 0x40, 1.0f);
-                        func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
+                        func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                                               9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
                         ship_moby->state = 7;
                     }
@@ -1513,7 +1474,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                 }
             } else {
                 *(int *)&hero.ship_hp = 0;
-                func_L00_0025F4A8_alt(ship_moby, vel, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
+                func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
                                       1.0f, -1, 50.0f, 1, 1, -1, 0);
                 ship_vars->s62 = D_L17_0016217C;
                 ship_moby->state = 7;
@@ -1680,7 +1641,7 @@ extern void release_voice_ed(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
 extern void add_vector_ed(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern float D_L17_0015F3FC;
+#include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
 extern char *D_L17_0015F420;
 extern ShipLevelEntry D_L17_0016DA80[];
@@ -1726,11 +1687,11 @@ void fighter_jet_update(ShipMoby *moby) {
                         FUN_L00_001ff660(dir, dir, (char *)hit + 0x10);
                         ship_vars->rot[2] = fast_add_rotations(
                             ship_vars->rot[2],
-                            fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), ship_vars->rot[2]) * D_L17_00162018 * k);
+                            fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), ship_vars->rot[2]) * fighter_jet_impact_yaw_response_scale_gp * k);
                         ship_vars->rot[1] = fast_add_rotations(
                             ship_vars->rot[1],
                             fast_subtract_rotations(fast_arc_tan(vector_length_xy(dir), dir[2]), ship_vars->rot[1]) *
-                                D_L17_0016201C * k);
+                                fighter_jet_impact_pitch_response_scale_gp * k);
                     }
                 } else {
                     spherical_offset_ed(dir, ship_vars->speed, ship_vars->rot[2], -ship_vars->rot[1]);
@@ -1804,14 +1765,14 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             jet_animate(moby, D_L17_00162054 * D_L17_0016209C);
             break;
         }
         case FIGHTER_JET_STATE_BOARDING_FADE:
             FUN_00213ed8(&ship_vars->fade, 1.0f, frame_time * 4.0f);
-            D_L17_0015F3FC = ship_vars->fade;
+            fighter_jet_transition_fade_value = ship_vars->fade;
             if (ship_vars->fade == 1.0f) {
                 struct Hero *g = &hero;
                 g->ship_moby = (struct Moby *)moby;
@@ -1848,8 +1809,8 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->h32 = 0xFF;
                 moby->b30 = 0xFF;
                 ship_vars->f28 = ship_vars->rot[2] = moby->rot[2];
-                ship_vars->fB4 = D_L17_00162034 * D_L17_0016209C;
-                ship_vars->fBC = D_L17_00162038 * D_L17_0016209C;
+                ship_vars->fB4 = fighter_jet_camera_base_offset_x_gp * D_L17_0016209C;
+                ship_vars->fBC = fighter_jet_camera_base_offset_z_gp * D_L17_0016209C;
                 ship_vars->fB8 = 0.0f;
                 ((ShipCamera *)g->moby)->unk98 = -1;
                 spherical_offset_ed(ship_vars->dir, fighter_jet_initial_flight_speed_gp, ship_vars->rot[2], -ship_vars->rot[1]);
@@ -1884,7 +1845,7 @@ void fighter_jet_update(ShipMoby *moby) {
             }
             if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             {
                 struct Hero *g = &hero;
@@ -1926,7 +1887,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->voice2 = -1;
             moby->state = 1;
             ship_vars->fade = 0.99f;
-            D_L17_0015F3FC = 0.99f;
+            fighter_jet_transition_fade_value = 0.99f;
             break;
         }
         case FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY:
@@ -1967,7 +1928,7 @@ void fighter_jet_update(ShipMoby *moby) {
             update_fighter_jet_flight((Moby *)moby, (Obj *)ship_vars);
             if (fast_dec_timer(&ship_vars->timerF8)) {
                 FUN_00213ed8(&ship_vars->fade, 1.0f, frame_time * 4.0f);
-                D_L17_0015F3FC = ship_vars->fade;
+                fighter_jet_transition_fade_value = ship_vars->fade;
             }
             if (ship_vars->fade >= 1.0f) {
                 char *p;
@@ -2029,7 +1990,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 return;
             }
             FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
-            D_L17_0015F3FC = ship_vars->fade;
+            fighter_jet_transition_fade_value = ship_vars->fade;
             break;
         }
         if (moby->pos[0] < 15.0f) {
@@ -3297,7 +3258,7 @@ extern RingPt D_L17_001DC680[];
 T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L17_001622CC __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring_2.h"
 extern float D_L17_001DC250[][2];
 extern float D_L17_001DCAB0[][2];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -3313,9 +3274,7 @@ int D_L17_001622B0[2] = {(int)D_L17_001DCD78, 0x80};
 int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
-extern float D_L17_001622C0 __attribute__((sda));
-extern float D_L17_001622C4 __attribute__((sda));
-extern float D_L17_001622C8 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring.h"
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -3324,43 +3283,43 @@ void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_ripple_ring(struct Moby *moby) __asm__("FUN_L17_002f0948");
 void draw_ripple_ring(struct Moby *moby) {
-    RippleData_c *d = (RippleData_c *)moby->pvars;
-    T4_c t;
+    RippleData_c *ring_ripple_vars = (RippleData_c *)moby->pvars;
+    T4_c ring_uv_scroll_factors;
     float scale;
     int r, g, b;
     int color;
-    int i, j, n, k;
+    int i, j, ring_uv_vertex_index, k;
 
-    scale = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_001622CC * frame_time);
+    scale = convert_integer_to_float(D_L17_0015F5CC) * (ring_ripple_uv_scroll_rate_gp * frame_time);
     vu1_add_g_sregister(6, get_effect_texture(D_L17_001622B8));
     vu1_add_g_sregister(0x42, ((long)D_L17_001622B4 << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
-    d->f0 = d->f4;
-    d->f4 = fast_add_rotations(d->f4,
-                               360.0f / multiply_global_factor_ed64(D_L17_001622C4) * DEG_TO_RAD * frame_time);
+    ring_ripple_vars->f0 = ring_ripple_vars->f4;
+    ring_ripple_vars->f4 = fast_add_rotations(ring_ripple_vars->f4,
+                               360.0f / multiply_global_factor_ed64(ring_ripple_phase_period_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L17_001622BC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < D_L17_00162280[0]; i++) {
         RingPt *p = &D_L17_001DBE20[i];
-        float w = D_L17_001622C8 *
+        float w = ring_ripple_z_amplitude_gp *
                   fast_sin(fast_add_rotations(
                       wrap_angle(FUN_L00_00200260(square_root(p->x * p->x + p->y * p->y),
-                                                  D_L17_001622C0) *
-                                 6.2831855f / D_L17_001622C0),
-                      d->f4));
+                                                  ring_ripple_radial_phase_distance_scale_gp) *
+                                 6.2831855f / ring_ripple_radial_phase_distance_scale_gp),
+                      ring_ripple_vars->f4));
         D_L17_001DC680[i].x = p->x + moby->pos.x;
         D_L17_001DC680[i].y = p->y + moby->pos.y;
         D_L17_001DC680[i].z = p->z + moby->pos.z + w;
         D_L17_001DCD78[i] = color;
     }
     for (j = 0; j < 2; j++) {
-        for (n = 0; n < D_L17_00162280[0]; n++) {
-            t = D_L17_001622D0;
-            D_L17_001DCAB0[n][0] =
-                D_L17_001DC250[n][0] + FUN_L00_00200260(scale * t.p[j].v[0], 1.0f);
-            D_L17_001DCAB0[n][1] =
-                D_L17_001DC250[n][1] + FUN_L00_00200260(scale * t.p[j].v[1], 1.0f);
+        for (ring_uv_vertex_index = 0; ring_uv_vertex_index < D_L17_00162280[0]; ring_uv_vertex_index++) {
+            ring_uv_scroll_factors = D_L17_001622D0;
+            D_L17_001DCAB0[ring_uv_vertex_index][0] =
+                D_L17_001DC250[ring_uv_vertex_index][0] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[0], 1.0f);
+            D_L17_001DCAB0[ring_uv_vertex_index][1] =
+                D_L17_001DC250[ring_uv_vertex_index][1] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[1], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {

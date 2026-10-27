@@ -1297,8 +1297,7 @@ extern f32 lightning_arc_alpha_pulse_angle_step_gp __asm__("D_L14_00161C68") __a
 extern f32 lightning_arc_alpha_pulse_sweep_gp __asm__("D_L14_00161C6C") __attribute__((sda));
 extern s32 D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern f32 lightning_main_arc_point_spacing_gp __asm__("D_L14_00161C74") __attribute__((sda));
-extern f32 D_L14_00161C8C __attribute__((sda));
-extern f32 D_L14_00161C90 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/update_branched_lightning_arc.h"
 extern f32 lightning_main_arc_z_displacement_limit_gp __asm__("D_L14_00161C94") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
@@ -1365,7 +1364,7 @@ void update_branched_lightning_arc(char *moby) {
             main_arc_point[3] = 1.0f;
             main_arc_point[0] = lightning_main_arc_point_spacing_gp * (float)i;
             if (i < 39) {
-                main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(D_L14_00161C8C, D_L14_00161C90);
+                main_arc_point[2] = main_arc_point[-2] + FUN_L00_00257c48(lightning_main_arc_z_step_range_start_gp, lightning_main_arc_z_step_range_end_gp);
                 if (lightning_main_arc_z_displacement_limit_gp < (*&main_arc_point)[2]) {
                     main_arc_point[2] = lightning_main_arc_z_displacement_limit_gp;
                 } else if (main_arc_point[2] < -lightning_main_arc_z_displacement_limit_gp) {
@@ -1488,10 +1487,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
-extern int D_L14_00161C78 __attribute__((sda));
-extern int D_L14_00161C7C __attribute__((sda));
-extern float D_L14_00161C80 __attribute__((sda));
-extern float D_L14_00161C84 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/draw_branched_lightning_arc.h"
 extern float D_L14_00161C88 __attribute__((sda));
 extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")__attribute__((section(".sdata")));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1521,7 +1517,7 @@ void draw_branched_lightning_arc(void) {
     int j;
     V_2EF078 *branch_offset_cursor;
     short *branch_age_cursor;
-    int c;
+    int outer_vertex_color;
     V_2EF078 *nd;
 
     layer_quads[0].tex = get_effect_texture(0x2D);
@@ -1531,9 +1527,9 @@ void draw_branched_lightning_arc(void) {
     outer_vertex_alpha = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
     if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
     if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-    c = D_L14_00161C78 | (outer_vertex_alpha << 24);
-    layer_quads[0].col[1] = c;
-    layer_quads[0].col[0] = c;
+    outer_vertex_color = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
+    layer_quads[0].col[1] = outer_vertex_color;
+    layer_quads[0].col[0] = outer_vertex_color;
     layer_quads[0].uv[0][0] = 0.0f;
     layer_quads[0].uv[0][1] = 0.0f;
     layer_quads[0].uv[1][0] = 0.0f;
@@ -1544,7 +1540,7 @@ void draw_branched_lightning_arc(void) {
     layer_quads[0].uv[3][1] = 1.0f;
     copy_blocks_16_forward(&layer_quads[1], &layer_quads[0], 0x90);
     layer_quads[1].tex = get_effect_texture(0x2C);
-    layer_quads[1].col[0] = layer_quads[1].col[1] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
+    layer_quads[1].col[0] = layer_quads[1].col[1] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
     subtract_vector_xyz_c2(&arc_to_world[0], D_L14_00161CC0, D_L14_00161CD0_c);
     normalize_vector_xyz(&arc_to_world[0], &arc_to_world[0], 1.0f);
     arc_to_world[0].w = 0.0f;
@@ -1559,10 +1555,10 @@ void draw_branched_lightning_arc(void) {
     arc_to_world[2].w = 0.0f;
     qcopy(&arc_to_world[3], D_L14_00161CD0_c);
     *(u128_2EF078 *)&sz[0] = 0;
-    sz[0].z = D_L14_00161C84;
+    sz[0].z = lightning_arc_outer_half_width_start_gp;
     sz[0].w = 1.0f;
     *(u128_2EF078 *)&sz[1] = 0;
-    sz[1].z = D_L14_00161C84 * D_L14_00161C88;
+    sz[1].z = lightning_arc_outer_half_width_start_gp * D_L14_00161C88;
     sz[1].w = 1.0f;
     qcopy(&layer_quads[0].v[0], &sz[0]);
     scale_vector_xyz(&layer_quads[0].v[1], &layer_quads[0].v[0], -1.0f);
@@ -1608,8 +1604,8 @@ void draw_branched_lightning_arc(void) {
             if (main_arc_end_vertex_alpha < 0) main_arc_end_vertex_alpha = 0;
             if (main_arc_end_vertex_alpha > 0xFF) main_arc_end_vertex_alpha = 0xFF;
         }
-        layer_quads[0].col[2] = layer_quads[0].col[3] = D_L14_00161C78 | (main_arc_end_vertex_alpha << 24);
-        layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((main_arc_end_vertex_alpha >> 1) << 24);
+        layer_quads[0].col[2] = layer_quads[0].col[3] = lightning_arc_outer_base_color_gp | (main_arc_end_vertex_alpha << 24);
+        layer_quads[1].col[2] = layer_quads[1].col[3] = lightning_arc_inner_base_color_gp | ((main_arc_end_vertex_alpha >> 1) << 24);
         draw_geometry_quad(&layer_quads[0], 0, 0);
         draw_geometry_quad(&layer_quads[1], 0, 0);
         layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2];
@@ -1618,7 +1614,7 @@ void draw_branched_lightning_arc(void) {
         qcopy(&layer_quads[0].v[1], &layer_quads[0].v[3]);
         qcopy(&layer_quads[1].v[0], &layer_quads[1].v[2]);
         qcopy(&layer_quads[1].v[1], &layer_quads[1].v[3]);
-        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
+        sz[0].z = lightning_arc_outer_half_width_start_gp + (lightning_arc_outer_half_width_end_gp - lightning_arc_outer_half_width_start_gp) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
         sz[1].z = sz[0].z * D_L14_00161C88;
     }
     qcopy(&quad_to_world[0], &arc_to_world[0]);
@@ -1634,11 +1630,11 @@ void draw_branched_lightning_arc(void) {
         outer_vertex_alpha = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
         if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
         if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-        c = D_L14_00161C78 | (outer_vertex_alpha << 24);
-        layer_quads[0].col[1] = c;
-        layer_quads[0].col[0] = c;
-        layer_quads[1].col[0] = layer_quads[1].col[1] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
-        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
+        outer_vertex_color = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
+        layer_quads[0].col[1] = outer_vertex_color;
+        layer_quads[0].col[0] = outer_vertex_color;
+        layer_quads[1].col[0] = layer_quads[1].col[1] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
+        sz[0].z = (lightning_arc_outer_half_width_start_gp + (lightning_arc_outer_half_width_end_gp - lightning_arc_outer_half_width_start_gp) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
         sz[1].z = sz[0].z * 4.0f;
         qcopy(&layer_quads[0].v[0], &sz[0]);
         scale_vector_xyz(&layer_quads[0].v[1], &layer_quads[0].v[0], -1.0f);
@@ -1675,10 +1671,10 @@ void draw_branched_lightning_arc(void) {
             outer_vertex_alpha = func_001FA898_r(branch_age_fraction * 255.0f) - D_L14_00161CE0[0];
             if (outer_vertex_alpha < 0) outer_vertex_alpha = 0;
             if (outer_vertex_alpha > 0xFF) outer_vertex_alpha = 0xFF;
-            c = D_L14_00161C78 | (outer_vertex_alpha << 24);
-            layer_quads[0].col[3] = c;
-            layer_quads[0].col[2] = c;
-            layer_quads[1].col[2] = layer_quads[1].col[3] = D_L14_00161C7C | ((outer_vertex_alpha >> 1) << 24);
+            outer_vertex_color = lightning_arc_outer_base_color_gp | (outer_vertex_alpha << 24);
+            layer_quads[0].col[3] = outer_vertex_color;
+            layer_quads[0].col[2] = outer_vertex_color;
+            layer_quads[1].col[2] = layer_quads[1].col[3] = lightning_arc_inner_base_color_gp | ((outer_vertex_alpha >> 1) << 24);
             draw_geometry_quad(&layer_quads[0], 0, 0);
             draw_geometry_quad(&layer_quads[1], 0, 0);
             layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2];
@@ -3039,11 +3035,7 @@ typedef struct {
     L14PuffTail tail; /* 0x20 */
 } L14Puff;
 
-extern f32 D_L14_00161F30 __attribute__((sda));
-extern f32 D_L14_00161F34 __attribute__((sda));
-extern f32 D_L14_00161F38 __attribute__((sda));
-extern f32 D_L14_00161F3C __attribute__((sda));
-extern s32 D_L14_00161F44 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_enemy_fighter_exhaust.h"
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern void exhaust_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3068,16 +3060,16 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
 
     if (emitter_moby->state == 0 || emitter_moby->state == 2 || emitter_moby->visible == 0)
         return;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F30);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_base_row0_offset_gp);
     exhaust_add(&pos, &emitter_moby->pos, &step);
-    exhaust_scale(&step, &emitter_moby->rot_row2, D_L14_00161F38);
+    exhaust_scale(&step, &emitter_moby->rot_row2, enemy_fighter_exhaust_base_row2_offset_gp);
     exhaust_add(&pos, &pos, &step);
     qcopy(&base, &pos);
-    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, enemy_fighter_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = exhaust_frames(12);
@@ -3089,7 +3081,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
@@ -3107,11 +3099,11 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         life *= 2;
         size -= 20000.0f;
     }
-    exhaust_scale(&step, &emitter_moby->rot_row1, D_L14_00161F34);
+    exhaust_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F44);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, enemy_fighter_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
@@ -3123,7 +3115,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     }
     spin = 16;
     size = 100000.0f;
-    exhaust_scale(&step, &emitter_moby->rot_row0, D_L14_00161F3C);
+    exhaust_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
     exhaust_add(&pos, &pos, &step);
     life = exhaust_frames(2);
     for (i = 0; i < 3; i++) {
@@ -3431,7 +3423,7 @@ extern f32 moby_exhaust_paired_emitter_offset_gp __asm__("D_L14_00161F64") __att
 extern f32 moby_exhaust_base_row2_offset_gp __asm__("D_L14_00161F68") __attribute__((sda));
 extern f32 moby_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F6C") __attribute__((sda));
 extern f32 moby_exhaust_grey_puff_row0_offset_gp __asm__("D_L14_00161F70") __attribute__((sda));
-extern s32 D_L14_00161F74 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_moby_exhaust_puffs.h"
 extern int FUN_L00_00257b90(int, int);
 
 /* Exhaust of the second engine moby: puffs and rings on both sides plus a grey puff in the middle. */
@@ -3458,7 +3450,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     exhaust_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F74);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, moby_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = exhaust_frames(12);
@@ -3509,7 +3501,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     exhaust_sub(&pos, &base, &step);
     for (j = 0; j < 2; j++) {
         spin = exhaust_rand(16);
-        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, D_L14_00161F74);
+        puff = exhaust_puff(&pos, 0.2f, 1.0f, 0.9f, exhaust_rand(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, moby_exhaust_paired_puff_color_gp);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = exhaust_frames(12);

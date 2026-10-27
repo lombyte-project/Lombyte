@@ -362,10 +362,7 @@ typedef struct {
 
 extern f32 mine_layer_lethal_knockback_speed_scale_gp __asm__("D_L03_001618F8") __attribute__((sda));
 extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC") __attribute__((sda));
-extern f32 D_L03_00161900 __attribute__((sda));
-extern f32 D_L03_00161904 __attribute__((sda));
-extern f32 D_L03_00161908 __attribute__((sda));
-extern f32 D_L03_0016190C __attribute__((sda));
+#include "rnc/overlay/l03/gameplay/entities/taxi_data/handle_mine_layer_damage.h"
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern f32 trooper_atan2(f32, f32) __asm__("FUN_001f9e90");
@@ -412,7 +409,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
             trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_nonlethal_knockback_horizontal_speed_scale_gp, mine_layer_nonlethal_knockback_vertical_launch_input_gp);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
@@ -426,7 +423,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
             trooper_vars->kb_speed = mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161900, D_L03_00161904);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_nonlethal_knockback_horizontal_speed_scale_gp, mine_layer_nonlethal_knockback_vertical_launch_input_gp);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
@@ -439,7 +436,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             break;
         case TROOPER_DAMAGE_LETHAL:
             trooper_vars->kb_speed = mine_layer_lethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback, D_L03_00161908, D_L03_0016190C);
+            trooper_set_knockback(trooper_vars->knockback, mine_layer_lethal_knockback_horizontal_speed_scale_gp, mine_layer_lethal_knockback_vertical_launch_input_gp);
             trooper_vars->kb_landed = 0;
             trooper_vars->kb_frames = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
@@ -643,10 +640,10 @@ void update_mine(struct Moby *mine_moby) {
                     break;
                 case MINE_DEBRIS_SPHERICAL_VELOCITY: {
                     int debris_spawn_color = mine_blend_color(0x7F000000, 0x7F182030, mine_rand(0.25f, 1.0f));
-                    int c2 = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
+                    int debris_grayscale_color = mine_blend_color(0, 0x5F5F5F, mine_rand(0.5f, 1.0f));
 
                     mine_spherical_offset(debris_velocity, mine_rand(0.0f, 1.0f) * frame_time, debris_azimuth, mine_rand_angle());
-                    mine_debris(debris_vector_scratch, debris_velocity, debris_spawn_color, c2, mine_rand(200000.0f, 300000.0f),
+                    mine_debris(debris_vector_scratch, debris_velocity, debris_spawn_color, debris_grayscale_color, mine_rand(200000.0f, 300000.0f),
                                 mine_rand_between(mine_frames(0xF0), mine_frames(0x12C)), 3);
                     break;
                 }

@@ -129,7 +129,7 @@ void draw_vendor_purchase_panel(void *moby) {
     OvlQuad quad_corners[4];
     OvlQuad pad[5];
     OvlQuad bounds_first_corner, bounds_opposite_corner;
-    int x, y, w, h;
+    int x, y, panel_screen_x, panel_screen_y;
     float untrimmed_edge_length;
     ids = D_L00_00161178;
     FUN_0020cd48_29fcd0(moby, 3, &ids, out);
@@ -150,7 +150,7 @@ void draw_vendor_purchase_panel(void *moby) {
     FUN_001f9a10_29fcd0(&quad_corners[3], &quad_corners[2], first_edge);
     bounds_first_corner = quad_corners[0];
     bounds_opposite_corner = quad_corners[3];
-    FUN_00237a78_29fcd0(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &w, &h);
+    FUN_00237a78_29fcd0(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &panel_screen_x, &panel_screen_y);
     FUN_00239690_29fcd0(9, 7, 1.0f);
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
@@ -160,7 +160,7 @@ void draw_vendor_purchase_panel(void *moby) {
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
     FUN_0020d330_29fcd0(moby, 1);
-    FUN_001f5450_29fcd0(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
+    FUN_001f5450_29fcd0(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A11E8), where it is exact; names translated to the US level program. */
@@ -288,7 +288,7 @@ extern A02b0_tab D_L00_001C8FF0[];
 
 extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
-extern void FUN_L00_002a09d8(s32);
+extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
@@ -344,7 +344,7 @@ void draw_vendor_screen(void) {
         }
         p->f8 = 1;
         p->fC = 0;
-        FUN_L00_002a09d8(1);
+        vu1_sync_chain(1);
         sce_gs_sync_v(0);
         D_L00_0015F3F8_s = D_L00_0015F3F8_v[0] + 1;
         vu1_send_chain_render_buffer();
@@ -435,7 +435,7 @@ void draw_vendor_screen(void) {
     do_gif_paging();
     restore_moby_class_dists();
     draw_mobys_clean_up();
-    FUN_L00_002a09d8(0x10);
+    vu1_sync_chain(0x10);
     patch_moby_gifs();
 }
 

@@ -60,26 +60,9 @@ void draw_dialog_text(void) __asm__("FUN_001fbc50");
 
 extern s32 freeze_ans2 __asm__("D_0015F4E8") __attribute__((sda));
 extern s32 freeze_ans1 __asm__("D_0015F4EC") __attribute__((sda));
-extern s32 D_0015F4F0 __attribute__((sda));
-extern s32 D_0015F4F4 __attribute__((sda));
-extern s32 D_0015F4F8 __attribute__((sda));
-extern s32 D_0015F4FC __attribute__((sda));
-extern s32 D_0015F500 __attribute__((sda));
-extern s32 D_0015F504 __attribute__((sda));
+#include "rnc/rendering/draw_dialog_text_globals.h"
 extern s32 freeze_bevel_a_text __asm__("D_0015F508") __attribute__((sda));
-extern s32 D_0015F50C __attribute__((sda));
-extern s32 D_0015F510 __attribute__((sda));
-extern s32 D_0015F514 __attribute__((sda));
-extern s32 D_0015F518 __attribute__((sda));
 extern s32 freeze_stats_text __asm__("D_0015F51C") __attribute__((sda));
-extern s32 D_0015F524 __attribute__((sda));
-extern s32 D_0015F528 __attribute__((sda));
-extern s32 D_0015F52C __attribute__((sda));
-extern s32 D_0015F530 __attribute__((sda));
-extern s32 D_0015F534 __attribute__((sda));
-extern s32 D_0015F538 __attribute__((sda));
-extern s32 D_0015F53C __attribute__((sda));
-extern s32 D_0015F540 __attribute__((sda));
 extern char D_0015F568[];
 extern char D_0015F570[];
 extern char D_0015F578[];
@@ -137,7 +120,7 @@ void draw_dialog_text(void) {
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box = D_001E78F0;
-        color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
+        color = fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
         text_cursor = SCRATCHPAD;
         while (*text_cursor >= 2) {
@@ -288,7 +271,7 @@ void draw_dialog_text(void) {
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
-        font_print_window_regular(&box, fast_tween_color(D_0015F4F0, D_0015F4F4, alpha), text, -1);
+        font_print_window_regular(&box, fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha), text, -1);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
         if (left != 0) {
@@ -311,7 +294,7 @@ void draw_dialog_text(void) {
         box = D_001E7908;
         alpha = 1.0f - (f32)freeze.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        text_color = fast_tween_color(D_0015F4F0, D_0015F4F4, alpha);
+        text_color = fast_tween_color(freeze_fading_dialog_text_base_color, freeze_fading_dialog_text_blend_target_color, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (freeze.choice) {
         case FREEZE_CHOICE_PAIRED_FOOTER_MESSAGE:
@@ -355,7 +338,7 @@ void draw_dialog_text(void) {
         f32 scale;
         f32 color_blend_fraction;
 
-        pulse = fast_tween_color(D_0015F524, D_0015F528,
+        pulse = fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                              fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
@@ -365,9 +348,9 @@ void draw_dialog_text(void) {
         } else if (scale < 0.1f) {
             scale = 0.1f;
         }
-        shared_dialog_text_color = D_0015F52C;
-        matched_record_text_color = D_0015F534;
-        unmatched_record_text_color = D_0015F53C;
+        shared_dialog_text_color = freeze_shared_dialog_text_base_color;
+        matched_record_text_color = freeze_matched_record_text_base_color;
+        unmatched_record_text_color = freeze_unmatched_record_text_base_color;
         if (freeze.unk24 != 0) {
             color_blend_fraction = (f32)freeze.unk24 * 0.125f;
             if (color_blend_fraction > 1.0f) {
@@ -375,23 +358,23 @@ void draw_dialog_text(void) {
             } else if (color_blend_fraction < 0.0f) {
                 color_blend_fraction = 0.0f;
             }
-            shared_dialog_text_color = fast_tween_color(D_0015F52C, D_0015F530, color_blend_fraction);
-            matched_record_text_color = fast_tween_color(D_0015F534, D_0015F538, color_blend_fraction);
-            unmatched_record_text_color = fast_tween_color(D_0015F53C, D_0015F540, color_blend_fraction);
+            shared_dialog_text_color = fast_tween_color(freeze_shared_dialog_text_base_color, freeze_shared_dialog_text_blend_target_color, color_blend_fraction);
+            matched_record_text_color = fast_tween_color(freeze_matched_record_text_base_color, freeze_matched_record_text_blend_target_color, color_blend_fraction);
+            unmatched_record_text_color = fast_tween_color(freeze_unmatched_record_text_base_color, freeze_unmatched_record_text_blend_target_color, color_blend_fraction);
         }
         if (hero.race_lap < 3) {
-            draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((f32)D_0015F504 * scale),
-                         D_0015F4FC + truncate_float_to_s32((f32)D_0015F504 * scale),
-                         D_0015F4F8 - truncate_float_to_s32((f32)D_0015F500 * scale),
-                         D_0015F4F8 + truncate_float_to_s32((f32)D_0015F500 * scale), pulse);
+            draw_outlined_rect(freeze_three_line_outline_center_y - truncate_float_to_s32((f32)freeze_three_line_outline_half_height * scale),
+                         freeze_three_line_outline_center_y + truncate_float_to_s32((f32)freeze_three_line_outline_half_height * scale),
+                         freeze_three_line_outline_center_x - truncate_float_to_s32((f32)freeze_three_line_outline_half_width * scale),
+                         freeze_three_line_outline_center_x + truncate_float_to_s32((f32)freeze_three_line_outline_half_width * scale), pulse);
             font_print_center(0x100, freeze_bevel_a_text, shared_dialog_text_color, get_help_message_text(0x4F6E), -1);
             font_print_center(0x100, freeze_bevel_a_text + 0x18, shared_dialog_text_color, get_help_message_text(0x5249), -1);
             font_print_center(0x100, freeze_bevel_a_text + 0x30, shared_dialog_text_color, get_help_message_text(0x5248), -1);
         } else {
-            draw_outlined_rect(D_0015F510 - truncate_float_to_s32((f32)D_0015F518 * scale),
-                         D_0015F510 + truncate_float_to_s32((f32)D_0015F518 * scale),
-                         D_0015F50C - truncate_float_to_s32((f32)D_0015F514 * scale),
-                         D_0015F50C + truncate_float_to_s32((f32)D_0015F514 * scale), pulse);
+            draw_outlined_rect(freeze_stats_outline_center_y - truncate_float_to_s32((f32)freeze_stats_outline_half_height * scale),
+                         freeze_stats_outline_center_y + truncate_float_to_s32((f32)freeze_stats_outline_half_height * scale),
+                         freeze_stats_outline_center_x - truncate_float_to_s32((f32)freeze_stats_outline_half_width * scale),
+                         freeze_stats_outline_center_x + truncate_float_to_s32((f32)freeze_stats_outline_half_width * scale), pulse);
             sprintf(line, freeze_fmt_indent, get_help_message_text(0x5240));
             if (hero.race_position == 1) {
                 sprintf(line, D_0015F568, 1);
@@ -441,7 +424,7 @@ void draw_dialog_text(void) {
     }
     case FREEZE_TITLE_DIALOG:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
-                     fast_tween_color(D_0015F524, D_0015F528,
+                     fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                                   fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
@@ -452,7 +435,7 @@ void draw_dialog_text(void) {
         MessageBox *mb = &freeze;
         s32 pulse;
 
-        pulse = fast_tween_color(D_0015F524, D_0015F528,
+        pulse = fast_tween_color(freeze_outline_pulse_base_color, freeze_outline_pulse_blend_target_color,
                                   fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +

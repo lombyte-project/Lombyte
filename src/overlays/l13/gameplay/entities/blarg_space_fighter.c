@@ -30,7 +30,7 @@ extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f9
 unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int arg, float scale,
                                 float max_speed) __asm__("FUN_L13_002c13b0");
 
-unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *target, char *initial_rotation, int initial_expiry_countdown, float scale,
+unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *rocket_spawn_position, char *target, char *initial_rotation, int initial_expiry_countdown, float scale,
                                 float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby_c13(0x52);
     if (moby != 0) {
@@ -41,7 +41,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *pos, char *t
         moby[0x20] = 0;
         *(char **)(data + 0x24) = target;
         *(char **)(data + 0x20) = owner_moby;
-        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x10, rocket_spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         {
             float *sp = &scale;

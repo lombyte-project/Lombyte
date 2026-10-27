@@ -41,7 +41,9 @@ extern void FUN_L00_00257024(void *);
 extern void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
 extern void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
 
-void FUN_L15_001ff938(void) {
+void update_hero_and_vehicle_mode_effects(void) __asm__("FUN_L15_001ff938");
+
+void update_hero_and_vehicle_mode_effects(void) {
     unsigned char *hero0, *hero1, *hero2, *hero3, *hero4, *hero5, *hero6;
     unsigned char *hero_moby;
     unsigned int copy[4] __attribute__((aligned(16)));

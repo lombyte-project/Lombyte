@@ -1066,7 +1066,7 @@ void start_slideshow(void) {
     }
 }
 extern s32 D_L00_0015F3FC;
-void FUN_L00_002a09d8(s32);
+void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
@@ -1074,7 +1074,7 @@ void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void end_slideshow(void) __asm__("FUN_L00_00299c00");
 
 void end_slideshow(void) {
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     fade_to_black(0xC);
     request_audio_stream_break();
     D_L00_0015F5C0_m[1] = 0;
@@ -1122,7 +1122,7 @@ void update_slideshow(void) {
             slideshow.state = 1;
         }
     } else if (slideshow.state == 1) {
-        FUN_L00_002a09d8(1);
+        vu1_sync_chain(1);
         if (slideshow.timer < 0x20) {
             src = slideshow.src;
             dst = slideshow.dst;
@@ -1365,7 +1365,7 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void FUN_L00_00235ea0_29a6b0(void) __asm__("FUN_L00_00235ea0");
+extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 extern s32 FUN_0022da68_29a6b0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
@@ -1385,7 +1385,7 @@ typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
 extern f32 vendor_camera_eye_local_offset_x_gp __asm__("D_L00_00161060") __attribute__((sda));
 extern Vec4 D_L00_00180250;
-extern f32 D_L00_001610D0 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/open_vendor_menu.h"
 extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -1441,7 +1441,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
         s32 item = vendor_29a6b0.entries[vendor_29a6b0.cursor].item;
 
         vendor_29a6b0.item_text = add_text_29a6b0(0x30, item + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions,
-                                                  FUN_L00_00235ea0_29a6b0, draw_weapon_ammo_hud_panel,
+                                                  hud_update_counter, draw_weapon_ammo_hud_panel,
                                                   &weapon_ammo_counts[item], (vendor_items_29a6b0 + item)->text);
     }
     D_L00_0015F5D8 = 1;
@@ -1477,7 +1477,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
         FUN_L00_002eaa30_29a6b0(&vendor_29a6b0.look);
     }
     vector_destination_cursor = &D_L00_00180250;
-    FUN_001f9cf8_29a6b0(vector_destination_cursor, &D_L00_001610D0, vendor_29a6b0.moby + 0xC0);
+    FUN_001f9cf8_29a6b0(vector_destination_cursor, &vendor_basis_local_vector_x_gp, vendor_29a6b0.moby + 0xC0);
     qcopy(vector_destination_cursor - 1, &D_L00_001610E0);
     vector_destination_cursor += 2;
     qzero(vector_destination_cursor);
@@ -1589,7 +1589,7 @@ extern void f1f97e8_29ad08(void *, s32, s32) __asm__("FUN_001f97e8");
 extern float f1fa580_29ad08(float, float) __asm__("FUN_001fa580");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void f1f99f8_29ad08(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_002a09d8(s32);
+extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
@@ -1630,7 +1630,7 @@ void start_vendor_exit_cutscene(void) {
     vu_euler_rotation_basis((char *)vendor_state + 0x80, (char *)vendor_state + 0xB0);
     f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     calculate_dma_transfer_address();
     selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;
@@ -1946,13 +1946,9 @@ extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
-extern s32 D_L00_00161080 __attribute__((sda));
-extern s32 D_L00_001610A0 __attribute__((sda));
-extern s32 D_L00_001610B0 __attribute__((sda));
-extern s32 D_L00_001610C0 __attribute__((sda));
-extern s32 D_L00_00161E14;
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase_2.h"
 extern s32 D_L00_00161E18;
-extern s32 D_L00_00161E1C;
+#include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase.h"
 extern s32 D_L00_00161E20;
 extern f32 D_L00_00161E24;
 extern s32 D_L00_00161E30;
@@ -2055,7 +2051,7 @@ extern void FUN_001ff570_2ba78(int, int) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308_2ba78(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void FUN_L00_00235ea0_2ba78(void) __asm__("FUN_L00_00235ea0");
+extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 
 
@@ -2241,7 +2237,7 @@ void update_vendor_purchase(void) {
                         s32 i = CUR_ITEM.fD0;
 
                         vendor_menu.f50 = FUN_001ff308_2ba78(0x30, 0xEA60 + i, initialize_numeric_hud_timer_and_base_dimensions,
-                                           FUN_L00_00235ea0_2ba78, draw_weapon_ammo_hud_panel,
+                                           hud_update_counter, draw_weapon_ammo_hud_panel,
                                            &weapon_ammo_counts[i], D_L00_001C40B0[i].hE);
                     } else {
                         last_row_index = vendor_menu.f210 - 1;
@@ -2275,7 +2271,7 @@ void update_vendor_menu(void) {
         VENDOR_MENU_EXIT_CUTSCENE = 3
     };
     Vec4 position_scratch;
-    Vec4 b;
+    Vec4 position_contribution_scratch;
     f32 camera_rotation_matrix[4][4];
     s32 vendor_menu_state;
     s32 ok;
@@ -2334,7 +2330,7 @@ void update_vendor_menu(void) {
                 FUN_00212f90(vendor_menu.f1c, 3, 0, 8);
                 vendor_menu.f1c->f58 = 1.0f;
                 D_L00_00161E20 = 1;
-                D_L00_00161E1C = 8;
+                vendor_opening_countdown_frames = 8;
                 allocate_voice_for_target_entry(4, 0, vendor_menu.f1c);
             }
         } else if (vendor_menu_state == 2) {
@@ -2389,7 +2385,7 @@ void update_vendor_menu(void) {
         advance_moby_animation(vendor_menu.f1c);
         FUN_L00_00250df8(vendor_menu.f1c);
         if (D_L00_00161188 == 1) {
-            transform_vector_by_basis(&vendor_menu.f24->pos, &D_L00_00161080, vendor_menu.f1c->mtx);
+            transform_vector_by_basis(&vendor_menu.f24->pos, &vendor_auxiliary_moby_local_offset_gp, vendor_menu.f1c->mtx);
             add_vector_xyz(&vendor_menu.f24->pos, &vendor_menu.f24->pos, &vendor_menu.f1c->pos);
             advance_moby_animation(vendor_menu.f24);
             FUN_L00_00250df8(vendor_menu.f24);
@@ -2397,14 +2393,14 @@ void update_vendor_menu(void) {
         }
         k1 = -0.05f;
         k2 = -0.36f;
-        transform_vector_by_basis(&vendor_menu.f20[0].pos, &D_L00_001610B0, vendor_menu.f1c->mtx);
+        transform_vector_by_basis(&vendor_menu.f20[0].pos, &vendor_rotating_display_local_offset_gp, vendor_menu.f1c->mtx);
         k3 = 0.05f;
         add_vector_xyz(&vendor_menu.f20[0].pos, &vendor_menu.f20[0].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[0].rot.f[0] = fast_add_rotations(vendor_menu.f20[0].rot.f[0], multiply_global_factor_ed64(k1));
         vendor_menu.f20[0].rot.f[1] = k2;
         vendor_menu.f20[0].rot.f[2] = fast_add_rotations(vendor_menu.f20[0].rot.f[2], multiply_global_factor_ed64(k3));
         FUN_L00_00250df8(&vendor_menu.f20[0]);
-        transform_vector_by_basis(&vendor_menu.f20[5].pos, &D_L00_001610C0, vendor_menu.f1c->mtx);
+        transform_vector_by_basis(&vendor_menu.f20[5].pos, &vendor_menu_rotating_display_local_offset_gp, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[5].pos, &vendor_menu.f20[5].pos, &vendor_menu.f1c->pos);
         vendor_menu.f20[5].rot.f[0] = fast_add_rotations(vendor_menu.f20[5].rot.f[0], multiply_global_factor_ed64(k1));
         vendor_menu.f20[5].rot.f[1] = k2;
@@ -2416,10 +2412,10 @@ void update_vendor_menu(void) {
             FUN_00212f90(&vendor_menu.f20[1], 1, 0, 8);
         }
         FUN_L00_00250df8(&vendor_menu.f20[1]);
-        b.q = 0;
-        b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        position_scratch.q = b.q;
-        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        position_contribution_scratch.q = 0;
+        position_contribution_scratch.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
+        position_scratch.q = position_contribution_scratch.q;
+        add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C8FF0[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[2].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[2].pos, &vendor_menu.f20[2].pos, &vendor_menu.f1c->pos);
@@ -2427,10 +2423,10 @@ void update_vendor_menu(void) {
         vendor_menu.f20[2].rot.f[1] = D_L00_001C8FF0[CUR_ITEM.fD0].f14;
         vendor_menu.f20[2].rot.f[2] = D_L00_00161E24;
         FUN_L00_00250df8(&vendor_menu.f20[2]);
-        b.q = 0;
-        b.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
-        position_scratch.q = b.q;
-        add_vector_xyz(&position_scratch, &D_L00_001610A0, &position_scratch);
+        position_contribution_scratch.q = 0;
+        position_contribution_scratch.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
+        position_scratch.q = position_contribution_scratch.q;
+        add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
         add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
@@ -2442,12 +2438,12 @@ void update_vendor_menu(void) {
             FUN_00212f90(&vendor_menu.f20[3], 1, 0, 8);
         }
         FUN_L00_00250df8(&vendor_menu.f20[3]);
-        b.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
-        b.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
-        b.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
+        position_contribution_scratch.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
+        position_contribution_scratch.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
+        position_contribution_scratch.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
         euler_rotation_basis(vendor_menu.f20[3].mtx, &vendor_menu.f20[3].rot);
-        transform_vector_by_basis(&b, &b, vendor_menu.f20[3].mtx);
-        add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &b);
+        transform_vector_by_basis(&position_contribution_scratch, &position_contribution_scratch, vendor_menu.f20[3].mtx);
+        add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &position_contribution_scratch);
         vendor_menu.f4++;
         if (vendor_menu.f5c == 0 && D_L00_00161E18 == 0) {
             if (vendor_menu.f210 < 8) {
@@ -2463,7 +2459,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
+                            vendor_menu.f50 = queue_animation_update(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2480,7 +2476,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
+                            vendor_menu.f50 = queue_animation_update(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2503,7 +2499,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
+                            vendor_menu.f50 = queue_animation_update(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2525,7 +2521,7 @@ void update_vendor_menu(void) {
                         }
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
-                            vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
+                            vendor_menu.f50 = queue_animation_update(0x30, CUR_ITEM.fD0 + 0xEA60, initialize_numeric_hud_timer_and_base_dimensions, hud_update_counter,
                                                   draw_weapon_ammo_hud_panel, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
@@ -2536,7 +2532,7 @@ void update_vendor_menu(void) {
                 allocate_voice_for_target_entry(0, 0, vendor_menu.f1c);
             }
             if ((pad_state.pressed_unmasked & 0x10) && D_L00_0016118C == 0) {
-                D_L00_00161E14 = 8;
+                vendor_close_delay_frames_remaining = 8;
                 D_L00_00161E18 = 1;
                 allocate_voice_for_target_entry(5, 0, vendor_menu.f1c);
             }
@@ -2544,14 +2540,14 @@ void update_vendor_menu(void) {
         update_vendor_purchase();
         D_L00_00161E30 = pad_state.pressed_unmasked;
         if (D_L00_00161E20 == 1) {
-            if (D_L00_00161E1C == 0) {
+            if (vendor_opening_countdown_frames == 0) {
                 D_L00_00161E20 = 0;
             } else {
-                D_L00_00161E1C--;
+                vendor_opening_countdown_frames--;
             }
         }
         if (D_L00_00161E18 == 1) {
-            if (--D_L00_00161E14 == 0) {
+            if (--vendor_close_delay_frames_remaining == 0) {
                 D_L00_0015F5D8 = 1;
                 calculate_dma_transfer_address();
                 FUN_00212f90(vendor_menu.f1c, 4, 9, 8);
@@ -2656,8 +2652,8 @@ void update_vendor_menu(void) {
             }
             keys = mb->keys;
             fast_vec_scale(&position_scratch, &keys[mb->frame], 1.0f - mb->blend);
-            fast_vec_scale(&b, &keys[mb->next_frame], mb->blend);
-            add_vector_xyz(&mb->pos, &position_scratch, &b);
+            fast_vec_scale(&position_contribution_scratch, &keys[mb->next_frame], mb->blend);
+            add_vector_xyz(&mb->pos, &position_scratch, &position_contribution_scratch);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.f80);
             add_vector_xyz(&mb->pos, &mb->pos, &vendor_menu.fC0);
             mb->rot.f[2] = vendor_menu.f80[3].f[2];

@@ -444,23 +444,7 @@ extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_00161
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
-extern s32 D_L14_001613D0 __attribute__((sda));
-extern s32 D_L14_001613D4 __attribute__((sda));
-extern f32 D_L14_001613D8 __attribute__((sda));
-extern f32 D_L14_001613DC __attribute__((sda));
-extern f32 D_L14_001613E0 __attribute__((sda));
-extern f32 D_L14_001613E4 __attribute__((sda));
-extern f32 D_L14_001613E8 __attribute__((sda));
-extern f32 D_L14_001613EC __attribute__((sda));
-extern f32 D_L14_001613F0 __attribute__((sda));
-extern f32 D_L14_001613F4 __attribute__((sda));
-extern f32 D_L14_001613F8 __attribute__((sda));
-extern s32 D_L14_00161400 __attribute__((sda));
-extern s32 D_L14_00161404 __attribute__((sda));
-extern s32 D_L14_00161408 __attribute__((sda));
-extern s32 D_L14_0016140C __attribute__((sda));
-extern s32 D_L14_00161410 __attribute__((sda));
-extern s32 D_L14_00161414 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
 extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
@@ -568,10 +552,10 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         int found;
         int hit;
 
-        moby->glow_color = 0xFF000000 | (D_L14_00161408 << 16) | (D_L14_00161404 << 8) | D_L14_00161400;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_patrol_glow_blue_gp << 16) | (blarg_heavy_interceptor_patrol_glow_green_gp << 8) | blarg_heavy_interceptor_patrol_glow_red_gp;
         if (is_turret_group_activated_or_empty(*(int *)(moby_vars + 0x70))) {
             moby->state = 3;
-            *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
+            *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         }
         *(s16 *)(moby_vars + 0x202) = 0;
         *(s16 *)(moby_vars + 0x200) = 1;
@@ -612,11 +596,11 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         *(s32 *)(moby_vars + 0x1D0) = -1;
         activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         moby->state = 3;
-        *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(D_L14_001613D0);
+        *(s16 *)(moby_vars + 0x1F2) = scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         break;
     }
     case INTERCEPTOR_STATE_TRACK_TARGET:
-        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) | (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) | blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         if (*(struct Moby **)(moby_vars + 0x18C) != 0) {
             *(s16 *)(moby_vars + 0x200) = 1;
             *(s16 *)(moby_vars + 0x202) = 1;
@@ -647,7 +631,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             moby->state = 4;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
-        moby->glow_color = 0xFF000000 | (D_L14_00161414 << 16) | (D_L14_00161410 << 8) | D_L14_0016140C;
+        moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) | (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) | blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         qcopy(vector_scratch, &moby->pos);
         vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
         if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
@@ -665,7 +649,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             if (moby->prev_seq == 0) {
                 blend_moby_animation_c618(moby, 2, 0, 5);
             }
-            update_blarg_heavy_interceptor_return_path_position(moby, D_L14_001613F8, D_L14_001613F4, 1.0f);
+            update_blarg_heavy_interceptor_return_path_position(moby, blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp, blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp, 1.0f);
             if (*(float *)(moby_vars + 0x1C0) != 0.0f || *(float *)(moby_vars + 0x1BC) != 0.0f) {
                 ease_c618((f32 *)(moby_vars + 0x1C0), 0.0f, (f32 *)(moby_vars + 0x1C8), 0.004f, 0.2f, 0.0f);
                 ease_c618((f32 *)(moby_vars + 0x1BC), 0.0f, (f32 *)(moby_vars + 0x1C4), 0.004f, 0.2f, 0.0f);
@@ -745,7 +729,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         s32 voice;
         float death_launch_angle;
 
-        *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(D_L14_001613D4);
+        *(s16 *)(moby_vars + 0x1F0) = scale_game_frames(blarg_heavy_interceptor_death_fall_duration_frames_gp);
         activate_waiting_turrets_in_group(*(int *)(moby_vars + 0x70));
         voice = *(s32 *)(moby_vars + 0x1D0);
         if (voice != -1) {
@@ -759,11 +743,11 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         FUN_L00_0025e450_c618(moby, moby_vars + 0x40, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
         subtract_vector_c618(vector_scratch, &moby->pos, &hero.motion.pos);
         vector_scratch[2] = 0.0f;
-        normalize_vector_c618(vector_scratch, vector_scratch, random_float_c618(D_L14_001613D8 * D_0015ED60_c618, D_L14_001613DC * D_0015ED60_c618));
+        normalize_vector_c618(vector_scratch, vector_scratch, random_float_c618(blarg_heavy_interceptor_death_launch_vector_magnitude_range_start_gp * D_0015ED60_c618, blarg_heavy_interceptor_death_launch_vector_magnitude_range_end_gp * D_0015ED60_c618));
         cross_vectors_c618(secondary_vector_scratch, &hero.gravity_dir, vector_scratch);
         death_launch_angle = randf_sym(0.6981317f, 1.2217305f);
         build_look_at_matrix_c618(moby_vars + 0x1E0, vector_scratch, &hero.gravity_dir, death_launch_angle);
-        *(float *)(moby_vars + 0x1E8) = random_float_c618(D_L14_001613E0 * D_0015ED60_c618, D_L14_001613E4 * D_0015ED60_c618);
+        *(float *)(moby_vars + 0x1E8) = random_float_c618(blarg_heavy_interceptor_death_launch_vertical_velocity_range_start_gp * D_0015ED60_c618, blarg_heavy_interceptor_death_launch_vertical_velocity_range_end_gp * D_0015ED60_c618);
         moby->scale *= 0.1f;
         *(float *)(moby_vars + 0x140) = 10.0f;
         *(float *)(moby_vars + 0x144) = 10.0f;
@@ -781,16 +765,16 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         int i;
 
         add_vector_c618(&moby->pos, &moby->pos, moby_vars + 0x1E0);
-        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E0) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E0) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > D_L14_001613F0 * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E4) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
+            *(float *)(moby_vars + 0x1E4) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
         if (*(float *)(moby_vars + 0x1E8) > 0.0f) {
-            *(float *)(moby_vars + 0x1E8) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
+            *(float *)(moby_vars + 0x1E8) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        *(float *)(moby_vars + 0x1E8) -= D_L14_001613E8 * frame_scale_sq;
+        *(float *)(moby_vars + 0x1E8) -= blarg_heavy_interceptor_death_fall_gravity_gp * frame_scale_sq;
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(moby_vars + 0x1FC));
         *(float *)(moby_vars + 0x140) = 10.0f;
         *(float *)(moby_vars + 0x144) = 10.0f;
@@ -1702,17 +1686,17 @@ extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern int D_L14_0015F5CC __attribute__((section(".sdata"))); /* no foreign declaration */
 extern int D_L14_001600EC; /* no foreign declaration */
-extern float D_L14_00161508 __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_retraction_depth_gp __asm__("D_L14_00161508") __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_0016150C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161510 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161514 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_0016151C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161520 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161524 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161528 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_0016152C __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_00161530 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_00161534 __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_aiming_phase_increment_gp __asm__("D_L14_00161514") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_bolt_launch_vector_magnitude_gp __asm__("D_L14_0016151C") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_center_bolt_spawn_base_offset_magnitude_gp __asm__("D_L14_00161520") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp __asm__("D_L14_00161524") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_bolt_spawn_launch_axis_offset_magnitude_gp __asm__("D_L14_00161528") __attribute__((sda)); /* no foreign declaration */
+extern float machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp __asm__("D_L14_0016152C") __attribute__((sda)); /* no foreign declaration */
+extern int machinegun_turret_firing_cadence_divisor_gp __asm__("D_L14_00161530") __attribute__((sda)); /* no foreign declaration */
+extern int machinegun_turret_target_wait_timeout_frames_gp __asm__("D_L14_00161534") __attribute__((sda)); /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
@@ -1797,7 +1781,7 @@ void machinegun_turret_update(char *moby) {
             func_0020D678_2B4E40(moby);
             return;
         }
-        scaled_wait_frames_or_target_query_status = func_001F9850_2B4E40(D_L14_00161534);
+        scaled_wait_frames_or_target_query_status = func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
         *(short *)(data + 0x76) = scaled_wait_frames_or_target_query_status;
         *(unsigned char *)(data + 0x8B) = 0;
         if (*(short *)(data + 0x88) != 0) {
@@ -1805,7 +1789,7 @@ void machinegun_turret_update(char *moby) {
             *(unsigned char *)(data + 0x8A) = 1;
         } else {
             *(unsigned char *)(moby + 0x20) = 1;
-            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - D_L14_00161508;
+            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - machinegun_turret_retraction_depth_gp;
             *(int *)(moby + 0x94) = 0;
             *(unsigned char *)(data + 0x8A) = 0;
             *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
@@ -1828,7 +1812,7 @@ void machinegun_turret_update(char *moby) {
     case TURRET_STATE_DEPLOY:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
-            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (0.0f + (D_L14_00161508 - 0.0f) * t);
+            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (0.0f + (machinegun_turret_retraction_depth_gp - 0.0f) * t);
         }
         if (*(unsigned char *)(moby + 0x70) & 2) {
             if (*(unsigned char *)(moby + 0x52) == 1) {
@@ -1843,7 +1827,7 @@ void machinegun_turret_update(char *moby) {
         if (func_001F9938_2B4E40(data + 0x74) == 0) {
             return;
         }
-        *(short *)(data + 0x76) = func_001F9850_2B4E40(D_L14_00161534);
+        *(short *)(data + 0x76) = func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
         *(unsigned char *)(moby + 0x20) = 3;
         *(short *)(data + 0x74) = func_001F9850_2B4E40(60);
         *(float *)(moby + 0x18) = *(float *)(data + 0x70);
@@ -1870,9 +1854,9 @@ void machinegun_turret_update(char *moby) {
         return;
     case TURRET_STATE_AIM_AND_FIRE:
         if (*(short *)(data + 0x9E) != 0) {
-            signed_phase_increment = -D_L14_00161514;
+            signed_phase_increment = -machinegun_turret_aiming_phase_increment_gp;
         } else {
-            signed_phase_increment = D_L14_00161514;
+            signed_phase_increment = machinegun_turret_aiming_phase_increment_gp;
         }
         phase_angle = func_001FA748_2B4E40(*(float *)(data + 0x8C), signed_phase_increment);
         *(float *)(data + 0x8C) = phase_angle;
@@ -1887,28 +1871,28 @@ void machinegun_turret_update(char *moby) {
         target_heading = func_L00_001FF860_2B4E40(target_point_scratch[0] - *(float *)(moby + 0x10), target_point_scratch[1] - *(float *)(moby + 0x14));
         *(float *)(moby + 0x48) = target_heading;
         func_001F9938_2B4E40(data + 0x9C);
-        rem = D_L14_0015F5CC % D_L14_00161530;
+        rem = D_L14_0015F5CC % machinegun_turret_firing_cadence_divisor_gp;
         if (rem == 0) {
             sel = func_002140B0_2B4E40(3);
             switch (sel) {
             case TURRET_SPAWN_CENTER:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161520);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_center_bolt_spawn_base_offset_magnitude_gp);
                 break;
             case TURRET_SPAWN_UNNEGATED_OFFSET:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, D_L14_0016152C);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             default:
-                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, D_L14_00161524);
-                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -D_L14_0016152C);
+                func_L00_001FF4B0_2B4E40(spawn_position, moby + 0xE0, machinegun_turret_off_center_bolt_spawn_base_offset_magnitude_gp);
+                func_L00_001FF4B0_2B4E40(spawn_position_offset, moby + 0xD0, -machinegun_turret_bolt_spawn_symmetric_offset_magnitude_gp);
                 func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_position_offset);
                 break;
             }
-            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_00161528);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, machinegun_turret_bolt_spawn_launch_axis_offset_magnitude_gp);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, spawn_vector_scratch);
             func_001F9BD8_2B4E40(spawn_position, spawn_position, moby + 0x10);
-            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, D_L14_0016151C * frame_time);
+            func_L00_001FF4B0_2B4E40(spawn_vector_scratch, moby + 0xC0, machinegun_turret_bolt_launch_vector_magnitude_gp * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
                 func_L00_00251328_2B4E40(spawn_flying_bolt(spawn_position, spawn_vector_scratch, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
@@ -1928,7 +1912,7 @@ void machinegun_turret_update(char *moby) {
         if (animation_sequence != 3) {
             return;
         }
-        *(short *)(data + 0x76) = func_001F9850_2B4E40(D_L14_00161534);
+        *(short *)(data + 0x76) = func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
         *(unsigned char *)(moby + 0x20) = animation_sequence;
         func_00213D28_2B4E40(moby, 2, 0);
         *(float *)(moby + 0x58) = 1.0f;
@@ -1936,7 +1920,7 @@ void machinegun_turret_update(char *moby) {
     case TURRET_STATE_RETRACT:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
-            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (D_L14_00161508 + (0.0f - D_L14_00161508) * t);
+            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (machinegun_turret_retraction_depth_gp + (0.0f - machinegun_turret_retraction_depth_gp) * t);
             *(float *)(moby + 0x48) = *(float *)(data + 0x84) + (*(float *)(data + 0x8C) - *(float *)(data + 0x84)) * t;
         }
         if (*(unsigned char *)(moby + 0x70) & 2) {
@@ -1956,7 +1940,7 @@ void machinegun_turret_update(char *moby) {
         *(short *)(data + 0x74) = func_001F9850_2B4E40(60);
         *(short *)(data + 0x88) = 0;
         *(int *)(data + 0x98) = func_001F9850_2B4E40(*(int *)(data + 0x94));
-        *(float *)(moby + 0x18) = *(float *)(data + 0x70) - D_L14_00161508;
+        *(float *)(moby + 0x18) = *(float *)(data + 0x70) - machinegun_turret_retraction_depth_gp;
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
         return;
     case TURRET_STATE_DESTROY:
@@ -2220,22 +2204,22 @@ extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
 extern float minibomber_bomb_gravity_gp __asm__("D_L14_00161568") __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
-extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161554 __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_intro_exit_path_step_distance_gp __asm__("D_L14_0016154C") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_traversal_path_step_distance_gp __asm__("D_L14_00161550") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_retrace_path_step_distance_gp __asm__("D_L14_00161554") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_bomb_aim_duration_frames __asm__("D_L14_0016155C") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_aim_return_duration_frames __asm__("D_L14_00161560") __attribute__((sda)); /* no foreign declaration */
 extern int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_0016156C __attribute__((sda)); /* no foreign declaration */
+extern int minibomber_bomb_initial_fade_timer_frames __asm__("D_L14_0016156C") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_path_traversal_trigger_distance __asm__("D_L14_00161570") __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161574 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161578 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_0016157C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161580 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161584 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161588 __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_0016158C __attribute__((sda)); /* no foreign declaration */
-extern float D_L14_00161590 __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_intro_exit_position_error_gain_gp __asm__("D_L14_00161574") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_position_velocity_damping_gp __asm__("D_L14_00161578") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_position_snap_threshold_scale_gp __asm__("D_L14_0016157C") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_intro_exit_heading_error_gain_gp __asm__("D_L14_00161580") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_heading_velocity_damping_gp __asm__("D_L14_00161584") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_heading_velocity_limit_gp __asm__("D_L14_00161588") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_retrace_and_traversal_position_error_gain_gp __asm__("D_L14_0016158C") __attribute__((sda)); /* no foreign declaration */
+extern float minibomber_retrace_and_traversal_heading_error_gain_gp __asm__("D_L14_00161590") __attribute__((sda)); /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
@@ -2395,8 +2379,8 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 == 2) {
             moby->state = 3;
         } else if (FUN_L14_002b5730_c((char *)moby, (char *)path, (int)&d->fE8, (int)&d->fEC, d->fF0, &d->fE4,
-                                     D_L14_0016154C * D_0015ED60, D_L14_00161574, D_L14_00161578, D_L14_0016157C,
-                                     D_L14_00161580, D_L14_00161584, D_L14_00161588) != 0) {
+                                     minibomber_intro_exit_path_step_distance_gp * D_0015ED60, minibomber_intro_exit_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp,
+                                     minibomber_intro_exit_heading_error_gain_gp, minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
             qcopy(d->f180, path + path->n);
             path = D_L14_001B0F30_2B5938[d->fDC];
             if (d->f10C == 0) {
@@ -2408,12 +2392,12 @@ void minibomber_update(Moby_2B5938 *moby) {
             }
             subtract_vector_xyz_c(v + 8, v + 4, v);
             d->f17C = fast_arc_tan(v[8], v[9]);
-            d->f170 = D_L14_00161574;
-            d->f174 = D_L14_00161578;
-            d->f178 = D_L14_0016157C;
-            d->f154 = D_L14_00161580;
-            d->f158 = D_L14_00161584;
-            d->f15C = D_L14_00161588;
+            d->f170 = minibomber_intro_exit_position_error_gain_gp;
+            d->f174 = minibomber_position_velocity_damping_gp;
+            d->f178 = minibomber_position_snap_threshold_scale_gp;
+            d->f154 = minibomber_intro_exit_heading_error_gain_gp;
+            d->f158 = minibomber_heading_velocity_damping_gp;
+            d->f15C = minibomber_heading_velocity_limit_gp;
             moby->state = 4;
             d->f104 = 0.0f;
             d->f102 = 0;
@@ -2430,8 +2414,8 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->fB4 != 2) {
             moby->state = 2;
         } else if (FUN_L14_002b5730_c((char *)moby, (char *)path, (int)&d->fE8, (int)&d->fEC, d->fF0, &d->fE4,
-                                     -(D_L14_00161554 * D_0015ED60), D_L14_0016158C, D_L14_00161578, D_L14_0016157C,
-                                     D_L14_00161590, D_L14_00161584, D_L14_00161588) != 0) {
+                                     -(minibomber_retrace_path_step_distance_gp * D_0015ED60), minibomber_retrace_and_traversal_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp,
+                                     minibomber_retrace_and_traversal_heading_error_gain_gp, minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
             moby->state = 1;
             FUN_L14_002b5c98_c((char *)moby);
         }
@@ -2467,13 +2451,13 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     case MINIBOMBER_STATE_TRAVERSE_PATH:
-        spd = D_L14_00161550 * D_0015ED60;
+        spd = minibomber_traversal_path_step_distance_gp * D_0015ED60;
         if (d->f10C == 1) {
             spd = -spd;
         }
         if (FUN_L14_002b5730_c((char *)moby, (char *)D_L14_001B0F30_2B5938[d->fDC], (int)&d->fE8, (int)&d->fEC, d->fF0,
-                              &d->fE4, spd, D_L14_0016158C, D_L14_00161578, D_L14_0016157C, D_L14_00161590,
-                              D_L14_00161584, D_L14_00161588) != 0) {
+                              &d->fE4, spd, minibomber_retrace_and_traversal_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp, minibomber_retrace_and_traversal_heading_error_gain_gp,
+                              minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
             PathNode_2B5938 *path;
             moby->state = 4;
             if (d->f10C == 0) {
@@ -2489,12 +2473,12 @@ void minibomber_update(Moby_2B5938 *moby) {
                 qcopy(v, path + path->n);
                 qcopy(v + 4, path + 1);
             }
-            d->f170 = D_L14_0016158C;
-            d->f174 = D_L14_00161578;
-            d->f178 = D_L14_0016157C;
-            d->f154 = D_L14_00161590;
-            d->f158 = D_L14_00161584;
-            d->f15C = D_L14_00161588;
+            d->f170 = minibomber_retrace_and_traversal_position_error_gain_gp;
+            d->f174 = minibomber_position_velocity_damping_gp;
+            d->f178 = minibomber_position_snap_threshold_scale_gp;
+            d->f154 = minibomber_retrace_and_traversal_heading_error_gain_gp;
+            d->f158 = minibomber_heading_velocity_damping_gp;
+            d->f15C = minibomber_heading_velocity_limit_gp;
             subtract_vector_xyz_c(v + 8, v + 4, v);
             d->f17C = fast_arc_tan(v[8], v[9]);
             qcopy(d->f180, v);
@@ -2527,7 +2511,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             bomb_gravity = minibomber_bomb_gravity_gp * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
-            func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(D_L14_0016156C));
+            func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(minibomber_bomb_initial_fade_timer_frames));
             FUN_L14_002b5968_u((char *)moby, v, d->f104);
             d->f100++;
             if (d->f100 >= D_L14_001B0F30_2B5938[d->fD8]->n) {
@@ -2733,7 +2717,7 @@ extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
 int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
                      float f13, float f14, float f15, float f16, float f17, float f18) __asm__("FUN_L14_002b5730");
 
-int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float f12,
+int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_index_address, int segment_distance_address, float *position_easing_velocity, float *heading_easing_velocity, float path_step_distance,
                      float position_error_gain, float position_velocity_damping, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
     float path_target_position[3];
     int path_sample_result = FUN_L00_0025d808_5730(path, path_target_position, segment_index_address, segment_distance_address, 0);
@@ -3221,8 +3205,7 @@ struct L14RaceState {
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
-extern s32 D_L14_00161A34 __attribute__((sda));
-extern s32 D_L14_00161A5C __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_level14_racer.h"
 extern void memset_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
@@ -3309,7 +3292,7 @@ void update_level14_racer(struct Moby *racer_moby) {
     case RACER_STATE_COMPLETE_START_INTERPOLATION:
         if (interpolate_racer_to_path_start(racer_moby)) {
             racer_moby->state = 5;
-            racer_vars->timer = scale_game_frames(D_L14_00161A34);
+            racer_vars->timer = scale_game_frames(level14_racer_path_follow_initial_timer_frames_gp);
         }
         break;
     case RACER_STATE_FOLLOW_PATH:
@@ -3328,7 +3311,7 @@ void update_level14_racer(struct Moby *racer_moby) {
                 sv[0] = spawned_object_planar_velocity[0];
                 sv[1] = spawned_object_planar_velocity[1];
             }
-            spawn_path_or_ballistic_debris(racer_moby, &D_L14_00161A5C, 0);
+            spawn_path_or_ballistic_debris(racer_moby, &level14_racer_exit_debris_path_initialization_scale_gp, 0);
             spawn_explosion(racer_moby, &racer_vars->trail, &racer_moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1, 1.0f,
                              15.0f, 1, 5, -1, 0);
             FUN_0020c828(racer_moby);

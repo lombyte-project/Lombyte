@@ -291,7 +291,7 @@ extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 __attribute__((section(".data")));
 extern unsigned short D_00141C60 __attribute__((section(".data")));
 extern int D_L05_0015F6A8;
-extern int D_L05_00161928 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_data/hoverboard_update.h"
 extern int D_L05_0016190C __attribute__((sda));
 extern int D_L05_00161910 __attribute__((sda));
 
@@ -360,7 +360,7 @@ void hoverboard_update(unsigned char *moby) {
         add_vector_xyz(effect_position, effect_position, delta);
         add_vector_xyz(effect_position, effect_position, offset);
         qcopy(effect_position, delta);
-        effect_position[3] = (float)D_L05_00161928;
+        effect_position[3] = (float)hoverboard_effect_displacement_w_gp;
         if ((unsigned char)moby[0xbc] == 0) {
             int size = random_int_between(scale_game_frames(10), scale_game_frames(13));
             spawn_effect(position, effect_position, D_L05_0016190C, D_L05_00161910, size, 15, 15, 1);
@@ -406,7 +406,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     struct Hero *player_hero = &hero;
     float position_delta[4];
     char *group_member_moby;
-    char *l2;
+    char *proximity_candidate_moby;
     char *other;
     char *od;
 
@@ -446,14 +446,14 @@ void add_moby_frames_for_group_proximity(char *moby) {
         }
     }
     if (*(int *)(od + 0x48) != -1) {
-        get_first_moby_in_group((int *)&l2, *(int *)(od + 0x48), 0, 0);
-        while (l2) {
-            if (*(short *)(l2 + 0xA6) == 0x474) {
+        get_first_moby_in_group((int *)&proximity_candidate_moby, *(int *)(od + 0x48), 0, 0);
+        while (proximity_candidate_moby) {
+            if (*(short *)(proximity_candidate_moby + 0xA6) == 0x474) {
                 float m[16];
-                subtract_vector_xyz(position_delta, l2 + 0x10, data + 0x200);
+                subtract_vector_xyz(position_delta, proximity_candidate_moby + 0x10, data + 0x200);
                 if (!(8.0f < vector_length_xyz(position_delta))) {
                     set_identity_matrix(m);
-                    transpose_rotation_matrix(m, l2 + 0xC0);
+                    transpose_rotation_matrix(m, proximity_candidate_moby + 0xC0);
                     transform_vector(position_delta, position_delta, m);
                     if (absolute_float(position_delta[0]) < 2.8f && absolute_float(position_delta[1]) < 1.4f &&
                         absolute_float(position_delta[2]) < 0.5f) {
@@ -462,7 +462,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&l2, (int)l2, 0, 0);
+            get_next_moby_in_group((int *)&proximity_candidate_moby, (int)proximity_candidate_moby, 0, 0);
         }
     }
 }

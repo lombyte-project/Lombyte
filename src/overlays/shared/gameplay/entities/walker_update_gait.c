@@ -176,7 +176,7 @@ void reset_walker_gait_helpers(u8 *a0) __asm__("FUN_L00_002a1538");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) __asm__("FUN_L00_002a1670");
-void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, float speed, float movement_heading, float accel) {
+void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, float speed, float movement_heading, float run_start_input) {
     enum {
         WALKER_GAIT_IDLE = 0,
         WALKER_GAIT_WALK = 1,
@@ -205,7 +205,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     switch (gait_data->bB7) {
     case WALKER_GAIT_IDLE:
         gait_data->fE4 = 0.0f;
-        if (accel > 0.0008f && speed > gait_data->anim[0]->f08 * 1.35f) {
+        if (run_start_input > 0.0008f && speed > gait_data->anim[0]->f08 * 1.35f) {
             {
                 WalkAnim *a = gait_data->anim[7];
                 int f = find_nearest_animation_sequence_entry(walker_moby->pClass->seqs[a->id], (float)a->i14);

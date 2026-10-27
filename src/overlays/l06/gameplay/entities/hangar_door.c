@@ -203,7 +203,7 @@ float compute_alien_snapper_target_gap_angle(char *self) __asm__("FUN_L06_002f96
 
 float compute_alien_snapper_target_gap_angle(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
-    float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, v[3];
+    float hi, lo, owner_to_self_angle_radians, owner_to_self_distance, translated_owner_to_self_vector[3];
     short *moby_index_cursor;
     if ((unsigned char)self[0x21] == 0xFF) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
@@ -214,10 +214,10 @@ float compute_alien_snapper_target_gap_angle(char *self) {
     owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, self + 0x10);
-    v[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
-    v[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
-    v[2] = 0.0f;
-    fast_vec_add(v, v, D_0013E533 + 0xE9D);
+    translated_owner_to_self_vector[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
+    translated_owner_to_self_vector[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
+    translated_owner_to_self_vector[2] = 0.0f;
+    fast_vec_add(translated_owner_to_self_vector, translated_owner_to_self_vector, D_0013E533 + 0xE9D);
     moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
     if (moby_index_cursor == 0) {
         return 0.0f;
@@ -2414,7 +2414,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int level_frame_count __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern float D_L06_00161ED0 __attribute__((sda));
 extern int D_001413D0[];
-extern float D_L06_00161EE4 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_snapper_hit_response_and_targeting.h"
 int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
 extern int FUN_001fa6e0(int, int, float);
@@ -2555,7 +2555,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         }
         break;
     }
-    data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161EE4 * 0.017453292f * D_0015ED6C_c);
+    data->f1C8 = func_001FA748_2FA618(data->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * D_0015ED6C_c);
     moby->glow_color = func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC,
                                      (func_001F9FA8_2FA618(data->f1C8) + 1.0f) * 0.5f);
 
@@ -3074,7 +3074,7 @@ extern int D_L06_00140408 __attribute__((section(".data")));
 extern int D_0013CAE0 __attribute__((section(".data")));
 extern float D_L06_0015F3FC;
 extern int D_L06_001413D0 __attribute__((section(".data")));
-extern float D_L06_00161F0C __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_queen_hit_response_and_recovery.h"
 int D_L06_00161F10 = 0x80808080;
 int D_L06_00161F14 = 0x80804080;
 extern char *D_L06_001600EC;
@@ -3236,7 +3236,7 @@ hit_response_done:
         }
     }
     *(float *)(data + 0x128) = fast_add_rotations(*(float *)(data + 0x128),
-        D_L06_00161F0C * 0.017453292f * frame_time);
+        alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
         (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[*(int *)(data + 0xEC)];
@@ -3356,11 +3356,9 @@ extern float moby_pair_parent_phase_target_distance_gp __asm__("D_L06_00161F24")
 extern float moby_pair_child_phase_target_distance_gp __asm__("D_L06_00161F28") __attribute__((sda));
 extern float moby_pair_parent_phase_two_target_rotation_y_gp __asm__("D_L06_00161F2C") __attribute__((sda));
 extern float moby_pair_child_phase_two_target_rotation_y_gp __asm__("D_L06_00161F30") __attribute__((sda));
-extern float D_L06_00161F34 __attribute__((sda));
-extern float D_L06_00161F38 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_moby_pair_transforms_2.h"
 extern float moby_pair_phase_distance_max_speed_gp __asm__("D_L06_00161F3C") __attribute__((sda));
-extern float D_L06_00161F40 __attribute__((sda));
-extern float D_L06_00161F44 __attribute__((sda));
+#include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_moby_pair_transforms.h"
 extern float moby_pair_phase_rotation_y_max_speed_degrees_gp __asm__("D_L06_00161F48") __attribute__((sda));
 extern int moby_pair_phase_one_duration_min_frames_gp __asm__("D_L06_00161F4C") __attribute__((sda));
 extern int moby_pair_phase_one_duration_max_frames_gp __asm__("D_L06_00161F50") __attribute__((sda));
@@ -3473,11 +3471,11 @@ void update_moby_pair_transforms(char *moby) {
         target_rot_b = *(float *)(*(char **)(data + 0x40) + 0x44);
         target_a = phase_a;
         target_b = phase_b;
-        acceleration = D_L06_00161F34;
-        max_speed = D_L06_00161F38;
+        acceleration = moby_pair_phase_distance_acceleration_gp;
+        max_speed = moby_pair_phase_distance_deceleration_gp;
         damping = moby_pair_phase_distance_max_speed_gp;
-        rotation_acceleration = D_L06_00161F40;
-        rotation_speed = D_L06_00161F44;
+        rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
+        rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
         next_phase = 2;
         next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_two_duration_min_frames_gp, (float)moby_pair_phase_two_duration_max_frames_gp));
@@ -3487,11 +3485,11 @@ void update_moby_pair_transforms(char *moby) {
         target_b = moby_pair_child_phase_target_distance_gp;
         target_rot_a = moby_pair_parent_phase_two_target_rotation_y_gp;
         target_rot_b = moby_pair_child_phase_two_target_rotation_y_gp;
-        acceleration = D_L06_00161F34;
-        max_speed = D_L06_00161F38;
+        acceleration = moby_pair_phase_distance_acceleration_gp;
+        max_speed = moby_pair_phase_distance_deceleration_gp;
         damping = moby_pair_phase_distance_max_speed_gp;
-        rotation_acceleration = D_L06_00161F40;
-        rotation_speed = D_L06_00161F44;
+        rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
+        rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
         next_phase = 1;
         next_timer = func_001FA898_r(random_float_between_alt((float)moby_pair_phase_one_duration_min_frames_gp, (float)moby_pair_phase_one_duration_max_frames_gp));

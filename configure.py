@@ -2038,6 +2038,8 @@ def build_overlays() -> Path:
     sn_lib = str(sn_root / "lib/gcc-lib/ee/2.95.2")
     # What SN's driver passes its cc1; SN's cc1.exe has -mgas and
     # -msplit-addresses on by default, ours takes them as flags.
+    # Read placement declarations from the same preprocessed input as cc1: owner
+    # headers and conditional declarations must retain their actual source order.
     sn_cc1 = f"{SN_CC1} -mgas -msplit-addresses cand.i -quiet -dumpbase cand.c -O2 -o cand.s"
     ninja.rule(
         "overlay-sn",
@@ -2047,7 +2049,7 @@ def build_overlays() -> Path:
             f"cd {work} && {sn_driver} -E '-B{sn_lib}\\' -I{ROOT}/src -I{ROOT}/include "
             f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.i && {sn_cc1} && cd - >/dev/null && "
             f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
-            f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
+            f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s {work}/cand.i && "
             f"{ee_assembler} -o {work}/cand-padded.o {work}/cand-final.s && "
             f"{sys.executable} padless-asm.py reference {work}/cand-final.s {work}/cand-ref.s && "
             f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-ref.s && "

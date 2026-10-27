@@ -1496,10 +1496,7 @@ typedef struct {
 } Mob577Target;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern f32 D_L01_00161A60 __attribute__((sda));
-extern f32 D_L01_00161A64 __attribute__((sda));
-extern f32 D_L01_00161A68 __attribute__((sda));
-extern f32 D_L01_00161A6C __attribute__((sda));
+#include "rnc/overlay/l01/gameplay/entities/birdbot_data/peckbot_update.h"
 s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
@@ -1655,8 +1652,8 @@ void peckbot_update(Mob577 *self) {
             hp = peckbot_vars->health - hit->dmg;
             peckbot_vars->x130 = 0.008f;
             peckbot_vars->x134 = 0.0005f;
-            peckbot_vars->x138 = D_L01_00161A64 * frame_time;
-            peckbot_vars->x13C = D_L01_00161A60 * frame_time;
+            peckbot_vars->x138 = peckbot_nonfatal_knockback_horizontal_speed_gp * frame_time;
+            peckbot_vars->x13C = peckbot_nonfatal_knockback_vertical_speed_gp * frame_time;
             peckbot_vars->x144 = 9;
             peckbot_vars->health = hp;
             peckbot_vars->x15D = 0;
@@ -1830,9 +1827,9 @@ void peckbot_update(Mob577 *self) {
             }
             SET_ANIM(self, 6, 0, scale_game_frames(3));
             peckbot_vars->x134 = 0.0f;
-            peckbot_vars->x130 = D_L01_00161A6C;
-            peckbot_vars->x138 = D_L01_00161A68 * frame_time;
-            peckbot_vars->x13C = FUN_L00_0025abf0(&self->pos, &peckbot_vars->home, &knockback_travel_time, peckbot_vars->x138, -D_L01_00161A6C);
+            peckbot_vars->x130 = peckbot_home_knockback_acceleration_gp;
+            peckbot_vars->x138 = peckbot_home_knockback_speed_gp * frame_time;
+            peckbot_vars->x13C = FUN_L00_0025abf0(&self->pos, &peckbot_vars->home, &knockback_travel_time, peckbot_vars->x138, -peckbot_home_knockback_acceleration_gp);
             peckbot_vars->x144 = 13;
             peckbot_vars->x15D = 0;
             trooper_start_knockback(self, peckbot_vars->knock, 6, 1, 0, self->rot.f[2]);
@@ -3246,26 +3243,26 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
 }
 f32 FUN_001f99c0(f32);
 
-f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
+f32 FUN_L01_002f81c8(f32 *spring_axis_position, f32 *spring_axis_velocity, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
     f32 velocity_adjustment;
     f32 f;
 
     range = range * range;
     damp = ((1.0f - damp) - 1.0f) * frame_scale + 1.0f;
-    *vel = *vel * damp;
-    velocity_adjustment = *pos - target;
+    *spring_axis_velocity = *spring_axis_velocity * damp;
+    velocity_adjustment = *spring_axis_position - target;
     velocity_adjustment = velocity_adjustment * velocity_adjustment;
     if (range < velocity_adjustment) {
         velocity_adjustment = range;
     }
     velocity_adjustment = velocity_adjustment * velocity_adjustment_scale / range;
-    if (target < *pos) {
-        *vel = *vel - velocity_adjustment;
+    if (target < *spring_axis_position) {
+        *spring_axis_velocity = *spring_axis_velocity - velocity_adjustment;
     } else {
-        *vel = *vel + velocity_adjustment;
+        *spring_axis_velocity = *spring_axis_velocity + velocity_adjustment;
     }
-    *pos = *pos + *vel;
-    return FUN_001f99c0(target - *pos);
+    *spring_axis_position = *spring_axis_position + *spring_axis_velocity;
+    return FUN_001f99c0(target - *spring_axis_position);
 }
 typedef union {
     u128 q;

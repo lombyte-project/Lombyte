@@ -183,13 +183,7 @@ typedef struct {
     int pad[3];
 } Ray_67e8;
 int D_L14_00161A3C = 0x8c;
-extern float D_L14_00161A40 __attribute__((sda));
-extern float D_L14_00161A44 __attribute__((sda));
-extern float D_L14_00161A48 __attribute__((sda));
-extern float D_L14_00161A4C __attribute__((sda));
-extern float D_L14_00161A50 __attribute__((sda));
-extern float D_L14_00161A54 __attribute__((sda));
-extern float D_L14_00161A58 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_racer_path_and_weapon.h"
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -227,7 +221,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     V_67e8 near;
-    V_67e8 v[4];
+    V_67e8 joint_transform_and_aim_vectors[4];
     V_67e8 ma[4];
     V_67e8 mb[4];
     V_67e8 mc[4];
@@ -277,7 +271,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         *(int *)(moby_data + 0x1C0) = frames_67e8(D_L14_00161A3C);
         *(int *)(moby_data + 0x1C4) = 0;
         racer_moby->command = 2;
-        joint_matrix_67e8(racer_moby, 4, v);
+        joint_matrix_67e8(racer_moby, 4, joint_transform_and_aim_vectors);
         joint_matrix_67e8(racer_moby, 5, ma);
         normalize_67e8(&ma[0], &ma[0], 1.0f);
         normalize_67e8(&ma[1], &ma[1], 1.0f);
@@ -285,7 +279,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         invert_67e8(mb, ma);
         mb[3].w = 1.0f;
         mb[3].x = mb[3].y = mb[3].z = 0.0f;
-        matmul_67e8(mc, mb, v);
+        matmul_67e8(mc, mb, joint_transform_and_aim_vectors);
         to_quat_67e8(moby_data + 0x1D0, mc);
     }
     yaw = racer_moby->rot.z;
@@ -296,13 +290,13 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         joint_matrix_67e8(racer_moby, 0, moby_data + 0xA0);
         blend = 1.0f;
         aim_timer_fraction = itof_67e8(*(int *)(moby_data + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C));
-        k = D_L14_00161A40;
+        k = weapon_aim_final_path_step;
         ti = ((RacerSeg_67e8 *)moby_data)->seg;
         tf = ((RacerSeg_67e8 *)moby_data)->frac;
-        track_67e8(path, &v[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
-        qcopy(moby_data + 0x1E0, &v[0]);
-        sub_67e8(&v[1], &v[0], &racer_moby->pos);
-        yaw = atan2_67e8(v[1].x, v[1].y);
+        track_67e8(path, &joint_transform_and_aim_vectors[0], &ti, &tf, 0, k + (1.0f - k) * aim_timer_fraction);
+        qcopy(moby_data + 0x1E0, &joint_transform_and_aim_vectors[0]);
+        sub_67e8(&joint_transform_and_aim_vectors[1], &joint_transform_and_aim_vectors[0], &racer_moby->pos);
+        yaw = atan2_67e8(joint_transform_and_aim_vectors[1].x, joint_transform_and_aim_vectors[1].y);
         turn = sub_rot_67e8(yaw, racer_moby->rot.z);
         if (turn > 1.2217305f) {
             turn = 1.2217305f;
@@ -328,12 +322,12 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             turn = (turn - 0.0f) * blend + 0.0f;
         }
         FUN_L00_001fff28(moby_data + 0x150, 2, turn);
-        joint_pos_67e8(racer_moby, 4, &v[2]);
-        *(u128_67e8 *)&v[3] = 0;
-        v[3].z = 1.0f;
-        v[3].w = 1.0f;
-        normalize_67e8(&ma[1], &v[1], 1.0f);
-        cross_67e8(&ma[2], &ma[1], &v[3]);
+        joint_pos_67e8(racer_moby, 4, &joint_transform_and_aim_vectors[2]);
+        *(u128_67e8 *)&joint_transform_and_aim_vectors[3] = 0;
+        joint_transform_and_aim_vectors[3].z = 1.0f;
+        joint_transform_and_aim_vectors[3].w = 1.0f;
+        normalize_67e8(&ma[1], &joint_transform_and_aim_vectors[1], 1.0f);
+        cross_67e8(&ma[2], &ma[1], &joint_transform_and_aim_vectors[3]);
         normalize_67e8(&ma[2], &ma[2], 1.0f);
         cross_67e8(&ma[0], &ma[2], &ma[1]);
         ma[3].x = ma[3].y = ma[3].z = 0.0f;
@@ -386,15 +380,15 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             ray_67e8(moby_data + 0xD0, moby_data + 0x1E0, 9, racer_moby, &ray);
         } else if (racer_moby->command == 2 || racer_moby->command == 4) {
             char *muzzle_flash_particle;
-            float r;
+            float muzzle_light_position_w;
             char *muzzle = moby_data + 0xD0;
-            scale_67e8(&ray, moby_data + 0xA0, D_L14_00161A44);
+            scale_67e8(&ray, moby_data + 0xA0, muzzle_flash_joint_axis_offset);
             add_67e8(&ray, &ray, muzzle);
             muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
                 char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
-                *(float *)(muzzle_flash_particle + 0xC) = (D_L14_00161A48 - 1000.0f) * blend + 1000.0f;
+                *(float *)(muzzle_flash_particle + 0xC) = (muzzle_flash_particle_full_blend_endpoint - 1000.0f) * blend + 1000.0f;
                 *(short *)(muzzle_flash_particle_state + 0x14) = ftoi_67e8(blend * 111.0f + 16.0f);
                 *(short *)(muzzle_flash_particle_state + 0x16) = 1;
                 lifetime_frames = frames_67e8(4);
@@ -404,17 +398,17 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             }
             qcopy(&ray.self, muzzle);
             ((float *)&ray.self)[2] -= 0.5f;
-            r = (D_L14_00161A4C - 0.1f) * blend + 0.1f;
+            muzzle_light_position_w = (muzzle_light_full_blend_position_w - 0.1f) * blend + 0.1f;
             if (*(int *)(moby_data + 0xF0) == -1) {
-                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, r, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
+                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, muzzle_light_position_w, 0.0f, muzzle_light_color_component_x, muzzle_light_color_component_y, muzzle_light_color_component_z);
             }
             if (*(int *)(moby_data + 0xF0) >= 0) {
                 float *muzzle_light_entry = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
                 qcopy(muzzle_light_entry + 4, &ray.self);
-                muzzle_light_entry[7] = r;
-                muzzle_light_entry[0] = D_L14_00161A50;
-                muzzle_light_entry[1] = D_L14_00161A54;
-                muzzle_light_entry[2] = D_L14_00161A58;
+                muzzle_light_entry[7] = muzzle_light_position_w;
+                muzzle_light_entry[0] = muzzle_light_color_component_x;
+                muzzle_light_entry[1] = muzzle_light_color_component_y;
+                muzzle_light_entry[2] = muzzle_light_color_component_z;
             }
         } else if (*(int *)(moby_data + 0xF0) != -1) {
             release_point_light_slot(*(int *)(moby_data + 0xF0));
@@ -424,8 +418,8 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
         release_point_light_slot(*(int *)(moby_data + 0xF0));
         *(int *)(moby_data + 0xF0) = -1;
     }
-    sub_67e8(&v[0], &D_0013F3D0_67e8, &racer_moby->pos);
-    target_yaw_offset = sub_rot_67e8(atan2_67e8(v[0].x, v[0].y), yaw);
+    sub_67e8(&joint_transform_and_aim_vectors[0], &D_0013F3D0_67e8, &racer_moby->pos);
+    target_yaw_offset = sub_rot_67e8(atan2_67e8(joint_transform_and_aim_vectors[0].x, joint_transform_and_aim_vectors[0].y), yaw);
     if (target_yaw_offset > 1.2217305f) {
         target_yaw_offset = 1.2217305f;
     } else if (target_yaw_offset < -1.2217305f) {
@@ -603,7 +597,7 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern float D_L14_00161AFC __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_tilting_platform.h"
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
@@ -627,7 +621,7 @@ void update_tilting_platform(struct Moby *moby) {
     } else {
         rotation = &moby->rot;
     }
-    FUN_L14_002de2b8_call(moby, D_L14_00161AFC, 8.0f);
+    FUN_L14_002de2b8_call(moby, unused_platform_tilt_argument, 8.0f);
     update_entity_matrix(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
@@ -643,8 +637,7 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern float D_L14_00161B00 __attribute__((sda));
-extern float D_L14_00161B04 __attribute__((sda));
+#include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -679,14 +672,14 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
             qcopy(target_up_vector, up);
         } else {
             subtract_vector_xyz(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
-            direction_scratch[2] = direction_scratch[2] + D_L14_00161B04;
+            direction_scratch[2] = direction_scratch[2] + platform_tilt_direction_z_offset;
             direction_length = vector_length_xyz(direction_scratch);
             if (direction_length == 0.0f) {
                 qcopy(target_up_vector, up);
             } else {
                 dt = dot_vectors_xyz(up, direction_scratch);
                 tilt_angle = 1.5707963705f - fast_arc_sin(dt / direction_length);
-                max_tilt_angle = D_L14_00161B00 * 0.0174532924f;
+                max_tilt_angle = platform_max_tilt_degrees * 0.0174532924f;
                 if (max_tilt_angle < tilt_angle) {
                     tilt_angle = max_tilt_angle;
                 }

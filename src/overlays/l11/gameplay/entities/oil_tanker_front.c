@@ -17,12 +17,12 @@ extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata
 extern char *D_L11_0015FFD8;
 extern char *path_table[] __asm__("D_L11_001B0EB0");
 extern float D_L11_001622CC __attribute__((sda));
-extern float D_L11_001622D0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal_3.h"
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
 extern float puffoid_hit_knockback_vertical_scale_gp __asm__("D_L11_001622D4") __attribute__((sda));
-extern float D_L11_001622D8 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal_2.h"
 extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC") __attribute__((sda));
-extern float D_L11_001622E0 __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal.h"
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
@@ -154,7 +154,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             patrol_vars->unk140 = FUN_001fa6d0(512.0f);
             patrol_vars->unk148 = 0.2f;
             patrol_vars->unk134 = 0.0f;
-            patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
+            patrol_vars->unk130 = puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
             patrol_vars->unk144 = 9;
             patrol_vars->unk15D = 0;
             switch (kind) {
@@ -171,7 +171,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_ARC:
             case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
-                patrol_vars->unk138 = D_L11_001622D8 * frame_time;
+                patrol_vars->unk138 = puffoid_hit_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_hit_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
@@ -191,8 +191,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_DEATH_KNOCKBACK: {
                 float yaw;
                 moby->flags &= ~0x1000;
-                patrol_vars->unk130 = D_L11_001622D0 * frame_time_sq;
-                patrol_vars->unk138 = D_L11_001622E0 * frame_time;
+                patrol_vars->unk130 = puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
+                patrol_vars->unk138 = puffoid_death_knockback_horizontal_scale_gp * frame_time;
                 patrol_vars->unk13C = puffoid_death_knockback_vertical_scale_gp * frame_time;
                 patrol_vars->unk170 = 7.5f;
                 patrol_vars->unk174 = 11.0f;
@@ -676,9 +676,7 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) {
         fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(chain_vars + 0x6C), x);
     lerp_vector(&moby->pos, current_path_point, pb, *(float *)(chain_vars + 0x6C));
 }
-extern float D_L11_00162324 __attribute__((sda));
-extern float D_L11_00162328 __attribute__((sda));
-extern s32 D_L11_0016232C __attribute__((sda));
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_oil_tanker_link_path_poses.h"
 extern s32 D_L11_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern s32 FUN_001fa6d0(float);
@@ -699,7 +697,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
     float spacing_reference_position[4];
     int i;
 
-    fast_vec_normalize(spacing_reference_position, &moby->rot_row0, D_L11_00162328);
+    fast_vec_normalize(spacing_reference_position, &moby->rot_row0, oil_tanker_spacing_reference_offset_gp);
     fast_vec_add(spacing_reference_position, spacing_reference_position, &moby->pos);
     for (i = 0; i < chain_vars->count; i++) {
         int segment_start_index = chain_vars->offsets[i];
@@ -712,7 +710,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
         float yaw0, yaw1, pitch0;
         float *qa, *qb, *qc; /* the points as raw rows: [4], [5], [6] = x, y, z */
 
-        while (segment_end_distance > D_L11_00162324) {
+        while (segment_end_distance > oil_tanker_link_spacing_threshold_gp) {
             segment_start_index = segment_end_index;
             segment_end_index = (segment_start_index + 1) % chain_path->count;
             segment_start_distance = segment_end_distance;
@@ -728,12 +726,12 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
                     if (D_L11_0015F5C4 == 0) {
                         FUN_0022da68(2, 0, chain_vars->links[i]);
                     }
-                    *(s32 *)(lv + 0x28) = scale_game_frames(D_L11_0016232C);
+                    *(s32 *)(lv + 0x28) = scale_game_frames(oil_tanker_link_marker_cooldown_frames_gp);
                 }
             }
         }
-        if (segment_start_distance > D_L11_00162324) {
-            segment_fraction = (segment_start_distance - D_L11_00162324) / (segment_start_distance - segment_end_distance);
+        if (segment_start_distance > oil_tanker_link_spacing_threshold_gp) {
+            segment_fraction = (segment_start_distance - oil_tanker_link_spacing_threshold_gp) / (segment_start_distance - segment_end_distance);
         } else {
             segment_fraction = 0.0f;
         }
@@ -769,7 +767,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
             pitch0);
         chain_vars->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * segment_fraction, yaw0);
         FUN_L00_00250df8(chain_vars->links[i]);
-        fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, D_L11_00162328);
+        fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, oil_tanker_spacing_reference_offset_gp);
         fast_vec_add(spacing_reference_position, spacing_reference_position, &chain_vars->links[i]->pos);
     }
 }
@@ -1125,11 +1123,13 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
 
-void FUN_L11_00318e98(struct Moby *moby, void *src) {
+void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FUN_L11_00318e98");
+
+void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
     char *moby_vars;
     moby->state = 2;
     moby_vars = (char *)moby->pvars;
-    qcopy(moby_vars, src);
+    qcopy(moby_vars, movement_step);
     *(int *)(moby_vars + 0x20) = scale_ticks(0x3C);
 }
 /* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
@@ -1903,7 +1903,7 @@ extern char D_L11_001FF758[];
 extern char D_L11_001F9A48[];
 extern char D_L11_001F4978[];
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
-extern float D_L11_001624F4;
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_layered_effect_and_queue_draw.h"
 extern char D_L11_00167680[];
 extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C") __attribute__((sda));
 extern float vector_length_xyz(void *);
@@ -1962,7 +1962,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         effect_bounds[0] = layered_effect_position_x_gp;
         effect_bounds[1] = layered_effect_position_y;
         effect_bounds[2] = layered_effect_position_z;
-        effect_bounds[3] = D_L11_001624F4;
+        effect_bounds[3] = layered_effect_bounds_radius;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))
@@ -2080,7 +2080,7 @@ extern char D_L11_00217760[];
 extern s32 D_L11_00217740[];
 extern s32 D_L11_00215268[];
 extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
-extern float D_L11_001625C4;
+#include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_distance_faded_effect_and_queue_draw.h"
 extern char D_L11_00167680[];
 extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_001625FC") __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
@@ -2139,7 +2139,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         effect_bounds[0] = distance_faded_effect_position_x_gp;
         effect_bounds[1] = distance_faded_effect_position_y;
         effect_bounds[2] = distance_faded_effect_position_z;
-        effect_bounds[3] = D_L11_001625C4;
+        effect_bounds[3] = distance_faded_effect_bounds_radius;
         if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
             return;
         if (!(180.0f < *(float *)(reference_position_base + 0x148)))

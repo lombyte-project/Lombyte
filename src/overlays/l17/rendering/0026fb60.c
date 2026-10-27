@@ -16,8 +16,8 @@ extern unsigned char *func_00218928_6fb60(int) __asm__("FUN_L00_002678b8");
 extern void func_001F9BF0_6fb60(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
-unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
-unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *vec) {
+unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");
+unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) {
     int header_value_input_base = func_002140B0_6fb60(5);
     unsigned char unscaled_header_value = func_001F9850_6fb60(header_value_input_base + 2);
     unsigned char header_byte_value = func_002140B0_6fb60(0xFF);
@@ -25,9 +25,9 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *vec) 
     if (record != 0) {
         char *record_data = (char *)record + 0x20;
         qcopy(record + 0x10, pos);
-        *(float *)(record_data + 0x10) = vec[0];
-        *(float *)(record_data + 0x14) = vec[1];
-        *(float *)(record_data + 0x18) = vec[2];
+        *(float *)(record_data + 0x10) = record_vector_source[0];
+        *(float *)(record_data + 0x14) = record_vector_source[1];
+        *(float *)(record_data + 0x18) = record_vector_source[2];
         if (parent != 0) {
             func_001F9BF0_6fb60(record_data, record + 0x10, &parent->pos);
             *(short *)(record + 0xA) = unscaled_header_value;

@@ -452,8 +452,8 @@ void update_ship_rocket(Moby *rocket) {
         func_001F9BD8_2E8040(&effect_scratch_vector, &effect_scratch_vector, &*(V4_2E8040 *)&rocket->pos);
         spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&particle_velocity, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (spawned_effect != 0) {
-            Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
-            spawned_effect[2] = *tex->p5C;
+            Tex_2E8040 *trail_particle_attribute_source = &D_L13_001B2680_2E8040;
+            spawned_effect[2] = *trail_particle_attribute_source->p5C;
             spawned_effect[3] = 0x48;
         }
         *(Q_2E8040 *)&trail_direction = 0;

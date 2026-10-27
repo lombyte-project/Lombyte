@@ -48,21 +48,13 @@ extern float deplanetizer_camera_quad_scale_ramp_start_value_gp __asm__("D_L18_0
 extern float deplanetizer_camera_quad_scale_ramp_end_value_gp __asm__("D_L18_00162494") __attribute__((sda));
 extern int deplanetizer_camera_quad_scale_ramp_end_frame_gp __asm__("D_L18_0016249C") __attribute__((sda));
 extern int deplanetizer_camera_quad_end_frame_gp __asm__("D_L18_001624A0") __attribute__((sda));
-extern int D_L18_001624A4 __attribute__((sda));
-extern int D_L18_001624A8 __attribute__((sda));
-extern int D_L18_001624AC __attribute__((sda));
-extern int D_L18_001624B0 __attribute__((sda));
-extern int D_L18_001624B4 __attribute__((sda));
-extern int D_L18_001624B8 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/update_deplanetizer_gun_sequence_effects_3.h"
 extern int deplanetizer_glow_alpha_ramp_end_frame_gp __asm__("D_L18_001624C0") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_start_frame_gp __asm__("D_L18_001624C4") __attribute__((sda));
 extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624C8") __attribute__((sda));
-extern float D_L18_001624D0 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/update_deplanetizer_gun_sequence_effects_2.h"
 /* First component of the vector passed at gp - 0x4720. */
-extern float D_L18_001624E0 __attribute__((sda));
-extern float D_L18_001624F0 __attribute__((sda));
-extern float D_L18_001624F4 __attribute__((sda));
-extern float D_L18_0016174C;
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/update_deplanetizer_gun_sequence_effects.h"
 extern int D_L18_001617F4, D_L18_001617F8;
 extern float D_L18_0015ED60;
 
@@ -228,12 +220,12 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     }
     if (D_L18_0016D260_update.state == 7) {
         if (D_L18_0016D260_update.n == 1) {
-            deplanetizer_glow_alpha_ramp_start_frame_gp = D_L18_001624A4;
-            deplanetizer_glow_alpha_ramp_end_frame_gp = D_L18_001624A8;
-            deplanetizer_three_quad_scale_ramp_start_frame_gp = D_L18_001624AC;
-            deplanetizer_three_quad_scale_ramp_end_frame_gp = D_L18_001624B0;
-            deplanetizer_camera_quad_start_frame_gp = D_L18_001624B4;
-            deplanetizer_camera_quad_scale_ramp_end_frame_gp = D_L18_001624B8;
+            deplanetizer_glow_alpha_ramp_start_frame_gp = deplanetizer_state_7_glow_alpha_ramp_start_frame_gp;
+            deplanetizer_glow_alpha_ramp_end_frame_gp = deplanetizer_state_7_glow_alpha_ramp_end_frame_gp;
+            deplanetizer_three_quad_scale_ramp_start_frame_gp = deplanetizer_state_7_three_quad_scale_ramp_start_frame_gp;
+            deplanetizer_three_quad_scale_ramp_end_frame_gp = deplanetizer_state_7_three_quad_scale_ramp_end_frame_gp;
+            deplanetizer_camera_quad_start_frame_gp = deplanetizer_state_7_camera_quad_start_frame_gp;
+            deplanetizer_camera_quad_scale_ramp_end_frame_gp = deplanetizer_state_7_camera_quad_scale_ramp_end_frame_gp;
             {
                 struct Moby *target;
                 for (target = D_L18_0015FFE4; target; target = target->next) {
@@ -289,8 +281,8 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                     fraction = convert_integer_to_float(i) / 12.0f;
                     interpolate_vector(&interpolated_joint_zero_position, &scratch.vectors.pos, &D_L18_00162530, fraction);
                     interpolate_vector(&interpolated_joint_two_position, &scratch.vectors.velocity, &D_L18_00162540, fraction);
-                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
-                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_two_position, &interpolated_joint_two_position, D_L18_0015F580, D_L18_001624D0, D_L18_001624D0 * 0.4f);
+                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, deplanetizer_joint_trail_base_size_gp, deplanetizer_joint_trail_base_size_gp * 0.4f);
+                    spawn_deplanetizer_gun_trail_effects(&interpolated_joint_two_position, &interpolated_joint_two_position, D_L18_0015F580, deplanetizer_joint_trail_base_size_gp, deplanetizer_joint_trail_base_size_gp * 0.4f);
                 }
                 qcopy(&D_L18_00162530, &scratch.vectors.pos);
                 qcopy(&D_L18_00162540, &scratch.vectors.velocity);
@@ -316,10 +308,10 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             color2 = 0x7F7F20;
             data[18] = fast_arc_tan(moby->rot_row1.x, moby->rot_row1.y);
             data[19] = fast_arc_tan(vector_length_xy(&moby->rot_row1), moby->rot_row1.z);
-            saved = D_L18_0016174C;
-            D_L18_0016174C = 24.0f;
+            saved = beam_effect_default_length;
+            beam_effect_default_length = 24.0f;
             update_beam_ring_rail_and_pulse_effects(moby);
-            D_L18_0016174C = saved;
+            beam_effect_default_length = saved;
             D_L18_001617F4 = color;
             D_L18_001617F8 = color2;
         }
@@ -335,18 +327,18 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
 burst:
     if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == frames_9780(586)) {
         char *matrix = D_L18_001679D0;
-        rot_9780(&scratch.vectors.pos, &D_L18_001624E0, matrix);
+        rot_9780(&scratch.vectors.pos, &deplanetizer_burst_local_spawn_offset_x_gp, matrix);
         add_9780(&scratch.vectors.pos, &scratch.vectors.pos, matrix - 0x210);
         qcopy(&scratch.vectors.velocity, matrix + 0x10);
         for (i = 0; i < 32; i++) {
             rotate_vector_about_axis(&direction, &scratch.vectors.velocity, D_L18_001679D0,
                 convert_integer_to_float(i) * 0.19634955f);
-            norm_9780(&direction, &direction, D_L18_001624F0 * D_L18_0015ED60);
+            norm_9780(&direction, &direction, deplanetizer_burst_velocity_scale_gp * D_L18_0015ED60);
             n = random_integer_below(16);
             if (random_integer_below(2))
             n = -n;
             effect = (unsigned char *)func_L00_0026DEA0_c(&scratch.vectors.pos, n, &direction,
-                0.0f, 1.0f, 1.01f, D_L18_001624F4, 0x7F7F7F7F);
+                0.0f, 1.0f, 1.01f, deplanetizer_burst_particle_size_gp, 0x7F7F7F7F);
             if (effect) {
                 unsigned char *data = effect + 0x20;
                 *(short *)(effect + 10) = frames_9780(60);
@@ -379,10 +371,10 @@ extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L18_00162550;
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
 extern volatile float D_L18_00162554;
 extern volatile float D_L18_00162558;
-extern float D_L18_0016255C;
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads.h"
 extern int deplanetizer_camera_quad_first_color_gp __asm__("D_L18_001624F8") __attribute__((sda));
 extern int deplanetizer_camera_quad_smaller_color_gp __asm__("D_L18_001624FC") __attribute__((sda));
 float D_L18_001DFB90[4][4] = {
@@ -401,7 +393,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     char *target;
 
     if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame_gp + 1)) {
-        D_L18_00162550 = 1.0f;
+        deplanetizer_camera_quad_local_offset_x = 1.0f;
         D_L18_00162554 = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
             tilt = -0.15f;
@@ -409,7 +401,7 @@ void draw_three_scaled_camera_facing_quads(void) {
             tilt = 0.15f;
         }
         D_L18_00162558 = tilt;
-        D_L18_0016255C = 1.0f;
+        deplanetizer_camera_quad_local_offset_w = 1.0f;
     }
     pk.b = tex_9780(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -417,7 +409,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.a = 0;
     gs_9780(0x4A, 0);
     gs_9780(0x47, 0x51001);
-    rot_9780(quad_transform[3], &D_L18_00162550, D_L18_001679D0);
+    rot_9780(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, D_L18_001679D0);
     target = D_L18_001679D0;
     target -= 0x210;
     add_9780(quad_transform[3], quad_transform[3], target);
@@ -987,7 +979,7 @@ extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
-extern float D_L18_00162600 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/gadgebot_update.h"
 extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
@@ -1094,7 +1086,7 @@ void gadgebot_update(unsigned char *moby) {
         if (target_distance < 1.5f) {
             moby[0x20] = 4;
             if (moby[0x53] != 2) {
-                int animation_frame_index = (int)D_L18_00162600;
+                int animation_frame_index = (int)gadgebot_sequence_2_start_frame_gp;
                 blend_moby_animation(moby, 2, animation_frame_index, scale_game_frames(5));
             }
         }
@@ -1215,10 +1207,7 @@ extern int gadgebot_glow_tint_end_gp __asm__("D_L18_00162610") __attribute__((sd
 extern float D_L18_001625FC __attribute__((sda));
 extern float gadgebot_glow_default_phase_speed_degrees_per_second_gp __asm__("D_L18_00162614") __attribute__((sda));
 extern float gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp __asm__("D_L18_00162618") __attribute__((sda));
-extern float D_L18_0016261C __attribute__((sda));
-extern float D_L18_00162620 __attribute__((sda));
-extern float D_L18_00162624 __attribute__((sda));
-extern float D_L18_00162628 __attribute__((sda));
+#include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/update_gadgebot_damage_target_and_glow.h"
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     SentryVars_c100 *sentry_vars = (SentryVars_c100 *)moby->pvars;
@@ -1272,10 +1261,10 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 fall_setup_value_or_path_slot_address = 0x200;
                 sentry_vars->unk90 = fall_setup_value_or_path_slot_address;
                 sentry_vars->unk98 = 0.5f;
-                sentry_vars->unk80 = D_L18_0016261C * frame_time_sq;
-                sentry_vars->unk84 = D_L18_00162620 * frame_time_sq;
-                sentry_vars->unk88 = D_L18_00162624 * frame_time;
-                sentry_vars->unk8C = D_L18_00162628 * frame_time;
+                sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
+                sentry_vars->unk84 = gadgebot_death_fall_horizontal_speed_approach_rate_gp * frame_time_sq;
+                sentry_vars->unk88 = gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
+                sentry_vars->unk8C = gadgebot_death_fall_base_vertical_speed_gp * frame_time;
                 reaction_value_or_path_address = 0x29;
                 sentry_vars->unk94 = reaction_value_or_path_address;
                 sentry_vars->unkAD = 0;

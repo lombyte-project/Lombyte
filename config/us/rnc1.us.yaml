@@ -1862,7 +1862,7 @@ segments:
           - [0x1279f0, c, ui/menus/save_data/start_memory_card_save]
           - [0x127a88, c, textbin/gameplay/state/load_level_zero_preserving_progress]
           - [0x127d84, textbin, text_gap_00226e04_before_fun_00226e08]
-          - [0x127d88, c, ui/menus/fun_00226e08]
+          - [0x127d88, c, ui/menus/tick_space_transition]
           - [0x127dd8, c, ui/menus/update_skill_point_and_gold_weapon_menu_entries]
           - [0x127ec4, textbin, text_gap_00226f44_before_fun_00226f50]
           - [0x127ed0, c, gameplay/state/clear_scene_state_buffers]

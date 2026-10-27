@@ -755,11 +755,20 @@ void snagglebeast_update(unsigned char *moby) {
     enum {
         SNAGGLEBEAST_INITIALIZE = 0,
         SNAGGLEBEAST_IDLE = 1,
+        SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST = 2,
+        SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK = 3,
+        SNAGGLEBEAST_SWEEP_BEAM_ATTACK = 4,
+        SNAGGLEBEAST_CHASE_TARGET = 5,
+        SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE = 6,
         SNAGGLEBEAST_TURN_TOWARD_TARGET = 7,
         SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO = 8,
         SNAGGLEBEAST_ROPE_ATTACK = 9,
         SNAGGLEBEAST_DEATH_EXPLOSION = 10,
+        SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT = 11,
+        SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE = 12,
+        SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE = 13,
         SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH = 14,
+        SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE = 15,
         SNAGGLEBEAST_POST_DEATH_CLEANUP = 16
     };
     enum {
@@ -769,6 +778,22 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_ROPE_EXTEND = 3,
         SNAGGLEBEAST_ROPE_RETRACT = 4,
         SNAGGLEBEAST_ROPE_RETURN_TO_IDLE = 5
+    };
+    enum {
+        SNAGGLEBEAST_PATH_SELECT_FIRST_POINT = 0,
+        SNAGGLEBEAST_PATH_SELECT_SECOND_POINT = 1,
+        SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT = 2
+    };
+    enum {
+        SNAGGLEBEAST_PHASE_BEFORE_FIRST_HEALTH_THRESHOLD = 0,
+        SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD = 1,
+        SNAGGLEBEAST_PHASE_FIRST_TIMED_DAMAGE_SEQUENCE = 2,
+        SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE = 3,
+        SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD = 4,
+        SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE = 5,
+        SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE = 6,
+        SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD = 7,
+        SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE = 8
     };
     Vec4 oldpos;
     ChaserSight sight;
@@ -849,11 +874,11 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     switch (moby[0xBC]) {
-    case 0:
+    case SNAGGLEBEAST_PHASE_BEFORE_FIRST_HEALTH_THRESHOLD:
         follow_target = 0;
         sight_ready = 0;
         break;
-    case 3:
+    case SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE:
         if (*(int *)(data + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
@@ -864,7 +889,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         sight_ready = 0;
         break;
-    case 6:
+    case SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE:
         if (*(int *)(data + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
@@ -874,16 +899,16 @@ void snagglebeast_update(unsigned char *moby) {
             follow_target = 0;
         }
         break;
-    case 1:
-    case 4:
-    case 7:
+    case SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD:
+    case SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD:
+    case SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD:
         timer194 = 0;
         sight_ready = 0;
         if (moby[0x20] != 1) timer19a = 0;
         break;
-    case 2:
-    case 5:
-    case 8:
+    case SNAGGLEBEAST_PHASE_FIRST_TIMED_DAMAGE_SEQUENCE:
+    case SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE:
+    case SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE:
         target_close = 0;
         timer194 = 0;
         sight_ready = 0;
@@ -1039,7 +1064,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 5;
         }
         break;
-    case 2: {
+    case SNAGGLEBEAST_ALTERNATING_JOINT_EMISSION_BURST: {
         float rot;
         rot = *(float *)(moby + 0x48);
         if (level_frame_count % 6 == 0) spawn_moby_point_offset_particle((char *)moby, 0, 600000.0f, 5.0f);
@@ -1066,7 +1091,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 3:
+    case SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK:
         FUN_L00_00258278((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 1.5707964f, frame_time_sq * 0.6981317f, frame_time * 1.0471976f);
         if (FUN_00214cc8(moby, 31.0f) || FUN_00214cc8(moby, 67.0f) || FUN_00214cc8(moby, 101.0f)) {
             float speed;
@@ -1108,7 +1133,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 1;
         }
         break;
-    case 4:
+    case SNAGGLEBEAST_SWEEP_BEAM_ATTACK:
         if (start_snagglebeast_turn_toward_target(moby, data, (float *)(((char *)&hero) + 0x80), 5, 0)) break;
         if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
@@ -1175,8 +1200,8 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 5:
-    case 6: {
+    case SNAGGLEBEAST_CHASE_TARGET:
+    case SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE: {
         float thr = 2.0f;
         float rot = *(float *)(moby + 0x48);
         float dd;
@@ -1349,7 +1374,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 12: {
+    case SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE: {
         int k;
         if (*(float *)(data + 0x20) <= convert_integer_to_float(*(short *)(data + 0x24) / 6)) {
             if (moby[0x53] != 8) FUN_00212f90(moby, 8, 0x35, random_int_between(0xA, 0xD));
@@ -1385,7 +1410,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     }
-    case 13: {
+    case SNAGGLEBEAST_WAIT_BEFORE_TIMED_DAMAGE: {
         int done = 0;
         if (FUN_0020c9e0(moby) > 10.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
@@ -1454,15 +1479,15 @@ void snagglebeast_update(unsigned char *moby) {
         } else {
             if (tick_countdown_32_alt((int *)(data + 0x160))) {
                 switch (data[0x19D]) {
-                case 0:
+                case SNAGGLEBEAST_PATH_SELECT_FIRST_POINT:
                     qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x10);
                     data[0x19C] &= 0xFE;
                     break;
-                case 1:
+                case SNAGGLEBEAST_PATH_SELECT_SECOND_POINT:
                     qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x20);
                     data[0x19C] &= 0xFD;
                     break;
-                case 2: {
+                case SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT: {
                     float d1 = vector_distance(((char *)&hero) + 0x80, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
                     if (vector_distance(((char *)&hero) + 0x80, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x40) < d1) {
                         qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
@@ -1479,7 +1504,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         break;
-    case 15: {
+    case SNAGGLEBEAST_RESTORE_TRANSFORM_AND_RESUME_CHASE: {
         int point;
         if (FUN_0020c9e0(moby) > 198.0f) {
             if (moby[0x53] != 0xA) FUN_00212f90(moby, 0xA, 0, 0);
@@ -1756,7 +1781,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(float *)(moby + 0x18) = 20.0f;
         }
         break;
-    case 11:
+    case SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT:
         if (moby[0x70] & 2) {
             if (target_above) {
                 *(int *)(data + 0x164) = 0;

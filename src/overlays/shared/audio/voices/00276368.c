@@ -94,7 +94,7 @@ extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
 extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern void FUN_L00_002a09d8(s32);
+extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
@@ -150,7 +150,7 @@ extern Own D_L00_001B6B38;
 extern Own D_L00_001B86C8;
 #include "rnc/overlay/shared/audio/voices/00276368_globals.h"
 extern f32 pause_menu_initial_vector_gp __asm__("D_L00_00160280") __attribute__((sda));
-extern f32 D_L00_00160290 __attribute__((sda));
+#include "rnc/overlay/shared/audio/voices/00276368_data/initialize_pause_menu.h"
 extern Vec4 D_L00_00180250;
 extern Vec4 D_L00_00180260;
 extern u8 D_L00_0016CA40[];
@@ -234,7 +234,7 @@ void initialize_pause_menu(void) {
     {
         u8 *row = (u8 *)&D_L00_00180250;
         fast_vec_scale(row, &pause_menu_initial_vector_gp, 1.0f);
-        qcopy(row - 0x10, &D_L00_00160290);
+        qcopy(row - 0x10, &pause_menu_vector_copy_source_gp);
         row += 0x20;
         qzero(row);
     }
@@ -255,7 +255,7 @@ void initialize_pause_menu(void) {
     update_view_context();
     reset_active_camera_position_and_basis();
     update_camera_view_matrices();
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     sce_gs_sync_v(0);
     D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
 
@@ -366,7 +366,7 @@ void close_pause_menu(void) {
 
     if (D_L00_001B9CF0.progress >= 10) {
 
-        FUN_L00_002a09d8(1);
+        vu1_sync_chain(1);
         vu1_init_chain();
         if (D_L00_001B9CF0.owner != 0) {
             for (i = 0; i < 14; i++) {
@@ -442,7 +442,7 @@ void close_pause_menu(void) {
             table[4] &= 0x7fffffff;
         }
         vu1_send_chain_render_buffer();
-        FUN_L00_002a09d8(1);
+        vu1_sync_chain(1);
     }
 }
 
@@ -854,7 +854,7 @@ void draw_pause_menu_pages(int transfer_only) {
         if (pass == 0) {
             restore_moby_class_dists();
             draw_mobys_clean_up();
-            FUN_L00_002a09d8(0x10);
+            vu1_sync_chain(0x10);
             patch_moby_gifs();
         }
     }

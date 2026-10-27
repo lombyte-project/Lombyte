@@ -1673,7 +1673,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     int p1;
                     int spark_random_frame_count;
                     int spark_vertical_offset_scale;
-                    int n2;
+                    int spark_jittered_frame_count;
                     FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&D_L00_001613F4);
                     random_vector(random_velocity_offset.f, 0.0f, *(float *)&D_L00_001613F8 * D_0015ED6C_2adb30);
                     FUN_001f9a10_2adb30(&spark_velocity, &random_velocity_offset, &spark_velocity);
@@ -1684,9 +1684,9 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     p1 = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
                     spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_001613FC * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
                     spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    n2 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
+                    spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)spark_vertical_offset_scale;
-                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, p1, spark_random_frame_count, spark_vertical_offset_scale, n2, *(int *)&D_L00_00161430);
+                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, p1, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
                 }
             }
         }
@@ -1815,7 +1815,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     int r2;
                     int g2;
                     int b2;
-                    int cnt;
+                    int blast_effect_count;
                     {
                         int k;
                         for (k = 0; k < 4; k++) {
@@ -1846,21 +1846,21 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     FUN_001f9c90_2adb30(&v, &v, D_0015ED6C_2adb30 * 10.0f);
                     FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                     if (camera_distance < 6.0f) {
-                        cnt = FUN_001fa6d0_2adb30(camera_distance) + 1;
+                        blast_effect_count = FUN_001fa6d0_2adb30(camera_distance) + 1;
                     } else {
-                        cnt = 4;
+                        blast_effect_count = 4;
                     }
                     g = 0.0f;
                     if (camera_distance < 7.0f) {
                         g = 7.0f - camera_distance;
                     }
-                    for (i = 0; i < cnt; i++) {
+                    for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
                         Colors6_2adb30 c1 = D_L00_001E9920;
-                        Colors6_2adb30 c2 = D_L00_001E9938;
+                        Colors6_2adb30 blast_effect_secondary_palette = D_L00_001E9938;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
-                                          FUN_L00_0025c0e8_2adb30(c2.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
+                                          FUN_L00_0025c0e8_2adb30(blast_effect_secondary_palette.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           s * 400000.0f,
                                           FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0xF), FUN_001f96f8_2adb30(0x14)),
                                           FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x19), FUN_001f96f8_2adb30(0x1E)),

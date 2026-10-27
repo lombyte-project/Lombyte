@@ -1,0 +1,10 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L18_GAMEPLAY_ENTITIES_ROCKET_DATA_UPDATE_BALLISTIC_RING_PROJECTILE_H
+#define LOMBYTE_RNC_OVERLAY_L18_GAMEPLAY_ENTITIES_ROCKET_DATA_UPDATE_BALLISTIC_RING_PROJECTILE_H
+
+#include "types.h"
+
+/* Scalar data for src/overlays/l18/gameplay/entities/rocket.c.
+ * Keep its include at this declaration block: SN small-data ordering matters. */
+extern int ballistic_ring_trail_spark_resource_selector_gp __asm__("D_L18_00161C44") __attribute__((sda));
+
+#endif /* LOMBYTE_RNC_OVERLAY_L18_GAMEPLAY_ENTITIES_ROCKET_DATA_UPDATE_BALLISTIC_RING_PROJECTILE_H */

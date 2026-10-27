@@ -788,7 +788,7 @@ void moving_platform_small_update(char *moby) {
     char *pc;
     char *initial_path_position;
     int *path;
-    char *pos;
+    char *platform_position;
     char *vel;
     char *target;
     int voice_slot_index;
@@ -885,8 +885,8 @@ void moving_platform_small_update(char *moby) {
         end = path_node_step < 0 ? 0 : count - 1;
         next = (*(int *)(data + 0xB0) + count + path_node_step) % count;
         node_off = next * 0x10;
-        pos = moby + 0x10;
-        subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), pos);
+        platform_position = moby + 0x10;
+        subtract_vector_xyz(data + 0xA0, (char *)path + (node_off + 0x10), platform_position);
         next_path_node_byte_offset = node_off;
         target = *(char **)(pc + 0x10) + 0x10;
         if (*(int *)(data + 0x108) != 0) {
@@ -895,7 +895,7 @@ void moving_platform_small_update(char *moby) {
             target += end * 0x10;
             node_off = 0; /* dead store: unused afterwards, but needed for the retail register allocation */
         }
-        if (FUN_001f9b48(pos, target) < *(float *)(data + 0xF4)) {
+        if (FUN_001f9b48(platform_position, target) < *(float *)(data + 0xF4)) {
             approach_value((float *)(data + 0xE4), frame_time * 0.5f,
                            *(float *)(data + 0xEC) * *(float *)(data + 0xEC) / *(float *)(data + 0xF4) * frame_time_sq * 0.5f);
         } else {
@@ -1322,12 +1322,12 @@ void red_ship_1_update(char *moby) {
     float zero[4];
     float old_rot[4];
     float old_pos[4];
-    float vec[4];
+    float culling_sphere_or_motion_delta[4];
     float position_delta[4];
     char *item;
     char *data;
     char *pm;
-    char *cur;
+    char *path_tangent_or_moby_position;
     char *initial_path_tangent;
     char *moby_position;
     char *path_node_base;
@@ -1346,9 +1346,9 @@ void red_ship_1_update(char *moby) {
     flag = 0;
     data = *(char **)(moby + 0x78);
     if (((unsigned char *)moby)[0x31] == 0) {
-        *(OvlQuad *)vec = *(OvlQuad *)(moby + 0x10);
-        vec[3] = 7.0f;
-        flag = fast_bsphere_check(vec, *(short *)(moby + 0x32)) == -1;
+        *(OvlQuad *)culling_sphere_or_motion_delta = *(OvlQuad *)(moby + 0x10);
+        culling_sphere_or_motion_delta[3] = 7.0f;
+        flag = fast_bsphere_check(culling_sphere_or_motion_delta, *(short *)(moby + 0x32)) == -1;
     }
     if (data == 0) {
         return;
@@ -1478,12 +1478,12 @@ void red_ship_1_update(char *moby) {
     case RED_SHIP_FOLLOW_PATH_SPLINE:
         *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
         *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
-        cur = data + 0xA0;
+        path_tangent_or_moby_position = data + 0xA0;
         if (*(float *)(data + 0x100) >= 1.0f) {
             *(float *)(data + 0x100) -= 1.0f;
             advanced_path_node_index = advance_path_node_index(pm);
             *(OvlQuad *)(data + 0x90) = *(OvlQuad *)(data + 0xA0);
-            compute_path_node_tangent(cur, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
+            compute_path_node_tangent(path_tangent_or_moby_position, (int *)pm, 1, *(float *)(data + 0x104), *(float *)(data + 0x108));
             *(OvlQuad *)(data + 0xB0) = *(OvlQuad *)(data + 0xC0);
             *(OvlQuad *)(data + 0xC0) = *(OvlQuad *)(*(char **)(pm + 0x10) + resolve_path_node_index(pm, advanced_path_node_index + 1) * 0x10 + 0x10);
         }
@@ -1491,7 +1491,7 @@ void red_ship_1_update(char *moby) {
                *(float *)(data + 0xBC);
         *(float *)(data + 0x13C) = add_rotations_29dba8(*(float *)(data + 0x13C), *(float *)(data + 0x138) * DEG_TO_RAD);
         *(OvlQuad *)(data + 0xE0) = *(OvlQuad *)(data + 0xD0);
-        evaluate_cubic_hermite_segment(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, cur);
+        evaluate_cubic_hermite_segment(*(float *)(data + 0x100) + step, data + 0xD0, data + 0xB0, data + 0xC0, data + 0x90, path_tangent_or_moby_position);
         if (!flag) {
             update_spline_moby_orientation(moby);
         } else {
@@ -1499,16 +1499,16 @@ void red_ship_1_update(char *moby) {
             *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(data + 0xE0),
                                                    *(float *)(data + 0xD4) - *(float *)(data + 0xE4));
         }
-        cur = moby + 0x10;
+        path_tangent_or_moby_position = moby + 0x10;
         *(float *)(data + 0x100) += step;
         *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
         if (!flag) {
-            add_moby_rotation_based_offsets(moby, cur);
+            add_moby_rotation_based_offsets(moby, path_tangent_or_moby_position);
         }
-        subtract_vector_xyz(position_delta, cur, old_pos);
-        *(OvlQuad *)vec = *(OvlQuad *)position_delta;
-        update_moby_emitter_effects(moby, vec, flag);
-        update_spline_moby_destruction_and_respawn(moby, vec, flag);
+        subtract_vector_xyz(position_delta, path_tangent_or_moby_position, old_pos);
+        *(OvlQuad *)culling_sphere_or_motion_delta = *(OvlQuad *)position_delta;
+        update_moby_emitter_effects(moby, culling_sphere_or_motion_delta, flag);
+        update_spline_moby_destruction_and_respawn(moby, culling_sphere_or_motion_delta, flag);
         break;
     }
 }
@@ -3080,10 +3080,10 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             pf = &moby_data->pf;
             if ((short)other->cls == 0x335 || (short)other->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
-                    float tmp[4];
-                    *(OvlQuad *)tmp = 0;
-                    probe_ground_height_cf((int)m, (char *)other, pf->path + 0x10 + i * 0x10, tmp,
-                                           pf->path + 0x10 + i * 0x10, tmp);
+                    float path_node_rotation[4];
+                    *(OvlQuad *)path_node_rotation = 0;
+                    probe_ground_height_cf((int)m, (char *)other, pf->path + 0x10 + i * 0x10, path_node_rotation,
+                                           pf->path + 0x10 + i * 0x10, path_node_rotation);
                 }
             }
             probe_ground_height_cf((int)m, (char *)other, (char *)m->pos, m->rot, (char *)m->pos,
@@ -3164,8 +3164,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
 }
 
 extern float D_L03_001618E0 __attribute__((sda));
-extern float D_L03_001618E4 __attribute__((sda));
-extern float D_L03_001618E8 __attribute__((sda));
+#include "rnc/overlay/l03/gameplay/entities/metropolis_train_locomotive_data/update_kerwan_path_enemy_hit_reaction.h"
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -3240,8 +3239,8 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case TURN_AWAY_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f18 = (D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                        D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f18 = (kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                        kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                             (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f))) *
                        0.5f;
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
@@ -3264,9 +3263,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case ANIMATION_FIVE_KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
-            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
+            moby_data->q.f18 = kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
@@ -3283,9 +3282,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         case ANIMATION_SIX_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;
             moby_data->q.f10 = frame_time_sq * 80.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
-            moby_data->q.f18 = D_L03_001618E4 / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
+            moby_data->q.f18 = kerwan_path_enemy_knockback_horizontal_distance / (2.0f * square_root(2.0f * D_L03_001618E0 * moby_data->q.f10) / (frame_time_sq * 80.0f)) +
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(D_L03_001618E0, 80.0f) / (frame_time_sq * 80.0f));
             moby_data->q.f1C = JUMP_SPEED(D_L03_001618E0, 80.0f);
             moby_data->q.i24 = 9;
@@ -3300,9 +3299,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             break;
         case DEATH_KNOCKBACK_RESPONSE:
             moby_data->q.f10 = frame_time_sq * 40.0f;
-            moby_data->q.f14 = D_L03_001618E8 * frame_time_sq;
+            moby_data->q.f14 = kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq;
             moby_data->q.f18 = 3.0f / (2.0f * square_root(2.0f * 2.0f * moby_data->q.f10) / (frame_time_sq * 40.0f)) +
-                       D_L03_001618E8 * frame_time_sq * 0.5f *
+                       kerwan_path_enemy_knockback_horizontal_deceleration * frame_time_sq * 0.5f *
                            (2.0f * JUMP_SPEED(2.0f, 40.0f) / (frame_time_sq * 40.0f));
             moby_data->q.f1C = JUMP_SPEED(2.0f, 40.0f);
             moby_data->q.i24 = 9;

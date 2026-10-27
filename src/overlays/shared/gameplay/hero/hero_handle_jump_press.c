@@ -95,7 +95,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_002293a8(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void FUN_L00_002118c8_002293a8(s32, f32) __asm__("FUN_L00_002118c8");
-void FUN_L00_002325e0_002293a8(s32, s32) __asm__("FUN_L00_002325e0");
+void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_002293a8(void *, f32) __asm__("FUN_L00_0025f730");
 s32 FUN_L00_00205000_002293a8(s32) __asm__("FUN_L00_00205000");
 void update_hero_locomotion_state(void) __asm__("FUN_L00_002293a8");
@@ -113,7 +113,7 @@ void update_hero_locomotion_state(void) {
     if (D_0013CAE0_002293a8 & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_002293a8(0xD, 2, -2.0f);
-        FUN_L00_002325e0_002293a8(3, 0x12);
+        hero_queue_sequence(3, 0x12);
         return;
     }
     hero_run_base = D_0013F350_002293a8;

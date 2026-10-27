@@ -61,7 +61,7 @@ extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
 void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023b6c0");
 
-void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) {
+void draw_cropped_hud_sprite(int frame_id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64 *packet_words;
     int *coordinate_offsets;
     int *vertex_depth_source;
@@ -73,7 +73,7 @@ void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_hei
     packet_words = (u64 *)D_L00_001611C0_23b6c0;
     packet_words[0] = 0x7400000000008001ULL;
     packet_words[1] = 0x5353106;
-    packet_words[2] = FUN_001ffa10_23b6c0(tex);
+    packet_words[2] = FUN_001ffa10_23b6c0(frame_id);
     packet_words[3] = 0x156;
     packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = 0;

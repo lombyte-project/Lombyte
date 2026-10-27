@@ -650,6 +650,8 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L12_00238900");
 
 void update_hero_motion_for_current_state(void) {
+
+
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
     s32 anim = moby->b53;
@@ -668,15 +670,15 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_LOOK:
     case HERO_STATE_STOP:
     case HERO_STATE_CROUCH:
-    case 0x17:
+    case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT:
     case 0x1D:
-    case 0x1E:
+    case HERO_STATE_LOOK_RELEASE_WAIT:
     case 0x1F:
     case HERO_STATE_DYING:
-    case 0x70:
-    case 0x71:
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT:
+    case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT:
     case 0x72:
-    case 0x80:
+    case HERO_STATE_DYING_SPEED_LIMITED:
         if (hero.wading != 0) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -837,9 +839,9 @@ void update_hero_motion_for_current_state(void) {
         }
         update_hero_water_height_and_bobbing();
         break;
-    case 0x33:
-    case 0x34:
-    case 0x35:
+    case HERO_STATE_SWIM:
+    case HERO_STATE_SWIM_IDLE:
+    case HERO_STATE_SWIM_WITH_CROUCH_INPUT:
         if (hero.state.current == 0x35) {
             FUN_L00_00216e48(5, MV(hero.moby), 0x13);
         } else {
@@ -881,7 +883,7 @@ void update_hero_motion_for_current_state(void) {
             f32 lo = frame_time * 0.6981317f;
             f32 m;
             f32 rate;
-            f32 accel;
+            f32 swim_pitch_smoothing_coefficient;
             f32 steer;
             f32 old;
             f32 diff;
@@ -893,7 +895,7 @@ void update_hero_motion_for_current_state(void) {
             steer = 0.0f;
             m = PD.f128 < PD.f12C ? PD.f12C : PD.f128;
             rate = frame_scale_sq * 0.2f;
-            accel = frame_scale_sq * 0.015f;
+            swim_pitch_smoothing_coefficient = frame_scale_sq * 0.015f;
             lo = lo + (frame_time * 1.2217305f - lo) * m;
             if ((PD.u1A0.d1A0 & 0xC0) == 0x80 || hero.state.step == 1) {
                 f32 s = PD.f12C * 1.5f;
@@ -974,7 +976,7 @@ void update_hero_motion_for_current_state(void) {
                 steer = 0.0f;
             }
             old = hero.motion.rot.f[1];
-            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, accel, rate, lo);
+            FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, swim_pitch_smoothing_coefficient, rate, lo);
             diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
@@ -1103,21 +1105,21 @@ void update_hero_motion_for_current_state(void) {
             AN.f3D8 = t * 1.1f;
         }
         break;
-    case 0x76: {
+    case HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY: {
         s32 n = 10 - hero.state_timer / 3;
         emit_hero_randomized_motion_effects(n > 8 ? 8 : n, 0);
         GROUND_FRICTION();
         clip_hero_horizontal_velocity(0);
         break;
     }
-    case 0x75:
+    case HERO_STATE_WATER_SURFACE_HURT:
         emit_hero_periodic_surface_effect(0xF, 0x1E);
         GROUND_FRICTION();
         clip_hero_horizontal_velocity(0);
         update_hero_water_height_and_bobbing();
         break;
-    case 0x6A:
-    case 0x82: {
+    case HERO_STATE_DROWN:
+    case HERO_STATE_DYING_ZERO_HEALTH: {
         f32 len = fast_vec_length(&hero.motion.momentum);
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
         fast_vec_normalize(&hero.motion.momentum, &hero.motion.momentum, len);
@@ -1146,8 +1148,8 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.velocity.f[2] = hero.drown_sink_speed;
         break;
     }
-    case 0x36:
-    case 0x37:
+    case HERO_STATE_WATER_SURFACE_MOVE:
+    case HERO_STATE_WATER_SURFACE_ENTRY:
         if (hero.state.current == 0x37) {
             emit_hero_periodic_surface_effect(0xF, 0x1E);
         }
@@ -1199,7 +1201,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     case 0x38:
     case 0x39:
-    case 0x3A:
+    case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
         if (MV(hero.ground_moby) != NULL && MV(hero.ground_moby)->hA6 == 0x155) {
             f32 d;
             f32 max_yaw_step;
@@ -1217,7 +1219,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
         break;
-    case 0x30: {
+    case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         s32 anim = -1;
         s32 frames = 0;
         if (hero.on_ice_ground != 0) {
@@ -1244,8 +1246,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x24:
-    case 0x2E:
+    case HERO_STATE_GRAPPLE_TARGET_ENTRY:
+    case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         hero.target_speed = 0.0f;
         speed_step(frame_time_sq * 12.6f, frame_time_sq * 12.6f);
@@ -1263,7 +1265,7 @@ void update_hero_motion_for_current_state(void) {
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, frame_time * 6.2831855f);
         }
         break;
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
         qcopy(&geometry_and_hit_descriptor_scratch, &MV(hero.grapple_target)->u10.v10);
@@ -1308,7 +1310,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         approach_value(&hero.tether_radius, hero.grapple_target_radius, frame_time * 10.0f);
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
@@ -1322,7 +1324,7 @@ void update_hero_motion_for_current_state(void) {
         subtract_vector_xyz(&hero.motion.velocity, &geometry_rotation_and_hit_descriptor_scratch, &hero.motion.pos);
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
         if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
@@ -1464,7 +1466,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         s32 t1;
         s32 t2;
         f32 r;
@@ -1700,12 +1702,12 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         switch (tb->kind) {
-        case 0:
+        case HERO_COMBO_KIND_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_frame < 18.0f) {
                 hero.target_speed = frame_time * 4.4f * hero.speed_scale;
             }
             break;
-        case 1:
+        case HERO_COMBO_KIND_STAGED_FORWARD_DECELERATION:
             if (hero.anim_changing != 0 || hero.anim_frame < 9.0f) {
                 if (hero.anim_frame > 8.0f) {
                     hero.target_speed = frame_time * 3.0f * hero.speed_scale;
@@ -1716,7 +1718,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
             break;
-        case 2:
+        case HERO_COMBO_KIND_CONDITIONALLY_FRAME_GATED_FORWARD_ADVANCE:
             if (hero.anim_changing != 0 || hero.anim_frame < 12.0f) {
                 hero.target_speed = frame_time * 3.7f * hero.speed_scale;
             }
@@ -1752,7 +1754,7 @@ void update_hero_motion_for_current_state(void) {
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         break;
     }
-    case 0x21:
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE:
     case HERO_STATE_WALL_BONK:
         approach_value(&hero.ground_speed, 0.0f, frame_time_sq * 24.0f);
         hero.motion.velocity.f[0] = fast_cos(hero.pushback_yaw) * hero.ground_speed;
@@ -1765,7 +1767,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = fast_add_rotations(hero.pushback_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.05f, frame_scale_sq * 0.2f, frame_time * 15.009831f);
         break;
-    case 0x20: {
+    case HERO_STATE_HELD_ITEM_ATTACK: {
         s32 t1;
         s32 t2;
         if (hero.heading_locked != 0 || MV(hero.melee_target) != NULL) {
@@ -1848,7 +1850,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x23:
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
         hero.target_speed = 0.0f;
         if (hero.heading_locked != 0) {
             hero.motion.move_yaw = hero.attack_target_yaw;
@@ -1865,7 +1867,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = hero.motion.velocity.f[2] - frame_time_sq * 54.0f;
         }
         break;
-    case 0x3F: {
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE: {
         f32 a;
         f32 f;
         update_hero_target_speed_from_stick();
@@ -1906,7 +1908,7 @@ void update_hero_motion_for_current_state(void) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         s32 slide = 0;
         f32 k;
         if (hero.base_condition != 0 && hero.water_depth < 0.25f) {
@@ -1998,7 +2000,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x2F: {
+    case HERO_STATE_RUN_CLEAR_VELOCITY_Z: {
         f32 a;
         update_hero_planar_movement_velocity();
         set_first_hero_easing_parameters(0.04f, 0.2f);
@@ -2041,8 +2043,8 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x18:
-    case 0x19:
+    case HERO_STATE_LEDGE_HANG_ENTRY:
+    case HERO_STATE_LEDGE_HANG:
         hero.motion.move_yaw = fast_add_rotations(hero.ledge_normal_yaw, 3.1415927f);
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.2831855f);
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
@@ -2050,8 +2052,8 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
         approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
-    case 0x1A:
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         f32 s;
         f32 a;
         f32 b;
@@ -2105,7 +2107,7 @@ void update_hero_motion_for_current_state(void) {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
     case HERO_STATE_FALL:
-    case 0x2D:
+    case HERO_STATE_ITEM_RELEASE_FALL:
         if (hero.state.current == 0x2D) {
             f32 t = 0.0f;
             if (hero.ground_distance > 4.0f) {
@@ -2132,7 +2134,7 @@ void update_hero_motion_for_current_state(void) {
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, -(frame_time * 50.0f));
         }
         break;
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         f32 len;
         hero.item_use_locked = 1;
         approach_value(&hero.fatal_fall_roll_rate, hero.pivot_rot_x_target, frame_time_sq * 8.726646f);
@@ -2146,7 +2148,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         s32 big;
         f32 sp;
         f32 m;
@@ -2196,7 +2198,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 8: {
+    case HERO_STATE_LAND: {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
@@ -2238,19 +2240,19 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
-    case 0xE:
-    case 0xF:
+    case HERO_STATE_STORED_HEADING_JUMP:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
+    case HERO_STATE_DOUBLE_JUMP:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
-    case 0x12:
-    case 0x1C:
+    case HERO_STATE_REPEATABLE_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
+    case HERO_STATE_LEDGE_JUMP:
     case 0x3C:
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         s32 state_timer_or_trail_control;
         s32 state_timer_threshold;
         if (hero.state.current == 0x1C && hero.pack_disabled == 0 && hero.items[3].item_id == 3) {
@@ -2474,12 +2476,12 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     case HERO_STATE_FIDGET:
-    case 0x67:
+    case HERO_STATE_AT_TARGET_POSE:
         clear_u64_value(&hero.motion.velocity);
         break;
-    case 0x53:
-    case 0x57:
-    case 0x59:
+    case HERO_STATE_VEHICLE_MODE_3_IDLE:
+    case HERO_STATE_VEHICLE_MODE_3_DYING:
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT:
         stop_hero_motion_without_forward_support(3.7f, 0.0f);
         stick_target(1.0f, 0);
         hero.target_speed = 0.0f;
@@ -2500,7 +2502,7 @@ void update_hero_motion_for_current_state(void) {
         steer_hero_planar_velocity(frame_time_sq * 25.0f);
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.resolved_velocity_z, frame_time_sq * 18.0f);
         break;
-    case 0x55:
+    case HERO_STATE_VEHICLE_MODE_3_FALL:
         stick_target(frame_time * 1.5f, 0);
         if (hero.move_lock_timer == 0) {
             hero_update_hop_movement();
@@ -2510,7 +2512,7 @@ void update_hero_motion_for_current_state(void) {
             hero.motion.velocity.f[2] = frame_time * -15.0f;
         }
         break;
-    case 0x54: {
+    case HERO_STATE_VEHICLE_MODE_3_RUN: {
         f32 d;
         f32 k;
         f32 g;
@@ -2541,7 +2543,7 @@ void update_hero_motion_for_current_state(void) {
         }
         break;
     }
-    case 0x56: {
+    case HERO_STATE_VEHICLE_MODE_3_HURT: {
         f32 len = vector_length_xy(&hero.motion.velocity);
         f32 planar_speed_before_damping = len;
         if (hero.air_frames.s != 0) {

@@ -95,8 +95,7 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern float D_L02_00161F7C __attribute__((sda));
-extern float D_L02_00161F80 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 #include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -228,8 +227,8 @@ void background_ship_1_update(char *moby) {
             }
         }
         func_0022ED80_r(0, 0, (int)moby);
-        scale_vector_xyz(tv, moby + 0xC0, D_L02_00161F7C * D_0015ED60);
-        tv[2] = tv[2] + D_L02_00161F80 * D_0015ED60;
+        scale_vector_xyz(tv, moby + 0xC0, background_ship_1_removal_effect_vector_scale_gp * D_0015ED60);
+        tv[2] = tv[2] + background_ship_1_removal_effect_vector_z_bias_gp * D_0015ED60;
         first_effect_frame_count = scale_game_frames(90);
         FUN_L00_00263fd8(moby, 0x5F2, (float *)(moby + 0x10), (void *)(moby + 0x40), first_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
         second_effect_frame_count = scale_game_frames(90);
@@ -370,8 +369,6 @@ extern float D_0015ED60_f __asm__("D_0015ED60");
 extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161FC4") __attribute__((sda));
 extern int background_ship_2_color_tween_start_gp __asm__("D_L02_00161FC8") __attribute__((sda));
 extern int background_ship_2_color_tween_end_gp __asm__("D_L02_00161FCC") __attribute__((sda));
-extern float D_L02_00161FD0 __attribute__((sda));
-extern float D_L02_00161FD4 __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
 extern void spawn_background_ship_2_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002ed420");
 extern void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *arg) __asm__("FUN_L02_002ed658");
@@ -499,8 +496,8 @@ void background_ship_2_update(char *moby) {
             }
         }
         func_0022ED80_r(0, 0, (int)moby);
-        scale_vector_xyz(tv, moby + 0xC0, D_L02_00161FD0 * D_0015ED60_f);
-        tv[2] = tv[2] + D_L02_00161FD4 * D_0015ED60_f;
+        scale_vector_xyz(tv, moby + 0xC0, background_ship_2_removal_effect_vector_scale_gp * D_0015ED60_f);
+        tv[2] = tv[2] + background_ship_2_removal_effect_vector_z_bias_gp * D_0015ED60_f;
         first_effect_frame_count = scale_game_frames(90);
         FUN_L00_00263fd8(moby, 0x5F6, (float *)(moby + 0x10), (void *)(moby + 0x40), first_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
         second_effect_frame_count = scale_game_frames(90);

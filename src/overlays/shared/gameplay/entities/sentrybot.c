@@ -69,9 +69,7 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern int D_L15_001613E8 __attribute__((sda));
-extern float D_L15_00161410 __attribute__((sda));
-extern int D_L15_00161414 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/sentrybot_update.h"
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void compute_selected_world_matrices(void *, int, void *, void *) __asm__("FUN_L00_0024f8f0");
 extern void FUN_L00_00257470(void *, int, int);
@@ -153,7 +151,7 @@ void sentrybot_update(unsigned char *moby) {
     int color;
     float color_pulse_sine;
 
-    if (D_L15_00161414 != 0)
+    if (sentrybot_update_disabled_gp != 0)
         return;
     data = *(unsigned char **)(moby + 0x78);
     if (D_L15_0015F5C4 == 2) {
@@ -665,9 +663,9 @@ void sentrybot_update(unsigned char *moby) {
                 j2 = 2;
                 compute_selected_world_matrices(moby, 1, &j2, selected_joint_world_matrix);
                 transform_scaled_vertex_batch((char *)moby, 1, &j2, (char *)emission_origin);
-                normalize_vector_xyz(va, selected_joint_world_matrix[1], D_L15_00161410 * frame_time);
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], sentrybot_emission_vector_speed_gp * frame_time);
                 subtract_vector_xyz(vb, data + 0x100, emission_origin);
-                normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
+                normalize_vector_xyz(vb, vb, sentrybot_emission_vector_speed_gp * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
@@ -723,9 +721,9 @@ void sentrybot_update(unsigned char *moby) {
                 j3 = 3;
                 compute_selected_world_matrices(moby, 1, &j3, selected_joint_world_matrix);
                 transform_scaled_vertex_batch((char *)moby, 1, &j3, (char *)emission_origin);
-                normalize_vector_xyz(va, selected_joint_world_matrix[1], -(D_L15_00161410 * frame_time));
+                normalize_vector_xyz(va, selected_joint_world_matrix[1], -(sentrybot_emission_vector_speed_gp * frame_time));
                 subtract_vector_xyz(vb, data + 0x100, emission_origin);
-                normalize_vector_xyz(vb, vb, D_L15_00161410 * frame_time);
+                normalize_vector_xyz(vb, vb, sentrybot_emission_vector_speed_gp * frame_time);
                 if (fast_difference_between_rotations(fast_arc_tan(va[0], va[1]),
                                                       fast_arc_tan(vb[0], vb[1])) > 0.7853982f ||
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
@@ -898,8 +896,8 @@ void sentrybot_update(unsigned char *moby) {
         lvl = *(short *)(data + 0x158) != 0;
     }
     tick = D_L15_0015F5CC;
-    if (tick != D_L15_001613E8 || hero.glow_pulse_level < lvl) {
-        D_L15_001613E8 = tick;
+    if (tick != sentrybot_alert_level_frame_stamp_gp || hero.glow_pulse_level < lvl) {
+        sentrybot_alert_level_frame_stamp_gp = tick;
         hero.glow_pulse_level = lvl;
     }
     alpha = 0x80;
@@ -913,11 +911,11 @@ void sentrybot_update(unsigned char *moby) {
                  -3.1415927f);
     {
         int color_pulse_red_offset = func_001FA898_r(color_pulse_sine * 20.0f);
-        int g0 = func_001FA898_r(color_pulse_sine * 70.0f);
-        int b0 = func_001FA898_r(color_pulse_sine * 10.0f);
+        int color_pulse_green_offset = func_001FA898_r(color_pulse_sine * 70.0f);
+        int color_pulse_blue_offset = func_001FA898_r(color_pulse_sine * 10.0f);
         int cr = color_pulse_red_offset + 0x32;
-        int cb = b0 + 0x14;
-        int cg = g0 + 0xB4;
+        int cb = color_pulse_blue_offset + 0x14;
+        int cg = color_pulse_green_offset + 0xB4;
         if (cr > 0xFF)
             cr = 0xFF;
         if (cg > 0xFF)
@@ -1297,14 +1295,7 @@ void update_sentrybot_joint_aim(void *mv) {
 }
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_globals.h"
 extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
-extern float D_L15_001613F0 __attribute__((sda));
-extern float D_L15_001613F4 __attribute__((sda));
-extern float D_L15_001613F8 __attribute__((sda));
-extern float D_L15_001613FC __attribute__((sda));
-extern float D_L15_00161400 __attribute__((sda));
-extern float D_L15_00161404 __attribute__((sda));
-extern float D_L15_00161408 __attribute__((sda));
-extern float D_L15_0016140C __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_sentrybot_hit_response_and_target_visibility.h"
 extern char D_001413F4[];
 extern short D_0013F658[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
@@ -1367,7 +1358,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         if (*(float *)(data + 0x20) <= 0.0f)
             code = 1;
         amount = convert_float_to_int_a570(512.0f);
-        speed = D_L15_001613F0 * frame_time_sq;
+        speed = sentrybot_knockback_gravity_gp * frame_time_sq;
         *(int *)(data + 0x90) = amount;
         *(float *)(data + 0x98) = 0.5f;
         *(int *)(data + 0x94) = 9;
@@ -1395,12 +1386,12 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 float vz;
                 float fall_speed;
                 step = frame_time;
-                fall_speed = D_L15_001613F0;
+                fall_speed = sentrybot_knockback_gravity_gp;
                 step_sq = frame_time_sq;
                 fall_speed = fall_speed * step_sq;
-                forward = D_L15_001613FC * step;
-                lateral = D_L15_001613F8 * step;
-                vz = D_L15_00161400 * step;
+                forward = sentrybot_recoverable_knockback_horizontal_speed_gp * step;
+                lateral = sentrybot_recoverable_knockback_vertical_speed_gp * step;
+                vz = sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp * step;
                 *(float *)(data + 0x80) = fall_speed;
                 *(float *)(data + 0x88) = forward;
                 *(float *)(data + 0x8C) = lateral;
@@ -1430,12 +1421,12 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 float vz;
                 float fall_speed;
                 step = frame_time;
-                fall_speed = D_L15_001613F4;
+                fall_speed = sentrybot_death_knockback_gravity_gp;
                 step_sq = frame_time_sq;
                 fall_speed = fall_speed * step_sq;
-                forward = D_L15_00161408 * step;
-                lateral = D_L15_00161404 * step;
-                vz = D_L15_0016140C * step;
+                forward = sentrybot_death_knockback_horizontal_speed_gp * step;
+                lateral = sentrybot_death_knockback_vertical_speed_gp * step;
+                vz = sentrybot_death_knockback_horizontal_speed_approach_rate_gp * step;
                 *(unsigned short *)(moby + 0x34) &= 0xEFFF;
                 *(float *)(data + 0x80) = fall_speed;
                 *(float *)(data + 0x88) = forward;
@@ -1612,8 +1603,7 @@ extern float rocket_trail_spark_frame_count_range_start_gp __asm__("D_L15_001614
 extern float rocket_trail_spark_third_frame_count_range_start_gp __asm__("D_L15_00161438") __attribute__((sda));
 extern float rocket_trail_spark_first_velocity_scale_gp __asm__("D_L15_00161448") __attribute__((sda));
 extern int rocket_trail_spark_second_configuration_word_gp __asm__("D_L15_0016141C") __attribute__((sda));
-extern float D_L15_00161420 __attribute__((sda));
-extern float D_L15_00161424 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/spawn_rocket_trail_spark.h"
 extern float rocket_trail_spark_frame_count_range_end_gp __asm__("D_L15_0016142C") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_start_gp __asm__("D_L15_00161430") __attribute__((sda));
 extern float rocket_trail_spark_second_frame_count_range_end_gp __asm__("D_L15_00161434") __attribute__((sda));
@@ -1644,8 +1634,8 @@ void spawn_rocket_trail_spark(char *moby) {
     scale_vector_xyz(spark_b, data, rocket_trail_spark_second_velocity_scale_gp);
     random_vector(noise, noise_radius, noise_radius);
     add_vector_xyz(spark_b, spark_b, noise);
-    spark_a[3] = D_L15_00161420;
-    spark_b[3] = D_L15_00161424;
+    spark_a[3] = rocket_trail_spark_first_vector_fourth_component_gp;
+    spark_b[3] = rocket_trail_spark_second_vector_fourth_component_gp;
     frame_count = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(rocket_trail_spark_frame_count_range_start_gp, rocket_trail_spark_frame_count_range_end_gp)));
     second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
@@ -1752,12 +1742,12 @@ extern f32 vector_length_xy_c2(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_L15_0015F5D0;
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile_2.h"
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(float *, float *) __asm__("FUN_001f9b80");
-extern int D_L15_0015F30C;
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile.h"
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
@@ -1838,7 +1828,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
         float dv[4];
         float tp[4];
         float ip[4];
-        if (D_L15_0015F30C != 0 && target_moby != 0) {
+        if (missile_target_reticle_enabled != 0 && target_moby != 0) {
             float scaled_target_distance = fast_vec_dist(D_L15_001673C0, target_moby->pos) / 50.0f;
             qcopy(delta, target_moby->pos);
             delta[2] = delta[2] + missile_data->zoff;
@@ -2066,13 +2056,13 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                     Cols_29E8A0 c2 = D_L15_001E2678;
                     int *p1 = &c1.c[random_integer_below_c3(6)];
                     int *p2 = &c2.c[random_integer_below_c3(6)];
-                    int l1 = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
-                    int l2 = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E));
-                    int l3, l4;
-                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, *p1, *p2, 400000.0f, l1, l2, sz, 0, 0);
-                    l3 = FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(0xA));
-                    l4 = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
-                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, 0x7FFFFFFF, 0xFFFFFF, 400000.0f, l3, l4, sz * 0.5f, 0, 0);
+                    int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+                    int colored_burst_effect_secondary_frame_count = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E));
+                    int white_burst_effect_frame_count, white_burst_effect_secondary_frame_count;
+                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, *p1, *p2, 400000.0f, colored_burst_effect_frame_count, colored_burst_effect_secondary_frame_count, sz, 0, 0);
+                    white_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(0xA));
+                    white_burst_effect_secondary_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+                    FUN_L00_0026a9f0(missile_moby->pos, burst_drift_velocity, 0x7FFFFFFF, 0xFFFFFF, 400000.0f, white_burst_effect_frame_count, white_burst_effect_secondary_frame_count, sz * 0.5f, 0, 0);
                     i++;
                 }
             }
@@ -2095,7 +2085,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                     FUN_L00_0026a4c8(missile_moby->pos, burst_particle_velocity, *p1, *p2, FUN_L00_00257b90(scale_game_frames(0x14), scale_game_frames(0x23)), 200000.0f);
                 }
             }
-            if (D_L15_0015F5D0 < 0.95f && 9.0f < effect_reference_distance) {
+            if (missile_distant_gray_glow_gate < 0.95f && 9.0f < effect_reference_distance) {
                 ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 4.0f, scale_game_frames(0xF), 0x7F, 0x7F, 0x7F, 0x20);
                 ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 4.0f, scale_game_frames(0x18), 0x7F, 0x7F, 0x7F, 0x20);
             }
@@ -2802,7 +2792,7 @@ extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
-extern int D_L15_0015F3F8;
+#include "rnc/overlay/shared/gameplay/entities/sentrybot_data/draw_spark_emitter_effect_quads.h"
 extern int D_L15_001CE230[];
 extern float D_L15_001CE250[][2];
 extern int D_L15_001CE290[][2];
@@ -2898,7 +2888,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                 float radians;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
-                angle = integer_to_float_2a3138(D_L15_0015F3F8 % limit)
+                angle = integer_to_float_2a3138(spark_emitter_uv_phase_input % limit)
                     / *frequency - 180.0f;
                 frequency++;
                 value = *(int *)((char *)D_L15_001CE290 + waveform);

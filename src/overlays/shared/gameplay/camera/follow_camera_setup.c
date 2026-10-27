@@ -114,14 +114,11 @@ extern s32 D_L00_00177F00[];
 extern s32 D_0013CAE0[];
 extern f32 D_L00_00166E10[];
 extern f32 D_L00_0015EF40;
-extern s32 D_L00_00161D94 __attribute__((sda));
-extern f32 D_L00_00161D84 __attribute__((sda));
-extern f32 D_L00_00161D88 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides_2.h"
 extern f32 follow_camera_vehicle_offset_scale_gp __asm__("D_L00_00161D98") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_distance_gp __asm__("D_L00_00161D9C") __attribute__((sda));
 extern f32 follow_camera_vehicle_orbit_height_gp __asm__("D_L00_00161DA0") __attribute__((sda));
-extern f32 D_L00_00161DA4 __attribute__((sda));
-extern f32 D_L00_00161DA8 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides.h"
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -205,8 +202,8 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
         FUN_L00_002e8620();
         camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
-        camera_spring_state->f3C = D_L00_00161DA8;
-        camera_spring_state->f44 = D_L00_00161DA4;
+        camera_spring_state->f3C = follow_camera_vehicle_collision_probe_scale_gp;
+        camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;
     }
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
         set_follow_camera_orbit_clamp_mode(0);
@@ -252,7 +249,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         mm->h14 = 0; }
         return;
     }
-    if (D_L00_00161D94 == 0) return;
+    if (follow_camera_rotation_slide_enabled_gp == 0) return;
     m = camera_moby->m;
     sum = 0.0f;
     {
@@ -272,14 +269,14 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     { f32 c = sum * 5.0f;
     if (1.0f < c) c = 1.0f;
     c = 1.0f - c;
-    if (c < D_L00_00161D84) m->h12 = scale_game_frames(0x20); }
+    if (c < follow_camera_rotation_slide_trigger_threshold_gp) m->h12 = scale_game_frames(0x20); }
     if (m->h12 != 0) {
         if (fast_dec_timer_s16(&m->h12)) m->h14 = scale_game_frames(0x2D);
         follow_camera_start_slide();
         k = ++m->h16;
         if (scale_game_frames(0x1E) < k) m->h16 = scale_game_frames(0x1E);
         rotation_or_blend_value = convert_integer_to_float(m->h16) / convert_integer_to_float(scale_game_frames(0x1E));
-        follow_camera_set_lateral_spring((D_L00_00161D88 - 0.015f) * rotation_or_blend_value + 0.015f, 0.2f);
+        follow_camera_set_lateral_spring((follow_camera_rotation_slide_lateral_spring_target_gp - 0.015f) * rotation_or_blend_value + 0.015f, 0.2f);
         D_L00_0015EF40 = 0.0f;
     } else if (m->h14 != 0) {
         fast_dec_timer_s16(&m->h14);

@@ -118,7 +118,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
     float beam_endpoint_position_scratch[4];
     float hit_descriptor_and_vector_scratch[12];
     char *beam_vars;
-    char *e;
+    char *beam_endpoint_record;
     int flag;
     int i;
     int k;
@@ -208,10 +208,10 @@ void update_fleet_beam(struct Moby *beam_moby) {
         normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&D_L17_00161498 - 0.2f));
         normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&D_L17_00161498);
         add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
-        e = *(char **)(beam_vars + 0x60);
+        beam_endpoint_record = *(char **)(beam_vars + 0x60);
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
-        add_vector_xyz(beam_geometry_scratch, e + 0x10, beam_endpoint_and_offset_scratch);
-        *(OvlQuad *)(e + 0x10) = *(OvlQuad *)beam_geometry_scratch;
+        add_vector_xyz(beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
+        *(OvlQuad *)(beam_endpoint_record + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_endpoint_and_offset_scratch;
     }
@@ -697,9 +697,9 @@ void update_fleet_rotating_radial_effect(char *moby) {
     float particle_direction_length;
     float base_elevation_angle;
     float elevation_angle_offset;
-    float f20;
+    float particle_direction_sign_or_minimum_speed;
     int particle_lifetime;
-    char *w;
+    char *particle_vector_scratch_destination;
 
     ring_vars = *(float **)(moby + 0x78);
     if (hero_is_in_special_state() != 0) {
@@ -761,29 +761,29 @@ void update_fleet_rotating_radial_effect(char *moby) {
                         transform_vector_by_basis(spF0, spF0, (moby + 0xC0));
                         {
                             for (k = 0; k < *(int *)&D_L17_00161B88; k++) {
-                                f20 = -1.0f;
+                                particle_direction_sign_or_minimum_speed = -1.0f;
                                 if (rand() & 1)
-                                    f20 = 1.0f;
+                                    particle_direction_sign_or_minimum_speed = 1.0f;
                                 particle_lifetime = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
                                     *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
                                 if (particle_lifetime <= 0)
                                     particle_lifetime = 1;
                                 subtract_vector_xyz(particle_vector_scratch, spC0, (moby + 0x10));
                                 spF0[0] = particle_vector_scratch[0];
-                                scale_vector_xyz(spF0, spF0, f20);
+                                scale_vector_xyz(spF0, spF0, particle_direction_sign_or_minimum_speed);
                                 particle_direction_length = vector_length_xyz(spF0);
-                                if (f20 < 0.0f)
+                                if (particle_direction_sign_or_minimum_speed < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
-                                w = (char *)particle_vector_scratch;
-                                FUN_L00_001ff290(w, spE0, spF0);
-                                f20 = frame_time;
-                                f20 *= 10.0f;
+                                particle_vector_scratch_destination = (char *)particle_vector_scratch;
+                                FUN_L00_001ff290(particle_vector_scratch_destination, spE0, spF0);
+                                particle_direction_sign_or_minimum_speed = frame_time;
+                                particle_direction_sign_or_minimum_speed *= 10.0f;
                                 normalize_vector_xyz(
                                     spF0, spF0,
-                                    random_float_between(f20, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
+                                    random_float_between(particle_direction_sign_or_minimum_speed, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
                                 spawn_moving_hero_relative_alpha_fade_particle((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
@@ -830,9 +830,7 @@ extern float fleet_radial_uv_scroll_rate_gp __asm__("D_L17_00161BBC") __attribut
 extern float FUN_L00_00200260(float, float);
 extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
 extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribute__((sda));
-extern int D_L17_00161B9C __attribute__((sda));
-extern int D_L17_00161BA0 __attribute__((sda));
-extern int D_L17_00161BA4 __attribute__((sda));
+#include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_data/draw_fleet_scrolling_radial_quads.h"
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
 extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -857,8 +855,8 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     moby_transform_matrix[15] = 1.0f;
     quad_primitive.tex = get_effect_texture(0x28);
     quad_primitive.q80 = 0xFF9000000260L;
-    quad_primitive.alpha = (long)fleet_radial_alpha_base_value_gp | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) |
-              ((long)D_L17_00161BA4 << 6) | 0x8000000000L;
+    quad_primitive.alpha = (long)fleet_radial_alpha_base_value_gp | ((long)fleet_radial_blend_subtract_color_selector << 2) | ((long)fleet_radial_blend_alpha_factor_selector << 4) |
+              ((long)fleet_radial_blend_add_color_selector << 6) | 0x8000000000L;
     quad_primitive.z70 = 0;
     for (pass = 0; pass < 2; pass++) {
         for (k = 0; k < 4; k++) {
@@ -930,7 +928,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         BOBBING_INITIALIZE = 0,
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1
     };
-    float v[4];
+    float zero_vector[4];
     float hit_descriptor[12];
     float pos[4];
     float surface_query_scratch[4];
@@ -942,11 +940,11 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     struct Hero *hero_contact_context;
     float yy;
     int i;
-    clear_vector(v);
+    clear_vector(zero_vector);
     hit_record = find_moby_hit(moby, 0x230000, 0);
     hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
-        func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
+        func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
         mark_moby_for_removal_u(moby);
         return;
@@ -961,14 +959,14 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         update_moby_vertical_oscillation(*(float *)&D_L17_00161D2C,
                          *(float *)&D_L17_00161D30 * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
-        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, v);
+        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, zero_vector);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
         hero_contact_context = &hero;
         if (((char *)hero_contact_context->coll_hit_moby) == moby || ((char *)hero_contact_context->unk240) == moby ||
             func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
-                func_L00_0025F4A8_alt(moby, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
+                func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
                 moby->pos.z = moby->pos.z + 1.0f;
                 yy = resolve_camera_surface_height(&moby->pos.x, surface_query_scratch);

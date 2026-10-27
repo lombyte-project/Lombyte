@@ -531,16 +531,7 @@ extern float D_L16_001D9A50[4][2];
 extern float D_L16_001D97A0[4][2];
 extern float D_L16_001D9A90[4][4];
 extern float D_L16_001D9800[4][4];
-extern int D_L16_00161E18 __attribute__((sda));
-extern int D_L16_00161E1C __attribute__((sda));
-extern int D_L16_00161E20 __attribute__((sda));
-extern int D_L16_00161E28 __attribute__((sda));
-extern int D_L16_00161E2C __attribute__((sda));
-extern int D_L16_00161E30 __attribute__((sda));
-extern int D_L16_00161E34 __attribute__((sda));
-extern int D_L16_00161E38 __attribute__((sda));
-extern int D_L16_00161E3C __attribute__((sda));
-extern int D_L16_00161E40 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/armed_transport_data/draw_grindrail_barrier_effect.h"
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
@@ -561,14 +552,14 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     int i;
     qcopy(rotation, barrier_moby + 0x40);
     qcopy(transform[3], barrier_moby + 0x10);
-    quad.texture = get_effect_texture(*(int *)&D_L16_00161E38);
+    quad.texture = get_effect_texture(*(int *)&grindrail_barrier_ring_texture_id);
     u = &quad.uv[0][0];
     v = &quad.uv[0][1];
     quad.giftag = 0xFF9000000260UL;
-    quad.primitive = *(int *)&D_L16_00161E28;
-    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E2C << 2;
-    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E30 << 4;
-    quad.primitive |= (unsigned long)*(int *)&D_L16_00161E34 << 6;
+    quad.primitive = *(int *)&grindrail_barrier_blend_minuend_selector;
+    quad.primitive |= (unsigned long)*(int *)&grindrail_barrier_blend_subtrahend_selector << 2;
+    quad.primitive |= (unsigned long)*(int *)&grindrail_barrier_blend_multiplier_selector << 4;
+    quad.primitive |= (unsigned long)*(int *)&grindrail_barrier_blend_addend_selector << 6;
     quad.primitive |= 0x8000000000UL;
     quad.flags = 0;
     color_base = quad.color;
@@ -577,18 +568,18 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         for (k = 0; k < 4; ++k) {
             u[k * 2] = D_L16_001D9780[k][0];
             v[k * 2] = D_L16_001D9780[k][1];
-            color_base[k] = *(int *)&D_L16_00161E1C;
+            color_base[k] = *(int *)&grindrail_barrier_ring_base_color;
             qcopy(quad.position[k], D_L16_001D97C0[k]);
             scale_vector_xyz(quad.position[k], quad.position[k], scale);
         }
     }
     angles = data->cardinal_angles;
-    angle_step = 6.2831855f / convert_integer_to_float(*(int *)&D_L16_00161E40);
-    phase_step = 3.0f / convert_integer_to_float(*(int *)&D_L16_00161E40);
+    angle_step = 6.2831855f / convert_integer_to_float(*(int *)&grindrail_barrier_ring_quad_count);
+    phase_step = 3.0f / convert_integer_to_float(*(int *)&grindrail_barrier_ring_quad_count);
     phase = data->phase;
     while (phase < 0.0f) phase += 1.0f;
     while (phase > 1.0f) phase -= 1.0f;
-    for (i = 0; i < *(int *)&D_L16_00161E40;) {
+    for (i = 0; i < *(int *)&grindrail_barrier_ring_quad_count;) {
         float blend;
         int color, j;
         rotation[0] = fast_add_rotations_c(data->yaw, (float)i * angle_step);
@@ -596,16 +587,16 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         if (phase > 0.5f) blend = (-phase + 1.0f) + (-phase + 1.0f);
         else blend = phase + phase;
         ++i;
-        color = fast_tween_color(*(int *)&D_L16_00161E18, *(int *)&D_L16_00161E1C, blend);
+        color = fast_tween_color(*(int *)&grindrail_barrier_ring_blend_start_color, *(int *)&grindrail_barrier_ring_base_color, blend);
         for (j = 1; j >= 0; --j) color_base[j] = color;
         phase += phase_step;
         if (phase > 1.0f) phase -= 1.0f;
         draw_geometry_quad(&quad, transform, 0);
     }
-    quad.texture = get_effect_texture(*(int *)&D_L16_00161E3C);
+    quad.texture = get_effect_texture(*(int *)&grindrail_barrier_accent_texture_id);
     {
         int k;
-        int solid_color = *(int *)&D_L16_00161E20;
+        int solid_color = *(int *)&grindrail_barrier_accent_color;
         for (k = 0; k < 4; ++k) {
             u[k * 2] = D_L16_001D97A0[k][0];
             v[k * 2] = D_L16_001D97A0[k][1];
@@ -654,22 +645,22 @@ extern short *D_L16_001ABCC0[];
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 extern float D_L16_00161D78;
-void group_trigger_nearest(int idx) __asm__("FUN_L16_002e5d30");
-void group_trigger_nearest(int idx) {
-    short *p = D_L16_001ABCC0[idx];
+void group_trigger_nearest(int moby_list_index) __asm__("FUN_L16_002e5d30");
+void group_trigger_nearest(int moby_list_index) {
+    short *moby_list_entry = D_L16_001ABCC0[moby_list_index];
     char *best = 0;
     float bestd = 50000.0f;
-    if (p != 0) {
+    if (moby_list_entry != 0) {
         do {
-            char *m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
-            if (*(short *)(m + 0xA6) != 0x5A3) {
-                float d = func_001F9D10_2E7198(D_0013E533 + 0xE9D, m + 0x10);
-                if (d < bestd) {
-                    bestd = d;
-                    best = m;
+            char *candidate_moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
+            if (*(short *)(candidate_moby + 0xA6) != 0x5A3) {
+                float candidate_distance = func_001F9D10_2E7198(D_0013E533 + 0xE9D, candidate_moby + 0x10);
+                if (candidate_distance < bestd) {
+                    bestd = candidate_distance;
+                    best = candidate_moby;
                 }
             }
-        } while (*p++ >= 0);
+        } while (*moby_list_entry++ >= 0);
         if (best != 0) {
             allocate_voice_for_target_entry(0, 0, (int)best);
         }

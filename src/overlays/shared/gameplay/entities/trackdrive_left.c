@@ -498,6 +498,12 @@ extern char D_0013C940[];
 
 void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
 void tresspasser_pad_update(Moby *moby) {
+    enum {
+        TRESSPASSER_PAD_STATE_INITIALIZE = 0,
+        TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION = 1,
+        TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE = 2,
+        TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
+    };
     Vec_2D9F08 camera_pos, camera_rot;
     Data_2D9F08 *data = (struct Data_2D9F08 *)moby->pvars;
     int i;
@@ -506,7 +512,7 @@ void tresspasser_pad_update(Moby *moby) {
         return;
     }
     switch (moby->state) {
-    case 0:
+    case TRESSPASSER_PAD_STATE_INITIALIZE:
         data->h12 = 0;
         moby->state = 1;
         D_L02_001D33B0[2][1] = 17.0f;
@@ -525,7 +531,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         }
         break;
-    case 1:
+    case TRESSPASSER_PAD_STATE_WAIT_FOR_TOOL_ACTIVATION:
         if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->ground_moby == moby && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->air_frames.s == 0) {
             int holding_tool;
 
@@ -558,7 +564,7 @@ void tresspasser_pad_update(Moby *moby) {
             moby->glow_color = D_L02_00161B38_2D9F08;
         }
         break;
-    case 2:
+    case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:
         func_L02_002DA728_2D9F08(moby);
         func_L02_002D9D48_2D9F08(&camera_pos, &camera_rot, moby);
         func_00214D88_2D9F08(&data->f110, &data->f114, 1.0f, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE6C_2D9F08 + D_0015EE6C_2D9F08);
@@ -652,7 +658,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         }
         break;
-    case 3:
+    case TRESSPASSER_PAD_STATE_COMMIT_COMPLETION:
         if (D_0013F450_2D9F08.anim_flags & 2) {
             if (moby->mission != 0xFF) {
                 ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
@@ -864,7 +870,7 @@ extern char *D_L02_00161AFC __attribute__((sda));
 extern char *D_L02_00161B00 __attribute__((sda));
 extern char *D_L02_00161B04 __attribute__((sda));
 extern char *D_L02_00161B08 __attribute__((sda));
-extern s32 D_L02_00161B64 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle_radial_strip.h"
 
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -896,7 +902,7 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     s32 unwrapped_uv_scroll;
     s32 wrapped_uv_scroll_offset;
     s32 strip_texture_tex0;
-    f32 f24, f25, f26, f27, f28, f29, f30, f31;
+    f32 start_cosine_component, start_sine_component, start_corner_cosine_component, end_cosine_component, end_sine_component, start_corner_sine_component, end_corner_cosine_component, end_corner_sine_component;
     f32 trig_value;
 
     unwrapped_uv_scroll = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
@@ -910,42 +916,42 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_uvs[2] = (s32)(D_L02_00161AF4 + wrapped_uv_scroll_offset);
     vertex_uvs[3] = (s32)(D_L02_00161AF8 + wrapped_uv_scroll_offset);
 
-    f25 = fast_sin(angle) * start_distance;
-    f24 = fast_cos(angle) * start_distance;
-    f28 = fast_sin(angle) * end_distance;
-    f27 = fast_cos(angle) * end_distance;
+    start_sine_component = fast_sin(angle) * start_distance;
+    start_cosine_component = fast_cos(angle) * start_distance;
+    end_sine_component = fast_sin(angle) * end_distance;
+    end_cosine_component = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    f29 = f25 + trig_value * 2.0f;
+    start_corner_sine_component = start_sine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f25 = f25 - trig_value * 2.0f;
+    start_sine_component = start_sine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f26 = f24 - trig_value * 2.0f;
+    start_corner_cosine_component = start_cosine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f24 = f24 + trig_value * 2.0f;
+    start_cosine_component = start_cosine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f31 = f28 + trig_value * 2.0f;
+    end_corner_sine_component = end_sine_component + trig_value * 2.0f;
     trig_value = fast_cos(angle);
-    f28 = f28 - trig_value * 2.0f;
+    end_sine_component = end_sine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f30 = f27 - trig_value * 2.0f;
+    end_corner_cosine_component = end_cosine_component - trig_value * 2.0f;
     trig_value = fast_sin(angle);
-    f27 = f27 + trig_value * 2.0f;
+    end_cosine_component = end_cosine_component + trig_value * 2.0f;
 
     packed_vertices[3] = 0xFFFFF000000000ULL;
     packed_vertices[2] = 0xFFFFF000000000ULL;
     packed_vertices[1] = 0xFFFFF000000000ULL;
     packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
-    LO4(packed_vertices[0], truncate_float_to_s32(f29));
-    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
-    LO4(packed_vertices[1], truncate_float_to_s32(f25));
-    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
-    LO4(packed_vertices[2], truncate_float_to_s32(f31));
-    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
-    LO4(packed_vertices[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
+    LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
+    NEG20(packed_vertices[1], truncate_float_to_s32(start_cosine_component));
+    LO4(packed_vertices[1], truncate_float_to_s32(start_sine_component));
+    NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
+    LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
+    NEG20(packed_vertices[3], truncate_float_to_s32(end_cosine_component));
+    LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
-    strip_texture_tex0 = FUN_001f44b8(D_L02_00161B64);
+    strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
     vertex_uvs[0] = (s32)D_L02_00161AFC;
@@ -953,40 +959,40 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_uvs[2] = (s32)D_L02_00161B04;
     vertex_uvs[3] = (s32)D_L02_00161B08;
 
-    f25 = fast_sin(angle) * start_distance;
-    f24 = fast_cos(angle) * start_distance;
-    f28 = fast_sin(angle) * end_distance;
-    f27 = fast_cos(angle) * end_distance;
+    start_sine_component = fast_sin(angle) * start_distance;
+    start_cosine_component = fast_cos(angle) * start_distance;
+    end_sine_component = fast_sin(angle) * end_distance;
+    end_cosine_component = fast_cos(angle) * end_distance;
     trig_value = fast_cos(angle);
-    f29 = f25 + trig_value * 5.0f;
+    start_corner_sine_component = start_sine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f25 = f25 - trig_value * 5.0f;
+    start_sine_component = start_sine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f26 = f24 - trig_value * 5.0f;
+    start_corner_cosine_component = start_cosine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f24 = f24 + trig_value * 5.0f;
+    start_cosine_component = start_cosine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f31 = f28 + trig_value * 5.0f;
+    end_corner_sine_component = end_sine_component + trig_value * 5.0f;
     trig_value = fast_cos(angle);
-    f28 = f28 - trig_value * 5.0f;
+    end_sine_component = end_sine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f30 = f27 - trig_value * 5.0f;
+    end_corner_cosine_component = end_cosine_component - trig_value * 5.0f;
     trig_value = fast_sin(angle);
-    f27 = f27 + trig_value * 5.0f;
+    end_cosine_component = end_cosine_component + trig_value * 5.0f;
 
     packed_vertices[3] = 0xFFFFF000000000ULL;
     packed_vertices[2] = 0xFFFFF000000000ULL;
     packed_vertices[1] = 0xFFFFF000000000ULL;
     packed_vertices[0] = 0xFFFFF000000000ULL;
 
-    NEG20(packed_vertices[0], truncate_float_to_s32(f26));
-    LO4(packed_vertices[0], truncate_float_to_s32(f29));
-    NEG20(packed_vertices[1], truncate_float_to_s32(f24));
-    LO4(packed_vertices[1], truncate_float_to_s32(f25));
-    NEG20(packed_vertices[2], truncate_float_to_s32(f30));
-    LO4(packed_vertices[2], truncate_float_to_s32(f31));
-    NEG20(packed_vertices[3], truncate_float_to_s32(f27));
-    LO4(packed_vertices[3], truncate_float_to_s32(f28));
+    NEG20(packed_vertices[0], truncate_float_to_s32(start_corner_cosine_component));
+    LO4(packed_vertices[0], truncate_float_to_s32(start_corner_sine_component));
+    NEG20(packed_vertices[1], truncate_float_to_s32(start_cosine_component));
+    LO4(packed_vertices[1], truncate_float_to_s32(start_sine_component));
+    NEG20(packed_vertices[2], truncate_float_to_s32(end_corner_cosine_component));
+    LO4(packed_vertices[2], truncate_float_to_s32(end_corner_sine_component));
+    NEG20(packed_vertices[3], truncate_float_to_s32(end_cosine_component));
+    LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 }
@@ -1532,27 +1538,7 @@ f32 D_L18_001D37A0[1] __attribute__((section(".data"))) = {0};
 typedef struct { int slot[12]; } Ring12;
 
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
-extern int D_L02_00161B30 __attribute__((sda));
-extern int D_L02_00161B34 __attribute__((sda));
-extern int D_L02_00161B38 __attribute__((sda));
-extern int D_L02_00161B3C __attribute__((sda));
-extern int D_L02_00161B40 __attribute__((sda));
-extern int D_L02_00161B44 __attribute__((sda));
-extern int D_L02_00161B48 __attribute__((sda));
-extern int D_L02_00161B4C __attribute__((sda));
-extern int D_L02_00161B50 __attribute__((sda));
-extern int D_L02_00161B54 __attribute__((sda));
-extern int D_L02_00161B58 __attribute__((sda));
-extern int D_L02_00161B5C __attribute__((sda));
-extern int D_L02_00161BA0 __attribute__((sda));
-extern int D_L02_00161BA4 __attribute__((sda));
-extern int D_L02_00161BA8 __attribute__((sda));
-extern int D_L02_00161BAC __attribute__((sda));
-extern int D_L02_00161BB0 __attribute__((sda));
-extern int D_L02_00161BB4 __attribute__((sda));
-extern int D_L02_00161BBC __attribute__((sda));
-extern int D_L02_00161BC0 __attribute__((sda));
-extern int D_L02_00161BC4 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle.h"
 extern void draw_tresspasser_puzzle_ring_arc(int, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
 extern void draw_tresspasser_puzzle_arrow(int, int, int, float, float) __asm__("FUN_L02_002da6c0");
 extern void draw_tresspasser_puzzle_radial_strip(void *, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
@@ -1613,30 +1599,30 @@ void draw_tresspasser_puzzle(char *moby) {
         slot = index % 12;
         if (first->slot[slot] == 2) {
             other = i + *(int *)(data + 0x18) + first_step - second_step;
-            color = D_L02_00161BAC;
-            if (second->slot[other % 12] != 0) distance = (float)D_L02_00161B44;
+            color = tresspasser_default_radial_strip_color_gp;
+            if (second->slot[other % 12] != 0) distance = (float)tresspasser_second_ring_arrow_distance_gp;
             else {
                 int third_index = i + *(int *)(data + 0x1c) + first_step - third_step;
-                if (third->slot[third_index % 12] != 0) distance = (float)D_L02_00161B38;
-                else if (third->slot[(third_index + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
-                else if (second->slot[(other + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
-                else if (first->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
+                if (third->slot[third_index % 12] != 0) distance = (float)tresspasser_third_ring_arrow_distance_gp;
+                else if (third->slot[(third_index + 6) % 12] != 0) distance = (float)-tresspasser_third_ring_arrow_distance_gp;
+                else if (second->slot[(other + 6) % 12] != 0) distance = (float)-tresspasser_second_ring_arrow_distance_gp;
+                else if (first->slot[(index + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
                     int opposite;
-                    distance = (float)-D_L02_00161B5C;
+                    distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                     draw_second = 0;
                     opposite = first_step + 6;
                     if (markers->slot[(i + opposite) % 12] != 0) {
                         int marker = (i + opposite) % 12;
                         first->slot[slot] = 3;
                         markers->slot[marker] = 2;
-                        color = D_L02_00161BB0;
+                        color = tresspasser_reached_marker_strip_color_gp;
                     }
                 }
             }
-            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B50, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)tresspasser_first_ring_arrow_distance_gp, distance, color);
             if (draw_second) {
-                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B50, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)tresspasser_first_ring_arrow_distance_gp, tresspasser_reverse_radial_strip_color_gp);
             }
         }
     }
@@ -1647,32 +1633,32 @@ void draw_tresspasser_puzzle(char *moby) {
     for (i = 0; i < 12; ++i) {
         draw_second = 1;
         phase = -0.31415927f;
-        color = D_L02_00161BAC;
+        color = tresspasser_default_radial_strip_color_gp;
         if (*(int *)(data + 0xe0) == 2) phase = fast_add_rotations(phase, *(float *)(data + 0xe4));
         angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x18);
         slot = index % 12;
         if (second->slot[slot] == 2) {
             other = i + *(int *)(data + 0x1c) + second_step - third_step;
-            if (third->slot[other % 12] != 0) distance = (float)D_L02_00161B38;
-            else if (third->slot[(other + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
-            else if (second->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
-            else if (first->slot[(i + *(int *)(data + 0x14) + second_step - first_step + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
+            if (third->slot[other % 12] != 0) distance = (float)tresspasser_third_ring_arrow_distance_gp;
+            else if (third->slot[(other + 6) % 12] != 0) distance = (float)-tresspasser_third_ring_arrow_distance_gp;
+            else if (second->slot[(index + 6) % 12] != 0) distance = (float)-tresspasser_second_ring_arrow_distance_gp;
+            else if (first->slot[(i + *(int *)(data + 0x14) + second_step - first_step + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
             else {
                 int opposite;
-                distance = (float)-D_L02_00161B5C;
+                distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                 draw_second = 0;
                 opposite = second_step + 6;
                 if (markers->slot[(i + opposite) % 12] != 0) {
                     int marker = (i + opposite) % 12;
                     second->slot[slot] = 3;
                     markers->slot[marker] = 2;
-                    color = D_L02_00161BB0;
+                    color = tresspasser_reached_marker_strip_color_gp;
                 }
             }
-            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B44, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)tresspasser_second_ring_arrow_distance_gp, distance, color);
             if (draw_second) {
-                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B44, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)tresspasser_second_ring_arrow_distance_gp, tresspasser_reverse_radial_strip_color_gp);
             }
         }
     }
@@ -1683,30 +1669,30 @@ void draw_tresspasser_puzzle(char *moby) {
     for (i = 0; i < 12; ++i) {
         draw_second = 1;
         phase = -0.31415927f;
-        color = D_L02_00161BAC;
+        color = tresspasser_default_radial_strip_color_gp;
         if (*(int *)(data + 0xe0) == 3) phase = fast_add_rotations(phase, *(float *)(data + 0xe4));
         angle = fast_add_rotations(phase, (float)(i * 30) * 0.017453292f);
         index = i + *(int *)(data + 0x1c);
         slot = index % 12;
         if (third->slot[slot] == 2) {
-            if (third->slot[(index + 6) % 12] != 0) distance = (float)-D_L02_00161B38;
-            else if (second->slot[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] != 0) distance = (float)-D_L02_00161B44;
-            else if (first->slot[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] != 0) distance = (float)-D_L02_00161B50;
+            if (third->slot[(index + 6) % 12] != 0) distance = (float)-tresspasser_third_ring_arrow_distance_gp;
+            else if (second->slot[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] != 0) distance = (float)-tresspasser_second_ring_arrow_distance_gp;
+            else if (first->slot[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] != 0) distance = (float)-tresspasser_first_ring_arrow_distance_gp;
             else {
                 int opposite;
-                distance = (float)-D_L02_00161B5C;
+                distance = (float)-tresspasser_unintercepted_strip_endpoint_distance_gp;
                 draw_second = 0;
                 opposite = third_step + 6;
                 if (markers->slot[(i + opposite) % 12] != 0) {
                     int marker = (i + opposite) % 12;
                     third->slot[slot] = 3;
                     markers->slot[marker] = 2;
-                    color = D_L02_00161BB0;
+                    color = tresspasser_reached_marker_strip_color_gp;
                 }
             }
-            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)D_L02_00161B38, distance, color);
+            draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), (float)tresspasser_third_ring_arrow_distance_gp, distance, color);
             if (draw_second) {
-                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)D_L02_00161B38, D_L02_00161BB4);
+                draw_tresspasser_puzzle_radial_strip(ctx.texture, fast_add_rotations(angle, 0.31415927f), distance, (float)tresspasser_third_ring_arrow_distance_gp, tresspasser_reverse_radial_strip_color_gp);
             }
         }
     }
@@ -1717,21 +1703,21 @@ void draw_tresspasser_puzzle(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 1) {
-            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
+            color = fast_tween_color(tresspasser_selected_ring_base_color_gp, tresspasser_selected_ring_base_color_gp & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = D_L02_00161BA4;
+        } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B4C, (float)D_L02_00161B48, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_first_ring_arc_first_boundary_radius_gp, (float)tresspasser_first_ring_arc_second_boundary_radius_gp, color);
         if (first->slot[(i + *(int *)(data + 0x14)) % 12] != 0) {
             if (first->slot[(i + *(int *)(data + 0x14)) % 12] >= 3) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_first_ring_arrow_distance_gp);
                 first->slot[(i + *(int *)(data + 0x14)) % 12] = 2;
             } else if (first->slot[(i + *(int *)(data + 0x14)) % 12] == 2) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 1, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_first_ring_arrow_distance_gp);
             } else {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B50);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 2, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_first_ring_arrow_distance_gp);
             }
         }
     }
@@ -1742,21 +1728,21 @@ void draw_tresspasser_puzzle(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 2) {
-            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
+            color = fast_tween_color(tresspasser_selected_ring_base_color_gp, tresspasser_selected_ring_base_color_gp & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = D_L02_00161BA4;
+        } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B40, (float)D_L02_00161B3C, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_second_ring_arc_first_boundary_radius_gp, (float)tresspasser_second_ring_arc_second_boundary_radius_gp, color);
         if (second->slot[(i + *(int *)(data + 0x18)) % 12] != 0) {
             if (second->slot[(i + *(int *)(data + 0x18)) % 12] >= 3) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_second_ring_arrow_distance_gp);
                 second->slot[(i + *(int *)(data + 0x18)) % 12] = 2;
             } else if (second->slot[(i + *(int *)(data + 0x18)) % 12] == 2) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 1, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_second_ring_arrow_distance_gp);
             } else {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B44);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 2, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_second_ring_arrow_distance_gp);
             }
         }
     }
@@ -1767,21 +1753,21 @@ void draw_tresspasser_puzzle(char *moby) {
     for (i = 0; i < 12; ++i) {
         angle = -0.2617994f;
         if (*(int *)(data + 0xe0) == 3) {
-            color = fast_tween_color(D_L02_00161BA0, D_L02_00161BA0 & 0xffffff,
+            color = fast_tween_color(tresspasser_selected_ring_base_color_gp, tresspasser_selected_ring_base_color_gp & 0xffffff,
                                   fast_sin((float)((D_L02_0015F5CC % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
             if (*(float *)(data + 0xe4) != 0.0f) angle = fast_add_rotations(angle, *(float *)(data + 0xe4));
-        } else color = D_L02_00161BA4;
+        } else color = tresspasser_unselected_ring_color_gp;
         angle = fast_add_rotations(angle, (float)(i * 30) * 0.017453292f);
         phase = fast_add_rotations(angle, 0.5235988f);
-        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B34, (float)D_L02_00161B30, color);
+        draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_third_ring_arc_first_boundary_radius_gp, (float)tresspasser_third_ring_arc_second_boundary_radius_gp, color);
         if (third->slot[(i + *(int *)(data + 0x1c)) % 12] != 0) {
             if (third->slot[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 0, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 0, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_third_ring_arrow_distance_gp);
                 third->slot[(i + *(int *)(data + 0x1c)) % 12] = 2;
             } else if (third->slot[(i + *(int *)(data + 0x1c)) % 12] == 2) {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 1, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 1, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_third_ring_arrow_distance_gp);
             } else {
-                draw_tresspasser_puzzle_arrow(ctx.texture, D_L02_00161BA8, 2, fast_add_rotations(angle, 0.2617994f), (float)D_L02_00161B38);
+                draw_tresspasser_puzzle_arrow(ctx.texture, tresspasser_arrow_unused_argument_gp, 2, fast_add_rotations(angle, 0.2617994f), (float)tresspasser_third_ring_arrow_distance_gp);
             }
         }
     }
@@ -1794,10 +1780,10 @@ void draw_tresspasser_puzzle(char *moby) {
         phase = fast_add_rotations(angle, 0.17453292f);
         value = markers->slot[i];
         if (value != 0) {
-            if (value == 2) color = D_L02_00161BC4;
-            else if (D_L02_0015F5CC & 0x20) color = D_L02_00161BC0;
-            else color = D_L02_00161BBC;
-            draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54, color);
+            if (value == 2) color = tresspasser_reached_marker_arc_color_gp;
+            else if (D_L02_0015F5CC & 0x20) color = tresspasser_unreached_marker_arc_flag_set_color_gp;
+            else color = tresspasser_unreached_marker_arc_flag_clear_color_gp;
+            draw_tresspasser_puzzle_ring_arc(ctx.texture, angle, phase, (float)tresspasser_marker_arc_first_boundary_radius_gp, (float)tresspasser_marker_arc_second_boundary_radius_gp, color);
         }
     }
     }

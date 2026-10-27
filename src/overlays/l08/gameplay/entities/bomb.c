@@ -90,7 +90,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
-extern float D_L08_0016144C __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_bolt_pickup.h"
 extern float bolt_pickup_collision_stop_speed_threshold_gp __asm__("D_L08_00161458") __attribute__((sda));
 extern float bolt_pickup_collision_speed_reduction_gp __asm__("D_L08_0016145C") __attribute__((sda));
 extern int bolt_pickup_bob_period_ticks_gp __asm__("D_L08_00161460") __attribute__((sda));
@@ -154,14 +154,14 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         qcopy(P, moby->pos);
         moby_data->vel[2] = moby_data->vel[2] - D_0015ED70 * 9.8f;
         f20 = fast_vec_length(moby_data->vel);
-        if (D_L08_0016144C * 1.8f * frame_scale < f20) {
-            fast_vec_normalize(moby_data->vel, moby_data->vel, D_L08_0016144C * 1.8f * frame_scale);
-            f20 = D_L08_0016144C * 1.8f * frame_scale;
+        if (bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale < f20) {
+            fast_vec_normalize(moby_data->vel, moby_data->vel, bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale);
+            f20 = bolt_pickup_collision_clearance_distance_gp * 1.8f * frame_scale;
         }
         add_vector_xyz(A, P, moby_data->vel);
-        fast_vec_normalize(B, moby_data->vel, D_L08_0016144C);
+        fast_vec_normalize(B, moby_data->vel, bolt_pickup_collision_clearance_distance_gp);
         subtract_vector_xyz(B, P, B);
-        fast_vec_normalize(C, moby_data->vel, f20 + D_L08_0016144C);
+        fast_vec_normalize(C, moby_data->vel, f20 + bolt_pickup_collision_clearance_distance_gp);
         add_vector_xyz(C, C, P);
         if (D_L08_0015F5CC % 2 == (((char *)moby - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
@@ -171,7 +171,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                     ok = 0;
                 } else {
                     subtract_vector_xyz(E, P, (D_L08_001746D8_2B94B0 + 8));
-                    fast_vec_normalize(E, E, D_L08_0016144C);
+                    fast_vec_normalize(E, E, bolt_pickup_collision_clearance_distance_gp);
                     add_vector_xyz(P, (D_L08_001746D8_2B94B0 + 8), E);
                 }
                 if (ok != 0) {
@@ -181,7 +181,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                 } else {
                     clear_u64_value(moby_data->vel);
                     qcopy(P, (D_L08_001746D8_2B94B0 + 8));
-                    P[2] = P[2] + D_L08_0016144C;
+                    P[2] = P[2] + bolt_pickup_collision_clearance_distance_gp;
                     if (*(int *)D_L08_001746D8_2B94B0 == 0) {
                         clear_u64_value(moby_data->vel);
                         moby->state = 2;
@@ -1104,16 +1104,11 @@ extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int D_L08_001618D4 __attribute__((sda));
-extern int D_L08_001618D8 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles_2.h"
 extern float bomber_tank_joint_particle_jitter_magnitude_base_gp __asm__("D_L08_001618DC") __attribute__((sda));
 extern float bomber_tank_joint_particle_vertical_spread_gp __asm__("D_L08_001618E0") __attribute__((sda));
 extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("D_L08_001618E8") __attribute__((sda));
-extern int D_L08_001618EC __attribute__((sda));
-extern int D_L08_001618F0 __attribute__((sda));
-extern int D_L08_001618F4 __attribute__((sda));
-extern float D_L08_001618F8 __attribute__((sda));
-extern float D_L08_001618FC __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles.h"
 extern int FUN_L00_0024f7c8();
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -1179,12 +1174,12 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
             spread_vector[1] = spread_vector[1] + offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         }
-        velocity[3] = D_L08_001618F8;
-        spread_vector[3] = D_L08_001618FC;
-        frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
-        frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
-        frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
-        func_00219780_2D6C58(joint_pos, velocity, spread_vector, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
+        velocity[3] = bomber_tank_joint_particle_velocity_w_gp;
+        spread_vector[3] = bomber_tank_joint_particle_spread_vector_w_gp;
+        frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_duration_frames_range_start_gp, (float)bomber_tank_joint_particle_duration_frames_range_start_gp * 1.2f)));
+        frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_second_frame_count_range_start_gp, (float)bomber_tank_joint_particle_second_frame_count_range_start_gp * 1.2f)));
+        frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_third_frame_count_range_start_gp, (float)bomber_tank_joint_particle_third_frame_count_range_start_gp * 1.5f)));
+        func_00219780_2D6C58(joint_pos, velocity, spread_vector, bomber_tank_joint_particle_initial_color_gp, bomber_tank_joint_particle_second_color_gp, frames1, frames2, frames3, -1);
     }
 }
 /* Spawns debris mobys while the level counter allows, then scatters or bursts the group's other mobys. */
@@ -2527,20 +2522,17 @@ extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern float D_L08_00161A00 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket_3.h"
 extern float rocket_guidance_velocity_correction_limit_gp __asm__("D_L08_00161A04") __attribute__((sda));
 extern float rocket_route_speed_gp __asm__("D_L08_00161A08") __attribute__((sda));
 extern float rocket_target_hit_distance_gp __asm__("D_L08_00161A0C") __attribute__((sda));
 extern float rocket_effect_radial_speed_range_end_gp __asm__("D_L08_00161A14") __attribute__((sda));
-extern float D_L08_00161A24 __attribute__((sda));
-extern float D_L08_00161A28 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket_2.h"
 extern float step_angle_toward_target(float*,int,float,float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
-extern int D_L08_00161A20 __attribute__((sda));
-extern int D_L08_00161A2C __attribute__((sda));
-extern int D_L08_00161A30 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket.h"
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned int D_L08_0015FFDC __attribute__((section(".sdata")));
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
@@ -2621,10 +2613,10 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
-        life=scale_game_frames_alt(D_L08_00161A20);
-        size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
-        FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
+        life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
+        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_HOME_TOWARD_TARGET: {
@@ -2651,10 +2643,10 @@ void update_rocket(M46 *moby) {
         normalize_vector_xyz(effect,moby->matrix[2],radius*fast_cos_c2(angle));
         normalize_vector_xyz(aux,moby->matrix[1],radius*fast_sin(angle));
         add_vector_xyz(effect,effect,aux); qcopy(aux,aux);
-        effect[3]=D_L08_00161A24; aux[3]=D_L08_00161A28;
-        life=scale_game_frames_alt(D_L08_00161A20);
-        size0=func_001FA898_r(D_L08_00161A24); size1=func_001FA898_r(D_L08_00161A28);
-        FUN_L00_00269958(moby->position,effect,D_L08_00161A2C,D_L08_00161A30,life,size0,size1,1);
+        effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
+        life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
+        size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
+        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_WAIT_FOR_ACTIVATION:
@@ -2754,7 +2746,7 @@ void update_rocket(M46 *moby) {
         step_angle_toward_target(&moby->rotation[2],0,data->yaw,D_0015ED6C*0.5235988f);
         step_angle_toward_target(&moby->rotation[1],0,-data->pitch,D_0015ED6C*0.5235988f);
         moby->rotation[0]=fast_add_rotations(moby->rotation[0],D_0015ED6C*6.2831855f);
-        build_spherical_offset(data->velocity,(D_L08_00161A00+D_L08_00161A00)*D_0015ED6C,moby->rotation[2],-moby->rotation[1]);
+        build_spherical_offset(data->velocity,(rocket_configured_heading_speed_base_gp+rocket_configured_heading_speed_base_gp)*D_0015ED6C,moby->rotation[2],-moby->rotation[1]);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         if (FUN_L08_002025d0(moby->position,0x400,2,moby,0) || moby->position[0]<5.0f || moby->position[0]>500.0f || moby->position[1]<5.0f || moby->position[1]>500.0f || moby->position[2]<5.0f || moby->position[2]>500.0f || distance_xyz_c(D_0013F3D0,moby->position)<16.0f) moby->state=6;
         return;
@@ -2877,7 +2869,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int D_001413D4 __attribute__((section(".data")));
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern float D_L08_00161A44 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bomb_data/update_path_following_moby.h"
 extern unsigned char D_0013D408[];
 extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
 extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
@@ -2909,7 +2901,7 @@ void update_path_following_moby(char *moby) {
         {
             float first_path_segment_length = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
             distance_xyz((char *)path + 0x10, (char *)path + (*path << 4));
-            *(float *)(moby_vars + 8) = D_L08_00161A44 * D_0015ED6C / first_path_segment_length;
+            *(float *)(moby_vars + 8) = path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
             *(float *)(moby_vars + 4) = *(float *)(moby_vars + 4) * (float)*path;
             *(float *)(moby_vars + 0xC) = randf_sym(0.0f, 5.0f);
         }
@@ -2929,7 +2921,7 @@ void update_path_following_moby(char *moby) {
     }
     case MOBY_STATE_FALLING: {
         float falling_gravity = 15.0f;
-        float c10 = 10.0f;
+        float falling_removal_height = 10.0f;
         float dd;
         float falling_rotation_step;
         char *falling_velocity = moby_vars + 0x10;
@@ -2939,12 +2931,12 @@ void update_path_following_moby(char *moby) {
         *(float *)(moby + 0x40) = *(float *)(moby + 0x40) + dd;
         *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
         add_vector_xyz(pos, pos, falling_velocity);
-        if (*(float *)(moby + 0x18) < c10) {
+        if (*(float *)(moby + 0x18) < falling_removal_height) {
             mark_moby_for_removal(moby);
             return;
         }
         if (coll_sphere(1.25f, pos, 0, moby)) {
-            spawn_explosion(moby, falling_velocity, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, c10, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
+            spawn_explosion(moby, falling_velocity, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, falling_removal_height, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
         }

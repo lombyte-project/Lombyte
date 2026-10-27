@@ -426,7 +426,7 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
     s32 movement_collision_flags;
     f32 target_distance_xy;
     f32 sp;
-    f32 lim;
+    f32 horizontal_step_cap_or_probe_height_threshold;
     f32 speed_increment;
     f32 displacement_probe_hit_height;
     f32 lookahead_probe_hit_height;
@@ -435,7 +435,7 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
     f32 intended_displacement_length_xy;
 
     sp = movement_control->f1C * f;
-    lim = movement_control->f24 * f;
+    horizontal_step_cap_or_probe_height_threshold = movement_control->f24 * f;
     fast_vec_sub(&displacement, target_position, &moby->pos);
     target_distance_xy = vector_length_xy(&displacement);
     save.q = moby->pos.q;
@@ -445,10 +445,10 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
     movement_control->f10 = movement_control->f10 + speed_increment;
     if (target_distance_xy < movement_control->f10 * 10.0f)
         movement_control->f10 = movement_control->f10 - movement_control->f20 * movement_control->f10;
-    if (lim < movement_control->f10)
-        movement_control->f10 = lim;
-    else if (movement_control->f10 < -lim)
-        movement_control->f10 = -lim;
+    if (horizontal_step_cap_or_probe_height_threshold < movement_control->f10)
+        movement_control->f10 = horizontal_step_cap_or_probe_height_threshold;
+    else if (movement_control->f10 < -horizontal_step_cap_or_probe_height_threshold)
+        movement_control->f10 = -horizontal_step_cap_or_probe_height_threshold;
     if (movement_control->i38 & 4) {
         displacement.f[0] = FUN_001f9dc8_c(movement_control->f4C) * movement_control->f10;
         displacement.f[1] = fast_sin(movement_control->f4C) * movement_control->f10;
@@ -462,7 +462,7 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
         displacement.f[2] = movement_control->f18;
         movement_control->f18 = movement_control->f18 - frame_time_sq_gp * 9.0f;
     }
-    lim = moby->pos.f[2] + 0.04f;
+    horizontal_step_cap_or_probe_height_threshold = moby->pos.f[2] + 0.04f;
     fast_vec_add(&probe_or_direction, &moby->pos, &displacement);
     probe_or_direction.f[2] = moby->pos.f[2] - movement_control->f30;
     if (FUN_L00_002583f0_c(&probe_or_direction, moby, movement_control->i38 & 0x20, movement_control->f08, movement_control->f0C)) {
@@ -481,14 +481,14 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
                     mask = 0x22;
                     if (!(movement_control->i38 & 8))
                         goto done;
-                    if (!(lookahead_probe_hit_height < lim))
+                    if (!(lookahead_probe_hit_height < horizontal_step_cap_or_probe_height_threshold))
                         goto done;
                 } else {
                     mask = 0x22;
                     if (!(movement_control->i38 & 8))
                         goto done;
                 }
-                if (displacement_probe_hit_height < lim)
+                if (displacement_probe_hit_height < horizontal_step_cap_or_probe_height_threshold)
                     mask = 8;
             }
         }

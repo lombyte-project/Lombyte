@@ -158,9 +158,9 @@ extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attr
 extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
 extern int D_L14_00162108 __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
-extern float D_L14_00162114 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/vendor/003015d0_data/start_vendor_beam_pulse_2.h"
 extern int D_L14_0016211C __attribute__((sda));
-extern int D_L14_00162120 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/vendor/003015d0_data/start_vendor_beam_pulse.h"
 
 extern char D_L14_001674C0[];
 
@@ -261,8 +261,8 @@ void start_vendor_beam_pulse(char *moby) {
             int frames;
             transform_vector(&work, &beam->points[point], matrix);
             qcopy(&delta, &beam->point_steps[point]);
-            delta.f[3] = D_L14_00162114;
-            color = random_integer_below(2) ? D_L14_0016211C : D_L14_00162120;
+            delta.f[3] = vendor_beam_spark_step_w_gp;
+            color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
             spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C, point >> 1, 15, frames, color);
         }
@@ -270,14 +270,14 @@ void start_vendor_beam_pulse(char *moby) {
             int frames, unused_color;
             transform_vector(&work, &beam->branches[3][k], matrix);
             qcopy(&delta, &beam->branch_steps[3][k]);
-            delta.f[3] = D_L14_00162114;
-            unused_color = random_integer_below(2) ? D_L14_0016211C : D_L14_00162120;
+            delta.f[3] = vendor_beam_spark_step_w_gp;
+            unused_color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
             /* Fakematch: a never-taken exit keeps the spark arguments in their own block until
              * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
             if (never) continue;
             spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C,
-                        beam->branch_start[k] >> 1, 15, frames, D_L14_00162120);
+                        beam->branch_start[k] >> 1, 15, frames, vendor_beam_branch_end_spark_color_gp);
         }
     }
 }
@@ -357,10 +357,7 @@ extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
-extern int D_L14_001620E0 __attribute__((sda));
-extern int D_L14_001620E4 __attribute__((sda));
-extern int D_L14_001620E8 __attribute__((sda));
-extern int D_L14_001620EC __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/vendor/003015d0_data/draw_vendor_beam.h"
 
 extern char D_L14_001674C0[];
 
@@ -392,8 +389,8 @@ void draw_vendor_beam(char *moby) {
     subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
     transform_vector_xyz(camera, camera, inverse);
     texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
-    gs_state = (u64)D_L14_001620E0 | ((u64)D_L14_001620E4 << 2) | ((u64)D_L14_001620E8 << 4)
-               | ((u64)D_L14_001620EC << 6) | (0x8000ULL << 24);
+    gs_state = (u64)vendor_beam_blend_minuend_selector_gp | ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) | ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4)
+               | ((u64)vendor_beam_blend_addend_selector_gp << 6) | (0x8000ULL << 24);
     packet[2].texture_state = 0xFF9000000260ULL;
     packet[1].texture_state = 0xFF9000000260ULL;
     packet[0].texture_state = 0xFF9000000260ULL;

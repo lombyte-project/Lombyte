@@ -612,7 +612,7 @@ extern float FUN_001ebd78(void *, float, float, float, float, float);
 /* Camera that orbits the hero while hero.vert_ramp_launch is set, easing yaw, pitch and distance toward their goals. */
 void update_hero_follow_camera_orbit(Camera *cam) __asm__("FUN_L05_003298d8");
 
-void update_hero_follow_camera_orbit(Camera *cam) {
+void update_hero_follow_camera_orbit(Camera *hero_follow_camera) {
     Vec4 up;
     Vec4 side;
     Vec4 fwd;
@@ -621,7 +621,7 @@ void update_hero_follow_camera_orbit(Camera *cam) {
     Vec4 flat;
     Vec4 unit;
     Vec4 yaw_rotated_forward;
-    CameraOrbit *orbit = cam->orbit;
+    CameraOrbit *orbit = hero_follow_camera->orbit;
     CameraFocus *focus = &orbit->focus;
     f32 *spring = orbit->goal;
     f32 dot;
@@ -637,7 +637,7 @@ void update_hero_follow_camera_orbit(Camera *cam) {
         normalize_vector_xyz(&side, &side, 1.0f);
         cross_vectors_xyz(&fwd, &up, &side);
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
-        subtract_vector_xyz(&rel, &cam->pos, focus);
+        subtract_vector_xyz(&rel, &hero_follow_camera->pos, focus);
         dot = fast_vec_dot(&rel, &up);
         normalize_vector_xyz(&along, &up, dot);
         subtract_vector_xyz(&flat, &rel, &along);
@@ -651,7 +651,7 @@ void update_hero_follow_camera_orbit(Camera *cam) {
         if (fast_vec_dot(&side, &unit) < 0.0f) {
             initial_yaw = -initial_yaw;
         }
-        cam->yaw = initial_yaw;
+        hero_follow_camera->yaw = initial_yaw;
         rotate_about_axis(&yaw_rotated_forward, &fwd, &up, initial_yaw);
         dot = fast_vec_dot(&yaw_rotated_forward, &rel);
         angle_normalization_length = vector_length_xyz(&rel);
@@ -664,8 +664,8 @@ void update_hero_follow_camera_orbit(Camera *cam) {
         if (fast_vec_dot(&up, &unit) < 0.0f) {
             pitch = tilt;
         }
-        cam->pitch = pitch;
-        cam->dist = vector_length_xyz(&rel);
+        hero_follow_camera->pitch = pitch;
+        hero_follow_camera->dist = vector_length_xyz(&rel);
         qcopy(&orbit->focus.side, &fwd);
         spring[0] = 3.1415927f;
         spring[1] = -1.5358897f;
@@ -681,15 +681,15 @@ void update_hero_follow_camera_orbit(Camera *cam) {
         spring[11] = 0.2f;
     }
     if (orbit->mode == 1) {
-        normalize_vector_xyz(&side, &focus->side, cam->dist);
-        rotate_about_axis(&side, &side, &up, cam->yaw);
+        normalize_vector_xyz(&side, &focus->side, hero_follow_camera->dist);
+        rotate_about_axis(&side, &side, &up, hero_follow_camera->yaw);
         cross_vectors_xyz(&fwd, &side, &up);
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
-        rotate_about_axis(&side, &side, &fwd, cam->pitch);
-        add_vector_xyz(&cam->pos, focus, &side);
-        cam->yaw = rope_spring_turn(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
-        cam->pitch = rope_spring_turn(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
-        cam->dist = FUN_001ebd78(&spring[5], cam->dist, spring[2], spring[8], spring[11], 0.0f);
+        rotate_about_axis(&side, &side, &fwd, hero_follow_camera->pitch);
+        add_vector_xyz(&hero_follow_camera->pos, focus, &side);
+        hero_follow_camera->yaw = rope_spring_turn(&spring[3], hero_follow_camera->yaw, spring[0], spring[6], spring[9], 0.0f);
+        hero_follow_camera->pitch = rope_spring_turn(&spring[4], hero_follow_camera->pitch, spring[1], spring[7], spring[10], 0.0f);
+        hero_follow_camera->dist = FUN_001ebd78(&spring[5], hero_follow_camera->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.vert_ramp_launch == 0) {
             orbit->mode = 0;
             scale_vector_xyz(orbit, orbit, -1.0f);

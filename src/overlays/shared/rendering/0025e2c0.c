@@ -62,7 +62,7 @@ extern int *D_L15_001B2770 NOT_SDA;
 unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
                                 char *owner) __asm__("FUN_L15_002647f0");
 
-unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
+unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int secondary_particle_color, int particle_frame_count, int g, int h,
                                 char *owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
@@ -84,7 +84,7 @@ unsigned char *create_type_47_particle(void *particle_position, float *p_vector,
         load_display_text_resource_entry(p_vector_scratch, packed_p_vector);
         load_display_text_resource_entry(c_vector_scratch, packed_c_vector);
         packed_p_vector[2] = particle_color;
-        packed_p_vector[3] = e;
+        packed_p_vector[3] = secondary_particle_color;
         *(short *)(packed_p_vector + 4) = particle_frame_count;
         *(short *)((char *)packed_p_vector + 0x12) = g;
         *(short *)((char *)packed_p_vector + 0x14) = h;

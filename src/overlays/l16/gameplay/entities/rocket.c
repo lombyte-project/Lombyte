@@ -1066,10 +1066,7 @@ extern float vector_length_xyz(void *a);
 extern int D_L16_0015F5CC;
 extern int conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") __attribute__((sda));
 extern int conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") __attribute__((sda));
-extern int D_L16_00161998 __attribute__((sda));
-extern int D_L16_0016199C __attribute__((sda));
-extern int D_L16_001619A0 __attribute__((sda));
-extern int D_L16_001619A4 __attribute__((sda));
+#include "rnc/overlay/l16/gameplay/entities/rocket_data/draw_conveyor_belt_strips.h"
 extern int conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") __attribute__((sda));
 extern int conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") __attribute__((sda));
 extern int conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") __attribute__((sda));
@@ -1107,13 +1104,13 @@ void draw_conveyor_belt_strips(char *moby) {
     tint = func_001FA8A8_caa18(conveyor_belt_pulse_color_start_gp, conveyor_belt_pulse_color_end_gp, phase);
     color = conveyor_belt_scrolling_vertex_color_gp;
     packets[0].texture = get_effect_texture(conveyor_belt_pulse_texture_id_gp);
-    packets[0].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
-                      ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
+    packets[0].mode = (long)conveyor_belt_alpha_blend_a_selector | ((long)conveyor_belt_alpha_blend_b_selector << 2) |
+                      ((long)conveyor_belt_alpha_blend_c_selector << 4) | ((long)conveyor_belt_alpha_blend_d_selector << 6) | modebits;
     packets[0].flags = flags;
     packets[0].zero = 0;
     packets[1].texture = get_effect_texture(conveyor_belt_scrolling_texture_id_gp);
-    packets[1].mode = (long)D_L16_00161998 | ((long)D_L16_0016199C << 2) |
-                      ((long)D_L16_001619A0 << 4) | ((long)D_L16_001619A4 << 6) | modebits;
+    packets[1].mode = (long)conveyor_belt_alpha_blend_a_selector | ((long)conveyor_belt_alpha_blend_b_selector << 2) |
+                      ((long)conveyor_belt_alpha_blend_c_selector << 4) | ((long)conveyor_belt_alpha_blend_d_selector << 6) | modebits;
     packets[1].flags = flags;
     packets[1].zero = 0;
     {
@@ -1231,8 +1228,7 @@ extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
 extern float test_dummy_bomb_horizontal_launch_speed_gp __asm__("D_L16_001619CC") __attribute__((sda));
-extern float D_L16_001619D0 __attribute__((sda));
-extern float D_L16_001619D4 __attribute__((sda));
+#include "rnc/overlay/l16/gameplay/entities/rocket_data/test_dummy_update.h"
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) __asm__("FUN_L16_002ced20");
 
@@ -1425,7 +1421,7 @@ void test_dummy_update(unsigned char *moby) {
             char *position = (char *)moby + 16;
             struct Hero *player;
             subtract_vector_xyz(position_or_delta.f, path + (dummy_data->node * 16 + 16), position);
-            FUN_L00_0025f730(position_or_delta.f, D_L16_001619D0 * D_0015ED6C);
+            FUN_L00_0025f730(position_or_delta.f, test_dummy_path_movement_speed_limit_gp * D_0015ED6C);
             add_vector_xyz(position, position, position_or_delta.f);
             moby_point_position(moby, D_L16_001619C8_gp, position_or_direction.f);
             func_L00_0025A8E8_2cf180(moby, 0.333f, position_or_direction.f, 1, 1.0f, 1.0f, 0, 1, 0);
@@ -1497,7 +1493,7 @@ void test_dummy_update(unsigned char *moby) {
             position_or_direction.f[1] =
                 fast_sin(fast_arc_tan(position_or_delta.f[0] - *(float *)(moby + 16), position_or_delta.f[1] - *(float *)(moby + 20)));
             position_or_direction.f[2] = 0.0f;
-            effect_slots_fire(slots, position_or_delta.f, position_or_direction.f, D_L16_001619D4);
+            effect_slots_fire(slots, position_or_delta.f, position_or_direction.f, test_dummy_spray_range_gp);
             position_or_direction.f[3] = 5627.925f;
             position_or_direction.f[2] = 1.0f;
             make_hit_descriptor(&fx, moby, 0x10001, 1.0f, position_or_direction.f);

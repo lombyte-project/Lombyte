@@ -128,20 +128,20 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
 extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
-extern int D_L14_001614E0;
+#include "rnc/overlay/shared/gameplay/entities/plasmabot_data/fun_l14_002b3890.h"
 
-void FUN_L14_002b3890(int idx) {
-    short *p;
-    if (idx != -1) {
-        p = D_L14_001ABF40[idx];
-        if (p != 0) {
+void FUN_L14_002b3890(int selected_moby_list_index) {
+    short *listed_moby_entry_cursor;
+    if (selected_moby_list_index != -1) {
+        listed_moby_entry_cursor = D_L14_001ABF40[selected_moby_list_index];
+        if (listed_moby_entry_cursor != 0) {
             do {
-                char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
+                char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
                 char *data = *(char **)(moby + 0x78);
                 if (*(short *)(moby + 0xA6) == 0x1C) {
-                    *(short *)(data + 0x260) = scale_game_frames(D_L14_001614E0);
+                    *(short *)(data + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
-            } while (*p++ >= 0);
+            } while (*listed_moby_entry_cursor++ >= 0);
         }
     }
 }
@@ -721,10 +721,7 @@ typedef struct {
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
-extern f32 D_L14_001614A8 __attribute__((sda));
-extern f32 D_L14_001614B0 __attribute__((sda));
-extern f32 D_L14_001614B4 __attribute__((sda));
-extern f32 D_L14_001614B8 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_plasmabot_visual_effects.h"
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
@@ -790,12 +787,12 @@ void update_plasmabot_visual_effects(struct Moby *moby)
     }
     moby_point_position(moby, 6, &effect_positions->joint6);
     build_moby_bone_transform(moby, 7, bone_transform_scratch);
-    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614A8);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], plasmabot_nozzle_bone_x_offset_gp);
     fast_vec_add(&effect_positions->nozzle, &bone_transform_scratch[3], &dx);
     build_moby_bone_transform(moby, 2, bone_transform_scratch);
-    fast_vec_scale(&dx, &bone_transform_scratch[0], D_L14_001614B0);
-    fast_vec_scale(&dy, &bone_transform_scratch[1], D_L14_001614B4);
-    fast_vec_scale(&dz, &bone_transform_scratch[2], D_L14_001614B8);
+    fast_vec_scale(&dx, &bone_transform_scratch[0], plasmabot_beam_bone_x_offset_gp);
+    fast_vec_scale(&dy, &bone_transform_scratch[1], plasmabot_beam_endpoint_bone_y_offset_gp);
+    fast_vec_scale(&dz, &bone_transform_scratch[2], plasmabot_beam_bone_z_offset_gp);
     fast_vec_add(&effect_positions->beam_start, &bone_transform_scratch[3], &dx);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dy);
     fast_vec_add(&effect_positions->beam_start, &effect_positions->beam_start, &dz);
@@ -1382,15 +1379,15 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 int FUN_L14_002d9870(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int *data = *(int **)(moby + 0x78);
-    int r = 0;
+    int hatch_reset_delay_active = 0;
     if (moby[0x20] == 0) {
         moby[0x20] = 5;
         set_moby_animation(moby, 1, 0);
     } else {
-        r = moby[0x20] == 6;
+        hatch_reset_delay_active = moby[0x20] == 6;
     }
     data[2] = scale_game_frames(0x3C);
-    return r;
+    return hatch_reset_delay_active;
 }
 extern float D_0015ED60;
 #define DE670_THRESHOLD D_L14_00161B20
@@ -1961,7 +1958,7 @@ typedef struct {
 } MobyHit_ff640;
 
 extern char *D_L14_0015FFDC;
-extern float D_L14_00162000 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -2060,7 +2057,7 @@ void update_floating_mine(struct Moby *moby) {
         break;
     }
     }
-    vars->phase = add_rotations_ff640(vars->phase, D_L14_00162000);
+    vars->phase = add_rotations_ff640(vars->phase, floating_mine_glow_phase_step_gp);
     glow_pulse_sine = sin_ff640(vars->phase);
     glow_red_intensity = ftoi_ff640(glow_pulse_sine * 48.0f) + 0xCF;
     glow_green_blue_intensity = ftoi_ff640(glow_pulse_sine * 32.0f) + 0x30;

@@ -1454,7 +1454,7 @@ extern void *D_L07_001612D4;
 extern int D_L07_001612D8; /* no foreign declaration */
 extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda)); /* no foreign declaration */
 extern unsigned short D_L07_00161B34 __attribute__((sda)); /* no foreign declaration */
-extern int D_L07_00161B38 __attribute__((sda)); /* no foreign declaration */
+extern int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") __attribute__((sda)); /* no foreign declaration */
 extern int D_L07_00204700[][4];
 extern int pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int pool_init_tiles() __asm__("FUN_L01_002b7a48");
@@ -1515,7 +1515,7 @@ void water_update(Moby_30D8E8 *water_moby) {
     if (water_data == 0) {
         return;
     }
-    if (D_L07_00161B38 != 0) {
+    if (water_shared_byte_clear_enabled != 0) {
         D_0013D4C0[4] = 0;
         D_0013D4EC[0] = 0;
     }
@@ -2141,7 +2141,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1, float f2, float f3,
                                 float f4) __asm__("FUN_L07_0030dbb0");
 
-unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1, float f2, float f3,
+unsigned char *spawn_moby_class_1046(int spawning_moby, void *spawn_position, int b, float f0, float f1, float f2, float spawn_speed,
                                 float f4) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x416);
     if (moby != 0) {
@@ -2152,11 +2152,11 @@ unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1
         moby[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
-        qcopy(moby + 0x10, pos);
-        *(int *)(data + 0x14) = a;
+        qcopy(moby + 0x10, spawn_position);
+        *(int *)(data + 0x14) = spawning_moby;
         *(float *)(data + 4) = f1;
         *(float *)(data + 0x10) = f2;
-        *(float *)(data + 0xC) = f3;
+        *(float *)(data + 0xC) = spawn_speed;
         *(float *)data = f0;
         *(float *)(data + 8) = f0;
         *(int *)(data + 0x18) = b;

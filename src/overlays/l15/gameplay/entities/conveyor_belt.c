@@ -463,8 +463,7 @@ extern int D_L15_0015F5CC;
 int D_L15_001620EC = 128;
 int D_L15_001620F0 = 45;
 int D_L15_001620F4 = 64;
-extern float D_L15_001620F8 __attribute__((sda));
-extern float D_L15_001620FC __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh_buffers.h"
 extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
@@ -506,7 +505,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     vu1_add_gs_register(0x14, ((long)0xFF90 << 32) | 0x260);
     ripple_data->f0 = ripple_data->f4;
     ripple_data->f4 = fast_add_rotations(ripple_data->f4,
-                               360.0f / multiply_global_factor_ed64(D_L15_001620FC) * DEG_TO_RAD * frame_time);
+                               360.0f / multiply_global_factor_ed64(ripple_mesh_buffers_phase_advance_divisor_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
@@ -516,8 +515,8 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
             float t = ripple_mesh_buffers_z_amplitude_gp *
                       fast_sin(fast_add_rotations(
                           wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
-                                                      D_L15_001620F8) *
-                                     6.2831855f / D_L15_001620F8),
+                                                      ripple_mesh_buffers_radial_wavelength_gp) *
+                                     6.2831855f / ripple_mesh_buffers_radial_wavelength_gp),
                           ripple_data->f4));
             *(float *)(j * 12 + D_L15_00162090[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + D_L15_00162090[i] + 4) = p[1] + moby->pos.y;
@@ -649,7 +648,7 @@ int D_L15_00162154 = 128;
 int D_L15_00162158 = 45;
 int D_L15_0016215C = 64;
 extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
-extern float D_L15_00162164 __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh.h"
 extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
@@ -678,7 +677,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_gs_register(8, 0);
     vu1_add_gs_register(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(D_L15_00162164) *
+    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(ripple_mesh_phase_advance_divisor_gp) *
                                                       DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
@@ -1840,7 +1839,7 @@ int D_L15_001621E4 = 128;
 int D_L15_001621E8 = 45;
 int D_L15_001621EC = 64;
 extern float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") __attribute__((sda));
-extern float D_L15_001621F4 __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_scaled_moby_radial_ripple_mesh.h"
 extern float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") __attribute__((sda));
 extern float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") __attribute__((sda));
 extern float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") __attribute__((sda));
@@ -1864,7 +1863,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edbe0(8, 0);
     FUN_00233980_2edbe0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(D_L15_001621F4) * 0.017453292f * D_0015ED6C_2edbe0);
+    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edbe0);
     FUN_L00_00250320_2edbe0(moby, &r, &g, &b);
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 46; i++) {
@@ -2104,7 +2103,7 @@ int D_L15_00162254 = 128;
 int D_L15_00162258 = 45;
 int D_L15_0016225C = 64;
 extern float ripple_88_radial_wavelength_gp __asm__("D_L15_00162260") __attribute__((sda));
-extern float D_L15_00162264 __attribute__((sda));
+#include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_scaled_88_vertex_moby_radial_ripple_mesh.h"
 extern float ripple_88_z_amplitude_gp __asm__("D_L15_00162268") __attribute__((sda));
 extern float ripple_88_uv_scroll_rate_gp __asm__("D_L15_0016226C") __attribute__((sda));
 extern float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") __attribute__((sda));
@@ -2128,7 +2127,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edfc0(8, 0);
     FUN_00233980_2edfc0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = FUN_001fa580_2edfc0(data->angle, 360.0f / FUN_001f96b0_2edfc0(D_L15_00162264) * 0.017453292f * D_0015ED6C_2edfc0);
+    data->angle = FUN_001fa580_2edfc0(data->angle, 360.0f / FUN_001f96b0_2edfc0(ripple_88_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edfc0);
     FUN_L00_00250320_2edfc0(moby, &r, &g, &b);
     color = (D_L15_0016225C << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 88; i++) {

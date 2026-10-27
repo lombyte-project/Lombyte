@@ -32,16 +32,13 @@ int D_L12_001619D0 = 105;
 extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
 extern int D_L12_001619DC __attribute__((sda));
-extern float D_L12_001619E0 __attribute__((sda));
-extern float D_L12_001619E4 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update_3.h"
 int D_L12_001619E8 = 1;
-extern int D_L12_001619EC __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update_2.h"
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
 int D_L12_001619F8 = 0x10022;
-extern float D_L12_001619FC __attribute__((sda));
-extern float D_L12_00161A00 __attribute__((sda));
-extern float D_L12_00161A04 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/water_reservoir_data/water_reservoir_update.h"
 extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
@@ -87,24 +84,24 @@ update:
                 random_vector_72(offset0, 0.0f, water_reservoir_random_offset_radius_gp);
                 random_vector_72(offset1, 0.0f, water_reservoir_random_offset_radius_gp);
                 subtract_vector_72(pos_offset_delta, pos, offset0);
-                pos_offset_delta[2] += D_L12_00161A00 - D_L12_001619FC;
+                pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp - water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 subtract_vector_72(offset_pair_delta, offset0, offset1);
-                offset_pair_delta[2] += D_L12_00161A04 - D_L12_00161A00;
-                scaled = D_L12_001619EC;
+                offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp - water_reservoir_effect_delta_z_reference_gp;
+                scaled = water_reservoir_effect_delta_scale_divisor_gp;
                 scale_vector_72(pos_offset_delta, pos_offset_delta, 2.0f / (float)scaled);
                 scale_vector_72(offset_pair_delta, offset_pair_delta, 2.0f / (float)scaled);
                 add_vector_72(pos, pos, (float *)&moby->pos);
                 if (moby->command & 1) {
-                    pos[2] += D_L12_00161A04;
+                    pos[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp;
                     pos_offset_delta[2] = -pos_offset_delta[2];
                     offset_pair_delta[2] = -offset_pair_delta[2];
                 } else {
-                    pos[2] += D_L12_001619FC;
+                    pos[2] += water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 }
-                pos_offset_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
-                offset_pair_delta[3] = random_float_between_72(D_L12_001619E0, D_L12_001619E4);
+                pos_offset_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
+                offset_pair_delta[3] = random_float_between_72(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
                 FUN_00218888_72(pos, pos_offset_delta, offset_pair_delta, D_L12_001619F4, D_L12_001619F4,
-                                  D_L12_001619E8, scale_game_frames_72(D_L12_001619EC),
+                                  D_L12_001619E8, scale_game_frames_72(water_reservoir_effect_delta_scale_divisor_gp),
                                   D_L12_001619F0, D_L12_001619F8);
             }
         }
@@ -204,7 +201,7 @@ extern void FUN_L00_00250df8(void *);
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
 
-char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) {
+char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float nominal_speed, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
     if (moby != 0) {
         char *data;
@@ -222,7 +219,7 @@ char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
         *(float *)(data + 0x1C) = yaw;
-        *(float *)(data + 0x24) = f1;
+        *(float *)(data + 0x24) = nominal_speed;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = scaled_frames;
         FUN_L00_00250df8(moby);

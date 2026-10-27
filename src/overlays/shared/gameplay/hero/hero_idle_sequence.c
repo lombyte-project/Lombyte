@@ -2121,7 +2121,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 float FUN_L00_00209018(float *a, int n);
 float FUN_L00_00209018(float *sample_values, int sample_count) {
-    char buf[16] __attribute__((aligned(16)));
+    char sample_integral_part_scratch[16] __attribute__((aligned(16)));
     char *hero_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     int i = truncate_float_to_s32(*(float *)(hero_base + 0xAA8));
     int last_sample_index = sample_count - 1;
@@ -2130,7 +2130,7 @@ float FUN_L00_00209018(float *sample_values, int sample_count) {
     if (*(int *)(hero_base + 0xA98) & 2) {
         previous_sample_index = last_sample_index;
     }
-    current_sample_weight = split_float_fraction(buf, *(float *)(hero_base + 0xAA8));
+    current_sample_weight = split_float_fraction(sample_integral_part_scratch, *(float *)(hero_base + 0xAA8));
     return current_sample_weight * sample_values[i] + (*(float *)(hero_base + 0xAAC) - current_sample_weight) * sample_values[previous_sample_index];
 }
 typedef unsigned int u128_002090d0 __attribute__((mode(TI), aligned(16)));
@@ -2554,7 +2554,7 @@ void emit_hero_timed_effects(void) {
     OvlQuad effect_vector[1];
     char *hero_effect_timer_anchor;
     char *base;
-    float lateral_angle, r, planar_scale, alpha_fraction, theta, phi;
+    float lateral_angle, spherical_offset_scale, planar_scale, alpha_fraction, theta, phi;
     int frame_count, alpha, col, life, small_effect_sample, large_effect_sample, k;
     OvlQuad *pt;
     hero_effect_timer_anchor = D_0013F7EE;
@@ -2587,11 +2587,11 @@ void emit_hero_timed_effects(void) {
     for (k = 0x38; k >= 0; k--) {
         small_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
         large_effect_sample = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
-        r = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
+        spherical_offset_scale = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
         qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
         theta = FUN_00213308_209ec8();
         phi = FUN_00213308_209ec8();
-        build_spherical_offset(pt, r, theta, phi);
+        build_spherical_offset(pt, spherical_offset_scale, theta, phi);
         FUN_L00_00269958(hero_position_copy, pt, col, 0x70F0, life, small_effect_sample, large_effect_sample, 1);
     }
     frame_count = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
@@ -2912,8 +2912,8 @@ extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
-void FUN_L00_0020a228(float a, float b);
-void FUN_L00_0020a210(float a, float b);
+void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");
+void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
 void update_hero_target_tracking(void) {
     char *hero_control_mode_owner = (char *)hero_pos - 0x80;
@@ -3012,11 +3012,11 @@ void update_hero_target_tracking(void) {
             yaw_delta = -0.296705961f;
         pitch = 0.0f;
     }
-    FUN_L00_0020a228(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
+    set_fourth_hero_easing_parameters(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
     manipulator_table = D_L00_0017A780;
     *(float *)(manipulator_table + 0x274) = pitch;
     *(float *)(manipulator_table + 0x278) = yaw_delta * 0.7f;
-    FUN_L00_0020a210(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
+    set_third_hero_easing_parameters(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
     *(float *)(manipulator_table + 0x1C8) = *(float *)(manipulator_table + 0x278) * 0.55f;
 }
 typedef struct {

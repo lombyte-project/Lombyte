@@ -1081,18 +1081,10 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
-extern int D_L08_00161C00 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/update_falling_debris_2.h"
 extern int D_L08_00161C04 __attribute__((sda));
 extern int D_L08_00161C08 __attribute__((sda));
-extern float D_L08_00161C0C __attribute__((sda));
-extern float D_L08_00161C10 __attribute__((sda));
-extern float D_L08_00161C14 __attribute__((sda));
-extern float D_L08_00161C18 __attribute__((sda));
-extern int D_L08_00161C1C __attribute__((sda));
-extern int D_L08_00161C20 __attribute__((sda));
-extern int D_L08_00161C24 __attribute__((sda));
-extern float D_L08_00161C28 __attribute__((sda));
-extern float D_L08_00161C2C __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/update_falling_debris.h"
 extern int spawn_spark() __asm__("FUN_00218888");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1155,26 +1147,26 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (debris_moby->pos[2] < 15.2f) {
-            for (i = 0; i < D_L08_00161C00; i++) {
+            for (i = 0; i < falling_debris_burst_particle_count; i++) {
                 float particle_planar_angle = random_angle_radians_c();
                 int burst_frame_count;
-                int c2;
-                int c3;
+                int burst_secondary_frame_count;
+                int burst_tertiary_frame_count;
                 qcopy(particle_spawn_position, debris_moby->pos);
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
-                particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
-                particle_primary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C14;
-                particle_primary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C14;
-                particle_secondary_vector[2] = D_L08_00161C10 * D_0015ED6C_gp;
-                particle_secondary_vector[0] += fast_cos(particle_planar_angle) * D_L08_00161C18;
-                particle_secondary_vector[1] += fast_sin(particle_planar_angle) * D_L08_00161C18;
-                particle_primary_vector[3] = D_L08_00161C28;
-                particle_secondary_vector[3] = D_L08_00161C2C;
-                burst_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
-                c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
-                c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
-                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, burst_frame_count, c2, c3, -1);
+                particle_primary_vector[2] = falling_debris_burst_primary_vertical_scale * D_0015ED6C_gp;
+                particle_primary_vector[0] += fast_cos(particle_planar_angle) * falling_debris_burst_primary_planar_scale;
+                particle_primary_vector[1] += fast_sin(particle_planar_angle) * falling_debris_burst_primary_planar_scale;
+                particle_secondary_vector[2] = falling_debris_burst_secondary_vertical_scale * D_0015ED6C_gp;
+                particle_secondary_vector[0] += fast_cos(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
+                particle_secondary_vector[1] += fast_sin(particle_planar_angle) * falling_debris_burst_secondary_planar_scale;
+                particle_primary_vector[3] = falling_debris_burst_primary_vector_w;
+                particle_secondary_vector[3] = falling_debris_burst_secondary_vector_w;
+                burst_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_frame_count_random_min, (float)(falling_debris_burst_frame_count_random_min * 2))));
+                burst_secondary_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_secondary_frame_count_random_min, (float)(falling_debris_burst_secondary_frame_count_random_min * 2))));
+                burst_tertiary_frame_count = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)falling_debris_burst_tertiary_frame_count_random_min, (float)(falling_debris_burst_tertiary_frame_count_random_min * 2))));
+                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, burst_frame_count, burst_secondary_frame_count, burst_tertiary_frame_count, -1);
             }
             debris_moby->state = 3;
         }
@@ -2623,8 +2615,7 @@ extern float add_angle_5188(float, float) __asm__("FUN_001fa580");
 extern void vu1_add_g_sregister_5188(int, u64) __asm__("FUN_00233980");
 extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
-extern float D_L08_00161C5C __attribute__((sda));
-extern float D_L08_00161C60 __attribute__((sda));
+#include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/draw_batalia_bolt_pickup_rotating_quad.h"
 extern char D_L08_0016D240[] __attribute__((section(".data")));
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) __asm__("FUN_L08_002e5188");
@@ -2645,9 +2636,9 @@ void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
     if (*(short *)(data + 0x6c) == 0) return;
 
     qcopy(pos, &moby->pos);
-    normalize_vector_xyz_5188(direction, (char *)moby + 0xe0, D_L08_00161C5C);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xe0, bolt_pickup_quad_center_offset_along_moby_e0);
     add_vector_xyz_5188(pos, pos, direction);
-    normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, D_L08_00161C60);
+    normalize_vector_xyz_5188(direction, (char *)moby + 0xc0, bolt_pickup_quad_center_offset_along_moby_c0);
     add_vector_xyz_5188(pos, pos, direction);
     fast_vec_sub(pos, pos, D_L08_001675C0);
     length = vector_length_5188(pos);

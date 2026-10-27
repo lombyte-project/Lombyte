@@ -1855,7 +1855,7 @@ void blaster_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B69C0), where it is exact; names translated to the US level program. */
 
-extern int D_L00_0015F30C;
+#include "rnc/overlay/shared/gameplay/entities/devastator_data/moby_save_globals_state.h"
 extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444")
     __attribute__((section(".sdata")));
 extern float D_L00_0015F448;
@@ -1865,23 +1865,23 @@ extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
 
 void moby_save_globals_state(void *m_) __asm__("FUN_L00_002b56d0");
 void moby_save_globals_state(void *m_) {
-    char *m = (char *)m_;
-    char *p;
+    char *render_state_owner_moby = (char *)m_;
+    char *render_state_backup_vars;
     float f0, f1, f2, f3;
 
-    p = *(char **)(m + 0x78);
+    render_state_backup_vars = *(char **)(render_state_owner_moby + 0x78);
     f0 = D_L00_0015F448;
     f1 = D_L00_0015F44C;
     f2 = D_L00_0015F450;
     f3 = D_L00_0015F448_e[3];
-    D_L00_0015F30C = 1;
-    *(float *)(p + 0x30) = f0;
-    *(float *)(p + 0x34) = f1;
-    *(float *)(p + 0x38) = f2;
-    *(float *)(p + 0x3C) = f3;
-    p[0x40] = D_L00_0015F444_e[0];
-    p[0x41] = D_L00_0015F444_e[1];
-    p[0x42] = D_L00_0015F444_e[2];
+    visibomb_render_override_active = 1;
+    *(float *)(render_state_backup_vars + 0x30) = f0;
+    *(float *)(render_state_backup_vars + 0x34) = f1;
+    *(float *)(render_state_backup_vars + 0x38) = f2;
+    *(float *)(render_state_backup_vars + 0x3C) = f3;
+    render_state_backup_vars[0x40] = D_L00_0015F444_e[0];
+    render_state_backup_vars[0x41] = D_L00_0015F444_e[1];
+    render_state_backup_vars[0x42] = D_L00_0015F444_e[2];
     D_L00_0015F444_e[0] = 0x40;
     D_L00_0015F448 = 0;
     D_L00_0015F444_e[1] = 0x60;
@@ -1906,24 +1906,24 @@ extern void set_background_color(int, int, int) __asm__("FUN_001fb280");
 
 void moby_restore_globals_state(int m_, int flag) __asm__("FUN_L00_002b57f0");
 void moby_restore_globals_state(int m_, int flag) {
-    char *m = (char *)m_;
-    char *p;
+    char *render_restore_moby = (char *)m_;
+    char *render_restore_moby_vars;
     float f0, f1, f2, f3;
-    char *d;
+    char *background_color_source;
 
-    p = *(char **)(m + 0x78);
-    D_L00_0015F30C = 0;
-    f0 = *(float *)(p + 0x30);
-    f1 = *(float *)(p + 0x34);
-    f2 = *(float *)(p + 0x38);
-    f3 = *(float *)(p + 0x3C);
+    render_restore_moby_vars = *(char **)(render_restore_moby + 0x78);
+    visibomb_render_override_active = 0;
+    f0 = *(float *)(render_restore_moby_vars + 0x30);
+    f1 = *(float *)(render_restore_moby_vars + 0x34);
+    f2 = *(float *)(render_restore_moby_vars + 0x38);
+    f3 = *(float *)(render_restore_moby_vars + 0x3C);
     D_L00_0015F448 = f0;
     D_L00_0015F44C = f1;
     D_L00_0015F450 = f2;
     D_L00_0015F448_e[3] = f3;
-    D_L00_0015F444 = p[0x40];
-    D_L00_0015F445 = p[0x41];
-    D_L00_0015F446 = p[0x42];
+    D_L00_0015F444 = render_restore_moby_vars[0x40];
+    D_L00_0015F445 = render_restore_moby_vars[0x41];
+    D_L00_0015F446 = render_restore_moby_vars[0x42];
     D_L00_00169FF8 = 1;
     if (flag != 0) {
         D_L00_00160F80 = 512000.0f;
@@ -1932,8 +1932,8 @@ void moby_restore_globals_state(int m_, int flag) {
         D_L00_0015FFF0 = 500;
         D_L00_0016017C = 0x1F4000;
     }
-    d = D_L00_0016CA40;
-    set_background_color(*(int *)(d + 0x23C), *(int *)(d + 0x240), *(int *)(d + 0x244));
+    background_color_source = D_L00_0016CA40;
+    set_background_color(*(int *)(background_color_source + 0x23C), *(int *)(background_color_source + 0x240), *(int *)(background_color_source + 0x244));
 }
 typedef union {
     OvlQuad q;
@@ -1962,7 +1962,7 @@ extern int D_L00_0015F608;
 extern float visibomb_missile_default_speed_gp __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
-unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) {
+unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, float fa, float fb) {
     unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
     if (spawned_moby) {
         unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
@@ -1979,7 +1979,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
         *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
         *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
-        qcopy(spawned_moby + 0x10, pos);
+        qcopy(spawned_moby + 0x10, launch_position);
         *(int *)(spawned_moby_vars + 0x8) = 0;
         *(int *)(spawned_moby_vars + 0xC) = 0;
         if ((void *)G->ground_moby && FUN_L00_002603d0_2b58d8((void *)G->ground_moby))
@@ -2000,16 +2000,16 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
         FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(spawned_moby_vars + 0x24));
         FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
-            int r = FUN_L00_002bb360_2b58d8(spawned_moby);
+            int missile_attachment_moby = FUN_L00_002bb360_2b58d8(spawned_moby);
             float k = visibomb_missile_default_speed_gp * D_0015ED6C_2b58d8;
-            *(int *)(spawned_moby_vars + 0x20) = r;
+            *(int *)(spawned_moby_vars + 0x20) = missile_attachment_moby;
             *(float *)(spawned_moby_vars + 0x48) = k;
         }
         copy_hero_moby_field_38(spawned_moby);
         *(int *)(spawned_moby_vars + 0x2C) = FUN_0022da68_2b58d8(0, 4, spawned_moby);
         collision_start.q = *(OvlQuad *)(source_moby + 0x10);
-        collision_start.f[2] = pos->f[2];
-        if (FUN_001efa68_2b58d8(&collision_start, pos, 0, ({
+        collision_start.f[2] = launch_position->f[2];
+        if (FUN_001efa68_2b58d8(&collision_start, launch_position, 0, ({
                 struct Hero *collision_ignored_hero = &hero;
                 (void *)collision_ignored_hero->moby;
             }),
@@ -2244,7 +2244,7 @@ extern void send_blast_hits_2b6140(void *, void *, void *, int, int, int, int, i
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));
-extern float D_L00_00161498 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/devastator_data/visibomb_missile_update.h"
 extern float visibomb_missile_max_speed_gp __asm__("D_L00_001614A0") __attribute__((sda));
 extern float visibomb_missile_speed_target_blend_factor_gp __asm__("D_L00_001614A4") __attribute__((sda));
 extern float visibomb_missile_speed_blend_factor_gp __asm__("D_L00_001614A8") __attribute__((sda));
@@ -2306,7 +2306,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         if (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed_gp * D_0015ED6C_2b6140;
     }
     func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32_2b6140((missile_vars->f48 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140
-        / (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140)) * D_L00_00161498));
+        / (visibomb_missile_max_speed_gp * D_0015ED6C_2b6140 - visibomb_missile_default_speed_gp * D_0015ED6C_2b6140)) * visibomb_missile_speed_voice_control_scale_gp));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames_2b6140(0xBB8) - scale_game_frames_2b6140(5)) {
             float steered_pitch;
@@ -3231,7 +3231,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                 int j;
                 for (j = 0; j < *(int *)&D_L00_0016155C; j++) {
                     int spark_initial_color;
-                    int c2;
+                    int spark_interpolated_color;
                     int c3;
                     int c4;
                     qcopy(qv, entry_direction_vector);
@@ -3241,13 +3241,13 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                     spark_random_vector[3] = *(float *)&D_L00_00161540;
                     spark_initial_color = fast_tween_color(*(int *)&D_L00_00161544, *(int *)&D_L00_00161548, random_float_between_c(0.0f, 1.0f));
                     swap_packed_color_channels(spark_initial_color, item_variant_bytes[0x10]);
-                    c2 = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
-                    swap_packed_color_channels(c2, item_variant_bytes[0x10]);
+                    spark_interpolated_color = fast_tween_color(*(int *)&D_L00_0016154C, *(int *)&D_L00_00161550, random_float_between_c(0.0f, 1.0f));
+                    swap_packed_color_channels(spark_interpolated_color, item_variant_bytes[0x10]);
                     c3 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     c4 = func_001FA898_r(multiply_global_factor_ed64(random_float_between_c((float)*(int *)&D_L00_00161554, (float)*(int *)&D_L00_00161558)));
                     FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
                     add_vector_xyz(spark_position, spark_position, (entry + 0x10));
-                    spawn_spark(spark_position, qv, spark_random_vector, spark_initial_color, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C);
+                    spawn_spark(spark_position, qv, spark_random_vector, spark_initial_color, spark_interpolated_color, 0xA, c3, c4, *(int *)&D_L00_0016152C);
                 }
             } else if (sub_type < 2) {
                 *(int *)(slots_base - (-(i * 4))) = 0;
@@ -3403,17 +3403,23 @@ extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
-void tesla_claw_update(struct Moby *m) {
-    V_2B9AD8 t;
-    Data_2B9AD8 *s = (Data_2B9AD8 *)m->pvars;
+void tesla_claw_update(struct Moby *tesla_claw_moby) {
+    enum {
+        TESLA_CLAW_STATE_INITIALIZE = 0,
+        TESLA_CLAW_STATE_WAIT_FOR_FIRE = 1,
+        TESLA_CLAW_STATE_FIRING = 3,
+        TESLA_CLAW_STATE_FINISHED = 4
+    };
+    V_2B9AD8 transformed_offset;
+    Data_2B9AD8 *tesla_claw_vars = (Data_2B9AD8 *)tesla_claw_moby->pvars;
     int active;
     int done = ((struct Hero *)D_0013F350_2b2100)->items[0].state == 3;
     int ready;
-    struct Hero *h;
+    struct Hero *player_hero;
 
     if ((controller_state.pressed & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
         !((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
-        s->reach = 0.8f;
+        tesla_claw_vars->reach = 0.8f;
     }
     D_L00_0017AEBC = 0.9f;
     active = 0;
@@ -3423,154 +3429,154 @@ void tesla_claw_update(struct Moby *m) {
         if ((unsigned int)((struct Hero *)D_0013F350_2b2100)->state.control_mode < 2 || ((struct Hero *)D_0013F350_2b2100)->state.control_mode == 9)
             FUN_L00_00203908_2b2100(0x4E30, 0x81);
     }
-    if ((controller_state.held & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && m->state != 4 &&
-        m->state != 0 && !((struct Hero *)D_0013F350_2b2100)->item_use_locked && ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
-        if (s->timer == 0) {
+    if ((controller_state.held & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && tesla_claw_moby->state != 4 &&
+        tesla_claw_moby->state != 0 && !((struct Hero *)D_0013F350_2b2100)->item_use_locked && ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
+        if (tesla_claw_vars->timer == 0) {
             if (ready > 0) {
-                if (FUN_001f9770_2b2100a(&s->tick)) {
-                    FUN_001f9770_2b2100a(&s->f44);
-                    FUN_001f9770_2b2100a(&s->f46);
+                if (FUN_001f9770_2b2100a(&tesla_claw_vars->tick)) {
+                    FUN_001f9770_2b2100a(&tesla_claw_vars->f44);
+                    FUN_001f9770_2b2100a(&tesla_claw_vars->f46);
                     FUN_L00_00233db8_2b2100a(-1, 1);
-                    s->tick = FUN_001f96f8_2b2100(10);
+                    tesla_claw_vars->tick = FUN_001f96f8_2b2100(10);
                 }
-                if (s->light == -1) {
-                    s->light = FUN_L00_0023e5e0_2b2100(&m->pos, 7.5f, 0.0f, 0);
-                } else if (s->glow < FUN_001f96f8_2b2100(10)) {
-                    s->glow++;
+                if (tesla_claw_vars->light == -1) {
+                    tesla_claw_vars->light = FUN_L00_0023e5e0_2b2100(&tesla_claw_moby->pos, 7.5f, 0.0f, 0);
+                } else if (tesla_claw_vars->glow < FUN_001f96f8_2b2100(10)) {
+                    tesla_claw_vars->glow++;
                 }
                 active = 1;
-                if (s->target) {
+                if (tesla_claw_vars->target) {
                     if (2.0943f < FUN_001fa688_2b2100(((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
-                            FUN_001f9e90_2b2100(s->target->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
-                                                     s->target->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
-                        !s->target->visible ||
-                        20.0f < FUN_001f9b48_2b2100(&s->target->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
-                        s->target = 0;
-                        s->lock = 0;
+                            FUN_001f9e90_2b2100(tesla_claw_vars->target->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
+                                                     tesla_claw_vars->target->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
+                        !tesla_claw_vars->target->visible ||
+                        20.0f < FUN_001f9b48_2b2100(&tesla_claw_vars->target->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
+                        tesla_claw_vars->target = 0;
+                        tesla_claw_vars->lock = 0;
                     }
                 }
-                if (s->target2) {
+                if (tesla_claw_vars->target2) {
                     if (2.0943f < FUN_001fa688_2b2100(((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
-                            FUN_001f9e90_2b2100(s->target2->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
-                                                     s->target2->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
-                        !s->target2->visible ||
-                        20.0f < FUN_001f9b48_2b2100(&s->target2->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
-                        s->target2 = 0;
-                        s->lock2 = 0;
+                            FUN_001f9e90_2b2100(tesla_claw_vars->target2->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
+                                                     tesla_claw_vars->target2->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
+                        !tesla_claw_vars->target2->visible ||
+                        20.0f < FUN_001f9b48_2b2100(&tesla_claw_vars->target2->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
+                        tesla_claw_vars->target2 = 0;
+                        tesla_claw_vars->lock2 = 0;
                     }
                 }
-                qcopy(&s->pos, &m->pos);
-                s->pos.f.z += 0.7f;
-                qcopy(&s->tip, &s->pos);
-                if (s->target && s->lock) {
+                qcopy(&tesla_claw_vars->pos, &tesla_claw_moby->pos);
+                tesla_claw_vars->pos.f.z += 0.7f;
+                qcopy(&tesla_claw_vars->tip, &tesla_claw_vars->pos);
+                if (tesla_claw_vars->target && tesla_claw_vars->lock) {
                     int lim = 50;
                     Aim_2B9AD8 *a;
                     short n;
-                    s->hold++;
-                    a = FUN_002141f8_2b2100(s->target);
+                    tesla_claw_vars->hold++;
+                    a = FUN_002141f8_2b2100(tesla_claw_vars->target);
                     if (a && a->kind == 1) lim = 5;
-                    n = s->hold;
+                    n = tesla_claw_vars->hold;
                     if (!(n < FUN_001f96f8_2b2100(lim))) {
-                        s->target = 0;
-                        s->lock = 0;
+                        tesla_claw_vars->target = 0;
+                        tesla_claw_vars->lock = 0;
                     }
                 } else {
-                    s->hold = 0;
+                    tesla_claw_vars->hold = 0;
                 }
-                if (s->target2 && s->lock2) {
+                if (tesla_claw_vars->target2 && tesla_claw_vars->lock2) {
                     int lim = 50;
                     Aim_2B9AD8 *a;
                     short n;
-                    s->hold2++;
-                    a = FUN_002141f8_2b2100(s->target2);
+                    tesla_claw_vars->hold2++;
+                    a = FUN_002141f8_2b2100(tesla_claw_vars->target2);
                     if (a && a->kind == 1) lim = 5;
-                    n = s->hold2;
+                    n = tesla_claw_vars->hold2;
                     if (!(n < FUN_001f96f8_2b2100(lim))) {
-                        s->target2 = 0;
-                        s->lock2 = 0;
+                        tesla_claw_vars->target2 = 0;
+                        tesla_claw_vars->lock2 = 0;
                     }
                 } else {
-                    s->hold2 = 0;
+                    tesla_claw_vars->hold2 = 0;
                 }
-                s->reach += (FUN_001fa6c0_2b2100(D_0013E533_2b2100[0]) * 6.0f + 12.0f - s->reach) * (D_0015ED60_2b2100 * 0.07f);
+                tesla_claw_vars->reach += (FUN_001fa6c0_2b2100(D_0013E533_2b2100[0]) * 6.0f + 12.0f - tesla_claw_vars->reach) * (D_0015ED60_2b2100 * 0.07f);
                 if (((struct Hero *)D_0013F350_2b2100)->state.current == 1) {
-                    t.f.x = 1.2f;
-                    t.f.y = 0.0f;
-                    t.f.z = 0.0f;
-                    FUN_001f9cf8_2b2100(&t, &t, D_L00_00166FD0);
-                    s->pos.f.z = t.f.z + m->pos.z;
-                    s->pos.f.x = t.f.x + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0];
-                    s->pos.f.y = t.f.y + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1];
-                    t.f.x = s->reach;
-                    t.f.y = 0.0f;
-                    t.f.z = 0.0f;
-                    FUN_001f9cf8_2b2100(&t, &t, D_L00_00166FD0);
-                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &t);
+                    transformed_offset.f.x = 1.2f;
+                    transformed_offset.f.y = 0.0f;
+                    transformed_offset.f.z = 0.0f;
+                    FUN_001f9cf8_2b2100(&transformed_offset, &transformed_offset, D_L00_00166FD0);
+                    tesla_claw_vars->pos.f.z = transformed_offset.f.z + tesla_claw_moby->pos.z;
+                    tesla_claw_vars->pos.f.x = transformed_offset.f.x + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0];
+                    tesla_claw_vars->pos.f.y = transformed_offset.f.y + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1];
+                    transformed_offset.f.x = tesla_claw_vars->reach;
+                    transformed_offset.f.y = 0.0f;
+                    transformed_offset.f.z = 0.0f;
+                    FUN_001f9cf8_2b2100(&transformed_offset, &transformed_offset, D_L00_00166FD0);
+                    FUN_001f9a10_2b2100(&tesla_claw_vars->tip, &tesla_claw_vars->pos, &transformed_offset);
                 } else if (((struct Hero *)D_0013F350_2b2100)->unk22C8 == 1) {
-                    FUN_L00_0024f7c8_2b2100a(m, 0, &s->pos);
-                    t.f.x = 0.0f;
-                    t.f.y = -s->reach;
-                    t.f.z = 0.0f;
-                    FUN_001f9cf8_2b2100(&t, &t, &m->rot_row0);
-                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &t);
+                    FUN_L00_0024f7c8_2b2100a(tesla_claw_moby, 0, &tesla_claw_vars->pos);
+                    transformed_offset.f.x = 0.0f;
+                    transformed_offset.f.y = -tesla_claw_vars->reach;
+                    transformed_offset.f.z = 0.0f;
+                    FUN_001f9cf8_2b2100(&transformed_offset, &transformed_offset, &tesla_claw_moby->rot_row0);
+                    FUN_001f9a10_2b2100(&tesla_claw_vars->tip, &tesla_claw_vars->pos, &transformed_offset);
                 } else {
-                    FUN_L00_0024f7c8_2b2100a(m, 0, &s->pos);
-                    FUN_001f9bf8_2b2100(&s->tip, D_0013F350_2b2100 + 0x640, s->reach);
-                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &s->tip);
+                    FUN_L00_0024f7c8_2b2100a(tesla_claw_moby, 0, &tesla_claw_vars->pos);
+                    FUN_001f9bf8_2b2100(&tesla_claw_vars->tip, D_0013F350_2b2100 + 0x640, tesla_claw_vars->reach);
+                    FUN_001f9a10_2b2100(&tesla_claw_vars->tip, &tesla_claw_vars->pos, &tesla_claw_vars->tip);
                 }
-                FUN_L00_002b9310_2b2100(m);
-                FUN_L00_002b94d0_2b2100(m);
-                FUN_001f4600_2b2100(draw_beam_and_arc_effects, m);
+                FUN_L00_002b9310_2b2100(tesla_claw_moby);
+                FUN_L00_002b94d0_2b2100(tesla_claw_moby);
+                FUN_001f4600_2b2100(draw_beam_and_arc_effects, tesla_claw_moby);
             } else {
-                s->target = 0;
-                s->target2 = 0;
-                s->lock = 0;
-                s->lock2 = 0;
-                s->f44 = 0;
-                s->f46 = 0;
+                tesla_claw_vars->target = 0;
+                tesla_claw_vars->target2 = 0;
+                tesla_claw_vars->lock = 0;
+                tesla_claw_vars->lock2 = 0;
+                tesla_claw_vars->f44 = 0;
+                tesla_claw_vars->f46 = 0;
             }
         }
     } else {
-        s->target = 0;
-        s->target2 = 0;
-        s->lock = 0;
-        s->lock2 = 0;
+        tesla_claw_vars->target = 0;
+        tesla_claw_vars->target2 = 0;
+        tesla_claw_vars->lock = 0;
+        tesla_claw_vars->lock2 = 0;
     }
     if (!active) {
         D_L00_00161590 = 1;
-        if (s->glow > 0) s->glow--;
-        if (s->sound != -1) {
-            Voice_2B9AD8 *v = &D_0013E550_2b2100[s->sound];
-            if (v[1].owner == m && v[1].active) FUN_0022d798_2b2100(s->sound);
+        if (tesla_claw_vars->glow > 0) tesla_claw_vars->glow--;
+        if (tesla_claw_vars->sound != -1) {
+            Voice_2B9AD8 *firing_voice_slot_window = &D_0013E550_2b2100[tesla_claw_vars->sound];
+            if (firing_voice_slot_window[1].owner == tesla_claw_moby && firing_voice_slot_window[1].active) FUN_0022d798_2b2100(tesla_claw_vars->sound);
         }
-        s->sound = -1;
-    } else if (!FUN_L00_0028d8c0_2b2100(m, s->sound)) {
-        s->sound = FUN_0022da68_2b2100(4, 4, m);
+        tesla_claw_vars->sound = -1;
+    } else if (!FUN_L00_0028d8c0_2b2100(tesla_claw_moby, tesla_claw_vars->sound)) {
+        tesla_claw_vars->sound = FUN_0022da68_2b2100(4, 4, tesla_claw_moby);
     }
-    if (!s->target || s->target->state == 0xFE || s->target->state == 0xFD || !(s->target->flags & 0x1000)) s->lock = 1;
-    if (!s->target2 || s->target2->state == 0xFE || s->target2->state == 0xFD || !(s->target2->flags & 0x1000)) s->lock2 = 1;
-    switch (m->state) {
-    case 0:
-        s->timer = FUN_001f96f8_2b2100(16);
-        s->light = FUN_L00_0023e5e0_2b2100(&s->pos, 0.0f, 0.0f, 0);
+    if (!tesla_claw_vars->target || tesla_claw_vars->target->state == 0xFE || tesla_claw_vars->target->state == 0xFD || !(tesla_claw_vars->target->flags & 0x1000)) tesla_claw_vars->lock = 1;
+    if (!tesla_claw_vars->target2 || tesla_claw_vars->target2->state == 0xFE || tesla_claw_vars->target2->state == 0xFD || !(tesla_claw_vars->target2->flags & 0x1000)) tesla_claw_vars->lock2 = 1;
+    switch (tesla_claw_moby->state) {
+    case TESLA_CLAW_STATE_INITIALIZE:
+        tesla_claw_vars->timer = FUN_001f96f8_2b2100(16);
+        tesla_claw_vars->light = FUN_L00_0023e5e0_2b2100(&tesla_claw_vars->pos, 0.0f, 0.0f, 0);
         D_L00_00161590 = 1;
-        m->state = 1;
-        s->f3E = 20;
-        s->sound = -1;
-        s->target2 = 0;
-        s->target = 0;
-        s->lock = 0;
-        s->lock2 = 0;
-        s->f46 = 0;
-        s->f44 = 0;
+        tesla_claw_moby->state = 1;
+        tesla_claw_vars->f3E = 20;
+        tesla_claw_vars->sound = -1;
+        tesla_claw_vars->target2 = 0;
+        tesla_claw_vars->target = 0;
+        tesla_claw_vars->lock = 0;
+        tesla_claw_vars->lock2 = 0;
+        tesla_claw_vars->f46 = 0;
+        tesla_claw_vars->f44 = 0;
         break;
-    case 1:
-        FUN_001f9740_2b2100(&s->timer);
+    case TESLA_CLAW_STATE_WAIT_FOR_FIRE:
+        FUN_001f9740_2b2100(&tesla_claw_vars->timer);
         if (active) {
             start_equipped_item_animation();
-            m->state = 3;
+            tesla_claw_moby->state = 3;
         }
-        if ((controller_state.pressed & (h = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !h->item_use_locked) {
+        if ((controller_state.pressed & (player_hero = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !player_hero->item_use_locked) {
             if (active) {
                 Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014161B + 0x65);
                 if (st->uses < 65535) st->uses++;
@@ -3578,25 +3584,25 @@ void tesla_claw_update(struct Moby *m) {
                     st->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
                 st->levels = (st->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
                 start_equipped_item_animation();
-                m->state = 3;
+                tesla_claw_moby->state = 3;
             } else {
-                s->target = 0;
-                s->target2 = 0;
-                s->lock = 0;
-                s->lock2 = 0;
-                m->state = 1;
-                FUN_0022da68_2b2100(0, 0, m);
+                tesla_claw_vars->target = 0;
+                tesla_claw_vars->target2 = 0;
+                tesla_claw_vars->lock = 0;
+                tesla_claw_vars->lock2 = 0;
+                tesla_claw_moby->state = 1;
+                FUN_0022da68_2b2100(0, 0, tesla_claw_moby);
                 cancel_hero_item_animation();
             }
         }
         break;
     case 2:
         break;
-    case 3:
+    case TESLA_CLAW_STATE_FIRING:
         if ((controller_state.released & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) || !active ||
             ((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
-            h = (struct Hero *)D_0013F350_2b2100;
-            if (FUN_001f96f8_2b2100(70) < h->item_anim_frames) {
+            player_hero = (struct Hero *)D_0013F350_2b2100;
+            if (FUN_001f96f8_2b2100(70) < player_hero->item_anim_frames) {
                 if (((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses++;
             }
             if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->longest)
@@ -3606,41 +3612,41 @@ void tesla_claw_update(struct Moby *m) {
                 ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step++;
             else
                 ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step = 0;
-            s->target = 0;
-            s->target2 = 0;
-            s->lock = 0;
-            s->lock2 = 0;
-            s->reach = 0.0f;
+            tesla_claw_vars->target = 0;
+            tesla_claw_vars->target2 = 0;
+            tesla_claw_vars->lock = 0;
+            tesla_claw_vars->lock2 = 0;
+            tesla_claw_vars->reach = 0.0f;
             cancel_hero_item_animation();
-            m->state = 1;
+            tesla_claw_moby->state = 1;
         }
         break;
-    case 4:
+    case TESLA_CLAW_STATE_FINISHED:
         break;
     case 5:
         break;
     }
-    if (s->light != -1) {
+    if (tesla_claw_vars->light != -1) {
         float k;
-        qzero(&t);
-        t.f.x = 2.0f;
-        t.f.z = 2.0f;
-        FUN_001f9cf8_2b2100(&t, &t, D_0013F350_2b2100 + 0x640);
-        D_L00_001802C0_2b2100[s->light].pos.f.x = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + t.f.x;
-        D_L00_001802C0_2b2100[s->light].pos.f.y = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + t.f.y;
-        D_L00_001802C0_2b2100[s->light].pos.f.z = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + t.f.z;
-        D_L00_001802C0_2b2100[s->light].pos.f.w = 7.5f;
-        k = FUN_001fa6c0_2b2100(s->glow) / (float)FUN_001f96f8_2b2100(10);
-        D_L00_001802C0_2b2100[s->light].z = k;
+        qzero(&transformed_offset);
+        transformed_offset.f.x = 2.0f;
+        transformed_offset.f.z = 2.0f;
+        FUN_001f9cf8_2b2100(&transformed_offset, &transformed_offset, D_0013F350_2b2100 + 0x640);
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.x = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + transformed_offset.f.x;
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.y = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + transformed_offset.f.y;
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.z = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + transformed_offset.f.z;
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.w = 7.5f;
+        k = FUN_001fa6c0_2b2100(tesla_claw_vars->glow) / (float)FUN_001f96f8_2b2100(10);
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].z = k;
         k = k * 0.7f;
-        D_L00_001802C0_2b2100[s->light].y = k;
-        D_L00_001802C0_2b2100[s->light].x = D_L00_001802C0_2b2100[s->light].y;
-        if (done && s->light != -1) {
-            release_point_light_slot(s->light);
-            s->light = -1;
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].y = k;
+        D_L00_001802C0_2b2100[tesla_claw_vars->light].x = D_L00_001802C0_2b2100[tesla_claw_vars->light].y;
+        if (done && tesla_claw_vars->light != -1) {
+            release_point_light_slot(tesla_claw_vars->light);
+            tesla_claw_vars->light = -1;
         }
     }
-    if (done && s->light == -1) m->state = 4;
+    if (done && tesla_claw_vars->light == -1) tesla_claw_moby->state = 4;
 }
 
 #include "rnc/overlay/beam_vector.h"

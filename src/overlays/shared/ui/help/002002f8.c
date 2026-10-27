@@ -46,18 +46,18 @@ void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L03_002002f8(void) {
-    char *g = (char *)D_0013E533 + 0xE1D;
-    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f ||
-        *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
+    char *hero_state = (char *)D_0013E533 + 0xE1D;
+    if (*(float *)(hero_state + 0x80) < 2.0f || *(float *)(hero_state + 0x84) < 2.0f ||
+        *(float *)(hero_state + 0x80) > 1022.0f || *(float *)(hero_state + 0x84) > 1022.0f) {
         char *q;
         fade_to_black(scale_game_frames(0x10));
         q = (char *)D_0013E533 + 0xE1D;
         q[0x20B1] = 1;
         return;
     }
-    *(short *)(g + 0x1EB2) = 0;
-    *(short *)(g + 0x1EB0) = 0;
-    if (*(unsigned char *)(g + 0x20A4) != 0) {
+    *(short *)(hero_state + 0x1EB2) = 0;
+    *(short *)(hero_state + 0x1EB0) = 0;
+    if (*(unsigned char *)(hero_state + 0x20A4) != 0) {
         hero_frame_update();
         return;
     }
@@ -67,7 +67,7 @@ void FUN_L03_002002f8(void) {
     update_hero_ledge_probe();
     update_hero_offset_rail_candidate();
     update_hero_state_machine();
-    if (*(unsigned char *)(g + 0x20A4) != 0) {
+    if (*(unsigned char *)(hero_state + 0x20A4) != 0) {
         return;
     }
     update_hero_delayed_voice_requests();
@@ -90,9 +90,9 @@ void FUN_L03_002002f8(void) {
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
     scan_hero_input_sequences();
-    no_op_main_callback_alt(*(void **)(g + 0x2080));
-    if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32) {
-        reveal_map_around_position(g + 0x80);
+    no_op_main_callback_alt(*(void **)(hero_state + 0x2080));
+    if (*(int *)(hero_state + 0x208C) != 0x16 && *(int *)(hero_state + 0x2084) != 0x32) {
+        reveal_map_around_position(hero_state + 0x80);
     }
     {
         char *q = (char *)D_0013E533 + 0xE1D;

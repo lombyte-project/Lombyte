@@ -80,10 +80,11 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern char D_L14_0017C620[];
 int hero_set_state(int a, int b) {
+
     int old2088;
     char *moby;
     int old20A7;
-    float vec[4];
+    float grind_direction_or_jump_reference_position[4];
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
@@ -246,7 +247,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x17: {
+    case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -255,7 +256,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x30: {
+    case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
@@ -264,7 +265,7 @@ int hero_set_state(int a, int b) {
         p->unk1D0 = scale_game_frames(7);
         break;
     }
-    case 0x2E: {
+    case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -278,7 +279,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN:
     case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
     case 0x3F:
-    case 0x73: {
+    case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -347,7 +348,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x71: {
+    case HERO_STATE_ANIMATION_FRAME_EXIT_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -360,7 +361,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x65: {
+    case HERO_STATE_APPROACH_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
         p->unk2284 = 0;
@@ -457,7 +458,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x24: {
+    case HERO_STATE_GRAPPLE_TARGET_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -481,7 +482,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x25: {
+    case HERO_STATE_APPROACH_TARGET_MOBY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -492,7 +493,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x26: {
+    case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
@@ -504,7 +505,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
     }
-    case 0x2C: {
+    case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         struct Hero *p = &hero;
         char *d;
         p->state.control_mode = 0xE;
@@ -568,7 +569,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x2D: {
+    case HERO_STATE_ITEM_RELEASE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
@@ -578,7 +579,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
         break;
     }
-    case 0x22: {
+    case HERO_STATE_RISE_THEN_FALL_WITH_AIRBORNE_HIT_QUERY: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xB;
         p->rise_fall_target_frame = 39.0f;
@@ -614,11 +615,11 @@ int hero_set_state(int a, int b) {
         seg = p->rail_segment;
         t = p->rail_seg_frac;
         sample_path(*(int **)&p->rail_spline, pos, &seg, &t, p->rail_spline_loops, 1.0f);
-        subtract_vector_xyz(vec, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(vec)) {
-            normalize_vector_xyz(vec, vec, 1.0f);
+        subtract_vector_xyz(grind_direction_or_jump_reference_position, pos, &p->motion.pos);
+        if (0.001f < vector_length_xyz(grind_direction_or_jump_reference_position)) {
+            normalize_vector_xyz(grind_direction_or_jump_reference_position, grind_direction_or_jump_reference_position, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, vec);
+                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, grind_direction_or_jump_reference_position);
             }
         }
         {
@@ -629,7 +630,7 @@ int hero_set_state(int a, int b) {
                                  *(float *)(((char *)q->grind_look_moby) + 0x14) - q->motion.pos.f[1]);
                 if (1.5707964f < fast_difference_between_rotations(
                                      ang, fast_add_rotations(q->grind_yaw_offset,
-                                                             fast_arc_tan(vec[0], vec[1])))) {
+                                                             fast_arc_tan(grind_direction_or_jump_reference_position[0], grind_direction_or_jump_reference_position[1])))) {
                     q->grind_yaw_offset = 1.5707964f;
                     q->grind_anim_variant = 1;
                 }
@@ -641,7 +642,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x18: {
+    case HERO_STATE_LEDGE_HANG_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -661,7 +662,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x19: {
+    case HERO_STATE_LEDGE_HANG: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -671,7 +672,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x21, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1A: {
+    case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -680,7 +681,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
         break;
     }
-    case 0x1B: {
+    case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = 3;
         p->unk2284 = 0xD;
@@ -699,7 +700,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_FALL:
-    case 0x77: {
+    case HERO_STATE_FATAL_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -734,7 +735,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x81: {
+    case HERO_STATE_DELAYED_JUMP_OR_R1_REPEAT_EXIT_WAIT: {
         struct Hero *p = &hero;
         int animation_timing_preset_selector = -2;
         p->state.control_mode = 1;
@@ -771,19 +772,19 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_HIGH_JUMP:
     case 0xC:
     case 0xD:
-    case 0xE:
+    case HERO_STATE_DOUBLE_JUMP:
     case 0xF:
     case HERO_STATE_PACK_LONG_JUMP:
     case 0x11:
     case 0x12:
-    case 0x1C:
+    case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
-    case 0x2A:
+    case HERO_STATE_GRIND_RAIL_TRANSFER:
     case 0x3C:
     case 0x49:
     case 0x4C:
     case 0x5E:
-    case 0x69: {
+    case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
@@ -864,15 +865,15 @@ int hero_set_state(int a, int b) {
                 u->jump_gravity = frame_time_sq * 27.0f;
                 if (u->selector_5 != 0) {
                     float k = 4.7f;
-                    *(u128 *)vec = 0;
+                    *(u128 *)grind_direction_or_jump_reference_position = 0;
                     u->unk430 = u->unk430 + k;
                     u->jump_height_start = u->jump_height_start + k;
                     u->unk48C = u->unk48C + k;
                     u->jump_gravity = frame_time_sq * 14.0f;
-                    vec[0] = 331.0f;
-                    vec[1] = 104.0f;
-                    vec[2] = 145.0f;
-                    if (FUN_001f9b48(&u->motion.pos, vec) < 10.0f) {
+                    grind_direction_or_jump_reference_position[0] = 331.0f;
+                    grind_direction_or_jump_reference_position[1] = 104.0f;
+                    grind_direction_or_jump_reference_position[2] = 145.0f;
+                    if (FUN_001f9b48(&u->motion.pos, grind_direction_or_jump_reference_position) < 10.0f) {
                         k = 0.7f;
                         u->unk430 = u->unk430 + k;
                         u->jump_height_start = u->jump_height_start + k;
@@ -1153,8 +1154,8 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_WRENCH_SLAM:
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
-    case 0x23:
-    case 0x51: {
+    case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1295,7 +1296,7 @@ int hero_set_state(int a, int b) {
             }
             break;
         }
-        case 0x23: {
+        case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL: {
             struct Hero *q;
             if (b)
                 set_hero_animation(0x2C, 7, (float)scale_game_frames(9));
@@ -1311,7 +1312,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x70: {
+    case HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->unkA64 = 0;
@@ -1358,7 +1359,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x21: {
+    case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
         p->unk2284 = 0;
@@ -1422,7 +1423,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0, 0, (float)scale_game_frames(0xE));
         break;
     }
-    case 0x59: {
+    case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
@@ -1432,7 +1433,7 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x58: {
+    case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 0;
@@ -1521,7 +1522,7 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x1E: {
+    case HERO_STATE_LOOK_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->unk2284 = 0x51;
         p->state.control_mode = 0;
@@ -1531,14 +1532,14 @@ int hero_set_state(int a, int b) {
         }
         break;
     }
-    case 0x1F: {
+    case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x72: {
+    case HERO_STATE_IDLE_ANIMATION_AFTER_ITEM_CANCELLATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1547,14 +1548,14 @@ int hero_set_state(int a, int b) {
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
         set_hero_animation(hero_get_gadget_anim_id(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1576,8 +1577,8 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x63:
-    case 0x64: {
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;

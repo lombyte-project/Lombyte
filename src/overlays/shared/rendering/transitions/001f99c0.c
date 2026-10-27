@@ -12,7 +12,7 @@
 extern int D_0013E05A[];
 extern int draw_buffer_address __asm__("D_0015EE84");
 extern s32 sceGsSyncV(s32);
-extern void FUN_L00_002a09d8(int);
+extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void transfer_draw_buffer_chunks(void *, int, int) __asm__("FUN_L00_002a0f18");
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 
@@ -20,7 +20,7 @@ void vu1_init_chain(void) __asm__("FUN_002335d0");
 void capture_draw_buffer(void *destination) __asm__("FUN_L00_001f99c0");
 
 void capture_draw_buffer(void *destination) {
-    FUN_L00_002a09d8(1);
+    vu1_sync_chain(1);
     sceGsSyncV(0);
     D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
     vu1_init_chain();

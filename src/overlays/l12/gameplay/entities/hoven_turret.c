@@ -41,12 +41,7 @@ extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L12_001FB530[][4];
 extern float D_L12_001FB5B0[][4];
-extern int D_L12_00161DCC __attribute__((sda));
-extern int D_L12_00161DD0 __attribute__((sda));
-extern int D_L12_00161DD4 __attribute__((sda));
-extern int D_L12_00161DD8 __attribute__((sda));
-extern int D_L12_00161DEC __attribute__((sda));
-extern int D_L12_00161DF0 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase_gp __asm__("D_L12_00161DF8") __attribute__((sda));
@@ -98,7 +93,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         matrix[15] = 1.0f;
     }
     quad[1].g[1] = func_001F4868_303CA8(0xE);
-    quad[1].g[3] = (long)D_L12_00161DCC | ((long)D_L12_00161DD0 << 2) | ((long)D_L12_00161DD4 << 4) | ((long)D_L12_00161DD8 << 6) | (0x8000L << 24);
+    quad[1].g[3] = (long)oscillating_link_strip_blend_minuend_color_selector | ((long)oscillating_link_strip_blend_subtrahend_color_selector << 2) | ((long)oscillating_link_strip_blend_alpha_factor_selector << 4) | ((long)oscillating_link_strip_blend_addend_color_selector << 6) | (0x8000L << 24);
     quad[1].g[2] = 0xFF9000000260UL;
     quad[1].g[0] = 0;
     {
@@ -116,7 +111,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         } else {
             fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(oscillating_link_strip_fade_pivot_ticks);
         }
-        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(D_L12_00161DEC, D_L12_00161DF0, fade);
+        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(oscillating_link_strip_fade_source_color, oscillating_link_strip_fade_target_color, fade);
         scroll = 0.0f;
         for (segment = 0; segment < data->count - 1; segment++) {
             scroll = scroll + oscillating_link_strip_segment_u_step_gp;
@@ -519,17 +514,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L12_00161E60 __attribute__((sda));
-extern float D_L12_00161E64 __attribute__((sda));
-extern float D_L12_00161EA8 __attribute__((sda));
-extern float D_L12_00161EAC __attribute__((sda));
-extern float D_L12_00161ED0 __attribute__((sda));
-extern float D_L12_00161ED4 __attribute__((sda));
-extern float D_L12_00161ED8 __attribute__((sda));
-extern float D_L12_00161EDC __attribute__((sda));
-extern float D_L12_00161EE0 __attribute__((sda));
-extern float D_L12_00161EE4 __attribute__((sda));
-extern float D_L12_00161EE8 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
@@ -732,25 +717,25 @@ void hoven_turret_update(struct Moby *moby) {
                 y = -y;
             }
             joy[1] = y;
-            target_yaw_step = D_L12_00161ED0 * 0.017453292f * D_0015ED6C_gp * -joy[0];
+            target_yaw_step = hoven_turret_yaw_input_rate * 0.017453292f * D_0015ED6C_gp * -joy[0];
             if ((data->f7C >= 0.0f && data->f7C < target_yaw_step) || (data->f7C <= 0.0f && target_yaw_step < data->f7C)) {
-                approach_value(&data->f7C, target_yaw_step, D_L12_00161ED8 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f7C, target_yaw_step, hoven_turret_yaw_acceleration_rate * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f7C, target_yaw_step, D_L12_00161EE0 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f7C, target_yaw_step, hoven_turret_yaw_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
             moby->rot.z = fast_add_rotations_c3(moby->rot.z, data->f7C);
-            target_pitch_step = -(D_L12_00161ED4 * 0.017453292f * D_0015ED6C_gp) * -joy[1];
+            target_pitch_step = -(hoven_turret_pitch_input_rate * 0.017453292f * D_0015ED6C_gp) * -joy[1];
             if ((data->f78 >= 0.0f && data->f78 < target_pitch_step) || (data->f78 <= 0.0f && target_pitch_step < data->f78)) {
-                approach_value(&data->f78, target_pitch_step, D_L12_00161EDC * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f78, target_pitch_step, hoven_turret_pitch_acceleration_rate * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f78, target_pitch_step, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
+                approach_value(&data->f78, target_pitch_step, hoven_turret_pitch_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
             data->f74 = fast_add_rotations_c3(data->f74, data->f78);
-            if (data->f74 > D_L12_00161EAC) {
-                data->f74 = D_L12_00161EAC;
+            if (data->f74 > hoven_turret_pitch_max) {
+                data->f74 = hoven_turret_pitch_max;
             }
-            if (data->f74 < D_L12_00161EA8) {
-                data->f74 = D_L12_00161EA8;
+            if (data->f74 < hoven_turret_pitch_min) {
+                data->f74 = hoven_turret_pitch_min;
             }
             FUN_L00_001fff28(data->f10, 1, -data->f74);
             if (moby->anim_flags & 2) {
@@ -765,7 +750,7 @@ void hoven_turret_update(struct Moby *moby) {
 
                 blend_moby_animation_c(moby, data->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations_c3(moby->rot.z, 1.5707964f);
-                build_spherical_offset(firing_offset, D_L12_00161EE8 * D_0015ED6C_gp, yaw, data->f74);
+                build_spherical_offset(firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, data->f74);
                 if (data->f80 == 1) {
                     data->f80 = 0;
                     FUN_L00_0024f7c8(moby, 2, muz);
@@ -784,18 +769,18 @@ void hoven_turret_update(struct Moby *moby) {
                 ((Cam_304920 *)D_L12_00167180_304920)->f178 = scale_game_frames_alt(7);
                 data->f70 = scale_game_frames_alt(0x14);
                 for (i = 0; i < 5; i++) {
-                    Vec_304920 vel;
+                    Vec_304920 randomized_firing_direction;
                     Vec_304920 rnd;
 
                     *(u128 *)rnd = 0;
                     rnd[0] = random_float_between_c(-1.0f, 1.0f);
                     rnd[1] = random_float_between_c(-1.0f, 1.0f);
                     rnd[2] = random_float_between_c(-1.0f, 1.0f);
-                    *(u128 *)vel = *(u128 *)rnd;
-                    normalize_vector_xyz(vel, vel, vector_length_xyz(firing_offset) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
-                    add_vector_xyz(vel, firing_offset, vel);
-                    normalize_vector_xyz(vel, vel, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
-                    FUN_L00_0026dd20(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
+                    *(u128 *)randomized_firing_direction = *(u128 *)rnd;
+                    normalize_vector_xyz(randomized_firing_direction, randomized_firing_direction, vector_length_xyz(firing_offset) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
+                    add_vector_xyz(randomized_firing_direction, firing_offset, randomized_firing_direction);
+                    normalize_vector_xyz(randomized_firing_direction, randomized_firing_direction, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
+                    FUN_L00_0026dd20(muz, randomized_firing_direction, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
                 }
                 normalize_vector_xyz(firing_offset, firing_offset, D_0015ED6C_gp * 0.5f);
                 FUN_L00_0026dd20(muz, firing_offset, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
@@ -814,7 +799,7 @@ void hoven_turret_update(struct Moby *moby) {
             float randomized_view_pitch;
             float t;
 
-            randomized_view_offset_distance = random_float_between_c(D_L12_00161E60, D_L12_00161E64);
+            randomized_view_offset_distance = random_float_between_c(hoven_turret_destruction_view_offset_distance_min, hoven_turret_destruction_view_offset_distance_max);
             randomized_view_yaw = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
             randomized_view_pitch = fast_add_rotations_c3(((Cam_304920 *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
             qcopy(explosion_position, ((Cam_304920 *)D_L12_00167180_304920)->f140);
@@ -871,24 +856,10 @@ extern short D_L12_00161E1C __attribute__((sda));
 extern short D_L12_00161E20 __attribute__((sda));
 extern short D_L12_00161E24 __attribute__((sda));
 extern short D_L12_00161E28 __attribute__((sda));
-extern int D_L12_00161E2C __attribute__((sda));
-extern int D_L12_00161E30 __attribute__((sda));
-extern int D_L12_00161E34 __attribute__((sda));
-extern int D_L12_00161E38 __attribute__((sda));
-extern int D_L12_00161E3C __attribute__((sda));
-extern int D_L12_00161E40 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud_2.h"
 extern short D_L12_00161E44 __attribute__((sda));
 extern short D_L12_00161E48 __attribute__((sda));
-extern int D_L12_00161E4C __attribute__((sda));
-extern int D_L12_00161E50 __attribute__((sda));
-extern int D_L12_00161E54 __attribute__((sda));
-extern int D_L12_00161E58 __attribute__((sda));
-extern int D_L12_00161E5C __attribute__((sda));
-extern int D_L12_00161EB0 __attribute__((sda));
-extern int D_L12_00161F08 __attribute__((sda));
-extern int D_L12_00161F0C __attribute__((sda));
-extern int D_L12_00161F10 __attribute__((sda));
-extern int D_L12_00161F14 __attribute__((sda));
+#include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud.h"
 extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
 extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");
@@ -913,15 +884,15 @@ void draw_hoven_turret_hud(Moby *moby) {
     float angle;
 
     vu1_add_g_sregister_c(0x42, 0x8000000044L);
-    uv[0] = D_L12_00161F08;
-    uv[1] = D_L12_00161F0C;
-    uv[2] = D_L12_00161F10;
-    uv[3] = D_L12_00161F14;
-    colors[3] = D_L12_00161EB0;
-    colors[2] = D_L12_00161EB0;
-    colors[1] = D_L12_00161EB0;
-    colors[0] = D_L12_00161EB0;
-    texture = func_001F4868_3055F8(D_L12_00161E5C + 0x28);
+    uv[0] = hoven_turret_hud_frame_vertex_0_uv;
+    uv[1] = hoven_turret_hud_frame_vertex_1_uv;
+    uv[2] = hoven_turret_hud_frame_vertex_2_uv;
+    uv[3] = hoven_turret_hud_frame_vertex_3_uv;
+    colors[3] = hoven_turret_hud_frame_color;
+    colors[2] = hoven_turret_hud_frame_color;
+    colors[1] = hoven_turret_hud_frame_color;
+    colors[0] = hoven_turret_hud_frame_color;
+    texture = func_001F4868_3055F8(hoven_turret_hud_frame_texture_index_offset + 0x28);
     for (i = 0; i < 4; i++) {
         float sign_x;
         float sign_y;
@@ -950,10 +921,10 @@ void draw_hoven_turret_hud(Moby *moby) {
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
     texture = func_001F4868_3055F8(6);
-    uv[0] = D_L12_00161E2C;
-    uv[1] = D_L12_00161E30;
-    uv[2] = D_L12_00161E34;
-    uv[3] = D_L12_00161E38;
+    uv[0] = hoven_turret_hud_health_dial_vertex_0_uv;
+    uv[1] = hoven_turret_hud_health_dial_vertex_1_uv;
+    uv[2] = hoven_turret_hud_health_dial_vertex_2_uv;
+    uv[3] = hoven_turret_hud_health_dial_vertex_3_uv;
     if (data->f8C > 100.0f) {
         color = fast_tween_color(0x6000FFFF, 0x6000FF00, (data->f8C - 100.0f) / 100.0f);
     } else {
@@ -1000,10 +971,10 @@ void draw_hoven_turret_hud(Moby *moby) {
     } else {
         color = fast_tween_color(0x5000FF00, 0x5000FFFF, convert_integer_to_float(data->f88) / (float)scale_game_frames_alt(0xF));
     }
-    uv[0] = D_L12_00161E4C;
-    uv[1] = D_L12_00161E50;
-    uv[2] = D_L12_00161E54;
-    uv[3] = D_L12_00161E58;
+    uv[0] = hoven_turret_hud_orientation_indicator_vertex_0_uv;
+    uv[1] = hoven_turret_hud_orientation_indicator_vertex_1_uv;
+    uv[2] = hoven_turret_hud_orientation_indicator_vertex_2_uv;
+    uv[3] = hoven_turret_hud_orientation_indicator_vertex_3_uv;
     colors[3] = color;
     colors[2] = color;
     colors[1] = color;
@@ -1024,7 +995,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E3C), 1);
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_yaw_indicator_texture_index), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
@@ -1041,7 +1012,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
-    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(D_L12_00161E40), 1);
+    func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_pitch_indicator_texture_index), 1);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 

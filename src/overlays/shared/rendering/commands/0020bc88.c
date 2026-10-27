@@ -10,36 +10,36 @@ extern char D_L02_001609A0[];
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
-void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag) {
-    int *p;
-    long *q;
+void FUN_L02_0020bc88(long *packed_vertices, int *vertex_uvs, int *vertex_colors, long texture, int flag) {
+    int *packet_start;
+    long *packet_payload;
     D_L02_001611B8[2][0] = 0x10000009;
     D_L02_001611B8[2][1] = 0;
     D_L02_001611B8[2][2] = 0;
     D_L02_001611B8[2][3] = 0x50000009;
-    p = D_L02_001611B8[2];
-    D_L02_001611B8[2] = p + 4;
-    qcopy(p + 4, D_L02_001609A0);
-    q = (long *)(p + 8);
-    D_L02_001611C0 = (int *)q;
+    packet_start = D_L02_001611B8[2];
+    D_L02_001611B8[2] = packet_start + 4;
+    qcopy(packet_start + 4, D_L02_001609A0);
+    packet_payload = (long *)(packet_start + 8);
+    D_L02_001611C0 = (int *)packet_payload;
     if (flag)
-        q[0] = 5;
+        packet_payload[0] = 5;
     else
-        q[0] = 0;
-    q[1] = c;
-    q[2] = 0x154;
-    q[3] = a[0];
-    q[4] = b[0];
-    q[5] = m[0];
-    q[6] = a[1];
-    q[7] = b[1];
-    q[8] = m[1];
-    q[9] = a[2];
-    q[10] = b[2];
-    q[11] = m[2];
-    q[12] = a[3];
-    q[13] = b[3];
-    q[14] = m[3];
-    q[15] = 0;
+        packet_payload[0] = 0;
+    packet_payload[1] = texture;
+    packet_payload[2] = 0x154;
+    packet_payload[3] = vertex_colors[0];
+    packet_payload[4] = vertex_uvs[0];
+    packet_payload[5] = packed_vertices[0];
+    packet_payload[6] = vertex_colors[1];
+    packet_payload[7] = vertex_uvs[1];
+    packet_payload[8] = packed_vertices[1];
+    packet_payload[9] = vertex_colors[2];
+    packet_payload[10] = vertex_uvs[2];
+    packet_payload[11] = packed_vertices[2];
+    packet_payload[12] = vertex_colors[3];
+    packet_payload[13] = vertex_uvs[3];
+    packet_payload[14] = packed_vertices[3];
+    packet_payload[15] = 0;
     D_L02_001611C0 = D_L02_001611B8[2] + 0x20;
 }

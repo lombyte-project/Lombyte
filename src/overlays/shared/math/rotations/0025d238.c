@@ -155,25 +155,25 @@ typedef struct { float x, y, z, w; } Pt_0025E860;
 typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
-int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, float *segment_offset, int loop, float dist) {
+int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, float *segment_offset, int loop, float remaining_traversal_amount) {
     float segment_delta[4];
     int crossed_path_boundary = 0;
     int traversal_direction = 1;
     int i;
     int j;
 
-    if (dist < 0.0f) {
-        dist = -dist;
+    if (remaining_traversal_amount < 0.0f) {
+        remaining_traversal_amount = -remaining_traversal_amount;
         traversal_direction = -1;
     }
-    while (dist != 0.0f && (*segment_index != path->n - 1 || loop)) {
+    while (remaining_traversal_amount != 0.0f && (*segment_index != path->n - 1 || loop)) {
         int adv;
 
         i = *segment_index;
         if (traversal_direction == 1) {
-            adv = path->pt[i].w < *segment_offset + dist;
+            adv = path->pt[i].w < *segment_offset + remaining_traversal_amount;
         } else {
-            adv = *segment_offset < dist;
+            adv = *segment_offset < remaining_traversal_amount;
         }
         if (adv) {
             i += traversal_direction;
@@ -181,13 +181,13 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, floa
                 i = (i + path->n) % path->n;
             }
             if (traversal_direction == 1) {
-                dist -= path->pt[*segment_index].w - *segment_offset;
+                remaining_traversal_amount -= path->pt[*segment_index].w - *segment_offset;
                 *segment_offset = 0.0f;
-                if (dist < 0.0f) {
-                    dist = 0.0f;
+                if (remaining_traversal_amount < 0.0f) {
+                    remaining_traversal_amount = 0.0f;
                 }
             } else {
-                dist -= *segment_offset;
+                remaining_traversal_amount -= *segment_offset;
                 *segment_offset = path->pt[i].w;
             }
             if ((traversal_direction == 1 && *segment_index == path->n - 1) || (traversal_direction == -1 && *segment_index == 0)) {
@@ -196,11 +196,11 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, floa
             *segment_index = i;
         } else {
             if (traversal_direction == 1) {
-                *segment_offset = *segment_offset + dist;
+                *segment_offset = *segment_offset + remaining_traversal_amount;
             } else {
-                *segment_offset = *segment_offset - dist;
+                *segment_offset = *segment_offset - remaining_traversal_amount;
             }
-            dist = 0.0f;
+            remaining_traversal_amount = 0.0f;
         }
     }
     i = *segment_index;
@@ -658,7 +658,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     for (i = 0; i < k9; i++) {
         S6_25e450 c0 = D_L00_001E9030_25e450;
         S6_25e450 c1 = D_L00_001E9048_25e450;
-        Q_25e450 vel;
+        Q_25e450 randomized_particle_vector;
         Q_25e450 rnd;
         int first_packed_color;
         int second_packed_color;
@@ -666,11 +666,11 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
-        *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
-        normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
+        *(u128_25e450 *)&randomized_particle_vector = *(u128_25e450 *)&rnd;
+        normalize_vector_xyz_25e450(&randomized_particle_vector, &randomized_particle_vector, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
         first_packed_color = swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag);
         second_packed_color = swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag);
-        func_L00_0026B368_25e450(explosion_position, &vel, first_packed_color, second_packed_color,
+        func_L00_0026B368_25e450(explosion_position, &randomized_particle_vector, first_packed_color, second_packed_color,
             random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }

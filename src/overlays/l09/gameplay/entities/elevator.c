@@ -1318,7 +1318,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern float D_L09_0015F5D4;
+#include "rnc/overlay/l09/gameplay/entities/elevator_data/barrier_update.h"
 extern int FUN_L00_001fefc8();
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -1393,7 +1393,7 @@ void barrier_update(Moby *moby)
     }
     moby->hit_slot = 0xFF;
     count = 40;
-    if (0.85f < radial_effect_count_reduction_control || 0.85f < D_L09_0015F5D4) count = 30;
+    if (0.85f < radial_effect_count_reduction_control || 0.85f < barrier_radial_effect_count_reduction_control) count = 30;
     angle = -3.1415927f;
     for (i = 0; i < count; i++) {
         *(u128 *)piece_velocity = 0;
@@ -1452,12 +1452,7 @@ extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
 extern float floating_ship_piece_hero_offset_tilt_gain_gp __asm__("D_L09_00161DC4") __attribute__((sda));
 extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attribute__((sda));
 extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC") __attribute__((sda));
-extern float D_L09_00161DD4 __attribute__((sda));
-extern float D_L09_00161DD8 __attribute__((sda));
-extern float D_L09_00161DDC __attribute__((sda));
-extern float D_L09_00161DE0 __attribute__((sda));
-extern float D_L09_00161DE4 __attribute__((sda));
-extern float D_L09_00161DE8 __attribute__((sda));
+#include "rnc/overlay/l09/gameplay/entities/elevator_data/update_floating_ship_piece.h"
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0013F350[];
@@ -1567,13 +1562,13 @@ void update_floating_ship_piece(char *moby) {
             *(u128_30A560 *)old_angles = *(u128_30A560 *)(data + 0x60);
             *(u128_30A560 *)old_pos = *(u128_30A560 *)(moby + 0x10);
             func_L00_0025CCF0_30A560(data + 0x60, -tilt * front_dot, data + 0x70, 0,
-                              D_L09_00161DD4 * deg_to_rad * frame_time_sq,
-                              D_L09_00161DD8 * frame_scale_sq,
-                              D_L09_00161DDC * deg_to_rad * frame_time);
+                              floating_ship_piece_loaded_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq,
+                              floating_ship_piece_loaded_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
+                              floating_ship_piece_loaded_tilt_snap_tolerance_scale_gp * deg_to_rad * frame_time);
             func_L00_0025CCF0_30A560(data + 0x64, pitch_target, data + 0x74, 0,
-                              D_L09_00161DD4 * deg_to_rad * frame_time_sq,
-                              D_L09_00161DD8 * frame_scale_sq,
-                              D_L09_00161DDC * deg_to_rad * frame_time);
+                              floating_ship_piece_loaded_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq,
+                              floating_ship_piece_loaded_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
+                              floating_ship_piece_loaded_tilt_snap_tolerance_scale_gp * deg_to_rad * frame_time);
             new_z = *(float *)(moby + 0x18) - floating_ship_piece_sink_speed_gp * frame_time;
             *(float *)(moby + 0x18) = new_z;
             if (sink_level < old_z && new_z <= sink_level) {
@@ -1590,24 +1585,24 @@ void update_floating_ship_piece(char *moby) {
                 ((Mpos_30A560 *)moby)->z = ((Mpos_30A560 *)moby)->z + rise;
                 deg_to_rad = 0.0174532924f;
                 func_L00_0025CCF0_30A560(data + 0x60, 0.0f, data + 0x70, 0,
-                                  D_L09_00161DE0 * deg_to_rad * frame_time_sq * 3.0f,
-                                  D_L09_00161DE4 * frame_scale_sq,
+                                  floating_ship_piece_return_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq * 3.0f,
+                                  floating_ship_piece_return_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
                                   frame_time * 1.57079637f);
                 func_L00_0025CCF0_30A560(data + 0x64, 0.0f, data + 0x74, 0,
-                                  D_L09_00161DE0 * deg_to_rad * frame_time_sq * 3.0f,
-                                  D_L09_00161DE4 * frame_scale_sq,
+                                  floating_ship_piece_return_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq * 3.0f,
+                                  floating_ship_piece_return_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
                                   frame_time * 1.57079637f);
             } else {
                 float deg_to_rad;
                 deg_to_rad = 0.0174532924f;
                 func_L00_0025CCF0_30A560(data + 0x60, 0.0f, data + 0x70, 0,
-                                  D_L09_00161DE0 * deg_to_rad * frame_time_sq,
-                                  D_L09_00161DE4 * frame_scale_sq,
-                                  D_L09_00161DE8 * deg_to_rad * frame_time);
+                                  floating_ship_piece_return_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq,
+                                  floating_ship_piece_return_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
+                                  floating_ship_piece_return_tilt_snap_tolerance_scale_gp * deg_to_rad * frame_time);
                 func_L00_0025CCF0_30A560(data + 0x64, 0.0f, data + 0x74, 0,
-                                  D_L09_00161DE0 * deg_to_rad * frame_time_sq,
-                                  D_L09_00161DE4 * frame_scale_sq,
-                                  D_L09_00161DE8 * deg_to_rad * frame_time);
+                                  floating_ship_piece_return_tilt_time_squared_gain_gp * deg_to_rad * frame_time_sq,
+                                  floating_ship_piece_return_tilt_frame_scale_squared_gain_gp * frame_scale_sq,
+                                  floating_ship_piece_return_tilt_snap_tolerance_scale_gp * deg_to_rad * frame_time);
             }
             if (((Mpos_30A560 *)moby)->z > *(float *)(data + 0x84)) {
                 ((Mpos_30A560 *)moby)->z = *(float *)(data + 0x84);

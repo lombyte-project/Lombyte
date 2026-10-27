@@ -80,12 +80,12 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern f32 D_L12_0017C250[];
 void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
 void hero_update_hop_movement(void) {
-    HopVec_235c08 tmp;
+    HopVec_235c08 velocity_offset;
     f32 x;
     f32 speed;
-    f32 a;
-    f32 d;
-    f32 arg;
+    f32 velocity_scale_or_yaw_delta;
+    f32 speed_decay_step;
+    f32 velocity_change_step;
     s32 state;
 
     state = hero.state.current;
@@ -136,9 +136,9 @@ void hero_update_hop_movement(void) {
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_235c08(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
         hero.motion.velocity.f[1] = FUN_001f9de0_235c08(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        a = hero.air_target_speed * FUN_001f9de0_235c08(FUN_001fa688_235c08(hero.takeoff_yaw, hero.high_jump_drift_yaw));
-        hero.motion.velocity.f[0] += FUN_001f9dc8_235c08(hero.takeoff_yaw) * a;
-        hero.motion.velocity.f[1] += FUN_001f9de0_235c08(hero.takeoff_yaw) * a;
+        velocity_scale_or_yaw_delta = hero.air_target_speed * FUN_001f9de0_235c08(FUN_001fa688_235c08(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        hero.motion.velocity.f[0] += FUN_001f9dc8_235c08(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
+        hero.motion.velocity.f[1] += FUN_001f9de0_235c08(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == 0x11) {
@@ -153,8 +153,8 @@ void hero_update_hop_movement(void) {
                 hero.motion.velocity.f[1] = FUN_001f9de0_235c08(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                FUN_001f9bf8_235c08(&tmp, &hero.motion.move_dir, ED6C * 4.9f);
-                FUN_001f9a10_235c08(&hero.motion.velocity, &hero.motion.velocity, &tmp);
+                FUN_001f9bf8_235c08(&velocity_offset, &hero.motion.move_dir, ED6C * 4.9f);
+                FUN_001f9a10_235c08(&hero.motion.velocity, &hero.motion.velocity, &velocity_offset);
             }
         }
         hero.ground_speed = hero.motion.flat_speed;
@@ -163,41 +163,41 @@ void hero_update_hop_movement(void) {
             x = hero.motion.rot.f[2];
             hero.motion.yaw_error = FUN_L00_0025bc98_235c08(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
-            a = FUN_001fa5c8_235c08(x, hero.motion.rot.f[2]);
-            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
+            velocity_scale_or_yaw_delta = FUN_001fa5c8_235c08(x, hero.motion.rot.f[2]);
+            rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, velocity_scale_or_yaw_delta);
         } else {
             FUN_L00_00211e30_235c08(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
         }
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
-        arg = ED70 * 20.0f;
+        velocity_change_step = ED70 * 20.0f;
         if (hero.target_speed < D_L12_0017C250[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
-                d = hero.stickless_decel;
+                speed_decay_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
-                    d = ED70 * 0.17f;
+                    speed_decay_step = ED70 * 0.17f;
                 speed = FUN_001f9b20_235c08(&hero.motion.velocity);
-                approach_value_235c08(0.0f, d, &speed);
+                approach_value_235c08(0.0f, speed_decay_step, &speed);
                 FUN_001f9c48_235c08(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
             if (hero.on_flagged_ground_moby != 0) {
-                arg = ED70 * 6.0f;
+                velocity_change_step = ED70 * 6.0f;
             } else {
-                arg = ED70 * 2.0f;
+                velocity_change_step = ED70 * 2.0f;
             }
         }
         if (hero.unk4A8 && hero.on_ice_ground) {
-            arg = ED70 * 0.17f;
+            velocity_change_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 FUN_L00_002118c8_235c08(0, ED6C * 2.5f);
-                arg = ED70 * 3.0f;
+                velocity_change_step = ED70 * 3.0f;
             }
             if (0.2617994f < hero.ground_slope.f) {
                 hero.target_speed = 0.0f;
-                arg = hero.ground_slope.f * (ED70 * 9.0f) / 0.7853982f;
+                velocity_change_step = hero.ground_slope.f * (ED70 * 9.0f) / 0.7853982f;
             }
         }
-        steer_hero_planar_velocity(arg);
+        steer_hero_planar_velocity(velocity_change_step);
     }
 }

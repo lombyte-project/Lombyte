@@ -150,11 +150,11 @@ void update_ambience_target_cycle(void) {
         break;
     }
 }
-extern int D_L00_00161390;
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/update_frame_timing_and_wrapped_value_2.h"
 #include "rnc/overlay/shared/gameplay/entities/camera_object_globals.h"
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
 extern int configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") __attribute__((sda));
-extern int D_L00_00161370 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/update_frame_timing_and_wrapped_value.h"
 extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
@@ -176,7 +176,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
     int scaled_frame_count;
     switch (state_object[0x20]) {
     case INITIALIZE_FRAME_TIMING:
-        D_L00_00161390 = 0;
+        fetch_add_accumulator = 0;
         state_object[0x20] = 1;
         state_object[0x30] = 0xFF;
         one = 1.0f;
@@ -184,7 +184,7 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
         scaled_frame_count = scale_game_frames(configured_reciprocal_frame_count_gp);
         D_L00_00161380 = scaled_frame_count;
         D_L00_00161384_gp = one / convert_integer_to_float(scaled_frame_count);
-        scaled_frame_count = scale_game_frames(D_L00_00161370);
+        scaled_frame_count = scale_game_frames(configured_reciprocal_denominator_frames);
         D_L00_00161388 = scaled_frame_count;
         D_L00_0016138C_gp = one / (float)scaled_frame_count;
         break;
@@ -198,8 +198,8 @@ void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
 int fetch_and_add_global_accumulator(int addend) __asm__("FUN_L00_002a4dc8");
 
 int fetch_and_add_global_accumulator(int addend) {
-    int previous_value = D_L00_00161390;
-    D_L00_00161390 = previous_value + addend;
+    int previous_value = fetch_add_accumulator;
+    fetch_add_accumulator = previous_value + addend;
     return previous_value;
 }
 #include "eetypes.h"
@@ -552,9 +552,7 @@ f32 FUN_001fa688_2a57a8(f32, f32) __asm__("FUN_001fa688");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
-extern f32 D_L00_001613A4 __attribute__((sda));
-extern f32 D_L00_0016139C __attribute__((sda));
-extern f32 D_L00_001613A0 __attribute__((sda));
+#include "rnc/overlay/shared/gameplay/entities/camera_object_data/vendor_update.h"
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 void vendor_update(P_2a57a8 *vendor_moby) {
     enum {
@@ -568,11 +566,11 @@ void vendor_update(P_2a57a8 *vendor_moby) {
     u8 *v;
     f32 hero_distance, z;
 
-    D_L00_001613A4 += 0.05f;
-    if (D_L00_001613A4 > 3.14f)
-        D_L00_001613A4 = -3.14f;
+    vendor_color_pulse_phase += 0.05f;
+    if (vendor_color_pulse_phase > 3.14f)
+        vendor_color_pulse_phase = -3.14f;
     vendor_moby->i90 =
-        (((s32)(fast_sin(D_L00_001613A4) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
+        (((s32)(fast_sin(vendor_color_pulse_phase) * 48.0f) + 0x60) * 0x10101) | 0x80000000;
     switch (vendor_moby->b20) {
     case VENDOR_INITIALIZE:
         vendor_moby->b20 = 1;
@@ -605,10 +603,10 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             q->mC->h34 &= 0xFFFE;
         }
         enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
-        D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
-        D_L00_001613A0 = FUN_001fa580_2a57a8(D_L00_001613A0, -0.02f);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        vendor_manipulator_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_rotation_phase, 0.01f);
+        vendor_manipulator_counter_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         break;
@@ -626,10 +624,10 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
         help_message_allowed = 1;
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, D_L00_0016139C);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, D_L00_001613A0);
-        D_L00_0016139C = FUN_001fa580_2a57a8(D_L00_0016139C, 0.01f);
-        D_L00_001613A0 = FUN_001fa580_2a57a8(D_L00_001613A0, -0.02f);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        vendor_manipulator_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_rotation_phase, 0.01f);
+        vendor_manipulator_counter_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
         if (hero_data.state.control_mode != 0 && hero_data.state.current != 3 && hero_data.state.control_mode != 1) {
@@ -1179,7 +1177,7 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     float B[4];
     float D[4];
     float C[4];
-    float rotation_angle_step, c2, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
+    float rotation_angle_step, class_local_rotation_angle, base_axis_offset_distance, rotated_axis_offset_distance, ground_collision_radius;
 
     if (*(char **)(data + 0x5C) != 0) {
         transform_attachment_pose((int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10),
@@ -1191,28 +1189,28 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     switch (*(short *)(moby + 0xA6)) {
     case BOLT_CLASS_ONE:
         rotation_angle_step = 0.04f;
-        c2 = -0.25f;
+        class_local_rotation_angle = -0.25f;
         base_axis_offset_distance = 0.04875f;
         rotated_axis_offset_distance = 0.325f;
         ground_collision_radius = 0.15f;
         break;
     case BOLT_CLASS_FIVE:
         rotation_angle_step = 0.03f;
-        c2 = -0.5f;
+        class_local_rotation_angle = -0.5f;
         base_axis_offset_distance = 0.0245f;
         rotated_axis_offset_distance = 0.35f;
         ground_collision_radius = 0.23f;
         break;
     case BOLT_CLASS_TWENTY:
         rotation_angle_step = 0.025f;
-        c2 = -0.4f;
+        class_local_rotation_angle = -0.4f;
         base_axis_offset_distance = 0.05625f;
         rotated_axis_offset_distance = 0.375f;
         ground_collision_radius = 0.23f;
         break;
     default:
         rotation_angle_step = 0.0175f;
-        c2 = -0.35f;
+        class_local_rotation_angle = -0.35f;
         base_axis_offset_distance = 0.135f;
         rotated_axis_offset_distance = 0.3f;
         ground_collision_radius = 0.25f;
@@ -1226,7 +1224,7 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
         *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
     }
     qcopy(local_rotation_angles, data + 0x50);
-    local_rotation_angles[1] = c2;
+    local_rotation_angles[1] = class_local_rotation_angle;
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
     multiply_matrix3x3(moby + 0xC0, base_rotation_basis, local_rotation_basis);

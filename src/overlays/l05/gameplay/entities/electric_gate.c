@@ -374,7 +374,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         MOBY_LOWER_BELOW_POSE_HEIGHT = 3
     };
     char *data = *(char **)(moby + 0x78);
-    float v[4];
+    float slide_motion_scratch[4];
     float slide_step_distance;
     float speed;
     char *pose_entry;
@@ -388,12 +388,12 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         initial_pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         qcopy(moby + 0x10, initial_pose_entry + 0x30);
         *(float *)(moby + 0x48) = *(float *)(initial_pose_entry + 0x78);
-        fast_vec_normalize(v, initial_pose_entry + 0x10, *(float *)(data + 0x18));
+        fast_vec_normalize(slide_motion_scratch, initial_pose_entry + 0x10, *(float *)(data + 0x18));
         if (*(int *)(data + 0x1C) != 0) {
-            fast_vec_scale(v, v, -1.0f);
+            fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             *(u16 *)(moby + 0x34) |= 0x8000;
         }
-        add_vector_xyz(moby + 0x10, moby + 0x10, v);
+        add_vector_xyz(moby + 0x10, moby + 0x10, slide_motion_scratch);
         *(u8 *)(moby + 0x20) = 1;
         break;
     }
@@ -408,19 +408,19 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
         reach = *(float *)(data + 0x18) * 3.0f;
         slide_step_distance = 0.0f;
-        fast_vec_normalize(v, pose_entry + 0x10, reach);
+        fast_vec_normalize(slide_motion_scratch, pose_entry + 0x10, reach);
         if (*(int *)(data + 0x1C) != 0) {
-            fast_vec_scale(v, v, -1.0f);
+            fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
-        add_vector_xyz(v, pose_entry + 0x30, v);
-        subtract_vector_xyz(v, v, moby + 0x10);
-        remaining_slide_distance = vector_length_xyz(v);
+        add_vector_xyz(slide_motion_scratch, pose_entry + 0x30, slide_motion_scratch);
+        subtract_vector_xyz(slide_motion_scratch, slide_motion_scratch, moby + 0x10);
+        remaining_slide_distance = vector_length_xyz(slide_motion_scratch);
         speed = vector_length_xyz(data);
         advance_accelerated_scalar(remaining_slide_distance, frame_time_sq * 20.0f, frame_time_sq * 30.0f,
                                    frame_time * 10.0f, &slide_step_distance, &speed);
-        fast_vec_normalize(data, v, speed);
+        fast_vec_normalize(data, slide_motion_scratch, speed);
         add_vector_xyz(moby + 0x10, moby + 0x10, data);
-        if (vector_length_xyz(v) < 0.01f) {
+        if (vector_length_xyz(slide_motion_scratch) < 0.01f) {
             *(u8 *)(moby + 0x20) = 3;
         }
         break;
@@ -1013,16 +1013,7 @@ extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
 extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
-extern int D_L05_00161E98 __attribute__((sda));
-extern int D_L05_00161E9C __attribute__((sda));
-extern float D_L05_00161EA0 __attribute__((sda));
-extern float D_L05_00161EA4 __attribute__((sda));
-extern float D_L05_00161EA8 __attribute__((sda));
-extern float D_L05_00161EAC __attribute__((sda));
-extern float D_L05_00161EB0 __attribute__((sda));
-extern float D_L05_00161EB4 __attribute__((sda));
-extern float D_L05_00161EB8 __attribute__((sda));
-extern float D_L05_00161EBC __attribute__((sda));
+#include "rnc/overlay/l05/gameplay/entities/electric_gate_data/update_triggered_particle_spray_emitter.h"
 
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
@@ -1085,21 +1076,21 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
         if (emitter_moby->pos.z < floor) {
             emitter_moby->state = 3;
         }
-        for (i = 0; (float)i < D_L05_00161EB8; i++) {
+        for (i = 0; (float)i < spray_particle_count_limit_per_update_gp; i++) {
             big = 1;
-            if (D_L05_00161EBC < random_float_between(0.0f, 100.0f)) {
+            if (spray_big_particle_selection_threshold_percent_gp < random_float_between(0.0f, 100.0f)) {
                 big = 0;
             }
-            minimum_particle_speed = D_L05_00161EAC;
+            minimum_particle_speed = spray_big_particle_speed_lower_bound_gp;
             if (!big) {
-                minimum_particle_speed = D_L05_00161EB0;
+                minimum_particle_speed = spray_small_particle_speed_lower_bound_gp;
             }
             qcopy(v, &emitter_moby->pos);
-            fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-D_L05_00161EB4, D_L05_00161EB4));
+            fast_vec_normalize(u, &emitter_moby->rot_row1, random_float_between(-spray_particle_lateral_spread_and_height_offset_gp, spray_particle_lateral_spread_and_height_offset_gp));
             add_vector_xyz(v, v, u);
-            particle_speed = random_float_between(minimum_particle_speed, D_L05_00161EA8);
-            second_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
-            third_particle_speed_sample = random_float_between(minimum_particle_speed, D_L05_00161EA8);
+            particle_speed = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
+            second_particle_speed_sample = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
+            third_particle_speed_sample = random_float_between(minimum_particle_speed, spray_particle_speed_upper_bound_gp);
             if (particle_speed < second_particle_speed_sample) {
                 particle_speed = second_particle_speed_sample;
             }
@@ -1108,13 +1099,13 @@ void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
             }
             fast_vec_normalize(particle_velocity, &emitter_moby->rot_row0, particle_speed * frame_time);
             if (big) {
-                scale = D_L05_00161EA0;
-                kind = D_L05_00161E98;
-                v[2] += D_L05_00161EB4 - scale + random_float_between(-0.4f, 0.4f);
+                scale = spray_big_particle_base_scale_gp;
+                kind = spray_big_particle_kind_gp;
+                v[2] += spray_particle_lateral_spread_and_height_offset_gp - scale + random_float_between(-0.4f, 0.4f);
             } else {
-                scale = D_L05_00161EA4;
-                kind = D_L05_00161E9C;
-                v[2] += D_L05_00161EB4 - scale + 0.4f;
+                scale = spray_small_particle_base_scale_gp;
+                kind = spray_small_particle_kind_gp;
+                v[2] += spray_particle_lateral_spread_and_height_offset_gp - scale + 0.4f;
             }
             create_particle_with_velocity_and_randomized_parameters(scale * random_float_between(0.8f, 1.2f), floor, frame_time_sq * 10.0f, v, particle_velocity, kind,
                              big);
