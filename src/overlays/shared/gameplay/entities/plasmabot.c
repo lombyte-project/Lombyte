@@ -253,11 +253,11 @@ typedef struct {
 } LineInfo;
 
 extern char D_001413F4[];
-extern char D_L14_001FBB60[];
-extern char D_L14_001FBBA0[];
-extern char D_L14_001FBBF8[];
-extern char D_L14_001FBC38[];
-extern char D_L14_001FBC90[];
+extern char plasmabot_missing_intro_path_format[] __asm__("D_L14_001FBB60");
+extern char plasmabot_empty_intro_path_format[] __asm__("D_L14_001FBBA0");
+extern char plasmabot_missing_bound_path_format[] __asm__("D_L14_001FBBF8");
+extern char plasmabot_empty_bound_path_format[] __asm__("D_L14_001FBC38");
+extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -387,24 +387,24 @@ void update_plasmabot(char *moby) {
     case PLASMABOT_INITIALIZE: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
-                DebugPrint(D_L14_001FBB60, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_missing_intro_path_format, *(short *)(moby + 0xB2));
                 { call_D678(moby); return; }
             }
             if (*D_L14_001B0BB0[*(int *)(data + 0x240)] == 0) {
-                DebugPrint(D_L14_001FBBA0, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_empty_intro_path_format, *(short *)(moby + 0xB2));
                 { call_D678(moby); return; }
             }
         }
         if (*(int *)(data + 0x244) == -1) {
-            DebugPrint(D_L14_001FBBF8, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_bound_path_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (*D_L14_001B0BB0[*(int *)(data + 0x244)] == 0) {
-            DebugPrint(D_L14_001FBC38, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_empty_bound_path_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (((unsigned char *)data)[0x24A] != 0 && *(int *)(data + 0x264) < 0) {
-            DebugPrint(D_L14_001FBC90, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_hatch_index_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (random_integer_below(2) != 0) {
