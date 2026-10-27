@@ -2233,7 +2233,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-extern short D_L11_0016205C __attribute__((sda));
+extern short ship_shot_direction_base_scale_gp __asm__("D_L11_0016205C") __attribute__((sda));
 int D_L11_00162060 = 4;
 void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, float aim_azimuth, float aim_elevation) __asm__("FUN_L11_003125a8");
 
@@ -2243,7 +2243,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, flo
     char muzzle_forward_offset[16];
     char reticle_world_position[16];
 
-    build_spherical_offset((f32 *)shot_direction, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_gp, aim_azimuth,
+    build_spherical_offset((f32 *)shot_direction, *(float *)&ship_shot_direction_base_scale_gp * *(float *)&D_L11_00162090_gp, aim_azimuth,
                            aim_elevation);
     fast_vec_add(shot_direction, shot_direction, ship_vars);
     if (FUN_001f9740_c(ship_vars + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
