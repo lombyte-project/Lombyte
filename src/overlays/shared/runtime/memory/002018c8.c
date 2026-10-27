@@ -34,7 +34,7 @@ extern char D_L00_0015F540[];
 extern char D_L00_0015F548[];
 extern char D_L00_0015F550[];
 extern char D_L00_0015F560[];
-extern u8 D_L00_001C3150[];
+extern u8 dialog_font_glyph_metrics[] __asm__("D_L00_001C3150");
 extern struct TextRegion D_L00_001E7A50;
 extern struct TextRegion D_L00_001E7A68;
 
@@ -126,15 +126,15 @@ void level_draw_dialog_text(void) {
                 *text_cursor++ = 0;
             } while (*text_cursor == 1);
         }
-        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         pivot = 272.0f;
         box.flags |= 4;
         y = box.anchor_y;
         y += box.rendered_height;
-        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         box.flags ^= 4;
         box.anchor_y = 0x136 - box.rendered_height;
-        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)D_L00_00173040.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
@@ -312,7 +312,7 @@ void level_draw_dialog_text(void) {
             break;
         }
         if (id != 0) {
-            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), D_L00_001C3150);
+            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), dialog_font_glyph_metrics);
         }
         break;
     }
