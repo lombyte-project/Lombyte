@@ -1444,7 +1444,7 @@ extern int gadgebot_launch_glow_texture_index_gp __asm__("D_L18_00162644") __att
 extern float gadgebot_launch_glow_z_offset_gp __asm__("D_L18_00162648") __attribute__((sda));
 extern float gadgebot_launch_glow_vertical_scale_adjustment_gp __asm__("D_L18_0016264C") __attribute__((sda));
 extern float gadgebot_launch_glow_horizontal_scale_adjustment_gp __asm__("D_L18_00162650") __attribute__((sda));
-extern float D_L18_001EFCD0[4][2];
+extern float gadgebot_launch_glow_quad_uvs[4][2] __asm__("D_L18_001EFCD0");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_c860 pk;
@@ -1472,8 +1472,8 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
            ((unsigned long)gadgebot_launch_glow_blend_addend_selector_gp << 6) | 0x8000000000ULL;
     c = fast_tween_color(gadgebot_launch_glow_tint_start_gp, gadgebot_launch_glow_tint_end_gp, *(float *)(d + 0x1F4));
     for (i = 0; i < 4; i++) {
-        pk.uv[i][0] = D_L18_001EFCD0[i][0];
-        pk.uv[i][1] = D_L18_001EFCD0[i][1];
+        pk.uv[i][0] = gadgebot_launch_glow_quad_uvs[i][0];
+        pk.uv[i][1] = gadgebot_launch_glow_quad_uvs[i][1];
         quad_vertex = pk.m[i];
         clear_g(quad_vertex);
         if (i & 1)
