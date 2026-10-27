@@ -250,7 +250,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
-extern short D_L05_00161FCC __attribute__((sda));
+extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
 extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
 void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -283,7 +283,7 @@ void draw_moby_glow_sprite(char *m) {
     cross_vectors_xyz(M[1], M[0], up);
     normalize_vector_xyz(M[1], M[1], 1.0f);
     cross_vectors_xyz(M[2], M[1], M[0]);
-    scale_vector_xyz(camera_facing_offset, M[0], *(float *)&D_L05_00161FCC);
+    scale_vector_xyz(camera_facing_offset, M[0], *(float *)&glow_sprite_camera_offset_distance);
     add_vector_xyz(M[3], M[3], camera_facing_offset);
     if (((unsigned char *)d)[0x67] != 0 && random_integer_below(8) == 0) {
         *(int *)(d + 0x60) >>= 1;
