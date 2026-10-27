@@ -2100,7 +2100,7 @@ void shuttle_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
 
-extern char D_L08_001DB280[];
+extern char shuttle_stop_local_points[] __asm__("D_L08_001DB280");
 extern int D_L08_001B0CB0[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -2108,7 +2108,7 @@ void update_shuttle_stop_world_points(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int *stop_point_table = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
     if (*stop_point_table == 8) {
-        char *local_point = D_L08_001DB280;
+        char *local_point = shuttle_stop_local_points;
         char *moby_rotation_basis = &moby->rot_row0;
         char *pos = &moby->pos;
         char *world_point = (char *)stop_point_table + 0x10;
