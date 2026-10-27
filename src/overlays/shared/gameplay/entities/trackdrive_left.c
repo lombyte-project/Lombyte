@@ -89,7 +89,7 @@ extern char D_L02_001673C0[];
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
 extern char interpolated_draw_gif_preamble[] __asm__("D_L02_001CB8F0");
-extern QuadFrame D_L02_0016D780[];
+extern QuadFrame l02_interpolated_frame_source_index_table[] __asm__("D_L02_0016D780");
 extern char *interpolated_frame_source_data __asm__("D_L02_0015F420");
 #include "rnc/rendering/dma_tag.h"
 
@@ -191,8 +191,8 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
         frame = FRAME_COUNTER;
         step = frame / draw_parameters->frames;
         fraction = (float)frame / (float)draw_parameters->frames - (float)step;
-        frame_from = &D_L02_0016D780[draw_parameters->first + step % draw_parameters->count];
-        frame_to = &D_L02_0016D780[draw_parameters->first + (step + 1) % draw_parameters->count];
+        frame_from = &l02_interpolated_frame_source_index_table[draw_parameters->first + step % draw_parameters->count];
+        frame_to = &l02_interpolated_frame_source_index_table[draw_parameters->first + (step + 1) % draw_parameters->count];
         from_a = interpolated_frame_source_data + frame_from->a * 16;
         from_b = interpolated_frame_source_data + frame_from->b * 16;
         to_b = interpolated_frame_source_data + frame_to->b * 16;
