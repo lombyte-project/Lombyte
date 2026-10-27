@@ -39,10 +39,10 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) __asm__
 extern int advance_armed_transport_along_path(char *, char *) __asm__("FUN_L16_002e2e88");
 extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L16_00161D7C __attribute__((sda));
+extern short armed_transport_spawn_direction_scale __asm__("D_L16_00161D7C") __attribute__((sda));
 extern short D_L16_00161D80;
-extern short D_L16_00161D88 __attribute__((sda));
-extern short D_L16_00161D8C __attribute__((sda));
+extern short armed_transport_bob_phase_speed_degrees __asm__("D_L16_00161D88") __attribute__((sda));
+extern short armed_transport_bob_amplitude __asm__("D_L16_00161D8C") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
@@ -230,7 +230,7 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY:
         moby_point_position(transport_moby, 1, vector.f);
         subtract_vector_xyz(rotation.f, transport_data + 0x70, vector.f);
-        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
+        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&armed_transport_spawn_direction_scale * frame_time);
         func_0022ED80_update(1, 0, transport_moby);
         spawn_class_32_moby(transport_moby, (char *)rotation.f, vector.f, transport_data + 0x70, scale_game_frames(45));
         transport_moby[0x20] = 6;
@@ -258,8 +258,8 @@ void armed_transport_update(char *transport_moby) {
     }
     }
     *(float *)(transport_data + 0x18C) = fast_add_rotations(*(float *)(transport_data + 0x18C),
-                                          *(float *)&D_L16_00161D88 * DEG_TO_RAD * frame_time);
-    *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&D_L16_00161D8C * fast_sin(*(float *)(transport_data + 0x18C));
+                                          *(float *)&armed_transport_bob_phase_speed_degrees * DEG_TO_RAD * frame_time);
+    *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&armed_transport_bob_amplitude * fast_sin(*(float *)(transport_data + 0x18C));
     update_armed_transport_joint_animation(transport_moby);
 }
 #include "qcopy.h"
