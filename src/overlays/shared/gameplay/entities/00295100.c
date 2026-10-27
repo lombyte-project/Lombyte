@@ -1084,7 +1084,7 @@ void end_slideshow(void) {
 }
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern char D_0013D1D0[];
-extern s32 D_L00_00173BF0[];
+extern s32 slideshow_frame_thresholds[] __asm__("D_L00_00173BF0");
 extern void FUN_0022ca50(void);
 
 void update_slideshow(void) __asm__("FUN_L00_00299c48");
@@ -1106,7 +1106,7 @@ void update_slideshow(void) {
         skip_check = 0;
     }
     if (slideshow.state == 0) {
-        if (slideshow.frame >= D_L00_00173BF0[slideshow.slide] - 0x24) {
+        if (slideshow.frame >= slideshow_frame_thresholds[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
                 update_audio_stream_until_idle(1);
             }
