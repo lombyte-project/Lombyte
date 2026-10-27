@@ -2973,7 +2973,7 @@ extern f32 D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
 extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 
 extern short D_L02_00161C38 __attribute__((sda));
-extern short D_L02_00161C3C __attribute__((sda));
+extern short transport_pod_rail_rotation_degrees_per_height_unit_gp __asm__("D_L02_00161C3C") __attribute__((sda));
 void advance_transport_pod_rails_to_offsets(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     advance_accelerated_scalar(
@@ -2988,8 +2988,8 @@ void advance_transport_pod_rails_to_offsets(struct Moby *moby) {
         float r0 =
             fast_add_rotations(moby->rot.z,
                                (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) *
-                                   *(float *)&D_L02_00161C3C * DEG_TO_RAD);
-        float k = *(float *)&D_L02_00161C3C;
+                                   *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp * DEG_TO_RAD);
+        float k = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
         *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = r0;
         *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
             moby->rot.z,
@@ -3011,7 +3011,7 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
     float rail_a_rotation_z;
     qcopy(rail_a + 0x10, &moby->pos);
     qcopy(*(char **)(transport_pod_vars + 0x88) + 0x10, &moby->pos);
-    k = *(float *)&D_L02_00161C3C;
+    k = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
     *(float *)(rail_a + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x94);
     *(int *)(transport_pod_vars + 0x8C) = 0;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x98);
@@ -3019,7 +3019,7 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
     rail_a_rotation_z = fast_add_rotations(moby->rot.z,
                      (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) * k *
                          DEG_TO_RAD);
-    k2 = *(float *)&D_L02_00161C3C;
+    k2 = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
     *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = rail_a_rotation_z;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
         moby->rot.z,
