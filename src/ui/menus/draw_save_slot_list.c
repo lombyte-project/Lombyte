@@ -13,9 +13,9 @@ typedef struct {
 
 
 
-extern char D_00160300[];
-extern char D_00160310[];
-extern char D_00160320[];
+extern char save_slot_play_time_format[] __asm__("D_00160300");
+extern char save_slot_grouped_bolts_format[] __asm__("D_00160310");
+extern char save_slot_hex_triplet_format[] __asm__("D_00160320");
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -78,7 +78,7 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 if (hours > 99) {
                     hours = 99;
                 }
-                sprintf(text, D_00160300, hours, minutes);
+                sprintf(text, save_slot_play_time_format, hours, minutes);
                 draw_hud_sprite(get_icon_frame(0xE99E, 3), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
@@ -98,14 +98,14 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 } else if (bolts < 1000000) {
                     sprintf(text, D_001602D0, bolts / 1000, bolts % 1000);
                 } else {
-                    sprintf(text, D_00160310, bolts / 1000000, bolts % 1000000 / 1000,
+                    sprintf(text, save_slot_grouped_bolts_format, bolts / 1000000, bolts % 1000000 / 1000,
                             bolts % 1000);
                 }
                 draw_hud_sprite(get_icon_frame(0x754F, 0xF), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
-                sprintf(text, D_00160320, slot->b16, slot->b15, slot->b17);
+                sprintf(text, save_slot_hex_triplet_format, slot->b16, slot->b15, slot->b17);
                 draw_hud_sprite(get_icon_frame(0xE99E, 2), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
