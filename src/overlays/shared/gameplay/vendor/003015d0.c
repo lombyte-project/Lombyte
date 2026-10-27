@@ -156,7 +156,7 @@ extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __
 extern int vendor_beam_max_pulse_duration_frames_gp __asm__("D_L14_001620C0") __attribute__((sda));
 extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attribute__((sda));
 extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
-extern int D_L14_00162108 __attribute__((sda));
+extern int vendor_beam_spark_initial_word_gp __asm__("D_L14_00162108") __attribute__((sda));
 extern int D_L14_0016210C __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/vendor/003015d0_data/start_vendor_beam_pulse_2.h"
 extern int D_L14_0016211C __attribute__((sda));
@@ -264,7 +264,7 @@ void start_vendor_beam_pulse(char *moby) {
             delta.f[3] = vendor_beam_spark_step_w_gp;
             color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
-            spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C, point >> 1, 15, frames, color);
+            spawn_spark(&work, &delta, &delta, vendor_beam_spark_initial_word_gp, D_L14_0016210C, point >> 1, 15, frames, color);
         }
         for (k = 0; k < 2; k++) {
             int frames, unused_color;
@@ -276,7 +276,7 @@ void start_vendor_beam_pulse(char *moby) {
             /* Fakematch: a never-taken exit keeps the spark arguments in their own block until
              * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
             if (never) continue;
-            spawn_spark(&work, &delta, &delta, D_L14_00162108, D_L14_0016210C,
+            spawn_spark(&work, &delta, &delta, vendor_beam_spark_initial_word_gp, D_L14_0016210C,
                         beam->branch_start[k] >> 1, 15, frames, vendor_beam_branch_end_spark_color_gp);
         }
     }
