@@ -222,10 +222,10 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
-extern short D_L00_00161CF4 __attribute__((sda));
-extern short D_L00_00161CF8 __attribute__((sda));
-extern short D_L00_00161CFC __attribute__((sda));
-extern short D_L00_00161D00 __attribute__((sda));
+extern short orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") __attribute__((sda));
+extern short orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") __attribute__((sda));
+extern short orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") __attribute__((sda));
+extern short orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") __attribute__((sda));
 void follow_camera_orbit(int camera_moby) {
     char *camera_object = (char *)camera_moby;
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -257,7 +257,7 @@ void follow_camera_orbit(int camera_moby) {
     y = fast_arc_sin(reference_up_component / x);
     current_up_component = fast_vec_dot(current_orbit_offset, up);
     orbit_angle_scratch = fast_arc_sin(current_up_component / bc);
-    i = rope_spring_turn(camera_state + 0x154, orbit_angle_scratch, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    i = rope_spring_turn(camera_state + 0x154, orbit_angle_scratch, y, *(float *)&orbit_pitch_spring_stiffness_gp, *(float *)&orbit_pitch_spring_damping_gp,
                          0.0f);
     fast_vec_scale(reference_up_projection, up, reference_up_component);
     subtract_vector_xyz(projected_reference_offset, reference_orbit_offset, reference_up_projection);
@@ -267,8 +267,8 @@ void follow_camera_orbit(int camera_moby) {
     x = fast_vec_length(projected_reference_offset);
     x = x * fast_vec_length(projected_current_offset);
     orbit_angle_scratch = 1.5707964f - fast_arc_sin(dot_product / x);
-    x = rope_spring_turn(camera_state + 0x150, 0.0f, orbit_angle_scratch, *(float *)&D_L00_00161CF4,
-                         *(float *)&D_L00_00161CF8, 0.0f);
+    x = rope_spring_turn(camera_state + 0x150, 0.0f, orbit_angle_scratch, *(float *)&orbit_yaw_spring_stiffness_gp,
+                         *(float *)&orbit_yaw_spring_damping_gp, 0.0f);
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
     yaw_rotation_sign = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
