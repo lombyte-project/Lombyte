@@ -26,15 +26,15 @@ void queue_batalia_eight_textured_batches(int pair_index) {
     }
 }
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
-extern int D_L08_001F4C18[];
-extern int D_L08_001F4C00[];
+extern int batalia_six_batch_offset_source_streams[] __asm__("D_L08_001F4C18");
+extern int batalia_six_batch_packet_triplet_sources[] __asm__("D_L08_001F4C00");
 void queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");
 
 void queue_batalia_six_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x6; i++) {
-        FUN_L08_00258090(D_L08_001F8560, D_L08_001F4C18[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
-        FUN_L00_001fde98(D_L08_001F01C8[i], D_L08_001F4C00[i], D_L08_001F4C48[i], D_L08_001F8560,
+        FUN_L08_00258090(D_L08_001F8560, batalia_six_batch_offset_source_streams[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
+        FUN_L00_001fde98(D_L08_001F01C8[i], batalia_six_batch_packet_triplet_sources[i], D_L08_001F4C48[i], D_L08_001F8560,
                          1);
     }
 }
