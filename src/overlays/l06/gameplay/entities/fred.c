@@ -7697,7 +7697,7 @@ s32 get_red_button_sequence_status(const u8 *moby) {
 typedef struct { int v[6]; } V6;
 
 V6 D_L06_002019A0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-extern V6 D_L06_002019B8;
+extern V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -7723,7 +7723,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             i++;
             frame_scaled_random_factor = random_float_between(8.0f, 10.0f);
             first_color_palette = D_L06_002019A0;
-            second_color_palette = D_L06_002019B8;
+            second_color_palette = l06_red_button_particle_second_color_palette;
             frame_scaled_random_factor = frame_scaled_random_factor * frame_time;
             pa = first_color_palette.v + random_integer_below(6);
             pb = second_color_palette.v + random_integer_below(6);
