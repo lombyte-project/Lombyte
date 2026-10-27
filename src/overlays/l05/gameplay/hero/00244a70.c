@@ -173,7 +173,7 @@ extern void FUN_L00_00216f90(void *, void *, s32, s32);
 extern void compute_hero_reference_tilt_rotation(void *, void *, f32, f32, f32, s32) __asm__("FUN_L00_00216130");
 extern void rotate_hero_about_local_pivot(void *, f32, f32, f32) __asm__("FUN_L00_002090d0");
 extern void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
-extern Vec4 D_L05_00179BE0[];
+extern Vec4 l05_hoverboard_trick_rotation_pivots[] __asm__("D_L05_00179BE0");
 extern struct PadState D_0013C940;
 #define PD D_0013C940
 extern struct PlayerJointTable D_L05_0017AAE0;
@@ -542,7 +542,7 @@ void update_hero_motion_by_state(void) {
             f32 swim_pitch_response_coefficient;
             f32 steer;
             f32 old;
-            f32 diff;
+            f32 swim_pitch_delta;
             f32 k;
             f32 yaw;
             f32 t;
@@ -633,7 +633,7 @@ void update_hero_motion_by_state(void) {
             }
             old = hero.motion.rot.f[1];
             FUN_L00_0025bc98(&hero.motion.rot.f[1], steer, &hero.swim_roll_velocity, 0, swim_pitch_response_coefficient, rate, lo);
-            diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
+            swim_pitch_delta = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
             hero.unk8EC = hero.motion.yaw_rate;
@@ -743,7 +743,7 @@ void update_hero_motion_by_state(void) {
             FUN_L05_00238858(0.009f, 0.22f);
             FUN_L05_00238870(0.04f, 0.2f);
             FUN_L05_00238888(0.02f, 0.2f);
-            AN.f114 = diff * 47.0f;
+            AN.f114 = swim_pitch_delta * 47.0f;
             AN.f118 = t * 1.5f;
             AN.f110 = t * 1.4f;
             if (AN.f114 > 0.87266463f) {
@@ -754,9 +754,9 @@ void update_hero_motion_by_state(void) {
             AN.f364 = 0.03f;
             AN.f414 = 0.03f;
             AN.f368 = 0.22f;
-            AN.f324 = diff * 40.0f;
+            AN.f324 = swim_pitch_delta * 40.0f;
             AN.f418 = 0.22f;
-            AN.f3D4 = diff * 40.0f;
+            AN.f3D4 = swim_pitch_delta * 40.0f;
             AN.f328 = t * 1.1f;
             AN.f3D8 = t * 1.1f;
         }
@@ -1015,7 +1015,7 @@ void update_hero_motion_by_state(void) {
             f32 x;
             f32 y;
             hero.motion.yaw_rate = 0.0f;
-            qcopy(&vector_and_hit_scratch, &D_L05_00179BE0[hero.air_pose_index]);
+            qcopy(&vector_and_hit_scratch, &l05_hoverboard_trick_rotation_pivots[hero.air_pose_index]);
             smooth_and_clamp_value_pair(&v10, &hero.smoothed_spin_stick, frame_scale_sq * 0.2f);
             x = -v10.f[0] * (frame_time * 12.217304f);
             y = -v10.f[1] * (frame_time * 12.217304f);
@@ -1115,17 +1115,17 @@ void update_hero_motion_by_state(void) {
     case HERO_STATE_ANIMATION_WAIT_TO_IDLE:
         if ((struct MobyView *)hero.ground_moby != NULL && ((struct MobyView *)hero.ground_moby)->hA6 == 0x155) {
             f32 d;
-            f32 lim;
+            f32 ground_moby_yaw_step_limit;
             clear_u64_value(&vector_and_hit_scratch);
             add_vector_xyz(&vector_and_hit_scratch, &vector_and_hit_scratch, &((struct MobyView *)hero.ground_moby)->u10.v10);
             subtract_vector_xyz(&hero.motion.velocity, &vector_and_hit_scratch, &hero.motion.pos);
             FUN_L00_0025f730(&hero.motion.velocity, frame_time * 2.0f);
             d = fast_subtract_rotations(((struct MobyView *)hero.ground_moby)->u40.f48.v, hero.motion.rot.f[2]);
-            lim = frame_time * 9.424778f;
-            if (d > lim) {
-                d = lim;
-            } else if (d < -lim) {
-                d = -lim;
+            ground_moby_yaw_step_limit = frame_time * 9.424778f;
+            if (d > ground_moby_yaw_step_limit) {
+                d = ground_moby_yaw_step_limit;
+            } else if (d < -ground_moby_yaw_step_limit) {
+                d = -ground_moby_yaw_step_limit;
             }
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
@@ -1551,7 +1551,7 @@ void update_hero_motion_by_state(void) {
             f32 off;
             f32 tol;
             f32 mx;
-            f32 diff;
+            f32 melee_target_spacing_error;
             if (d < 0.0f) {
                 d = 0.0f;
             }
@@ -1568,9 +1568,9 @@ void update_hero_motion_by_state(void) {
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
-            if (FUN_001f99c0(diff) < tol + 3.0f) {
-                f32 s = diff / 0.9f;
+            melee_target_spacing_error = d - off;
+            if (FUN_001f99c0(melee_target_spacing_error) < tol + 3.0f) {
+                f32 s = melee_target_spacing_error / 0.9f;
                 if (s > mx) {
                     s = mx;
                 }
