@@ -363,8 +363,8 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 
 extern float background_ship_2_path_travel_speed_gp __asm__("D_L02_00161FC0") __attribute__((sda));
-extern char D_L02_001FADB0[];
-extern char D_L02_001FADD0[];
+extern char background_ship_2_missing_path_message[] __asm__("D_L02_001FADB0");
+extern char background_ship_2_empty_path_message[] __asm__("D_L02_001FADD0");
 extern float D_0015ED60_f __asm__("D_0015ED60");
 extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161FC4") __attribute__((sda));
 extern int background_ship_2_color_tween_start_gp __asm__("D_L02_00161FC8") __attribute__((sda));
@@ -406,12 +406,12 @@ void background_ship_2_update(char *moby) {
         }
         invalid_index = -1;
         if (*(int *)(moby_data + 0x60) == invalid_index) {
-            stub_printf(D_L02_001FADB0, *(short *)(moby + 0xB2));
+            stub_printf(background_ship_2_missing_path_message, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
         if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
-            stub_printf(D_L02_001FADD0, *(short *)(moby + 0xB2));
+            stub_printf(background_ship_2_empty_path_message, *(short *)(moby + 0xB2));
             delete_moby(moby);
             return;
         }
