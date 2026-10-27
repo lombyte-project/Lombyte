@@ -335,10 +335,10 @@ void vu1_add_g_sregister_c(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 extern float D_L17_0016D3E4 __attribute__((section(".data")));
 extern float D_L17_001DDFF8[];
-extern float D_L17_001DE040[];
+extern float backdrop_quad_color_blend_factors[] __asm__("D_L17_001DE040");
 extern float D_L17_001DE0A0[];
 extern float D_L17_001DE0B8[];
-extern float D_L17_001DE0D0[];
+extern float backdrop_quad_uv_rotation_angles[] __asm__("D_L17_001DE0D0");
 extern float D_L17_001E6FA0[];
 extern int D_L17_001DE010[];
 extern int D_L17_001DE028[];
@@ -407,7 +407,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
     for (k = 0; k < 5; k++) {
         float quad_side_length = D_L17_001DDFF8[k];
-        float uv_rotation_angle = D_L17_001DE0D0[k];
+        float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
         float x = *(float *)(data + 0x10) - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
@@ -435,7 +435,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         pkt.uv[6] = fast_sin_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
         pkt.uv[7] = fast_cos_c(fast_add_rotations(uv_rotation_angle, 1.5707964f)) * 0.5f + 0.5f;
         {
-            int interpolated_vertex_color = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
+            int interpolated_vertex_color = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], backdrop_quad_color_blend_factors[k]);
             pkt.col[3] = interpolated_vertex_color;
             pkt.col[2] = interpolated_vertex_color;
             pkt.col[1] = interpolated_vertex_color;
@@ -458,9 +458,9 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-extern float D_L17_001DDFE0[];
-extern float D_L17_001DE058[];
-extern float D_L17_001DE070[];
+extern float backdrop_quad_uv_rotation_rate_factors[] __asm__("D_L17_001DDFE0");
+extern float backdrop_quad_color_blend_direction_multipliers[] __asm__("D_L17_001DE058");
+extern float backdrop_quad_color_blend_rates[] __asm__("D_L17_001DE070");
 extern float backdrop_heading_radius_numerator_addend_gp __asm__("D_L17_001623D4") __attribute__((sda));
 void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
 
@@ -485,7 +485,7 @@ done:
     if (moby->state == 0) {
         moby->state = 1;
         for (i = 0; i < 5; i++) {
-            D_L17_001DE0D0[i] = (float)i * 25.0f;
+            backdrop_quad_uv_rotation_angles[i] = (float)i * 25.0f;
         }
         qcopy(moby_pvars, &moby->pos);
         build_spherical_offset(
@@ -501,19 +501,19 @@ done:
         *(float *)(moby_pvars + 0x10) -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
-            D_L17_001DE040[i] += D_L17_001DE070[i] * D_L17_001DE058[i] * frame_delta_time;
-            if (1.0f < D_L17_001DE040[i]) {
-                D_L17_001DE040[i] = 1.0f;
-                D_L17_001DE058[i] = -1.0f;
+            backdrop_quad_color_blend_factors[i] += backdrop_quad_color_blend_rates[i] * backdrop_quad_color_blend_direction_multipliers[i] * frame_delta_time;
+            if (1.0f < backdrop_quad_color_blend_factors[i]) {
+                backdrop_quad_color_blend_factors[i] = 1.0f;
+                backdrop_quad_color_blend_direction_multipliers[i] = -1.0f;
             }
-            if (D_L17_001DE040[i] < 0.0f) {
-                D_L17_001DE040[i] = 0.0f;
-                D_L17_001DE058[i] = 1.0f;
+            if (backdrop_quad_color_blend_factors[i] < 0.0f) {
+                backdrop_quad_color_blend_factors[i] = 0.0f;
+                backdrop_quad_color_blend_direction_multipliers[i] = 1.0f;
             }
         }
         for (i = 0; i < 5; i++) {
-            D_L17_001DE0D0[i] =
-                fast_add_rotations(D_L17_001DE0D0[i], D_L17_001DDFE0[i] * 0.1f * frame_delta_time);
+            backdrop_quad_uv_rotation_angles[i] =
+                fast_add_rotations(backdrop_quad_uv_rotation_angles[i], backdrop_quad_uv_rotation_rate_factors[i] * 0.1f * frame_delta_time);
         }
         for (i = 0; i < 2; i++) {
             D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
