@@ -2149,7 +2149,7 @@ void FUN_001f9a28_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
 void FUN_001f9a10_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
                            Vec4_002090d0 *) __asm__("FUN_001f9a10");
 void FUN_00214598_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("FUN_00214598");
-extern Vec4_002090d0 D_0013F3E0;
+extern Vec4_002090d0 hero_motion_rotation_for_local_pivot __asm__("D_0013F3E0");
 void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) __asm__("FUN_L00_002090d0");
 
 void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
@@ -2163,7 +2163,7 @@ void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
         Mtx_002090d0 r;
         Vec4_002090d0 e;
     } L_002090d0;
-    Vec4_002090d0 *hero_rotation = &D_0013F3E0;
+    Vec4_002090d0 *hero_rotation = &hero_motion_rotation_for_local_pivot;
     *(u128_002090d0 *)&L_002090d0.p = *in;
     FUN_001fa050_002090d0(&L_002090d0.m, hero_rotation);
     FUN_001f9d20_002090d0(&L_002090d0.a, &L_002090d0.p, &L_002090d0.m);
