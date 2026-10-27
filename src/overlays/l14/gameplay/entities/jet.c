@@ -2013,7 +2013,7 @@ extern int sample_path() __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-extern short D_L14_00161D14 __attribute__((sda));
+extern short elevator_path_step_rate_gp __asm__("D_L14_00161D14") __attribute__((sda));
 int advance_elevator_along_path(struct Moby *elevator_moby) {
     char *moby_vars = (char *)elevator_moby->pvars;
     float rot[4];
@@ -2033,7 +2033,7 @@ int advance_elevator_along_path(struct Moby *elevator_moby) {
         total = *(float *)(moby_vars + 0xBC);
         qcopy(rot, moby_vars + 0xF0);
     }
-    step = *(float *)&D_L14_00161D14 * D_0015ED6C_c;
+    step = *(float *)&elevator_path_step_rate_gp * D_0015ED6C_c;
     path_endpoint_reached = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
     FUN_L00_0025b8c0(&elevator_moby->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0(&elevator_moby->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
