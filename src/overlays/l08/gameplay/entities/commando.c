@@ -397,13 +397,13 @@ extern s32 D_L08_001DDF40[];
 extern s32 D_L08_001E2828[];
 extern s32 D_L08_001E2858[];
 extern s32 D_L08_001E8310[];
-extern char D_L08_001E8350[];
+extern char layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern short D_L08_00161DC0 __attribute__((sda));
-extern short D_L08_00161E04 __attribute__((sda));
+extern short layered_mesh_effect_center_x __asm__("D_L08_00161DC0") __attribute__((sda));
+extern short layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") __attribute__((sda));
 extern s32 D_L08_001DDF20[];
 extern s32 D_L08_001DB518[];
 extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
@@ -430,11 +430,11 @@ void update_layered_mesh_effect(struct Moby *moby) {
 
     switch (moby->state) {
     case DRAW_ELEMENTS_INITIALIZE:
-        if (*(int *)&D_L08_00161E04 == 0) {
+        if (*(int *)&layered_mesh_rgba_tables_initialized == 0) {
             scale_rgba_tables(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             scale_rgba_tables(D_L08_001DDF20, 8, D_L08_001DB518, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L08_001E2828, 0xB, D_L08_001DDF40, 0.25f, 0.25f, 0.25f, 1.0f, 1);
-            *(int *)&D_L08_00161E04 = 1;
+            *(int *)&layered_mesh_rgba_tables_initialized = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -453,12 +453,12 @@ void update_layered_mesh_effect(struct Moby *moby) {
         }
         break;
     case DRAW_ELEMENTS_UPDATE:
-        culling_sphere[0] = *(float *)&D_L08_00161DC0;
+        culling_sphere[0] = *(float *)&layered_mesh_effect_center_x;
         culling_sphere[1] = layered_mesh_effect_center_y;
         culling_sphere[2] = layered_mesh_effect_center_z;
         culling_sphere[3] = layered_mesh_effect_culling_radius;
         if (fast_bsphere_check((char *)culling_sphere, 1000.0f) >= 0) {
-            distance_vector[0] = *(float *)&D_L08_00161DC0;
+            distance_vector[0] = *(float *)&layered_mesh_effect_center_x;
             distance_vector[1] = layered_mesh_effect_center_y;
             distance_vector[2] = layered_mesh_effect_center_z;
             distance_vector[3] = 1.0f;
@@ -466,7 +466,7 @@ void update_layered_mesh_effect(struct Moby *moby) {
             distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
+                advance_wrapped_sine_pair(layered_mesh_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
