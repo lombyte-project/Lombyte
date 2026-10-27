@@ -31,7 +31,7 @@ extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern struct Globals_0015F634 *level_sound_defs __asm__("D_0015F634");
 extern struct Globals_00194100 coll_output __asm__("D_00194100");
-extern u8 D_001E8988[];
+extern u8 unloaded_sound_bank_format[] __asm__("D_001E8988");
 
 extern void DebugPrint();
 extern void FlushCache(s32);
@@ -101,7 +101,7 @@ void do_space_transition(void) {
     if (level_sound_defs != 0) {
         snd_unload_bank(level_sound_defs->unk1C);
         snd_resolve_bank_xrefs();
-        DebugPrint(D_001E8988, level_sound_defs->unk1C);
+        DebugPrint(unloaded_sound_bank_format, level_sound_defs->unk1C);
     }
     sound_bank_handle = 0;
     snd_stream_safe_cd_callback(0);
