@@ -2472,9 +2472,6 @@ void horny_toad_update(Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
-#else
 extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
 extern f32 D_0015ED6C_2d5160 __asm__("D_0015ED6C");
 extern float D_0015ED70;
@@ -2529,21 +2526,28 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
     hit = FUN_L00_0025a420_2d5160(m, 0x330000, 0);
     FUN_L00_0025a478_2d5160(m, hit, v + 0x20, 0, &result, &damage, 0, 4);
     if (result != 1 && m[0x20] != 12 && damage != 0.0f) {
-        forceX = D_L00_00161970_2d5160 * D_0015ED70;
-        forceY = D_L00_00161974_2d5160 * D_0015ED70;
-        forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
-        forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
+        /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
+           later 0.75 in $f4, the squared frame time first in $f0. */
+        register s32 hit_state __asm__("$8") = 0x29;
+        register f32 frame_time_reg __asm__("$f4") = D_0015ED6C_2d5160;
+        register f32 knockback_scale __asm__("$f4");
+        register f32 frame_time_sq_reg __asm__("$f0") = D_0015ED70;
+        forceX = D_L00_00161970_2d5160 * frame_time_sq_reg;
+        forceY = D_L00_00161974_2d5160 * frame_time_sq_reg;
+        forceZ = D_L00_00161978_2d5160 * frame_time_reg;
+        forceW = D_L00_0016197C_2d5160 * frame_time_reg;
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
-        *(volatile s32 *)(v + 0x94) = 0x29;
-        *(volatile s32 *)(v + 0x90) = 0x200;
-        *(f32 *)(v + 0x98) = 0.75f;
+        *(s32 *)(v + 0x94) = hit_state;
+        *(s32 *)(v + 0x90) = 0x200;
+        knockback_scale = 0.75f;
+        *(f32 *)(v + 0x98) = knockback_scale;
         *(f32 *)(v + 0x20) = health;
+        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x88) = forceZ;
         *(f32 *)(v + 0x8C) = forceW;
-        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0xBC) = duration;
         *(u16 *)(m + 0x34) &= ~0x1000;
         *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
@@ -2585,7 +2589,6 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
             FUN_L00_00257880_2d5160(m, 4, 0, FUN_001fef20_2d5160(20));
     }
 }
-#endif
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
 /* D_0015ED70 is declared sda above (crate_drop_bolts), but here retail loads it
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */

@@ -288,74 +288,76 @@ void camera_object_update(char *camera_object) {
         *(float *)(camera_object + 0x10) = 5.0f;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5040.s", FUN_L00_002a5040);
-#else
-extern float D_L00_00161394 __attribute__((sda));
-extern float D_L00_00161398 __attribute__((sda));
-extern float D_L00_001D7360[][4];
-extern float D_L00_001D73F0[][2];
-extern float D_L00_001D73F4[][2];
-/* Fakematch: a second name for the table makes reload re-materialise its address as retail does. */
-extern float D_L00_001D73F4_lui[][2] __asm__("D_L00_001D73F4");
-extern int D_L00_001D7438[];
-extern s32 D_L00_001D7460[];
-extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void transform_point_2a5040(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 fast_cos_2a5040(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
+/* Ported from rac1-decomp (src/overlays/shared/bolts_and_wrench.c: func_L00_002A62D0), where it is exact; names translated to the US level program. */
 
-typedef unsigned int Q_2a5040 __attribute__((mode(TI), aligned(16)));
-typedef union { Q_2a5040 q; float f[4]; } V_2a5040;
+typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+
+typedef unsigned int Q_2A62D0 __attribute__((mode(TI), aligned(16)));
+
+typedef union { Q_2A62D0 q; float f[4]; } V_2A62D0;
+
 typedef struct {
     float v[4][4];
     int col[4];
     float uv[4][2];
-    unsigned long pk[4];
-} Quad_2a5040;
+} Quad_2A62D0;
 
-void draw_vendor_effects(char *m) __asm__("FUN_L00_002a5040");
-void draw_vendor_effects(char *m) {
+extern S D_L00_00166C80_d __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L00_001D7360[][4];
+extern float D_L00_001D73F0[][2];
+extern int D_L00_001D7438_d[] __asm__("D_L00_001D7438") __attribute__((section(".data")));
+extern int D_L00_001D7460_c[][4] __asm__("D_L00_001D7460");
+extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern short D_L00_00161394_d __asm__("D_L00_00161394") __attribute__((sda));
+extern short D_L00_00161398_d __asm__("D_L00_00161398") __attribute__((sda));
+extern void FUN_L00_00263618(void *, int, float, float);
+extern void fast_draw_quad_real(void *, void *, int);
+extern void transform_vector_by_basis_c(void *, void *, void *) __asm__("func_001F9CF8");
+extern void vu_euler_rotation_basis_c(void *, void *) __asm__("func_001FA030");
+
+void FUN_L00_002a5040(char *m) {
     char *p = *(char **)(m + 0x78);
-    Quad_2a5040 qd;
+    Quad_2A62D0 qd;
+    long pk[4];
     float q[4][4];
     float d0[4];
     float mtx[3][4];
-    V_2a5040 M[4];
-    V_2a5040 T[4];
-    float off, zf;
+    V_2A62D0 M[4];
+    V_2A62D0 T[4];
+    float zero;
+    char *g, *h;
+    float (*t4)[2]; float (*t0)[2];
+    int izero;
+    float off;
+    /* register pin: the sparkle 1.1 lives in $f22, copied from the glow block's 1.1 */
+    register float kk __asm__("$f22");
+    /* register pin: &d0 for the second vu_euler_rotation_basis_c call */
+    register float *ap __asm__("$5");
     int k, i, i0, i1, i2, i3, col;
-    C_2a4e48 *cam;
-    float rz;
 
-    cam = &D_166C80_2a4e48;
-    rz = cam->f158;
+    h = (char *)&D_L00_00166C80_d;
+    d0[2] = *(float *)(h + 0x158);
     d0[0] = 0.0f;
     d0[1] = 0.0f;
-    d0[2] = rz;
-    vu_euler_rotation_basis(mtx, d0);
+    vu_euler_rotation_basis_c(mtx, d0);
 
-    D_L00_00161394 = D_L00_00161394 + 0.01f;
-    if (1.0f < D_L00_00161394) {
-        D_L00_00161394 = D_L00_00161394 - 1.0f;
+    (*(float *)&D_L00_00161394_d) = (*(float *)&D_L00_00161394_d) + 0.01f;
+    if (1.0f < (*(float *)&D_L00_00161394_d)) {
+        (*(float *)&D_L00_00161394_d) = (*(float *)&D_L00_00161394_d) - 1.0f;
     }
 
-    qd.pk[2] = 1;
-    qd.pk[3] = 0x4000000044UL;
-    qd.pk[0] = 0;
-    qd.pk[1] = get_effect_texture(0x18);
+    pk[2] = 1;
+    pk[3] = 0x4000000044L;
+    pk[0] = 0;
+    pk[1] = get_effect_texture_c(0x18);
 
     for (k = 0; k < 4; k++) {
-        float (*uvt)[2] = D_L00_001D73F4;
-        float (*uvt2)[2] = D_L00_001D73F4_lui;
-        transform_point_2a5040(q[0], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][0]], mtx);
-        transform_point_2a5040(q[1], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][1]], mtx);
-        transform_point_2a5040(q[2], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][2]], mtx);
-        transform_point_2a5040(q[3], D_L00_001D7360[((int (*)[4])D_L00_001D7460)[k][3]], mtx);
+        transform_vector_by_basis_c(q[0], D_L00_001D7360[D_L00_001D7460_c[k][0]], mtx);
+        transform_vector_by_basis_c(q[1], D_L00_001D7360[D_L00_001D7460_c[k][1]], mtx);
+        transform_vector_by_basis_c(q[2], D_L00_001D7360[D_L00_001D7460_c[k][2]], mtx);
+        transform_vector_by_basis_c(q[3], D_L00_001D7360[D_L00_001D7460_c[k][3]], mtx);
 
         qd.v[0][0] = *(float *)(m + 0x10) + q[0][0] * *(float *)(p + 0x90);
         qd.v[0][1] = *(float *)(m + 0x14) + q[0][1] * *(float *)(p + 0x90);
@@ -370,39 +372,42 @@ void draw_vendor_effects(char *m) {
         qd.v[3][1] = *(float *)(m + 0x14) + q[3][1] * *(float *)(p + 0x90);
         qd.v[3][2] = *(float *)(m + 0x18) + q[3][2];
 
-        i0 = ((int (*)[4])D_L00_001D7460)[k][0];
-        i1 = ((int (*)[4])D_L00_001D7460)[k][1];
-        i2 = ((int (*)[4])D_L00_001D7460)[k][2];
-        i3 = ((int (*)[4])D_L00_001D7460)[k][3];
-        off = D_L00_00161394;
-        qd.col[0] = D_L00_001D7438[i0];
-        qd.col[1] = D_L00_001D7438[i1];
-        qd.col[2] = D_L00_001D7438[i2];
-        qd.col[3] = D_L00_001D7438[i3];
-        qd.uv[0][0] = D_L00_001D73F0[i0][0];
-        qd.uv[0][1] = uvt[i0][0] + off;
-        qd.uv[1][0] = D_L00_001D73F0[i1][0];
-        qd.uv[1][1] = uvt[i1][0] + off;
-        qd.uv[2][0] = D_L00_001D73F0[i2][0];
-        qd.uv[2][1] = uvt2[i2][0] + off;
-        qd.uv[3][0] = D_L00_001D73F0[i3][0];
-        qd.uv[3][1] = uvt[i3][0] + off;
-        draw_geometry_quad(&qd, 0, 1);
+        i0 = D_L00_001D7460_c[k][0];
+        i1 = D_L00_001D7460_c[k][1];
+        i2 = D_L00_001D7460_c[k][2];
+        i3 = D_L00_001D7460_c[k][3];
+        off = (*(float *)&D_L00_00161394_d);
+        qd.col[0] = D_L00_001D7438_d[i0];
+        qd.col[1] = D_L00_001D7438_d[i1];
+        qd.col[2] = D_L00_001D7438_d[i2];
+        qd.col[3] = D_L00_001D7438_d[i3];
+        t0 = D_L00_001D73F0;
+        t4 = (float (*)[2])&t0[0][1];
+        qd.uv[0][0] = t0[i0][0];
+        qd.uv[0][1] = t4[i0][0] + off;
+        qd.uv[1][0] = t0[i1][0];
+        qd.uv[1][1] = t4[i1][0] + off;
+        qd.uv[2][0] = t0[i2][0];
+        qd.uv[2][1] = t4[i2][0] + off;
+        qd.uv[3][0] = t0[i3][0];
+        qd.uv[3][1] = t4[i3][0] + off;
+        fast_draw_quad_real(&qd, 0, 1);
     }
 
-    qd.pk[1] = get_effect_texture(0x1B);
+    pk[1] = get_effect_texture_c(0x1B);
 
-    D_L00_00161398 = D_L00_00161398 + 0.01f;
-    if (1.0f < D_L00_00161398) {
-        D_L00_00161398 = 0.0f;
+    (*(float *)&D_L00_00161398_d) = (*(float *)&D_L00_00161398_d) + 0.01f;
+    if (1.0f < (*(float *)&D_L00_00161398_d)) {
+        (*(float *)&D_L00_00161398_d) = 0.0f;
     }
 
     {
-        float g = D_L00_00161398;
+        float g = (*(float *)&D_L00_00161398_d);
         float n = -g * 1.2f;
         float pp = g * 1.2f;
         float z = g * 1.4f + 1.1f;
         float zz = z - 0.2f;
+        kk = 1.1f;
 
         T[0].q = 0;
         T[0].f[0] = n * *(float *)(p + 0x90);
@@ -421,25 +426,28 @@ void draw_vendor_effects(char *m) {
         T[3].f[1] = pp * *(float *)(p + 0x90);
         T[3].f[2] = zz;
         M[0].q = T[0].q;
+        T[0].q = M[0].q;
         M[1].q = T[1].q;
+        T[1].q = M[1].q;
         M[2].q = T[2].q;
         M[3].q = T[3].q;
     }
 
-    /* Fakematch: setting cam a second time hides its base from alias analysis, so the
-       yaw load waits for the orbit stores as in retail. */
-    cam = &D_166C80_2a4e48;
-    rz = cam->f158;
+    g = (char *)&D_L00_00166C80_d;
+    off = *(float *)(g + 0x158);
     d0[0] = 0.0f;
+    d0[2] = off;
     d0[1] = 0.0f;
-    d0[2] = rz;
-    vu_euler_rotation_basis(mtx, d0);
-    transform_point_2a5040(q[0], M[0].f, mtx);
-    transform_point_2a5040(q[1], M[1].f, mtx);
-    transform_point_2a5040(q[2], M[2].f, mtx);
-    transform_point_2a5040(q[3], M[3].f, mtx);
+    /* inline asm: ap = d0 (frame slot 0xD0). The kk input puts it after retail's mov.s $f22,$f5;
+     * the $4 clobber keeps addiu $a0 (mtx) after it. */
+    __asm__("addiu %0,$sp,0xD0" : "=r"(ap) : "f"(kk) : "$4");
+    vu_euler_rotation_basis_c(mtx, ap);
+    transform_vector_by_basis_c(q[0], M[0].f, mtx);
+    transform_vector_by_basis_c(q[1], M[1].f, mtx);
+    transform_vector_by_basis_c(q[2], M[2].f, mtx);
+    transform_vector_by_basis_c(q[3], M[3].f, mtx);
 
-    col = ((int)((1.0f - D_L00_00161398) * 128.0f) << 24) | 0x808080;
+    col = ((int)((1.0f - (*(float *)&D_L00_00161398_d)) * 128.0f) << 24) | 0x808080;
     qd.v[0][0] = *(float *)(m + 0x10) + q[0][0];
     qd.v[0][1] = *(float *)(m + 0x14) + q[0][1];
     qd.v[0][2] = *(float *)(m + 0x18) + q[0][2];
@@ -464,23 +472,21 @@ void draw_vendor_effects(char *m) {
     qd.uv[2][1] = 1.0f;
     qd.uv[3][0] = 1.0f;
     qd.uv[3][1] = 1.0f;
-    draw_geometry_quad(&qd, 0, 1);
+    fast_draw_quad_real(&qd, 0, 1);
 
-    zf = 0.0f;
+    /* the sparkle vector reuses the first matrix row's slot in retail; its w is that row's 0 */
+    izero = 0;
+    zero = *(float *)&izero;
     for (i = 0; i < 4; i++) {
-        float ang;
-        /* Fakematch: re-setting zf in the loop keeps the 0.0 in one register for the whole tail. */
-        zf = 0.0f;
-        ang = (float)i * 3.14159f * 0.5f - 3.14159f;
-        T[0].f[0] = fast_cos_2a5040(ang) * 1.1f;
-        T[0].f[1] = fast_sin(ang) * 1.1f;
+        float ang = (float)i * 3.14159f * 0.5f - 3.14159f;
+        T[0].f[0] = fast_cos(ang) * kk;
+        T[0].f[1] = fast_sin(ang) * kk;
         T[0].f[2] = 0.59f;
-        transform_point_2a5040(T[0].f, T[0].f, m + 0xC0);
+        transform_vector_by_basis_c(T[0].f, T[0].f, m + 0xC0);
         add_vector_xyz(T[0].f, T[0].f, m + 0x10);
-        draw_offset_textured_effect_quad(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zf);
+        FUN_L00_00263618(T[0].f, *(int *)(m + 0x90) & 0xFFFF0000, 0.1333f, zero);
     }
 }
-#endif
 typedef struct {
     f32 f[4];
 } V_2a57a8;
