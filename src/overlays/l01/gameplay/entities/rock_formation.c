@@ -24,7 +24,7 @@ typedef struct {
     f32 force;
 } DebrisHit;
 
-extern DebrisColors D_L01_00161C50;
+extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
 extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -85,7 +85,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
             DebrisVec pos;
             DebrisVec off;
 
-            colors = D_L01_00161C50;
+            colors = l01_rock_formation_debris_oclass_choices;
             pos.q = 0;
             pos.f[0] = random_float_between(-1.0f, 1.0f);
             pos.f[1] = random_float_between(-1.0f, 1.0f);
