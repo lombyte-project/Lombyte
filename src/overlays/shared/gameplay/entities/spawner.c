@@ -202,7 +202,7 @@ extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
 extern s16 *FUN_002141f8_30a778(struct Moby *) __asm__("FUN_002141f8");
 extern void FUN_001e93b0_30a778(char *, s32, s32) __asm__("FUN_001e93b0");
-extern char D_L09_00209280[];
+extern char spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 
 struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) __asm__("FUN_L09_0030a778");
 
@@ -275,7 +275,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
             *(f32 *)data = (f32)data[2];
         }
     } else {
-        FUN_001e93b0_30a778(D_L09_00209280, (s16)owner->save_id, D_L09_0015F5CC);
+        FUN_001e93b0_30a778(spawner_child_respawn_failure_format, (s16)owner->save_id, D_L09_0015F5CC);
     }
     return result;
 }
