@@ -1355,7 +1355,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
 
 extern int water_entry_plane_initialized_gp __asm__("D_L08_00161970") __attribute__((sda));
-extern float D_L08_001D7060[4];
+extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -1386,21 +1386,21 @@ void update_hero_water_entry_effects(struct Moby *moby) {
 
     if (water_entry_plane_initialized_gp == 0) {
         water_entry_plane_initialized_gp = 1;
-        prepare_scaled_table_with_byte_128(D_L08_001D7060, 0.6666667f);
+        prepare_scaled_table_with_byte_128(water_entry_plane_data, 0.6666667f);
     }
     enqueue_callback_list_1(FUN_L08_002da0d0, moby);
     if (current_level_index != 8)
         return;
-    if (!(hero.motion.pos.f[2] < D_L08_001D7060[2]))
+    if (!(hero.motion.pos.f[2] < water_entry_plane_data[2]))
         return;
-    if (!(D_L08_001D7060[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
+    if (!(water_entry_plane_data[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
         return;
     if (voice_is_playing(hero.moby, hero.health.unk22B2)) {
         release_voice_slot(hero.health.unk22B2);
         hero.health.unk22B2 = -1;
     }
     qcopy(&pos, &hero.motion.pos);
-    pos.f[2] = D_L08_001D7060[2];
+    pos.f[2] = water_entry_plane_data[2];
     water_entry_moby = spawn_burst_moby(&pos, 3.0f);
     if (water_entry_moby)
         water_entry_moby[0x23] = 0x70;
@@ -1417,10 +1417,10 @@ void update_hero_water_entry_effects(struct Moby *moby) {
         unsigned char *splash;
         random_vector(spray_velocity_or_splash_position.f, 1.0f, 1.0f);
         add_vector_xyz(&spray_velocity_or_splash_position, &spray_velocity_or_splash_position, &pos);
-        spray_velocity_or_splash_position.f[2] = D_L08_001D7060[2] + 0.05f;
+        spray_velocity_or_splash_position.f[2] = water_entry_plane_data[2] + 0.05f;
         sc = random_float_between(0.7f, 1.0f);
         sp = i == 0 ? 2.0f : -2.0f;
-        splash = spawn_splash(&spray_velocity_or_splash_position, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
+        splash = spawn_splash(&spray_velocity_or_splash_position, D_L08_0015F580, &water_entry_plane_data[2], sc, sp);
         if (splash)
             *(short *)(splash + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
     }
