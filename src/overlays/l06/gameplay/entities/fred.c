@@ -6447,7 +6447,7 @@ void fred_update(struct Moby *moby) {
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_301b90 __asm__("D_L06_001600EC");
 extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
-extern char D_0015172A[] __asm__("D_0015172A");
+extern char dialogue_playback_phase[] __asm__("D_0015172A");
 extern int D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
 extern float D_L06_00167560 __asm__("D_L06_00167560");
 extern int D_L06_00167568 __asm__("D_L06_00167568");
@@ -6547,7 +6547,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         moby[0x20] = 3;
         *(int *)(moby_vars + 0xB0) = 1;
         jet_game_state(6, 9);
-        if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+        if (*(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
         set_moby_list_state_17(*(int *)(moby_vars + 0x10));
         set_moby_list_state_15(*(int *)(moby_vars + 0x14));
         set_moby_list_state_15(*(int *)(moby_vars + 0x18));
@@ -6612,13 +6612,13 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         char *q;
         x = scale_game_frames(0x708);
         if (*(int *)(moby_vars + 0xB4) == x) {
-            if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+            if (*(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
         } else {
             x = scale_game_frames(900);
             if (*(int *)(moby_vars + 0xB4) == x) select_localized_moby_voice_line((struct Moby *)moby, 2);
             else {
                 x = scale_game_frames(300);
-                if (*(int *)(moby_vars + 0xB4) == x && *(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+                if (*(int *)(moby_vars + 0xB4) == x && *(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
             }
         }
         if (fast_dec_timer(moby_vars + 0xC0) != 0) {
