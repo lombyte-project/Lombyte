@@ -71,13 +71,13 @@ typedef struct {
     s32 id;
     s32 pad[4];
 } E5;
-extern E5 D_L00_001EA880[];
+extern E5 l00_camera_id_lookup_table[] __asm__("D_L00_001EA880");
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 
 s32 find_camera_table_index_by_id(s32 id) {
     s32 table_index = 0;
-    while (D_L00_001EA880[table_index].id != -1 && D_L00_001EA880[table_index].id != id)
+    while (l00_camera_id_lookup_table[table_index].id != -1 && l00_camera_id_lookup_table[table_index].id != id)
         table_index++;
     return table_index;
 }
