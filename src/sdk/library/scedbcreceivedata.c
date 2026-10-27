@@ -8,7 +8,7 @@ struct DbCState {
     u8 payload[0x80];
     s32 unk8C;
 };
-extern u8 D_001536A0[];
+extern u8 dbc_receive_rpc_error_message[] __asm__("D_001536A0");
 extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
@@ -20,7 +20,7 @@ s32 sceDbcReceiveData(s32 rpc_request_word_0, s32 rpc_request_word_1, s32 *byte_
     state->unk4 = rpc_request_word_1;
     state->unk8 = *byte_count;
     if (sceSifCallRpc(RpcQueueData, 0x8000091A, 0, state, 0x400, state, 0x400, 0, 0) < 0) {
-        debug_print_stub(D_001536A0);
+        debug_print_stub(dbc_receive_rpc_error_message);
         return 0;
     }
     if (state->unk8C < 0) {
