@@ -297,8 +297,8 @@ extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
 extern Quad_56a8 D_L00_0017C040[];
 extern Quad_56a8 D_L00_0017C0B0[];
 extern Quad_56a8 D_L00_0017C120[];
-extern s32 D_L00_0017C1C0[];
-extern f32 D_L00_0017C190[];
+extern s32 hero_random_manipulator_attachment_indices[] __asm__("D_L00_0017C1C0");
+extern f32 hero_random_manipulator_blend_by_phase[] __asm__("D_L00_0017C190");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 
 void update_hero_rotation_targets_and_random_manipulators(void) {
@@ -346,7 +346,7 @@ void update_hero_rotation_targets_and_random_manipulators(void) {
             s32 j;
             for (i = 0; i < 7; i++) {
                 if (hero.manipulators[i].attached == 0) {
-                    attach_manipulator((s32)hero.moby, D_L00_0017C1C0[i], &hero.manipulators[i]);
+                    attach_manipulator((s32)hero.moby, hero_random_manipulator_attachment_indices[i], &hero.manipulators[i]);
                     hero.manipulators[i].absolute = 1;
                     qcopy(&hero.manipulators[i].quat, &D_L00_0017C040[i]);
                     qcopy(&hero.manipulators[i].scale3, &D_L00_0017C0B0[i]);
@@ -354,7 +354,7 @@ void update_hero_rotation_targets_and_random_manipulators(void) {
                 }
             }
             for (j = 0; j < 7; j++)
-                hero.manipulators[j].blend = D_L00_0017C190[hero.rand_timer.fired];
+                hero.manipulators[j].blend = hero_random_manipulator_blend_by_phase[hero.rand_timer.fired];
         }
     }
 }
