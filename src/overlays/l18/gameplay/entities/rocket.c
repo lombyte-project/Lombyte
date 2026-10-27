@@ -3222,10 +3222,10 @@ typedef struct {
     UVec130 uv[4];
     long unk70, tex, unk80, unk88;
 } Qec130;
-extern unsigned int D_L18_001620A0 __asm__("D_L18_001620A0") __attribute__((sda));
+extern unsigned int l18_billboard_quad_pair_first_color __asm__("D_L18_001620A0") __attribute__((sda));
 extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda));
-extern float D_L18_001620A8 __asm__("D_L18_001620A8") __attribute__((sda));
-extern float D_L18_001620AC __asm__("D_L18_001620AC") __attribute__((sda));
+extern float l18_billboard_quad_pair_first_corner_scale_base __asm__("D_L18_001620A8") __attribute__((sda));
+extern float l18_billboard_quad_pair_second_corner_scale_base __asm__("D_L18_001620AC") __attribute__((sda));
 extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") __attribute__((section(".data")));
 extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") __attribute__((section(".data")));
 extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") __attribute__((section(".data")));
@@ -3260,12 +3260,12 @@ void draw_moby_billboard_quad_pair(void *mv) {
     cross_vectors_xyz(&quad_transform[1], &quad_transform[0], (Vec130 *)&hero.gravity_dir);
     vscl_ec130(&quad_transform[1], &quad_transform[1], -1.0f);
     cross_vectors_xyz(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    uniform_quad_color = D_L18_001620A0;
+    uniform_quad_color = l18_billboard_quad_pair_first_color;
     quad.color[3] = uniform_quad_color;
     quad.color[2] = uniform_quad_color;
     quad.color[1] = uniform_quad_color;
     quad.color[0] = uniform_quad_color;
-    corner_scale = D_L18_001620A8 + spread_k(0.0f, 0.025f);
+    corner_scale = l18_billboard_quad_pair_first_corner_scale_base + spread_k(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
@@ -3278,7 +3278,7 @@ void draw_moby_billboard_quad_pair(void *mv) {
     quad.color[2] = uniform_quad_color;
     quad.color[1] = uniform_quad_color;
     quad.color[0] = uniform_quad_color;
-    corner_scale = D_L18_001620AC + spread_k(0.0f, 0.05f);
+    corner_scale = l18_billboard_quad_pair_second_corner_scale_base + spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
