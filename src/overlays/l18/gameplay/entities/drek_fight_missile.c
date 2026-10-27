@@ -219,7 +219,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
-extern short D_L18_0016222C __attribute__((sda));
+extern short drek_missile_wander_vertical_velocity_to_pitch_scale_gp __asm__("D_L18_0016222C") __attribute__((sda));
 int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) {
     float target_displacement[4];
     float redirected_target_position[4];
@@ -237,7 +237,7 @@ int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_p
         fast_sin(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214_gp * frame_time);
     FUN_00213f38_c((float *)(moby + 0x18), (float *)(missile_vars + 0x144), wander_target_position[2], *(float *)(missile_vars + 0x158),
                    *(float *)(missile_vars + 0x158), *(float *)(missile_vars + 0x15C));
-    *(float *)(moby + 0x44) = *(float *)&D_L18_0016222C * *(float *)(missile_vars + 0x144);
+    *(float *)(moby + 0x44) = *(float *)&drek_missile_wander_vertical_velocity_to_pitch_scale_gp * *(float *)(missile_vars + 0x144);
     if (fast_vec_length(target_displacement) < 2.0f) {
         return 1;
     }
