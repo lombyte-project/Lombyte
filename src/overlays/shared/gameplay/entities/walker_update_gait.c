@@ -154,7 +154,7 @@ typedef struct WalkData {
     unsigned short uEE;
 } WalkData;
 
-extern char D_L00_001611E0[];
+extern char walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
@@ -838,7 +838,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = vector_distance_xy(walker_moby->pos, gait_data->v60);
-            debug_print_alt(D_L00_001611E0, dist);
+            debug_print_alt(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);
@@ -868,7 +868,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = fast_vec_dist(walker_moby->pos, gait_data->v60);
-            debug_print_alt(D_L00_001611E0, dist);
+            debug_print_alt(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);
