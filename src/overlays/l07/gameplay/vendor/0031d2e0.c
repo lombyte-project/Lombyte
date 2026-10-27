@@ -29,7 +29,7 @@ extern char D_0013F3D0[];
 
 typedef struct { float pos[3]; float length; } L07PathNode;
 typedef struct { char pad[0xe]; unsigned short scale; char tail[8]; } L07ScaleRow;
-extern L07ScaleRow D_L07_001C4130[];
+extern L07ScaleRow l07_ammo_spawner_scaling_rows[] __asm__("D_L07_001C4130");
 
 /* Ported from rac1-decomp nonmatching/l07_umbris/func_L07_0031E6B0.c (func_L07_0031E6B0) */
 /* Umbris item spawner: measures its path once, then for each listed item whose stock ratio is in
@@ -76,7 +76,7 @@ state_one:
         for (i = 0; D_L07_00161CA0[i] != -1; i++) {
             int id = D_L07_00161CA0[i];
             float value = convert_integer_to_float(weapon_ammo_counts[id]);
-            float scale = convert_integer_to_float(((L07ScaleRow *)((char *)D_L07_001C4130 + id * 0x18))->scale);
+            float scale = convert_integer_to_float(((L07ScaleRow *)((char *)l07_ammo_spawner_scaling_rows + id * 0x18))->scale);
             float ratio = value / scale;
             float step = random_float_between(0.0f, *(float *)(data + 8));
             float min_ratio = *(float *)(data + 2) / 100.0f;
