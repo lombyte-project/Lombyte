@@ -876,9 +876,9 @@ extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern unsigned char D_0013DD42 __attribute__((section(".data")));
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
-extern char D_L01_0020B600[];
-extern char D_L01_00161D38[];
-extern char D_L01_00161D48[];
+extern char plumber_level_one_dialogue_data[] __asm__("D_L01_0020B600");
+extern char plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");
+extern char plumber_fallback_dialogue_data[] __asm__("D_L01_00161D48");
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
 extern char *D_L01_001600EC_c __asm__("D_L01_001600EC");
@@ -935,13 +935,13 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 mark_moby_for_removal(plumber_moby);
                 return;
             }
-            plumber_vars->p20 = (void *)D_L01_0020B600;
+            plumber_vars->p20 = (void *)plumber_level_one_dialogue_data;
             plumber_moby->state = 1;
         } else if (D_0015ED84_m == 8) {
-            plumber_vars->p20 = (void *)D_L01_00161D38;
+            plumber_vars->p20 = (void *)plumber_level_eight_dialogue_data;
             plumber_moby->state = 4;
         } else {
-            plumber_vars->p20 = (void *)D_L01_00161D48;
+            plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
             plumber_moby->state = 7;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
