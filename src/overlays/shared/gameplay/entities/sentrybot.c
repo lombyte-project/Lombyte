@@ -31,9 +31,9 @@ typedef struct {
 extern char *spawn_class_3a6_moby(char *, float *, char *, char *) __asm__("FUN_L15_002e4580");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L15_001673C0[4];
-extern float D_L15_001CBFE0[];
-extern float D_L15_001CC060[];
-extern float D_L15_001CC0E0[];
+extern float sentrybot_positive_heading_delta_offsets_degrees[] __asm__("D_L15_001CBFE0");
+extern float sentrybot_negative_heading_delta_offsets_degrees[] __asm__("D_L15_001CC060");
+extern float sentrybot_turn_around_heading_offsets_degrees[] __asm__("D_L15_001CC0E0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -391,13 +391,13 @@ void sentrybot_update(unsigned char *moby) {
             float *turn_heading_offsets_degrees = 0;
             switch (anim) {
             case SENTRYBOT_ANIM_TURN_AROUND:
-                turn_heading_offsets_degrees = D_L15_001CC0E0;
+                turn_heading_offsets_degrees = sentrybot_turn_around_heading_offsets_degrees;
                 break;
             case SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA:
-                turn_heading_offsets_degrees = D_L15_001CC060;
+                turn_heading_offsets_degrees = sentrybot_negative_heading_delta_offsets_degrees;
                 break;
             case SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA:
-                turn_heading_offsets_degrees = D_L15_001CBFE0;
+                turn_heading_offsets_degrees = sentrybot_positive_heading_delta_offsets_degrees;
                 break;
             }
             if (moby[0x70] & 2) {
