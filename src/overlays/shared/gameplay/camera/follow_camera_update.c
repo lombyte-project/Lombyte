@@ -1297,9 +1297,9 @@ void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
 void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
 void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
-extern char D_L00_001E77C0[];
-extern char D_L00_001E77D8[];
-extern char D_L00_001E77F0[];
+extern char mode6_orbit_initial_values[] __asm__("D_L00_001E77C0");
+extern char mode6_orbit_spring_stiffness_values[] __asm__("D_L00_001E77D8");
+extern char mode6_orbit_spring_damping_values[] __asm__("D_L00_001E77F0");
 char *initialize_mode6_orbit_camera(void *target_moby) __asm__("FUN_L00_002eb930");
 
 char *initialize_mode6_orbit_camera(void *target_moby) {
@@ -1310,12 +1310,12 @@ char *initialize_mode6_orbit_camera(void *target_moby) {
     FUN_L00_002eb648_002eb930(camera_record, target_moby);
     camera_state = *(char **)(camera_record + 0x70);
     qcopy(camera_state + 0xB0, camera_state + 0x80);
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x14, D_L00_001E77C0, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x14, mode6_orbit_initial_values, 0.0f);
     FUN_L00_001eb0c8_002eb930(camera_record + 0x50, camera_state + 0x14, 0.0f);
     FUN_L00_002eb3b0_002eb930(camera_record);
     *(int *)(camera_state + 0x9C) = 1;
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x28, D_L00_001E77D8, 0.0f);
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, D_L00_001E77F0, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x28, mode6_orbit_spring_stiffness_values, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, mode6_orbit_spring_damping_values, 0.0f);
     zero_five_words(camera_state + 0x50);
     return camera_record;
 }
