@@ -528,12 +528,12 @@ extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__
 
 extern char render_fog_context[] __asm__("D_L11_0016D440");
 extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
-extern Pos_30a908 D_L11_001D9B08[];
+extern Pos_30a908 l11_ocean_strip_vertex_positions[] __asm__("D_L11_001D9B08");
 extern int ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
-extern UV_30a908 D_L11_001DA310[];
-extern Pos_30a908 D_L11_001D9F08[];
+extern UV_30a908 l11_ocean_strip_vertex_uvs[] __asm__("D_L11_001DA310");
+extern Pos_30a908 l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
 extern int D_L11_001DA208[];
-extern UV_30a908 D_L11_001DA510[];
+extern UV_30a908 l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
@@ -607,22 +607,22 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
         FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
         ocean_strip_vertex_colors[i] = col;
-        D_L11_001DA310[i].u = 0.0f;
-        D_L11_001DA310[i].v = 0.0f;
+        l11_ocean_strip_vertex_uvs[i].u = 0.0f;
+        l11_ocean_strip_vertex_uvs[i].v = 0.0f;
         FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[0]);
-        D_L11_001D9B08[i].x = scratch_vector.x;
-        D_L11_001D9B08[i].y = scratch_vector.y;
-        D_L11_001D9B08[i].z = scratch_vector.z;
+        l11_ocean_strip_vertex_positions[i].x = scratch_vector.x;
+        l11_ocean_strip_vertex_positions[i].y = scratch_vector.y;
+        l11_ocean_strip_vertex_positions[i].z = scratch_vector.z;
         FUN_001f9a68_30a908(&scratch_vector, &second_strip_edge_delta, strip_fraction);
         ocean_strip_vertex_colors[i + 1] = col;
-        D_L11_001DA310[i + 1].u = 0.0f;
-        D_L11_001DA310[i + 1].v = 0.0f;
+        l11_ocean_strip_vertex_uvs[i + 1].u = 0.0f;
+        l11_ocean_strip_vertex_uvs[i + 1].v = 0.0f;
         FUN_001f9a10_30a908(&scratch_vector, &scratch_vector, &strip_corners[2]);
-        D_L11_001D9B08[i + 1].x = scratch_vector.x;
-        D_L11_001D9B08[i + 1].y = scratch_vector.y;
-        D_L11_001D9B08[i + 1].z = scratch_vector.z;
+        l11_ocean_strip_vertex_positions[i + 1].x = scratch_vector.x;
+        l11_ocean_strip_vertex_positions[i + 1].y = scratch_vector.y;
+        l11_ocean_strip_vertex_positions[i + 1].z = scratch_vector.z;
     }
-    func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, ocean_strip_vertex_colors, D_L11_001DA310, 1);
+    func_L00_001FDE48_30a908(0xC, l11_ocean_strip_vertex_positions, ocean_strip_vertex_colors, l11_ocean_strip_vertex_uvs, 1);
     far_quad.z78 = FUN_001f44b8_30a908(0x16);
     far_quad.q80 = 0xFF9000000260L;
     far_quad.q88 = 0x8000000044L;
@@ -668,33 +668,33 @@ void draw_pokitaru_ocean(struct Moby *moby) {
             for (y = ocean_vars->f18 * -2.0f; y < ocean_vars->f18 * 2.0f; y += ocean_vars->f18) {
                 vertex_count = 0;
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
-                    D_L11_001DA510[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[vertex_count].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[vertex_count].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
-                    D_L11_001D9F08[vertex_count].z = tide_level_macro;
+                    l11_ocean_wave_grid_vertex_uvs[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].z = tide_level_macro;
                     i = vertex_count + 1;
-                    D_L11_001DA510[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
-                    D_L11_001D9F08[i].z = tide_level_macro;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 2;
-                    D_L11_001DA510[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
-                    D_L11_001D9F08[i].z = tide_level_macro;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 3;
-                    D_L11_001DA510[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    D_L11_001D9F08[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
-                    D_L11_001D9F08[i].z = tide_level_macro;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     for (i = vertex_count; i < vertex_count + 4; i++) {
-                        scratch_vector.x = D_L11_001D9F08[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
-                        scratch_vector.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
-                        scratch_vector.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
+                        scratch_vector.x = l11_ocean_wave_grid_vertex_positions[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
+                        scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
+                        scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
                         color_interpolation_scalar = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
                         if (color_interpolation_scalar > 1.0f) {
@@ -707,7 +707,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
                         FUN_001f97b0_30a908();
                     }
                 }
-                func_L00_001FDE48_30a908(vertex_count, D_L11_001D9F08, D_L11_001DA208, D_L11_001DA510, 1);
+                func_L00_001FDE48_30a908(vertex_count, l11_ocean_wave_grid_vertex_positions, D_L11_001DA208, l11_ocean_wave_grid_vertex_uvs, 1);
             }
         }
     }
