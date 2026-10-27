@@ -1514,7 +1514,7 @@ extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
 
 extern int D_L15_0015F5A4 __attribute__((section(".sdata")));
 extern char quartu_help_message_state[] __asm__("D_L15_00179A10");
-extern unsigned char D_0013D4C4[];
+extern unsigned char l15_dwell_zone_hint_enabled[] __asm__("D_0013D4C4");
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
@@ -1630,7 +1630,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             show_help_message_2ed398(0x3A9C, 0x80);
         }
         if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
-            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && D_0013D4C4[0] == 0
+            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] == 0
             && !(*(unsigned int *)(D_00141680_2ed398 + 0x6FC) & (1 << current_level_index_macro))) {
             show_help_message_2ed398(0x3A9D, 0x82);
         }
@@ -1657,7 +1657,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
         }
         if (scale_game_frames_2ed398(0xE10) < hint_dialogue_data->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
             && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1
-            && D_0013D4C4[0] != 0) {
+            && l15_dwell_zone_hint_enabled[0] != 0) {
             show_help_message_2ed398(0x4E2E, 0x78);
             hint_dialogue_data->last = pick;
             hint_dialogue_data->hold38 = 0;
