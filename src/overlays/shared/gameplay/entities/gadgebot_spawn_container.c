@@ -3012,7 +3012,7 @@ void update_moby_rotation_group(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F86B8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
-extern int D_L06_001BAC50[];
+extern int energy_sphere_holder_completion_bits[] __asm__("D_L06_001BAC50");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
@@ -3059,7 +3059,7 @@ void energy_sphere_holder_update(char *holder_moby) {
         initialize_energy_sphere_holder_vars(holder_moby);
         *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                  D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
-        D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
+        energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
             ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
         break;
     case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
@@ -3073,7 +3073,7 @@ void energy_sphere_holder_update(char *holder_moby) {
             holder_moby[0x20] = 2;
             *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                      D_0014171B_86b8) |= 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
-            D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
+            energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
                 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
         } else {
             update_energy_sphere_holder_beam_effects(holder_moby);
