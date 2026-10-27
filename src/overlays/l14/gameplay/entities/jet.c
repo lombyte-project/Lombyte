@@ -2734,7 +2734,7 @@ typedef struct {
 extern L14LevelState D_L14_001BB930;
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
-extern char D_L14_00161F20[];
+extern char captain_qwark_name[] __asm__("D_L14_00161F20");
 extern char D_L14_001674C0[];
 extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
@@ -2784,7 +2784,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby_vars->p20 = (void *)D_L14_00161F20;
+        moby_vars->p20 = (void *)captain_qwark_name;
         initialize_npc_dialogue(moby, moby_vars);
         moby_vars->b8 = 1;
         moby->state = 1;
