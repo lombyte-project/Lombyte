@@ -2689,8 +2689,8 @@ extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
 extern char D_0013E550[];
 extern char D_L11_001677C0[];
-extern char D_L11_0021B610[];
-extern char D_L11_0021B648[];
+extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11_0021B610");
+extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
 extern int D_L11_0015F608;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update_2.h"
 extern unsigned char D_L11_00162054 __attribute__((sda));
@@ -2972,7 +2972,7 @@ void jet_fighter_update(struct Moby *moby) {
                     moby->collision = 0;
                     moby->flags |= 1;
                     if (ship_vars->exit_path2 == -1) {
-                        print_3290(D_L11_0021B610);
+                        print_3290(jet_fighter_missing_victory_jet_destination_message);
                         qcopy_nc(&moby->pos, ship_vars->home_pos);
                         qcopy_nc(&moby->rot, ship_vars->home_rot);
                     } else {
@@ -2981,7 +2981,7 @@ void jet_fighter_update(struct Moby *moby) {
                     }
                     refresh_moby_spatial_bounds_from_basis(moby);
                     if (ship_vars->exit_path == -1) {
-                        print_3290(D_L11_0021B648);
+                        print_3290(jet_fighter_missing_victory_hero_destination_message);
                     } else {
                         p = D_L11_001600EC + (ship_vars->exit_path << 7);
                         FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
