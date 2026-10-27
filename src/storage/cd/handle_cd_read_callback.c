@@ -4,7 +4,7 @@ extern volatile s32 D_001312E0[];
 extern volatile s32 D_001312E8[];
 extern volatile s32 D_001312F0[];
 extern volatile s32 D_00131314[];
-extern volatile s32 D_00131318[];
+extern volatile s32 native_cd_last_command_state[] __asm__("D_00131318");
 extern volatile s32 D_00159740[];
 extern s32 iSignalSema();
 
@@ -12,7 +12,7 @@ void handle_cd_read_callback(s32 *status) __asm__("FUN_001206d8");
 
 void handle_cd_read_callback(s32 *status) {
     D_00131314[0] = *status;
-    D_00131318[0] = D_00131314[0];
+    native_cd_last_command_state[0] = D_00131314[0];
     if (D_00131314[0] == 11) {
         D_00131314[0] = 0;
         D_001312F0[0] = 0;
