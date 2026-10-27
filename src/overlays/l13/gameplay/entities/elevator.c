@@ -1100,7 +1100,7 @@ typedef struct {
 } RsHit;
 
 extern char *D_L13_001B07B0[];
-extern char *D_L13_0015FFE4;
+extern char *level13_moby_list_head __asm__("D_L13_0015FFE4");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
@@ -1932,7 +1932,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         va.f[1] = fast_sin(robosquawker_moby->rot.f[2]) * (robosquawker_vars->f204 * frame_time);
         va.f[2] = 0.0f;
         add_vector_xyz(&vb, &robosquawker_moby->pos, &va);
-        for (candidate_moby = (RsOther *)D_L13_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+        for (candidate_moby = (RsOther *)level13_moby_list_head; candidate_moby != 0; candidate_moby = candidate_moby->next) {
             if (candidate_moby == (RsOther *)robosquawker_moby) {
                 continue;
             }
@@ -2191,7 +2191,7 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
     float ang, source_to_candidate_distance, yaw_error, k, angular_error_magnitude, arrow_pulse_phase;
     char *tab;
 
-    candidate_moby = D_L13_0015FFE4;
+    candidate_moby = level13_moby_list_head;
     selected_target_moby = 0;
     best = 0x7FFFFFFF;
     *(int *)(moby_vars + 0xE8) = 0;
