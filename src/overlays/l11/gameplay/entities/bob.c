@@ -1481,7 +1481,7 @@ extern float fast_cos_2f2d58(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2f2d58(float) __asm__("FUN_001f9de0");
 extern void draw_quad_2f2d58(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float D_L11_001D3530[];
+extern float teleporter_ring_quad_uvs[] __asm__("D_L11_001D3530");
 
 int D_L11_00161920 = 0;
 int D_L11_00161924 = 2;
@@ -1511,7 +1511,7 @@ void draw_teleporter_ring(struct Moby *moby) {
     quad.tag[2] = 0xff9000000260ULL;
     quad.tag[0] = 0;
     {
-        float *uv = D_L11_001D3530;
+        float *uv = teleporter_ring_quad_uvs;
         unsigned int *colors = quad.color;
         float *dest1 = &quad.uv[0][1];
         float *dest0 = &quad.uv[0][0];
