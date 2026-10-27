@@ -174,8 +174,8 @@ struct HoloPacket {
     long hdr[4];
 };
 
-extern float D_L00_001CA380[][4];
-extern float D_L00_001CA410[][2];
+extern float vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
+extern float vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
 extern int D_L00_001CA458[] __attribute__((section(".data")));
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
@@ -198,10 +198,10 @@ void draw_vendor_hologram_cone(void) {
     quad_packet.hdr[0] = 0;
     quad_packet.hdr[1] = get_effect_texture_c(0x18);
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(transformed_vertex_offsets[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[0], vendor_hologram_vertex_offsets[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[1], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[2], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[3], vendor_hologram_vertex_offsets[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
         quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[0][0];
         quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[0][1];
         quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[0][2];
@@ -218,14 +218,14 @@ void draw_vendor_hologram_cone(void) {
         quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
         quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];
         quad_packet.col[3] = D_L00_001CA458[D_L00_001CA480[i].d];
-        quad_packet.uv[0][0] = D_L00_001CA410[D_L00_001CA480[i].a][0];
-        quad_packet.uv[0][1] = D_L00_001CA410[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[1][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
-        quad_packet.uv[1][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[2][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
-        quad_packet.uv[2][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[3][0] = D_L00_001CA410[D_L00_001CA480[i].d][0];
-        quad_packet.uv[3][1] = D_L00_001CA410[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[0][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][0];
+        quad_packet.uv[0][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[1][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
+        quad_packet.uv[1][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[2][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
+        quad_packet.uv[2][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[3][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][0];
+        quad_packet.uv[3][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
         fast_draw_quad_real(&quad_packet, 0, 1);
     }
 }
