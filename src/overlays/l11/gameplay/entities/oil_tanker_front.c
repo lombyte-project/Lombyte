@@ -1774,18 +1774,18 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L11_00162428 __attribute__((sda));
-extern short D_L11_0016242C __attribute__((sda));
-extern short D_L11_00162430 __attribute__((sda));
-extern short D_L11_00162434 __attribute__((sda));
-extern short D_L11_00162438 __attribute__((sda));
-extern short D_L11_0016243C __attribute__((sda));
-extern short D_L11_00162440 __attribute__((sda));
-extern short D_L11_00162444 __attribute__((sda));
-extern short D_L11_00162448 __attribute__((sda));
-extern short D_L11_0016244C __attribute__((sda));
-extern short D_L11_00162450 __attribute__((sda));
-extern short D_L11_00162454 __attribute__((sda));
+extern short bubble_spark_random_velocity_radius_gp __asm__("D_L11_00162428") __attribute__((sda));
+extern short bubble_spark_vertical_range_start_gp __asm__("D_L11_0016242C") __attribute__((sda));
+extern short bubble_spark_vertical_range_end_gp __asm__("D_L11_00162430") __attribute__((sda));
+extern short bubble_spark_first_vector_w_gp __asm__("D_L11_00162434") __attribute__((sda));
+extern short bubble_spark_second_vector_w_gp __asm__("D_L11_00162438") __attribute__((sda));
+extern short bubble_spark_initial_color_range_start_gp __asm__("D_L11_0016243C") __attribute__((sda));
+extern short bubble_spark_initial_color_range_end_gp __asm__("D_L11_00162440") __attribute__((sda));
+extern short bubble_spark_second_color_range_start_gp __asm__("D_L11_00162444") __attribute__((sda));
+extern short bubble_spark_second_color_range_end_gp __asm__("D_L11_00162448") __attribute__((sda));
+extern short bubble_spark_base_frame_count_gp __asm__("D_L11_0016244C") __attribute__((sda));
+extern short bubble_spark_base_second_frame_count_gp __asm__("D_L11_00162450") __attribute__((sda));
+extern short bubble_spark_base_third_frame_count_gp __asm__("D_L11_00162454") __attribute__((sda));
 void spawn_bubble_spark(struct Moby *source_moby) __asm__("FUN_L11_0031b098");
 
 void spawn_bubble_spark(struct Moby *source_moby) {
@@ -1794,23 +1794,23 @@ void spawn_bubble_spark(struct Moby *source_moby) {
     char *moby_vars;
     int initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count;
     moby_vars = (char *)source_moby->pvars;
-    random_vector(randomized_velocity, 0.0f, *(float *)&D_L11_00162428 * D_0015ED6C_n[1]);
+    random_vector(randomized_velocity, 0.0f, *(float *)&bubble_spark_random_velocity_radius_gp * D_0015ED6C_n[1]);
     add_vector_xyz(randomized_velocity, randomized_velocity, moby_vars);
     clear_vector(vertical_spark_vector);
-    vertical_spark_vector[2] = random_float_between_alt(*(float *)&D_L11_0016242C, *(float *)&D_L11_00162430) *
+    vertical_spark_vector[2] = random_float_between_alt(*(float *)&bubble_spark_vertical_range_start_gp, *(float *)&bubble_spark_vertical_range_end_gp) *
             D_0015ED6C_n[1];
-    randomized_velocity[3] = *(float *)&D_L11_00162434;
-    vertical_spark_vector[3] = *(float *)&D_L11_00162438;
-    initial_spark_color = fast_tween_color(*(int *)&D_L11_0016243C, *(int *)&D_L11_00162440,
+    randomized_velocity[3] = *(float *)&bubble_spark_first_vector_w_gp;
+    vertical_spark_vector[3] = *(float *)&bubble_spark_second_vector_w_gp;
+    initial_spark_color = fast_tween_color(*(int *)&bubble_spark_initial_color_range_start_gp, *(int *)&bubble_spark_initial_color_range_end_gp,
                       random_float_between_alt(0.0f, 1.0f));
-    second_spark_color = fast_tween_color(*(int *)&D_L11_00162444, *(int *)&D_L11_00162448,
+    second_spark_color = fast_tween_color(*(int *)&bubble_spark_second_color_range_start_gp, *(int *)&bubble_spark_second_color_range_end_gp,
                       random_float_between_alt(0.0f, 1.0f));
     spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-        (float)*(int *)&D_L11_0016244C * 0.8f, (float)*(int *)&D_L11_0016244C * 1.2f)));
+        (float)*(int *)&bubble_spark_base_frame_count_gp * 0.8f, (float)*(int *)&bubble_spark_base_frame_count_gp * 1.2f)));
     second_spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-        (float)*(int *)&D_L11_00162450 * 0.8f, (float)*(int *)&D_L11_00162450 * 1.2f)));
+        (float)*(int *)&bubble_spark_base_second_frame_count_gp * 0.8f, (float)*(int *)&bubble_spark_base_second_frame_count_gp * 1.2f)));
     third_spark_frame_count = func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(
-        (float)*(int *)&D_L11_00162454 * 0.8f, (float)*(int *)&D_L11_00162454 * 1.2f)));
+        (float)*(int *)&bubble_spark_base_third_frame_count_gp * 0.8f, (float)*(int *)&bubble_spark_base_third_frame_count_gp * 1.2f)));
     spawn_spark(&source_moby->pos, randomized_velocity, vertical_spark_vector, initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count, -1);
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
