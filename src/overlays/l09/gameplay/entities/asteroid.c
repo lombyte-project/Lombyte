@@ -185,7 +185,7 @@ extern int D_L09_0016CD50[];
 extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
 extern u64 scaled_entries_texture_register_value __asm__("D_L09_001612F0");
-extern unsigned short D_L09_0010E800[];
+extern unsigned short l09_scaled_entries_vu1_setup_qword_count[] __asm__("D_L09_0010E800");
 extern int scaled_entries_vu1_setup_data[] __asm__("D_L09_0010E810");
 extern int scaled_entries_gs_setup_packet[] __asm__("D_L09_001CB470");
 extern char D_L09_00166E40[];
@@ -235,7 +235,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     set_scale_matrix(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    vu1_add_data_ref(scaled_entries_vu1_setup_data, D_L09_0010E800[0]);
+    vu1_add_data_ref(scaled_entries_vu1_setup_data, l09_scaled_entries_vu1_setup_qword_count[0]);
     {
         int *packet;
         int *packet_end;
