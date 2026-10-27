@@ -1012,15 +1012,15 @@ unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fra
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
 extern int level_frame_count __asm__("D_L06_0015F5CC");
-extern short D_L06_001620C8 __attribute__((sda));
-extern short D_L06_001620CC __attribute__((sda));
-extern short D_L06_001620D0 __attribute__((sda));
-extern short D_L06_001620D4 __attribute__((sda));
-extern short D_L06_001620D8 __attribute__((sda));
-extern short D_L06_001620DC __attribute__((sda));
-extern short D_L06_001620E0 __attribute__((sda));
-extern short D_L06_001620E4 __attribute__((sda));
-extern short D_L06_001620E8 __attribute__((sda));
+extern short timer_text_center_x_gp __asm__("D_L06_001620C8") __attribute__((sda));
+extern short timer_text_y_gp __asm__("D_L06_001620CC") __attribute__((sda));
+extern short timer_text_color_at_zero_blend_gp __asm__("D_L06_001620D0") __attribute__((sda));
+extern short timer_text_color_at_unit_blend_gp __asm__("D_L06_001620D4") __attribute__((sda));
+extern short timer_frame_x_addend_gp __asm__("D_L06_001620D8") __attribute__((sda));
+extern short timer_frame_y_addend_gp __asm__("D_L06_001620DC") __attribute__((sda));
+extern short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") __attribute__((sda));
+extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute__((sda));
+extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
@@ -1041,16 +1041,16 @@ void draw_pulsing_timer_display(char *moby) {
     float color_blend_factor;
     int col;
 
-    draw_ui_frame(W(D_L06_001620D8) + W(D_L06_001620CC), W(D_L06_001620DC) + W(D_L06_001620CC),
-                W(D_L06_001620E0) + W(D_L06_001620C8), W(D_L06_001620E4) + W(D_L06_001620C8),
-                W(D_L06_001620E8));
+    draw_ui_frame(W(timer_frame_x_addend_gp) + W(timer_text_y_gp), W(timer_frame_y_addend_gp) + W(timer_text_y_gp),
+                W(timer_frame_left_x_addend_gp) + W(timer_text_center_x_gp), W(timer_frame_right_x_addend_gp) + W(timer_text_center_x_gp),
+                W(timer_frame_fill_high_byte_gp));
     color_blend_factor = fast_sin(func_001FA888(level_frame_count % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (color_blend_factor > 1.0f) {
         color_blend_factor = 1.0f;
     } else if (color_blend_factor < 0.0f) {
         color_blend_factor = 0.0f;
     }
-    col = fast_tween_color_local(W(D_L06_001620D0), W(D_L06_001620D4), color_blend_factor);
+    col = fast_tween_color_local(W(timer_text_color_at_zero_blend_gp), W(timer_text_color_at_unit_blend_gp), color_blend_factor);
     timer_text[0] = 0x30;
     timer_text[1] = *(int *)(data + 0xB4) / scale_ticks(0xE10) + 0x30;
     timer_text[2] = 0x3A;
@@ -1059,7 +1059,7 @@ void draw_pulsing_timer_display(char *moby) {
     timer_text[5] = 0x3A;
     timer_text[6] = *(int *)(data + 0xB4) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     timer_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(W(D_L06_001620C8), W(D_L06_001620CC), col, (int)timer_text, 8);
+    font_print_center_large_001f6c20(W(timer_text_center_x_gp), W(timer_text_y_gp), col, (int)timer_text, 8);
 }
 
 f32 D_L10_001DA10C[1] __attribute__((section(".data"))) = {0};
