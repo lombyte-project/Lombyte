@@ -2935,7 +2935,7 @@ typedef struct {
 } VoiceSlot;
 extern KillFlags D_L15_001BABD0 __attribute__((section(".data")));
 extern KillFlags D_L15_001BB830 __attribute__((section(".data")));
-extern u8 D_L15_0015FC88[8];
+extern u8 secondary_kill_record_gate_by_mission[8] __asm__("D_L15_0015FC88");
 extern u8 D_0014C050[][16] __attribute__((section(".data")));
 extern u8 D_0013E550[] __attribute__((section(".data")));
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -2946,7 +2946,7 @@ void mark_moby_killed_and_release_owned_voice(int addr) {
     s32 slot;
     moby->collision = 0;
     D_L15_001BABD0.killed[(s16)moby->save_id] = moby->mission + 2;
-    if (moby->mission == 0xFF || (D_L15_0015FC88[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
+    if (moby->mission == 0xFF || (secondary_kill_record_gate_by_mission[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
         D_L15_001BB830.killed[(s16)moby->save_id] = moby->mission + 2;
     }
     if (moby->command != 0xFF) {
