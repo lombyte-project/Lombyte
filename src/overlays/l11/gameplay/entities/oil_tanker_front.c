@@ -1259,8 +1259,8 @@ void spawn_energy_sphere_spark(struct Moby *moby) {
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
 extern char D_L11_001B0EB0[];
-extern char D_L11_001F14B0[];
-extern char D_L11_001F14C0[];
+extern char blarg_ship_positive_y_local_shot_offset[] __asm__("D_L11_001F14B0");
+extern char blarg_ship_negative_y_local_shot_offset[] __asm__("D_L11_001F14C0");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -1290,7 +1290,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-extern short D_L11_001623D0 __attribute__((sda));
+extern short blarg_ship_shot_speed_gp __asm__("D_L11_001623D0") __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -1457,13 +1457,13 @@ void blarg_ship_update(struct Moby *moby) {
                 normalize_vector_xyz(sB0, hero_position_delta, *(float *)(moby_vars + 0x94));
                 add_vector_xyz(sB0, sB0, hero_position);
                 if (level_frame % 20 == 0) {
-                    transform_vector_by_basis(sA0, D_L11_001F14B0, &moby->rot_row0);
+                    transform_vector_by_basis(sA0, blarg_ship_positive_y_local_shot_offset, &moby->rot_row0);
                 } else {
-                    transform_vector_by_basis(sA0, D_L11_001F14C0, &moby->rot_row0);
+                    transform_vector_by_basis(sA0, blarg_ship_negative_y_local_shot_offset, &moby->rot_row0);
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
                 subtract_vector_xyz(shot_displacement, sB0, sA0);
-                normalize_vector_xyz(shot_velocity, shot_displacement, *(float *)&D_L11_001623D0 * D_0015ED6C_n[1]);
+                normalize_vector_xyz(shot_velocity, shot_displacement, *(float *)&blarg_ship_shot_speed_gp * D_0015ED6C_n[1]);
                 add_vector_xyz(shot_velocity, shot_velocity, hero_position_delta);
                 spawned_shot = spawn_class_3f9_moby((int)moby, shot_velocity, sA0, 128.0f, -1.0f, 10.0f);
                 if (spawned_shot) {
