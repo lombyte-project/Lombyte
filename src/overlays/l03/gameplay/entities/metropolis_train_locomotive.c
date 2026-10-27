@@ -1284,7 +1284,7 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
 extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
-extern char D_L03_001E2A28[];
+extern char spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float add_rotations_29dba8(float, float) __asm__("FUN_001fa580");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1393,7 +1393,7 @@ void red_ship_1_update(char *moby) {
                 *path -= 1;
             }
         } else {
-            report_29dba8(D_L03_001E2A28, *(short *)(moby + 0xA6),
+            report_29dba8(spline_moby_missing_path_warning_format, *(short *)(moby + 0xA6),
                          truncate_float_to_s32((moby - D_L03_0015FFD8_29dba8) >> 8));
         }
         ((unsigned char *)moby)[0x30] = 0xFF;
