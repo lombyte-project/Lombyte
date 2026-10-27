@@ -923,7 +923,7 @@ extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FU
 extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
-extern s32 D_L01_001DEB10[];
+extern s32 gold_weapon_case_item_ids_by_slot[] __asm__("D_L01_001DEB10");
 extern ItemPrice_2e1ac0 D_L01_001C4530[];
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
@@ -947,7 +947,7 @@ void gold_weapon_case_update(struct Moby *moby) {
     case GOLD_WEAPON_CASE_INITIALIZE:
         if (moby->oclass != 0x130) {
             moby->state = 2;
-        } else if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0 ||
+        } else if (D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0 ||
                    FUN_L00_002668a0_2e1ac0(moby, sale_vars) == -1) {
             moby->state = 3;
         } else {
@@ -958,9 +958,9 @@ void gold_weapon_case_update(struct Moby *moby) {
         sale_vars->radius = 1.9f;
         FUN_L00_00266448_2e1ac0(moby, sale_vars);
         if (sale_vars->result == 2) {
-            D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] = 1;
+            D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] = 1;
             moby->state = 4;
-            item = D_L01_001DEB10[sale_vars->slot];
+            item = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
             price = &D_L01_001C4530[item];
             current_bolt_count -= price->bolts;
             initialize_vendor_screen(moby, item, price);
@@ -975,7 +975,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         }
         break;
     case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
-        if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0) {
+        if (D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0) {
             FUN_0020c828_2e1ac0(moby);
         }
         break;
