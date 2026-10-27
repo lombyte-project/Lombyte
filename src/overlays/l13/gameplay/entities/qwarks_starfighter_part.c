@@ -441,12 +441,12 @@ extern Moby388 *D_L13_00174158[];
 extern char *spawn_owner_linked_class_160_moby(void *) __asm__("FUN_L13_002e8438");
 extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern char D_L13_001F4F38[];
-extern char D_L13_00161958[];
-extern char D_L13_00161968[];
+extern char qwarks_starfighter_high_elapsed_time_adjustment_message[] __asm__("D_L13_00161958");
+extern char qwarks_starfighter_mid_elapsed_time_adjustment_message[] __asm__("D_L13_00161968");
 extern char D_L13_00166F80[];
-extern char D_L13_001F4EF0[];
-extern char D_L13_001805C0[];
-extern char D_L13_001F4F18[];
+extern char qwarks_starfighter_boss_start_time_format[] __asm__("D_L13_001F4EF0");
+extern char level13_point_light_slots[] __asm__("D_L13_001805C0");
+extern char qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_001F4F18");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -608,16 +608,16 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 int elapsed;
                 if (D_L13_00161954 == -1) {
                     D_L13_00161954 = D_0015EEA4;
-                    DebugPrint_alt(D_L13_001F4EF0, D_0015EEA4, D_0015EEA4 / 60, D_0015EEA4 / 360);
+                    DebugPrint_alt(qwarks_starfighter_boss_start_time_format, D_0015EEA4, D_0015EEA4 / 60, D_0015EEA4 / 360);
                 }
                 elapsed = (unsigned int)(D_0015EEA4 - D_L13_00161954) / 360;
                 if (elapsed >= 0x29) {
-                    DebugPrint_alt(D_L13_00161958);
+                    DebugPrint_alt(qwarks_starfighter_high_elapsed_time_adjustment_message);
                     data->s24 = 0x66;
                     data->f20 = 102.0f;
                     *(int *)(ship + 0x138) = 0x221;
                 } else if (elapsed >= 0x1A) {
-                    DebugPrint_alt(D_L13_00161968);
+                    DebugPrint_alt(qwarks_starfighter_mid_elapsed_time_adjustment_message);
                     data->s24 = 0x78;
                     data->f20 = 120.0f;
                     *(int *)(ship + 0x138) = 0x234;
@@ -747,7 +747,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             qcopy(probe, data->v80);
             probe[3] = 1.0f;
             if (fast_bsphere_check(probe, 100.0f) <= 0 && moby->b31 == 0) {
-                DebugPrint_alt(D_L13_001F4F18);
+                DebugPrint_alt(qwarks_starfighter_tractor_offscreen_abort_message);
                 data->i100 = 0;
             }
             if (distance_xyz(ray_start, ((char *)&D_0013F3D0)) > 100.0f) {
@@ -1065,7 +1065,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         if (data->light120 == -1) {
             data->light120 = allocate_colored_effect_slot(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
         } else {
-            char *light = D_L13_001805C0 + (data->light120 << 5);
+            char *light = level13_point_light_slots + (data->light120 << 5);
             qcopy(light + 0x10, offset);
         }
     }
