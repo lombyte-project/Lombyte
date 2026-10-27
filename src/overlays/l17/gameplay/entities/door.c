@@ -3522,8 +3522,8 @@ extern int shuttle_travel_completion_bits[] __asm__("D_L17_001BADD0");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int);
-extern short D_L17_001623A8 __attribute__((sda));
-extern short D_L17_001623AC __attribute__((sda));
+extern short shuttle_second_stop_departure_scale_multiplier __asm__("D_L17_001623A8") __attribute__((sda));
+extern short shuttle_first_stop_departure_scale_multiplier __asm__("D_L17_001623AC") __attribute__((sda));
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_002ea9d8(void *);
@@ -3567,7 +3567,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
 
     qcopy(old_pos, &shuttle_moby->pos);
     qcopy(old_rot, &shuttle_moby->rot);
-    shuttle_moby->scale = shuttle_moby->pclass->scale * *(float *)&D_L17_001623AC;
+    shuttle_moby->scale = shuttle_moby->pclass->scale * *(float *)&shuttle_first_stop_departure_scale_multiplier;
     switch (shuttle_moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
         if (D_L17_001BBB30.collected[(short)shuttle_moby->save_id] != 0 ||
@@ -3609,8 +3609,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
                     shuttle_vars->go = 1;
                     switch (s) {
                     case SHUTTLE_STOP_FIRST: {
-                        float x = *(float *)&D_L17_001623AC;
-                        float y = *(float *)&D_L17_001623A8;
+                        float x = *(float *)&shuttle_first_stop_departure_scale_multiplier;
+                        float y = *(float *)&shuttle_second_stop_departure_scale_multiplier;
                         shuttle_vars->sel = 1;
                         shuttle_vars->f9C = x;
                         shuttle_vars->fA0 = y;
@@ -3618,8 +3618,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
                         break;
                     }
                     case SHUTTLE_STOP_SECOND: {
-                        float x = *(float *)&D_L17_001623A8;
-                        float y = *(float *)&D_L17_001623AC;
+                        float x = *(float *)&shuttle_second_stop_departure_scale_multiplier;
+                        float y = *(float *)&shuttle_first_stop_departure_scale_multiplier;
                         shuttle_vars->side = s;
                         shuttle_vars->f9C = x;
                         shuttle_vars->fA0 = y;
