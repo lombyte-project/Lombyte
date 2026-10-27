@@ -3517,7 +3517,7 @@ typedef struct {
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
 int D_L02_00161CC4 = 0x5f243632;
 int D_L02_00161CC8 = 0x61311;
-extern Colors0720 D_L02_00161CD0;
+extern Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -3580,7 +3580,7 @@ void rocks_update(struct Moby *moby) {
                 OvlVec4 dir;
                 OvlVec4 pos;
                 OvlVec4 tmp;
-                colors = D_L02_00161CD0;
+                colors = l02_rocks_debris_colors;
                 pos.q = 0;
                 pos.f[0] = random_float_between_alt(-1.0f, 1.0f);
                 pos.f[1] = random_float_between_alt(-1.0f, 1.0f);
