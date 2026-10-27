@@ -731,7 +731,7 @@ typedef struct {
 extern ML D_L05_0016CC60;
 extern int D_L05_0015F5C4;
 extern unsigned char D_L05_0017C8A0[];
-extern short D_L05_00161EE8 __attribute__((sda));
+extern short big_head_manipulator_scale_gp __asm__("D_L05_00161EE8") __attribute__((sda));
 
 void attach_big_head_cheat_manipulator(char *moby) __asm__("FUN_L05_00317398");
 
@@ -747,9 +747,9 @@ void attach_big_head_cheat_manipulator(char *moby) {
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0, manipulator);
-                    *(float *)(manipulator + 0x20) = *(float *)&D_L05_00161EE8;
-                    *(float *)(manipulator + 0x24) = *(float *)&D_L05_00161EE8;
-                    *(float *)(manipulator + 0x28) = *(float *)&D_L05_00161EE8;
+                    *(float *)(manipulator + 0x20) = *(float *)&big_head_manipulator_scale_gp;
+                    *(float *)(manipulator + 0x24) = *(float *)&big_head_manipulator_scale_gp;
+                    *(float *)(manipulator + 0x28) = *(float *)&big_head_manipulator_scale_gp;
                 }
             }
         }
