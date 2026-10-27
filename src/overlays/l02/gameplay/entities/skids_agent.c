@@ -699,8 +699,8 @@ void liftcar_platform_update(struct Moby *moby) {
 
 #include "rnc/overlay/l02/gameplay/entities/skids_agent_globals.h"
 extern char D_L02_001673C0[];
-extern char D_L02_001F3C00[];
-extern char D_L02_001F3C60[];
+extern char aridia_ocean_first_clip_draw_data[] __asm__("D_L02_001F3C00");
+extern char aridia_ocean_last_clip_draw_data[] __asm__("D_L02_001F3C60");
 extern char D_L02_001F3CD0[];
 extern char D_L02_001F3D30[];
 extern char D_L02_001F3D90[];
@@ -721,7 +721,7 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
 
     begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, aridia_ocean_animated_frame_packet);
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
-        draw_2ea048(D_L02_001F3C00);
+        draw_2ea048(aridia_ocean_first_clip_draw_data);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
         draw_2ea048(D_L02_001F3CD0);
@@ -731,7 +731,7 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
         draw_2ea048(D_L02_001F3E10);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
-        draw_2ea048(D_L02_001F3C60);
+        draw_2ea048(aridia_ocean_last_clip_draw_data);
     }
     FUN_L02_002a47f8_c();
 }
