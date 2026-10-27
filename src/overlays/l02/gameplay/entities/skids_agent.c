@@ -60,7 +60,7 @@ extern u8 D_0013D506 __attribute__((section(".data")));
 extern u8 D_0015EDB0 __attribute__((section(".sdata")));
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
-extern char D_L02_00161D00[];
+extern char skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
@@ -383,7 +383,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             return;
         }
         watcher_vars->unk180 = 0;
-        watcher_vars->dialog = D_L02_00161D00;
+        watcher_vars->dialog = skid_mcmarx_dialogue_data;
         moby->state = 1;
         moby->update_dist = 0xFF;
         watcher_init(moby, watcher_vars);
