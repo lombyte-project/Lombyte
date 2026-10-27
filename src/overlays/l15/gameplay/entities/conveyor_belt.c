@@ -883,7 +883,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026f080(float, float, char *, float *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-extern short D_L15_00162198 __attribute__((sda));
+extern short vertical_effect_motion_scale_gp __asm__("D_L15_00162198") __attribute__((sda));
 int D_L15_0016219C = 3;
 void emit_randomized_vertical_effect(struct Moby *moby) __asm__("FUN_L15_002eb928");
 
@@ -893,7 +893,7 @@ void emit_randomized_vertical_effect(struct Moby *moby) {
     if (random_integer_below(D_L15_0016219C - 1) == 0) {
         char *pos = &moby->pos;
         clear_u64_value(vertical_motion_vector);
-        vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
+        vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) * *(float *)&vertical_effect_motion_scale_gp * frame_time;
         FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vertical_motion_vector);
     }
 }
