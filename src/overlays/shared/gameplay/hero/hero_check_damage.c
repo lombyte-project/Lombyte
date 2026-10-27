@@ -473,9 +473,9 @@ int hero_get_state_aim_pitch(int mode, float *out) {
     case 0:
     case 1:
     case 3: {
-        float c;
-        c = 25.0f;
-        if (c < hero.anim_frame) {
+        float pitch_override_frame_threshold;
+        pitch_override_frame_threshold = 25.0f;
+        if (pitch_override_frame_threshold < hero.anim_frame) {
             *out = -1.3089969f;
         }
         return 1;
