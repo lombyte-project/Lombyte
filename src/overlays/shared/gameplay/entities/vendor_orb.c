@@ -1260,7 +1260,7 @@ void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
-extern f32 D_L00_001E6CE0[4][4];
+extern f32 beam_endpoint_quad_local_vertices[4][4] __asm__("D_L00_001E6CE0");
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_L00_002e3388");
 
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
@@ -1302,7 +1302,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     core_quad_jitter_offset[1] = spread_k(0.0f, 0.05f);
     core_quad_jitter_offset[2] = spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
@@ -1313,7 +1313,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = 0x607F4040;
     geometry_quad.col[0] = 0x607F4040;
     for (j = 0; j < 4; j++) {
-        FUN_001f9a68_e3388(geometry_quad.v[j], D_L00_001E6CE0[j], quad_scale * 3.0f);
+        FUN_001f9a68_e3388(geometry_quad.v[j], beam_endpoint_quad_local_vertices[j], quad_scale * 3.0f);
         transform_vector(geometry_quad.v[j], geometry_quad.v[j], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
@@ -1330,7 +1330,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = -1;
     geometry_quad.col[0] = -1;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
@@ -1341,7 +1341,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = 0x607F4040;
     geometry_quad.col[0] = 0x607F4040;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale * 3.0f);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale * 3.0f);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
