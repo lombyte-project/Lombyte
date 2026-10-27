@@ -13,7 +13,7 @@ typedef struct {
 extern Item0A D_001CF120[];
 extern Item0A D_001D60E0[];
 extern int pause_item_variant_values[] __asm__("D_001D6178");
-extern char D_001D0D00[];
+extern char pause_item_count_storage_base[] __asm__("D_001D0D00");
 /* Builds the pause-menu item list from the 15 entries of D_001CF120
    that item_available enables. The flag needs its own `f = b != 0`:
    `(b != 0) << 2` folds into a branch. */
@@ -40,7 +40,7 @@ int build_pause_item_list(void) {
             item_count++;
         }
     }
-    item_count_storage_base = D_001D0D00;
+    item_count_storage_base = pause_item_count_storage_base;
     *(int *)(item_count_storage_base + 0x40) = item_count;
     return 0;
 }
