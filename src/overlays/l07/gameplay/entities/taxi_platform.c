@@ -2729,7 +2729,7 @@ struct WalkerTarget {
 extern Rec_30D8E8 * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
-extern char D_L07_00211838[];
+extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
 extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
 extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
@@ -2908,7 +2908,7 @@ void sharkigator_update(unsigned char *moby) {
 
     switch (moby[0x20]) {
     case SHARKIGATOR_INITIALIZE:
-        DebugPrint_alt(D_L07_00211838);
+        DebugPrint_alt(sharkigator_unexpected_init_message);
         goto end;
     case SHARKIGATOR_SWIM_IDLE:
         if ((moby[0x70] & 2) && moby[0x53] != 0) {
