@@ -459,9 +459,9 @@ extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
 
-extern short D_L16_00161E00 __attribute__((sda));
-extern short D_L16_00161E04 __attribute__((sda));
-extern short D_L16_00161E08 __attribute__((sda));
+extern short grindrail_barrier_ring_rotation_speed __asm__("D_L16_00161E00") __attribute__((sda));
+extern short grindrail_barrier_ring_phase_speed __asm__("D_L16_00161E04") __attribute__((sda));
+extern short grindrail_barrier_accent_rotation_speeds __asm__("D_L16_00161E08") __attribute__((sda));
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 void grindrail_barrier_update(struct Moby *barrier_moby) {
     enum {
@@ -479,19 +479,19 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
-        cycle = *(float *)(barrier_data + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
+        cycle = *(float *)(barrier_data + 0xC) + *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
         *(float *)(barrier_data + 0xC) = cycle;
         if (cycle > 1.0f)
             *(float *)(barrier_data + 0xC) = cycle - 1.0f;
         if (voice_is_playing(barrier_moby, *(int *)(barrier_data + 0x24)) == 0) {
             *(int *)(barrier_data + 0x24) = func_0022ED80_6B70(0, 4, barrier_moby);
         }
-        *(float *)(barrier_data + 8) = fast_add_rotations(*(float *)(barrier_data + 8), *(float *)&D_L16_00161E00 *
+        *(float *)(barrier_data + 8) = fast_add_rotations(*(float *)(barrier_data + 8), *(float *)&grindrail_barrier_ring_rotation_speed *
                                                                       DEG_TO_RAD * frame_time);
         cardinal_angles = (float *)(barrier_data + 0x10);
         for (i = 0; i < 4; i++) {
             cardinal_angles[i] = fast_add_rotations(cardinal_angles[i],
-                                      ((float *)&D_L16_00161E08)[i] * DEG_TO_RAD * frame_time);
+                                      ((float *)&grindrail_barrier_accent_rotation_speeds)[i] * DEG_TO_RAD * frame_time);
         }
         if (barrier_moby->visible)
             enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, barrier_moby);
