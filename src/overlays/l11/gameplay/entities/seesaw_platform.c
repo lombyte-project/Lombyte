@@ -622,7 +622,7 @@ extern Light_e088 D_L11_001CB280;
 int D_L11_00161F64 = 0;
 char D_L11_0021B4C0[] = "I'm really sorry, but you can't have more than 128 water tiles in this level";
 extern char D_L11_001DA740[];
-extern float D_L11_001808C0[];
+extern float water_light_heading_reference[] __asm__("D_L11_001808C0");
 extern void *D_L11_001612D0;
 extern void *D_L11_001612D4;
 extern int D_L11_001612D8;
@@ -691,7 +691,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             water_tile_light->unk14 = 1.0f;
             water_tile_light->unk18 = 0.9f;
             water_tile_light->unk20 = 0.1f;
-            light_direction_angle = fast_arc_tan(D_L11_001808C0[4], D_L11_001808C0[5]);
+            light_direction_angle = fast_arc_tan(water_light_heading_reference[4], water_light_heading_reference[5]);
             water_tile_light->unk30 = fast_cos(light_direction_angle) * 0.57735f;
             water_tile_light->unk34 = fast_sin(light_direction_angle) * 0.57735f;
             water_tile_light->unk38 = -0.57735f;
