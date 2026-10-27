@@ -1084,7 +1084,7 @@ void draw_active_beam_slots(char *moby) {
 #include "rnc/rendering/geometry_quad.h"
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E4138). */
 typedef struct { OvlVec4 axis, unk10, position, unk30; } TrailSlot;
-extern TrailSlot D_L00_001E6D30[];
+extern TrailSlot l00_beam_strand_axis_and_origin_slots[] __asm__("D_L00_001E6D30");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
@@ -1136,14 +1136,14 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     width.f[2] = half_width;
     glow_width.f[3] = 1.0f;
 
-    qcopy(&basis[0], &D_L00_001E6D30[slot].axis);
-    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &D_L00_001E6D30[slot].position);
+    qcopy(&basis[0], &l00_beam_strand_axis_and_origin_slots[slot].axis);
+    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &l00_beam_strand_axis_and_origin_slots[slot].position);
     fast_vec_scale(&basis[1], &basis[1], 1.0f);
     cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
     normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
     cross_vectors_xyz(&basis[0], &basis[2], &basis[1]);
-    qcopy(&basis[3], &D_L00_001E6D30[slot].position);
-    qcopy(&transform[3], &D_L00_001E6D30[slot].position);
+    qcopy(&basis[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
+    qcopy(&transform[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
     subtract_vector_xyz(&direction, &D_L00_001E6DE0[slot], &transform[3]);
     normalize_vector_xyz(&transform[0], &direction, 1.0f);
     cross_vectors_xyz(&transform[1], &transform[0], D_0013E633_2E3700);
