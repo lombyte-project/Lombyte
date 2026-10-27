@@ -1591,22 +1591,22 @@ extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
 void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
 extern int D_L00_00160770;
-extern short D_L00_001613F0 __attribute__((sda));
-extern short D_L00_001613F4 __attribute__((sda));
-extern short D_L00_001613F8 __attribute__((sda));
-extern short D_L00_001613FC __attribute__((sda));
-extern short D_L00_00161400 __attribute__((sda));
-extern short D_L00_00161404 __attribute__((sda));
-extern short D_L00_00161408 __attribute__((sda));
+extern short bomb_spark_vertical_acceleration __asm__("D_L00_001613F0") __attribute__((sda));
+extern short bomb_spark_velocity_scale __asm__("D_L00_001613F4") __attribute__((sda));
+extern short bomb_spark_random_velocity_radius __asm__("D_L00_001613F8") __attribute__((sda));
+extern short bomb_spark_random_frame_count_range __asm__("D_L00_001613FC") __attribute__((sda));
+extern short bomb_spark_vertical_offset_frame_base __asm__("D_L00_00161400") __attribute__((sda));
+extern short bomb_spark_jittered_frame_count_base __asm__("D_L00_00161404") __attribute__((sda));
+extern short bomb_spark_frame_count_jitter __asm__("D_L00_00161408") __attribute__((sda));
 extern short D_L00_0016140C __attribute__((sda));
 extern short D_L00_00161410 __attribute__((sda));
 extern short D_L00_00161414 __attribute__((sda));
 extern short D_L00_00161418 __attribute__((sda));
-extern short D_L00_0016141C __attribute__((sda));
-extern short D_L00_00161420 __attribute__((sda));
-extern short D_L00_00161424 __attribute__((sda));
-extern short D_L00_00161428 __attribute__((sda));
-extern short D_L00_0016142C __attribute__((sda));
+extern short bomb_spark_primary_color_start __asm__("D_L00_0016141C") __attribute__((sda));
+extern short bomb_spark_primary_color_end __asm__("D_L00_00161420") __attribute__((sda));
+extern short bomb_spark_secondary_color_start __asm__("D_L00_00161424") __attribute__((sda));
+extern short bomb_spark_secondary_color_end __asm__("D_L00_00161428") __attribute__((sda));
+extern short bomb_sparks_per_emission __asm__("D_L00_0016142C") __attribute__((sda));
 extern short D_L00_00161430 __attribute__((sda));
 extern B910 D_L00_001E98D0;
 extern Colors6_2adb30 D_L00_001E9920;
@@ -1665,7 +1665,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
         if (d->h68 == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
-                for (i = 0; i < *(int *)&D_L00_0016142C; i++) {
+                for (i = 0; i < *(int *)&bomb_sparks_per_emission; i++) {
                     Vec_2adb30 spark_velocity;
                     Vec_2adb30 v2;
                     Vec_2adb30 random_velocity_offset;
@@ -1674,18 +1674,18 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     int spark_random_frame_count;
                     int spark_vertical_offset_scale;
                     int spark_jittered_frame_count;
-                    FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&D_L00_001613F4);
-                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&D_L00_001613F8 * D_0015ED6C_2adb30);
+                    FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&bomb_spark_velocity_scale);
+                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&bomb_spark_random_velocity_radius * D_0015ED6C_2adb30);
                     FUN_001f9a10_2adb30(&spark_velocity, &random_velocity_offset, &spark_velocity);
                     FUN_001f99f8_2adb30(v2.f);
                     spark_velocity.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
-                    p0 = fast_tween_color(*(int *)&D_L00_0016141C, *(int *)&D_L00_00161420, FUN_002132a8_2adb30(0.0f, 1.0f));
-                    spark_secondary_color = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
-                    spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_001613FC * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
-                    spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)spark_vertical_offset_scale;
+                    p0 = fast_tween_color(*(int *)&bomb_spark_primary_color_start, *(int *)&bomb_spark_primary_color_end, FUN_002132a8_2adb30(0.0f, 1.0f));
+                    spark_secondary_color = fast_tween_color(*(int *)&bomb_spark_secondary_color_start, *(int *)&bomb_spark_secondary_color_end, FUN_002132a8_2adb30(0.0f, 1.0f));
+                    spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_random_frame_count_range * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
+                    spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_vertical_offset_frame_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
+                    spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_jittered_frame_count_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
+                    v2.f[2] -= *(float *)&bomb_spark_vertical_acceleration * frame_time_sq_macro * (float)spark_vertical_offset_scale;
                     spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, spark_secondary_color, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
                 }
             }
