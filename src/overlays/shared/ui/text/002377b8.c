@@ -1059,7 +1059,7 @@ out:
    clears the first. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
 
-extern HudCounter D_L00_0015FAB8;
+extern HudCounter l00_bolt_hud_icon_animation_counters __asm__("D_L00_0015FAB8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(HudElem *) __asm__("FUN_L00_0023a760");
 
 /* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
@@ -1067,8 +1067,8 @@ void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8
 
 void initialize_bolt_counter_hud(HudElem *hud_element) {
     initialize_numeric_hud_timer_and_base_dimensions(hud_element);
-    hud_element->unk80 = &D_L00_0015FAB8;
-    D_L00_0015FAB8.unk0 = 0;
+    hud_element->unk80 = &l00_bolt_hud_icon_animation_counters;
+    l00_bolt_hud_icon_animation_counters.unk0 = 0;
 }
 typedef struct T00239d00 {
     u8 pad[0x6c];
