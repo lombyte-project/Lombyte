@@ -55,15 +55,15 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 7 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int moby_hold_state_if_grabbed(char *a) __asm__("FUN_L01_002f1c78");
-int moby_hold_state_if_grabbed(char *a) {
-    int r = process_moby_suck_cannon_suction(a);
-    if (r == 0) {
-        if (*(unsigned char *)(a + 0x20) == 0x7)
-            a[0x20] = 1;
+int moby_hold_state_if_grabbed(char *suction_moby) {
+    int suction_result = process_moby_suck_cannon_suction(suction_moby);
+    if (suction_result == 0) {
+        if (*(unsigned char *)(suction_moby + 0x20) == 0x7)
+            suction_moby[0x20] = 1;
     } else {
-        a[0x20] = 0x7;
+        suction_moby[0x20] = 0x7;
     }
-    return r;
+    return suction_result;
 }
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
