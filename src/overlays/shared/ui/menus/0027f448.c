@@ -40,7 +40,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
 
 typedef struct { short uid; short bolts; } BoltSourceStats;
 
-extern BoltSourceStats D_0014D590[][64];
+extern BoltSourceStats bolt_source_stats[][64] __asm__("D_0014D590");
 
 int find_or_assign_bolt_source_slot(int lvl, int uid) __asm__("FUN_L00_00284d90");
 
@@ -50,11 +50,11 @@ int find_or_assign_bolt_source_slot(int lvl, int uid) {
     if (uid >= 0) {
         uid++;
         k = 63;
-        while (k >= 0 && D_0014D590[lvl][k].uid != uid && D_0014D590[lvl][k].uid != 0) {
+        while (k >= 0 && bolt_source_stats[lvl][k].uid != uid && bolt_source_stats[lvl][k].uid != 0) {
             k--;
         }
         if (k >= 0) {
-            D_0014D590[lvl][k].uid = uid;
+            bolt_source_stats[lvl][k].uid = uid;
         }
     }
     return k;
