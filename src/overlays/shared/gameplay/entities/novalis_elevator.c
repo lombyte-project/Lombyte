@@ -924,7 +924,7 @@ extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice_2e1ac0 *) __a
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
 extern s32 gold_weapon_case_item_ids_by_slot[] __asm__("D_L01_001DEB10");
-extern ItemPrice_2e1ac0 D_L01_001C4530[];
+extern ItemPrice_2e1ac0 l01_gold_weapon_case_item_prices[] __asm__("D_L01_001C4530");
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 void gold_weapon_case_update(struct Moby *moby) {
@@ -961,7 +961,7 @@ void gold_weapon_case_update(struct Moby *moby) {
             D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] = 1;
             moby->state = 4;
             item = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
-            price = &D_L01_001C4530[item];
+            price = &l01_gold_weapon_case_item_prices[item];
             current_bolt_count -= price->bolts;
             initialize_vendor_screen(moby, item, price);
         }
