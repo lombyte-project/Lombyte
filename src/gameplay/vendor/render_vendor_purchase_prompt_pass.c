@@ -27,7 +27,7 @@ struct Shop {
     struct Slot slots[1];
 };
 
-extern struct Shop D_001E63C0;
+extern struct Shop vendor_state __asm__("D_001E63C0");
 extern struct Goal D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
@@ -42,7 +42,7 @@ void render_vendor_purchase_prompt_pass(void) {
     s32 cost;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    vendor_shop = &D_001E63C0;
+    vendor_shop = &vendor_state;
     if (vendor_shop->open != 0) {
         if (vendor_shop->slots[vendor_shop->cur].kind == 1) {
             if (weapon_ammo_counts[vendor_shop->slots[vendor_shop->cur].id] >= D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].need) {
