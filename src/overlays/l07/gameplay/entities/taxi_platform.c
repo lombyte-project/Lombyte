@@ -171,7 +171,7 @@ void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effe
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F5D8), where it is exact; names translated to the US level program. */
 
-extern char *D_L07_0015FFE4;
+extern char *ring_hit_candidate_list_head __asm__("D_L07_0015FFE4");
 extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void draw_fading_ring_effect(unsigned char *) __asm__("FUN_L07_0030dcf0");
@@ -201,7 +201,7 @@ void update_fading_ring_effect(unsigned char *moby) {
     }
     enqueue_callback_list_1((void *)draw_fading_ring_effect, moby);
     FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), moby, moby_data);
-    for (affected_moby = D_L07_0015FFE4; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
+    for (affected_moby = ring_hit_candidate_list_head; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
         FUN_L07_0030e0e0_c(affected_moby, moby, moby_data);
     }
 }
