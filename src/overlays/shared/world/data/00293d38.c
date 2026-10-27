@@ -15,7 +15,7 @@ typedef struct {
     int unkC;
 } StashSlot;
 
-extern StashSlot D_L00_001C12D8[];
+extern StashSlot l00_stash_slots[] __asm__("D_L00_001C12D8");
 extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 
 /* SIF-DMAs size quadwords from slot base + off; -3 for a bad or empty slot, -1 past its limit. */
@@ -26,13 +26,13 @@ int send_dma_to_stash_slot(int dma_source_address, unsigned int slot, int slot_o
     int slot_limit_quadwords;
     if (slot >= 0x40)
         return -3;
-    slot_limit_quadwords = D_L00_001C12D8[slot].limit;
+    slot_limit_quadwords = l00_stash_slots[slot].limit;
     if (slot_limit_quadwords == 0)
         return -3;
     if (slot_limit_quadwords < slot_offset_quadwords + size)
         return -1;
     req[0] = dma_source_address;
-    req[1] = (int)(D_L00_001C12D8[slot].base + slot_offset_quadwords * 16);
+    req[1] = (int)(l00_stash_slots[slot].base + slot_offset_quadwords * 16);
     req[2] = size * 16;
     req[3] = 0;
     sceSifSetDma(req, 1);
