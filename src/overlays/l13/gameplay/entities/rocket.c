@@ -342,7 +342,7 @@ extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern struct L13Ent00178480 D_L13_00178400[];
+extern struct L13Ent00178480 l13_moby_hit_entries[] __asm__("D_L13_00178400");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -390,14 +390,14 @@ void update_gemlik_projectile(struct Moby *moby) {
                 work.hit[0x18] = 1;
                 *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
                 work.hit[0x19] = 1;
-                if ((unsigned char)ent[0xA4] == 0xFF || (target_hit_entry = &D_L13_00178400[(unsigned char)ent[0xA4]])->p34 != ent) {
+                if ((unsigned char)ent[0xA4] == 0xFF || (target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]])->p34 != ent) {
                     record_moby_hit(ent, work.hit);
                 } else {
                     target_hit_entry->f2C += 1.0f;
-                    D_L13_00178400[(unsigned char)ent[0xA4]].b28 = 1;
-                    D_L13_00178400[(unsigned char)ent[0xA4]].b29 = 1;
-                    D_L13_00178400[(unsigned char)ent[0xA4]].s2A = *(unsigned short *)((char *)moby + 0xA6);
-                    { struct L13Ent00178480 *t = &D_L13_00178400[(unsigned char)ent[0xA4]]; t->i24 = hit_mask; }
+                    l13_moby_hit_entries[(unsigned char)ent[0xA4]].b28 = 1;
+                    l13_moby_hit_entries[(unsigned char)ent[0xA4]].b29 = 1;
+                    l13_moby_hit_entries[(unsigned char)ent[0xA4]].s2A = *(unsigned short *)((char *)moby + 0xA6);
+                    { struct L13Ent00178480 *t = &l13_moby_hit_entries[(unsigned char)ent[0xA4]]; t->i24 = hit_mask; }
                 }
                 break;
             }
