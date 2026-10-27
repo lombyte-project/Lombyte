@@ -504,7 +504,7 @@ struct L04MissionState {
 };
 
 extern int D_L04_0015F5C4;
-extern struct L04MissionState D_L04_0016C9E0;
+extern struct L04MissionState l04_mode_slot_dispatch_state __asm__("D_L04_0016C9E0");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void dispatch_mode_selected_slot(struct Moby *moby) __asm__("FUN_L04_002e53a0");
@@ -521,15 +521,15 @@ void dispatch_mode_selected_slot(struct Moby *moby) {
         break;
     case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
-            if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
-                int mission_mode = D_L04_0016C9E0.mode;
+            if (l04_mode_slot_dispatch_state.mode == 0 || l04_mode_slot_dispatch_state.mode == 1) {
+                int mission_mode = l04_mode_slot_dispatch_state.mode;
                 int i;
                 i = 0;
                 if (mission_mode == 0)
                     i = 3;
                 else if (mission_mode == 1)
                     i = 2;
-                cutscene_set_camera_target(D_L04_0016C9E0.slot[i]);
+                cutscene_set_camera_target(l04_mode_slot_dispatch_state.slot[i]);
             }
         }
         break;
