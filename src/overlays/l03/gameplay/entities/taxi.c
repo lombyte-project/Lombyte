@@ -1601,7 +1601,7 @@ struct RailSpawnerMoby {
     u16 uid;                    /* 0xA8 */
 };
 
-extern char D_L03_001E35F0[];
+extern char path_mover_spawner_bad_path_format[] __asm__("D_L03_001E35F0");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern float FUN_001f9b48(void *, void *);
 extern struct Moby *spawn_path_mover(struct RailPath *, float) __asm__("FUN_L03_002db198");
@@ -1619,7 +1619,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
 
     if (moby->state == 0) {
         if (vars->path == -1) {
-            debug_print(D_L03_001E35F0, moby->uid);
+            debug_print(path_mover_spawner_bad_path_format, moby->uid);
             kill_2db020((char *)moby);
             return;
         }
