@@ -1957,7 +1957,7 @@ extern void euler_basis_dba20(void *, void *) __asm__("FUN_001fa030");
 extern void draw_quad_dba20(void *, void *, int) __asm__("FUN_001f7d30");
 extern void matrix_mul_dba20(void *, void *, void *) __asm__("FUN_001fa328");
 
-extern float D_L18_001D4310[];
+extern float expanding_projectile_ring_quad_uvs[] __asm__("D_L18_001D4310");
 
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_expanding_projectile_ring_2.h"
 extern int expanding_projectile_ring_color_start_gp __asm__("D_L18_00161C5C") __attribute__((sda));
@@ -2006,8 +2006,8 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         fj = (float)j;
         for (k = 0; k < 4; k++) {
             float corner_angle;
-            quad_packets[j].uv[k].u = D_L18_001D4310[2 * k];
-            quad_packets[j].uv[k].v = D_L18_001D4310[2 * k + 1];
+            quad_packets[j].uv[k].u = expanding_projectile_ring_quad_uvs[2 * k];
+            quad_packets[j].uv[k].v = expanding_projectile_ring_quad_uvs[2 * k + 1];
             if (k & 1) {
                 quad_packets[j].corner[k].f[2] = layer_phase * D_L18_00161C6C;
             } else {
