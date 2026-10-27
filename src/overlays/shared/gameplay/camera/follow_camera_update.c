@@ -1762,7 +1762,7 @@ extern f32 D_L00_00166DD8 __asm__("D_L00_00166DD8") __attribute__((section(".dat
 extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") __attribute__((section(".data")));
 extern u8 D_001413F4 __asm__("D_001413F4") __attribute__((section(".data")));
 extern s32 D_001413DC __asm__("D_001413DC") __attribute__((section(".data")));
-extern s32 D_001415D4[];
+extern s32 hero_requested_camera_mode[] __asm__("D_001415D4");
 extern u8 *D_L00_001B04B0[];
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
@@ -1792,7 +1792,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     type = *(u16 *)&params->type;
     if (params->type == 2 && D_001413DC == 0x1A && params->timer > 0) {
         forced = 1;
-    } else if ((s16)type == 4 && D_001415D4[0] == 3) {
+    } else if ((s16)type == 4 && hero_requested_camera_mode[0] == 3) {
         forced = 0 < params->timer;
     }
     if (params->clip_volume >= 0 && (forced || is_point_inside_clip_volume(&hero.motion.pos, params->clip_volume)))
