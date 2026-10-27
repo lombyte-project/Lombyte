@@ -3671,7 +3671,7 @@ typedef struct {
 } SpeedStepThreshold_228c18;
 
 extern SpeedStepThreshold_228c18 D_L00_0017BDB8[];
-extern s32 D_L00_0015F6C8_gp __asm__("D_L00_0015F6C8") __attribute__((sda));
+extern s32 l00_hero_speed_step_animation_frame_offsets __asm__("D_L00_0015F6C8") __attribute__((sda));
 
 void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 
@@ -3736,7 +3736,7 @@ void update_hero_animation_for_movement_speed(void) {
                         int frame = moby->prev_frame;
                         unsigned char *new_seq = (unsigned char *)moby_class->seqs[sequence];
                         unsigned char *old_seq = (unsigned char *)moby_class->seqs[previous_sequence];
-                        int offset = *(int *)((char *)&D_L00_0015F6C8_gp + step * 4 + previous_step * 8);
+                        int offset = *(int *)((char *)&l00_hero_speed_step_animation_frame_offsets + step * 4 + previous_step * 8);
                         int start = ((frame * new_seq[0x10]) / old_seq[0x10] + offset) % new_seq[0x10];
                         set_hero_animation(sequence, start, (float)scale_game_frames(8));
                     }
