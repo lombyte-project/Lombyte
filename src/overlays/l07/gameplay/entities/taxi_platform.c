@@ -2746,8 +2746,8 @@ extern int is_point_inside_clip_volume_c2(void *arg0, int arg1) __asm__("func_00
 extern int tick_countdown_32_alt(int *counter) __asm__("FUN_001f9740");
 extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern unsigned char D_L07_00161B50_gp[1] __asm__("D_L07_00161B50") __attribute__((sda));
-extern unsigned char D_L07_00161B40_gp[1] __asm__("D_L07_00161B40") __attribute__((sda));
+extern unsigned char l07_sharkigator_water_gap_transition_sequences[1] __asm__("D_L07_00161B50") __attribute__((sda));
+extern unsigned char l07_sharkigator_water_gap_transition_states[1] __asm__("D_L07_00161B40") __attribute__((sda));
 extern unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -2864,8 +2864,8 @@ void sharkigator_update(unsigned char *moby) {
     moby[0xBC] = classify_sharkigator_water_height_gap((char *)moby, data);
     command = moby[0xBC];
     if (old_command != command) {
-        next_state = ((struct { unsigned char t[3][3]; } *)D_L07_00161B40_gp)->t[old_command][command];
-        next_sequence = ((struct { unsigned char t[3][3]; } *)D_L07_00161B50_gp)->t[old_command][command];
+        next_state = ((struct { unsigned char t[3][3]; } *)l07_sharkigator_water_gap_transition_states)->t[old_command][command];
+        next_sequence = ((struct { unsigned char t[3][3]; } *)l07_sharkigator_water_gap_transition_sequences)->t[old_command][command];
     }
     FUN_L00_0024f7c8(moby, 0, point);
     if (coll_sphere(0.8f, point, 1, moby) != 0 && collision_hit_material() == 0) {
