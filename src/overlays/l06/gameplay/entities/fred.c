@@ -5939,11 +5939,11 @@ typedef struct {
     short v, uv;
 } I3003f0;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh_2.h"
-extern unsigned int D_L06_0016206C __attribute__((sda));
+extern unsigned int l06_backdrop_mesh_vertex_color __asm__("D_L06_0016206C") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh.h"
-extern V3003f0 D_L06_001F2EB0[];
-extern I3003f0 D_L06_001F34B0[];
-extern UV3003f0 D_L06_001F38B0[];
+extern V3003f0 l06_backdrop_mesh_vertex_positions[] __asm__("D_L06_001F2EB0");
+extern I3003f0 l06_backdrop_mesh_quad_corner_index_pairs[] __asm__("D_L06_001F34B0");
+extern UV3003f0 l06_backdrop_mesh_texture_coordinates[] __asm__("D_L06_001F38B0");
 extern long tex_3003f0(int) __asm__("FUN_001f44b8");
 extern void init_3003f0(void *) __asm__("FUN_001f9fc8");
 extern void vmul_3003f0(void *, void *, float) __asm__("FUN_001f9a68");
@@ -5963,20 +5963,20 @@ void draw_backdrop_mesh(void) {
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
     init_3003f0(&backdrop_draw_transform);
-    shared_quad_vertex_color = D_L06_0016206C;
+    shared_quad_vertex_color = l06_backdrop_mesh_vertex_color;
     backdrop_draw_transform.f38 = moby_breakup_z_offset_gp;
     quad.color[3] = shared_quad_vertex_color;
     quad.color[2] = shared_quad_vertex_color;
     quad.color[1] = shared_quad_vertex_color;
     quad.color[0] = shared_quad_vertex_color;
     for (i = 0; i < 64; i++) {
-        quad_corner_index_pair = &D_L06_001F34B0[i * 4];
+        quad_corner_index_pair = &l06_backdrop_mesh_quad_corner_index_pairs[i * 4];
         for (j = 0; j < 4; j++) {
             k = quad_corner_index_pair->uv;
-            vmul_3003f0(&quad.corner[j], &D_L06_001F2EB0[quad_corner_index_pair->v], backdrop_mesh_vertex_position_scale_gp);
+            vmul_3003f0(&quad.corner[j], &l06_backdrop_mesh_vertex_positions[quad_corner_index_pair->v], backdrop_mesh_vertex_position_scale_gp);
             quad_corner_index_pair++;
-            quad.uv[j].u = D_L06_001F38B0[k].u;
-            quad.uv[j].v = D_L06_001F38B0[k].v;
+            quad.uv[j].u = l06_backdrop_mesh_texture_coordinates[k].u;
+            quad.uv[j].v = l06_backdrop_mesh_texture_coordinates[k].v;
         }
         draw_3003f0(&quad, &backdrop_draw_transform, 0);
     }
@@ -6023,10 +6023,10 @@ void effect_quad_draw_single(void) {
     pkt[0] = 0;
     init_3003f0(mp);
     backdrop_quad_transform_matrix[3][2] = moby_breakup_z_offset_gp;
-    colors[3] = D_L06_0016206C;
-    colors[2] = D_L06_0016206C;
-    colors[1] = D_L06_0016206C;
-    colors[0] = D_L06_0016206C;
+    colors[3] = l06_backdrop_mesh_vertex_color;
+    colors[2] = l06_backdrop_mesh_vertex_color;
+    colors[1] = l06_backdrop_mesh_vertex_color;
+    colors[0] = l06_backdrop_mesh_vertex_color;
     for (i = 0; i < 96; i++) {
         vmul_3003f0(center, &D_L06_001FAFF0[i], backdrop_mesh_vertex_position_scale_gp);
         transform_vector(center, center, backdrop_quad_transform_matrix);
