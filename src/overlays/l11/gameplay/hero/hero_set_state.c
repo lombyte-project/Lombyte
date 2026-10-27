@@ -27,7 +27,7 @@ typedef struct {
 extern T2C_24E240 D_L11_0017C628[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L11_0017C7F0[][25];
+extern float level_11_hero_animation_blend_curves[][25] __asm__("D_L11_0017C7F0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -371,7 +371,7 @@ int hero_set_state(int a, int b) {
                 {
                     struct Hero *w = &hero;
                     *(float *)(((char *)w->moby) + 0x54) =
-                        D_L11_0017C7F0[w->anim_blend_curve][(w->anim_blend_step)++];
+                        level_11_hero_animation_blend_curves[w->anim_blend_curve][(w->anim_blend_step)++];
                 }
             }
         }
@@ -512,7 +512,7 @@ int hero_set_state(int a, int b) {
         break;
     }
     case HERO_STATE_RUN:
-    case 0x3F:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -928,20 +928,20 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
+    case HERO_STATE_STORED_HEADING_JUMP:
     case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
     case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
+    case HERO_STATE_REPEATABLE_JUMP:
     case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
-    case 0x3C:
-    case 0x49:
-    case 0x4C:
-    case 0x5E:
+    case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
+    case HERO_STATE_ALT_LEDGE_JUMP:
+    case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
@@ -1290,7 +1290,7 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_CROUCH_SWING:
     case HERO_STATE_HELD_ITEM_ATTACK:
     case HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL:
-    case 0x51: {
+    case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
         struct Hero *p = &hero;
         p->state.control_mode = 6;
         p->speed_scale = 1.0f;
@@ -1498,7 +1498,7 @@ int hero_set_state(int a, int b) {
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
                 *(float *)(((char *)q->moby) + 0x54) =
-                    D_L11_0017C7F0[q->anim_blend_curve][(q->anim_blend_step)++];
+                    level_11_hero_animation_blend_curves[q->anim_blend_curve][(q->anim_blend_step)++];
             }
         }
         break;
@@ -1580,7 +1580,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(2, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L11_0017C7F0[p->anim_blend_curve][(p->anim_blend_step)++];
+                level_11_hero_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -1602,7 +1602,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
@@ -1636,14 +1636,14 @@ int hero_set_state(int a, int b) {
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x27: {
+    case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 8;
         p->unk2284 = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x32: {
+    case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->unk2284 = 0;
@@ -1665,8 +1665,8 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0xB, 0, -1.0f);
         break;
     }
-    case 0x63:
-    case 0x64: {
+    case HERO_STATE_CANCEL_ITEM_WITH_OPTIONAL_IDLE_ANIMATION:
+    case HERO_STATE_IDLE_ANIMATION_WITH_DYING_OVERRIDE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->item_use_locked = 1;
