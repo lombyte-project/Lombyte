@@ -1780,7 +1780,7 @@ typedef struct {
     int target_timer;
     float target[4];
 } WD2;
-extern char D_L05_00161EF0[];
+extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -1808,7 +1808,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
             FUN_0020c828_c(bouncer_moby);
             return;
         }
-        bouncer_data->ptr20 = (void *)D_L05_00161EF0;
+        bouncer_data->ptr20 = (void *)qwarks_bouncer_dialogue_name;
         bouncer_moby->state = 1;
         FUN_L00_002668a0_c(bouncer_moby, bouncer_data);
         bouncer_data->fC = 3.7f;
