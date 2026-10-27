@@ -2211,7 +2211,7 @@ typedef struct {
 
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern T1_276078 D_00137B80;
-extern u8 D_L00_001602D0[];
+extern u8 misc_animation_stash_tag[] __asm__("D_L00_001602D0");
 void Load(s32, s32, s32) __asm__("FUN_00216828");
 s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
 void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
@@ -2223,7 +2223,7 @@ void load_misc_animations_into_stash(void) {
         s32 sz = D_00137B80.e[i].n << 7;
         if (sz) {
             Load(stash_source_address, D_00137B80.e[i].a, D_00137B80.e[i].n);
-            D_L00_001B9CF0.stash_handles[i] = stash_send_data(stash_source_address, sz, sz, D_L00_001602D0);
+            D_L00_001B9CF0.stash_handles[i] = stash_send_data(stash_source_address, sz, sz, misc_animation_stash_tag);
         }
     }
 }
