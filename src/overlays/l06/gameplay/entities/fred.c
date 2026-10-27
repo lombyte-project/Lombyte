@@ -6457,7 +6457,7 @@ extern float D_L06_001620A0 __asm__("D_L06_001620A0") __attribute__((sda));
 extern float D_L06_001620A4 __asm__("D_L06_001620A4") __attribute__((sda));
 extern float D_L06_001620A8 __asm__("D_L06_001620A8") __attribute__((sda));
 extern float D_L06_001620B0 __asm__("D_L06_001620B0") __attribute__((sda));
-extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
+extern float l06_linked_sequence_post_path_countdown_duration __asm__("D_L06_001620C4") __attribute__((sda));
 extern int D_L06_0015F880 __asm__("D_L06_0015F880");
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
@@ -6589,7 +6589,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         if (nb == **p - 1) {
             moby[0x20] = 4;
             select_localized_moby_voice_line((struct Moby *)moby, 1);
-            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
+            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(l06_linked_sequence_post_path_countdown_duration));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
             scripted_camera_sequence_active = 0;
