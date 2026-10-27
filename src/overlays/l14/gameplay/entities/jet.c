@@ -1114,7 +1114,7 @@ extern struct {
     u8 pad1C[4];
     Vec4 pos;            /* 0x20 */
 } D_L14_00174540;
-extern char D_L14_00174580[];
+extern char bolt_impact_reflection_normal[] __asm__("D_L14_00174580");
 
 void update_flying_bolt(struct Moby *projectile_moby) __asm__("FUN_L14_002ece00");
 
@@ -1180,7 +1180,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
                 particle_launch_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L14_00174580);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, bolt_impact_reflection_normal);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.5f);
                 bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
