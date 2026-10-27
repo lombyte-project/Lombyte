@@ -2717,7 +2717,7 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
 extern int frame_count __asm__("D_L13_0015F5CC");
-extern int D_L13_001D3538[];
+extern int randomized_effect_joint_indices[] __asm__("D_L13_001D3538");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -2732,14 +2732,14 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
     OvlQuad zv;
     float effect_position[4];
     int i;
-    for (i = 0; D_L13_001D3538[i] != -1; i++) {
+    for (i = 0; randomized_effect_joint_indices[i] != -1; i++) {
         float randomized_scale_ratio;
         int effect_frame_count, k;
         OvlQuad *z = &zv;
         zv = 0;
         randomized_scale_ratio = moby->scale / (moby->pclass->scale * 4.0f);
         randomized_scale_ratio = randomized_scale_ratio * random_float_between_alt(0.8f, 1.1f);
-        moby_point_position(moby, D_L13_001D3538[i], effect_position);
+        moby_point_position(moby, randomized_effect_joint_indices[i], effect_position);
         add_random_offset_to_vector_xyz(effect_position, randomized_scale_ratio * 1.4f);
         if (frame_count & 1) {
             effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
