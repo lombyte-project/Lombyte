@@ -2068,7 +2068,7 @@ typedef struct {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_0015ED6C;
-extern float D_L02_001D3F50[][2];
+extern float level02_elevator_ring_segment_uvs[][2] __asm__("D_L02_001D3F50");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
@@ -2119,7 +2119,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     packet.mode = (long)D_L02_00161BF4 | ((long)D_L02_00161BF8 << 2) | ((long)D_L02_00161BFC << 4) |
                   ((long)D_L02_00161C00 << 6) | 0x8000000000L;
     packet.zero = 0;
-    uv = D_L02_001D3F50;
+    uv = level02_elevator_ring_segment_uvs;
     point = packet.position;
     v = &packet.uv[0].v;
     u = &packet.uv[0].u;
