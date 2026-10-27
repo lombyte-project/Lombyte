@@ -868,7 +868,7 @@ extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
 extern void FUN_001e93b0(char *, s32);
 extern void FUN_001f97b0(void);
-extern char D_L00_001E9480[];
+extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
 void prepare_movie_playback(s32 sector, s32 size, s32 language) {
@@ -914,7 +914,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         wait_for_graphics_pipeline_idle(0, 0);
     }
     if (gs_address > 0x400000) {
-        FUN_001e93b0(D_L00_001E9480, gs_address - 0x400000);
+        FUN_001e93b0(mpeg_memory_alloc_error_format, gs_address - 0x400000);
         FUN_001f97b0();
     }
 }
