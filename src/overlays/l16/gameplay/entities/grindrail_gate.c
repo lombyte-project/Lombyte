@@ -2940,7 +2940,7 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
 /* Sets up the draw state then runs both per-slot calls over three entries. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
 
-extern char D_L16_001E28D0[];
+extern char level16_reflection_mesh_coordinate_scratch[] __asm__("D_L16_001E28D0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
@@ -2976,9 +2976,9 @@ void draw_level16_reflection_mesh_batch(void) {
     for (i = 0; i < 3; i++) {
         compute_level16_reflection_map_coordinates(D_L16_00161FB8[i], ((int *)D_L16_00161FE8)[i],
                          ((int *)D_L16_00161FC8)[i], ((int *)D_L16_00161FD8)[i],
-                         D_L16_001E28D0);
+                         level16_reflection_mesh_coordinate_scratch);
         FUN_L00_001fde98(D_L16_00161FB8[i], ((int *)D_L16_00161FC8)[i],
-                         ((int *)D_L16_00161FF8)[i], D_L16_001E28D0, 1);
+                         ((int *)D_L16_00161FF8)[i], level16_reflection_mesh_coordinate_scratch, 1);
     }
 }
 /* Bounding spheres for one mesh (two or three entries), then the renderer callback; same source as FUN_L16_002e93b0. */
