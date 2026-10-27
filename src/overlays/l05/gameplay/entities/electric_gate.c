@@ -703,25 +703,25 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L05_00161DB4 __attribute__((sda));
-extern short D_L05_00161DBC __attribute__((sda));
-extern short D_L05_00161DC0 __attribute__((sda));
-extern short D_L05_00161DC4 __attribute__((sda));
-extern short D_L05_00161DC8 __attribute__((sda));
-extern short D_L05_00161DCC __attribute__((sda));
-extern short D_L05_00161DD0 __attribute__((sda));
+extern short drain_cover_particle_height_span_per_particle_gp __asm__("D_L05_00161DB4") __attribute__((sda));
+extern short drain_cover_particle_scalar_lower_bound_gp __asm__("D_L05_00161DBC") __attribute__((sda));
+extern short drain_cover_particle_scalar_upper_bound_gp __asm__("D_L05_00161DC0") __attribute__((sda));
+extern short drain_cover_particle_size_sampling_bound_gp __asm__("D_L05_00161DC4") __attribute__((sda));
+extern short drain_cover_particle_vertical_speed_gp __asm__("D_L05_00161DC8") __attribute__((sda));
+extern short drain_cover_particle_color_gp __asm__("D_L05_00161DCC") __attribute__((sda));
+extern short drain_cover_particle_spawn_radius_upper_bound_gp __asm__("D_L05_00161DD0") __attribute__((sda));
 void emit_drain_cover_particles(char *particle_source_moby, float lower_height_bound, float upper_height_bound) {
     float v[4];
     float particle_position[4];
     float ground, x, y, spawn_height_candidate, u;
     int i, j, k, particle_size, particle_color;
     clear_vector(v);
-    v[2] = *(float *)&D_L05_00161DC8 * frame_time;
+    v[2] = *(float *)&drain_cover_particle_vertical_speed_gp * frame_time;
     ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_d);
     j = 0;
-    for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&D_L05_00161DB4; i++) {
+    for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&drain_cover_particle_height_span_per_particle_gp; i++) {
         float fi = (float)j;
-        x = random_float_between_alt(fi, *(float *)&D_L05_00161DD0);
+        x = random_float_between_alt(fi, *(float *)&drain_cover_particle_spawn_radius_upper_bound_gp);
         y = random_angle_radians();
         particle_position[0] = fast_cos(y) * x;
         particle_position[1] = fast_sin(y) * x;
@@ -731,10 +731,10 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
         spawn_height_candidate = random_float_between_alt((lower_height_bound + upper_height_bound) * 0.5f, upper_height_bound) - ground;
         if (spawn_height_candidate < particle_position[2])
             particle_position[2] = spawn_height_candidate;
-        u = random_float_between_alt(*(float *)&D_L05_00161DBC, *(float *)&D_L05_00161DC0);
+        u = random_float_between_alt(*(float *)&drain_cover_particle_scalar_lower_bound_gp, *(float *)&drain_cover_particle_scalar_upper_bound_gp);
         k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
-        particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4));
-        particle_color = *(int *)&D_L05_00161DCC;
+        particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
+        particle_color = *(int *)&drain_cover_particle_color_gp;
         create_particle_with_velocity_and_lifetime(u, particle_position, v, k, particle_size, particle_color);
     }
 }
