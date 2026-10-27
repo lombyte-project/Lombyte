@@ -107,7 +107,7 @@ extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__(
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
-extern Rgb_0e00 D_L14_001620A8;
+extern Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8");
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern int timer_done_0e00(int *) __asm__("FUN_001f9740");
@@ -258,7 +258,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
       int g;
       int b;
       float min;
-      *((Rgb_0e00 *) (&next)) = D_L14_001620A8;
+      *((Rgb_0e00 *) (&next)) = l14_spark_rolling_fade_source_rgb;
       fade_fraction = ((float) spark_data->fade) * spark_data->fade_rate;
       r = ftoi_0e00(((((Rgb_0e00 *) (&next))->r - 255.0f) * fade_fraction) + 255.0f);
       g = ftoi_0e00(((((Rgb_0e00 *) (&next))->g - 0.0f) * fade_fraction) + 0.0f);
