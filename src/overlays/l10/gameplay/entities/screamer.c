@@ -443,14 +443,14 @@ typedef struct {
 
 /* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; toxic_crab_update reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
 extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
-extern short *D_L10_001ABCC0[];
+extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
 
 void activate_waiting_moby_group_members(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
-        group_entry = D_L10_001ABCC0[moby->group];
+        group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
                 Ent *base = D_L10_0015FFD0_e[2];
@@ -1119,7 +1119,7 @@ void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0"
 void set_moby_group_command_frames(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
-        group_entry = D_L10_001ABCC0[moby->group];
+        group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
                 int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
@@ -2361,7 +2361,7 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     translated_radial_point[1] = fast_sin(owner_to_self_angle) * 2.0f;
     translated_radial_point[2] = 0.0f;
     fast_vec_add(translated_radial_point, translated_radial_point, ((unsigned char *)&D_0013E533) + 0xE9D);
-    group_entry = D_L10_001ABCC0[self->group];
+    group_entry = moby_group_member_lists[self->group];
     if (group_entry != 0) {
         do {
             int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
