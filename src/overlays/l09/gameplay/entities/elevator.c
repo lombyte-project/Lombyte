@@ -399,7 +399,8 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
 
 void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health) {
     enum {
-        DAMAGE_RESULT_UNAVAILABLE = 0
+        DAMAGE_RESULT_UNAVAILABLE = 0,
+        DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
     VendorHitSource *damage_hit_record;
     struct Moby *link;
@@ -424,7 +425,7 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
         case 8:
         case 9:
         case 10:
-        case 11:
+        case DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE:
             break;
         }
         if (hit >= 2) {
