@@ -463,7 +463,7 @@ SDATA_OVERLAYS = {
     "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
     "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
     "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C, 4),
-    "rendering/vu1_chain": (0x160EE0, 0x61E60, 4),
+    "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.

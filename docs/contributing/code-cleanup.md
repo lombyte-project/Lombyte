@@ -158,7 +158,12 @@ edit fails at once.
 
 ## Moving files
 
-See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example.
+See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example
+and [point-light links](../game/point-lights.md) for grouping related functions
+while retaining their existing type and calling-convention views.
+[Occlusion visibility](../game/occlusion.md) shows the related grid/mask helpers.
+[VU1 packets and VIF1 DMA](../game/vu1-chain.md) shows a module move that also
+preserves a source-owned small-data placement entry.
 
 - Folders follow the subsystem, for example `ui/menus/<screen>` or
   `gameplay/...`.
