@@ -2307,7 +2307,7 @@ extern char *D_L04_0015FFD8;
 extern char *D_L04_00173FD8 __attribute__((section(".data")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166E00[];
-extern char D_L04_001DBC80[];
+extern char blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L04_00166F40[4];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -2461,7 +2461,7 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     path_index_when_selector_nonzero = *(int *)(data + 0xE0);
     if (path_index_when_selector_nonzero == -1 || (path_index_when_selector_zero = *(int *)(data + 0xE4), path_index_when_selector_zero == -1)) {
-        DebugPrint(D_L04_001DBC80, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
+        DebugPrint(blarg_trooper_missing_path_fields_format, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
         destroy_blarg_trooper(moby);
         return;
     }
