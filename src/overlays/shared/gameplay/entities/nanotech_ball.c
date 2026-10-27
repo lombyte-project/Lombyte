@@ -2936,7 +2936,7 @@ extern f32 vector_distance(void *, s32 *) __asm__("FUN_001f9b80");
 extern float D_0015ED60 MACRO_ADDR;
 extern float D_L00_00161B84;
 extern float D_L00_00161B80 MACRO_ADDR;
-extern float D_L00_001E5FE0[];
+extern float suck_beam_segment_turn_spring_states[] __asm__("D_L00_001E5FE0");
 extern float FUN_L00_001eb328(void *,float,float,float,float,float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -3049,7 +3049,7 @@ void suck_beam_update(void *moby,void *position) {
         cross_vectors_xyz(&tmp_c,&tmp_b,&tmp_a);
         dot=fast_vec_dot(&tmp_a,&tmp_b);
         { float target=1.5707964f-fast_arc_sin(dot/(fast_vec_length(&tmp_a)*D_L00_00161B84));
-        turn=FUN_L00_001eb328(&D_L00_001E5FE0[i],0.0f,target,0.06f,0.2f,0.0f);
+        turn=FUN_L00_001eb328(&suck_beam_segment_turn_spring_states[i],0.0f,target,0.06f,0.2f,0.0f);
         delta=fast_subtract_rotations(target,turn); }
         if(absolute_float(delta)>0.31415927f)turn=fast_add_rotations(turn,fast_subtract_rotations(delta,0.31415927f));
         func_002156E0_2D9EA0(&motion,&tmp_a,turn,&tmp_c);
