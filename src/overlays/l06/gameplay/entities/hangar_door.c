@@ -1265,8 +1265,8 @@ typedef struct DrawbridgeVars {
     Moby *d[10];
 } DrawbridgeVars;
 
-extern char D_L06_00161D50[4] __attribute__((sda));
-extern char D_L06_00161D60[4] __attribute__((sda));
+extern char drawbridge_first_row_local_offset_gp[4] __asm__("D_L06_00161D50") __attribute__((sda));
+extern char drawbridge_second_row_local_offset_gp[4] __asm__("D_L06_00161D60") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/hangar_door_globals.h"
 extern float drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") __attribute__((sda));
 extern float drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") __attribute__((sda));
@@ -1289,11 +1289,11 @@ void update_drawbridge_segment_transforms(Moby *moby)
         length = D_L06_00161D78 - (float)i;
         if (length < 0.0f) length = 0.0f;
         fast_vec_normalize(&first, &moby->rot_row0, length);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D50, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->a[i]->pos, &result);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D60, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->b[i]->pos, &result);
@@ -1314,11 +1314,11 @@ void update_drawbridge_segment_transforms(Moby *moby)
         if (right < min_length) right = min_length;
         fast_vec_normalize(&first, &moby->rot_row0, length);
         fast_vec_normalize(&second, &moby->rot_row0, right);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D50, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->c[j]->pos, &result);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D60, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &second);
         qcopy(&data->d[j]->pos, &result);
