@@ -2384,7 +2384,7 @@ void update_path_spark_effect(char *moby) {
 
 
 extern L10State D_L10_001BB6B0;
-extern char D_L10_00178580[];
+extern char moby_pair_records[] __asm__("D_L10_00178580");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
@@ -2403,7 +2403,7 @@ void block_cave_update(struct Moby *moby) {
         return;
     }
     moby->draw_dist = 0x80;
-    table_entry = D_L10_00178580;
+    table_entry = moby_pair_records;
     for (i = 0; i < 0x40; i++, table_entry += 0x40) {
         if (*(char **)(table_entry + 0x34) == moby) {
             if (*(int *)(table_entry + 0x24) & 0x20000) {
