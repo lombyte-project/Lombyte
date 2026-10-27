@@ -1595,8 +1595,8 @@ finish:
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
 
-extern char D_L10_00180740[];
-extern char D_L10_001DD120[];
+extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
+extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int *D_L10_001B0930[];
 extern int D_L10_0015F5CC;
@@ -1628,7 +1628,7 @@ void update_path_spark_emitter(char *moby) {
     float frac;
     float first_path_segment_length;
     if (*(int *)spark_vars == -1) {
-        func_001E9730_2da0f0(D_L10_001DD120, *(short *)(moby + 0xB2));
+        func_001E9730_2da0f0(path_spark_missing_path_message, *(short *)(moby + 0xB2));
         delete_moby(moby);
         return;
     }
@@ -1659,7 +1659,7 @@ void update_path_spark_emitter(char *moby) {
         if (*(int *)(spark_vars + 0xC) == -1) {
             *(int *)(spark_vars + 0xC) = allocate_colored_effect_slot(spark_path_position, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
-            char *light_parameter_entry = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
+            char *light_parameter_entry = point_light_parameter_entries + *(int *)(spark_vars + 0xC) * 32;
             qcopy(light_parameter_entry + 0x10, spark_path_position);
             *(float *)(light_parameter_entry + 0) = 1.0f;
             *(float *)(light_parameter_entry + 0x1C) = 3.0f;
