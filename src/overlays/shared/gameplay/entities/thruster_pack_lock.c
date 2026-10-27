@@ -679,8 +679,8 @@ extern int screen_extent[] __asm__("D_0013E500");
 extern float itof_g(int) __asm__("FUN_001fa6c0");
 extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 
-extern u128_ad0 D_L11_001608E0;
-extern u128_ad0 D_L11_001608F0;
+extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
+extern u128_ad0 l11_screen_triangle_strip_vertex_gif_tag_template __asm__("D_L11_001608F0");
 void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) __asm__("FUN_L11_00310ad0");
 
 void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
@@ -695,7 +695,7 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     {
         char *dma_header = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(dma_header + 0x10);
-        qcopy((void *)D_L11_001611C0, &D_L11_001608E0);
+        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_setup_gif_tag_template);
         *(short *)(dma_header + 0x10) = -0x7FFF;
     }
     {
@@ -707,7 +707,7 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     {
         char *saved_packet_cursor = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(saved_packet_cursor + 0x10);
-        qcopy((void *)D_L11_001611C0, &D_L11_001608F0);
+        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_vertex_gif_tag_template);
         *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
     D_L11_001611C0 += 0x10;
