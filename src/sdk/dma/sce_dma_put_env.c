@@ -14,7 +14,7 @@ typedef struct {
 extern u8 dma_sts_control_encodings[] __asm__("D_00153420");
 extern u8 dma_std_control_encodings[] __asm__("D_00153430");
 extern u8 dma_mfd_control_encodings[] __asm__("D_00153440");
-extern sceDmaEnv D_001599D8;
+extern sceDmaEnv dma_last_applied_environment __asm__("D_001599D8");
 
 s32 sceDmaPutEnv(sceDmaEnv *env) {
     u32 ctrl;
@@ -58,6 +58,6 @@ s32 sceDmaPutEnv(sceDmaEnv *env) {
     *(volatile u32 *)0x1000E030 = sqwc;
     *(volatile u32 *)0x1000E050 = rbor;
     *(volatile u32 *)0x1000E040 = rbsr;
-    D_001599D8 = *env;
+    dma_last_applied_environment = *env;
     return 0;
 }
