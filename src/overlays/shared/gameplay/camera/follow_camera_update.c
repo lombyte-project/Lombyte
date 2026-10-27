@@ -1763,7 +1763,7 @@ extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") __attribute__((section(".dat
 extern u8 D_001413F4 __asm__("D_001413F4") __attribute__((section(".data")));
 extern s32 D_001413DC __asm__("D_001413DC") __attribute__((section(".data")));
 extern s32 hero_requested_camera_mode[] __asm__("D_001415D4");
-extern u8 *D_L00_001B04B0[];
+extern u8 *toad_paths[] __asm__("D_L00_001B04B0");
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00_0025fa38");
@@ -1803,8 +1803,8 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
         return 1;
     if (params->volume_25faf0 >= 0 && (forced || test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0)))
         return 1;
-    if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, D_L00_001B04B0[params->path] + 0x10,
-                                                         *(s32 *)D_L00_001B04B0[params->path])))
+    if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, toad_paths[params->path] + 0x10,
+                                                         *(s32 *)toad_paths[params->path])))
         return 1;
     return 0;
 }
