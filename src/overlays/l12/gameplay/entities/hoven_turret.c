@@ -366,14 +366,14 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
-extern char D_L12_00161EF0 __attribute__((sda));
+extern char hoven_turret_camera_local_offset __asm__("D_L12_00161EF0") __attribute__((sda));
 void update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_003032e8");
 
 void update_hoven_turret_camera(struct Moby *moby) {
     float position_and_rotation[8];
     char *data = (char *)moby->pvars;
     FUN_L08_00313ba8(moby);
-    transform_vector_by_basis(position_and_rotation, &D_L12_00161EF0, &moby->rot_row0);
+    transform_vector_by_basis(position_and_rotation, &hoven_turret_camera_local_offset, &moby->rot_row0);
     fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
     FUN_L00_002ea9d8(position_and_rotation);
     position_and_rotation[4] = 0;
