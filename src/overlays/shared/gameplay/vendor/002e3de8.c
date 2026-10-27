@@ -114,8 +114,8 @@ typedef struct {
     long unk70, tex, unk80, alpha;
 } TrailQuad;
 
-extern QuadCorner D_L10_001DA310[];
-extern QuadCorner D_L10_001DA350[];
+extern QuadCorner l10_animated_quad_second_base_corners[] __asm__("D_L10_001DA310");
+extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
 extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
@@ -162,8 +162,8 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     second_corner = (float *)second_quad;
     second_dst = (float *)second_quad;
     first_corner = (float *)&first;
-    first_src = D_L10_001DA350;
-    second_src = D_L10_001DA310;
+    first_src = l10_animated_quad_first_base_corners;
+    second_src = l10_animated_quad_second_base_corners;
     for (i = 0; i < 4; i++) {
         qcopy(first_corner, &first_src[i]);
         qcopy(second_dst, second_src);
