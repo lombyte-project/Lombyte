@@ -1234,7 +1234,7 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
 }
 extern s32 D_00140408[];
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
-extern s32 D_0013DEA0[];
+extern s32 weapon_ammo_used_counts[] __asm__("D_0013DEA0");
 /* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
 s32 use_ammo(s32 weapon_index, s32 amount) {
@@ -1254,7 +1254,7 @@ s32 use_ammo(s32 weapon_index, s32 amount) {
         return 0;
     }
     weapon_ammo_counts[weapon_index] = available_ammo - amount;
-    D_0013DEA0[weapon_index] = D_0013DEA0[weapon_index] + amount;
+    weapon_ammo_used_counts[weapon_index] = weapon_ammo_used_counts[weapon_index] + amount;
     return 1;
 }
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
