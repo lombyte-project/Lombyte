@@ -1791,7 +1791,7 @@ typedef struct {
     short x;
     short y;
 } IconEC5D0;
-extern IconEC5D0 D_L11_001F1058[];
+extern IconEC5D0 l11_ship_radar_icon_definitions[] __asm__("D_L11_001F1058");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vector_length_xyz(void *a);
@@ -1845,7 +1845,7 @@ void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char 
             color &= 0xFFFFFF;
             color = (func_001FA898_r(alpha_distance_product * 0.125f) << 24) | color;
         }
-        icon_definition = &D_L11_001F1058[icon];
+        icon_definition = &l11_ship_radar_icon_definitions[icon];
         y -= 0x50;
         y += *(int *)(frame_size);
         x += 0x1B0;
