@@ -533,9 +533,9 @@ void draw_fighter_jet_radar_contact_icon(char *radar_rotation, char *from, char 
 /* Walks the moby list: picks the on-screen target, marks targetable mobys and points an arrow at the nearest pickup. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC7D8), where it is exact; names translated to the US level program. */
 
-extern char *D_L17_0015FFE4;
-extern char D_L17_001678D0[];
-extern char D_L17_001D9AC0[];
+extern char *fighter_jet_contact_moby_list_head __asm__("D_L17_0015FFE4");
+extern char fighter_jet_arrow_direction_basis[] __asm__("D_L17_001678D0");
+extern char fighter_jet_screen_marker_vertices[] __asm__("D_L17_001D9AC0");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fighter_jet_aim_radius_offset_vector[] __asm__("D_L17_001678E0");
 extern float square_root(float) __asm__("FUN_001f9988");
@@ -579,7 +579,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
     int dx, dy, aim_selection_screen_radius, aim_screen_distance_squared;
     float x, y, ang, dd, ship_to_arrow_target_distance, heading_error_magnitude, k, angular_error_magnitude, arrow_pulse_phase;
 
-    scanned_moby = D_L17_0015FFE4;
+    scanned_moby = fighter_jet_contact_moby_list_head;
     best = 0x7FFFFFFF;
     selected_target_moby = 0;
     *(int *)(ship_vars + 0xE8) = 0;
@@ -645,14 +645,14 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f,
                                          ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f,
+                        emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f,
                                          -ang);
                     }
                 }
@@ -672,13 +672,13 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
                     float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                    emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
+                    emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
                 }
                 {
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
                     float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                    emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
+                    emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
                 }
             }
             dd = FUN_001f9b48(scanned_moby + 0x10, (&hero.motion.pos));
@@ -698,7 +698,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
                 }
@@ -713,7 +713,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
                         float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
-                        emit_transformed_2d_vertex_packet(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
+                        emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
                 }
@@ -755,7 +755,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
         u[2] += 4.0f;
         ap = (char *)ship_moby + 0x10;
         project_to_screen(arrow_target_position_scratch, u);
-        transpose_rotation_matrix(arrow_direction_rotation_matrix, D_L17_001678D0);
+        transpose_rotation_matrix(arrow_direction_rotation_matrix, fighter_jet_arrow_direction_basis);
         fast_vec_sub(v, np, (&hero.motion.pos));
         transform_vector(v, v, arrow_direction_rotation_matrix);
         v[0] = -v[1];
