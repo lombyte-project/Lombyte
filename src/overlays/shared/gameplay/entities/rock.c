@@ -1642,7 +1642,7 @@ extern float gold_bolt_particle_initial_speed_min_gp __asm__("D_L01_00161F54") _
 extern float gold_bolt_particle_initial_speed_max_gp __asm__("D_L01_00161F58") __attribute__((sda));
 extern float gold_bolt_particle_velocity_jitter_speed_min_gp __asm__("D_L01_00161F5C") __attribute__((sda));
 extern float gold_bolt_particle_velocity_jitter_speed_max_gp __asm__("D_L01_00161F60") __attribute__((sda));
-extern short D_L01_00161F64 __attribute__((sda));
+extern short gold_bolt_particle_lifetime_gp __asm__("D_L01_00161F64") __attribute__((sda));
 extern int gold_bolt_particle_initial_color_gp __asm__("D_L01_00161F68") __attribute__((sda));
 extern int gold_bolt_particle_loop_color_gp __asm__("D_L01_00161F6C") __attribute__((sda));
 extern float gold_bolt_particle_initial_scale_gp __asm__("D_L01_00161F70") __attribute__((sda));
@@ -1664,14 +1664,14 @@ void spawn_gold_bolt_particles(char *moby) {
     }
     frame_duration = frame_time;
     random_vector(particle_velocity, gold_bolt_particle_initial_speed_min_gp * frame_duration, gold_bolt_particle_initial_speed_max_gp * frame_duration);
-    particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+    particle_lifetime = *(unsigned char *)&gold_bolt_particle_lifetime_gp;
     spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_initial_color_gp, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
                      gold_bolt_particle_initial_scale_gp);
     for (i = 2; i >= 0; i--) {
         frame_duration = frame_time;
         random_vector(u, gold_bolt_particle_velocity_jitter_speed_min_gp * frame_duration, gold_bolt_particle_velocity_jitter_speed_max_gp * frame_duration);
         add_vector_xyz(particle_velocity, particle_velocity, u);
-        loop_particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+        loop_particle_lifetime = *(unsigned char *)&gold_bolt_particle_lifetime_gp;
         spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_loop_color_gp, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
                          0, gold_bolt_particle_loop_scale_gp);
     }
