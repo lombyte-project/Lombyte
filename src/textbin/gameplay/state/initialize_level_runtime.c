@@ -92,7 +92,7 @@ extern s64 D_00160588;
 extern u8 point_lights[] __asm__("D_0019C1C0");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern char dir_lights[] __asm__("D_0019BDC0");
-extern u8 D_001D9740[];
+extern u8 default_directional_light_template[] __asm__("D_001D9740");
 extern u8 *D_0015FF18;
 extern u8 *moby_instance_end __asm__("D_0015FF1C");
 extern u8 *moby_vars __asm__("D_0015FF28");
@@ -243,7 +243,7 @@ void initialize_level_runtime(void) {
     clear_blocks_16(point_lights, 0x100);
     clear_blocks_16(point_light_data, 0x180);
     clear_blocks_16(dir_lights, 0x400);
-    copy_blocks_16_forward(dir_lights, D_001D9740, 0x40);
+    copy_blocks_16_forward(dir_lights, default_directional_light_template, 0x40);
     D_0015FF18 = allocation_cursor;
     fill_transfer_words(allocation_cursor, 0, 0x4000);
     allocation_cursor += 0x4000;
