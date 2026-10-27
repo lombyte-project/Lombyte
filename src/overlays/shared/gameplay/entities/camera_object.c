@@ -2636,7 +2636,7 @@ extern char D_0013F350[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float frame_time_sq __asm__("D_0015ED70");
-extern float l00_collision_hit_normal[] __asm__("D_L00_00173E80");
+extern float coll_hit_normal[] __asm__("D_L00_00173E80");
 extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
 extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
 extern int FUN_001efa68(void*,void*,int,int,int);
@@ -2720,7 +2720,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         {
             char *camera_position = (char *)&D_L00_00166DC0;
             char *hit_position = trajectory_state + 0x10;
-            *(u128 *)(trajectory_state + 0x20) = *(u128 *)l00_collision_hit_normal;
+            *(u128 *)(trajectory_state + 0x20) = *(u128 *)coll_hit_normal;
             subtract_vector_xyz(C, hit_position, camera_position);
             scale_vector_xyz_c(C, C, 0.95f);
             add_vector_xyz(hit_position, C, camera_position);

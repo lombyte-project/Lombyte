@@ -486,7 +486,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 }
 #include "rnc/overlay/collision.h"
 
-extern CollisionHit l01_collision_hit __asm__("D_L01_001742C0");
+extern CollisionHit collision_hit __asm__("D_L01_001742C0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -532,11 +532,11 @@ void rock_update(struct Moby *debris_moby) {
             debris_moby->rot.x = random_float_between(-3.1415927f, 3.1415927f);
             debris_moby->rot.y = random_float_between(-3.1415927f, 3.1415927f);
             debris_moby->rot.z = random_float_between(-3.1415927f, 3.1415927f);
-            FUN_L00_001ff660(&debris_vars->vel, &debris_vars->vel, &l01_collision_hit.normal_x);
+            FUN_L00_001ff660(&debris_vars->vel, &debris_vars->vel, &collision_hit.normal_x);
             fast_vec_scale(&debris_vars->vel, &debris_vars->vel, random_float_between(0.07f, 0.13f));
             fast_vec_add(&debris_vars->vel, &debris_vars->vel, &bounce_or_particle_velocity);
-            fast_vec_normalize(&l01_collision_hit.normal_x, &l01_collision_hit.normal_x, 0.1f);
-            fast_vec_add(&debris_moby->pos, &l01_collision_hit.normal_x, &l01_collision_hit.point);
+            fast_vec_normalize(&collision_hit.normal_x, &collision_hit.normal_x, 0.1f);
+            fast_vec_add(&debris_moby->pos, &collision_hit.normal_x, &collision_hit.point);
             spin = random_float_between(frame_time * 1.5707964f, frame_time * 6.2831855f);
             if (0.0f < debris_vars->spin) {
                 spin = -spin;

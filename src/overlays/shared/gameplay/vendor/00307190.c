@@ -45,7 +45,7 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
 /* Fire bolt: flies along its velocity with a smoke trail (while the level is not underwater), damaging what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308758), where it is exact; names translated to the US level program. */
 
-extern char l08_line_collision_result[] __asm__("D_L08_00174640");
+extern char D_L08_00174640[];
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -93,7 +93,7 @@ void update_fire_bolt(char *fire_bolt) {
         }
         add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
         if (collision_line(fire_bolt + 0x10, previous_position, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
-            char *collision_result = l08_line_collision_result;
+            char *collision_result = D_L08_00174640;
             if (*(int *)(collision_result + 0x18) != *(int *)(bolt_data + 0x10)) {
                 if (*(int *)(collision_result + 0x18) != 0) {
                     spawn_nearby_effect(*(void **)(collision_result + 0x18), (int)fire_bolt, 0x10001, collision_result + 0x20, bolt_data, 1.0f);

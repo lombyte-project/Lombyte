@@ -161,9 +161,9 @@ typedef struct {
     s32 unk20;
 } CollisionProbe;
 
-extern f32 l04_projectile_bounds_center[] __asm__("D_L04_00166F40");                             /* arena centre */
-extern u128 l04_collision_line_hit_position __asm__("D_L04_00173FE0");                              /* hit position of the last collision_line */
-extern u8 l04_projectile_impact_reflection_normal[] __asm__("D_L04_00174000");
+extern f32 D_L04_00166F40[];                             /* arena centre */
+extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
+extern u8 D_L04_00174000[];
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
@@ -213,7 +213,7 @@ void update_class_b8_projectile(struct Moby *moby)
         v->unk24 = 1;
     v->hero_dist = hero_distance;
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f
-        || range < vector_distance(&moby->pos, l04_projectile_bounds_center)) {
+        || range < vector_distance(&moby->pos, D_L04_00166F40)) {
         mark_moby_for_removal(moby);
         return;
     }
@@ -247,7 +247,7 @@ void update_class_b8_projectile(struct Moby *moby)
     if (collision_line(&old, &moby->pos, 0, v->owner, probe) == 0)
         return;
 
-    qcopy(&moby->pos, &l04_collision_line_hit_position);
+    qcopy(&moby->pos, &D_L04_00173FE0);
     if (moby->command == 0) {
         for (i = 0; i < 5; i++) {
             random_vector.q = 0;
@@ -255,7 +255,7 @@ void update_class_b8_projectile(struct Moby *moby)
             random_vector.f[1] = random_float_between(-1.0f, 1.0f);
             random_vector.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = random_vector.q;
-            FUN_L00_001ff660(&random_vector, v, l04_projectile_impact_reflection_normal);
+            FUN_L00_001ff660(&random_vector, v, D_L04_00174000);
             normalize_vector_xyz(&push, &push, vector_length_xyz(&random_vector) * 0.5f);
             add_vector_xyz(&push, &random_vector, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));

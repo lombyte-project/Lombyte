@@ -238,7 +238,7 @@ typedef struct {
 extern f32 explosive_moby_gravity_coefficient_gp __asm__("D_L01_00162058") __attribute__((sda));
 extern f32 explosive_moby_velocity_multiplier_gp __asm__("D_L01_0016205C") __attribute__((sda));
 extern f32 explosive_moby_horizontal_damping_threshold_gp __asm__("D_L01_00162060") __attribute__((sda));
-extern BlobHitInfo l01_collision_hit __asm__("D_L01_001742C0");
+extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -298,8 +298,8 @@ void update_explosive_moby(struct Moby *moby) {
     hit = coll_sphere(2.0f, &moby->pos, 0, (void *)blob_vars->owner);
     if (tick_countdown_32(&blob_vars->timer) || hit) {
         if (hit) {
-            if (l01_collision_hit.have_normal) {
-                FUN_L00_001ff660(blob_vars, blob_vars, &l01_collision_hit.normal);
+            if (collision_hit.have_normal) {
+                FUN_L00_001ff660(blob_vars, blob_vars, &collision_hit.normal);
             } else {
                 clear_vector(blob_vars);
             }
