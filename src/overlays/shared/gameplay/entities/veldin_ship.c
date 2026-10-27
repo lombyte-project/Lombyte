@@ -293,7 +293,7 @@ void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
-extern T_2d0538 D_L00_001E9E30;
+extern T_2d0538 l00_crate_drop_unused_stack_copy_source __asm__("D_L00_001E9E30");
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/crate_drop_bolts.h"
 void crate_drop_bolts(u8 *crate_moby) {
     enum {
@@ -311,7 +311,7 @@ void crate_drop_bolts(u8 *crate_moby) {
 
     crate_vars = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
-    unused_global_copy = D_L00_001E9E30;
+    unused_global_copy = l00_crate_drop_unused_stack_copy_source;
     drop_type_or_skip_spawn = *(s16 *)(crate_vars + 0xC6) == 0;
     if (crate_class == 0x1F5)
         drop_type_or_skip_spawn = 0;
