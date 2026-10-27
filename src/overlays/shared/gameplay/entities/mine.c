@@ -1607,7 +1607,7 @@ extern short bomb_spark_primary_color_end __asm__("D_L00_00161420") __attribute_
 extern short bomb_spark_secondary_color_start __asm__("D_L00_00161424") __attribute__((sda));
 extern short bomb_spark_secondary_color_end __asm__("D_L00_00161428") __attribute__((sda));
 extern short bomb_sparks_per_emission __asm__("D_L00_0016142C") __attribute__((sda));
-extern short D_L00_00161430 __attribute__((sda));
+extern short bomb_spark_texture_selector __asm__("D_L00_00161430") __attribute__((sda));
 extern B910 D_L00_001E98D0;
 extern Colors6_2adb30 D_L00_001E9920;
 extern Colors6_2adb30 D_L00_001E9938;
@@ -1686,7 +1686,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_vertical_offset_frame_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
                     spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_jittered_frame_count_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
                     v2.f[2] -= *(float *)&bomb_spark_vertical_acceleration * frame_time_sq_macro * (float)spark_vertical_offset_scale;
-                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, spark_secondary_color, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
+                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, spark_secondary_color, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&bomb_spark_texture_selector);
                 }
             }
         }
