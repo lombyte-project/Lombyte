@@ -3529,11 +3529,11 @@ extern s32 D_L18_00162460_gp __asm__("D_L18_00162460") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
-extern short D_L18_00162464 __attribute__((sda));
-extern short D_L18_00162468 __attribute__((sda));
-extern short D_L18_0016246C __attribute__((sda));
-extern short D_L18_00162470 __attribute__((sda));
-extern short D_L18_00162474 __attribute__((sda));
+extern short drek_boss_animation_glow_quad_scale_gp __asm__("D_L18_00162464") __attribute__((sda));
+extern short drek_boss_animation_glow_position_offset_scale_gp __asm__("D_L18_00162468") __attribute__((sda));
+extern short drek_boss_animation_glow_blend_start_color_gp __asm__("D_L18_0016246C") __attribute__((sda));
+extern short drek_boss_animation_glow_blend_end_color_gp __asm__("D_L18_00162470") __attribute__((sda));
+extern short drek_boss_animation_glow_cycle_period_frames_gp __asm__("D_L18_00162474") __attribute__((sda));
 void render_drek_boss_joint_glows(struct Moby *moby) {
     char joint_world_position[16];
     char animation_glow_world_position[16];
@@ -3551,17 +3551,17 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
     moby_point_position(boss_vars->p3A0, 2, joint_world_position);
     draw_offset_textured_effect_quad(joint_world_position, attached_glow_color, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
-        int animation_glow_period_frames = scale_game_frames(*(int *)&D_L18_00162474);
+        int animation_glow_period_frames = scale_game_frames(*(int *)&drek_boss_animation_glow_cycle_period_frames_gp);
         float animation_glow_cycle_value = convert_integer_to_float(game_frame % animation_glow_period_frames);
         int animation_glow_color;
         animation_glow_cycle_value = animation_glow_cycle_value / convert_integer_to_float(animation_glow_period_frames);
         animation_glow_cycle_value = animation_glow_cycle_value * 6.18318f;
         animation_glow_cycle_value = fast_sin(animation_glow_cycle_value - 3.14159f);
-        animation_glow_color = fast_tween_color(*(int *)&D_L18_0016246C, *(int *)&D_L18_00162470, animation_glow_cycle_value * 0.5f + 0.5f);
+        animation_glow_color = fast_tween_color(*(int *)&drek_boss_animation_glow_blend_start_color_gp, *(int *)&drek_boss_animation_glow_blend_end_color_gp, animation_glow_cycle_value * 0.5f + 0.5f);
         moby_point_position(moby, 5, animation_glow_world_position);
-        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
+        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&drek_boss_animation_glow_quad_scale_gp, *(float *)&drek_boss_animation_glow_position_offset_scale_gp);
         moby_point_position(moby, 6, animation_glow_world_position);
-        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&D_L18_00162464, *(float *)&D_L18_00162468);
+        draw_offset_textured_effect_quad(animation_glow_world_position, animation_glow_color, *(float *)&drek_boss_animation_glow_quad_scale_gp, *(float *)&drek_boss_animation_glow_position_offset_scale_gp);
     }
     for (i = 0; i < 8; i++) {
         moby_point_position(moby, 11 + i, joint_world_position);
