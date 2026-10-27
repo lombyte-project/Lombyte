@@ -1468,7 +1468,7 @@ typedef union {
     s32 i[4];
 } V2c2488;
 extern s32 D_0013CAE0[] __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern u8 D_0013E52A[] __asm__("D_0013E52A");
+extern u8 bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern f32 dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1515,7 +1515,7 @@ void aim_throw_arc(V2c2488 *origin_position, V2c2488 *target_position, f32 *out,
     *(s32 *)&out[2] = 0;
     out[2] = FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (D_0013CAE0[0] & 5) {
-        k = scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f;
+        k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
         k = k / horizontal_speed;
     } else {
         k = 8.5f / horizontal_speed;
@@ -1648,7 +1648,7 @@ void bomb_glove_update(struct Moby *moby) {
         pos.f[2] += 0.490819991f;
         angle = atan2_f(launch.f[0], launch.f[1]);
         {
-            f32 speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+            f32 speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
             scale_vector_xyz(&target, &launch, speed);
         }
         add_vector_xyz(&target, &target, &pos);
@@ -1663,7 +1663,7 @@ void bomb_glove_update(struct Moby *moby) {
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
             {
-                f32 speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+                f32 speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
                 build_spherical_offset_2c1ad0(&temporary.arc, speed, angle, slope);
             }
             qcopy(&direction, &D_L00_00166DC0_2c1ad0);
@@ -1674,7 +1674,7 @@ void bomb_glove_update(struct Moby *moby) {
                 else horizontal = z / 0.01f;
             }
             gravity = frame_time_sq_macro * 11.0f;
-            root = square_root(gravity * ((controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f) * 0.5f);
+            root = square_root(gravity * ((controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f) * 0.5f);
             radius = (root + root) * root * (1.0f - horizontal) / (frame_time_sq_macro * 11.0f);
             vertical = horizontal * radius;
             if (0.0f < radius) {
@@ -1719,7 +1719,7 @@ void bomb_glove_update(struct Moby *moby) {
             }
         }
         gravity = frame_time_sq_macro * 11.0f;
-        speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+        speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
         aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
     }
     switch (moby->state) {
