@@ -91,8 +91,8 @@ extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void tick_space_transition(void) __asm__("FUN_00226e08");
 
-extern char D_L00_00165FB0[];
-extern char D_L00_00161E00[];
+extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");
+extern char level_startup_clear_start[] __asm__("D_L00_00161E00");
 void run_level_main_loop(void) __asm__("FUN_L00_00245c28");
 
 void run_level_main_loop(void) {
@@ -113,12 +113,12 @@ void run_level_main_loop(void) {
     int one;
     int per;
 
-    if (((D_L00_00165FB0 - D_L00_00161E00) & 0xF) == 0 && ((unsigned int)D_L00_00161E00 & 0xF) == 0) {
-        clear_blocks_16(D_L00_00161E00, D_L00_00165FB0 - D_L00_00161E00);
+    if (((level_startup_clear_end - level_startup_clear_start) & 0xF) == 0 && ((unsigned int)level_startup_clear_start & 0xF) == 0) {
+        clear_blocks_16(level_startup_clear_start, level_startup_clear_end - level_startup_clear_start);
     } else {
         debug_print(level_bss_clear_args);
-        for (i = 0; i < D_L00_00165FB0 - D_L00_00161E00; i++) {
-            D_L00_00161E00[i] = 0;
+        for (i = 0; i < level_startup_clear_end - level_startup_clear_start; i++) {
+            level_startup_clear_start[i] = 0;
         }
     }
     init_stash();
