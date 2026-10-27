@@ -1983,7 +1983,7 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern char D_L05_00161EF8[];
+extern char shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -2022,7 +2022,7 @@ void shady_salesman_update(WM *moby) {
         }
         moby->position[2] += 0.5f;
         moby->position[2] = probe_ground_height(moby->position, 0, 0.5f);
-        npc_data->ptr20 = (void *)D_L05_00161EF8;
+        npc_data->ptr20 = (void *)shady_salesman_dialogue_name;
         moby->state = 1;
         initialize_npc_dialogue(moby, npc_data);
         break;
