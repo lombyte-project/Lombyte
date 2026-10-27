@@ -642,7 +642,7 @@ void mine_blend_color(void) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
-extern s32 D_L00_0015F770_gp __asm__("D_L00_0015F770") __attribute__((sda));
+extern s32 l00_hud_text_panel_base_y __asm__("D_L00_0015F770") __attribute__((sda));
 extern s32 D_L00_0015F648_macro __asm__("D_L00_0015F648") MACRO_ADDR;
 extern u8 D_L00_0017E530[] NOT_SDA;
 extern char D_0013F3D0[];
@@ -676,9 +676,9 @@ int draw_hud_text_panel(HudElem *hud_element) {
     int never = 0;
 
     if (pal_mode != 0) {
-        y = D_L00_0015F770_gp + 0xa;
+        y = l00_hud_text_panel_base_y + 0xa;
     } else {
-        y = D_L00_0015F770_gp + 0x12;
+        y = l00_hud_text_panel_base_y + 0x12;
     }
     fade = convert_integer_to_float(*opacity);
     fade /= scale_game_seconds(8.0f);
