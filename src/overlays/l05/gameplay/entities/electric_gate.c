@@ -2158,7 +2158,7 @@ void update_hero_clip_volume_outputs(char *moby) {
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int D_L05_0015F5C4;
 
-extern short D_L05_00161F08 __attribute__((sda));
+extern short television_scale_multiplier_gp __asm__("D_L05_00161F08") __attribute__((sda));
 void television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
 void television_update(struct Moby *moby) {
     enum {
@@ -2169,7 +2169,7 @@ void television_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int visibility_control_mode;
     moby->scale =
-        moby->pclass->scale * *(float *)&D_L05_00161F08;
+        moby->pclass->scale * *(float *)&television_scale_multiplier_gp;
     switch (moby->state) {
     case TELEVISION_INITIALIZE:
         moby->state = 1;
