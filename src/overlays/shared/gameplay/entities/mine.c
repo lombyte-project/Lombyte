@@ -2990,7 +2990,7 @@ int rndi_2b1af0(int, int) __asm__("FUN_L00_00257b90");
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float,
                   float) __asm__("FUN_L00_002712b8");
 void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern P_2b1af0 D_0013F450;
+extern P_2b1af0 l00_object_offset_particle_velocity_contributions __asm__("D_0013F450");
 void emit_object_offset_particles(unsigned char *source_object) __asm__("FUN_L00_002b1af0");
 
 void emit_object_offset_particles(unsigned char *source_object) {
@@ -3015,10 +3015,10 @@ void emit_object_offset_particles(unsigned char *source_object) {
     transform_vector_by_basis(&b, &b, source_object + 0xC0);
     for (i = 1; i >= 0; i--) {
         ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
-        scale_2b1af0(&b, &D_0013F450.a, 0.7f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.a, 0.7f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
-        scale_2b1af0(&b, &D_0013F450.b, 0.7f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.b, 0.7f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
         particle_byte_input_or_min_frames = trunc_2b1af0(rnd_2b1af0(0.0f, 6.0f));
@@ -3027,10 +3027,10 @@ void emit_object_offset_particles(unsigned char *source_object) {
     }
     for (j = 0; j >= 0; j--) {
         ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
-        scale_2b1af0(&b, &D_0013F450.a, 0.55f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.a, 0.55f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
-        scale_2b1af0(&b, &D_0013F450.b, 0.55f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.b, 0.55f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
         particle_byte_input_or_min_frames = fr_2b1af0(0x14);
