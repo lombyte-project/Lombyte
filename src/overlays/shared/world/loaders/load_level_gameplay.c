@@ -1766,7 +1766,7 @@ extern char D_L00_001E8780[], D_L00_001E87A0[], D_L00_001E87D0[], D_L00_001E87E8
     D_L00_001E8A48[];
 extern char level_memory_map_newline[] __asm__("D_L00_0015FC80");
 extern char level_code_memory_end[] __asm__("D_L00_002F0CD0");
-extern s32 D_L00_001B1A80[];
+extern s32 particle_texture_ranges[] __asm__("D_L00_001B1A80");
 extern char *D_L00_001C5800_244110[] __asm__("D_L00_001C5800");
 extern char *D_L00_001BC030_244110[] __asm__("D_L00_001BC030");
 extern char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0");
@@ -2036,8 +2036,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         if (core_header[4])
             debug_print(D_L00_001E88C8, KB(D_L00_00173E40_244110[0] - (char *)D_L00_0016051C));
         debug_print(D_L00_001E88E0, KB(D_L00_0015F40C - (s32)D_L00_00173E40_244110[0]));
-        debug_print(D_L00_001E88F8, KB((D_L00_001B1A80[1] >> 4) - D_L00_0015F40C));
-        debug_print(D_L00_001E8910, KB((s32)effect_texture_data_base - (D_L00_001B1A80[1] >> 4)));
+        debug_print(D_L00_001E88F8, KB((particle_texture_ranges[1] >> 4) - D_L00_0015F40C));
+        debug_print(D_L00_001E8910, KB((s32)effect_texture_data_base - (particle_texture_ranges[1] >> 4)));
         debug_print(D_L00_001E8928, KB((char *)D_L00_00197300[0] - effect_texture_data_base));
         debug_print(D_L00_001E8940, KB(D_L00_001C5800_244110[0] - (char *)D_L00_00197300[0]));
         if (core_header[0xA])
