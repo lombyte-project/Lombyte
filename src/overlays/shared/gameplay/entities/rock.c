@@ -1964,8 +1964,8 @@ void update_teleporter_child_transforms(char *parent_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A808), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_L01_00201600[];
-extern int D_L01_00201618[];
+extern int shared_teleporter_help_message_ids[] __asm__("D_L01_00201600");
+extern int level_17_teleporter_help_message_ids[] __asm__("D_L01_00201618");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 extern short D_L01_00161F98 __attribute__((sda));
@@ -1979,12 +1979,12 @@ void try_set_teleporter_help_message(char *moby) {
         try_set_help_message(4, ((int *)&D_L01_00161FA0)[data[4]]);
         break;
     case 17:
-        try_set_help_message(4, D_L01_00201618[data[4]]);
+        try_set_help_message(4, level_17_teleporter_help_message_ids[data[4]]);
         break;
     case 1:
     case 7:
     case 13:
-        try_set_help_message(4, D_L01_00201600[data[4]]);
+        try_set_help_message(4, shared_teleporter_help_message_ids[data[4]]);
         break;
     case 8:
         try_set_help_message(4, ((int *)&D_L01_00161F98)[data[4]]);
