@@ -2007,7 +2007,7 @@ typedef struct {
 } Quad_30a8c8;
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern float D_L01_00201630[];
+extern float moby_radius_ring_quad_uvs[] __asm__("D_L01_00201630");
 extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
 extern int moby_radius_ring_blend_minuend_selector_gp __asm__("D_L01_00161FB8") __attribute__((sda));
 extern int moby_radius_ring_blend_subtrahend_selector_gp __asm__("D_L01_00161FBC") __attribute__((sda));
@@ -2034,8 +2034,8 @@ void draw_moby_radius_ring(char *moby) {
     quad.g[2] = 0xFF9000000260UL;
     quad.g[0] = 0;
     for (i = 0; i < 4; i++) {
-        quad.uv[i * 2] = D_L01_00201630[i * 2];
-        *(&quad.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
+        quad.uv[i * 2] = moby_radius_ring_quad_uvs[i * 2];
+        *(&quad.uv[i * 2] + 1) = moby_radius_ring_quad_uvs[i * 2 + 1];
         quad.c[i] = moby_radius_ring_vertex_color_gp;
     }
     ring_half_height = 0.1f;
