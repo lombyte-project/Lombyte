@@ -707,7 +707,7 @@ extern char D_L15_00178700[];
 extern u8 D_001413F4[];
 extern u8 D_0013DD50;
 extern char D_0014C190[];
-extern char D_L15_001615B8[];
+extern char destructible_hit_debris_color_palette[] __asm__("D_L15_001615B8");
 extern struct { u32 words[3]; } D_L15_001615C8;
 extern void fast_vec_normalize(void *out, void *a, f32 length) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
@@ -764,7 +764,7 @@ void update_destructible_moby_on_hit(struct Moby *moby)
     }
     moby->hit_slot = 0xff;
     if (hit != 0) {
-        __builtin_memcpy(palette, &D_L15_001615B8, 16);
+        __builtin_memcpy(palette, &destructible_hit_debris_color_palette, 16);
         fast_vec_normalize(&hit_direction, hit + 0x10, frame_time * 10.0f);
         fast_vec_scale(&push, &hit_direction, 2.0f);
         if (fast_vec_length(hit) != 0.0f) {
