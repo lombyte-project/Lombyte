@@ -2595,7 +2595,7 @@ typedef struct {
 extern CarrierMoby *D_L01_0015FFD8_m __asm__("D_L01_0015FFD8");
 extern CarrierCamPoint *D_L01_001600EC_p __asm__("D_L01_001600EC");
 extern CarrierCamera D_L01_00167100_c __asm__("D_L01_00167100");
-extern CarrierOffsets D_L01_0020B360;
+extern CarrierOffsets l01_carrier_rider_local_offsets __asm__("D_L01_0020B360");
 extern s32 truncate_float_f49(f32) __asm__("FUN_001fa6d0");
 extern f32 fast_subtract_rotations_f49(f32, f32) __asm__("FUN_001fa5c8");
 extern void transform_vector_f49(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -2701,7 +2701,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     fast_dec_timer_s16(&v->timer);
     if (v->arrived == 0 || v->timer != 0 || carrier_moby->seq != 2) {
         for (i = 0; i < 8; i++) {
-            offs = D_L01_0020B360;
+            offs = l01_carrier_rider_local_offsets;
             if (v->riders[i] != -1) {
                 if (v->state != 1) {
                     D_L01_0015FFD8_m[v->riders[i]].flags &= ~0x41;
