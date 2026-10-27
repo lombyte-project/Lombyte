@@ -3398,7 +3398,7 @@ typedef struct {
 } SteamParticle;
 
 SteamColors D_L01_00161C08 = {{0x2b8, 0x2b9, 0x2ba}};
-extern SteamColors D_L01_00161C18;
+extern SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -3448,7 +3448,7 @@ void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) {
                          random_int_between(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
     }
     for (i = 0; i < 2; i++) {
-        colors = D_L01_00161C18;
+        colors = l01_rising_particle_variant_indices;
         puff.q = 0;
         puff.f[0] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
         puff.f[1] = random_float_between(frame_time_macro * -0.5f, frame_time_macro * 0.5f);
