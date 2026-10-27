@@ -16,7 +16,7 @@ typedef struct {
 extern R_2afd00 D_L01_00179F40[];
 extern char D_L01_0016CCE0[];
 extern char D_L01_0017C7C0[];
-extern char D_L01_001CA940[];
+extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
 extern float D_L01_0015F3FC;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
@@ -46,14 +46,14 @@ void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress")
 void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 
-extern char D_L01_00161100 __attribute__((sda));
+extern char vendor_camera_local_position_offset __asm__("D_L01_00161100") __attribute__((sda));
 extern int D_L01_0015F5D8 __attribute__((sda));
 extern short D_L01_0015F400 __attribute__((sda));
 void initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
 
 void initialize_vendor_screen(char *vendor_moby, int lvl) {
     struct Hero *hero_state = &hero;
-    char *vendor_screen_state = D_L01_001CA940;
+    char *vendor_screen_state = vendor_screen_state_storage;
     char *relocated_address_block = D_L01_0016CCE0;
     char *sc;
     char *relocated_address_source_block;
@@ -67,7 +67,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     snd_flush_sound_commands_alt();
     D_L01_0015F5D8 = 1;
     fill_transfer_words_alt(vendor_screen_state, 0, 0x220);
-    *(int *)D_L01_001CA940 = 3;
+    *(int *)vendor_screen_state_storage = 3;
     cutscene_mode = 5;
     *(int *)(vendor_screen_state + 4) = 0;
     *(char **)(vendor_screen_state + 0x28) = vendor_moby;
@@ -78,7 +78,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     *(char *)&hero_state->item_use_locked = 1;
     *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();
-    transform_vector_by_basis(sc, &D_L01_00161100, vendor_moby + 0xC0);
+    transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
     add_vector_xyz(sc, sc, vendor_moby + 0x10);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_vector(vendor_screen_state + 0xB0);
