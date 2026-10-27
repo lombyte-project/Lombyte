@@ -283,7 +283,7 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A788), where it is exact; names translated to the US level program. */
 
-extern char D_L06_0016CFE0[];
+extern char level06_camera_target_update_data[] __asm__("D_L06_0016CFE0");
 extern int D_L06_0015F5C4;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
@@ -302,7 +302,7 @@ void update_gated_moby_effects(unsigned char *moby) {
         break;
     case MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE:
         if (D_L06_0015F5C4 == 2) {
-            char *camera_target_update_data = D_L06_0016CFE0;
+            char *camera_target_update_data = level06_camera_target_update_data;
             if (*(int *)(camera_target_update_data + 0x30) == 5) {
                 if (scale_game_frames(0x7F) >= *(int *)(camera_target_update_data + 0x34)) {
                     cutscene_set_camera_target(*(int *)(camera_target_update_data + 0x180));
