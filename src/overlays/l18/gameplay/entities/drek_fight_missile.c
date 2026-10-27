@@ -1220,7 +1220,7 @@ typedef struct {
 extern ML D_L18_0016D260;
 extern int D_L18_0015F5C4;
 extern unsigned char D_L18_0017CE40[];
-extern short D_L18_001623A4 __attribute__((sda));
+extern short drek_boss_big_head_manipulator_scale_gp __asm__("D_L18_001623A4") __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
@@ -1237,9 +1237,9 @@ void attach_drek_boss_big_head_manipulator(char *moby) {
 
                 if (big_head_manipulator[1] == 0) {
                     attach_manipulator(listed_moby, 0, big_head_manipulator);
-                    *(float *)(big_head_manipulator + 0x20) = *(float *)&D_L18_001623A4;
-                    *(float *)(big_head_manipulator + 0x24) = *(float *)&D_L18_001623A4;
-                    *(float *)(big_head_manipulator + 0x28) = *(float *)&D_L18_001623A4;
+                    *(float *)(big_head_manipulator + 0x20) = *(float *)&drek_boss_big_head_manipulator_scale_gp;
+                    *(float *)(big_head_manipulator + 0x24) = *(float *)&drek_boss_big_head_manipulator_scale_gp;
+                    *(float *)(big_head_manipulator + 0x28) = *(float *)&drek_boss_big_head_manipulator_scale_gp;
                 }
             }
         }
@@ -1611,7 +1611,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     {
         char *manipulator_owner_moby = boss_data->f3A4;
         if (manipulator_owner_moby != 0 && manipulator_owner_moby[0x20] >= 0) {
-            FUN_L00_00263ac8(*(float *)&D_L18_001623A4, (int)manipulator_owner_moby, 0, boss_data->f1C0);
+            FUN_L00_00263ac8(*(float *)&drek_boss_big_head_manipulator_scale_gp, (int)manipulator_owner_moby, 0, boss_data->f1C0);
         }
     }
     if (moby->f31 != 0 && FUN_001f9b48(moby->f10, D_L18_001677C0) < 32.0f) {
