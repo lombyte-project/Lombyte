@@ -297,11 +297,11 @@ void restore_view_after_textured_grid(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 
-extern unsigned int D_L02_0015FFDC;
+extern unsigned int l02_trackdrive_left_moby_address_cutoff __asm__("D_L02_0015FFDC");
 
 void trackdrive_left_update(char *moby) __asm__("FUN_L02_002cb978");
 void trackdrive_left_update(char *moby) {
-    if ((unsigned int)moby < D_L02_0015FFDC) {
+    if ((unsigned int)moby < l02_trackdrive_left_moby_address_cutoff) {
         *(int *)(moby + 0x58) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x40;
     }
