@@ -2274,7 +2274,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-extern short D_L11_00162064 __attribute__((sda));
+extern short ship_projectile_base_scale_gp __asm__("D_L11_00162064") __attribute__((sda));
 int D_L11_00162068 = 30;
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) __asm__("FUN_L11_003126f8");
 
@@ -2292,7 +2292,7 @@ void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
             if (*(int *)(ship_vars + 0x88) != 0 && !(500 < *(int *)(ship_vars + 0x8C)))
                 projectile_target = *(int *)(ship_vars + 0x88);
             if (spawn_ship_projectile(moby, projectile_spawn_position, projectile_target, &moby->rot,
-                                 *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_gp,
+                                 *(float *)&ship_projectile_base_scale_gp * *(float *)&D_L11_00162090_gp,
                                  scale_game_frames(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
