@@ -20,23 +20,23 @@ extern u8 D_L00_001DB5C0[];
 #include "rnc/overlay/collision.h"
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern float D_L00_00161594 __attribute__((sda));
-extern float D_L00_00161598 __attribute__((sda));
-extern float D_L00_0016159C __attribute__((sda));
+extern float beam_target_hero_heading_error_limit __asm__("D_L00_00161598") __attribute__((sda));
+extern float beam_target_camera_heading_error_limit __asm__("D_L00_0016159C") __attribute__((sda));
 extern float D_L00_001615A0 __attribute__((sda));
-extern float D_L00_001615A4 __attribute__((sda));
-extern float D_L00_001615A8 __attribute__((sda));
-extern float D_L00_001615B0 __attribute__((sda));
-extern float D_L00_001615B8 __attribute__((sda));
+extern float primary_beam_wave_start_amplitude __asm__("D_L00_001615A4") __attribute__((sda));
+extern float primary_beam_wave_end_amplitude __asm__("D_L00_001615A8") __attribute__((sda));
+extern float primary_beam_wave_phase_advance __asm__("D_L00_001615B0") __attribute__((sda));
+extern float secondary_beam_wave_phase_retreat __asm__("D_L00_001615B8") __attribute__((sda));
 extern float D_L00_001615BC __attribute__((sda));
-extern float D_L00_001615C0 __attribute__((sda));
-extern float D_L00_001615C4 __attribute__((sda));
-extern float D_L00_001615CC __attribute__((sda));
+extern float secondary_beam_vertical_wave_envelope_amplitude __asm__("D_L00_001615C0") __attribute__((sda));
+extern float secondary_beam_horizontal_wave_amplitude __asm__("D_L00_001615C4") __attribute__((sda));
+extern float secondary_beam_vertical_envelope_phase_advance __asm__("D_L00_001615CC") __attribute__((sda));
 extern float D_L00_001615D0 __attribute__((sda));
-extern float D_L00_001615E4 __attribute__((sda));
-extern float D_L00_001615E8 __attribute__((sda));
+extern float primary_beam_vertical_jitter_range_start __asm__("D_L00_001615E4") __attribute__((sda));
+extern float primary_beam_vertical_jitter_range_end __asm__("D_L00_001615E8") __attribute__((sda));
 extern int D_L00_001615F8 __attribute__((sda));
-extern float D_L00_00161628 __attribute__((sda));
-extern float D_L00_0016162C __attribute__((sda));
+extern float beam_origin_particle_direction_scale __asm__("D_L00_00161628") __attribute__((sda));
+extern float beam_target_camera_alignment_score_weight __asm__("D_L00_0016162C") __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668[] __attribute__((section(".sdata")));
 extern short D_L00_00161670[] __attribute__((section(".sdata")));
@@ -94,7 +94,7 @@ typedef struct {
 } WalloperBeam;
 
 void build_beam_and_arc_points(u8 *o) __asm__("FUN_L00_002b94d0");
-void build_beam_and_arc_points(u8 *o) {
+void build_beam_and_arc_points(u8 *beam_owner_moby) {
     Vec4 target0, target1;
     struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } hit;
     Vec4 camera_direction, direction, delta, blend, step, offset;
@@ -103,14 +103,14 @@ void build_beam_and_arc_points(u8 *o) {
     union { struct { Vec4 origin; HitDescriptor hit0; } first; HitDescriptor hit1; } effects;
     /* Retail uses a five-vector scratch span with differences beginning at slot 1. */
     Vec4 differences[5];
-    WalloperBeam *v = *(WalloperBeam **)(o + 0x78);
+    WalloperBeam *beam_state = *(WalloperBeam **)(beam_owner_moby + 0x78);
     int i;
     struct Moby *best = 0, *second = 0, *candidate, **list;
     char *data;
     float best_score = 0.0f, second_score = 0.0f;
     int enabled = (u8)D_0013E533[0];
     float spacing = D_L00_00161594 / 20.0f;
-    float distance, angle, score, n, amplitude, wave, length, factor, phase, side_wave;
+    float distance, angle, score, beam_wave_sample_index, amplitude, wave, length, factor, phase, side_wave;
     float side_phase;
     float x_s, x_c, x_a, x_m;
     struct Hero *player;
@@ -124,43 +124,43 @@ void build_beam_and_arc_points(u8 *o) {
     float length_w4;
     float length_w3;
     int k;
-    int m;
+    int arc_point_index;
     int mirror;
     int seg;
     int j, hit_result, collided_count, spin;
     char *previous, *side;
     Vec4 *beam;
     float *side_waves;
-    D_L00_001615AC_gp = fast_add_rotations(D_L00_001615AC_gp, D_L00_001615B0);
-    D_L00_001615B4_gp = fast_subtract_rotations(D_L00_001615B4_gp, D_L00_001615B8);
-    D_L00_001615C8_gp = fast_add_rotations(D_L00_001615C8_gp, D_L00_001615CC);
-    if (!v->target || (enabled && !v->second_target)) {
-        if (v->second_target) {
-            v->target = v->second_target;
-            v->target_timer = v->second_timer;
-            v->second_target = 0;
-            v->second_timer = 0;
+    D_L00_001615AC_gp = fast_add_rotations(D_L00_001615AC_gp, primary_beam_wave_phase_advance);
+    D_L00_001615B4_gp = fast_subtract_rotations(D_L00_001615B4_gp, secondary_beam_wave_phase_retreat);
+    D_L00_001615C8_gp = fast_add_rotations(D_L00_001615C8_gp, secondary_beam_vertical_envelope_phase_advance);
+    if (!beam_state->target || (enabled && !beam_state->second_target)) {
+        if (beam_state->second_target) {
+            beam_state->target = beam_state->second_target;
+            beam_state->target_timer = beam_state->second_timer;
+            beam_state->second_target = 0;
+            beam_state->second_timer = 0;
         } else {
             for (k = 0; (candidate = ((struct Moby **)active_mobies)[k]) != 0; k++) {
                 camera = player_camera;
                 aim_hero = &hero;
-                if (candidate == v->target || candidate == v->second_target ||
+                if (candidate == beam_state->target || candidate == beam_state->second_target ||
                     !candidate || !candidate->pclass ||
                     *(short *)((char *)candidate->pclass + 0x46) != 5) continue;
                 if (candidate->state == 0xfe) goto next_candidate;
                 if (candidate->state == 0xfd) goto next_candidate;
                 if (!suck_get_aim_height(candidate)) continue;
-                fast_vec_sub(&target0, &candidate->pos, v);
+                fast_vec_sub(&target0, &candidate->pos, beam_state);
                 distance_w16 = vector_length_xy(&target0);
                 if (D_L00_00161594 < distance_w16) continue;
                 length_w3 = fast_difference_between_rotations(camera[0x56],
                     fast_arc_tan(candidate->pos.x - camera[0x50], candidate->pos.y - camera[0x51]));
-                if (D_L00_0016159C < length_w3) continue;
+                if (beam_target_camera_heading_error_limit < length_w3) continue;
                 score = fast_difference_between_rotations(
                     fast_arc_tan(candidate->pos.x - aim_hero->motion.pos.f[0], candidate->pos.y - aim_hero->motion.pos.f[1]),
                     aim_hero->motion.rot.f[2]);
-                if (D_L00_00161598 < score) continue;
-                score = ((D_L00_0016159C - length_w3) / D_L00_0016159C) * D_L00_0016162C +
+                if (beam_target_hero_heading_error_limit < score) continue;
+                score = ((beam_target_camera_heading_error_limit - length_w3) / beam_target_camera_heading_error_limit) * beam_target_camera_alignment_score_weight +
                         (D_L00_00161594 - distance_w16) / D_L00_00161594;
                 if (best_score < score) {
                     second_score = best_score; second = best;
@@ -171,66 +171,66 @@ next_candidate:;
         }
     }
     if (best) {
-        if (v->target) second = best;
+        if (beam_state->target) second = best;
         else {
-            v->target = best;
-            v->target_timer = 0;
-            FUN_0022da68(1, 0, o);
+            beam_state->target = best;
+            beam_state->target_timer = 0;
+            FUN_0022da68(1, 0, beam_owner_moby);
         }
     }
     if (second && enabled) {
-        distance_w17 = fast_vec_dist(v, &best->pos);
+        distance_w17 = fast_vec_dist(beam_state, &best->pos);
         if (distance_w17 < D_L00_00161594) {
             angle = fast_vec_dist(&best->pos, &second->pos);
             if (distance_w17 + angle < D_L00_00161594) {
-                v->second_target = second;
-                v->second_timer = 0;
+                beam_state->second_target = second;
+                beam_state->second_timer = 0;
             }
         }
     }
     primary_distance = 0.0f;
-    if (v->target) {
-        data = (char *)suck_get_aim_height(v->target);
-        qcopy(&target0, &v->target->pos);
+    if (beam_state->target) {
+        data = (char *)suck_get_aim_height(beam_state->target);
+        qcopy(&target0, &beam_state->target->pos);
         target0.f[2] += *(float *)(data + 0x10);
-        primary_distance = fast_vec_dist(v, &target0);
+        primary_distance = fast_vec_dist(beam_state, &target0);
         spacing = primary_distance * 0.05f;
     }
-    if (v->second_target) {
-        data = (char *)suck_get_aim_height(v->second_target);
-        qcopy(&target1, &v->second_target->pos);
+    if (beam_state->second_target) {
+        data = (char *)suck_get_aim_height(beam_state->second_target);
+        qcopy(&target1, &beam_state->second_target->pos);
         target1.f[2] += *(float *)(data + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
     if (enabled) D_L00_001615F8 = 0x207f20;
     else D_L00_001615F8 = 0x7f2020;
     clear_u64_value(&camera_direction);
-    make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled + 2.0f);
-    hit.kind = 5; hit.mode = 1; hit.id = *(short *)(o + 0xa6);
-    v->count3e = 20;
+    make_hit_descriptor(&hit, beam_owner_moby, 0x210000, &camera_direction, enabled + 2.0f);
+    hit.kind = 5; hit.mode = 1; hit.id = *(short *)(beam_owner_moby + 0xa6);
+    beam_state->count3e = 20;
     player = &hero;
-    collect_mobies_in_sphere(0.3f, v, 0x10, player->moby, &hit);
-    fast_vec_sub(&direction, &v->tip, v);
+    collect_mobies_in_sphere(0.3f, beam_state, 0x10, player->moby, &hit);
+    fast_vec_sub(&direction, &beam_state->tip, beam_state);
     fast_vec_normalize(&direction, &direction, 1.0f);
-    if (v->target || v->second_target) {
+    if (beam_state->target || beam_state->second_target) {
         fast_vec_cross(&delta, &direction, &player->gravity_dir);
         build_look_at_matrix(&direction, &direction, &delta, 0.17453292f);
     }
     hit_result = 0;
     collided_count = 0;
     fast_vec_scale(spacing, &step, &direction);
-    qcopy(D_L00_001DB5C0, v); qcopy(D_L00_001DB5C0 + 0x140, v);
+    qcopy(D_L00_001DB5C0, beam_state); qcopy(D_L00_001DB5C0 + 0x140, beam_state);
     beam = (Vec4 *)D_L00_001DB5C0;
     side_waves = (float *)D_L00_001DB9D0;
     for (seg = 1; seg < 20; seg++) {
         previous = (char *)&beam[seg - 1];
         side = (char *)&beam[seg + 20];
-        n = (float)seg;
-        factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
+        beam_wave_sample_index = (float)seg;
+        factor = primary_beam_wave_start_amplitude + (primary_beam_wave_end_amplitude - primary_beam_wave_start_amplitude) *
                     (convert_integer_to_float(seg) * 0.05f);
-        phase = normalize_angle(D_L00_001615AC_gp + n * D_L00_001615A0);
+        phase = normalize_angle(D_L00_001615AC_gp + beam_wave_sample_index * D_L00_001615A0);
         wave = factor * fast_sin(phase);
-        wave += randf_sym(D_L00_001615E4, D_L00_001615E8);
+        wave += randf_sym(primary_beam_vertical_jitter_range_start, primary_beam_vertical_jitter_range_end);
 
         beam[seg].f[2] -= ((float *)D_L00_001DB840)[seg];
         ((float *)D_L00_001DB840)[seg] = wave;
@@ -246,8 +246,8 @@ next_candidate:;
         }
         beam[seg].f[2] += wave;
         fast_vec_sub(&delta, &beam[seg], (char *)D_L00_001DB5C0 - 16 + seg * 16);
-        if (v->target) {
-            if (!enabled || !v->second_target) {
+        if (beam_state->target) {
+            if (!enabled || !beam_state->second_target) {
                 fast_vec_sub(&target_delta, &target0, &beam[seg]);
                 length_w4 = fast_vec_length(&target_delta);
                 if (length_w4 != 0.0f) {
@@ -274,7 +274,7 @@ next_candidate:;
         if (seg < 10) {
             side_phase = normalize_angle(D_L00_001615B4_gp + (float)seg * D_L00_001615BC);
             angle = normalize_angle(D_L00_001615C8_gp + (float)seg * D_L00_001615D0);
-            factor = D_L00_001615C0 * fast_sin(angle);
+            factor = secondary_beam_vertical_wave_envelope_amplitude * fast_sin(angle);
             qcopy(side, &beam[seg]);
             x_s = fast_sin(side_phase);
             side_wave = randf_sym(0.0f, 0.1f);
@@ -282,7 +282,7 @@ next_candidate:;
             side_waves[seg] = x_c;
             *(float *)((char *)&beam[seg] + 0x148) += x_c;
             x_a = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
-            x_m = D_L00_001615C4 * fast_cos(side_phase);
+            x_m = secondary_beam_horizontal_wave_amplitude * fast_cos(side_phase);
             offset.f[0] = fast_cos(x_a) * x_m;
             offset.f[1] = fast_sin(x_a) * x_m;
             offset.f[2] = 0.0f;
@@ -296,12 +296,12 @@ next_candidate:;
             qcopy(&offset, &D_L00_001DB890[seg]);
         }
         if (seg == 1) {
-            struct Hero *h = &hero;
-            fast_vec_scale(0.5f, &effects.first.origin, (char *)h->moby + 0xe0);
-            fast_vec_add(&target_delta, &h->motion.pos, &effects.first.origin);
-            hit_result = collision_line((Vec4f *)&target_delta, (Vec4f *)v, 0x10, h->moby, 0);
+            struct Hero *collision_source_hero = &hero;
+            fast_vec_scale(0.5f, &effects.first.origin, (char *)collision_source_hero->moby + 0xe0);
+            fast_vec_add(&target_delta, &collision_source_hero->motion.pos, &effects.first.origin);
+            hit_result = collision_line((Vec4f *)&target_delta, (Vec4f *)beam_state, 0x10, collision_source_hero->moby, 0);
         } else if (seg == 19 || !(seg & 1)) {
-            hit_result = collision_line((Vec4f *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4f *)&beam[seg], 0x10, o, 0);
+            hit_result = collision_line((Vec4f *)((char *)D_L00_001DB5C0 - 32 + seg * 16), (Vec4f *)&beam[seg], 0x10, beam_owner_moby, 0);
         } else continue;
         fast_vec_sub(&camera_direction, &beam[seg], g_debug_camera);
         camera_direction.f[2] = 0.0f;
@@ -323,10 +323,10 @@ next_candidate:;
             }
             if (hit_result) {
                 qcopy(&beam[seg], &coll_hit.point);
-                v->count3e = seg;
-                qcopy(&v->tip, &coll_hit.point);
+                beam_state->count3e = seg;
+                qcopy(&beam_state->tip, &coll_hit.point);
                 if (!coll_hit.moby || test_moby_linked_record_word8(coll_hit.moby)) {
-                    v->target = 0; v->target_timer = 0;
+                    beam_state->target = 0; beam_state->target_timer = 0;
                 }
                 break;
             }
@@ -334,43 +334,43 @@ next_candidate:;
     }
     for (k = 0; k < collided_count; k++)
         collided[k]->collision = *(int *)((char *)collided[k]->pclass + 0x10);
-    if (!hit_result) qcopy(&v->tip, D_L00_001DB5C0 + 0x130);
-    if (v->target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffffUL)) {
-        fast_vec_sub(&target_delta, &v->target->pos, g_debug_camera);
+    if (!hit_result) qcopy(&beam_state->tip, D_L00_001DB5C0 + 0x130);
+    if (beam_state->target && !(*(unsigned long *)&beam_state->target_timer & 0xffff0000ffffUL)) {
+        fast_vec_sub(&target_delta, &beam_state->target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled + 2.0f);
-        effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = *(short *)(o + 0xa6);
-        record_moby_hit(v->target, &effects.first.hit0);
+        make_hit_descriptor(&effects.first.hit0, beam_owner_moby, 0x210000, &target_delta, enabled + 2.0f);
+        effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = *(short *)(beam_owner_moby + 0xa6);
+        record_moby_hit(beam_state->target, &effects.first.hit0);
         {
             char *aim;
             int frames = 5;
-            aim = (char *)suck_get_aim_height(v->target);
+            aim = (char *)suck_get_aim_height(beam_state->target);
             if (aim && *(short *)(aim + 4) == 1) frames = 1;
-            v->unk44 = scale_game_frames(frames);
+            beam_state->unk44 = scale_game_frames(frames);
         }
     }
-    if (v->second_target && !(*(unsigned long *)&v->target_timer & 0xffff0000ffff0000UL)) {
-        fast_vec_sub(&target_delta, &v->second_target->pos, g_debug_camera);
+    if (beam_state->second_target && !(*(unsigned long *)&beam_state->target_timer & 0xffff0000ffff0000UL)) {
+        fast_vec_sub(&target_delta, &beam_state->second_target->pos, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
-        make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled + 2.0f);
-        effects.hit1.kind = 5; effects.hit1.mode = 3; effects.hit1.id = *(short *)(o + 0xa6);
-        record_moby_hit(v->second_target, &effects.hit1);
+        make_hit_descriptor(&effects.hit1, beam_owner_moby, 0x210000, &target_delta, enabled + 2.0f);
+        effects.hit1.kind = 5; effects.hit1.mode = 3; effects.hit1.id = *(short *)(beam_owner_moby + 0xa6);
+        record_moby_hit(beam_state->second_target, &effects.hit1);
         {
             char *aim;
             int frames = 5;
-            aim = (char *)suck_get_aim_height(v->second_target);
+            aim = (char *)suck_get_aim_height(beam_state->second_target);
             if (aim && *(short *)(aim + 4) == 1) frames = 1;
-            v->unk46 = scale_game_frames(frames);
+            beam_state->unk46 = scale_game_frames(frames);
         }
     }
     for (i = 0; i < 4; i++) {
         Vec4 *rows;
-        if (i < 2) { qcopy(&effects.first.origin, v); factor_w15 = 0.4f; }
-        else { qcopy(&effects.first.origin, &v->tip); factor_w15 = 0.5f; }
+        if (i < 2) { qcopy(&effects.first.origin, beam_state); factor_w15 = 0.4f; }
+        else { qcopy(&effects.first.origin, &beam_state->tip); factor_w15 = 0.5f; }
         if (fast_dec_timer_s16(&D_L00_00161658[i])) {
             D_L00_00161658[i] = scale_game_frames(D_L00_00161668[i]);
             (&D_L00_00161660)[i] = 0;
@@ -383,15 +383,15 @@ next_candidate:;
             qcopy(&arc_points[i][0], &effects.first.origin);
             fast_vec_add(&arc_points[i][1], &effects.first.origin, &target_delta);
             sign = 1.0f;
-            for (m = 2; m < 5; m++) {
-                fast_vec_sub(&effects.first.hit0, &arc_points[i][-1] + m, g_debug_camera);
+            for (arc_point_index = 2; arc_point_index < 5; arc_point_index++) {
+                fast_vec_sub(&effects.first.hit0, &arc_points[i][-1] + arc_point_index, g_debug_camera);
                 phase = random_float_between(0.17453292f, 0.9599311f) * sign;
                 sign = -sign;
                 build_look_at_matrix(&target_delta, &target_delta, &effects.first.hit0, phase);
-                fast_vec_add(&arc_points[i][m], &arc_points[i][-1] + m, &target_delta);
+                fast_vec_add(&arc_points[i][arc_point_index], &arc_points[i][-1] + arc_point_index, &target_delta);
             }
         } else {
-            int d, n0;
+            int arc_alpha_timer_delta, arc_countdown_frames;
             for (j = 1; j < 5; j++) {
                 fast_vec_sub(&differences[j], &arc_points[i][j], &arc_points[i][-1] + j);
                 differences[j].f[0] += randf_sym(0.0f, 0.1f);
@@ -401,22 +401,22 @@ next_candidate:;
             qcopy(&arc_points[i][0], &effects.first.origin);
             for (j = 1; j < 5; j++)
                 fast_vec_add(&arc_points[i][j], &arc_points[i][-1] + j, &differences[j]);
-            d = D_L00_00161670[i]; n0 = D_L00_00161658[i];
-            if (d < n0) d = n0 - d; else d = d - n0;
-            distance = convert_integer_to_float(d) / convert_integer_to_float(scale_game_frames(15));
+            arc_alpha_timer_delta = D_L00_00161670[i]; arc_countdown_frames = D_L00_00161658[i];
+            if (arc_alpha_timer_delta < arc_countdown_frames) arc_alpha_timer_delta = arc_countdown_frames - arc_alpha_timer_delta; else arc_alpha_timer_delta = arc_alpha_timer_delta - arc_countdown_frames;
+            distance = convert_integer_to_float(arc_alpha_timer_delta) / convert_integer_to_float(scale_game_frames(15));
             (&D_L00_00161660)[i] = truncate_float_to_s32((1.0f - distance) * 32.0f);
         }
     }
     angle = randf_sym(0.5235988f, 1.0471976f);
     phase = random_float_between(-0.5235988f, 1.0471976f);
-    fast_vec_scale(D_L00_00161628 * frame_scale, &target_delta, &direction);
+    fast_vec_scale(beam_origin_particle_direction_scale * frame_scale, &target_delta, &direction);
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5d0, phase);
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.2f, 0.6f);
-    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)&target_delta, 0.0f);
+    FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude * 0.3f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)&target_delta, 0.0f);
     spin = -spin;
-    FUN_L00_00272060(v, scale_game_frames(15), amplitude * 0.15f, amplitude * 0.5f, 0x307f7f7f, 0, spin, (float *)&target_delta, 0.0f);
+    FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude * 0.15f, amplitude * 0.5f, 0x307f7f7f, 0, spin, (float *)&target_delta, 0.0f);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = random_float_between(0.15f, 3.0f);
     {
@@ -426,12 +426,12 @@ next_candidate:;
         int dead = 0;
         if (amplitude < 0.0f) dead = 0;
         if (dead) {
-            FUN_L00_00272060(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
-            FUN_L00_00272060(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
-            FUN_L00_00272060(v, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+            FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+            FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
+            FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
         }
     }
-    FUN_L00_00272060(&v->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)D_L00_0015F580_macro, 0.0f);
+    FUN_L00_00272060(&beam_state->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)D_L00_0015F580_macro, 0.0f);
 }
 typedef struct {
     u8 pad[0x3E];
