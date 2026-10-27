@@ -164,7 +164,7 @@ typedef struct {
     s64 unk70, tex, unk80, unk88;
 } GlowQuad_bfa8;
 
-extern GlowVec_bfa8 D_L01_0020B9D0[4];
+extern GlowVec_bfa8 l01_moby_offset_quad_source_corners[4] __asm__("D_L01_0020B9D0");
 extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
 #include "rnc/overlay/shared/gameplay/entities/sandmouse_globals.h"
@@ -196,10 +196,10 @@ void draw_moby_offset_textured_quad(char *moby) {
 
     i = 3;
     one = 1.0f;
-    source_corner_0 = D_L01_0020B9D0[0].q;
-    source_corner_1 = D_L01_0020B9D0[1].q;
-    source_corner_2 = D_L01_0020B9D0[2].q;
-    source_corner_3 = D_L01_0020B9D0[3].q;
+    source_corner_0 = l01_moby_offset_quad_source_corners[0].q;
+    source_corner_1 = l01_moby_offset_quad_source_corners[1].q;
+    source_corner_2 = l01_moby_offset_quad_source_corners[2].q;
+    source_corner_3 = l01_moby_offset_quad_source_corners[3].q;
     local.src_corner[0].q = source_corner_0;
     local.src_corner[1].q = source_corner_1;
     local.src_corner[2].q = source_corner_2;
