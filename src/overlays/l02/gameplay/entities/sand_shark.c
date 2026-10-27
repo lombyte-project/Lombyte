@@ -265,8 +265,8 @@ extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
 extern int D_001413D4_e50 __asm__("D_001413D4") __attribute__((section(".data")));
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
 extern char D_L02_001673C0_e50[] __asm__("D_L02_001673C0");
-extern char D_L02_001FA8A0[];
-extern char D_L02_001FA8C0[];
+extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
+extern char sand_shark_empty_path_message_format[] __asm__("D_L02_001FA8C0");
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
 extern int scale_ticks_e50(int) __asm__("FUN_001f96f8");
@@ -374,12 +374,12 @@ void sand_shark_update(struct Moby *moby) {
     switch (moby->state) {
     case SAND_SHARK_INITIALIZE:
         if (vars->path == -1) {
-            FUN_001e93b0_e50(D_L02_001FA8A0, moby->save_id);
+            FUN_001e93b0_e50(sand_shark_missing_path_message_format, moby->save_id);
             remove_moby_e50(moby);
             return;
         }
         if (*D_L02_001B0AB0_e50[vars->path] == 0) {
-            FUN_001e93b0_e50(D_L02_001FA8C0, moby->save_id);
+            FUN_001e93b0_e50(sand_shark_empty_path_message_format, moby->save_id);
             remove_moby_e50(moby);
             return;
         }
