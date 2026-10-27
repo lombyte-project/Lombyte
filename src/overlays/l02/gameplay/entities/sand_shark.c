@@ -2972,18 +2972,18 @@ extern float D_0015ED6C;
 extern f32 D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
 extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 
-extern short D_L02_00161C38 __attribute__((sda));
+extern short transport_pod_rail_vertical_deceleration_gp __asm__("D_L02_00161C38") __attribute__((sda));
 extern short transport_pod_rail_rotation_degrees_per_height_unit_gp __asm__("D_L02_00161C3C") __attribute__((sda));
 void advance_transport_pod_rails_to_offsets(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     advance_accelerated_scalar(
         (float *)(*(char **)(transport_pod_vars + 0x84) + 0x18), (float *)(transport_pod_vars + 0x8C),
         moby->pos.z + *(float *)(transport_pod_vars + 0x94), *(float *)&D_L02_00161C34_gp * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
+        *(float *)&transport_pod_rail_vertical_deceleration_gp * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     advance_accelerated_scalar(
         (float *)(*(char **)(transport_pod_vars + 0x88) + 0x18), (float *)(transport_pod_vars + 0x90),
         moby->pos.z + *(float *)(transport_pod_vars + 0x98), *(float *)&D_L02_00161C34_gp * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
+        *(float *)&transport_pod_rail_vertical_deceleration_gp * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     {
         float r0 =
             fast_add_rotations(moby->rot.z,
