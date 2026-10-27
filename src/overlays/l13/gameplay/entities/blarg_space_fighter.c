@@ -2685,8 +2685,8 @@ typedef struct {
     int on[1];
 } Vd_v;
 
-extern int D_L13_001D3508[];
-extern int D_L13_001D3520[];
+extern int joint_effect_gate_slot_indices[] __asm__("D_L13_001D3508");
+extern int gated_effect_joint_indices[] __asm__("D_L13_001D3520");
 void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) __asm__("FUN_L13_002e8920");
 
 void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) {
@@ -2694,16 +2694,16 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
     float bone_position[4];
     int i;
     for (i = 0; i < 6; i++) {
-        if (((Vd_v *)emission_gate_data)->on[D_L13_001D3508[i]] != 0) {
+        if (((Vd_v *)emission_gate_data)->on[joint_effect_gate_slot_indices[i]] != 0) {
             float scale_ratio;
             int effect_frame_count, k;
             zv = 0;
             scale_ratio = source_moby->scale / (source_moby->pclass->scale * 4.0f);
-            bone_v(source_moby, D_L13_001D3520[i], bone_position);
+            bone_v(source_moby, gated_effect_joint_indices[i], bone_position);
             if (frame_count & 1) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x14));
                 FUN_L00_00269958(bone_position, &zv, 0xCF0000FF, 0xCF, effect_frame_count, ftoi_v(scale_ratio * 350.0f), -100, 1);
-            } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != D_L13_001D3508[i] ||
+            } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != joint_effect_gate_slot_indices[i] ||
                        below_v(9) == 0) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x16));
                 FUN_L00_00269958(bone_position, &zv, 0x6000FFFF, 0x80, effect_frame_count, ftoi_v(scale_ratio * 600.0f), -100, 1);
