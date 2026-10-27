@@ -169,10 +169,10 @@ extern int l05_electric_gate_outer_color_blend_start __asm__("D_L05_00161D3C") _
 extern int l05_electric_gate_outer_color_blend_end __asm__("D_L05_00161D40") __attribute__((sda));
 extern int l05_electric_gate_inner_color_blend_start __asm__("D_L05_00161D44") __attribute__((sda));
 extern int l05_electric_gate_inner_color_blend_end __asm__("D_L05_00161D48") __attribute__((sda));
-extern int D_L05_00161D70 __attribute__((sda));
-extern int D_L05_00161D74 __attribute__((sda));
-extern int D_L05_00161D78 __attribute__((sda));
-extern int D_L05_00161D7C __attribute__((sda));
+extern int l05_electric_gate_blend_minuend_selector __asm__("D_L05_00161D70") __attribute__((sda));
+extern int l05_electric_gate_blend_subtrahend_selector __asm__("D_L05_00161D74") __attribute__((sda));
+extern int l05_electric_gate_blend_alpha_factor_selector __asm__("D_L05_00161D78") __attribute__((sda));
+extern int l05_electric_gate_blend_addend_selector __asm__("D_L05_00161D7C") __attribute__((sda));
 extern int l05_electric_gate_beam_effect_texture_index __asm__("D_L05_00161D98") __attribute__((sda));
 extern float D_L05_0020B740[4][2];
 extern Vec4 D_L05_0020B760[4];
@@ -197,8 +197,8 @@ void draw_electric_gate_beams(char *moby) {
         angle = fast_add_rotations(angle, 1.2566371f);
         for (j = 0; j < 2; j++) {
             texture = get_effect_texture(l05_electric_gate_beam_effect_texture_index);
-            quads[j][i].primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) | ((s64)D_L05_00161D78 << 4)
-                                    | ((s64)D_L05_00161D7C << 6) | 0x8000000000LL;
+            quads[j][i].primitive = (s64)l05_electric_gate_blend_minuend_selector | ((s64)l05_electric_gate_blend_subtrahend_selector << 2) | ((s64)l05_electric_gate_blend_alpha_factor_selector << 4)
+                                    | ((s64)l05_electric_gate_blend_addend_selector << 6) | 0x8000000000LL;
             quads[j][i].texture = texture;
             quads[j][i].texture_state = 0xFF9000000260LL;
             quads[j][i].reserved.value = 0;
