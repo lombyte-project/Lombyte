@@ -800,7 +800,7 @@ typedef struct {
     float unk70[4];
 } ScenePoints;
 
-extern u8 D_0013D3B1[];
+extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
 extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
 extern int scene_state __asm__("D_L07_0015F5C4");
@@ -842,7 +842,7 @@ void update_umbris_scene_progression(struct Moby *moby)
 
     switch (moby->state) {
     case CONTROLLER_WAIT_FOR_SCENE_IDLE:
-        if (D_0013D3B1[0] != 0 && data->removed_moby != -1) {
+        if (umbris_open_volume_triggered[0] != 0 && data->removed_moby != -1) {
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
         if (scene_state == 0) moby->state = 1;
