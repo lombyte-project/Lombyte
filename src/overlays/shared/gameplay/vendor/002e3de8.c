@@ -117,18 +117,18 @@ typedef struct {
 extern QuadCorner D_L10_001DA310[];
 extern QuadCorner D_L10_001DA350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L10_001DA270[][2];
-extern float D_L10_001DA2F0[][2];
+extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
+extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
 #include "rnc/overlay/shared/gameplay/vendor/002e3de8_globals.h"
-extern int D_L10_001DA250[];
-extern int D_L10_001DA2B0[][2];
+extern int quad_layer_colors[] __asm__("D_L10_001DA250");
+extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
-extern int D_L10_00161F48[2] __attribute__((sda));
-extern int D_L10_00161F50[2] __attribute__((sda));
-extern int D_L10_00161F58[2] __attribute__((sda));
-extern int D_L10_00161F60[2] __attribute__((sda));
+extern int quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
+extern int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
+extern int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
+extern int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
 extern void fast_draw_quad_real(void *, void *, int);
 
@@ -179,11 +179,11 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     for (pass = 0; pass < quad_layer_count_gp; pass++) {
         int parity = pass & 1;
         int shade;
-        first.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
-                                   D_L10_00161F58[parity], D_L10_00161F60[parity], 0x80);
-        second.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
-                                    D_L10_00161F58[parity], D_L10_00161F60[parity], 0x80);
-        shade = D_L10_001DA250[pass];
+        first.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
+                                   quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
+        second.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
+                                    quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
+        shade = quad_layer_colors[pass];
         second.color[2] = shade;
         second.color[0] = shade;
         first.color[3] = shade;
@@ -192,15 +192,15 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         first.color[0] = shade;
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
-                int limit = truncate_float_to_s32(D_L10_001DA270[pass][axis] * 360.0f);
-                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / D_L10_001DA270[pass][axis] - 180.0f;
+                int limit = truncate_float_to_s32(quad_layer_uv_phase_divisors[pass][axis] * 360.0f);
+                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / quad_layer_uv_phase_divisors[pass][axis] - 180.0f;
                 float wave;
-                if (D_L10_001DA2B0[pass][axis] != 0) {
+                if (quad_layer_uv_cosine_selectors[pass][axis] != 0) {
                     wave = fast_cos(angle * 0.017453292f);
                 } else {
                     wave = fast_sin(angle * 0.017453292f);
                 }
-                first.uv[i][axis] = D_L10_001DA2F0[i][axis] + wave * 0.125f;
+                first.uv[i][axis] = quad_corner_base_uvs[i][axis] + wave * 0.125f;
             }
         }
         for (k = 0; k < 2; k++) {
