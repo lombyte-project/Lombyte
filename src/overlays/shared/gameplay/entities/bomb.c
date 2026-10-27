@@ -477,7 +477,7 @@ extern u8 D_0013E520[];
 extern Data D_L00_00173E40;
 extern struct Moby *D_L00_001DD100[];
 extern Node D_L00_001DD150[];
-extern u8 D_L00_001DDF10[];
+extern u8 morphoray_chicken_slot_buffers[] __asm__("D_L00_001DDF10");
 extern s32 D_L00_00161854 __attribute__((sda));
 extern s32 D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
 extern u32 D_L00_00161840[1] __attribute__((sda));
@@ -579,14 +579,14 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
                 spawned_moby->flags &= ~0x20;
             } else if (!moby_vars->unk74) {
                 moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-                moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+                moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
                 spawned_moby->flags |= 0x1020;
                 ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
             }
             ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->unk70 = (void *)1;
         } else if (!moby_vars->unk74) {
             moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-            moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+            moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
             spawned_moby->flags |= 0x1020;
             ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
         }
