@@ -2097,7 +2097,7 @@ void initialize_path_walker_group(struct Moby *moby) {
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern char D_L16_0016CC60[];
+extern char paired_joint_trail_source_context[] __asm__("D_L16_0016CC60");
 extern int D_L16_0015F5C4;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
@@ -2121,7 +2121,7 @@ void update_paired_joint_particle_trails(struct Moby *moby) {
         break;
     case JOINT_TRAIL_EMIT:
         if (D_L16_0015F5C4 == 2) {
-            char *trail_source_context = D_L16_0016CC60;
+            char *trail_source_context = paired_joint_trail_source_context;
             if (*(int *)(trail_source_context + 0x30) == 0) {
                 char *joint_source_moby = *(char **)(trail_source_context + 0x184);
                 moby_point_position(joint_source_moby, 6, joint_6_position);
