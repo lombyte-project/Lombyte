@@ -19,7 +19,7 @@ struct Clip {
 };
 
 Vec4 D_0018CFC0[4] = {0};
-extern f32 D_00160720[4];
+extern f32 view_projection_scale_bias_constants[4] __asm__("D_00160720");
 #include "rnc/rendering/view/update_view_context_globals.h"
 extern f32 D_001DFF50[];
 extern f32 D_001E6B70[];
@@ -141,10 +141,10 @@ void update_view_context(void) {
     viewport_width = view->half_width;
     viewport_height = view->half_height;
     projection_fog_multiplier = view->fog_mul;
-    D_00160720[0] = 0.5f / 210000.0f;
-    D_00160720[1] = -0.5f / 210000.0f;
-    D_00160720[2] = 0.5f;
-    D_00160720[3] = viewport_width / (horizontal_fov * 210000.0f);
+    view_projection_scale_bias_constants[0] = 0.5f / 210000.0f;
+    view_projection_scale_bias_constants[1] = -0.5f / 210000.0f;
+    view_projection_scale_bias_constants[2] = 0.5f;
+    view_projection_scale_bias_constants[3] = viewport_width / (horizontal_fov * 210000.0f);
     view->proj[0] = viewport_width / (horizontal_fov * projection_near_clip);
     view->proj[1] = 0;
     view->proj[2] = 0;
