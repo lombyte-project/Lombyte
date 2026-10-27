@@ -372,7 +372,7 @@ extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
-extern volatile float D_L18_00162554;
+extern volatile float l18_deplanetizer_camera_quad_local_offset_y __asm__("D_L18_00162554");
 extern volatile float D_L18_00162558;
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads.h"
 extern int deplanetizer_camera_quad_first_color_gp __asm__("D_L18_001624F8") __attribute__((sda));
@@ -394,7 +394,7 @@ void draw_three_scaled_camera_facing_quads(void) {
 
     if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame_gp + 1)) {
         deplanetizer_camera_quad_local_offset_x = 1.0f;
-        D_L18_00162554 = 0.0f;
+        l18_deplanetizer_camera_quad_local_offset_y = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
             tilt = -0.15f;
         } else {
