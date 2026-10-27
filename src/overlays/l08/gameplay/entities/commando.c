@@ -391,7 +391,7 @@ extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E24[] __attribute__((section(".sdata")));
 extern Pair D_L08_001E8348[];
-extern Pair D_L08_00161E28;
+extern Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28");
 extern char D_L08_001675C0[];
 extern s32 D_L08_001DDF40[];
 extern s32 D_L08_001E2828[];
@@ -440,8 +440,8 @@ void update_layered_mesh_effect(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             D_L08_001E8348[i].a = 0;
             D_L08_001E8348[i].b = 0;
-            D_L08_00161E28.a = 0;
-            D_L08_00161E28.b = 0;
+            l08_layered_mesh_effect_sine_phase_pair.a = 0;
+            l08_layered_mesh_effect_sine_phase_pair.b = 0;
         }
         for (i = 0; i < 2; i++) {
             D_L08_00161E10[i].a = 0;
@@ -466,7 +466,7 @@ void update_layered_mesh_effect(struct Moby *moby) {
             distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(layered_mesh_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
+                advance_wrapped_sine_pair(layered_mesh_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)&l08_layered_mesh_effect_sine_phase_pair);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
