@@ -121,7 +121,7 @@ extern u8 moby_grids[] __asm__("D_001B76E0");
 extern u8 D_001C76E0[];
 extern u8 D_001CD780[];
 extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern char D_001E76D8[];
+extern char too_many_directional_lights_message[] __asm__("D_001E76D8");
 
 extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -242,7 +242,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     light_count = *(s32 *)light_record;
     light_record += 0x10;
     if (light_count >= 12) {
-        DebugPrint(D_001E76D8);
+        DebugPrint(too_many_directional_lights_message);
         light_count = 12;
     }
     if (light_count != 0) {
