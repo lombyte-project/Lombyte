@@ -1065,13 +1065,13 @@ typedef float FVec4[4] __attribute__((aligned(16)));
 typedef struct {
     FVec4 v;
 } FRow;
-extern short D_L18_00162310 __attribute__((sda));
-extern short D_L18_00162314 __attribute__((sda));
-extern short D_L18_00162318 __attribute__((sda));
-extern short D_L18_0016231C __attribute__((sda));
+extern short lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") __attribute__((sda));
+extern short lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") __attribute__((sda));
+extern short lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") __attribute__((sda));
+extern short lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") __attribute__((sda));
 extern short D_L18_00162320 __attribute__((sda));
-extern short D_L18_00162324 __attribute__((sda));
-extern short D_L18_00162328 __attribute__((sda));
+extern short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") __attribute__((sda));
+extern short lift_mesh_quad_color_gp __asm__("D_L18_00162328") __attribute__((sda));
 extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_L18_001DA7A0[][2] __attribute__((section(".data")));
 extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
@@ -1090,19 +1090,19 @@ void draw_lift_25_quad_mesh(struct Moby *moby) {
     int i;
     int j;
 
-    pkt[1] = get_effect_texture_alt((*(int *)&D_L18_00162324));
-    pkt[3] = (*(int *)&D_L18_00162310) | (long)(*(int *)&D_L18_00162314) << 2;
-    pkt[3] |= (long)(*(int *)&D_L18_00162318) << 4;
-    pkt[3] |= (long)(*(int *)&D_L18_0016231C) << 6;
+    pkt[1] = get_effect_texture_alt((*(int *)&lift_mesh_effect_texture_index_gp));
+    pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
     pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
     height_offset_transform[3][2] = moby->pos.z - *(float *)data;
-    colors[3] = (*(int *)&D_L18_00162328);
-    colors[2] = (*(int *)&D_L18_00162328);
-    colors[1] = (*(int *)&D_L18_00162328);
-    colors[0] = (*(int *)&D_L18_00162328);
+    colors[3] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[2] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[1] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 25; i++) {
         float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
@@ -1136,19 +1136,19 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
     int i;
     int j;
 
-    pkt[1] = get_effect_texture_l18((*(int *)&D_L18_00162324));
-    pkt[3] = (*(int *)&D_L18_00162310) | (long)(*(int *)&D_L18_00162314) << 2;
-    pkt[3] |= (long)(*(int *)&D_L18_00162318) << 4;
-    pkt[3] |= (long)(*(int *)&D_L18_0016231C) << 6;
+    pkt[1] = get_effect_texture_l18((*(int *)&lift_mesh_effect_texture_index_gp));
+    pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
     pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
     height_offset_transform[3][2] = moby->pos.z - *(float *)data;
-    colors[3] = (*(int *)&D_L18_00162328);
-    colors[2] = (*(int *)&D_L18_00162328);
-    colors[1] = (*(int *)&D_L18_00162328);
-    colors[0] = (*(int *)&D_L18_00162328);
+    colors[3] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[2] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[1] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 38; i++) {
         float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
@@ -1185,19 +1185,19 @@ void draw_lift_22_quad_mesh(struct Moby *moby) {
     int i;
     int j;
 
-    pkt[1] = get_effect_texture_l18((*(int *)&D_L18_00162324));
-    pkt[3] = (*(int *)&D_L18_00162310) | (long)(*(int *)&D_L18_00162314) << 2;
-    pkt[3] |= (long)(*(int *)&D_L18_00162318) << 4;
-    pkt[3] |= (long)(*(int *)&D_L18_0016231C) << 6;
+    pkt[1] = get_effect_texture_l18((*(int *)&lift_mesh_effect_texture_index_gp));
+    pkt[3] = (*(int *)&lift_mesh_blend_minuend_selector_gp) | (long)(*(int *)&lift_mesh_blend_subtrahend_selector_gp) << 2;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_factor_selector_gp) << 4;
+    pkt[3] |= (long)(*(int *)&lift_mesh_blend_addend_selector_gp) << 6;
     pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
     height_offset_transform[3][2] = moby->pos.z - *(float *)data;
-    colors[3] = (*(int *)&D_L18_00162328);
-    colors[2] = (*(int *)&D_L18_00162328);
-    colors[1] = (*(int *)&D_L18_00162328);
-    colors[0] = (*(int *)&D_L18_00162328);
+    colors[3] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[2] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[1] = (*(int *)&lift_mesh_quad_color_gp);
+    colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 22; i++) {
         float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
