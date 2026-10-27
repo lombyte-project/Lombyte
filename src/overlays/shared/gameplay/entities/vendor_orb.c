@@ -517,10 +517,10 @@ extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
-extern u8 D_L00_001EA1B0[];
-extern u8 D_L00_001EA1D8[];
-extern u8 D_L00_001EA200[];
-extern u8 D_L00_00161BC0[];
+extern u8 pilots_helmet_missing_cutscene_format[] __asm__("D_L00_001EA1B0");
+extern u8 pilots_helmet_already_owned_message[] __asm__("D_L00_001EA1D8");
+extern u8 pilots_helmet_missing_segment_switch_format[] __asm__("D_L00_001EA200");
+extern u8 pilots_helmet_acquired_message[] __asm__("D_L00_00161BC0");
 extern u16 D_00141B08[];
 extern T_2e03a0_2e03a0 D_L00_001BA5D0;
 extern T_2e03a0_2e03a0 D_L00_001BB230;
@@ -544,9 +544,9 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_INITIALIZE:
         initialize_moby_particle_effect(moby);
         if (p->fa_2e03a0 == -1)
-            stub_printf(D_L00_001EA1B0, moby->h);
+            stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
         if (item_available[7]) {
-            stub_printf(D_L00_001EA1D8);
+            stub_printf(pilots_helmet_already_owned_message);
             FUN_0020c828_2e03a0(moby);
             return;
         }
@@ -563,7 +563,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                 if (p->fa_2e03a0 != -1)
                     start_scene(p->fa_2e03a0);
                 else
-                    stub_printf(D_L00_001EA1B0, moby->h);
+                    stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
                 moby->state = 2;
             }
         }
@@ -571,7 +571,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_GRANT_REWARD:
         if (D_L00_0015F5C4_2e03a0 == 2)
             return;
-        stub_printf(D_L00_00161BC0);
+        stub_printf(pilots_helmet_acquired_message);
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
         grant_inventory_item(7, 1);
@@ -588,7 +588,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                     D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
             }
         } else {
-            stub_printf(D_L00_001EA200, moby->h);
+            stub_printf(pilots_helmet_missing_segment_switch_format, moby->h);
         }
         if (moby->b0 != 0xFF)
             FUN_L00_002502a0_2e03a0(moby->b0);
