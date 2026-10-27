@@ -2459,7 +2459,7 @@ typedef struct ShipD_5E48 {
 extern Ship_5E48 *D_L10_001742D8 __attribute__((section(".data")));
 extern char *create_rocket(void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
 extern char D_L10_00179890[];
-extern char D_L10_001DD390[];
+extern char blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern float FUN_L00_00258110_c(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
@@ -2520,7 +2520,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
 
     FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->i140 == -1) {
-        DebugPrint(D_L10_001DD390, ship->sA6, ship->hA8);
+        DebugPrint(blarg_ship_missing_path_error_format, ship->sA6, ship->hA8);
         goto del;
     }
     FUN_L10_002e5968_c((char *)ship);
