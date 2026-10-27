@@ -463,7 +463,7 @@ extern int fast_bsphere_check() __asm__("FUN_001fa728");
 extern int free_effect_particle() __asm__("FUN_L00_00267a08");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern unsigned char D_0013F5E0[];
-extern volatile unsigned char D_0015EDB6;
+extern volatile unsigned char nanotech_ball_invulnerability_pickup_enabled __asm__("D_0015EDB6");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -618,13 +618,13 @@ void nanotech_ball_update(Moby *moby) {
             int max_hp = hero_max_health;
             if (player->vehicle_mode == 1) max_hp = 4;
             if (moby->state != 1 && D_L00_0015F63C != 0 && ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && player->health.hp != 0
-                && (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp || (D_0015EDB6 != 0 && player->invulnerable_frames == 0))
+                && (player->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp || (nanotech_ball_invulnerability_pickup_enabled != 0 && player->invulnerable_frames == 0))
                 && func_001F9D10_2D9EA0(&moby->pos, &player->motion.pos) < 10.0f
                 && func_L00_002D9E30_2D9EA0(moby)) {
                 int i;
                 moby->state = 3;
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
-                if (D_0015EDB6 != 0) player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
+                if (nanotech_ball_invulnerability_pickup_enabled != 0) player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 data->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent, &player->gravity_dir, -nanotech_ball_collection_target_gravity_offset_gp);
                 func_001F9BD8_2D9EA0(&collection_target_or_end_tangent, &player->motion.pos, &collection_target_or_end_tangent);
@@ -715,7 +715,7 @@ void nanotech_ball_update(Moby *moby) {
             Hero *player = &hero;
             int max_hp = hero_max_health;
             if (player->vehicle_mode == 1) max_hp = 4;
-            if (player->health.hp == max_hp && player->invulnerable_frames != 0 && D_0015EDB6 != 0) {
+            if (player->health.hp == max_hp && player->invulnerable_frames != 0 && nanotech_ball_invulnerability_pickup_enabled != 0) {
                 int duration = func_001F9850_2D9EA0(nanotech_ball_full_health_invulnerable_collection_min_frames_gp);
                 if (data->h54 < duration) {
                     int i;
