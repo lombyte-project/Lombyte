@@ -95,14 +95,14 @@ void apply_npc_big_head_cheat(char *moby) {
 /* calls func_L12_002BD3D0 with two looked-up ids */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
 
-extern char D_L12_001F5480[];
+extern char level_12_effect_entries[] __asm__("D_L12_001F5480");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern void draw_textured_effect_list(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 
 void draw_level_12_effects(void) {
-    draw_textured_effect_list(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
+    draw_textured_effect_list(level_12_effect_entries, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
 }
 
 f32 D_L15_0017CA60[1] __attribute__((section(".data"))) = {0};
