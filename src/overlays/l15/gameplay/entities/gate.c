@@ -16,7 +16,7 @@
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 
-extern short D_L15_00161EC0 __attribute__((sda));
+extern short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") __attribute__((sda));
 void update_moby_yaw_from_linked_state(struct Moby *moby) __asm__("FUN_L15_002e46b0");
 
 void update_moby_yaw_from_linked_state(struct Moby *moby) {
@@ -27,11 +27,11 @@ void update_moby_yaw_from_linked_state(struct Moby *moby) {
         int linked_moby_state = (unsigned char)other[0x20];
         float step;
         if (linked_moby_state == 2) {
-            step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
+            step = *(float *)&linked_state_yaw_rate_degrees_gp * DEG_TO_RAD * frame_time;
             if (*(int *)(linked_moby_vars + 0x10) != 0)
                 step = -step;
         } else if (linked_moby_state == 4) {
-            step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
+            step = *(float *)&linked_state_yaw_rate_degrees_gp * DEG_TO_RAD * frame_time;
             if (*(int *)(linked_moby_vars + 0x10) == 0)
                 step = -step;
         } else {
