@@ -238,7 +238,7 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_31e468;
 
-extern float D_L05_00215C70[4][4];
+extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -294,7 +294,7 @@ void draw_moby_glow_sprite(char *m) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
-        scale_vector_xyz(pk.m[j], D_L05_00215C70[j], *(float *)(d + 0x70));
+        scale_vector_xyz(pk.m[j], glow_sprite_local_vertices[j], *(float *)(d + 0x70));
         transform_vector(pk.m[j], pk.m[j], M);
     }
     draw_geometry_quad(&pk, 0, 0);
