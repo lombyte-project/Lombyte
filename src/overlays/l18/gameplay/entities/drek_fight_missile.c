@@ -749,25 +749,25 @@ typedef struct {
 
 extern char *D_L18_001600EC;
 extern char *D_L18_001C6200[];
-extern unsigned char D_L18_001C6500[];
+extern unsigned char l18_block_indices_by_lookup_index[] __asm__("D_L18_001C6500");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void mark_block_entries_within_transform_xy_bounds(int block_lookup_index, int transform_record_index) {
     int i = 0;
     int k;
-    if (((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->n > i)
+    if (((Blk *)D_L18_001C6200[l18_block_indices_by_lookup_index[block_lookup_index]])->n > i)
         do {
             float entry_offset[4];
-            fast_vec_sub(entry_offset, ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e + i,
+            fast_vec_sub(entry_offset, ((Blk *)D_L18_001C6200[l18_block_indices_by_lookup_index[block_lookup_index]])->e + i,
                          D_L18_001600EC + (transform_record_index << 7) + 0x30);
             transform_vector_by_basis(entry_offset, entry_offset, D_L18_001600EC + (transform_record_index << 7) + 0x40);
             k = i;
             if (absolute_float(entry_offset[0]) < 1.0f && absolute_float(entry_offset[1]) < 1.0f) {
-                ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e[k].w0c = 0;
-                ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->e[k].w14 = 1.0f;
+                ((Blk *)D_L18_001C6200[l18_block_indices_by_lookup_index[block_lookup_index]])->e[k].w0c = 0;
+                ((Blk *)D_L18_001C6200[l18_block_indices_by_lookup_index[block_lookup_index]])->e[k].w14 = 1.0f;
             }
-        } while (++i < ((Blk *)D_L18_001C6200[D_L18_001C6500[block_lookup_index]])->n);
+        } while (++i < ((Blk *)D_L18_001C6200[l18_block_indices_by_lookup_index[block_lookup_index]])->n);
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3268), where it is exact; names translated to the US level program. */
 
