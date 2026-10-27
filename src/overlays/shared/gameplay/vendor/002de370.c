@@ -95,7 +95,7 @@ void initialize_transform_state_from_level_table(char *transform_state) {
 
 extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
-extern float D_L03_00166F30[];
+extern float transform_basis_reference_vector[] __asm__("D_L03_00166F30");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern void rotate_vector_by_scaled_angle_between_vectors(float, float *, float *, float *, int) __asm__("FUN_L03_0024e6f8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -122,7 +122,7 @@ void smooth_transform_orientation_toward_hero(char *transform_state) {
     rotate_vector_by_scaled_angle_between_vectors(rotation_scale, (float *)transform_state, (float *)result, direction, 1);
     normalize_vector_xyz(result, transform_state, 1.0f);
     qcopy(transform_state, result);
-    cross_vectors_xyz(transform_state + 0x10, transform_state, D_L03_00166F30);
+    cross_vectors_xyz(transform_state + 0x10, transform_state, transform_basis_reference_vector);
     normalize_vector_xyz(transform_state + 0x10, transform_state + 0x10, 1.0f);
     cross_vectors_xyz(transform_state + 0x20, transform_state + 0x10, transform_state);
 }
