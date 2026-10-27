@@ -18,7 +18,7 @@ struct Mmio {
     u32 unk8;
 };
 extern struct TtyState D_00154A50;
-extern u8 D_00154BC0[];
+extern u8 tty_receive_packet[] __asm__("D_00154BC0");
 extern s32 FlushCache();
 extern s32 init_block() __asm__("func_00119568");
 extern s32 sceDeci2Open();
@@ -35,7 +35,7 @@ s32 sceTtyInit(void) {
     state->unkC = 0;
     state->unk4 = 0;
     state->unk8 = 0;
-    state->unk14 = (u32)D_00154BC0 | 0x20000000;
+    state->unk14 = (u32)tty_receive_packet | 0x20000000;
     hdr = (struct Mmio *)((u32)D_00154A80 | 0x20000000);
     state->unk10 = (s32)hdr;
     hdr->unk2 = 0;
