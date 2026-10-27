@@ -2039,7 +2039,7 @@ typedef struct {
     s32 saved;
 } HpBarPalette;
 HpBarPalette hp_bar_palette __asm__("D_L11_0016216C") = {0};
-extern s32 D_L11_001F1088[]; /* the health bar palette as loaded */
+extern s32 ship_hp_bar_saved_palette[] __asm__("D_L11_001F1088"); /* the health bar palette as loaded */
 
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
@@ -2215,7 +2215,7 @@ void draw_ship_hud(struct Moby *moby) {
         /* CSM1 palette order: bits 3 and 4 of the entry swap */
         entry = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < fill) {
-            hp_bar_palette.clut[entry] = D_L11_001F1088[entry];
+            hp_bar_palette.clut[entry] = ship_hp_bar_saved_palette[entry];
         } else {
             hp_bar_palette.clut[entry] = 0x80000000;
         }
@@ -2800,7 +2800,7 @@ void jet_fighter_update(struct Moby *moby) {
             qcopy_nc(ship_vars->home_pos, &moby->pos);
             hp_bar_palette.clut = (s32 *)(D_L11_0015F420 + D_L11_0016DA80[0x4C].idx * 16);
             if (hp_bar_saved == 0) {
-                *(Block400_3290 *)D_L11_001F1088 = *(Block400_3290 *)hp_bar_palette.clut;
+                *(Block400_3290 *)ship_hp_bar_saved_palette = *(Block400_3290 *)hp_bar_palette.clut;
             }
             hp_bar_saved = 1;
             ship_vars->iF8 = 1;
