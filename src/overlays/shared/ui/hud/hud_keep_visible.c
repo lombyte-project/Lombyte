@@ -77,8 +77,8 @@ int hud_screen_position(HudElem *rec, int *x, int *y) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L00_0017E3A0[];
-extern float D_L00_0017E400[];
+extern float hud_slide_timer_active_scales[] __asm__("D_L00_0017E3A0");
+extern float hud_slide_timer_inactive_scales[] __asm__("D_L00_0017E400");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) __asm__("FUN_L00_00235ad8");
@@ -100,9 +100,9 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
         slide_index = 23;
     }
     if (hud_element->unk7C != 0) {
-        slide_scale = D_L00_0017E3A0[slide_index];
+        slide_scale = hud_slide_timer_active_scales[slide_index];
     } else {
-        slide_scale = D_L00_0017E400[slide_index];
+        slide_scale = hud_slide_timer_inactive_scales[slide_index];
     }
     if (hud_element->flags & 1) {
         dy = -truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->h) + 52.0f) + 0.5f);
