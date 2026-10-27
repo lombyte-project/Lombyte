@@ -2027,7 +2027,7 @@ extern void FUN_0022ca50(void);
 extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
-extern u8 D_00141345[];
+extern u8 vendor_item_0x18_purchased[] __asm__("D_00141345");
 extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
 extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
 extern s32 D_L00_00161E30;
@@ -2225,7 +2225,7 @@ void update_vendor_purchase(void) {
                     grant_inventory_item(CUR_ITEM.fD0, 1);
                     vendor_menu.f48 = CUR_ITEM.fD0;
                     if (CUR_ITEM.fD0 == 0x18) {
-                        D_00141345[0] = 1;
+                        vendor_item_0x18_purchased[0] = 1;
                     }
                     D_0015ED98 = D_0015ED98 - purchase_cost;
                     FUN_L00_0029a400_2ba78(vendor_menu.f40 != 0);
