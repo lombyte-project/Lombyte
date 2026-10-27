@@ -12,8 +12,8 @@ extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __
 #define PACKET_CURSOR (l09_packet.words)
 #define TEXTURE_CURSOR (gs_texture_allocation.cursor)
 extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
-extern char D_L09_0016D300[];
-extern long D_L09_00161FC0[];
+extern char level09_strip_texture_entry_table[] __asm__("D_L09_0016D300");
+extern long level09_strip_texture_transfer_packet[] __asm__("D_L09_00161FC0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
@@ -48,14 +48,14 @@ void queue_level09_strip_texture_packets(int first_texture_index, int second_tex
     } else {
         int *packet;
         long *words;
-        int a_second = ((TextureEntry *)D_L09_0016D300)[first_texture_index].second;
-        int a_first = ((TextureEntry *)D_L09_0016D300)[first_texture_index].first;
-        int b_second = ((TextureEntry *)D_L09_0016D300)[second_texture_index].second;
-        int b_first = ((TextureEntry *)D_L09_0016D300)[second_texture_index].first;
+        int a_second = ((TextureEntry *)level09_strip_texture_entry_table)[first_texture_index].second;
+        int a_first = ((TextureEntry *)level09_strip_texture_entry_table)[first_texture_index].first;
+        int b_second = ((TextureEntry *)level09_strip_texture_entry_table)[second_texture_index].second;
+        int b_first = ((TextureEntry *)level09_strip_texture_entry_table)[second_texture_index].first;
 
-        D_L09_00161FC0[0] = 0x0800000000000400L;
-        D_L09_00161FC0[1] = 0;
-        FUN_L02_0024fca0(&D_L09_00161FC0[2], texture_vertices + (a_first << 4), texture_vertices + (a_second << 4),
+        level09_strip_texture_transfer_packet[0] = 0x0800000000000400L;
+        level09_strip_texture_transfer_packet[1] = 0;
+        FUN_L02_0024fca0(&level09_strip_texture_transfer_packet[2], texture_vertices + (a_first << 4), texture_vertices + (a_second << 4),
                          texture_vertices + (b_first << 4), texture_vertices + (b_second << 4), 0x1000);
         PACKET_CURSOR[0] = 0x10000006;
         PACKET_CURSOR[1] = 0;
@@ -78,7 +78,7 @@ void queue_level09_strip_texture_packets(int first_texture_index, int second_tex
         words[11] = 0x53;
         PACKET_CURSOR = packet + 28;
         PACKET_CURSOR[0] = 0x30000401;
-        PACKET_CURSOR[1] = (int)D_L09_00161FC0;
+        PACKET_CURSOR[1] = (int)level09_strip_texture_transfer_packet;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000401;
         PACKET_CURSOR += 4;
