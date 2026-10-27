@@ -1043,10 +1043,10 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
         }
     }
 }
-extern char D_L08_001FC220[];
+extern char flickering_mesh_texture_width_zero_message[] __asm__("D_L08_001FC220");
 char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max texture tile count (8)\n";
-extern char D_L08_001FC2A0[];
-extern char D_L08_001FC2D0[];
+extern char flickering_mesh_texture_height_zero_message[] __asm__("D_L08_001FC2A0");
+extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_001FC2D0");
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -1075,16 +1075,16 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         light_vars->particle_timer = light_vars->particle_ticks;
         qcopy(&light_vars->light_pos, at);
         if (light_vars->texture_w_count == 0.0f) {
-            DebugPrint(D_L08_001FC220);
+            DebugPrint(flickering_mesh_texture_width_zero_message);
             light_vars->texture_w_count = 1.0f;
         } else if (8.0f < light_vars->texture_h_count) {
             DebugPrint(D_L08_001FC250, light_vars->texture_h_count);
         }
         if (light_vars->texture_h_count == 0.0f) {
-            DebugPrint(D_L08_001FC2A0);
+            DebugPrint(flickering_mesh_texture_height_zero_message);
             light_vars->texture_h_count = 1.0f;
         } else if (8.0f < light_vars->texture_w_count) {
-            DebugPrint(D_L08_001FC2D0, light_vars->texture_w_count);
+            DebugPrint(flickering_mesh_texture_width_tile_limit_warning, light_vars->texture_w_count);
         }
         for (i = 0; i < 8; i++) {
             light_vars->noise[i] = random_float_between(light_vars->jitter, 1.0f);
