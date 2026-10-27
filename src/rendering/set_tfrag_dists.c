@@ -3,7 +3,7 @@
 extern f32 D_00160EA0[3];
 extern s32 tfrag_lod_dists_raw[3] __asm__("D_00160EB0");
 extern f32 fog_params[] __asm__("D_0018CF20");
-extern f32 D_001DE7F0[4][4];
+extern f32 tfrag_range_coefficients[4][4] __asm__("D_001DE7F0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 
@@ -20,17 +20,17 @@ void set_tfrag_dists(void) {
     scaled_near_range = D_00160EA0[2] * fog_params[0];
     ab = 1.0f / (scaled_far_range - scaled_middle_range);
     bc = 1.0f / (scaled_middle_range - scaled_near_range);
-    fast_mem_zero16(D_001DE7F0, 0x40);
-    D_001DE7F0[0][0] = ab * 0.5f;
-    D_001DE7F0[0][1] = -ab;
-    D_001DE7F0[1][0] = bc * 0.5f;
-    D_001DE7F0[1][1] = -bc;
-    D_001DE7F0[2][0] = scaled_middle_range * ab * -0.5f;
-    D_001DE7F0[2][1] = scaled_far_range * ab;
-    D_001DE7F0[3][0] = scaled_near_range * bc * -0.5f;
-    D_001DE7F0[3][1] = scaled_middle_range * bc;
-    D_001DE7F0[1][3] = scaled_middle_range;
-    D_001DE7F0[0][3] = scaled_far_range;
+    fast_mem_zero16(tfrag_range_coefficients, 0x40);
+    tfrag_range_coefficients[0][0] = ab * 0.5f;
+    tfrag_range_coefficients[0][1] = -ab;
+    tfrag_range_coefficients[1][0] = bc * 0.5f;
+    tfrag_range_coefficients[1][1] = -bc;
+    tfrag_range_coefficients[2][0] = scaled_middle_range * ab * -0.5f;
+    tfrag_range_coefficients[2][1] = scaled_far_range * ab;
+    tfrag_range_coefficients[3][0] = scaled_near_range * bc * -0.5f;
+    tfrag_range_coefficients[3][1] = scaled_middle_range * bc;
+    tfrag_range_coefficients[1][3] = scaled_middle_range;
+    tfrag_range_coefficients[0][3] = scaled_far_range;
 }
 
 extern __typeof__(set_tfrag_dists) func_00233068 __attribute__((alias("FUN_00233068")));
