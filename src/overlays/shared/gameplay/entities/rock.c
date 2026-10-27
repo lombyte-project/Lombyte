@@ -195,8 +195,8 @@ typedef struct {
     int count;
 } Dmg_2F7E08;
 
-extern Cols_2F7E08 D_L01_0020B470;
-extern Cols_2F7E08 D_L01_0020B488;
+extern Cols_2F7E08 l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
+extern Cols_2F7E08 l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
 extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
 extern char *D_L01_0015FFD8_c __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E533[];
@@ -327,8 +327,8 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         for (j = 0; j < rings; j++) {
             float speed = random_float_between_c(8.0f, 10.0f) * D_0015ED6C - fade * D_0015ED6C;
-            Cols_2F7E08 start_colors = D_L01_0020B470;
-            Cols_2F7E08 end_colors = D_L01_0020B488;
+            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
             speed = speed * size_scale;
             FUN_L00_0026a9f0(&(*(Vec_2F7E08 *)&moby->pos), data, start_colors.c[random_integer_below_c2(6)], end_colors.c[random_integer_below_c2(6)], size_scale * 400000.0f,
                               FUN_L00_00257b90_c(scale_game_frames_alt(0x1E), scale_game_frames_alt(0x28)) / rate_divisor,
@@ -338,8 +338,8 @@ void update_explosive_projectile(struct Moby *moby) {
                               FUN_L00_00257b90_c(scale_game_frames_alt(0x1E), scale_game_frames_alt(0x28)) / rate_divisor, 0, 8, speed * 0.5f);
         }
         for (flash = 0; flash < 5; flash++) {
-            Cols_2F7E08 start_colors = D_L01_0020B470;
-            Cols_2F7E08 end_colors = D_L01_0020B488;
+            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
             Vec_2F7E08 flash_emission_vector;
             {
                 Vec_2F7E08 random_dir;
