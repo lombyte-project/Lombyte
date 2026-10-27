@@ -5,7 +5,7 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
 
-extern u8 D_00100080[];
+extern u8 moby_draw_vu0_micro_program[] __asm__("D_00100080");
 extern u8 D_0015FED0[];
 extern s32 vu1_chain_limit __asm__("D_00160F08");
 extern void noop_core_callback_secondary() __asm__("func_001F21B8");
@@ -20,7 +20,7 @@ void draw_mobys_setup(void) {
     register s32 callbackArg;
     vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
     font_state = 6;
-    vu0_load_micro_program(D_00100080);
+    vu0_load_micro_program(moby_draw_vu0_micro_program);
     vu1_add_g_sregister(0x47, 0x5360B);
     current = render_packet_cursor.addr;
     D_0015FF0C = current;
