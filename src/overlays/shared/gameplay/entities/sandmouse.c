@@ -433,7 +433,7 @@ extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
 extern struct Moby *l01_sandmouse_projectile_target_candidates[] __asm__("D_L01_001ABE80");
-extern CollisionHit D_L01_001742C0;
+extern CollisionHit collision_hit __asm__("D_L01_001742C0");
 /* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
    best lock-on target for moby seen from `from` along `ang`. */
 struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *reference_rotation, f32 yawMax, f32 pitchMax,
@@ -476,7 +476,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
         score *= FUN_001f9988_30d308(distance_xyz_30d308(from, tp));
         if (!(score < bestScore)) continue;
         if (collision_line_30d308(from, tp, 0, moby, 0)) {
-            hit = (struct Moby *)D_L01_001742C0.moby;
+            hit = (struct Moby *)collision_hit.moby;
             if (hit == 0 || hit == hero.moby || hit == 0 || hit->pclass == 0
                 || ((TargetClass_30d308 *)hit->pclass)->kind != candidate_target_kind) {
                 continue;
