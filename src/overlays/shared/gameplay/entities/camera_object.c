@@ -304,8 +304,8 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L00_001D7360[][4];
 extern float D_L00_001D73F0[][2];
-extern int D_L00_001D7438_d[] __asm__("D_L00_001D7438") __attribute__((section(".data")));
-extern int D_L00_001D7460_c[][4] __asm__("D_L00_001D7460");
+extern int vendor_sparkle_colors[] __asm__("D_L00_001D7438") __attribute__((section(".data")));
+extern int vendor_sparkle_quad_corners[][4] __asm__("D_L00_001D7460");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern float vendor_sparkle_uv_scroll __asm__("D_L00_00161394") __attribute__((sda));
 extern float vendor_glow_phase __asm__("D_L00_00161398") __attribute__((sda));
@@ -352,10 +352,10 @@ void draw_vendor_effects(char *m) {
     pk[1] = get_effect_texture(0x18);
 
     for (k = 0; k < 4; k++) {
-        transform_vector_by_basis(q[0], D_L00_001D7360[D_L00_001D7460_c[k][0]], mtx);
-        transform_vector_by_basis(q[1], D_L00_001D7360[D_L00_001D7460_c[k][1]], mtx);
-        transform_vector_by_basis(q[2], D_L00_001D7360[D_L00_001D7460_c[k][2]], mtx);
-        transform_vector_by_basis(q[3], D_L00_001D7360[D_L00_001D7460_c[k][3]], mtx);
+        transform_vector_by_basis(q[0], D_L00_001D7360[vendor_sparkle_quad_corners[k][0]], mtx);
+        transform_vector_by_basis(q[1], D_L00_001D7360[vendor_sparkle_quad_corners[k][1]], mtx);
+        transform_vector_by_basis(q[2], D_L00_001D7360[vendor_sparkle_quad_corners[k][2]], mtx);
+        transform_vector_by_basis(q[3], D_L00_001D7360[vendor_sparkle_quad_corners[k][3]], mtx);
 
         qd.v[0][0] = *(float *)(m + 0x10) + q[0][0] * *(float *)(p + 0x90);
         qd.v[0][1] = *(float *)(m + 0x14) + q[0][1] * *(float *)(p + 0x90);
@@ -370,15 +370,15 @@ void draw_vendor_effects(char *m) {
         qd.v[3][1] = *(float *)(m + 0x14) + q[3][1] * *(float *)(p + 0x90);
         qd.v[3][2] = *(float *)(m + 0x18) + q[3][2];
 
-        i0 = D_L00_001D7460_c[k][0];
-        i1 = D_L00_001D7460_c[k][1];
-        i2 = D_L00_001D7460_c[k][2];
-        i3 = D_L00_001D7460_c[k][3];
+        i0 = vendor_sparkle_quad_corners[k][0];
+        i1 = vendor_sparkle_quad_corners[k][1];
+        i2 = vendor_sparkle_quad_corners[k][2];
+        i3 = vendor_sparkle_quad_corners[k][3];
         off = vendor_sparkle_uv_scroll;
-        qd.col[0] = D_L00_001D7438_d[i0];
-        qd.col[1] = D_L00_001D7438_d[i1];
-        qd.col[2] = D_L00_001D7438_d[i2];
-        qd.col[3] = D_L00_001D7438_d[i3];
+        qd.col[0] = vendor_sparkle_colors[i0];
+        qd.col[1] = vendor_sparkle_colors[i1];
+        qd.col[2] = vendor_sparkle_colors[i2];
+        qd.col[3] = vendor_sparkle_colors[i3];
         t0 = D_L00_001D73F0;
         t4 = (float (*)[2])&t0[0][1];
         qd.uv[0][0] = t0[i0][0];
