@@ -1075,7 +1075,7 @@ typedef struct {
 
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013E529 __attribute__((section(".data")));
-extern char *D_001413A0[];
+extern char *suck_cannon_moby_slots[] __asm__("D_001413A0");
 extern G_2db508 D_0013F350;
 extern G_2db508 D_0013F350_a __asm__("D_0013F350");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1109,8 +1109,8 @@ int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, vo
                 *(float *)(suction_record + 0x64) = vector_distance_xy(candidate_moby + 0x10, suction_origin);
                 for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
                     G_2db508 *gg = &D_0013F350;
-                    if (D_001413A0[i] == 0) {
-                        D_001413A0[i] = candidate_moby;
+                    if (suck_cannon_moby_slots[i] == 0) {
+                        suck_cannon_moby_slots[i] = candidate_moby;
                         *(short *)(suction_record + 0x6A) = i;
                         gg->i207C++;
                         break;
