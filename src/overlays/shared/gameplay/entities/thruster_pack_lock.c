@@ -428,7 +428,7 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
         }
     }
 }
-extern unsigned char D_0015EDB2;
+extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
 extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
@@ -464,7 +464,7 @@ int draw_linked_moby_trails(char *moby) {
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
     }
-    if (D_0015EDB2 != 0) {
+    if (linked_moby_trail_long_span_enabled != 0) {
         *(float *)&D_L11_001623F0_d = 16.0f;
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
