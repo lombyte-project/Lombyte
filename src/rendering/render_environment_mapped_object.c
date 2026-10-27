@@ -42,7 +42,7 @@ extern Vec4 *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((
 extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
 extern EnvironmentCameraState D_00186F40;
 extern FloatVector4 camera_position __asm__("D_00187080");
-extern Vec4 D_001DC4E0[];
+extern Vec4 environment_mapping_transformed_vertex_positions[] __asm__("D_001DC4E0");
 extern float environment_mapping_vertex_uvs[][2] __asm__("D_001DCB40");
 extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");
 
@@ -120,9 +120,9 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
         transition_fraction =
             convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_ticks(0x3C));
         for (element_index = 0; element_index < vertex_count; element_index++) {
-            transform_vector(&D_001DC4E0[element_index], &positions[element_index],
+            transform_vector(&environment_mapping_transformed_vertex_positions[element_index], &positions[element_index],
                              object_transform);
-            subtract_vectors(view_direction, &D_001DC4E0[element_index], camera_position);
+            subtract_vectors(view_direction, &environment_mapping_transformed_vertex_positions[element_index], camera_position);
             normalize_vector(view_direction, view_direction, 1.0f);
             transform_vector(normal, &normals[element_index], object_transform);
             normalize_vector(normal, normal, 0.1f);
@@ -152,12 +152,12 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             for (element_index = 0; element_index < vertex_count; element_index++) {
                 environment_mapping_saved_vertex_uvs[element_index][0] = environment_mapping_vertex_uvs[element_index][0];
                 environment_mapping_saved_vertex_uvs[element_index][1] = environment_mapping_vertex_uvs[element_index][1];
-                transform_vector(&D_001DC4E0[element_index], &positions[element_index],
+                transform_vector(&environment_mapping_transformed_vertex_positions[element_index], &positions[element_index],
                                  object_transform);
             }
         } else {
             for (element_index = 0; element_index < vertex_count; element_index++) {
-                transform_vector(&D_001DC4E0[element_index], &positions[element_index],
+                transform_vector(&environment_mapping_transformed_vertex_positions[element_index], &positions[element_index],
                                  object_transform);
             }
         }
@@ -167,7 +167,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
         for (corner_index = 0; corner_index < 4; corner_index++) {
             int vertex_index = indexed_quads[element_index].corners[corner_index].vertex_index;
 
-            qcopy(&quad_positions[corner_index], &D_001DC4E0[vertex_index]);
+            qcopy(&quad_positions[corner_index], &environment_mapping_transformed_vertex_positions[vertex_index]);
             texture_coordinates[corner_index][0] = environment_mapping_vertex_uvs[vertex_index][0];
             texture_coordinates[corner_index][1] = environment_mapping_vertex_uvs[vertex_index][1];
         }
