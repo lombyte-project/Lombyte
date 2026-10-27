@@ -103,7 +103,7 @@ extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((sectio
 extern char D_L02_00161CF0[];
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
-extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
+extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
 extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
@@ -281,7 +281,7 @@ void skids_agent_update(struct Moby *moby) {
             moby_point_position(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
             build_moby_bone_transform(moby, 2, mtx);
             copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
-            transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->rot_row0);
+            transform_vector_by_basis(&offset, skids_agent_prop_local_offset, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
             FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
         }
