@@ -430,9 +430,9 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
 /* smooths the moby's data floats and rebuilds its orientation axes */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
 
-extern char D_L03_00166F40[];
-extern short D_L03_00161E70 __attribute__((sda));
-extern short D_L03_00161E74 __attribute__((sda));
+extern char camera_look_offset_direction[] __asm__("D_L03_00166F40");
+extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
+extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -451,13 +451,13 @@ void rebuild_camera_orientation_axes(void *camera_instance) {
     float look_offset[4];
     qcopy(look_point, camera_data);
     camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
-                             *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
-    normalize_vector_xyz(look_offset, D_L03_00166F40, camera_target_data[5]);
+                             *(float *)&camera_target_height_stiffness, *(float *)&camera_target_height_damping, 0.0f);
+    normalize_vector_xyz(look_offset, camera_look_offset_direction, camera_target_data[5]);
     add_vector_xyz(look_point, look_offset, look_point);
     subtract_vector_xyz(look_direction, look_point, camera + 0x30);
     normalize_vector_xyz(camera, look_direction, 1.0f);
     qcopy(camera + 0x40, camera);
-    cross_vectors_xyz(camera + 0x10, camera, D_L03_00166F40 - 0x10);
+    cross_vectors_xyz(camera + 0x10, camera, camera_look_offset_direction - 0x10);
     normalize_vector_xyz(camera + 0x10, camera + 0x10, 1.0f);
     cross_vectors_xyz(camera + 0x20, camera + 0x10, camera);
 }
