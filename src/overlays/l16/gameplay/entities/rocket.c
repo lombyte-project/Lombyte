@@ -382,11 +382,11 @@ void update_moby_hit_triggered_removal(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002DF780), where it is exact; names translated to the US level program. */
 
-extern float D_L16_00161C74;
+extern float challenge_layout_param __asm__("D_L16_00161C74");
 
 void challenge_set_layout_param(float new_value) __asm__("FUN_L16_002de3b8");
 void challenge_set_layout_param(float new_value) {
-    D_L16_00161C74 = new_value;
+    challenge_layout_param = new_value;
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
