@@ -107,7 +107,7 @@ extern V D_L00_00166DC0[];
 extern Own l00_pause_menu_exit_guarded_page_owner __asm__("D_L00_001B71F0");
 extern Own D_L00_001B7DD0;
 extern Own D_L00_001B80E0;
-extern Own D_L00_001B63F8;
+extern Own l00_pause_menu_self_transition_animation_guard_page_owner __asm__("D_L00_001B63F8");
 extern Own D_L00_001B78F0;
 extern Own D_L00_001B6820;
 extern G841F0 D_L00_001841F0;
@@ -586,7 +586,7 @@ void update_pause_menu(void) {
         flag = (D_L00_001B9CF0.unk8 == D_L00_001B9CF0.owner->unk38);
         if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8 &&
             D_L00_001B9CF0.owner != &l00_pause_menu_exit_guarded_page_owner && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
-            D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &D_L00_001B63F8 &&
+            D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &l00_pause_menu_self_transition_animation_guard_page_owner &&
             D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
             if (D_L00_001B9CF0.state != 0x23) {
                 flag = flag ^ 1;
