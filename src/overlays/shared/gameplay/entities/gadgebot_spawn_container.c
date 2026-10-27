@@ -172,13 +172,13 @@ extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern char D_L06_00167540[];
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 square_root(f32) __asm__("func_001F9988");
-extern float D_L06_001D3290[][4];
-extern float D_L06_001D38C0[][2];
-extern float D_L06_001D3A90[][4];
-extern float D_L06_001D3D30[][4];
-extern float D_L06_001D40C0[][4];
-extern float D_L06_001D4360[][2];
-extern float D_L06_001D4530[][4];
+extern float gadgebot_container_local_vertices[][4] __asm__("D_L06_001D3290");
+extern float gadgebot_container_static_uvs[][2] __asm__("D_L06_001D38C0");
+extern float gadgebot_container_face_normals[][4] __asm__("D_L06_001D3A90");
+extern float gadgebot_container_vertex_normals[][4] __asm__("D_L06_001D3D30");
+extern float gadgebot_container_face_positions[][4] __asm__("D_L06_001D40C0");
+extern float gadgebot_container_reflection_uvs[][2] __asm__("D_L06_001D4360");
+extern float gadgebot_container_transformed_vertices[][4] __asm__("D_L06_001D4530");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern short D_L06_00161870 __attribute__((sda));
 extern short D_L06_00161874 __attribute__((sda));
@@ -224,12 +224,12 @@ void draw_gadgebot_spawn_container(char *moby) {
         near = 1;
     }
     if (near) {
-        float *uv = &D_L06_001D4360[0][0];
+        float *uv = &gadgebot_container_reflection_uvs[0][0];
         for (i = 0; i < 57; i++) {
-            transform_vector(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
-            subtract_vector_xyz(direction, D_L06_001D4530[i], D_L06_00167540);
+            transform_vector(gadgebot_container_transformed_vertices[i], gadgebot_container_local_vertices[i], matrix);
+            subtract_vector_xyz(direction, gadgebot_container_transformed_vertices[i], D_L06_00167540);
             fast_vec_normalize(direction, direction, 1.0f);
-            transform_vector(normal, D_L06_001D3D30[i], matrix);
+            transform_vector(normal, gadgebot_container_vertex_normals[i], matrix);
             fast_vec_normalize(normal, normal, *(float *)&D_L06_0016188C);
             scale = fast_vec_dot(normal, direction);
             fast_vec_scale(projected, normal, scale + scale);
@@ -243,7 +243,7 @@ void draw_gadgebot_spawn_container(char *moby) {
         }
     } else {
         for (i = 0; i < 57; i++) {
-            transform_vector(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+            transform_vector(gadgebot_container_transformed_vertices[i], gadgebot_container_local_vertices[i], matrix);
         }
     }
     quad.tex = get_effect_texture(*(int *)&D_L06_00161884);
@@ -259,22 +259,22 @@ void draw_gadgebot_spawn_container(char *moby) {
     i = 0;
     do {
         float *center = facePos;
-        transform_point(center, D_L06_001D40C0[i], matrix);
+        transform_point(center, gadgebot_container_face_positions[i], matrix);
         subtract_vector_xyz(direction, center, D_L06_00167540);
         fast_vec_normalize(direction, direction, 1.0f);
-        transform_vector_by_basis(center, D_L06_001D3A90[i], matrix);
+        transform_vector_by_basis(center, gadgebot_container_face_normals[i], matrix);
         if (!(0.0f < fast_vec_dot(direction, center))) {
             short *indices = D_L06_001D3620[i];
             int j;
             for (j = 0; j < 4; j++, indices += 2) {
                 short vertex = indices[0];
-                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+                qcopy(quad.corner[j], gadgebot_container_transformed_vertices[vertex]);
                 if (near) {
-                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
-                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                    quad.uv[j][0] = gadgebot_container_reflection_uvs[vertex][0];
+                    quad.uv[j][1] = gadgebot_container_reflection_uvs[vertex][1];
                 } else {
-                    quad.uv[j][0] = D_L06_001D38C0[indices[1]][0];
-                    quad.uv[j][1] = D_L06_001D38C0[indices[1]][1];
+                    quad.uv[j][0] = gadgebot_container_static_uvs[indices[1]][0];
+                    quad.uv[j][1] = gadgebot_container_static_uvs[indices[1]][1];
                 }
             }
             fast_draw_quad_real(&quad, 0, 0);
