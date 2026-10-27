@@ -1,0 +1,17 @@
+diff --git a/gcc/gcse.c b/gcc/gcse.c
+index 57407f3..0a30cdd 100644
+--- a/gcc/gcse.c
++++ b/gcc/gcse.c
+@@ -762,8 +762,10 @@ gcse_main (f, file)
+       bytes_used = 4 * n_basic_blocks * sizeof (int_list_ptr);
+       /* Compute the predecessors and successors for each basic block.
+ 	 A nonzero return value indicates that edges were split and thus
+-	 basic block and preds/succs info must be recomputed.  */
+-      if (compute_preds_succs (s_preds, s_succs, num_preds, num_succs, 1) != 0)
++	 basic block and preds/succs info must be recomputed.  Critical
++	 edges are not split: like gcc 2.95.3, the retail compiler's GCSE
++	 runs on the flow graph as it is.  */
++      if (compute_preds_succs (s_preds, s_succs, num_preds, num_succs, 0) != 0)
+ 	{
+ 	  /* Call find_basic_blocks to compute the new number of basic
+ 	     blocks and new edge data.  */

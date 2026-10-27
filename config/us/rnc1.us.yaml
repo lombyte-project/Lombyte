@@ -2064,7 +2064,7 @@ segments:
           - [0x13995c, textbin, text_gap_002389dc_after_fun_002386e8]
           - [0x139960, c, ui/menus/render_vendor_item_details_pass]
           - [0x139e84, textbin, text_gap_00238f04_before_fun_00238f08]
-          - [0x139e88, c, assembly/textbin/gameplay/vendor/render_vendor_buy_label_pass]
+          - [0x139e88, c, gameplay/vendor/render_vendor_buy_label_pass]
           - [0x13a0dc, textbin, text_gap_0023915c_before_fun_00239160]
           - [0x13a0e0, c, gameplay/vendor/render_vendor_purchase_prompt_pass]
           - [0x13a29c, textbin, text_gap_0023931c_after_fun_00239160]

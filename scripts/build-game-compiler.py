@@ -47,7 +47,7 @@ ARCHIVE_TOP = "gnu-ee-binutils-gcc"
 PATCH_ORDER = (
     "0000", "0001", "0016", "0020", "0022", "0027", "0029", "0037", "0044",
     "0045", "0047", "0048", "0049", "0051", "0052", "0053", "0054", "0055",
-    "0056", "0057", "0058", "0060", "0061", "0062", "0064",
+    "0056", "0057", "0058", "0060", "0061", "0062", "0064", "0065",
 )
 
 # The SDK assembler: the archive's GNU as with none of the game's assembler
@@ -71,7 +71,7 @@ HOST_OBJECTS_CFLAGS_MK = "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 # default --work directory inside the checkout. Rebuilds on other hosts or paths embed their own build paths and
 # may differ; the full-ELF gate (`make elf`) is the check that matters.
 REFERENCE_HASHES = {
-    "cc1": "e743fc337f997842d143bb1e870ba3d6a5aecd7056700c0bbf6672d8d2f17850",
+    "cc1": "aa5fa2fc779ac642a728a37aed3924c47535c5befb36e4f40c64b8067ab74396",
     "cpp": "45b15c9c451eb003e4565a571120974680164d5537fa94c5bfa336075e25f064",
     "xgcc": "799912e0b2174799b9aa8e647e00ccfaabd64b22e13dc35496b46ebb9bc98a99",
     "as": "fe87060e6ff8660bac31474cac6c41ee4d9d44e5878f54f75d8dfcc35bc9022f",
