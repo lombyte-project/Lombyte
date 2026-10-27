@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_001531D0[];
+extern u8 gs_load_image_dma_timeout_message[] __asm__("D_001531D0");
 extern s32 scePrintf();
 s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     u32 count;
@@ -7,7 +7,7 @@ s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     count = 0;
     while (*(volatile u32 *)0x1000A000 & 0x100) {
         if (count++ > 0x1000000) {
-            scePrintf(D_001531D0);
+            scePrintf(gs_load_image_dma_timeout_message);
             return -1;
         }
     }
@@ -20,7 +20,7 @@ s32 sceGsExecLoadImage(u8 *lp, u8 *image_payload) {
     *(volatile u32 *)0x1000A000 = 0x101;
     while (*(volatile u32 *)0x1000A000 & 0x100) {
         if (count++ > 0x1000000) {
-            scePrintf(D_001531D0);
+            scePrintf(gs_load_image_dma_timeout_message);
             return -1;
         }
     }
