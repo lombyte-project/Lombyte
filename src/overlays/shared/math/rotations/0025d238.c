@@ -739,7 +739,7 @@ typedef struct { int v[6]; } S6y10;
 extern S6y10 D_L00_001E9030;
 extern S6y10 D_L00_001E9048;
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
-extern float D_L00_001B02F0[];
+extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -799,15 +799,15 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
-            D_L00_001B02F0[9] = flash;
-            D_L00_001B02F0[10] = flash;
-            D_L00_001B02F0[8] = flash;
+            explosion_flash_descriptor[9] = flash;
+            explosion_flash_descriptor[10] = flash;
+            explosion_flash_descriptor[8] = flash;
         } else {
-            D_L00_001B02F0[9] = 13.0f;
-            D_L00_001B02F0[10] = 13.0f;
-            D_L00_001B02F0[8] = 13.0f;
+            explosion_flash_descriptor[9] = 13.0f;
+            explosion_flash_descriptor[10] = 13.0f;
+            explosion_flash_descriptor[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, burst_position, 0, 0);
+        mine_camera_blast(explosion_flash_descriptor, burst_position, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
@@ -845,15 +845,15 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
-            D_L00_001B02F0[9] = flash;
-            D_L00_001B02F0[10] = flash;
-            D_L00_001B02F0[8] = flash;
+            explosion_flash_descriptor[9] = flash;
+            explosion_flash_descriptor[10] = flash;
+            explosion_flash_descriptor[8] = flash;
         } else {
-            D_L00_001B02F0[9] = 13.0f;
-            D_L00_001B02F0[10] = 13.0f;
-            D_L00_001B02F0[8] = 13.0f;
+            explosion_flash_descriptor[9] = 13.0f;
+            explosion_flash_descriptor[10] = 13.0f;
+            explosion_flash_descriptor[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, effect_position, 0, 0);
+        mine_camera_blast(explosion_flash_descriptor, effect_position, 0, 0);
     }
 }
 #define NOT_SDA
