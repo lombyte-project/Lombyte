@@ -1222,8 +1222,8 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
-extern short D_L14_0016147C __attribute__((sda));
-extern short D_L14_00161480 __attribute__((sda));
+extern short blarg_heavy_interceptor_glow_minimum_camera_separation_gp __asm__("D_L14_0016147C") __attribute__((sda));
+extern short blarg_heavy_interceptor_camera_pulled_glow_default_color_gp __asm__("D_L14_00161480") __attribute__((sda));
 void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) __asm__("FUN_L14_002ae260");
 
 void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
@@ -1248,7 +1248,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     glow_to_camera_distance = vector_length_xyz(glow_to_camera_vector);
     if (0.0f < glow_to_camera_distance) {
         float camera_pull_distance = *(float *)(d + 0x218);
-        float camera_distance_margin = glow_to_camera_distance - *(float *)&D_L14_0016147C;
+        float camera_distance_margin = glow_to_camera_distance - *(float *)&blarg_heavy_interceptor_glow_minimum_camera_separation_gp;
         if (camera_distance_margin < camera_pull_distance) {
             camera_pull_distance = camera_distance_margin;
             if (camera_distance_margin < 0.0f)
@@ -1272,7 +1272,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
         pk.col[1] = col;
         pk.col[0] = col;
     } else {
-        col = *(u32 *)&D_L14_00161480;
+        col = *(u32 *)&blarg_heavy_interceptor_camera_pulled_glow_default_color_gp;
         pk.col[3] = col;
         pk.col[2] = col;
         pk.col[1] = col;
