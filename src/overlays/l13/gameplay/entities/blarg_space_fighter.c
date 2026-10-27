@@ -2361,7 +2361,7 @@ extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
 char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
-extern char D_L13_001F4DD0[];
+extern char linked_switch_closed_debug_format[] __asm__("D_L13_001F4DD0");
 extern int frame_count __asm__("D_L13_0015F5CC");
 
 typedef struct {
@@ -2491,7 +2491,7 @@ void update_linked_switch_group(char *moby) {
 
                 FUN_0022da68(2, 0, moby);
                 set_moby_list_state((unsigned char)moby[0x21], 3);
-                debug_print(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
+                debug_print(linked_switch_closed_debug_format, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                 moby[0x20] = 3;
             } else if (fast_dec_timer_s16(&data->unk72) != 0) {
                 FUN_0022da68(0, 0, moby);
