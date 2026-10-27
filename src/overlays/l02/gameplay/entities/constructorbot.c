@@ -19,7 +19,7 @@ typedef struct {
 extern f32 shard_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58") __attribute__((sda));
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
-extern LevelFx D_L02_001B2680;
+extern LevelFx l02_shard_trail_particle_tint_source __asm__("D_L02_001B2680");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -67,7 +67,7 @@ void update_shard_debris(struct Moby *moby) {
         particle = spawn_particle(&trail_position, &back, particle_frame_count, D_L02_00161F5C >> 24, D_L02_00161F5C & 0xFFFFFF, 3,
                                  rand_range(300000.0f, 500000.0f), 10000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle) {
-            particle[2] = *D_L02_001B2680.tint;
+            particle[2] = *l02_shard_trail_particle_tint_source.tint;
             particle[9] = float_to_int(4.0f) - 0x80;
         }
         vec_add(&trail_position, &trail_position, &half);
