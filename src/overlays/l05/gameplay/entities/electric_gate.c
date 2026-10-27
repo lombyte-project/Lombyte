@@ -165,15 +165,15 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
-extern int D_L05_00161D3C __attribute__((sda));
-extern int D_L05_00161D40 __attribute__((sda));
-extern int D_L05_00161D44 __attribute__((sda));
-extern int D_L05_00161D48 __attribute__((sda));
+extern int l05_electric_gate_outer_color_blend_start __asm__("D_L05_00161D3C") __attribute__((sda));
+extern int l05_electric_gate_outer_color_blend_end __asm__("D_L05_00161D40") __attribute__((sda));
+extern int l05_electric_gate_inner_color_blend_start __asm__("D_L05_00161D44") __attribute__((sda));
+extern int l05_electric_gate_inner_color_blend_end __asm__("D_L05_00161D48") __attribute__((sda));
 extern int D_L05_00161D70 __attribute__((sda));
 extern int D_L05_00161D74 __attribute__((sda));
 extern int D_L05_00161D78 __attribute__((sda));
 extern int D_L05_00161D7C __attribute__((sda));
-extern int D_L05_00161D98 __attribute__((sda));
+extern int l05_electric_gate_beam_effect_texture_index __asm__("D_L05_00161D98") __attribute__((sda));
 extern float D_L05_0020B740[4][2];
 extern Vec4 D_L05_0020B760[4];
 extern Vec4 D_L05_0020B7A0[4];
@@ -192,11 +192,11 @@ void draw_electric_gate_beams(char *moby) {
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
     for (i = 0; i < 5; i++) {
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
-        outer_color = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
-        inner_color = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
+        outer_color = fast_tween_color(l05_electric_gate_outer_color_blend_start, l05_electric_gate_outer_color_blend_end, blend);
+        inner_color = fast_tween_color(l05_electric_gate_inner_color_blend_start, l05_electric_gate_inner_color_blend_end, blend);
         angle = fast_add_rotations(angle, 1.2566371f);
         for (j = 0; j < 2; j++) {
-            texture = get_effect_texture(D_L05_00161D98);
+            texture = get_effect_texture(l05_electric_gate_beam_effect_texture_index);
             quads[j][i].primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) | ((s64)D_L05_00161D78 << 4)
                                     | ((s64)D_L05_00161D7C << 6) | 0x8000000000LL;
             quads[j][i].texture = texture;
