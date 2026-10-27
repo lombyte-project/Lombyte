@@ -88,7 +88,7 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
     return particle;
 }
 
-extern char *D_L01_001B25A4[];
+extern char *number_particle_lookup_tables[] __asm__("D_L01_001B25A4");
 extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
 extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 
@@ -113,7 +113,7 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
             particle[3] = kind;
         }
         particle[1] = 0;
-        particle[2] = D_L01_001B25A4[0][number_table_index];
+        particle[2] = number_particle_lookup_tables[0][number_table_index];
         *(float *)(particle + 0xC) = scale * 210000.0f;
         *(short *)(particle + 0xA) = particle_lifetime;
         ((unsigned char *)particle)[8] = 0xA0;
