@@ -1286,7 +1286,7 @@ extern char *D_001413D0[];
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
-extern char D_L03_00161BB8[];
+extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 #include "rnc/gameplay/state/game_globals.h"
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
 extern L03LevelState D_L03_001BA6D0;
@@ -1363,7 +1363,7 @@ void helga_update(struct Moby *helga_moby) {
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         helga_moby->state = 1;
-        talk->script = D_L03_00161BB8;
+        talk->script = helga_dialogue_script;
         helga_vars->talk.unk48 = 5;
         initialize_npc_dialogue(helga_moby, talk);
         initialize_moby_grounding(helga_moby);
