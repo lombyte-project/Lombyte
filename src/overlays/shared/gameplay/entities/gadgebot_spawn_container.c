@@ -1344,7 +1344,7 @@ char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 extern GbHit D_L06_001745C0;
 extern Moby *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
-extern GbStats D_L06_0017EC58;
+extern GbStats l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58");
 extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern char D_L06_00167540[];
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -1480,7 +1480,7 @@ void gadgebot_update(GbMoby *moby) {
                 ok = 1;
             }
             if (ok) {
-                D_L06_0017EC58.unk2C++;
+                l06_gadgebot_command_range_stats.unk2C++;
                 switch (D_00141610[0]) {
                 case GADGEBOT_COMMAND_FOLLOW_HERO:
                     if (moby->state != 3) {
