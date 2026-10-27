@@ -1670,7 +1670,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     Vec_2adb30 v2;
                     Vec_2adb30 random_velocity_offset;
                     int p0;
-                    int p1;
+                    int spark_secondary_color;
                     int spark_random_frame_count;
                     int spark_vertical_offset_scale;
                     int spark_jittered_frame_count;
@@ -1681,12 +1681,12 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     spark_velocity.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
                     p0 = fast_tween_color(*(int *)&D_L00_0016141C, *(int *)&D_L00_00161420, FUN_002132a8_2adb30(0.0f, 1.0f));
-                    p1 = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
+                    spark_secondary_color = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
                     spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_001613FC * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
                     spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)spark_vertical_offset_scale;
-                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, p1, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
+                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, spark_secondary_color, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
                 }
             }
         }
@@ -1957,7 +1957,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             spawn_gravity_floor_burst_particle(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
-                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
+                            int shrinking_particle_primary_color = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
                             int c1 = mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
                             float sz;
                             int life;
@@ -1970,7 +1970,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             v2.f[2] = gz;
                             sz = FUN_002132a8_2adb30(31500.002f, 52500.0f);
                             life = FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x5A), FUN_001f96f8_2adb30(0x96));
-                            spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&v2, &particle_work_vector, c0, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
+                            spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&v2, &particle_work_vector, shrinking_particle_primary_color, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
                         }
                     }
                 }
