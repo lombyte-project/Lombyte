@@ -3259,8 +3259,8 @@ T4_c D_L17_001622D0 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 #include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring_2.h"
-extern float D_L17_001DC250[][2];
-extern float D_L17_001DCAB0[][2];
+extern float ring_template_uvs[][2] __asm__("D_L17_001DC250");
+extern float ring_scrolled_uvs[][2] __asm__("D_L17_001DCAB0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_00200260(float, float);
@@ -3268,9 +3268,9 @@ extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
 int D_L17_00162280[2] = {0x59, 0};
 int D_L17_001622A0[2] = {(int)D_L17_001DC680, 0};
-int D_L17_001622A8[2] = {(int)D_L17_001DCAB0, 0};
-extern int D_L17_001DCD78[];
-int D_L17_001622B0[2] = {(int)D_L17_001DCD78, 0x80};
+int D_L17_001622A8[2] = {(int)ring_scrolled_uvs, 0};
+extern int ring_vertex_colors[] __asm__("D_L17_001DCD78");
+int D_L17_001622B0[2] = {(int)ring_vertex_colors, 0x80};
 int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
@@ -3311,15 +3311,15 @@ void draw_ripple_ring(struct Moby *moby) {
         D_L17_001DC680[i].x = p->x + moby->pos.x;
         D_L17_001DC680[i].y = p->y + moby->pos.y;
         D_L17_001DC680[i].z = p->z + moby->pos.z + w;
-        D_L17_001DCD78[i] = color;
+        ring_vertex_colors[i] = color;
     }
     for (j = 0; j < 2; j++) {
         for (ring_uv_vertex_index = 0; ring_uv_vertex_index < D_L17_00162280[0]; ring_uv_vertex_index++) {
             ring_uv_scroll_factors = D_L17_001622D0;
-            D_L17_001DCAB0[ring_uv_vertex_index][0] =
-                D_L17_001DC250[ring_uv_vertex_index][0] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[0], 1.0f);
-            D_L17_001DCAB0[ring_uv_vertex_index][1] =
-                D_L17_001DC250[ring_uv_vertex_index][1] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[1], 1.0f);
+            ring_scrolled_uvs[ring_uv_vertex_index][0] =
+                ring_template_uvs[ring_uv_vertex_index][0] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[0], 1.0f);
+            ring_scrolled_uvs[ring_uv_vertex_index][1] =
+                ring_template_uvs[ring_uv_vertex_index][1] + FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[1], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
