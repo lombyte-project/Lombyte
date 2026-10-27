@@ -2188,8 +2188,8 @@ extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fast_tween_color(float, int, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L01_00161998 __attribute__((sda));
-extern short D_L01_0016199C __attribute__((sda));
+extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute__((sda));
+extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
@@ -2387,7 +2387,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     color_cycle_phase = fast_add_rotations_c(*(float *)(moby_vars + 0x254), frame_time * 9.424778f);
     *(float *)(moby_vars + 0x254) = color_cycle_phase;
     *(int *)(moby + 0x90) = fast_tween_color((fast_sin_c(color_cycle_phase) + 1.0f) * 0.5f,
-                                           *(int *)&D_L01_00161998, *(int *)&D_L01_0016199C);
+                                           *(int *)&amoeboid_color_cycle_start_gp, *(int *)&amoeboid_color_cycle_end_gp);
 }
 extern short *D_L01_001ABCC0[];
 extern void FUN_L00_00250df8(void *);
