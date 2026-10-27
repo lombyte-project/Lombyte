@@ -2213,7 +2213,7 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_001600EC;
-extern char D_L15_00167410[];
+extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
@@ -2232,7 +2232,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     float target_axis_residual[4];
     float r[4];
     char *data;
-    char *projection_axis_record = D_L15_00167410;
+    char *projection_axis_record = angular_limit_projection_axis_record;
     char *g;
     float dot1;
     float dot2;
