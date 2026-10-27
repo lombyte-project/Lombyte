@@ -3508,15 +3508,15 @@ extern int smoke_fire_particle_steady_alpha_gp __asm__("D_L00_00161998") __attri
 extern float D_L00_0016199C __attribute__((sda));
 extern u8 D_L00_001619A0[4] __attribute__((sda));
 extern u8 D_L00_001619A8[8] __attribute__((sda));
-extern int D_L00_001E1380[][4];
-extern float D_L00_001E12C0[][4];
-extern float D_L00_001E1440[];
-extern float D_L00_001E1444[];
-extern float D_L00_001E11A0[][4];
-extern float D_L00_001E11E0[];
-extern float D_L00_001E1200[][4];
-extern float D_L00_001E13E0[];
-extern float D_L00_001E13E4[];
+extern int smoke_fire_mesh_quad_vertex_indices[][4] __asm__("D_L00_001E1380");
+extern float smoke_fire_mesh_particle_local_positions[][4] __asm__("D_L00_001E12C0");
+extern float smoke_fire_mesh_particle_v_coordinates[] __asm__("D_L00_001E1440");
+extern float smoke_fire_mesh_particle_u_coordinates[] __asm__("D_L00_001E1444");
+extern float smoke_fire_particle_quad_local_positions[][4] __asm__("D_L00_001E11A0");
+extern float smoke_fire_particle_quad_texture_coordinates[] __asm__("D_L00_001E11E0");
+extern float smoke_fire_base_mesh_local_positions[][4] __asm__("D_L00_001E1200");
+extern float smoke_fire_base_mesh_v_coordinates[] __asm__("D_L00_001E13E0");
+extern float smoke_fire_base_mesh_u_coordinates[] __asm__("D_L00_001E13E4");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 void draw_smoke_fire_spawner(P *spawner) {
     Vec4 position, up;
@@ -3578,20 +3578,20 @@ void draw_smoke_fire_spawner(P *spawner) {
         if (D_L00_001D2D10[i]) {
             /* Fakematch: reading the index table through rows sets its address ahead of the
              * primitive constant, which then takes v1 as retail. */
-            rows = D_L00_001E1380;
+            rows = smoke_fire_mesh_quad_vertex_indices;
             quad.primitive = 0x8000000044L;
             one = 1.0f;
             for (k = 2; k < 4; k++) {
                 for (j = 0; j < 4; j++) {
                     index = rows[k][j];
-                    vertex = D_L00_001E12C0[index];
+                    vertex = smoke_fire_mesh_particle_local_positions[index];
                     quad.positions[j].f[0] = vertex[0];
                     quad.positions[j].f[1] = vertex[1] * width;
                     quad.positions[j].f[2] = vertex[2] * height;
                     quad.positions[j].f[3] = one;
                     transform_vector(&quad.positions[j], &quad.positions[j], transform);
-                    quad.texture_coordinates[j][0] = D_L00_001E1444[index * 2] + D_L00_001D31C0[i];
-                    quad.texture_coordinates[j][1] = D_L00_001E1440[index * 2];
+                    quad.texture_coordinates[j][0] = smoke_fire_mesh_particle_u_coordinates[index * 2] + D_L00_001D31C0[i];
+                    quad.texture_coordinates[j][1] = smoke_fire_mesh_particle_v_coordinates[index * 2];
                     quad.colors[j] = mesh_alpha * D_L00_001619A8[index] | mesh_color;
                 }
                 fast_draw_quad_real(&quad, 0, 0);
@@ -3618,12 +3618,12 @@ void draw_smoke_fire_spawner(P *spawner) {
             quad.primitive = 0x8000000048L;
             one = 1.0f;
             for (particle_quad_vertex_index = 0; particle_quad_vertex_index < 4; particle_quad_vertex_index++) {
-                quad.positions[particle_quad_vertex_index].f[0] = D_L00_001E11A0[particle_quad_vertex_index][0];
-                quad.positions[particle_quad_vertex_index].f[1] = D_L00_001E11A0[particle_quad_vertex_index][1] * width;
-                quad.positions[particle_quad_vertex_index].f[2] = D_L00_001E11A0[particle_quad_vertex_index][2] * height;
+                quad.positions[particle_quad_vertex_index].f[0] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][0];
+                quad.positions[particle_quad_vertex_index].f[1] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][1] * width;
+                quad.positions[particle_quad_vertex_index].f[2] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][2] * height;
                 quad.positions[particle_quad_vertex_index].f[3] = one;
-                quad.texture_coordinates[particle_quad_vertex_index][0] = D_L00_001E11E0[particle_quad_vertex_index * 2] - D_L00_001D31C0[i];
-                quad.texture_coordinates[particle_quad_vertex_index][1] = D_L00_001E11E0[particle_quad_vertex_index * 2 + 1];
+                quad.texture_coordinates[particle_quad_vertex_index][0] = smoke_fire_particle_quad_texture_coordinates[particle_quad_vertex_index * 2] - D_L00_001D31C0[i];
+                quad.texture_coordinates[particle_quad_vertex_index][1] = smoke_fire_particle_quad_texture_coordinates[particle_quad_vertex_index * 2 + 1];
                 quad.colors[particle_quad_vertex_index] = alpha * D_L00_001619A0[particle_quad_vertex_index] | q->col;
                 transform_vector(&quad.positions[particle_quad_vertex_index], &quad.positions[particle_quad_vertex_index], transform);
             }
@@ -3637,15 +3637,15 @@ void draw_smoke_fire_spawner(P *spawner) {
     if (q->flag42 == 0) {
         for (k = 0; k < 6; k++) {
             for (j = 0; j < 4; j++) {
-                index = D_L00_001E1380[k][j];
-                vertex = D_L00_001E1200[index];
+                index = smoke_fire_mesh_quad_vertex_indices[k][j];
+                vertex = smoke_fire_base_mesh_local_positions[index];
                 quad.positions[j].f[0] = vertex[0];
                 quad.positions[j].f[1] = vertex[1] * q->f48;
                 quad.positions[j].f[2] = vertex[2] * q->f4C;
                 quad.positions[j].f[3] = 1.0f;
                 transform_vector(&quad.positions[j], &quad.positions[j], facing);
-                quad.texture_coordinates[j][0] = D_L00_001E13E4[index * 2] + D_L00_00161374;
-                quad.texture_coordinates[j][1] = D_L00_001E13E0[index * 2];
+                quad.texture_coordinates[j][0] = smoke_fire_base_mesh_u_coordinates[index * 2] + D_L00_00161374;
+                quad.texture_coordinates[j][1] = smoke_fire_base_mesh_v_coordinates[index * 2];
                 quad.colors[j] = D_L00_001619A8[index] * 0xFF000000 | mesh_color;
             }
             fast_draw_quad_real(&quad, 0, 0);
