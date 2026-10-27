@@ -188,7 +188,7 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern f32 D_L01_0017C250[];
+extern f32 hero_air_control_speed_reference[] __asm__("D_L01_0017C250");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -290,7 +290,7 @@ void update_hero_airborne_planar_motion(void) {
         build_scaled_hero_move_impulse(0.7f, frame_time * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         air_acceleration = frame_time_sq * 20.0f;
-        if (hero.target_speed < D_L01_0017C250[0] * frame_time * 0.2f) {
+        if (hero.target_speed < hero_air_control_speed_reference[0] * frame_time * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_decay_step = hero.stickless_decel;
                 speed = vector_length_xy(&hero.motion.velocity);
