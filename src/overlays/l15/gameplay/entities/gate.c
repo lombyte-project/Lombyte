@@ -521,7 +521,7 @@ void update_swinging_door(struct Moby *moby) {
 }
 typedef union { u128 q; float f[4]; } Vec_2a7880;
 extern char D_L15_00178700[];
-extern char D_L15_00161568[];
+extern char destructible_radial_debris_color_palette[] __asm__("D_L15_00161568");
 extern u64 D_L15_00161570;
 typedef struct { u32 words[3]; } Colors_2a7880;
 extern Colors_2a7880 D_L15_00161578;
@@ -584,7 +584,7 @@ void update_destructible_moby_with_radial_debris(struct Moby *moby)
     if (slot == 0)
         goto no_hit;
 
-    __builtin_memcpy(palette, &D_L15_00161568, 16);
+    __builtin_memcpy(palette, &destructible_radial_debris_color_palette, 16);
     normalize_vector_xyz_7880(frame_time * 10.0f, &first, slot + 0x10);
     scale_vector_xyz_7880(2.0f, &second, &first);
     if (vector_length_xyz_7880(slot) != 0.0f) {
