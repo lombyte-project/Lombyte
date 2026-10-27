@@ -40,7 +40,7 @@ void update_moby_translation_delta_matrix(char *moby) {
 extern int D_L04_0015FFD8;
 extern int *D_L04_001B0630[];
 extern char *D_L04_001600EC;
-extern char D_L04_001DBE10[];
+extern char snow_plow_missing_path_warning_format[] __asm__("D_L04_001DBE10");
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
@@ -140,7 +140,7 @@ void snow_plow_update(struct Moby *moby) {
             p = D_L04_001B0630[path[5]];
             if (FUN_001f9b48(p + 4, p + *p * 4) < 0.5f) --*p;
         } else {
-            char *message = D_L04_001DBE10;
+            char *message = snow_plow_missing_path_warning_format;
             int oclass = moby->oclass;
             timer = truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
             debug_print(message, oclass, timer);
