@@ -113,7 +113,7 @@ typedef struct {
     short idx[16];
 } Strip;
 
-extern char D_L09_0016EAA0[];
+extern char level09_scrolling_strip_gs_setup_packet[] __asm__("D_L09_0016EAA0");
 extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -134,7 +134,7 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
     float second_scroll_offset;
     queue_level09_strip_texture_packets(first_texture_index, second_texture_index);
     D_L09_001611B8[2][0] = 0x30000009;
-    D_L09_001611B8[2][1] = (int)D_L09_0016EAA0;
+    D_L09_001611B8[2][1] = (int)level09_scrolling_strip_gs_setup_packet;
     D_L09_001611B8[2][2] = 0;
     D_L09_001611B8[2][3] = 0x50000009;
     D_L09_001611C0 = D_L09_001611B8[2] + 4;
