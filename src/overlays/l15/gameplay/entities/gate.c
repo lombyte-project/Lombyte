@@ -524,7 +524,7 @@ extern char D_L15_00178700[];
 extern char destructible_radial_debris_color_palette[] __asm__("D_L15_00161568");
 extern u64 D_L15_00161570;
 typedef struct { u32 words[3]; } Colors_2a7880;
-extern Colors_2a7880 D_L15_00161578;
+extern Colors_2a7880 l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578");
 extern u32 D_L15_00161580;
 extern u8 D_001413F4[];
 extern u8 D_0013DD50;
@@ -652,7 +652,7 @@ void update_destructible_moby_with_radial_debris(struct Moby *moby)
     do {
         float radius, angle;
         int color, color2, duration;
-        __builtin_memcpy(colors, &D_L15_00161578, 12);
+        __builtin_memcpy(colors, &l15_destructible_secondary_debris_color_palette, 12);
         radius = random_float_between_7880(0.0f, 1.5f);
         angle = random_angle_radians_7880();
         if (moby->oclass == 0x94)
