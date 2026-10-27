@@ -521,7 +521,7 @@ extern u8 pilots_helmet_missing_cutscene_format[] __asm__("D_L00_001EA1B0");
 extern u8 pilots_helmet_already_owned_message[] __asm__("D_L00_001EA1D8");
 extern u8 pilots_helmet_missing_segment_switch_format[] __asm__("D_L00_001EA200");
 extern u8 pilots_helmet_acquired_message[] __asm__("D_L00_00161BC0");
-extern u16 D_00141B08[];
+extern u16 pilots_helmet_help_record[] __asm__("D_00141B08");
 extern T_2e03a0_2e03a0 D_L00_001BA5D0;
 extern T_2e03a0_2e03a0 D_L00_001BB230;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
@@ -575,7 +575,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
         grant_inventory_item(7, 1);
-        if (D_00141B08[0] == 0)
+        if (pilots_helmet_help_record[0] == 0)
             give_reward(0x2328, 0x34);
         if (p->b != -1) {
             D_L00_001BA5D0.arr[D_L00_0015FFD8_2e03a0[p->b].h] =
