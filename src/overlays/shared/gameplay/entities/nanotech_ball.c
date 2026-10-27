@@ -2179,7 +2179,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
         int color_effects_remaining = k;
         do {
             float sh = variant_effect_scale * random_float_between(8.0f, 10.0f) * D_0015ED6C - near_camera_distance_deficit * D_0015ED6C;
-            int A, B, r1, r2;
+            int A, B, r1, color_effect_random_frames;
             float big;
             first_color_choices = D_L00_001EA100;
             second_color_choices = D_L00_001EA118;
@@ -2187,8 +2187,8 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
             B = swap_packed_color_channels(second_color_choices.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = variant_effect_scale * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
-            r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
-            FUN_L00_0026a9f0(self + 0x10, spray_bias_vector, A, B, big, r1, r2, 0, 0, sh);
+            color_effect_random_frames = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
+            FUN_L00_0026a9f0(self + 0x10, spray_bias_vector, A, B, big, r1, color_effect_random_frames, 0, 0, sh);
         } while (--color_effects_remaining);
     }
     if (camera_distance > 9.0f) {
