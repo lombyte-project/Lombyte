@@ -3678,7 +3678,7 @@ extern short D_L00_00161670[] __attribute__((section(".sdata")));
 extern short D_L00_00161672;
 extern short D_L00_00161674;
 extern short D_L00_00161676;
-extern V2b9310 D_L00_001DB5B0[];
+extern V2b9310 l00_tesla_beam_previous_point_window[] __asm__("D_L00_001DB5B0");
 extern V2b9310 D_L00_001DB5C0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
 void initialize_tesla_claw_beam(char *moby) {
@@ -3700,7 +3700,7 @@ void initialize_tesla_claw_beam(char *moby) {
     vscale_2b9310(&step, &beam_endpoint_delta, D_L00_00161594 / 20.0f);
     qcopy(D_L00_001DB5C0, data);
     for (i = 1; i < 20; i++) {
-        vadd_2b9310(&D_L00_001DB5C0[i], &D_L00_001DB5B0[i], &step);
+        vadd_2b9310(&D_L00_001DB5C0[i], &l00_tesla_beam_previous_point_window[i], &step);
         D_L00_001DB840[i] = 0;
         vzero_2b9310(&D_L00_001DB890[i]);
         D_L00_001DB9D0[i] = 0;
