@@ -1281,7 +1281,7 @@ struct QuestGiverVars {
     s32 target_timer;  /* 0x1F4: frames until a new idle target */
 };
 
-extern u8 D_0013D4CC[];
+extern u8 npc_dialogue_suppression_flags[] __asm__("D_0013D4CC");
 extern char *D_001413D0[];
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
@@ -1341,7 +1341,7 @@ void helga_update(struct Moby *helga_moby) {
     apply_helga_big_head_cutscene_adjustments(helga_moby);
     switch (helga_moby->state) {
     case HELGA_INITIALIZE:
-        if (D_0013D4CC[0] != 0) {
+        if (npc_dialogue_suppression_flags[0] != 0) {
             if (helga_vars->link != -1) {
                 helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                 if (helper_moby->oclass == 0x3F4) {
@@ -1983,7 +1983,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         D_L03_001BA5D0[(s16)robot_qwark_moby->save_id >> 5] |= 1 << (robot_qwark_moby->save_id & 0x1F);
     }
     robot_qwark_moby->hit_slot = 0xFF;
-    if (D_0013D4CC[0] != 0 && robot_qwark_moby->state != 3) {
+    if (npc_dialogue_suppression_flags[0] != 0 && robot_qwark_moby->state != 3) {
         return;
     }
     switch (robot_qwark_moby->state) {
