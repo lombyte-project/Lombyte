@@ -10,7 +10,9 @@
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
-int FUN_L18_002fcbb0(struct Moby *a) {
+int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
+
+int update_moby_suck_cannon_state(struct Moby *a) {
     int r = process_moby_suck_cannon_suction(a);
     if (r == 0) {
         if (a->state == 0x7)
