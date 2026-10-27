@@ -4,7 +4,7 @@
 #include "rnc/rendering/dma_tag.h"
 
 #include "rnc/rendering/screen.h"
-extern char D_00160850[];
+extern char loading_quad_packet_header_template[] __asm__("D_00160850");
 
 typedef union {
     struct {
@@ -44,7 +44,7 @@ void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_heigh
     render_packet_cursor.words[3] = 0x50000007;
     base = render_packet_cursor.words;
     render_packet_cursor.words = base + 4;
-    qcopy(base + 4, D_00160850);
+    qcopy(base + 4, loading_quad_packet_header_template);
     quad_payload = (long *)(base + 8);
     render_packet_cursor.words = base + 8;
     quad_payload[0] = texture_register_value;
