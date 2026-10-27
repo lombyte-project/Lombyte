@@ -443,7 +443,7 @@ extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002e
 extern char D_L13_001F4F38[];
 extern char qwarks_starfighter_high_elapsed_time_adjustment_message[] __asm__("D_L13_00161958");
 extern char qwarks_starfighter_mid_elapsed_time_adjustment_message[] __asm__("D_L13_00161968");
-extern char D_L13_00166F80[];
+extern char jet_camera47[] __asm__("D_L13_00166F80");
 extern char qwarks_starfighter_boss_start_time_format[] __asm__("D_L13_001F4EF0");
 extern char level13_point_light_slots[] __asm__("D_L13_001805C0");
 extern char qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_001F4F18");
@@ -479,7 +479,7 @@ extern int queue_animation_update_alt(int, int, int, int, int, int, int) __asm__
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_0015172A[];
+extern short dialogue_playback_phase[] __asm__("D_0015172A");
 extern void reset_numeric_hud_element() __asm__("FUN_L00_00235d80");
 extern void hud_update_counter() __asm__("FUN_L00_00235ea0");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -898,7 +898,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
         moby->rot[0] = fast_add_rotations(moby->rot[0], frame_time * 4.1887903f);
-        view = D_L13_00166F80;
+        view = jet_camera47;
         moby->rot[2] = *(float *)(view + 0x158);
         moby->rot[1] = *(float *)(view + 0x154);
         moby->scale *= 0.98f;
@@ -1087,7 +1087,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
     }
 
     if (data->b13A != 0) {
-        if (D_0015172A[0] == 3) {
+        if (dialogue_playback_phase[0] == 3) {
             continue_audio_stream_if_ready_alt();
             data->h144 = scale_game_frames_alt(0x168);
             data->h146 = scale_game_frames_alt(0x3C);
