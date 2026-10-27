@@ -57,7 +57,7 @@ extern Ldg2463f8 D_0015EE48;
 #include "rnc/overlay/l18/world/loaders/002463f8_globals.h"
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L18_001831C0[3];
-extern u64 D_L18_001831D8[3];
+extern u64 level_texture_state_64x64[3] __asm__("D_L18_001831D8");
 extern u64 D_L18_001831F0[3];
 extern s32 level_tfrag_encoded_texture_refs[] __asm__("D_L18_001C5400");
 extern s32 level_moby_encoded_texture_refs[] __asm__("D_L18_0019A480");
@@ -222,10 +222,10 @@ s32 load_level_core_data(s32 full, s32 keep) {
             (gs_texture_allocation_base + level_header[0x25]) >> 8, 0, 0, 0, 4);
         D_L18_001831C0[1] = 0x0000FFA0000000E0;
         D_L18_001831C0[2] = 0x0040000400004000;
-        D_L18_001831D8[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+        level_texture_state_64x64[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
             (gs_texture_allocation_base + level_header[0x27]) >> 8, 0, 0, 0, 4);
-        D_L18_001831D8[1] = 0x0000FFA0000000E0;
-        D_L18_001831D8[2] = 0x0040000400004000;
+        level_texture_state_64x64[1] = 0x0000FFA0000000E0;
+        level_texture_state_64x64[2] = 0x0040000400004000;
         D_L18_001831F0[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
             (gs_texture_allocation_base + level_header[0x31]) >> 8, 0, 0, 0, 4);
         D_L18_001831F0[1] = 0x0000FFA0000000E0;
