@@ -2353,8 +2353,8 @@ extern int FUN_00213260_209638(int) __asm__("FUN_00213260");
 extern void FUN_L00_002718d0_209638(void *, void *, void *, float,
                                     float) __asm__("FUN_L00_002718d0");
 
-void FUN_L00_00209638(int seed, int limit);
-void FUN_L00_00209638(int seed, int limit) {
+void fast_sin_cf(int seed, int limit) __asm__("FUN_L00_00209638");
+void fast_sin_cf(int seed, int limit) {
     float planar_effect_vector[4];
     float pos[4];
     float planar_effect_angle_radians;

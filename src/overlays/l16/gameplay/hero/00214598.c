@@ -221,7 +221,7 @@ extern void FUN_L16_00208038(f32, f32);
 extern void FUN_L16_00208050(f32, f32);
 extern void FUN_L16_00208068(f32, f32);
 extern void emit_hero_periodic_surface_particles(s32, s32) __asm__("FUN_L00_00209848");
-extern void FUN_L00_00209638(s32, s32);
+extern void fast_sin_cf(s32, s32) __asm__("FUN_L00_00209638");
 
 #define GROUND_FRICTION()                                                                          \
     {                                                                                              \
@@ -816,7 +816,7 @@ void update_hero_motion_for_current_state(void) {
             emit_hero_periodic_surface_particles(4, 0xC);
         }
         if (hero.state.current == 0x36 && frame_time < hero.motion.flat_speed) {
-            FUN_L00_00209638(0, 1);
+            fast_sin_cf(0, 1);
         }
         if (hero.splash_effect_timer != 0) {
             s32 n = --hero.splash_effect_timer >> 3;
@@ -1921,7 +1921,7 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.wading != 0 || slide) {
             if (hero.motion.flat_speed > frame_time) {
-                FUN_L00_00209638(0, 2);
+                fast_sin_cf(0, 2);
             }
             if (hero.motion.flat_speed > frame_time * 0.5f) {
                 emit_hero_periodic_surface_particles(2, 4);

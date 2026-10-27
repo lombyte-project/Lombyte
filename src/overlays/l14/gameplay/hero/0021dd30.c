@@ -461,7 +461,7 @@ extern void FUN_L14_0021c5c8(f32, f32);
 extern void FUN_L14_0021c5f8(f32, f32);
 extern void FUN_L14_0021c5e0(f32, f32);
 extern void emit_hero_periodic_surface_particles(s32, s32) __asm__("FUN_L00_00209848");
-extern void FUN_L00_00209638(s32, s32);
+extern void fast_sin_cf(s32, s32) __asm__("FUN_L00_00209638");
 
 #define GROUND_FRICTION()                                                                          \
     {                                                                                              \
