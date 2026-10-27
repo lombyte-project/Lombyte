@@ -941,10 +941,10 @@ typedef struct {
     UV2d8e48 uv[4];
     long unk70, tex, unk80, unk88;
 } Q2d8e48;
-extern unsigned int D_L15_00161CAC __asm__("D_L15_00161CAC") __attribute__((sda));
+extern unsigned int l15_electric_water_bolt_start_first_quad_color __asm__("D_L15_00161CAC") __attribute__((sda));
 extern unsigned int D_L15_00161C60 __asm__("D_L15_00161C60") __attribute__((sda));
-extern float D_L15_00161CB4 __asm__("D_L15_00161CB4") __attribute__((sda));
-extern float D_L15_00161CB8 __asm__("D_L15_00161CB8") __attribute__((sda));
+extern float l15_electric_water_bolt_start_first_quad_base_scale __asm__("D_L15_00161CB4") __attribute__((sda));
+extern float l15_electric_water_bolt_start_second_quad_base_scale __asm__("D_L15_00161CB8") __attribute__((sda));
 extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
 extern V2d8e48 D_L15_001D36F0[] __asm__("D_L15_001D36F0") __attribute__((section(".data")));
 extern UV2d8e48 D_L15_001D3730[] __asm__("D_L15_001D3730") __attribute__((section(".data")));
@@ -982,12 +982,12 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     fast_vec_cross(&quad_transform[1], &quad_transform[0], (V2d8e48 *)&hero.gravity_dir);
     vscl_2d8e48(&quad_transform[1], &quad_transform[1], -1.0f);
     fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
-    uniform_quad_color = D_L15_00161CAC;
+    uniform_quad_color = l15_electric_water_bolt_start_first_quad_color;
     quad.color[3] = uniform_quad_color;
     quad.color[2] = uniform_quad_color;
     quad.color[1] = uniform_quad_color;
     quad.color[0] = uniform_quad_color;
-    quad_scale = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
+    quad_scale = l15_electric_water_bolt_start_first_quad_base_scale + rnd_2d8e48(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
@@ -1000,7 +1000,7 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     quad.color[2] = uniform_quad_color;
     quad.color[1] = uniform_quad_color;
     quad.color[0] = uniform_quad_color;
-    quad_scale = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
+    quad_scale = l15_electric_water_bolt_start_second_quad_base_scale + rnd_2d8e48(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         fast_vec_scale(quad_scale, &quad.corner[i], &D_L15_001D36F0[i]);
         xform_2d8e48(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
