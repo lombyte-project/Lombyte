@@ -1289,7 +1289,7 @@ extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
 extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 #include "rnc/gameplay/state/game_globals.h"
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
-extern L03LevelState D_L03_001BA6D0;
+extern L03LevelState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
 extern void record_moby_context_bytes(void *, int, struct Moby *, int, void *) __asm__("FUN_L01_0029b0a0");
@@ -1404,7 +1404,7 @@ void helga_update(struct Moby *helga_moby) {
                 grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (helga_vars->reward != -1) {
-                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                    l03_moby_collection_state.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                     reward_moby = (struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i);
                     /* Fakematch: same record as the || test in the level's other reward
@@ -1761,7 +1761,7 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 {
@@ -1813,7 +1813,7 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 /* Fakematch: same record test as above; the goto and the do/while (0)
