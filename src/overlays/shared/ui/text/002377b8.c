@@ -139,7 +139,7 @@ extern s32 eight_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F738") __
 extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
-extern D00237ae8 D_L00_0017DAC0[];
+extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -160,7 +160,7 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     hud_element->x78 = scale_game_frames(0x1E);
     hud_element->x70 = 0;
     D_L00_0015F72C = 0;
-    slot_entry = D_L00_0017DAC0;
+    slot_entry = l00_eight_slot_hud_selector_entries;
     tab = item_defs;
     item_id_cursor = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
