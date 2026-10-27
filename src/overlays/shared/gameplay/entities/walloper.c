@@ -853,8 +853,8 @@ short D_L15_001D0DD8[10] = {0};
 short D_L16_001D07D8[10] = {0};
 short D_L17_001D1058[10] = {0};
 short D_L18_001D0D58[10] = {0};
-extern char D_L00_001616A8[4] __attribute__((sda));
-extern char D_L00_001616AC[4] __attribute__((sda));
+extern char walloper_effect_fade_in_duration_frames[4] __asm__("D_L00_001616A8") __attribute__((sda));
+extern char walloper_effect_fade_out_duration_frames[4] __asm__("D_L00_001616AC") __attribute__((sda));
 short D_L00_001DBEC0[10] = {0};
 short D_L01_001DC340[10] = {0};
 short D_L02_001D0940[10] = {0};
@@ -916,8 +916,8 @@ void walloper_update(char *walloper_moby) {
             D_L00_001DBEF0[arc_init_index] = 2;
             D_L00_001DBF08[arc_init_index] = 1;
         }
-        D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
-        walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&D_L00_001616AC);
+        D_L00_001616CC = scale_game_frames(*(int *)&walloper_effect_fade_in_duration_frames);
+        walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&walloper_effect_fade_out_duration_frames);
         break;
     case 2:
         if (walloper_hero_state->state.current == 0x20) {
@@ -926,12 +926,12 @@ void walloper_update(char *walloper_moby) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
                     float a = convert_integer_to_float(D_L00_001616CC);
-                    a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616A8));
+                    a = a / convert_integer_to_float(scale_game_frames(*(int *)&walloper_effect_fade_in_duration_frames));
                     walloper_effect_alpha_scale = 1.0f - a;
                 } else if (12.0f <= interpolated_record_value) {
                     if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
                         float a = convert_integer_to_float(walloper_effect_fade_out_countdown);
-                        a = a / convert_integer_to_float(scale_game_frames(*(int *)&D_L00_001616AC));
+                        a = a / convert_integer_to_float(scale_game_frames(*(int *)&walloper_effect_fade_out_duration_frames));
                         walloper_effect_alpha_scale = a;
                     } else {
                         walloper_effect_alpha_scale = 0.0f;
@@ -941,8 +941,8 @@ void walloper_update(char *walloper_moby) {
                 }
             }
         } else {
-            D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
-            walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&D_L00_001616AC);
+            D_L00_001616CC = scale_game_frames(*(int *)&walloper_effect_fade_in_duration_frames);
+            walloper_effect_fade_out_countdown = scale_game_frames(*(int *)&walloper_effect_fade_out_duration_frames);
             blend_moby_animation(walloper_moby, 1, 0, scale_game_frames(12));
         }
     }
