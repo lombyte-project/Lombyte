@@ -1973,8 +1973,8 @@ s32 collision_line(V_208b60 *, V_208b60 *, s32, s32, s32) __asm__("FUN_001efa68"
 f32 FUN_001f99d0_208b60(f32, f32) __asm__("FUN_001f99d0");
 f32 FUN_001f99c8_208b60(f32, f32) __asm__("FUN_001f99c8");
 #define G D_0013F350_208b60
-extern V_208b60 D_L00_001AEB90;
-extern T_208b60 D_L00_0017C300[];
+extern V_208b60 l00_hero_height_probe_direction __asm__("D_L00_001AEB90");
+extern T_208b60 l00_hero_height_probe_offsets[] __asm__("D_L00_0017C300");
 void update_hero_moby_probed_height_bounds(void) {
     V_208b60 v, collision_probe_start, x;
     f32 k, rotation_step, planar_angle, planar_cosine, planar_sine, probe_reference_z, hi, lo, sc;
@@ -2006,7 +2006,7 @@ void update_hero_moby_probed_height_bounds(void) {
         v.f[1] = planar_sine * direction_xy_scale;
     }
     v.f[2] = -FUN_001f9de0_208b60(G.fD20);
-    qcopy(&D_L00_001AEB90, &v);
+    qcopy(&l00_hero_height_probe_direction, &v);
     probe_reference_z = G.f2D8;
     if (probe_reference_z < 1.0f) {
         f32 t = G.f2F0;
@@ -2027,7 +2027,7 @@ void update_hero_moby_probed_height_bounds(void) {
     lo = hi;
     pw = &collision_probe_start;
     px = &x;
-    t = D_L00_0017C300;
+    t = l00_hero_height_probe_offsets;
     for (i = 3; i >= 0; i--, t++) {
         M_208b60 *m;
         U_208b60 *u = &(*(U_208b60 *)D_L00_00173E40);
