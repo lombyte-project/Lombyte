@@ -812,13 +812,13 @@ extern s32 D_L08_001F01C8[];
 extern s32 D_L08_001F4C48[];
 extern s32 D_L08_001F4C60[];
 extern s32 D_L08_001F8528[];
-extern char D_L08_001F8550[];
+extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 #include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32();
-extern short D_L08_00162380 __attribute__((sda));
+extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
 int D_L08_001623C4 = 0;
 extern int *D_L08_001623E8[2] __attribute__((sda));
 extern int D_L08_001623C8[2] __attribute__((sda));
@@ -869,12 +869,12 @@ void update_batalia_textured_effect(struct Moby *moby) {
         }
         break;
     case MOBY_ACTIVE:
-        sphere_check_input[0] = *(float *)&D_L08_00162380;
+        sphere_check_input[0] = *(float *)&batalia_effect_reference_position_x;
         sphere_check_input[1] = batalia_effect_reference_position_y;
         sphere_check_input[2] = batalia_effect_reference_position_z;
         sphere_check_input[3] = batalia_effect_culling_radius;
         if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
-            position_delta[0] = *(float *)&D_L08_00162380;
+            position_delta[0] = *(float *)&batalia_effect_reference_position_x;
             position_delta[1] = batalia_effect_reference_position_y;
             position_delta[2] = batalia_effect_reference_position_z;
             position_delta[3] = 1.0f;
@@ -882,7 +882,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
             distance = vector_length_xyz(position_delta);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
+                advance_wrapped_sine_pair(batalia_effect_sine_offsets, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_001623F0 = 0xFF;
