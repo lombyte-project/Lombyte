@@ -296,7 +296,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
-int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
+int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
@@ -452,7 +452,7 @@ void update_plasmabot(char *moby) {
         float *path;
         if (*(int *)(data + 0x114) == 2) return;
         if (fast_dec_timer_s16(data + 0x248) == 0) return;
-        if (FUN_L14_002d9870_c(*(int *)(data + 0x264)) == 0) return;
+        if (refresh_plasmabot_hatch_reset_delay(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(moby) == 0) return;
         *(short *)(data + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
         activate_plasmabot(moby);
@@ -523,7 +523,7 @@ void update_plasmabot(char *moby) {
         break;
     case PLASMABOT_FOLLOW_PATH_BACKWARD:
         if (((unsigned char *)data)[0x24A] != 0) {
-            FUN_L14_002d9870_c(*(int *)(data + 0x264));
+            refresh_plasmabot_hatch_reset_delay(*(int *)(data + 0x264));
         }
         if (follow_plasmabot_path(moby) != 0) {
             if (((unsigned char *)data)[0x24A] != 0) {
@@ -1376,7 +1376,7 @@ typedef struct {
 
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
-int FUN_L14_002d9870(int i) {
+int refresh_plasmabot_hatch_reset_delay(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int *data = *(int **)(moby + 0x78);
     int hatch_reset_delay_active = 0;
