@@ -1037,7 +1037,7 @@ typedef struct {
     s32 node[2];           /* 0x40: indexes into D_L18_001600EC */
 } PathJunctionVars;
 
-extern PathLink *D_L18_0015F70C;
+extern PathLink *l18_path_links __asm__("D_L18_0015F70C");
 extern char *D_L18_001600EC;
 extern float FUN_001f9b48(void *, void *);
 extern char *create_class_326_moby(void *vector) __asm__("FUN_L18_002e22c0");
@@ -1063,21 +1063,21 @@ void update_path_junction_selection(struct Moby *moby) {
         pair_or_node_index = 0;
         do {
             for (i = 0; i < path_link_count; i++) {
-                if (D_L18_0015F70C[i].weight == 0.0f) {
+                if (l18_path_links[i].weight == 0.0f) {
                     continue;
                 }
-                vars->pair[pair_or_node_index].first = &D_L18_0015F70C[i];
-                vars->weight[pair_or_node_index].first = D_L18_0015F70C[i].weight;
+                vars->pair[pair_or_node_index].first = &l18_path_links[i];
+                vars->weight[pair_or_node_index].first = l18_path_links[i].weight;
                 for (j = 0; j < path_link_count; j++) {
-                    if (D_L18_0015F70C[j].weight == 0.0f) {
+                    if (l18_path_links[j].weight == 0.0f) {
                         continue;
                     }
-                    if (FUN_001f9b48(&D_L18_0015F70C[i].path->points[0],
-                                     &D_L18_0015F70C[j].path->points[D_L18_0015F70C[j].path->count - 1]) < 0.5f) {
-                        vars->pair[pair_or_node_index].second = &D_L18_0015F70C[j];
-                        vars->weight[pair_or_node_index].second = D_L18_0015F70C[j].weight;
-                        D_L18_0015F70C[j].weight = 0.0f;
-                        D_L18_0015F70C[i].weight = 0.0f;
+                    if (FUN_001f9b48(&l18_path_links[i].path->points[0],
+                                     &l18_path_links[j].path->points[l18_path_links[j].path->count - 1]) < 0.5f) {
+                        vars->pair[pair_or_node_index].second = &l18_path_links[j];
+                        vars->weight[pair_or_node_index].second = l18_path_links[j].weight;
+                        l18_path_links[j].weight = 0.0f;
+                        l18_path_links[i].weight = 0.0f;
                         pair_or_node_index++;
                         break;
                     }
