@@ -69,14 +69,14 @@ extern u8 l07_moby_texture_reference_copy[] __asm__("D_L07_001AEC40");
 extern s32 l07_tie_texture_address_words[] __asm__("D_L07_001C6780");
 extern s32 l07_shrub_texture_address_words[] __asm__("D_L07_001BC630");
 extern char *D_L18_0015F600_26b768 __asm__("D_L07_0015F600");
-extern Class26b768 *D_L07_00197380[];
+extern Class26b768 *l07_moby_classes[] __asm__("D_L07_00197380");
 extern s32 D_L07_0016000C;
 extern s32 D_L07_00160010;
 extern s32 l07_metadata_moby_class_ids[] __asm__("D_L07_001AFC40");
 extern char *l07_metadata_moby_payload_bases[] __asm__("D_L07_001AFCA0");
 extern s32 D_L07_001AFD00[];
 typedef int Q26b768 __attribute__((mode(TI)));
-extern Q26b768 D_L07_001AFD60[];
+extern Q26b768 l07_metadata_moby_texture_slot_maps[] __asm__("D_L07_001AFD60");
 extern u8 l07_moby_registration_indices_by_class_id[] __asm__("D_L07_00197C40");
 extern char *l07_effects_texture_data_base __asm__("D_L07_0015F420");
 extern s32 D_L07_0015FC98;
@@ -265,10 +265,10 @@ s32 load_level_assets(s32 full, s32 keep) {
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7]; i < level_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)level_header + level_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
         print_moby_class_sizes((char *)level_header + level_header[7], level_header[7]);
-        for (sq = 0, sequence_offset_cursor = (char *)level_header + level_header[0x1E]; sq < D_L07_00197380[0]->seq_count; sq++, sequence_offset_cursor += 4) {
+        for (sq = 0, sequence_offset_cursor = (char *)level_header + level_header[0x1E]; sq < l07_moby_classes[0]->seq_count; sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
-                D_L07_00197380[0]->seqs[sq] = base + *(s32 *)sequence_offset_cursor;
-                relocate_asset_entry_pointers(D_L07_00197380[0], sq);
+                l07_moby_classes[0]->seqs[sq] = base + *(s32 *)sequence_offset_cursor;
+                relocate_asset_entry_pointers(l07_moby_classes[0], sq);
             }
         }
         D_L07_0016000C = -1;
@@ -280,7 +280,7 @@ s32 load_level_assets(s32 full, s32 keep) {
             l07_metadata_moby_payload_bases[class_metadata_index] = base + *(s32 *)class_metadata_entry_cursor;
             D_L07_001AFD00[class_metadata_index] = *(s32 *)(class_metadata_entry_cursor + 8);
             { s32 o = l07_moby_registration_indices_by_class_id[*(s32 *)(class_metadata_entry_cursor + 4)] * 32 + 0x10;
-            qcopy(&D_L07_001AFD60[class_metadata_index], (char *)level_header + level_header[7] + o); }
+            qcopy(&l07_metadata_moby_texture_slot_maps[class_metadata_index], (char *)level_header + level_header[7] + o); }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9]; i < level_header[8]; i++, class_entry_cursor += 0x20)
             register_object_render_class(base + *(s32 *)class_entry_cursor, (char *)level_header + level_header[0x11], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
@@ -337,7 +337,7 @@ s32 load_level_assets(s32 full, s32 keep) {
         end = free + 0x3F;
         span++;
         for (ci = 0; ci < l07_moby_class_count; ci++, span++) {
-            Class26b768 *moby_class = D_L07_00197380[ci];
+            Class26b768 *moby_class = l07_moby_classes[ci];
             if (moby_class == 0) {
                 for (j = 0; j < l07_class_metadata_count; j++)
                     if (l07_metadata_moby_class_ids[j] == l07_moby_class_ids[ci])
@@ -352,9 +352,9 @@ s32 load_level_assets(s32 full, s32 keep) {
                 if (span->count != moby_class->count0D)
                     printf_1e93b0(D_L07_0020FA40, l07_moby_class_ids[ci]);
                 sound_id_cursor = sound_table_base + span->off;
-                for (k = 0; k < D_L07_00197380[ci]->count0D; k++, sound_id_cursor += 4) {
-                    D_L07_00197380[ci]->f28[k].sound = *(u16 *)sound_id_cursor;
-                    D_L07_00197380[ci]->f28[k].time = sound_bank_handle;
+                for (k = 0; k < l07_moby_classes[ci]->count0D; k++, sound_id_cursor += 4) {
+                    l07_moby_classes[ci]->f28[k].sound = *(u16 *)sound_id_cursor;
+                    l07_moby_classes[ci]->f28[k].time = sound_bank_handle;
                 }
             }
         }
@@ -388,15 +388,15 @@ s32 load_level_assets(s32 full, s32 keep) {
         printf_1e93b0(D_L07_0020FB80, KB(l07_texture_data_base - (s32)D_L18_00174840_26b768[0]));
         printf_1e93b0(D_L07_0020FB98, KB((l07_particle_texture_range_words[1] >> 4) - l07_texture_data_base));
         printf_1e93b0(D_L07_0020FBB0, KB((s32)l07_effects_texture_data_base - (l07_particle_texture_range_words[1] >> 4)));
-        printf_1e93b0(D_L07_0020FBC8, KB((char *)D_L07_00197380[0] - l07_effects_texture_data_base));
-        printf_1e93b0(D_L07_0020FBE0, KB(D_L18_001C6200_26b768[0] - (char *)D_L07_00197380[0]));
+        printf_1e93b0(D_L07_0020FBC8, KB((char *)l07_moby_classes[0] - l07_effects_texture_data_base));
+        printf_1e93b0(D_L07_0020FBE0, KB(D_L18_001C6200_26b768[0] - (char *)l07_moby_classes[0]));
         if (level_header[0xA])
             printf_1e93b0(D_L07_0020FBF8, KB(D_L18_001BCA30_26b768[0] - D_L18_001C6200_26b768[0]));
         else
             printf_1e93b0(D_L07_0020FBF8, KB(D_L18_00160FC0_26b768 - D_L18_001C6200_26b768[0]));
         if (level_header[0xA])
-            printf_1e93b0(D_L07_0020FC10, KB(D_L07_00197380[0]->seqs[0] - D_L18_001BCA30_26b768[0]));
-        printf_1e93b0(D_L07_0020FC28, KB(D_L18_00160FC0_26b768 - D_L07_00197380[0]->seqs[0]));
+            printf_1e93b0(D_L07_0020FC10, KB(l07_moby_classes[0]->seqs[0] - D_L18_001BCA30_26b768[0]));
+        printf_1e93b0(D_L07_0020FC28, KB(D_L18_00160FC0_26b768 - l07_moby_classes[0]->seqs[0]));
         printf_1e93b0(D_L07_0020FC40, KB(D_L18_00160494_26b768 - D_L18_00160FC0_26b768));
         printf_1e93b0(D_L07_0020FC58, KB(level_mobys - D_L18_00160494_26b768));
         printf_1e93b0(D_L07_0020FC70, KB(D_L18_0015FFE8_26b768 - level_mobys));
