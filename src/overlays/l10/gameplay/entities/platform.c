@@ -2084,8 +2084,8 @@ typedef int u128_c __attribute__((mode(TI)));
 
 typedef int OvlQuad_c __attribute__((mode(TI)));
 
-extern f32 D_L10_001D9FF0[];
-extern f32 D_L10_001DA010[];
+extern f32 data_processor_linked_effect_base_uvs[] __asm__("D_L10_001D9FF0");
+extern f32 data_processor_linked_effect_quad_vertex_offsets[] __asm__("D_L10_001DA010");
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
@@ -2163,7 +2163,7 @@ void render_data_processor_linked_effect(u8 *moby) {
     {
         int k;
         for (k = 0; k < 4; k++) {
-            uv1[k * 2] = uv2[k * 2] = D_L10_001D9FF0[k * 2 + 1];
+            uv1[k * 2] = uv2[k * 2] = data_processor_linked_effect_base_uvs[k * 2 + 1];
         }
     }
     group = 0;
@@ -2178,7 +2178,7 @@ void render_data_processor_linked_effect(u8 *moby) {
             next_row = row + 1;
             for (j = 0; j < 4; j++) {
                 matrix1[j * 2] = matrix2[j * 2] =
-                    D_L10_001D9FF0[j * 2] + phase + *(float *)(base + 0x12de0);
+                    data_processor_linked_effect_base_uvs[j * 2] + phase + *(float *)(base + 0x12de0);
             }
             for (i = 0; i < *(int *)(data + 4); i = next) {
                 int offset;
@@ -2215,7 +2215,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                 *(unsigned int *)(buffers.packet.quad + 0x44) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x40) = color;
                 for (; vertex < 4; vertex++) {
-                    add_vector_xyz(buffers.packet.quad + vertex * 0x10, (char *)D_L10_001DA010 + vertex * 0x10,
+                    add_vector_xyz(buffers.packet.quad + vertex * 0x10, (char *)data_processor_linked_effect_quad_vertex_offsets + vertex * 0x10,
                         base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
                 draw_geometry_quad(buffers.packet.quad, scratch + offset, 0);
