@@ -361,7 +361,7 @@ extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attri
 
 extern char D_L14_001674C0[];
 
-extern float D_L14_001E5FD0[4][2];
+extern float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0");
 
 /* Fakematch: an empty scope with a declaration adds two block notes (see the corner loops). */
 #define EMPTY_SCOPES_4 { typedef int pad; } { typedef int pad; } { typedef int pad; } { typedef int pad; }
@@ -404,7 +404,7 @@ void draw_vendor_beam(char *moby) {
     packet[1].gs_state = gs_state;
     packet[0].gs_state = gs_state;
     for (k = 0; k < 4; k++) {
-        float v_coord = D_L14_001E5FD0[k][1];
+        float v_coord = vendor_beam_base_uv[k][1];
         int color;
         packet[2].uv[k][1] = v_coord;
         packet[1].uv[k][1] = v_coord;
@@ -440,7 +440,7 @@ void draw_vendor_beam(char *moby) {
                 /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
                 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 { typedef int pad; }
-                packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(point - point / 4 * 4) * 0.25f;
+                packet[0].uv[corner][0] = vendor_beam_base_uv[corner][0] + convert_integer_to_float(point - point / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
@@ -474,7 +474,7 @@ void draw_vendor_beam(char *moby) {
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
                 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4
-                packet[0].uv[corner][0] = D_L14_001E5FD0[corner][0] + convert_integer_to_float(node - node / 4 * 4) * 0.25f;
+                packet[0].uv[corner][0] = vendor_beam_base_uv[corner][0] + convert_integer_to_float(node - node / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
