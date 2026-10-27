@@ -62,12 +62,12 @@ void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) {
 }
 /* calls func_L12_002BD3D0 with two looked-up ids */
 
-extern char D_L14_001F5F80[];
+extern char level14_textured_effect_list[] __asm__("D_L14_001F5F80");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern void draw_textured_effect_list(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void draw_level14_textured_effect_list(void) __asm__("FUN_L14_00307a28");
 
 void draw_level14_textured_effect_list(void) {
-    draw_textured_effect_list(D_L14_001F5F80, 0x13, get_effect_texture(0x2e), get_effect_texture(0x2f));
+    draw_textured_effect_list(level14_textured_effect_list, 0x13, get_effect_texture(0x2e), get_effect_texture(0x2f));
 }
