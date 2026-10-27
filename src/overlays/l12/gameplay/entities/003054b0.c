@@ -1281,7 +1281,7 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
 
 extern float D_L12_00162108[2] __attribute__((section(".sdata")));
-extern char D_L12_00208B00[];
+extern char hoven_scrolling_clipped_scrolled_uv_buffer[] __asm__("D_L12_00208B00");
 extern int hoven_scrolling_clipped_vertex_counts[] __asm__("D_L12_001FBD10");
 extern int hoven_scrolling_clipped_vertex_position_tables[] __asm__("D_L12_002059E0");
 extern int hoven_scrolling_clipped_base_uv_tables[] __asm__("D_L12_00205A08");
@@ -1306,9 +1306,9 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     if (is_point_inside_clip_volume(D_L12_00167240, moby_data[0])) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
-            FUN_L08_00258090(D_L12_00208B00, hoven_scrolling_clipped_base_uv_tables[i], hoven_scrolling_clipped_vertex_counts[i], D_L12_00162108);
+            FUN_L08_00258090(hoven_scrolling_clipped_scrolled_uv_buffer, hoven_scrolling_clipped_base_uv_tables[i], hoven_scrolling_clipped_vertex_counts[i], D_L12_00162108);
             FUN_L00_001fde98(hoven_scrolling_clipped_vertex_counts[i], hoven_scrolling_clipped_vertex_position_tables[i], hoven_scrolling_clipped_vertex_color_tables[i],
-                             D_L12_00208B00, 1);
+                             hoven_scrolling_clipped_scrolled_uv_buffer, 1);
         }
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));
