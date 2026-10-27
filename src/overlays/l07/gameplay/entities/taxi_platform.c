@@ -122,7 +122,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern char D_L07_00166E40[];
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
-extern char D_L07_00208560[];
+extern char ocean_umbris_scaled_table[] __asm__("D_L07_00208560");
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 
 void ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
@@ -133,7 +133,7 @@ void ocean_umbris_update(unsigned char *moby) {
     };
     switch (moby[0x20]) {
     case OCEAN_UMBRIS_INITIALIZE:
-        prepare_scaled_table_with_byte_128(D_L07_00208560, 0.66666669f);
+        prepare_scaled_table_with_byte_128(ocean_umbris_scaled_table, 0.66666669f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
