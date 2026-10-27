@@ -1192,7 +1192,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 allocate_voice_for_target_entry_c4(s32, s32, void *) __asm__("func_0022DA68");
 int D_L17_0016215C = 10;
 float D_L17_001621F0[2] = {512.0f, 512.0f};
-extern unsigned short D_L17_0016217C __attribute__((sda));
+extern unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") __attribute__((sda));
 extern unsigned char D_0013A4E0_c4[] __asm__("D_0013A4E0");
 extern unsigned char D_0013E533_c4[] __asm__("D_0013E533");
 extern void FUN_L00_001ff660(void *, void *, void *);
@@ -1476,7 +1476,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                 *(int *)&hero.ship_hp = 0;
                 func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f,
                                       1.0f, -1, 50.0f, 1, 1, -1, 0);
-                ship_vars->s62 = D_L17_0016217C;
+                ship_vars->s62 = l17_fighter_jet_collision_death_respawn_delay;
                 ship_moby->state = 7;
                 ship_moby->flags |= 0x41;
             }
