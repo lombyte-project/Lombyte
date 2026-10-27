@@ -1379,7 +1379,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
 
-extern char D_L13_00174180[];
+extern char gemlik_trail_direction_source[] __asm__("D_L13_00174180");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1399,7 +1399,7 @@ void initialize_gemlik_trail(struct Moby *moby) {
     float point_offset[4];
     int i;
     probe_ground_height(&moby->pos, 0, 0.5f);
-    normalize_vector_xyz(moby_vars + 0x200, D_L13_00174180, 1.0f);
+    normalize_vector_xyz(moby_vars + 0x200, gemlik_trail_direction_source, 1.0f);
     moby_point_position(moby, 0, moby_vars + 0x1F0);
     for (i = 0; i < 16; i++) {
         float a = (convert_integer_to_float(i) * 0.0625f - 0.5f) *
