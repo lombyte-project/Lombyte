@@ -1887,7 +1887,7 @@ extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/update_beam_ring_rail_and_pulse_effects.h"
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
-extern Tab_2BE3A8 D_L00_001E9AB0;
+extern Tab_2BE3A8 l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
 
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
@@ -2017,7 +2017,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             Vec_2BE3A8 out;
             Vec_2BE3A8 up;
 
-            colors = D_L00_001E9AB0;
+            colors = l00_beam_origin_particle_color_palette;
             color = colors.c[func_002140B0_2BE3A8(5)];
             wave_width = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8);
             func_002156E0_2BE3A8(&out, &beam_segment_direction, D_0013F5E0_r, func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8));
