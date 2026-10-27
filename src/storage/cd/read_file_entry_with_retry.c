@@ -5,7 +5,7 @@ struct FileEntry {
     u32 lsn;
     u32 size;
 };
-extern struct FileEntry D_0013A448[];
+extern struct FileEntry level_archive_disc_extents[] __asm__("D_0013A448");
 extern s32 sceCdRead(u32, u32, void *, sceCdRMode *);
 extern s32 sceCdSync(s32);
 extern s32 sceCdGetError(void);
@@ -22,7 +22,7 @@ s32 read_file_entry_with_retry(s32 file) {
     mode.spindlctrl = D_0015ED58;
     mode.datapattern = 0;
     mode.pad = 0;
-    file_entry = &D_0013A448[file];
+    file_entry = &level_archive_disc_extents[file];
     do {
         sceCdRead(file_entry->lsn, 5, cd_read_buffer, &mode);
         while (sceCdSync(1) != 0) {
