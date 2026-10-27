@@ -1958,13 +1958,13 @@ void update_hero_motion_by_state(void) {
                 hero.grind_voice = -1;
             }
             if (hero.state.current == HERO_STATE_GRIND || hero.state.current == 0x2B) {
-                f32 ang;
+                f32 grind_particle_yaw;
                 f32 rr;
                 qcopy(&vector_and_hit_scratch, &hero.motion.pos);
-                ang = fast_add_rotations(hero.rail_dir_yaw, randf_sym(0.0f, 0.5235988f));
+                grind_particle_yaw = fast_add_rotations(hero.rail_dir_yaw, randf_sym(0.0f, 0.5235988f));
                 rr = random_float_between(frame_time * 4.0f, frame_time * 7.0f);
-                v10.f[0] = fast_cos(ang) * rr;
-                v10.f[1] = fast_sin(ang) * rr;
+                v10.f[0] = fast_cos(grind_particle_yaw) * rr;
+                v10.f[1] = fast_sin(grind_particle_yaw) * rr;
                 v10.f[2] = 0.0f;
                 v10.f[2] = random_float_between(frame_time * 3.0f, frame_time * 5.0f);
                 v10.f[3] = -(frame_time_sq * 30.0f);
@@ -2103,13 +2103,13 @@ void update_hero_motion_by_state(void) {
                     }
                 }
                 if (hero.rail_switching != 0 && hero.rail_transfer_frames <= scale_game_frames(48)) {
-                    f32 u;
+                    f32 previous_rail_transfer_fraction;
                     subtract_vector_xyz(&vector_matrix_and_hit_scratch, &vector_and_hit_scratch, &v10);
                     hero.rail_transfer_frames++;
                     fast_vec_scale(&vector_matrix_and_hit_scratch, &vector_matrix_and_hit_scratch, (f32)hero.rail_transfer_frames / (f32)scale_game_frames(48));
-                    u = (f32)(hero.rail_transfer_frames - 1) / (f32)scale_game_frames(48);
+                    previous_rail_transfer_fraction = (f32)(hero.rail_transfer_frames - 1) / (f32)scale_game_frames(48);
                     subtract_vector_xyz(&vector_and_rotation_scratch, &vector_and_hit_scratch, &v10);
-                    fast_vec_scale(&vector_and_rotation_scratch, &vector_and_rotation_scratch, u);
+                    fast_vec_scale(&vector_and_rotation_scratch, &vector_and_rotation_scratch, previous_rail_transfer_fraction);
                     hero.motion.pos.f[2] += vector_matrix_and_hit_scratch.f[2] - vector_and_rotation_scratch.f[2];
                     add_vector_xyz(&vector_and_rotation_scratch, &v10, &vector_matrix_and_hit_scratch);
                     subtract_vector_xyz(&vector_matrix_and_hit_scratch, &vector_and_rotation_scratch, &hero.motion.pos);
