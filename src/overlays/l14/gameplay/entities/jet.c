@@ -419,7 +419,7 @@ typedef struct {
 
 extern struct Moby *D_L14_0015FFD8_lift __asm__("D_L14_0015FFD8");
 extern char *D_L14_001B0BB0_lift[] __asm__("D_L14_001B0BB0");
-extern char D_L14_001FC840[];
+extern char shuttle_missing_target_error_format[] __asm__("D_L14_001FC840");
 #include "rnc/overlay/l14/gameplay/entities/jet_globals.h"
 extern s32 shuttle_enter_riding_transition_frames_gp __asm__("D_L14_00161B8C") __attribute__((sda));
 extern s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") __attribute__((sda));
@@ -493,7 +493,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         shuttle_vars->h206 = 0;
         attach_manipulator(shuttle_moby, 0, shuttle_vars->manip);
         if (shuttle_vars->rider == -1) {
-            lift_print(D_L14_001FC840, shuttle_moby->save_id);
+            lift_print(shuttle_missing_target_error_format, shuttle_moby->save_id);
             lift_remove(shuttle_moby);
             return;
         }
