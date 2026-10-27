@@ -902,8 +902,8 @@ collision:
 extern Pair D_L08_001E8348[];
 extern char D_L08_001E8360[];
 extern int D_L08_001E2858[];
-extern int D_L08_001E8268[];
-extern int D_L08_001E82A0[];
+extern int scrolled_mesh_position_streams[] __asm__("D_L08_001E8268");
+extern int scrolled_mesh_uv_source_streams[] __asm__("D_L08_001E82A0");
 extern int D_L08_001E8310[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
@@ -913,8 +913,8 @@ void draw_scrolled_mesh_batch(int pair_index) __asm__("FUN_L08_002f0b40");
 void draw_scrolled_mesh_batch(int pair_index) {
     int i;
     for (i = 0; i < 13; i++) {
-        FUN_L08_00258090(D_L08_001E8360, D_L08_001E82A0[i], D_L08_001E2858[i], &D_L08_001E8348[pair_index]);
-        FUN_L00_001fde98(D_L08_001E2858[i], D_L08_001E8268[i], D_L08_001E8310[i], D_L08_001E8360,
+        FUN_L08_00258090(D_L08_001E8360, scrolled_mesh_uv_source_streams[i], D_L08_001E2858[i], &D_L08_001E8348[pair_index]);
+        FUN_L00_001fde98(D_L08_001E2858[i], scrolled_mesh_position_streams[i], D_L08_001E8310[i], D_L08_001E8360,
                          1);
     }
 }
