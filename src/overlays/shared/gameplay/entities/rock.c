@@ -638,7 +638,7 @@ typedef struct {
 } TpLevelState;
 
 extern char D_L01_00167240[];
-extern char D_L01_0020B550[];
+extern char cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int D_0015ED84; /* no foreign declaration */
 extern int cutscene_active __asm__("D_L01_0015F404");
 extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
@@ -675,7 +675,7 @@ void update_cutscene_trigger(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
         if (*(int *)(trigger_vars + 0x24) == -1) {
-            stub_printf(D_L01_0020B550, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
+            stub_printf(cutscene_camera_init_position_error_format, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
             mark_moby_for_removal(moby);
             return;
         }
