@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
-extern u8 D_001538E8[];
+extern u8 chroma_intra_matrix_error_message[] __asm__("D_001538E8");
 const u8 D_00153910[] = "load_chroma_non_intra_quantizer_matrix == 1";
 extern s32 _Error();
 extern s32 _nextBit();
@@ -25,7 +25,7 @@ void _quantMatrixExtension(struct MpegDecoder *mpeg) {
         _waitIpuIdle(mpeg);
     }
     if (_nextBit(mpeg, 1) != 0) {
-        _Error(mpeg, D_001538E8);
+        _Error(mpeg, chroma_intra_matrix_error_message);
     }
     if (_nextBit(mpeg, 1) != 0) {
         _Error(mpeg, D_00153910);
