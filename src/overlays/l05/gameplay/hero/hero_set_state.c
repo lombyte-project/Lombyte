@@ -26,7 +26,7 @@ typedef struct {
 
 extern char D_L05_0017C380_e[] __asm__("D_L05_0017C380");
 extern T2C_24D680 D_L05_0017C088[];
-extern char *D_L05_0015FFD8;
+extern char *moby_pool_4f60 __asm__("D_L05_0015FFD8");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float level05_hero_animation_blend_curves[][25] __asm__("D_L05_0017C250");
@@ -58,7 +58,7 @@ extern s32 D_L05_0015F688 __attribute__((sda));
 int D_L05_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 struct HeroVelocityKey D_L05_0015F6F8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern unsigned char D_0013D388[];
-extern unsigned char D_L05_0017C238[];
+extern unsigned char l05_run_jump_animation_by_run_frame[] __asm__("D_L05_0017C238");
 extern void *D_L05_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -509,7 +509,7 @@ int hero_set_state(int a, int b) {
                 fill_transfer_words(&q->smoothed_spin_stick, 0, 0x210);
                 q->hoverboard_moby = (u8 *)m;
                 q->unk890 = (u8 *)
-                    D_L05_0015FFD8 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
+                    moby_pool_4f60 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
                 q->board_gravity = frame_time_sq * 22.0f;
                 q->unk87C = 1.2217305f;
                 q->trick_hud_handle = -1;
@@ -1478,7 +1478,7 @@ int hero_set_state(int a, int b) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
                     if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
-                        id = D_L05_0017C238[n];
+                        id = l05_run_jump_animation_by_run_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {
                     set_hero_animation(0x12, 0, (float)scale_game_frames(5));
