@@ -419,7 +419,7 @@ void grant_inventory_item(int id, int flag) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
 #include "rnc/gameplay/entities/moby.h"
 
-extern char *D_L00_001B04B0[];
+extern char *toad_paths[] __asm__("D_L00_001B04B0");
 extern char bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");
 extern char bolt_drop_integer_scale_format[] __asm__("D_L00_001600B0");
 extern char bolt_drop_float_scale_format[] __asm__("D_L00_001600C0");
@@ -626,7 +626,7 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
         if (path_index >= 0) {
             gravity = frame_time_sq_macro * 10.8f * -0.5f;
             rise = velocity[2] - gravity;
-            height = position[2] - *(float *)(D_L00_001B04B0[path_index] + 0x18);
+            height = position[2] - *(float *)(toad_paths[path_index] + 0x18);
             time = 120.0f;
             roots = solve_quadratic_equation(&first_root, &second_root, gravity, rise, height);
             if (1.0f <= (float)roots) {
