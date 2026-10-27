@@ -2619,12 +2619,12 @@ void update_owner_linked_class_160_moby(struct Moby *moby) {
 extern int rand_q(void) __asm__("FUN_001160d8");
 extern int below_q(int) __asm__("FUN_00213260");
 
-extern unsigned char D_L13_001D3558[];
+extern unsigned char l13_starfighter_voice_line_ids[] __asm__("D_L13_001D3558");
 int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) __asm__("FUN_L13_002e86f8");
 
 int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) {
     int j = rand_q() % line_count;
-    int id = D_L13_001D3558[base + j];
+    int id = l13_starfighter_voice_line_ids[base + j];
     int i;
     int lt;
     if (base < 0x1D) {
@@ -2652,7 +2652,7 @@ int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int bas
                     *(int *)(moby_data + 0x13C) &= ~(1 << id);
                 j++;
                 j %= line_count;
-                id = D_L13_001D3558[base + j];
+                id = l13_starfighter_voice_line_ids[base + j];
             } else {
                 music_stream_state.queued_secondary_track = id + 50000;
                 moby_data[0x13A] = 1;
