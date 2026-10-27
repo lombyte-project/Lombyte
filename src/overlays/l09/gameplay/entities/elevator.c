@@ -943,7 +943,7 @@ extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute_
 extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
 extern f32 turret_beam_local_offset_gp[2] __asm__("D_L09_00161CC0") __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
 extern TurretShake D_L09_00166E00;
-extern TurretBeam D_L09_00180440[];
+extern TurretBeam l09_turret_beam_light_slots[] __asm__("D_L09_00180440");
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
@@ -1071,7 +1071,7 @@ void turret_update(struct Moby *moby) {
                 vars->beam = allocate_colored_effect_slot(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
-                beam = &D_L09_00180440[vars->beam];
+                beam = &l09_turret_beam_light_slots[vars->beam];
                 beam->pos[0] = work_vector.f[0];
                 beam->pos[1] = work_vector.f[1];
                 beam->pos[2] = work_vector.f[2];
