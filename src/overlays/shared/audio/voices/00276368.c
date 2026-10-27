@@ -104,7 +104,7 @@ extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern V D_L00_00166DC0[];
-extern Own D_L00_001B71F0;
+extern Own l00_pause_menu_exit_guarded_page_owner __asm__("D_L00_001B71F0");
 extern Own D_L00_001B7DD0;
 extern Own D_L00_001B80E0;
 extern Own D_L00_001B63F8;
@@ -196,7 +196,7 @@ void initialize_pause_menu(void) {
         small_buffers = 1;
     } else if (state_id == 0x21) {
         D_L00_001B9CF0.state = 0x22;
-        page = &D_L00_001B71F0;
+        page = &l00_pause_menu_exit_guarded_page_owner;
         state->owner = page;
         state->unk8 = page;
         state->unk124 = 1;
@@ -585,7 +585,7 @@ void update_pause_menu(void) {
         }
         flag = (D_L00_001B9CF0.unk8 == D_L00_001B9CF0.owner->unk38);
         if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8 &&
-            D_L00_001B9CF0.owner != &D_L00_001B71F0 && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
+            D_L00_001B9CF0.owner != &l00_pause_menu_exit_guarded_page_owner && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
             D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &D_L00_001B63F8 &&
             D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
             if (D_L00_001B9CF0.state != 0x23) {
