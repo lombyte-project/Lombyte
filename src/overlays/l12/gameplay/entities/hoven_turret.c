@@ -39,8 +39,8 @@ typedef struct Data_303CA8 {
 
 extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L12_001FB530[][4];
-extern float D_L12_001FB5B0[][4];
+extern float oscillating_link_strip_quad_vertex_offsets[][4] __asm__("D_L12_001FB530");
+extern float oscillating_link_strip_transform_rotations[][4] __asm__("D_L12_001FB5B0");
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
@@ -81,7 +81,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     for (i = 0; i < 2; i++) {
         float *matrix = matrices[i];
 
-        func_001FA218_303CA8(matrix, D_L12_001FB5B0[i]);
+        func_001FA218_303CA8(matrix, oscillating_link_strip_transform_rotations[i]);
         func_001FA540_303CA8(matrix, rotation_matrix, matrix);
         if (!(i & 1) && data->target != -1) {
             qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
@@ -122,7 +122,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
                 quad[1].uv[uv_index * 2] = D_L12_001FB7D0_303CA8[uv_index * 2] + scroll + oscillating_link_strip_scroll_phase_gp;
             }
             for (vertex = 0; vertex < 4; vertex++) {
-                func_001F9BD8_303CA8(&quad[1].v[vertex * 4], D_L12_001FB530[vertex], data->ring[ring][segment + (vertex >> 1)]);
+                func_001F9BD8_303CA8(&quad[1].v[vertex * 4], oscillating_link_strip_quad_vertex_offsets[vertex], data->ring[ring][segment + (vertex >> 1)]);
             }
             for (pass = 0; pass < 2; pass++) {
                 func_L00_001FD1D8_303CA8(&quad[1], matrices[pass], 0);
