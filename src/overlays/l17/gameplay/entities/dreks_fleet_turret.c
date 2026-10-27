@@ -648,14 +648,14 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int rand(void);
 extern int random_integer_below(int);
 extern int truncate_float_to_s32();
-extern short D_L17_00161B78 __attribute__((sda));
+extern short fleet_radial_rotation_rate_degrees_factor __asm__("D_L17_00161B78") __attribute__((sda));
 extern short fleet_radial_base_elevation_degrees __asm__("D_L17_00161B7C") __attribute__((sda));
 extern f32 D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
 extern short fleet_radial_radius __asm__("D_L17_00161B84") __attribute__((sda));
-extern short D_L17_00161B88 __attribute__((sda));
-extern short D_L17_00161B8C __attribute__((sda));
-extern short D_L17_00161B90 __attribute__((sda));
-extern short D_L17_00161B94 __attribute__((sda));
+extern short fleet_radial_particles_per_emission __asm__("D_L17_00161B88") __attribute__((sda));
+extern short fleet_radial_particle_scale __asm__("D_L17_00161B8C") __attribute__((sda));
+extern short fleet_radial_particle_lifetime_range_end __asm__("D_L17_00161B90") __attribute__((sda));
+extern short fleet_radial_particle_color __asm__("D_L17_00161B94") __attribute__((sda));
 extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life,
                                        unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -707,7 +707,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
         case RING_INITIALIZE:
             *(unsigned char *)(moby + 0x30) = 0xFF;
             *(unsigned char *)(moby + 0x20) = 1;
-            ring_vars[1] = ring_vars[0] * *(float *)&D_L17_00161B78 * DEG_TO_RAD * frame_time;
+            ring_vars[1] = ring_vars[0] * *(float *)&fleet_radial_rotation_rate_degrees_factor * DEG_TO_RAD * frame_time;
             break;
         case RING_ROTATE_AND_DRAW:
             *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), ring_vars[1]);
@@ -760,12 +760,12 @@ void update_fleet_rotating_radial_effect(char *moby) {
                         *(float *)((char *)spF0 + 8) = 12.0f;
                         transform_vector_by_basis(spF0, spF0, (moby + 0xC0));
                         {
-                            for (k = 0; k < *(int *)&D_L17_00161B88; k++) {
+                            for (k = 0; k < *(int *)&fleet_radial_particles_per_emission; k++) {
                                 particle_direction_sign_or_minimum_speed = -1.0f;
                                 if (rand() & 1)
                                     particle_direction_sign_or_minimum_speed = 1.0f;
                                 particle_lifetime = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
-                                    *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
+                                    *(float *)&fleet_radial_particle_lifetime_range_end * 0.5f, *(float *)&fleet_radial_particle_lifetime_range_end)));
                                 if (particle_lifetime <= 0)
                                     particle_lifetime = 1;
                                 subtract_vector_xyz(particle_vector_scratch, spC0, (moby + 0x10));
@@ -785,9 +785,9 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                     spF0, spF0,
                                     random_float_between(particle_direction_sign_or_minimum_speed, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
                                 spawn_moving_hero_relative_alpha_fade_particle((float *)spE0, (char *)spF0,
-                                                 *(int *)&D_L17_00161B94, particle_lifetime & 0xFF,
+                                                 *(int *)&fleet_radial_particle_color, particle_lifetime & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
-                                                 *(float *)&D_L17_00161B8C);
+                                                 *(float *)&fleet_radial_particle_scale);
                             }
                         }
                     }
