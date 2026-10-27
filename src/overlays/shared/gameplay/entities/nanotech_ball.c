@@ -2965,7 +2965,7 @@ void suck_beam_update(void *moby,void *position) {
         frame[3],tmp_c,motion,tmp_d,tmp_e,interp,cross_c,basis_c,tmp_f,unused_a,unused_b;
     V41 *orientation;
     int i,j,n,segment,next_ring;
-    float t,angle,turn,delta,dot,length,amount,speed;
+    float beam_step_blend_fraction,angle,turn,delta,dot,length,amount,speed;
     Particle41 *p;
     V41 *anchor,*previous,*source;
 
@@ -3011,11 +3011,11 @@ void suck_beam_update(void *moby,void *position) {
     add_vector_xyz(&start,&start,&step);
     transform_vector_by_basis(&end,&(*(V41 *)D_L00_00161B70),orientation);
     add_vector_xyz(&end,&end,&step);
-    t=(float)D_L00_00161B54/convert_integer_to_float(scale_game_frames(60));
+    beam_step_blend_fraction=(float)D_L00_00161B54/convert_integer_to_float(scale_game_frames(60));
     D_L00_00161B54++;
-    step.f.x=start.f.x+(end.f.x-start.f.x)*t;
-    step.f.y=start.f.y+(end.f.y-start.f.y)*t;
-    step.f.z=start.f.z+(end.f.z-start.f.z)*t;
+    step.f.x=start.f.x+(end.f.x-start.f.x)*beam_step_blend_fraction;
+    step.f.y=start.f.y+(end.f.y-start.f.y)*beam_step_blend_fraction;
+    step.f.z=start.f.z+(end.f.z-start.f.z)*beam_step_blend_fraction;
     if(D_L00_00161B54>=scale_game_frames(60)) {
         qcopy(&(*(V41 *)D_L00_00161B60),&(*(V41 *)D_L00_00161B70));
         fast_vec_normalize(&axis,orientation,D_L00_00161B84);
