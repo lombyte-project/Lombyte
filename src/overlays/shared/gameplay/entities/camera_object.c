@@ -1906,8 +1906,8 @@ void spawn_wrench_impact_effects(u8 *o) __asm__("FUN_L00_002a8028");
 void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
 extern char D_0013CAE0[];
-extern char D_00140B00[];
-extern char D_001403C0[];
+extern char thrown_wrench_transform_history[] __asm__("D_00140B00");
+extern char wrench_return_position[] __asm__("D_001403C0");
 extern PlayerCamera player_camera __asm__("D_L00_00166C80");
 extern WrenchHit collision_hit __asm__("D_L00_00173E40");
 extern void draw_target_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
@@ -2085,7 +2085,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         float *position;
         float radius;
         {
-        char *control=((char *)&D_00140B00);
+        char *control=((char *)&thrown_wrench_transform_history);
         WrenchHero *control_player=(WrenchHero*)(control-0x17B0);
         update_moby_transform_history(control,0);
         wrench_moby->parent=control_player->moby; control_player->wrench_state=2;
@@ -2115,7 +2115,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             int arrived=0;
             float length,steps;
             process_mobies_near_returning_wrench((char*)wrench_moby);
-            subtract_vector_xyz(work.v[1],((char *)&D_001403C0),position);
+            subtract_vector_xyz(work.v[1],((char *)&wrench_return_position),position);
             wrench_vars->acceleration+=frame_time_sq*0.9f; wrench_vars->speed+=wrench_vars->acceleration;
             length=vector_length_xyz(work.v[1]); steps=wrench_vars->speed; steps=length/steps;
             if (steps<(float)scale_game_frames_alt(5) && wrench_moby->current_animation!=1) blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(5));
