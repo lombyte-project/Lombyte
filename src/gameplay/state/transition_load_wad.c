@@ -112,7 +112,7 @@ extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
 extern u8 boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8 D_00186310[];
-extern SoundBanks D_0018CB20;
+extern SoundBanks render_sequence __asm__("D_0018CB20");
 extern LoadState D_001940C0;
 extern u8 D_00194180[];
 extern HelpState D_001996D0;
@@ -293,16 +293,16 @@ void transition_load_wad(void)
   gs_texture_allocation_cursor = v + 0x20000;
   gs_texture_allocation_start = v + 0x20000;
   D_001940C0.x1C = initialize_level_render_state(data + hdr->x7C);
-  fill_transfer_words(&D_0018CB20, 0, 0x1C0);
+  fill_transfer_words(&render_sequence, 0, 0x1C0);
   fill_transfer_words(D_00186310, 0, 0x40);
-  D_0018CB20.x58 = D_001940C0.x1C;
-  D_0018CB20.x5C = (D_001940C0.x1C += 0x40000);
+  render_sequence.x58 = D_001940C0.x1C;
+  render_sequence.x5C = (D_001940C0.x1C += 0x40000);
   D_001940C0.x1C += 0x40000;
   snd = (WadSound *) (data + hdr->x80);
   sound_entry_count_or_moby_class_slot = 0;
   if (snd->size != 0)
   {
-    out = D_0018CB20.x60;
+    out = render_sequence.x60;
     do
     {
       sound_entry_count_or_moby_class_slot++;
