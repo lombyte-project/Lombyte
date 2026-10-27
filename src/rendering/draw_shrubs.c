@@ -10,7 +10,7 @@ struct ShrubDrawState {
     s32 unk0;
     s32 pad[2];
 };
-extern struct ShrubDrawState D_0018A2D0;
+extern struct ShrubDrawState shrub_draw_submission_state __asm__("D_0018A2D0");
 extern void flush_cache(s32) __asm__("func_00118A80");
 extern void WriteDmaChannel(u32, u32, u32);
 extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
@@ -29,7 +29,7 @@ void draw_shrubs(void) {
     packet += 0x10;
     render_packet_cursor.addr = packet;
     noop_core_callback_secondary(shrub_textures_label, 1);
-    if (D_0018A2D0.unk0 != 0) {
+    if (shrub_draw_submission_state.unk0 != 0) {
         flush_cache(0);
         shrub_proc();
         WriteDmaChannel(D_001D8EB0, 0x3200, 0x40);
