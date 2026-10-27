@@ -178,7 +178,7 @@ struct VoiceSlot {
     struct MobyView *pm88;
 };
 extern u8 D_0013E550[];
-extern u8 D_L17_0017C8C0[];
+extern u8 l17_swim_speed_scale_by_animation_frame[] __asm__("D_L17_0017C8C0");
 
 extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -722,7 +722,7 @@ void update_hero_motion_for_current_state(void) {
             if (hero.state.current == 0x35) {
                 build_spherical_offset(&hero.motion.velocity, hero.ground_speed, hero.motion.rot.f[2], yaw);
             } else if (hero.state.current == 0x33) {
-                f32 sp = hero.ground_speed * FUN_L00_00209018(D_L17_0017C8C0, 0x1E) * 5.0f;
+                f32 sp = hero.ground_speed * FUN_L00_00209018(l17_swim_speed_scale_by_animation_frame, 0x1E) * 5.0f;
                 if (hero.state.prev == 0x35 && scale_game_frames(15) > hero.state_timer) {
                     if (sp < frame_time * 4.5f) {
                         sp = frame_time * 4.5f;
@@ -839,7 +839,7 @@ void update_hero_motion_for_current_state(void) {
             }
             speed_step(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
             {
-                f32 sp = hero.ground_speed * FUN_L00_00209018(D_L17_0017C8C0, 0x1E) * 5.5f;
+                f32 sp = hero.ground_speed * FUN_L00_00209018(l17_swim_speed_scale_by_animation_frame, 0x1E) * 5.5f;
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[2] = 0.0f;
