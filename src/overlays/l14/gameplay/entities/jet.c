@@ -1217,12 +1217,12 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L14_00161C50 __attribute__((sda));
-extern short D_L14_00161C54 __attribute__((sda));
-extern short D_L14_00161C58 __attribute__((sda));
-extern short D_L14_00161C5C __attribute__((sda));
-extern short D_L14_00161C60 __attribute__((sda));
-extern short D_L14_00161C64 __attribute__((sda));
+extern short lightning_arc_interval_remaining_frames_gp __asm__("D_L14_00161C50") __attribute__((sda));
+extern short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") __attribute__((sda));
+extern short lightning_arc_initialized_gp __asm__("D_L14_00161C58") __attribute__((sda));
+extern short lightning_displaced_endpoint_z_setting_gp __asm__("D_L14_00161C5C") __attribute__((sda));
+extern short lightning_visibility_test_point_w_gp __asm__("D_L14_00161C60") __attribute__((sda));
+extern short lightning_visibility_test_z_offset_gp __asm__("D_L14_00161C64") __attribute__((sda));
 extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
@@ -1241,8 +1241,8 @@ void update_path_lightning_controller(struct Moby *moby) {
         if (current_level_index == 0xE) hero.pack_disabled = 1;
         MOBY(moby)->state = 1;
         moby->update_dist = 0xFF;
-        *(int *)&D_L14_00161C58 = 0;
-        *(int *)&D_L14_00161C50 = 0;
+        *(int *)&lightning_arc_initialized_gp = 0;
+        *(int *)&lightning_arc_interval_remaining_frames_gp = 0;
     }
     moby_state = MOBY(moby)->state;
     if (moby_state == 1) {
@@ -1262,15 +1262,15 @@ void update_path_lightning_controller(struct Moby *moby) {
         show_tracked_moby();
         return;
     }
-    if (tick_countdown_32_alt(&D_L14_00161C50) == 0) return;
-    if (*(int *)&D_L14_00161C58 == 0) {
+    if (tick_countdown_32_alt(&lightning_arc_interval_remaining_frames_gp) == 0) return;
+    if (*(int *)&lightning_arc_initialized_gp == 0) {
         int *path = D_L14_001B0F30_ee[*(int *)moby_vars];
         int i;
         int visible_point_count = 0;
         for (i = 0; i < path[0] && visible_point_count < 5; i++) {
             qcopy(visibility_test_point, (char *)path + i * 16 + 0x10);
-            visibility_test_point[2] += *(float *)&D_L14_00161C64;
-            visibility_test_point[3] = *(float *)&D_L14_00161C60;
+            visibility_test_point[2] += *(float *)&lightning_visibility_test_z_offset_gp;
+            visibility_test_point[3] = *(float *)&lightning_visibility_test_point_w_gp;
             if (fast_bsphere_check(visibility_test_point, 255.0f) > 0) {
                 visible_path_point_indices[visible_point_count++] = i;
             }
@@ -1280,7 +1280,7 @@ void update_path_lightning_controller(struct Moby *moby) {
             qcopy(D_L14_00161CC0, (char *)path + visible_path_point_indices[k] * 16 + 0x10);
             lightning_path_endpoint_w = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
-            lightning_displaced_endpoint_z = *(float *)&D_L14_00161C5C;
+            lightning_displaced_endpoint_z = *(float *)&lightning_displaced_endpoint_z_setting_gp;
             D_L14_00161CD0_f += FUN_L00_00257c48(0.0f, 20.0f);
             lightning_displaced_endpoint_y += FUN_L00_00257c48(0.0f, 20.0f);
             qcopy(&moby->pos, D_L14_00161CC0);
@@ -1288,8 +1288,8 @@ void update_path_lightning_controller(struct Moby *moby) {
     }
     update_branched_lightning_arc(moby);
     if (lightning_arc_remaining_frames == 0) {
-        *(int *)&D_L14_00161C50 = scale_game_frames(*(int *)&D_L14_00161C54);
-        *(int *)&D_L14_00161C58 = 0;
+        *(int *)&lightning_arc_interval_remaining_frames_gp = scale_game_frames(*(int *)&lightning_arc_interval_frames_gp);
+        *(int *)&lightning_arc_initialized_gp = 0;
     }
 }
 /* Arc state shared by FUN_L14_002ed530 and its draw callback FUN_L14_002edc18. */
@@ -1346,8 +1346,8 @@ void update_branched_lightning_arc(char *moby) {
     s32 *starts;
     u16 *main_arc_age;
 
-    if (*(int *)&D_L14_00161C58 == 0) {
-        *(int *)&D_L14_00161C58 = 1;
+    if (*(int *)&lightning_arc_initialized_gp == 0) {
+        *(int *)&lightning_arc_initialized_gp = 1;
         lightning_arc_sound_pending = 1;
         D_L14_00161CE8 = moby;
         i = 0;
