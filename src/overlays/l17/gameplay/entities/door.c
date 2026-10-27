@@ -478,7 +478,7 @@ extern float vector_length_xyz(void *a);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
-extern unsigned char D_0015EDB4[4];
+extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
@@ -509,7 +509,7 @@ void draw_fighter_jet_radar_contact_icon(char *radar_rotation, char *from, char 
     scale_vector_xyz(radar_offset, radar_offset, 0.0714285746f);
     radar_distance = vector_length_xyz(radar_offset);
     side = 1.0f;
-    if (D_0015EDB4[0] != 0) {
+    if (draw_map51[0] != 0) {
         side = -1.0f;
     }
     x = func_001FA898_r(side * radar_offset[0]);
