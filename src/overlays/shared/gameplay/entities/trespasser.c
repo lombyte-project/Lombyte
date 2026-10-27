@@ -261,7 +261,7 @@ extern int f99a8_2c5be8(int) __asm__("FUN_001f99a8");
 extern int f96f8_2c5be8(int) __asm__("FUN_001f96f8");
 extern int f8dc90_2c5be8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-extern int D_0013DE08[];
+extern int weapon_ammo_pickup_totals[] __asm__("D_0013DE08");
 extern int D_L00_00161838;
 int try_collect_ammo_pickup(char *pickup_moby) __asm__("FUN_L00_002c5be8");
 
@@ -285,7 +285,7 @@ int try_collect_ammo_pickup(char *pickup_moby) {
                          : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
-        D_0013DE08[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
+        weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
         *(unsigned char *)(pickup_moby + 0x20) = 2;
         *(float *)(pickup_moby + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
         f99f8_2c5be8(pickup_vars + 4);
@@ -2561,7 +2561,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
                 queue_formatted_dialogue_message(sound, difference, -1);
             }
             account_idx = pickup_vars->weapon;
-            D_0013DE08[account_idx] += weapon_ammo_counts[account_idx] - before;
+            weapon_ammo_pickup_totals[account_idx] += weapon_ammo_counts[account_idx] - before;
             pickup_moby->state = 2;
             pickup_moby->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
             FUN_001f99f8_2c53c0(&pickup_vars->velocity);
