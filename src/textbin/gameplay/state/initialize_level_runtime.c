@@ -107,7 +107,7 @@ extern s32 part_clip_dist __asm__("D_001600BC");
 extern s64 D_001604E0 __attribute__((sda));
 extern s64 D_001604F0 __attribute__((sda));
 #include "rnc/gameplay/state/level_state.h"
-extern SceneInfo D_0018CB20;
+extern SceneInfo render_sequence __asm__("D_0018CB20");
 extern u8 D_00186310[];
 extern u8 D_00186350[];
 extern u32 sound_bank_handle __asm__("D_0015ED5C");
@@ -270,21 +270,21 @@ void initialize_level_runtime(void) {
         level_render_state.scene_mode = 4;
         level_render_state.scene_state = 2;
     }
-    fill_transfer_words(&D_0018CB20, 0, 0x1C0);
+    fill_transfer_words(&render_sequence, 0, 0x1C0);
     fill_transfer_words(D_00186310, 0, 0x40);
     fill_transfer_words(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
     workspace_offset = current_vu_chain - 0x60000;
     scene_offset = &scene_offsets[level_render_state.scene_mode];
-    D_0018CB20.unk58 = D_001940C0.unk4 + workspace_offset;
-    D_0018CB20.unk5C = D_001940C0.unk8 + workspace_offset;
+    render_sequence.unk58 = D_001940C0.unk4 + workspace_offset;
+    render_sequence.unk5C = D_001940C0.unk8 + workspace_offset;
     current_vu_chain = workspace_offset;
     scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
         {
             s32 chunk_offset = scene_chunk->offset + 0x800;
-            D_0018CB20.chunks[k] = data_base + *scene_offset + chunk_offset;
+            render_sequence.chunks[k] = data_base + *scene_offset + chunk_offset;
         }
         scene_chunk++;
     }
