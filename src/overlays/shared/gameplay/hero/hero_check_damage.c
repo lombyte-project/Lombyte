@@ -689,152 +689,133 @@ void update_hero_condition_animation(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020dd20.s", FUN_L00_0020dd20);
-#else
-/* Near miss (SN BYTES 6/399, size-exact): left is $v1/$a0 swapped for the hero and item-slot
- * address temporaries (the prologue lui and the loop-head lui). */
 extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
-extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
-extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
-struct AngleFields_20dd20 {
-    u8 pad[0x5e4];
-    f32 unk5E4;
-    u8 pad5E8[0x3c];
-    f32 unk624, unk628;
-    u8 pad62C[0x68];
-    f32 unk694;
-    u8 pad698[0x3c];
-    f32 unk6D4, unk6D8;
-};
-extern struct AngleFields_20dd20 D_L00_0017A680_20dd20 __asm__("D_L00_0017A680") __attribute__((section(".data")));
-extern u8 *FUN_L00_0024f028_20dd20(struct Moby *, s32) __asm__("FUN_L00_0024f028");
-extern void FUN_L00_0024f0e8_20dd20(struct Moby *, u8 **) __asm__("FUN_L00_0024f0e8");
-extern void FUN_L00_0024f190_20dd20(struct Moby *, u8 *) __asm__("FUN_L00_0024f190");
-extern f32 FUN_00213ed8_20dd20(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern char *D_L00_00197300[];
+extern u8 D_L00_0017CA80[] __attribute__((section(".data")));
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+extern u8 *allocate_moby_animation_slot(u8 *, s32) __asm__("FUN_L00_0024f028");
+extern void release_moby_animation_slot(u8 *, u8 **) __asm__("FUN_L00_0024f0e8");
+extern void advance_moby_animation_blend(void *, unsigned char *) __asm__("FUN_L00_0024f190");
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern s32 return_hero_animation_id_unchanged(s32) __asm__("FUN_L00_002050b8");
-extern s32 FUN_L00_0020d5d0_20dd20(s32, f32 *) __asm__("FUN_L00_0020d5d0");
-extern s32 FUN_L00_0020d5b8_20dd20(struct Moby *, s32) __asm__("FUN_L00_0020d5b8");
-extern s32 FUN_001f96f8_20dd20(s32) __asm__("FUN_001f96f8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-extern u8 *hero_slots[2] __asm__("D_00140050") __attribute__((section(".data")));
-
-void FUN_L00_0020dd20(void) {
-    struct Hero *h = &hero;
+/* Ported from rac1-decomp (src/overlays/shared/hero_animation_slots.c: update_hero_item_slot_animation_blends). */
+void update_hero_item_slot_blends(void) __asm__("FUN_L00_0020dd20");
+void update_hero_item_slot_blends(void) {
     s32 i;
 
-    i = 0;
-    do {
+    for (i = 0; i < 2; i++) {
+        struct Hero *g = &hero;
         u8 *o;
-        u8 *t;
         s32 diff;
         struct { s16 v; } w;
         s32 r;
         s32 k;
         s32 j;
-        u8 *ids;
         f32 out;
-        struct Hero *p6;
+        u8 *blend = hero.item_slot_blends[i];
 
-        /* Fakematch: the empty loops put i in $s7 and the item base in $fp. */
-        do { do { t = hero_slots[i]; } while (0); } while (0);
-
-        if (t != 0 && *(s32 *)(t + 0x34) != 0) {
-            if (FUN_00213ed8_20dd20((f32 *)(t + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
-                FUN_L00_0024f0e8_20dd20(h->moby, &hero_slots[i]);
+        if (blend != 0 && *(s32 *)(blend + 0x34) != 0) {
+            if (approach_value((f32 *)(blend + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
+                release_moby_animation_slot((u8 *)g->moby, &hero.item_slot_blends[i]);
             }
         } else {
-            s32 c = h->unk20AB;
+            s32 anim_count = g->item_slot_anim_count;
             s32 want = 0;
 
-            if (c != 0 && (i == 0 || c == 2)) {
+            if (anim_count != 0 && (i == 0 || anim_count == 2)) {
                 want = 1;
             }
-            if (hero.unk20AF != 0) {
-                u8 *slot;
-                want = 0;
-                slot = hero_slots[i];
-                if (slot != 0) {
-                    *(s32 *)(slot + 0x34) = 1;
+            {
+                struct Hero *h = &hero;
+                if (h->unk20AF != 0) {
+                    u8 *cancelled;
+                    want = 0;
+                    cancelled = hero.item_slot_blends[i];
+                    if (cancelled != 0) {
+                        *(s32 *)(cancelled + 0x34) = 1;
+                    }
                 }
             }
             if (want) {
-                struct Hero *p4 = &hero;
-                if (hero_slots[i] == 0) {
-                    u8 *slot = FUN_L00_0024f028_20dd20(p4->moby, D_L00_0015F6A0_gp[i]);
-                    hero_slots[i] = slot;
-                    *(f32 *)(slot + 8) = 0.0f;
-                    *(s32 *)(hero_slots[i] + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_lui[i + 1]];
+                struct Hero *h = &hero;
+                if (hero.item_slot_blends[i] == 0) {
+                    u8 *n = allocate_moby_animation_slot((u8 *)h->moby, D_L00_0015F6A0_gp[i]);
+                    hero.item_slot_blends[i] = n;
+                    *(f32 *)(n + 8) = 0.0f;
+                    *(u8 **)(hero.item_slot_blends[i] + 0x18) = (u8 *)D_L00_00197300[D_L00_00197BC0_lui[i + 1]];
                 }
             } else {
-                struct Hero *p5 = &hero;
-                u8 *slot = hero_slots[i];
-                if (slot == 0) {
+                struct Hero *h = &hero;
+                u8 *fading = hero.item_slot_blends[i];
+                if (fading == 0) {
                     continue;
                 }
-                if (FUN_00213ed8_20dd20((f32 *)(slot + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
-                    FUN_L00_0024f0e8_20dd20(p5->moby, &hero_slots[i]);
+                if (approach_value((f32 *)(fading + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
+                    release_moby_animation_slot((u8 *)h->moby, &hero.item_slot_blends[i]);
                 }
             }
         }
 
-        o = hero_slots[i];
-        p6 = &hero;
-        if (o == 0) {
-            continue;
-        }
         {
-            u8 *mb = (u8 *)p6->moby;
-            diff = mb[0x52] != mb[0x53];
-        }
-        if (p6->held_item_anim_blend[0] != 0 && p6->unkD14 == 0) {
-            FUN_00213ed8_20dd20((f32 *)(o + 8), 0.0f, frame_scale * 0.1f);
-        } else if (*(s32 *)(o + 0x34) == 0) {
-            FUN_00213ed8_20dd20((f32 *)(o + 8), 1.0f, frame_scale * 0.1f);
+            struct Hero *h = &hero;
+            u8 *hr;
+            o = hero.item_slot_blends[i];
+            if (o == 0) {
+                continue;
+            }
+            hr = (u8 *)h->moby;
+            diff = hr[0x52] != hr[0x53];
+            if (h->held_item_anim_blend[0] != 0 && h->unkD14 == 0) {
+                approach_value((f32 *)(o + 8), 0.0f, frame_scale * 0.1f);
+            } else if (*(s32 *)(o + 0x34) == 0) {
+                approach_value((f32 *)(o + 8), 1.0f, frame_scale * 0.1f);
+            }
         }
 
         w.v = 0;
-        if (diff && hero.anim_changing != 0) {
-            s32 a = return_hero_animation_id_unchanged(o[0x23]);
-            s32 b = return_hero_animation_id_unchanged(((u8 *)hero.moby)[0x53]);
-            if (a != b) {
-                w.v = o[0x22] != o[0x23];
+        if (diff) {
+            struct Hero *h = &hero;
+            if (h->anim_changing != 0) {
+                s32 a = return_hero_animation_id_unchanged(o[0x23]);
+                if (a != return_hero_animation_id_unchanged(((u8 *)h->moby)[0x53])) {
+                    w.v = o[0x22] != o[0x23];
+                }
             }
         }
         *(s16 *)(o + 0x30) = w.v;
 
-        r = FUN_L00_0020d5d0_20dd20(((u8 *)h->moby)[0x53], &out);
+        r = hero_get_state_aim_pitch(((u8 *)g->moby)[0x53], &out);
         if (r != 0 || o[0x32] != 0) {
             if (out != 0.0f) {
                 f32 x = frame_scale_sq;
-                u8 *tbl = (u8 *)&D_L00_0017A680_20dd20;
-                *(f32 *)(tbl + 0x694) = out;
-                *(f32 *)(tbl + 0x5E4) = out;
-                *(f32 *)(tbl + 0x6D4) = x * 0.05f;
-                *(f32 *)(tbl + 0x6D8) = x * 0.3f;
-                *(f32 *)(tbl + 0x624) = x * 0.05f;
-                *(f32 *)(tbl + 0x628) = x * 0.3f;
+                u8 *tb = (u8 *)hero_eases;
+                *(f32 *)(tb + 0x694) = out;
+                *(f32 *)(tb + 0x5E4) = out;
+                *(f32 *)(tb + 0x6D4) = x * 0.05f;
+                *(f32 *)(tb + 0x6D8) = x * 0.3f;
+                *(f32 *)(tb + 0x624) = x * 0.05f;
+                *(f32 *)(tb + 0x628) = x * 0.3f;
             }
             if (r != 0 && (o[0x32] == 0 || o[0x23] != 0)) {
-                {
-                    if (o[0x22] == o[0x23] || 0.5f < *(f32 *)(o + 0x24)) {
-                        o[0x22] = o[0x23];
-                        o[0x20] = o[0x21];
-                    }
-                    *(f32 *)(o + 0x24) = 0.0f;
-                    o[0x23] = 0;
-                    o[0x21] = 0;
-                    *(f32 *)(o + 0x28) = 1.0f;
-                    *(f32 *)(o + 0x2C) = 1.0f / (f32)FUN_001f96f8_20dd20(0xF);
-                    o[0x32] = 1;
-                    o[0x33] = 0;
+                if (o[0x22] == o[0x23] || 0.5f < *(f32 *)(o + 0x24)) {
+                    o[0x22] = o[0x23];
+                    o[0x20] = o[0x21];
                 }
+                *(f32 *)(o + 0x24) = 0.0f;
+                o[0x23] = 0;
+                o[0x21] = 0;
+                *(f32 *)(o + 0x28) = 1.0f;
+                *(f32 *)(o + 0x2C) = 1.0f / (f32)scale_game_frames(0xF);
+                o[0x32] = 1;
+                o[0x33] = 0;
             }
             if (r == 0) {
                 if (o[0x33] == 0) {
-                    t = (u8 *)h->moby;
-                    o[0x23] = FUN_L00_0020d5b8_20dd20((struct Moby *)t, t[0x53]);
+                    u8 *hr = (u8 *)g->moby;
+                    o[0x23] = resolve_moby_animation_id(hr, hr[0x53]);
                     o[0x21] = 0;
                     o[0x33] = 1;
                     *(f32 *)(o + 0x24) = 0.0f;
@@ -853,25 +834,24 @@ void FUN_L00_0020dd20(void) {
                 *(f32 *)(o + 0x28) = 1.0f;
             }
             for (j = 0; j < 2; j++) {
-                ids = o + 0x22;
-                if (ids[j] < 0x17) {
-                    o[6 + j] = 1;
-                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80_20dd20 + (i * 2 + j) * 0x400;
+                u8 *id = o + 0x22;
+                u8 *e = o + 6;
+                if (id[j] < 0x17) {
+                    e[j] = 1;
+                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
                 } else {
-                    o[6 + j] = 0;
+                    e[j] = 0;
                 }
             }
-            /* Fakematch: the empty loops change loop numbering, which moves the register allocation. */
-            do { do { do { do { FUN_L00_0024f190_20dd20(h->moby, o); } while (0); } while (0); } while (0); } while (0);
+            advance_moby_animation_blend(g->moby, o);
         } else {
-            u8 *enabled;
-
             if (*(s16 *)(o + 0x30) == 0) {
+                struct Hero *h = &hero;
                 for (k = 0; k < 2; k++) {
                     if (!diff || k == 1) {
+                        u8 *hr = (u8 *)h->moby;
                         u8 *p = o + 0x22;
-                        t = (u8 *)hero.moby;
-                        p[k] = FUN_L00_0020d5b8_20dd20((struct Moby *)t, *(t + k + 0x52));
+                        p[k] = resolve_moby_animation_id(hr, *(hr + k + 0x52));
                     }
                 }
             }
@@ -885,27 +865,31 @@ void FUN_L00_0020dd20(void) {
                 }
             } else {
                 if (!diff) {
-                    o[0x20] = ((u8 *)h->moby)[0x50];
+                    o[0x20] = ((u8 *)g->moby)[0x50];
                 }
-                o[0x21] = ((u8 *)h->moby)[0x51];
-                *(f32 *)(o + 0x24) = *(f32 *)((u8 *)h->moby + 0x54);
-            }
-            enabled = o + 6;
-            for (j = 0; j < 2; j++) {
-                ids = o + 0x22;
-                if (ids[j] < 0x17) {
-                    enabled[j] = 1;
-                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80_20dd20 + (i * 2 + j) * 0x400;
+                /* Fakematch: o is never null; the jump merges the same arms and keeps retail's registers. */
+                if (o) {
+                    o[0x21] = ((u8 *)g->moby)[0x51];
+                    *(f32 *)(o + 0x24) = *(f32 *)((u8 *)g->moby + 0x54);
                 } else {
-                    enabled[j] = 0;
+                    o[0x21] = ((u8 *)g->moby)[0x51];
+                    *(f32 *)(o + 0x24) = *(f32 *)((u8 *)g->moby + 0x54);
                 }
             }
-            /* Fakematch: the empty loops change loop numbering, which moves the register allocation. */
-            do { do { do { do { FUN_L00_0024f190_20dd20(h->moby, o); } while (0); } while (0); } while (0); } while (0);
+            for (j = 0; j < 2; j++) {
+                u8 *id = o + 0x22;
+                u8 *e = o + 6;
+                if (id[j] < 0x17) {
+                    e[j] = 1;
+                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
+                } else {
+                    e[j] = 0;
+                }
+            }
+            advance_moby_animation_blend(g->moby, o);
         }
-    } while (++i < 2);
+    }
 }
-#endif
 typedef struct {
     u8 pad_0[0x28];
     s32 animation;         /* 0x28 */
@@ -940,7 +924,7 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
     for (i = 0; i < 2; i++) {
         if (hero.held_item_anim_blend[i] != 0)
             continue;
-        if (i == 1 && hero.unk20AB != 2)
+        if (i == 1 && hero.item_slot_anim_count != 2)
             break;
         {
             slot_animation_object = FUN_L00_0024f028_0020e360((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
@@ -960,7 +944,7 @@ typedef struct {
     u8 p0[0xC];
     s32 joint;             /* hero.joint_matrices index the item moby follows */
     u8 p10[0x18 - 0x10];
-    s32 unk18;             /* copied to hero.unk20AB; 2 animates both item slots */
+    s32 slot_anim_count;    /* copied to hero.item_slot_anim_count: 0 none, 1 slot 0, 2 both slots */
     u8 p1[0x24 - 0x1C];
     s32 unk24;
     s32 animation;         /* 0x28 */
@@ -998,7 +982,7 @@ void start_equipped_item_animation(void) {
         P->unk20AA = k;
     }
     animation_step_divisor = FUN_001f96f8_c(10);
-    if (D_L00_00179AC0_c[item_id].unk18 == 0)
+    if (D_L00_00179AC0_c[item_id].slot_anim_count == 0)
         animation_step_divisor = FUN_001f96f8_c(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
         P->item_hold_anim = hero_animation_id;
@@ -1007,7 +991,7 @@ void start_equipped_item_animation(void) {
     }
     if (slot_animation_id == -1)
         return;
-    for (i = 0; i < 2 && (i != 1 || hero.unk20AB == 2); i++) {
+    for (i = 0; i < 2 && (i != 1 || hero.item_slot_anim_count == 2); i++) {
         if (hero.held_item_anim_blend[i] != 0) {
             release_moby_animation_slot((u8 *)hero.moby, &hero.held_item_anim_blend[i]);
         }
@@ -1177,7 +1161,7 @@ typedef struct {
     u8 padC[0x4];
     s32 cls;       /* 0x10: moby class of the item */
     s32 cls2;      /* 0x14: moby class of its second moby */
-    s32 unk18;     /* 0x18: read as a word and stored as a byte; the codegen
+    s32 slot_anim_count; /* 0x18: read as a word and stored as a byte; the codegen
                     * (address formed base + offset first) needs a word field */
     u8 pad1C[0x30];
 } ItemDef_ea80;
@@ -1242,7 +1226,7 @@ void spawn_hero_item_mobies(void) {
             }
             /* The slot address is rebuilt here instead of reusing h; using h
              * changes the register allocation away from retail. */
-            hero.unk20AB = item_defs_ea80[((struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].unk18;
+            hero.item_slot_anim_count = item_defs_ea80[((struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].slot_anim_count;
         }
     }
 
@@ -1624,7 +1608,7 @@ void update_hero_item_mobys(void)
                 else
                 {
                     qcopy(moby + 0x10, (((u8 *) (&hero)) + 0xaf0) + (joint * 0x40));
-                    if ((large_font_height == 0) || (D_L00_00179AC0_c[item_id].unk18 == 0))
+                    if ((large_font_height == 0) || (D_L00_00179AC0_c[item_id].slot_anim_count == 0))
                     {
                         first = is_hero_slot_item_id_10_17_20_or_25(i);
                         second = is_hero_slot_item_id_5_to_7(i);
@@ -2177,11 +2161,11 @@ void hero_switch_item(int i) {
             s->items[0].thrown = 0;
             k->pending_item[i] = 0;
             k->force_slot0_item8 = 0;
-            if (k->unkD00 != 0) {
-                *(int *)(k->unkD00 + 0x34) = 1;
+            if (k->item_slot_blends[0] != 0) {
+                *(int *)(k->item_slot_blends[0] + 0x34) = 1;
             }
-            if (k->unkD04 != 0) {
-                *(int *)(k->unkD04 + 0x34) = 1;
+            if (k->item_slot_blends[1] != 0) {
+                *(int *)(k->item_slot_blends[1] + 0x34) = 1;
             }
             if (s->items[0].moby != 0) {
                 blend_moby_animation(s->items[0].moby, 2, 0, 2);

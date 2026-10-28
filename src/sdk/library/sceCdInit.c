@@ -1,10 +1,5 @@
-#include "types.h"
-#include "asm.h"
+/* Ported from rac1-decomp (src/core/001208E8.c, func_001211B0). */
 
-#ifndef NON_MATCHING
-/* Exact SDK/library unit sceCdInit; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceCdInit/sceCdInit.s", sceCdInit);
-#else
 #include "types.h"
 
 /* libcdvd: bind the CD/DVD init RPC server, send the init mode and read
@@ -63,15 +58,17 @@ int sceCdInit(int init_mode) {
     }
     sceSifInitRpc(0);
     owner = GetThreadId();
-    D_00131300[0] = -1;
     *(volatile s32 *)D_001312E4 = 1;
     *(volatile s32 *)D_00159750 = owner;
-    D_001312F8[0] = -1;
-    D_00131304[0] = D_00131308[0] = -1;
-    D_0013130C[0] = -1;
-    D_001312F4[0] = 0;
-    D_001312FC[0] = -1;
-    D_00131310[0]++;
+    {
+        s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304, *p6 = D_0013130C, *p4 = D_001312FC, *p5 = D_001312F4;
+        /* Fakematch: retail keeps the -1 in $a0. */
+        register int m __asm__("$4") = -1;
+        *p4 = m; *p0 = m; *p1 = m; *p2 = m; *p3 = m;
+        *p5 = 0;
+        D_00131310[0]++;
+        *p6 = m;
+    }
     while (1) {
         bind_result = sceSifBindRpc(&D_00159968, 0x80000592, 0);
         if (bind_result < 0) {
@@ -132,4 +129,3 @@ int sceCdInit(int init_mode) {
 done:
     return ret;
 }
-#endif /* NON_MATCHING */

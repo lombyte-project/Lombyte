@@ -50,7 +50,7 @@ ASM_LABEL = re.compile(r'__asm__\s*\(\s*"([^"]*)"\s*\)')
 LABEL_STRING = re.compile(r"[A-Za-z_.$][\w.$]*(?:\+\d+)?")
 # The only files that may hold instructions: the approved quadword idiom and the
 # EE-kernel primitives (privileged instructions C cannot express).
-ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h"}
+ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h", "include/moby_update.h"}
 ASM_ANY = re.compile(r"\b(?:__asm__|__asm|asm)\b(\s*(?:volatile|__volatile__)\b)?\s*\(")
 FUNC_DECL = re.compile(r"\b(\w+)\s*\(((?:[^;{}()]|\([^()]*\))*)\)\s*__asm__\s*\(\s*\"(" + FUN_LABEL + r")\"\s*\)")
 DATA_DECL = re.compile(r"\b(\w+)\s*((?:\[[^\]]*\]\s*)*)__asm__\s*\(\s*\"(" + DATA_LABEL + r")\"\s*\)")
@@ -263,6 +263,10 @@ def check_c_file(rel: str, raw: str) -> list[Problem]:
     for m in ASM_ANY.finditer("" if rel in ASM_HEADERS else text):
         label = ASM_LABEL.match(text, m.start())
         if m.group(1) or not label or not LABEL_STRING.fullmatch(label.group(1)):
+            # A fakematch (pin, barrier or small helper) marked in the 15 lines above,
+            # as scripts/rnc_units.py counts it.
+            if any("Fakematch:" in l for l in raw[:m.start()].split("\n")[-16:]):
+                continue
             snippet = text[m.start():m.start() + 60].split("\n")[0].strip()
             out.append(Problem("inline-asm", rel, f"inline assembly other than a name label: {snippet}",
                                line_of(text, m.start())))

@@ -1,13 +1,6 @@
 #include "types.h"
-#include "asm.h"
 #include "rnc/globals.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/vendor/render_vendor_buy_label_pass/FUN_00238f08.s", FUN_00238f08);
-#else
-/* Near miss (game, 14 rows): retail keeps one register for the %hi of vendor_item_prices
-   from the first test on; ours computes it twice in that block. The stride local gives
-   the first test retail's mult. */
 /* Ported from rac1-decomp (src/game/vendor.c: func_0023A220). */
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
@@ -43,7 +36,7 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
     struct TextRegion region;
     struct VendorState *v;
     int price;
-    int message_id;
+    long message_id;
     int stride = sizeof(struct VendorItemPricing);
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
@@ -93,4 +86,5 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
         font_print_window_small(&region, 0x80F0F0F0L, get_help_message_text(0x5234), -1);
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(render_vendor_buy_label_pass) func_00238F08 __attribute__((alias("FUN_00238f08")));

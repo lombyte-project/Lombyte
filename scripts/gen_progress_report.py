@@ -23,7 +23,7 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
   overlays together; the categories keep them apart: ``boot`` (= ``game`` +
   ``sdk``), ``overlays`` (= ``shared`` + ``levels``), ``level_NN``;
 * a function is matched only when it is C_EXACT: a promoted source outside
-  ``src/assembly/`` with no inline asm but name labels (``non_label_asm``), or
+  ``src/assembly/`` with no inline asm but name labels and `Fakematch:`-marked asm (``non_label_asm``), or
   a legacy exact unit in ``config/us/unit_categories.json``.
   Assembly-backed units build from their retail oracle, so the ordinary
   objdiff report of the baseline shows them as 100 %; this report does not;

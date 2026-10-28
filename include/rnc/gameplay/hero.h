@@ -594,8 +594,7 @@ struct Hero {
     s32 queued_frame_request;      /* 0xAB8 */
     u8 pad_ABC[0x4];
     f32 joint_matrices[9][4][4];   /* 0xAC0: world matrices of 9 joints (compute_selected_world_matrices) */
-    u8*unkD00;                     /* 0xD00 */
-    u8*unkD04;                     /* 0xD04 */
+    u8 *item_slot_blends[2];       /* 0xD00: per item slot 0/1: blend from FUN_L00_0024f028, faded by update_hero_item_slot_blends */
     u8 *held_item_anim_blend[2];   /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
     u8 *unkD10;                    /* 0xD10 */
     s32 unkD14;                    /* 0xD14 */
@@ -728,7 +727,7 @@ struct Hero {
     u8 item_anim_active;           /* 0x20A8 */
     u8 wading;                     /* 0x20A9 */
     u8 unk20AA;                    /* 0x20AA */
-    u8 unk20AB;                    /* 0x20AB */
+    u8 item_slot_anim_count;       /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
     u8 item_use_locked;            /* 0x20AC */
     u8 tilt_disabled;              /* 0x20AD */
     u8 unk20AE;                    /* 0x20AE */

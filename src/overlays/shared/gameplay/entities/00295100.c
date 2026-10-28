@@ -143,7 +143,7 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
-extern void FUN_L00_002648e0(void);
+extern void update_all_mobys_profiled(void) __asm__("FUN_L00_002648e0");
 extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 extern void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
@@ -263,7 +263,7 @@ void handle_pause_input(void) {
         FUN_L00_00297e30_c();
     if (DBG(2)) {
         count_expired_mobys();
-        FUN_L00_002648e0();
+        update_all_mobys_profiled();
         enqueue_voice_request();
         update_ambience_target_cycle();
     }

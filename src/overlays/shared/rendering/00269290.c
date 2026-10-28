@@ -319,9 +319,6 @@ void update_scalar_and_fade_effect_particle(char *particle) {
                           ((*(int *)(particle + 0x20) * 127 / scale_game_frames(6)) << 24);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
-#else
 extern int particle_collision_269d20(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void subtract_homogeneous_scaled_vector_xyz(float, void *, void *, void *) __asm__("FUN_L00_0025c2b0");
 extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
@@ -346,7 +343,6 @@ void update_colliding_effect_particle(unsigned char *m) {
     float collision[4] __attribute__((aligned(16)));
     float rotation[16] __attribute__((aligned(16)));
     float red, green, blue, limit;
-    float step;
     int color;
     next[0] = *(float *)(m + 0x10) + *(float *)(p + 0x0);
     next[1] = *(float *)(m + 0x14) + *(float *)(p + 0x4);
@@ -363,6 +359,10 @@ void update_colliding_effect_particle(unsigned char *m) {
         particle_matrix_269d20(0.055f, collision, D_L00_00173E80_26ff10);
         particle_transform_269d20(m + 0x10, D_L00_00173E80_26ff10 - 8, collision);
     } else {
+        /* Fakematch: keeps $s0 live at the else label so reorg fills the beqz delay slot
+           like retail. */
+        register unsigned char *live_s0 __asm__("$16");
+        __asm__ volatile("" : : "r"(live_s0));
         *(u128 *)(m + 0x10) = *(u128 *)next;
     }
     if (*(unsigned int *)(e + 0x70) & 2) {
@@ -408,20 +408,23 @@ void update_colliding_effect_particle(unsigned char *m) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x400) p[0x1b] ^= 0x40;
         }
-        /* Fakematch: the dead copy into step puts the 65535 and 255 constants in retail's order. */
-        limit = step = *(float *)(e + 0x60);
+        limit = *(float *)(e + 0x60);
         if (blue < limit) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;
         }
-        step = 65535.0f;
-        p[0x18] = particle_color_int_269d20(red * step);
-        p[0x19] = particle_color_int_269d20(green * step);
-        p[0x1a] = particle_color_int_269d20(blue * step);
-        color = (particle_color_int_269d20(red * 255.0f) & 0xff) |
-                ((particle_color_int_269d20(green * 255.0f) & 0xff) << 8) |
-                ((particle_color_int_269d20(blue * 255.0f) & 0xff) << 16) |
-                (particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f) << 24);
+        {
+            /* Fakematch: retail keeps 65535.0f in $f21 and 255.0f in $f20. */
+            register float to_u16 __asm__("$f21") = 65535.0f;
+            register float to_u8 __asm__("$f20") = 255.0f;
+            p[0x18] = particle_color_int_269d20(red * to_u16);
+            p[0x19] = particle_color_int_269d20(green * to_u16);
+            p[0x1a] = particle_color_int_269d20(blue * to_u16);
+            color = (particle_color_int_269d20(red * to_u8) & 0xff) |
+                    ((particle_color_int_269d20(green * to_u8) & 0xff) << 8) |
+                    ((particle_color_int_269d20(blue * to_u8) & 0xff) << 16) |
+                    (particle_color_int_269d20(*(float *)(p + 0x10) * to_u8) << 24);
+        }
         *(int *)(m + 4) = color;
     } else if (*(unsigned int *)(e + 0x70) & 4) {
         color = particle_color_int_269d20(*(float *)(p + 0x10) * 255.0f);
@@ -471,7 +474,6 @@ void update_colliding_effect_particle(unsigned char *m) {
         *(float *)(e + 0x28) < *(float *)(m + 0x18))
         free_effect_particle(m);
 }
-#endif
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

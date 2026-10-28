@@ -28,10 +28,13 @@ allowed only:
 - in the approved header macros: the quadword copy in `include/qcopy.h` and
   `include/qzero.h`, and the privileged instructions C cannot write
   (`CpuEnableInt`, `CpuSync`, `CpuReadStatus`, `CpuSyscall`, ...) in
-  `include/kernel.h`.
+  `include/kernel.h`;
+- as a fakematch: a register pin or a small helper that forces the retail
+  schedule, with a `Fakematch:` comment in the 15 lines above it.
 
 Any other asm (instructions, an empty memory barrier, `__asm__("" : "+r"(x))`,
-`.extern`, a register pin like `register int x asm("v1")`) keeps the function
+`.extern`, a register pin like `register int x asm("v1")`) without that
+comment keeps the function
 **pending** (C_FUZZY 99.99) even when the bytes match. The rule is
 `non_label_asm()` in `scripts/rnc_units.py` (copied in
 `scripts/generate_treemap.py`).

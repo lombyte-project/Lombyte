@@ -75,6 +75,7 @@ gap is a patch that was dropped. The kinds:
 | [0061](0061-copy-rtx-if-shared-virtual-mems.patch) | upstream | a stack MEM is not shared | gcc-2.95.3, Jeff Law 1999-08-30 (`emit-rtl.c`) |
 | [0062](0062-reload-reg-unavailable.patch) | upstream | reload never picks a register outside the insn's spill set | gcc-2.95.3, Bernd Schmidt 2000-01-12 (`reload1.c`) |
 | [0064](0064-r5900-timode-reload-one-register.patch) | retail | a TImode reload in general registers takes one register, as `HARD_REGNO_NREGS` already says, not two | SN's ee-gcc 2.95.2 spills only `$v0` for a TImode reload; `textbin/rendering/buffers/setup_fs_aa_buffer` |
+| [0065](0065-gcse-no-critical-edge-split.patch) | upstream | GCSE works on the flow graph as it is and does not split critical edges first, so PRE can place an expression in the block before a branch | gcc-2.95.3 `gcse.c` (`compute_preds_succs` without edge splitting; the split came with the Cygnus edge LCM that 0016 turns off); `gameplay/vendor/render_vendor_buy_label_pass` |
 
 ### SDK assembler
 
@@ -120,4 +121,5 @@ the slot. Both rules come from the retail SDK code only.
 0062-reload-reg-unavailable.patch                 9bddaf0912802fba0a322dcfaace0ec3626da4a11b9f5c698b60cebab7a7c2c0
 0063-gas-sync-no-swap.patch                       e4bf497eb0ab4ab8d3f584fa17fc8cab33733b7f216f2f1be129093312d2bf96
 0064-r5900-timode-reload-one-register.patch       e769215547b8b2dc6df055851e9bb65e12497d68b2240960428de1a6ca3ee489
+0065-gcse-no-critical-edge-split.patch            2d74e2844ce166d514b9ea3d47e801cfc9c53074115a9dadd31f6db522214802
 ```

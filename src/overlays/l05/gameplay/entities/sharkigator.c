@@ -370,8 +370,15 @@ state_three:
             if (h->water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
                 if (h->state.current != 0x72) {
                     qcopy_nc(v, &h->motion.pos);
-                    v[2] = h->water_surface_z;
-                    spawn_sharkigator_splash_effects((int)moby, (char *)v);
+                    {
+                        /* Fakematch: the pin and the empty barriers order the call setup like
+                           retail ($5 before the v[2] store, $4 after it, in the jal slot). */
+                        register char *splash_pos __asm__("$5") = (char *)v;
+                        __asm__ volatile("");
+                        v[2] = h->water_surface_z;
+                        __asm__ volatile("");
+                        spawn_sharkigator_splash_effects((int)moby, splash_pos);
+                    }
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
                     /* Fakematch: the two join statements are repeated in both branches so
                        that a real insn sits between set_camera (the last call of this
