@@ -63,6 +63,10 @@ without that comment (not dead stores or `x += 1; x -= 1;`, so mark those
 yourself). If removing the trick does not change the code, it is not a
 fakematch: delete it.
 
+Write an empty barrier as `FAKEMATCH_BARRIER()` and a read of a hard
+register that nothing set on that path (to keep it live) as
+`FAKEMATCH_KEEP_LIVE("$16")`, both from `include/fakematch.h`, not as raw asm.
+
 ## Names
 
 - **Only name what you can prove.** Good evidence: recovered symbols,

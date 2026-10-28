@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "fakematch.h"
 #include "rnc/overlay/level_labels.h"
 
 typedef struct {
@@ -359,10 +360,9 @@ void update_colliding_effect_particle(unsigned char *m) {
         particle_matrix_269d20(0.055f, collision, D_L00_00173E80_26ff10);
         particle_transform_269d20(m + 0x10, D_L00_00173E80_26ff10 - 8, collision);
     } else {
-        /* Fakematch: keeps $s0 live at the else label so reorg fills the beqz delay slot
-           like retail. */
-        register unsigned char *live_s0 __asm__("$16");
-        __asm__ volatile("" : : "r"(live_s0));
+        /* Fakematch: retail reads $s0 on this path before setting it, so reorg sees it
+           live at the else label and fills the beqz delay slot like retail. */
+        FAKEMATCH_KEEP_LIVE("$16");
         *(u128 *)(m + 0x10) = *(u128 *)next;
     }
     if (*(unsigned int *)(e + 0x70) & 2) {
