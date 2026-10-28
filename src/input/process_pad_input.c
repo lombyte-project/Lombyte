@@ -91,7 +91,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
             pad_state->axes[i] = convert_integer_to_float(pad_read_data[i + 2]) * 0.003921569f;
         }
     }
-    if (draw_map51) {
+    if (D_0015EDB4) {
         pad_state->axes[2] = -pad_state->axes[2];
         pad_state->axes[0] = -pad_state->axes[0];
         SWAPLR(pad_state->held);
@@ -127,7 +127,7 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
     pad_state->x1C8 = pad_state->released;
     pad_state->x1C0 = pad_state->held;
     pad_state->x348 = pad_state->held;
-    if (draw_map51) {
+    if (D_0015EDB4) {
         pad_state->prev[2] = -pad_state->prev[2];
         pad_state->prev[0] = -pad_state->prev[0];
         SWAPLR(pad_state->x1C0);

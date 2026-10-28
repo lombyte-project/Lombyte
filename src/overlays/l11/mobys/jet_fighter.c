@@ -98,7 +98,7 @@ void draw_ship_radar_moby_icon(
     fast_vec_scale(radar_offset, radar_offset, 0.142857149f);
     radar_distance = fast_vec_length(radar_offset);
     side = 1.0f;
-    if (draw_map51[0] != 0) {
+    if (D_0015EDB4[0] != 0) {
         side = -1.0f;
     }
     x = truncate_float_to_s32(side * radar_offset[0]);
