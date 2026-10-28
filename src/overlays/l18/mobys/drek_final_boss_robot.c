@@ -334,7 +334,7 @@ extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attrib
 extern short D_L18_00162390 __attribute__((sda));
 extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_00162394")
     __attribute__((sda));
-extern short D_L18_00162398 __attribute__((sda));
+extern short l18_drek_boss_paired_transition_frame_count_gp __asm__("D_L18_00162398") __attribute__((sda));
 extern s32   D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C")
     __attribute__((sda));
@@ -946,7 +946,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                                 second_rotation_angles,
                                 node_position_and_yaw,
                                 *(int *)&l18_drek_boss_paired_transition_duration_frames_gp,
-                                *(int *)&D_L18_00162398,
+                                *(int *)&l18_drek_boss_paired_transition_frame_count_gp,
                                 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
