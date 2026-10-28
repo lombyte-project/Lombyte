@@ -154,7 +154,7 @@ typedef struct WalkData {
     unsigned short uEE;
 } WalkData;
 
-extern char D_L00_001611E0[];
+extern char walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
@@ -163,7 +163,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L00_001CA760[];
+extern int walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
 extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
 extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -245,7 +245,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_WALK_DOWNHILL:
     case WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK:
     case WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK: {
-        int gait_animation_index = D_L00_001CA760[gait_data->bB7];
+        int gait_animation_index = walker_gait_animation_index_by_state[gait_data->bB7];
         if (walker_moby->f58 < 0.25f && fast_difference_between_rotations(walker_moby->f48, movement_heading) < 0.09239978f &&
             speed < frame_time * 0.19f) {
             blend_moby_animation(walker_moby, gait_data->bB0, 0, 10);
@@ -838,7 +838,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = vector_distance_xy(walker_moby->pos, gait_data->v60);
-            debug_print_alt(D_L00_001611E0, dist);
+            debug_print_alt(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);
@@ -868,7 +868,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = fast_vec_dist(walker_moby->pos, gait_data->v60);
-            debug_print_alt(D_L00_001611E0, dist);
+            debug_print_alt(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);

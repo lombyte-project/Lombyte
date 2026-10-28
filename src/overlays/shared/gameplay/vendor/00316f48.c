@@ -19,13 +19,13 @@ typedef struct { char pad0[0x1C]; Level13VendorItem *item; } Level13VendorRecord
 typedef struct { char pad0[0x86]; short class_id; } Level13VendorCurrentMoby;
 
 extern Level13VendorCurrentMoby *D_L13_00167100 __attribute__((section(".data")));
-extern Level13VendorRecord *D_L13_0015EF50;
+extern Level13VendorRecord *l13_vendor_item_records __asm__("D_L13_0015EF50");
 
 void flag_vendor_item(int slot) __asm__("FUN_L13_00316f48");
 
 void flag_vendor_item(int slot) {
  Level13VendorCurrentMoby *moby=D_L13_00167100;
- Level13VendorRecord *record=(Level13VendorRecord *)(slot*32+(int)D_L13_0015EF50);
+ Level13VendorRecord *record=(Level13VendorRecord *)(slot*32+(int)l13_vendor_item_records);
  Level13VendorItem *item=record->item;
  if(moby->class_id==VENDOR_CLASS_ID) item->field39=1;
 }

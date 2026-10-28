@@ -103,8 +103,8 @@ extern ShrubData *shrub_data_table __asm__("D_001603DC");
 extern u8 *shrub_colors __asm__("D_001603E0"); /* 24 RGBA colours per shrub */
 extern f32 occl_fog_density_set __asm__("D_001603E4");
 extern S160AB0 D_00160AB0 NOT_SDA;
-extern Ent40 *D_00160E8C __attribute__((sda));
-extern s32 D_00160E90;
+extern Ent40 *tfrag_render_records __asm__("D_00160E8C") __attribute__((sda));
+extern s32 tfrag_render_record_count __asm__("D_00160E90");
 extern f32 D_00160EC0;
 extern TieData *tie_data_table __asm__("D_00160F58");
 extern s32 tie_count __asm__("D_00160F5C");
@@ -121,7 +121,7 @@ extern u8 moby_grids[] __asm__("D_001B76E0");
 extern u8 D_001C76E0[];
 extern u8 D_001CD780[];
 extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern char D_001E76D8[];
+extern char too_many_directional_lights_message[] __asm__("D_001E76D8");
 
 extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -242,20 +242,20 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     light_count = *(s32 *)light_record;
     light_record += 0x10;
     if (light_count >= 12) {
-        DebugPrint(D_001E76D8);
+        DebugPrint(too_many_directional_lights_message);
         light_count = 12;
     }
     if (light_count != 0) {
         copy_memory_aligned(dir_lights, light_record, light_count << 6);
     }
 
-    for (tfrag_index = 0; tfrag_index < D_00160E90; tfrag_index++) {
-        D_00160E8C[tfrag_index].x36 = 0xFFFF;
+    for (tfrag_index = 0; tfrag_index < tfrag_render_record_count; tfrag_index++) {
+        tfrag_render_records[tfrag_index].x36 = 0xFFFF;
     }
     tfrag_batch_start = 0;
-    while (tfrag_batch_start < D_00160E90) {
+    while (tfrag_batch_start < tfrag_render_record_count) {
         tfrag_list = (u16 *)0x70003000;
-        for (batch_count = 0; batch_count < 0x3FF && tfrag_batch_start < D_00160E90; batch_count++, tfrag_batch_start++) {
+        for (batch_count = 0; batch_count < 0x3FF && tfrag_batch_start < tfrag_render_record_count; batch_count++, tfrag_batch_start++) {
             *tfrag_list++ = tfrag_batch_start;
         }
         *tfrag_list = 0xFFFF;
@@ -465,8 +465,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     for (tie_cursor = ties; tie_cursor != ties_end; tie_cursor++) {
         tie_cursor->x18 = 0x7F80;
     }
-    for (tfrag_index = 0; tfrag_index < D_00160E90; tfrag_index++) {
-        D_00160E8C[tfrag_index].x3A = 0x7F80;
+    for (tfrag_index = 0; tfrag_index < tfrag_render_record_count; tfrag_index++) {
+        tfrag_render_records[tfrag_index].x3A = 0x7F80;
     }
     ((OcclCamState *)occl_cam_state)->x1C = 0;
     reset_draw_globals();

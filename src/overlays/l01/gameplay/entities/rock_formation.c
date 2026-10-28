@@ -24,7 +24,7 @@ typedef struct {
     f32 force;
 } DebrisHit;
 
-extern DebrisColors D_L01_00161C50;
+extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
 extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -85,7 +85,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
             DebrisVec pos;
             DebrisVec off;
 
-            colors = D_L01_00161C50;
+            colors = l01_rock_formation_debris_oclass_choices;
             pos.q = 0;
             pos.f[0] = random_float_between(-1.0f, 1.0f);
             pos.f[1] = random_float_between(-1.0f, 1.0f);
@@ -212,7 +212,7 @@ typedef struct {
     u8 collected[1];
 } BurstLevelState;
 extern BurstLevelState D_L01_001BB6B0;
-extern BurstColors D_L01_00161C60;
+extern BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60");
 extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -242,7 +242,7 @@ void bridge_piece_1_update(BurstMoby *self) {
     }
     if (hit_result != NULL && hit_result->moby->oclass == 0x2AE) {
         for (i = 0; i < 20; i++) {
-            colors = D_L01_00161C60;
+            colors = l01_bridge_piece_debris_oclass_choices;
             pos.q = 0;
             pos.f[0] = random_float_between(-frame_time, frame_time);
             pos.f[1] = random_float_between(-frame_time, frame_time);
@@ -511,7 +511,7 @@ void update_birdbot_projectile(DropMoby *projectile) {
         }
     }
 }
-extern DebrisColors D_L01_00161C70;
+extern DebrisColors l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70");
 extern u8 D_0013D388[];
 
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
@@ -561,7 +561,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
             DebrisVec pos;
             DebrisVec off;
 
-            colors = D_L01_00161C70;
+            colors = l01_cave_wall_debris_oclass_choices;
             pos.q = 0;
             pos.f[0] = random_float_between(-1.0f, 1.0f);
             pos.f[1] = random_float_between(-1.0f, 1.0f);

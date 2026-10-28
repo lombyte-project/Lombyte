@@ -31,7 +31,7 @@ struct Obj {
 };
 
 extern u8 *D_001CDF80[];
-extern u8 *D_001CDFDC[];
+extern u8 *default_spark_lookup[] __asm__("D_001CDFDC");
 extern struct Obj *create_part(s32) __asm__("FUN_00217a30");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -58,7 +58,7 @@ struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_ve
         spark_part->b3 = 0x44;
         spark_part->b8 = truncate_float_to_s32(random_float_between(spark_part->fC, 255.0f));
         if (lookup_index_and_flags == -1) {
-            spark_part->b2 = *D_001CDFDC[0];
+            spark_part->b2 = *default_spark_lookup[0];
         } else {
             spark_part->b2 = *D_001CDF80[(u16)lookup_index_and_flags];
             if (lookup_index_and_flags & 0x10000) {

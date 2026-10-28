@@ -83,7 +83,7 @@ typedef struct {
     f32 unk228;
     s32 unk22C;
 } ViewSettings;
-extern Ent *D_L00_001B9E90[];
+extern Ent *l00_pause_menu_page_mobys[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_0015F5D8;
 extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
@@ -104,10 +104,10 @@ extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern V D_L00_00166DC0[];
-extern Own D_L00_001B71F0;
+extern Own l00_pause_menu_exit_guarded_page_owner __asm__("D_L00_001B71F0");
 extern Own D_L00_001B7DD0;
 extern Own D_L00_001B80E0;
-extern Own D_L00_001B63F8;
+extern Own l00_pause_menu_self_transition_animation_guard_page_owner __asm__("D_L00_001B63F8");
 extern Own D_L00_001B78F0;
 extern Own D_L00_001B6820;
 extern G841F0 D_L00_001841F0;
@@ -116,7 +116,7 @@ extern s32 D_L00_0015F578 __attribute__((sda));
 extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
 extern s32 D_L00_0016000C __attribute__((sda));
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
-extern u8 D_L00_001E91B0[];
+extern u8 level_transition_debug_format[] __asm__("D_L00_001E91B0");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
@@ -143,7 +143,7 @@ extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_002994
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
-extern Own D_L00_001B2588;
+extern Own l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own D_L00_001B3518;
 extern Own D_L00_001B6088;
 extern Own D_L00_001B6B38;
@@ -196,7 +196,7 @@ void initialize_pause_menu(void) {
         small_buffers = 1;
     } else if (state_id == 0x21) {
         D_L00_001B9CF0.state = 0x22;
-        page = &D_L00_001B71F0;
+        page = &l00_pause_menu_exit_guarded_page_owner;
         state->owner = page;
         state->unk8 = page;
         state->unk124 = 1;
@@ -210,7 +210,7 @@ void initialize_pause_menu(void) {
         state->owner = page;
         state->unk8 = page;
     } else {
-        page = &D_L00_001B2588;
+        page = &l00_pause_menu_default_page_owner;
         D_L00_001B9CF0.state = 2;
         state->owner = page;
         state->unk8 = page;
@@ -335,20 +335,20 @@ void initialize_pause_menu(void) {
     if (D_L00_001B9CF0.owner != 0) {
         for (i = 0; i < 14; i++) {
             Ent *moby = create_menu_preview_moby(0x472);
-            D_L00_001B9E90[i] = moby;
+            l00_pause_menu_page_mobys[i] = moby;
             if (moby != 0) {
                 f32 *camera;
                 moby->flags &= 0xFFFD;
-                D_L00_001B9E90[i]->update = FUN_L00_002df638;
+                l00_pause_menu_page_mobys[i]->update = FUN_L00_002df638;
                 camera = player_camera;
-                D_L00_001B9E90[i]->pos[0] = camera[80];
-                D_L00_001B9E90[i]->pos[1] = camera[81];
-                D_L00_001B9E90[i]->pos[2] = camera[82];
-                D_L00_001B9E90[i]->rot[0] = 0.0f;
-                D_L00_001B9E90[i]->rot[1] = 0.0f;
-                D_L00_001B9E90[i]->rot[2] = 0.0f;
+                l00_pause_menu_page_mobys[i]->pos[0] = camera[80];
+                l00_pause_menu_page_mobys[i]->pos[1] = camera[81];
+                l00_pause_menu_page_mobys[i]->pos[2] = camera[82];
+                l00_pause_menu_page_mobys[i]->rot[0] = 0.0f;
+                l00_pause_menu_page_mobys[i]->rot[1] = 0.0f;
+                l00_pause_menu_page_mobys[i]->rot[2] = 0.0f;
                 seq = D_L00_001B9CF0.owner->ids[i];
-                set_moby_animation(D_L00_001B9E90[i], seq, D_L00_001B9E90[i]->pclass->seqs[seq]->frame_count - 1);
+                set_moby_animation(l00_pause_menu_page_mobys[i], seq, l00_pause_menu_page_mobys[i]->pclass->seqs[seq]->frame_count - 1);
             }
         }
     }
@@ -411,7 +411,7 @@ void close_pause_menu(void) {
             s32 remaining;
             remaining = 13;
             do {
-                D_L00_001B9E90[13 - remaining] = delete_moby(D_L00_001B9E90[13 - remaining]);
+                l00_pause_menu_page_mobys[13 - remaining] = delete_moby(l00_pause_menu_page_mobys[13 - remaining]);
                 remaining--;
             } while (remaining >= 0);
         }
@@ -500,7 +500,7 @@ void update_pause_menu(void) {
         D_L00_001B9CF0.unk104 = 0;
         D_L00_001B9CF0.unk10 = 0;
         if (D_L00_001B9CF0.unkC == 2) {
-            debug_print(D_L00_001E91B0, D_L00_001841F0.w224);
+            debug_print(level_transition_debug_format, D_L00_001841F0.w224);
             prepare_target_level_transition(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
             previous_decode_mode = decode_mode;
@@ -573,9 +573,9 @@ void update_pause_menu(void) {
         }
     } else if (D_L00_001B9CF0.unk8 != 0) {
         if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8) {
-            allocate_voice_for_target_entry(3, 0x11, D_L00_001B9E90[0]);
+            allocate_voice_for_target_entry(3, 0x11, l00_pause_menu_page_mobys[0]);
         } else {
-            allocate_voice_for_target_entry(4, 0x11, D_L00_001B9E90[0]);
+            allocate_voice_for_target_entry(4, 0x11, l00_pause_menu_page_mobys[0]);
         }
         for (i = 0; i < 14; i++) {
             owner_callback_object = D_L00_001B9CF0.owner->objs[i];
@@ -585,8 +585,8 @@ void update_pause_menu(void) {
         }
         flag = (D_L00_001B9CF0.unk8 == D_L00_001B9CF0.owner->unk38);
         if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8 &&
-            D_L00_001B9CF0.owner != &D_L00_001B71F0 && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
-            D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &D_L00_001B63F8 &&
+            D_L00_001B9CF0.owner != &l00_pause_menu_exit_guarded_page_owner && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
+            D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &l00_pause_menu_self_transition_animation_guard_page_owner &&
             D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
             if (D_L00_001B9CF0.state != 0x23) {
                 flag = flag ^ 1;
@@ -594,16 +594,16 @@ void update_pause_menu(void) {
         }
         for (j = 0; j < 14; j++) {
             if (D_L00_001B9CF0.unk8->objs[j] != 0) {
-                D_L00_001B9CF0.unk8->objs[j]->f14 = D_L00_001B9E90[j];
+                D_L00_001B9CF0.unk8->objs[j]->f14 = l00_pause_menu_page_mobys[j];
             }
             if (flag) {
                 s32 n = D_L00_001B9CF0.owner->ids[j];
-                set_moby_animation(D_L00_001B9E90[j], n,
-                                   D_L00_001B9E90[j]->pclass->seqs[n]->frame_count - 1);
-                D_L00_001B9E90[j]->anim_speed = -1.0f;
+                set_moby_animation(l00_pause_menu_page_mobys[j], n,
+                                   l00_pause_menu_page_mobys[j]->pclass->seqs[n]->frame_count - 1);
+                l00_pause_menu_page_mobys[j]->anim_speed = -1.0f;
             } else {
-                set_moby_animation(D_L00_001B9E90[j], D_L00_001B9CF0.unk8->ids[j], 0);
-                D_L00_001B9E90[j]->anim_speed = 1.0f;
+                set_moby_animation(l00_pause_menu_page_mobys[j], D_L00_001B9CF0.unk8->ids[j], 0);
+                l00_pause_menu_page_mobys[j]->anim_speed = 1.0f;
             }
         }
         D_L00_001B9CF0.state = 1;
@@ -650,7 +650,7 @@ typedef struct {
     int h;
 } PageMobyData;
 
-extern s32 D_L00_001B23C0[];
+extern s32 pause_menu_page_render_enabled[] __asm__("D_L00_001B23C0");
 extern s32 pause_menu_rectangle_color_gp __asm__("D_L00_00160270") __attribute__((sda));
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
@@ -714,8 +714,8 @@ void draw_pause_menu_pages(int transfer_only) {
     init_moby_class_dists();
     stash_moby_class_dists();
     for (i = 0; i < 14; i++) {
-        if (D_L00_001B23C0[i] != 0 && D_L00_001B9E90[i] != 0 && (i != 6 || D_L00_001B9CF0.unkD8 != 0)) {
-            draw_moby_list((int)D_L00_001B9E90[i], 1);
+        if (pause_menu_page_render_enabled[i] != 0 && l00_pause_menu_page_mobys[i] != 0 && (i != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+            draw_moby_list((int)l00_pause_menu_page_mobys[i], 1);
         }
     }
     /* Fakematch: a never-taken set keeps gcse from folding the 0 in page_objects into the select below. */
@@ -727,13 +727,13 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     for (k = 0; k < 14; k++) {
         PageMobyData *page_data;
-        if (D_L00_001B9E90[k] == 0 || D_L00_001B23C0[k] == 0) {
+        if (l00_pause_menu_page_mobys[k] == 0 || pause_menu_page_render_enabled[k] == 0) {
             continue;
         }
         if (k == 6 && D_L00_001B9CF0.unkD8 == 0) {
             continue;
         }
-        page_data = *(PageMobyData **)((char *)D_L00_001B9E90[k] + 0x78);
+        page_data = *(PageMobyData **)((char *)l00_pause_menu_page_mobys[k] + 0x78);
         qcopy(&corners[0], page_data);
         qcopy(&corners[1], &page_data->row[1]);
         qcopy(&corners[2], &page_data->row[2]);
@@ -757,7 +757,7 @@ void draw_pause_menu_pages(int transfer_only) {
         append_screen_rect_packet(rect.x + 1, rect.y + 1, rect.x + rect.w - 1, rect.y + rect.h - 1, pause_menu_rectangle_color_gp, 0);
     }
     for (pass = 0; pass < 2; pass++) {
-        Ent **mobys = D_L00_001B9E90;
+        Ent **mobys = l00_pause_menu_page_mobys;
         for (j = 0; j < 14; j++) {
             char *moby = (char *)mobys[j];
             int width, height, x, y;
@@ -771,7 +771,7 @@ void draw_pause_menu_pages(int transfer_only) {
             if (flags & 4) {
                 continue;
             }
-            if (D_L00_001B23C0[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
+            if (pause_menu_page_render_enabled[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
                 continue;
             }
             if (j == 6 && D_L00_001B9CF0.unkD8 == 0) {
@@ -860,8 +860,8 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     setup_gif_paging(0);
     for (flashing_panel_index = 0; flashing_panel_index < 14; flashing_panel_index++) {
-        if (D_L00_001B23C0[flashing_panel_index] != 0 && (flashing_panel_index != 6 || D_L00_001B9CF0.unkD8 != 0)) {
-            draw_menu_flashing_panel((int)D_L00_001B9E90[flashing_panel_index]);
+        if (pause_menu_page_render_enabled[flashing_panel_index] != 0 && (flashing_panel_index != 6 || D_L00_001B9CF0.unkD8 != 0)) {
+            draw_menu_flashing_panel((int)l00_pause_menu_page_mobys[flashing_panel_index]);
         }
     }
     do_gif_paging();

@@ -235,7 +235,7 @@ extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
 #define ED6C frame_time
 #define ED70 frame_time_sq
 
-extern f32 D_L02_0017C3D0[];
+extern f32 hero_low_speed_threshold_basis[] __asm__("D_L02_0017C3D0");
 void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
 void hero_update_hop_velocity(void) {
     HopVec_223450 velocity_addend;
@@ -329,7 +329,7 @@ void hero_update_hop_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         velocity_change_step = ED70 * 20.0f;
-        if (hero.target_speed < D_L02_0017C3D0[0] * ED6C * 0.2f) {
+        if (hero.target_speed < hero_low_speed_threshold_basis[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_reduction_step = hero.stickless_decel;
                 speed = FUN_001f9b20_223450(&hero.motion.velocity);

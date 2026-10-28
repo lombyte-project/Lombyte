@@ -22,7 +22,7 @@ typedef struct {
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-extern ItemInfo D_001863D8[];
+extern ItemInfo menu_grid_item_slot_records[] __asm__("D_001863D8");
 #include "rnc/gameplay/state/item_state.h"
 extern f32 D_00160290 __attribute__((sda));
 extern f32 D_00160294 __attribute__((sda));
@@ -106,7 +106,7 @@ s32 draw_menu_item_grid(struct MenuScreen *grid) {
                 frame_offset = 0;
                 if ((u16)cell->kind == 0) {
                     id = cell->id;
-                    if (menu_system.equipped[D_001863D8[id].slot] == id && !(grid->data.grid.flags & 0x20)) {
+                    if (menu_system.equipped[menu_grid_item_slot_records[id].slot] == id && !(grid->data.grid.flags & 0x20)) {
                         frame_offset = 1;
                     }
                     if (frame_offset == 0) {

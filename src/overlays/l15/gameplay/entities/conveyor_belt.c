@@ -358,7 +358,7 @@ extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
-extern short D_L15_00162078 __attribute__((sda));
+extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 void bolt_grabber_update(struct Moby *moby) {
     enum {
@@ -368,7 +368,7 @@ void bolt_grabber_update(struct Moby *moby) {
         BOLT_GRABBER_REMOVE = 3
     };
     moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
-    moby->scale = moby->pclass->scale * *(float *)&D_L15_00162078;
+    moby->scale = moby->pclass->scale * *(float *)&bolt_grabber_scale_multiplier_gp;
     switch (moby->state) {
     case BOLT_GRABBER_INITIALIZE:
         initialize_moby_particle_effect((char *)moby);
@@ -408,7 +408,7 @@ extern char *spawn_poison_vessel(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L15_0016207C;
+extern short poison_vessel_spawn_interval __asm__("D_L15_0016207C");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_poison_vessel_spawner(struct Moby *moby) __asm__("FUN_L15_002eabd8");
@@ -427,7 +427,7 @@ void update_poison_vessel_spawner(struct Moby *moby) {
         break;
     case WAIT_FOR_SPAWN_TIMER:
         if (fast_dec_timer(data)) {
-            data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
+            data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&poison_vessel_spawn_interval * 60.0f));
             spawn_poison_vessel(moby, &moby->pos);
         }
         break;
@@ -808,7 +808,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
 
 extern char *msg_string(s32) __asm__("func_001FDD10");
-extern char D_L15_00162190[];
+extern char quartu_cutscene_message_format[] __asm__("D_L15_00162190");
 extern char D_L15_0016CE60[];
 extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern int strlen_alt(char *) __asm__("FUN_001166cc");
@@ -832,7 +832,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0xB5) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x104)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526A));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526A));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0xB5)) >> 2;
             }
         }
@@ -840,7 +840,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x1C2) < *(int *)(second_message_timing_state + 0x34)) {
             if (*(int *)(second_message_timing_state + 0x34) < scale_game_frames(0x280)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526B));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526B));
                 val = (*(int *)(second_message_timing_state + 0x34) - scale_game_frames(0x1C2)) >> 2;
             }
         }
@@ -848,7 +848,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x2EE) < *(int *)(third_message_timing_state + 0x34)) {
             if (*(int *)(third_message_timing_state + 0x34) < scale_game_frames(0x3A2)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526C));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526C));
                 val = (*(int *)(third_message_timing_state + 0x34) - scale_game_frames(0x2EE)) >> 2;
             }
         }
@@ -856,7 +856,7 @@ void draw_quartu_cutscene_messages(void) {
         if (scale_game_frames(0x8FC) < *(int *)(message_timing_state + 0x34)) {
             if (*(int *)(message_timing_state + 0x34) < scale_game_frames(0x960)) {
                 flag = 1;
-                sprintf(formatted_message_text, D_L15_00162190, msg_string(0x526E));
+                sprintf(formatted_message_text, quartu_cutscene_message_format, msg_string(0x526E));
                 val = (*(int *)(message_timing_state + 0x34) - scale_game_frames(0x8FC)) >> 2;
             }
         }
@@ -883,7 +883,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026f080(float, float, char *, float *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-extern short D_L15_00162198 __attribute__((sda));
+extern short vertical_effect_motion_scale_gp __asm__("D_L15_00162198") __attribute__((sda));
 int D_L15_0016219C = 3;
 void emit_randomized_vertical_effect(struct Moby *moby) __asm__("FUN_L15_002eb928");
 
@@ -893,7 +893,7 @@ void emit_randomized_vertical_effect(struct Moby *moby) {
     if (random_integer_below(D_L15_0016219C - 1) == 0) {
         char *pos = &moby->pos;
         clear_u64_value(vertical_motion_vector);
-        vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
+        vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) * *(float *)&vertical_effect_motion_scale_gp * frame_time;
         FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vertical_motion_vector);
     }
 }
@@ -979,7 +979,7 @@ typedef struct {
 } KillFlags;
 extern KillFlags D_L15_001BB830;
 extern unsigned int D_L15_001BAAD0[];
-extern unsigned int D_L15_0014C190[];
+extern unsigned int l15_banked_moby_save_bits[] __asm__("D_L15_0014C190");
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern int D_L15_0015FFD8;
@@ -1034,7 +1034,7 @@ void codebot_slot_update(struct Moby *moby) {
         int i;
         save_index = ((int)((unsigned int)moby->save_id << 16)) >> 16;
         if (D_L15_001BB830.killed[save_index] != 0 ||
-            ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)D_L15_0014C190) >> (moby->save_id & 31) & 1) != 0)) {
+            ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)l15_banked_moby_save_bits) >> (moby->save_id & 31) & 1) != 0)) {
             moby->state = 4;
             break;
         }
@@ -1088,7 +1088,7 @@ void codebot_slot_update(struct Moby *moby) {
             *(OvlQuad *)(effect + 0x10) = *(OvlQuad *)position_rotation_work_vector;
             if (angle < 0.5f) {
                 unsigned int *bits;
-                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)D_L15_0014C190);
+                bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)l15_banked_moby_save_bits);
                 *bits |= 1u << (moby->save_id & 31);
                 {
                     unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
@@ -1513,8 +1513,8 @@ extern char D_00141968_2ed398[] __asm__("D_00141968");
 extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
 
 extern int D_L15_0015F5A4 __attribute__((section(".sdata")));
-extern char D_L15_00179A10[];
-extern unsigned char D_0013D4C4[];
+extern char quartu_help_message_state[] __asm__("D_L15_00179A10");
+extern unsigned char l15_dwell_zone_hint_enabled[] __asm__("D_0013D4C4");
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
@@ -1543,7 +1543,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->zone[3]) != 0
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
-                && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1) {
+                && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1) {
                 if (D_0013D4DF_2ed398[0] == 0) {
                     int lim, now;
                     now = scale_game_frames_2ed398(D_0015EEA4_macro);
@@ -1579,8 +1579,8 @@ void update_quartu_hint_triggers(struct Moby *moby) {
                 }
             }
         }
-        if (D_L15_0015F5A4 != 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
-            && ((Help_2ed398 *)D_L15_00179A10)->cur == -1 && *(unsigned short *)(D_00141680_2ed398 + 0x730) == 0) {
+        if (D_L15_0015F5A4 != 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
+            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && *(unsigned short *)(D_00141680_2ed398 + 0x730) == 0) {
             show_help_message_2ed398(0x3A9F, 0x89);
             D_L15_0015F5A4 = 0;
         }
@@ -1611,7 +1611,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 && pick != hint_dialogue_data->last
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
-                && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1
+                && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1
                 && D_0013D4DF_2ed398[0] != 0) {
                 hint_dialogue_data->wait = scale_game_frames_2ed398(0x708);
                 if (*(int *)(D_00141680_2ed398 + 0x6D4) >= 0) {
@@ -1625,12 +1625,12 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             ((Items_2ed398 *)D_0013D388_2ed398)->f6F = 1;
         }
         if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 && hero.vehicle_mode == 2
-            && ((Items_2ed398 *)D_0013D388_2ed398)->f6F == 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
-            && ((Help_2ed398 *)D_L15_00179A10)->cur == -1 && *(int *)(D_00141680_2ed398 + 0x6EC) >= 0) {
+            && ((Items_2ed398 *)D_0013D388_2ed398)->f6F == 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
+            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && *(int *)(D_00141680_2ed398 + 0x6EC) >= 0) {
             show_help_message_2ed398(0x3A9C, 0x80);
         }
-        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0
-            && ((Help_2ed398 *)D_L15_00179A10)->cur == -1 && D_0013D4C4[0] == 0
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
+            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] == 0
             && !(*(unsigned int *)(D_00141680_2ed398 + 0x6FC) & (1 << current_level_index_macro))) {
             show_help_message_2ed398(0x3A9D, 0x82);
         }
@@ -1656,8 +1656,8 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             }
         }
         if (scale_game_frames_2ed398(0xE10) < hint_dialogue_data->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
-            && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1
-            && D_0013D4C4[0] != 0) {
+            && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1
+            && l15_dwell_zone_hint_enabled[0] != 0) {
             show_help_message_2ed398(0x4E2E, 0x78);
             hint_dialogue_data->last = pick;
             hint_dialogue_data->hold38 = 0;
@@ -1830,7 +1830,7 @@ float D_L15_001DEA88[46][2] = {
     {1.7922f, 1.7922f},
 };
 float D_L15_001DEED8[46][2] = {0};
-extern Quad4_2edbe0 D_L15_00162208;
+extern Quad4_2edbe0 l15_scaled_ripple_uv_scroll_factors __asm__("D_L15_00162208");
 int D_L15_001621B0[1] = {0x2e};
 int D_L15_001621D0[1] = {(int)D_L15_001DECB0};
 int D_L15_001621D8[1] = {(int)D_L15_001DEED8};
@@ -1881,7 +1881,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     }
     for (j = 0; j < 2; j++) {
         for (uv_vertex_index = 0; uv_vertex_index < 46; uv_vertex_index++) {
-            Quad4_2edbe0 uv_scroll_factors = D_L15_00162208;
+            Quad4_2edbe0 uv_scroll_factors = l15_scaled_ripple_uv_scroll_factors;
             D_L15_001DEED8[uv_vertex_index][0] = D_L15_001DEA88[uv_vertex_index][0] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][0], 1.0f);
             D_L15_001DEED8[uv_vertex_index][1] = D_L15_001DEA88[uv_vertex_index][1] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
@@ -2094,7 +2094,7 @@ float D_L15_001DF520[88][2] = {
     {-0.201364f, -0.505576f},
 };
 float D_L15_001DFD60[88][2] = {0};
-extern Quad4_2edfc0 D_L15_00162278;
+extern Quad4_2edfc0 l15_ripple_88_uv_scroll_factors __asm__("D_L15_00162278");
 int D_L15_00162220[1] = {0x58};
 int D_L15_00162240[1] = {(int)D_L15_001DF940};
 int D_L15_00162248[1] = {(int)D_L15_001DFD60};
@@ -2145,7 +2145,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     }
     for (j = 0; j < 2; j++) {
         for (uv_vertex_index = 0; uv_vertex_index < 88; uv_vertex_index++) {
-            Quad4_2edfc0 uv_scroll_factors = D_L15_00162278;
+            Quad4_2edfc0 uv_scroll_factors = l15_ripple_88_uv_scroll_factors;
             D_L15_001DFD60[uv_vertex_index][0] = D_L15_001DF520[uv_vertex_index][0] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][0], 1.0f);
             D_L15_001DFD60[uv_vertex_index][1] = D_L15_001DF520[uv_vertex_index][1] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
@@ -2158,13 +2158,13 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
 
 extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
-extern char *D_L15_0015EF50;
+extern char *moby_slot_entry_table __asm__("D_L15_0015EF50");
 
 int can_spawn_codebot_slot_effect(int slot) {
     char *slot_state_data;
     if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
-    slot_state_data = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
+    slot_state_data = *(char **)(*(char **)(*(char **)(moby_slot_entry_table + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
     if (*(short *)(slot_state_data + 0x14) == 1 && codebot_slot_effect_spawn_gate != 0.0f)
         return 1;
     return *(short *)(slot_state_data + 0x14) == 3;
@@ -2213,7 +2213,7 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_001600EC;
-extern char D_L15_00167410[];
+extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
@@ -2232,7 +2232,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     float target_axis_residual[4];
     float r[4];
     char *data;
-    char *projection_axis_record = D_L15_00167410;
+    char *projection_axis_record = angular_limit_projection_axis_record;
     char *g;
     float dot1;
     float dot2;
@@ -2297,7 +2297,7 @@ extern void zoom_s(int, float, float) __asm__("FUN_L00_002e84f0");
 void update_moby_follow_camera(char *moby) __asm__("FUN_L15_002f88e8");
 
 void update_moby_follow_camera(char *moby) {
-    char *slot_data = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *slot_data = *(char **)(moby_slot_entry_table + *(short *)(moby + 0x84) * 32 + 0x1C);
     char *target_record = D_L15_001600EC + (*(int *)(slot_data + 0x48) << 7);
     int done;
     int hold_start_frames;

@@ -8,12 +8,12 @@ typedef struct {
     short sel;            /* 0x26 */
 } MissionNode;            /* 0x28 */
 
-extern MissionNode *D_001A2C20[];
+extern MissionNode *mission_id_collection_node_source[] __asm__("D_001A2C20");
 
 int collect_mission_ids(int *out, int *mask, int *nums, int arg3) __asm__("FUN_0020bc00");
 
 int collect_mission_ids(int *out, int *mask, int *nums, int use_selected_ids) {
-    MissionNode *mission_node_cursor = D_001A2C20[0];
+    MissionNode *mission_node_cursor = mission_id_collection_node_source[0];
     int count = 0;
     int all = 1;
 

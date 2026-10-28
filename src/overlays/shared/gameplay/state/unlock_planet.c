@@ -419,10 +419,10 @@ void grant_inventory_item(int id, int flag) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
 #include "rnc/gameplay/entities/moby.h"
 
-extern char *D_L00_001B04B0[];
-extern char D_L00_001600A0[];
-extern char D_L00_001600B0[];
-extern char D_L00_001600C0[];
+extern char *toad_paths[] __asm__("D_L00_001B04B0");
+extern char bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");
+extern char bolt_drop_integer_scale_format[] __asm__("D_L00_001600B0");
+extern char bolt_drop_float_scale_format[] __asm__("D_L00_001600C0");
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") __attribute__((section(".sdata")));
@@ -503,10 +503,10 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
             }
             if (rate < 0x96) {
                 if (rate < 0x5B) {
-                    debug_print(D_L00_001600A0);
+                    debug_print(bolt_drop_scale_five_message);
                     total *= 5;
                 } else {
-                    debug_print(D_L00_001600B0, (0xBE - rate) / 20);
+                    debug_print(bolt_drop_integer_scale_format, (0xBE - rate) / 20);
                     total *= (0xBE - rate) / 20;
                 }
                 if (D_0015EEA0_macro) {
@@ -516,10 +516,10 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
                 }
             } else if (rate >= 0x12D) {
                 if (rate >= 0x160) {
-                    debug_print(D_L00_001600C0, 0x3FB99999A0000000L);
+                    debug_print(bolt_drop_float_scale_format, 0x3FB99999A0000000L);
                     total /= 10;
                 } else {
-                    debug_print(D_L00_001600C0, convert_integer_to_float(0x168 - rate) / 20.0f);
+                    debug_print(bolt_drop_float_scale_format, convert_integer_to_float(0x168 - rate) / 20.0f);
                     total *= (0x168 - rate) / 80;
                 }
                 if (total <= 0) {
@@ -626,7 +626,7 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
         if (path_index >= 0) {
             gravity = frame_time_sq_macro * 10.8f * -0.5f;
             rise = velocity[2] - gravity;
-            height = position[2] - *(float *)(D_L00_001B04B0[path_index] + 0x18);
+            height = position[2] - *(float *)(toad_paths[path_index] + 0x18);
             time = 120.0f;
             roots = solve_quadratic_equation(&first_root, &second_root, gravity, rise, height);
             if (1.0f <= (float)roots) {

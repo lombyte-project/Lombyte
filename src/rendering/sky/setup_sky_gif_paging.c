@@ -15,8 +15,8 @@ struct SkyVisibilityList {
     struct SkyVisibilityEntry *points;
 };
 extern struct DmaTag *D_00160470;
-extern u8 D_00160450[];
-extern struct SkyVisibilityList *D_0016045C;
+extern u8 sky_textures_label[] __asm__("D_00160450");
+extern struct SkyVisibilityList *level_sky_effect_data __asm__("D_0016045C");
 extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
@@ -30,8 +30,8 @@ void setup_sky_gif_paging(void) {
     D_00160470 = tag;
     tag = tag + 1;
     render_packet_cursor.tag = tag;
-    noop_core_callback_secondary(D_00160450, 1);
-    visibility_list = D_0016045C;
+    noop_core_callback_secondary(sky_textures_label, 1);
+    visibility_list = level_sky_effect_data;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     pending_texture_upload_count = 0;
     for (entry_index = 0; entry_index < visibility_list->count; entry_index++) {

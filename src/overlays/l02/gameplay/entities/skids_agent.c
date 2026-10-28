@@ -60,7 +60,7 @@ extern u8 D_0013D506 __attribute__((section(".data")));
 extern u8 D_0015EDB0 __attribute__((section(".sdata")));
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
-extern char D_L02_00161D00[];
+extern char skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
@@ -100,10 +100,10 @@ extern void spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void drive_joint(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((section(".data"))); /* dialogue camera spot */
-extern char D_L02_00161CF0[];
+extern char skids_agent_dialogue_data[] __asm__("D_L02_00161CF0");
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
-extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
+extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
 extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
@@ -147,7 +147,7 @@ void skids_agent_update(struct Moby *moby) {
         if (items_owned[0x2D] != 0) {
             goto kill;
         }
-        *(char **)(data + 0x20) = D_L02_00161CF0;
+        *(char **)(data + 0x20) = skids_agent_dialogue_data;
         moby->state = 1;
         initialize_npc_dialogue(moby, data);
         initialize_moby_grounding(moby);
@@ -281,7 +281,7 @@ void skids_agent_update(struct Moby *moby) {
             moby_point_position(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
             build_moby_bone_transform(moby, 2, mtx);
             copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
-            transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->rot_row0);
+            transform_vector_by_basis(&offset, skids_agent_prop_local_offset, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
             FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
         }
@@ -383,7 +383,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             return;
         }
         watcher_vars->unk180 = 0;
-        watcher_vars->dialog = D_L02_00161D00;
+        watcher_vars->dialog = skid_mcmarx_dialogue_data;
         moby->state = 1;
         moby->update_dist = 0xFF;
         watcher_init(moby, watcher_vars);
@@ -699,14 +699,14 @@ void liftcar_platform_update(struct Moby *moby) {
 
 #include "rnc/overlay/l02/gameplay/entities/skids_agent_globals.h"
 extern char D_L02_001673C0[];
-extern char D_L02_001F3C00[];
-extern char D_L02_001F3C60[];
-extern char D_L02_001F3CD0[];
+extern char aridia_ocean_first_clip_draw_data[] __asm__("D_L02_001F3C00");
+extern char aridia_ocean_last_clip_draw_data[] __asm__("D_L02_001F3C60");
+extern char aridia_ocean_middle_clip_first_draw_data[] __asm__("D_L02_001F3CD0");
 extern char D_L02_001F3D30[];
 extern char D_L02_001F3D90[];
 extern char D_L02_001F3DD0[];
-extern char D_L02_001F3E10[];
-extern char D_L02_001F3E80[];
+extern char aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
+extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
 extern void begin_animated_frame_rendering(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
 extern int in_clip_2ea048(void *, int) __asm__("FUN_00214720");
@@ -719,19 +719,19 @@ void draw_aridia_ocean_parts(struct Moby *moby) __asm__("FUN_L02_002ea048");
 void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
-    begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
+    begin_animated_frame_rendering(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, aridia_ocean_animated_frame_packet);
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[0] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[0]))) {
-        draw_2ea048(D_L02_001F3C00);
+        draw_2ea048(aridia_ocean_first_clip_draw_data);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[1] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[1]))) {
-        draw_2ea048(D_L02_001F3CD0);
+        draw_2ea048(aridia_ocean_middle_clip_first_draw_data);
         draw_2ea048(D_L02_001F3D30);
         draw_2ea048(D_L02_001F3D90);
         draw_2ea048(D_L02_001F3DD0);
-        draw_2ea048(D_L02_001F3E10);
+        draw_2ea048(aridia_ocean_middle_clip_last_draw_data);
     }
     if (aridia_ocean_clip_culling_override != 0 || (clip_volume_indices[2] != -1 && in_clip_2ea048(D_L02_001673C0, clip_volume_indices[2]))) {
-        draw_2ea048(D_L02_001F3C60);
+        draw_2ea048(aridia_ocean_last_clip_draw_data);
     }
     FUN_L02_002a47f8_c();
 }

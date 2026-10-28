@@ -20,7 +20,7 @@ typedef struct {
     float fade;
 } CamVars_c788;
 
-extern struct Moby *D_L11_001DA710[];
+extern struct Moby *l11_three_per_side_child_mobys[] __asm__("D_L11_001DA710");
 extern struct Moby *D_L11_00161F10[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F20[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F30[] __attribute__((section(".sdata")));
@@ -92,15 +92,15 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
         D_L11_00161EDC = 0.0f;
         child_sets_controller->command = 0;
         for (i = 0; i < 6; i++) {
-            D_L11_001DA710[i] = create_moby_c788(0x480);
-            D_L11_001DA710[i]->draw_dist = 0x40;
-            D_L11_001DA710[i]->visible = 1;
-            D_L11_001DA710[i]->spawn_frame = hero.moby->spawn_frame;
-            qcopy_nc(&D_L11_001DA710[i]->pos, &child_sets_controller->pos);
-            qcopy_nc(&D_L11_001DA710[i]->rot, &child_sets_controller->rot);
-            D_L11_001DA710[i]->flags |= 1;
-            D_L11_001DA710[i]->visible = 0;
-            D_L11_001DA710[i]->collision = 0;
+            l11_three_per_side_child_mobys[i] = create_moby_c788(0x480);
+            l11_three_per_side_child_mobys[i]->draw_dist = 0x40;
+            l11_three_per_side_child_mobys[i]->visible = 1;
+            l11_three_per_side_child_mobys[i]->spawn_frame = hero.moby->spawn_frame;
+            qcopy_nc(&l11_three_per_side_child_mobys[i]->pos, &child_sets_controller->pos);
+            qcopy_nc(&l11_three_per_side_child_mobys[i]->rot, &child_sets_controller->rot);
+            l11_three_per_side_child_mobys[i]->flags |= 1;
+            l11_three_per_side_child_mobys[i]->visible = 0;
+            l11_three_per_side_child_mobys[i]->collision = 0;
         }
         for (i = 0; i < 4; i++) {
             D_L11_00161F20[i] = create_moby_c788(0x481);
@@ -163,9 +163,9 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
             jet_mount((char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
                              (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, 1, 0, 0);
             for (j = 0; j < 6; j++) {
-                D_L11_001DA710[j]->flags &= ~1;
-                D_L11_001DA710[j]->visible = 1;
-                D_L11_001DA710[j]->collision = D_L11_001DA710[j]->pclass->collision;
+                l11_three_per_side_child_mobys[j]->flags &= ~1;
+                l11_three_per_side_child_mobys[j]->visible = 1;
+                l11_three_per_side_child_mobys[j]->collision = l11_three_per_side_child_mobys[j]->pclass->collision;
             }
             for (j = 0; j < 4; j++) {
                 D_L11_00161F20[j]->flags &= ~1;
@@ -287,21 +287,21 @@ void update_child_set_poses(struct Moby *parent_moby) {
     for (i = 0; i < 6; i++) {
         int s = (i >= 3) ? 1 : -1;
         float ang = (float)(i % 3) * 0.5235988f - (child_set_fold_rotation_x_degrees_gp * (1.0f - D_L11_00161EC4) + 30.0f) * 0.017453292f;
-        qcopy_nc(&D_L11_001DA710[i]->rot, &parent_moby->rot);
-        D_L11_001DA710[i]->rot.z = fast_add_rotations(D_L11_001DA710[i]->rot.z, (float)s * 1.5707964f);
-        D_L11_001DA710[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
-        D_L11_001DA710[i]->rot.x = ang;
-        euler_rotation_basis(&D_L11_001DA710[i]->rot_row0, &D_L11_001DA710[i]->rot);
+        qcopy_nc(&l11_three_per_side_child_mobys[i]->rot, &parent_moby->rot);
+        l11_three_per_side_child_mobys[i]->rot.z = fast_add_rotations(l11_three_per_side_child_mobys[i]->rot.z, (float)s * 1.5707964f);
+        l11_three_per_side_child_mobys[i]->rot.y = child_set_base_rotation_y_degrees_gp * 0.017453292f;
+        l11_three_per_side_child_mobys[i]->rot.x = ang;
+        euler_rotation_basis(&l11_three_per_side_child_mobys[i]->rot_row0, &l11_three_per_side_child_mobys[i]->rot);
         zero_vector_d1b0(&child_placement_vector_scratch);
         normalize_vector_xyz(&child_placement_vector_scratch, &parent_moby->rot_row0, 14.0f);
         child_placement_vector_scratch.z += child_set_base_z_offset_gp;
         add_vector_xyz(&child_placement_vector_scratch, &child_placement_vector_scratch, &parent_moby->pos);
-        normalize_vector_xyz(&child_position_scratch, &D_L11_001DA710[i]->rot_row2, child_set_child_axis2_offset_length_gp);
+        normalize_vector_xyz(&child_position_scratch, &l11_three_per_side_child_mobys[i]->rot_row2, child_set_child_axis2_offset_length_gp);
         normalize_vector_xyz(&parent_axis1_offset, &parent_moby->rot_row1, (float)s * D_L11_00161EB4);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &parent_axis1_offset);
         add_vector_xyz(&child_position_scratch, &child_position_scratch, &child_placement_vector_scratch);
-        qcopy_nc(&D_L11_001DA710[i]->pos, &child_position_scratch);
-        FUN_L00_00250df8(D_L11_001DA710[i]);
+        qcopy_nc(&l11_three_per_side_child_mobys[i]->pos, &child_position_scratch);
+        FUN_L00_00250df8(l11_three_per_side_child_mobys[i]);
     }
     for (j = 0; j < 4; j++) {
         int s = (j >= 2) ? 1 : -1;
@@ -618,13 +618,13 @@ typedef struct {
     u8 unk3D;
 } Light_e088;
 
-extern Light_e088 D_L11_001CB280;
+extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
 int D_L11_00161F64 = 0;
 char D_L11_0021B4C0[] = "I'm really sorry, but you can't have more than 128 water tiles in this level";
-extern char D_L11_001DA740[];
-extern float D_L11_001808C0[];
+extern char water_tile_binding_records[] __asm__("D_L11_001DA740");
+extern float water_light_heading_reference[] __asm__("D_L11_001808C0");
 extern void *D_L11_001612D0;
-extern void *D_L11_001612D4;
+extern void *l11_water_tile_binding_record_base __asm__("D_L11_001612D4");
 extern int D_L11_001612D8;
 extern float D_L11_0016120C;
 extern float D_L11_00161210;
@@ -682,7 +682,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             }
             pool_init_tiles(D_L11_001DA880, 20);
             pool_set_scale(1.0f);
-            water_tile_light = &D_L11_001CB280;
+            water_tile_light = &l11_water_tile_light;
             water_tile_light->unk0 = 16.0f;
             water_tile_light->unk4 = 16.0f;
             water_tile_light->unk8 = -8.0f;
@@ -691,7 +691,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             water_tile_light->unk14 = 1.0f;
             water_tile_light->unk18 = 0.9f;
             water_tile_light->unk20 = 0.1f;
-            light_direction_angle = fast_arc_tan(D_L11_001808C0[4], D_L11_001808C0[5]);
+            light_direction_angle = fast_arc_tan(water_light_heading_reference[4], water_light_heading_reference[5]);
             water_tile_light->unk30 = fast_cos(light_direction_angle) * 0.57735f;
             water_tile_light->unk34 = fast_sin(light_direction_angle) * 0.57735f;
             water_tile_light->unk38 = -0.57735f;
@@ -700,7 +700,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             water_tile_light->unk3C = 0x1C;
             water_tile_light->unk3D = 0x40;
             D_L11_001612D0 = D_L11_001DA880;
-            D_L11_001612D4 = D_L11_001DA740;
+            l11_water_tile_binding_record_base = water_tile_binding_records;
             D_L11_001612D8 = 20;
             D_L11_0016120C = 32768.0f;
             D_L11_00161210 = 255.0f;
@@ -715,7 +715,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
         D_L11_001DA880[water_tile_vars[1]].unk1C = 0x1C;
         D_L11_001DA880[water_tile_vars[1]].unk1D = 0x44;
         D_L11_001DA880[water_tile_vars[1]].unk1E = 0xFFFF;
-        pool_bind_tile(&D_L11_001DA880[water_tile_vars[1]], D_L11_001DA740 + water_tile_vars[1] * 16);
+        pool_bind_tile(&D_L11_001DA880[water_tile_vars[1]], water_tile_binding_records + water_tile_vars[1] * 16);
         water_tile_moby->state = 1;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
@@ -1791,7 +1791,7 @@ typedef struct {
     short x;
     short y;
 } IconEC5D0;
-extern IconEC5D0 D_L11_001F1058[];
+extern IconEC5D0 l11_ship_radar_icon_definitions[] __asm__("D_L11_001F1058");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vector_length_xyz(void *a);
@@ -1845,7 +1845,7 @@ void draw_ship_radar_moby_icon(char *radar_reference_rotation, char *from, char 
             color &= 0xFFFFFF;
             color = (func_001FA898_r(alpha_distance_product * 0.125f) << 24) | color;
         }
-        icon_definition = &D_L11_001F1058[icon];
+        icon_definition = &l11_ship_radar_icon_definitions[icon];
         y -= 0x50;
         y += *(int *)(frame_size);
         x += 0x1B0;
@@ -1897,7 +1897,7 @@ void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_p
 /* squared distance from a point to a projected target, or a large value when out of range */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
 
-extern char D_L11_001679E0[];
+extern char ship_target_projection_offset_reference[] __asm__("D_L11_001679E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1921,8 +1921,8 @@ float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
             dx = -dx;
         if (dy < 0)
             dy = -dy;
-        qcopy(target_projection_point, D_L11_001679E0);
-        scale_vector_xyz(target_projection_point, D_L11_001679E0, *(float *)(target_moby + 0xC) / 1280.0f);
+        qcopy(target_projection_point, ship_target_projection_offset_reference);
+        scale_vector_xyz(target_projection_point, ship_target_projection_offset_reference, *(float *)(target_moby + 0xC) / 1280.0f);
         add_vector_xyz(target_projection_point, target_projection_point, target_moby + 0x10);
         project_world_point_to_screen_pixels(target_projection_point, &cx, &cy, 0);
         cx = cx - ax;
@@ -2031,7 +2031,7 @@ typedef struct {
    health). */
 extern struct UsageStat help_stats[] __asm__("D_00141968");
 extern s32 D_0015EEA4;
-extern short D_L11_001F0CF8[];  /* outline of an ammo pip */
+extern short ship_ammo_pip_points[] __asm__("D_L11_001F0CF8");  /* outline of an ammo pip */
 /* The health bar's palette: jet_fighter_update points clut at it in texture
    memory and, the first time (saved), copies it to D_L11_001F1088. */
 typedef struct {
@@ -2039,7 +2039,7 @@ typedef struct {
     s32 saved;
 } HpBarPalette;
 HpBarPalette hp_bar_palette __asm__("D_L11_0016216C") = {0};
-extern s32 D_L11_001F1088[]; /* the health bar palette as loaded */
+extern s32 ship_hp_bar_saved_palette[] __asm__("D_L11_001F1088"); /* the health bar palette as loaded */
 
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void append_rotated_sprite_quad(f32, f32, f32, f32, f32, s32, s32, s64, s32, s32, s32, s32, f32,
@@ -2110,9 +2110,9 @@ void draw_ship_hud(struct Moby *moby) {
     x = 0x18;
     for (i = 0; i < hero.ship_ammo_max; i++) {
         if (i < hero.ship_ammo) {
-            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
+            append_scaled_screen_triangle_strip(ship_ammo_pip_points, 0x19, x, y, 0xFFFFF3, 0x50008F00, 0.5f);
         } else {
-            append_scaled_screen_triangle_strip(D_L11_001F0CF8, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
+            append_scaled_screen_triangle_strip(ship_ammo_pip_points, 0x19, x, y, 0xFFFFF3, 0x20004F00, 0.5f);
         }
         pips = hero.ship_ammo_max;
         if (i == pips >> 1) {
@@ -2215,7 +2215,7 @@ void draw_ship_hud(struct Moby *moby) {
         /* CSM1 palette order: bits 3 and 4 of the entry swap */
         entry = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < fill) {
-            hp_bar_palette.clut[entry] = D_L11_001F1088[entry];
+            hp_bar_palette.clut[entry] = ship_hp_bar_saved_palette[entry];
         } else {
             hp_bar_palette.clut[entry] = 0x80000000;
         }
@@ -2233,7 +2233,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-extern short D_L11_0016205C __attribute__((sda));
+extern short ship_shot_direction_base_scale_gp __asm__("D_L11_0016205C") __attribute__((sda));
 int D_L11_00162060 = 4;
 void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, float aim_azimuth, float aim_elevation) __asm__("FUN_L11_003125a8");
 
@@ -2243,7 +2243,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, flo
     char muzzle_forward_offset[16];
     char reticle_world_position[16];
 
-    build_spherical_offset((f32 *)shot_direction, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_gp, aim_azimuth,
+    build_spherical_offset((f32 *)shot_direction, *(float *)&ship_shot_direction_base_scale_gp * *(float *)&D_L11_00162090_gp, aim_azimuth,
                            aim_elevation);
     fast_vec_add(shot_direction, shot_direction, ship_vars);
     if (FUN_001f9740_c(ship_vars + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
@@ -2274,7 +2274,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-extern short D_L11_00162064 __attribute__((sda));
+extern short ship_projectile_base_scale_gp __asm__("D_L11_00162064") __attribute__((sda));
 int D_L11_00162068 = 30;
 void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) __asm__("FUN_L11_003126f8");
 
@@ -2292,7 +2292,7 @@ void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
             if (*(int *)(ship_vars + 0x88) != 0 && !(500 < *(int *)(ship_vars + 0x8C)))
                 projectile_target = *(int *)(ship_vars + 0x88);
             if (spawn_ship_projectile(moby, projectile_spawn_position, projectile_target, &moby->rot,
-                                 *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_gp,
+                                 *(float *)&ship_projectile_base_scale_gp * *(float *)&D_L11_00162090_gp,
                                  scale_game_frames(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
@@ -2361,7 +2361,7 @@ typedef struct {
 
 extern unsigned short D_00141C10 __attribute__((section(".data")));
 extern float D_L11_0016D4F0 __attribute__((section(".data")));
-extern char D_L11_00174840[];
+extern char jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int D_L11_00161FF0 = 120;
 int D_L11_00162004 = 5;
@@ -2614,7 +2614,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
     ship_moby->rot.y = fast_add_rot_2838(ship_vars->f34, -ship_vars->f70 * D_L11_00162154);
     ship_moby->rot.z = fast_add_rot_2838(ship_vars->f38, -ship_vars->f6C * D_L11_00162158);
     if (coll_sphere(2.0f, &ship_moby->pos, 0, ship_moby)) {
-        collision_result = D_L11_00174840;
+        collision_result = jet_fighter_collision_query_result;
         if (*(char **)(collision_result + 0x18) == 0) {
             spawn_explosion(ship_moby, D_L11_0015F580, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
                              9.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
@@ -2684,17 +2684,17 @@ typedef struct {
 } Block400_3290;
 
 extern ShipLevelEntry_3290 D_L11_0016DA80[];
-extern char *D_L11_0015F420;
+extern char *ship_hp_bar_palette_address_base __asm__("D_L11_0015F420");
 extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
 extern char D_0013E550[];
 extern char D_L11_001677C0[];
-extern char D_L11_0021B610[];
-extern char D_L11_0021B648[];
+extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11_0021B610");
+extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
 extern int D_L11_0015F608;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update_2.h"
-extern unsigned char D_L11_00162054 __attribute__((sda));
-extern unsigned char D_L11_00162058 __attribute__((sda));
+extern unsigned char l11_jet_fighter_initial_ammo __asm__("D_L11_00162054") __attribute__((sda));
+extern unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update.h"
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;
@@ -2798,9 +2798,9 @@ void jet_fighter_update(struct Moby *moby) {
             qcopy_nc(&ship_vars->f30, &moby->rot);
             qcopy_nc(ship_vars->home_rot, &moby->rot);
             qcopy_nc(ship_vars->home_pos, &moby->pos);
-            hp_bar_palette.clut = (s32 *)(D_L11_0015F420 + D_L11_0016DA80[0x4C].idx * 16);
+            hp_bar_palette.clut = (s32 *)(ship_hp_bar_palette_address_base + D_L11_0016DA80[0x4C].idx * 16);
             if (hp_bar_saved == 0) {
-                *(Block400_3290 *)D_L11_001F1088 = *(Block400_3290 *)hp_bar_palette.clut;
+                *(Block400_3290 *)ship_hp_bar_saved_palette = *(Block400_3290 *)hp_bar_palette.clut;
             }
             hp_bar_saved = 1;
             ship_vars->iF8 = 1;
@@ -2858,10 +2858,10 @@ void jet_fighter_update(struct Moby *moby) {
                 moby->state = 4;
                 g->ship_moby = moby;
                 g->ship_oclass = moby->oclass;
-                g->ship_ammo = D_L11_00162054;
+                g->ship_ammo = l11_jet_fighter_initial_ammo;
                 g->unk160E = 1;
-                g->ship_ammo_max = D_L11_00162058;
-                g->unk15F8 = D_L11_00162058;
+                g->ship_ammo_max = l11_jet_fighter_max_ammo;
+                g->unk15F8 = l11_jet_fighter_max_ammo;
                 g->ship_hp = jet_fighter_initial_health_gp;
                 ship_vars->shown_hp = 0.0f;
                 ship_vars->hp_bar_fill = 0xFF;
@@ -2972,7 +2972,7 @@ void jet_fighter_update(struct Moby *moby) {
                     moby->collision = 0;
                     moby->flags |= 1;
                     if (ship_vars->exit_path2 == -1) {
-                        print_3290(D_L11_0021B610);
+                        print_3290(jet_fighter_missing_victory_jet_destination_message);
                         qcopy_nc(&moby->pos, ship_vars->home_pos);
                         qcopy_nc(&moby->rot, ship_vars->home_rot);
                     } else {
@@ -2981,7 +2981,7 @@ void jet_fighter_update(struct Moby *moby) {
                     }
                     refresh_moby_spatial_bounds_from_basis(moby);
                     if (ship_vars->exit_path == -1) {
-                        print_3290(D_L11_0021B648);
+                        print_3290(jet_fighter_missing_victory_hero_destination_message);
                     } else {
                         p = D_L11_001600EC + (ship_vars->exit_path << 7);
                         FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);

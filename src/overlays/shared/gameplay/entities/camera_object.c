@@ -751,7 +751,7 @@ typedef struct {
 
 extern s32 D_L00_0015F5C4;
 extern CollisionHit D_L00_00173E40 __attribute__((section(".data")));
-extern Vec4 D_L00_001D73D0[];
+extern Vec4 l00_bolt_glint_local_offsets_by_class[] __asm__("D_L00_001D73D0");
 extern BoltTrailSlot glints[] __asm__("D_L00_0016EA40");
 extern u8 *D_L00_0015FFDC;
 extern s32 D_L00_0015FFBC;
@@ -985,7 +985,7 @@ void bolt_update(Bolt *bolt_moby) {
             v->hop_left--;
         }
         if (v->slot >= 0) {
-            transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+            transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
             fast_vec_add(&glints[v->slot], &geometry_scratch, &bolt_moby->pos);
             if (glints[v->slot].moby != (((u8 *)bolt_moby - D_L00_0015FFD8) >> 8)) {
                 v->slot = -1;
@@ -995,7 +995,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (--v->slot_timer > 0) {
             return;
         }
-        transform_vector_by_basis(&geometry_scratch, &D_L00_001D73D0[bolt_moby->oclass], &bolt_moby->rot);
+        transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
         v->slot = allocate_glint_slot(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
@@ -1910,8 +1910,8 @@ void spawn_wrench_impact_effects(u8 *o) __asm__("FUN_L00_002a8028");
 void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
 extern char D_0013CAE0[];
-extern char D_00140B00[];
-extern char D_001403C0[];
+extern char thrown_wrench_transform_history[] __asm__("D_00140B00");
+extern char wrench_return_position[] __asm__("D_001403C0");
 extern PlayerCamera player_camera __asm__("D_L00_00166C80");
 extern WrenchHit collision_hit __asm__("D_L00_00173E40");
 extern void draw_target_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
@@ -2089,7 +2089,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         float *position;
         float radius;
         {
-        char *control=((char *)&D_00140B00);
+        char *control=((char *)&thrown_wrench_transform_history);
         WrenchHero *control_player=(WrenchHero*)(control-0x17B0);
         update_moby_transform_history(control,0);
         wrench_moby->parent=control_player->moby; control_player->wrench_state=2;
@@ -2119,7 +2119,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             int arrived=0;
             float length,steps;
             process_mobies_near_returning_wrench((char*)wrench_moby);
-            subtract_vector_xyz(work.v[1],((char *)&D_001403C0),position);
+            subtract_vector_xyz(work.v[1],((char *)&wrench_return_position),position);
             wrench_vars->acceleration+=frame_time_sq*0.9f; wrench_vars->speed+=wrench_vars->acceleration;
             length=vector_length_xyz(work.v[1]); steps=wrench_vars->speed; steps=length/steps;
             if (steps<(float)scale_game_frames_alt(5) && wrench_moby->current_animation!=1) blend_moby_animation(wrench_moby,1,0,scale_game_frames_alt(5));
@@ -2640,7 +2640,7 @@ extern char D_0013F350[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float frame_time_sq __asm__("D_0015ED70");
-extern float D_L00_00173E80[];
+extern float coll_hit_normal[] __asm__("D_L00_00173E80");
 extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
 extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
 extern int FUN_001efa68(void*,void*,int,int,int);
@@ -2724,7 +2724,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         {
             char *camera_position = (char *)&D_L00_00166DC0;
             char *hit_position = trajectory_state + 0x10;
-            *(u128 *)(trajectory_state + 0x20) = *(u128 *)D_L00_00173E80;
+            *(u128 *)(trajectory_state + 0x20) = *(u128 *)coll_hit_normal;
             subtract_vector_xyz(C, hit_position, camera_position);
             scale_vector_xyz_c(C, C, 0.95f);
             add_vector_xyz(hit_position, C, camera_position);

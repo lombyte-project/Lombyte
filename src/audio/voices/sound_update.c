@@ -72,7 +72,7 @@ typedef struct {
 } VoiceRuntimeState;
 
 extern VoiceRuntimeState D_0013E550;
-extern f32 D_0013F640[];
+extern f32 sound_water_height_threshold[] __asm__("D_0013F640");
 extern s32 use_alt_fog[] __asm__("D_001872D4");
 
 extern s32 ComputeByteStringHash(u8 *, s32);
@@ -146,7 +146,7 @@ s32 sound_update(void) {
     underwater = use_alt_fog[0];
     water_height = 0.0f;
     if (underwater != 0) {
-        water_height = D_0013F640[0];
+        water_height = sound_water_height_threshold[0];
     }
     snd_flush_sound_commands();
 

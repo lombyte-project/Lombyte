@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 
-extern u8 D_001E8650[];
+extern u8 cd_read_start_failure_message[] __asm__("D_001E8650");
 extern s32 DebugPrint();
 extern s32 RaiseKernelTrap();
 extern s32 snd_stream_safe_cd_read() __asm__("func_0012ED58");
@@ -16,7 +16,7 @@ s32 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) 
             music_stream_state.read_sector_count = sector_count;
             return sector_count << 0xB;
         }
-        DebugPrint(D_001E8650);
+        DebugPrint(cd_read_start_failure_message);
         RaiseKernelTrap();
     }
     return 0;

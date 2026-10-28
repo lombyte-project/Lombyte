@@ -4,7 +4,7 @@ struct Handle {
     u8 pad4[6];
     s16 state;
 };
-extern char D_00160068[];
+extern char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068");
 extern void DebugPrint(char *, ...);
 void set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
@@ -13,7 +13,7 @@ void set_sound_handle_id(u32 id, s64 playback_record_address) {
 
     if (playback_record != 0) {
         if (playback_record->id != 0xFFFFFFFF) {
-            DebugPrint(D_00160068);
+            DebugPrint(sound_handle_id_conflict_diagnostic);
         } else {
             playback_record->id = id;
             if (id == 0) {

@@ -48,7 +48,7 @@ typedef struct {
 
 extern HeroTableRow2C D_L18_0017C628[];
 extern HeroAnimRow D_L18_0017A4C0[];
-extern HeroTableEntry70 D_L18_0017A290[];
+extern HeroTableEntry70 l18_hero_idle_fidget_entries[] __asm__("D_L18_0017A290");
 extern S167700 D_L18_00167680;
 extern S17B100 D_L18_0017B080;
 extern S17C838 D_L18_0017C7B8;
@@ -296,7 +296,7 @@ void process_hero_state_transitions(void) {
                                 HeroTableEntry70 *rec;
 
                                 hero.fidget_index = record_index;
-                                rec = &D_L18_0017A290[record_index];
+                                rec = &l18_hero_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
@@ -964,7 +964,7 @@ void process_hero_state_transitions(void) {
                         return;
                     }
                     break;
-                case 63:
+                case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -1881,7 +1881,7 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_RUN_JUMP:
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
-                case 12:
+                case HERO_STATE_STORED_HEADING_JUMP:
                 case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
                 case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
@@ -1889,7 +1889,7 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
-                case 60:
+                case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();

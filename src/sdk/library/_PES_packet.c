@@ -5,8 +5,8 @@
 
 #include "types.h"
 
-extern u8 D_001539C8[];
-extern u8 D_001539D8[];
+extern u8 pes_header_skip_bit_counts[] __asm__("D_001539C8");
+extern u8 invalid_pack_header_field_message[] __asm__("D_001539D8");
 extern s32 _Error();
 extern s32 _sysbitGet();
 extern s32 _sysbitJump();
@@ -45,7 +45,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
 
     ctx = error_context;
     hdr->unk28 = (s32)bs->stamp;
-    header_skip_bit_counts = *(struct PES_TBL *)D_001539C8;
+    header_skip_bit_counts = *(struct PES_TBL *)pes_header_skip_bit_counts;
     _sysbitGet(bs, 0x18);
     hdr->unk0 = (s64)_sysbitGet(bs, 8) << 0x20;
     hdr->unk8 = _sysbitGet(bs, 0x10);
@@ -110,7 +110,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
                 _sysbitGet(bs, 0x20);
             }
             if (pack_header_field_flag == pes_extension_flag) {
-                _Error(ctx, D_001539D8);
+                _Error(ctx, invalid_pack_header_field_message);
                 return 0;
             }
             if (first_16_bit_skip_flag == pes_extension_flag) {

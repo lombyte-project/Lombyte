@@ -2,7 +2,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/map/map_state.h"
 
-extern s32 D_0013D560[];
+extern s32 max_coverage_save_result_by_level[] __asm__("D_0013D560");
 extern void fill_transfer_words() __asm__("func_001F97E8");
 extern s32 func_001FA860();
 extern void downsample_map_coverage() __asm__("func_00208030");
@@ -22,8 +22,8 @@ void save_map_coverage(s32 buffer) {
     if (coverage_save_result == -1) {
         downsample_map_coverage(buffer);
     }
-    if (D_0013D560[current_level_index] < coverage_save_result) {
-        D_0013D560[current_level_index] = coverage_save_result;
+    if (max_coverage_save_result_by_level[current_level_index] < coverage_save_result) {
+        max_coverage_save_result_by_level[current_level_index] = coverage_save_result;
     }
 }
 

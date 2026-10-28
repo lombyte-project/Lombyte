@@ -7,7 +7,7 @@
 typedef struct { f32 f[0x300]; } T_215340;
 extern T_215340 D_L00_0017A680;
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
-extern void FUN_L00_0020a1f8(f32, f32);
+extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 extern void set_third_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a210");
 extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
@@ -29,7 +29,7 @@ void adjust_hero_pose_targets_from_motion(void) {
 
     if (hero.state.current == HERO_STATE_RUN) {
         set_first_hero_easing_parameters(0.04f, 0.2f);
-        FUN_L00_0020a1f8(0.04f, 0.2f);
+        set_second_hero_easing_parameters(0.04f, 0.2f);
         set_third_hero_easing_parameters(0.04f, 0.2f);
         set_fourth_hero_easing_parameters(0.02f, 0.2f);
         if (hero.state.step == 1) {
@@ -70,7 +70,7 @@ void adjust_hero_pose_targets_from_motion(void) {
         }
     } else if (hero.state.current == HERO_STATE_LAND || hero.state.current == 0x81) {
         set_first_hero_easing_parameters(0.008f, 0.08f);
-        FUN_L00_0020a1f8(0.015f, 0.08f);
+        set_second_hero_easing_parameters(0.015f, 0.08f);
         set_third_hero_easing_parameters(0.015f, 0.08f);
         set_fourth_hero_easing_parameters(0.008f, 0.1f);
         scaled_pose_input = hero.motion.yaw_error * 1.6f;
@@ -115,7 +115,7 @@ void adjust_hero_pose_targets_from_motion(void) {
         TF(0xB68) = -scaled_pose_input * 0.3f;
     } else if (hero.state.control_mode == 2 || hero.state.control_mode == 4) {
         set_first_hero_easing_parameters(0.04f, 0.2f);
-        FUN_L00_0020a1f8(0.04f, 0.2f);
+        set_second_hero_easing_parameters(0.04f, 0.2f);
         set_third_hero_easing_parameters(0.04f, 0.2f);
         set_fourth_hero_easing_parameters(0.02f, 0.2f);
         x = hero.motion.yaw_error;

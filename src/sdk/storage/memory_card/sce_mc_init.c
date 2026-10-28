@@ -7,9 +7,9 @@ typedef struct {
 
 
 extern s32 D_00132DAC[];
-extern char D_00153450[];
-extern char D_00153468[];
-extern char D_00153490[];
+extern char mc_rpc_bind_error_message[] __asm__("D_00153450");
+extern char mcserv_old_release_message[] __asm__("D_00153468");
+extern char mcman_old_release_message[] __asm__("D_00153490");
 extern SifClientData D_00159A00;
 extern u8 D_00159A80[];
 extern s32 D_0015AFC0[];
@@ -38,7 +38,7 @@ s32 sceMcInit(void) {
     sceSifInitRpc(0);
     while (1) {
         if (sceSifBindRpc(&D_00159A00, 0x80000400, 0) < 0) {
-            scePrintf(D_00153450);
+            scePrintf(mc_rpc_bind_error_message);
             while (1) {
             }
         }
@@ -56,12 +56,12 @@ s32 sceMcInit(void) {
         return rpc_call_result - 100;
     }
     if (D_0015AFC0[1] < 522) {
-        scePrintf(D_00153468);
+        scePrintf(mcserv_old_release_message);
         D_00159A00.server = 0;
         return -120;
     }
     if (D_0015AFC0[2] < 526) {
-        scePrintf(D_00153490);
+        scePrintf(mcman_old_release_message);
         D_00159A00.server = 0;
         return -121;
     }

@@ -91,8 +91,8 @@ extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void tick_space_transition(void) __asm__("FUN_00226e08");
 
-extern char D_L00_00165FB0[];
-extern char D_L00_00161E00[];
+extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");
+extern char level_startup_clear_start[] __asm__("D_L00_00161E00");
 void run_level_main_loop(void) __asm__("FUN_L00_00245c28");
 
 void run_level_main_loop(void) {
@@ -113,12 +113,12 @@ void run_level_main_loop(void) {
     int one;
     int per;
 
-    if (((D_L00_00165FB0 - D_L00_00161E00) & 0xF) == 0 && ((unsigned int)D_L00_00161E00 & 0xF) == 0) {
-        clear_blocks_16(D_L00_00161E00, D_L00_00165FB0 - D_L00_00161E00);
+    if (((level_startup_clear_end - level_startup_clear_start) & 0xF) == 0 && ((unsigned int)level_startup_clear_start & 0xF) == 0) {
+        clear_blocks_16(level_startup_clear_start, level_startup_clear_end - level_startup_clear_start);
     } else {
         debug_print(level_bss_clear_args);
-        for (i = 0; i < D_L00_00165FB0 - D_L00_00161E00; i++) {
-            D_L00_00161E00[i] = 0;
+        for (i = 0; i < level_startup_clear_end - level_startup_clear_start; i++) {
+            level_startup_clear_start[i] = 0;
         }
     }
     init_stash();
@@ -365,18 +365,18 @@ typedef struct {
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
 
 extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
-extern char D_L00_001E8B00[];
+extern char map_archive_stash_tag[] __asm__("D_L00_001E8B00");
 extern float map_points[] __asm__("D_L00_00182810");
 extern float map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
-extern int D_L00_00183EF0[];
+extern int map_parameter_pair_defaults[] __asm__("D_L00_00183EF0");
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
 extern s32 D_0015ED84;
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0014161B[];
-extern unsigned char D_L00_00184394[];
+extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
@@ -401,9 +401,9 @@ void initialize_level_map_archive(void) {
     D_L00_001841F0.initialized = 1;
     { int i;
     for (i = 0; i < 20; i++) {
-        D_L00_001841F0.unk104[i] = D_L00_00183EF0[i * 2];
+        D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
         D_L00_001841F0.unkB4[i] = 0.65f;
-        D_L00_001841F0.unk154[i] = D_L00_00183EF0[i * 2 + 1];
+        D_L00_001841F0.unk154[i] = map_parameter_pair_defaults[i * 2 + 1];
     } }
     level = current_level_index;
     D_L00_001841F0.file_handle = -1;
@@ -435,7 +435,7 @@ void initialize_level_map_archive(void) {
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = file->size << 7;
         load(archive, file->sector, file->size);
-        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
+        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = scratch;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
@@ -466,7 +466,7 @@ void initialize_level_map_archive(void) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (float)x) * (15.5f - (float)x) +
                     (15.5f - (float)y) * (15.5f - (float)y) > radius_sq) {
-                    D_L00_00184394[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
+                    l00_map_outside_circle_mask[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }
         }

@@ -21,15 +21,15 @@ typedef struct {
     E1edf60 e[4];
     int count;
 } T1edf60;
-extern T1edf60 D_L00_00169040;
+extern T1edf60 l00_reticle_submission_queue __asm__("D_L00_00169040");
 void suck_draw_reticle(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void suck_draw_reticle(int source_entity, int queued_reticle_value, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
     E1edf60 *e;
     if (D_L00_0015F5C4 == 2)
         return;
-    if (D_L00_00169040.count >= 3)
+    if (l00_reticle_submission_queue.count >= 3)
         return;
-    e = &D_L00_00169040.e[D_L00_00169040.count];
+    e = &l00_reticle_submission_queue.e[l00_reticle_submission_queue.count];
     e->f20 = source_entity;
     e->f14 = queued_reticle_value;
     e->f10 = x;
@@ -59,5 +59,5 @@ void suck_draw_reticle(int source_entity, int queued_reticle_value, OvlQuad *pos
         e->f26 = 4;
     }
 done:
-    D_L00_00169040.count++;
+    l00_reticle_submission_queue.count++;
 }

@@ -18,18 +18,18 @@ extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int FUN_00120478(float);
 extern char *D_L07_001B0530[];
-extern char D_L07_00211AF0[];
+extern char equalizer_ammo_spawner_missing_trigger_message[] __asm__("D_L07_00211AF0");
 extern char D_L07_00211B30[];
-extern char D_L07_00211B50[];
+extern char equalizer_ammo_spawn_counts_format[] __asm__("D_L07_00211B50");
 extern char D_L07_00211B78[];
-extern char D_L07_00211BA8[];
+extern char equalizer_ammo_batch_reduced_format[] __asm__("D_L07_00211BA8");
 /* Item id list ended by -1; sized so Ps2EeAs reaches it through $gp like retail. */
 extern int D_L07_00161CA0[2] __attribute__((section(".sdata"))) __attribute__((sda));
 extern char D_0013F3D0[];
 
 typedef struct { float pos[3]; float length; } L07PathNode;
 typedef struct { char pad[0xe]; unsigned short scale; char tail[8]; } L07ScaleRow;
-extern L07ScaleRow D_L07_001C4130[];
+extern L07ScaleRow l07_ammo_spawner_scaling_rows[] __asm__("D_L07_001C4130");
 
 /* Ported from rac1-decomp nonmatching/l07_umbris/func_L07_0031E6B0.c (func_L07_0031E6B0) */
 /* Umbris item spawner: measures its path once, then for each listed item whose stock ratio is in
@@ -46,11 +46,11 @@ void update_equalizer_ammo_spawner(char *moby) {
         int bad = 0;
         int i;
         if (data[0] == -1) {
-            debug_print(D_L07_00211AF0);
+            debug_print(equalizer_ammo_spawner_missing_trigger_message);
             bad = 1;
         }
         if (data[1] == -1) {
-            debug_print(D_L07_00211AF0);
+            debug_print(equalizer_ammo_spawner_missing_trigger_message);
             bad = 1;
         }
         if (bad) {
@@ -76,7 +76,7 @@ state_one:
         for (i = 0; D_L07_00161CA0[i] != -1; i++) {
             int id = D_L07_00161CA0[i];
             float value = convert_integer_to_float(weapon_ammo_counts[id]);
-            float scale = convert_integer_to_float(((L07ScaleRow *)((char *)D_L07_001C4130 + id * 0x18))->scale);
+            float scale = convert_integer_to_float(((L07ScaleRow *)((char *)l07_ammo_spawner_scaling_rows + id * 0x18))->scale);
             float ratio = value / scale;
             float step = random_float_between(0.0f, *(float *)(data + 8));
             float min_ratio = *(float *)(data + 2) / 100.0f;
@@ -104,7 +104,7 @@ state_one:
                 path = D_L07_001B0530[data[1]];
                 if (quotient != 0)
                     batch = quotient;
-                debug_print(D_L07_00211B50, total, batch);
+                debug_print(equalizer_ammo_spawn_counts_format, total, batch);
                 if (total > 0) {
                     float near = 12.0f;
                     float retry_step = 10.0f;
@@ -128,7 +128,7 @@ state_one:
                         step += random_float_between(*(float *)(data + 8) / retry_step, 2.0f);
                         if (remaining < batch) {
                             batch = remaining;
-                            debug_print(D_L07_00211BA8, remaining);
+                            debug_print(equalizer_ammo_batch_reduced_format, remaining);
                         }
                     } while (remaining > 0);
                 }
@@ -236,9 +236,9 @@ extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern short D_L07_00161CD8 __attribute__((sda));
-extern short D_L07_00161CDC __attribute__((sda));
-extern short D_L07_00161CE0 __attribute__((sda));
+extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));
+extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __attribute__((sda));
+extern short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") __attribute__((sda));
 void update_scene_moby_trails(unsigned char *moby) __asm__("FUN_L07_0031f900");
 
 void update_scene_moby_trails(unsigned char *moby) {
@@ -267,21 +267,21 @@ void update_scene_moby_trails(unsigned char *moby) {
                 moby_point_position(trail_source_moby, 0, point_0_position);
                 moby_point_position(trail_source_moby, 3, point_3_position);
                 subtract_vector_xyz(point_0_trail_velocity, point_0_position, point_3_position);
-                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_0_trail_velocity, point_0_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_0_position, point_0_position, point_0_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
                 moby_point_position(trail_source_moby, 1, point_1_position);
                 moby_point_position(trail_source_moby, 4, point_4_position);
                 subtract_vector_xyz(point_1_trail_velocity, point_1_position, point_4_position);
-                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_1_trail_velocity, point_1_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_1_position, point_1_position, point_1_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
                 moby_point_position(trail_source_moby, 2, point_2_position);
                 moby_point_position(trail_source_moby, 5, point_5_position);
                 subtract_vector_xyz(point_2_trail_velocity, point_2_position, point_5_position);
-                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&D_L07_00161CD8);
-                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&D_L07_00161CDC,
-                                 *(float *)&D_L07_00161CE0);
+                normalize_vector_xyz(point_2_trail_velocity, point_2_trail_velocity, *(float *)&scene_trail_velocity_length);
+                draw_trail(point_2_position, point_2_position, point_2_trail_velocity, *(float *)&scene_trail_first_spawn_particle_value,
+                                 *(float *)&scene_trail_second_spawn_particle_value);
             }
         }
         break;

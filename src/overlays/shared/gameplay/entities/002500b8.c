@@ -13,7 +13,7 @@
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
-extern char D_L00_001E8ED8[];
+extern char no_environment_sample_message[] __asm__("D_L00_001E8ED8");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -43,7 +43,7 @@ void apply_nearest_environment_sample(char *object) {
         }
     }
     if (nearest_entry_index == -1) {
-        debug_print_alt(D_L00_001E8ED8);
+        debug_print_alt(no_environment_sample_message);
         return;
     }
     selected_entry_byte_offset = nearest_entry_index * 0x30;

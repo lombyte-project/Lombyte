@@ -1054,7 +1054,7 @@ typedef struct {
 } SndPair_254030;
 
 
-extern SndPair_254030 D_L05_00179BC0[];
+extern SndPair_254030 l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_00179BC0");
 extern char D_0013CAE0[];
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
@@ -1083,8 +1083,8 @@ void update_hero_hoverboard_trick_animations(void) {
             int a = h->air_pose_index + 0x69;
             if (((unsigned char *)*(char **)&h->moby)[0x53] != a) {
                 set_hero_animation(a, 2, (float)scale_game_frames(5));
-                hero_queue_sequence(D_L05_00179BC0[h->air_pose_index].bank,
-                                 D_L05_00179BC0[h->air_pose_index].seq);
+                hero_queue_sequence(l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].bank,
+                                 l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].seq);
             } else if ((float)h->anim_loop_frame - 2.0f < h->anim_frame) {
                 h->tricks_landed[h->air_pose_index] = 1;
                 h->unk6F8 += 1;
@@ -1264,7 +1264,7 @@ struct HeroTally {
     s32 active;           /* 0x8A8 */
 };
 
-extern struct ScoreTable D_L05_002169F8;
+extern struct ScoreTable l05_hoverboard_score_multipliers_by_trick_count __asm__("D_L05_002169F8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int D_0015ED84;
 extern int D_0015EEA4;
@@ -1314,7 +1314,7 @@ void update_hero_hoverboard_trick_score(void) {
         if (TALLY->flags[i] != 0) TALLY->flag_count++;
     }
     {
-        struct ScoreTable table = D_L05_002169F8;
+        struct ScoreTable table = l05_hoverboard_score_multipliers_by_trick_count;
         TALLY->rank_scale = table.values[TALLY->flag_count];
         TALLY->score = truncate_float_to_s32((float)((TALLY->time_score_base * 100) / (int)(scale_time(1.0f) * 60.0f)));
         TALLY->score += TALLY->flag_count * 25;
@@ -1836,7 +1836,7 @@ continue_fall:
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
-extern char D_L05_0017C068[];
+extern char hero_hoverboard_animation_link_table[] __asm__("D_L05_0017C068");
 #include "rnc/data_labels.h"
 
 void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
@@ -1849,7 +1849,7 @@ void hero_update_linked_target(void) {
     if (path_owner_moby != 0) {
         if ((unsigned)(*(int *)(hero_base + 0x208C) - 0x15) < 2) {
             *(int *)(hero_base + 0x2278) = path_owner_moby;
-            *(int *)(hero_base + 0x227C) = (int)D_L05_0017C068;
+            *(int *)(hero_base + 0x227C) = (int)hero_hoverboard_animation_link_table;
         }
     }
 }

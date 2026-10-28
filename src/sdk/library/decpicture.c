@@ -20,8 +20,8 @@ struct MpegReferenceImage {
     s32 decoded;
 };
 
-extern u8 D_00153940[];
-extern u8 D_00153960[];
+extern u8 odd_field_picture_count_error_message[] __asm__("D_00153940");
+extern u8 unknown_picture_structure_error_message[] __asm__("D_00153960");
 extern s32 _Error();
 extern s32 _pictureData0();
 
@@ -33,7 +33,7 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
     struct MpegReferenceImage *reference;
 
     if (decoder->picture_coding_type == 3 && decoder->second_field != 0) {
-        _Error(decoder, D_00153940);
+        _Error(decoder, odd_field_picture_count_error_message);
         decoder->second_field = 0;
     }
     switch (decoder->picture_coding_type) {
@@ -48,7 +48,7 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
         break;
     default:
         reference = decoder->forward_reference;
-        _Error(decoder, D_00153960);
+        _Error(decoder, unknown_picture_structure_error_message);
         break;
     }
     result = _pictureData0(decoder);

@@ -40,7 +40,7 @@ void update_moby_translation_delta_matrix(char *moby) {
 extern int D_L04_0015FFD8;
 extern int *D_L04_001B0630[];
 extern char *D_L04_001600EC;
-extern char D_L04_001DBE10[];
+extern char snow_plow_missing_path_warning_format[] __asm__("D_L04_001DBE10");
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
@@ -140,7 +140,7 @@ void snow_plow_update(struct Moby *moby) {
             p = D_L04_001B0630[path[5]];
             if (FUN_001f9b48(p + 4, p + *p * 4) < 0.5f) --*p;
         } else {
-            char *message = D_L04_001DBE10;
+            char *message = snow_plow_missing_path_warning_format;
             int oclass = moby->oclass;
             timer = truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
             debug_print(message, oclass, timer);
@@ -483,7 +483,7 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L04_0015FFD8; /* no foreign declaration */
-extern short D_L04_0016195C __attribute__((sda));
+extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -523,7 +523,7 @@ void floating_platform_update(char *moby) {
         int i;
         for (i = 0; i < 3; i++) {
             float *ring_angle_ptr = (float *)(data + 0x224) + i;
-            float ring_angle = fast_add_rotations(*ring_angle_ptr, *(float *)&D_L04_0016195C * DEG_TO_RAD * frame_time);
+            float ring_angle = fast_add_rotations(*ring_angle_ptr, *(float *)&floating_platform_ring_rotation_rate_degrees * DEG_TO_RAD * frame_time);
             float joint_animation_frame_scale = frame_scale_sq;
             *ring_angle_ptr = ring_angle;
             *(float *)(data + 0x108 + i * 0x80) = ring_angle;
@@ -1474,7 +1474,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern float D_L04_001CB940[6];
+extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");
 extern char D_L04_00173FE0[];
 
 /* Three-state motion update. The saved position is restored when the timer expires. */
@@ -1524,30 +1524,30 @@ void leaf_update(struct Moby *moby) {
         moby->scale = 0.0f;
         motion = (float *)moby->pvars;
         initialDirection.q = direction.q;
-        normalize_vector_xyz(&initialDirection, &initialDirection, D_L04_001CB940[5] / 5.0f);
-        motion[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
-        motion[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        normalize_vector_xyz(&initialDirection, &initialDirection, leaf_motion_parameters[5] / 5.0f);
+        motion[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
+        motion[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         motion[2] = frame_time * -0.5f;
         normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
         normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
-        normalize_vector_xyz(motion + 4, &initialDirection, D_L04_001CB940[5] * 0.5f);
+        normalize_vector_xyz(motion + 4, &initialDirection, leaf_motion_parameters[5] * 0.5f);
         *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
         moby->state = 2;
         return;
     case LEAF_UPDATE_MOTION:
         fast_dec_timer((int *)(data + 0x44));
-        normalize_vector_xyz(&random, &random, D_L04_001CB940[5] / 10.0f);
+        normalize_vector_xyz(&random, &random, leaf_motion_parameters[5] / 10.0f);
         add_vector_xyz(data + 0x10, data + 0x10, &random);
         normalize_vector_xyz(&work, data + 0x10, 5.0f);
-        normalize_vector_xyz(data + 0x10, data + 0x10, D_L04_001CB940[5] * 0.5f);
+        normalize_vector_xyz(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
         add_vector_xyz(&work, &work, &moby->pos);
         if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
             FUN_L00_001ff660(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
-            *(float *)(data + 0x18) += D_L04_001CB940[5] / 10.0f;
+            *(float *)(data + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
         add_vector_xyz(data, data, data + 0x10);
-        work.f[0] = D_L04_001CB940[5] * fast_cos(D_L04_001CB940[1]);
-        work.f[1] = D_L04_001CB940[5] * fast_sin(D_L04_001CB940[1]);
+        work.f[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
+        work.f[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         work.f[2] = frame_time * -0.5f;
         scale_vector_xyz(&work, &work, 0.4f);
         scale_vector_xyz(data, data, 0.6f);
@@ -1558,10 +1558,10 @@ void leaf_update(struct Moby *moby) {
             FUN_L00_001ff660(data, data, D_L04_00173FE0 + 0x20);
             scale_vector_xyz(data, data, 0.25f);
             add_vector_xyz(&moby->pos, &moby->pos, data);
-            *(float *)(data + 8) += D_L04_001CB940[5] / 5.0f;
+            *(float *)(data + 8) += leaf_motion_parameters[5] / 5.0f;
         }
-        if (D_L04_001CB940[5] < speed)
-            normalize_vector_xyz(data, data, D_L04_001CB940[5]);
+        if (leaf_motion_parameters[5] < speed)
+            normalize_vector_xyz(data, data, leaf_motion_parameters[5]);
         {
             float amount = frame_time * -0.5f;
             if (amount < *(float *)(data + 8))
@@ -1626,8 +1626,8 @@ struct RiserVars {
     s32 timer;
 };
 
-extern s32 D_L04_001BA650[];
-extern LevelCollected D_L04_001BB3B0;
+extern s32 level_completed_save_id_bits[] __asm__("D_L04_001BA650");
+extern LevelCollected l04_save_id_collection_state __asm__("D_L04_001BB3B0");
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
@@ -1654,7 +1654,7 @@ void upper_door_update(struct Moby *moby) {
     case UPPER_DOOR_WAIT_FOR_ACTIVATION:
         id = moby->save_id;
         save_id_index = id;
-        if (D_L04_001BB3B0.collected[save_id_index] == 0 && !((D_0014C190_257218[current_level_index][save_id_index >> 5] >> (id & 0x1F)) & 1)) {
+        if (l04_save_id_collection_state.collected[save_id_index] == 0 && !((D_0014C190_257218[current_level_index][save_id_index >> 5] >> (id & 0x1F)) & 1)) {
             if (riser_vars->trigger == -1)
                 break;
             trigger_moby = (struct Moby *)((riser_vars->trigger << 8) + D_L04_0015FFD8);
@@ -1670,7 +1670,7 @@ void upper_door_update(struct Moby *moby) {
         moby->pos.z += riser_rise_speed(moby) * frame_time;
         if (fast_dec_timer(&riser_vars->timer)) {
             D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
-            D_L04_001BA650[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+            level_completed_save_id_bits[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             if (moby->oclass == 0x44D)
                 allocate_voice_for_target_entry(1, 0, moby);
             moby->state = 3;
@@ -1690,9 +1690,9 @@ struct PortalMobyView {
 };
 
 extern s32 D_L04_0015F5C4;
-extern u8 D_0013D4F1[];
-extern u8 D_0013D4C9[];
-extern char D_L04_001DC760[];
+extern u8 suck_cannon_in_inventory[] __asm__("D_0013D4F1");
+extern u8 suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
+extern char suck_cannon_missing_segment_switch_warning_format[] __asm__("D_L04_001DC760");
 extern struct Moby *portal_mobys_2e1a10 __asm__("D_L04_0015FFD8");
 extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
@@ -1723,7 +1723,7 @@ void suck_cannon_update(struct Moby *moby) {
     switch (moby->state) {
     case SUCK_CANNON_INITIALIZE:
         initialize_moby_particle_effect(moby);
-        if (D_0013D4F1[0]) {
+        if (suck_cannon_in_inventory[0]) {
             remove_moby_2e1a10(moby);
             break;
         }
@@ -1741,7 +1741,7 @@ void suck_cannon_update(struct Moby *moby) {
     case SUCK_CANNON_WAIT_TO_RESET_CAMERA:
         if (D_L04_0015F5C4 == 2)
             break;
-        if (!D_0013D4C9[0])
+        if (!suck_cannon_first_acquisition_recorded[0])
             queue_dialogue_message(0xFA7, -1);
         else
             queue_dialogue_message(0x53DF, -1);
@@ -1751,7 +1751,7 @@ void suck_cannon_update(struct Moby *moby) {
             exit = &portal_mobys_2e1a10[vars->exitMoby];
             jet_reset_camera(&exit->pos, &exit->rot);
         } else {
-            debug_print(D_L04_001DC760, ((struct PortalMobyView *)moby)->uid);
+            debug_print(suck_cannon_missing_segment_switch_warning_format, ((struct PortalMobyView *)moby)->uid);
         }
         moby->state = 3;
         memcard_save_data(0, -1);

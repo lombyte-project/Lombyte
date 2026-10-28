@@ -35,8 +35,8 @@ extern void set_image_tag(void *, int, int,
                                      int) __asm__("func_0023B210"); /* setImageTag */
 extern void switch_thread(void) __asm__("func_0023A770");           /* switchThread */
 extern void err_message(char *) __asm__("func_0023AB78");       /* ErrMessage */
-extern char D_001E8B38[];
-extern char D_001E8B50[];
+extern char decode_thread_aborted_message[] __asm__("D_001E8B38");
+extern char mpeg_get_picture_decode_error_message[] __asm__("D_001E8B50");
 /* decBs0(VideoDec *) */
 int dec_bs0(struct VideoDec *vd) __asm__("FUN_0023cec8");
 
@@ -48,7 +48,7 @@ int dec_bs0(struct VideoDec *vd) {
     while (!func_0012BA48(&vd->mpeg)) {
         if (func_0023CC80((int *)vd) == VD_STATE_ABORT) {
             status = -1;
-            DebugPrint(D_001E8B38);
+            DebugPrint(decode_thread_aborted_message);
             break;
         }
 
@@ -57,7 +57,7 @@ int dec_bs0(struct VideoDec *vd) {
         }
 
         if (sceMpegGetPicture(&vd->mpeg, voData->v, 0x340) < 0) {
-            err_message(D_001E8B50);
+            err_message(mpeg_get_picture_decode_error_message);
         }
 
         if (vd->mpeg.frameCount == 0) {

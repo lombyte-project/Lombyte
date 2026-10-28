@@ -15,7 +15,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
-extern char D_L00_001E78B0[];
+extern char camera_collision_grid_out_of_bounds_warning[] __asm__("D_L00_001E78B0");
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
 s32 *find_camera_collision_volume_for_point(OvlQuad *input_point, f32 rad) __asm__("FUN_L00_001ee1b0");
@@ -34,7 +34,7 @@ s32 *find_camera_collision_volume_for_point(OvlQuad *input_point, f32 rad) {
     i = truncate_float_to_s32(query_point.f[0] * 0.0625f);
     j = truncate_float_to_s32(query_point.f[1] * 0.0625f);
     if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
-        debug_print(D_L00_001E78B0);
+        debug_print(camera_collision_grid_out_of_bounds_warning);
         return 0;
     }
     cell_volume_list = (char *)D_L00_0015EF80[j * 64 + i];

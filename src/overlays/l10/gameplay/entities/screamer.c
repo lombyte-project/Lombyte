@@ -443,14 +443,14 @@ typedef struct {
 
 /* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; toxic_crab_update reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
 extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
-extern short *D_L10_001ABCC0[];
+extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
 
 void activate_waiting_moby_group_members(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
-        group_entry = D_L10_001ABCC0[moby->group];
+        group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
                 Ent *base = D_L10_0015FFD0_e[2];
@@ -1119,7 +1119,7 @@ void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0"
 void set_moby_group_command_frames(struct Moby *moby) {
     short *group_entry;
     if (moby->group != 0xFF) {
-        group_entry = D_L10_001ABCC0[moby->group];
+        group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
                 int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
@@ -1287,7 +1287,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int tick_countdown_32(void *);
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern float D_L10_00161E24 __attribute__((sda));
+extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
 extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update.h"
@@ -1344,7 +1344,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
 
     update_toxic_crab_hit_reactions_and_targeting(m);
     target_moby = crab_data->tgt;
-    m->f2C = *(float *)(m->p24 + 0x24) * D_L10_00161E24;
+    m->f2C = *(float *)(m->p24 + 0x24) * l10_toxic_crab_size_scale;
     FUN_L00_00263ac8(2.5f, (int)m, 2, crab_data->q2B0);
     *(OvlQuad *)from = *(OvlQuad *)m->pos;
     from[2] += 1.0f;
@@ -1379,17 +1379,17 @@ void toxic_crab_update(Moby2E30F8 *m) {
         crab_data->v170[3] = m->f48;
         FUN_L01_0026d930((char *)&crab_data->iD0);
         {
-            float k = D_L10_00161E24 * 1024.0f;
+            float k = l10_toxic_crab_size_scale * 1024.0f;
             float initial_movement_step;
-            float e;
+            float initial_movement_size_scale;
             int r;
             crab_data->fDC = 0.5f;
             crab_data->fD8 = 2.0f;
             r = truncate_float_to_s32(k);
             initial_movement_step = crab_data->f1A4 * frame_time;
-            e = D_L10_00161E24;
+            initial_movement_size_scale = l10_toxic_crab_size_scale;
             crab_data->iD0 = r;
-            crab_data->fD4 = e;
+            crab_data->fD4 = initial_movement_size_scale;
             crab_data->fF4 = initial_movement_step;
         }
         {
@@ -2361,7 +2361,7 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     translated_radial_point[1] = fast_sin(owner_to_self_angle) * 2.0f;
     translated_radial_point[2] = 0.0f;
     fast_vec_add(translated_radial_point, translated_radial_point, ((unsigned char *)&D_0013E533) + 0xE9D);
-    group_entry = D_L10_001ABCC0[self->group];
+    group_entry = moby_group_member_lists[self->group];
     if (group_entry != 0) {
         do {
             int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
@@ -2459,7 +2459,7 @@ typedef struct ShipD_5E48 {
 extern Ship_5E48 *D_L10_001742D8 __attribute__((section(".data")));
 extern char *create_rocket(void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
 extern char D_L10_00179890[];
-extern char D_L10_001DD390[];
+extern char blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern float FUN_L00_00258110_c(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
@@ -2520,7 +2520,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
 
     FUN_L00_00263ac8(2.5f, (int)ship, 2, d->a1D0);
     if (d->i140 == -1) {
-        DebugPrint(D_L10_001DD390, ship->sA6, ship->hA8);
+        DebugPrint(blarg_ship_missing_path_error_format, ship->sA6, ship->hA8);
         goto del;
     }
     FUN_L10_002e5968_c((char *)ship);
@@ -3023,7 +3023,7 @@ extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") __attribute__((section
 extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */
-extern Moby *D_L10_0015FFE4;
+extern Moby *l10_conditional_help_moby_list_head __asm__("D_L10_0015FFE4");
 extern int hero_inside_conditional_help_volume __asm__("D_L10_00161F38") __attribute__((sda)); /* no foreign declaration */
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D504[];
@@ -3039,11 +3039,11 @@ extern unsigned char D_0014171B_2E9978[] __asm__("D_0013D504");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sda));
 extern unsigned char D_0013D605_2E9978[] __asm__("D_0013D388");
 
-extern unsigned char D_00141B10[];
-extern unsigned char D_00141B18[];
+extern unsigned char l10_help_message_2710_gate[] __asm__("D_00141B10");
+extern unsigned char l10_help_message_2711_gate[] __asm__("D_00141B18");
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_00141C48[];
-extern unsigned char D_00141CB8[];
+extern unsigned char l10_help_message_2717_gate[] __asm__("D_00141CB8");
 void update_conditional_help_messages(Moby *moby) __asm__("FUN_L10_002e85b8");
 
 void update_conditional_help_messages(Moby *moby)
@@ -3072,7 +3072,7 @@ void update_conditional_help_messages(Moby *moby)
             && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
-            && *(unsigned short *)(D_00141B10) == 0) {
+            && *(unsigned short *)(l10_help_message_2710_gate) == 0) {
             func_L00_00203F20_2E9978(0x2710, 0x35);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f4) != 0
@@ -3092,7 +3092,7 @@ void update_conditional_help_messages(Moby *moby)
         if (D_L10_0015F5C4_vendor == 0 && D_0013D504_r[0] != 0
             && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
-            && *(unsigned short *)(D_00141B18) == 0) {
+            && *(unsigned short *)(l10_help_message_2711_gate) == 0) {
             func_L00_00203F20_2E9978(0x2711, 0x36);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f8) != 0
@@ -3104,7 +3104,7 @@ void update_conditional_help_messages(Moby *moby)
             func_L00_00203F20_2E9978(0x2715, 0x5C);
         }
         any_active = 0;
-        for (other = D_L10_0015FFE4; other != 0; other = other->next) {
+        for (other = l10_conditional_help_moby_list_head; other != 0; other = other->next) {
             if (other->oclass == 0x359 && other->state != 1) any_active = 1;
         }
         if (any_active == 0) break;
@@ -3112,7 +3112,7 @@ void update_conditional_help_messages(Moby *moby)
             && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f10].pos) < 15.0f
             && data->f14 != -1
             && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f14].pos) < 15.0f
-            && *(unsigned short *)(D_00141CB8) == 0) {
+            && *(unsigned short *)(l10_help_message_2717_gate) == 0) {
             func_L00_00203F20_2E9978(0x2717, 0x6A);
         }
         if (any_active == 0) break;

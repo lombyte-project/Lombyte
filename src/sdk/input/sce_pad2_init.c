@@ -6,13 +6,13 @@ struct Pad2StateEntry {
     s32 result;
 };
 
-extern u32 D_00132DD0[];
+extern u32 pad2_initialized[] __asm__("D_00132DD0");
 extern u8 D_0015B540[];
 
 s32 scePad2Init(void) {
     struct Pad2StateEntry *entry;
 
-    D_00132DD0[0] = 1;
+    pad2_initialized[0] = 1;
     entry = (struct Pad2StateEntry *)D_0015B540;
     do {
         entry->state = 0;

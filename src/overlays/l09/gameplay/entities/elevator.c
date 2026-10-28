@@ -15,8 +15,8 @@ typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
 } L09LevelState;
-extern L09LevelState D_L09_001BB3B0;
-extern int D_L09_001BA650[];
+extern L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0");
+extern int elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -60,12 +60,12 @@ void elevator_update(unsigned char *moby) {
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xC0)) ||
-            D_L09_001BB3B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0 ||
+            l09_moby_collection_state.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
                 D_0014C190_257218[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                D_L09_001BA650[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                elevator_activation_save_id_bits[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
                 *(int *)(data + 0xC0) = -1;
             }
@@ -399,7 +399,8 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
 
 void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health) {
     enum {
-        DAMAGE_RESULT_UNAVAILABLE = 0
+        DAMAGE_RESULT_UNAVAILABLE = 0,
+        DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
     VendorHitSource *damage_hit_record;
     struct Moby *link;
@@ -424,7 +425,7 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
         case 8:
         case 9:
         case 10:
-        case 11:
+        case DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE:
             break;
         }
         if (hit >= 2) {
@@ -940,9 +941,9 @@ extern s32 D_0015EDDC;
 #include "rnc/overlay/l09/gameplay/entities/elevator_globals.h"
 extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute__((sda));
 extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
-extern f32 D_L09_00161CC0[2] __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
-extern TurretShake D_L09_00166E00;
-extern TurretBeam D_L09_00180440[];
+extern f32 turret_beam_local_offset_gp[2] __asm__("D_L09_00161CC0") __attribute__((sda)); /* a vector; declared small so Ps2EeAs reaches it through $gp */
+extern TurretShake l09_turret_shot_response_state __asm__("D_L09_00166E00");
+extern TurretBeam l09_turret_beam_light_slots[] __asm__("D_L09_00180440");
 extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda8");
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
@@ -1063,14 +1064,14 @@ void turret_update(struct Moby *moby) {
                     fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y),
                     moby->rot.z), 1.5707964f) * 0.01f) * 0.9f;
             moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
-            transform_vector_by_basis(&work_vector, D_L09_00161CC0, &moby->rot_row0);
+            transform_vector_by_basis(&work_vector, turret_beam_local_offset_gp, &moby->rot_row0);
             add_vector_xyz(&work_vector, &work_vector, &seat);
             if (vars->beam == -1) {
                 vars->beam_frames = 0;
                 vars->beam = allocate_colored_effect_slot(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
-                beam = &D_L09_00180440[vars->beam];
+                beam = &l09_turret_beam_light_slots[vars->beam];
                 beam->pos[0] = work_vector.f[0];
                 beam->pos[1] = work_vector.f[1];
                 beam->pos[2] = work_vector.f[2];
@@ -1138,10 +1139,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 1, &muzzle);
                     spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    D_L09_00166E00.unk160 = 0.03f;
-                    D_L09_00166E00.unk168 = scale_game_frames(10);
-                    D_L09_00166E00.unk170 = 0.03f;
-                    D_L09_00166E00.unk178 = scale_game_frames(7);
+                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.unk168 = scale_game_frames(10);
+                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.unk178 = scale_game_frames(7);
                     vars->barrel = 0;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
@@ -1165,10 +1166,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 2, &muzzle);
                     spawn_class_4ea_projectile(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    D_L09_00166E00.unk160 = 0.03f;
-                    D_L09_00166E00.unk168 = scale_game_frames(10);
-                    D_L09_00166E00.unk170 = 0.03f;
-                    D_L09_00166E00.unk178 = scale_game_frames(7);
+                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.unk168 = scale_game_frames(10);
+                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.unk178 = scale_game_frames(7);
                     vars->barrel = 1;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
@@ -1213,7 +1214,7 @@ extern void FUN_001f9bf8(f32, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern char D_L09_002090B0[];
+extern char damage_causer_contact_log_format[] __asm__("D_L09_002090B0");
 
 typedef struct { char pad[0x18]; char *hit; } CollisionState;
 extern CollisionState D_L09_00173FC0;
@@ -1253,7 +1254,7 @@ void update_damage_causer(struct Moby *moby) {
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
             char *hit = D_L09_00173FC0.hit;
-            stub_printf(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
+            stub_printf(damage_causer_contact_log_format, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
                         *(s16 *)(hit + 0xb2), F(data, 0xc));
         }
         i++;

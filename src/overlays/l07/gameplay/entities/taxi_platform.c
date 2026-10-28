@@ -122,7 +122,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern char D_L07_00166E40[];
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
-extern char D_L07_00208560[];
+extern char ocean_umbris_scaled_table[] __asm__("D_L07_00208560");
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 
 void ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
@@ -133,7 +133,7 @@ void ocean_umbris_update(unsigned char *moby) {
     };
     switch (moby[0x20]) {
     case OCEAN_UMBRIS_INITIALIZE:
-        prepare_scaled_table_with_byte_128(D_L07_00208560, 0.66666669f);
+        prepare_scaled_table_with_byte_128(ocean_umbris_scaled_table, 0.66666669f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;
@@ -171,7 +171,7 @@ void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effe
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F5D8), where it is exact; names translated to the US level program. */
 
-extern char *D_L07_0015FFE4;
+extern char *ring_hit_candidate_list_head __asm__("D_L07_0015FFE4");
 extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void draw_fading_ring_effect(unsigned char *) __asm__("FUN_L07_0030dcf0");
@@ -201,7 +201,7 @@ void update_fading_ring_effect(unsigned char *moby) {
     }
     enqueue_callback_list_1((void *)draw_fading_ring_effect, moby);
     FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), moby, moby_data);
-    for (affected_moby = D_L07_0015FFE4; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
+    for (affected_moby = ring_hit_candidate_list_head; affected_moby; affected_moby = *(char **)(affected_moby + 0x28)) {
         FUN_L07_0030e0e0_c(affected_moby, moby, moby_data);
     }
 }
@@ -372,7 +372,7 @@ void rumble_by_distance(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
 
-extern char D_L07_00180340[];
+extern char point_light_slot_table[] __asm__("D_L07_00180340");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -402,7 +402,7 @@ void update_timed_point_light_color(char *light_effect_state) {
             phase_remaining_fraction /= convert_integer_to_float(color_phase_threshold);
             interpolated_packed_color = fast_tween_color(*(int *)(light_effect_state + 0x288), *(int *)(light_effect_state + 0x28C), 1.0f - phase_remaining_fraction);
         }
-        rgb_destination = (float *)(D_L07_00180340 + *(short *)(light_effect_state + 0x280) * 32);
+        rgb_destination = (float *)(point_light_slot_table + *(short *)(light_effect_state + 0x280) * 32);
         rgb_destination[0] = convert_integer_to_float(interpolated_packed_color & 0xFF) * 0.0078125f;
         rgb_destination[1] = convert_integer_to_float((interpolated_packed_color >> 8) & 0xFF) * 0.0078125f;
         rgb_destination[2] = convert_integer_to_float((interpolated_packed_color >> 16) & 0xFF) * 0.0078125f;
@@ -800,7 +800,7 @@ typedef struct {
     float unk70[4];
 } ScenePoints;
 
-extern u8 D_0013D3B1[];
+extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
 extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
 extern int scene_state __asm__("D_L07_0015F5C4");
@@ -842,7 +842,7 @@ void update_umbris_scene_progression(struct Moby *moby)
 
     switch (moby->state) {
     case CONTROLLER_WAIT_FOR_SCENE_IDLE:
-        if (D_0013D3B1[0] != 0 && data->removed_moby != -1) {
+        if (umbris_open_volume_triggered[0] != 0 && data->removed_moby != -1) {
             delete_moby_m(&level_mobys[data->removed_moby]);
         }
         if (scene_state == 0) moby->state = 1;
@@ -1037,9 +1037,9 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C3E0), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_L07_00211550[];
+extern char mine_group_not_found_message[] __asm__("D_L07_00211550");
 extern char D_L07_00211580[];
-extern char D_L07_002115D0[];
+extern char mine_group_extra_mines_message[] __asm__("D_L07_002115D0");
 extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
@@ -1154,7 +1154,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                               path + 0x10 + ((j + 1) % *(int *)path) * 16);
         }
         if (get_first_moby_in_group(&current, *(int *)(data + 0x74), 1, 0)) {
-            debug_print(D_L07_00211550, *(int *)(data + 0x74));
+            debug_print(mine_group_not_found_message, *(int *)(data + 0x74));
             return;
         }
         first = *(int *)(data + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
@@ -1172,7 +1172,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                 if (placed < child_count - 1) {
                     debug_print(D_L07_00211580, placed + 1, *(int *)(data + 0x74), child_count);
                 } else if (placed == child_count - 1) {
-                    debug_print(D_L07_002115D0, *(int *)(data + 0x74), child_count);
+                    debug_print(mine_group_extra_mines_message, *(int *)(data + 0x74), child_count);
                 }
                 *(int *)(data + 0x78) = placed + 1;
                 break;
@@ -1244,7 +1244,7 @@ extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern Vec4 D_L07_00173EE0;
-extern char D_L07_00173F00[];
+extern char projectile_impact_reflection_normal[] __asm__("D_L07_00173F00");
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
 void update_linear_projectile(struct Moby *moby) __asm__("FUN_L07_0030b6a8");
@@ -1289,7 +1289,7 @@ void update_linear_projectile(struct Moby *moby) {
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
                 particle_motion_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L07_00173F00);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, projectile_impact_reflection_normal);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector, vector_length_xyz(&spark) * 0.5f);
                 add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
@@ -1438,8 +1438,8 @@ typedef struct {
     unsigned char sub;         /* 0xBC */
 } Moby_30D8E8;
 
-extern Cab_30D8E8 D_L07_001CA900;
-extern Dir_30D8E8 D_L07_0017FF40;
+extern Cab_30D8E8 l07_water_grid_parameters __asm__("D_L07_001CA900");
+extern Dir_30D8E8 l07_water_direction_source __asm__("D_L07_0017FF40");
 extern Rec_30D8E8 *D_L07_001612D0;
 extern char D_0013D4EC[];
 extern float D_0015ED6C;
@@ -1450,19 +1450,19 @@ extern float D_L07_0016120C;
 extern float D_L07_00161210;
 extern float D_L07_00161214;
 extern int D_L07_00161208;
-extern void *D_L07_001612D4;
+extern void *l07_water_grid_geometry_descriptor_base __asm__("D_L07_001612D4");
 extern int D_L07_001612D8; /* no foreign declaration */
 extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda)); /* no foreign declaration */
-extern unsigned short D_L07_00161B34 __attribute__((sda)); /* no foreign declaration */
+extern unsigned short l07_water_grid_override_control_value __asm__("D_L07_00161B34") __attribute__((sda)); /* no foreign declaration */
 extern int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") __attribute__((sda)); /* no foreign declaration */
-extern int D_L07_00204700[][4];
+extern int water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
 extern int pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int pool_init_tiles() __asm__("FUN_L01_002b7a48");
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern unsigned short D_L07_00204680[];
+extern unsigned short l07_water_grid_saved_control_values[] __asm__("D_L07_00204680");
 extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
 extern void enqueue_callback_list_1_c(void *, void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
@@ -1528,8 +1528,8 @@ void water_update(Moby_30D8E8 *water_moby) {
             int (*p)[4];
             FUN_L01_002b7a48_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
             FUN_L01_002b7ef0_2cd2b0(1.0f);
-            cab = &D_L07_001CA900;
-            water_direction_source = &D_L07_0017FF40;
+            cab = &l07_water_grid_parameters;
+            water_direction_source = &l07_water_direction_source;
             cab->f0 = 16.0f;
             cab->f4 = 16.0f;
             cab->f8 = -8.0f;
@@ -1544,7 +1544,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             cab->f38 = -0.57735f;
             cab->i28 = 0x28;
             cab->i2C = 0x29;
-            p = D_L07_00204700;
+            p = water_grid_geometry_descriptors;
             D_L07_001612D8 = 0x24;
             D_L07_0016120C = 32768.0f;
             D_L07_00161210 = 255.0f;
@@ -1552,11 +1552,11 @@ void water_update(Moby_30D8E8 *water_moby) {
             cab->b3C = 0x40;
             cab->b3D = 0x40;
             D_L07_001612D0 = D_L07_001DCE40_2cd2b0;
-            D_L07_001612D4 = p;
+            l07_water_grid_geometry_descriptor_base = p;
             D_L07_00161208 = 0;
             for (i = 0; i < 0x24; i++) {
                 FUN_L01_002b7c68_2cd2b0(&D_L07_001DCE40_2cd2b0[i], p[i]);
-                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00204680[water_data->idx];
+                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_saved_control_values[water_data->idx];
             }
             for (k = 0; k < 0x24; k++) {
                 Rec_30D8E8 *water_records = D_L07_001DCE40_2cd2b0;
@@ -1651,7 +1651,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         return;
     }
     {
-        Cab_30D8E8 *cab = &D_L07_001CA900;
+        Cab_30D8E8 *cab = &l07_water_grid_parameters;
         D_L07_001DCE40_2cd2b0[water_data->idx].b1C = cab->b3C;
         D_L07_001DCE40_2cd2b0[water_data->idx].b1D = cab->b3D;
     }
@@ -1665,15 +1665,15 @@ void water_update(Moby_30D8E8 *water_moby) {
     if (on == 0.0f) {
         D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
     } else {
-        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00204680[water_data->idx];
+        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_saved_control_values[water_data->idx];
     }
     if (water_data->idx == 0) {
         FUN_L01_002b7fe0_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
         enqueue_callback_list_1_c(render_level07_water_grids, water_moby);
     }
     if (water_data->idx == water_grid_override_index) {
-        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = D_L07_00161B34;
-        D_L07_00204680[water_data->idx] = D_L07_00161B34;
+        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_override_control_value;
+        l07_water_grid_saved_control_values[water_data->idx] = l07_water_grid_override_control_value;
     }
 }
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
@@ -2729,7 +2729,7 @@ struct WalkerTarget {
 extern Rec_30D8E8 * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
-extern char D_L07_00211838[];
+extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
 extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
 extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
@@ -2746,8 +2746,8 @@ extern int is_point_inside_clip_volume_c2(void *arg0, int arg1) __asm__("func_00
 extern int tick_countdown_32_alt(int *counter) __asm__("FUN_001f9740");
 extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern unsigned char D_L07_00161B50_gp[1] __asm__("D_L07_00161B50") __attribute__((sda));
-extern unsigned char D_L07_00161B40_gp[1] __asm__("D_L07_00161B40") __attribute__((sda));
+extern unsigned char l07_sharkigator_water_gap_transition_sequences[1] __asm__("D_L07_00161B50") __attribute__((sda));
+extern unsigned char l07_sharkigator_water_gap_transition_states[1] __asm__("D_L07_00161B40") __attribute__((sda));
 extern unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -2864,8 +2864,8 @@ void sharkigator_update(unsigned char *moby) {
     moby[0xBC] = classify_sharkigator_water_height_gap((char *)moby, data);
     command = moby[0xBC];
     if (old_command != command) {
-        next_state = ((struct { unsigned char t[3][3]; } *)D_L07_00161B40_gp)->t[old_command][command];
-        next_sequence = ((struct { unsigned char t[3][3]; } *)D_L07_00161B50_gp)->t[old_command][command];
+        next_state = ((struct { unsigned char t[3][3]; } *)l07_sharkigator_water_gap_transition_states)->t[old_command][command];
+        next_sequence = ((struct { unsigned char t[3][3]; } *)l07_sharkigator_water_gap_transition_sequences)->t[old_command][command];
     }
     FUN_L00_0024f7c8(moby, 0, point);
     if (coll_sphere(0.8f, point, 1, moby) != 0 && collision_hit_material() == 0) {
@@ -2908,7 +2908,7 @@ void sharkigator_update(unsigned char *moby) {
 
     switch (moby[0x20]) {
     case SHARKIGATOR_INITIALIZE:
-        DebugPrint_alt(D_L07_00211838);
+        DebugPrint_alt(sharkigator_unexpected_init_message);
         goto end;
     case SHARKIGATOR_SWIM_IDLE:
         if ((moby[0x70] & 2) && moby[0x53] != 0) {
@@ -3609,7 +3609,7 @@ void configure_timed_point_light(float radius, void *moby_, void *obj_, short pa
         }
     }
     if (*(short *)(light_effect_state + 0x280) != -1) {
-        effect_slot_entry = D_L07_00180340 + (*(short *)(light_effect_state + 0x280) << 5);
+        effect_slot_entry = point_light_slot_table + (*(short *)(light_effect_state + 0x280) << 5);
         if (*(short *)(light_effect_state + 0x282) == pa && (pa == -1 || *(short *)(light_effect_state + 0x284) == 0) || *(short *)(light_effect_state + 0x282) != pa) {
             if (duration_frames != -1) {
                 *(short *)(light_effect_state + 0x284) = duration_frames;

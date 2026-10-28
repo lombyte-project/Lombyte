@@ -11,10 +11,10 @@ typedef struct {
     void *rbadr;
     u32 rbmsk;
 } sceDmaEnv;
-extern u8 D_00153420[];
-extern u8 D_00153430[];
-extern u8 D_00153440[];
-extern sceDmaEnv D_001599D8;
+extern u8 dma_sts_control_encodings[] __asm__("D_00153420");
+extern u8 dma_std_control_encodings[] __asm__("D_00153430");
+extern u8 dma_mfd_control_encodings[] __asm__("D_00153440");
+extern sceDmaEnv dma_last_applied_environment __asm__("D_001599D8");
 
 s32 sceDmaPutEnv(sceDmaEnv *env) {
     u32 ctrl;
@@ -40,9 +40,9 @@ s32 sceDmaPutEnv(sceDmaEnv *env) {
     if (env->rcyc >= 7) {
         return -4;
     }
-    ctrl = (ctrl & ~0x30) | (D_00153420[env->sts] << 4);
-    ctrl = (ctrl & ~0xC0) | (D_00153430[env->std] << 6);
-    ctrl = (ctrl & ~0xC) | (D_00153440[env->mfd] << 2);
+    ctrl = (ctrl & ~0x30) | (dma_sts_control_encodings[env->sts] << 4);
+    ctrl = (ctrl & ~0xC0) | (dma_std_control_encodings[env->std] << 6);
+    ctrl = (ctrl & ~0xC) | (dma_mfd_control_encodings[env->mfd] << 2);
     if (env->rcyc != 0) {
         ctrl |= 2;
         ctrl = (ctrl & ~0x300) | ((env->rcyc - 1) << 8);
@@ -58,6 +58,6 @@ s32 sceDmaPutEnv(sceDmaEnv *env) {
     *(volatile u32 *)0x1000E030 = sqwc;
     *(volatile u32 *)0x1000E050 = rbor;
     *(volatile u32 *)0x1000E040 = rbsr;
-    D_001599D8 = *env;
+    dma_last_applied_environment = *env;
     return 0;
 }

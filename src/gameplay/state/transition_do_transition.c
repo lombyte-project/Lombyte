@@ -41,7 +41,7 @@ extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618");
 extern u8 requested_video_mode __asm__("D_0016034C") MACRO_ADDR;
 extern SoundCue D_001862B0[];
-extern TransferState D_0018CB20;
+extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
 extern void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
@@ -152,15 +152,15 @@ void transition_do_transition(void) {
         space_load_in_progress = 0;
         for (i = 0; D_001862B0[i].start != -1; i++) {
             if (D_001862B0[i].end == -1) {
-                if (D_0018CB20.time < D_001862B0[i].start) {
+                if (render_sequence.time < D_001862B0[i].start) {
                     D_001862B0[i].voice = -1;
                     continue;
                 }
                 if (D_001862B0[i].voice != -1) {
                     continue;
                 }
-            } else if (D_0018CB20.time < D_001862B0[i].start ||
-                       D_001862B0[i].end < D_0018CB20.time) {
+            } else if (render_sequence.time < D_001862B0[i].start ||
+                       D_001862B0[i].end < render_sequence.time) {
                 goto stop;
             } else if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 continue;
@@ -182,8 +182,8 @@ void transition_do_transition(void) {
             wait = 0;
             level = (level + 1) % 4;
             sequence_macro = 1.0f;
-            D_0018CB20.time = 0;
-            D_0018CB20.f3C = 0;
+            render_sequence.time = 0;
+            render_sequence.f3C = 0;
             parse_space_scene_chunk(0);
             intro_overlay_alpha = 0;
             language_intro_overlay_alpha = 0;

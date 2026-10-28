@@ -47,12 +47,12 @@ extern int hud_timer_value_color_gp __asm__("D_L05_0015FA2C") __attribute__((sda
 extern int hud_timer_text_center_x_gp __asm__("D_L05_0015FA30") __attribute__((sda));
 extern int hud_timer_optional_row_bottom_offset_gp __asm__("D_L05_0015FA34") __attribute__((sda));
 extern int hud_timer_time_row_bottom_offset_gp __asm__("D_L05_0015FA44") __attribute__((sda));
-extern char D_L05_0015F788[];
-extern char D_L05_0015F9D8[];
-extern char D_L05_0015FA50[];
-extern char D_L05_0015FA58[];
-extern char D_L05_0015FA68[];
-extern char D_L05_0015FA70[];
+extern char hud_timer_optional_row_centering_format[] __asm__("D_L05_0015F788");
+extern char hud_label_colon_format[] __asm__("D_L05_0015F9D8");
+extern char hud_timer_optional_value_format[] __asm__("D_L05_0015FA50");
+extern char hud_timer_time_row_centering_format[] __asm__("D_L05_0015FA58");
+extern char hud_timer_time_label_format[] __asm__("D_L05_0015FA68");
+extern char hud_timer_time_value_format[] __asm__("D_L05_0015FA70");
 
 extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
 extern char *get_help_message_text(int) __asm__("FUN_001fdd10");
@@ -61,12 +61,12 @@ extern int FUN_001f6250(char *, int);
 extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
 extern int D_0015ED84;
 extern char D_L05_0015F860[];
-extern char D_L05_0015F9E0[];
-extern char D_L05_0015F9E8[];
-extern char D_L05_0015F9F0[];
-extern char D_L05_0015F9F8[];
-extern char D_L05_0015FA00[];
-extern char D_L05_0015FA08[];
+extern char hud_race_lap_progress_format[] __asm__("D_L05_0015F9E0");
+extern char hud_race_first_place_format[] __asm__("D_L05_0015F9E8");
+extern char hud_race_second_place_format[] __asm__("D_L05_0015F9F0");
+extern char hud_race_third_place_format[] __asm__("D_L05_0015F9F8");
+extern char hud_race_other_place_format[] __asm__("D_L05_0015FA00");
+extern char hud_race_rank_label_format[] __asm__("D_L05_0015FA08");
 extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
@@ -103,32 +103,32 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
         draw_stretchable_ui_frame(D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
     }
     x = D_L05_0015F9A0;
-    sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x523F));
+    sprintf(formatted_hud_text, hud_label_colon_format, get_help_message_text(0x523F));
     print_text_with_texture_3(x - 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     x += measure_text_width_regular(formatted_hud_text, -1);
     count = hero.race_lap + 1;
     if (count > 3) count = 3;
-    sprintf(formatted_hud_text, D_L05_0015F9E0, count);
+    sprintf(formatted_hud_text, hud_race_lap_progress_format, count);
     print_text_with_texture_3(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
     {
         int count = hero.race_position;
         x = D_L05_0015F9B0;
         if (count == 1) {
-            sprintf(formatted_hud_text, D_L05_0015F9E8, 1);
+            sprintf(formatted_hud_text, hud_race_first_place_format, 1);
         } else if (count == 2) {
-            sprintf(formatted_hud_text, D_L05_0015F9F0, 2);
+            sprintf(formatted_hud_text, hud_race_second_place_format, 2);
         } else if (count == 3) {
-            sprintf(formatted_hud_text, D_L05_0015F9F8, 3);
+            sprintf(formatted_hud_text, hud_race_third_place_format, 3);
         } else {
-            sprintf(formatted_hud_text, D_L05_0015FA00, count);
+            sprintf(formatted_hud_text, hud_race_other_place_format, count);
         }
     }
     x -= measure_text_width_regular(formatted_hud_text, -1);
     print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
-    sprintf(formatted_hud_text, D_L05_0015FA08, get_help_message_text(0x5240));
+    sprintf(formatted_hud_text, hud_race_rank_label_format, get_help_message_text(0x5240));
     x -= measure_text_width_regular(formatted_hud_text, -1);
     print_text_with_texture_3(x + 1, y + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
@@ -184,24 +184,24 @@ int draw_hud_timer(HudElem *hud_element) {
     if (D_0013D388[0]) {
         draw_stretchable_ui_frame(hud_timer_frame_x_gp, y0, hud_timer_frame_width_gp, hud_timer_frame_height_gp, hud_timer_frame_alpha_gp);
         x = hud_timer_text_center_x_gp;
-        sprintf(formatted_hud_text, D_L05_0015F788, get_help_message_text(0x50A6), hero.race_score);
+        sprintf(formatted_hud_text, hud_timer_optional_row_centering_format, get_help_message_text(0x50A6), hero.race_score);
         x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
-        sprintf(formatted_hud_text, D_L05_0015F9D8, get_help_message_text(0x50A6));
+        sprintf(formatted_hud_text, hud_label_colon_format, get_help_message_text(0x50A6));
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
         print_text_with_texture_3(x, y1, hud_timer_label_color_gp, formatted_hud_text, -1);
         x += FUN_001f6250(formatted_hud_text, -1);
-        sprintf(formatted_hud_text, D_L05_0015FA50, hero.race_score);
+        sprintf(formatted_hud_text, hud_timer_optional_value_format, hero.race_score);
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
         print_text_with_texture_3(x, y1, hud_timer_value_color_gp, formatted_hud_text, -1);
     }
     x = hud_timer_text_center_x_gp;
-    sprintf(formatted_hud_text, D_L05_0015FA58, get_help_message_text(0x5241));
+    sprintf(formatted_hud_text, hud_timer_time_row_centering_format, get_help_message_text(0x5241));
     x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
-    sprintf(formatted_hud_text, D_L05_0015FA68, get_help_message_text(0x5241));
+    sprintf(formatted_hud_text, hud_timer_time_label_format, get_help_message_text(0x5241));
     print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y2, hud_timer_label_color_gp, formatted_hud_text, -1);
     x += FUN_001f6250(formatted_hud_text, -1);
-    sprintf(formatted_hud_text, D_L05_0015FA70, min, sec, hund);
+    sprintf(formatted_hud_text, hud_timer_time_value_format, min, sec, hund);
     print_text_with_texture_3(x + 1, y2 + 1, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y2, hud_timer_value_color_gp, formatted_hud_text, -1);
     return hud_element->w;

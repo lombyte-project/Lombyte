@@ -227,27 +227,27 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L10_00162000 __attribute__((sda));
-extern short D_L10_00162004 __attribute__((sda));
-extern short D_L10_00162008 __attribute__((sda));
-extern short D_L10_0016200C __attribute__((sda));
-extern short D_L10_00162010 __attribute__((sda));
-extern short D_L10_00162014 __attribute__((sda));
-extern short D_L10_00162018 __attribute__((sda));
-extern short D_L10_0016201C __attribute__((sda));
-extern short D_L10_00162020 __attribute__((sda));
+extern short height_adjusted_spark_vector_z_adjustment_scale_gp __asm__("D_L10_00162000") __attribute__((sda));
+extern short height_adjusted_spark_random_vector_radius_scale_gp __asm__("D_L10_00162004") __attribute__((sda));
+extern short height_adjusted_spark_first_vector_fourth_component_min_gp __asm__("D_L10_00162008") __attribute__((sda));
+extern short height_adjusted_spark_first_vector_fourth_component_max_gp __asm__("D_L10_0016200C") __attribute__((sda));
+extern short height_adjusted_spark_random_vector_fourth_component_min_gp __asm__("D_L10_00162010") __attribute__((sda));
+extern short height_adjusted_spark_random_vector_fourth_component_max_gp __asm__("D_L10_00162014") __attribute__((sda));
+extern short height_adjusted_spark_base_frame_count_gp __asm__("D_L10_00162018") __attribute__((sda));
+extern short height_adjusted_spark_base_third_frame_count_gp __asm__("D_L10_0016201C") __attribute__((sda));
+extern short height_adjusted_spark_frame_count_scale_spread_gp __asm__("D_L10_00162020") __attribute__((sda));
 int D_L10_00162024 = 0x80002040;
 int D_L10_00162028 = 0x80104040;
 int D_L10_0016202C = 0x30002040;
 int D_L10_00162030 = 0x30004020;
-extern short D_L10_00162038 __attribute__((sda));
-extern short D_L10_00162034 __attribute__((sda));
-extern short D_L10_00162040 __attribute__((sda));
-extern short D_L10_0016203C __attribute__((sda));
-extern short D_L10_00162048 __attribute__((sda));
-extern short D_L10_00162044 __attribute__((sda));
+extern short height_adjusted_spark_timer_reset_max_gp __asm__("D_L10_00162038") __attribute__((sda));
+extern short height_adjusted_spark_timer_reset_min_gp __asm__("D_L10_00162034") __attribute__((sda));
+extern short height_adjusted_spark_active_duration_max_gp __asm__("D_L10_00162040") __attribute__((sda));
+extern short height_adjusted_spark_active_duration_min_gp __asm__("D_L10_0016203C") __attribute__((sda));
+extern short height_adjusted_spark_pause_duration_max_gp __asm__("D_L10_00162048") __attribute__((sda));
+extern short height_adjusted_spark_pause_duration_min_gp __asm__("D_L10_00162044") __attribute__((sda));
 int D_L10_0016204C = 24;
-extern short D_L10_00162050 __attribute__((sda));
+extern short height_adjusted_spark_height_derived_frame_count_scale_gp __asm__("D_L10_00162050") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -261,30 +261,30 @@ void emit_height_adjusted_burst_spark_particle(void *emission_position, short *t
     int frame_count, third_frame_count, second_frame_count, initial_spark_color;
     if (*burst >= 0) {
         if (fast_dec_timer_s16(burst)) {
-            *burst = -func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162044, (float)*(int *)&D_L10_00162048));
+            *burst = -func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_pause_duration_min_gp, (float)*(int *)&height_adjusted_spark_pause_duration_max_gp));
             return;
         }
     } else {
         if (++*burst != 0) return;
-        *burst = func_001FA898_r(random_float_between((float)*(int *)&D_L10_0016203C, (float)*(int *)&D_L10_00162040));
+        *burst = func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_active_duration_min_gp, (float)*(int *)&height_adjusted_spark_active_duration_max_gp));
     }
     qcopy(visibility_sphere, emission_position);
     visibility_sphere[3] = 3.0f;
     visibility_sphere[2] -= 4.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1) return;
     if (!fast_dec_timer_s16(timer)) return;
-    frame_count_scale = random_float_between(1.0f - *(float *)&D_L10_00162020, *(float *)&D_L10_00162020 + 1.0f);
-    frame_count = func_001FA898_r((float)*(int *)&D_L10_00162018 * frame_count_scale);
-    third_frame_count = func_001FA898_r((float)*(int *)&D_L10_0016201C * frame_count_scale);
-    second_frame_count = func_001FA898_r(square_root((height + height) / (*(float *)&D_L10_00162000 * frame_time_sq)) * *(float *)&D_L10_00162050 * frame_count_scale);
+    frame_count_scale = random_float_between(1.0f - *(float *)&height_adjusted_spark_frame_count_scale_spread_gp, *(float *)&height_adjusted_spark_frame_count_scale_spread_gp + 1.0f);
+    frame_count = func_001FA898_r((float)*(int *)&height_adjusted_spark_base_frame_count_gp * frame_count_scale);
+    third_frame_count = func_001FA898_r((float)*(int *)&height_adjusted_spark_base_third_frame_count_gp * frame_count_scale);
+    second_frame_count = func_001FA898_r(square_root((height + height) / (*(float *)&height_adjusted_spark_vector_z_adjustment_scale_gp * frame_time_sq)) * *(float *)&height_adjusted_spark_height_derived_frame_count_scale_gp * frame_count_scale);
     clear_u64_value(spark_first_vector);
-    random_vector(acc, 0.0f, *(float *)&D_L10_00162004 * frame_time);
-    acc[2] -= *(float *)&D_L10_00162000 * frame_time_sq * (float)second_frame_count;
-    spark_first_vector[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
-    acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
+    random_vector(acc, 0.0f, *(float *)&height_adjusted_spark_random_vector_radius_scale_gp * frame_time);
+    acc[2] -= *(float *)&height_adjusted_spark_vector_z_adjustment_scale_gp * frame_time_sq * (float)second_frame_count;
+    spark_first_vector[3] = random_float_between(*(float *)&height_adjusted_spark_first_vector_fourth_component_min_gp, *(float *)&height_adjusted_spark_first_vector_fourth_component_max_gp);
+    acc[3] = random_float_between(*(float *)&height_adjusted_spark_random_vector_fourth_component_min_gp, *(float *)&height_adjusted_spark_random_vector_fourth_component_max_gp);
     initial_spark_color = fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position, spark_first_vector, acc, initial_spark_color, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
-    *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
+    *timer = func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp, (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
 }
 #define NOT_SDA
 
@@ -300,7 +300,7 @@ struct L10Data {
     int slot[4];
 };
 
-extern struct L10Data D_L10_0016CCE0;
+extern struct L10Data l10_level_mode_dispatch_data __asm__("D_L10_0016CCE0");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_level_mode_dispatcher(struct Moby *moby) __asm__("FUN_L10_002eacd8");
@@ -317,9 +317,9 @@ void update_level_mode_dispatcher(struct Moby *moby) {
         break;
     case LEVEL_MODE_STATE_DISPATCH:
         if (D_L10_0015F5C4_vendor == 2) {
-            if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
-                D_L10_0016CCE0.mode == 7) {
-                int level_mode = D_L10_0016CCE0.mode;
+            if (l10_level_mode_dispatch_data.mode == 3 || l10_level_mode_dispatch_data.mode == 5 || l10_level_mode_dispatch_data.mode == 6 ||
+                l10_level_mode_dispatch_data.mode == 7) {
+                int level_mode = l10_level_mode_dispatch_data.mode;
                 int i;
                 i = 0;
                 if (level_mode == 3)
@@ -328,7 +328,7 @@ void update_level_mode_dispatcher(struct Moby *moby) {
                     i = 2;
                 else if (level_mode == 7)
                     i = 3;
-                cutscene_set_camera_target(D_L10_0016CCE0.slot[i]);
+                cutscene_set_camera_target(l10_level_mode_dispatch_data.slot[i]);
             }
         }
         break;

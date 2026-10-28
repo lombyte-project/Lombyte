@@ -7,7 +7,7 @@
 #include "rnc/math/vector.h"
 
 
-extern u128 D_001D9B60[][6];
+extern u128 spark_spawn_points_by_variant[][6] __asm__("D_001D9B60");
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -35,7 +35,7 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
         randomized_spark_vector.f[3] = 0.4f;
         qcopy(&scalar_adjusted_spark_vector, &randomized_spark_vector);
         scalar_adjusted_spark_vector.f[3] = 0.6f;
-        qcopy(&spark_spawn_position, &D_001D9B60[level_render_state.content_variant][i]);
+        qcopy(&spark_spawn_position, &spark_spawn_points_by_variant[level_render_state.content_variant][i]);
         transform_vector_by_basis(&spark_spawn_position, &spark_spawn_position, source_object + 0xC0);
         add_vector_xyz(&spark_spawn_position, &spark_spawn_position, source_object + 0x10);
         frame_count = scale_game_frames(4);

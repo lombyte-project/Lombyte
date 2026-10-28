@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_00153078[];
+extern u8 gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
 extern s32 scePrintf();
 s32 sceGsPutDrawEnv(u64 *env) {
     u32 count;
@@ -9,7 +9,7 @@ s32 sceGsPutDrawEnv(u64 *env) {
     count = 0;
     while (*(volatile u32 *)0x1000A000 & 0x100) {
         if (count++ > 0x1000000) {
-            scePrintf(D_00153078);
+            scePrintf(gs_draw_env_dma_timeout_message);
             return -1;
         }
     }

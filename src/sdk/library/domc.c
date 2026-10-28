@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8 D_00153770[];
+extern u8 intra_skip_mb_error_message[] __asm__("D_00153770");
 extern s32 _Error();
 extern void func_001271D8();
 extern void func_00127178();
@@ -16,7 +16,7 @@ void _doMC(struct MpegDecoder *decoder, s32 index) {
         }
     }
     if (decoder->mb_buf[index].unk130 != 0 && decoder->mb_buf[index].unk13C != 0) {
-        _Error(decoder, D_00153770);
+        _Error(decoder, intra_skip_mb_error_message);
     }
     if (decoder->mb_buf[index].unk130 != 0) {
         func_001271D8(decoder->mb_buf[index].unk128, decoder->mb_buf[index].ipu_out);

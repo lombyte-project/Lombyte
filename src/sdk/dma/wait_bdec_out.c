@@ -7,7 +7,7 @@ typedef struct {
     void *cbData;
 } MpegDec;
 
-extern char D_00153788[];
+extern char bdec_error_message[] __asm__("D_00153788");
 extern void _waitIpuIdle(MpegDec *d);
 extern void _dispatchMpegCallback(void *cb, s32 *arg);
 extern void _Error(MpegDec *d, char *msg);
@@ -53,7 +53,7 @@ s32 _waitBdecOut(MpegDec *decoder) {
         decoder->unk83C = 32;
     }
     if (*IPU_CTRL & 0x4000) {
-        _Error(decoder, D_00153788);
+        _Error(decoder, bdec_error_message);
         cb2[0] = 2;
         _dispatchMpegCallback(decoder->cbData, cb2);
         *(u32 *)0x10002010 = 0x40000000;

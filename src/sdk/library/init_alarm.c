@@ -14,22 +14,22 @@ typedef struct PatchPair {
     u32 b;
 } PatchPair;
 
-extern PatchPair D_00131258[];
-extern u8 D_00130AF0[];
-extern u8 D_00131230[];
+extern PatchPair alarm_syscall_patch_pairs[] __asm__("D_00131258");
+extern u8 alarm_kernel_patch_payload[] __asm__("D_00130AF0");
+extern u8 alarm_call_trampoline_payload[] __asm__("D_00131230");
 
 void InitAlarm(void) {
     u32 i;
 
     if ((*(volatile u32 *)0x10001810 & 0x100) == 0) {
-        Rfu116SetSyscallTail(D_00131258[0].a, D_00131258[0].b);
-        InvokeKernelSyscall005A_RfuTail((void *)0x80076000, D_00130AF0, 0x740);
-        InvokeKernelSyscall005A_RfuTail((void *)0x00082000, D_00131230, 0x28);
+        Rfu116SetSyscallTail(alarm_syscall_patch_pairs[0].a, alarm_syscall_patch_pairs[0].b);
+        InvokeKernelSyscall005A_RfuTail((void *)0x80076000, alarm_kernel_patch_payload, 0x740);
+        InvokeKernelSyscall005A_RfuTail((void *)0x00082000, alarm_call_trampoline_payload, 0x28);
         FlushCache(0);
         FlushCache(2);
-        Rfu116SetSyscallTail(D_00131258[1].a, D_00131258[1].b);
+        Rfu116SetSyscallTail(alarm_syscall_patch_pairs[1].a, alarm_syscall_patch_pairs[1].b);
         for (i = 2; i < 8; i++) {
-            Rfu116SetSyscallTail(D_00131258[i].a, Rfu091Tail(D_00131258[i].a));
+            Rfu116SetSyscallTail(alarm_syscall_patch_pairs[i].a, Rfu091Tail(alarm_syscall_patch_pairs[i].a));
         }
     }
 }

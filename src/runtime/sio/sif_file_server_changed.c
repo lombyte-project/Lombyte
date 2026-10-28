@@ -7,7 +7,7 @@ typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
 extern u8 D_0012FBEC[];
-extern u32 D_0012FCA8[];
+extern u32 server_version_record_address[] __asm__("D_0012FCA8");
 extern s32 memcmp();
 extern u8 FsResetBuffer[] __asm__("D_00157FA8");
 s32 sif_file_server_changed(void) __asm__("FUN_0011bbb8");
@@ -17,8 +17,8 @@ s32 sif_file_server_changed(void) {
     u8 *new_var;
     result = 0;
     new_var = D_0012FBEC;
-    if ((memcmp(FsResetBuffer, new_var, 4) != 0) && (memcmp(FsResetBuffer, D_0012FCA8[0], 4) != 0)) {
-        result = memcmp(new_var, D_0012FCA8[0], 4) != 0;
+    if ((memcmp(FsResetBuffer, new_var, 4) != 0) && (memcmp(FsResetBuffer, server_version_record_address[0], 4) != 0)) {
+        result = memcmp(new_var, server_version_record_address[0], 4) != 0;
     }
     return result;
 }

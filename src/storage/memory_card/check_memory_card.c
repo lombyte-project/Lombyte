@@ -10,7 +10,7 @@ struct McDirBlk {
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_0013D1D0[];
-extern u8 D_0013D348[];
+extern u8 memory_card_info_sync_outputs[] __asm__("D_0013D348");
 extern s32 sceMcGetInfo(s32, s32, s32, s32, s32);
 extern s32 sceMcSync(s32, s32 *, s32 *);
 extern s32 sceMcGetDir(s32, s32, s8 *, s32, s32, s32);
@@ -30,10 +30,10 @@ s32 check_memory_card(void) {
     blk = &memory_card_state.card[0].port;
     result = sceMcGetInfo(blk[0], blk[1], &card_type, &free_blocks, &format);
 
-    while (sceMcSync(1, D_0013D348, D_0013D348 + 4) == 0) {
+    while (sceMcSync(1, memory_card_info_sync_outputs, memory_card_info_sync_outputs + 4) == 0) {
         sceGsSyncV(0);
     }
-    card_state = (struct McDirBlk *)((u8 *)D_0013D348 - 0xB8);
+    card_state = (struct McDirBlk *)((u8 *)memory_card_info_sync_outputs - 0xB8);
     if (card_state->unkBC == -5) {
         return 1;
     }

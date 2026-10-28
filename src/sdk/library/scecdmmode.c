@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-extern u8 D_00132900[];
+extern u8 cd_media_mode_request[] __asm__("D_00132900");
 extern s32 SignalSema();
 extern s32 cd_check_scmd() __asm__("func_00120D40");
 extern s32 sceSifCallRpc();
@@ -10,12 +10,12 @@ s32 sceCdMmode(s32 media_mode) {
     register s32 mode;
     s32 result;
 
-    state = D_00132900;
+    state = cd_media_mode_request;
     mode = media_mode;
     if (cd_check_scmd(0x22) == 0) {
         return 0;
     }
-    *(s32 *)D_00132900 = mode;
+    *(s32 *)cd_media_mode_request = mode;
     sceSifWriteBackDCache(state, 4);
     if (sceSifCallRpc(D_00132D08, 0x22, 0, state, 4, D_001324C0, 4, 0, 0) < 0) {
         SignalSema(D_001312EC[0]);

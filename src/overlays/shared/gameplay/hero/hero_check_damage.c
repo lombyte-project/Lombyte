@@ -473,9 +473,9 @@ int hero_get_state_aim_pitch(int mode, float *out) {
     case 0:
     case 1:
     case 3: {
-        float c;
-        c = 25.0f;
-        if (c < hero.anim_frame) {
+        float pitch_override_frame_threshold;
+        pitch_override_frame_threshold = 25.0f;
+        if (pitch_override_frame_threshold < hero.anim_frame) {
             *out = -1.3089969f;
         }
         return 1;
@@ -1509,16 +1509,16 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
 #include "rnc/overlay/hero_tables.h"
 extern s32 D_L00_0015F5C4 __asm__("D_L00_0015F5C4");
 extern s32 game_frame __asm__("D_L00_0015F5CC");
-extern u8 D_0013FE10[] __asm__("D_0013FE10");
-extern u8 D_L00_0017A5C0[] __asm__("D_L00_0017A5C0");
+extern u8 hero_joint_world_matrices[] __asm__("D_0013FE10");
+extern u8 l00_hero_item_10_17_20_25_joint_selection[] __asm__("D_L00_0017A5C0");
 extern u8 D_L00_0017A608[] __asm__("D_L00_0017A608");
-extern u8 D_L00_0017A650[] __asm__("D_L00_0017A650");
-extern u8 D_L00_0017A668[] __asm__("D_L00_0017A668");
-extern u8 D_L00_0017C480[] __asm__("D_L00_0017C480");
+extern u8 l00_hero_item_28_29_primary_joint_selection[] __asm__("D_L00_0017A650");
+extern u8 l00_hero_item_28_29_secondary_joint_selection[] __asm__("D_L00_0017A668");
+extern u8 l00_hero_item_10_17_20_25_packed_pose[] __asm__("D_L00_0017C480");
 extern u8 D_L00_0017C680[] __asm__("D_L00_0017C680");
-extern u8 D_L00_0017C880[] __asm__("D_L00_0017C880");
-extern u8 D_L00_0017C980[] __asm__("D_L00_0017C980");
-extern u8 D_L00_0017A960[] __asm__("D_L00_0017A960");
+extern u8 l00_hero_item_28_29_primary_packed_pose[] __asm__("D_L00_0017C880");
+extern u8 l00_hero_item_28_29_secondary_packed_pose[] __asm__("D_L00_0017C980");
+extern u8 l00_hero_item_pair_scale_state[] __asm__("D_L00_0017A960");
 extern u8 D_L00_0015F6A8[] __asm__("D_L00_0015F6A8");
 extern u8 opt_mirror_anim __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690") __attribute__((sda));
@@ -1579,7 +1579,7 @@ void update_hero_item_mobys(void)
         slot_offset = i * 0x50;
         /* Fakematch: holding the joint matrices in a local set once per slot keeps their
          * address out of the slot loop's preheader, which gives retail's registers there. */
-        joint_mtx = D_0013FE10;
+        joint_mtx = hero_joint_world_matrices;
         for (j = 0; j < 2; j++)
         {
             if ((j > 0) && (i != 1) && (i != 3) && (i != 4))
@@ -1600,7 +1600,7 @@ void update_hero_item_mobys(void)
                     slot_vec = (((u8 *) (&hero)) + 0x1070) + slot_offset;
                     qcopy(slot_vec, hero.joint_matrices[joint][3]);
                     slot_vec = (((u8 *) (&hero)) + 0x1080) + slot_offset;
-                    matrix_to_euler(D_0013FE10 + (joint * 0x40), slot_vec);
+                    matrix_to_euler(hero_joint_world_matrices + (joint * 0x40), slot_vec);
                     advance_moby_animation(moby);
                     FUN_L00_00250df8(moby);
                     *((u16 *) (moby + 0x34)) &= 0xfffb;
@@ -1616,7 +1616,7 @@ void update_hero_item_mobys(void)
                         if (((first == 0) && (second == 0)) && (third == 0))
                             advance_moby_animation(moby);
                         FUN_L00_00250df8(moby);
-                        copy_matrix3x4(moby + 0xc0, D_0013FE10 + (joint * 0x40));
+                        copy_matrix3x4(moby + 0xc0, hero_joint_world_matrices + (joint * 0x40));
                         if (((first == 0) && (second == 0)) && (third == 0))
                             FUN_0025c170_f580(moby + 0xc0);
                         scratch.direction[0] = 1.0f;
@@ -1629,11 +1629,11 @@ void update_hero_item_mobys(void)
                         *((u16 *) (moby + 0x34)) |= 6;
                         if (first != 0)
                         {
-                            FUN_L00_002092c8(D_L00_0017A5C0, D_L00_0017C480, *((s32 *) (moby + 0x24)), 0, 0);
+                            FUN_L00_002092c8(l00_hero_item_10_17_20_25_joint_selection, l00_hero_item_10_17_20_25_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
                             *((s32 *) (moby + 0x54)) = 0;
                             *((s32 *) (moby + 0x50)) = 0;
-                            *((void **) (moby + 0x68)) = D_L00_0017C480;
-                            *((void **) (moby + 0x6c)) = D_L00_0017C480;
+                            *((void **) (moby + 0x68)) = l00_hero_item_10_17_20_25_packed_pose;
+                            *((void **) (moby + 0x6c)) = l00_hero_item_10_17_20_25_packed_pose;
                         }
                         else if (second != 0)
                         {
@@ -1648,8 +1648,8 @@ void update_hero_item_mobys(void)
                         }
                         else if (third != 0)
                         {
-                            scratch.saved[0] = *((u128 *) D_L00_0017A960);
-                            scratch.saved[1] = *((u128 *) (D_L00_0017A960 + 0xb0));
+                            scratch.saved[0] = *((u128 *) l00_hero_item_pair_scale_state);
+                            scratch.saved[1] = *((u128 *) (l00_hero_item_pair_scale_state + 0xb0));
                             hero_eases[4].scale3.f[0] = 1.0f;
                             hero_eases[4].scale3.f[1] = 1.0f;
                             hero_eases[4].scale3.f[2] = 1.0f;
@@ -1658,27 +1658,27 @@ void update_hero_item_mobys(void)
                             hero_eases[5].scale3.f[2] = 1.0f;
                             if (j == 0)
                             {
-                                FUN_L00_002092c8(D_L00_0017A650, D_L00_0017C880, *((s32 *) (moby + 0x24)), 0, 0);
-                                *((void **) (moby + 0x68)) = D_L00_0017C880;
-                                *((void **) (moby + 0x6c)) = D_L00_0017C880;
+                                FUN_L00_002092c8(l00_hero_item_28_29_primary_joint_selection, l00_hero_item_28_29_primary_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
+                                *((void **) (moby + 0x68)) = l00_hero_item_28_29_primary_packed_pose;
+                                *((void **) (moby + 0x6c)) = l00_hero_item_28_29_primary_packed_pose;
                             }
                             else
                             {
-                                FUN_L00_002092c8(D_L00_0017A668, D_L00_0017C980, *((s32 *) (moby + 0x24)), 0, 0);
-                                *((void **) (moby + 0x68)) = D_L00_0017C980;
-                                *((void **) (moby + 0x6c)) = D_L00_0017C980;
+                                FUN_L00_002092c8(l00_hero_item_28_29_secondary_joint_selection, l00_hero_item_28_29_secondary_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
+                                *((void **) (moby + 0x68)) = l00_hero_item_28_29_secondary_packed_pose;
+                                *((void **) (moby + 0x6c)) = l00_hero_item_28_29_secondary_packed_pose;
                             }
                             *((s32 *) (moby + 0x54)) = 0;
                             *((s32 *) (moby + 0x50)) = 0;
-                            *((u128 *) D_L00_0017A960) = scratch.saved[0];
-                            *((u128 *) (D_L00_0017A960 + 0xb0)) = scratch.saved[1];
+                            *((u128 *) l00_hero_item_pair_scale_state) = scratch.saved[0];
+                            *((u128 *) (l00_hero_item_pair_scale_state + 0xb0)) = scratch.saved[1];
                         }
                     }
                     else
                     {
                         advance_moby_animation(moby);
                         if ((large_font_height == 0) || (i != 0))
-                            matrix_to_euler(D_0013FE10 + (joint * 0x40), moby + 0x40);
+                            matrix_to_euler(hero_joint_world_matrices + (joint * 0x40), moby + 0x40);
                         else
                             update_hero_item_rotation_from_history(moby, (u8 *) ((joint * 0x40) + ((s32) joint_mtx)));
                         FUN_L00_00250df8(moby);
@@ -1691,36 +1691,36 @@ void update_hero_item_mobys(void)
             }
             if ((i == 3) && (j == 1) && (moby != 0))
             {
-                struct Hero *p = &hero;
-                if ((*((s32 *) (((u8 *) p) + 0x118c))) == 0)
+                struct Hero *hero_state = &hero;
+                if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) == 0)
                 {
-                    *((s32 *) (((u8 *) p) + 0x118c)) = (s32) FUN_0024e838_f580(0x4b4);
-                    if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                    *((s32 *) (((u8 *) hero_state) + 0x118c)) = (s32) FUN_0024e838_f580(0x4b4);
+                    if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) != 0)
                     {
-                    *((u32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x90)) = 0x801432d7;
-                    created = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
-                    qcopy(created + 0x10, &p->motion.pos);
-                    qcopy(created + 0x40, &p->motion.rot);
+                    *((u32 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x90)) = 0x801432d7;
+                    created = (u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)));
+                    qcopy(created + 0x10, &hero_state->motion.pos);
+                    qcopy(created + 0x40, &hero_state->motion.rot);
                     *((u16 *) (created + 0x32)) = 0x40;
-                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x31)) = 1;
-                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x30)) = 0;
-                    *((u16 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x34)) = 0;
-                    *((f32 *) (((u8 *) (*((s32 *) (((u8 *) p) + 0x118c)))) + 0x2c)) *= 1.3f;
-                    FUN_L00_00250df8((u8 *) (*((s32 *) (((u8 *) p) + 0x118c))));
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x31)) = 1;
+                    *((u8 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x30)) = 0;
+                    *((u16 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x34)) = 0;
+                    *((f32 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x2c)) *= 1.3f;
+                    FUN_L00_00250df8((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c))));
                     }
                 }
-                if ((*((s32 *) (((u8 *) p) + 0x118c))) != 0)
+                if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) != 0)
                 {
-                    effect = (u8 *) (*((s32 *) (((u8 *) p) + 0x118c)));
+                    effect = (u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)));
                     if ((((*((u16 *) (effect + 0x34))) ^ 1) & 1) != 0)
                     {
                         build_moby_bone_transform(moby, 6, mtx);
-                        qcopy(((u8 *) p) + 0x1d80, mtx[3]);
+                        qcopy(((u8 *) hero_state) + 0x1d80, mtx[3]);
                         enqueue_hero_glow_draw_callback_once();
                         qcopy(effect + 0x10, mtx[3]);
                         copy_matrix3x4(effect + 0xc0, mtx);
                         FUN_L00_00250df8(effect);
-                        *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) p->moby) + 0x38));
+                        *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) hero_state->moby) + 0x38));
                         random_range = scale_game_frames(0x78);
                         angle = fast_sin((((((f32) (game_frame % random_range)) / convert_integer_to_float(random_range)) * 2.0f) * 3.1415927f) + (-3.1415927f));
                         color_red = truncate_float_to_s32(angle * 90.0f);
@@ -2586,13 +2586,13 @@ extern int FUN_001f96f8_211250(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 
 void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern s32 D_0013DFD8[];
-extern s32 D_0014E990[][16];
+extern s32 hero_respawn_counts_by_level[] __asm__("D_0013DFD8");
+extern s32 hero_respawn_counts_by_level_and_source_category[][16] __asm__("D_0014E990");
 void hero_respawn(void) {
     s32 lvl = current_level_index;
     char *damage_source_moby;
     u32 t;
-    D_0013DFD8[lvl]++;
+    hero_respawn_counts_by_level[lvl]++;
     D_0015EEAC++;
     if (((char *)hero.damage_source_moby) != 0 && *(s16 *)(((char *)hero.damage_source_moby) + 0xA6) == 0x4D &&
         lvl == 15) {
@@ -2601,7 +2601,7 @@ void hero_respawn(void) {
     clear_help_record_high_bits();
     damage_source_moby = ((char *)hero.damage_source_moby);
     if (damage_source_moby != 0 && *(u8 *)(damage_source_moby + 0xB0) != 0xFF) {
-        D_0014E990[current_level_index][*(u8 *)(damage_source_moby + 0xB0)]++;
+        hero_respawn_counts_by_level_and_source_category[current_level_index][*(u8 *)(damage_source_moby + 0xB0)]++;
         D_0014EE90[*(u8 *)(damage_source_moby + 0xB0)]++;
     }
     fade_to_black(FUN_001f96f8_211250(0x10));

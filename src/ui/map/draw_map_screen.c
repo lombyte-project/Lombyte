@@ -24,8 +24,8 @@ struct MapEntry {
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern u8 D_001CF678[];
-extern u8 D_001CF418[];
+extern u8 map_cross_destination_page[] __asm__("D_001CF678");
+extern u8 map_circle_destination_page[] __asm__("D_001CF418");
 extern u8 D_0013D4E1[];
 #include "rnc/gameplay/state/level_state.h"
 extern char D_00141EC0[];
@@ -94,10 +94,10 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             }
         }
         if (controller_state.pressed_unmasked & PAD_CROSS) {
-            menu_system.next = (struct MenuPage *)D_001CF678;
+            menu_system.next = (struct MenuPage *)map_cross_destination_page;
         }
         if ((controller_state.pressed_unmasked & PAD_CIRCLE) && level_map_selection.level != 0) {
-            menu_system.unkF0 = (struct MenuPage *)D_001CF418;
+            menu_system.unkF0 = (struct MenuPage *)map_circle_destination_page;
             menu_system.unkF4 = 0xB;
             menu_system.close_request = 3;
             menu_system.unkE4 = level_map_selection.level;

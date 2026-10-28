@@ -12,8 +12,8 @@ struct TfragGroup {
     struct Tfrag *tfrags;
     s32 count;
 };
-extern struct TfragGroup D_001E0F00[];
-extern struct TexRemap D_001E0C00[];
+extern struct TfragGroup tfrag_gif_patch_groups[] __asm__("D_001E0F00");
+extern struct TexRemap tfrag_gif_texture_remaps[] __asm__("D_001E0C00");
 void patch_tfrag_gifs(void) __asm__("FUN_00233308");
 
 void patch_tfrag_gifs(void) {
@@ -23,11 +23,11 @@ void patch_tfrag_gifs(void) {
     s32 n;
     s32 count;
 
-    for (current_tfrag_group = D_001E0F00; current_tfrag_group->tfrags != 0; current_tfrag_group++) {
+    for (current_tfrag_group = tfrag_gif_patch_groups; current_tfrag_group->tfrags != 0; current_tfrag_group++) {
         current_tfrag = current_tfrag_group->tfrags;
         count = current_tfrag_group->count;
         for (n = 0; n < count; n++) {
-            texture_remap = &D_001E0C00[current_tfrag->tex];
+            texture_remap = &tfrag_gif_texture_remaps[current_tfrag->tex];
             if (texture_remap->lo != 0) {
                 current_tfrag->tex0 = (current_tfrag->tex0 & 0xFFFFC000) | texture_remap->lo;
             }

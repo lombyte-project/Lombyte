@@ -33,7 +33,7 @@ typedef struct {
 extern Checkpoints D_0013D290;
 #include "rnc/gameplay/state/item_state.h"
 extern u8 D_0015EE98[] MACRO_ADDR;
-extern s32 D_001D5BA0[];
+extern s32 item_availability_restore_indices[] __asm__("D_001D5BA0");
 
 extern void copy_memory_aligned(void *dst, void *src, s32 size) __asm__("func_001F9838");
 extern void load_and_initialize_level_chunk(void) __asm__("func_00209370");
@@ -68,8 +68,8 @@ void load_level_zero_preserving_progress(s32 slot) {
     bytes = (u8 *)0x70000030;
     load_and_initialize_level_chunk();
     copy_memory_aligned(item_text_variant, (void *)0x70000000, 0x28);
-    for (j = 0; D_001D5BA0[j] != -1; j++) {
-        item_available[D_001D5BA0[j]] = bytes[D_001D5BA0[j]];
+    for (j = 0; item_availability_restore_indices[j] != -1; j++) {
+        item_available[item_availability_restore_indices[j]] = bytes[item_availability_restore_indices[j]];
     }
     copy_memory_aligned(weapon_ammo_counts, (void *)0x70000060, 0x94);
     copy_memory_aligned(D_0014BEC0, (void *)0x70000100, 0x50);

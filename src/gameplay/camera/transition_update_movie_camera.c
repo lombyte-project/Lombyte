@@ -3,7 +3,7 @@
 #include "sda.h"
 #include "qcopy.h"
 
-extern char D_0018CB20[];
+extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern char D_00187080[];
 extern void update_view_context(void) __asm__("FUN_001f2d98");
@@ -14,7 +14,7 @@ extern void sceVu0RotMatrixZ(float *, float *, float);
 unsigned char transition_update_movie_camera(void) __asm__("FUN_001eaf88");
 
 unsigned char transition_update_movie_camera(void) {
-    char *camera_keyframe_state = D_0018CB20;
+    char *camera_keyframe_state = render_sequence;
     char *key = *(char **)(camera_keyframe_state + 0x54) + *(int *)(camera_keyframe_state + 0x38) * 32;
     unsigned char flag = key[0xC];
     float *keyframe_rotation_angles = (float *)(key + 0x10);

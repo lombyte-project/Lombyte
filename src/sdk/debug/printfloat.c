@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 
-extern char D_00152780[];
-extern char D_00152788[];
-extern char D_00152790[];
+extern char significand_format[] __asm__("D_00152780");
+extern char nonnegative_exponent_format[] __asm__("D_00152788");
+extern char negative_exponent_format[] __asm__("D_00152790");
 extern s32 dpcmp_f(f64 left, f64 right) __asm__("dpcmp");
 extern f64 dpsub_f(f64 left, f64 right) __asm__("dpsub");
 extern f64 dpmul_f(f64 left, f64 right) __asm__("dpmul");
@@ -36,10 +36,10 @@ void printfloat(f64 x) {
         }
     }
     significand = ftoi(__fixunsdfdi(dpmul_f(x, 1000000.0)));
-    kprintf(D_00152780, significand);
+    kprintf(significand_format, significand);
     if (exponent >= 0) {
-        kprintf(D_00152788, exponent);
+        kprintf(nonnegative_exponent_format, exponent);
     } else {
-        kprintf(D_00152790, exponent);
+        kprintf(negative_exponent_format, exponent);
     }
 }

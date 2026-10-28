@@ -62,7 +62,7 @@ extern int D_L12_00161F04;
 extern int D_L12_00161F20 __attribute__((section(".sdata")));
 extern int D_L12_00161F24 __attribute__((section(".sdata")));
 extern int D_L12_00161F34 __attribute__((sda));
-extern int D_L12_001FB670[];
+extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int D_L12_001FB688[];
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
@@ -235,7 +235,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                 float dmg = 1.0f;
                 char *r = FUN_L00_0025a420(gun_moby, 0x50000, 0);
                 if (r == 0) {
-                    int k = D_L12_001FB670[i];
+                    int k = planetbuster_maximus_gun_part_slots[i];
                     char *fallback_moby = 0;
                     if (k == 0x11) {
                         fallback_moby = moby;
@@ -269,7 +269,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                     }
                     allocate_voice_for_target_entry(1, 0, gun_moby);
                     if (*(short *)(owner_data + 0x5FC) > 0) {
-                        int k = D_L12_001FB670[i];
+                        int k = planetbuster_maximus_gun_part_slots[i];
                         if (k != 0x11) {
                             D_L12_001FB688[k] = *(int *)(owner_data + k * 0x30 + 0x20);
                             *(int *)(owner_data + k * 0x30 + 0x20) = -1;
@@ -1096,7 +1096,7 @@ extern int hoven_jittered_second_packet_blend_minuend_selector_gp __asm__("D_L12
 extern int hoven_jittered_second_packet_blend_subtrahend_selector_gp __asm__("D_L12_00161FD0") __attribute__((sda));
 extern int hoven_jittered_second_packet_blend_alpha_factor_selector_gp __asm__("D_L12_00161FD4") __attribute__((sda));
 extern int hoven_jittered_second_packet_blend_addend_selector_gp __asm__("D_L12_00161FD8") __attribute__((sda));
-extern float D_L12_001FB6D0[4][2];
+extern float hoven_jittered_quad_base_uvs[4][2] __asm__("D_L12_001FB6D0");
 extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
 extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
 extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
@@ -1130,8 +1130,8 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
         float u, v;
         qcopy(packets[1].corner[vertex], &D_L12_001FB6F0[vertex]);
         qcopy(packets[0].corner[vertex], &D_L12_001FB730[vertex]);
-        u = D_L12_001FB6D0[vertex][0];
-        v = D_L12_001FB6D0[vertex][1];
+        u = hoven_jittered_quad_base_uvs[vertex][0];
+        v = hoven_jittered_quad_base_uvs[vertex][1];
         packets[0].uv[vertex][0] = u;
         packets[0].uv[vertex][1] = v;
         packets[1].uv[vertex][0] = u;
@@ -1144,8 +1144,8 @@ void draw_hoven_jittered_quad_layers(struct Moby *moby) {
             float (*second)[4] = packets[1].corner;
             first[corner][2] = first[corner][2] + 1.0f;
             second[corner][2] = second[corner][2] + 1.0f;
-            packets[0].uv[corner][0] = D_L12_001FB6D0[corner][0] + u_offset;
-            packets[0].uv[corner][1] = D_L12_001FB6D0[corner][1];
+            packets[0].uv[corner][0] = hoven_jittered_quad_base_uvs[corner][0] + u_offset;
+            packets[0].uv[corner][1] = hoven_jittered_quad_base_uvs[corner][1];
         }
         jitter = 0.0f;
         row = -3;
@@ -1189,7 +1189,7 @@ typedef struct {
 } Obj;
 
 extern char D_0013D388[];
-extern char D_L12_0016CCF0[];
+extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int D_L12_0015F5C4;
 extern int D_L12_0015F5CC;
 extern void start_scene(int) __asm__("FUN_L00_00298840");
@@ -1211,10 +1211,10 @@ void trigger_scene_once_in_clip_volume(struct Moby *moby) {
         hero_position = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(hero_position, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
-            qcopy(D_L12_0016CCF0, hero_position);
-            destination_base = D_L12_0016CCF0 - 0x10;
+            qcopy(scene_trigger_saved_hero_data, hero_position);
+            destination_base = scene_trigger_saved_hero_data - 0x10;
             *(float *)(destination_base + 0x18) = *(float *)(hero_position + 0x258);
-            qcopy(D_L12_0016CCF0 + 0x10, hero_position + 0x10);
+            qcopy(scene_trigger_saved_hero_data + 0x10, hero_position + 0x10);
             *(short *)(destination_base + 0x46) = 1;
             start_scene(*(int *)(data + 8));
         }
@@ -1281,15 +1281,15 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
 
 extern float D_L12_00162108[2] __attribute__((section(".sdata")));
-extern char D_L12_00208B00[];
-extern int D_L12_001FBD10[];
-extern int D_L12_002059E0[];
-extern int D_L12_00205A08[];
-extern int D_L12_00205A58[];
+extern char hoven_scrolling_clipped_scrolled_uv_buffer[] __asm__("D_L12_00208B00");
+extern int hoven_scrolling_clipped_vertex_counts[] __asm__("D_L12_001FBD10");
+extern int hoven_scrolling_clipped_vertex_position_tables[] __asm__("D_L12_002059E0");
+extern int hoven_scrolling_clipped_base_uv_tables[] __asm__("D_L12_00205A08");
+extern int hoven_scrolling_clipped_vertex_color_tables[] __asm__("D_L12_00205A58");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
-extern void FUN_L08_002f0c18(int);
+extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
@@ -1306,25 +1306,25 @@ void draw_hoven_scrolling_texture_layers(struct Moby *moby) {
     if (is_point_inside_clip_volume(D_L12_00167240, moby_data[0])) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
-            FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
-            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i],
-                             D_L12_00208B00, 1);
+            FUN_L08_00258090(hoven_scrolling_clipped_scrolled_uv_buffer, hoven_scrolling_clipped_base_uv_tables[i], hoven_scrolling_clipped_vertex_counts[i], D_L12_00162108);
+            FUN_L00_001fde98(hoven_scrolling_clipped_vertex_counts[i], hoven_scrolling_clipped_vertex_position_tables[i], hoven_scrolling_clipped_vertex_color_tables[i],
+                             hoven_scrolling_clipped_scrolled_uv_buffer, 1);
         }
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));
-    FUN_L08_002f0c18(0);
+    draw_eleven_entry_scrolled_texture_batch(0);
     vu1_add_g_sregister(0x42, ((long)hoven_scrolling_second_layer_fixed_alpha << 32) | 0x68);
     vu1_add_g_sregister(6, get_effect_texture(0x30));
-    FUN_L08_002f0c18(1);
+    draw_eleven_entry_scrolled_texture_batch(1);
 }
 /* Builds the colour tables once, then scrolls two pairs of wrapped phases each frame. */
 extern int hoven_scrolling_color_tables_initialized_gp __asm__("D_L12_001620F0") __attribute__((sda));
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
-extern float D_L12_001620E0[1] __attribute__((sda));
-extern float D_L12_001620D8[2] __attribute__((sda));
+extern float hoven_scrolling_layer_phase_rates[1] __asm__("D_L12_001620E0") __attribute__((sda));
+extern float hoven_scrolling_clipped_uv_scroll_rates[2] __asm__("D_L12_001620D8") __attribute__((sda));
 extern float frame_delta_time __asm__("D_0015ED7C") __attribute__((section(".sdata")));
-extern int *D_L12_00208AE0[];
-extern int D_L12_00205A80[];
+extern int *hoven_scrolling_color_tables[] __asm__("D_L12_00208AE0");
+extern int hoven_scrolling_color_table_entry_counts[] __asm__("D_L12_00205A80");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 
@@ -1348,8 +1348,8 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
     switch (moby->state) {
     case INITIALIZE_SCROLL_PHASES:
         if (hoven_scrolling_color_tables_initialized_gp == 0) {
-            scale_rgba_tables(D_L12_00208AE0, 5, D_L12_00205A80, 0.1f, 0.5f, 0.4f, 0.5f, 1);
-            scale_rgba_tables(D_L12_00205A58, 10, D_L12_001FBD10, 0.1f, 0.6f, 0.4f, 0.5f, 1);
+            scale_rgba_tables(hoven_scrolling_color_tables, 5, hoven_scrolling_color_table_entry_counts, 0.1f, 0.5f, 0.4f, 0.5f, 1);
+            scale_rgba_tables(hoven_scrolling_clipped_vertex_color_tables, 10, hoven_scrolling_clipped_vertex_counts, 0.1f, 0.6f, 0.4f, 0.5f, 1);
             hoven_scrolling_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
@@ -1362,14 +1362,14 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
         break;
     case UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW:
         for (i = 0; i < 2; i++) {
-            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] += hoven_scrolling_layer_phase_rates[i * 2] * frame_delta_time;
             if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] > 1.0f) {
                 ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] -= 1.0f;
             }
             if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] < -1.0f) {
                 ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 2] += 1.0f;
             }
-            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
+            ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] += hoven_scrolling_layer_phase_rates[i * 2 + 1] * frame_delta_time;
             if (((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] > 1.0f) {
                 ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] -= 1.0f;
             }
@@ -1377,14 +1377,14 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
                 ((float *)&hoven_scrolling_color_tables_initialized_gp)[i * 2 + 3] += 1.0f;
             }
         }
-        D_L12_00162108[0] += D_L12_001620D8[0] * frame_delta_time;
+        D_L12_00162108[0] += hoven_scrolling_clipped_uv_scroll_rates[0] * frame_delta_time;
         if (D_L12_00162108[0] > 1.0f) {
             D_L12_00162108[0] -= 1.0f;
         }
         if (D_L12_00162108[0] < -1.0f) {
             D_L12_00162108[0] += 1.0f;
         }
-        D_L12_00162108[1] += D_L12_001620D8[1] * frame_delta_time;
+        D_L12_00162108[1] += hoven_scrolling_clipped_uv_scroll_rates[1] * frame_delta_time;
         if (D_L12_00162108[1] > 1.0f) {
             D_L12_00162108[1] -= 1.0f;
         }

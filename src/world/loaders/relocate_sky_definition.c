@@ -28,7 +28,7 @@ struct SpriteFile {
     s32 groups[1];
 };
 
-extern struct SpriteFile *D_0016045C;
+extern struct SpriteFile *level_sky_effect_data __asm__("D_0016045C");
 extern s16 log2dim(s32) __asm__("FUN_001f97a0");
 
 /* Prepares the sky data of a level. The sky block starts with a header:
@@ -54,7 +54,7 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
     s32 texture_height;
     struct Group *relocated_group;
 
-    D_0016045C = sky_definition;
+    level_sky_effect_data = sky_definition;
     sky_definition->loaded = 1;
     sky_definition->sprites += (s32)sky_definition;
     sky_definition->unk14 += (s32)sky_definition;
@@ -62,21 +62,21 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
     if (sky_definition->unk1C != 0) {
         sky_definition->unk1C += (s32)sky_definition;
     }
-    serialized_texture_words = (s32 *)D_0016045C->sprites;
-    for (i = 0; i < D_0016045C->nsprites; i++) {
+    serialized_texture_words = (s32 *)level_sky_effect_data->sprites;
+    for (i = 0; i < level_sky_effect_data->nsprites; i++) {
         serialized_palette_offset = *serialized_texture_words++;
         serialized_texel_offset = *serialized_texture_words++;
         texture_width = *serialized_texture_words++;
         texture_height = *serialized_texture_words++;
-        ((struct Sprite *)D_0016045C->sprites)[i].y = serialized_palette_offset >> 4;
-        ((struct Sprite *)D_0016045C->sprites)[i].x = serialized_texel_offset >> 4;
-        ((struct Sprite *)D_0016045C->sprites)[i].w = log2dim(texture_width);
-        ((struct Sprite *)D_0016045C->sprites)[i].h = log2dim(texture_height);
-        ((struct Sprite *)D_0016045C->sprites)[i].unk0 = 0;
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].y = serialized_palette_offset >> 4;
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].x = serialized_texel_offset >> 4;
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].w = log2dim(texture_width);
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].h = log2dim(texture_height);
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].unk0 = 0;
     }
-    for (k = 0; k < D_0016045C->ngroups; k++) {
-        D_0016045C->groups[k] += (s32)sky_definition;
-        relocated_group = (struct Group *)D_0016045C->groups[k];
+    for (k = 0; k < level_sky_effect_data->ngroups; k++) {
+        level_sky_effect_data->groups[k] += (s32)sky_definition;
+        relocated_group = (struct Group *)level_sky_effect_data->groups[k];
         for (j = 0; j < relocated_group->count; j++) {
             ((struct Group *)((u8 *)relocated_group + j * 0x20))->items[0] += (s32)sky_definition;
         }

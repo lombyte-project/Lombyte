@@ -4,11 +4,11 @@
 
 extern unsigned char D_0013D4C2 __attribute__((section(".data")));
 extern char D_L00_001B47D0[];
-extern char D_L00_001B4808[];
+extern char menu_items_when_flag_clear[] __asm__("D_L00_001B4808");
 
 /* Points the menu at one of two item tables, picked by a game flag. */
 int FUN_L00_0027a6e0(char *menu) {
-    *(char **)(menu + 0x34) = D_0013D4C2 ? D_L00_001B47D0 : D_L00_001B4808;
+    *(char **)(menu + 0x34) = D_0013D4C2 ? D_L00_001B47D0 : menu_items_when_flag_clear;
     return 0;
 }
 
@@ -18,11 +18,11 @@ extern char D_0013D408[];
 extern char D_0013D4C0[];
 extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013D388[];
-extern short D_L00_001603F8 __attribute__((sda));
-extern short D_L00_001BA4A8[];
+extern short unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sda));
+extern short unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013C940[];
-extern unsigned char D_L00_001B9BA0[];
+extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
 extern void FUN_L00_002607d0(int);
 extern void FUN_L00_00263d40(int, int);
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
@@ -38,15 +38,15 @@ void process_unlock_code_input(void) {
         pressed = *(int *)(pad + 0x1C4);
         if (!(pressed & 0xF0A0)) return;
 
-        if (*(int *)&D_L00_001603F8 >= 20) return;
+        if (*(int *)&unlock_code_input_count >= 20) return;
         if (pressed & 0x1000) direction = 0;
         else if (pressed & 0x4000) direction = 1;
         else if (pressed & 0x8000) direction = 2;
         else if (pressed & 0x2000) direction = 3;
         else direction = (pressed & 0x80) ? 4 : 5;
-        count = *(int *)&D_L00_001603F8;
-        D_L00_001BA4A8[count++] = direction;
-        *(int *)&D_L00_001603F8 = count;
+        count = *(int *)&unlock_code_input_count;
+        unlock_code_input_sequence[count++] = direction;
+        *(int *)&unlock_code_input_count = count;
         if (count != 20) return;
         code = -1;
         index = 2;
@@ -56,7 +56,7 @@ void process_unlock_code_input(void) {
         for (; index < candidate_index_limit; index++) {
             matched = 1;
             for (j = 0; j < 20; j++) {
-                if (D_L00_001BA4A8[j] != D_L00_001B9BA0[(j * index + index) & 0xff]) {
+                if (unlock_code_input_sequence[j] != l00_unlock_code_comparison_table[(j * index + index) & 0xff]) {
                     matched = 0;
                     break;
                 }
@@ -87,6 +87,6 @@ void process_unlock_code_input(void) {
             }
         }
     } else {
-        *(int *)&D_L00_001603F8 = 0;
+        *(int *)&unlock_code_input_count = 0;
     }
 }

@@ -37,7 +37,7 @@ void draw_page_contents(void) {
 }
 extern volatile s32 D_L00_0015F628;
 #include "rnc/overlay/shared/rendering/debug/001f8ec8_globals.h"
-extern u8 D_L00_00173080[];
+extern u8 timed_text_entries[] __asm__("D_L00_00173080");
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f5210_c(s32, s32, s32, s32) __asm__("FUN_001f5210");
@@ -60,7 +60,7 @@ void draw_framebuffer_with_timed_text(void) {
     }
     reset_gs_registers();
     setup_gif_paging(0);
-    timed_text_entry = D_L00_00173080;
+    timed_text_entry = timed_text_entries;
     for (i = 0xB6; i >= 0; i--) {
         draw_timed_text(timed_text_entry, timed_text_frame);
         timed_text_entry += 16;

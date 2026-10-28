@@ -1,7 +1,7 @@
 #include "types.h"
 #define W(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define L(p, o) (*(s64 *)((u8 *)(p) + (o)))
-extern u8 D_00153A10[];
+extern u8 mpeg_work_area_too_small_message[] __asm__("D_00153A10");
 extern void D_0012CB30();
 extern void D_0012CB40();
 extern void *memset(void *, s32, u32);
@@ -23,7 +23,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     decoder = (u8 *)((((u32)work + 3) >> 2) << 2);
     rest = size - (decoder - work);
     if ((u32)rest < 0x10C0) {
-        _Error(decoder, D_00153A10);
+        _Error(decoder, mpeg_work_area_too_small_message);
         return 0;
     }
     state = decoder + 0x108;

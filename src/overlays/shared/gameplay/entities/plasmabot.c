@@ -130,7 +130,9 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/fun_l14_002b3890.h"
 
-void FUN_L14_002b3890(int selected_moby_list_index) {
+void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) __asm__("FUN_L14_002b3890");
+
+void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
     short *listed_moby_entry_cursor;
     if (selected_moby_list_index != -1) {
         listed_moby_entry_cursor = D_L14_001ABF40[selected_moby_list_index];
@@ -251,11 +253,11 @@ typedef struct {
 } LineInfo;
 
 extern char D_001413F4[];
-extern char D_L14_001FBB60[];
-extern char D_L14_001FBBA0[];
-extern char D_L14_001FBBF8[];
-extern char D_L14_001FBC38[];
-extern char D_L14_001FBC90[];
+extern char plasmabot_missing_intro_path_format[] __asm__("D_L14_001FBB60");
+extern char plasmabot_empty_intro_path_format[] __asm__("D_L14_001FBBA0");
+extern char plasmabot_missing_bound_path_format[] __asm__("D_L14_001FBBF8");
+extern char plasmabot_empty_bound_path_format[] __asm__("D_L14_001FBC38");
+extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -276,10 +278,10 @@ extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern float D_L14_001614E4_gp __asm__("D_L14_001614E4") __attribute__((sda));
-extern float D_L14_001614E8_gp __asm__("D_L14_001614E8") __attribute__((sda));
-extern int D_L14_001614EC_gp __asm__("D_L14_001614EC") __attribute__((sda));
-extern float D_L14_001614F4_gp __asm__("D_L14_001614F4") __attribute__((sda));
+extern float l14_plasmabot_beam_trace_endpoint_distance __asm__("D_L14_001614E4") __attribute__((sda));
+extern float l14_plasmabot_aim_sweep_half_angle __asm__("D_L14_001614E8") __attribute__((sda));
+extern int l14_plasmabot_aim_sweep_duration_frames __asm__("D_L14_001614EC") __attribute__((sda));
+extern float l14_plasmabot_beam_origin_offset_distance __asm__("D_L14_001614F4") __attribute__((sda));
 extern u8 D_L14_00174560[];
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_0024f7c8(char *, int, void *);
@@ -296,7 +298,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
-int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
+int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
@@ -308,7 +310,7 @@ void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 void update_plasmabot_aim_joint_rotation(char *moby, float angle) __asm__("FUN_L14_002b37b0");
-void FUN_L14_002b3890_c(int idx) __asm__("FUN_L14_002b3890");
+void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 #define call_4BF0(m) FUN_L14_002b39a0_c((unsigned char *)(m))
@@ -385,24 +387,24 @@ void update_plasmabot(char *moby) {
     case PLASMABOT_INITIALIZE: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
-                DebugPrint(D_L14_001FBB60, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_missing_intro_path_format, *(short *)(moby + 0xB2));
                 { call_D678(moby); return; }
             }
             if (*D_L14_001B0BB0[*(int *)(data + 0x240)] == 0) {
-                DebugPrint(D_L14_001FBBA0, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_empty_intro_path_format, *(short *)(moby + 0xB2));
                 { call_D678(moby); return; }
             }
         }
         if (*(int *)(data + 0x244) == -1) {
-            DebugPrint(D_L14_001FBBF8, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_bound_path_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (*D_L14_001B0BB0[*(int *)(data + 0x244)] == 0) {
-            DebugPrint(D_L14_001FBC38, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_empty_bound_path_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (((unsigned char *)data)[0x24A] != 0 && *(int *)(data + 0x264) < 0) {
-            DebugPrint(D_L14_001FBC90, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_hatch_index_format, *(short *)(moby + 0xB2));
             { call_D678(moby); return; }
         }
         if (random_integer_below(2) != 0) {
@@ -452,7 +454,7 @@ void update_plasmabot(char *moby) {
         float *path;
         if (*(int *)(data + 0x114) == 2) return;
         if (fast_dec_timer_s16(data + 0x248) == 0) return;
-        if (FUN_L14_002d9870_c(*(int *)(data + 0x264)) == 0) return;
+        if (refresh_plasmabot_hatch_reset_delay(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(moby) == 0) return;
         *(short *)(data + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
         activate_plasmabot(moby);
@@ -523,7 +525,7 @@ void update_plasmabot(char *moby) {
         break;
     case PLASMABOT_FOLLOW_PATH_BACKWARD:
         if (((unsigned char *)data)[0x24A] != 0) {
-            FUN_L14_002d9870_c(*(int *)(data + 0x264));
+            refresh_plasmabot_hatch_reset_delay(*(int *)(data + 0x264));
         }
         if (follow_plasmabot_path(moby) != 0) {
             if (((unsigned char *)data)[0x24A] != 0) {
@@ -571,18 +573,18 @@ void update_plasmabot(char *moby) {
         if (!(fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.017453292f)) break;
         if (!(aim < 0.017453292f)) break;
         if (test_path_segment_strict_crossing(*(int *)(data + 0x244), moby + 0x10, owner + 0x10) != 0) break;
-        FUN_L14_002b3890_c(((unsigned char *)moby)[0x21]);
+        reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
         *(float *)(data + 0x278) = ang;
         ((unsigned char *)moby)[0x20] = 5;
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-        *(short *)(data + 0x262) = scale_game_frames(D_L14_001614EC_gp);
+        *(short *)(data + 0x262) = scale_game_frames(l14_plasmabot_aim_sweep_duration_frames);
         break;
     }
     case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
         float ang;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
-        update_plasmabot_aim_quaternion(moby, 0, fast_subtract_rotations_c2(ang, D_L14_001614E8_gp));
+        update_plasmabot_aim_quaternion(moby, 0, fast_subtract_rotations_c2(ang, l14_plasmabot_aim_sweep_half_angle));
         update_plasmabot_aim_joint_rotation(moby, ang);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 5, 0, scale_game_frames(10));
@@ -600,8 +602,8 @@ void update_plasmabot(char *moby) {
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
         progress = convert_integer_to_float(*(short *)(data + 0x262));
-        progress = progress / convert_integer_to_float(scale_game_frames(D_L14_001614EC_gp));
-        sweep = D_L14_001614E8_gp;
+        progress = progress / convert_integer_to_float(scale_game_frames(l14_plasmabot_aim_sweep_duration_frames));
+        sweep = l14_plasmabot_aim_sweep_half_angle;
         angle = fast_subtract_rotations_c2(*(float *)(data + 0x278), -sweep + (sweep + sweep) * progress);
         if (((unsigned char *)data)[0x24B] != 0) {
             if (*(float *)(owner + 0x18) + 0.1f - *(float *)(moby + 0x18) < 0.0f) {
@@ -615,9 +617,9 @@ void update_plasmabot(char *moby) {
         if (flag == 0) {
             direction[2] = 0.0f;
         }
-        fast_vec_normalize(direction, direction, D_L14_001614E4_gp);
+        fast_vec_normalize(direction, direction, l14_plasmabot_beam_trace_endpoint_distance);
         add_vector_xyz_c3(end, bone_transform_scratch[3], direction);
-        fast_vec_normalize(direction, direction, D_L14_001614F4_gp);
+        fast_vec_normalize(direction, direction, l14_plasmabot_beam_origin_offset_distance);
         add_vector_xyz_c3(bone_transform_scratch[3], bone_transform_scratch[3], direction);
         info.moby = moby;
         info.flags = 0x10001;
@@ -1218,7 +1220,7 @@ typedef struct {
 } Pk_2af4a0;
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
-extern float D_L14_001D8890[4][4];
+extern float plasmabot_glow_quad_vertex_offsets[4][4] __asm__("D_L14_001D8890");
 extern float plasmabot_glow_quad_scale_gp __asm__("D_L14_001614F8") __attribute__((sda));
 extern float plasmabot_glow_camera_pull_distance_limit_gp __asm__("D_L14_001614FC") __attribute__((sda));
 extern float plasmabot_glow_camera_clearance_distance_gp __asm__("D_L14_00161500") __attribute__((sda));
@@ -1278,7 +1280,7 @@ void draw_plasmabot_glow_quad(char *m) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
-        scale_vector_xyz(pk.m[j], D_L14_001D8890[j], plasmabot_glow_quad_scale_gp);
+        scale_vector_xyz(pk.m[j], plasmabot_glow_quad_vertex_offsets[j], plasmabot_glow_quad_scale_gp);
         add_vector_xyz(pk.m[j], pk.m[j], glow_position);
     }
     draw_geometry_quad(&pk, 0, 0);
@@ -1376,7 +1378,7 @@ typedef struct {
 
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
-int FUN_L14_002d9870(int i) {
+int refresh_plasmabot_hatch_reset_delay(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int *data = *(int **)(moby + 0x78);
     int hatch_reset_delay_active = 0;
@@ -1957,7 +1959,7 @@ typedef struct {
     struct Moby *moby;
 } MobyHit_ff640;
 
-extern char *D_L14_0015FFDC;
+extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between_ff640(float, float) __asm__("FUN_002132a8");
@@ -2014,7 +2016,7 @@ void update_floating_mine(struct Moby *moby) {
             if (vars->rest_z < 0.0f)
                 vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
             ease_ff640(&moby->pos.z, &vars->z_speed, vars->rest_z, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, 0.0f);
-            if ((char *)moby > D_L14_0015FFDC && hero.state.control_mode != 15)
+            if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != 15)
                 goto remove;
         }
         hit = find_moby_hit_ff640(moby, 0x230000, 0);
@@ -2032,7 +2034,7 @@ void update_floating_mine(struct Moby *moby) {
                 explode_ff640(moby, explosion_vector, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             else
                 explode_ff640(moby, explosion_vector, &moby->pos, 0.0f, 0.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            if ((char *)moby < D_L14_0015FFDC) {
+            if ((char *)moby < floating_mine_respawn_address_limit) {
                 moby->state = 2;
                 moby->flags |= 0x41;
                 moby->hit_slot = 0xFF;

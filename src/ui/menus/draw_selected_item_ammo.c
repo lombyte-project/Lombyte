@@ -4,8 +4,8 @@
 
 #include "rnc/gameplay/state/item_state.h"
 extern char D_001602A0[];
-extern u8 D_001602B8[];
-extern u8 D_001602C0[];
+extern u8 ammo_count_decimal_format[] __asm__("D_001602B8");
+extern u8 ammo_count_grouped_decimal_format[] __asm__("D_001602C0");
 extern char D_001602D0[];
 struct ImageEntry {
     u8 pad0[8];
@@ -50,9 +50,9 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
         sprintf(sp_slot, get_help_message_text(0x4F52));
     } else {
         if (temp_17_38 < 0x3E8) {
-            end_ptr = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
+            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_decimal_format, temp_17_38);
         } else {
-            end_ptr = sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
+            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_grouped_decimal_format, temp_17_38 / 1000, temp_17_38 % 1000);
         }
         if ((s32)temp_18_40 < 0x3E8) {
             sprintf(end_ptr, D_001602A0, (s32)temp_18_40);

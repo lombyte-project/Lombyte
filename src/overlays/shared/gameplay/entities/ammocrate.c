@@ -77,8 +77,8 @@ extern void xform_7d50(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L13_001611C0;
-extern u128_7d50 D_L13_001608E0;
-extern u128_7d50 D_L13_001608F0;
+extern u128_7d50 l13_transformed_2d_primitive_setup_template __asm__("D_L13_001608E0");
+extern u128_7d50 l13_transformed_2d_vertex_header_template __asm__("D_L13_001608F0");
 void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) __asm__("FUN_L13_002b7d50");
 
 void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float z_rotation_angle) {
@@ -98,7 +98,7 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
     {
         char *packet_header = (char *)D_L13_001611C0;
         D_L13_001611C0 = (int)(packet_header + 0x10);
-        qcopy((void *)D_L13_001611C0, &D_L13_001608E0);
+        qcopy((void *)D_L13_001611C0, &l13_transformed_2d_primitive_setup_template);
         *(short *)(packet_header + 0x10) = -0x7FFF;
     }
     {
@@ -110,7 +110,7 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
     {
         char *saved_packet_cursor = (char *)D_L13_001611C0;
         D_L13_001611C0 = (int)(saved_packet_cursor + 0x10);
-        qcopy((void *)D_L13_001611C0, &D_L13_001608F0);
+        qcopy((void *)D_L13_001611C0, &l13_transformed_2d_vertex_header_template);
         *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
     *(u128_7d50 *)rotation_angles = 0;

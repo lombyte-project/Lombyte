@@ -3,11 +3,11 @@ struct Slots {
     s32 used[5];
     s32 owner[5];
 };
-extern struct Slots D_001A0368;
+extern struct Slots map_slot_table __asm__("D_001A0368");
 s32 find_free_map_slot(s32 reverse) __asm__("FUN_00204ef8");
 
 s32 find_free_map_slot(s32 reverse) {
-    struct Slots *slots = &D_001A0368;
+    struct Slots *slots = &map_slot_table;
     s32 *used;
     s32 *owner;
     s32 i;

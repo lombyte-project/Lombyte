@@ -6,7 +6,7 @@
 #include "rnc/overlay/level_labels.h"
 
 extern int *D_L02_001611B8[] __attribute__((section(".sdata")));
-extern char D_L02_001609A0[];
+extern char textured_quad_packet_header_template[] __asm__("D_L02_001609A0");
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
@@ -19,7 +19,7 @@ void FUN_L02_0020bc88(long *packed_vertices, int *vertex_uvs, int *vertex_colors
     D_L02_001611B8[2][3] = 0x50000009;
     packet_start = D_L02_001611B8[2];
     D_L02_001611B8[2] = packet_start + 4;
-    qcopy(packet_start + 4, D_L02_001609A0);
+    qcopy(packet_start + 4, textured_quad_packet_header_template);
     packet_payload = (long *)(packet_start + 8);
     D_L02_001611C0 = (int *)packet_payload;
     if (flag)
