@@ -106,7 +106,7 @@ extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern char D_L10_001DC510[];
+extern char cycling_platform_missing_pvars_message[] __asm__("D_L10_001DC510");
 void update_cycling_platform(char *platform_moby) __asm__("FUN_L10_00295a38");
 
 void update_cycling_platform(char *platform_moby) {
@@ -119,7 +119,7 @@ void update_cycling_platform(char *platform_moby) {
     };
     char *platform_vars = *(char **)(platform_moby + 0x78);
     if (platform_vars == 0) {
-        stub_printf(D_L10_001DC510, *(short *)(platform_moby + 0xA6), *(short *)(platform_moby + 0xB2));
+        stub_printf(cycling_platform_missing_pvars_message, *(short *)(platform_moby + 0xA6), *(short *)(platform_moby + 0xB2));
         delete_moby(platform_moby);
         return;
     }
@@ -637,8 +637,8 @@ extern float D_0015ED6C_bf __asm__("D_0015ED6C");
 extern unsigned char D_0014C190_bf[] __asm__("D_0014C190");
 extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
 
-extern BfState D_L10_001BAA50;
-extern unsigned char D_L10_0015FC88[8];
+extern BfState l10_gate_completion_records __asm__("D_L10_001BAA50");
+extern unsigned char l10_gate_persistence_eligibility_by_mission[8] __asm__("D_L10_0015FC88");
 void gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
 void gate_update(unsigned char *gate_moby) {
     enum {
@@ -660,8 +660,8 @@ void gate_update(unsigned char *gate_moby) {
     case GATE_STATE_MOVING_TO_LOWER_Y:
         *(float *)(gate_moby + 0x14) += D_0015ED6C_bf * -1.0f;
         if (*(float *)(gate_moby + 0x14) <= saved_position[1] + -3.75f) {
-            D_L10_001BAA50.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
-            if (gate_moby[0xB0] == 0xFF || (D_L10_0015FC88[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
+            l10_gate_completion_records.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
+            if (gate_moby[0xB0] == 0xFF || (l10_gate_persistence_eligibility_by_mission[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
                 D_L10_001BB6B0_bf.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
             }
             gate_moby[0x20] = 2;
@@ -1595,8 +1595,8 @@ finish:
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
 
-extern char D_L10_00180740[];
-extern char D_L10_001DD120[];
+extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
+extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern int *D_L10_001B0930[];
 extern int D_L10_0015F5CC;
@@ -1628,7 +1628,7 @@ void update_path_spark_emitter(char *moby) {
     float frac;
     float first_path_segment_length;
     if (*(int *)spark_vars == -1) {
-        func_001E9730_2da0f0(D_L10_001DD120, *(short *)(moby + 0xB2));
+        func_001E9730_2da0f0(path_spark_missing_path_message, *(short *)(moby + 0xB2));
         delete_moby(moby);
         return;
     }
@@ -1659,7 +1659,7 @@ void update_path_spark_emitter(char *moby) {
         if (*(int *)(spark_vars + 0xC) == -1) {
             *(int *)(spark_vars + 0xC) = allocate_colored_effect_slot(spark_path_position, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
         } else {
-            char *light_parameter_entry = D_L10_00180740 + *(int *)(spark_vars + 0xC) * 32;
+            char *light_parameter_entry = point_light_parameter_entries + *(int *)(spark_vars + 0xC) * 32;
             qcopy(light_parameter_entry + 0x10, spark_path_position);
             *(float *)(light_parameter_entry + 0) = 1.0f;
             *(float *)(light_parameter_entry + 0x1C) = 3.0f;
@@ -1967,9 +1967,9 @@ void handle_moby_destruction(char *moby) {
         delete_moby(moby);
     }
 }
-extern char D_L10_001DD1D0[] __asm__("D_L10_001DD1D0");
-extern char D_L10_001DD210[] __asm__("D_L10_001DD210");
-extern unsigned char D_L10_00161CA8[] __asm__("D_L10_00161CA8");
+extern char l10_data_processor_linked_effect_missing_processor_link_message[] __asm__("D_L10_001DD1D0");
+extern char l10_data_processor_linked_effect_deleted_instance_message[] __asm__("D_L10_001DD210");
+extern unsigned char l10_data_processor_linked_effect_initial_strip_order[] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
 void render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 extern int stub_printf() __asm__("FUN_001e93b0");
@@ -2002,8 +2002,8 @@ void update_data_processor_linked_effect(struct Moby *moby) {
     int pass, i, copy_index;
 
     if (*(int *)(data + 0xC) == -1) {
-        stub_printf(D_L10_001DD1D0);
-        stub_printf(D_L10_001DD210, *(short *)&moby->save_id);
+        stub_printf(l10_data_processor_linked_effect_missing_processor_link_message);
+        stub_printf(l10_data_processor_linked_effect_deleted_instance_message, *(short *)&moby->save_id);
         delete_moby(moby);
     }
     switch (moby->state) {
@@ -2012,7 +2012,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
             delete_moby(moby);
             break;
         }
-        memcpy(scratch.order, D_L10_00161CA8, 10);
+        memcpy(scratch.order, l10_data_processor_linked_effect_initial_strip_order, 10);
         for (pass = 0; pass < 10; pass++) {
             for (i = 0; i < random_integer_below(9); i++) {
                 unsigned char saved_next_order_byte = scratch.order[i + 1];
@@ -2084,8 +2084,8 @@ typedef int u128_c __attribute__((mode(TI)));
 
 typedef int OvlQuad_c __attribute__((mode(TI)));
 
-extern f32 D_L10_001D9FF0[];
-extern f32 D_L10_001DA010[];
+extern f32 data_processor_linked_effect_base_uvs[] __asm__("D_L10_001D9FF0");
+extern f32 data_processor_linked_effect_quad_vertex_offsets[] __asm__("D_L10_001DA010");
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
@@ -2163,7 +2163,7 @@ void render_data_processor_linked_effect(u8 *moby) {
     {
         int k;
         for (k = 0; k < 4; k++) {
-            uv1[k * 2] = uv2[k * 2] = D_L10_001D9FF0[k * 2 + 1];
+            uv1[k * 2] = uv2[k * 2] = data_processor_linked_effect_base_uvs[k * 2 + 1];
         }
     }
     group = 0;
@@ -2178,7 +2178,7 @@ void render_data_processor_linked_effect(u8 *moby) {
             next_row = row + 1;
             for (j = 0; j < 4; j++) {
                 matrix1[j * 2] = matrix2[j * 2] =
-                    D_L10_001D9FF0[j * 2] + phase + *(float *)(base + 0x12de0);
+                    data_processor_linked_effect_base_uvs[j * 2] + phase + *(float *)(base + 0x12de0);
             }
             for (i = 0; i < *(int *)(data + 4); i = next) {
                 int offset;
@@ -2215,7 +2215,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                 *(unsigned int *)(buffers.packet.quad + 0x44) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x40) = color;
                 for (; vertex < 4; vertex++) {
-                    add_vector_xyz(buffers.packet.quad + vertex * 0x10, (char *)D_L10_001DA010 + vertex * 0x10,
+                    add_vector_xyz(buffers.packet.quad + vertex * 0x10, (char *)data_processor_linked_effect_quad_vertex_offsets + vertex * 0x10,
                         base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
                 draw_geometry_quad(buffers.packet.quad, scratch + offset, 0);
@@ -2229,8 +2229,8 @@ extern unsigned char D_001413F4[];
 extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
-extern float D_L10_00161D58 __attribute__((sda));
-extern float D_L10_00161D5C __attribute__((sda));
+extern float jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") __attribute__((sda));
+extern float jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
@@ -2245,11 +2245,15 @@ typedef struct {
 
 void update_jitter_strand_grid_moby(struct Moby *moby) __asm__("FUN_L10_002dcc58");
 void update_jitter_strand_grid_moby(struct Moby *moby) {
+    enum {
+        JITTER_STRAND_GRID_STATE_INITIALIZE = 0,
+        JITTER_STRAND_GRID_STATE_UPDATE = 1
+    };
     PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
     Vec4 jitter[20][10];
 
     switch (moby->state) {
-    case 0:
+    case JITTER_STRAND_GRID_STATE_INITIALIZE:
         if (current_level_index == 10 && D_001413F4[0] == 1) {
             delete_moby(moby);
             break;
@@ -2268,17 +2272,17 @@ void update_jitter_strand_grid_moby(struct Moby *moby) {
         }
         moby->state = 1;
         break;
-    case 1: {
+    case JITTER_STRAND_GRID_STATE_UPDATE: {
         int group, item, row;
 
-        vars->phase += D_L10_00161D5C * frame_time;
+        vars->phase += jitter_strand_phase_advance_rate_gp * frame_time;
         if (vars->phase > 1.0f) vars->phase -= 1.0f;
         for (group = 0; group < 4; group++) {
             for (item = 0; item < 10; item++) {
                 if (fast_dec_timer(&vars->timers[group][item])) {
                     for (row = 0; row < 20; row++) {
                         clear_u64_value(&vars->pos[group][row][item]);
-                        vars->pos[group][row][item].f[1] = row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
+                        vars->pos[group][row][item].f[1] = row * (jitter_strand_row_y_span_gp / 20.0f) - jitter_strand_row_y_span_gp * 0.5f;
                         vars->pos[group][row][item].f[3] = 1.0f;
                         random_vector(&jitter[row][item], 0.0f, D_L10_00161D54 * frame_time);
                     }
@@ -2380,7 +2384,7 @@ void update_path_spark_effect(char *moby) {
 
 
 extern L10State D_L10_001BB6B0;
-extern char D_L10_00178580[];
+extern char moby_pair_records[] __asm__("D_L10_00178580");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
@@ -2399,7 +2403,7 @@ void block_cave_update(struct Moby *moby) {
         return;
     }
     moby->draw_dist = 0x80;
-    table_entry = D_L10_00178580;
+    table_entry = moby_pair_records;
     for (i = 0; i < 0x40; i++, table_entry += 0x40) {
         if (*(char **)(table_entry + 0x34) == moby) {
             if (*(int *)(table_entry + 0x24) & 0x20000) {

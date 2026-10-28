@@ -3,14 +3,14 @@ typedef void (*ExtFunc)(void *);
 typedef struct {
     ExtFunc f[11];
 } ExtTable;
-extern ExtTable D_001538B8;
+extern ExtTable mpeg_extension_dispatch_table __asm__("D_001538B8");
 extern void _nextStartCode(void *);
 extern u32 _peepBit(void *, s32);
 extern void _flushBuf(void *, s32);
 extern u32 _nextBit(void *, s32);
 
 void _extensionAndUserData(void *decoder_state) {
-    ExtTable extension_handlers = D_001538B8;
+    ExtTable extension_handlers = mpeg_extension_dispatch_table;
     u32 code;
     u32 id;
 

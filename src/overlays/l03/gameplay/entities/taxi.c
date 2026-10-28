@@ -481,11 +481,11 @@ typedef struct {
     s32 shake_frames;     /* 0x168 */
 } MineCamera;
 
-extern MineBlast D_L03_001E32B0;
+extern MineBlast l03_mine_camera_blast_template __asm__("D_L03_001E32B0");
 extern struct Moby *D_L03_00178000[];
 extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
 extern char D_L03_00166EC0[];
-extern char D_L03_001B08B0[];
+extern char mine_moby_index_list[] __asm__("D_L03_001B08B0");
 extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern s32 mine_frames(s32) __asm__("FUN_001f96f8");
 extern s32 mine_tick(s32 *) __asm__("FUN_001f9740");
@@ -532,7 +532,7 @@ void update_mine(struct Moby *mine_moby) {
         MINE_DEBRIS_RANDOM_PALETTE_COLOR = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
-    MineBlast blast = D_L03_001E32B0;
+    MineBlast blast = l03_mine_camera_blast_template;
     MineVec vector_scratch;
     MineVars *mine_vars = (MineVars *)mine_moby->pvars;
     struct Moby *target_moby;
@@ -654,14 +654,14 @@ void update_mine(struct Moby *mine_moby) {
         D_L03_00166D80_cbea8.shake = explosion_reference_distance < 20.0f ? 0.4f - explosion_reference_distance * 0.0175f : 0.050000012f;
         D_L03_00166D80_cbea8.shake_frames = mine_frames(0x19);
         mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
-        mine_spawn_drops(mine_moby, D_L03_001B08B0);
+        mine_spawn_drops(mine_moby, mine_moby_index_list);
         mine_kill(mine_moby);
         return;
     }
     case MINE_SHRINK_AND_REMOVE:
         mine_moby->scale *= frame_scale * -0.074f + 1.0f;
         if (mine_moby->scale < mine_moby->pclass->scale * 0.01f) {
-            mine_spawn_drops(mine_moby, D_L03_001B08B0);
+            mine_spawn_drops(mine_moby, mine_moby_index_list);
             mine_kill(mine_moby);
         }
         break;
@@ -1281,15 +1281,15 @@ struct QuestGiverVars {
     s32 target_timer;  /* 0x1F4: frames until a new idle target */
 };
 
-extern u8 D_0013D4CC[];
+extern u8 npc_dialogue_suppression_flags[] __asm__("D_0013D4CC");
 extern char *D_001413D0[];
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
-extern s32 D_L03_001BA720[];
-extern char D_L03_00161BB8[];
+extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
+extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 #include "rnc/gameplay/state/game_globals.h"
-extern u8 D_L03_0015FC88[];
-extern L03LevelState D_L03_001BA6D0;
+extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
+extern L03LevelState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
 extern void record_moby_context_bytes(void *, int, struct Moby *, int, void *) __asm__("FUN_L01_0029b0a0");
@@ -1341,13 +1341,13 @@ void helga_update(struct Moby *helga_moby) {
     apply_helga_big_head_cutscene_adjustments(helga_moby);
     switch (helga_moby->state) {
     case HELGA_INITIALIZE:
-        if (D_0013D4CC[0] != 0) {
+        if (npc_dialogue_suppression_flags[0] != 0) {
             if (helga_vars->link != -1) {
                 helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                 }
             }
             taxi_kill(helga_moby);
@@ -1358,12 +1358,12 @@ void helga_update(struct Moby *helga_moby) {
             if (helper_moby->oclass == 0x3F4) {
                 flag = (s32 *)(helper_moby->pvars + 0x8C);
                 *flag = 1;
-                record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
             }
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         helga_moby->state = 1;
-        talk->script = D_L03_00161BB8;
+        talk->script = helga_dialogue_script;
         helga_vars->talk.unk48 = 5;
         initialize_npc_dialogue(helga_moby, talk);
         initialize_moby_grounding(helga_moby);
@@ -1377,7 +1377,7 @@ void helga_update(struct Moby *helga_moby) {
                 if (helper_moby->oclass == 0x3F4) {
                     flag = (s32 *)(helper_moby->pvars + 0x8C);
                     *flag = 1;
-                    record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                    record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                 }
             }
         }
@@ -1391,7 +1391,7 @@ void helga_update(struct Moby *helga_moby) {
                     if (helper_moby->oclass == 0x3F4) {
                         flag = (s32 *)(helper_moby->pvars + 0x8C);
                         *flag = 1;
-                        record_moby_context_bytes(flag, 4, helga_moby, 2, D_L03_001BA720);
+                        record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                     }
                 }
                 if (helga_vars->talk.warp != -1) {
@@ -1404,7 +1404,7 @@ void helga_update(struct Moby *helga_moby) {
                 grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (helga_vars->reward != -1) {
-                    D_L03_001BA6D0.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                    l03_moby_collection_state.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                     reward_moby = (struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i);
                     /* Fakematch: same record as the || test in the level's other reward
@@ -1416,7 +1416,7 @@ void helga_update(struct Moby *helga_moby) {
                     do {
                         group = reward_moby->mission;
                     } while (0);
-                    if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
+                    if (mission_collection_recording_filter[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                         /* Fakematch: see above. */
                         do {
                         record:
@@ -1601,7 +1601,7 @@ struct RailSpawnerMoby {
     u16 uid;                    /* 0xA8 */
 };
 
-extern char D_L03_001E35F0[];
+extern char path_mover_spawner_bad_path_format[] __asm__("D_L03_001E35F0");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern float FUN_001f9b48(void *, void *);
 extern struct Moby *spawn_path_mover(struct RailPath *, float) __asm__("FUN_L03_002db198");
@@ -1619,7 +1619,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
 
     if (moby->state == 0) {
         if (vars->path == -1) {
-            debug_print(D_L03_001E35F0, moby->uid);
+            debug_print(path_mover_spawner_bad_path_format, moby->uid);
             kill_2db020((char *)moby);
             return;
         }
@@ -1761,13 +1761,13 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 {
                     s32 k = reward_moby->mission;
                     u32 u = k & 0xFF;
-                    if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
+                    if (k == 0xFF || (mission_collection_recording_filter[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
                         D_L03_001BB330.collected[(s16)reward_moby->save_id] = k + 2;
                     }
                 }
@@ -1813,7 +1813,7 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 /* Fakematch: same record test as above; the goto and the do/while (0)
@@ -1823,7 +1823,7 @@ void big_al_update(struct Moby *guide_moby) {
                 do {
                     group = reward_moby->mission;
                 } while (0);
-                if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
+                if (mission_collection_recording_filter[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                 rec2:
                     D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                 }
@@ -1983,7 +1983,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         D_L03_001BA5D0[(s16)robot_qwark_moby->save_id >> 5] |= 1 << (robot_qwark_moby->save_id & 0x1F);
     }
     robot_qwark_moby->hit_slot = 0xFF;
-    if (D_0013D4CC[0] != 0 && robot_qwark_moby->state != 3) {
+    if (npc_dialogue_suppression_flags[0] != 0 && robot_qwark_moby->state != 3) {
         return;
     }
     switch (robot_qwark_moby->state) {

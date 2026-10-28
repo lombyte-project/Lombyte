@@ -16,29 +16,29 @@
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
-extern char D_L04_001D2C90[];
+extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void spawn_smoke_puff_trail_with_endpoint_bursts(void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
-extern short D_L04_001618B0 __attribute__((sda));
+extern short moby_segment_puff_scale_multiplier __asm__("D_L04_001618B0") __attribute__((sda));
 void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
 
 void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     float first_world_position[4], second_world_position[4];
     char *pi, *pj;
-    pi = D_L04_001D2C90 + i * 16;
+    pi = moby_segment_puff_local_endpoint_table + i * 16;
     qcopy(first_world_position, pi);
     first_world_position[3] = 1.0f;
     transform_vector_by_basis(first_world_position, first_world_position, moby + 0xC0);
     add_vector_xyz(first_world_position, first_world_position, moby + 0x10);
-    pj = D_L04_001D2C90 + j * 16;
+    pj = moby_segment_puff_local_endpoint_table + j * 16;
     qcopy(second_world_position, pj);
     second_world_position[3] = 1.0f;
     transform_vector_by_basis(second_world_position, second_world_position, moby + 0xC0);
     add_vector_xyz(second_world_position, second_world_position, moby + 0x10);
-    spawn_smoke_puff_trail_with_endpoint_bursts(moby, first_world_position, second_world_position, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0,
-                     *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0);
+    spawn_smoke_puff_trail_with_endpoint_bursts(moby, first_world_position, second_world_position, k, *(float *)(pi + 0xC) * *(float *)&moby_segment_puff_scale_multiplier,
+                     *(float *)(pj + 0xC) * *(float *)&moby_segment_puff_scale_multiplier);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 

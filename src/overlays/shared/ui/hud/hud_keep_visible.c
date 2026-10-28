@@ -77,8 +77,8 @@ int hud_screen_position(HudElem *rec, int *x, int *y) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L00_0017E3A0[];
-extern float D_L00_0017E400[];
+extern float hud_slide_timer_active_scales[] __asm__("D_L00_0017E3A0");
+extern float hud_slide_timer_inactive_scales[] __asm__("D_L00_0017E400");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) __asm__("FUN_L00_00235ad8");
@@ -100,9 +100,9 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
         slide_index = 23;
     }
     if (hud_element->unk7C != 0) {
-        slide_scale = D_L00_0017E3A0[slide_index];
+        slide_scale = hud_slide_timer_active_scales[slide_index];
     } else {
-        slide_scale = D_L00_0017E400[slide_index];
+        slide_scale = hud_slide_timer_inactive_scales[slide_index];
     }
     if (hud_element->flags & 1) {
         dy = -truncate_float_to_s32(slide_scale * (convert_integer_to_float(hud_element->h) + 52.0f) + 0.5f);
@@ -337,7 +337,7 @@ typedef struct {
     float x, y, vx, vy;
 } Star_236458;
 
-extern Star_236458 D_L00_0017E660[];
+extern Star_236458 l00_hud_star_particles[] __asm__("D_L00_0017E660");
 extern int D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
 
 void hud_init_particles(HudElem *elem) __asm__("FUN_L00_00236268");
@@ -357,14 +357,14 @@ void hud_init_particles(HudElem *elem) {
         band = (232.0f - (margin + margin)) / (float)bands;
         lo = (margin - 116.0f) + (float)(i % bands) * band;
         hi = lo + band;
-        D_L00_0017E660[i].x = random_float_between(margin - 17.0f, 17.0f - margin);
-        D_L00_0017E660[i].y = random_float_between(lo, hi);
-        D_L00_0017E660[i].vx = random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660[i].vy = random_float_between(-0.6f, 0.6f);
-        D_L00_0017E660[i].vx += random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660[i].vy += random_float_between(-0.6f, 0.6f);
-        D_L00_0017E660[i].vx += random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660[i].vy += random_float_between(-0.6f, 0.6f);
+        l00_hud_star_particles[i].x = random_float_between(margin - 17.0f, 17.0f - margin);
+        l00_hud_star_particles[i].y = random_float_between(lo, hi);
+        l00_hud_star_particles[i].vx = random_float_between(-0.4f, 0.4f);
+        l00_hud_star_particles[i].vy = random_float_between(-0.6f, 0.6f);
+        l00_hud_star_particles[i].vx += random_float_between(-0.4f, 0.4f);
+        l00_hud_star_particles[i].vy += random_float_between(-0.6f, 0.6f);
+        l00_hud_star_particles[i].vx += random_float_between(-0.4f, 0.4f);
+        l00_hud_star_particles[i].vy += random_float_between(-0.6f, 0.6f);
     }
     /* Fakematch: keeping bands live past the loop gives retail's schedule of the loop body. */
     bands++;
@@ -384,7 +384,7 @@ void hud_update_particles(void) {
     float boundary_inset, hx, hy, nhx, nhy;
 
     hud_update_counter();
-    hud_star = &D_L00_0017E660[D_L00_0015F3F8 % 2];
+    hud_star = &l00_hud_star_particles[D_L00_0015F3F8 % 2];
     i = D_L00_0015F3F8 % 2;
     for (; i < 100; i += 2, hud_star += 2) {
         if (i < 10) {
@@ -556,8 +556,8 @@ int draw_hud_stars(HudElem *element) {
             star_width = (int)width;
             offset = offset + limit;
         }
-        if (offset < D_L00_0017E660[i].y) continue;
-        FUN_L00_001ff348(star_position, &D_L00_0017E660[i], origin);
+        if (offset < l00_hud_star_particles[i].y) continue;
+        FUN_L00_001ff348(star_position, &l00_hud_star_particles[i], origin);
         fast_vec_add(star_position, star_position, direction);
         draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
@@ -626,8 +626,8 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
             star_width = (int)(star_init_limit0_gp * 32.0f);
             offset += star_init_limit0_gp;
         }
-        if (offset < D_L00_0017E660[i].y) continue;
-        FUN_L00_001ff348(star_position, &D_L00_0017E660[i], origin);
+        if (offset < l00_hud_star_particles[i].y) continue;
+        FUN_L00_001ff348(star_position, &l00_hud_star_particles[i], origin);
         fast_vec_add(star_position, star_position, direction);
         draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
@@ -642,7 +642,7 @@ void mine_blend_color(void) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
-extern s32 D_L00_0015F770_gp __asm__("D_L00_0015F770") __attribute__((sda));
+extern s32 l00_hud_text_panel_base_y __asm__("D_L00_0015F770") __attribute__((sda));
 extern s32 D_L00_0015F648_macro __asm__("D_L00_0015F648") MACRO_ADDR;
 extern u8 D_L00_0017E530[] NOT_SDA;
 extern char D_0013F3D0[];
@@ -676,9 +676,9 @@ int draw_hud_text_panel(HudElem *hud_element) {
     int never = 0;
 
     if (pal_mode != 0) {
-        y = D_L00_0015F770_gp + 0xa;
+        y = l00_hud_text_panel_base_y + 0xa;
     } else {
-        y = D_L00_0015F770_gp + 0x12;
+        y = l00_hud_text_panel_base_y + 0x12;
     }
     fade = convert_integer_to_float(*opacity);
     fade /= scale_game_seconds(8.0f);

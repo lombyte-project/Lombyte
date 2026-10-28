@@ -864,7 +864,7 @@ void prepare_taxi_departure_path(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L16_001D9750[];
+extern float grindrail_gate_local_trigger_bounds[] __asm__("D_L16_001D9750");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
@@ -907,9 +907,9 @@ void update_grindrail_gate(struct Moby *gate_moby) {
             transpose_rotation_matrix(pos, &gate_moby->rot_row0);
             subtract_vector_xyz(hero_offset_from_gate, hero_position, &gate_moby->pos);
             transform_vector(hero_offset_from_gate, hero_offset_from_gate, pos);
-            if (D_L16_001D9750[0] < hero_offset_from_gate[0] && hero_offset_from_gate[0] < D_L16_001D9750[1] &&
-                D_L16_001D9750[2] < hero_offset_from_gate[1] && hero_offset_from_gate[1] < D_L16_001D9750[3] &&
-                D_L16_001D9750[4] < hero_offset_from_gate[2] && hero_offset_from_gate[2] < D_L16_001D9750[5]) {
+            if (grindrail_gate_local_trigger_bounds[0] < hero_offset_from_gate[0] && hero_offset_from_gate[0] < grindrail_gate_local_trigger_bounds[1] &&
+                grindrail_gate_local_trigger_bounds[2] < hero_offset_from_gate[1] && hero_offset_from_gate[1] < grindrail_gate_local_trigger_bounds[3] &&
+                grindrail_gate_local_trigger_bounds[4] < hero_offset_from_gate[2] && hero_offset_from_gate[2] < grindrail_gate_local_trigger_bounds[5]) {
                 gate_moby->command = 1;
                 gate_moby->state = 2;
                 *(int *)command_timer = scale_game_frames(D_L16_00161DD8);
@@ -1465,9 +1465,9 @@ typedef struct {
 } L16ChallengeScratch;
 
 extern char D_0013D50F[], D_0014161B[];
-extern char D_L16_001D9840[];
+extern char gadgetron_ceo_challenge_start_pose[] __asm__("D_L16_001D9840");
 extern char D_L16_001671C0[];
-extern char D_L16_001D9860[];
+extern char gadgetron_ceo_challenge_return_pose[] __asm__("D_L16_001D9860");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1575,7 +1575,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             activation->mode = 2;
             activation->pending = pending;
             ceo_moby->event = 0;
-            pose = D_L16_001D9840;
+            pose = gadgetron_ceo_challenge_start_pose;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
@@ -1628,7 +1628,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         event = ceo_moby->event;
         if (event == 1) {
             ceo_moby->state = event;
-            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             if (!D_0013D507) {
                 int pending;
@@ -1644,13 +1644,13 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         }
         if (ceo_moby->event == 2) {
             ceo_moby->state = 1;
-            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
         if (ceo_moby->event == 3) {
             char *camera;
-            char *pose = D_L16_001D9840;
+            char *pose = gadgetron_ceo_challenge_start_pose;
             ceo_moby->event = 0;
             FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
@@ -2097,7 +2097,7 @@ void initialize_path_walker_group(struct Moby *moby) {
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern char D_L16_0016CC60[];
+extern char paired_joint_trail_source_context[] __asm__("D_L16_0016CC60");
 extern int D_L16_0015F5C4;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
@@ -2121,7 +2121,7 @@ void update_paired_joint_particle_trails(struct Moby *moby) {
         break;
     case JOINT_TRAIL_EMIT:
         if (D_L16_0015F5C4 == 2) {
-            char *trail_source_context = D_L16_0016CC60;
+            char *trail_source_context = paired_joint_trail_source_context;
             if (*(int *)(trail_source_context + 0x30) == 0) {
                 char *joint_source_moby = *(char **)(trail_source_context + 0x184);
                 moby_point_position(joint_source_moby, 6, joint_6_position);
@@ -2187,7 +2187,7 @@ typedef struct {
     short grounded;
 } L16PlatformHero;
 
-extern char *D_L16_001600FC;
+extern char *elevator_reference_transform_table __asm__("D_L16_001600FC");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float elevator_height_offset __asm__("D_L16_00161EAC") __attribute__((sda)); /* no foreign declaration */
@@ -2228,9 +2228,9 @@ void elevator_update(L16PlatformMoby *moby) {
             motion.q = 0;
             motion.v[2] = 1.0f;
             elevator_data->particle = -1;
-            transform_vector_by_basis(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-            elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+            transform_vector_by_basis(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+            elevator_data->goal = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38);
+            moby->position[2] = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
             moby->reverse = 1;
             moby->state = 2;
             break;
@@ -2246,8 +2246,8 @@ void elevator_update(L16PlatformMoby *moby) {
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+                transform_vector(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+                motion.v[2] = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_data->goal = motion.v[2];
@@ -2264,8 +2264,8 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L16_001600FC + (elevator_data->joint << 7));
-                elevator_data->goal = motion.v[2] + *(float *)(D_L16_001600FC + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
+                transform_vector(motion.v, motion.v, elevator_reference_transform_table + (elevator_data->joint << 7));
+                elevator_data->goal = motion.v[2] + *(float *)(elevator_reference_transform_table + elevator_data->joint * 0x80 + 0x38) + elevator_height_offset;
                 elevator_data->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2274,7 +2274,7 @@ void elevator_update(L16PlatformMoby *moby) {
             float *hero_position = hero.motion.pos.f;
             float speed;
 
-            if (vector_distance(hero_position, D_L16_001600FC + (elevator_data->joint << 7) + 0x30) > 2.25f
+            if (vector_distance(hero_position, elevator_reference_transform_table + (elevator_data->joint << 7) + 0x30) > 2.25f
                 || absolute_float(moby->position[2] - hero_position[2] - 2.0f) > 1.0f
                 || moby->position[2] < elevator_data->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &elevator_data->speed, elevator_data->goal,
@@ -2334,7 +2334,7 @@ typedef struct {
 } L16RingMatrix;
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L16_001D9880[][2];
+extern float elevator_ring_quad_uvs[][2] __asm__("D_L16_001D9880");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
@@ -2359,7 +2359,7 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
     L16RingMatrix matrix;
     char *elevator_data = (char *)elevator_moby->pvars;
     int bound_index = (*(int *)((char *)elevator_data + 0xA0)) << 7;
-    char *entry = (char *)(bound_index + (int)D_L16_001600FC);
+    char *entry = (char *)(bound_index + (int)elevator_reference_transform_table);
     float translation = (*(float *)((char *)elevator_data + 0xB8));
     float lower = (*(float *)((char *)entry + 0x38));
     float half = (*(float *)((char *)entry + 0x28));
@@ -2385,7 +2385,7 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) {
     packet.mode = (long)D_L16_00161ECC | ((long)D_L16_00161ED0 << 2) | ((long)D_L16_00161ED4 << 4) |
                   ((long)D_L16_00161ED8 << 6) | 0x8000000000L;
     packet.zero = 0;
-    uv = D_L16_001D9880;
+    uv = elevator_ring_quad_uvs;
     point = packet.position;
     v = &packet.uv[0].v;
     u = &packet.uv[0].u;
@@ -2940,7 +2940,7 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
 /* Sets up the draw state then runs both per-slot calls over three entries. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
 
-extern char D_L16_001E28D0[];
+extern char level16_reflection_mesh_coordinate_scratch[] __asm__("D_L16_001E28D0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
@@ -2976,9 +2976,9 @@ void draw_level16_reflection_mesh_batch(void) {
     for (i = 0; i < 3; i++) {
         compute_level16_reflection_map_coordinates(D_L16_00161FB8[i], ((int *)D_L16_00161FE8)[i],
                          ((int *)D_L16_00161FC8)[i], ((int *)D_L16_00161FD8)[i],
-                         D_L16_001E28D0);
+                         level16_reflection_mesh_coordinate_scratch);
         FUN_L00_001fde98(D_L16_00161FB8[i], ((int *)D_L16_00161FC8)[i],
-                         ((int *)D_L16_00161FF8)[i], D_L16_001E28D0, 1);
+                         ((int *)D_L16_00161FF8)[i], level16_reflection_mesh_coordinate_scratch, 1);
     }
 }
 /* Bounding spheres for one mesh (two or three entries), then the renderer callback; same source as FUN_L16_002e93b0. */

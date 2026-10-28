@@ -21,14 +21,14 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
 
-extern short D_L00_0015F924 __attribute__((sda));
-extern short D_L00_0015F928 __attribute__((sda));
-extern short D_L00_0015F92C __attribute__((sda));
-extern short D_L00_0015F930 __attribute__((sda));
-extern short D_L00_0015F934 __attribute__((sda));
-extern short D_L00_0015F938 __attribute__((sda));
-extern short D_L00_0015F93C __attribute__((sda));
-extern short D_L00_0015F940 __attribute__((sda));
+extern short ammo_hud_frame_width_below_100 __asm__("D_L00_0015F924") __attribute__((sda));
+extern short ammo_hud_frame_width_at_least_100 __asm__("D_L00_0015F928") __attribute__((sda));
+extern short ammo_hud_nonzero_text_color_blend_start __asm__("D_L00_0015F92C") __attribute__((sda));
+extern short ammo_hud_nonzero_text_color_blend_end __asm__("D_L00_0015F930") __attribute__((sda));
+extern short ammo_hud_zero_text_color_blend_start __asm__("D_L00_0015F934") __attribute__((sda));
+extern short ammo_hud_zero_text_color_blend_end __asm__("D_L00_0015F938") __attribute__((sda));
+extern short ammo_hud_text_right_x_offset __asm__("D_L00_0015F93C") __attribute__((sda));
+extern short ammo_hud_text_y_offset __asm__("D_L00_0015F940") __attribute__((sda));
 int draw_weapon_ammo_hud_panel(char *hud_element) __asm__("FUN_L00_0023a7a8");
 
 int draw_weapon_ammo_hud_panel(char *hud_element) {
@@ -59,9 +59,9 @@ int draw_weapon_ammo_hud_panel(char *hud_element) {
         alpha = truncate_float_to_s32(hud_fade_factor * 128.0f);
         frame_alpha = truncate_float_to_s32((float)alpha * 0.7f);
         if (*(int *)(hud_element + 8) < 100)
-            base_frame_width = *(int *)&D_L00_0015F924;
+            base_frame_width = *(int *)&ammo_hud_frame_width_below_100;
         else
-            base_frame_width = *(int *)&D_L00_0015F928;
+            base_frame_width = *(int *)&ammo_hud_frame_width_at_least_100;
         x4 = x + 4;
         wd = x + truncate_float_to_s32((float)base_frame_width * hud_fade_factor);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
@@ -75,15 +75,15 @@ int draw_weapon_ammo_hud_panel(char *hud_element) {
         displayed_numerator = *(int *)(hud_element + 0x74);
         sprintf_alt(formatted_count_text, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
         if (displayed_numerator != 0)
-            text_color = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, text_color_blend_factor);
+            text_color = fast_tween_color(*(int *)&ammo_hud_nonzero_text_color_blend_start, *(int *)&ammo_hud_nonzero_text_color_blend_end, text_color_blend_factor);
         else
-            text_color = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, text_color_blend_factor);
+            text_color = fast_tween_color(*(int *)&ammo_hud_zero_text_color_blend_start, *(int *)&ammo_hud_zero_text_color_blend_end, text_color_blend_factor);
         text_shadow_color = fast_tween_color(0, 0x80000000, text_color_blend_factor);
         {
-            int tx = x + *(int *)&D_L00_0015F93C + base_frame_width;
-            font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, text_shadow_color, formatted_count_text, -1);
+            int tx = x + *(int *)&ammo_hud_text_right_x_offset + base_frame_width;
+            font_print_right(tx + 1, y + *(int *)&ammo_hud_text_y_offset + 1, text_shadow_color, formatted_count_text, -1);
         }
-        font_print_right(x + *(int *)&D_L00_0015F93C + base_frame_width, y + *(int *)&D_L00_0015F940, text_color, formatted_count_text,
+        font_print_right(x + *(int *)&ammo_hud_text_right_x_offset + base_frame_width, y + *(int *)&ammo_hud_text_y_offset, text_color, formatted_count_text,
                          -1);
     }
     return *(int *)(hud_element + 0x58);

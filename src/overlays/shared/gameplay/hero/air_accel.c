@@ -824,7 +824,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
-extern OvlMobyEntry40 D_L01_00178580[];
+extern OvlMobyEntry40 l01_moby_hit_response_entries[] __asm__("D_L01_00178580");
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L01_00231580");
 
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
@@ -856,7 +856,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    hero_moby_entry = &D_L01_00178580[hero_moby[0xA4]];
+    hero_moby_entry = &l01_moby_hit_response_entries[hero_moby[0xA4]];
     if (hero_moby_entry->owner != hero_moby) {
         return 0;
     }
@@ -1453,7 +1453,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_23c710 D_L01_00179D70[];
+extern Entry70_23c710 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
 void update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
 
 void update_hero_timers_and_vehicle_transitions(void) {
@@ -1535,7 +1535,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
         }
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_23c710(&D_L01_00179D70[i].w0);
+        FUN_001f9740_23c710(&l01_countdown_timer_records[i].w0);
     }
     hero.current_path_dist = 9999.0f;
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_23c710(&hero.motion.velocity) < 0.0f) {

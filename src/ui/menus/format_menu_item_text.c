@@ -6,8 +6,8 @@ struct Weapon {
     u8 pad4[0x14];
 };
 extern struct Weapon D_001DFFB0[];
-extern char D_0015FDA0[];
-extern char D_0015FDA8[];
+extern char menu_item_decimal_format[] __asm__("D_0015FDA0");
+extern char menu_item_placeholder_error_text[] __asm__("D_0015FDA8");
 extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 sprintf(char *, const char *, ...);
 void format_menu_item_text(s32 idx, u8 *dst) __asm__("FUN_00208280");
@@ -34,9 +34,9 @@ void format_menu_item_text(s32 map_icon_index, u8 *output_text_cursor) {
     }
     template_cursor++;
     if (*template_cursor == 'b') {
-        sprintf((char *)replacement_text, D_0015FDA0, D_001DFFB0[level_map_selection.icons[map_icon_index].label_item].name);
+        sprintf((char *)replacement_text, menu_item_decimal_format, D_001DFFB0[level_map_selection.icons[map_icon_index].label_item].name);
     } else {
-        sprintf((char *)replacement_text, D_0015FDA8);
+        sprintf((char *)replacement_text, menu_item_placeholder_error_text);
     }
     template_cursor++;
     while (*replacement_cursor != '\0') {

@@ -46,7 +46,7 @@ extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
 extern s32 frame_size[] __asm__("D_0013E504");
-extern char D_L02_0015F850[];
+extern char hud_counter_decimal_format[] __asm__("D_L02_0015F850");
 #include "rnc/overlay/l02/ui/text/0023ccc8_globals.h"
 extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));
 extern s32 hud_counter_text_shade_divisor_gp __asm__("D_L02_0015F920") __attribute__((sda));
@@ -104,7 +104,7 @@ s32 draw_hud_counter(HudElem *hud_element) {
     } else if (shade < 0.0f) {
         shade = 0.0f;
     }
-    sprintf_alt(text, D_L02_0015F850, hud_element->unk74);
+    sprintf_alt(text, hud_counter_decimal_format, hud_element->unk74);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
     if (hud_element->unk08 < 10) {
         full_bar_width = D_L02_0015F958;

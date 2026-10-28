@@ -27,7 +27,7 @@ extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
-extern float D_L16_001D9680[4];
+extern float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float distance_xyz(void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
@@ -39,10 +39,10 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) __asm__
 extern int advance_armed_transport_along_path(char *, char *) __asm__("FUN_L16_002e2e88");
 extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L16_00161D7C __attribute__((sda));
+extern short armed_transport_spawn_direction_scale __asm__("D_L16_00161D7C") __attribute__((sda));
 extern short D_L16_00161D80;
-extern short D_L16_00161D88 __attribute__((sda));
-extern short D_L16_00161D8C __attribute__((sda));
+extern short armed_transport_bob_phase_speed_degrees __asm__("D_L16_00161D88") __attribute__((sda));
+extern short armed_transport_bob_amplitude __asm__("D_L16_00161D8C") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
@@ -131,7 +131,7 @@ void armed_transport_update(char *transport_moby) {
             vector.f[2] = 3.14159f;
             for (i = 0; i < 4; i++) {
                 if (((int *)(transport_data + 0xC0))[i] >= 0) {
-                    set_blarg_elite_commando_parent_transform(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, D_L16_001D9680,
+                    set_blarg_elite_commando_parent_transform(D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8), transport_moby, armed_transport_passenger_attachment_offset,
                                       (char *)vector.f);
                 }
             }
@@ -172,7 +172,7 @@ void armed_transport_update(char *transport_moby) {
 
                 clear_u64_value(rotation.f);
                 rotation.f[2] = fast_add_rotations(*(float *)(transport_moby + 0x48), 3.14159f);
-                transform_vector_by_basis(vector.f, D_L16_001D9680, transport_moby + 0xC0);
+                transform_vector_by_basis(vector.f, armed_transport_passenger_attachment_offset, transport_moby + 0xC0);
                 add_vector_xyz(vector.f, vector.f, transport_moby + 0x10);
                 start_blarg_elite_commando_return_to_initial_position(passenger, scale_game_frames(90));
                 *slot = -1;
@@ -230,7 +230,7 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY:
         moby_point_position(transport_moby, 1, vector.f);
         subtract_vector_xyz(rotation.f, transport_data + 0x70, vector.f);
-        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&D_L16_00161D7C * frame_time);
+        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&armed_transport_spawn_direction_scale * frame_time);
         func_0022ED80_update(1, 0, transport_moby);
         spawn_class_32_moby(transport_moby, (char *)rotation.f, vector.f, transport_data + 0x70, scale_game_frames(45));
         transport_moby[0x20] = 6;
@@ -258,8 +258,8 @@ void armed_transport_update(char *transport_moby) {
     }
     }
     *(float *)(transport_data + 0x18C) = fast_add_rotations(*(float *)(transport_data + 0x18C),
-                                          *(float *)&D_L16_00161D88 * DEG_TO_RAD * frame_time);
-    *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&D_L16_00161D8C * fast_sin(*(float *)(transport_data + 0x18C));
+                                          *(float *)&armed_transport_bob_phase_speed_degrees * DEG_TO_RAD * frame_time);
+    *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&armed_transport_bob_amplitude * fast_sin(*(float *)(transport_data + 0x18C));
     update_armed_transport_joint_animation(transport_moby);
 }
 #include "qcopy.h"
@@ -459,9 +459,9 @@ extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
 
-extern short D_L16_00161E00 __attribute__((sda));
-extern short D_L16_00161E04 __attribute__((sda));
-extern short D_L16_00161E08 __attribute__((sda));
+extern short grindrail_barrier_ring_rotation_speed __asm__("D_L16_00161E00") __attribute__((sda));
+extern short grindrail_barrier_ring_phase_speed __asm__("D_L16_00161E04") __attribute__((sda));
+extern short grindrail_barrier_accent_rotation_speeds __asm__("D_L16_00161E08") __attribute__((sda));
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 void grindrail_barrier_update(struct Moby *barrier_moby) {
     enum {
@@ -479,19 +479,19 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
-        cycle = *(float *)(barrier_data + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
+        cycle = *(float *)(barrier_data + 0xC) + *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
         *(float *)(barrier_data + 0xC) = cycle;
         if (cycle > 1.0f)
             *(float *)(barrier_data + 0xC) = cycle - 1.0f;
         if (voice_is_playing(barrier_moby, *(int *)(barrier_data + 0x24)) == 0) {
             *(int *)(barrier_data + 0x24) = func_0022ED80_6B70(0, 4, barrier_moby);
         }
-        *(float *)(barrier_data + 8) = fast_add_rotations(*(float *)(barrier_data + 8), *(float *)&D_L16_00161E00 *
+        *(float *)(barrier_data + 8) = fast_add_rotations(*(float *)(barrier_data + 8), *(float *)&grindrail_barrier_ring_rotation_speed *
                                                                       DEG_TO_RAD * frame_time);
         cardinal_angles = (float *)(barrier_data + 0x10);
         for (i = 0; i < 4; i++) {
             cardinal_angles[i] = fast_add_rotations(cardinal_angles[i],
-                                      ((float *)&D_L16_00161E08)[i] * DEG_TO_RAD * frame_time);
+                                      ((float *)&grindrail_barrier_accent_rotation_speeds)[i] * DEG_TO_RAD * frame_time);
         }
         if (barrier_moby->visible)
             enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, barrier_moby);
@@ -523,14 +523,14 @@ typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } Ri
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
-extern float D_L16_001D9780[4][2];
+extern float grindrail_barrier_ring_uvs[4][2] __asm__("D_L16_001D9780");
 extern float D_L16_001D9A70[4][2];
-extern float D_L16_001D97C0[4][4];
+extern float grindrail_barrier_ring_vertex_positions[4][4] __asm__("D_L16_001D97C0");
 extern float D_L16_001D9AD0[4][4];
 extern float D_L16_001D9A50[4][2];
-extern float D_L16_001D97A0[4][2];
+extern float grindrail_barrier_accent_uvs[4][2] __asm__("D_L16_001D97A0");
 extern float D_L16_001D9A90[4][4];
-extern float D_L16_001D9800[4][4];
+extern float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D9800");
 #include "rnc/overlay/shared/gameplay/entities/armed_transport_data/draw_grindrail_barrier_effect.h"
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -566,10 +566,10 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     {
         int k;
         for (k = 0; k < 4; ++k) {
-            u[k * 2] = D_L16_001D9780[k][0];
-            v[k * 2] = D_L16_001D9780[k][1];
+            u[k * 2] = grindrail_barrier_ring_uvs[k][0];
+            v[k * 2] = grindrail_barrier_ring_uvs[k][1];
             color_base[k] = *(int *)&grindrail_barrier_ring_base_color;
-            qcopy(quad.position[k], D_L16_001D97C0[k]);
+            qcopy(quad.position[k], grindrail_barrier_ring_vertex_positions[k]);
             scale_vector_xyz(quad.position[k], quad.position[k], scale);
         }
     }
@@ -598,10 +598,10 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         int k;
         int solid_color = *(int *)&grindrail_barrier_accent_color;
         for (k = 0; k < 4; ++k) {
-            u[k * 2] = D_L16_001D97A0[k][0];
-            v[k * 2] = D_L16_001D97A0[k][1];
+            u[k * 2] = grindrail_barrier_accent_uvs[k][0];
+            v[k * 2] = grindrail_barrier_accent_uvs[k][1];
             color_base[k] = solid_color;
-            qcopy(quad.position[k], D_L16_001D9800[k]);
+            qcopy(quad.position[k], grindrail_barrier_accent_vertex_positions[k]);
         }
     }
     {
@@ -671,11 +671,15 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
 void moby_update_draw_only(unsigned char *moby) {
+    enum {
+        MOBY_DRAW_ONLY_STATE_INITIALIZE = 0,
+        MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK = 1
+    };
     switch (moby[0x20]) {
-    case 0:
+    case MOBY_DRAW_ONLY_STATE_INITIALIZE:
         moby[0x20] = 1;
         break;
-    case 1:
+    case MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK:
         enqueue_callback_list_1((int)draw_level16_reflection_mesh_batch, (int)moby);
         break;
     }

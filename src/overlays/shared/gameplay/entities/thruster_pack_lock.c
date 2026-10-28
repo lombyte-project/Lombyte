@@ -357,11 +357,11 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
 
-extern short D_L11_001621C8 __attribute__((sda));
-extern short D_L11_001621D8 __attribute__((sda));
-extern short D_L11_001621E8 __attribute__((sda));
-extern short D_L11_001621F8 __attribute__((sda));
-extern short D_L11_00162208 __attribute__((sda));
+extern short first_position_particle_config __asm__("D_L11_001621C8") __attribute__((sda));
+extern short second_position_particle_config __asm__("D_L11_001621D8") __attribute__((sda));
+extern short third_position_particle_config __asm__("D_L11_001621E8") __attribute__((sda));
+extern short extra_scattered_joint_particle_config __asm__("D_L11_001621F8") __attribute__((sda));
+extern short extra_joint_position_particle_config __asm__("D_L11_00162208") __attribute__((sda));
 void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__("FUN_L11_003112b8");
 
 void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) {
@@ -392,15 +392,15 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
         initial_particle_velocity[0] =
             -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
             scale;
-        spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &D_L11_001621C8, 1);
+        spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
         initial_particle_velocity[0] =
             -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) * frame_time) *
             scale;
-        spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &D_L11_001621D8, 1);
+        spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
         initial_particle_velocity[0] =
             -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) * frame_time) *
             scale;
-        spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &D_L11_001621E8, 1);
+        spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
         if (*(float *)(particle_emission_data + 0xC4) > 0.5f) {
             add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
             add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
@@ -408,28 +408,28 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
-            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &D_L11_001621C8, 1);
+            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
-            spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &D_L11_001621D8, 1);
+            spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) *
                        frame_time) *
                      scale;
-            spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &D_L11_001621E8, 1);
+            spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
-            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &D_L11_001621F8, 1);
+            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &extra_scattered_joint_particle_config, 1);
             initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
-            spawn_type_74_particle(moby, joint_world_position, initial_particle_velocity, &D_L11_00162208, 1);
+            spawn_type_74_particle(moby, joint_world_position, initial_particle_velocity, &extra_joint_position_particle_config, 1);
         }
     }
 }
-extern unsigned char D_0015EDB2;
-extern float D_L11_001F1490[];
+extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
+extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -464,7 +464,7 @@ int draw_linked_moby_trails(char *moby) {
     if (*(unsigned char *)(moby + 0x21) == 0xFF) {
         return;
     }
-    if (D_0015EDB2 != 0) {
+    if (linked_moby_trail_long_span_enabled != 0) {
         *(float *)&D_L11_001623F0_d = 16.0f;
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
@@ -480,8 +480,8 @@ int draw_linked_moby_trails(char *moby) {
         base = integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
-            quads[i].texture_coordinates[j][0] = ((float (*)[2])D_L11_001F1490)[j][0];
-            quads[i].texture_coordinates[j][1] = ((float (*)[2])D_L11_001F1490)[j][1];
+            quads[i].texture_coordinates[j][0] = ((float (*)[2])trail_quad_texture_coordinates)[j][0];
+            quads[i].texture_coordinates[j][1] = ((float (*)[2])trail_quad_texture_coordinates)[j][1];
             blend = integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
             if (1.0f < blend) {
                 blend = 1.0f;
@@ -679,8 +679,8 @@ extern int screen_extent[] __asm__("D_0013E500");
 extern float itof_g(int) __asm__("FUN_001fa6c0");
 extern int ftoi_g(float) __asm__("FUN_001fa6d0");
 
-extern u128_ad0 D_L11_001608E0;
-extern u128_ad0 D_L11_001608F0;
+extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
+extern u128_ad0 l11_screen_triangle_strip_vertex_gif_tag_template __asm__("D_L11_001608F0");
 void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) __asm__("FUN_L11_00310ad0");
 
 void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
@@ -695,7 +695,7 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     {
         char *dma_header = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(dma_header + 0x10);
-        qcopy((void *)D_L11_001611C0, &D_L11_001608E0);
+        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_setup_gif_tag_template);
         *(short *)(dma_header + 0x10) = -0x7FFF;
     }
     {
@@ -707,7 +707,7 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     {
         char *saved_packet_cursor = (char *)D_L11_001611C0;
         D_L11_001611C0 = (int)(saved_packet_cursor + 0x10);
-        qcopy((void *)D_L11_001611C0, &D_L11_001608F0);
+        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_vertex_gif_tag_template);
         *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
     D_L11_001611C0 += 0x10;

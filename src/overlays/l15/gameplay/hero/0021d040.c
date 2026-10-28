@@ -47,7 +47,7 @@ typedef struct {
 
 extern HeroTableRow2C D_L15_0017C228[];
 extern HeroAnimRow D_L15_0017A0C0[];
-extern HeroTableEntry70 D_L15_00179E90[];
+extern HeroTableEntry70 l15_hero_idle_fidget_entries[] __asm__("D_L15_00179E90");
 extern S167300 D_L15_00167280;
 extern S17AD00 D_L15_0017AC80;
 extern S17C438 D_L15_0017C3B8;
@@ -275,7 +275,7 @@ void update_hero_state_machine(void) {
                                 HeroTableEntry70 *rec;
 
                                 hero.fidget_index = record_index;
-                                rec = &D_L15_00179E90[record_index];
+                                rec = &l15_hero_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
@@ -1477,7 +1477,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_RUN_JUMP:
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
-                case 12:
+                case HERO_STATE_STORED_HEADING_JUMP:
                 case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
                 case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
@@ -1485,7 +1485,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
-                case 60:
+                case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();

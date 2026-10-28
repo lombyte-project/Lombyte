@@ -12,8 +12,8 @@ extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __
 #define PACKET_CURSOR (l09_packet.words)
 #define TEXTURE_CURSOR (gs_texture_allocation.cursor)
 extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
-extern char D_L09_0016D300[];
-extern long D_L09_00161FC0[];
+extern char level09_strip_texture_entry_table[] __asm__("D_L09_0016D300");
+extern long level09_strip_texture_transfer_packet[] __asm__("D_L09_00161FC0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
@@ -48,14 +48,14 @@ void queue_level09_strip_texture_packets(int first_texture_index, int second_tex
     } else {
         int *packet;
         long *words;
-        int a_second = ((TextureEntry *)D_L09_0016D300)[first_texture_index].second;
-        int a_first = ((TextureEntry *)D_L09_0016D300)[first_texture_index].first;
-        int b_second = ((TextureEntry *)D_L09_0016D300)[second_texture_index].second;
-        int b_first = ((TextureEntry *)D_L09_0016D300)[second_texture_index].first;
+        int a_second = ((TextureEntry *)level09_strip_texture_entry_table)[first_texture_index].second;
+        int a_first = ((TextureEntry *)level09_strip_texture_entry_table)[first_texture_index].first;
+        int b_second = ((TextureEntry *)level09_strip_texture_entry_table)[second_texture_index].second;
+        int b_first = ((TextureEntry *)level09_strip_texture_entry_table)[second_texture_index].first;
 
-        D_L09_00161FC0[0] = 0x0800000000000400L;
-        D_L09_00161FC0[1] = 0;
-        FUN_L02_0024fca0(&D_L09_00161FC0[2], texture_vertices + (a_first << 4), texture_vertices + (a_second << 4),
+        level09_strip_texture_transfer_packet[0] = 0x0800000000000400L;
+        level09_strip_texture_transfer_packet[1] = 0;
+        FUN_L02_0024fca0(&level09_strip_texture_transfer_packet[2], texture_vertices + (a_first << 4), texture_vertices + (a_second << 4),
                          texture_vertices + (b_first << 4), texture_vertices + (b_second << 4), 0x1000);
         PACKET_CURSOR[0] = 0x10000006;
         PACKET_CURSOR[1] = 0;
@@ -78,7 +78,7 @@ void queue_level09_strip_texture_packets(int first_texture_index, int second_tex
         words[11] = 0x53;
         PACKET_CURSOR = packet + 28;
         PACKET_CURSOR[0] = 0x30000401;
-        PACKET_CURSOR[1] = (int)D_L09_00161FC0;
+        PACKET_CURSOR[1] = (int)level09_strip_texture_transfer_packet;
         PACKET_CURSOR[2] = 0;
         PACKET_CURSOR[3] = 0x50000401;
         PACKET_CURSOR += 4;
@@ -113,7 +113,7 @@ typedef struct {
     short idx[16];
 } Strip;
 
-extern char D_L09_0016EAA0[];
+extern char level09_scrolling_strip_gs_setup_packet[] __asm__("D_L09_0016EAA0");
 extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -134,7 +134,7 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
     float second_scroll_offset;
     queue_level09_strip_texture_packets(first_texture_index, second_texture_index);
     D_L09_001611B8[2][0] = 0x30000009;
-    D_L09_001611B8[2][1] = (int)D_L09_0016EAA0;
+    D_L09_001611B8[2][1] = (int)level09_scrolling_strip_gs_setup_packet;
     D_L09_001611B8[2][2] = 0;
     D_L09_001611B8[2][3] = 0x50000009;
     D_L09_001611C0 = D_L09_001611B8[2] + 4;
@@ -184,15 +184,15 @@ extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
 extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
-extern u64 D_L09_001612F0;
-extern unsigned short D_L09_0010E800[];
-extern int D_L09_0010E810[];
-extern int D_L09_001CB470[];
+extern u64 scaled_entries_texture_register_value __asm__("D_L09_001612F0");
+extern unsigned short l09_scaled_entries_vu1_setup_qword_count[] __asm__("D_L09_0010E800");
+extern int scaled_entries_vu1_setup_data[] __asm__("D_L09_0010E810");
+extern int scaled_entries_gs_setup_packet[] __asm__("D_L09_001CB470");
 extern char D_L09_00166E40[];
 extern char D_L09_00166EC0[];
 
 extern float D_L09_00166F40[];
-extern float D_L09_0016CBC0[];
+extern float level09_view_context[] __asm__("D_L09_0016CBC0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_data/build_packet_and_draw_scaled_entries.h"
 extern float D_L09_00161304 __attribute__((section(".sdata")));
 #include "rnc/overlay/quad.h"
@@ -215,7 +215,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     int *scratch;
     int scratch_color;
     float *old = (float *)0x001612f8;
-    float *current = D_L09_0016CBC0;
+    float *current = level09_view_context;
     float saved0 = current[0x218 / 4];
     float saved1 = current[0x21c / 4];
     float saved2 = current[0x228 / 4];
@@ -235,7 +235,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     set_scale_matrix(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    vu1_add_data_ref(D_L09_0010E810, D_L09_0010E800[0]);
+    vu1_add_data_ref(scaled_entries_vu1_setup_data, l09_scaled_entries_vu1_setup_qword_count[0]);
     {
         int *packet;
         int *packet_end;
@@ -277,7 +277,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
         D_L09_001611C0 = packet_end;
         packet[60] = 0x30000003;
     }
-    PACKET_CURSOR[1] = (int)D_L09_001CB470;
+    PACKET_CURSOR[1] = (int)scaled_entries_gs_setup_packet;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
     {
@@ -307,7 +307,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
         *(volatile u64 *)&words[2] = (blend << 32) | 100;
         alpha = alpha <= 0x60U ? 0x5370b : 0x5360a;
         blend = alpha;
-        words[4] = *(volatile u64 *)&D_L09_001612F0;
+        words[4] = *(volatile u64 *)&scaled_entries_texture_register_value;
         scratch_color = 0x757c8e;
         words[5] = 6;
         words[6] = (long)color;
@@ -1413,9 +1413,9 @@ void update_tumbling_debris(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
 
-extern char D_L09_001F3080[];
-extern char D_L09_001F63C0[];
-extern char D_L09_001FC740[];
+extern char level09_scrolling_strip_entries[] __asm__("D_L09_001F3080");
+extern char level09_scaled_surface_entries[] __asm__("D_L09_001F63C0");
+extern char level09_textured_surface_draw_settings[] __asm__("D_L09_001FC740");
 extern int D_L09_0015F5CC;
 extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 extern void build_packet_and_draw_scaled_entries(void *, void *, int) __asm__("FUN_L09_002c1978");
@@ -1427,9 +1427,9 @@ void draw_level09_textured_surfaces(void) {
     int texture_sequence_step = texture_sequence_numerator / 20;
     float texture_sequence_position = (float)texture_sequence_numerator / 20.0f;
     float texture_sequence_step_float = (float)texture_sequence_step;
-    draw_level09_scrolling_textured_strips(D_L09_001F3080, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
-    draw_textured_grid(D_L09_001FC740);
-    build_packet_and_draw_scaled_entries(D_L09_001FC740, D_L09_001F63C0, 10);
+    draw_level09_scrolling_textured_strips(level09_scrolling_strip_entries, 0x6C, texture_sequence_position - texture_sequence_step_float, (texture_sequence_step & 15) + 0x2C, ((texture_sequence_step + 1) & 15) + 0x2C);
+    draw_textured_grid(level09_textured_surface_draw_settings);
+    build_packet_and_draw_scaled_entries(level09_textured_surface_draw_settings, level09_scaled_surface_entries, 10);
 }
 struct DebrisVars {
     Vec4 vel;           /* 0x00 */

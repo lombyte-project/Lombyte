@@ -178,7 +178,7 @@ void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-extern T_210ce8 D_L18_00178B00[];
+extern T_210ce8 l18_moby_hurt_response_records[] __asm__("D_L18_00178B00");
 s32 process_hero_hurt_response(s32 apply_hurt_response) __asm__("FUN_L18_00218a90");
 
 s32 process_hero_hurt_response(s32 apply_hurt_response) {
@@ -210,7 +210,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     if (hero_moby_bytes[0xA4] == 0xFF) {
         return 0;
     }
-    response_record = &D_L18_00178B00[hero_moby_bytes[0xA4]];
+    response_record = &l18_moby_hurt_response_records[hero_moby_bytes[0xA4]];
     if (response_record->p34 != hero_moby_bytes) {
         return 0;
     }

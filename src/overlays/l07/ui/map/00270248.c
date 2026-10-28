@@ -13,7 +13,7 @@ typedef struct {
     char pad[0xC];
     unsigned char *p;
 } Grid_270248;
-extern Grid_270248 D_L07_00184270;
+extern Grid_270248 l07_packed_bit_grid __asm__("D_L07_00184270");
 extern int ensure_menu_cache_entry(int) __asm__("FUN_L00_00249d80");
 
 void clear_bit_grid_rectangle(int x, int y0, int width, int height) __asm__("FUN_L07_00270248");
@@ -24,7 +24,7 @@ void clear_bit_grid_rectangle(int x, int y0, int width, int height) {
         int rowbase = (y >> 5) << 4;
         int i;
         for (i = x; i < x + width; i++) {
-            unsigned char *p = D_L07_00184270.p + (y << 6) + i / 8;
+            unsigned char *p = l07_packed_bit_grid.p + (y << 6) + i / 8;
             if (*p != 0) {
                 int bit = 1 << (i & 7);
                 if (*p & bit) {

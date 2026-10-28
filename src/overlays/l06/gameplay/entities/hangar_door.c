@@ -198,7 +198,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-extern short D_L06_00161ED8 __attribute__((sda));
+extern short alien_snapper_gap_angle_limit_degrees_gp __asm__("D_L06_00161ED8") __attribute__((sda));
 float compute_alien_snapper_target_gap_angle(char *self) __asm__("FUN_L06_002f96f8");
 
 float compute_alien_snapper_target_gap_angle(char *self) {
@@ -209,8 +209,8 @@ float compute_alien_snapper_target_gap_angle(char *self) {
         return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                             *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     }
-    lo = -(*(float *)&D_L06_00161ED8 * DEG_TO_RAD);
-    hi = *(float *)&D_L06_00161ED8 * DEG_TO_RAD;
+    lo = -(*(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD);
+    hi = *(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD;
     owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     owner_to_self_distance = FUN_001f9b48(owner + 0x10, self + 0x10);
@@ -848,7 +848,7 @@ extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001ef
 extern f32 spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L06_00161CF0 __attribute__((sda));
+extern short toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") __attribute__((sda));
 void check_oscillating_toxic_gas_vent_collisions(char *m) {
     Sx collision_params;
     Vx segment_start;
@@ -860,11 +860,11 @@ void check_oscillating_toxic_gas_vent_collisions(char *m) {
     int segment_travel_step_count;
     float segment_phase_step, segment_radius_step, remaining_radius, segment_start_radius, oscillation_phase_radians, ra, rb;
     moby_data = *(char **)(m + 0x78);
-    segment_travel_step_count = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
+    segment_travel_step_count = func_001FA898_r(*(float *)&toxic_gas_vent_max_collision_range_gp / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
     segment_phase_step = *(float *)(moby_data + 0x80) * (float)segment_travel_step_count;
-    segment_radius_step = *(float *)&D_L06_00161CF0 * 0.25f;
-    remaining_radius = *(float *)&D_L06_00161CF0;
+    segment_radius_step = *(float *)&toxic_gas_vent_max_collision_range_gp * 0.25f;
+    remaining_radius = *(float *)&toxic_gas_vent_max_collision_range_gp;
     oscillation_phase_radians = fast_subtract_rotations(*(float *)(moby_data + 0x7C), segment_phase_step * 4.0f);
     collision_params.m = m;
     collision_params.f1C = 1.0f;
@@ -937,8 +937,8 @@ void check_timed_toxic_gas_vent_collisions(char *vent_moby) {
     q.s1A = *(unsigned short *)(vent_moby + 0xA6);
     sp = (*(float *)(vent_data + 0x70) * 60.0f - (float)*(int *)(vent_data + 0x88)) *
          (*(float *)&spark_speed_gp * frame_time);
-    if (*(float *)&D_L06_00161CF0 < sp)
-        sp = *(float *)&D_L06_00161CF0;
+    if (*(float *)&toxic_gas_vent_max_collision_range_gp < sp)
+        sp = *(float *)&toxic_gas_vent_max_collision_range_gp;
     normalize_vector_xyz(segment_start, vent_moby + 0xD0, 0.125f);
     add_vector_xyz(segment_start, segment_start, vent_moby + 0x10);
     segment_start[2] = segment_start[2] + 0.125f;
@@ -1265,8 +1265,8 @@ typedef struct DrawbridgeVars {
     Moby *d[10];
 } DrawbridgeVars;
 
-extern char D_L06_00161D50[4] __attribute__((sda));
-extern char D_L06_00161D60[4] __attribute__((sda));
+extern char drawbridge_first_row_local_offset_gp[4] __asm__("D_L06_00161D50") __attribute__((sda));
+extern char drawbridge_second_row_local_offset_gp[4] __asm__("D_L06_00161D60") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/hangar_door_globals.h"
 extern float drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") __attribute__((sda));
 extern float drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") __attribute__((sda));
@@ -1289,11 +1289,11 @@ void update_drawbridge_segment_transforms(Moby *moby)
         length = D_L06_00161D78 - (float)i;
         if (length < 0.0f) length = 0.0f;
         fast_vec_normalize(&first, &moby->rot_row0, length);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D50, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->a[i]->pos, &result);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D60, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->b[i]->pos, &result);
@@ -1314,11 +1314,11 @@ void update_drawbridge_segment_transforms(Moby *moby)
         if (right < min_length) right = min_length;
         fast_vec_normalize(&first, &moby->rot_row0, length);
         fast_vec_normalize(&second, &moby->rot_row0, right);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D50, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &first);
         qcopy(&data->c[j]->pos, &result);
-        transform_vector_by_basis(&result, (Vec_2F69D0 *)D_L06_00161D60, &moby->rot_row0);
+        transform_vector_by_basis(&result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         add_vector_xyz(&result, &result, &moby->pos);
         add_vector_xyz(&result, &result, &second);
         qcopy(&data->d[j]->pos, &result);

@@ -19,7 +19,7 @@ struct MenuState {
     s32 available;
     struct MenuItem *items;
 };
-extern struct MenuItem *D_001A2B70[];
+extern struct MenuItem *mission_lists_by_level[] __asm__("D_001A2B70");
 extern struct MenuState D_001A2C10;
 #include "rnc/gameplay/state/level_state.h"
 extern s32 check_mission_condition(s16, s32) __asm__("func_0020BAF0");
@@ -29,7 +29,7 @@ s32 update_mission_list(void) {
     struct MenuItem *it;
     struct MenuItem *items;
 
-    items = D_001A2B70[level_map_selection.level];
+    items = mission_lists_by_level[level_map_selection.level];
     D_001A2C10.items = items;
     if (items == 0) {
         return 0;

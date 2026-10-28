@@ -12,7 +12,7 @@ typedef struct {
     char pad38[0x14];
     char *subs; /* 0x4C */
 } SubState;
-extern SubState D_0018CB20;
+extern SubState render_sequence __asm__("D_0018CB20");
 #include "rnc/rendering/screen.h"
 extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
                                 int a8);
@@ -36,16 +36,16 @@ void draw_subtitles(void) {
     int lang;
     int language_text_slot;
 
-    if (D_0018CB20.subs == 0) {
+    if (render_sequence.subs == 0) {
         return;
     }
     lang = game_language;
     language_text_slot = (lang >= 2 && lang <= 5) ? lang - 1 : 0;
-    for (subtitle = (Subtitle *)D_0018CB20.subs; subtitle->start >= 0; subtitle++) {
-        if (D_0018CB20.time < subtitle->start) {
+    for (subtitle = (Subtitle *)render_sequence.subs; subtitle->start >= 0; subtitle++) {
+        if (render_sequence.time < subtitle->start) {
             continue;
         }
-        if (subtitle->end < D_0018CB20.time) {
+        if (subtitle->end < render_sequence.time) {
             continue;
         }
         {
@@ -55,7 +55,7 @@ void draw_subtitles(void) {
 
             font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12,
                                 7);
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[language_text_slot], -1);
+            font_print_window_regular(win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
             win[5] = screen_extent.height - 0x3C;
             measured_text_width = win[6];
             measured_text_height = win[7];
@@ -66,7 +66,7 @@ void draw_subtitles(void) {
             }
             draw_ui_frame(win[5] - hh, win[5] + hh, 0x100 - hw, 0x100 + hw, 0x60);
             win[9] &= ~4;
-            font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + subtitle->text[language_text_slot], -1);
+            font_print_window_regular(win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
             return;
         }
     }

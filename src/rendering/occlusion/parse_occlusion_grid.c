@@ -1,11 +1,11 @@
 #include "types.h"
 
-extern char *D_0015F640;
+extern char *camera_visibility_grid __asm__("D_0015F640");
 
 int parse_occlusion_grid(int x, int y, int z) __asm__("FUN_001f2690");
 
 int parse_occlusion_grid(int x, int y, int z) {
-    char *grid = D_0015F640;
+    char *grid = camera_visibility_grid;
     char *base = grid + *(int *)grid;
     unsigned short *axis_lookup = (unsigned short *)(grid + 4);
     int cz, cy, cx;

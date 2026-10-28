@@ -28,7 +28,7 @@ typedef struct {
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_dual_texture_50_quad_mesh.h"
 #include "rnc/overlay/l06/gameplay/entities/fred_globals.h"
 extern int dual_texture_mesh_first_pass_texture_index_gp __asm__("D_L06_00161F90") __attribute__((sda));
-extern unsigned int D_L06_00161F94 __attribute__((sda));
+extern unsigned int l06_dual_texture_mesh_first_pass_vertex_color __asm__("D_L06_00161F94") __attribute__((sda));
 extern int dual_texture_mesh_second_pass_vertex_color_gp __asm__("D_L06_00161F98") __attribute__((sda));
 extern float dual_texture_mesh_position_scale_gp __asm__("D_L06_00161F9C") __attribute__((sda));
 extern float dual_texture_mesh_first_pass_u_offset_multiplier_gp __asm__("D_L06_00161FA0") __attribute__((sda));
@@ -526,7 +526,7 @@ void draw_dual_texture_50_quad_mesh(void) {
     first.unk70 = 0;
     matrix_ptr = matrix;
     initialize_matrix_2fd1a0(matrix);
-    first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
+    first.color[0] = first.color[1] = first.color[2] = first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
@@ -1047,10 +1047,10 @@ void draw_dual_texture_58_quad_mesh(void) {
     second.unk70 = 0;
     first.unk70 = 0;
     initialize_matrix_2fd1a0(matrix_ptr);
-    first.color[3] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[0] = D_L06_00161F94;
+    first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
@@ -5552,10 +5552,10 @@ void draw_dual_texture_864_quad_mesh(void) {
     second.unk70 = 0;
     first.unk70 = 0;
     initialize_matrix_2fd1a0(matrix_ptr);
-    first.color[3] = D_L06_00161F94;
-    first.color[2] = D_L06_00161F94;
-    first.color[1] = D_L06_00161F94;
-    first.color[0] = D_L06_00161F94;
+    first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
+    first.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
     second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
     second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
@@ -5939,11 +5939,11 @@ typedef struct {
     short v, uv;
 } I3003f0;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh_2.h"
-extern unsigned int D_L06_0016206C __attribute__((sda));
+extern unsigned int l06_backdrop_mesh_vertex_color __asm__("D_L06_0016206C") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/fred_data/draw_backdrop_mesh.h"
-extern V3003f0 D_L06_001F2EB0[];
-extern I3003f0 D_L06_001F34B0[];
-extern UV3003f0 D_L06_001F38B0[];
+extern V3003f0 l06_backdrop_mesh_vertex_positions[] __asm__("D_L06_001F2EB0");
+extern I3003f0 l06_backdrop_mesh_quad_corner_index_pairs[] __asm__("D_L06_001F34B0");
+extern UV3003f0 l06_backdrop_mesh_texture_coordinates[] __asm__("D_L06_001F38B0");
 extern long tex_3003f0(int) __asm__("FUN_001f44b8");
 extern void init_3003f0(void *) __asm__("FUN_001f9fc8");
 extern void vmul_3003f0(void *, void *, float) __asm__("FUN_001f9a68");
@@ -5963,20 +5963,20 @@ void draw_backdrop_mesh(void) {
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
     init_3003f0(&backdrop_draw_transform);
-    shared_quad_vertex_color = D_L06_0016206C;
+    shared_quad_vertex_color = l06_backdrop_mesh_vertex_color;
     backdrop_draw_transform.f38 = moby_breakup_z_offset_gp;
     quad.color[3] = shared_quad_vertex_color;
     quad.color[2] = shared_quad_vertex_color;
     quad.color[1] = shared_quad_vertex_color;
     quad.color[0] = shared_quad_vertex_color;
     for (i = 0; i < 64; i++) {
-        quad_corner_index_pair = &D_L06_001F34B0[i * 4];
+        quad_corner_index_pair = &l06_backdrop_mesh_quad_corner_index_pairs[i * 4];
         for (j = 0; j < 4; j++) {
             k = quad_corner_index_pair->uv;
-            vmul_3003f0(&quad.corner[j], &D_L06_001F2EB0[quad_corner_index_pair->v], backdrop_mesh_vertex_position_scale_gp);
+            vmul_3003f0(&quad.corner[j], &l06_backdrop_mesh_vertex_positions[quad_corner_index_pair->v], backdrop_mesh_vertex_position_scale_gp);
             quad_corner_index_pair++;
-            quad.uv[j].u = D_L06_001F38B0[k].u;
-            quad.uv[j].v = D_L06_001F38B0[k].v;
+            quad.uv[j].u = l06_backdrop_mesh_texture_coordinates[k].u;
+            quad.uv[j].v = l06_backdrop_mesh_texture_coordinates[k].v;
         }
         draw_3003f0(&quad, &backdrop_draw_transform, 0);
     }
@@ -6023,10 +6023,10 @@ void effect_quad_draw_single(void) {
     pkt[0] = 0;
     init_3003f0(mp);
     backdrop_quad_transform_matrix[3][2] = moby_breakup_z_offset_gp;
-    colors[3] = D_L06_0016206C;
-    colors[2] = D_L06_0016206C;
-    colors[1] = D_L06_0016206C;
-    colors[0] = D_L06_0016206C;
+    colors[3] = l06_backdrop_mesh_vertex_color;
+    colors[2] = l06_backdrop_mesh_vertex_color;
+    colors[1] = l06_backdrop_mesh_vertex_color;
+    colors[0] = l06_backdrop_mesh_vertex_color;
     for (i = 0; i < 96; i++) {
         vmul_3003f0(center, &D_L06_001FAFF0[i], backdrop_mesh_vertex_position_scale_gp);
         transform_vector(center, center, backdrop_quad_transform_matrix);
@@ -6447,7 +6447,7 @@ void fred_update(struct Moby *moby) {
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_301b90 __asm__("D_L06_001600EC");
 extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
-extern char D_0015172A[] __asm__("D_0015172A");
+extern char dialogue_playback_phase[] __asm__("D_0015172A");
 extern int D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
 extern float D_L06_00167560 __asm__("D_L06_00167560");
 extern int D_L06_00167568 __asm__("D_L06_00167568");
@@ -6457,7 +6457,7 @@ extern float D_L06_001620A0 __asm__("D_L06_001620A0") __attribute__((sda));
 extern float D_L06_001620A4 __asm__("D_L06_001620A4") __attribute__((sda));
 extern float D_L06_001620A8 __asm__("D_L06_001620A8") __attribute__((sda));
 extern float D_L06_001620B0 __asm__("D_L06_001620B0") __attribute__((sda));
-extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
+extern float l06_linked_sequence_post_path_countdown_duration __asm__("D_L06_001620C4") __attribute__((sda));
 extern int D_L06_0015F880 __asm__("D_L06_0015F880");
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
 extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
@@ -6547,7 +6547,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         moby[0x20] = 3;
         *(int *)(moby_vars + 0xB0) = 1;
         jet_game_state(6, 9);
-        if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+        if (*(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
         set_moby_list_state_17(*(int *)(moby_vars + 0x10));
         set_moby_list_state_15(*(int *)(moby_vars + 0x14));
         set_moby_list_state_15(*(int *)(moby_vars + 0x18));
@@ -6589,7 +6589,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         if (nb == **p - 1) {
             moby[0x20] = 4;
             select_localized_moby_voice_line((struct Moby *)moby, 1);
-            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
+            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(l06_linked_sequence_post_path_countdown_duration));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
             scripted_camera_sequence_active = 0;
@@ -6612,13 +6612,13 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         char *q;
         x = scale_game_frames(0x708);
         if (*(int *)(moby_vars + 0xB4) == x) {
-            if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+            if (*(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
         } else {
             x = scale_game_frames(900);
             if (*(int *)(moby_vars + 0xB4) == x) select_localized_moby_voice_line((struct Moby *)moby, 2);
             else {
                 x = scale_game_frames(300);
-                if (*(int *)(moby_vars + 0xB4) == x && *(short *)D_0015172A == 3) continue_audio_stream_if_ready();
+                if (*(int *)(moby_vars + 0xB4) == x && *(short *)dialogue_playback_phase == 3) continue_audio_stream_if_ready();
             }
         }
         if (fast_dec_timer(moby_vars + 0xC0) != 0) {
@@ -6660,8 +6660,8 @@ struct TauntVoiceVars {
     s32 leave[6];        /* 0x50 */
     s32 chatter[3][6];   /* 0x68 */
 };
-extern s32 D_L06_001620B8[1] __attribute__((sda));
-extern s32 D_001516EC[];
+extern s32 chatter_variant_used_flags[1] __asm__("D_L06_001620B8") __attribute__((sda));
+extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s32 FUN_00213260(s32);
 
 /* plays one of the vendor's greet, chatter or leave lines in the current language */
@@ -6686,13 +6686,13 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
     case VOICE_KIND_CHATTER:
         chatter_index = FUN_00213260(3);
         for (i = 0; i < 4; i++) {
-            if (D_L06_001620B8[chatter_index] == 0) {
-                D_L06_001620B8[chatter_index] = 1;
+            if (chatter_variant_used_flags[chatter_index] == 0) {
+                chatter_variant_used_flags[chatter_index] = 1;
                 break;
             }
             chatter_index = (chatter_index + 1) % 3;
             if (i == 2) {
-                D_L06_001620B8[0] = 0;
+                chatter_variant_used_flags[0] = 0;
                 chatter_second_variant_used = 0;
                 chatter_third_variant_used = 0;
             }
@@ -6709,7 +6709,7 @@ void select_localized_moby_voice_line(struct Moby *moby, s32 kind) {
     }
     if (id != -1) {
         id += 20000;
-        D_001516EC[0] = id;
+        queued_dialogue_id[0] = id;
     }
 }
 typedef int u128_302578 __attribute__((mode(TI)));
@@ -7697,7 +7697,7 @@ s32 get_red_button_sequence_status(const u8 *moby) {
 typedef struct { int v[6]; } V6;
 
 V6 D_L06_002019A0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-extern V6 D_L06_002019B8;
+extern V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -7723,7 +7723,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             i++;
             frame_scaled_random_factor = random_float_between(8.0f, 10.0f);
             first_color_palette = D_L06_002019A0;
-            second_color_palette = D_L06_002019B8;
+            second_color_palette = l06_red_button_particle_second_color_palette;
             frame_scaled_random_factor = frame_scaled_random_factor * frame_time;
             pa = first_color_palette.v + random_integer_below(6);
             pb = second_color_palette.v + random_integer_below(6);

@@ -52,7 +52,7 @@ typedef struct {
 extern u8 D_0013E550[];
 #include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
 extern Vec4f D_L09_00166F40;
-extern u8 D_L09_00208320[];
+extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
 extern void debug_print(void *, s16) __asm__("FUN_001e93b0");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -128,7 +128,7 @@ void seeker_update(struct Moby *moby) {
         vars->unk5A = 6;
         vars->unk58 = 8;
         if (vars->unk180 == -1) {
-            debug_print(D_L09_00208320, moby->save_id);
+            debug_print(seeker_invalid_bound_path_format, moby->save_id);
             mark_moby_for_removal(moby);
             break;
         }

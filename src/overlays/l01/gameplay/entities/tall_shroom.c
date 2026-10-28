@@ -11,7 +11,7 @@ typedef struct {
     f32 f5c;
 } Ent;
 
-extern Ent D_L01_00202D80[];
+extern Ent l01_sine_modulated_scroll_layers[] __asm__("D_L01_00202D80");
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
@@ -25,11 +25,11 @@ void draw_level01_scroll_layers(void) {
     s32 i;
 
     mine_blend_color();
-    update_and_draw_scrolling_overlay_layers(3, D_L01_00202D80);
+    update_and_draw_scrolling_overlay_layers(3, l01_sine_modulated_scroll_layers);
     normalized_sine_value = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     normalized_sine_value = normalized_sine_value * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
-        D_L01_00202D80[i].f5c = normalized_sine_value;
+        l01_sine_modulated_scroll_layers[i].f5c = normalized_sine_value;
     }
 }
 typedef struct {
@@ -238,7 +238,7 @@ typedef struct {
 extern f32 explosive_moby_gravity_coefficient_gp __asm__("D_L01_00162058") __attribute__((sda));
 extern f32 explosive_moby_velocity_multiplier_gp __asm__("D_L01_0016205C") __attribute__((sda));
 extern f32 explosive_moby_horizontal_damping_threshold_gp __asm__("D_L01_00162060") __attribute__((sda));
-extern BlobHitInfo D_L01_001742C0;
+extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -298,8 +298,8 @@ void update_explosive_moby(struct Moby *moby) {
     hit = coll_sphere(2.0f, &moby->pos, 0, (void *)blob_vars->owner);
     if (tick_countdown_32(&blob_vars->timer) || hit) {
         if (hit) {
-            if (D_L01_001742C0.have_normal) {
-                FUN_L00_001ff660(blob_vars, blob_vars, &D_L01_001742C0.normal);
+            if (collision_hit.have_normal) {
+                FUN_L00_001ff660(blob_vars, blob_vars, &collision_hit.normal);
             } else {
                 clear_vector(blob_vars);
             }
@@ -647,8 +647,8 @@ typedef struct {
     f32 x, y, z, w;
 } EnvVec;
 
-extern EnvVec D_L01_00167240;
-extern f32 D_L01_00162110[2];
+extern EnvVec camera_pos __asm__("D_L01_00167240");
+extern f32 level01_environment_map_uv_scroll_offsets[2] __asm__("D_L01_00162110");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -669,7 +669,7 @@ void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f
         vertex_position.x = verts[i][0];
         vertex_position.y = verts[i][1];
         vertex_position.z = verts[i][2];
-        fast_vec_sub(&eye, &vertex_position, &D_L01_00167240);
+        fast_vec_sub(&eye, &vertex_position, &camera_pos);
         fast_vec_normalize(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
@@ -681,16 +681,16 @@ void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f
         fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
         uv_projection_denominator = fast_vec_length(&refl) * 2.0f;
-        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[0];
-        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + D_L01_00162110[1];
+        uv[i][0] = (refl.x / uv_projection_denominator + 0.5f) * 2.0f + level01_environment_map_uv_scroll_offsets[0];
+        uv[i][1] = (refl.y / uv_projection_denominator + 0.5f) * 2.0f + level01_environment_map_uv_scroll_offsets[1];
     }
 }
-extern s32 D_L01_00202EA0[];
-extern s32 D_L01_00208108[];
+extern s32 level01_environment_mesh_vertex_counts[] __asm__("D_L01_00202EA0");
+extern s32 level01_environment_mesh_position_addresses[] __asm__("D_L01_00208108");
 extern s32 D_L01_00208120[];
-extern s32 D_L01_00208138[];
-extern s32 D_L01_00208150[];
-extern u8 D_L01_00208170[];
+extern s32 level01_environment_mesh_normal_addresses[] __asm__("D_L01_00208138");
+extern s32 level01_environment_mesh_vertex_attribute_addresses[] __asm__("D_L01_00208150");
+extern u8 level01_environment_mesh_uv_scratch[] __asm__("D_L01_00208170");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -708,9 +708,9 @@ void draw_level01_environment_mapped_meshes(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 5; i++) {
-        generate_level01_environment_map_uvs(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i],
-                         D_L01_00208170);
-        FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170,
+        generate_level01_environment_map_uvs(level01_environment_mesh_vertex_counts[i], level01_environment_mesh_normal_addresses[i], level01_environment_mesh_position_addresses[i], D_L01_00208120[i],
+                         level01_environment_mesh_uv_scratch);
+        FUN_L00_001fde98(level01_environment_mesh_vertex_counts[i], level01_environment_mesh_position_addresses[i], level01_environment_mesh_vertex_attribute_addresses[i], level01_environment_mesh_uv_scratch,
                          1);
     }
 }
@@ -734,25 +734,25 @@ void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
 
     switch (moby->state) {
     case UV_SCROLL_STATE_INITIALIZE:
-        D_L01_00162110[0] = 0.0f;
-        D_L01_00162110[1] = 0.0f;
+        level01_environment_map_uv_scroll_offsets[0] = 0.0f;
+        level01_environment_map_uv_scroll_offsets[1] = 0.0f;
         moby->state = 1;
         break;
     case UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW:
         uv_scroll_delta = frame_delta_time * 0.025f;
-        D_L01_00162110[0] += uv_scroll_delta;
-        D_L01_00162110[1] += uv_scroll_delta;
-        if (D_L01_00162110[0] > 1.0f) {
-            D_L01_00162110[0] -= 1.0f;
+        level01_environment_map_uv_scroll_offsets[0] += uv_scroll_delta;
+        level01_environment_map_uv_scroll_offsets[1] += uv_scroll_delta;
+        if (level01_environment_map_uv_scroll_offsets[0] > 1.0f) {
+            level01_environment_map_uv_scroll_offsets[0] -= 1.0f;
         }
-        if (D_L01_00162110[0] < -1.0f) {
-            D_L01_00162110[0] += 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[0] < -1.0f) {
+            level01_environment_map_uv_scroll_offsets[0] += 1.0f;
         }
-        if (D_L01_00162110[1] > 1.0f) {
-            D_L01_00162110[1] -= 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[1] > 1.0f) {
+            level01_environment_map_uv_scroll_offsets[1] -= 1.0f;
         }
-        if (D_L01_00162110[1] < -1.0f) {
-            D_L01_00162110[1] += 1.0f;
+        if (level01_environment_map_uv_scroll_offsets[1] < -1.0f) {
+            level01_environment_map_uv_scroll_offsets[1] += 1.0f;
         }
         enqueue_callback_list_1(draw_level01_environment_mapped_meshes, moby);
         break;

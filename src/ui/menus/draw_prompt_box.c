@@ -6,7 +6,7 @@ extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
-extern char D_001602E8[];
+extern char fallback_prompt_text[] __asm__("D_001602E8");
 extern void font_print_window_small(struct TextRegion *, long, char *,
                                     int) __asm__("func_001F75F0");
 /* Draws the two-line prompt box (text 0x4FB3 for menu_system.unkD4 in 0..2,
@@ -23,7 +23,7 @@ int draw_prompt_box(char *prompt_dimensions) {
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
-    text = D_001602E8;
+    text = fallback_prompt_text;
     prompt_text_selector = menu_system.unkD4;
     switch (prompt_text_selector) {
     case 0:

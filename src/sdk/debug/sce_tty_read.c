@@ -11,14 +11,14 @@ typedef struct {
     u8 pad_0[0x18];
     TtyRcv *rcv;
 } TtyState;
-extern TtyQueue *D_00154A68[];
+extern TtyQueue *tty_read_input_queues[] __asm__("D_00154A68");
 extern TtyState D_00154A50;
 extern void QueuePeekReadDone();
 s32 sceTtyRead(s8 *destination, s32 size) {
     s32 i;
 
     for (i = 0; i < size; i++) {
-        while (D_00154A68[0]->avail == 0) {
+        while (tty_read_input_queues[0]->avail == 0) {
         }
         destination[i] = *D_00154A50.rcv->data;
         QueuePeekReadDone(D_00154A50.rcv);

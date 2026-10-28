@@ -230,7 +230,7 @@ typedef struct {
 } P002668a0;
 
 extern E002668a0 D_0013D5B0_c[] __asm__("D_0013D5B0");
-extern P002668a0 *D_L00_001B1678[];
+extern P002668a0 *l00_moby_dialogue_entry_lists[] __asm__("D_L00_001B1678");
 extern s32 D_L00_0015F5CC;
 extern s32 FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
 s32 initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
@@ -245,14 +245,14 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
     if (i == -1) {
         return -1;
     }
-    if (D_L00_001B1678[i] == 0) {
+    if (l00_moby_dialogue_entry_lists[i] == 0) {
         return -1;
     }
     out->f09 = 1;
     out->f38 = D_L00_0015F5CC;
     out->f04 = -1;
     out->f36 = 0;
-    dialogue_entries = D_L00_001B1678[i];
+    dialogue_entries = l00_moby_dialogue_entry_lists[i];
     out->f3C = (u32)dialogue_entries;
     if (D_0013D5B0_c[i].d != 0 && dialogue_entries->f08 == 0) {
         out->f36 = dialogue_entries->f06;

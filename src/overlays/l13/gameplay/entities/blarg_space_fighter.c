@@ -1171,7 +1171,7 @@ typedef struct Snd_2C56B0 { char pad0[0x74]; unsigned char b74; char pad75[0x13]
 
 extern char *D_L13_0015FFD8;
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
-extern char D_L13_001F4700[];
+extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
 extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1245,7 +1245,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
             return;
         }
         if (path == 0) {
-            func_001E9730_d(D_L13_001F4700, moby->hB2);
+            func_001E9730_d(blarg_space_fighter_missing_path_debug_format, moby->hB2);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2361,7 +2361,7 @@ extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
 char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
-extern char D_L13_001F4DD0[];
+extern char linked_switch_closed_debug_format[] __asm__("D_L13_001F4DD0");
 extern int frame_count __asm__("D_L13_0015F5CC");
 
 typedef struct {
@@ -2491,7 +2491,7 @@ void update_linked_switch_group(char *moby) {
 
                 FUN_0022da68(2, 0, moby);
                 set_moby_list_state((unsigned char)moby[0x21], 3);
-                debug_print(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
+                debug_print(linked_switch_closed_debug_format, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                 moby[0x20] = 3;
             } else if (fast_dec_timer_s16(&data->unk72) != 0) {
                 FUN_0022da68(0, 0, moby);
@@ -2619,12 +2619,12 @@ void update_owner_linked_class_160_moby(struct Moby *moby) {
 extern int rand_q(void) __asm__("FUN_001160d8");
 extern int below_q(int) __asm__("FUN_00213260");
 
-extern unsigned char D_L13_001D3558[];
+extern unsigned char l13_starfighter_voice_line_ids[] __asm__("D_L13_001D3558");
 int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) __asm__("FUN_L13_002e86f8");
 
 int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) {
     int j = rand_q() % line_count;
-    int id = D_L13_001D3558[base + j];
+    int id = l13_starfighter_voice_line_ids[base + j];
     int i;
     int lt;
     if (base < 0x1D) {
@@ -2652,7 +2652,7 @@ int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int bas
                     *(int *)(moby_data + 0x13C) &= ~(1 << id);
                 j++;
                 j %= line_count;
-                id = D_L13_001D3558[base + j];
+                id = l13_starfighter_voice_line_ids[base + j];
             } else {
                 music_stream_state.queued_secondary_track = id + 50000;
                 moby_data[0x13A] = 1;
@@ -2685,8 +2685,8 @@ typedef struct {
     int on[1];
 } Vd_v;
 
-extern int D_L13_001D3508[];
-extern int D_L13_001D3520[];
+extern int joint_effect_gate_slot_indices[] __asm__("D_L13_001D3508");
+extern int gated_effect_joint_indices[] __asm__("D_L13_001D3520");
 void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) __asm__("FUN_L13_002e8920");
 
 void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate_data) {
@@ -2694,16 +2694,16 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
     float bone_position[4];
     int i;
     for (i = 0; i < 6; i++) {
-        if (((Vd_v *)emission_gate_data)->on[D_L13_001D3508[i]] != 0) {
+        if (((Vd_v *)emission_gate_data)->on[joint_effect_gate_slot_indices[i]] != 0) {
             float scale_ratio;
             int effect_frame_count, k;
             zv = 0;
             scale_ratio = source_moby->scale / (source_moby->pclass->scale * 4.0f);
-            bone_v(source_moby, D_L13_001D3520[i], bone_position);
+            bone_v(source_moby, gated_effect_joint_indices[i], bone_position);
             if (frame_count & 1) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x14));
                 FUN_L00_00269958(bone_position, &zv, 0xCF0000FF, 0xCF, effect_frame_count, ftoi_v(scale_ratio * 350.0f), -100, 1);
-            } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != D_L13_001D3508[i] ||
+            } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != joint_effect_gate_slot_indices[i] ||
                        below_v(9) == 0) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x16));
                 FUN_L00_00269958(bone_position, &zv, 0x6000FFFF, 0x80, effect_frame_count, ftoi_v(scale_ratio * 600.0f), -100, 1);
@@ -2717,7 +2717,7 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
 extern int frame_count __asm__("D_L13_0015F5CC");
-extern int D_L13_001D3538[];
+extern int randomized_effect_joint_indices[] __asm__("D_L13_001D3538");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -2732,14 +2732,14 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
     OvlQuad zv;
     float effect_position[4];
     int i;
-    for (i = 0; D_L13_001D3538[i] != -1; i++) {
+    for (i = 0; randomized_effect_joint_indices[i] != -1; i++) {
         float randomized_scale_ratio;
         int effect_frame_count, k;
         OvlQuad *z = &zv;
         zv = 0;
         randomized_scale_ratio = moby->scale / (moby->pclass->scale * 4.0f);
         randomized_scale_ratio = randomized_scale_ratio * random_float_between_alt(0.8f, 1.1f);
-        moby_point_position(moby, D_L13_001D3538[i], effect_position);
+        moby_point_position(moby, randomized_effect_joint_indices[i], effect_position);
         add_random_offset_to_vector_xyz(effect_position, randomized_scale_ratio * 1.4f);
         if (frame_count & 1) {
             effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
@@ -2757,7 +2757,7 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
     }
 }
 /* Places the attached pieces on their bones, keeping each position inside a box, and copies the moby's pose to them. */
-extern int D_L13_001D34A8[];
+extern int attachment_joint_indices_by_command[] __asm__("D_L13_001D34A8");
 extern char *spawn_moby_joint_attachment(char *, int, int) __asm__("FUN_L13_002ecd10");
 extern void FUN_0020c828(char *);
 
@@ -2790,7 +2790,7 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             *(OvlQuad *)(attached_moby + 0xE0) = *(OvlQuad *)&parent_moby->rot_row2;
         }
     }
-    attachment_joint_index = D_L13_001D34A8[parent_moby->command];
+    attachment_joint_index = attachment_joint_indices_by_command[parent_moby->command];
     if (parent_moby->state == 5)
         attachment_joint_index = -1;
     if (attachment_joint_index != -1) {

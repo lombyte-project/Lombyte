@@ -12,7 +12,7 @@ typedef struct {
     char pad0[0xB0];
     float fB0; /* tan of half the field of view */
 } VendorView_5290;
-extern VendorView_5290 D_L14_0016D140;
+extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
 #include "qcopy.h"
 
 /* Oltanis (level 14) vendor code.  Both bodies below were written from the
@@ -107,7 +107,7 @@ extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__(
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
-extern Rgb_0e00 D_L14_001620A8;
+extern Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8");
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern int on_ground_0e00(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern int timer_done_0e00(int *) __asm__("FUN_001f9740");
@@ -258,7 +258,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
       int g;
       int b;
       float min;
-      *((Rgb_0e00 *) (&next)) = D_L14_001620A8;
+      *((Rgb_0e00 *) (&next)) = l14_spark_rolling_fade_source_rgb;
       fade_fraction = ((float) spark_data->fade) * spark_data->fade_rate;
       r = ftoi_0e00(((((Rgb_0e00 *) (&next))->r - 255.0f) * fade_fraction) + 255.0f);
       g = ftoi_0e00(((((Rgb_0e00 *) (&next))->g - 0.0f) * fade_fraction) + 0.0f);
@@ -423,7 +423,7 @@ void update_unlock_sequence_controller(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_0015FFD8;
-extern float D_L14_001EE5E0[];
+extern float unlock_sequence_saved_moby_heights[] __asm__("D_L14_001EE5E0");
 extern unsigned short *D_L14_001ABF40[];
 
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
@@ -431,7 +431,7 @@ void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
     float *out;
     if (moby_id_cursor != 0) {
         int base = D_L14_0015FFD8;
-        out = D_L14_001EE5E0;
+        out = unlock_sequence_saved_moby_heights;
         do {
             float *target_moby = (float *)(base + ((*moby_id_cursor & 0x7FFF) << 8));
             *out++ = target_moby[6];
@@ -457,7 +457,7 @@ void raise_unlock_sequence_mobys(struct Moby *moby) {
     x = convert_integer_to_float(unlock_sequence_data[1]) * ((float *)unlock_sequence_data)[2];
     height_blend_factor = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
     base = D_L14_0015FFD8;
-    saved_height_cursor = D_L14_001EE5E0;
+    saved_height_cursor = unlock_sequence_saved_moby_heights;
     do {
         char *target_moby = base + ((*(unsigned short *)moby_id_cursor & 0x7FFF) << 8);
         float saved_height = *saved_height_cursor++;
@@ -1404,7 +1404,7 @@ void initialize_path_camera(char *camera) {
        the atan2 call into retail's v0/a0/a1. */
     D_L14_001600EC++;
     D_L14_001600EC--;
-    fov_stops->fov_end = atan2_4f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
+    fov_stops->fov_end = atan2_4f00(1.0f, l14_camera_projection_state.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
         fov_stop_count = 0;
@@ -1477,7 +1477,7 @@ typedef struct {
 extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
 extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
-extern char D_L14_001676D0[];
+extern char path_camera_target_offset_basis[] __asm__("D_L14_001676D0");
 extern float D_L14_001675D8 __attribute__((section(".data")));
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
 extern int path_step_5290(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
@@ -1527,7 +1527,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
             t[1] = ofs[1];
             t[2] = ofs[2];
             t[3] = 0.0f;
-            transform_vector_by_basis(t, t, D_L14_001676D0);
+            transform_vector_by_basis(t, t, path_camera_target_offset_basis);
             add_5290(u, &o->pos, t);
             sub_5290(initial_look_direction_or_previous_position, u, &path_camera->pos);
         } else {
@@ -1551,7 +1551,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         float ang = fov_stops->fov_end * 0.5f;
         char *hp;
         char *mb;
-        D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+        l14_camera_projection_state.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
         update_view_context();
         D_L14_001675D8 = 0.25f;
         path_camera->transition_state = 4;
@@ -1589,7 +1589,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
             for (remaining_segment_index = camera_run->seg; remaining_segment_index < fov_stops->seg[i + 1]; remaining_segment_index++)
                 total += *(float *)(path + (remaining_segment_index * 16 + 0x1C));
             ang = cosine_interpolate(fov_stops->fov[i], fov_stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
-            D_L14_0016D140.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
+            l14_camera_projection_state.fB0 = fast_sin_5290(ang) / fast_cos_5290(ang);
             update_view_context();
         }
     }
@@ -1601,7 +1601,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         u[1] = ofs[1];
         u[2] = ofs[2];
         u[3] = 0.0f;
-        transform_vector_by_basis(u, u, D_L14_001676D0);
+        transform_vector_by_basis(u, u, path_camera_target_offset_basis);
         add_5290(v, &o->pos, u);
         sub_5290(t, v, &path_camera->pos);
     } else {
@@ -1835,8 +1835,8 @@ extern float D_L14_001624BC __attribute__((section(".sdata")));
 extern float D_L14_001624C0 __attribute__((section(".sdata")));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
-extern float D_L14_001F6C38[][3];
-extern float D_L14_001F6C08[][3];
+extern float path_key_camera_angle_override_progress_thresholds[][3] __asm__("D_L14_001F6C38");
+extern float path_key_camera_linked_moby_event_progress_thresholds[][3] __asm__("D_L14_001F6C08");
 extern CamKey5d48 D_L14_001F6488[];
 extern char D_L14_0017AD80[];
 extern int scale_ticks_5d48(int) __asm__("FUN_001f96f8");
@@ -1888,14 +1888,14 @@ void update_path_key_camera(char *path_key_camera) {
         side = 2;
     }
     D_L14_001624C0 = (D_L14_001F6C80[side][hero.rail_segment] + hero.rail_seg_frac) / D_L14_001F6C80[side][999];
-    if (rec->n32 < 2 && D_L14_001F6C38[rec->n32][side] <= D_L14_001624C0) {
+    if (rec->n32 < 2 && path_key_camera_angle_override_progress_thresholds[rec->n32][side] <= D_L14_001624C0) {
         rec->n32++;
     }
     if (rec->n32 == 1) {
         ((CamBones5d48 *)D_L14_0017AD80)->f274 = D_L14_001624B0 * 0.017453292f;
         ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
-    if (rec->n30 < 3 && D_L14_001F6C08[rec->n30][side] <= D_L14_001624C0) {
+    if (rec->n30 < 3 && path_key_camera_linked_moby_event_progress_thresholds[rec->n30][side] <= D_L14_001624C0) {
         struct Moby *first_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m24 << 8));
         struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
         struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));

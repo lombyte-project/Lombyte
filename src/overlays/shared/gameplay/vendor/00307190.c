@@ -116,14 +116,14 @@ void update_fire_bolt(char *fire_bolt) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
-extern float D_L08_00162360[2];
+extern float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360");
 #include "rnc/overlay/shared/gameplay/vendor/00307190_globals.h"
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 
-extern short D_L08_0016234C __attribute__((sda));
-extern short D_L08_00162350 __attribute__((sda));
+extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") __attribute__((sda));
+extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") __attribute__((sda));
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
 
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
@@ -141,17 +141,17 @@ void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_prese
         count_interpolation_end = 3.0f;
         count_interpolation_start = 2.0f;
     }
-    if (*(float *)&D_L08_0016234C >= 0.0f)
-        count_interpolation_start = *(float *)&D_L08_0016234C;
-    if (*(float *)&D_L08_00162350 >= 0.0f)
-        count_interpolation_end = *(float *)&D_L08_00162350;
-    D_L08_00162360[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
-    D_L08_00162360[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
+    if (*(float *)&ground_particle_scatter_count_interpolation_start_override_gp >= 0.0f)
+        count_interpolation_start = *(float *)&ground_particle_scatter_count_interpolation_start_override_gp;
+    if (*(float *)&ground_particle_scatter_count_interpolation_end_override_gp >= 0.0f)
+        count_interpolation_end = *(float *)&ground_particle_scatter_count_interpolation_end_override_gp;
+    ground_particle_scatter_spawn_vector_xy_bias[0] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
+    ground_particle_scatter_spawn_vector_xy_bias[1] = random_float_between_alt(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     countdown_range_start = multiply_global_factor_ed64(countdown_range_start);
     ground_particle_scatter_refresh_countdown = random_float_between_alt(countdown_range_start, multiply_global_factor_ed64(10.0f));
     xy_range_reference_vector[0] = xy_random_range_scale * frame_time;
     xy_range_reference_vector[1] = xy_range_reference_vector[0];
-    xy_length_ratio = vector_length_xy(D_L08_00162360) / fast_vec_length(xy_range_reference_vector);
+    xy_length_ratio = vector_length_xy(ground_particle_scatter_spawn_vector_xy_bias) / fast_vec_length(xy_range_reference_vector);
     ground_particle_scatter_base_attempt_count = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -293,7 +293,7 @@ void scatter_ground_particles(Moby *moby) {
                 origin_distance_xy = func_001F9CE8_3091B0(po);
                 if (origin_distance_xy <= 8.0f) {
                     w = -spread;
-                    par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
+                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(w, spread);
                     par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
                     par.z = -(hi * frame_time);
                     par.w = 0.0f;
@@ -303,7 +303,7 @@ void scatter_ground_particles(Moby *moby) {
                     if (h < lo) h = lo;
                     w = spread;
                     w = -w;
-                    par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
+                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(w, spread);
                     par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
                     par.z = -(h * frame_time);
                     par.w = 0.0f;
@@ -333,7 +333,7 @@ void scatter_ground_particles(Moby *moby) {
             do {
                 float u;
                 float t;
-                origin_delta_or_spawn_vector.x = D_L08_00162360[0] + func_002140F8_3091B0(negative_spread, spread);
+                origin_delta_or_spawn_vector.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(negative_spread, spread);
                 u = func_002140F8_3091B0(negative_spread, spread);
                 t = hi * frame_time;
                 *(int *)&origin_delta_or_spawn_vector.w = 0;
@@ -443,7 +443,7 @@ void spawn_moby_radial_particles(char *moby) {
             range_check_delta_or_spawn_position[1] = range_check_delta_or_spawn_position[1] + fast_sin(spawn_angle_radians) * rad;
             subtract_vector_xyz(reference_to_spawn_delta, range_check_delta_or_spawn_position, D_L08_001675C0);
             if (!(vector_length_xy(reference_to_spawn_delta) <= *(float *)(moby_data + 0x10))) {
-                randomized_spawn_vector[0] = D_L08_00162360[0] + random_float_between_alt(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[0] = ground_particle_scatter_spawn_vector_xy_bias[0] + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[1] = ground_particle_scatter_spawn_vector_y_bias + random_float_between_alt(-xy_random_range, xy_random_range);
                 randomized_spawn_vector[2] = -(random_float_between_alt(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
                          frame_time);

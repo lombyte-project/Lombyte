@@ -19,7 +19,7 @@ typedef struct {
     long gs[4];
 } QuadPkt;
 
-extern float D_L00_001CA318[][4];
+extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
 extern float vector_length_xyz(void *);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
@@ -56,13 +56,13 @@ void draw_vendor_inset_quads(char *vertex_batch) {
         subtract_vector_xyz(A, P[1], P[0]);
         subtract_vector_xyz(B, P[2], P[0]);
         edge_length = vector_length_xyz(A);
-        normalize_vector_xyz(E, A, D_L00_001CA318[i][0]);
+        normalize_vector_xyz(E, A, vendor_quad_inset_parameters[i][0]);
         add_vector_xyz(C, C, E);
-        normalize_vector_xyz(A, A, edge_length - D_L00_001CA318[i][2] * 2.0f);
+        normalize_vector_xyz(A, A, edge_length - vendor_quad_inset_parameters[i][2] * 2.0f);
         edge_length = vector_length_xyz(B);
-        normalize_vector_xyz(E, B, D_L00_001CA318[i][1]);
+        normalize_vector_xyz(E, B, vendor_quad_inset_parameters[i][1]);
         add_vector_xyz(C, C, E);
-        normalize_vector_xyz(B, B, edge_length - D_L00_001CA318[i][3] * 2.0f);
+        normalize_vector_xyz(B, B, edge_length - vendor_quad_inset_parameters[i][3] * 2.0f);
         add_vector_xyz(E, C, A);
         add_vector_xyz(E, E, B);
         project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
@@ -174,8 +174,8 @@ struct HoloPacket {
     long hdr[4];
 };
 
-extern float D_L00_001CA380[][4];
-extern float D_L00_001CA410[][2];
+extern float vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
+extern float vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
 extern int D_L00_001CA458[] __attribute__((section(".data")));
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
@@ -198,10 +198,10 @@ void draw_vendor_hologram_cone(void) {
     quad_packet.hdr[0] = 0;
     quad_packet.hdr[1] = get_effect_texture_c(0x18);
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(transformed_vertex_offsets[0], D_L00_001CA380[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[3], D_L00_001CA380[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[0], vendor_hologram_vertex_offsets[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[1], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[2], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[3], vendor_hologram_vertex_offsets[D_L00_001CA480[i].d], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
         quad_packet.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x10) + transformed_vertex_offsets[0][0];
         quad_packet.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x14) + transformed_vertex_offsets[0][1];
         quad_packet.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_lui[7] + 0x18) + transformed_vertex_offsets[0][2];
@@ -218,14 +218,14 @@ void draw_vendor_hologram_cone(void) {
         quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
         quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];
         quad_packet.col[3] = D_L00_001CA458[D_L00_001CA480[i].d];
-        quad_packet.uv[0][0] = D_L00_001CA410[D_L00_001CA480[i].a][0];
-        quad_packet.uv[0][1] = D_L00_001CA410[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[1][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
-        quad_packet.uv[1][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[2][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
-        quad_packet.uv[2][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[3][0] = D_L00_001CA410[D_L00_001CA480[i].d][0];
-        quad_packet.uv[3][1] = D_L00_001CA410[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[0][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][0];
+        quad_packet.uv[0][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[1][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
+        quad_packet.uv[1][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[2][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
+        quad_packet.uv[2][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[3][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][0];
+        quad_packet.uv[3][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
         fast_draw_quad_real(&quad_packet, 0, 1);
     }
 }
@@ -280,10 +280,10 @@ extern u32 frame_size[] __asm__("D_0013E504");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
-extern u128 D_L00_00166FE0[];
+extern u128 camera_lateral_axis[] __asm__("D_L00_00166FE0");
 extern u128 D_L00_00166FF0[];
 extern u128 D_L00_00166FD0[];
-extern f32 D_L00_00166C80[];
+extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern A02b0_tab D_L00_001C8FF0[];
 
 extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
@@ -362,12 +362,12 @@ void draw_vendor_screen(void) {
                 D_L00_00165F80[2] = s[2];
                 qzero(s);
             }
-            qzero(D_L00_00166FE0);
+            qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
-            D_L00_00166C80[0x350 / 4] = 1.0f;
-            D_L00_00166C80[0x364 / 4] = 1.0f;
-            D_L00_00166C80[0x378 / 4] = 1.0f;
-            D_L00_00166C80[0x37C / 4] = 1.0f;
+            player_camera[0x350 / 4] = 1.0f;
+            player_camera[0x364 / 4] = 1.0f;
+            player_camera[0x378 / 4] = 1.0f;
+            player_camera[0x37C / 4] = 1.0f;
             update_camera_view_matrices();
         } else {
             D_L00_00165F80[0] = D_L00_00166FD0[0];

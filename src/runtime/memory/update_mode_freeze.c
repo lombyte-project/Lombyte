@@ -19,7 +19,7 @@ struct FreezeModeState {
 };
 
 extern u16 D_0013E05A[];
-extern u8 D_00141050[];
+extern u8 saved_camera_vectors[] __asm__("D_00141050");
 extern s32 D_0015EE38;
 extern s32 D_0015EE3C;
 extern s32 boot_level_active __asm__("D_0015F5E8");
@@ -232,7 +232,7 @@ void update_mode_freeze(void) {
                         }
                     }
                     game_mode = 0;
-                    noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
+                    noop_callback_k(saved_camera_vectors, saved_camera_vectors + 0x10, 0, 1);
                 } else {
                     game_mode = 0;
                     if (hero.race_lap >= 3) {

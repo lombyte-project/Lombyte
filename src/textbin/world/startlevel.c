@@ -82,8 +82,8 @@ static inline void clear_bytes(u8 *p, s32 n) {
 
 void startlevel(void) __asm__("FUN_001e9658");
 
-extern u8 D_00165430[];
-extern volatile SoundSlot D_00186100[];
+extern u8 level_bss_end[] __asm__("D_00165430");
+extern volatile SoundSlot l00_primary_sound_defs[] __asm__("D_00186100");
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -101,7 +101,7 @@ void startlevel(void) {
     boot_level_active = 1;
     init_once();
     InitializeStreamingState();
-    for (i = 0; i < D_00165430 - level_bss_start; i++) {
+    for (i = 0; i < level_bss_end - level_bss_start; i++) {
         level_bss_start[i] = 0;
     }
     previous_memory_card_notice = 0;
@@ -180,15 +180,15 @@ void startlevel(void) {
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
     boot_sound_defs_b[4].bank = bank;
-    D_00186100[6].bank = bank;
-    level_sound_defs = D_00186100;
+    l00_primary_sound_defs[6].bank = bank;
+    level_sound_defs = l00_primary_sound_defs;
     level_sound_def_count = 7;
-    D_00186100[0].bank = bank;
-    D_00186100[1].bank = bank;
-    D_00186100[2].bank = bank;
-    D_00186100[3].bank = bank;
-    D_00186100[4].bank = bank;
-    D_00186100[5].bank = bank;
+    l00_primary_sound_defs[0].bank = bank;
+    l00_primary_sound_defs[1].bank = bank;
+    l00_primary_sound_defs[2].bank = bank;
+    l00_primary_sound_defs[3].bank = bank;
+    l00_primary_sound_defs[4].bank = bank;
+    l00_primary_sound_defs[5].bank = bank;
     boot_sound_defs_b[0].bank = bank;
     /* The ordinary view lets the last bank store fill the call delay slot. */
     ((SoundSlot *)boot_sound_defs_b)[2].bank = bank;

@@ -195,8 +195,8 @@ typedef struct {
     int count;
 } Dmg_2F7E08;
 
-extern Cols_2F7E08 D_L01_0020B470;
-extern Cols_2F7E08 D_L01_0020B488;
+extern Cols_2F7E08 l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
+extern Cols_2F7E08 l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
 extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
 extern char *D_L01_0015FFD8_c __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E533[];
@@ -327,8 +327,8 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         for (j = 0; j < rings; j++) {
             float speed = random_float_between_c(8.0f, 10.0f) * D_0015ED6C - fade * D_0015ED6C;
-            Cols_2F7E08 start_colors = D_L01_0020B470;
-            Cols_2F7E08 end_colors = D_L01_0020B488;
+            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
             speed = speed * size_scale;
             FUN_L00_0026a9f0(&(*(Vec_2F7E08 *)&moby->pos), data, start_colors.c[random_integer_below_c2(6)], end_colors.c[random_integer_below_c2(6)], size_scale * 400000.0f,
                               FUN_L00_00257b90_c(scale_game_frames_alt(0x1E), scale_game_frames_alt(0x28)) / rate_divisor,
@@ -338,8 +338,8 @@ void update_explosive_projectile(struct Moby *moby) {
                               FUN_L00_00257b90_c(scale_game_frames_alt(0x1E), scale_game_frames_alt(0x28)) / rate_divisor, 0, 8, speed * 0.5f);
         }
         for (flash = 0; flash < 5; flash++) {
-            Cols_2F7E08 start_colors = D_L01_0020B470;
-            Cols_2F7E08 end_colors = D_L01_0020B488;
+            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
             Vec_2F7E08 flash_emission_vector;
             {
                 Vec_2F7E08 random_dir;
@@ -486,7 +486,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 }
 #include "rnc/overlay/collision.h"
 
-extern CollisionHit D_L01_001742C0;
+extern CollisionHit collision_hit __asm__("D_L01_001742C0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -532,11 +532,11 @@ void rock_update(struct Moby *debris_moby) {
             debris_moby->rot.x = random_float_between(-3.1415927f, 3.1415927f);
             debris_moby->rot.y = random_float_between(-3.1415927f, 3.1415927f);
             debris_moby->rot.z = random_float_between(-3.1415927f, 3.1415927f);
-            FUN_L00_001ff660(&debris_vars->vel, &debris_vars->vel, &D_L01_001742C0.normal_x);
+            FUN_L00_001ff660(&debris_vars->vel, &debris_vars->vel, &collision_hit.normal_x);
             fast_vec_scale(&debris_vars->vel, &debris_vars->vel, random_float_between(0.07f, 0.13f));
             fast_vec_add(&debris_vars->vel, &debris_vars->vel, &bounce_or_particle_velocity);
-            fast_vec_normalize(&D_L01_001742C0.normal_x, &D_L01_001742C0.normal_x, 0.1f);
-            fast_vec_add(&debris_moby->pos, &D_L01_001742C0.normal_x, &D_L01_001742C0.point);
+            fast_vec_normalize(&collision_hit.normal_x, &collision_hit.normal_x, 0.1f);
+            fast_vec_add(&debris_moby->pos, &collision_hit.normal_x, &collision_hit.point);
             spin = random_float_between(frame_time * 1.5707964f, frame_time * 6.2831855f);
             if (0.0f < debris_vars->spin) {
                 spin = -spin;
@@ -638,7 +638,7 @@ typedef struct {
 } TpLevelState;
 
 extern char D_L01_00167240[];
-extern char D_L01_0020B550[];
+extern char cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int D_0015ED84; /* no foreign declaration */
 extern int cutscene_active __asm__("D_L01_0015F404");
 extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
@@ -675,7 +675,7 @@ void update_cutscene_trigger(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
         if (*(int *)(trigger_vars + 0x24) == -1) {
-            stub_printf(D_L01_0020B550, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
+            stub_printf(cutscene_camera_init_position_error_format, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
             mark_moby_for_removal(moby);
             return;
         }
@@ -758,13 +758,13 @@ void update_cutscene_trigger(char *moby) {
 /* Register this level's vendor data set. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
-extern char D_L01_001E34C0[];
+extern char pool_tiles[] __asm__("D_L01_001E34C0");
 extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
 
 void render_level_water_grids(void) {
-    render_water_grids(D_L01_001E34C0, 0x15);
+    render_water_grids(pool_tiles, 0x15);
 }
 /* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */
@@ -876,9 +876,9 @@ extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern unsigned char D_0013DD42 __attribute__((section(".data")));
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
-extern char D_L01_0020B600[];
-extern char D_L01_00161D38[];
-extern char D_L01_00161D48[];
+extern char plumber_level_one_dialogue_data[] __asm__("D_L01_0020B600");
+extern char plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");
+extern char plumber_fallback_dialogue_data[] __asm__("D_L01_00161D48");
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
 extern char *D_L01_001600EC_c __asm__("D_L01_001600EC");
@@ -935,13 +935,13 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
                 mark_moby_for_removal(plumber_moby);
                 return;
             }
-            plumber_vars->p20 = (void *)D_L01_0020B600;
+            plumber_vars->p20 = (void *)plumber_level_one_dialogue_data;
             plumber_moby->state = 1;
         } else if (D_0015ED84_m == 8) {
-            plumber_vars->p20 = (void *)D_L01_00161D38;
+            plumber_vars->p20 = (void *)plumber_level_eight_dialogue_data;
             plumber_moby->state = 4;
         } else {
-            plumber_vars->p20 = (void *)D_L01_00161D48;
+            plumber_vars->p20 = (void *)plumber_fallback_dialogue_data;
             plumber_moby->state = 7;
         }
         initialize_npc_dialogue(plumber_moby, plumber_vars);
@@ -1642,7 +1642,7 @@ extern float gold_bolt_particle_initial_speed_min_gp __asm__("D_L01_00161F54") _
 extern float gold_bolt_particle_initial_speed_max_gp __asm__("D_L01_00161F58") __attribute__((sda));
 extern float gold_bolt_particle_velocity_jitter_speed_min_gp __asm__("D_L01_00161F5C") __attribute__((sda));
 extern float gold_bolt_particle_velocity_jitter_speed_max_gp __asm__("D_L01_00161F60") __attribute__((sda));
-extern short D_L01_00161F64 __attribute__((sda));
+extern short gold_bolt_particle_lifetime_gp __asm__("D_L01_00161F64") __attribute__((sda));
 extern int gold_bolt_particle_initial_color_gp __asm__("D_L01_00161F68") __attribute__((sda));
 extern int gold_bolt_particle_loop_color_gp __asm__("D_L01_00161F6C") __attribute__((sda));
 extern float gold_bolt_particle_initial_scale_gp __asm__("D_L01_00161F70") __attribute__((sda));
@@ -1664,14 +1664,14 @@ void spawn_gold_bolt_particles(char *moby) {
     }
     frame_duration = frame_time;
     random_vector(particle_velocity, gold_bolt_particle_initial_speed_min_gp * frame_duration, gold_bolt_particle_initial_speed_max_gp * frame_duration);
-    particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+    particle_lifetime = *(unsigned char *)&gold_bolt_particle_lifetime_gp;
     spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_initial_color_gp, particle_lifetime, random_integer_below_c(0xFF) & 0xFF, 0,
                      gold_bolt_particle_initial_scale_gp);
     for (i = 2; i >= 0; i--) {
         frame_duration = frame_time;
         random_vector(u, gold_bolt_particle_velocity_jitter_speed_min_gp * frame_duration, gold_bolt_particle_velocity_jitter_speed_max_gp * frame_duration);
         add_vector_xyz(particle_velocity, particle_velocity, u);
-        loop_particle_lifetime = *(unsigned char *)&D_L01_00161F64;
+        loop_particle_lifetime = *(unsigned char *)&gold_bolt_particle_lifetime_gp;
         spawn_moving_hero_relative_alpha_fade_particle(v, particle_velocity, gold_bolt_particle_loop_color_gp, loop_particle_lifetime, random_integer_below_c(0xFF) & 0xFF,
                          0, gold_bolt_particle_loop_scale_gp);
     }
@@ -1964,36 +1964,36 @@ void update_teleporter_child_transforms(char *parent_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A808), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_L01_00201600[];
-extern int D_L01_00201618[];
+extern int shared_teleporter_help_message_ids[] __asm__("D_L01_00201600");
+extern int level_17_teleporter_help_message_ids[] __asm__("D_L01_00201618");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
-extern short D_L01_00161F98 __attribute__((sda));
-extern short D_L01_00161FA0 __attribute__((sda));
-extern short D_L01_00161FA8 __attribute__((sda));
-extern short D_L01_00161FB0 __attribute__((sda));
+extern short level_8_teleporter_help_message_ids __asm__("D_L01_00161F98") __attribute__((sda));
+extern short level_12_teleporter_help_message_ids __asm__("D_L01_00161FA0") __attribute__((sda));
+extern short level_16_teleporter_help_message_ids __asm__("D_L01_00161FA8") __attribute__((sda));
+extern short level_18_teleporter_help_message_ids __asm__("D_L01_00161FB0") __attribute__((sda));
 void try_set_teleporter_help_message(char *moby) {
     int *data = *(int **)(moby + 0x78);
     switch (D_0015ED84) {
     case 12:
-        try_set_help_message(4, ((int *)&D_L01_00161FA0)[data[4]]);
+        try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[data[4]]);
         break;
     case 17:
-        try_set_help_message(4, D_L01_00201618[data[4]]);
+        try_set_help_message(4, level_17_teleporter_help_message_ids[data[4]]);
         break;
     case 1:
     case 7:
     case 13:
-        try_set_help_message(4, D_L01_00201600[data[4]]);
+        try_set_help_message(4, shared_teleporter_help_message_ids[data[4]]);
         break;
     case 8:
-        try_set_help_message(4, ((int *)&D_L01_00161F98)[data[4]]);
+        try_set_help_message(4, ((int *)&level_8_teleporter_help_message_ids)[data[4]]);
         break;
     case 16:
-        try_set_help_message(4, ((int *)&D_L01_00161FA8)[data[4]]);
+        try_set_help_message(4, ((int *)&level_16_teleporter_help_message_ids)[data[4]]);
         break;
     case 18:
-        try_set_help_message(4, ((int *)&D_L01_00161FB0)[data[4]]);
+        try_set_help_message(4, ((int *)&level_18_teleporter_help_message_ids)[data[4]]);
         break;
     }
 }
@@ -2007,7 +2007,7 @@ typedef struct {
 } Quad_30a8c8;
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern float D_L01_00201630[];
+extern float moby_radius_ring_quad_uvs[] __asm__("D_L01_00201630");
 extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
 extern int moby_radius_ring_blend_minuend_selector_gp __asm__("D_L01_00161FB8") __attribute__((sda));
 extern int moby_radius_ring_blend_subtrahend_selector_gp __asm__("D_L01_00161FBC") __attribute__((sda));
@@ -2034,8 +2034,8 @@ void draw_moby_radius_ring(char *moby) {
     quad.g[2] = 0xFF9000000260UL;
     quad.g[0] = 0;
     for (i = 0; i < 4; i++) {
-        quad.uv[i * 2] = D_L01_00201630[i * 2];
-        *(&quad.uv[i * 2] + 1) = D_L01_00201630[i * 2 + 1];
+        quad.uv[i * 2] = moby_radius_ring_quad_uvs[i * 2];
+        *(&quad.uv[i * 2] + 1) = moby_radius_ring_quad_uvs[i * 2 + 1];
         quad.c[i] = moby_radius_ring_vertex_color_gp;
     }
     ring_half_height = 0.1f;

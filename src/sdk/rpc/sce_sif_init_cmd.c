@@ -40,7 +40,7 @@ extern u32 D_0012FC04[];
 extern u32 D_00154E54[];
 extern int LookupTable[] __asm__("D_00154F80");
 extern u8 sif_cmd_packet_buffer[] __asm__("D_00154D80");
-extern u8 D_00154E00[];
+extern u8 sif_cmd_send_buffer[] __asm__("D_00154E00");
 extern SifCmdData sif_cmd_data __asm__("D_00154E58");
 extern SifCmdHandlerEntry sif_system_handlers[] __asm__("D_00154E80");
 extern SifCmdInitPacket sif_init_packet __asm__("D_00154E40");
@@ -70,7 +70,7 @@ void sceSifInitCmd(void) {
     }
     D_0012FC04[0] = 1;
     uncached_packet_buffer = (u32)sif_cmd_packet_buffer | 0x20000000;
-    uncached_unk4 = (u32)D_00154E00 | 0x20000000;
+    uncached_unk4 = (u32)sif_cmd_send_buffer | 0x20000000;
     sif_cmd_data.packet_buffer = (void *)uncached_packet_buffer;
     sif_cmd_data.unk4 = (void *)uncached_unk4;
     sif_cmd_data.unk8 = 0;

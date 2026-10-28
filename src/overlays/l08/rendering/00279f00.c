@@ -16,9 +16,9 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L08_00160200 __attribute__((sda));
-extern short D_L08_00160204 __attribute__((sda));
-extern short D_L08_00160208 __attribute__((sda));
+extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
+extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));
+extern short moby_offset_effect_offset_length_gp __asm__("D_L08_00160208") __attribute__((sda));
 extern unsigned char *D_L08_001B291C __attribute__((section(".data")));
 unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_00279f00");
 
@@ -31,14 +31,14 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
         source_position = source_moby + 0x10;
         effect_data = (char *)effect + 0x20;
         subtract_vector_xyz(position_offset, source_position, D_L08_001675C0);
-        normalize_vector_xyz(position_offset, position_offset, *(float *)&D_L08_00160208);
+        normalize_vector_xyz(position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
         add_vector_xyz(effect + 0x10, source_position, position_offset);
-        *(int *)(effect + 4) = *(int *)&D_L08_00160204;
+        *(int *)(effect + 4) = *(int *)&moby_offset_effect_color_gp;
         effect[9] = func_001FA898_r(4.0f) + 0x40;
         effect[3] = 0x48;
         effect[1] = 0;
         effect[2] = *D_L08_001B291C;
-        *(float *)(effect + 0xC) = *(float *)&D_L08_00160200;
+        *(float *)(effect + 0xC) = *(float *)&moby_offset_effect_size_gp;
         *(short *)(effect + 0xA) = scale_game_frames(0x1E);
         *(float *)(effect + 0x20) = 255.0f;
         *(char **)(effect_data + 4) = source_moby;

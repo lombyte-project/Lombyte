@@ -26,7 +26,7 @@ typedef struct {
 
 extern T2C_2306C8 D_L14_0017C328[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern float D_L14_0017C4F0[][25];
+extern float level14_hero_animation_blend_curves[][25] __asm__("D_L14_0017C4F0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -52,7 +52,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 struct HeroVelocityKey D_L14_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern short D_L14_0015F688 __attribute__((sda));
 int D_L14_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
-extern unsigned char D_L14_0017C4D8[];
+extern unsigned char l14_run_jump_animation_ids_by_frame[] __asm__("D_L14_0017C4D8");
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -78,7 +78,7 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
-extern char D_L14_0017C620[];
+extern char level14_transform_trail_jump_velocity_keys[] __asm__("D_L14_0017C620");
 int hero_set_state(int a, int b) {
 
     int old2088;
@@ -278,7 +278,7 @@ int hero_set_state(int a, int b) {
     }
     case HERO_STATE_RUN:
     case HERO_STATE_RUN_CLEAR_VELOCITY_Z:
-    case 0x3F:
+    case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = 1;
@@ -770,20 +770,20 @@ int hero_set_state(int a, int b) {
     case HERO_STATE_RUN_JUMP:
     case HERO_STATE_PACK_JUMP:
     case HERO_STATE_HIGH_JUMP:
-    case 0xC:
-    case 0xD:
+    case HERO_STATE_STORED_HEADING_JUMP:
+    case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
     case HERO_STATE_DOUBLE_JUMP:
-    case 0xF:
+    case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
     case HERO_STATE_PACK_LONG_JUMP:
-    case 0x11:
-    case 0x12:
+    case HERO_STATE_REPEATABLE_JUMP:
+    case HERO_STATE_WATER_SURFACE_JUMP:
     case HERO_STATE_LEDGE_JUMP:
     case HERO_STATE_GRIND_JUMP:
     case HERO_STATE_GRIND_RAIL_TRANSFER:
-    case 0x3C:
-    case 0x49:
-    case 0x4C:
-    case 0x5E:
+    case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
+    case HERO_STATE_VEHICLE_MODE_1_JUMP:
+    case HERO_STATE_ALT_LEDGE_JUMP:
+    case HERO_STATE_VEHICLE_MODE_2_JUMP:
     case HERO_STATE_JUMP_FROM_RESPAWN_WAIT: {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
@@ -1001,7 +1001,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                *(char **)&u->unk3E4 = D_L14_0017C620;
+                *(char **)&u->unk3E4 = level14_transform_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
@@ -1101,7 +1101,7 @@ int hero_set_state(int a, int b) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
                     if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
-                        id = D_L14_0017C4D8[n];
+                        id = l14_run_jump_animation_ids_by_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {
                     set_hero_animation(0x12, 0, (float)scale_game_frames(5));
@@ -1410,7 +1410,7 @@ int hero_set_state(int a, int b) {
             if (b) {
                 set_hero_animation(0x10, 3, -3.0f);
                 *(float *)(((char *)q->moby) + 0x54) =
-                    D_L14_0017C4F0[q->anim_blend_curve][(q->anim_blend_step)++];
+                    level14_hero_animation_blend_curves[q->anim_blend_curve][(q->anim_blend_step)++];
             }
         }
         break;
@@ -1492,7 +1492,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             set_hero_animation(2, 3, -3.0f);
             *(float *)(((char *)p->moby) + 0x54) =
-                D_L14_0017C4F0[p->anim_blend_curve][(p->anim_blend_step)++];
+                level14_hero_animation_blend_curves[p->anim_blend_curve][(p->anim_blend_step)++];
         }
         break;
     }
@@ -1514,7 +1514,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x10, 2, -3.0f);
         break;
     }
-    case 0x1D: {
+    case HERO_STATE_BLEND_TO_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;

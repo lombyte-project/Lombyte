@@ -146,8 +146,8 @@ typedef struct {
     u8 bB;
 } E;
 
-extern B910 D_L00_001E9830;
-extern B910 D_L00_001E9880;
+extern B910 l00_mine_camera_blast_parameters __asm__("D_L00_001E9830");
+extern B910 l00_mine_alternate_camera_blast_parameters __asm__("D_L00_001E9880");
 extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
@@ -197,8 +197,8 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
 extern s32 D_L00_001612D8_gp __asm__("D_L00_001612D8") __attribute__((sda));
-extern short D_L00_001613D0 __attribute__((sda));
-extern short D_L00_001613D4 __attribute__((sda));
+extern short mine_force_burst __asm__("D_L00_001613D0") __attribute__((sda));
+extern short mine_bounce_ramp_duration __asm__("D_L00_001613D4") __attribute__((sda));
 extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *D_L00_001B2080[];
 extern unsigned char *FUN_002141f8_cf(unsigned char *) __asm__("FUN_L00_002603d0");
@@ -246,8 +246,8 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
-    B910 camera_blast_parameters = D_L00_001E9830;
-    B910 alternate_camera_blast_parameters = D_L00_001E9880;
+    B910 camera_blast_parameters = l00_mine_camera_blast_parameters;
+    B910 alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;
     U910 collision_response_velocity;
     U910 old;
     U910 up;
@@ -341,7 +341,7 @@ void mine_update(M910 *mine_moby) {
             mine_moby->pos.f[2] -= 0.4f;
             q.dir[2] = 1.0f;
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
@@ -725,7 +725,7 @@ void mine_update(M910 *mine_moby) {
                 }
             }
             v->i78 = 0;
-            if (v->i5C < 0 || *(int *)&D_L00_001613D0 != 0) {
+            if (v->i5C < 0 || *(int *)&mine_force_burst != 0) {
                 cart_burst(mine_moby, &mine_moby->pos, -1, 0.33f, 13.0f);
                 mine_spawn_drops(mine_moby, D_L00_001B07B0);
                 mark_moby_for_removal(mine_moby);
@@ -743,7 +743,7 @@ void mine_update(M910 *mine_moby) {
                 }
             }
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
@@ -1591,28 +1591,28 @@ extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
 void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
 extern int D_L00_00160770;
-extern short D_L00_001613F0 __attribute__((sda));
-extern short D_L00_001613F4 __attribute__((sda));
-extern short D_L00_001613F8 __attribute__((sda));
-extern short D_L00_001613FC __attribute__((sda));
-extern short D_L00_00161400 __attribute__((sda));
-extern short D_L00_00161404 __attribute__((sda));
-extern short D_L00_00161408 __attribute__((sda));
+extern short bomb_spark_vertical_acceleration __asm__("D_L00_001613F0") __attribute__((sda));
+extern short bomb_spark_velocity_scale __asm__("D_L00_001613F4") __attribute__((sda));
+extern short bomb_spark_random_velocity_radius __asm__("D_L00_001613F8") __attribute__((sda));
+extern short bomb_spark_random_frame_count_range __asm__("D_L00_001613FC") __attribute__((sda));
+extern short bomb_spark_vertical_offset_frame_base __asm__("D_L00_00161400") __attribute__((sda));
+extern short bomb_spark_jittered_frame_count_base __asm__("D_L00_00161404") __attribute__((sda));
+extern short bomb_spark_frame_count_jitter __asm__("D_L00_00161408") __attribute__((sda));
 extern short D_L00_0016140C __attribute__((sda));
 extern short D_L00_00161410 __attribute__((sda));
 extern short D_L00_00161414 __attribute__((sda));
 extern short D_L00_00161418 __attribute__((sda));
-extern short D_L00_0016141C __attribute__((sda));
-extern short D_L00_00161420 __attribute__((sda));
-extern short D_L00_00161424 __attribute__((sda));
-extern short D_L00_00161428 __attribute__((sda));
-extern short D_L00_0016142C __attribute__((sda));
-extern short D_L00_00161430 __attribute__((sda));
-extern B910 D_L00_001E98D0;
-extern Colors6_2adb30 D_L00_001E9920;
-extern Colors6_2adb30 D_L00_001E9938;
+extern short bomb_spark_primary_color_start __asm__("D_L00_0016141C") __attribute__((sda));
+extern short bomb_spark_primary_color_end __asm__("D_L00_00161420") __attribute__((sda));
+extern short bomb_spark_secondary_color_start __asm__("D_L00_00161424") __attribute__((sda));
+extern short bomb_spark_secondary_color_end __asm__("D_L00_00161428") __attribute__((sda));
+extern short bomb_sparks_per_emission __asm__("D_L00_0016142C") __attribute__((sda));
+extern short bomb_spark_texture_selector __asm__("D_L00_00161430") __attribute__((sda));
+extern B910 l00_bomb_camera_blast_parameters __asm__("D_L00_001E98D0");
+extern Colors6_2adb30 l00_bomb_blast_effect_primary_palette __asm__("D_L00_001E9920");
+extern Colors6_2adb30 l00_bomb_blast_effect_secondary_palette __asm__("D_L00_001E9938");
 void bomb_update(BombMoby_2adb30 *bomb_moby) {
-    B910 rec = D_L00_001E98D0;
+    B910 rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
     Vec_2adb30 old;
     Vec_2adb30 blast_velocity;
@@ -1665,28 +1665,28 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
         if (d->h68 == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
-                for (i = 0; i < *(int *)&D_L00_0016142C; i++) {
+                for (i = 0; i < *(int *)&bomb_sparks_per_emission; i++) {
                     Vec_2adb30 spark_velocity;
                     Vec_2adb30 v2;
                     Vec_2adb30 random_velocity_offset;
                     int p0;
-                    int p1;
+                    int spark_secondary_color;
                     int spark_random_frame_count;
                     int spark_vertical_offset_scale;
                     int spark_jittered_frame_count;
-                    FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&D_L00_001613F4);
-                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&D_L00_001613F8 * D_0015ED6C_2adb30);
+                    FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&bomb_spark_velocity_scale);
+                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&bomb_spark_random_velocity_radius * D_0015ED6C_2adb30);
                     FUN_001f9a10_2adb30(&spark_velocity, &random_velocity_offset, &spark_velocity);
                     FUN_001f99f8_2adb30(v2.f);
                     spark_velocity.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
-                    p0 = fast_tween_color(*(int *)&D_L00_0016141C, *(int *)&D_L00_00161420, FUN_002132a8_2adb30(0.0f, 1.0f));
-                    p1 = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
-                    spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_001613FC * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
-                    spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)spark_vertical_offset_scale;
-                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, p1, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&D_L00_00161430);
+                    p0 = fast_tween_color(*(int *)&bomb_spark_primary_color_start, *(int *)&bomb_spark_primary_color_end, FUN_002132a8_2adb30(0.0f, 1.0f));
+                    spark_secondary_color = fast_tween_color(*(int *)&bomb_spark_secondary_color_start, *(int *)&bomb_spark_secondary_color_end, FUN_002132a8_2adb30(0.0f, 1.0f));
+                    spark_random_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_random_frame_count_range * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
+                    spark_vertical_offset_scale = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_vertical_offset_frame_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
+                    spark_jittered_frame_count = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&bomb_spark_jittered_frame_count_base * (FUN_002132a8_2adb30(-*(float *)&bomb_spark_frame_count_jitter, *(float *)&bomb_spark_frame_count_jitter) + 1.0f)));
+                    v2.f[2] -= *(float *)&bomb_spark_vertical_acceleration * frame_time_sq_macro * (float)spark_vertical_offset_scale;
+                    spawn_spark(&bomb_moby->pos, &spark_velocity, &v2, p0, spark_secondary_color, spark_random_frame_count, spark_vertical_offset_scale, spark_jittered_frame_count, *(int *)&bomb_spark_texture_selector);
                 }
             }
         }
@@ -1856,8 +1856,8 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     }
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
-                        Colors6_2adb30 c1 = D_L00_001E9920;
-                        Colors6_2adb30 blast_effect_secondary_palette = D_L00_001E9938;
+                        Colors6_2adb30 c1 = l00_bomb_blast_effect_primary_palette;
+                        Colors6_2adb30 blast_effect_secondary_palette = l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           FUN_L00_0025c0e8_2adb30(blast_effect_secondary_palette.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
@@ -1957,7 +1957,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             spawn_gravity_floor_burst_particle(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
-                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
+                            int shrinking_particle_primary_color = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
                             int c1 = mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
                             float sz;
                             int life;
@@ -1970,7 +1970,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             v2.f[2] = gz;
                             sz = FUN_002132a8_2adb30(31500.002f, 52500.0f);
                             life = FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x5A), FUN_001f96f8_2adb30(0x96));
-                            spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&v2, &particle_work_vector, c0, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
+                            spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(&v2, &particle_work_vector, shrinking_particle_primary_color, c1, sz, life, 1, D_L00_001B2080_2adb30[11][0], -1);
                         }
                     }
                 }
@@ -2540,11 +2540,11 @@ typedef struct { char pad0[0x100]; V1688 previous; char pad110[0x30]; V1688 curr
 
 typedef struct { char pad0[0x18]; M910 *moby; int kind; V1688 position; char pad30[0x10]; V1688 normal, velocity_end, velocity_start; } Impact1688;
 
-extern B910 D_L00_001E9950;
-extern B910 D_L00_001E99A0;
+extern B910 l00_devastator_missile_camera_blast_parameters __asm__("D_L00_001E9950");
+extern B910 l00_gold_devastator_missile_camera_blast_parameters __asm__("D_L00_001E99A0");
 extern Cam910 D_L00_00166C80;
-extern Colors1688 D_L00_001E99F0;
-extern Colors1688 D_L00_001E9A08;
+extern Colors1688 l00_devastator_missile_impact_color_palette __asm__("D_L00_001E99F0");
+extern Colors1688 l00_devastator_missile_impact_fade_palette __asm__("D_L00_001E9A08");
 extern E D_0013E520;
 extern P D_0013F350;
 extern V1688 D_L00_00160660 __attribute__((section(".sdata")));
@@ -2632,8 +2632,8 @@ extern void FUN_L00_0026a4c8_c(void *,void *,int,int,float,int) __asm__("FUN_L00
 
 void gold_devastator_missile_update(M910 *m) __asm__("FUN_L00_002b03a0");
 void gold_devastator_missile_update(M910 *missile_moby) {
-    B910 effect=D_L00_001E9950;
-    B910 gold_effect=D_L00_001E99A0;
+    B910 effect=l00_devastator_missile_camera_blast_parameters;
+    B910 gold_effect=l00_gold_devastator_missile_camera_blast_parameters;
     V1688 camera_delta;
     V1688 previous;
     V1688 blast_velocity;
@@ -2890,8 +2890,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         if(reduced) j/=2;
         for(i=0;i<j;i++) {
             float speed=random_float_between(8.0f,10.0f)*size*D_0015ED6C-near_adjust*D_0015ED6C;
-            Colors1688 color=D_L00_001E99F0;
-            Colors1688 fade=D_L00_001E9A08;
+            Colors1688 color=l00_devastator_missile_impact_color_palette;
+            Colors1688 fade=l00_devastator_missile_impact_fade_palette;
             int c=swap_packed_color_channels(color.colors[random_integer_below(6)],D_0013E520.bB);
             int f=swap_packed_color_channels(fade.colors[random_integer_below(6)],D_0013E520.bB);
             int life=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
@@ -2903,8 +2903,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             FUN_L00_0026a9f0((&missile_moby->pos),&blast_velocity,0x7FFFFFFF,0xFFFFFF,400000.0f,white_life,white_end,0,0,speed*0.5f);
         }
         for(i=0;i<particles;i++) {
-            Colors1688 color=D_L00_001E99F0;
-            Colors1688 fade=D_L00_001E9A08;
+            Colors1688 color=l00_devastator_missile_impact_color_palette;
+            Colors1688 fade=l00_devastator_missile_impact_fade_palette;
             V1688 v;
             int c,f,life;
             float debris_scale;
@@ -2990,7 +2990,7 @@ int rndi_2b1af0(int, int) __asm__("FUN_L00_00257b90");
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float,
                   float) __asm__("FUN_L00_002712b8");
 void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern P_2b1af0 D_0013F450;
+extern P_2b1af0 l00_object_offset_particle_velocity_contributions __asm__("D_0013F450");
 void emit_object_offset_particles(unsigned char *source_object) __asm__("FUN_L00_002b1af0");
 
 void emit_object_offset_particles(unsigned char *source_object) {
@@ -3015,10 +3015,10 @@ void emit_object_offset_particles(unsigned char *source_object) {
     transform_vector_by_basis(&b, &b, source_object + 0xC0);
     for (i = 1; i >= 0; i--) {
         ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
-        scale_2b1af0(&b, &D_0013F450.a, 0.7f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.a, 0.7f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
-        scale_2b1af0(&b, &D_0013F450.b, 0.7f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.b, 0.7f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
         particle_byte_input_or_min_frames = trunc_2b1af0(rnd_2b1af0(0.0f, 6.0f));
@@ -3027,10 +3027,10 @@ void emit_object_offset_particles(unsigned char *source_object) {
     }
     for (j = 0; j >= 0; j--) {
         ff500_2b1af0(&particle_velocity, &b, rndf_2b1af0(0.01f, 0.06f));
-        scale_2b1af0(&b, &D_0013F450.a, 0.55f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.a, 0.55f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
-        scale_2b1af0(&b, &D_0013F450.b, 0.55f);
+        scale_2b1af0(&b, &l00_object_offset_particle_velocity_contributions.b, 0.55f);
         b.f[2] = 0.0f;
         add_2b1af0(&particle_velocity, &particle_velocity, &b);
         particle_byte_input_or_min_frames = fr_2b1af0(0x14);
@@ -3041,7 +3041,7 @@ void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890")
 int count_2b1de0(float) __asm__("FUN_001fa6d0");
 int random_bit_2b1de0(int) __asm__("FUN_00213260");
 
-extern V_2b1af0 D_0013F9B0;
+extern V_2b1af0 l00_object_offset_burst_reference_direction __asm__("D_0013F9B0");
 void emit_object_offset_particle_burst(unsigned char *source_object) __asm__("FUN_L00_002b1de0");
 
 void emit_object_offset_particle_burst(unsigned char *source_object) {
@@ -3062,14 +3062,14 @@ void emit_object_offset_particle_burst(unsigned char *source_object) {
     add_2b1af0(&emission_position, source_object + 0x10, &emission_offset);
     for (i = 0; i < count_2b1de0(24.0f); i++) {
         angle = rnd_2b1af0(0.0f, 0.1308997f);
-        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &l00_object_offset_burst_reference_direction, (char *)&l00_object_offset_burst_reference_direction - 0x20,
                          (float)i * 0.2617994f + angle);
         ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         signed_random_particle_argument = rndi_2b1af0(0, 3);
         if (random_bit_2b1de0(2) != 0)
             signed_random_particle_argument = -signed_random_particle_argument;
-        if (*(int *)((char *)&D_0013F9B0 - 0x360) != 0) {
-            scale_2b1af0(&scaled_global_vector, (char *)&D_0013F9B0 - 0x560, 1.7f);
+        if (*(int *)((char *)&l00_object_offset_burst_reference_direction - 0x360) != 0) {
+            scale_2b1af0(&scaled_global_vector, (char *)&l00_object_offset_burst_reference_direction - 0x560, 1.7f);
             add_2b1af0(&particle_velocity, &particle_velocity, &scaled_global_vector);
         }
         {
@@ -3081,7 +3081,7 @@ void emit_object_offset_particle_burst(unsigned char *source_object) {
     }
     for (j = 0; j < count_2b1de0(6.0f); j++) {
         angle = rndf_2b1af0(0.0f, 0.7853982f);
-        build_look_at_matrix(&particle_velocity, &D_0013F9B0, (char *)&D_0013F9B0 - 0x20,
+        build_look_at_matrix(&particle_velocity, &l00_object_offset_burst_reference_direction, (char *)&l00_object_offset_burst_reference_direction - 0x20,
                          (float)j * 1.0471976f + angle);
         ff500_2b1af0(&particle_velocity, &particle_velocity, rndf_2b1af0(0.05f, 0.1f));
         {

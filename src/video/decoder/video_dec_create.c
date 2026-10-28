@@ -1,6 +1,6 @@
 #include "types.h"
 extern u8 D_0023D080[];
-extern u8 D_0023D0A8[];
+extern u8 mpeg_decoder_callback[] __asm__("D_0023D0A8");
 extern void mpeg_stop_dma() __asm__("FUN_0023d0e0");
 extern void mpeg_restart_video_dma() __asm__("FUN_0023d110");
 extern u8 D_0023D140[];
@@ -15,7 +15,7 @@ s32 video_dec_create(s32 video_dec, s32 mpeg_work_area, s32 mpeg_work_area_size,
                      s32 ts_count) {
     sceMpegCreate(video_dec);
     AddMpegCallback(video_dec, 0, D_0023D080, 0);
-    AddMpegCallback(video_dec, 1, D_0023D0A8, 0);
+    AddMpegCallback(video_dec, 1, mpeg_decoder_callback, 0);
     AddMpegCallback(video_dec, 2, mpeg_stop_dma, 0);
     AddMpegCallback(video_dec, 3, mpeg_restart_video_dma, 0);
     AddMpegCallback(video_dec, 5, D_0023D140, 0);

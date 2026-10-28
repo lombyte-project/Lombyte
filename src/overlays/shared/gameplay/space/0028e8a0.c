@@ -230,7 +230,7 @@ void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
 s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
 s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
-extern s32 D_L00_00160570[1] __attribute__((sda));
+extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
 void prepare_target_level_transition(s32 target_level_index) {
@@ -253,7 +253,7 @@ void prepare_target_level_transition(s32 target_level_index) {
         s32 divisor;
         FUN_L00_0028e9c8_0028ed58(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        shared_result_record->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[shared_state_record->h26]);
+        shared_result_record->i34 = FUN_001f96f8_0028ed58(transition_sequence_positions[shared_state_record->h26]);
         shared_result_record->i3C = shared_result_record->i34 / divisor;
         FUN_002049f0_0028ed58(shared_result_record->i3C);
         shared_result_record->i38 = shared_result_record->i34 % divisor;
@@ -284,7 +284,7 @@ extern struct {
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 __attribute__((section(".data")));
-extern u8 D_0013D3F0[];
+extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
 void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 
 void prepare_level_entry_transition(void) {
@@ -299,7 +299,7 @@ void prepare_level_entry_transition(void) {
     }
     if (level_index != 0) {
         if (level_index == 0xE) {
-            if (D_0013D3F0[0] == 0)
+            if (level_14_entry_transition_gate[0] == 0)
                 goto out;
         }
         if (level_index < 0x14)

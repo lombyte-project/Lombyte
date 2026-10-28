@@ -16,22 +16,22 @@ extern signed char D_L15_00161ACF[] MACRO_ADDR;
 void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L15_00161ACC __attribute__((sda));
-extern short D_L15_00161AD0 __attribute__((sda));
-extern short D_L15_00161AD4 __attribute__((sda));
+extern short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") __attribute__((sda));
+extern short sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") __attribute__((sda));
+extern short sine_alpha_period_frames __asm__("D_L15_00161AD4") __attribute__((sda));
 void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 
 void emit_sine_modulated_rgba_draw_packet(void) {
-    int period_frames = scale_game_frames(*(int *)&D_L15_00161AD4);
+    int period_frames = scale_game_frames(*(int *)&sine_alpha_period_frames);
     float period_frames_float = convert_integer_to_float(period_frames);
     float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
-    float alpha_scale = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * sine_value;
+    float alpha_scale = *(float *)&D_L15_00161ABC + *(float *)&sine_alpha_scale_amplitude * sine_value;
     int alpha;
     int k;
     if (alpha_scale < 0.0f)
         alpha_scale = 0.0f;
     alpha = func_001FA898_r((float)D_L15_00161ACF[0] * alpha_scale);
-    k = *(int *)&D_L15_00161ACC;
+    k = *(int *)&sine_draw_packet_rgb_control;
     emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, alpha);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */

@@ -184,7 +184,7 @@ extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
-extern int D_L06_0015FFD8_gp __asm__("D_L06_0015FFD8") __attribute__((sda));
+extern int level_mobys_q __asm__("D_L06_0015FFD8") __attribute__((sda));
 void bot_door_lock_update(char *moby) __asm__("FUN_L06_00307d30");
 void bot_door_lock_update(char *moby) {
     enum {
@@ -271,7 +271,7 @@ void bot_door_lock_update(char *moby) {
         }
         if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
             for (i = 0; i < 4; i++) {
-                if (idata[i] != -1) activate_bot_door_lock_target((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8_gp + idata[i] * 0x100));
+                if (idata[i] != -1) activate_bot_door_lock_target((unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
             moby[0x20] = 2;
         }
@@ -495,11 +495,11 @@ void draw_projected_fading_quad(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015EF50;
+extern char *target_reference_table __asm__("D_L06_0015EF50");
 
 void FUN_L06_00316330(char *moby) {
     if (*(short *)(moby + 0x86) == 0x12) {
-        *(int *)(*(char **)(D_L06_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
+        *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
     }
 }
 

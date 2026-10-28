@@ -517,11 +517,11 @@ extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
-extern u8 D_L00_001EA1B0[];
-extern u8 D_L00_001EA1D8[];
-extern u8 D_L00_001EA200[];
-extern u8 D_L00_00161BC0[];
-extern u16 D_00141B08[];
+extern u8 pilots_helmet_missing_cutscene_format[] __asm__("D_L00_001EA1B0");
+extern u8 pilots_helmet_already_owned_message[] __asm__("D_L00_001EA1D8");
+extern u8 pilots_helmet_missing_segment_switch_format[] __asm__("D_L00_001EA200");
+extern u8 pilots_helmet_acquired_message[] __asm__("D_L00_00161BC0");
+extern u16 pilots_helmet_help_record[] __asm__("D_00141B08");
 extern T_2e03a0_2e03a0 D_L00_001BA5D0;
 extern T_2e03a0_2e03a0 D_L00_001BB230;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
@@ -544,9 +544,9 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_INITIALIZE:
         initialize_moby_particle_effect(moby);
         if (p->fa_2e03a0 == -1)
-            stub_printf(D_L00_001EA1B0, moby->h);
+            stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
         if (item_available[7]) {
-            stub_printf(D_L00_001EA1D8);
+            stub_printf(pilots_helmet_already_owned_message);
             FUN_0020c828_2e03a0(moby);
             return;
         }
@@ -563,7 +563,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                 if (p->fa_2e03a0 != -1)
                     start_scene(p->fa_2e03a0);
                 else
-                    stub_printf(D_L00_001EA1B0, moby->h);
+                    stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
                 moby->state = 2;
             }
         }
@@ -571,11 +571,11 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_GRANT_REWARD:
         if (D_L00_0015F5C4_2e03a0 == 2)
             return;
-        stub_printf(D_L00_00161BC0);
+        stub_printf(pilots_helmet_acquired_message);
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
         grant_inventory_item(7, 1);
-        if (D_00141B08[0] == 0)
+        if (pilots_helmet_help_record[0] == 0)
             give_reward(0x2328, 0x34);
         if (p->b != -1) {
             D_L00_001BA5D0.arr[D_L00_0015FFD8_2e03a0[p->b].h] =
@@ -588,7 +588,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                     D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
             }
         } else {
-            stub_printf(D_L00_001EA200, moby->h);
+            stub_printf(pilots_helmet_missing_segment_switch_format, moby->h);
         }
         if (moby->b0 != 0xFF)
             FUN_L00_002502a0_2e03a0(moby->b0);
@@ -1084,7 +1084,7 @@ void draw_active_beam_slots(char *moby) {
 #include "rnc/rendering/geometry_quad.h"
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E4138). */
 typedef struct { OvlVec4 axis, unk10, position, unk30; } TrailSlot;
-extern TrailSlot D_L00_001E6D30[];
+extern TrailSlot l00_beam_strand_axis_and_origin_slots[] __asm__("D_L00_001E6D30");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
@@ -1136,14 +1136,14 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     width.f[2] = half_width;
     glow_width.f[3] = 1.0f;
 
-    qcopy(&basis[0], &D_L00_001E6D30[slot].axis);
-    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &D_L00_001E6D30[slot].position);
+    qcopy(&basis[0], &l00_beam_strand_axis_and_origin_slots[slot].axis);
+    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &l00_beam_strand_axis_and_origin_slots[slot].position);
     fast_vec_scale(&basis[1], &basis[1], 1.0f);
     cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
     normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
     cross_vectors_xyz(&basis[0], &basis[2], &basis[1]);
-    qcopy(&basis[3], &D_L00_001E6D30[slot].position);
-    qcopy(&transform[3], &D_L00_001E6D30[slot].position);
+    qcopy(&basis[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
+    qcopy(&transform[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
     subtract_vector_xyz(&direction, &D_L00_001E6DE0[slot], &transform[3]);
     normalize_vector_xyz(&transform[0], &direction, 1.0f);
     cross_vectors_xyz(&transform[1], &transform[0], D_0013E633_2E3700);
@@ -1260,7 +1260,7 @@ void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
-extern f32 D_L00_001E6CE0[4][4];
+extern f32 beam_endpoint_quad_local_vertices[4][4] __asm__("D_L00_001E6CE0");
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_L00_002e3388");
 
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
@@ -1302,7 +1302,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     core_quad_jitter_offset[1] = spread_k(0.0f, 0.05f);
     core_quad_jitter_offset[2] = spread_k(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
@@ -1313,7 +1313,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = 0x607F4040;
     geometry_quad.col[0] = 0x607F4040;
     for (j = 0; j < 4; j++) {
-        FUN_001f9a68_e3388(geometry_quad.v[j], D_L00_001E6CE0[j], quad_scale * 3.0f);
+        FUN_001f9a68_e3388(geometry_quad.v[j], beam_endpoint_quad_local_vertices[j], quad_scale * 3.0f);
         transform_vector(geometry_quad.v[j], geometry_quad.v[j], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
@@ -1330,7 +1330,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = -1;
     geometry_quad.col[0] = -1;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
@@ -1341,7 +1341,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.col[1] = 0x607F4040;
     geometry_quad.col[0] = 0x607F4040;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_e3388(geometry_quad.v[i], D_L00_001E6CE0[i], quad_scale * 3.0f);
+        FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale * 3.0f);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
@@ -1816,21 +1816,21 @@ extern float D_L00_00166EEC __attribute__((section(".data")));
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
-extern short D_L00_00161D38 __attribute__((sda));
+extern short follow_camera_ground_aware_focus_transition_frames_gp __asm__("D_L00_00161D38") __attribute__((sda));
 extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
 extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
-extern short D_L00_00161D48 __attribute__((sda));
-extern short D_L00_00161D4C __attribute__((sda));
-extern short D_L00_00161D50 __attribute__((sda));
+extern short follow_camera_blend_out_focus_offset_gp __asm__("D_L00_00161D48") __attribute__((sda));
+extern short follow_camera_project_hero_focus_blend_base_frames_gp __asm__("D_L00_00161D4C") __attribute__((sda));
+extern short follow_camera_focus_blend_transition_frames_gp __asm__("D_L00_00161D50") __attribute__((sda));
 extern short D_L00_00161D54_gp __asm__("D_L00_00161D54") __attribute__((sda));
-extern short D_L00_00161D58 __attribute__((sda));
-extern short D_L00_00161D5C __attribute__((sda));
-extern short D_L00_00161D60 __attribute__((sda));
-extern short D_L00_00161D64 __attribute__((sda));
-extern short D_L00_00161D68 __attribute__((sda));
+extern short follow_camera_project_hero_focus_offset_gp __asm__("D_L00_00161D58") __attribute__((sda));
+extern short follow_camera_hold_focus_blend_base_frames_gp __asm__("D_L00_00161D5C") __attribute__((sda));
+extern short follow_camera_hold_focus_transition_frames_gp __asm__("D_L00_00161D60") __attribute__((sda));
+extern short follow_camera_hold_focus_exit_base_frames_gp __asm__("D_L00_00161D64") __attribute__((sda));
+extern short follow_camera_hold_focus_blend_offset_gp __asm__("D_L00_00161D68") __attribute__((sda));
 extern short D_L00_00161D6C_gp __asm__("D_L00_00161D6C") __attribute__((sda));
-extern short D_L00_00161D78 __attribute__((sda));
-extern short D_L00_00161D7C __attribute__((sda));
+extern short follow_camera_continue_projected_focus_transition_frames_gp __asm__("D_L00_00161D78") __attribute__((sda));
+extern short follow_camera_projected_focus_blend_offset_gp __asm__("D_L00_00161D7C") __attribute__((sda));
 extern void FUN_L00_002e48a0_c(void *out, float f) __asm__("FUN_L00_002e48a0");
 
 void FUN_L00_002e4930(char *camera) {
@@ -1852,13 +1852,13 @@ void FUN_L00_002e4930(char *camera) {
             if (current_player->state.current == 0xF && D_L00_00166EEC == 0.0f) {
                 attach_state->prev = attach_state->state;
                 attach_state->state = 3;
-                attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
+                attach_state->moveTimer = scale_game_frames(*(int *)&follow_camera_project_hero_focus_blend_base_frames_gp);
                 attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-                attach_state->timer = D_L00_00161D50;
+                attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
                 inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
-                attach_state->dist = *(float *)&D_L00_00161D58;
+                attach_state->dist = *(float *)&follow_camera_project_hero_focus_offset_gp;
                 attach_state->hit = 0;
-                x = *(float *)&D_L00_00161D58;
+                x = *(float *)&follow_camera_project_hero_focus_offset_gp;
                 attach_state->invTimer = inv;
                 FUN_L00_002e48a0_c(attach_state->v30, x);
                 qcopy(attach_state->v20, attach_state->v10);
@@ -1867,7 +1867,7 @@ void FUN_L00_002e4930(char *camera) {
                 if (state_check_player->state.current == 0xC && D_L00_00166EEC == 0.0f) {
                     attach_state->prev = attach_state->state;
                     attach_state->state = 8;
-                    attach_state->timer = D_L00_00161D60;
+                    attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
                     attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
                 } else {
                     struct Hero *hero_state_player = &hero;
@@ -1876,11 +1876,11 @@ void FUN_L00_002e4930(char *camera) {
                         attach_state->state = 6;
                         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
                         attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-                        attach_state->timer = D_L00_00161D50;
+                        attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
                         inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
-                        attach_state->dist = *(float *)&D_L00_00161D48;
+                        attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
                         attach_state->hit = 0;
-                        x = *(float *)&D_L00_00161D48;
+                        x = *(float *)&follow_camera_blend_out_focus_offset_gp;
                         attach_state->invTimer = inv;
                         FUN_L00_002e48a0_c(attach_state->v30, x);
                         qcopy(attach_state->v20, attach_state->v10);
@@ -1890,13 +1890,13 @@ void FUN_L00_002e4930(char *camera) {
                             D_L00_00166EEC == 0.0f) {
                             attach_state->prev = attach_state->state;
                             attach_state->state = 5;
-                            attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D5C);
+                            attach_state->moveTimer = scale_game_frames(*(int *)&follow_camera_hold_focus_blend_base_frames_gp);
                             attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-                            attach_state->timer = D_L00_00161D60;
+                            attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
                             inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
-                            attach_state->dist = *(float *)&D_L00_00161D68;
+                            attach_state->dist = *(float *)&follow_camera_hold_focus_blend_offset_gp;
                             attach_state->hit = 0;
-                            x = *(float *)&D_L00_00161D68;
+                            x = *(float *)&follow_camera_hold_focus_blend_offset_gp;
                             attach_state->invTimer = inv;
                             FUN_L00_002e48a0_c(attach_state->v30, x);
                             qcopy(attach_state->v20, attach_state->v10);
@@ -1905,7 +1905,7 @@ void FUN_L00_002e4930(char *camera) {
                             if (control_mode_player->state.control_mode == 4 && D_L00_00166EEC == 0.0f) {
                                 attach_state->prev = attach_state->state;
                                 attach_state->state = 2;
-                                attach_state->timer = D_L00_00161D38;
+                                attach_state->timer = follow_camera_ground_aware_focus_transition_frames_gp;
                                 attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
                             }
                         }
@@ -1921,10 +1921,10 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->state = 9;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
         r = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-        y = *(float *)&D_L00_00161D7C;
+        y = *(float *)&follow_camera_projected_focus_blend_offset_gp;
         attach_state->hit = 0;
         attach_state->timer = 0;
-        x = *(float *)&D_L00_00161D7C;
+        x = *(float *)&follow_camera_projected_focus_blend_offset_gp;
         attach_state->invTimer = 1.0f;
         attach_state->dist = y;
         attach_state->invMove = r;
@@ -1945,11 +1945,11 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->state = 6;
             attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
             attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-            attach_state->timer = D_L00_00161D50;
+            attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
             inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
-            attach_state->dist = *(float *)&D_L00_00161D48;
+            attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
             attach_state->hit = 0;
-            x = *(float *)&D_L00_00161D48;
+            x = *(float *)&follow_camera_blend_out_focus_offset_gp;
             attach_state->invTimer = inv;
             FUN_L00_002e48a0_c(attach_state->v30, x);
             qcopy(attach_state->v20, attach_state->v10);
@@ -1982,11 +1982,11 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->state = 6;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
         attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
-        attach_state->timer = D_L00_00161D50;
+        attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
         inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
-        attach_state->dist = *(float *)&D_L00_00161D48;
+        attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
         attach_state->hit = 0;
-        x = *(float *)&D_L00_00161D48;
+        x = *(float *)&follow_camera_blend_out_focus_offset_gp;
         attach_state->invTimer = inv;
         FUN_L00_002e48a0_c(attach_state->v30, x);
         qcopy(attach_state->v20, attach_state->v10);
@@ -1995,14 +1995,14 @@ void FUN_L00_002e4930(char *camera) {
     if (attach_state->state == 5 && D_001413D4 == 0xC) {
         attach_state->prev = attach_state->state;
         attach_state->state = 8;
-        attach_state->timer = D_L00_00161D60;
+        attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
         attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
     if (attach_state->state == 8 && D_001413D4 != 0xC) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
-        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
@@ -2046,7 +2046,7 @@ void FUN_L00_002e4930(char *camera) {
     if (attach_state->state == 9 && D_001413D4 != 0x14) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0xA;
-        attach_state->timer = D_L00_00161D78;
+        attach_state->timer = follow_camera_continue_projected_focus_transition_frames_gp;
         attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
         return;
     }
@@ -2060,7 +2060,7 @@ void FUN_L00_002e4930(char *camera) {
     if (attach_state->state == 5 && D_001413D4 == 0x10) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
-        attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
     }
 }
@@ -2085,9 +2085,9 @@ extern void FUN_L00_002e42c0_c(void *, int) __asm__("FUN_L00_002e42c0");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_002E5770_r(void *, int) __asm__("FUN_L00_002e42c0");
 
-extern short D_L00_00161D0C __attribute__((sda));
-extern short D_L00_00161D10 __attribute__((sda));
-extern short D_L00_00161D80 __attribute__((sda));
+extern short follow_camera_ground_focus_angle_upper_bound_gp __asm__("D_L00_00161D0C") __attribute__((sda));
+extern short follow_camera_ground_focus_angle_lower_bound_gp __asm__("D_L00_00161D10") __attribute__((sda));
+extern short follow_camera_projected_focus_blend_fraction_gp __asm__("D_L00_00161D80") __attribute__((sda));
 void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     float hero_position[4];
     float target_position_or_up_offset[4];
@@ -2125,8 +2125,8 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         padb = &hero;
         if (padb->state.current == 0x11 ||
             (padb->past_jump_apex != 0 && padb->ground_distance > 0.2f &&
-             ((y = FUN_L00_002e4580_u(camera, *(float *)(attach_state + 0xB0))) < *(float *)&D_L00_00161D10 ||
-              *(float *)&D_L00_00161D0C < y))) {
+             ((y = FUN_L00_002e4580_u(camera, *(float *)(attach_state + 0xB0))) < *(float *)&follow_camera_ground_focus_angle_lower_bound_gp ||
+              *(float *)&follow_camera_ground_focus_angle_upper_bound_gp < y))) {
             int v;
             *(unsigned char *)(attach_state + 0xC4) = 1;
             v = *(unsigned short *)&D_L00_00161D3C_gp;
@@ -2215,7 +2215,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
         FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
-        lerp_vector(*(float *)&D_L00_00161D80, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
+        lerp_vector(*(float *)&follow_camera_projected_focus_blend_fraction_gp, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
         break;
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:

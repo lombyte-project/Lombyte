@@ -22,21 +22,21 @@ typedef struct {
     s32 unk24;    /* 0x24 */
 } MessageBox;
 
-extern MessageBox D_L00_00173040;
+extern MessageBox l00_message_box __asm__("D_L00_00173040");
 #include "rnc/overlay/shared/runtime/memory/002018c8_globals.h"
-extern char D_L00_0015F508[];
-extern char D_L00_0015F510[];
-extern char D_L00_0015F520[];
-extern char D_L00_0015F528[];
-extern char D_L00_0015F530[];
-extern char D_L00_0015F538[];
-extern char D_L00_0015F540[];
-extern char D_L00_0015F548[];
-extern char D_L00_0015F550[];
-extern char D_L00_0015F560[];
-extern u8 D_L00_001C3150[];
-extern struct TextRegion D_L00_001E7A50;
-extern struct TextRegion D_L00_001E7A68;
+extern char freeze_dialog_default_body_text[] __asm__("D_L00_0015F508");
+extern char freeze_dialog_body_format[] __asm__("D_L00_0015F510");
+extern char results_indented_label_format[] __asm__("D_L00_0015F520");
+extern char results_first_place_format[] __asm__("D_L00_0015F528");
+extern char results_second_place_format[] __asm__("D_L00_0015F530");
+extern char results_third_place_format[] __asm__("D_L00_0015F538");
+extern char results_other_place_format[] __asm__("D_L00_0015F540");
+extern char results_record_label_format[] __asm__("D_L00_0015F548");
+extern char results_record_time_format[] __asm__("D_L00_0015F550");
+extern char results_record_score_format[] __asm__("D_L00_0015F560");
+extern u8 dialog_font_glyph_metrics[] __asm__("D_L00_001C3150");
+extern struct TextRegion l00_split_dialog_text_region_template __asm__("D_L00_001E7A50");
+extern struct TextRegion l00_choice_dialog_text_region_template __asm__("D_L00_001E7A68");
 
 extern void memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
@@ -99,7 +99,7 @@ void level_draw_dialog_text(void) {
     struct TextRegion box;
 
     setup_gif_paging(0);
-    switch (D_L00_00173040.state) {
+    switch (l00_message_box.state) {
     case MESSAGE_BOX_SPLIT_TEXT_SPRITE_DIALOG: {
         u8 *text_cursor;
         s32 color;
@@ -112,9 +112,9 @@ void level_draw_dialog_text(void) {
         f32 angle;
         f32 pivot;
 
-        alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
+        alpha = 1.0f - (f32)l00_message_box.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        box = D_L00_001E7A50;
+        box = l00_split_dialog_text_region_template;
         color = fast_tween_color(dialog_text_tween_start_color, dialog_text_tween_end_color, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
         text_cursor = SCRATCHPAD;
@@ -126,17 +126,17 @@ void level_draw_dialog_text(void) {
                 *text_cursor++ = 0;
             } while (*text_cursor == 1);
         }
-        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, SCRATCHPAD, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         pivot = 272.0f;
         box.flags |= 4;
         y = box.anchor_y;
         y += box.rendered_height;
-        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         box.flags ^= 4;
         box.anchor_y = 0x136 - box.rendered_height;
-        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), D_L00_001C3150);
+        font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), dialog_font_glyph_metrics);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
-                            1.0f - (f32)D_L00_00173040.unk24 / (f32)scale_game_frames(30));
+                            1.0f - (f32)l00_message_box.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
         mid = (y + box.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
@@ -158,7 +158,7 @@ void level_draw_dialog_text(void) {
         s32 h;
         f32 alpha;
 
-        text = D_L00_0015F508;
+        text = freeze_dialog_default_body_text;
         left = 0;
         mid = 0;
         right = 0;
@@ -202,7 +202,7 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_TIMER_GATED_CENTERED_BUTTON:
             mid = 0x524A;
             text = get_help_message_text(0x4FA6);
-            if (D_L00_00173040.timer != 0) {
+            if (l00_message_box.timer != 0) {
                 mid = 0;
             }
             break;
@@ -213,7 +213,7 @@ void level_draw_dialog_text(void) {
             } else if (D_L00_0015F5A8 != 0) {
                 left = 0x524E;
                 right = 0x524B;
-                sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
+                sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FA9), 1, 1, get_help_message_text(0x4FAA));
                 text = formatted_dialog_body;
             } else {
                 mid = 0x4FA8;
@@ -231,7 +231,7 @@ void level_draw_dialog_text(void) {
         case FREEZE_DIALOG_FORMATTED_BODY_PAIRED_BUTTONS:
             left = 0x524E;
             right = 0x524B;
-            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
+            sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FAE), 1, 1, get_help_message_text(0x4FAA));
             text = formatted_dialog_body;
             break;
         case FREEZE_DIALOG_PLAIN_BODY_PAIRED_BUTTONS:
@@ -252,7 +252,7 @@ void level_draw_dialog_text(void) {
             break;
         case FREEZE_DIALOG_FORMATTED_BODY_CENTERED_BUTTON:
             mid = 0x4FA8;
-            sprintf(formatted_dialog_body, D_L00_0015F510, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
+            sprintf(formatted_dialog_body, freeze_dialog_body_format, get_help_message_text(0x4FB0), 1, 1, get_help_message_text(0x4FA7));
             text = formatted_dialog_body;
             break;
         }
@@ -263,12 +263,12 @@ void level_draw_dialog_text(void) {
         box.bottom = y + h;
         box.anchor_y = y + 4;
         box.top = y;
-        alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
+        alpha = 1.0f - (f32)l00_message_box.timer / (f32)scale_game_frames(30);
         draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
         font_print_window_regular(&box, fast_tween_color(dialog_text_tween_start_color, dialog_text_tween_end_color, alpha), text, -1);
         tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
-                            1.0f - (f32)D_L00_00173040.unk24 / (f32)scale_game_frames(30));
+                            1.0f - (f32)l00_message_box.unk24 / (f32)scale_game_frames(30));
         if (left != 0) {
             font_print_center(0xCA, box.bottom - 0x14, tint, get_help_message_text(left), -1);
         }
@@ -286,12 +286,12 @@ void level_draw_dialog_text(void) {
         s32 id;
         f32 alpha;
 
-        box = D_L00_001E7A68;
-        alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
+        box = l00_choice_dialog_text_region_template;
+        alpha = 1.0f - (f32)l00_message_box.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         text_color = fast_tween_color(dialog_text_tween_start_color, dialog_text_tween_end_color, alpha);
         button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
-        switch (D_L00_00173040.choice) {
+        switch (l00_message_box.choice) {
         case CHOICE_DIALOG_PAIRED_BUTTONS:
         case CHOICE_DIALOG_SHARED_PAIRED_BUTTONS:
             font_print_center(0xCA, 0x118, button_color, get_help_message_text(0x524E), -1);
@@ -312,7 +312,7 @@ void level_draw_dialog_text(void) {
             break;
         }
         if (id != 0) {
-            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), D_L00_001C3150);
+            font_print_window(&box, text_color, get_help_message_text(id), -1, get_effect_texture(1), dialog_font_glyph_metrics);
         }
         break;
     }
@@ -337,7 +337,7 @@ void level_draw_dialog_text(void) {
                              fast_sin((f32)(D_L00_0015F3F8 % dialog_frame_pulse_period) / convert_integer_to_float(dialog_frame_pulse_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
-        scale = (f32)D_L00_00173040.unk20 * 0.125f;
+        scale = (f32)l00_message_box.unk20 * 0.125f;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.1f) {
@@ -346,8 +346,8 @@ void level_draw_dialog_text(void) {
         results_label_color = results_label_tween_start_color;
         first_place_or_record_color = first_place_or_record_tween_start_color;
         other_place_or_no_record_color = other_place_or_no_record_tween_start_color;
-        if (D_L00_00173040.unk24 != 0) {
-            color_blend_factor = (f32)D_L00_00173040.unk24 * 0.125f;
+        if (l00_message_box.unk24 != 0) {
+            color_blend_factor = (f32)l00_message_box.unk24 * 0.125f;
             if (color_blend_factor > 1.0f) {
                 color_blend_factor = 1.0f;
             } else if (color_blend_factor < 0.0f) {
@@ -370,15 +370,15 @@ void level_draw_dialog_text(void) {
                          results_rank_and_records_frame_center_y + truncate_float_to_s32((f32)results_rank_and_records_frame_half_height * scale),
                          results_rank_and_records_frame_center_x - truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale),
                          results_rank_and_records_frame_center_x + truncate_float_to_s32((f32)results_rank_and_records_frame_half_width * scale), pulse);
-            sprintf(line, D_L00_0015F520, get_help_message_text(0x5240));
+            sprintf(line, results_indented_label_format, get_help_message_text(0x5240));
             if (hero.race_position == 1) {
-                sprintf(line, D_L00_0015F528, 1);
+                sprintf(line, results_first_place_format, 1);
             } else if (hero.race_position == 2) {
-                sprintf(line, D_L00_0015F530, 2);
+                sprintf(line, results_second_place_format, 2);
             } else if (hero.race_position == 3) {
-                sprintf(line, D_L00_0015F538, 3);
+                sprintf(line, results_third_place_format, 3);
             } else {
-                sprintf(line, D_L00_0015F540, hero.race_position);
+                sprintf(line, results_other_place_format, hero.race_position);
             }
             line[3] = ' ';
             if (hero.race_position == 1) {
@@ -394,22 +394,22 @@ void level_draw_dialog_text(void) {
                 rem = best - min * unit;
                 sec = rem / per;
                 hund = (rem - sec * per) * 100 / per;
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A3));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A3));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x26, first_place_or_record_color, line, -1);
-                sprintf(line, D_L00_0015F550, min, sec, hund);
+                sprintf(line, results_record_time_format, min, sec, hund);
                 font_print_center(0x100, results_rank_and_records_base_y + 0x3A, first_place_or_record_color, line, -1);
             } else {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A2));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A2));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x30, other_place_or_no_record_color, line, -1);
             }
             record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.race_score) {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A5));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x56, first_place_or_record_color, line, -1);
-                sprintf(line, D_L00_0015F560, hero.race_score);
+                sprintf(line, results_record_score_format, hero.race_score);
                 font_print_center(0x100, results_rank_and_records_base_y + 0x6A, first_place_or_record_color, line, -1);
             } else {
-                sprintf(line, D_L00_0015F548, get_help_message_text(0x50A4));
+                sprintf(line, results_record_label_format, get_help_message_text(0x50A4));
                 font_print_center(0x100, results_rank_and_records_base_y + 0x60, other_place_or_no_record_color, line, -1);
             }
             font_print_center(0x100, results_rank_and_records_base_y + 0x90, results_label_color, get_help_message_text(0x5249), -1);
@@ -424,10 +424,10 @@ void level_draw_dialog_text(void) {
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
-        font_print_center(0x100, 0x7A, 0x8000C0C0, D_L00_00173040.title, -1);
+        font_print_center(0x100, 0x7A, 0x8000C0C0, l00_message_box.title, -1);
         break;
     default: {
-        MessageBox *mb = &D_L00_00173040;
+        MessageBox *mb = &l00_message_box;
         s32 pulse;
 
         pulse = fast_tween_color(dialog_frame_pulse_start_color, dialog_frame_pulse_end_color,

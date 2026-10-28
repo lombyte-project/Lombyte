@@ -150,7 +150,7 @@ typedef struct {
     int target_timer;
 } WD8;
 extern unsigned char D_0013DD49 __attribute__((section(".data")));
-extern char D_L08_001622E8[];
+extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
 extern void FUN_L00_0025a120(void *);
@@ -194,7 +194,7 @@ void batalia_deserter_update(WM *moby) {
             return;
         }
         deserter_data->f2C = 4.0f;
-        deserter_data->p40 = (void *)D_L08_001622E8;
+        deserter_data->p40 = (void *)batalia_deserter_name_text;
         moby->state = 1;
         if (deserter_data->i64 >= 0)
             initialize_npc_dialogue(moby, (char *)deserter_data + 0x20);
@@ -307,7 +307,7 @@ extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__(
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
 
-extern short D_L08_00162300 __attribute__((sda));
+extern short batalia_plumber_manipulator_replicated_value __asm__("D_L08_00162300") __attribute__((sda));
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L08_003063f0");
 
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
@@ -331,7 +331,7 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
                 if (D_L08_0017CC40_d[1] == 0) {
                     float replicated_value;
                     attach_manipulator(candidate_moby, 0, D_L08_0017CC40_d);
-                    replicated_value = *(float *)&D_L08_00162300;
+                    replicated_value = *(float *)&batalia_plumber_manipulator_replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x20) = replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x24) = replicated_value;
                     *(float *)(D_L08_0017CC40_d + 0x28) = replicated_value;
@@ -408,7 +408,7 @@ extern int FUN_001fa6d0(float);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern char D_L08_00162308[];
+extern char batalia_plumber_name_text[] __asm__("D_L08_00162308");
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
@@ -440,7 +440,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        watch_data->p20 = (void *)D_L08_00162308;
+        watch_data->p20 = (void *)batalia_plumber_name_text;
         moby->state = 1;
         FUN_L00_002668a0_c(moby, watch_data);
         break;
@@ -812,13 +812,13 @@ extern s32 D_L08_001F01C8[];
 extern s32 D_L08_001F4C48[];
 extern s32 D_L08_001F4C60[];
 extern s32 D_L08_001F8528[];
-extern char D_L08_001F8550[];
+extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 #include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32();
-extern short D_L08_00162380 __attribute__((sda));
+extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
 int D_L08_001623C4 = 0;
 extern int *D_L08_001623E8[2] __attribute__((sda));
 extern int D_L08_001623C8[2] __attribute__((sda));
@@ -869,12 +869,12 @@ void update_batalia_textured_effect(struct Moby *moby) {
         }
         break;
     case MOBY_ACTIVE:
-        sphere_check_input[0] = *(float *)&D_L08_00162380;
+        sphere_check_input[0] = *(float *)&batalia_effect_reference_position_x;
         sphere_check_input[1] = batalia_effect_reference_position_y;
         sphere_check_input[2] = batalia_effect_reference_position_z;
         sphere_check_input[3] = batalia_effect_culling_radius;
         if (fast_bsphere_check((char *)sphere_check_input, 1000.0f) >= 0) {
-            position_delta[0] = *(float *)&D_L08_00162380;
+            position_delta[0] = *(float *)&batalia_effect_reference_position_x;
             position_delta[1] = batalia_effect_reference_position_y;
             position_delta[2] = batalia_effect_reference_position_z;
             position_delta[3] = 1.0f;
@@ -882,7 +882,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
             distance = vector_length_xyz(position_delta);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
+                advance_wrapped_sine_pair(batalia_effect_sine_offsets, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_001623F0 = 0xFF;

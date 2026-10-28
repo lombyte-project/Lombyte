@@ -6,7 +6,7 @@
 struct Code4 {
     u8 b[4];
 };
-extern struct Code4 D_00161218[];
+extern struct Code4 video_dec_flush_code[] __asm__("D_00161218");
 extern void video_dec_begin_put(struct VideoDec *, u32 *, s32 *, u32 *,
                                 s32 *) __asm__("func_0023CBF0");
 extern s32 cpy2area(u32, s32, u32, s32, void *, s32, s32,
@@ -16,7 +16,7 @@ extern void vi_buf_flush(void *) __asm__("func_0023C660");
 s32 video_dec_flush(struct VideoDec *vd) __asm__("FUN_0023cd08");
 
 s32 video_dec_flush(struct VideoDec *vd) {
-    struct Code4 code = D_00161218[0];
+    struct Code4 code = video_dec_flush_code[0];
     u32 destination_a;
     s32 destination_a_len;
     u32 destination_b;

@@ -123,19 +123,19 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 int D_L13_00161EB0 = 0x800040ff;
 int D_L13_00161EB4 = 0x4000cc80;
-extern short D_L13_00161EB8 __attribute__((sda));
-extern short D_L13_00161EBC __attribute__((sda));
-extern short D_L13_00161EC0 __attribute__((sda));
-extern short D_L13_00161EC4 __attribute__((sda));
-extern short D_L13_00161EC8 __attribute__((sda));
-extern short D_L13_00161ECC __attribute__((sda));
-extern short D_L13_00161ED0 __attribute__((sda));
-extern short D_L13_00161ED4 __attribute__((sda));
-extern short D_L13_00161ED8 __attribute__((sda));
-extern short D_L13_00161EDC __attribute__((sda));
-extern short D_L13_00161EE0 __attribute__((sda));
-extern short D_L13_00161EE4 __attribute__((sda));
-extern short D_L13_00161EE8 __attribute__((sda));
+extern short point_spark_first_vector_w __asm__("D_L13_00161EB8") __attribute__((sda));
+extern short point_spark_second_vector_w __asm__("D_L13_00161EBC") __attribute__((sda));
+extern short point_spark_frame_count_range_start __asm__("D_L13_00161EC0") __attribute__((sda));
+extern short point_spark_frame_count_range_end __asm__("D_L13_00161EC4") __attribute__((sda));
+extern short point_spark_second_frame_count_range_start __asm__("D_L13_00161EC8") __attribute__((sda));
+extern short point_spark_second_frame_count_range_end __asm__("D_L13_00161ECC") __attribute__((sda));
+extern short point_spark_third_frame_count_range_start __asm__("D_L13_00161ED0") __attribute__((sda));
+extern short point_spark_third_frame_count_range_end __asm__("D_L13_00161ED4") __attribute__((sda));
+extern short point_spark_xy_multiplier_range_start __asm__("D_L13_00161ED8") __attribute__((sda));
+extern short point_spark_xy_multiplier_range_end __asm__("D_L13_00161EDC") __attribute__((sda));
+extern short point_spark_z_range_start __asm__("D_L13_00161EE0") __attribute__((sda));
+extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sda));
+extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
 int D_L13_00161EEC = 24;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -158,33 +158,33 @@ void spawn_point_table_sparks(struct Moby *moby) {
             *(float *)(data - (-(next_point_index * 16)) + 0x21c) < 0.99f) {
             continue;
         }
-        if (*(float *)&D_L13_00161EE8 < random_float_between_alt(0.0f, 1.0f)) {
+        if (*(float *)&point_spark_spawn_random_threshold < random_float_between_alt(0.0f, 1.0f)) {
             continue;
         }
         first_vector_angle_radians = random_angle_radians();
         second_vector_angle_radians = random_angle_radians();
         first_vector[0] = fast_cos(first_vector_angle_radians) *
-               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+               random_float_between_alt(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
         first_vector[1] = fast_sin(first_vector_angle_radians) *
-               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+               random_float_between_alt(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
         first_vector[2] = 0;
         second_vector[0] = fast_cos(second_vector_angle_radians) *
-               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+               random_float_between_alt(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
         second_vector[1] = fast_sin(second_vector_angle_radians) *
-               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+               random_float_between_alt(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
         second_vector[2] = 0;
-        first_vector[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
-        second_vector[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
+        first_vector[2] = random_float_between_alt(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
+        second_vector[2] = random_float_between_alt(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
         frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between_alt(*(float *)&D_L13_00161EC0, *(float *)&D_L13_00161EC4)));
+            random_float_between_alt(*(float *)&point_spark_frame_count_range_start, *(float *)&point_spark_frame_count_range_end)));
         second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between_alt(*(float *)&D_L13_00161EC8, *(float *)&D_L13_00161ECC)));
+            random_float_between_alt(*(float *)&point_spark_second_frame_count_range_start, *(float *)&point_spark_second_frame_count_range_end)));
         third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between_alt(*(float *)&D_L13_00161ED0, *(float *)&D_L13_00161ED4)));
+            random_float_between_alt(*(float *)&point_spark_third_frame_count_range_start, *(float *)&point_spark_third_frame_count_range_end)));
         scale_vector_xyz(first_vector, first_vector, 1.0f / (float)frame_count);
-        first_vector[3] = *(float *)&D_L13_00161EB8;
+        first_vector[3] = *(float *)&point_spark_first_vector_w;
         scale_vector_xyz(second_vector, second_vector, 1.0f / (float)third_frame_count);
-        second_vector[3] = *(float *)&D_L13_00161EBC;
+        second_vector[3] = *(float *)&point_spark_second_vector_w;
         source_point_position = data + (source_point_byte_offset + 0x210);
         lerp_vector(spawn_position, source_point_position, source_point_position, random_float_between_alt(0.0f, 1.0f));
         spawn_spark(spawn_position, first_vector, second_vector, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,

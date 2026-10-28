@@ -34,7 +34,7 @@ typedef struct {
 
 extern HeroTableRow2C D_L12_0017C0A8[];
 extern HeroAnimRow D_L12_00179F40[];
-extern HeroTableEntry70 D_L12_00179D10[];
+extern HeroTableEntry70 l12_idle_fidget_entries[] __asm__("D_L12_00179D10");
 extern S17AB80 D_L12_0017AB00;
 extern S17C2B8 D_L12_0017C238;
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -57,7 +57,7 @@ extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L12_0015F6DC_d __asm__("D_L12_0015F6DC");
-extern int D_L12_0015F594 __attribute__((sda));
+extern int item_selector_hud_activation_blocked __asm__("D_L12_0015F594") __attribute__((sda));
 extern int D_L12_0016CC00 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -150,7 +150,7 @@ void update_hero_state_transitions(void) {
         } else if (process_hero_item_action_input() == 0 && try_enter_hero_water_state() == 0 && try_transition_hero_water_state() == 0 &&
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].switch_lock != 2 && D_L12_0015F594 == 0 &&
+                if (hero.items[0].switch_lock != 2 && item_selector_hud_activation_blocked == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {
@@ -220,7 +220,7 @@ void update_hero_state_transitions(void) {
                     {
                         int flag;
                         struct Moby *m;
-                        int r;
+                        int current_animation_id;
 
                         flag = 1;
                         if (hero_slot_item_id(0) == 0x1B) {
@@ -253,13 +253,13 @@ void update_hero_state_transitions(void) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(0xC));
                             }
                         }
-                        r = return_hero_animation_id_unchanged(moby->prev_seq);
-                        if (r == hero_get_gadget_anim_id(0) && flag) {
+                        current_animation_id = return_hero_animation_id_unchanged(moby->prev_seq);
+                        if (current_animation_id == hero_get_gadget_anim_id(0) && flag) {
                             if (pick_idle_fidget(&record_index)) {
                                 HeroTableEntry70 *rec;
 
                                 hero.fidget_index = record_index;
-                                rec = &D_L12_00179D10[record_index];
+                                rec = &l12_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
                                 rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
@@ -444,7 +444,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_DYING:
                 case HERO_STATE_VEHICLE_MODE_1_DYING:
                 case HERO_STATE_VEHICLE_MODE_3_DYING:
-                case 98:
+                case HERO_STATE_VEHICLE_MODE_2_DYING:
                 case HERO_STATE_DROWN:
                 case HERO_STATE_DYING_SPEED_LIMITED:
                 case HERO_STATE_DYING_ZERO_HEALTH:
@@ -689,14 +689,14 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_WRENCH_SLAM:
                 case HERO_STATE_CROUCH_SWING:
                     if (hero.state.current == HERO_STATE_WRENCH_SLAM) {
-                        int r = truncate_float_to_s32(
+                        int slam_intercept_frames = truncate_float_to_s32(
                             predict_hero_trajectory_intercept_time(60.0f, frame_time_sq * 130.0f, -1.0f));
                         int n = 0x1A;
                         if (hero.slam_descending == 0.0f) {
                             hero.anim_speed = 0.33f;
-                        } else if (hero.slam_descending != 0.0f && hero.air_frames.s != 0 && r != 0 &&
+                        } else if (hero.slam_descending != 0.0f && hero.air_frames.s != 0 && slam_intercept_frames != 0 &&
                                    (float)n - hero.anim_frame > 1.0f) {
-                            adjust_hero_animation_speed_for_target_frame(n, r, 0.5f, -1.0f);
+                            adjust_hero_animation_speed_for_target_frame(n, slam_intercept_frames, 0.5f, -1.0f);
                             if (hero.ground_distance < 0.7f && hero.anim_speed < 0.75f) {
                                 hero.anim_speed = 0.75f;
                             }
@@ -960,7 +960,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x65, 1);
                     }
                     break;
-                case 63:
+                case HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE:
                     hero.anim_speed = hero.ground_speed * 27.0f;
                     if (hero.anim_speed < 0.5f) {
                         hero.anim_speed = 0.5f;
@@ -1168,11 +1168,11 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_PACK_LONG_JUMP, 1);
                     }
                     {
-                        int r =
+                        int rise_fall_predicted_land_frames =
                             truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero.rise_fall_gravity, -1.0f));
-                        hero.predicted_land_frames = r;
-                        if (hero.past_apex != 0.0f && hero.frames_off_ground.s != 0 && r != 0) {
-                            if (r == 2) {
+                        hero.predicted_land_frames = rise_fall_predicted_land_frames;
+                        if (hero.past_apex != 0.0f && hero.frames_off_ground.s != 0 && rise_fall_predicted_land_frames != 0) {
+                            if (rise_fall_predicted_land_frames == 2) {
                                 scale_game_frames(0xA);
                             }
                             adjust_hero_animation_speed_for_target_frame(hero.rise_fall_target_frame, hero.predicted_land_frames, 0.5f, -1.0f);
@@ -1543,15 +1543,15 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_RUN_JUMP:
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
-                case 12:
-                case 13:
+                case HERO_STATE_STORED_HEADING_JUMP:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case 15:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
-                case 17:
+                case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
-                case 60:
+                case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();
@@ -1701,10 +1701,10 @@ void update_hero_state_transitions(void) {
                                 if (hero.state.current == 0xE && hero.anim_frame < 37.0f) {
                                     approach_value(&hero.anim_speed, 1.0f, frame_scale_sq * 0.15f);
                                 } else {
-                                    int r = truncate_float_to_s32(
+                                    int jump_predicted_land_frames = truncate_float_to_s32(
                                         predict_hero_trajectory_intercept_time(60.0f, hero.jump_gravity, -1.0f));
-                                    hero.frames_to_land = r;
-                                    adjust_hero_animation_speed_for_target_frame(hero.target_anim_frame, r, hero.jump_anim_retime_scale,
+                                    hero.frames_to_land = jump_predicted_land_frames;
+                                    adjust_hero_animation_speed_for_target_frame(hero.target_anim_frame, jump_predicted_land_frames, hero.jump_anim_retime_scale,
                                                      frame_scale_sq * 0.2f);
                                 }
                                 if (!isNear) {

@@ -10,7 +10,7 @@ typedef struct {
     s32 unk814;
 } MpegDec;
 
-extern char D_001537E0[];
+extern char skip_to_next_picture_error_message[] __asm__("D_001537E0");
 extern s32 _slice0(MpegDec *d, s32 mbs);
 extern void _waitIpuIdle(MpegDec *d);
 extern s32 _waitBdecOut(MpegDec *d);
@@ -40,7 +40,7 @@ s32 _pictureData0(MpegDec *decoder) {
         _doMC(decoder, decoder->unk810 == 0);
     }
     if (decode_status == 1 || decode_status == 2) {
-        _Error(decoder, D_001537E0);
+        _Error(decoder, skip_to_next_picture_error_message);
     }
     return decode_status == 0;
 }

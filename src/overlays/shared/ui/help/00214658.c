@@ -39,7 +39,7 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 #define ED6C frame_time
 #define ED70 frame_time_sq
 
-extern f32 D_L00_0017BDD0[];
+extern f32 hero_deceleration_speed_reference[] __asm__("D_L00_0017BDD0");
 void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
 void hero_move_state_velocity(void) {
     HopVec_214658 velocity_addend;
@@ -143,7 +143,7 @@ void hero_move_state_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         base_planar_velocity_step = ED70 * 20.0f;
-        if (hero.target_speed < D_L00_0017BDD0[0] * ED6C * 0.2f) {
+        if (hero.target_speed < hero_deceleration_speed_reference[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 planar_speed_reduction_step = hero.stickless_decel;
                 if (hero.on_ice_ground)
@@ -219,7 +219,7 @@ void update_hero_target_heading(float a, float b, float c) {
 }
 extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");
+extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 
@@ -232,7 +232,7 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     transformed_negative_z_vector.q = 0;
     vector_components[2] = -1.0f;
     FUN_001f9d20_214fe8(vector_components, vector_components, (char *)state + 0x40);
-    FUN_L00_0020a1f8_214fe8(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
+    set_second_hero_easing_parameters(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
     limit = 0.43633232f;
     if (state->state.current == 0x3f) limit = 0.29670596f;
     else if (state->state.current == 0x70) limit = 0.08726646f;
@@ -843,8 +843,8 @@ extern G D_0013F350;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* Allocates a voice (b, 4, a) for slot idx when it has none; records a in slot idx. */
-void FUN_L00_00216e48(int idx, int a, int b);
-void FUN_L00_00216e48(int voice_slot_index, int a, int b) {
+void release_voice_slot_cf(int idx, int a, int b) __asm__("FUN_L00_00216e48");
+void release_voice_slot_cf(int voice_slot_index, int a, int b) {
     G *hero_state = &D_0013F350;
     if (hero_state->a[voice_slot_index] == -1) {
         hero_state->a[voice_slot_index] = allocate_voice_for_target_entry(b, 4, a);

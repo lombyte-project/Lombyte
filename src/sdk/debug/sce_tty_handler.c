@@ -19,10 +19,10 @@ typedef struct {
     TtyQueue *queue;
 } TtyState;
 
-extern u8 D_00152710[];
-extern u8 D_00152738[];
-extern u8 D_00152750[];
-extern u8 D_00152768[];
+extern u8 tty_packet_size_error_message[] __asm__("D_00152710");
+extern u8 tty_receive_error_message[] __asm__("D_00152738");
+extern u8 tty_send_error_format[] __asm__("D_00152750");
+extern u8 tty_pending_send_bytes_error_format[] __asm__("D_00152768");
 extern void QueuePeekWriteDone(TtyQueue *queue);
 extern s32 SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count);
 extern s32 SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
@@ -42,12 +42,12 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     case 2:
         if (param != 0) {
             if ((u32)(tty->rlen + param) > 0x140) {
-                kprintf(D_00152710);
+                kprintf(tty_packet_size_error_message);
             }
             receive_append_offset = tty->rlen;
             param = SceDeci2ExRecv(tty->socket, tty->rbuf + receive_append_offset, param);
             if (param < 0) {
-                kprintf(D_00152738);
+                kprintf(tty_receive_error_message);
             }
             tty->rlen += param;
         } else {
@@ -62,7 +62,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     case TTY_SEND_PENDING_BYTES:
         send_result = SceDeci2ExSend(tty->socket, tty->wbuf, tty->wlen);
         if (send_result < 0) {
-            kprintf(D_00152750, send_result);
+            kprintf(tty_send_error_format, send_result);
             tty->busy = 0;
         } else {
             tty->wbuf += send_result;
@@ -71,7 +71,7 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
         break;
     case TTY_CLEAR_SEND_BUSY:
         if (tty->wlen != 0) {
-            kprintf(D_00152768, tty->wlen);
+            kprintf(tty_pending_send_bytes_error_format, tty->wlen);
         }
         tty->busy = 0;
         break;

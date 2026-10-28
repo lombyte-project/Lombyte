@@ -39,8 +39,8 @@ typedef struct Data_303CA8 {
 
 extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L12_001FB530[][4];
-extern float D_L12_001FB5B0[][4];
+extern float oscillating_link_strip_quad_vertex_offsets[][4] __asm__("D_L12_001FB530");
+extern float oscillating_link_strip_transform_rotations[][4] __asm__("D_L12_001FB5B0");
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
@@ -81,7 +81,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     for (i = 0; i < 2; i++) {
         float *matrix = matrices[i];
 
-        func_001FA218_303CA8(matrix, D_L12_001FB5B0[i]);
+        func_001FA218_303CA8(matrix, oscillating_link_strip_transform_rotations[i]);
         func_001FA540_303CA8(matrix, rotation_matrix, matrix);
         if (!(i & 1) && data->target != -1) {
             qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
@@ -122,7 +122,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
                 quad[1].uv[uv_index * 2] = D_L12_001FB7D0_303CA8[uv_index * 2] + scroll + oscillating_link_strip_scroll_phase_gp;
             }
             for (vertex = 0; vertex < 4; vertex++) {
-                func_001F9BD8_303CA8(&quad[1].v[vertex * 4], D_L12_001FB530[vertex], data->ring[ring][segment + (vertex >> 1)]);
+                func_001F9BD8_303CA8(&quad[1].v[vertex * 4], oscillating_link_strip_quad_vertex_offsets[vertex], data->ring[ring][segment + (vertex >> 1)]);
             }
             for (pass = 0; pass < 2; pass++) {
                 func_L00_001FD1D8_303CA8(&quad[1], matrices[pass], 0);
@@ -366,14 +366,14 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
-extern char D_L12_00161EF0 __attribute__((sda));
+extern char hoven_turret_camera_local_offset __asm__("D_L12_00161EF0") __attribute__((sda));
 void update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_003032e8");
 
 void update_hoven_turret_camera(struct Moby *moby) {
     float position_and_rotation[8];
     char *data = (char *)moby->pvars;
     FUN_L08_00313ba8(moby);
-    transform_vector_by_basis(position_and_rotation, &D_L12_00161EF0, &moby->rot_row0);
+    transform_vector_by_basis(position_and_rotation, &hoven_turret_camera_local_offset, &moby->rot_row0);
     fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
     FUN_L00_002ea9d8(position_and_rotation);
     position_and_rotation[4] = 0;
@@ -850,15 +850,15 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern short D_L12_00161E14 __attribute__((sda));
-extern short D_L12_00161E18 __attribute__((sda));
-extern short D_L12_00161E1C __attribute__((sda));
-extern short D_L12_00161E20 __attribute__((sda));
-extern short D_L12_00161E24 __attribute__((sda));
-extern short D_L12_00161E28 __attribute__((sda));
+extern short hoven_turret_hud_gauge_center_x __asm__("D_L12_00161E14") __attribute__((sda));
+extern short hoven_turret_hud_gauge_center_y __asm__("D_L12_00161E18") __attribute__((sda));
+extern short hoven_turret_hud_frame_half_width __asm__("D_L12_00161E1C") __attribute__((sda));
+extern short hoven_turret_hud_frame_half_height __asm__("D_L12_00161E20") __attribute__((sda));
+extern short hoven_turret_hud_health_dial_radius_x __asm__("D_L12_00161E24") __attribute__((sda));
+extern short hoven_turret_hud_health_dial_radius_y __asm__("D_L12_00161E28") __attribute__((sda));
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud_2.h"
-extern short D_L12_00161E44 __attribute__((sda));
-extern short D_L12_00161E48 __attribute__((sda));
+extern short hoven_turret_hud_orientation_indicator_radius_x __asm__("D_L12_00161E44") __attribute__((sda));
+extern short hoven_turret_hud_orientation_indicator_radius_y __asm__("D_L12_00161E48") __attribute__((sda));
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_hoven_turret_hud.h"
 extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
@@ -910,14 +910,14 @@ void draw_hoven_turret_hud(Moby *moby) {
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (u32)((truncate_float_to_s32((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (truncate_float_to_s32(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sign_x) << 4) + 0x8000;
-        xy[1] += (u32)((truncate_float_to_s32(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (truncate_float_to_s32(*(float *)&D_L12_00161E14 + *(float *)&D_L12_00161E1C * sign_x) << 4) + 0x8000;
-        xy[2] += (u32)((truncate_float_to_s32((*(float *)&D_L12_00161E18 + *(float *)&D_L12_00161E20 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += (truncate_float_to_s32(*(float *)&D_L12_00161E14) << 4) + 0x8000;
-        xy[3] += (u32)((truncate_float_to_s32(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (truncate_float_to_s32(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        xy[0] += (u32)((truncate_float_to_s32((*(float *)&hoven_turret_hud_gauge_center_y + *(float *)&hoven_turret_hud_frame_half_height * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x + *(float *)&hoven_turret_hud_frame_half_width * sign_x) << 4) + 0x8000;
+        xy[1] += (u32)((truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_y * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x + *(float *)&hoven_turret_hud_frame_half_width * sign_x) << 4) + 0x8000;
+        xy[2] += (u32)((truncate_float_to_s32((*(float *)&hoven_turret_hud_gauge_center_y + *(float *)&hoven_turret_hud_frame_half_height * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
+        xy[3] += (u32)((truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_y * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
     texture = func_001F4868_3055F8(6);
@@ -948,22 +948,22 @@ void draw_hoven_turret_hud(Moby *moby) {
         }
         start_angle = func_001FA7D8_3055F8((float)j * 0.19634955f);
         end_angle = fast_add_rotations_c2(start_angle, 0.19634955f);
-        x0 = truncate_float_to_s32(*(float *)&D_L12_00161E24 * fast_sin(start_angle));
-        y0 = truncate_float_to_s32(*(float *)&D_L12_00161E28 * -fast_cos(start_angle));
-        x1 = truncate_float_to_s32(*(float *)&D_L12_00161E24 * fast_sin(end_angle));
-        y1 = truncate_float_to_s32(*(float *)&D_L12_00161E28 * -fast_cos(end_angle));
+        x0 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_x * fast_sin(start_angle));
+        y0 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_y * -fast_cos(start_angle));
+        x1 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_x * fast_sin(end_angle));
+        y1 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_y * -fast_cos(end_angle));
         xy[3] = 0xFFFFF000000000L;
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (u32)((truncate_float_to_s32((*(float *)&D_L12_00161E18 + (float)y1) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (truncate_float_to_s32(*(float *)&D_L12_00161E14 + (float)x1) << 4) + 0x8000;
-        xy[1] += (u32)((truncate_float_to_s32(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (truncate_float_to_s32(*(float *)&D_L12_00161E14) << 4) + 0x8000;
-        xy[2] += (u32)((truncate_float_to_s32((*(float *)&D_L12_00161E18 + (float)y0) * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += (truncate_float_to_s32(*(float *)&D_L12_00161E14 + (float)x0) << 4) + 0x8000;
-        xy[3] += (u32)((truncate_float_to_s32(*(float *)&D_L12_00161E18 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (truncate_float_to_s32(*(float *)&D_L12_00161E14) << 4) + 0x8000;
+        xy[0] += (u32)((truncate_float_to_s32((*(float *)&hoven_turret_hud_gauge_center_y + (float)y1) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x + (float)x1) << 4) + 0x8000;
+        xy[1] += (u32)((truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_y * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
+        xy[2] += (u32)((truncate_float_to_s32((*(float *)&hoven_turret_hud_gauge_center_y + (float)y0) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x + (float)x0) << 4) + 0x8000;
+        xy[3] += (u32)((truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_y * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
     if (scale_game_frames_alt(0xF) < data->f88) {
@@ -984,34 +984,34 @@ void draw_hoven_turret_hud(Moby *moby) {
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 0.0f));
-    xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 1.5707964f));
-    xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, -1.5707964f));
-    xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(moby->rot.z * 4.0f, 3.1415927f));
-    xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_yaw_indicator_texture_index), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 0.0f));
-    xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 1.5707964f));
-    xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, -1.5707964f));
-    xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     angle = func_001FA7D8_3055F8(fast_add_rotations_c2(data->f74 * 8.0f, 3.1415927f));
-    xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&D_L12_00161E48 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&D_L12_00161E44 * 16.0f) + 0x8000;
+    xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_pitch_indicator_texture_index), 1);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");

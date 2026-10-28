@@ -355,7 +355,7 @@ extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void draw_scrolled_mesh_batch(int) __asm__("FUN_L08_002f0b40");
-extern void FUN_L08_002f0c18(int);
+extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
@@ -377,9 +377,9 @@ void draw_layered_mesh_effect(void) {
     draw_scrolled_mesh_batch(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)offset_mesh_first_pass_fixed_alpha_gp << 32 | 0x48);
-    FUN_L08_002f0c18(0);
+    draw_eleven_entry_scrolled_texture_batch(0);
     vu1_add_g_sregister(0x42, (long)offset_mesh_second_pass_fixed_alpha << 32 | 0x48);
-    FUN_L08_002f0c18(1);
+    draw_eleven_entry_scrolled_texture_batch(1);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
     vu1_add_g_sregister(0x42, (long)pair_offset_mesh_fixed_alpha_gp << 32 | 0x48);
     emit_pair_offset_render_batch(0);
@@ -391,19 +391,19 @@ extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E24[] __attribute__((section(".sdata")));
 extern Pair D_L08_001E8348[];
-extern Pair D_L08_00161E28;
+extern Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28");
 extern char D_L08_001675C0[];
 extern s32 D_L08_001DDF40[];
 extern s32 D_L08_001E2828[];
 extern s32 D_L08_001E2858[];
 extern s32 D_L08_001E8310[];
-extern char D_L08_001E8350[];
+extern char layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern short D_L08_00161DC0 __attribute__((sda));
-extern short D_L08_00161E04 __attribute__((sda));
+extern short layered_mesh_effect_center_x __asm__("D_L08_00161DC0") __attribute__((sda));
+extern short layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") __attribute__((sda));
 extern s32 D_L08_001DDF20[];
 extern s32 D_L08_001DB518[];
 extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
@@ -430,18 +430,18 @@ void update_layered_mesh_effect(struct Moby *moby) {
 
     switch (moby->state) {
     case DRAW_ELEMENTS_INITIALIZE:
-        if (*(int *)&D_L08_00161E04 == 0) {
+        if (*(int *)&layered_mesh_rgba_tables_initialized == 0) {
             scale_rgba_tables(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
             scale_rgba_tables(D_L08_001DDF20, 8, D_L08_001DB518, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             scale_rgba_tables(D_L08_001E2828, 0xB, D_L08_001DDF40, 0.25f, 0.25f, 0.25f, 1.0f, 1);
-            *(int *)&D_L08_00161E04 = 1;
+            *(int *)&layered_mesh_rgba_tables_initialized = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
             D_L08_001E8348[i].a = 0;
             D_L08_001E8348[i].b = 0;
-            D_L08_00161E28.a = 0;
-            D_L08_00161E28.b = 0;
+            l08_layered_mesh_effect_sine_phase_pair.a = 0;
+            l08_layered_mesh_effect_sine_phase_pair.b = 0;
         }
         for (i = 0; i < 2; i++) {
             D_L08_00161E10[i].a = 0;
@@ -453,12 +453,12 @@ void update_layered_mesh_effect(struct Moby *moby) {
         }
         break;
     case DRAW_ELEMENTS_UPDATE:
-        culling_sphere[0] = *(float *)&D_L08_00161DC0;
+        culling_sphere[0] = *(float *)&layered_mesh_effect_center_x;
         culling_sphere[1] = layered_mesh_effect_center_y;
         culling_sphere[2] = layered_mesh_effect_center_z;
         culling_sphere[3] = layered_mesh_effect_culling_radius;
         if (fast_bsphere_check((char *)culling_sphere, 1000.0f) >= 0) {
-            distance_vector[0] = *(float *)&D_L08_00161DC0;
+            distance_vector[0] = *(float *)&layered_mesh_effect_center_x;
             distance_vector[1] = layered_mesh_effect_center_y;
             distance_vector[2] = layered_mesh_effect_center_z;
             distance_vector[3] = 1.0f;
@@ -466,7 +466,7 @@ void update_layered_mesh_effect(struct Moby *moby) {
             distance = vector_length_xyz(distance_vector);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
+                advance_wrapped_sine_pair(layered_mesh_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)&l08_layered_mesh_effect_sine_phase_pair);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
@@ -635,7 +635,7 @@ typedef struct {
     Vec4 pos;
 } PointLight;
 
-extern PointLight D_L08_00180AC0[];
+extern PointLight l08_point_light_slots[] __asm__("D_L08_00180AC0");
 
 /* Builds the animated grid, draws its quads, and updates attached effects. */
 /* Ported from rac1-decomp (nonmatching/l08_batalia/func_L08_002F7318.c: func_L08_002F7318). */
@@ -753,7 +753,7 @@ typedef struct {
    real prototype evaluates the operands in the other order and moves two words. */
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
 extern float D_0015ED60;
-extern int D_L08_0015F3F8;
+extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
@@ -791,7 +791,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
         float row_noise,phase0,phase1;
         int i,j;
         unsigned int color;
-        time=convert_integer_to_float(D_L08_0015F3F8);
+        time=convert_integer_to_float(l08_effect_animation_time);
         for (remaining=0;remaining<8;remaining++) {
             float *goal;
             if (data->noise[remaining]<*(goal=&data->goal[remaining])) {
@@ -804,7 +804,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             *goal=random_float_between(1.0f-data->jitter,1.0f);
         }
         alpha=func_001FA898_r(data->intensity*convert_integer_to_float(data->alpha)*convert_integer_to_float(moby->alpha)*0.0078125f)&0xFF;
-        if (data->frames) { frame=D_L08_0015F3F8; frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
+        if (data->frames) { frame=l08_effect_animation_time; frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
         else data->current=data->texture;
         if (data->flags&1) quad.gs[1]=get_effect_texture_alt(data->current);
         else quad.gs[1]=get_effect_texture_alt(data->current+0x28);
@@ -902,14 +902,14 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 int j1=j+1;
                 int i1=i+1;
                 float *vi=&v[i],*vi1=&v[i1];
-                FlickerQuad *q=&quad;
+                FlickerQuad *mesh_quad=&quad;
                 int row_offset=i*row_bytes,next_offset=i1*row_bytes;
                 Vec4 *row=(Vec4*)(points+row_offset),*next_row=(Vec4*)(points+next_offset);
                 quad.uv[0]=u[j]; quad.uv[1]=*vi;
                 quad.uv[2]=u[j1]; quad.uv[3]=*vi;
                 quad.uv[4]=u[j]; quad.uv[5]=*vi1;
                 quad.uv[6]=u[j1]; quad.uv[7]=*vi1;
-                add_vector_xyz(&q->vertex[0],&row[j],&moby->pos);
+                add_vector_xyz(&mesh_quad->vertex[0],&row[j],&moby->pos);
                 add_vector_xyz(&quad.vertex[1],&row[j+1],&moby->pos);
                 add_vector_xyz(&quad.vertex[2],&next_row[j],&moby->pos);
                 add_vector_xyz(&quad.vertex[3],&next_row[j+1],&moby->pos);
@@ -917,7 +917,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
                 quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
                 quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                draw_geometry_quad(q,0,0);
+                draw_geometry_quad(mesh_quad,0,0);
             }
         }
         }
@@ -983,7 +983,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     float size;
                     short life;
                     int r,g,b,a;
-                    Vec4 *p0=&sv0;
+                    Vec4 *particle_motion=&sv0;
                     normalize_vector_xyz(&sv2,&left_step,-(data->particle_offset+square_root(fast_cos(fraction*3.1415927f))*data->particle_height));
                     normalize_vector_xyz(&sv1,&step,fraction*width);
                     add_vector_xyz(&sv1,&sv1,&moby->pos);
@@ -995,13 +995,13 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     life=scale_game_frames(data->particle_life);
                     r=data->particle_r; g=data->particle_g; b=data->particle_b;
                     a=func_001FA898_r(convert_integer_to_float(data->particle_a)*fraction);
-                    spawn_colored_effect_size_first(moby,&sv1,p0,size,life,r,g,b,a);
+                    spawn_colored_effect_size_first(moby,&sv1,particle_motion,size,life,r,g,b,a);
                 }
             }
             if (fast_dec_timer_s16(&data->puff_timer)) {
                 data->puff_timer=scale_game_frames(data->puff_ticks);
                 for (i=0;i<data->puff_count;i++) {
-                    int c0=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
+                    int puff_spawn_color=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
                     int c1=(data->puff_c1[3]<<24)|(data->puff_c1[2]<<16)|(data->puff_c1[1]<<8)|data->puff_c1[0];
                     float width=data->size_x*0.5f;
                     float size=random_float_between(data->puff_size0,data->puff_size1);
@@ -1018,11 +1018,11 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     sv0.f[1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
                     sv0.f[2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
                     fast_vec_scale(&sv0,&sv0,1.0f-data->puff_blend+shape*data->puff_blend);
-                    spawn_effect_particle_with_target_scalar(&sv1,&sv0,c0,c1,size,life);
+                    spawn_effect_particle_with_target_scalar(&sv1,&sv0,puff_spawn_color,c1,size,life);
                 }
             }
             if (data->light!=-1) {
-                PointLight *light=&D_L08_00180AC0[data->light];
+                PointLight *light=&l08_point_light_slots[data->light];
                 if (fast_vec_dist(&data->light_pos,&light->pos)<data->light_speed*D_0015ED60) {
                     float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->size_x)*0.5f;
                     float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->size_y)*0.5f;
@@ -1043,10 +1043,10 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
         }
     }
 }
-extern char D_L08_001FC220[];
+extern char flickering_mesh_texture_width_zero_message[] __asm__("D_L08_001FC220");
 char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max texture tile count (8)\n";
-extern char D_L08_001FC2A0[];
-extern char D_L08_001FC2D0[];
+extern char flickering_mesh_texture_height_zero_message[] __asm__("D_L08_001FC2A0");
+extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_001FC2D0");
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -1075,16 +1075,16 @@ void update_flickering_mesh_effect(struct Moby *moby) {
         light_vars->particle_timer = light_vars->particle_ticks;
         qcopy(&light_vars->light_pos, at);
         if (light_vars->texture_w_count == 0.0f) {
-            DebugPrint(D_L08_001FC220);
+            DebugPrint(flickering_mesh_texture_width_zero_message);
             light_vars->texture_w_count = 1.0f;
         } else if (8.0f < light_vars->texture_h_count) {
             DebugPrint(D_L08_001FC250, light_vars->texture_h_count);
         }
         if (light_vars->texture_h_count == 0.0f) {
-            DebugPrint(D_L08_001FC2A0);
+            DebugPrint(flickering_mesh_texture_height_zero_message);
             light_vars->texture_h_count = 1.0f;
         } else if (8.0f < light_vars->texture_w_count) {
-            DebugPrint(D_L08_001FC2D0, light_vars->texture_w_count);
+            DebugPrint(flickering_mesh_texture_width_tile_limit_warning, light_vars->texture_w_count);
         }
         for (i = 0; i < 8; i++) {
             light_vars->noise[i] = random_float_between(light_vars->jitter, 1.0f);
@@ -1122,7 +1122,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
                                             light_vars->intensity * convert_integer_to_float(light_vars->light_green) / 100.0f,
                                             light_vars->intensity * convert_integer_to_float(light_vars->light_blue) / 100.0f);
             } else {
-                point_light_slot = &D_L08_00180AC0[light_vars->light];
+                point_light_slot = &l08_point_light_slots[light_vars->light];
                 point_light_slot->red = light_vars->intensity * convert_integer_to_float(light_vars->light_red) / 100.0f;
                 point_light_slot->green = light_vars->intensity * convert_integer_to_float(light_vars->light_green) / 100.0f;
                 point_light_slot->blue = light_vars->intensity * convert_integer_to_float(light_vars->light_blue) / 100.0f;
@@ -1227,7 +1227,7 @@ typedef struct {
     int target_timer;
 } WD8;
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
-extern char D_L08_001621E0[];
+extern char commando_name_string[] __asm__("D_L08_001621E0");
 extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
@@ -1272,7 +1272,7 @@ void commando_update(WM *moby) {
             return;
         }
         commando_vars->f2C = 3.0f;
-        commando_vars->p40 = D_L08_001621E0;
+        commando_vars->p40 = commando_name_string;
         if (!D_0013D3B4) {
             moby->state = 1;
         } else {

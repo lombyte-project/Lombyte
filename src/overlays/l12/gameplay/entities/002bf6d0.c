@@ -8,12 +8,12 @@
 
 extern char D_L12_001CBF40[];
 extern int D_L12_0015FFD8; /* no foreign declaration */
-extern short *D_L12_001ABCC0[];
+extern short *group_record_index_lists[] __asm__("D_L12_001ABCC0");
 
 void copy_moby_z_to_group_records(struct Moby *moby) __asm__("FUN_L12_002bf6d0");
 
 void copy_moby_z_to_group_records(struct Moby *moby) {
-    short *group_index_cursor = D_L12_001ABCC0[moby->group];
+    short *group_index_cursor = group_record_index_lists[moby->group];
     int base = D_L12_0015FFD8;
     do {
         int i = (*group_index_cursor & 0x7FFF) * 256;
@@ -42,13 +42,13 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 8 while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int carried_moby_place_and_set_state(struct Moby *a) __asm__("FUN_L12_002e1758");
-int carried_moby_place_and_set_state(struct Moby *a) {
-    int r = store_moby_in_suck_cannon(a);
-    if (r == 0) {
-        if (a->state == 0x8)
-            a->state = 1;
+int carried_moby_place_and_set_state(struct Moby *carried_moby) {
+    int suck_cannon_store_result = store_moby_in_suck_cannon(carried_moby);
+    if (suck_cannon_store_result == 0) {
+        if (carried_moby->state == 0x8)
+            carried_moby->state = 1;
     } else {
-        a->state = 0x8;
+        carried_moby->state = 0x8;
     }
-    return r;
+    return suck_cannon_store_result;
 }

@@ -294,7 +294,7 @@ typedef struct {
 
 extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C");
 extern u32 D_L00_00160500_gp[1] __asm__("D_L00_00160500") __attribute__((sda));
-extern u32 D_L00_001604F0[1] __attribute__((sda));
+extern u32 sky_type2_base_colors[1] __asm__("D_L00_001604F0") __attribute__((sda));
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
 extern u8 D_L00_001BD7B0[] __attribute__((section(".data")));
 
@@ -342,7 +342,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
                 j = r & 1;
                 init_particle->f8 = random_angle_radians();
                 init_particle->type = 2;
-                init_particle->col = D_L00_001604F0[k];
+                init_particle->col = sky_type2_base_colors[k];
                 qcopy(&init_particle->f10, D_L00_001BD7B0 + k * 16);
                 init_particle->u.c.c0 = k;
                 {
@@ -408,7 +408,7 @@ void draw_three_sky_shells_with_three_particle_types(void) {
             {
                 s32 rr = rand() >> 16;
                 u32 x;
-                x = D_L00_001604F0[update_particle->u.c.c0];
+                x = sky_type2_base_colors[update_particle->u.c.c0];
                 x += (rr & 0xF00) << 8;
                 x += (rr & 0xF0) << 4;
                 x += rr & 0xF;

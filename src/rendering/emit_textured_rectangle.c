@@ -3,7 +3,7 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
-extern char D_00160860[];
+extern char textured_rectangle_packet_header_template[] __asm__("D_00160860");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
@@ -33,7 +33,7 @@ void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 screen_height, 
     u1_fixed = ub * 16;
     base = render_packet_cursor.tag;
     render_packet_cursor.tag = base + 1;
-    qcopy(base + 1, D_00160860);
+    qcopy(base + 1, textured_rectangle_packet_header_template);
     packet_words = (long *)(base + 2);
     render_packet_cursor.tag = base + 2;
     packet_words[0] = texture_packet_word;
