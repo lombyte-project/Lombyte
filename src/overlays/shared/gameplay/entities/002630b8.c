@@ -16,7 +16,7 @@ typedef struct MobyBound {
     f32 height;                   /* 0x10: aim height above the moby position */
 } MobyBound;
 
-extern struct Moby *D_L00_0015FFE4;
+extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern u8 D_L00_00166DC0[];
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -49,7 +49,7 @@ struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_i
     *yaw = fast_arc_tan(dp->f[0], dp->f[1]);
     *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
-    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+    for (candidate_moby = suck_moby_list; candidate_moby != 0; candidate_moby = candidate_moby->next) {
         MobyBound *aim_bounds;
         f32 t_yaw, t_pitch, target_distance, aim_angle_error;
         if ((s8)candidate_moby->state < 0)
