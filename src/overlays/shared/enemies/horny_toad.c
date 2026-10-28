@@ -444,32 +444,32 @@ void horny_toad_update(Moby *moby) {
 
 void process_horny_toad_hit_reaction(unsigned char *m) __asm__("FUN_L00_002d5160");
 
-void process_horny_toad_hit_reaction(unsigned char *m) {
-    unsigned char *v = *(unsigned char **)(m + 0x78);
+void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
+    unsigned char *toad_vars = *(unsigned char **)(toad_moby + 0x78);
     unsigned char *hit;
     s32            result;
     f32            damage;
     f32            angle;
-    f32            vec[4] __attribute__((aligned(16)));
+    f32            hit_knockback_vector[4] __attribute__((aligned(16)));
     f32            forceX, forceY, forceZ, forceW, health, duration;
     f32            reactionC0, reactionC4;
     unsigned char *row;
     s32            index;
     unsigned char *effect;
 
-    if (m[0x20] == 0)
+    if (toad_moby[0x20] == 0)
         return;
     if (D_L00_0015F5C4_2d5160 == 2) {
-        m[0x31] = 0;
-        *(u16 *)(m + 0x34) |= 1;
+        toad_moby[0x31] = 0;
+        *(u16 *)(toad_moby + 0x34) |= 1;
     } else {
-        m[0x31] = 1;
-        *(u16 *)(m + 0x34) &= ~1;
+        toad_moby[0x31] = 1;
+        *(u16 *)(toad_moby + 0x34) &= ~1;
     }
     damage = 0.0f;
-    hit = find_moby_hit(m, 0x330000, 0);
-    hit_reaction(m, hit, v + 0x20, 0, &result, &damage, 0, 4);
-    if (result != 1 && m[0x20] != 12 && damage != 0.0f) {
+    hit = find_moby_hit(toad_moby, 0x330000, 0);
+    hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &result, &damage, 0, 4);
+    if (result != 1 && toad_moby[0x20] != 12 && damage != 0.0f) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
@@ -480,70 +480,70 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
         forceY = D_L00_00161974_gp * frame_time_sq_reg;
         forceZ = D_L00_00161978_gp * frame_time_reg;
         forceW = D_L00_0016197C_gp * frame_time_reg;
-        health = *(f32 *)(v + 0x20) - damage;
-        v[0xAD] = 0;
+        health = *(f32 *)(toad_vars + 0x20) - damage;
+        toad_vars[0xAD] = 0;
         duration = frame_time + frame_time;
-        *(s32 *)(v + 0x94) = hit_state;
-        *(s32 *)(v + 0x90) = 0x200;
+        *(s32 *)(toad_vars + 0x94) = hit_state;
+        *(s32 *)(toad_vars + 0x90) = 0x200;
         knockback_scale = 0.75f;
-        *(f32 *)(v + 0x98) = knockback_scale;
-        *(f32 *)(v + 0x20) = health;
-        *(f32 *)(v + 0x80) = forceX;
-        *(f32 *)(v + 0x84) = forceY;
-        *(f32 *)(v + 0x88) = forceZ;
-        *(f32 *)(v + 0x8C) = forceW;
-        *(f32 *)(v + 0xBC) = duration;
-        *(u16 *)(m + 0x34) &= ~0x1000;
-        *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
-        trooper_knockback_arc(vec, &angle, v + 0x88, v + 0x8C);
-        trooper_start_knockback(m, v + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
+        *(f32 *)(toad_vars + 0x98) = knockback_scale;
+        *(f32 *)(toad_vars + 0x20) = health;
+        *(f32 *)(toad_vars + 0x80) = forceX;
+        *(f32 *)(toad_vars + 0x84) = forceY;
+        *(f32 *)(toad_vars + 0x88) = forceZ;
+        *(f32 *)(toad_vars + 0x8C) = forceW;
+        *(f32 *)(toad_vars + 0xBC) = duration;
+        *(u16 *)(toad_moby + 0x34) &= ~0x1000;
+        *(OvlQuad *)hit_knockback_vector = *(OvlQuad *)(hit + 0x10);
+        trooper_knockback_arc(hit_knockback_vector, &angle, toad_vars + 0x88, toad_vars + 0x8C);
+        trooper_start_knockback(toad_moby, toad_vars + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
         reactionC0 = D_L00_0016198C_gp;
         reactionC4 = D_L00_00161988_gp;
-        *(f32 *)(v + 0xC0) = reactionC0;
-        *(f32 *)(v + 0xC4) = reactionC4;
-        m[0x20] = 12;
-        v[0x67] = 0x78;
-        trooper_anim_update(m, v + 0x60);
-        FUN_L00_00257470_2d5160(m, 0, -1);
+        *(f32 *)(toad_vars + 0xC0) = reactionC0;
+        *(f32 *)(toad_vars + 0xC4) = reactionC4;
+        toad_moby[0x20] = 12;
+        toad_vars[0x67] = 0x78;
+        trooper_anim_update(toad_moby, toad_vars + 0x60);
+        FUN_L00_00257470_2d5160(toad_moby, 0, -1);
     }
-    m[0xA4] = 0xFF;
-    trooper_anim_finish(m, v + 0x60);
-    if (m[0x20] == 3) {
-        index = *(s32 *)(v + 0x1E4);
-        effect = v + 0x180;
+    toad_moby[0xA4] = 0xFF;
+    trooper_anim_finish(toad_moby, toad_vars + 0x60);
+    if (toad_moby[0x20] == 3) {
+        index = *(s32 *)(toad_vars + 0x1E4);
+        effect = toad_vars + 0x180;
         activate_effect_l08(64.0f,
-                            m,
+                            toad_moby,
                             effect,
                             0,
                             0,
                             D_L00_001B04B0_2d5160[index] + 0x10,
                             *(s32 *)D_L00_001B04B0_2d5160[index]);
     } else {
-        index = *(s32 *)(v + 0x1E0);
-        effect = v + 0x180;
+        index = *(s32 *)(toad_vars + 0x1E0);
+        effect = toad_vars + 0x180;
         activate_effect_l08(24.0f,
-                            m,
+                            toad_moby,
                             effect,
                             0,
                             0,
                             D_L00_001B04B0_2d5160[index] + 0x10,
                             *(s32 *)D_L00_001B04B0_2d5160[index]);
     }
-    if (*(s32 *)(v + 0x1C0) == 0) {
-        *(s32 *)(v + 0x1C0) = (s32)hero.moby;
+    if (*(s32 *)(toad_vars + 0x1C0) == 0) {
+        *(s32 *)(toad_vars + 0x1C0) = (s32)hero.moby;
         qcopy(effect, &hero.motion.pos);
     }
-    fast_dec_timer_s16(v + 0x276);
-    index = *(s32 *)(v + 0x38);
+    fast_dec_timer_s16(toad_vars + 0x276);
+    index = *(s32 *)(toad_vars + 0x38);
     if (index != 0) {
-        *(s16 *)(v + 0x276) =
+        *(s16 *)(toad_vars + 0x276) =
             truncate_float_to_s32(scale_time(FUN_L00_00257be8_2d5160(180.0f, 240.0f)));
     }
-    *(s32 *)(v + 0x38) = 0;
-    if ((m[0x20] == 5 || m[0x20] == 8) && *(s16 *)(v + 0x276) != 0) {
-        m[0x20] = 10;
-        if (m[0x53] != 4)
-            FUN_L00_00257880_2d5160(m, 4, 0, scale_game_frames(20));
+    *(s32 *)(toad_vars + 0x38) = 0;
+    if ((toad_moby[0x20] == 5 || toad_moby[0x20] == 8) && *(s16 *)(toad_vars + 0x276) != 0) {
+        toad_moby[0x20] = 10;
+        if (toad_moby[0x53] != 4)
+            FUN_L00_00257880_2d5160(toad_moby, 4, 0, scale_game_frames(20));
     }
 }
 /* D_0015ED70 is declared sda above (crate_drop_bolts), but here retail loads it
