@@ -115,7 +115,7 @@ typedef struct {
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 extern u8 D_001413F5[];
-extern u8 D_0015EDB4;
+extern u8 draw_map51 __asm__("D_0015EDB4");
 extern f32 sequence __asm__("D_0015F43C");
 extern f32 D_0015F440;
 extern s32 space_load_pending __asm__("D_0015F5B0");
@@ -352,7 +352,7 @@ void update_resident_gameplay_state(void) {
         D_00186F40.forward.components[2] = -scratch_vectors[2].components[2];
         D_00186F40.right.components[2] = -scratch_vectors[0].components[2];
         D_00186F40.up.components[2] = scratch_vectors[1].components[2];
-        if (D_0015EDB4 != 0) {
+        if (draw_map51 != 0) {
             fast_vec_cross(&D_00186F40.right, &D_00186F40.up, &D_00186F40.forward);
         }
         for (object_index = 0; object_index < render_sequence.count; object_index++) {
