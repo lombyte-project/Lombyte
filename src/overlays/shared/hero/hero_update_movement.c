@@ -505,7 +505,7 @@ void hero_update_movement(void) {
             f32          swim_pitch_easing_coefficient;
             f32          steer;
             f32          old;
-            f32          diff;
+            f32          swim_pitch_delta;
             f32          k;
             f32          yaw;
             f32          t;
@@ -604,7 +604,7 @@ void hero_update_movement(void) {
                          swim_pitch_easing_coefficient,
                          rate,
                          lo);
-            diff = fast_subtract_rotations(hero.motion.rot.f[1], old);
+            swim_pitch_delta = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
             hero.unk8EC = hero.motion.yaw_rate;
@@ -727,7 +727,7 @@ void hero_update_movement(void) {
             set_second_hero_easing_parameters(0.009f, 0.22f);
             set_third_hero_easing_parameters(0.04f, 0.2f);
             set_fourth_hero_easing_parameters(0.02f, 0.2f);
-            hero_eases[1].rot_target.f[1] = diff * 47.0f;
+            hero_eases[1].rot_target.f[1] = swim_pitch_delta * 47.0f;
             hero_eases[1].rot_target.f[2] = t * 1.5f;
             hero_eases[1].rot_target.f[0] = t * 1.4f;
             if (hero_eases[1].rot_target.f[1] > 0.87266463f) {
@@ -738,9 +738,9 @@ void hero_update_movement(void) {
             hero_eases[4].accel = 0.03f;
             hero_eases[5].accel = 0.03f;
             hero_eases[4].max_speed = 0.22f;
-            hero_eases[4].rot_target.f[1] = diff * 40.0f;
+            hero_eases[4].rot_target.f[1] = swim_pitch_delta * 40.0f;
             hero_eases[5].max_speed = 0.22f;
-            hero_eases[5].rot_target.f[1] = diff * 40.0f;
+            hero_eases[5].rot_target.f[1] = swim_pitch_delta * 40.0f;
             hero_eases[4].rot_target.f[2] = t * 1.1f;
             hero_eases[5].rot_target.f[2] = t * 1.1f;
         }
@@ -847,18 +847,18 @@ void hero_update_movement(void) {
         if ((struct MobyView *)hero.ground_moby != NULL &&
             ((struct MobyView *)hero.ground_moby)->hA6 == 0x155) {
             f32 d;
-            f32 lim;
+            f32 ground_moby_yaw_step_limit;
             clear_u64_value(&v0);
             fast_vec_add(&v0, &v0, &((struct MobyView *)hero.ground_moby)->u10.v10);
             fast_vec_sub(&hero.motion.velocity, &v0, &hero.motion.pos);
             FUN_L00_0025f730(&hero.motion.velocity, frame_time * 2.0f);
             d = fast_subtract_rotations(((struct MobyView *)hero.ground_moby)->u40.f48.v,
                                         hero.motion.rot.f[2]);
-            lim = frame_time * 9.424778f;
-            if (d > lim) {
-                d = lim;
-            } else if (d < -lim) {
-                d = -lim;
+            ground_moby_yaw_step_limit = frame_time * 9.424778f;
+            if (d > ground_moby_yaw_step_limit) {
+                d = ground_moby_yaw_step_limit;
+            } else if (d < -ground_moby_yaw_step_limit) {
+                d = -ground_moby_yaw_step_limit;
             }
             hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], d);
         }
@@ -1384,7 +1384,7 @@ void hero_update_movement(void) {
             f32 off;
             f32 tol;
             f32 mx;
-            f32 diff;
+            f32 melee_spacing_error;
             if (d < 0.0f) {
                 d = 0.0f;
             }
@@ -1401,9 +1401,9 @@ void hero_update_movement(void) {
                 tol = 1.7f;
                 mx = 1.9f;
             }
-            diff = d - off;
-            if (absolute_float(diff) < tol + 3.0f) {
-                f32 s = diff / 0.9f;
+            melee_spacing_error = d - off;
+            if (absolute_float(melee_spacing_error) < tol + 3.0f) {
+                f32 s = melee_spacing_error / 0.9f;
                 if (s > mx) {
                     s = mx;
                 }
@@ -2106,7 +2106,7 @@ void hero_update_movement(void) {
                 hero_integrate_velocity();
             }
         } else {
-            f32 lim = frame_time * 12.0f;
+            f32 grind_base_speed_target = frame_time * 12.0f;
             f32 tt;
             f32 e;
             f32 sp;
@@ -2143,7 +2143,7 @@ void hero_update_movement(void) {
                          frame_scale_sq * 0.015f,
                          frame_scale_sq * 0.3f,
                          0.0f);
-            approach_value(&hero.grind_base_speed, lim, frame_time_sq * 15.0f);
+            approach_value(&hero.grind_base_speed, grind_base_speed_target, frame_time_sq * 15.0f);
             si = hero.rail_segment;
             sf = hero.rail_seg_frac;
             qcopy(&v20, &hero.motion.pos);
