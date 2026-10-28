@@ -229,11 +229,11 @@ void blarg_bombthrower_update(struct Moby *moby) {
         moby->flags |= 0x400;
     }
     if (moby->state == 100) {
-        float duration = convert_integer_to_float(D_L08_001619D0_gp);
+        float duration = convert_integer_to_float(l08_bombthrower_fade_interpolation_divisor_gp);
         int   start_alpha = vars->s132;
         moby->alpha = truncate_float_to_s32(
             (float)start_alpha +
-            (float)-start_alpha * ((float)(D_L08_001619D0_gp - vars->s130) / duration));
+            (float)-start_alpha * ((float)(l08_bombthrower_fade_interpolation_divisor_gp - vars->s130) / duration));
         spawn_moby_table_puff_pattern(moby);
         return;
     }
@@ -527,7 +527,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->state = 100;
             moby->collision = 0;
             vars->s132 = 0x28;
-            vars->s130 = D_L08_001619D0_gp;
+            vars->s130 = l08_bombthrower_fade_interpolation_divisor_gp;
             spawn_moby_table_puff_pattern(moby);
             mark_moby_for_removal(moby);
             return;
