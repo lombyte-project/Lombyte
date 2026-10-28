@@ -6,14 +6,14 @@ struct ScrollingStatus {
     s32 unk44;
 };
 
-extern struct ScrollingStatus vendor_state __asm__("D_001E63C0");
+extern struct ScrollingStatus D_001E63C0;
 extern u8 scrolling_status_message_format[] __asm__("D_001E8A70");
 extern s32 sprintf();
 void set_scrolling_status_message(s32 arg0) __asm__("FUN_00237e90");
 
 void set_scrolling_status_message(s32 message) {
-    sprintf(vendor_state.unk2C, scrolling_status_message_format, message);
-    vendor_state.unk44 = 0;
+    sprintf(D_001E63C0.unk2C, scrolling_status_message_format, message);
+    D_001E63C0.unk44 = 0;
 }
 
 extern void func_00237E90(s32 arg0) __attribute__((alias("FUN_00237e90")));

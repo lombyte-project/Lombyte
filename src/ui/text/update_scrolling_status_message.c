@@ -7,7 +7,7 @@ struct ScrollingStatus {
 };
 
 extern u8 scrolling_status_message_ids[] __asm__("D_001E5FB8");
-extern struct ScrollingStatus vendor_state __asm__("D_001E63C0");
+extern struct ScrollingStatus D_001E63C0;
 extern s32 draw_framebuffer_rect() __asm__("func_001FB8F0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 random_integer_below() __asm__("func_00213260");
@@ -18,14 +18,14 @@ void update_scrolling_status_message(void) __asm__("FUN_00238520");
 
 void update_scrolling_status_message(void) {
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    if ((strlen(vendor_state.unk2C) - ((s32)vendor_state.unk44 / 20)) > 0) {
-        vendor_state.unk44 = (s32)(vendor_state.unk44 + 2);
+    if ((strlen(D_001E63C0.unk2C) - ((s32)D_001E63C0.unk44 / 20)) > 0) {
+        D_001E63C0.unk44 = (s32)(D_001E63C0.unk44 + 2);
     } else {
         u8 *base_1e5fb8 = scrolling_status_message_ids;
         set_scrolling_status_message(get_help_message_text(
             *(s32 *)(void *)((random_integer_below(0x18) * 4) + base_1e5fb8)));
     }
-    render_capture_scrolling_text(vendor_state.unk2C, -vendor_state.unk44, 8, 2.0f);
+    render_capture_scrolling_text(D_001E63C0.unk2C, -D_001E63C0.unk44, 8, 2.0f);
     draw_framebuffer_rect(0, 0, 4, 0x40, 0x200, 0x80, 0);
     draw_framebuffer_rect(0xE2, 0, 0xE6, 0x40, 0x200, 0x80, 0);
 }
