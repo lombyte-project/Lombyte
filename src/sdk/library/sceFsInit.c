@@ -17,9 +17,9 @@ struct UnalignedWord {
 };
 
 extern SifFileCommandCallbackRecord D_00158000 NOT_SDA;
-extern char D_00157FC0[];
+extern char fs_receive_interrupt_handler_data[] __asm__("D_00157FC0");
 extern struct sceSifClientData D_00157F80;
-extern char *D_00156840[];
+extern char *fs_init_completion_buffer_addresses[] __asm__("D_00156840");
 extern u8 FsResetBuffer[] __asm__("D_00157FA8");
 extern struct SifFileSlot D_00157D80[];
 extern u8 D_00157500[];
@@ -47,7 +47,7 @@ s32 sceFsInit(void) {
     D_00158000.callback = 0;
     callback_record->argument = 0;
     result = DIntr();
-    sceSifAddCmdHandler(0x80000011, (u32)_sceFs_Rcv_Intr, (u32)D_00157FC0);
+    sceSifAddCmdHandler(0x80000011, (u32)_sceFs_Rcv_Intr, (u32)fs_receive_interrupt_handler_data);
     sceSifAddCmdHandler(0x80000013, (u32)invoke_sif_file_command_callback, (u32)callback_record);
     if (result != 0) {
         EnableInterrupts();
@@ -69,9 +69,9 @@ s32 sceFsInit(void) {
         slot->flags = 0;
     }
     SignalSema(D_0012FCA0[0]);
-    D_00156840[0] = D_00157500;
-    D_00156840[1] = D_00157500 + 0x440;
-    result = sceSifCallRpc(&D_00157F80, 0xFF, 0, D_00156840, 8, D_001574C0, 8, 0, 0);
+    fs_init_completion_buffer_addresses[0] = D_00157500;
+    fs_init_completion_buffer_addresses[1] = D_00157500 + 0x440;
+    result = sceSifCallRpc(&D_00157F80, 0xFF, 0, fs_init_completion_buffer_addresses, 8, D_001574C0, 8, 0, 0);
     if (result < 0) {
         return (s32)0xFFFEFFFF;
     }

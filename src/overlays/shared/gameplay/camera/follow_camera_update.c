@@ -222,10 +222,10 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
-extern short D_L00_00161CF4 __attribute__((sda));
-extern short D_L00_00161CF8 __attribute__((sda));
-extern short D_L00_00161CFC __attribute__((sda));
-extern short D_L00_00161D00 __attribute__((sda));
+extern short orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") __attribute__((sda));
+extern short orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") __attribute__((sda));
+extern short orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") __attribute__((sda));
+extern short orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") __attribute__((sda));
 void follow_camera_orbit(int camera_moby) {
     char *camera_object = (char *)camera_moby;
     char *camera_state = *(char **)(camera_object + 0x70);
@@ -257,7 +257,7 @@ void follow_camera_orbit(int camera_moby) {
     y = fast_arc_sin(reference_up_component / x);
     current_up_component = fast_vec_dot(current_orbit_offset, up);
     orbit_angle_scratch = fast_arc_sin(current_up_component / bc);
-    i = rope_spring_turn(camera_state + 0x154, orbit_angle_scratch, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    i = rope_spring_turn(camera_state + 0x154, orbit_angle_scratch, y, *(float *)&orbit_pitch_spring_stiffness_gp, *(float *)&orbit_pitch_spring_damping_gp,
                          0.0f);
     fast_vec_scale(reference_up_projection, up, reference_up_component);
     subtract_vector_xyz(projected_reference_offset, reference_orbit_offset, reference_up_projection);
@@ -267,8 +267,8 @@ void follow_camera_orbit(int camera_moby) {
     x = fast_vec_length(projected_reference_offset);
     x = x * fast_vec_length(projected_current_offset);
     orbit_angle_scratch = 1.5707964f - fast_arc_sin(dot_product / x);
-    x = rope_spring_turn(camera_state + 0x150, 0.0f, orbit_angle_scratch, *(float *)&D_L00_00161CF4,
-                         *(float *)&D_L00_00161CF8, 0.0f);
+    x = rope_spring_turn(camera_state + 0x150, 0.0f, orbit_angle_scratch, *(float *)&orbit_yaw_spring_stiffness_gp,
+                         *(float *)&orbit_yaw_spring_damping_gp, 0.0f);
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
     yaw_rotation_sign = (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
@@ -353,7 +353,7 @@ void update_follow_camera_pose(int camera_moby) {
     FUN_L00_002e9010_u(camera_moby);
 }
 extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
-extern f32 D_L00_00161DB0[2] __attribute__((sda));
+extern f32 follow_camera_yaw_rate_table[2] __asm__("D_L00_00161DB0") __attribute__((sda));
 void apply_follow_camera_translation() __asm__("FUN_L00_002e46b8");
 void follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
 void noop_main_callback() __asm__("FUN_001e93e8");
@@ -364,7 +364,7 @@ void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
 extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
 void follow_camera_update(u8 *camera_moby) {
     u8 *camera_spring_state = *(u8 **)(camera_moby + 0x70) + 0x1D0;
-    D_L00_0015EF44_gp = D_L00_00161DB0[opt_cam_yaw_rate];
+    D_L00_0015EF44_gp = follow_camera_yaw_rate_table[opt_cam_yaw_rate];
     apply_follow_camera_translation();
     follow_camera_apply_overrides(camera_moby);
     noop_main_callback(camera_moby);
@@ -628,46 +628,46 @@ extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
 #define P D_0013F350_2ea488
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
-int camera_transition_update(u8 *m, char *mode_check_object) {
+int camera_transition_update(u8 *transition_camera_record, char *mode_check_object) {
     Q_2ea488 *q;
-    char *o;
+    char *active_transition_camera_record;
     char *r;
-    s32 st;
-    int t;
-    int s;
-    V_2ea488 v;
-    V_2ea488 d1, d2;
-    f32 l, x;
+    s32 requested_camera_mode;
+    int checked_object_mode;
+    int active_camera_mode;
+    V_2ea488 transition_vector_scratch;
+    V_2ea488 transition_camera_vector_residual, transition_hero_vector_residual;
+    f32 transition_residual_length_product, x;
     P_2ea488 *g;
-    char *b, *b2, *vec;
+    char *b, *transition_camera_globals, *alignment_comparison_axis;
 
-    q = D_L00_0015EF50_2ea488[*(s16 *)(m + 0x84)].q;
+    q = D_L00_0015EF50_2ea488[*(s16 *)(transition_camera_record + 0x84)].q;
     g = &P;
-    st = g->i2284;
-    if (st == *(s16 *)(m + 0x86) || st == 0x51) {
-        o = D_L00_00166E00_2ea488;
-        t = *(s16 *)(mode_check_object + 0x86);
-        if (t != 0 && t != 10 && t != 14 && t != 2)
+    requested_camera_mode = g->i2284;
+    if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) || requested_camera_mode == 0x51) {
+        active_transition_camera_record = D_L00_00166E00_2ea488;
+        checked_object_mode = *(s16 *)(mode_check_object + 0x86);
+        if (checked_object_mode != 0 && checked_object_mode != 10 && checked_object_mode != 14 && checked_object_mode != 2)
             goto off;
-        s = *(s16 *)(o + 0x86);
-        if (s != 0 && s != 10 && s != 14 && s != 2)
+        active_camera_mode = *(s16 *)(active_transition_camera_record + 0x86);
+        if (active_camera_mode != 0 && active_camera_mode != 10 && active_camera_mode != 14 && active_camera_mode != 2)
             goto off;
-        *(OvlQuad *)&v = D_0013F3D0_2ea488;
-        r = find_camera_collision_volume_for_point(&v, 0.25f);
+        *(OvlQuad *)&transition_vector_scratch = D_0013F3D0_2ea488;
+        r = find_camera_collision_volume_for_point(&transition_vector_scratch, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
         q->i24 = 0;
         q->h22 = 1;
         q->h20++;
         if (q->h20 >= FUN_001f96f8_2ea488(7)) {
-            if (*(s16 *)(o + 0x86) == 0)
-                m[0x7C] = 5;
+            if (*(s16 *)(active_transition_camera_record + 0x86) == 0)
+                transition_camera_record[0x7C] = 5;
             return 1;
         }
-        v.f[0] = FUN_001f9dc8_2ea488(P.f98);
-        v.f[1] = FUN_001f9de0_2ea488(P.f98);
-        *(s32 *)&v.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&v, 0.06981316953897476f, v.f[2]);
+        transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
+        transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
+        *(s32 *)&transition_vector_scratch.f[2] = 0;
+        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
         goto tail;
     off:
         q->h20 = 0;
@@ -679,18 +679,18 @@ int camera_transition_update(u8 *m, char *mode_check_object) {
         goto tail;
     q->h22 = 0;
     b = D_L00_00166E10_2ea488;
-    b2 = b - 0x190;
-    vec = b + 0x30;
-    FUN_001f9a68_2ea488(&v, vec, FUN_001f9ab0_2ea488(vec, *(char **)(b2 + 0x180)));
-    FUN_001f9a28_2ea488(&d1, *(char **)(b2 + 0x180), &v);
-    FUN_001f9a68_2ea488(&v, vec, FUN_001f9ab0_2ea488(vec, g->p2080 + 0xC0));
-    FUN_001f9a28_2ea488(&d2, g->p2080 + 0xC0, &v);
-    l = FUN_001f9af0_2ea488(&d2);
-    if (l != 0.0f) {
-        l *= FUN_001f9af0_2ea488(&d1);
+    transition_camera_globals = b - 0x190;
+    alignment_comparison_axis = b + 0x30;
+    FUN_001f9a68_2ea488(&transition_vector_scratch, alignment_comparison_axis, FUN_001f9ab0_2ea488(alignment_comparison_axis, *(char **)(transition_camera_globals + 0x180)));
+    FUN_001f9a28_2ea488(&transition_camera_vector_residual, *(char **)(transition_camera_globals + 0x180), &transition_vector_scratch);
+    FUN_001f9a68_2ea488(&transition_vector_scratch, alignment_comparison_axis, FUN_001f9ab0_2ea488(alignment_comparison_axis, g->p2080 + 0xC0));
+    FUN_001f9a28_2ea488(&transition_hero_vector_residual, g->p2080 + 0xC0, &transition_vector_scratch);
+    transition_residual_length_product = FUN_001f9af0_2ea488(&transition_hero_vector_residual);
+    if (transition_residual_length_product != 0.0f) {
+        transition_residual_length_product *= FUN_001f9af0_2ea488(&transition_camera_vector_residual);
     }
-    if (l != 0.0f) {
-        x = FUN_001f9df8_2ea488(FUN_001f9ab0_2ea488(&d2, &d1) / l);
+    if (transition_residual_length_product != 0.0f) {
+        x = FUN_001f9df8_2ea488(FUN_001f9ab0_2ea488(&transition_hero_vector_residual, &transition_camera_vector_residual) / transition_residual_length_product);
         if (1.3962633609771729f <= 1.5707964f - x) {
             FUN_L00_001ed280_2ea488();
             return 0;
@@ -700,10 +700,10 @@ int camera_transition_update(u8 *m, char *mode_check_object) {
 tail:
     if (q->i24) {
         FUN_001f9740_2ea488(&q->i24);
-        v.f[0] = FUN_001f9dc8_2ea488(P.f98);
-        v.f[1] = FUN_001f9de0_2ea488(P.f98);
-        *(s32 *)&v.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&v, 0.13962633907794952f, v.f[2]);
+        transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
+        transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
+        *(s32 *)&transition_vector_scratch.f[2] = 0;
+        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.13962633907794952f, transition_vector_scratch.f[2]);
     }
     return 0;
 }
@@ -1297,9 +1297,9 @@ void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
 void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
 void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
-extern char D_L00_001E77C0[];
-extern char D_L00_001E77D8[];
-extern char D_L00_001E77F0[];
+extern char mode6_orbit_initial_values[] __asm__("D_L00_001E77C0");
+extern char mode6_orbit_spring_stiffness_values[] __asm__("D_L00_001E77D8");
+extern char mode6_orbit_spring_damping_values[] __asm__("D_L00_001E77F0");
 char *initialize_mode6_orbit_camera(void *target_moby) __asm__("FUN_L00_002eb930");
 
 char *initialize_mode6_orbit_camera(void *target_moby) {
@@ -1310,12 +1310,12 @@ char *initialize_mode6_orbit_camera(void *target_moby) {
     FUN_L00_002eb648_002eb930(camera_record, target_moby);
     camera_state = *(char **)(camera_record + 0x70);
     qcopy(camera_state + 0xB0, camera_state + 0x80);
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x14, D_L00_001E77C0, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x14, mode6_orbit_initial_values, 0.0f);
     FUN_L00_001eb0c8_002eb930(camera_record + 0x50, camera_state + 0x14, 0.0f);
     FUN_L00_002eb3b0_002eb930(camera_record);
     *(int *)(camera_state + 0x9C) = 1;
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x28, D_L00_001E77D8, 0.0f);
-    FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, D_L00_001E77F0, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x28, mode6_orbit_spring_stiffness_values, 0.0f);
+    FUN_L00_001eb0c8_002eb930(camera_state + 0x3C, mode6_orbit_spring_damping_values, 0.0f);
     zero_five_words(camera_state + 0x50);
     return camera_record;
 }
@@ -1762,8 +1762,8 @@ extern f32 D_L00_00166DD8 __asm__("D_L00_00166DD8") __attribute__((section(".dat
 extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") __attribute__((section(".data")));
 extern u8 D_001413F4 __asm__("D_001413F4") __attribute__((section(".data")));
 extern s32 D_001413DC __asm__("D_001413DC") __attribute__((section(".data")));
-extern s32 D_001415D4[];
-extern u8 *D_L00_001B04B0[];
+extern s32 hero_requested_camera_mode[] __asm__("D_001415D4");
+extern u8 *toad_paths[] __asm__("D_L00_001B04B0");
 
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 test_point_in_transformed_unit_cylinder(void *, s32) __asm__("FUN_L00_0025fa38");
@@ -1792,7 +1792,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     type = *(u16 *)&params->type;
     if (params->type == 2 && D_001413DC == 0x1A && params->timer > 0) {
         forced = 1;
-    } else if ((s16)type == 4 && D_001415D4[0] == 3) {
+    } else if ((s16)type == 4 && hero_requested_camera_mode[0] == 3) {
         forced = 0 < params->timer;
     }
     if (params->clip_volume >= 0 && (forced || is_point_inside_clip_volume(&hero.motion.pos, params->clip_volume)))
@@ -1803,8 +1803,8 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
         return 1;
     if (params->volume_25faf0 >= 0 && (forced || test_point_in_transformed_unit_sphere(&hero.motion.pos, params->volume_25faf0)))
         return 1;
-    if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, D_L00_001B04B0[params->path] + 0x10,
-                                                         *(s32 *)D_L00_001B04B0[params->path])))
+    if (params->path >= 0 && (forced || point_in_path_xy(&hero.motion.pos, toad_paths[params->path] + 0x10,
+                                                         *(s32 *)toad_paths[params->path])))
         return 1;
     return 0;
 }

@@ -11,7 +11,7 @@ struct WordCell {
 };
 
 
-extern s32 D_001D5CF8[];
+extern s32 help_text_read_destination[] __asm__("D_001D5CF8");
 extern void initialize_menu_stream_buffers(s32) __asm__("func_00225AC0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
@@ -32,7 +32,7 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
     }
     menu->data.raw.unk50 = 0;
     if (music_stream_state.read_state == 0) {
-        if (start_audio_stream_read(D_001D5CF8[0], disc_table.help_text.sector, disc_table.help_text.size) != 0) {
+        if (start_audio_stream_read(help_text_read_destination[0], disc_table.help_text.sector, disc_table.help_text.size) != 0) {
             menu->data.raw.unk50 = 1;
         } else {
             menu->data.raw.unk50 = 3;

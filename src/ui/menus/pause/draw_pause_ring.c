@@ -26,8 +26,8 @@ struct PauseState {
 };
 
 #include "rnc/gameplay/state/item_state.h"
-extern u8 D_001602D8[];
-extern u8 D_001602E0[];
+extern u8 pause_ring_left_label_text[] __asm__("D_001602D8");
+extern u8 pause_ring_right_label_text[] __asm__("D_001602E0");
 extern u8 D_001863D0[];
 extern s32 SubtractIntegerWithClamp(s32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -94,8 +94,8 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
     draw_hud_sprite(get_icon_frame(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
     draw_hud_sprite(get_icon_frame(0xE99E, 0), pause_state->w - 0xA, 0x27, -0x20, -0x20,
                     0x80);
-    font_print_large(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
-    font_print_large(pause_state->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
+    font_print_large(0x28, 0xF, 0x80FFA888L, pause_ring_left_label_text, -1);
+    font_print_large(pause_state->w - 0x3C, 0xF, 0x80FFA888L, pause_ring_right_label_text, -1);
     do_gif_paging();
     return 2;
 }

@@ -12,7 +12,7 @@ struct MpegMbState {
     int unk1C;
 };
 
-extern u8 D_00153898[];
+extern u8 invalid_macroblock_type_error_message[] __asm__("D_00153898");
 extern void _Error();
 extern void _flushBuf();
 extern s16 _ipuVdec(struct MpegDecoder *, s32);
@@ -50,7 +50,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     temp_2_32 = _ipuVdec(decoder, 1);
     *mb_type = temp_2_32;
     if (temp_2_32 == 0) {
-        _Error(decoder, D_00153898);
+        _Error(decoder, invalid_macroblock_type_error_message);
         decoder->unk11C = 1;
         return 0;
     }

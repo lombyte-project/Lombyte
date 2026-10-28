@@ -6,7 +6,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 extern int text_screen_active[] __asm__("D_001E6400");
-extern char D_001870A0[];
+extern char camera_shake_vectors[] __asm__("D_001870A0");
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void advance_timed_camera_control(void) __asm__("FUN_001eda60");
 extern void refresh_camera_control_flags(void) __asm__("func_001ED940");
@@ -72,7 +72,7 @@ void update_camera(void) {
         }
     }
 frozen:
-    camera_shake_base = D_001870A0;
+    camera_shake_base = camera_shake_vectors;
     apply_camera_shake(camera_shake_base, 0);
     apply_camera_shake(camera_shake_base + 0x10, 1);
     update_camera_underwater_flag();

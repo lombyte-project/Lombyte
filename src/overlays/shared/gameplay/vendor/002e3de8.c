@@ -17,30 +17,30 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
-extern short D_L10_00161E58 __attribute__((sda));
-extern short D_L10_00161E5C __attribute__((sda));
-extern short D_L10_00161E60 __attribute__((sda));
-extern short D_L10_00161E64 __attribute__((sda));
-extern short D_L10_00161E68 __attribute__((sda));
-extern short D_L10_00161E6C __attribute__((sda));
-extern short D_L10_00161E70 __attribute__((sda));
+extern short type_52_particle_header_value __asm__("D_L10_00161E58") __attribute__((sda));
+extern short type_52_particle_data_value __asm__("D_L10_00161E5C") __attribute__((sda));
+extern short type_52_particle_scale_upper_bound __asm__("D_L10_00161E60") __attribute__((sda));
+extern short type_52_particle_random_value_upper_bound __asm__("D_L10_00161E64") __attribute__((sda));
+extern short type_52_particle_divisor_lower_bound __asm__("D_L10_00161E68") __attribute__((sda));
+extern short type_52_particle_divisor_upper_bound __asm__("D_L10_00161E6C") __attribute__((sda));
+extern short type_52_particle_offset_radius_upper_bound __asm__("D_L10_00161E70") __attribute__((sda));
 void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 
 void spawn_type_52_particle_near_moby(char *moby) {
     float spawn_position[3];
     int particle_header_value, particle_data_value;
     float offset_angle_radians = random_angle_radians();
-    float offset_radius = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70);
-    float particle_scale = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
-    float random_particle_value = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
-    int random_divisor = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
+    float offset_radius = random_float_between_alt(0.0f, *(float *)&type_52_particle_offset_radius_upper_bound);
+    float particle_scale = random_float_between_alt(0.0f, *(float *)&type_52_particle_scale_upper_bound);
+    float random_particle_value = random_float_between_alt(*(float *)&type_52_particle_scale_upper_bound, *(float *)&type_52_particle_random_value_upper_bound);
+    int random_divisor = random_int_between(*(int *)&type_52_particle_divisor_lower_bound, *(int *)&type_52_particle_divisor_upper_bound);
     spawn_position[0] = fast_cos(offset_angle_radians) * offset_radius;
     spawn_position[1] = fast_sin(offset_angle_radians) * offset_radius;
     spawn_position[2] = 0.0f;
     fast_vec_add(spawn_position, spawn_position, (float *)(moby + 0x10));
     spawn_position[2] = spawn_position[2] + 0.025f;
-    particle_header_value = *(int *)&D_L10_00161E58;
-    particle_data_value = *(int *)&D_L10_00161E5C;
+    particle_header_value = *(int *)&type_52_particle_header_value;
+    particle_data_value = *(int *)&type_52_particle_data_value;
     spawn_type_52_particle(spawn_position, particle_scale, random_particle_value, particle_header_value, particle_data_value, random_divisor);
 }
 
@@ -114,21 +114,21 @@ typedef struct {
     long unk70, tex, unk80, alpha;
 } TrailQuad;
 
-extern QuadCorner D_L10_001DA310[];
-extern QuadCorner D_L10_001DA350[];
+extern QuadCorner l10_animated_quad_second_base_corners[] __asm__("D_L10_001DA310");
+extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L10_001DA270[][2];
-extern float D_L10_001DA2F0[][2];
+extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
+extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
 #include "rnc/overlay/shared/gameplay/vendor/002e3de8_globals.h"
-extern int D_L10_001DA250[];
-extern int D_L10_001DA2B0[][2];
+extern int quad_layer_colors[] __asm__("D_L10_001DA250");
+extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
-extern int D_L10_00161F48[2] __attribute__((sda));
-extern int D_L10_00161F50[2] __attribute__((sda));
-extern int D_L10_00161F58[2] __attribute__((sda));
-extern int D_L10_00161F60[2] __attribute__((sda));
+extern int quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
+extern int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
+extern int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
+extern int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
 extern void fast_draw_quad_real(void *, void *, int);
 
@@ -162,8 +162,8 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     second_corner = (float *)second_quad;
     second_dst = (float *)second_quad;
     first_corner = (float *)&first;
-    first_src = D_L10_001DA350;
-    second_src = D_L10_001DA310;
+    first_src = l10_animated_quad_first_base_corners;
+    second_src = l10_animated_quad_second_base_corners;
     for (i = 0; i < 4; i++) {
         qcopy(first_corner, &first_src[i]);
         qcopy(second_dst, second_src);
@@ -179,11 +179,11 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     for (pass = 0; pass < quad_layer_count_gp; pass++) {
         int parity = pass & 1;
         int shade;
-        first.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
-                                   D_L10_00161F58[parity], D_L10_00161F60[parity], 0x80);
-        second.alpha = GS_ALPHA(D_L10_00161F48[parity], D_L10_00161F50[parity],
-                                    D_L10_00161F58[parity], D_L10_00161F60[parity], 0x80);
-        shade = D_L10_001DA250[pass];
+        first.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
+                                   quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
+        second.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
+                                    quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
+        shade = quad_layer_colors[pass];
         second.color[2] = shade;
         second.color[0] = shade;
         first.color[3] = shade;
@@ -192,15 +192,15 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         first.color[0] = shade;
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
-                int limit = truncate_float_to_s32(D_L10_001DA270[pass][axis] * 360.0f);
-                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / D_L10_001DA270[pass][axis] - 180.0f;
+                int limit = truncate_float_to_s32(quad_layer_uv_phase_divisors[pass][axis] * 360.0f);
+                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / quad_layer_uv_phase_divisors[pass][axis] - 180.0f;
                 float wave;
-                if (D_L10_001DA2B0[pass][axis] != 0) {
+                if (quad_layer_uv_cosine_selectors[pass][axis] != 0) {
                     wave = fast_cos(angle * 0.017453292f);
                 } else {
                     wave = fast_sin(angle * 0.017453292f);
                 }
-                first.uv[i][axis] = D_L10_001DA2F0[i][axis] + wave * 0.125f;
+                first.uv[i][axis] = quad_corner_base_uvs[i][axis] + wave * 0.125f;
             }
         }
         for (k = 0; k < 2; k++) {

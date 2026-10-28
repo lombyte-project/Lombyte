@@ -206,9 +206,6 @@ void blend_racer_and_child_animations(char *moby, int animation_index, int frame
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
-#else
 typedef unsigned int U128_2d1688 __attribute__((mode(TI)));
 extern char *D_L05_001B0930[];
 extern float D_L05_00161388 __attribute__((sda));
@@ -373,14 +370,36 @@ state_three:
             if (h->water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
                 if (h->state.current != 0x72) {
                     qcopy_nc(v, &h->motion.pos);
-                    v[2] = h->water_surface_z;
-                    spawn_sharkigator_splash_effects((int)moby, (char *)v);
+                    {
+                        /* Fakematch: the pin and the empty barriers order the call setup like
+                           retail ($5 before the v[2] store, $4 after it, in the jal slot). */
+                        register char *splash_pos __asm__("$5") = (char *)v;
+                        __asm__ volatile("");
+                        v[2] = h->water_surface_z;
+                        __asm__ volatile("");
+                        spawn_sharkigator_splash_effects((int)moby, splash_pos);
+                    }
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
+                    /* Fakematch: the two join statements are repeated in both branches so
+                       that a real insn sits between set_camera (the last call of this
+                       block) and the block-ending branch; jump2 cross-jumps the identical
+                       tails back into one join (same bytes). With the call adjacent to the
+                       branch, haifa add_branch_dependences makes it depend on every insn,
+                       including the a0=moby move, which then ties with a1 and the water
+                       store for the 2-wide issue and the store takes the jal delay slot;
+                       retail has a0 in the slot. Sibling rocket.c FUN_L18_002a7220 gets the
+                       same order from a real intermediate call. */
+                    h->unk20A5 = one;
+                    h->motion.pos.f[2] += 20.0f;
                 } else {
                     qcopy(&h->motion.pos, moby + 0x10);
+                    h->unk20A5 = one;
+                    h->motion.pos.f[2] += 20.0f;
                 }
-                h->unk20A5 = one;
-                h->motion.pos.f[2] += 20.0f;
+                /* Fakematch: a gcse-time set of moby so PRE does not hoist the
+                   *(moby + 0x18) load below out of the join; folds to nothing. */
+                moby++;
+                moby--;
                 speed = *(float *)(data + 0x78);
             } else {
                 speed = *(float *)(data + 0x78);
@@ -419,7 +438,6 @@ state_three:
             set_action_2d1688(moby, 1, 0, timer_2d1688(10));
     }
 }
-#endif
 
 typedef float V2d1e30[4] __attribute__((aligned(16)));
 extern int tick_2d1e30(void *) __asm__("FUN_001f9740");
@@ -807,7 +825,7 @@ int D_L05_00161400 = 0;
 int D_L05_00161404 = 1;
 int D_L05_00161408 = 0x40806060;
 int D_L05_0016140C = 0x802020;
-extern unsigned char D_L05_0015EDB2;
+extern unsigned char l05_scenery_ship_extended_trail_selector __asm__("D_L05_0015EDB2");
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern struct Moby *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
@@ -842,7 +860,7 @@ void draw_group_scenery_ship_trails(char *moby) {
 
     if (D_L05_001613F0 != 0)
         return;
-    if (D_L05_0015EDB2 != 0)
+    if (l05_scenery_ship_extended_trail_selector != 0)
         D_L05_001613E0 = 16.0f;
     else
         D_L05_001613E0 = 5.0f;
@@ -1107,7 +1125,7 @@ extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern int D_L05_00161A84 __attribute__((sda));
 extern float D_L05_00161A98 __attribute__((sda));
 #include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermibot_update_2.h"
-extern float D_L05_00161AB0 __attribute__((sda));
+extern float extermibot_spark_paired_frame_count_min_gp __asm__("D_L05_00161AB0") __attribute__((sda));
 extern float D_L05_00161AB4 __attribute__((sda));
 #include "rnc/overlay/l05/gameplay/entities/sharkigator_data/extermibot_update.h"
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1126,7 +1144,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
 void FUN_L05_00303b08_c(struct Moby *m, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 extern float D_0013F3D0[];
-extern char D_001404A8[];
+extern char extermibot_strike_flags_selector[] __asm__("D_001404A8");
 
 void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 void extermibot_update(unsigned char *moby) {
@@ -1392,7 +1410,7 @@ void extermibot_update(unsigned char *moby) {
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(extermibot_spark_random_z_scale_gp * D_0015ED6C), extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_lifetime_min_frames_gp, extermibot_spark_lifetime_min_frames_gp * 2.0f)));
-                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
+                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_paired_frame_count_min_gp, extermibot_spark_paired_frame_count_min_gp * 1.2f)));
                 spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, extermibot_primary_spark_initial_color_gp, extermibot_primary_spark_paired_color_gp, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
@@ -1408,7 +1426,7 @@ void extermibot_update(unsigned char *moby) {
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(extermibot_spark_random_z_scale_gp * D_0015ED6C), extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_lifetime_min_frames_gp, extermibot_spark_lifetime_min_frames_gp * 2.0f)));
-                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
+                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(extermibot_spark_paired_frame_count_min_gp, extermibot_spark_paired_frame_count_min_gp * 1.2f)));
                 spawn_spark_c(spark_spawn_position, path_goal_or_facing_vector, out, extermibot_secondary_spark_initial_color_gp, extermibot_secondary_spark_paired_color_gp, c1, c2,
                               truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
@@ -1428,7 +1446,7 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[3] = 5627.9248f;
             qcopy(out, target_moby + 0x10);
             out[2] += 0.75f;
-            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&D_001404A8)) != 6 ? 0x10001 : 0x10000, out, path_goal_or_facing_vector, 1.0f);
+            spawn_nearby_effect(target_moby, (int)moby, *(int *)(((char *)&extermibot_strike_flags_selector)) != 6 ? 0x10001 : 0x10000, out, path_goal_or_facing_vector, 1.0f);
         }
         if (moby[0x70] & 2) {
             moby[0x20] = 9;
@@ -3201,9 +3219,9 @@ extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690"
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
-extern Cam_30ca80 D_L05_00180340;
+extern Cam_30ca80 l05_water_light_heading_source __asm__("D_L05_00180340");
 extern Light_30ca80 light __asm__("D_L05_001CAD00");
-extern int D_L05_0020B440[][4];
+extern int water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
 extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
 extern int rise_frames[] __asm__("D_L05_0020B3E0");
 extern float rise_speeds[] __asm__("D_L05_0020B3F8");
@@ -3218,7 +3236,7 @@ extern float D_L05_0016120C __attribute__((section(".sdata")));
 extern float D_L05_00161210 __attribute__((section(".sdata")));
 extern float D_L05_00161214 __attribute__((section(".sdata")));
 int D_L05_00161D10 = -1;
-extern unsigned short D_L05_00161D14 __attribute__((sda));
+extern unsigned short l05_water_record_draw_value_override __asm__("D_L05_00161D14") __attribute__((sda));
 int hero_hits __asm__("D_L05_00161D1C") = 0;
 int rise_step __asm__("D_L05_00161D20") = 0;
 extern float rise_checkpoint __asm__("D_L05_00161D24") __attribute__((sda));
@@ -3260,7 +3278,7 @@ void water_update(struct Moby *moby) {
             light.f14 = 1.0f;
             light.f18 = 0.9f;
             light.f20 = 0.1f;
-            light_direction_angle = angle_atan2_30ca80(D_L05_00180340.f10, D_L05_00180340.f14);
+            light_direction_angle = angle_atan2_30ca80(l05_water_light_heading_source.f10, l05_water_light_heading_source.f14);
             light.dir_x = fast_cos_30ca80(light_direction_angle) * 0.57735002f;
             light.dir_y = fast_sin_30ca80(light_direction_angle) * 0.57735002f;
             light.dir_z = -0.57735002f;
@@ -3269,7 +3287,7 @@ void water_update(struct Moby *moby) {
             light.b3C = 0x1C;
             light.b3D = 0x40;
             D_L05_001612D0_30ca80 = water_records_30ca80;
-            D_L05_001612D4 = D_L05_0020B440;
+            D_L05_001612D4 = water_grid_fixed_point_bounds;
             D_L05_001612D8 = 0x30;
             D_L05_00161204[0] = 0;
             D_L05_00161205[0] = 0xB;
@@ -3279,7 +3297,7 @@ void water_update(struct Moby *moby) {
             D_L05_00161210 = 255.0f;
             D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
-                copy_slot_30ca80(&water_records_30ca80[i].x, D_L05_0020B440[i]);
+                copy_slot_30ca80(&water_records_30ca80[i].x, water_grid_fixed_point_bounds[i]);
                 water_records_30ca80[water_vars->record_index].h1E = record_draw_values[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
@@ -3472,8 +3490,8 @@ void water_update(struct Moby *moby) {
             enqueue_callback_list_1_30ca80(render_level_water_grids, moby);
         }
         if (water_vars->record_index == D_L05_00161D10) {
-            water_records_30ca80[water_vars->record_index].h1E = D_L05_00161D14;
-            record_draw_values[water_vars->record_index] = D_L05_00161D14;
+            water_records_30ca80[water_vars->record_index].h1E = l05_water_record_draw_value_override;
+            record_draw_values[water_vars->record_index] = l05_water_record_draw_value_override;
         }
     }
 }

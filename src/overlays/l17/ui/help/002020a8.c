@@ -80,7 +80,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
-extern OvlMobyEntry40 D_L17_00178A00[];
+extern OvlMobyEntry40 l17_moby_hit_response_entries[] __asm__("D_L17_00178A00");
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L17_0020dbe8");
 
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
@@ -112,7 +112,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (hero_moby[0xA4] == 0xFF) {
         return 0;
     }
-    hero_moby_entry = &D_L17_00178A00[hero_moby[0xA4]];
+    hero_moby_entry = &l17_moby_hit_response_entries[hero_moby[0xA4]];
     if (hero_moby_entry->owner != hero_moby) {
         return 0;
     }

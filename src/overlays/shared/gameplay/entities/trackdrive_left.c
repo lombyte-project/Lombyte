@@ -4,11 +4,11 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-extern u8 D_L02_001CB9C0[];
+extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
 extern s32 scaled_table_header_leading_word_gp __asm__("D_L02_001612A0") __attribute__((sda));
 
-extern float D_L02_001CB500[];
+extern float scaled_table_source[] __asm__("D_L02_001CB500");
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) __asm__("FUN_L02_002a4058");
 
 void prepare_scaled_float_table_with_target_byte(char *value_target, int val, float scale) {
@@ -17,12 +17,12 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     float *source;
     float *base;
     value_target[0x3F] = val;
-    *(s32 *)(D_L02_001CB9C0 + 0x0) = scaled_table_header_leading_word_gp;
-    *(s32 *)(D_L02_001CB9C0 + 0x4) = scaled_table_header_second_word;
-    *(s32 *)(D_L02_001CB9C0 + 0x8) = scaled_table_header_third_word;
-    *(s32 *)(D_L02_001CB9C0 + 0xC) = scaled_table_header_final_word;
-    destination = (float *)(D_L02_001CB9C0 + 0x10);
-    base = D_L02_001CB500;
+    *(s32 *)(scaled_table_output + 0x0) = scaled_table_header_leading_word_gp;
+    *(s32 *)(scaled_table_output + 0x4) = scaled_table_header_second_word;
+    *(s32 *)(scaled_table_output + 0x8) = scaled_table_header_third_word;
+    *(s32 *)(scaled_table_output + 0xC) = scaled_table_header_final_word;
+    destination = (float *)(scaled_table_output + 0x10);
+    base = scaled_table_source;
     source = base + 4;
     for (i = 0xF7; i >= 0; i--) {
         *destination = *source * scale;
@@ -84,13 +84,13 @@ extern void setup_offset_vector(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
-extern char D_L02_0016D040[];
+extern char level02_camera_view_state[] __asm__("D_L02_0016D040");
 extern char D_L02_001673C0[];
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
-extern char D_L02_001CB8F0[];
-extern QuadFrame D_L02_0016D780[];
-extern char *D_L02_0015F420;
+extern char interpolated_draw_gif_preamble[] __asm__("D_L02_001CB8F0");
+extern QuadFrame l02_interpolated_frame_source_index_table[] __asm__("D_L02_0016D780");
+extern char *interpolated_frame_source_data __asm__("D_L02_0015F420");
 #include "rnc/rendering/dma_tag.h"
 
 extern union PacketCursor l02_packet __asm__("D_L02_001611C0") __attribute__((section(".sdata")));
@@ -122,15 +122,15 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     long blend_mode;
     unsigned int alpha_limit;
 
-    textured_grid_saved_fog_near_distance = ((QuadCamera *)D_L02_0016D040)->f218;
-    textured_grid_saved_fog_far_distance = ((QuadCamera *)D_L02_0016D040)->f21C;
-    textured_grid_saved_fog_near_intensity = ((QuadCamera *)D_L02_0016D040)->f228;
-    textured_grid_saved_fog_far_intensity = ((QuadCamera *)D_L02_0016D040)->f22C;
+    textured_grid_saved_fog_near_distance = ((QuadCamera *)level02_camera_view_state)->f218;
+    textured_grid_saved_fog_far_distance = ((QuadCamera *)level02_camera_view_state)->f21C;
+    textured_grid_saved_fog_near_intensity = ((QuadCamera *)level02_camera_view_state)->f228;
+    textured_grid_saved_fog_far_intensity = ((QuadCamera *)level02_camera_view_state)->f22C;
     if (textured_grid_fog_source_mode != 1) {
-        ((QuadCamera *)D_L02_0016D040)->f218 = draw_parameters->f20;
-        ((QuadCamera *)D_L02_0016D040)->f21C = draw_parameters->f24;
-        ((QuadCamera *)D_L02_0016D040)->f228 = draw_parameters->f28;
-        ((QuadCamera *)D_L02_0016D040)->f22C = draw_parameters->f2C;
+        ((QuadCamera *)level02_camera_view_state)->f218 = draw_parameters->f20;
+        ((QuadCamera *)level02_camera_view_state)->f21C = draw_parameters->f24;
+        ((QuadCamera *)level02_camera_view_state)->f228 = draw_parameters->f28;
+        ((QuadCamera *)level02_camera_view_state)->f22C = draw_parameters->f2C;
     }
     update_view_context();
     update_camera_view_matrices();
@@ -154,13 +154,13 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     base[0x28] = 0x8000;
     base[0x29] = 0x303EC000;
     base[0x2A] = 0x412;
-    *(float *)(base + 0x2B) = ((QuadCamera *)D_L02_0016D040)->f210;
+    *(float *)(base + 0x2B) = ((QuadCamera *)level02_camera_view_state)->f210;
     cursor = base + 0x2C;
-    qcopy(cursor, ((QuadCamera *)D_L02_0016D040)->v190);
+    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->v190);
     cursor = base + 0x30;
-    qcopy(cursor, ((QuadCamera *)D_L02_0016D040)->v1A0);
-    *(float *)(base + 0x34) = ((QuadCamera *)D_L02_0016D040)->f22C;
-    *(float *)(base + 0x35) = ((QuadCamera *)D_L02_0016D040)->f228;
+    qcopy(cursor, ((QuadCamera *)level02_camera_view_state)->v1A0);
+    *(float *)(base + 0x34) = ((QuadCamera *)level02_camera_view_state)->f22C;
+    *(float *)(base + 0x35) = ((QuadCamera *)level02_camera_view_state)->f228;
     base[0x36] = 0;
     base[0x37] = 0;
     base[0x38] = 0x03000000;
@@ -171,7 +171,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     PACKET_CURSOR[0] |= ((char *)cursor - (char *)PACKET_CURSOR >> 4) - 1;
     PACKET_CURSOR = cursor;
     PACKET_CURSOR[0] = 0x30000003;
-    PACKET_CURSOR[1] = (int)D_L02_001CB8F0;
+    PACKET_CURSOR[1] = (int)interpolated_draw_gif_preamble;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
     PACKET_CURSOR += 4;
@@ -191,12 +191,12 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
         frame = FRAME_COUNTER;
         step = frame / draw_parameters->frames;
         fraction = (float)frame / (float)draw_parameters->frames - (float)step;
-        frame_from = &D_L02_0016D780[draw_parameters->first + step % draw_parameters->count];
-        frame_to = &D_L02_0016D780[draw_parameters->first + (step + 1) % draw_parameters->count];
-        from_a = D_L02_0015F420 + frame_from->a * 16;
-        from_b = D_L02_0015F420 + frame_from->b * 16;
-        to_b = D_L02_0015F420 + frame_to->b * 16;
-        to_a = D_L02_0015F420 + frame_to->a * 16;
+        frame_from = &l02_interpolated_frame_source_index_table[draw_parameters->first + step % draw_parameters->count];
+        frame_to = &l02_interpolated_frame_source_index_table[draw_parameters->first + (step + 1) % draw_parameters->count];
+        from_a = interpolated_frame_source_data + frame_from->a * 16;
+        from_b = interpolated_frame_source_data + frame_from->b * 16;
+        to_b = interpolated_frame_source_data + frame_to->b * 16;
+        to_a = interpolated_frame_source_data + frame_to->a * 16;
         dst = draw_parameters->dst;
         *(long *)dst = 0x0800000000000400;
         *(long *)(draw_parameters->dst + 8) = 0;
@@ -205,8 +205,8 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
     color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
     if (textured_grid_fog_source_mode == 1) {
-        color = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
-            | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
+        color = ((QuadCamera *)level02_camera_view_state)->c230 | ((QuadCamera *)level02_camera_view_state)->c234 << 8
+            | ((QuadCamera *)level02_camera_view_state)->c238 << 16;
     }
     words = (long *)PACKET_CURSOR;
     alpha_limit = 0x60;
@@ -273,7 +273,7 @@ void restore_view_after_textured_grid(void) {
     long *gs_register_packet;
     int *packet_base;
     vu1_add_vif_code(0x13000000);
-    camera_state = D_L02_0016D040;
+    camera_state = level02_camera_view_state;
     *(float *)(camera_state + 0x218) = textured_grid_saved_fog_near_distance;
     *(float *)(camera_state + 0x21C) = textured_grid_saved_fog_far_distance;
     *(float *)(camera_state + 0x228) = textured_grid_saved_fog_near_intensity;
@@ -297,11 +297,11 @@ void restore_view_after_textured_grid(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 
-extern unsigned int D_L02_0015FFDC;
+extern unsigned int l02_trackdrive_left_moby_address_cutoff __asm__("D_L02_0015FFDC");
 
 void trackdrive_left_update(char *moby) __asm__("FUN_L02_002cb978");
 void trackdrive_left_update(char *moby) {
-    if ((unsigned int)moby < D_L02_0015FFDC) {
+    if ((unsigned int)moby < l02_trackdrive_left_moby_address_cutoff) {
         *(int *)(moby + 0x58) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x40;
     }
@@ -862,14 +862,14 @@ void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int
 }
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
-extern char *D_L02_00161AEC __attribute__((sda));
-extern char *D_L02_00161AF0 __attribute__((sda));
-extern char *D_L02_00161AF4 __attribute__((sda));
-extern char *D_L02_00161AF8 __attribute__((sda));
-extern char *D_L02_00161AFC __attribute__((sda));
-extern char *D_L02_00161B00 __attribute__((sda));
-extern char *D_L02_00161B04 __attribute__((sda));
-extern char *D_L02_00161B08 __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_first_vertex_uv_base_gp __asm__("D_L02_00161AEC") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_second_vertex_uv_base_gp __asm__("D_L02_00161AF0") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_third_vertex_uv_base_gp __asm__("D_L02_00161AF4") __attribute__((sda));
+extern char *tresspasser_radial_strip_scrolling_fourth_vertex_uv_base_gp __asm__("D_L02_00161AF8") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_first_vertex_uv_gp __asm__("D_L02_00161AFC") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_second_vertex_uv_gp __asm__("D_L02_00161B00") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_third_vertex_uv_gp __asm__("D_L02_00161B04") __attribute__((sda));
+extern char *tresspasser_radial_strip_fixed_fourth_vertex_uv_gp __asm__("D_L02_00161B08") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle_radial_strip.h"
 
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -911,10 +911,10 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     vertex_colors[2] = color;
     vertex_colors[1] = color;
     vertex_colors[0] = color;
-    vertex_uvs[0] = (s32)(D_L02_00161AEC + wrapped_uv_scroll_offset);
-    vertex_uvs[1] = (s32)(D_L02_00161AF0 + wrapped_uv_scroll_offset);
-    vertex_uvs[2] = (s32)(D_L02_00161AF4 + wrapped_uv_scroll_offset);
-    vertex_uvs[3] = (s32)(D_L02_00161AF8 + wrapped_uv_scroll_offset);
+    vertex_uvs[0] = (s32)(tresspasser_radial_strip_scrolling_first_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[1] = (s32)(tresspasser_radial_strip_scrolling_second_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[2] = (s32)(tresspasser_radial_strip_scrolling_third_vertex_uv_base_gp + wrapped_uv_scroll_offset);
+    vertex_uvs[3] = (s32)(tresspasser_radial_strip_scrolling_fourth_vertex_uv_base_gp + wrapped_uv_scroll_offset);
 
     start_sine_component = fast_sin(angle) * start_distance;
     start_cosine_component = fast_cos(angle) * start_distance;
@@ -954,10 +954,10 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
     strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
-    vertex_uvs[0] = (s32)D_L02_00161AFC;
-    vertex_uvs[1] = (s32)D_L02_00161B00;
-    vertex_uvs[2] = (s32)D_L02_00161B04;
-    vertex_uvs[3] = (s32)D_L02_00161B08;
+    vertex_uvs[0] = (s32)tresspasser_radial_strip_fixed_first_vertex_uv_gp;
+    vertex_uvs[1] = (s32)tresspasser_radial_strip_fixed_second_vertex_uv_gp;
+    vertex_uvs[2] = (s32)tresspasser_radial_strip_fixed_third_vertex_uv_gp;
+    vertex_uvs[3] = (s32)tresspasser_radial_strip_fixed_fourth_vertex_uv_gp;
 
     start_sine_component = fast_sin(angle) * start_distance;
     start_cosine_component = fast_cos(angle) * start_distance;
@@ -1001,7 +1001,7 @@ typedef struct { long a, b, c, d; } Q_2dae88;
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
-extern Q_2dae88 D_L02_001D3310[];
+extern Q_2dae88 l02_tresspasser_textured_quad_packed_vertices[] __asm__("D_L02_001D3310");
 extern int tresspasser_textured_quad_color_gp __asm__("D_L02_00161B94") __attribute__((sda));
 extern int tresspasser_quad_first_vertex_uv_gp __asm__("D_L02_00161AAC") __attribute__((sda));
 extern int tresspasser_quad_second_vertex_uv_gp __asm__("D_L02_00161AB0") __attribute__((sda));
@@ -1013,7 +1013,7 @@ void draw_tresspasser_puzzle_textured_quads(void) {
     Q_2dae88 packed_vertices;
     int vertex_colors[4];
     int vertex_uvs[4];
-    Q_2dae88 *vertex_quad_cursor = D_L02_001D3310;
+    Q_2dae88 *vertex_quad_cursor = l02_tresspasser_textured_quad_packed_vertices;
     int i;
     for (i = 3; i >= 0; i--) {
         vertex_uvs[0] = tresspasser_quad_first_vertex_uv_gp;
@@ -1235,7 +1235,7 @@ typedef struct {
 
 extern int level_game_mode __asm__("D_L02_0015F5C4");
 #include "rnc/gameplay/state/options.h"
-extern unsigned char D_L02_0017CA40[];
+extern unsigned char l02_big_head_cheat_manipulator[] __asm__("D_L02_0017CA40");
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
@@ -1247,7 +1247,7 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
         for (i = 0; i < talk_camera.count; i++) {
             char *candidate_moby = talk_camera.mobys[i];
             if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *manipulator = D_L02_0017CA40;
+                unsigned char *manipulator = l02_big_head_cheat_manipulator;
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0, manipulator);
                     *(float *)(manipulator + 0x20) = 2.75f;

@@ -553,7 +553,7 @@ typedef struct {
 extern L14LevelState D_L14_001BB930;
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
-extern char D_L14_00161FE8[];
+extern char sam_dialogue_name_text[] __asm__("D_L14_00161FE8");
 extern char *D_L14_001600EC;
 extern int D_L14_0015F5C4;
 extern unsigned char D_0013DD4F __attribute__((section(".data")));
@@ -607,7 +607,7 @@ void sam_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby_data->p20 = (void *)D_L14_00161FE8;
+        moby_data->p20 = (void *)sam_dialogue_name_text;
         initialize_npc_dialogue(moby, moby_data);
         moby->state = 1;
         moby_data->b8 = 1;

@@ -535,8 +535,8 @@ extern int func_L00_00200290_25e450(void *, float) __asm__("FUN_001fa728");
 extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
-extern char D_L00_001B0250[];
-extern char D_L00_001B02A0[];
+extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
+extern char alternate_explosion_flash_descriptor[] __asm__("D_L00_001B02A0");
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
 extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
@@ -715,18 +715,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             v.f[3] = fG;
             if (func_L00_00200290_25e450(&v, 100.0f) != -1) {
                 if (0.0f < fG) {
-                    ((Fl_25e450 *)D_L00_001B0250)->f[9] = fG;
-                    ((Fl_25e450 *)D_L00_001B0250)->f[10] = fG;
-                    ((Fl_25e450 *)D_L00_001B0250)->f[8] = fG;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[9] = fG;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[10] = fG;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[8] = fG;
                 } else {
-                    ((Fl_25e450 *)D_L00_001B0250)->f[9] = 15.0f;
-                    ((Fl_25e450 *)D_L00_001B0250)->f[10] = 15.0f;
-                    ((Fl_25e450 *)D_L00_001B0250)->f[8] = 15.0f;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[9] = 15.0f;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[10] = 15.0f;
+                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[8] = 15.0f;
                 }
                 if (flag) {
-                    func_L00_002D4CE8_25e450(D_L00_001B02A0, explosion_position, 0, 0);
+                    func_L00_002D4CE8_25e450(alternate_explosion_flash_descriptor, explosion_position, 0, 0);
                 } else {
-                    func_L00_002D4CE8_25e450(D_L00_001B0250, explosion_position, 0, 0);
+                    func_L00_002D4CE8_25e450(default_explosion_flash_descriptor, explosion_position, 0, 0);
                 }
             }
         }
@@ -739,7 +739,7 @@ typedef struct { int v[6]; } S6y10;
 extern S6y10 D_L00_001E9030;
 extern S6y10 D_L00_001E9048;
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
-extern float D_L00_001B02F0[];
+extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -799,15 +799,15 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
-            D_L00_001B02F0[9] = flash;
-            D_L00_001B02F0[10] = flash;
-            D_L00_001B02F0[8] = flash;
+            explosion_flash_descriptor[9] = flash;
+            explosion_flash_descriptor[10] = flash;
+            explosion_flash_descriptor[8] = flash;
         } else {
-            D_L00_001B02F0[9] = 13.0f;
-            D_L00_001B02F0[10] = 13.0f;
-            D_L00_001B02F0[8] = 13.0f;
+            explosion_flash_descriptor[9] = 13.0f;
+            explosion_flash_descriptor[10] = 13.0f;
+            explosion_flash_descriptor[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, burst_position, 0, 0);
+        mine_camera_blast(explosion_flash_descriptor, burst_position, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
@@ -845,15 +845,15 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
-            D_L00_001B02F0[9] = flash;
-            D_L00_001B02F0[10] = flash;
-            D_L00_001B02F0[8] = flash;
+            explosion_flash_descriptor[9] = flash;
+            explosion_flash_descriptor[10] = flash;
+            explosion_flash_descriptor[8] = flash;
         } else {
-            D_L00_001B02F0[9] = 13.0f;
-            D_L00_001B02F0[10] = 13.0f;
-            D_L00_001B02F0[8] = 13.0f;
+            explosion_flash_descriptor[9] = 13.0f;
+            explosion_flash_descriptor[10] = 13.0f;
+            explosion_flash_descriptor[8] = 13.0f;
         }
-        mine_camera_blast(D_L00_001B02F0, effect_position, 0, 0);
+        mine_camera_blast(explosion_flash_descriptor, effect_position, 0, 0);
     }
 }
 #define NOT_SDA

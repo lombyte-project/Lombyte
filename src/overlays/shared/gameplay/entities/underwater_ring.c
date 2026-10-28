@@ -286,7 +286,7 @@ void codebot_update(struct Moby *moby) {
         }
     }
 }
-extern struct Moby *D_L15_0015FFD8;
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int D_L15_0015F594 __attribute__((sda));
 extern int D_L15_0015F5C4;
 extern u8 D_0014C050[];
@@ -321,7 +321,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             mark_moby_for_removal_002ed068(moby);
             return;
         }
-        entry = (struct Moby *)((char *)D_L15_0015FFD8 + (*(int *)((u8 *)linked + 0x60) << 8));
+        entry = (struct Moby *)((char *)l15_moby_array + (*(int *)((u8 *)linked + 0x60) << 8));
         entry->flags |= 1;
         entry->collision = 0;
         entry->visible = 0;
@@ -344,7 +344,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             if (!(D_0013CAE4 & 0x10)) return;
             if (D_L15_0015F594 != 4) return;
             if (hero.vehicle_mode == 2 && current_level_index == 0xf) {
-                pad = D_L15_0015FFD8;
+                pad = l15_moby_array;
                 pad += *(int *)((u8 *)linked + 0x60);
                 pad->flags |= 1;
                 pad->collision = 0;
@@ -357,7 +357,7 @@ void giant_clank_pad_update(struct Moby *moby) {
                 return;
             }
             if (hero.vehicle_mode != 0) return;
-            pad = D_L15_0015FFD8;
+            pad = l15_moby_array;
             pad += *(int *)((u8 *)linked + 0x60);
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;

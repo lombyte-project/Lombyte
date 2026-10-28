@@ -261,7 +261,7 @@ extern int f99a8_2c5be8(int) __asm__("FUN_001f99a8");
 extern int f96f8_2c5be8(int) __asm__("FUN_001f96f8");
 extern int f8dc90_2c5be8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-extern int D_0013DE08[];
+extern int weapon_ammo_pickup_totals[] __asm__("D_0013DE08");
 extern int D_L00_00161838;
 int try_collect_ammo_pickup(char *pickup_moby) __asm__("FUN_L00_002c5be8");
 
@@ -285,7 +285,7 @@ int try_collect_ammo_pickup(char *pickup_moby) {
                          : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
-        D_0013DE08[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
+        weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
         *(unsigned char *)(pickup_moby + 0x20) = 2;
         *(float *)(pickup_moby + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
         f99f8_2c5be8(pickup_vars + 4);
@@ -1150,7 +1150,7 @@ void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
 void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
-extern const float D_L00_00161828 __attribute__((sda));
+extern const float l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
 extern float trespasser_pickup_z_rotation_step_gp __asm__("D_L00_00161830") __attribute__((sda));
 void update_trespasser_pickup(void *mv) {
@@ -1166,7 +1166,7 @@ void update_trespasser_pickup(void *mv) {
         FUN_00213508_2c1778(trespasser_moby + 0x10, 0, 0.5f);
         *(float *)(trespasser_moby + 0x40) = 1.5707964f;
         *(float *)(trespasser_moby + 0x44) = 3.1415927f;
-        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828;
+        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + l00_trespasser_pickup_initial_height_offset;
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
@@ -1468,7 +1468,7 @@ typedef union {
     s32 i[4];
 } V2c2488;
 extern s32 D_0013CAE0[] __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern u8 D_0013E52A[] __asm__("D_0013E52A");
+extern u8 bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern f32 dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1515,7 +1515,7 @@ void aim_throw_arc(V2c2488 *origin_position, V2c2488 *target_position, f32 *out,
     *(s32 *)&out[2] = 0;
     out[2] = FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (D_0013CAE0[0] & 5) {
-        k = scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f;
+        k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
         k = k / horizontal_speed;
     } else {
         k = 8.5f / horizontal_speed;
@@ -1648,7 +1648,7 @@ void bomb_glove_update(struct Moby *moby) {
         pos.f[2] += 0.490819991f;
         angle = atan2_f(launch.f[0], launch.f[1]);
         {
-            f32 speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+            f32 speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
             scale_vector_xyz(&target, &launch, speed);
         }
         add_vector_xyz(&target, &target, &pos);
@@ -1663,7 +1663,7 @@ void bomb_glove_update(struct Moby *moby) {
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
             {
-                f32 speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+                f32 speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
                 build_spherical_offset_2c1ad0(&temporary.arc, speed, angle, slope);
             }
             qcopy(&direction, &D_L00_00166DC0_2c1ad0);
@@ -1674,7 +1674,7 @@ void bomb_glove_update(struct Moby *moby) {
                 else horizontal = z / 0.01f;
             }
             gravity = frame_time_sq_macro * 11.0f;
-            root = square_root(gravity * ((controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f) * 0.5f);
+            root = square_root(gravity * ((controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f) * 0.5f);
             radius = (root + root) * root * (1.0f - horizontal) / (frame_time_sq_macro * 11.0f);
             vertical = horizontal * radius;
             if (0.0f < radius) {
@@ -1719,7 +1719,7 @@ void bomb_glove_update(struct Moby *moby) {
             }
         }
         gravity = frame_time_sq_macro * 11.0f;
-        speed = (controller_state.held & 5) ? scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f : 8.5f;
+        speed = (controller_state.held & 5) ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f : 8.5f;
         aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
     }
     switch (moby->state) {
@@ -2561,7 +2561,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
                 queue_formatted_dialogue_message(sound, difference, -1);
             }
             account_idx = pickup_vars->weapon;
-            D_0013DE08[account_idx] += weapon_ammo_counts[account_idx] - before;
+            weapon_ammo_pickup_totals[account_idx] += weapon_ammo_counts[account_idx] - before;
             pickup_moby->state = 2;
             pickup_moby->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
             FUN_001f99f8_2c53c0(&pickup_vars->velocity);

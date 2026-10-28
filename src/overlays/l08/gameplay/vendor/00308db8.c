@@ -10,8 +10,8 @@
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L08_001F8548[];
-extern int D_L08_001F84C8[];
-extern int D_L08_001F84E8[];
+extern int batalia_eight_batch_packet_triplet_sources[] __asm__("D_L08_001F84C8");
+extern int batalia_eight_batch_offset_source_streams[] __asm__("D_L08_001F84E8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -20,21 +20,21 @@ void queue_batalia_eight_textured_batches(int pair_index) __asm__("FUN_L08_00308
 void queue_batalia_eight_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
-        FUN_L08_00258090(D_L08_001F8560, D_L08_001F84E8[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
-        FUN_L00_001fde98(D_L08_001F4C60[i], D_L08_001F84C8[i], D_L08_001F8528[i], D_L08_001F8560,
+        FUN_L08_00258090(D_L08_001F8560, batalia_eight_batch_offset_source_streams[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
+        FUN_L00_001fde98(D_L08_001F4C60[i], batalia_eight_batch_packet_triplet_sources[i], D_L08_001F8528[i], D_L08_001F8560,
                          1);
     }
 }
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
-extern int D_L08_001F4C18[];
-extern int D_L08_001F4C00[];
+extern int batalia_six_batch_offset_source_streams[] __asm__("D_L08_001F4C18");
+extern int batalia_six_batch_packet_triplet_sources[] __asm__("D_L08_001F4C00");
 void queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");
 
 void queue_batalia_six_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x6; i++) {
-        FUN_L08_00258090(D_L08_001F8560, D_L08_001F4C18[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
-        FUN_L00_001fde98(D_L08_001F01C8[i], D_L08_001F4C00[i], D_L08_001F4C48[i], D_L08_001F8560,
+        FUN_L08_00258090(D_L08_001F8560, batalia_six_batch_offset_source_streams[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
+        FUN_L00_001fde98(D_L08_001F01C8[i], batalia_six_batch_packet_triplet_sources[i], D_L08_001F4C48[i], D_L08_001F8560,
                          1);
     }
 }

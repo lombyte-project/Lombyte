@@ -150,7 +150,7 @@ void apply_moby_wobble(struct Moby *moby) {
 }
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 
-extern char D_L16_001D96E0[];
+extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -165,7 +165,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
             int i;
             struct Hero *hero_state;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(table_entry + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &moby->rot_row0);
+                transform_vector_by_basis(table_entry + 0x10 + i * 16, table_entry_source_vectors + i * 16, &moby->rot_row0);
                 add_vector_xyz(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
             hero_state = &hero;

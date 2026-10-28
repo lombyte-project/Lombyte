@@ -15,20 +15,20 @@ typedef struct PatchPair {
     u32 b;
 } PatchPair;
 
-extern PatchPair D_00130AD0[];
-extern u8 D_00130328[];
+extern PatchPair exec_ps2_syscall_patch_pairs[] __asm__("D_00130AD0");
+extern u8 exec_ps2_patch_data[] __asm__("D_00130328");
 
 void InitExecPS2(void) {
     u32 i;
 
     if (PatchIsNeeded()) {
-        Rfu116SetSyscallLate(D_00130AD0[0].a, D_00130AD0[0].b);
-        InvokeKernelSyscall005A_RfuWorker((void *)0x80074000, D_00130328, 0x7A8);
+        Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[0].a, exec_ps2_syscall_patch_pairs[0].b);
+        InvokeKernelSyscall005A_RfuWorker((void *)0x80074000, exec_ps2_patch_data, 0x7A8);
         FlushCache(0);
         FlushCache(2);
-        Rfu116SetSyscallLate(D_00130AD0[1].a, D_00130AD0[1].b);
+        Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[1].a, exec_ps2_syscall_patch_pairs[1].b);
         for (i = 2; i < 3; i++) {
-            Rfu116SetSyscallLate(D_00130AD0[i].a, Rfu091Mid(D_00130AD0[i].a));
+            Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[i].a, Rfu091Mid(exec_ps2_syscall_patch_pairs[i].a));
         }
     }
 }

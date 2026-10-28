@@ -14,11 +14,11 @@ struct Menu {
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 extern s32 D_001D2AF4[];
-extern u8 D_001D5098[];
-extern u8 D_001D5148[];
-extern u8 D_001D5208[];
+extern u8 timed_menu_first_progress_string_ids[] __asm__("D_001D5098");
+extern u8 timed_menu_second_progress_string_ids[] __asm__("D_001D5148");
+extern u8 timed_menu_third_progress_string_ids[] __asm__("D_001D5208");
 u8 D_001D5298[] NOT_SDA = "9Q";
-extern u8 D_001D52B0[];
+extern u8 timed_menu_fifth_progress_string_ids[] __asm__("D_001D52B0");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
 
@@ -75,7 +75,7 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
         menu->unk40 = scale_game_frames(0xB4);
         menu->unk3C = 0;
         D_001D2AF4[0] = 0x50A9;
-        menu->str = (s32)D_001D5098;
+        menu->str = (s32)timed_menu_first_progress_string_ids;
         break;
 
     case WAIT_FOR_INITIAL_DELAY:
@@ -119,7 +119,7 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
             menu->unk40 = scale_game_frames(0xB4);
             menu->unk3C = 0;
             D_001D2AF4[0] = 0x50D6;
-            menu->str = (s32)D_001D5148;
+            menu->str = (s32)timed_menu_second_progress_string_ids;
         }
         break;
 
@@ -136,7 +136,7 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
     case BEGIN_DELAY_AFTER_SECOND_PROGRESS_PHASE:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x5106;
-            menu->str = (s32)D_001D5208;
+            menu->str = (s32)timed_menu_third_progress_string_ids;
             menu->unk40 = scale_game_frames(0xF0);
             menu->unk3C = 0;
             menu->unk50 = menu->unk50 + 1;
@@ -178,7 +178,7 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
             menu->unk40 = scale_game_frames(0xB4);
             menu->unk3C = 0;
             D_001D2AF4[0] = 0x5144;
-            menu->str = (s32)D_001D52B0;
+            menu->str = (s32)timed_menu_fifth_progress_string_ids;
             menu->unk50 = 0x10;
         }
         break;

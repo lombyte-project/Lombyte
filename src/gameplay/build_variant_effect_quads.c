@@ -18,7 +18,7 @@ long FUN_001f44b8_28efc8(int) __asm__("FUN_001f44b8");
 int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("func_001FA6C0");
 void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("func_001F7D30");
-extern int D_001604C0[1] __attribute__((sda));
+extern int variant_effect_quad_counts[1] __asm__("D_001604C0") __attribute__((sda));
 void build_variant_effect_quads(unsigned char *quad_source) __asm__("FUN_0022e1b0");
 
 void build_variant_effect_quads(unsigned char *quad_source) {
@@ -38,7 +38,7 @@ void build_variant_effect_quads(unsigned char *quad_source) {
         quad.texture_coordinates[j][1] = quad_uvs[j][1];
     }
     FUN_001f9a68_28efc8(0.0009765625f, &quad_source_translation, quad_source);
-    for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
+    for (i = 0; i < variant_effect_quad_counts[level_render_state.content_variant]; i++) {
         int quad_alpha = quad_source[0xBC];
         unsigned int col;
         float quad_scale;

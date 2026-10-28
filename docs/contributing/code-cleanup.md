@@ -43,8 +43,9 @@ make it clearer, add a comment that explains why it looks odd.
 
 **Never:**
 
-- add inline assembly (other than the name label); for `ei`, `di`, `sync`,
-  `mfc0` or `syscall` use the macros in `include/kernel.h`;
+- add inline assembly (other than the name label or a marked fakematch, see
+  below); for `ei`, `di`, `sync`, `mfc0` or `syscall` use the macros in
+  `include/kernel.h`;
 - use `#ifdef` tricks;
 - change which compiler a unit uses;
 - edit files in `asm/`;
@@ -53,12 +54,14 @@ make it clearer, add a comment that explains why it looks odd.
 ## Fakematches
 
 A fakematch is code that only steers the compiler: `x++; x--;`, `x = x;`, a
-`do { } while (0)` outside a macro, an `if (0)` branch, a dead store. It is
-allowed until someone finds the real form, but it needs a comment that starts
-with `Fakematch:` and says what it changes, ending at most three lines above
-it. `check-cleanup.py` finds the first four shapes without that comment (not
-dead stores or `x += 1; x -= 1;`, so mark those yourself). If
-removing the trick does not change the code, it is not a fakematch: delete it.
+`do { } while (0)` outside a macro, an `if (0)` branch, a dead store, a
+register pin, an empty barrier or a small asm helper. It is allowed until
+someone finds the real form, but it needs a comment that starts with
+`Fakematch:` and says what it changes, ending at most three lines above it (15
+for asm). `check-cleanup.py` finds the first four shapes and unmarked asm
+without that comment (not dead stores or `x += 1; x -= 1;`, so mark those
+yourself). If removing the trick does not change the code, it is not a
+fakematch: delete it.
 
 ## Names
 
@@ -158,7 +161,12 @@ edit fails at once.
 
 ## Moving files
 
-See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example.
+See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example
+and [point-light links](../game/point-lights.md) for grouping related functions
+while retaining their existing type and calling-convention views.
+[Occlusion visibility](../game/occlusion.md) shows the related grid/mask helpers.
+[VU1 packets and VIF1 DMA](../game/vu1-chain.md) shows a module move that also
+preserves a source-owned small-data placement entry.
 
 - Folders follow the subsystem, for example `ui/menus/<screen>` or
   `gameplay/...`.

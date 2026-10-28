@@ -14,7 +14,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_00292AC0), where it is exact; names translated to the US level program. */
 
-extern char D_L03_001CAF00[];
+extern char textured_grid_scratchpad_index_table[] __asm__("D_L03_001CAF00");
 extern void FUN_L02_0024f748(char *);
 extern void FUN_L02_0024fa80(char *);
 extern void build_interpolated_dma_packet(char *) __asm__("FUN_L02_002a40f0");
@@ -26,7 +26,7 @@ void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 
 void draw_textured_grid(char *moby) {
     build_interpolated_dma_packet(moby);
-    FUN_L02_002101b8(D_L03_001CAF00, 0x70002800, 0xF8);
+    FUN_L02_002101b8(textured_grid_scratchpad_index_table, 0x70002800, 0xF8);
     FUN_L02_0024f748(moby);
     FUN_L02_0024fa80(moby);
     restore_view_after_textured_grid(moby);
@@ -142,7 +142,7 @@ typedef struct {
 extern struct Moby *D_L03_0015FFD8_mb __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern struct Moby *D_L03_0015FFE4;
 extern s32 D_L03_0015F5CC;
-extern char D_L03_001E2FA0[];
+extern char spawner_spawn_failure_format[] __asm__("D_L03_001E2FA0");
 
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern SpawnTarget *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
@@ -252,7 +252,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
     }
     if (spawned == NULL) {
-        debug_print(D_L03_001E2FA0, D_L03_0015F5CC, (s16)spawner_moby->save_id, spawner_moby->oclass);
+        debug_print(spawner_spawn_failure_format, D_L03_0015F5CC, (s16)spawner_moby->save_id, spawner_moby->oclass);
     }
     return spawned;
 }
@@ -1752,7 +1752,7 @@ extern ML D_L03_0016C960;
 extern int D_L03_0015F5C4;
 extern unsigned char D_0015EDB0;
 extern unsigned char D_L03_0017C540[];
-extern short D_L03_00161BC4 __attribute__((sda));
+extern short shared_manipulator_attachment_scale __asm__("D_L03_00161BC4") __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void attach_shared_manipulator_to_matching_class_moby(char *moby) __asm__("FUN_L03_002db480");
@@ -1769,9 +1769,9 @@ void attach_shared_manipulator_to_matching_class_moby(char *moby) {
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 1, manipulator);
-                    *(float *)(manipulator + 0x20) = *(float *)&D_L03_00161BC4;
-                    *(float *)(manipulator + 0x24) = *(float *)&D_L03_00161BC4;
-                    *(float *)(manipulator + 0x28) = *(float *)&D_L03_00161BC4;
+                    *(float *)(manipulator + 0x20) = *(float *)&shared_manipulator_attachment_scale;
+                    *(float *)(manipulator + 0x24) = *(float *)&shared_manipulator_attachment_scale;
+                    *(float *)(manipulator + 0x28) = *(float *)&shared_manipulator_attachment_scale;
                 }
             }
         }
@@ -1991,7 +1991,7 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
 }
 extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern unsigned char D_L03_001DC1A0[];
+extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1A0");
 extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void update_moby_draw_callback(unsigned char *moby) __asm__("FUN_L03_002dc9b0");
@@ -2003,7 +2003,7 @@ void update_moby_draw_callback(unsigned char *moby) {
     };
     switch (moby[0x20]) {
     case DRAW_CALLBACK_INITIALIZE:
-        prepare_scaled_float_table_with_target_byte(D_L03_001DC1A0, 0x20, 0.6666667f);
+        prepare_scaled_float_table_with_target_byte(l03_draw_callback_setup_byte_target, 0x20, 0.6666667f);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         break;

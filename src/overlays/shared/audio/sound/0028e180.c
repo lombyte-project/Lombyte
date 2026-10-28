@@ -13,12 +13,12 @@ extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
-extern char D_L00_001BD880[];
+extern char ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
-extern unsigned char D_0013DD4B[];
+extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -57,7 +57,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         }
         moby_position = (float *)(moby + 0x10);
         if (*(short *)(proximity_state_data + 0xC) != 0) {
-            transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+            transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
             add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
             if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
                 *(short *)(proximity_state_data + 0xC) = 0;
@@ -65,7 +65,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         } else {
             hero_position_or_scene_flags = (unsigned char *)(&hero.motion.pos);
             if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
-                transform_vector_by_basis(proximity_test_position, D_L00_001BD880 + ship_index[0] * 16, moby + 0xC0);
+                transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
                 add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
                 if (FUN_001f9b48(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
                     *(short *)(proximity_state_data + 0xC) = 1;
@@ -95,13 +95,13 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             if (hero_position_or_scene_flags[0x48] == 0 && D_0013D4DC[0] != 0) {
                 start_scene(4);
                 hero_position_or_scene_flags[0x48] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x49] == 0 && D_0013DD4B[0] != 0) {
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x49] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 start_scene(5);
                 hero_position_or_scene_flags[0x49] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4A] == 0 && D_0013DD4B[0] != 0) {
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4A] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 queue_scene_movie_with_game_language(0xB);
                 hero_position_or_scene_flags[0x4A] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4B] == 0 && D_0013DD4B[0] != 0) {
+            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4B] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 start_scene(6);
                 hero_position_or_scene_flags[0x4B] = 1;
             } else {

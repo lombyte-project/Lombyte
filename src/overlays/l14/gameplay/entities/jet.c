@@ -419,7 +419,7 @@ typedef struct {
 
 extern struct Moby *D_L14_0015FFD8_lift __asm__("D_L14_0015FFD8");
 extern char *D_L14_001B0BB0_lift[] __asm__("D_L14_001B0BB0");
-extern char D_L14_001FC840[];
+extern char shuttle_missing_target_error_format[] __asm__("D_L14_001FC840");
 #include "rnc/overlay/l14/gameplay/entities/jet_globals.h"
 extern s32 shuttle_enter_riding_transition_frames_gp __asm__("D_L14_00161B8C") __attribute__((sda));
 extern s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") __attribute__((sda));
@@ -493,7 +493,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         shuttle_vars->h206 = 0;
         attach_manipulator(shuttle_moby, 0, shuttle_vars->manip);
         if (shuttle_vars->rider == -1) {
-            lift_print(D_L14_001FC840, shuttle_moby->save_id);
+            lift_print(shuttle_missing_target_error_format, shuttle_moby->save_id);
             lift_remove(shuttle_moby);
             return;
         }
@@ -938,8 +938,8 @@ typedef struct {
 } L14MineHit;
 
 extern L14MinePath *D_L14_001B0BB0_mine[] __asm__("D_L14_001B0BB0");
-extern char D_L14_001FCA98[];
-extern char D_L14_001FCAD8[];
+extern char looping_path_moby_missing_path_error_format[] __asm__("D_L14_001FCA98");
+extern char looping_path_moby_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
 extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
 extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
@@ -983,13 +983,13 @@ void update_looping_path_moby(struct Moby *moby) {
     switch (moby->state) {
     case MINE_STATE_INITIALIZE:
         if (mine_vars->path == -1) {
-            mine_print(D_L14_001FCA98, moby->save_id);
+            mine_print(looping_path_moby_missing_path_error_format, moby->save_id);
             mine_remove(moby);
             return;
         }
         path = D_L14_001B0BB0_mine[mine_vars->path];
         if (path->count == 0) {
-            mine_print(D_L14_001FCAD8, moby->save_id);
+            mine_print(looping_path_moby_empty_path_error_format, moby->save_id);
             mine_remove(moby);
             return;
         }
@@ -1114,7 +1114,7 @@ extern struct {
     u8 pad1C[4];
     Vec4 pos;            /* 0x20 */
 } D_L14_00174540;
-extern char D_L14_00174580[];
+extern char bolt_impact_reflection_normal[] __asm__("D_L14_00174580");
 
 void update_flying_bolt(struct Moby *projectile_moby) __asm__("FUN_L14_002ece00");
 
@@ -1180,7 +1180,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
                 particle_launch_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, D_L14_00174580);
+                FUN_L00_001ff660(&spark, &bolt_vars->vel, bolt_impact_reflection_normal);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.5f);
                 bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
@@ -1217,12 +1217,12 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L14_00161C50 __attribute__((sda));
-extern short D_L14_00161C54 __attribute__((sda));
-extern short D_L14_00161C58 __attribute__((sda));
-extern short D_L14_00161C5C __attribute__((sda));
-extern short D_L14_00161C60 __attribute__((sda));
-extern short D_L14_00161C64 __attribute__((sda));
+extern short lightning_arc_interval_remaining_frames_gp __asm__("D_L14_00161C50") __attribute__((sda));
+extern short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") __attribute__((sda));
+extern short lightning_arc_initialized_gp __asm__("D_L14_00161C58") __attribute__((sda));
+extern short lightning_displaced_endpoint_z_setting_gp __asm__("D_L14_00161C5C") __attribute__((sda));
+extern short lightning_visibility_test_point_w_gp __asm__("D_L14_00161C60") __attribute__((sda));
+extern short lightning_visibility_test_z_offset_gp __asm__("D_L14_00161C64") __attribute__((sda));
 extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
@@ -1241,8 +1241,8 @@ void update_path_lightning_controller(struct Moby *moby) {
         if (current_level_index == 0xE) hero.pack_disabled = 1;
         MOBY(moby)->state = 1;
         moby->update_dist = 0xFF;
-        *(int *)&D_L14_00161C58 = 0;
-        *(int *)&D_L14_00161C50 = 0;
+        *(int *)&lightning_arc_initialized_gp = 0;
+        *(int *)&lightning_arc_interval_remaining_frames_gp = 0;
     }
     moby_state = MOBY(moby)->state;
     if (moby_state == 1) {
@@ -1262,15 +1262,15 @@ void update_path_lightning_controller(struct Moby *moby) {
         show_tracked_moby();
         return;
     }
-    if (tick_countdown_32_alt(&D_L14_00161C50) == 0) return;
-    if (*(int *)&D_L14_00161C58 == 0) {
+    if (tick_countdown_32_alt(&lightning_arc_interval_remaining_frames_gp) == 0) return;
+    if (*(int *)&lightning_arc_initialized_gp == 0) {
         int *path = D_L14_001B0F30_ee[*(int *)moby_vars];
         int i;
         int visible_point_count = 0;
         for (i = 0; i < path[0] && visible_point_count < 5; i++) {
             qcopy(visibility_test_point, (char *)path + i * 16 + 0x10);
-            visibility_test_point[2] += *(float *)&D_L14_00161C64;
-            visibility_test_point[3] = *(float *)&D_L14_00161C60;
+            visibility_test_point[2] += *(float *)&lightning_visibility_test_z_offset_gp;
+            visibility_test_point[3] = *(float *)&lightning_visibility_test_point_w_gp;
             if (fast_bsphere_check(visibility_test_point, 255.0f) > 0) {
                 visible_path_point_indices[visible_point_count++] = i;
             }
@@ -1280,7 +1280,7 @@ void update_path_lightning_controller(struct Moby *moby) {
             qcopy(D_L14_00161CC0, (char *)path + visible_path_point_indices[k] * 16 + 0x10);
             lightning_path_endpoint_w = 1.0f;
             qcopy(D_L14_00161CD0, D_L14_00161CC0);
-            lightning_displaced_endpoint_z = *(float *)&D_L14_00161C5C;
+            lightning_displaced_endpoint_z = *(float *)&lightning_displaced_endpoint_z_setting_gp;
             D_L14_00161CD0_f += FUN_L00_00257c48(0.0f, 20.0f);
             lightning_displaced_endpoint_y += FUN_L00_00257c48(0.0f, 20.0f);
             qcopy(&moby->pos, D_L14_00161CC0);
@@ -1288,8 +1288,8 @@ void update_path_lightning_controller(struct Moby *moby) {
     }
     update_branched_lightning_arc(moby);
     if (lightning_arc_remaining_frames == 0) {
-        *(int *)&D_L14_00161C50 = scale_game_frames(*(int *)&D_L14_00161C54);
-        *(int *)&D_L14_00161C58 = 0;
+        *(int *)&lightning_arc_interval_remaining_frames_gp = scale_game_frames(*(int *)&lightning_arc_interval_frames_gp);
+        *(int *)&lightning_arc_initialized_gp = 0;
     }
 }
 /* Arc state shared by FUN_L14_002ed530 and its draw callback FUN_L14_002edc18. */
@@ -1302,7 +1302,7 @@ extern f32 lightning_main_arc_z_displacement_limit_gp __asm__("D_L14_00161C94") 
 extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __attribute__((sda));
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
 extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
-extern char *D_L14_00161CE8;
+extern char *lightning_arc_owner_moby __asm__("D_L14_00161CE8");
 extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
 extern s16 D_L14_001E0000[40];
@@ -1330,7 +1330,7 @@ void spawn_lightning_arc_particle_pairs(float *pos, int n) __asm__("FUN_L14_002e
 void draw_branched_lightning_arc() __asm__("FUN_L14_002edc18");
 extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 
-extern float D_L14_001DFFE0[];
+extern float lightning_main_arc_penultimate_point[] __asm__("D_L14_001DFFE0");
 /* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
 void update_branched_lightning_arc(char *moby) {
     Vec4 delta;
@@ -1346,10 +1346,10 @@ void update_branched_lightning_arc(char *moby) {
     s32 *starts;
     u16 *main_arc_age;
 
-    if (*(int *)&D_L14_00161C58 == 0) {
-        *(int *)&D_L14_00161C58 = 1;
+    if (*(int *)&lightning_arc_initialized_gp == 0) {
+        *(int *)&lightning_arc_initialized_gp = 1;
         lightning_arc_sound_pending = 1;
-        D_L14_00161CE8 = moby;
+        lightning_arc_owner_moby = moby;
         i = 0;
         starts = D_L14_00161CF8_macro;
         *(int *)&lightning_arc_alpha_pulse_sweep_gp = 0;
@@ -1374,7 +1374,7 @@ void update_branched_lightning_arc(char *moby) {
             path_fraction = arc_itof(i) / arc_itof(40);
             *main_arc_age = arc_ftoi((float)-arc_frames(D_L14_00161C70_gp) * path_fraction + 0.0f);
         }
-        arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
+        arc_lerp(lightning_main_arc_penultimate_point, lightning_main_arc_penultimate_point - 4, lightning_main_arc_penultimate_point + 4, 0.5f);
         sign = -1.0f;
         lightning_arc_remaining_frames = lightning_arc_initial_lifetime_frames = arc_frames(FUN_L00_00257b90_d530(lightning_arc_lifetime_range_start_gp, lightning_arc_lifetime_range_end_gp));
         lightning_arc_inverse_fade_duration = 1.0f / arc_itof(lightning_arc_remaining_frames - arc_frames(D_L14_00161C70_gp));
@@ -1412,7 +1412,7 @@ void update_branched_lightning_arc(char *moby) {
             sign = -sign;
         }
     }
-    if (moby == D_L14_00161CE8) {
+    if (moby == lightning_arc_owner_moby) {
         arc_tick(&lightning_arc_remaining_frames);
         for (i = 0; i < 40; i++) {
             s16 v = ++D_L14_001E0000[i];
@@ -1702,11 +1702,11 @@ extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, i
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L14_00161CA0 __attribute__((sda));
-extern short D_L14_00161CA4 __attribute__((sda));
+extern short lightning_arc_particle_speed_range_start_gp __asm__("D_L14_00161CA0") __attribute__((sda));
+extern short lightning_arc_particle_speed_range_end_gp __asm__("D_L14_00161CA4") __attribute__((sda));
 extern short D_L14_00161CA8 __attribute__((sda));
-extern short D_L14_00161CAC __attribute__((sda));
-extern short D_L14_00161CB0 __attribute__((sda));
+extern short lightning_arc_particle_scale_range_start_gp __asm__("D_L14_00161CAC") __attribute__((sda));
+extern short lightning_arc_particle_scale_range_end_gp __asm__("D_L14_00161CB0") __attribute__((sda));
 void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) {
     float initial_velocity[4];
     float saved_position[4];
@@ -1716,12 +1716,12 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
     if (spawn_pair_count > 0) {
     i = spawn_pair_count;
     do {
-        particle_scale = random_float_between_c(*(float *)&D_L14_00161CAC, *(float *)&D_L14_00161CB0);
+        particle_scale = random_float_between_c(*(float *)&lightning_arc_particle_scale_range_start_gp, *(float *)&lightning_arc_particle_scale_range_end_gp);
         random_sign = random_integer_below(2);
         if (random_sign == 0) random_sign--;
         velocity_horizontal_angle = random_angle_radians();
         velocity_vertical_angle = random_float_between_c(0.34906584f, 1.5358897f);
-        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&D_L14_00161CA0, *(float *)&D_L14_00161CA4), velocity_horizontal_angle, velocity_vertical_angle);
+        build_spherical_offset_c(initial_velocity, random_float_between_c(*(float *)&lightning_arc_particle_speed_range_start_gp, *(float *)&lightning_arc_particle_speed_range_end_gp), velocity_horizontal_angle, velocity_vertical_angle);
         qcopy(saved_position, particle_spawn_position);
         particle_spawn_position[0] += FUN_L00_00257c48(0.0f, 0.15f);
         particle_spawn_position[1] += FUN_L00_00257c48(0.0f, 0.15f);
@@ -2013,7 +2013,7 @@ extern int sample_path() __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-extern short D_L14_00161D14 __attribute__((sda));
+extern short elevator_path_step_rate_gp __asm__("D_L14_00161D14") __attribute__((sda));
 int advance_elevator_along_path(struct Moby *elevator_moby) {
     char *moby_vars = (char *)elevator_moby->pvars;
     float rot[4];
@@ -2033,7 +2033,7 @@ int advance_elevator_along_path(struct Moby *elevator_moby) {
         total = *(float *)(moby_vars + 0xBC);
         qcopy(rot, moby_vars + 0xF0);
     }
-    step = *(float *)&D_L14_00161D14 * D_0015ED6C_c;
+    step = *(float *)&elevator_path_step_rate_gp * D_0015ED6C_c;
     path_endpoint_reached = FUN_L00_0025d808_2f05d8(selected_path, pos, moby_vars + 0xA4, moby_vars + 0xA8, 0, step * *(float *)(moby_vars + 0xAC));
     FUN_L00_0025b8c0(&elevator_moby->pos.x, (float *)(moby_vars + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
     FUN_L00_0025b8c0(&elevator_moby->pos.y, (float *)(moby_vars + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
@@ -2146,7 +2146,7 @@ void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
     D_0014C190_257218[D_0015ED84_m][(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
     D_L14_001BABD0[(short)*(unsigned short *)((char *)vendor_moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)vendor_moby + 0xB2) & 0x1F);
 }
-extern u8 D_L14_001E03B0[];
+extern u8 elevator_local_path_points[] __asm__("D_L14_001E03B0");
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
 extern void transform_vector_by_basis(u8 *, u8 *, u8 *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
@@ -2158,7 +2158,7 @@ extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
  * program. */
 void rebuild_elevator_world_path(u8 *moby) {
     u8 *data = *(u8 **)(moby + 0x78);
-    u8 *local_path_point_cursor = D_L14_001E03B0;
+    u8 *local_path_point_cursor = elevator_local_path_points;
     u8 *world_path_point_cursor = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
     s32 i = 10;
     f32 one = 1.0f;
@@ -2734,7 +2734,7 @@ typedef struct {
 extern L14LevelState D_L14_001BB930;
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
-extern char D_L14_00161F20[];
+extern char captain_qwark_name[] __asm__("D_L14_00161F20");
 extern char D_L14_001674C0[];
 extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
@@ -2784,7 +2784,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby_vars->p20 = (void *)D_L14_00161F20;
+        moby_vars->p20 = (void *)captain_qwark_name;
         initialize_npc_dialogue(moby, moby_vars);
         moby_vars->b8 = 1;
         moby->state = 1;
@@ -3164,32 +3164,32 @@ extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float 
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-extern short D_L14_00161F48 __attribute__((sda));
-extern short D_L14_00161F4C __attribute__((sda));
-extern short D_L14_00161F50 __attribute__((sda));
-extern short D_L14_00161F54 __attribute__((sda));
-extern short D_L14_00161F58 __attribute__((sda));
+extern short enemy_fighter_path_step_rate_gp __asm__("D_L14_00161F48") __attribute__((sda));
+extern short enemy_fighter_flight_spring_strength_gp __asm__("D_L14_00161F4C") __attribute__((sda));
+extern short enemy_fighter_flight_spring_damping_gp __asm__("D_L14_00161F50") __attribute__((sda));
+extern short enemy_fighter_bank_angle_scale_gp __asm__("D_L14_00161F54") __attribute__((sda));
+extern short enemy_fighter_bank_yaw_error_scale_gp __asm__("D_L14_00161F58") __attribute__((sda));
 void advance_enemy_fighter_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float path_target_position[3];
     float path_position_delta[3];
     float target_yaw, yaw_error_factor, path_vertical_angle;
-    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(moby_vars + 0x68)], (char *)path_target_position, moby_vars + 0x60, moby_vars + 0x64, 1, (*(float *)&D_L14_00161F48) * D_0015ED6C_c2);
-    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
+    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(moby_vars + 0x68)], (char *)path_target_position, moby_vars + 0x60, moby_vars + 0x64, 1, (*(float *)&enemy_fighter_path_step_rate_gp) * D_0015ED6C_c2);
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(moby_vars + 0x70), path_target_position[0], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(moby_vars + 0x74), path_target_position[1], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(moby_vars + 0x78), path_target_position[2], (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
     subtract_vector_xyz_c(path_position_delta, path_target_position, &moby->pos);
     if (absolute_float(path_position_delta[0]) > 0.01f) {
         if (absolute_float(path_position_delta[1]) > 0.01f) {
             target_yaw = fast_arc_tan(path_position_delta[0], path_position_delta[1]);
             yaw_error_factor = fast_subtract_rotations(moby->rot.z, target_yaw);
-            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), target_yaw, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
+            FUN_L00_00258278(moby, (float *)(moby_vars + 0x88), target_yaw, (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
             path_vertical_angle = fast_arc_tan(vector_length_xy_c(path_position_delta), path_position_delta[2]);
-            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -path_vertical_angle, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
-            yaw_error_factor = yaw_error_factor / (*(float *)&D_L14_00161F58);
+            FUN_L00_0025b8c0(&moby->rot.y, (float *)(moby_vars + 0x84), -path_vertical_angle, (*(float *)&enemy_fighter_flight_spring_strength_gp), (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
+            yaw_error_factor = yaw_error_factor / (*(float *)&enemy_fighter_bank_yaw_error_scale_gp);
             if (yaw_error_factor > 1.0f) yaw_error_factor = 1.0f;
             if (yaw_error_factor < -1.0f) yaw_error_factor = -1.0f;
-            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * (*(float *)&D_L14_00161F54), 0.003f, (*(float *)&D_L14_00161F50), 0.0f);
+            FUN_L00_0025b8c0(&moby->rot.x, (float *)(moby_vars + 0x80), yaw_error_factor * (*(float *)&enemy_fighter_bank_angle_scale_gp), 0.003f, (*(float *)&enemy_fighter_flight_spring_damping_gp), 0.0f);
         }
     }
 }
@@ -3217,8 +3217,8 @@ extern int tram_sound(int, int, void *) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int D_L14_001BABD0[];
 extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
-extern char D_L14_001FCE98[];
-extern char D_L14_001FCED0[];
+extern char enemy_fighter_921_missing_flight_path_error_format[] __asm__("D_L14_001FCE98");
+extern char enemy_fighter_921_empty_flight_path_error_format[] __asm__("D_L14_001FCED0");
 extern s32 enemy_fighter_921_respawn_delay_frames_gp __asm__("D_L14_00161F8C") __attribute__((sda));
 extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
@@ -3312,12 +3312,12 @@ void update_enemy_fighter_921(struct Moby *moby) {
     switch (moby->state) {
     case TRAM_STATE_INITIALIZE:
         if (moby_vars->path == -1) {
-            tram_print(D_L14_001FCE98, moby->save_id);
+            tram_print(enemy_fighter_921_missing_flight_path_error_format, moby->save_id);
             tram_remove(moby);
             return;
         }
         if (*(int *)D_L14_001B0BB0_t[moby_vars->path] == 0) {
-            tram_print(D_L14_001FCED0, moby->save_id);
+            tram_print(enemy_fighter_921_empty_flight_path_error_format, moby->save_id);
             tram_remove(moby);
             return;
         }

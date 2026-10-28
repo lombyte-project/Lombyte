@@ -21,13 +21,13 @@ extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 pause_action_list_mode __asm__("D_0015EE90");
-extern char D_0015FE98[];
-extern char D_0015FEA0[];
+extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
+extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
 extern u32 mc_gamedata[] __asm__("D_001A04C0");
 extern u32 mc_leveldata[] __asm__("D_001A07C0");
 extern u8 D_001A0880[];
 extern char D_001A08A0[];
-extern char D_001E81E8[];
+extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
 
 extern void DebugPrint(char *fmt, ...);
 extern s32 get_dma_packet_span_bytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
@@ -472,8 +472,8 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_DELETE_PROCESS_ENTRY_AND_REQUEST_DELETE:
             if (MC.result == 1) {
-                sprintf(name, D_0015FE98, D_0013D1D0, D_001A08A0);
-                DebugPrint(D_0015FEA0, name);
+                sprintf(name, memcard_delete_entry_path_format, D_0013D1D0, D_001A08A0);
+                DebugPrint(memcard_deleting_entry_message, name);
                 if (sceMcDelete(CARD.port, CARD.slot, name) == 0) {
                     MC.sub = 2;
                 }
@@ -504,7 +504,7 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_DELETE_REQUEST_DIRECTORY_DELETE:
             if (sceMcDelete(CARD.port, CARD.slot, D_0013D1D0) == 0) {
-                DebugPrint(D_001E81E8, D_0013D1D0);
+                DebugPrint(memcard_deleting_directory_message, D_0013D1D0);
                 MC.sub = 4;
             }
             break;

@@ -172,23 +172,23 @@ extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern char D_L06_00167540[];
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 square_root(f32) __asm__("func_001F9988");
-extern float D_L06_001D3290[][4];
-extern float D_L06_001D38C0[][2];
-extern float D_L06_001D3A90[][4];
-extern float D_L06_001D3D30[][4];
-extern float D_L06_001D40C0[][4];
-extern float D_L06_001D4360[][2];
-extern float D_L06_001D4530[][4];
+extern float gadgebot_container_local_vertices[][4] __asm__("D_L06_001D3290");
+extern float gadgebot_container_static_uvs[][2] __asm__("D_L06_001D38C0");
+extern float gadgebot_container_face_normals[][4] __asm__("D_L06_001D3A90");
+extern float gadgebot_container_vertex_normals[][4] __asm__("D_L06_001D3D30");
+extern float gadgebot_container_face_positions[][4] __asm__("D_L06_001D40C0");
+extern float gadgebot_container_reflection_uvs[][2] __asm__("D_L06_001D4360");
+extern float gadgebot_container_transformed_vertices[][4] __asm__("D_L06_001D4530");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern short D_L06_00161870 __attribute__((sda));
-extern short D_L06_00161874 __attribute__((sda));
-extern short D_L06_00161878 __attribute__((sda));
-extern short D_L06_0016187C __attribute__((sda));
-extern short D_L06_00161880 __attribute__((sda));
-extern short D_L06_00161884 __attribute__((sda));
-extern short D_L06_00161888 __attribute__((sda));
-extern short D_L06_0016188C __attribute__((sda));
-extern short D_L06_001D3620[][8];
+extern short gadgebot_container_blend_minuend_selector_gp __asm__("D_L06_00161870") __attribute__((sda));
+extern short gadgebot_container_blend_subtrahend_selector_gp __asm__("D_L06_00161874") __attribute__((sda));
+extern short gadgebot_container_blend_factor_selector_gp __asm__("D_L06_00161878") __attribute__((sda));
+extern short gadgebot_container_blend_addend_selector_gp __asm__("D_L06_0016187C") __attribute__((sda));
+extern short gadgebot_container_blend_fixed_alpha_gp __asm__("D_L06_00161880") __attribute__((sda));
+extern short gadgebot_container_texture_index_gp __asm__("D_L06_00161884") __attribute__((sda));
+extern short gadgebot_container_quad_color_gp __asm__("D_L06_00161888") __attribute__((sda));
+extern short gadgebot_container_vertex_normal_scale_gp __asm__("D_L06_0016188C") __attribute__((sda));
+extern short gadgebot_container_face_vertex_uv_indices[][8] __asm__("D_L06_001D3620");
 extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -224,13 +224,13 @@ void draw_gadgebot_spawn_container(char *moby) {
         near = 1;
     }
     if (near) {
-        float *uv = &D_L06_001D4360[0][0];
+        float *uv = &gadgebot_container_reflection_uvs[0][0];
         for (i = 0; i < 57; i++) {
-            transform_vector(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
-            subtract_vector_xyz(direction, D_L06_001D4530[i], D_L06_00167540);
+            transform_vector(gadgebot_container_transformed_vertices[i], gadgebot_container_local_vertices[i], matrix);
+            subtract_vector_xyz(direction, gadgebot_container_transformed_vertices[i], D_L06_00167540);
             fast_vec_normalize(direction, direction, 1.0f);
-            transform_vector(normal, D_L06_001D3D30[i], matrix);
-            fast_vec_normalize(normal, normal, *(float *)&D_L06_0016188C);
+            transform_vector(normal, gadgebot_container_vertex_normals[i], matrix);
+            fast_vec_normalize(normal, normal, *(float *)&gadgebot_container_vertex_normal_scale_gp);
             scale = fast_vec_dot(normal, direction);
             fast_vec_scale(projected, normal, scale + scale);
             subtract_vector_xyz(projected, direction, projected);
@@ -243,38 +243,38 @@ void draw_gadgebot_spawn_container(char *moby) {
         }
     } else {
         for (i = 0; i < 57; i++) {
-            transform_vector(D_L06_001D4530[i], D_L06_001D3290[i], matrix);
+            transform_vector(gadgebot_container_transformed_vertices[i], gadgebot_container_local_vertices[i], matrix);
         }
     }
-    quad.tex = get_effect_texture(*(int *)&D_L06_00161884);
+    quad.tex = get_effect_texture(*(int *)&gadgebot_container_texture_index_gp);
     quad.unk80 = 0xff9000000260L;
-    quad.unk88 = (long)*(int *)&D_L06_00161870 | (long)*(int *)&D_L06_00161874 << 2 |
-                 (long)*(int *)&D_L06_00161878 << 4 | (long)*(int *)&D_L06_0016187C << 6 |
-                 (long)*(int *)&D_L06_00161880 << 32;
+    quad.unk88 = (long)*(int *)&gadgebot_container_blend_minuend_selector_gp | (long)*(int *)&gadgebot_container_blend_subtrahend_selector_gp << 2 |
+                 (long)*(int *)&gadgebot_container_blend_factor_selector_gp << 4 | (long)*(int *)&gadgebot_container_blend_addend_selector_gp << 6 |
+                 (long)*(int *)&gadgebot_container_blend_fixed_alpha_gp << 32;
     quad.unk70 = 0;
-    quad.color[3] = *(int *)&D_L06_00161888;
-    quad.color[2] = *(int *)&D_L06_00161888;
-    quad.color[1] = *(int *)&D_L06_00161888;
-    quad.color[0] = *(int *)&D_L06_00161888;
+    quad.color[3] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[2] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[1] = *(int *)&gadgebot_container_quad_color_gp;
+    quad.color[0] = *(int *)&gadgebot_container_quad_color_gp;
     i = 0;
     do {
         float *center = facePos;
-        transform_point(center, D_L06_001D40C0[i], matrix);
+        transform_point(center, gadgebot_container_face_positions[i], matrix);
         subtract_vector_xyz(direction, center, D_L06_00167540);
         fast_vec_normalize(direction, direction, 1.0f);
-        transform_vector_by_basis(center, D_L06_001D3A90[i], matrix);
+        transform_vector_by_basis(center, gadgebot_container_face_normals[i], matrix);
         if (!(0.0f < fast_vec_dot(direction, center))) {
-            short *indices = D_L06_001D3620[i];
+            short *indices = gadgebot_container_face_vertex_uv_indices[i];
             int j;
             for (j = 0; j < 4; j++, indices += 2) {
                 short vertex = indices[0];
-                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+                qcopy(quad.corner[j], gadgebot_container_transformed_vertices[vertex]);
                 if (near) {
-                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
-                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                    quad.uv[j][0] = gadgebot_container_reflection_uvs[vertex][0];
+                    quad.uv[j][1] = gadgebot_container_reflection_uvs[vertex][1];
                 } else {
-                    quad.uv[j][0] = D_L06_001D38C0[indices[1]][0];
-                    quad.uv[j][1] = D_L06_001D38C0[indices[1]][1];
+                    quad.uv[j][0] = gadgebot_container_static_uvs[indices[1]][0];
+                    quad.uv[j][1] = gadgebot_container_static_uvs[indices[1]][1];
                 }
             }
             fast_draw_quad_real(&quad, 0, 0);
@@ -1344,7 +1344,7 @@ char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 extern GbHit D_L06_001745C0;
 extern Moby *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
-extern GbStats D_L06_0017EC58;
+extern GbStats l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58");
 extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern char D_L06_00167540[];
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -1480,7 +1480,7 @@ void gadgebot_update(GbMoby *moby) {
                 ok = 1;
             }
             if (ok) {
-                D_L06_0017EC58.unk2C++;
+                l06_gadgebot_command_range_stats.unk2C++;
                 switch (D_00141610[0]) {
                 case GADGEBOT_COMMAND_FOLLOW_HERO:
                     if (moby->state != 3) {
@@ -2674,7 +2674,7 @@ extern char *D_L06_001AC180_2f34d8[] __asm__("D_L06_001AC180");
 
 extern s32 gadgebot_target_cache_frame_gp __asm__("D_L06_00161CE8") __attribute__((sda));
 extern s32 cached_gadgebot_target_count_gp __asm__("D_L06_00161CE4") __attribute__((sda));
-extern char *D_L06_001DAE60[];
+extern char *cached_gadgebot_target_mobies[] __asm__("D_L06_001DAE60");
 /* Picks the best target for moby among this frame's live class-0x359 mobys and the hero
  * (current is the target it has now), and stores it in *current. */
 void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) __asm__("FUN_L06_002f34d8");
@@ -2689,14 +2689,14 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
             if (*(s16 *)(candidate_moby + 0xA6) == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
                 s32 candidate_slot_index = cached_gadgebot_target_count_gp;
                 cached_gadgebot_target_count_gp = candidate_slot_index + 1;
-                D_L06_001DAE60[candidate_slot_index] = candidate_moby;
+                cached_gadgebot_target_mobies[candidate_slot_index] = candidate_moby;
             }
         }
     }
     best.score = 999999.0f;
     best.moby = 0;
     for (i = 0; i < cached_gadgebot_target_count_gp; i++) {
-        consider_moby_target_candidate(moby, *current, D_L06_001DAE60[i], (int *)&best.moby, &best.score, range);
+        consider_moby_target_candidate(moby, *current, cached_gadgebot_target_mobies[i], (int *)&best.moby, &best.score, range);
     }
     consider_moby_target_candidate(moby, *current, (char *)hero.moby, (int *)&best.moby, &best.score, range);
     *current = best.moby;
@@ -3012,7 +3012,7 @@ void update_moby_rotation_group(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F86B8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
-extern int D_L06_001BAC50[];
+extern int energy_sphere_holder_completion_bits[] __asm__("D_L06_001BAC50");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void initialize_energy_sphere_holder_vars(char *) __asm__("FUN_L06_002f7548");
@@ -3059,7 +3059,7 @@ void energy_sphere_holder_update(char *holder_moby) {
         initialize_energy_sphere_holder_vars(holder_moby);
         *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                  D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
-        D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
+        energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
             ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
         break;
     case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
@@ -3073,7 +3073,7 @@ void energy_sphere_holder_update(char *holder_moby) {
             holder_moby[0x20] = 2;
             *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
                      D_0014171B_86b8) |= 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
-            D_L06_001BAC50[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
+            energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
                 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
         } else {
             update_energy_sphere_holder_beam_effects(holder_moby);
@@ -3326,7 +3326,7 @@ extern int energy_sphere_destruction_zero_branch_color_start_gp __asm__("D_L06_0
 extern int energy_sphere_destruction_zero_branch_color_end_gp __asm__("D_L06_00161EA4") __attribute__((sda));
 extern float energy_sphere_destruction_scale_range_start_gp __asm__("D_L06_00161EA8") __attribute__((sda));
 extern float energy_sphere_destruction_scale_range_end_gp __asm__("D_L06_00161EAC") __attribute__((sda));
-extern unsigned char D_L06_00161E94 __attribute__((sda));
+extern unsigned char l06_energy_sphere_destruction_particle_lifetime __asm__("D_L06_00161E94") __attribute__((sda));
 void spawn_energy_sphere_destruction_particles(char *moby) {
     float particle_velocity[4];
     int i;
@@ -3345,7 +3345,7 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
             particle_color = fast_tween_color(energy_sphere_destruction_zero_branch_color_start_gp, energy_sphere_destruction_zero_branch_color_end_gp,
                              random_float_between_alt(0.0f, 1.0f));
         }
-        particle_lifetime = D_L06_00161E94;
+        particle_lifetime = l06_energy_sphere_destruction_particle_lifetime;
         random_particle_byte = random_integer_below(0xFF);
         spawn_moving_hero_relative_alpha_fade_particle(moby + 0x10, particle_scale, particle_velocity, particle_color, particle_lifetime, (unsigned char)random_particle_byte, 0);
     }

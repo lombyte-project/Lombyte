@@ -58,7 +58,7 @@ extern void FUN_L02_002101b8(void *, int, int);
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
-extern char D_L02_001CB400[];
+extern char animated_frame_scratchpad_dma_source[] __asm__("D_L02_001CB400");
 extern void build_interpolated_dma_packet(void *) __asm__("FUN_L02_002a40f0");
 
 void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, int ticks_per_frame, float x, float y, float z, float w, int frame_table_start_index, int frame_count,
@@ -82,7 +82,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
     ((unsigned char *)scratch)[0x3F] = 0x80;
     *(int *)(scratch + 0x1C) = frame_packet_address;
     build_interpolated_dma_packet(scratch);
-    FUN_L02_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
+    FUN_L02_002101b8(animated_frame_scratchpad_dma_source, 0x70002800, 0xF8);
 }
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_globals.h"
@@ -152,7 +152,7 @@ void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, v
 
 extern float D_L02_001D3230[][4] __attribute__((section(".data")));
 float D_L02_001619C0[4] __attribute__((section(".sdata"))) = {-3.25f, 0.0f, 0.2f, 0.0f};
-extern short D_L02_001619D0 __attribute__((sda));
+extern short sand_shark_dust_endpoint_size_scale_gp __asm__("D_L02_001619D0") __attribute__((sda));
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -176,8 +176,8 @@ void emit_sand_shark_dust_segment(struct Moby *moby, int segment_start_index, in
     fast_vec_sub(vb, vb, D_L02_001619C0);
     transform_vector_by_basis(vb, vb, &moby->rot_row0);
     fast_vec_add(vb, vb, &moby->pos);
-    emit_sand_shark_dust_puffs_along_segment(moby, va, vb, puff_count, pa[3] * *(float *)&D_L02_001619D0,
-                     pb[3] * *(float *)&D_L02_001619D0);
+    emit_sand_shark_dust_puffs_along_segment(moby, va, vb, puff_count, pa[3] * *(float *)&sand_shark_dust_endpoint_size_scale_gp,
+                     pb[3] * *(float *)&sand_shark_dust_endpoint_size_scale_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
 
@@ -265,8 +265,8 @@ extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
 extern int D_001413D4_e50 __asm__("D_001413D4") __attribute__((section(".data")));
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
 extern char D_L02_001673C0_e50[] __asm__("D_L02_001673C0");
-extern char D_L02_001FA8A0[];
-extern char D_L02_001FA8C0[];
+extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
+extern char sand_shark_empty_path_message_format[] __asm__("D_L02_001FA8C0");
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
 extern int scale_ticks_e50(int) __asm__("FUN_001f96f8");
@@ -374,12 +374,12 @@ void sand_shark_update(struct Moby *moby) {
     switch (moby->state) {
     case SAND_SHARK_INITIALIZE:
         if (vars->path == -1) {
-            FUN_001e93b0_e50(D_L02_001FA8A0, moby->save_id);
+            FUN_001e93b0_e50(sand_shark_missing_path_message_format, moby->save_id);
             remove_moby_e50(moby);
             return;
         }
         if (*D_L02_001B0AB0_e50[vars->path] == 0) {
-            FUN_001e93b0_e50(D_L02_001FA8C0, moby->save_id);
+            FUN_001e93b0_e50(sand_shark_empty_path_message_format, moby->save_id);
             remove_moby_e50(moby);
             return;
         }
@@ -1907,7 +1907,7 @@ typedef struct {
     unsigned char reverse;
 } L16PlatformMoby;
 
-extern char *D_L02_001600FC;
+extern char *level02_elevator_transform_table __asm__("D_L02_001600FC");
 extern float level02_elevator_stop_height_offset_gp __asm__("D_L02_00161BD0") __attribute__((sda));
 extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
@@ -1943,9 +1943,9 @@ void elevator_update(L16PlatformMoby *moby) {
             motion.q = 0;
             motion.v[2] = 1.0f;
             elevator_vars->particle = -1;
-            transform_vector_by_basis(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-            elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38);
-            moby->position[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
+            transform_vector_by_basis(motion.v, motion.v, level02_elevator_transform_table + (elevator_vars->joint << 7));
+            elevator_vars->goal = motion.v[2] + *(float *)(level02_elevator_transform_table + elevator_vars->joint * 0x80 + 0x38);
+            moby->position[2] = motion.v[2] + *(float *)(level02_elevator_transform_table + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
             moby->reverse = 1;
             if (elevator_vars->stop) {
                 moby->state = 2;
@@ -1965,8 +1965,8 @@ void elevator_update(L16PlatformMoby *moby) {
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                motion.v[2] = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
+                transform_vector(motion.v, motion.v, level02_elevator_transform_table + (elevator_vars->joint << 7));
+                motion.v[2] = motion.v[2] + *(float *)(level02_elevator_transform_table + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
                 if (absolute_float(hero.motion.pos.f[2] - motion.v[2]) < 1.0f) {
                     moby->reverse = (moby->reverse + 1) & 1;
                     elevator_vars->goal = motion.v[2];
@@ -1983,8 +1983,8 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
+                transform_vector(motion.v, motion.v, level02_elevator_transform_table + (elevator_vars->joint << 7));
+                elevator_vars->goal = motion.v[2] + *(float *)(level02_elevator_transform_table + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
                 elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
@@ -1998,8 +1998,8 @@ void elevator_update(L16PlatformMoby *moby) {
                     motion.v[2] = 1.0f;
                 }
                 moby->reverse = (moby->reverse + 1) & 1;
-                transform_vector(motion.v, motion.v, D_L02_001600FC + (elevator_vars->joint << 7));
-                elevator_vars->goal = motion.v[2] + *(float *)(D_L02_001600FC + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
+                transform_vector(motion.v, motion.v, level02_elevator_transform_table + (elevator_vars->joint << 7));
+                elevator_vars->goal = motion.v[2] + *(float *)(level02_elevator_transform_table + elevator_vars->joint * 0x80 + 0x38) + level02_elevator_stop_height_offset_gp;
                 elevator_vars->speed = 0.0f;
                 moby->state = 3;
             }
@@ -2068,7 +2068,7 @@ typedef struct {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_0015ED6C;
-extern float D_L02_001D3F50[][2];
+extern float level02_elevator_ring_segment_uvs[][2] __asm__("D_L02_001D3F50");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
@@ -2093,7 +2093,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     L16RingMatrix matrix;
     char *moby_vars = (char *)moby->pvars;
     int bound_index = (*(int *)((char *)moby_vars + 0xA0)) << 7;
-    char *entry = (char *)(bound_index + (int)D_L02_001600FC);
+    char *entry = (char *)(bound_index + (int)level02_elevator_transform_table);
     float translation = (*(float *)((char *)moby_vars + 0xB8));
     float lower = (*(float *)((char *)entry + 0x38));
     float half = (*(float *)((char *)entry + 0x28));
@@ -2119,7 +2119,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     packet.mode = (long)D_L02_00161BF4 | ((long)D_L02_00161BF8 << 2) | ((long)D_L02_00161BFC << 4) |
                   ((long)D_L02_00161C00 << 6) | 0x8000000000L;
     packet.zero = 0;
-    uv = D_L02_001D3F50;
+    uv = level02_elevator_ring_segment_uvs;
     point = packet.position;
     v = &packet.uv[0].v;
     u = &packet.uv[0].u;
@@ -2972,24 +2972,24 @@ extern float D_0015ED6C;
 extern f32 D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
 extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 
-extern short D_L02_00161C38 __attribute__((sda));
-extern short D_L02_00161C3C __attribute__((sda));
+extern short transport_pod_rail_vertical_deceleration_gp __asm__("D_L02_00161C38") __attribute__((sda));
+extern short transport_pod_rail_rotation_degrees_per_height_unit_gp __asm__("D_L02_00161C3C") __attribute__((sda));
 void advance_transport_pod_rails_to_offsets(struct Moby *moby) {
     char *transport_pod_vars = (char *)moby->pvars;
     advance_accelerated_scalar(
         (float *)(*(char **)(transport_pod_vars + 0x84) + 0x18), (float *)(transport_pod_vars + 0x8C),
         moby->pos.z + *(float *)(transport_pod_vars + 0x94), *(float *)&D_L02_00161C34_gp * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
+        *(float *)&transport_pod_rail_vertical_deceleration_gp * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     advance_accelerated_scalar(
         (float *)(*(char **)(transport_pod_vars + 0x88) + 0x18), (float *)(transport_pod_vars + 0x90),
         moby->pos.z + *(float *)(transport_pod_vars + 0x98), *(float *)&D_L02_00161C34_gp * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
+        *(float *)&transport_pod_rail_vertical_deceleration_gp * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     {
         float r0 =
             fast_add_rotations(moby->rot.z,
                                (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) *
-                                   *(float *)&D_L02_00161C3C * DEG_TO_RAD);
-        float k = *(float *)&D_L02_00161C3C;
+                                   *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp * DEG_TO_RAD);
+        float k = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
         *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = r0;
         *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
             moby->rot.z,
@@ -3011,7 +3011,7 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
     float rail_a_rotation_z;
     qcopy(rail_a + 0x10, &moby->pos);
     qcopy(*(char **)(transport_pod_vars + 0x88) + 0x10, &moby->pos);
-    k = *(float *)&D_L02_00161C3C;
+    k = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
     *(float *)(rail_a + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x94);
     *(int *)(transport_pod_vars + 0x8C) = 0;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x18) = moby->pos.z + *(float *)(transport_pod_vars + 0x98);
@@ -3019,7 +3019,7 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
     rail_a_rotation_z = fast_add_rotations(moby->rot.z,
                      (*(float *)(*(char **)(transport_pod_vars + 0x84) + 0x18) - moby->pos.z) * k *
                          DEG_TO_RAD);
-    k2 = *(float *)&D_L02_00161C3C;
+    k2 = *(float *)&transport_pod_rail_rotation_degrees_per_height_unit_gp;
     *(float *)(*(char **)(transport_pod_vars + 0x84) + 0x48) = rail_a_rotation_z;
     *(float *)(*(char **)(transport_pod_vars + 0x88) + 0x48) = fast_add_rotations(
         moby->rot.z,
@@ -3037,7 +3037,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-extern short D_L02_00161C68 __attribute__((sda));
+extern short crane_animation_speed_gp __asm__("D_L02_00161C68") __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 void crane_update(struct Moby *moby) {
     enum {
@@ -3050,7 +3050,7 @@ void crane_update(struct Moby *moby) {
         CRANE_ANIM_TRANSITION_TO_RESTART_WAIT = 7
     };
     int *crane_vars = (int *)moby->pvars;
-    moby->anim_speed = *(float *)&D_L02_00161C68;
+    moby->anim_speed = *(float *)&crane_animation_speed_gp;
     switch (moby->prev_seq) {
     case CRANE_ANIM_TRANSITION_TO_RANDOM_WAIT:
     case CRANE_ANIM_TRANSITION_TO_WAIT_FOR_TRANSITION_TO_RANDOM_WAIT:
@@ -3237,11 +3237,11 @@ extern int D_001413D4 __attribute__((section(".data")));
 extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern int FUN_L02_0028d618(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L02_00161C80 __attribute__((sda));
-extern short D_L02_00161C88 __attribute__((sda));
-extern short D_L02_00161C8C __attribute__((sda));
-extern short D_L02_00161C90 __attribute__((sda));
-extern short D_L02_00161C94 __attribute__((sda));
+extern short rocket_launcher_shot_sound_distance_threshold_rate_gp __asm__("D_L02_00161C80") __attribute__((sda));
+extern short rocket_launcher_shot_sound_0_scalar_full_distance_gp __asm__("D_L02_00161C88") __attribute__((sda));
+extern short rocket_launcher_shot_sound_0_scalar_zero_distance_gp __asm__("D_L02_00161C8C") __attribute__((sda));
+extern short rocket_launcher_shot_sound_1_scalar_zero_distance_gp __asm__("D_L02_00161C90") __attribute__((sda));
+extern short rocket_launcher_shot_sound_1_scalar_full_distance_gp __asm__("D_L02_00161C94") __attribute__((sda));
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                     void *target) __asm__("FUN_0022da68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -3252,16 +3252,16 @@ void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
     int sound_a, sound_b, gain_a, gain_b;
     if (*(float *)(data + 0x10) >= 0.0f) {
         distance = distance_xyz(D_L02_001673C0, &moby->pos);
-        *(float *)(data + 0x10) += *(float *)&D_L02_00161C80 * D_0015ED6C;
+        *(float *)(data + 0x10) += *(float *)&rocket_launcher_shot_sound_distance_threshold_rate_gp * D_0015ED6C;
         if (distance < *(float *)(data + 0x10) && D_001413D4 != 0x72) {
             sound_a = allocate_voice_for_target_entry(0, 0x10, (int)moby);
             sound_b = allocate_voice_for_target_entry(1, 0x10, (int)moby);
             gain_a = func_001FA898_r(
-                (1.0f - (distance - *(float *)&D_L02_00161C88) /
-                            (*(float *)&D_L02_00161C8C - *(float *)&D_L02_00161C88)) *
+                (1.0f - (distance - *(float *)&rocket_launcher_shot_sound_0_scalar_full_distance_gp) /
+                            (*(float *)&rocket_launcher_shot_sound_0_scalar_zero_distance_gp - *(float *)&rocket_launcher_shot_sound_0_scalar_full_distance_gp)) *
                 1024.0f);
-            gain_b = func_001FA898_r(((distance - *(float *)&D_L02_00161C90) /
-                                      (*(float *)&D_L02_00161C94 - *(float *)&D_L02_00161C90)) *
+            gain_b = func_001FA898_r(((distance - *(float *)&rocket_launcher_shot_sound_1_scalar_zero_distance_gp) /
+                                      (*(float *)&rocket_launcher_shot_sound_1_scalar_full_distance_gp - *(float *)&rocket_launcher_shot_sound_1_scalar_zero_distance_gp)) *
                                      1024.0f);
             if (gain_a > 1024)
                 gain_a = 1024;
@@ -3517,7 +3517,7 @@ typedef struct {
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
 int D_L02_00161CC4 = 0x5f243632;
 int D_L02_00161CC8 = 0x61311;
-extern Colors0720 D_L02_00161CD0;
+extern Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -3580,7 +3580,7 @@ void rocks_update(struct Moby *moby) {
                 OvlVec4 dir;
                 OvlVec4 pos;
                 OvlVec4 tmp;
-                colors = D_L02_00161CD0;
+                colors = l02_rocks_debris_colors;
                 pos.q = 0;
                 pos.f[0] = random_float_between_alt(-1.0f, 1.0f);
                 pos.f[1] = random_float_between_alt(-1.0f, 1.0f);

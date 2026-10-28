@@ -905,9 +905,9 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 /* Draws the moby's ring of lights: builds a matrix facing the camera from the moby's axis, transforms the ring
  * vertices through it and draws them, then flips the matrix and draws the back face. */
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418") __attribute__((sda));
-extern float D_L14_001D7A60[][3];
-extern s32 D_L14_001D80C8[];
-extern char D_L14_001D7E38[];
+extern float blarg_heavy_interceptor_light_ring_vertex_positions[][3] __asm__("D_L14_001D7A60");
+extern s32 blarg_heavy_interceptor_light_ring_vertex_colors[] __asm__("D_L14_001D80C8");
+extern char blarg_heavy_interceptor_light_ring_texture_coordinates[] __asm__("D_L14_001D7E38");
 extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
 void draw_blarg_heavy_interceptor_camera_facing_glow(struct Moby *m) __asm__("FUN_L14_002ae0a8");
 
@@ -951,7 +951,7 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     sreg_r(0x4A, 0);
     font_queue_vu_state();
     for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
-        float *s = D_L14_001D7A60[i];
+        float *s = blarg_heavy_interceptor_light_ring_vertex_positions[i];
         float *o = f.verts[i];
         ring_vertex_scratch[0] = s[0];
         ring_vertex_scratch[1] = s[1];
@@ -962,19 +962,19 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[1] = ring_vertex_scratch[1];
         o[2] = ring_vertex_scratch[2];
         if (*(short *)(moby_vars + 0x202) != 0) {
-            cols[i] = D_L14_001D80C8[i] & 0xFF0000FF;
+            cols[i] = blarg_heavy_interceptor_light_ring_vertex_colors[i] & 0xFF0000FF;
         }
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     }
     scale_r(f.mat[1], f.mat[1], -1.0f);
     scale_r(f.mat[2], f.mat[2], -1.0f);
     for (j = 0; j < blarg_heavy_interceptor_light_ring_vertex_count_gp; j++) {
         float *o = f.verts[j];
-        float *s = D_L14_001D7A60[j];
+        float *s = blarg_heavy_interceptor_light_ring_vertex_positions[j];
         ring_vertex_scratch[0] = s[0];
         ring_vertex_scratch[1] = s[1];
         ring_vertex_scratch[2] = s[2];
@@ -985,9 +985,9 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) {
         o[2] = ring_vertex_scratch[2];
     }
     if (*(short *)(moby_vars + 0x202) != 0) {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, cols, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     } else {
-        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, D_L14_001D80C8, D_L14_001D7E38, 1);
+        FUN_L00_001fde98(blarg_heavy_interceptor_light_ring_vertex_count_gp, f.verts, blarg_heavy_interceptor_light_ring_vertex_colors, blarg_heavy_interceptor_light_ring_texture_coordinates, 1);
     }
 }
 /* Draws the moby's spinning beam: sixteen camera-facing quads stepped out along its heading, each pair
@@ -1222,8 +1222,8 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
-extern short D_L14_0016147C __attribute__((sda));
-extern short D_L14_00161480 __attribute__((sda));
+extern short blarg_heavy_interceptor_glow_minimum_camera_separation_gp __asm__("D_L14_0016147C") __attribute__((sda));
+extern short blarg_heavy_interceptor_camera_pulled_glow_default_color_gp __asm__("D_L14_00161480") __attribute__((sda));
 void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) __asm__("FUN_L14_002ae260");
 
 void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
@@ -1248,7 +1248,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     glow_to_camera_distance = vector_length_xyz(glow_to_camera_vector);
     if (0.0f < glow_to_camera_distance) {
         float camera_pull_distance = *(float *)(d + 0x218);
-        float camera_distance_margin = glow_to_camera_distance - *(float *)&D_L14_0016147C;
+        float camera_distance_margin = glow_to_camera_distance - *(float *)&blarg_heavy_interceptor_glow_minimum_camera_separation_gp;
         if (camera_distance_margin < camera_pull_distance) {
             camera_pull_distance = camera_distance_margin;
             if (camera_distance_margin < 0.0f)
@@ -1272,7 +1272,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
         pk.col[1] = col;
         pk.col[0] = col;
     } else {
-        col = *(u32 *)&D_L14_00161480;
+        col = *(u32 *)&blarg_heavy_interceptor_camera_pulled_glow_default_color_gp;
         pk.col[3] = col;
         pk.col[2] = col;
         pk.col[1] = col;
@@ -1410,7 +1410,7 @@ extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
 extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
-extern short D_L14_001613FC __attribute__((sda));
+extern short blarg_heavy_interceptor_return_path_position_damping_coefficient_gp __asm__("D_L14_001613FC") __attribute__((sda));
 void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
@@ -1424,11 +1424,11 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, floa
         }
     }
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), target_position[0], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), target_position[1], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), target_position[2], position_easing_factor,
-                       *(float *)&D_L14_001613FC, 0.0f);
+                       *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp, 0.0f);
 }
 extern f32 blarg_heavy_interceptor_vertical_oscillation_amplitude_gp __asm__("D_L14_001613A8") __attribute__((sda));
 extern f32 blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp __asm__("D_L14_001613AC") __attribute__((sda));
@@ -1553,7 +1553,7 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     return ok;
 }
 extern s32 truncate_float_to_s32(f32 f) __asm__("FUN_001fa6d0");
-extern s32 D_L14_001D8210[];
+extern s32 blarg_heavy_interceptor_light_ring_fade_values[] __asm__("D_L14_001D8210");
 
 /* 0x002AED50, 212 bytes.  Advances the blink phase and fades each light
  * entry's alpha up and down.  Its counter and its 1.0f constant are small
@@ -1573,15 +1573,15 @@ void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) {
     if (1.0f <= *(f32 *)(data + 0x164))
         *(s32 *)(data + 0x164) = 0;
     for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
-        s32 light_fade_value = D_L14_001D8210[i];
+        s32 light_fade_value = blarg_heavy_interceptor_light_ring_fade_values[i];
         if (light_fade_value != 0) {
             light_fade_value += step;
             if (light_fade_value > 0x90)
                 light_fade_value -= 0x80;
-            D_L14_001D8210[i] = light_fade_value;
+            blarg_heavy_interceptor_light_ring_fade_values[i] = light_fade_value;
             if (light_fade_value > 0x50)
                 light_fade_value = 0xA0 - light_fade_value;
-            D_L14_001D80C8[i] = (D_L14_001D80C8[i] & 0xFFFFFF) | (light_fade_value << 24);
+            blarg_heavy_interceptor_light_ring_vertex_colors[i] = (blarg_heavy_interceptor_light_ring_vertex_colors[i] & 0xFFFFFF) | (light_fade_value << 24);
         }
     }
 }
@@ -2198,7 +2198,7 @@ char D_L14_001FBE80[] = "Hovertank with a bound path that has no points. UID: %d
 char D_L14_001FBEC0[] = "Hovertank with no bombPath. UID: %d\n";
 char D_L14_001FBEE8[] = "Hovertank with a bomb path that has no points. UID: %d\n";
 char D_L14_001FBF20[] = "Hovertank with no exit Path. UID: %d\n";
-extern char D_L14_001FBF48[];
+extern char minibomber_empty_exit_path_diagnostic[] __asm__("D_L14_001FBF48");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
@@ -2339,7 +2339,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             return;
         }
         if (D_L14_001B0F30_2B5938[d->f150]->n == 0) {
-            debug_print_alt(D_L14_001FBF48, moby->fB2);
+            debug_print_alt(minibomber_empty_exit_path_diagnostic, moby->fB2);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2634,10 +2634,10 @@ extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("
 extern void FUN_L00_00262b80_c(void *, char *, char *, float, float,
                                float) __asm__("FUN_L00_00262b80");
 
-extern short D_L14_00161538 __attribute__((sda));
-extern short D_L14_0016153C __attribute__((sda));
-extern short D_L14_00161544 __attribute__((sda));
-extern short D_L14_00161548 __attribute__((sda));
+extern short minibomber_vertical_oscillation_amplitude_gp __asm__("D_L14_00161538") __attribute__((sda));
+extern short minibomber_vertical_oscillation_phase_increment_target_gp __asm__("D_L14_0016153C") __attribute__((sda));
+extern short minibomber_rotation_oscillation_first_phase_increment_gp __asm__("D_L14_00161544") __attribute__((sda));
+extern short minibomber_rotation_oscillation_second_phase_increment_gp __asm__("D_L14_00161548") __attribute__((sda));
 void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428");
 
 void update_minibomber_oscillation(struct Moby *moby) {
@@ -2652,13 +2652,13 @@ void update_minibomber_oscillation(struct Moby *moby) {
         spring_target = spring_target * 1.5f;
     } else {
         FUN_L00_0025b8c0_c((float *)(data + 0x168), (float *)(data + 0x16C),
-                           *(float *)&D_L14_0016153C, 0.002f, 0.2f, 0.0f);
-        FUN_L00_00262b00_c(*(float *)&D_L14_00161538, *(float *)(data + 0x168), moby,
+                           *(float *)&minibomber_vertical_oscillation_phase_increment_target_gp, 0.002f, 0.2f, 0.0f);
+        FUN_L00_00262b00_c(*(float *)&minibomber_vertical_oscillation_amplitude_gp, *(float *)(data + 0x168), moby,
                            (float *)(data + 0xC0), (float *)(data + 0xC4));
     }
     FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160),
-                       *(float *)&D_L14_00161544, *(float *)&D_L14_00161548);
+                       *(float *)&minibomber_rotation_oscillation_first_phase_increment_gp, *(float *)&minibomber_rotation_oscillation_second_phase_increment_gp);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
@@ -2773,7 +2773,7 @@ extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
-extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
+extern char l14_minibomber_bomb_release_blast_template[] __asm__("D_L14_001D88D0");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
                                 int) __asm__("FUN_L00_0026d000");
@@ -2834,7 +2834,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
         spawn_two_point_effect_particle(effect_spawn_position, direction);
     }
-    mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
+    mine_camera_blast((int)l14_minibomber_bomb_release_blast_template, original_pos, 0, 0);
 }
 /* Points the mover at the second-to-last node of its active path and clears its offset. */
 

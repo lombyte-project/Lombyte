@@ -9,7 +9,7 @@ struct MenuPreviewObjects {
     struct MenuPreviewObject *items[24];
     u8 held[24];
 };
-extern s32 D_001D5020[];
+extern s32 menu_preview_slot_draw_enabled[] __asm__("D_001D5020");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
 
@@ -24,7 +24,7 @@ s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
         if (preview->held[i] != 0) {
             continue;
         }
-        if (D_001D5020[i] == 0) {
+        if (menu_preview_slot_draw_enabled[i] == 0) {
             continue;
         }
         if (i == 7 && ((struct Moby *)preview->items[7])->oclass == 0x4A) {

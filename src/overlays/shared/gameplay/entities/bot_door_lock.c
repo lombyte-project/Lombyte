@@ -4,9 +4,6 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
-#else
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/quad.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -78,25 +75,29 @@ void draw_bot_door_lock_glow(char *moby) {
         draw_geometry_quad(&quad, 0, 1);
     }
     quad.texture = get_effect_texture(0x1b);
-    /* Near miss, 10 bytes: retail keeps 1.4 in f5 and 1.1 in f4. */
     data[8] += 0.01f;
     if (1.0f < data[8]) data[8] = 0.0f;
-    corners[0].q = 0;
-    corners[0].f[0] = -data[8] * 1.2f * data[9];
-    corners[0].f[1] = -data[8] * 1.2f * data[9];
-    corners[0].f[2] = data[8] * 1.4f + 1.1f;
-    corners[1].q = 0;
-    corners[1].f[0] = data[8] * 1.2f * data[9];
-    corners[1].f[1] = -data[8] * 1.2f * data[9];
-    corners[1].f[2] = data[8] * 1.4f + 1.1f - 0.2f;
-    corners[2].q = 0;
-    corners[2].f[0] = -data[8] * 1.2f * data[9];
-    corners[2].f[1] = data[8] * 1.2f * data[9];
-    corners[2].f[2] = data[8] * 1.4f + 1.1f;
-    corners[3].q = 0;
-    corners[3].f[0] = data[8] * 1.2f * data[9];
-    corners[3].f[1] = data[8] * 1.2f * data[9];
-    corners[3].f[2] = data[8] * 1.4f + 1.1f - 0.2f;
+    {
+        /* Fakematch: local-alloc swaps the registers of 1.4f and 1.1f; pin them. */
+        register float scale __asm__("$f5") = 1.4f;
+        register float offset __asm__("$f4") = 1.1f;
+        corners[0].q = 0;
+        corners[0].f[0] = -data[8] * 1.2f * data[9];
+        corners[0].f[1] = -data[8] * 1.2f * data[9];
+        corners[0].f[2] = data[8] * scale + offset;
+        corners[1].q = 0;
+        corners[1].f[0] = data[8] * 1.2f * data[9];
+        corners[1].f[1] = -data[8] * 1.2f * data[9];
+        corners[1].f[2] = data[8] * scale + offset - 0.2f;
+        corners[2].q = 0;
+        corners[2].f[0] = -data[8] * 1.2f * data[9];
+        corners[2].f[1] = data[8] * 1.2f * data[9];
+        corners[2].f[2] = data[8] * scale + offset;
+        corners[3].q = 0;
+        corners[3].f[0] = data[8] * 1.2f * data[9];
+        corners[3].f[1] = data[8] * 1.2f * data[9];
+        corners[3].f[2] = data[8] * scale + offset - 0.2f;
+    }
     pos[0].q = corners[0].q;
     pos[3].q = corners[3].q;
     pos[1].q = corners[1].q;
@@ -127,7 +128,6 @@ void draw_bot_door_lock_glow(char *moby) {
     quad.texture_coordinates[3][0] = 1.0f; quad.texture_coordinates[3][1] = 1.0f;
     draw_geometry_quad(&quad, 0, 1);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -184,7 +184,7 @@ extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
-extern int D_L06_0015FFD8_gp __asm__("D_L06_0015FFD8") __attribute__((sda));
+extern int level_mobys_q __asm__("D_L06_0015FFD8") __attribute__((sda));
 void bot_door_lock_update(char *moby) __asm__("FUN_L06_00307d30");
 void bot_door_lock_update(char *moby) {
     enum {
@@ -271,7 +271,7 @@ void bot_door_lock_update(char *moby) {
         }
         if (idata[5] < 1 || D_0014C050[(unsigned char)moby[0xb0] + current_level_index * 16] == 0xff) {
             for (i = 0; i < 4; i++) {
-                if (idata[i] != -1) activate_bot_door_lock_target((unsigned char *)moby, (unsigned char *)(D_L06_0015FFD8_gp + idata[i] * 0x100));
+                if (idata[i] != -1) activate_bot_door_lock_target((unsigned char *)moby, (unsigned char *)(level_mobys_q + idata[i] * 0x100));
             }
             moby[0x20] = 2;
         }
@@ -495,11 +495,11 @@ void draw_projected_fading_quad(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015EF50;
+extern char *target_reference_table __asm__("D_L06_0015EF50");
 
 void FUN_L06_00316330(char *moby) {
     if (*(short *)(moby + 0x86) == 0x12) {
-        *(int *)(*(char **)(D_L06_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
+        *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
     }
 }
 

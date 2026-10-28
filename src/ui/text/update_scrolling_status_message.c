@@ -6,7 +6,7 @@ struct ScrollingStatus {
     s32 unk44;
 };
 
-extern u8 D_001E5FB8[];
+extern u8 scrolling_status_message_ids[] __asm__("D_001E5FB8");
 extern struct ScrollingStatus D_001E63C0;
 extern s32 draw_framebuffer_rect() __asm__("func_001FB8F0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
@@ -21,7 +21,7 @@ void update_scrolling_status_message(void) {
     if ((strlen(D_001E63C0.unk2C) - ((s32)D_001E63C0.unk44 / 20)) > 0) {
         D_001E63C0.unk44 = (s32)(D_001E63C0.unk44 + 2);
     } else {
-        u8 *base_1e5fb8 = D_001E5FB8;
+        u8 *base_1e5fb8 = scrolling_status_message_ids;
         set_scrolling_status_message(get_help_message_text(
             *(s32 *)(void *)((random_integer_below(0x18) * 4) + base_1e5fb8)));
     }

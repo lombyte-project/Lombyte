@@ -40,7 +40,7 @@ struct ShopCamera {
 
 extern char D_L04_00166F40[];
 extern u8 D_0014C050[];
-extern struct ShopCamera D_L04_0016C9F0;
+extern struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0");
 extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(struct Moby *);
@@ -101,9 +101,9 @@ void lieutenant_update(struct Moby *moby) {
             rotation_ptr = &rot;
             qcopy(rotation_ptr, &moby->rot);
             rot.f[2] = fast_add_rotations(rot.f[2], 3.14159f);
-            qcopy(&D_L04_0016C9F0.pos, &pos);
-            qcopy(&D_L04_0016C9F0.rot, rotation_ptr);
-            D_L04_0016C9F0.active = 1;
+            qcopy(&l04_lieutenant_shop_camera.pos, &pos);
+            qcopy(&l04_lieutenant_shop_camera.rot, rotation_ptr);
+            l04_lieutenant_shop_camera.active = 1;
             memcard_save_data(0, -1);
             moby->state = 3;
             moby->flags |= 0x41;
@@ -504,7 +504,7 @@ struct L04MissionState {
 };
 
 extern int D_L04_0015F5C4;
-extern struct L04MissionState D_L04_0016C9E0;
+extern struct L04MissionState l04_mode_slot_dispatch_state __asm__("D_L04_0016C9E0");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void dispatch_mode_selected_slot(struct Moby *moby) __asm__("FUN_L04_002e53a0");
@@ -521,15 +521,15 @@ void dispatch_mode_selected_slot(struct Moby *moby) {
         break;
     case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
-            if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
-                int mission_mode = D_L04_0016C9E0.mode;
+            if (l04_mode_slot_dispatch_state.mode == 0 || l04_mode_slot_dispatch_state.mode == 1) {
+                int mission_mode = l04_mode_slot_dispatch_state.mode;
                 int i;
                 i = 0;
                 if (mission_mode == 0)
                     i = 3;
                 else if (mission_mode == 1)
                     i = 2;
-                cutscene_set_camera_target(D_L04_0016C9E0.slot[i]);
+                cutscene_set_camera_target(l04_mode_slot_dispatch_state.slot[i]);
             }
         }
         break;

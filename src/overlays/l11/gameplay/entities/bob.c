@@ -342,7 +342,7 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
-extern float D_L11_001677C0[];
+extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern void FUN_L00_0025a120(void *);
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void update_resort_owner_state_actions(void *mp) __asm__("FUN_L11_002d1030");
@@ -359,7 +359,7 @@ void update_resort_owner_look_tracking(WM11 *m) __asm__("FUN_L11_002d27b0");
 void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 void resort_owner_update(struct Moby *moby) {
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
-    if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
+    if (moby->visible && distance_xyz(&moby->pos, camera_pos_b358) < 38.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 30;
     }
@@ -385,7 +385,7 @@ extern float D_0015ED70;
 extern float D_0015ED6C;
 float D_L11_001613E0 = 3.2f;
 int D_L11_001613F0 = 0;
-extern int D_L11_0016D260[];
+extern int resort_owner_completion_rotation_trigger_state[] __asm__("D_L11_0016D260");
 extern int D_L11_0015FFD8;
 
 int try_activate_pokitaru_gate(struct Moby *moby) __asm__("FUN_L11_0030a480");
@@ -469,9 +469,9 @@ void update_resort_owner_state_actions(void *mp) {
             FUN_00212f90(moby, 5, 0, scale_game_frames(0x14));
         break;
     case RESORT_OWNER_WAIT_FOR_PATH_COMPLETION_DIALOGUE_END:
-        if (D_L11_0016D260[12] != 1)
+        if (resort_owner_completion_rotation_trigger_state[12] != 1)
             break;
-        if (D_L11_0016D260[13] != scale_game_frames(0x7D0))
+        if (resort_owner_completion_rotation_trigger_state[13] != scale_game_frames(0x7D0))
             break;
         trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (*(int *)(pvars + 0x104) << 8)));
         break;
@@ -547,7 +547,7 @@ struct PokPathPoint {
 extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
 extern int D_L11_0015FFD8;
 extern int D_001413D4_14b0 __asm__("D_001413D4") __attribute__((section(".data")));
-extern char D_L11_0016D270[];
+extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
 extern float resort_owner_gate_jump_target_local_z_offset_gp __asm__("D_L11_00161410") __attribute__((sda));
 extern float resort_owner_gate_jump_target_local_y_offset_gp __asm__("D_L11_00161414") __attribute__((sda));
@@ -741,9 +741,9 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             fast_vec_add(position_scratch, position_scratch, &moby->pos);
             qcopy(dialogue_rotation, &moby->rot);
             dialogue_rotation[2] = fast_add_rotations(dialogue_rotation[2], 3.14159f);
-            qcopy(D_L11_0016D270, position_scratch);
-            qcopy(D_L11_0016D270 + 0x10, dialogue_rotation);
-            *(short *)(D_L11_0016D270 + 0x36) = 1;
+            qcopy(resort_owner_completion_dialogue_pose, position_scratch);
+            qcopy(resort_owner_completion_dialogue_pose + 0x10, dialogue_rotation);
+            *(short *)(resort_owner_completion_dialogue_pose + 0x36) = 1;
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xD);
         }
@@ -1144,7 +1144,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     int tracking;
 
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
-    if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
+    if (moby->visible && distance_xyz(&moby->pos, camera_pos_b358) < 30.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 24;
     }
@@ -1481,14 +1481,14 @@ extern float fast_cos_2f2d58(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2f2d58(float) __asm__("FUN_001f9de0");
 extern void draw_quad_2f2d58(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float D_L11_001D3530[];
+extern float teleporter_ring_quad_uvs[] __asm__("D_L11_001D3530");
 
 int D_L11_00161920 = 0;
 int D_L11_00161924 = 2;
 int D_L11_00161928 = 0;
 int D_L11_0016192C = 1;
 int D_L11_00161930 = 0x13;
-extern unsigned int D_L11_00161934 __attribute__((sda));
+extern unsigned int l11_teleporter_ring_vertex_color __asm__("D_L11_00161934") __attribute__((sda));
 extern float teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") __attribute__((sda));
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
 void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
@@ -1511,7 +1511,7 @@ void draw_teleporter_ring(struct Moby *moby) {
     quad.tag[2] = 0xff9000000260ULL;
     quad.tag[0] = 0;
     {
-        float *uv = D_L11_001D3530;
+        float *uv = teleporter_ring_quad_uvs;
         unsigned int *colors = quad.color;
         float *dest1 = &quad.uv[0][1];
         float *dest0 = &quad.uv[0][0];
@@ -1523,7 +1523,7 @@ void draw_teleporter_ring(struct Moby *moby) {
             uv += 2;
             *dest1 = v;
             dest0 += 2;
-            *colors++ = D_L11_00161934;
+            *colors++ = l11_teleporter_ring_vertex_color;
             dest1 += 2;
             k--;
         } while (k >= 0);
@@ -2019,7 +2019,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
             FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
-    if (vector_distance(&moby->pos, D_L11_001677C0) > 38.0f)
+    if (vector_distance(&moby->pos, camera_pos_b358) > 38.0f)
         return;
     if (moby->state == 1 && (level_frame & 1))
         return;

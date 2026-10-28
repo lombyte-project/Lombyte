@@ -11,7 +11,7 @@ struct Globals_0016045C {
 };
 #include "rnc/globals.h"
 #include "rnc/rendering/screen.h"
-extern struct Globals_0016045C *D_0016045C;
+extern struct Globals_0016045C *level_sky_effect_data __asm__("D_0016045C");
 extern s32 D_0018A2E8[];
 extern s32 AppendDmaTag();
 extern s32 fill_transfer_words() __asm__("func_001F97E8");
@@ -54,7 +54,7 @@ void transition_default_draw(s32 *arg0) __asm__("FUN_001eb410");
 void transition_default_draw(s32 *unused_parameter) {
     s32 language_overlay_index;
 
-    if (D_0016045C == 0 || D_0016045C->unk4 != 0) {
+    if (level_sky_effect_data == 0 || level_sky_effect_data->unk4 != 0) {
         append_gif_transfer_packet();
     }
     fill_transfer_words(occl_visibility, -1, 0x80);
@@ -63,7 +63,7 @@ void transition_default_draw(s32 *unused_parameter) {
     prune_moby_references();
     reset_gs_registers();
     font_state = -1;
-    if (D_0016045C != 0) {
+    if (level_sky_effect_data != 0) {
         transition_draw_sky();
     }
     draw_tfrag();

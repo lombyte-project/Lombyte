@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 extern struct TagPtr D_00160F68;
 #include "rnc/rendering/texture/dma_tie_textures_globals.h"
-extern char D_001E8A50[];
+extern char tie_texture_overflow_message[] __asm__("D_001E8A50");
 extern s32 build_tie_texture_dma(s32) __asm__("FUN_002370c0");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
@@ -24,7 +24,7 @@ void dma_tie_textures(void) {
         size = build_tie_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
         if (size > 0x400000) {
-            DebugPrint(D_001E8A50);
+            DebugPrint(tie_texture_overflow_message);
         }
         if (max_tie_texture_dma_size < size) {
             max_tie_texture_dma_size = size;

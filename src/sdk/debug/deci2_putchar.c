@@ -2,28 +2,28 @@
 
 #include "types.h"
 
-extern s32 D_0012FBFC[];
-extern s8 D_00154D00[];
+extern s32 deci2_buffered_byte_count[] __asm__("D_0012FBFC");
+extern s8 deci2_output_buffer[] __asm__("D_00154D00");
 extern s32 Kputs(s8 *text);
 
 void deci2Putchar(s32 c) __asm__("deci2Putchar");
 
 void deci2Putchar(s32 output_byte) {
-    s32 index = D_0012FBFC[0];
+    s32 index = deci2_buffered_byte_count[0];
 
     if (index >= 126) {
-        D_0012FBFC[0] = 0;
-        D_00154D00[127] = 0;
-        Kputs(D_00154D00);
-        index = D_0012FBFC[0];
+        deci2_buffered_byte_count[0] = 0;
+        deci2_output_buffer[127] = 0;
+        Kputs(deci2_output_buffer);
+        index = deci2_buffered_byte_count[0];
     }
     if (output_byte == '\n') {
-        D_00154D00[index] = (s8)output_byte;
-        D_00154D00[index + 1] = 0;
-        D_0012FBFC[0] = 0;
-        Kputs(D_00154D00);
+        deci2_output_buffer[index] = (s8)output_byte;
+        deci2_output_buffer[index + 1] = 0;
+        deci2_buffered_byte_count[0] = 0;
+        Kputs(deci2_output_buffer);
     } else {
-        D_00154D00[index] = (s8)output_byte;
-        D_0012FBFC[0] = index + 1;
+        deci2_output_buffer[index] = (s8)output_byte;
+        deci2_buffered_byte_count[0] = index + 1;
     }
 }

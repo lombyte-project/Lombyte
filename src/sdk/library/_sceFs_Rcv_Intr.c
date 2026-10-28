@@ -39,7 +39,7 @@ typedef struct {
 
 /* Semaphore slot table: read plainly, released through a volatile store (below). */
 extern s32 D_0012FC10[];
-extern u32 D_0012FC90[];
+extern u32 sif_file_completion_bank_index[] __asm__("D_0012FC90");
 extern s32 D_0012FC98[];
 extern u8 D_00157500[];
 
@@ -63,7 +63,7 @@ void _sceFs_Rcv_Intr(s32 *command_packet) {
     u8 *pkt;
     u8 *base;
     u8 *read_destination;
-    u32 *bank = D_0012FC90;
+    u32 *bank = sif_file_completion_bank_index;
     s32 completion_bank_index;
     s32 i;
     s64 ret;

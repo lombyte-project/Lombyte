@@ -161,7 +161,7 @@ extern void vu1_add_data_ref(void *, s32) __asm__("FUN_00233830");
 extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
 extern void FUN_L01_002b4c28(void);
 
-extern L01Camera D_L01_0016CEC0;
+extern L01Camera l01_water_render_camera_state __asm__("D_L01_0016CEC0");
 void build_water_render_setup_packet(void) __asm__("FUN_L01_002b8f98");
 
 void build_water_render_setup_packet(void) {
@@ -191,7 +191,7 @@ void build_water_render_setup_packet(void) {
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;
     base[10].vif0 = 0x412;
-    camera = &D_L01_0016CEC0;
+    camera = &l01_water_render_camera_state;
     *(f32 *)&base[10].vif1 = camera->f210;
     packet_write_cursor = (u8 *)(base + 11);
     qcopy(packet_write_cursor, camera->v190);
@@ -923,8 +923,8 @@ extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FU
 extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
-extern s32 D_L01_001DEB10[];
-extern ItemPrice_2e1ac0 D_L01_001C4530[];
+extern s32 gold_weapon_case_item_ids_by_slot[] __asm__("D_L01_001DEB10");
+extern ItemPrice_2e1ac0 l01_gold_weapon_case_item_prices[] __asm__("D_L01_001C4530");
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 void gold_weapon_case_update(struct Moby *moby) {
@@ -947,7 +947,7 @@ void gold_weapon_case_update(struct Moby *moby) {
     case GOLD_WEAPON_CASE_INITIALIZE:
         if (moby->oclass != 0x130) {
             moby->state = 2;
-        } else if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0 ||
+        } else if (D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0 ||
                    FUN_L00_002668a0_2e1ac0(moby, sale_vars) == -1) {
             moby->state = 3;
         } else {
@@ -958,10 +958,10 @@ void gold_weapon_case_update(struct Moby *moby) {
         sale_vars->radius = 1.9f;
         FUN_L00_00266448_2e1ac0(moby, sale_vars);
         if (sale_vars->result == 2) {
-            D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] = 1;
+            D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] = 1;
             moby->state = 4;
-            item = D_L01_001DEB10[sale_vars->slot];
-            price = &D_L01_001C4530[item];
+            item = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
+            price = &l01_gold_weapon_case_item_prices[item];
             current_bolt_count -= price->bolts;
             initialize_vendor_screen(moby, item, price);
         }
@@ -975,7 +975,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         }
         break;
     case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
-        if (D_0013E520_2e1ac0[D_L01_001DEB10[sale_vars->slot]] != 0) {
+        if (D_0013E520_2e1ac0[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0) {
             FUN_0020c828_2e1ac0(moby);
         }
         break;
@@ -1006,7 +1006,7 @@ extern int probe_vertical_ground_collision(Vs *p, int x, int y, float f, float g
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-extern float D_L01_001DEB40[];
+extern float sand_mouse_follow_ground_probe_up_distance[] __asm__("D_L01_001DEB40");
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) __asm__("FUN_L01_002e3110");
 void sand_mouse_compute_target(char *following_moby, char *follow_movement_state) {
     Vs scaled_hero_follow_offset;
@@ -1017,7 +1017,7 @@ void sand_mouse_compute_target(char *following_moby, char *follow_movement_state
     add_vector_xyz(follow_movement_state, &scaled_hero_follow_offset, &unit_hero_follow_offset);
     add_vector_xyz(follow_movement_state, follow_movement_state, &hero_context->motion.pos);
     if (*(int *)(follow_movement_state + 0x68) == 0) {
-        if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, D_L01_001DEB40[0], 2.0f)) {
+        if (probe_vertical_ground_collision((Vs *)follow_movement_state, (int)following_moby, 0, sand_mouse_follow_ground_probe_up_distance[0], 2.0f)) {
             *(float *)(follow_movement_state + 8) = D_L01_001742E8;
         }
     } else {
@@ -1349,8 +1349,8 @@ typedef struct {
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
 extern int D_0015ED84;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/sand_mouse_update.h"
-extern char D_L01_0020AE80[];
-extern char D_L01_0020AEA0[];
+extern char sand_mouse_already_completed_message[] __asm__("D_L01_0020AE80");
+extern char sand_mouse_missing_start_house_message[] __asm__("D_L01_0020AEA0");
 extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
 extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
 extern void rig_probe_setup(void *, int, int *, float *, float *, int *) __asm__("FUN_L01_00263a28");
@@ -1434,12 +1434,12 @@ void sand_mouse_update(struct Moby *moby) {
             moby->pos.z = moby->pos.z + 0.02f;
             if (D_L01_001BB6B0.collected[(short)(id = moby->save_id)] != 0
                 || (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1) {
-                debug_print_2e3f20(D_L01_0020AE80);
+                debug_print_2e3f20(sand_mouse_already_completed_message);
                 mark_moby_for_removal(moby);
                 return;
             }
         } else {
-            debug_print_2e3f20(D_L01_0020AEA0);
+            debug_print_2e3f20(sand_mouse_missing_start_house_message);
             mark_moby_for_removal(moby);
             return;
         }
@@ -2188,8 +2188,8 @@ extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fast_tween_color(float, int, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L01_00161998 __attribute__((sda));
-extern short D_L01_0016199C __attribute__((sda));
+extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute__((sda));
+extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
@@ -2387,9 +2387,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     color_cycle_phase = fast_add_rotations_c(*(float *)(moby_vars + 0x254), frame_time * 9.424778f);
     *(float *)(moby_vars + 0x254) = color_cycle_phase;
     *(int *)(moby + 0x90) = fast_tween_color((fast_sin_c(color_cycle_phase) + 1.0f) * 0.5f,
-                                           *(int *)&D_L01_00161998, *(int *)&D_L01_0016199C);
+                                           *(int *)&amoeboid_color_cycle_start_gp, *(int *)&amoeboid_color_cycle_end_gp);
 }
-extern short *D_L01_001ABCC0[];
+extern short *l01_moby_index_lists_by_group[] __asm__("D_L01_001ABCC0");
 extern void FUN_L00_00250df8(void *);
 
 char *activate_smaller_amoeboid(void *source_moby) __asm__("FUN_L01_002ef350");
@@ -2406,7 +2406,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
         next_class = 0x362;
     }
     entry = *(volatile u8 *)&self->group;
-    entities = (char *)(D_L01_001ABCC0 + entry);
+    entities = (char *)(l01_moby_index_lists_by_group + entry);
     /* Fakematch: the dead touch of the entity base gives retail's register for the list slot. */
     D_L01_0015FFD8++;
     D_L01_0015FFD8--;
@@ -2468,7 +2468,7 @@ extern char *D_L01_0015FFD8;
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
 char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) {
-    short *list = D_L01_001ABCC0[candidate_list_index];
+    short *list = l01_moby_index_lists_by_group[candidate_list_index];
     float best = 120.0f;
     char *nearest_entity = 0;
     if (list == 0) {
@@ -2559,7 +2559,7 @@ extern f32 amoeboid_burst_downward_velocity_adjustment_factor_gp __asm__("D_L01_
 extern f32 D_L01_00161A14 __attribute__((sda));
 extern f32 D_L01_00161A18 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_burst_sparks_2.h"
-extern s32 D_L01_00161A2C __attribute__((sda));
+extern s32 amoeboid_burst_spark_header_frame_count_gp __asm__("D_L01_00161A2C") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_burst_sparks.h"
 extern s32 amoeboid_burst_spark_duration_base_gp __asm__("D_L01_00161A34") __attribute__((sda));
 extern f32 amoeboid_burst_input_motion_scale_max_gp __asm__("D_L01_00161A38") __attribute__((sda));
@@ -2612,7 +2612,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             add_random_offset_to_vector_xyz(velocity, amoeboid_burst_spark_velocity_jitter_bound_gp * frame_time_gp);
             lower = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_spawn_color_randomization_start_gp, amoeboid_burst_spark_spawn_color_randomization_end_gp);
             upper = fast_tween_color(random_float_between_alt(0.0f, 1.0f), amoeboid_burst_spark_secondary_color_randomization_start_gp, amoeboid_burst_spark_secondary_color_randomization_end_gp);
-            first = scale_game_frames(D_L01_00161A2C);
+            first = scale_game_frames(amoeboid_burst_spark_header_frame_count_gp);
             second = scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)amoeboid_burst_spark_duration_base_gp * 0.5f, (f32)amoeboid_burst_spark_duration_base_gp * 2.5f)));
             spawn_spark(spawn_position, origin_copy, velocity, lower, upper, first, second, duration, -1);
@@ -3001,7 +3001,7 @@ typedef struct {
 } HitInfo;
 
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/gunship_follow_path.h"
-extern char D_L01_0020B3E0[];
+extern char gunship_missing_path_warning_format[] __asm__("D_L01_0020B3E0");
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
@@ -3146,7 +3146,7 @@ void gunship_follow_path(struct Moby *moby) {
             if (FUN_001f9b48(&pn->node[0], &pn->node[pn->count - 1]) < 0.5f)
                 pn->count--;
         } else {
-            FUN_001e93b0(D_L01_0020B3E0, moby->oclass, FUN_001fa6d0((f32)(moby - (struct Moby *)D_L01_0015FFD8)));
+            FUN_001e93b0(gunship_missing_path_warning_format, moby->oclass, FUN_001fa6d0((f32)(moby - (struct Moby *)D_L01_0015FFD8)));
         }
         moby->update_dist = 0xFF;
         v->unk11E = -1;

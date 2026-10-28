@@ -382,11 +382,11 @@ void update_moby_hit_triggered_removal(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002DF780), where it is exact; names translated to the US level program. */
 
-extern float D_L16_00161C74;
+extern float challenge_layout_param __asm__("D_L16_00161C74");
 
 void challenge_set_layout_param(float new_value) __asm__("FUN_L16_002de3b8");
 void challenge_set_layout_param(float new_value) {
-    D_L16_00161C74 = new_value;
+    challenge_layout_param = new_value;
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
@@ -2031,8 +2031,8 @@ typedef struct {
     long zero,texture,flags,mode;
 } L16RibbonPacket;
 
-extern float D_L16_001D3170[][4];
-extern float D_L16_001D31B0[][2];
+extern float linked_pair_ribbon_vertex_positions[][4] __asm__("D_L16_001D3170");
+extern float linked_pair_ribbon_uvs[][2] __asm__("D_L16_001D31B0");
 extern int linked_pair_ribbon_alpha_blend_b_selector __asm__("D_L16_001619EC") __attribute__((sda)); /* no foreign declaration */
 extern int linked_pair_ribbon_alpha_blend_c_selector __asm__("D_L16_001619F0") __attribute__((sda)); /* no foreign declaration */
 extern int linked_pair_ribbon_alpha_blend_a_selector __asm__("D_L16_001619E8") __attribute__((sda)); /* no foreign declaration */
@@ -2069,10 +2069,10 @@ void draw_linked_pair_ribbons(char *moby, char *partner) {
     packet.zero = 0;
     color = linked_pair_ribbon_vertex_color;
     for (corner = 0; corner < 4; corner++) {
-        packet.uv[corner].u = D_L16_001D31B0[corner][0];
-        packet.uv[corner].v = D_L16_001D31B0[corner][1];
+        packet.uv[corner].u = linked_pair_ribbon_uvs[corner][0];
+        packet.uv[corner].v = linked_pair_ribbon_uvs[corner][1];
         packet.color[corner] = color;
-        qcopy(packet.point[corner], D_L16_001D3170[corner]);
+        qcopy(packet.point[corner], linked_pair_ribbon_vertex_positions[corner]);
     }
     for (pass = 0; pass < 4; pass++) {
         draw_geometry_quad(&packet, frame[0], 0);

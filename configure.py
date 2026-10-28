@@ -463,7 +463,7 @@ SDATA_OVERLAYS = {
     "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
     "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
     "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C, 4),
-    "rendering/vu1_chain": (0x160EE0, 0x61E60, 4),
+    "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -1987,7 +1987,11 @@ def build_overlays() -> Path:
         )
     sn_root = SN_COMPILER
     OVERLAYS_BUILD.mkdir(parents=True, exist_ok=True)
-    (OVERLAYS_BUILD / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
+    helper = OVERLAYS_BUILD / "padless-asm.py"
+    # Every overlay C object depends on this helper; preserve its timestamp
+    # when reconfiguring without a content change.
+    if not helper.is_file() or helper.read_text() != PADLESS_ASM_HELPER:
+        helper.write_text(PADLESS_ASM_HELPER)
     game_root = GAME_COMPILER
     rel_root = os.path.relpath(ROOT, OVERLAYS_BUILD)
     includes = (f"-I{game_root}/include -I{rel_root}/src -I{rel_root}/include "

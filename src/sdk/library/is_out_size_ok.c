@@ -19,7 +19,7 @@ s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_ima
             goto tail;
         }
         new_var2 = out_max_height < reference_image->height;
-        if (reference_image->unk10) {
+        if (reference_image->mb_height) {
             out_size_ok = (out_max_height < new_var->height) ^ 1;
             goto tail;
         } else {
@@ -27,7 +27,7 @@ s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_ima
             goto tail;
         }
     } else {
-        out_size_ok = (decoder->out_max_size < (reference_image->unkC * reference_image->unk10)) ^ 1;
+        out_size_ok = (decoder->out_max_size < (reference_image->mb_width * reference_image->mb_height)) ^ 1;
     }
 tail:
     if (out_size_ok == 0) {

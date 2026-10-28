@@ -14,7 +14,7 @@ struct MpegMotionState {
 };
 
 const u8 D_00153800[] = "slice_start_code(0x%08x) out of range";
-extern u8 D_00153828[];
+extern u8 slice_setup_error_message[] __asm__("D_00153828");
 extern s32 _Error();
 extern s32 _Error1();
 extern s32 _flushBuf();
@@ -41,7 +41,7 @@ s32 _sliceA0(struct MpegSliceDecoder *decoder, s32 unused, s32 *macroblock_addre
     address_increment = _mbAddressIncrement(decoder);
     *increment = address_increment;
     if (decoder->error != 0) {
-        _Error(decoder, D_00153828, address_increment);
+        _Error(decoder, slice_setup_error_message, address_increment);
         return 1;
     }
     *macroblock_address =

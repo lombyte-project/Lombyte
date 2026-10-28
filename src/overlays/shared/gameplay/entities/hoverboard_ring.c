@@ -238,7 +238,7 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_31e468;
 
-extern float D_L05_00215C70[4][4];
+extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -250,7 +250,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
-extern short D_L05_00161FCC __attribute__((sda));
+extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
 extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
 void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -283,7 +283,7 @@ void draw_moby_glow_sprite(char *m) {
     cross_vectors_xyz(M[1], M[0], up);
     normalize_vector_xyz(M[1], M[1], 1.0f);
     cross_vectors_xyz(M[2], M[1], M[0]);
-    scale_vector_xyz(camera_facing_offset, M[0], *(float *)&D_L05_00161FCC);
+    scale_vector_xyz(camera_facing_offset, M[0], *(float *)&glow_sprite_camera_offset_distance);
     add_vector_xyz(M[3], M[3], camera_facing_offset);
     if (((unsigned char *)d)[0x67] != 0 && random_integer_below(8) == 0) {
         *(int *)(d + 0x60) >>= 1;
@@ -294,7 +294,7 @@ void draw_moby_glow_sprite(char *m) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
-        scale_vector_xyz(pk.m[j], D_L05_00215C70[j], *(float *)(d + 0x70));
+        scale_vector_xyz(pk.m[j], glow_sprite_local_vertices[j], *(float *)(d + 0x70));
         transform_vector(pk.m[j], pk.m[j], M);
     }
     draw_geometry_quad(&pk, 0, 0);

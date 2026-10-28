@@ -71,13 +71,13 @@ typedef struct {
     s32 id;
     s32 pad[4];
 } E5;
-extern E5 D_L00_001EA880[];
+extern E5 l00_camera_id_lookup_table[] __asm__("D_L00_001EA880");
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 
 s32 find_camera_table_index_by_id(s32 id) {
     s32 table_index = 0;
-    while (D_L00_001EA880[table_index].id != -1 && D_L00_001EA880[table_index].id != id)
+    while (l00_camera_id_lookup_table[table_index].id != -1 && l00_camera_id_lookup_table[table_index].id != id)
         table_index++;
     return table_index;
 }
@@ -105,7 +105,7 @@ typedef struct {
 
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
-extern char D_L00_00169110[];
+extern char active_camera_saved_state_storage[] __asm__("D_L00_00169110");
 extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 void backup_current_cam(void) __asm__("FUN_001ebc90");
 void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
@@ -122,7 +122,7 @@ void init_camera_system(void) {
     }
     *(char **)(camera_system_state + 0x180) = FUN_L00_001eb1f8_u(0);
     *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 1;
-    *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = D_L00_00169110;
+    *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = active_camera_saved_state_storage;
     *(short *)(camera_system_state + 0x270) = 0;
     update_camera_tracking_state();
     camera_run_setup_to_new_cam(*(char **)(camera_system_state + 0x180));
@@ -178,7 +178,7 @@ typedef struct {
 extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
-extern int D_L00_00169890[];
+extern int level_camera_present_flags[] __asm__("D_L00_00169890");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
@@ -201,7 +201,7 @@ void setup_level_cameras(void) {
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
         D_L00_00167150[k].s8E = 0;
-        D_L00_00169890[k] = 0;
+        level_camera_present_flags[k] = 0;
     }
     camera_system_state_alias = (char *)&D_L00_00166C80;
     base = &hero;
@@ -255,7 +255,7 @@ void setup_level_cameras(void) {
             el->c7C = level_camera_data[0x1C];
             el->i74 = (unsigned char)level_camera_data[0x1F];
             camera_id = *(unsigned short *)(level_camera_entry + 0xC);
-            D_L00_00169890[i] = 1;
+            level_camera_present_flags[i] = 1;
             el->s86 = camera_id;
             el->s8C = find_camera_table_index_by_id((short)camera_id);
             i++;

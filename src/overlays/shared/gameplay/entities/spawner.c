@@ -111,7 +111,7 @@ extern void FUN_L00_0025e450_307d68(void *, void *, void *, f32, f32, s32, s32, 
                                     f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern s32 FUN_L00_001f2868_307d68(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 
-extern OvlVec4 D_L09_00173FE0;
+extern OvlVec4 l09_projectile_impact_position __asm__("D_L09_00173FE0");
 /*
  * Update of the shot FUN_L09_00307ba8 spawns (cf. FUN_L04_002af058): moves
  * along vel, plays its sound once it starts moving away from the hero within
@@ -175,7 +175,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     if (collision_line_307d68(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
         return;
 
-    qcopy(&projectile_moby->pos, &D_L09_00173FE0);
+    qcopy(&projectile_moby->pos, &l09_projectile_impact_position);
     if (projectile_moby->command == 0) {
         for (i = 0; i < 5; i++) {
             spark_scatter_vector.q = 0;
@@ -202,7 +202,7 @@ extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
 extern s16 *FUN_002141f8_30a778(struct Moby *) __asm__("FUN_002141f8");
 extern void FUN_001e93b0_30a778(char *, s32, s32) __asm__("FUN_001e93b0");
-extern char D_L09_00209280[];
+extern char spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 
 struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) __asm__("FUN_L09_0030a778");
 
@@ -275,7 +275,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
             *(f32 *)data = (f32)data[2];
         }
     } else {
-        FUN_001e93b0_30a778(D_L09_00209280, (s16)owner->save_id, D_L09_0015F5CC);
+        FUN_001e93b0_30a778(spawner_child_respawn_failure_format, (s16)owner->save_id, D_L09_0015F5CC);
     }
     return result;
 }
@@ -367,7 +367,7 @@ typedef struct {
     char *slots[4];
 } SpawnerVars_30ab80;
 
-extern char *D_L09_001600EC __attribute__((sda));
+extern char *spawner_target_region_records __asm__("D_L09_001600EC") __attribute__((sda));
 extern float D_L09_0015F580[] MACRO_ADDR;
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
@@ -442,7 +442,7 @@ void spawner_update(char *moby)
             for (i = 0; i < 4; i++) {
                 int idx = *(int *)(spawner_vars + 0xA0 + i * 4);
                 if (idx != -1) {
-                    char *q = D_L09_001600EC + (idx << 7);
+                    char *q = spawner_target_region_records + (idx << 7);
                     float candidate_distance = distance_30ab80(D_0013E533 + 0xE9D, q + 0x30);
                     if (candidate_distance < best) {
                         sel = q;
@@ -468,7 +468,7 @@ void spawner_update(char *moby)
                 int k = (i + start) % 4;
                 int idx = *(int *)(spawner_vars + (k << 2) + 0xA0);
                 if (idx != -1) {
-                    sel = D_L09_001600EC + (idx << 7);
+                    sel = spawner_target_region_records + (idx << 7);
                     break;
                 }
             }

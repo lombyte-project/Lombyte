@@ -3,7 +3,7 @@
 extern s32 snd_cd_bank_load_request[] __asm__("D_00137B40");
 extern char snd_non_idle_error_string[] __asm__("D_00153D20");
 extern u8 snd_bank_load_by_loc_rpc_error_string[] __asm__("D_00153DF8");
-extern u8 D_0015EBE8[];
+extern u8 sound_stream_client[] __asm__("D_0015EBE8");
 extern s32 snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
 extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
 extern u32 snd_cd_callback_arg __asm__("D_0015ED00");
@@ -29,12 +29,12 @@ s32 snd_bank_load_by_loc(s32 location, s32 byte_offset) {
     snd_cd_bank_load_request[1] = byte_offset;
     snd_cd_callback_arg = 0xFFFFFFFF;
     snd_cd_bank_load_request[0] = location;
-    while (SceSifCheckStatRpc(D_0015EBE8) != 0) {
+    while (SceSifCheckStatRpc(sound_stream_client) != 0) {
         printf(snd_non_idle_error_string);
         snd_flush_sound_commands();
         FlushCache(0);
     }
-    if (sceSifCallRpc(D_0015EBE8, 3, 1, snd_cd_bank_load_request, 8, &snd_cd_callback_arg, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(sound_stream_client, 3, 1, snd_cd_bank_load_request, 8, &snd_cd_callback_arg, 4, 0, 0) < 0) {
         printf(snd_bank_load_by_loc_rpc_error_string);
         snd_cd_load_error = 0x106;
         return 0;

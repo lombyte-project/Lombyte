@@ -31,9 +31,9 @@ typedef struct {
 extern char *spawn_class_3a6_moby(char *, float *, char *, char *) __asm__("FUN_L15_002e4580");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L15_001673C0[4];
-extern float D_L15_001CBFE0[];
-extern float D_L15_001CC060[];
-extern float D_L15_001CC0E0[];
+extern float sentrybot_positive_heading_delta_offsets_degrees[] __asm__("D_L15_001CBFE0");
+extern float sentrybot_negative_heading_delta_offsets_degrees[] __asm__("D_L15_001CC060");
+extern float sentrybot_turn_around_heading_offsets_degrees[] __asm__("D_L15_001CC0E0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -391,13 +391,13 @@ void sentrybot_update(unsigned char *moby) {
             float *turn_heading_offsets_degrees = 0;
             switch (anim) {
             case SENTRYBOT_ANIM_TURN_AROUND:
-                turn_heading_offsets_degrees = D_L15_001CC0E0;
+                turn_heading_offsets_degrees = sentrybot_turn_around_heading_offsets_degrees;
                 break;
             case SENTRYBOT_ANIM_TURN_NEGATIVE_HEADING_DELTA:
-                turn_heading_offsets_degrees = D_L15_001CC060;
+                turn_heading_offsets_degrees = sentrybot_negative_heading_delta_offsets_degrees;
                 break;
             case SENTRYBOT_ANIM_TURN_POSITIVE_HEADING_DELTA:
-                turn_heading_offsets_degrees = D_L15_001CBFE0;
+                turn_heading_offsets_degrees = sentrybot_positive_heading_delta_offsets_degrees;
                 break;
             }
             if (moby[0x70] & 2) {
@@ -1297,7 +1297,7 @@ void update_sentrybot_joint_aim(void *mv) {
 extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_sentrybot_hit_response_and_target_visibility.h"
 extern char D_001413F4[];
-extern short D_0013F658[];
+extern short sentrybot_target_visibility_height_check_gate[] __asm__("D_0013F658");
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -1480,7 +1480,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         target_angle = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                               *(float *)(data + 0xD4) - *(float *)(moby + 0x14));
         if ((fast_difference_between_rotations(*(float *)(moby + 0x48), target_angle) < 1.5707964f &&
-             (D_0013F658[0] == 0 || FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
+             (sentrybot_target_visibility_height_check_gate[0] == 0 || FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
             moby[0x20] == 0x10 || moby[0x20] == 0x11) {
             seen = data[0x15A];
         }
@@ -1652,15 +1652,15 @@ extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, 
 
 extern float rocket_detonation_glow_scale_gp __asm__("D_L15_00161458") __attribute__((sda));
 extern int rocket_detonation_glow_lifetime_frames_gp __asm__("D_L15_0016145C") __attribute__((sda));
-extern unsigned char D_L15_00161460 __attribute__((sda));
-extern unsigned char D_L15_00161464 __attribute__((sda));
-extern unsigned char D_L15_00161468 __attribute__((sda));
-extern unsigned char D_L15_0016146C __attribute__((sda));
+extern unsigned char l15_rocket_detonation_glow_alpha __asm__("D_L15_00161460") __attribute__((sda));
+extern unsigned char l15_rocket_detonation_glow_red __asm__("D_L15_00161464") __attribute__((sda));
+extern unsigned char l15_rocket_detonation_glow_green __asm__("D_L15_00161468") __attribute__((sda));
+extern unsigned char l15_rocket_detonation_glow_blue __asm__("D_L15_0016146C") __attribute__((sda));
 void spawn_rocket_detonation_glow(char *moby) {
     char *glow_spawn_position = moby + 0x10;
     int scaled_frame_count = scale_game_frames(rocket_detonation_glow_lifetime_frames_gp);
     spawn_glow_particle(moby, glow_spawn_position, (int)&D_L15_0015F580, scaled_frame_count, rocket_detonation_glow_scale_gp,
-                     D_L15_00161464, D_L15_00161468, D_L15_0016146C, D_L15_00161460);
+                     l15_rocket_detonation_glow_red, l15_rocket_detonation_glow_green, l15_rocket_detonation_glow_blue, l15_rocket_detonation_glow_alpha);
 }
 /* update of moby class 256: a homing missile that leads its target, trails smoke and explodes on contact */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029E8A0), where it is exact; names translated to the US level program. */
@@ -1717,9 +1717,9 @@ typedef struct M_29E8A0 {
     float mtx[16];
 } M_29E8A0;
 
-extern Cols_29E8A0 D_L15_001E2660;
-extern Cols_29E8A0 D_L15_001E2678;
-extern Tbl_29E8A0 D_L15_001E2610;
+extern Cols_29E8A0 l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
+extern Cols_29E8A0 l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678");
+extern Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610");
 extern int D_L15_00178500[];
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
 extern char D_0013E533[];
@@ -1729,7 +1729,7 @@ typedef struct {
 } LevelView;
 extern LevelView D_L15_00167280;
 extern char D_L15_00174440[];
-extern char D_L15_001B0D70[];
+extern char missile_drop_spawn_parameters[] __asm__("D_L15_001B0D70");
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c3(f32) __asm__("func_001F9DC8");
@@ -1807,7 +1807,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
     float pitch;
     int k;
 
-    camera_blast_parameters = D_L15_001E2610;
+    camera_blast_parameters = l15_missile_camera_blast_parameter_template;
     owner = 0;
     *(u128_29E8A0 *)burst_rotation_axis = 0;
     burst_rotation_axis[2] = D_0015ED6C * 8.0f;
@@ -1922,7 +1922,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
     }
     add_vector_xyz(missile_moby->pos, missile_moby->pos, missile_movement_delta);
     if (missile_moby->pos[0] < 0.0f || missile_moby->pos[1] < 0.0f || missile_moby->pos[2] < 0.0f) {
-        mine_spawn_drops(missile_moby, D_L15_001B0D70);
+        mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
         mark_moby_for_removal_c3(missile_moby);
         return;
     }
@@ -1964,7 +1964,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 fast_vec_normalize(burst_rotation_axis, hit + 0x40, 1.0f);
             }
         } else if (tick_countdown_32_alt(&missile_data->timer) != 0 || vector_distance_xy_alt(missile_moby->pos, (float *)(hero + 0x80)) > 260.0f) {
-            mine_spawn_drops(missile_moby, D_L15_001B0D70);
+            mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
             mark_moby_for_removal_c3(missile_moby);
             return;
         }
@@ -2052,8 +2052,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 i = 0;
                 while (i < burst_effect_pair_count) {
                     float sz = random_float_between(8.0f, 10.0f) * D_0015ED6C - under * D_0015ED6C;
-                    Cols_29E8A0 c1 = D_L15_001E2660;
-                    Cols_29E8A0 c2 = D_L15_001E2678;
+                    Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
+                    Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
                     int *p1 = &c1.c[random_integer_below_c3(6)];
                     int *p2 = &c2.c[random_integer_below_c3(6)];
                     int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
@@ -2067,8 +2067,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 }
             }
             for (j = 0; j < 10; j++) {
-                Cols_29E8A0 c1 = D_L15_001E2660;
-                Cols_29E8A0 c2 = D_L15_001E2678;
+                Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
+                Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
                 float burst_particle_velocity[4];
                 {
                     float random_burst_direction[4];
@@ -2106,7 +2106,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             }
             allocate_voice_for_target_entry(0, 0, (int)missile_moby);
             mine_camera_blast(&camera_blast_parameters, missile_moby->pos, 0, 0);
-            mine_spawn_drops(missile_moby, D_L15_001B0D70);
+            mine_spawn_drops(missile_moby, missile_drop_spawn_parameters);
             mark_moby_for_removal_c3(missile_moby);
             }
         }
@@ -2583,8 +2583,8 @@ typedef struct {
     unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
 } EffectQuad;
 
-extern float D_L15_001CE110[4][4][4];
-extern float D_L15_001CE210[8];
+extern float group_moby_effect_quad_vertices[4][4][4] __asm__("D_L15_001CE110");
+extern float group_moby_effect_quad_uvs[8] __asm__("D_L15_001CE210");
 extern int group_moby_effect_first_quad_color_gp __asm__("D_L15_001614C8") __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -2607,7 +2607,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     effect_quad.r70 = 0;
     {
         int count = 3;
-        float *source = D_L15_001CE210;
+        float *source = group_moby_effect_quad_uvs;
         float *v = &effect_quad.uv[0][1];
         float *u = &effect_quad.uv[0][0];
         do {
@@ -2637,7 +2637,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
                 int color = (&group_moby_effect_first_quad_color_gp)[i];
                 for (j = 0; j < 4; j++) {
                     colors[j] = color;
-                    qcopy(effect_quad.v[j], D_L15_001CE110[i][j]);
+                    qcopy(effect_quad.v[j], group_moby_effect_quad_vertices[i][j]);
                 }
                 draw_geometry_quad(&effect_quad, rotation, 0);
             }
@@ -2793,17 +2793,17 @@ extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/draw_spark_emitter_effect_quads.h"
-extern int D_L15_001CE230[];
-extern float D_L15_001CE250[][2];
-extern int D_L15_001CE290[][2];
-extern float D_L15_001CE2D0[][2];
-extern float D_L15_001CE2F0[4][4];
-extern float D_L15_001CE330[4][4];
+extern int spark_emitter_pass_colors[] __asm__("D_L15_001CE230");
+extern float spark_emitter_uv_phase_divisors_by_pass[][2] __asm__("D_L15_001CE250");
+extern int spark_emitter_uv_cosine_flags_by_pass[][2] __asm__("D_L15_001CE290");
+extern float spark_emitter_base_uvs[][2] __asm__("D_L15_001CE2D0");
+extern float spark_emitter_second_quad_vertex_template[4][4] __asm__("D_L15_001CE2F0");
+extern float spark_emitter_first_quad_vertex_template[4][4] __asm__("D_L15_001CE330");
 
-extern int D_L15_001614D8[2] __attribute__((sda));
-extern int D_L15_001614E0[2] __attribute__((sda));
-extern int D_L15_001614E8[2] __attribute__((sda));
-extern int D_L15_001614F0[2] __attribute__((sda));
+extern int spark_emitter_alpha_a_by_pass_parity[2] __asm__("D_L15_001614D8") __attribute__((sda));
+extern int spark_emitter_alpha_b_by_pass_parity[2] __asm__("D_L15_001614E0") __attribute__((sda));
+extern int spark_emitter_alpha_c_by_pass_parity[2] __asm__("D_L15_001614E8") __attribute__((sda));
+extern int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") __attribute__((sda));
 
 int draw_spark_emitter_effect_quads(unsigned char *moby) {
     EffectQuad first, second;
@@ -2839,33 +2839,33 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     second.col[3] = 0;
     second.col[1] = 0;
     for (corner = 0; corner < 4; corner++) {
-        qcopy(first.v[corner], D_L15_001CE330[corner]);
-        qcopy(secondVertices[corner], D_L15_001CE2F0[corner]);
+        qcopy(first.v[corner], spark_emitter_first_quad_vertex_template[corner]);
+        qcopy(secondVertices[corner], spark_emitter_second_quad_vertex_template[corner]);
     }
     for (pass = 0; pass < 6; pass = nextPass) {
         int parity = pass & 1;
         first.alpha =
-            (unsigned long long)D_L15_001614D8[parity] |
-            ((unsigned long long)D_L15_001614E0[parity] << 2) |
-            ((unsigned long long)D_L15_001614E8[parity] << 4) |
-            ((unsigned long long)D_L15_001614F0[parity] << 6) |
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
             0x8000000000ULL;
         second.alpha =
-            (unsigned long long)D_L15_001614D8[parity] |
-            ((unsigned long long)D_L15_001614E0[parity] << 2) |
-            ((unsigned long long)D_L15_001614E8[parity] << 4) |
-            ((unsigned long long)D_L15_001614F0[parity] << 6) |
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
             0x8000000000ULL;
         if (data[5] != 0) {
             second.col[2] = interpolate_color_2a3138((float)data[5] / 60.0f,
-                                                   D_L15_001CE230[pass], 0);
+                                                   spark_emitter_pass_colors[pass], 0);
             second.col[0] = second.col[2];
             first.col[3] = second.col[2];
             first.col[2] = second.col[2];
             first.col[1] = second.col[2];
             first.col[0] = second.col[2];
         } else {
-            second.col[2] = D_L15_001CE230[pass];
+            second.col[2] = spark_emitter_pass_colors[pass];
             second.col[0] = second.col[2];
             first.col[3] = second.col[2];
             first.col[2] = second.col[2];
@@ -2877,7 +2877,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
         nextPass = pass + 1;
         for (; corner < 4; corner++) {
             float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
-            float *frequency = (float *)((char *)D_L15_001CE250 + passOffset);
+            float *frequency = (float *)((char *)spark_emitter_uv_phase_divisors_by_pass + passOffset);
             int waveform = passOffset;
             int base = corner * 8;
             axis = 1;
@@ -2891,7 +2891,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                 angle = integer_to_float_2a3138(spark_emitter_uv_phase_input % limit)
                     / *frequency - 180.0f;
                 frequency++;
-                value = *(int *)((char *)D_L15_001CE290 + waveform);
+                value = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
                 waveform += 4;
                 radians = 0.017453292f;
                 step = 0.125f;
@@ -2901,7 +2901,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                     angle = fast_sin_2a3138(angle * radians);
                 }
                 delta = angle * step;
-                *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
+                *uv++ = *(float *)((char *)spark_emitter_base_uvs + base) + delta;
                 base += 4;
             } while (axis >= 0);
         }
@@ -2935,7 +2935,7 @@ typedef struct {
 } VoiceSlot;
 extern KillFlags D_L15_001BABD0 __attribute__((section(".data")));
 extern KillFlags D_L15_001BB830 __attribute__((section(".data")));
-extern u8 D_L15_0015FC88[8];
+extern u8 secondary_kill_record_gate_by_mission[8] __asm__("D_L15_0015FC88");
 extern u8 D_0014C050[][16] __attribute__((section(".data")));
 extern u8 D_0013E550[] __attribute__((section(".data")));
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -2946,7 +2946,7 @@ void mark_moby_killed_and_release_owned_voice(int addr) {
     s32 slot;
     moby->collision = 0;
     D_L15_001BABD0.killed[(s16)moby->save_id] = moby->mission + 2;
-    if (moby->mission == 0xFF || (D_L15_0015FC88[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
+    if (moby->mission == 0xFF || (secondary_kill_record_gate_by_mission[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
         D_L15_001BB830.killed[(s16)moby->save_id] = moby->mission + 2;
     }
     if (moby->command != 0xFF) {
@@ -3162,7 +3162,7 @@ typedef struct {
 } Quad;
 
 extern float D_L15_001673C0[4];
-extern float D_L15_001E27F0[];
+extern float spiderbot_effect_quad_uvs[] __asm__("D_L15_001E27F0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -3203,8 +3203,8 @@ void draw_spiderbot_effect_quad(char *moby) {
     effect_quad.col[1] = 0x80243278;
     effect_quad.col[0] = 0x80243278;
     for (i = 0; i < 4; i++) {
-        effect_quad.uv[i][0] = D_L15_001E27F0[i * 2];
-        effect_quad.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
+        effect_quad.uv[i][0] = spiderbot_effect_quad_uvs[i * 2];
+        effect_quad.uv[i][1] = spiderbot_effect_quad_uvs[i * 2 + 1];
     }
     subtract_vector_xyz(D, C, A);
     *(OvlQuad *)effect_quad.v[0] = *(OvlQuad *)D;
@@ -3568,7 +3568,7 @@ extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern int sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") __attribute__((sda));
-extern short D_L15_00161AC8 __attribute__((sda));
+extern short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") __attribute__((sda));
 void update_sentrybot_alarm_effect(void *moby) {
     struct Hero *base = &hero;
     if (base->state.current == 0x65) {
@@ -3582,15 +3582,15 @@ void update_sentrybot_alarm_effect(void *moby) {
     }
     if (*(float *)&D_L15_00161ABC_gp != 0.0f) {
         *(int *)&D_L15_00161AC0_gp = 1;
-        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index_gp) == 0) {
+        if (voice_is_playing(*(void **)&sentrybot_alarm_voice_owner_gp, sentrybot_alarm_voice_slot_index_gp) == 0) {
             sentrybot_alarm_voice_slot_index_gp = allocate_voice_for_target_entry(5, 0x11, (int)moby);
-            *(void **)&D_L15_00161AC8 = moby;
+            *(void **)&sentrybot_alarm_voice_owner_gp = moby;
         }
         enqueue_callback_list_1_alt(emit_sine_modulated_rgba_draw_packet, moby);
     } else {
-        if (voice_is_playing(*(void **)&D_L15_00161AC8, sentrybot_alarm_voice_slot_index_gp) != 0) {
+        if (voice_is_playing(*(void **)&sentrybot_alarm_voice_owner_gp, sentrybot_alarm_voice_slot_index_gp) != 0) {
             release_voice_slot(sentrybot_alarm_voice_slot_index_gp);
-            *(int *)&D_L15_00161AC8 = 0;
+            *(int *)&sentrybot_alarm_voice_owner_gp = 0;
             sentrybot_alarm_voice_slot_index_gp = -1;
         }
         *(int *)&D_L15_00161AC0_gp = 0;

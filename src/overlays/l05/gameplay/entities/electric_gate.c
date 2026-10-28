@@ -89,7 +89,7 @@ extern void draw_electric_gate_beams(char *moby) __asm__("FUN_L05_0030de90");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
-extern short D_L05_00161D38 __attribute__((sda));
+extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 void electric_gate_update(char *gate_moby) {
     enum {
@@ -114,8 +114,8 @@ void electric_gate_update(char *gate_moby) {
         **(int **)(data + 4) = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
-        if (*(int *)&D_L05_00161D38 != D_L05_0015F5CC_e[2]) {
-            *(int *)&D_L05_00161D38 = D_L05_0015F5CC_e[2];
+        if (*(int *)&electric_gate_beam_callback_frame_gp != D_L05_0015F5CC_e[2]) {
+            *(int *)&electric_gate_beam_callback_frame_gp = D_L05_0015F5CC_e[2];
             enqueue_callback_list_1(draw_electric_gate_beams, gate_moby);
         }
         gate_position = gate_moby + 0x10;
@@ -165,25 +165,25 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
-extern int D_L05_00161D3C __attribute__((sda));
-extern int D_L05_00161D40 __attribute__((sda));
-extern int D_L05_00161D44 __attribute__((sda));
-extern int D_L05_00161D48 __attribute__((sda));
-extern int D_L05_00161D70 __attribute__((sda));
-extern int D_L05_00161D74 __attribute__((sda));
-extern int D_L05_00161D78 __attribute__((sda));
-extern int D_L05_00161D7C __attribute__((sda));
-extern int D_L05_00161D98 __attribute__((sda));
+extern int l05_electric_gate_outer_color_blend_start __asm__("D_L05_00161D3C") __attribute__((sda));
+extern int l05_electric_gate_outer_color_blend_end __asm__("D_L05_00161D40") __attribute__((sda));
+extern int l05_electric_gate_inner_color_blend_start __asm__("D_L05_00161D44") __attribute__((sda));
+extern int l05_electric_gate_inner_color_blend_end __asm__("D_L05_00161D48") __attribute__((sda));
+extern int l05_electric_gate_blend_minuend_selector __asm__("D_L05_00161D70") __attribute__((sda));
+extern int l05_electric_gate_blend_subtrahend_selector __asm__("D_L05_00161D74") __attribute__((sda));
+extern int l05_electric_gate_blend_alpha_factor_selector __asm__("D_L05_00161D78") __attribute__((sda));
+extern int l05_electric_gate_blend_addend_selector __asm__("D_L05_00161D7C") __attribute__((sda));
+extern int l05_electric_gate_beam_effect_texture_index __asm__("D_L05_00161D98") __attribute__((sda));
 extern float D_L05_0020B740[4][2];
-extern Vec4 D_L05_0020B760[4];
-extern Vec4 D_L05_0020B7A0[4];
+extern Vec4 l05_electric_gate_outer_beam_base_positions[4] __asm__("D_L05_0020B760");
+extern Vec4 l05_electric_gate_inner_beam_base_positions[4] __asm__("D_L05_0020B7A0");
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
 void draw_electric_gate_beams(char *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
     u64 texture;
-    int i, j, k, n, outer_color, inner_color, offset;
+    int i, j, k, vertex_index, outer_color, inner_color, offset;
     float angle, blend;
     unsigned short *list;
     unsigned short *next;
@@ -192,27 +192,27 @@ void draw_electric_gate_beams(char *moby) {
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
     for (i = 0; i < 5; i++) {
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
-        outer_color = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
-        inner_color = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
+        outer_color = fast_tween_color(l05_electric_gate_outer_color_blend_start, l05_electric_gate_outer_color_blend_end, blend);
+        inner_color = fast_tween_color(l05_electric_gate_inner_color_blend_start, l05_electric_gate_inner_color_blend_end, blend);
         angle = fast_add_rotations(angle, 1.2566371f);
         for (j = 0; j < 2; j++) {
-            texture = get_effect_texture(D_L05_00161D98);
-            quads[j][i].primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) | ((s64)D_L05_00161D78 << 4)
-                                    | ((s64)D_L05_00161D7C << 6) | 0x8000000000LL;
+            texture = get_effect_texture(l05_electric_gate_beam_effect_texture_index);
+            quads[j][i].primitive = (s64)l05_electric_gate_blend_minuend_selector | ((s64)l05_electric_gate_blend_subtrahend_selector << 2) | ((s64)l05_electric_gate_blend_alpha_factor_selector << 4)
+                                    | ((s64)l05_electric_gate_blend_addend_selector << 6) | 0x8000000000LL;
             quads[j][i].texture = texture;
             quads[j][i].texture_state = 0xFF9000000260LL;
             quads[j][i].reserved.value = 0;
-            for (n = 0; n < 4; n++) {
-                quads[j][i].texture_coordinates[n][0] = D_L05_0020B740[n][0];
-                quads[j][i].texture_coordinates[n][1] = D_L05_0020B740[n][1];
+            for (vertex_index = 0; vertex_index < 4; vertex_index++) {
+                quads[j][i].texture_coordinates[vertex_index][0] = D_L05_0020B740[vertex_index][0];
+                quads[j][i].texture_coordinates[vertex_index][1] = D_L05_0020B740[vertex_index][1];
                 if (j != 0) {
-                    quads[j][i].colors[n] = outer_color;
-                    qcopy(&quads[j][i].positions[n], &D_L05_0020B760[n]);
-                    quads[j][i].positions[n].f[2] += (float)(i + 1);
+                    quads[j][i].colors[vertex_index] = outer_color;
+                    qcopy(&quads[j][i].positions[vertex_index], &l05_electric_gate_outer_beam_base_positions[vertex_index]);
+                    quads[j][i].positions[vertex_index].f[2] += (float)(i + 1);
                 } else {
-                    quads[0][i].colors[n] = inner_color;
-                    qcopy(&quads[0][i].positions[n], &D_L05_0020B7A0[n]);
-                    quads[0][i].positions[n].f[2] += (float)(i + 1);
+                    quads[0][i].colors[vertex_index] = inner_color;
+                    qcopy(&quads[0][i].positions[vertex_index], &l05_electric_gate_inner_beam_base_positions[vertex_index]);
+                    quads[0][i].positions[vertex_index].f[2] += (float)(i + 1);
                 }
             }
         }
@@ -252,10 +252,10 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214
 extern unsigned char D_L05_0015F444;
 extern unsigned char D_L05_0015F445;
 extern unsigned char D_L05_0015F446;
-extern unsigned char D_L05_00161202;
-extern unsigned char D_L05_00161203;
-extern unsigned char D_L05_00161201;
-extern unsigned char D_L05_00161200;
+extern unsigned char l05_volume_blended_color_upper_middle_byte __asm__("D_L05_00161202");
+extern unsigned char l05_volume_blended_color_high_byte __asm__("D_L05_00161203");
+extern unsigned char l05_volume_blended_color_lower_middle_byte __asm__("D_L05_00161201");
+extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
@@ -297,7 +297,7 @@ void update_fog_zone(char *moby) {
         *(int *)(data + 0x10) = 0;
         *(int *)(data + 0x1C) = 0;
         {
-            int c = D_L05_00161200 + (D_L05_00161201 << 8) + (D_L05_00161202 << 16) + (D_L05_00161203 << 24);
+            int c = l05_volume_blended_color_low_byte + (l05_volume_blended_color_lower_middle_byte << 8) + (l05_volume_blended_color_upper_middle_byte << 16) + (l05_volume_blended_color_high_byte << 24);
             *(int *)(data + 0x34) = 0x40408070;
             *(int *)(data + 0x30) = c;
         }
@@ -347,10 +347,10 @@ void update_fog_zone(char *moby) {
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space, hero_offset_from_volume_origin, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x40);
         c = fast_tween_color(*(int *)(data + 0x30), *(int *)(data + 0x34), (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
-        D_L05_00161201 = c >> 8;
-        D_L05_00161202 = c >> 16;
-        D_L05_00161200 = c;
-        D_L05_00161203 = c >> 24;
+        l05_volume_blended_color_lower_middle_byte = c >> 8;
+        l05_volume_blended_color_upper_middle_byte = c >> 16;
+        l05_volume_blended_color_low_byte = c;
+        l05_volume_blended_color_high_byte = c >> 24;
     }
 }
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -469,16 +469,16 @@ extern void subtract_vector_30e7f8(void *, void *, void *) __asm__("FUN_001f9a28
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void *allocate_entity(int) __asm__("FUN_0020c4f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern float D_L05_00161DAC __asm__("D_L05_00161DAC") __attribute__((sda));
-extern float D_L05_00161DB0 __asm__("D_L05_00161DB0") __attribute__((sda));
+extern float l05_drain_cover_gravity __asm__("D_L05_00161DAC") __attribute__((sda));
+extern float l05_drain_cover_hover_acceleration __asm__("D_L05_00161DB0") __attribute__((sda));
 extern int D_L05_00161DB8 __asm__("D_L05_00161DB8") __attribute__((sda));
-extern float D_L05_00161DE8 __asm__("D_L05_00161DE8") __attribute__((sda));
-extern float D_L05_00161DEC __asm__("D_L05_00161DEC") __attribute__((sda));
-extern float D_L05_00161DF0 __asm__("D_L05_00161DF0") __attribute__((sda));
-extern int D_L05_00161DF4 __asm__("D_L05_00161DF4") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_height_span __asm__("D_L05_00161DE8") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_radial_speed_lower_bound __asm__("D_L05_00161DEC") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_radial_speed_upper_bound __asm__("D_L05_00161DF0") __attribute__((sda));
+extern int l05_drain_cover_pre_rise_particle_configuration __asm__("D_L05_00161DF4") __attribute__((sda));
 extern int D_L05_00161DF8 __asm__("D_L05_00161DF8") __attribute__((sda));
-extern float D_L05_00161DFC __asm__("D_L05_00161DFC") __attribute__((sda));
-extern float D_L05_00161E00 __asm__("D_L05_00161E00") __attribute__((sda));
+extern float l05_drain_cover_pre_rise_particle_vertical_speed_upper_bound __asm__("D_L05_00161DFC") __attribute__((sda));
+extern float l05_drain_cover_nearby_effect_distance_limit __asm__("D_L05_00161E00") __attribute__((sda));
 extern float D_L05_00161DD4 __asm__("D_L05_00161DD4") __attribute__((sda));
 extern float D_0013F3D0[];
 extern int D_L05_0015F5C4;
@@ -586,12 +586,12 @@ void drain_cover_update(DrainCoverMoby *moby) {
         if (D_L05_0015F5C4 == 0 && vector_distance_xyz(moby->pos, D_0013F3D0) < 24.0f && timer_finished(&data->timer) != 0) {
             moby->state = 2;
             clear_vector_30e7f8(data->vel);
-            data->vel[2] = sqrt_30e7f8(data->f80 * 2.0f * (D_L05_00161DAC * frame_time_sq));
+            data->vel[2] = sqrt_30e7f8(data->f80 * 2.0f * (l05_drain_cover_gravity * frame_time_sq));
         } else if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f) {
-            emit_drain_cover_particles((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
-            emit_drain_cover_particles((char *)moby, data->home[2], D_L05_00161DE8 + data->home[2]);
+            emit_drain_cover_particles((char *)moby, data->home[2], l05_drain_cover_pre_rise_particle_height_span + data->home[2]);
+            emit_drain_cover_particles((char *)moby, data->home[2], l05_drain_cover_pre_rise_particle_height_span + data->home[2]);
             if ((float)data->timer < (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.2f) {
-                particle_configuration = D_L05_00161DF4;
+                particle_configuration = l05_drain_cover_pre_rise_particle_configuration;
                 b = D_L05_00161DF8;
                 r = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
                 g = convert_effect_value(scale_game_frames_float_30e7f8(random_float_between_30e7f8(10.0f, 20.0f)));
@@ -601,8 +601,8 @@ void drain_cover_update(DrainCoverMoby *moby) {
                     particle_position[0] = angle_cos(particle_offset_angle) * 0.75f;
                     particle_position[1] = angle_sin(particle_offset_angle) * 0.75f;
                     particle_position[2] = 0.0f;
-                    rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(D_L05_00161DEC, D_L05_00161DF0) * frame_time);
-                    effect_velocity[2] = random_float_between_30e7f8(0.0f, D_L05_00161DFC) * frame_time;
+                    rotate_vector(effect_velocity, particle_position, random_float_between_30e7f8(l05_drain_cover_pre_rise_particle_radial_speed_lower_bound, l05_drain_cover_pre_rise_particle_radial_speed_upper_bound) * frame_time);
+                    effect_velocity[2] = random_float_between_30e7f8(0.0f, l05_drain_cover_pre_rise_particle_vertical_speed_upper_bound) * frame_time;
                     transform_vector(effect_position, effect_velocity, 0.0f);
                     add_vector(particle_position, moby->pos, particle_position);
                     particle_position[2] = random_float_between_30e7f8(moby->pos[2] - 0.25f, moby->pos[2] + 0.5f);
@@ -619,7 +619,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         emit_drain_cover_particles((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
         add_vector(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (data->vel[2] <= 0.0f) {
             moby->state = 3;
             data->home[3] = data->f84 - 0.5f;
@@ -629,7 +629,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     case DRAIN_COVER_HOVER:
         emit_drain_cover_particles((char *)moby, data->home[2], moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
-        approach_position(data->home[2] + data->home[3], D_L05_00161DB0 * frame_time_sq, D_L05_00161DB0 * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
+        approach_position(data->home[2] + data->home[3], l05_drain_cover_hover_acceleration * frame_time_sq, l05_drain_cover_hover_acceleration * frame_time_sq, frame_time * 20.0f, &moby->pos[2], &data->vel[2]);
         if (data->vel[2] == 0.0f) {
             if (data->home[3] > data->f84) {
                 data->home[3] = data->f84 - 0.5f;
@@ -645,7 +645,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         emit_drain_cover_particles((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) + moby->pos[2]);
         update_drain_cover_tilt((char *)moby, data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f, data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
         add_vector(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - D_L05_00161DAC * frame_time_sq;
+        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
         if (moby->pos[2] < data->home[2]) {
             allocate_target_entry(1, 0, moby);
             moby->state = 1;
@@ -659,7 +659,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         break;
     }
     hero = (DrainCoverHero *)(D_0013E550 + 0xE00);
-    if (moby->pos[2] - 2.0f > hero->pos[2] && vector_distance_xyz(moby->pos, hero->pos) < D_L05_00161E00) {
+    if (moby->pos[2] - 2.0f > hero->pos[2] && vector_distance_xyz(moby->pos, hero->pos) < l05_drain_cover_nearby_effect_distance_limit) {
         effect_velocity[0] = angle_cos(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
         effect_velocity[1] = angle_sin(vector_heading(hero->pos[0] - moby->pos[0], hero->pos[1] - moby->pos[1])) * 0.2f;
         effect_velocity[2] = 0.0f;
@@ -703,25 +703,25 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L05_00161DB4 __attribute__((sda));
-extern short D_L05_00161DBC __attribute__((sda));
-extern short D_L05_00161DC0 __attribute__((sda));
-extern short D_L05_00161DC4 __attribute__((sda));
-extern short D_L05_00161DC8 __attribute__((sda));
-extern short D_L05_00161DCC __attribute__((sda));
-extern short D_L05_00161DD0 __attribute__((sda));
+extern short drain_cover_particle_height_span_per_particle_gp __asm__("D_L05_00161DB4") __attribute__((sda));
+extern short drain_cover_particle_scalar_lower_bound_gp __asm__("D_L05_00161DBC") __attribute__((sda));
+extern short drain_cover_particle_scalar_upper_bound_gp __asm__("D_L05_00161DC0") __attribute__((sda));
+extern short drain_cover_particle_size_sampling_bound_gp __asm__("D_L05_00161DC4") __attribute__((sda));
+extern short drain_cover_particle_vertical_speed_gp __asm__("D_L05_00161DC8") __attribute__((sda));
+extern short drain_cover_particle_color_gp __asm__("D_L05_00161DCC") __attribute__((sda));
+extern short drain_cover_particle_spawn_radius_upper_bound_gp __asm__("D_L05_00161DD0") __attribute__((sda));
 void emit_drain_cover_particles(char *particle_source_moby, float lower_height_bound, float upper_height_bound) {
     float v[4];
     float particle_position[4];
     float ground, x, y, spawn_height_candidate, u;
     int i, j, k, particle_size, particle_color;
     clear_vector(v);
-    v[2] = *(float *)&D_L05_00161DC8 * frame_time;
+    v[2] = *(float *)&drain_cover_particle_vertical_speed_gp * frame_time;
     ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_d);
     j = 0;
-    for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&D_L05_00161DB4; i++) {
+    for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&drain_cover_particle_height_span_per_particle_gp; i++) {
         float fi = (float)j;
-        x = random_float_between_alt(fi, *(float *)&D_L05_00161DD0);
+        x = random_float_between_alt(fi, *(float *)&drain_cover_particle_spawn_radius_upper_bound_gp);
         y = random_angle_radians();
         particle_position[0] = fast_cos(y) * x;
         particle_position[1] = fast_sin(y) * x;
@@ -731,10 +731,10 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
         spawn_height_candidate = random_float_between_alt((lower_height_bound + upper_height_bound) * 0.5f, upper_height_bound) - ground;
         if (spawn_height_candidate < particle_position[2])
             particle_position[2] = spawn_height_candidate;
-        u = random_float_between_alt(*(float *)&D_L05_00161DBC, *(float *)&D_L05_00161DC0);
+        u = random_float_between_alt(*(float *)&drain_cover_particle_scalar_lower_bound_gp, *(float *)&drain_cover_particle_scalar_upper_bound_gp);
         k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
-        particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4));
-        particle_color = *(int *)&D_L05_00161DCC;
+        particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
+        particle_color = *(int *)&drain_cover_particle_color_gp;
         create_particle_with_velocity_and_lifetime(u, particle_position, v, k, particle_size, particle_color);
     }
 }
@@ -814,7 +814,7 @@ extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__(
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
-extern char D_L05_001BAAA0[];
+extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
 
 void pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_0030f5c8");
 void pipe_mounted_grating_update(struct Moby *moby) {
@@ -896,7 +896,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
             }
         }
         moby->command = 1;
-        record_moby_context_bytes(&moby->command, 1, moby, 1, D_L05_001BAAA0);
+        record_moby_context_bytes(&moby->command, 1, moby, 1, pipe_mounted_grating_command_records);
         mark_moby_for_removal_f5c8(moby);
     } else if (moby->command) {
         mark_moby_for_removal_f5c8(moby);
@@ -1383,16 +1383,16 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-extern short D_L05_00161EC0 __attribute__((sda));
-extern short D_L05_00161EC4 __attribute__((sda));
-extern short D_L05_00161EC8 __attribute__((sda));
+extern short lift_camera_height_offset_gp __asm__("D_L05_00161EC0") __attribute__((sda));
+extern short lift_camera_pitch_degrees_gp __asm__("D_L05_00161EC4") __attribute__((sda));
+extern short lift_camera_distance_along_facing_gp __asm__("D_L05_00161EC8") __attribute__((sda));
 void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotation) {
     float pitch_degrees;
-    fast_vec_normalize(camera_position, lift_moby + 0xC0, *(float *)&D_L05_00161EC8);
+    fast_vec_normalize(camera_position, lift_moby + 0xC0, *(float *)&lift_camera_distance_along_facing_gp);
     fast_vec_add(camera_position, camera_position, lift_moby + 0x10);
-    *(float *)(camera_position + 8) = *(float *)(camera_position + 8) + *(float *)&D_L05_00161EC0;
+    *(float *)(camera_position + 8) = *(float *)(camera_position + 8) + *(float *)&lift_camera_height_offset_gp;
     clear_u64_value(camera_rotation);
-    pitch_degrees = *(float *)&D_L05_00161EC4;
+    pitch_degrees = *(float *)&lift_camera_pitch_degrees_gp;
     *(float *)(camera_rotation + 8) = *(float *)(lift_moby + 0x48);
     *(float *)(camera_rotation + 4) = pitch_degrees * DEG_TO_RAD;
 }
@@ -1780,7 +1780,7 @@ typedef struct {
     int target_timer;
     float target[4];
 } WD2;
-extern char D_L05_00161EF0[];
+extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -1808,7 +1808,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
             FUN_0020c828_c(bouncer_moby);
             return;
         }
-        bouncer_data->ptr20 = (void *)D_L05_00161EF0;
+        bouncer_data->ptr20 = (void *)qwarks_bouncer_dialogue_name;
         bouncer_moby->state = 1;
         FUN_L00_002668a0_c(bouncer_moby, bouncer_data);
         bouncer_data->fC = 3.7f;
@@ -1983,7 +1983,7 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern char D_L05_00161EF8[];
+extern char shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -2022,7 +2022,7 @@ void shady_salesman_update(WM *moby) {
         }
         moby->position[2] += 0.5f;
         moby->position[2] = probe_ground_height(moby->position, 0, 0.5f);
-        npc_data->ptr20 = (void *)D_L05_00161EF8;
+        npc_data->ptr20 = (void *)shady_salesman_dialogue_name;
         moby->state = 1;
         initialize_npc_dialogue(moby, npc_data);
         break;
@@ -2158,7 +2158,7 @@ void update_hero_clip_volume_outputs(char *moby) {
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int D_L05_0015F5C4;
 
-extern short D_L05_00161F08 __attribute__((sda));
+extern short television_scale_multiplier_gp __asm__("D_L05_00161F08") __attribute__((sda));
 void television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
 void television_update(struct Moby *moby) {
     enum {
@@ -2169,7 +2169,7 @@ void television_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int visibility_control_mode;
     moby->scale =
-        moby->pclass->scale * *(float *)&D_L05_00161F08;
+        moby->pclass->scale * *(float *)&television_scale_multiplier_gp;
     switch (moby->state) {
     case TELEVISION_INITIALIZE:
         moby->state = 1;

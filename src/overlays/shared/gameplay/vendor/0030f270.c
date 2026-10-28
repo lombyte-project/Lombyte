@@ -19,15 +19,15 @@ int test_linked_moby_turn_trigger(char *moby) {
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L11_00162628[] __attribute__((section(".sdata")));
-extern int D_L11_00217710[];
-extern int D_L11_002176F8[];
+extern int oil_tanker_front_texture_2b_batch_pair_sources[] __asm__("D_L11_00217710");
+extern int oil_tanker_front_texture_2b_batch_triplet_sources[] __asm__("D_L11_002176F8");
 void queue_oil_tanker_front_texture_2b_batches(int pair_index) __asm__("FUN_L11_0031e858");
 
 void queue_oil_tanker_front_texture_2b_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x5; i++) {
-        FUN_L08_00258090(D_L11_00217770, D_L11_00217710[i], D_L11_00215268[i], &D_L11_00162628[pair_index]);
-        FUN_L00_001fde98(D_L11_00215268[i], D_L11_002176F8[i], D_L11_00217740[i], D_L11_00217770,
+        FUN_L08_00258090(D_L11_00217770, oil_tanker_front_texture_2b_batch_pair_sources[i], D_L11_00215268[i], &D_L11_00162628[pair_index]);
+        FUN_L00_001fde98(D_L11_00215268[i], oil_tanker_front_texture_2b_batch_triplet_sources[i], D_L11_00217740[i], D_L11_00217770,
                          1);
     }
 }

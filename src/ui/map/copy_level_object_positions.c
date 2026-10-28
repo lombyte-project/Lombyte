@@ -11,7 +11,7 @@ struct ObjectVector {
 
 extern u8 D_0013D5B0[];
 extern u8 D_00199478[];
-extern u32 D_001E03B8[];
+extern u32 level_object_index_boundaries[] __asm__("D_001E03B8");
 
 void copy_level_object_positions(void) __asm__("FUN_00208770");
 
@@ -30,8 +30,8 @@ void copy_level_object_positions(void) {
         return;
     }
     next_index = index + 1;
-    end = D_001E03B8[next_index];
-    start = D_001E03B8[index];
+    end = level_object_index_boundaries[next_index];
+    start = level_object_index_boundaries[index];
     if (start >= end) {
         return;
     }

@@ -13,7 +13,7 @@ struct MpegMotionRef {
     s32 unk4;
 };
 
-extern u8 D_00153868[];
+extern u8 skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868");
 extern s32 _Error(struct MpegDecoder *a0, u8 *a1);
 s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 *picture_structure_mode, struct MpegMotionRef *motion_reference,
              s32 *flags) {
@@ -40,7 +40,7 @@ s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 
         motion_reference->unk0 = temp_2_32;
     }
     if (decoder->picture_coding_type == 1) {
-        _Error(decoder, D_00153868);
+        _Error(decoder, skipped_macroblock_in_i_picture_error_message);
         var_9_6 = 0;
     }
     *flags &= ~1;

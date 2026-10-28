@@ -36,7 +36,7 @@ extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
-extern u8 *D_L01_001B2500[];
+extern u8 *spark_texture_table[] __asm__("D_L01_001B2500");
 
 void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_table_index, u8 mode, f32 x, f32 y, f32 z,
                       f32 w, f32 alpha, f32 r, f32 g, f32 b, f32 size) __asm__("FUN_L01_0027e900");
@@ -69,7 +69,7 @@ void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_tabl
         spark->b3 = mode;
     }
     spark->b1 = 0;
-    spark->b2 = *D_L01_001B2500[texture_table_index];
+    spark->b2 = *spark_texture_table[texture_table_index];
     spark_body->x = x;
     spark_body->y = y;
     spark_body->z = z;
@@ -109,7 +109,7 @@ typedef struct {
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern u8 *D_L01_001B25E0[];
+extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
 Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
@@ -126,14 +126,14 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
         particle->alpha = truncate_float_to_s32(4.0f) + 0x20;
         particle->kind = 0x48;
         particle->active = 0;
-        particle->tex = *D_L01_001B25E0[0];
+        particle->tex = *pool_bubble_texture_table[0];
         particle->scale = scale;
         qcopy(&particle->m.pos, motion_position_source);
         particle->spin = random_integer_below(0x100);
     }
     return particle;
 }
-extern u8 *D_L01_001B25E4[];
+extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 void *create_part(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -153,7 +153,7 @@ Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 s
         particle->alpha = truncate_float_to_s32(12.0f) + 0x20;
         particle->kind = 0x48;
         particle->active = 1;
-        particle->tex = *D_L01_001B25E4[0];
+        particle->tex = *pool_bubbles_texture_table[0];
         particle->life = 0x80;
         particle->scale = scale * 210000.0f;
         qcopy(&m->pos, motion_position_source);

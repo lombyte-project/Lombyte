@@ -26,9 +26,9 @@ typedef struct {
 } Q_25a478;
 typedef struct { u8 pad0[0x10]; f32 x, y; } O_25a478;
 extern u8 D_0013E533[];
-extern f32 D_0015FFC8[2] __attribute__((sda));
-extern f32 D_001CC0C8[][8];
-extern u8 D_001CC080[][4];
+extern f32 hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
+extern f32 hit_vector_scale_table[][8] __asm__("D_001CC0C8");
+extern u8 hit_response_code_table[][4] __asm__("D_001CC080");
 extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern Q_25a478 *ReadStateField(void *);
 extern s32 fast_dec_timer_s16(s16 *) __asm__("func_001F9770");
@@ -71,7 +71,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
     *out = 0;
     if (kp) *kp = -1;
     if (hit_record && hit_record->tgt && (hit_record->tgt->hA6 == 0x131 || hit_record->tgt->hA6 == 0xA8) && q) {
-        hit_record->f2C = D_0015FFC8[q->b8];
+        hit_record->f2C = hit_damage_override_table[q->b8];
     }
     if (!hit_recipient_moby) {
         if (q) {
@@ -101,7 +101,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
     }
     if (hit_record->u.s.f1C == 5627.9248f) {
         V_25a478 *hit_vector = &hit_record->u.pos;
-        fast_vec_scale(hit_vector, hit_vector, D_001CC0C8[hit_vector_scale_row][hit_record->state]);
+        fast_vec_scale(hit_vector, hit_vector, hit_vector_scale_table[hit_vector_scale_row][hit_record->state]);
         kind = hit_record->kind;
         hit_record->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
@@ -153,7 +153,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
         break;
     }
     if (kp) *kp = kind;
-    hit_response_code = D_001CC080[hit_response_index][q->b8];
+    hit_response_code = hit_response_code_table[hit_response_index][q->b8];
     if (q->h14 != kind) q->h1C = 0;
     if (fast_dec_timer_s16(&q->h1C)) {
         switch (hit_response_index) {

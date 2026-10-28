@@ -761,14 +761,29 @@ DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss")
 
 def data_symbols(elf: ELFFile) -> list:
     """Every object the file defines in a data section: (symbol, section)."""
-    out = []
-    for sym in _symbols(elf):
-        if sym["st_info"]["type"] != "STT_OBJECT" or not isinstance(sym["st_shndx"], int):
-            continue
-        secname = section_name(elf, sym["st_shndx"])
-        if secname in DATA_SECTIONS:
-            out.append((sym, secname))
-    return out
+    cached = getattr(elf, "_data_symbols", None)
+    if cached is None:
+        out = []
+        for sym in _symbols(elf):
+            if sym["st_info"]["type"] != "STT_OBJECT" or not isinstance(sym["st_shndx"], int):
+                continue
+            secname = section_name(elf, sym["st_shndx"])
+            if secname in DATA_SECTIONS:
+                out.append((sym, secname))
+        cached = elf._data_symbols = tuple(out)
+    return list(cached)
+
+
+def _data_symbol(elf: ELFFile, name: str):
+    # Keep the first definition, as the original ordered lookup did. Both
+    # caches belong to this parsed ELF; open_elf replaces it after a rebuild.
+    index = getattr(elf, "_data_symbol_by_name", None)
+    if index is None:
+        index = {}
+        for entry in data_symbols(elf):
+            index.setdefault(entry[0].name, entry)
+        elf._data_symbol_by_name = index
+    return index.get(name)
 
 
 def check_shared_data(obj_path, name: str) -> dict:
@@ -777,11 +792,11 @@ def check_shared_data(obj_path, name: str) -> dict:
     result = {"method": DATA_METHOD, "exact": False, "symbol": name}
     address = int(ov.SHARED_DATA.match(name).group(1), 16)
     elf = open_elf(obj_path)
-    found = [(sym, sec) for sym, sec in data_symbols(elf) if sym.name == name]
-    if not found:
+    found = _data_symbol(elf, name)
+    if found is None:
         result["verdict"] = f"LINK {name} is not defined in this file"
         return result
-    sym, _secname = found[0]
+    sym, _secname = found
     size, start = sym["st_size"], sym["st_value"]
     result.update(address=address, size=size)
     section = elf.get_section(sym["st_shndx"])
@@ -816,11 +831,11 @@ def check_data(obj_path, name: str) -> dict:
         return result
     level, address = int(m.group(1)), int(m.group(2), 16)
     elf = open_elf(obj_path)
-    found = [(sym, sec) for sym, sec in data_symbols(elf) if sym.name == name]
-    if not found:
+    found = _data_symbol(elf, name)
+    if found is None:
         result["verdict"] = f"LINK {name} is not defined in this file"
         return result
-    sym, secname = found[0]
+    sym, secname = found
     size, start = sym["st_size"], sym["st_value"]
     result.update(level=level, address=address, size=size)
     if secname in (".bss", ".sbss"):

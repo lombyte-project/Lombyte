@@ -231,11 +231,11 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern short D_L05_001618C0 __attribute__((sda));
-extern short D_L05_001618C4 __attribute__((sda));
-extern short D_L05_001618C8 __attribute__((sda));
-extern short D_L05_001618CC __attribute__((sda));
-extern short D_L05_001618D0 __attribute__((sda));
+extern short faucet_base_color_gp __asm__("D_L05_001618C0") __attribute__((sda));
+extern short faucet_item_16_pulse_start_color_gp __asm__("D_L05_001618C4") __attribute__((sda));
+extern short faucet_item_16_pulse_end_color_gp __asm__("D_L05_001618C8") __attribute__((sda));
+extern short faucet_fallback_pulse_start_color_gp __asm__("D_L05_001618CC") __attribute__((sda));
+extern short faucet_fallback_pulse_end_color_gp __asm__("D_L05_001618D0") __attribute__((sda));
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 void update_hydrodisplacer_faucet_pulse_color(void *mv) {
@@ -261,13 +261,13 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
         pulse_phase = fast_add_rotations(*(float *)(data + 0x18), frame_time * 6.2831855f);
         *(float *)(data + 0x18) = pulse_phase;
         if (((unsigned char *)moby)[0xBC] == 1) {
-            pulse_color = fast_tween_color(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&faucet_item_16_pulse_start_color_gp, *(int *)&faucet_item_16_pulse_end_color_gp, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         } else {
-            pulse_color = fast_tween_color(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
+            pulse_color = fast_tween_color(*(int *)&faucet_fallback_pulse_start_color_gp, *(int *)&faucet_fallback_pulse_end_color_gp, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
-        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&D_L05_001618C0, pulse_color, *(float *)(data + 0x1C));
+        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(data + 0x1C));
     } else {
-        *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
+        *(int *)(moby + 0x90) = *(int *)&faucet_base_color_gp;
     }
 }
 #include "rnc/gameplay/state/item_state.h"
@@ -528,9 +528,9 @@ extern void cross_vector_xyz_30c220(float *, float *, float *) __asm__("FUN_001f
 extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture_30c220(int) __asm__("FUN_001f44b8");
 extern void draw_quad_30c220(void *, float *, int) __asm__("FUN_001f7d30");
-extern float D_L05_001D67B0[][2];
-extern float D_L05_001D67D0[][4];
-extern float D_L05_001D6810[][4];
+extern float wobble_quad_texcoords[][2] __asm__("D_L05_001D67B0");
+extern float wobble_quad_a_base_vertices[][4] __asm__("D_L05_001D67D0");
+extern float wobble_quad_b_base_vertices[][4] __asm__("D_L05_001D6810");
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
 #include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_globals.h"
 extern int wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") __attribute__((sda));
@@ -596,8 +596,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     quad_b.control[3] = flags;
     quad_a.control[3] = flags;
     for (k = 0; k < 4; k++) {
-        float u = D_L05_001D67B0[k][0];
-        float v = D_L05_001D67B0[k][1];
+        float u = wobble_quad_texcoords[k][0];
+        float v = wobble_quad_texcoords[k][1];
         quad_a.texcoord[k][0] = u;
         quad_a.texcoord[k][1] = v;
         quad_b.texcoord[k][0] = u;
@@ -608,8 +608,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
         j = 0;
         do {
             vertex_a = quad_a.vertex[j];
-            qcopy(vertex_a, D_L05_001D67D0[j]);
-            qcopy(quad_b.vertex[j], D_L05_001D6810[j]);
+            qcopy(vertex_a, wobble_quad_a_base_vertices[j]);
+            qcopy(quad_b.vertex[j], wobble_quad_b_base_vertices[j]);
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
@@ -731,7 +731,7 @@ typedef struct {
 extern ML D_L05_0016CC60;
 extern int D_L05_0015F5C4;
 extern unsigned char D_L05_0017C8A0[];
-extern short D_L05_00161EE8 __attribute__((sda));
+extern short big_head_manipulator_scale_gp __asm__("D_L05_00161EE8") __attribute__((sda));
 
 void attach_big_head_cheat_manipulator(char *moby) __asm__("FUN_L05_00317398");
 
@@ -747,9 +747,9 @@ void attach_big_head_cheat_manipulator(char *moby) {
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0, manipulator);
-                    *(float *)(manipulator + 0x20) = *(float *)&D_L05_00161EE8;
-                    *(float *)(manipulator + 0x24) = *(float *)&D_L05_00161EE8;
-                    *(float *)(manipulator + 0x28) = *(float *)&D_L05_00161EE8;
+                    *(float *)(manipulator + 0x20) = *(float *)&big_head_manipulator_scale_gp;
+                    *(float *)(manipulator + 0x24) = *(float *)&big_head_manipulator_scale_gp;
+                    *(float *)(manipulator + 0x28) = *(float *)&big_head_manipulator_scale_gp;
                 }
             }
         }
@@ -1011,7 +1011,7 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern char D_L05_00215C00[];
+extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -1026,7 +1026,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             int i;
             struct Hero *player_hero;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, D_L05_00215C00 + i * 16, moby + 0xC0);
+                transform_vector_by_basis(vector_table_entry + 0x10 + i * 16, moby_vector_table_local_vectors + i * 16, moby + 0xC0);
                 fast_vec_add(vector_table_entry + 0x10 + i * 16, vector_table_entry + 0x10 + i * 16, moby + 0x10);
             }
             player_hero = &hero;

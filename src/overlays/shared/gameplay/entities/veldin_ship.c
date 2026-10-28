@@ -293,7 +293,7 @@ void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
-extern T_2d0538 D_L00_001E9E30;
+extern T_2d0538 l00_crate_drop_unused_stack_copy_source __asm__("D_L00_001E9E30");
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/crate_drop_bolts.h"
 void crate_drop_bolts(u8 *crate_moby) {
     enum {
@@ -311,7 +311,7 @@ void crate_drop_bolts(u8 *crate_moby) {
 
     crate_vars = *(u8 **)(crate_moby + 0x78);
     crate_class = *(s16 *)(crate_moby + 0xA6);
-    unused_global_copy = D_L00_001E9E30;
+    unused_global_copy = l00_crate_drop_unused_stack_copy_source;
     drop_type_or_skip_spawn = *(s16 *)(crate_vars + 0xC6) == 0;
     if (crate_class == 0x1F5)
         drop_type_or_skip_spawn = 0;
@@ -472,7 +472,7 @@ typedef struct G2d1428 {
     u8 p224[0x10];
     f32 f234;
 } G2d1428;
-extern V2d1428 D_L00_00173E60;
+extern V2d1428 collision_hit_point __asm__("D_L00_00173E60");
 s32 is_moby_in_class_range_500_to_540(M2d1428 *) __asm__("FUN_L00_0025e3b8");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -791,7 +791,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
             collision_start.z += vars->fB0 * 0.75f;
             collision_end.z += vars->vel.z;
             hit = coll_line_fix(&collision_start, &collision_end, 2, 0, 0);
-            qcopy(&landing_position, &D_L00_00173E60);
+            qcopy(&landing_position, &collision_hit_point);
         } else {
             qcopy(&landing_position, &vars->parent->pos);
             landing_position.z += 1.0f;
@@ -957,7 +957,7 @@ typedef struct M2d1e80 {
     u8 bc;
 } M2d1e80;
 extern s32 D_L00_0015F5C4;
-extern s32 D_L00_0016C890[];
+extern s32 veldin_ship_visibility_selector[] __asm__("D_L00_0016C890");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
@@ -968,7 +968,7 @@ void veldin_ship_update(M2d1e80 *moby) {
         moby->bc = 1;
         ship_vars[0x10] = 0;
     }
-    if (D_L00_0015F5C4 == 2 && (D_L00_0016C890[0] < 3 || D_L00_0016C890[0] == 4)) {
+    if (D_L00_0015F5C4 == 2 && (veldin_ship_visibility_selector[0] < 3 || veldin_ship_visibility_selector[0] == 4)) {
         moby->vis = 0;
         moby->flags |= 1;
     } else {
@@ -2472,9 +2472,6 @@ void horny_toad_update(Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
-#else
 extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
 extern f32 D_0015ED6C_2d5160 __asm__("D_0015ED6C");
 extern float D_0015ED70;
@@ -2529,21 +2526,28 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
     hit = FUN_L00_0025a420_2d5160(m, 0x330000, 0);
     FUN_L00_0025a478_2d5160(m, hit, v + 0x20, 0, &result, &damage, 0, 4);
     if (result != 1 && m[0x20] != 12 && damage != 0.0f) {
-        forceX = D_L00_00161970_2d5160 * D_0015ED70;
-        forceY = D_L00_00161974_2d5160 * D_0015ED70;
-        forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
-        forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
+        /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
+           later 0.75 in $f4, the squared frame time first in $f0. */
+        register s32 hit_state __asm__("$8") = 0x29;
+        register f32 frame_time_reg __asm__("$f4") = D_0015ED6C_2d5160;
+        register f32 knockback_scale __asm__("$f4");
+        register f32 frame_time_sq_reg __asm__("$f0") = D_0015ED70;
+        forceX = D_L00_00161970_2d5160 * frame_time_sq_reg;
+        forceY = D_L00_00161974_2d5160 * frame_time_sq_reg;
+        forceZ = D_L00_00161978_2d5160 * frame_time_reg;
+        forceW = D_L00_0016197C_2d5160 * frame_time_reg;
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
-        *(volatile s32 *)(v + 0x94) = 0x29;
-        *(volatile s32 *)(v + 0x90) = 0x200;
-        *(f32 *)(v + 0x98) = 0.75f;
+        *(s32 *)(v + 0x94) = hit_state;
+        *(s32 *)(v + 0x90) = 0x200;
+        knockback_scale = 0.75f;
+        *(f32 *)(v + 0x98) = knockback_scale;
         *(f32 *)(v + 0x20) = health;
+        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x88) = forceZ;
         *(f32 *)(v + 0x8C) = forceW;
-        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0xBC) = duration;
         *(u16 *)(m + 0x34) &= ~0x1000;
         *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
@@ -2585,7 +2589,6 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
             FUN_L00_00257880_2d5160(m, 4, 0, FUN_001fef20_2d5160(20));
     }
 }
-#endif
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
 /* D_0015ED70 is declared sda above (crate_drop_bolts), but here retail loads it
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
@@ -3508,15 +3511,15 @@ extern int smoke_fire_particle_steady_alpha_gp __asm__("D_L00_00161998") __attri
 extern float D_L00_0016199C __attribute__((sda));
 extern u8 D_L00_001619A0[4] __attribute__((sda));
 extern u8 D_L00_001619A8[8] __attribute__((sda));
-extern int D_L00_001E1380[][4];
-extern float D_L00_001E12C0[][4];
-extern float D_L00_001E1440[];
-extern float D_L00_001E1444[];
-extern float D_L00_001E11A0[][4];
-extern float D_L00_001E11E0[];
-extern float D_L00_001E1200[][4];
-extern float D_L00_001E13E0[];
-extern float D_L00_001E13E4[];
+extern int smoke_fire_mesh_quad_vertex_indices[][4] __asm__("D_L00_001E1380");
+extern float smoke_fire_mesh_particle_local_positions[][4] __asm__("D_L00_001E12C0");
+extern float smoke_fire_mesh_particle_v_coordinates[] __asm__("D_L00_001E1440");
+extern float smoke_fire_mesh_particle_u_coordinates[] __asm__("D_L00_001E1444");
+extern float smoke_fire_particle_quad_local_positions[][4] __asm__("D_L00_001E11A0");
+extern float smoke_fire_particle_quad_texture_coordinates[] __asm__("D_L00_001E11E0");
+extern float smoke_fire_base_mesh_local_positions[][4] __asm__("D_L00_001E1200");
+extern float smoke_fire_base_mesh_v_coordinates[] __asm__("D_L00_001E13E0");
+extern float smoke_fire_base_mesh_u_coordinates[] __asm__("D_L00_001E13E4");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 void draw_smoke_fire_spawner(P *spawner) {
     Vec4 position, up;
@@ -3578,20 +3581,20 @@ void draw_smoke_fire_spawner(P *spawner) {
         if (D_L00_001D2D10[i]) {
             /* Fakematch: reading the index table through rows sets its address ahead of the
              * primitive constant, which then takes v1 as retail. */
-            rows = D_L00_001E1380;
+            rows = smoke_fire_mesh_quad_vertex_indices;
             quad.primitive = 0x8000000044L;
             one = 1.0f;
             for (k = 2; k < 4; k++) {
                 for (j = 0; j < 4; j++) {
                     index = rows[k][j];
-                    vertex = D_L00_001E12C0[index];
+                    vertex = smoke_fire_mesh_particle_local_positions[index];
                     quad.positions[j].f[0] = vertex[0];
                     quad.positions[j].f[1] = vertex[1] * width;
                     quad.positions[j].f[2] = vertex[2] * height;
                     quad.positions[j].f[3] = one;
                     transform_vector(&quad.positions[j], &quad.positions[j], transform);
-                    quad.texture_coordinates[j][0] = D_L00_001E1444[index * 2] + D_L00_001D31C0[i];
-                    quad.texture_coordinates[j][1] = D_L00_001E1440[index * 2];
+                    quad.texture_coordinates[j][0] = smoke_fire_mesh_particle_u_coordinates[index * 2] + D_L00_001D31C0[i];
+                    quad.texture_coordinates[j][1] = smoke_fire_mesh_particle_v_coordinates[index * 2];
                     quad.colors[j] = mesh_alpha * D_L00_001619A8[index] | mesh_color;
                 }
                 fast_draw_quad_real(&quad, 0, 0);
@@ -3618,12 +3621,12 @@ void draw_smoke_fire_spawner(P *spawner) {
             quad.primitive = 0x8000000048L;
             one = 1.0f;
             for (particle_quad_vertex_index = 0; particle_quad_vertex_index < 4; particle_quad_vertex_index++) {
-                quad.positions[particle_quad_vertex_index].f[0] = D_L00_001E11A0[particle_quad_vertex_index][0];
-                quad.positions[particle_quad_vertex_index].f[1] = D_L00_001E11A0[particle_quad_vertex_index][1] * width;
-                quad.positions[particle_quad_vertex_index].f[2] = D_L00_001E11A0[particle_quad_vertex_index][2] * height;
+                quad.positions[particle_quad_vertex_index].f[0] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][0];
+                quad.positions[particle_quad_vertex_index].f[1] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][1] * width;
+                quad.positions[particle_quad_vertex_index].f[2] = smoke_fire_particle_quad_local_positions[particle_quad_vertex_index][2] * height;
                 quad.positions[particle_quad_vertex_index].f[3] = one;
-                quad.texture_coordinates[particle_quad_vertex_index][0] = D_L00_001E11E0[particle_quad_vertex_index * 2] - D_L00_001D31C0[i];
-                quad.texture_coordinates[particle_quad_vertex_index][1] = D_L00_001E11E0[particle_quad_vertex_index * 2 + 1];
+                quad.texture_coordinates[particle_quad_vertex_index][0] = smoke_fire_particle_quad_texture_coordinates[particle_quad_vertex_index * 2] - D_L00_001D31C0[i];
+                quad.texture_coordinates[particle_quad_vertex_index][1] = smoke_fire_particle_quad_texture_coordinates[particle_quad_vertex_index * 2 + 1];
                 quad.colors[particle_quad_vertex_index] = alpha * D_L00_001619A0[particle_quad_vertex_index] | q->col;
                 transform_vector(&quad.positions[particle_quad_vertex_index], &quad.positions[particle_quad_vertex_index], transform);
             }
@@ -3637,15 +3640,15 @@ void draw_smoke_fire_spawner(P *spawner) {
     if (q->flag42 == 0) {
         for (k = 0; k < 6; k++) {
             for (j = 0; j < 4; j++) {
-                index = D_L00_001E1380[k][j];
-                vertex = D_L00_001E1200[index];
+                index = smoke_fire_mesh_quad_vertex_indices[k][j];
+                vertex = smoke_fire_base_mesh_local_positions[index];
                 quad.positions[j].f[0] = vertex[0];
                 quad.positions[j].f[1] = vertex[1] * q->f48;
                 quad.positions[j].f[2] = vertex[2] * q->f4C;
                 quad.positions[j].f[3] = 1.0f;
                 transform_vector(&quad.positions[j], &quad.positions[j], facing);
-                quad.texture_coordinates[j][0] = D_L00_001E13E4[index * 2] + D_L00_00161374;
-                quad.texture_coordinates[j][1] = D_L00_001E13E0[index * 2];
+                quad.texture_coordinates[j][0] = smoke_fire_base_mesh_u_coordinates[index * 2] + D_L00_00161374;
+                quad.texture_coordinates[j][1] = smoke_fire_base_mesh_v_coordinates[index * 2];
                 quad.colors[j] = D_L00_001619A8[index] * 0xFF000000 | mesh_color;
             }
             fast_draw_quad_real(&quad, 0, 0);

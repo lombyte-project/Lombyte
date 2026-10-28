@@ -342,7 +342,7 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
 }
 void FUN_001f9a10_00271df8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
-extern unsigned char *D_L00_001B2148[];
+extern unsigned char *l00_height_culled_particle_texture_refs[] __asm__("D_L00_001B2148");
 #include "rnc/overlay/shared/rendering/002712b8_globals.h"
 extern float height_culled_particle_size_rate_gp __asm__("D_L00_00160210") __attribute__((sda));
 void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
@@ -354,7 +354,7 @@ void update_moving_height_culled_particle(unsigned char *particle) {
     }
     FUN_001f9a10_00271df8(particle + 0x10, particle + 0x10, particle_data);
     particle[8] += particle_data[0x14];
-    if (particle[2] == D_L00_001B2148[0][0]) {
+    if (particle[2] == l00_height_culled_particle_texture_refs[0][0]) {
         *(float *)(particle + 0xC) += height_culled_particle_size_rate_gp * frame_time * 210000.0f;
     }
     if (*(float *)(particle + 0x18) < *(float *)(particle_data + 0x10)) {
@@ -1121,7 +1121,7 @@ void update_mode_controlled_alpha_fade_particle(char *particle) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern unsigned char *D_L00_001B2180[];
+extern unsigned char *l00_gravity_floor_burst_particle_texture_refs[] __asm__("D_L00_001B2180");
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
 unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *initial_velocity, float scale, int life, float floor_z, int col, float gravity, int secondary_color, int big) __asm__("FUN_L00_002738e8");
@@ -1139,7 +1139,7 @@ unsigned char *spawn_gravity_floor_burst_particle(void *initial_position, void *
         }
         particle[3] = big ? 0x48 : 0x44;
         particle[1] = 0;
-        particle[2] = D_L00_001B2180[0][1];
+        particle[2] = l00_gravity_floor_burst_particle_texture_refs[0][1];
         *(int *)(particle + 4) = col;
         *(float *)(particle + 0xC) = scale * 210000.0f;
         particle[8] = (int)random_float_between(0.0f, 255.0f);
@@ -2070,7 +2070,7 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *init
 
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L00_0016024C __attribute__((sda));
+extern short proximity_correction_length_gp __asm__("D_L00_0016024C") __attribute__((sda));
 extern char D_0013F5E0[] __attribute__((section(".data"))  );
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -2116,7 +2116,7 @@ void update_proximity_corrected_size_alpha_tween_particle(char *particle) {
         subtract_vector_xyz(reference_position_delta, *(char **)(particle_data + 0x18) + 0x10, particle_position);
         if (reference_position_delta[0] <= 2.0f && reference_position_delta[1] <= 2.0f) {
             cross_vectors_xyz(proximity_correction_offset, reference_position_delta, ((unsigned char *)D_0013F5E0));
-            fast_vec_normalize_c(proximity_correction_offset, proximity_correction_offset, *(float *)&D_L00_0016024C);
+            fast_vec_normalize_c(proximity_correction_offset, proximity_correction_offset, *(float *)&proximity_correction_length_gp);
             add_vector_xyz_c(particle_position, particle_position, proximity_correction_offset);
             if (reference_position_delta[0] <= 0.5f && reference_position_delta[1] <= 0.5f) {
                 fast_vec_normalize_c(particle_velocity_scratch, reference_position_delta, 0.03f);
@@ -2211,7 +2211,7 @@ typedef struct {
 
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern T1_276078 D_00137B80;
-extern u8 D_L00_001602D0[];
+extern u8 misc_animation_stash_tag[] __asm__("D_L00_001602D0");
 void Load(s32, s32, s32) __asm__("FUN_00216828");
 s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
 void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
@@ -2223,7 +2223,7 @@ void load_misc_animations_into_stash(void) {
         s32 sz = D_00137B80.e[i].n << 7;
         if (sz) {
             Load(stash_source_address, D_00137B80.e[i].a, D_00137B80.e[i].n);
-            D_L00_001B9CF0.stash_handles[i] = stash_send_data(stash_source_address, sz, sz, D_L00_001602D0);
+            D_L00_001B9CF0.stash_handles[i] = stash_send_data(stash_source_address, sz, sz, misc_animation_stash_tag);
         }
     }
 }

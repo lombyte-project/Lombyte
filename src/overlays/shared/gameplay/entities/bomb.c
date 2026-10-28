@@ -476,8 +476,8 @@ typedef struct {
 extern u8 D_0013E520[];
 extern Data D_L00_00173E40;
 extern struct Moby *D_L00_001DD100[];
-extern Node D_L00_001DD150[];
-extern u8 D_L00_001DDF10[];
+extern Node l00_morphoray_chicken_slot_records[] __asm__("D_L00_001DD150");
+extern u8 morphoray_chicken_slot_buffers[] __asm__("D_L00_001DDF10");
 extern s32 D_L00_00161854 __attribute__((sda));
 extern s32 D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
 extern u32 D_L00_00161840[1] __attribute__((sda));
@@ -578,15 +578,15 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
                 moby_vars->unk78 = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;
             } else if (!moby_vars->unk74) {
-                moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-                moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+                moby_vars->unk14 = (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
+                moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
                 spawned_moby->flags |= 0x1020;
                 ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
             }
             ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->unk70 = (void *)1;
         } else if (!moby_vars->unk74) {
-            moby_vars->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
-            moby_vars->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+            moby_vars->unk14 = (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
+            moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
             spawned_moby->flags |= 0x1020;
             ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
         }
@@ -1026,15 +1026,15 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 5 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int moby_set_state_from_check(char *a) __asm__("FUN_L00_002cadc0");
-int moby_set_state_from_check(char *a) {
-    int r = process_moby_suck_cannon_suction(a);
-    if (r == 0) {
-        if (*(unsigned char *)(a + 0x20) == 5)
-            a[0x20] = 1;
+int moby_set_state_from_check(char *checked_moby) {
+    int suction_result = process_moby_suck_cannon_suction(checked_moby);
+    if (suction_result == 0) {
+        if (*(unsigned char *)(checked_moby + 0x20) == 5)
+            checked_moby[0x20] = 1;
     } else {
-        a[0x20] = 5;
+        checked_moby[0x20] = 5;
     }
-    return r;
+    return suction_result;
 }
 #define NOT_SDA
 
@@ -1315,7 +1315,7 @@ extern void add_vector_xyz_2cb418(void *, void *, void *) __asm__("FUN_001f9a10"
 extern void subtract_vector_xyz_2cb418(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void mark_moby_for_removal_2cb418(Moby *) __asm__("FUN_0020c828");
 
-extern f32 D_L00_00161894[2];
+extern f32 homing_shot_pitch_bias[2] __asm__("D_L00_00161894");
 extern f32 D_L00_00161890[2];
 extern f32 jitter __asm__("D_L00_0016187C") __attribute__((sda));
 extern f32 trail_speed __asm__("D_L00_00161880") __attribute__((sda));
@@ -1339,7 +1339,7 @@ void update_homing_shot(Moby *shot_moby) {
     int left;
 
     vars = *(ShotVars_2cb418 **)&shot_moby->pvars;
-    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, -D_L00_00161894[0]);
+    shot_moby->rot.y = fast_add_rotations_2cb418(shot_moby->rot.y, -homing_shot_pitch_bias[0]);
     if (vector_length_xyz_2cb418(vars) < 0.1f) {
         if (vars->timer < scale_game_frames_2cb418(0x23) - scale_game_frames_2cb418(1) && vars->bounces == 0) {
             yaw = vars->rest_yaw;
@@ -1770,7 +1770,7 @@ typedef struct {
 } Ryno_2cc608;
 typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 
-extern char D_L00_00166C80[];
+extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float camera_pos_2cc608[] __asm__("D_L00_00166DC0");
 extern int play_frames_2cc608 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
@@ -1823,7 +1823,7 @@ void ryno_update(struct Moby *ryno_moby) {
     float yaw, pitch;
     int i;
 
-    matcopy_2cc608(&launch_direction_basis, D_L00_00166C80);
+    matcopy_2cc608(&launch_direction_basis, player_camera);
     transpose_2cc608(&view, &launch_direction_basis);
     if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (timer32_2cc608(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {

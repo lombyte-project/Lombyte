@@ -3,14 +3,14 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-extern float D_L01_001CAE60[];
+extern float pool_uv_pairs[] __asm__("D_L01_001CAE60");
 
 void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
 void pool_set_scale(float requested_scale) {
     unsigned int i;
-    float k = requested_scale / D_L01_001CAE60[16];
+    float k = requested_scale / pool_uv_pairs[16];
     for (i = 0; i < 0x5C; i++) {
-        D_L01_001CAE60[i] = D_L01_001CAE60[i] * k;
+        pool_uv_pairs[i] = pool_uv_pairs[i] * k;
     }
 }
 #define NOT_SDA
@@ -22,8 +22,8 @@ void pool_set_scale(float requested_scale) {
 extern void FUN_L01_00261c10(char *a, char *b);
 extern void FUN_L01_00262038(char *a, int i, int c, char *base);
 
-extern short D_L01_00161218 __attribute__((sda));
-extern short D_L01_0016121C __attribute__((sda));
+extern short pool_wave_source_slot_index __asm__("D_L01_00161218") __attribute__((sda));
+extern short pool_wave_next_source_slot_index __asm__("D_L01_0016121C") __attribute__((sda));
 void step_pool_wave_simulation(char *base, int record_count) __asm__("FUN_L01_002b7f30");
 
 void step_pool_wave_simulation(char *base, int record_count) {
@@ -31,16 +31,16 @@ void step_pool_wave_simulation(char *base, int record_count) {
     for (i = 0; i < record_count; i++) {
         char *current_record = base + i * 0x1190;
         if (*(unsigned short *)(current_record + 0x1E) != 0) {
-            int source_slot_offset = *(int *)&D_L01_00161218 * 0x5C0 + 0x50;
+            int source_slot_offset = *(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50;
             FUN_L01_00261c10((char *)0x70000000, current_record + source_slot_offset);
-            FUN_L01_00262038((char *)0x70000000, i, *(int *)&D_L01_0016121C, base);
+            FUN_L01_00262038((char *)0x70000000, i, *(int *)&pool_wave_next_source_slot_index, base);
         }
     }
     {
-        int saved_source_slot_index = *(int *)&D_L01_00161218;
-        int saved_next_source_slot_index = *(int *)&D_L01_0016121C;
-        *(int *)&D_L01_0016121C = saved_source_slot_index;
-        *(int *)&D_L01_00161218 = saved_next_source_slot_index;
+        int saved_source_slot_index = *(int *)&pool_wave_source_slot_index;
+        int saved_next_source_slot_index = *(int *)&pool_wave_next_source_slot_index;
+        *(int *)&pool_wave_next_source_slot_index = saved_source_slot_index;
+        *(int *)&pool_wave_source_slot_index = saved_next_source_slot_index;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
@@ -50,13 +50,13 @@ extern short D_L01_00161220_d __asm__("D_L01_00161220") __attribute__((sda));
 extern void FUN_L01_00261d78(char *, char *, char *, float);
 extern void func_L01_002B90E8_2B9198(void) __asm__("FUN_L01_002b7f30");
 
-extern short D_L01_00161224 __attribute__((sda));
+extern short pool_wave_step_accumulator __asm__("D_L01_00161224") __attribute__((sda));
 void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
 void pool_flush(char *records_base, int record_count) {
-    if (1.0f - pool_light[8] <= *(float *)&D_L01_00161224) {
-        *(float *)&D_L01_00161224 = pool_light[8];
+    if (1.0f - pool_light[8] <= *(float *)&pool_wave_step_accumulator) {
+        *(float *)&pool_wave_step_accumulator = pool_light[8];
         func_L01_002B90E8_2B9198();
-        *(int *)&D_L01_00161220_d = *(int *)&D_L01_0016121C;
+        *(int *)&D_L01_00161220_d = *(int *)&pool_wave_next_source_slot_index;
     } else {
         *(int *)&D_L01_00161220_d = 2;
         if (record_count > 0) {
@@ -65,24 +65,24 @@ void pool_flush(char *records_base, int record_count) {
             do {
                 if (*(unsigned short *)(current_record + 0x1E) != 0) {
                     FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
-                                     current_record + (*(int *)&D_L01_0016121C * 0x5C0 + 0x50),
-                                     current_record + (*(int *)&D_L01_00161218 * 0x5C0 + 0x50),
-                                     *(float *)&D_L01_00161224);
+                                     current_record + (*(int *)&pool_wave_next_source_slot_index * 0x5C0 + 0x50),
+                                     current_record + (*(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50),
+                                     *(float *)&pool_wave_step_accumulator);
                 }
                 k--;
                 current_record += 0x1190;
             } while (k != 0);
         }
     }
-    *(float *)&D_L01_00161224 = *(float *)&D_L01_00161224 + pool_light[8];
+    *(float *)&pool_wave_step_accumulator = *(float *)&pool_wave_step_accumulator + pool_light[8];
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_L01_001CAFE0[];
+extern float pool_base_uv_pairs[] __asm__("D_L01_001CAFE0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L01_001CB1B0[];
+extern int pool_uv_offset_selectors[] __asm__("D_L01_001CB1B0");
 
 void update_animated_offset_pairs(float *offset_animation_state) __asm__("FUN_L01_002b80d0");
 
@@ -114,12 +114,12 @@ void update_animated_offset_pairs(float *offset_animation_state) {
     second_u_offset = offset_animation_state[8] + fast_cos(offset_animation_state[13]) * offset_animation_state[16];
     second_v_offset = offset_animation_state[9] + fast_sin(offset_animation_state[13]) * offset_animation_state[16];
     for (i = 0; i < 0x5C; i += 2) {
-        if (D_L01_001CB1B0[i >> 1] == 0) {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + first_u_offset;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + first_v_offset;
+        if (pool_uv_offset_selectors[i >> 1] == 0) {
+            pool_uv_pairs[i] = pool_base_uv_pairs[i] + first_u_offset;
+            pool_uv_pairs[i + 1] = pool_base_uv_pairs[i + 1] + first_v_offset;
         } else {
-            D_L01_001CAE60[i] = D_L01_001CAFE0[i] + second_u_offset;
-            D_L01_001CAE60[i + 1] = D_L01_001CAFE0[i + 1] + second_v_offset;
+            pool_uv_pairs[i] = pool_base_uv_pairs[i] + second_u_offset;
+            pool_uv_pairs[i + 1] = pool_base_uv_pairs[i + 1] + second_v_offset;
         }
     }
 }

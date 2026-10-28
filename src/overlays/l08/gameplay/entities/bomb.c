@@ -293,7 +293,7 @@ typedef struct {
 
 #include "rnc/overlay/collision.h"
 extern CollisionHit D_L08_00174640;
-extern blk16 D_L08_00161868;
+extern blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
@@ -366,7 +366,7 @@ void update_bomb(char *moby) {
             float lo = -1.0f;
             float hi = 1.0f;
             int *selected_table_entry;
-            table_or_bounce_scratch = D_L08_00161868;
+            table_or_bounce_scratch = l08_bomb_moving_particle_initial_colors;
             *(v128_36F8 *)random_direction = 0;
             random_direction[0] = random_float_between_c5(lo, hi);
             random_direction[1] = random_float_between_c5(lo, hi);
@@ -1355,7 +1355,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
 
 extern int water_entry_plane_initialized_gp __asm__("D_L08_00161970") __attribute__((sda));
-extern float D_L08_001D7060[4];
+extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -1386,21 +1386,21 @@ void update_hero_water_entry_effects(struct Moby *moby) {
 
     if (water_entry_plane_initialized_gp == 0) {
         water_entry_plane_initialized_gp = 1;
-        prepare_scaled_table_with_byte_128(D_L08_001D7060, 0.6666667f);
+        prepare_scaled_table_with_byte_128(water_entry_plane_data, 0.6666667f);
     }
     enqueue_callback_list_1(FUN_L08_002da0d0, moby);
     if (current_level_index != 8)
         return;
-    if (!(hero.motion.pos.f[2] < D_L08_001D7060[2]))
+    if (!(hero.motion.pos.f[2] < water_entry_plane_data[2]))
         return;
-    if (!(D_L08_001D7060[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
+    if (!(water_entry_plane_data[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
         return;
     if (voice_is_playing(hero.moby, hero.health.unk22B2)) {
         release_voice_slot(hero.health.unk22B2);
         hero.health.unk22B2 = -1;
     }
     qcopy(&pos, &hero.motion.pos);
-    pos.f[2] = D_L08_001D7060[2];
+    pos.f[2] = water_entry_plane_data[2];
     water_entry_moby = spawn_burst_moby(&pos, 3.0f);
     if (water_entry_moby)
         water_entry_moby[0x23] = 0x70;
@@ -1417,10 +1417,10 @@ void update_hero_water_entry_effects(struct Moby *moby) {
         unsigned char *splash;
         random_vector(spray_velocity_or_splash_position.f, 1.0f, 1.0f);
         add_vector_xyz(&spray_velocity_or_splash_position, &spray_velocity_or_splash_position, &pos);
-        spray_velocity_or_splash_position.f[2] = D_L08_001D7060[2] + 0.05f;
+        spray_velocity_or_splash_position.f[2] = water_entry_plane_data[2] + 0.05f;
         sc = random_float_between(0.7f, 1.0f);
         sp = i == 0 ? 2.0f : -2.0f;
-        splash = spawn_splash(&spray_velocity_or_splash_position, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
+        splash = spawn_splash(&spray_velocity_or_splash_position, D_L08_0015F580, &water_entry_plane_data[2], sc, sp);
         if (splash)
             *(short *)(splash + 0xA) = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
     }
@@ -1609,10 +1609,10 @@ extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
 extern f32 fast_vec_length_c2(void *) __asm__("func_001F9AF0");
 extern float D_L08_00161978_gp __asm__("D_L08_00161978") __attribute__((sda));
-extern float D_L08_0016197C_gp __asm__("D_L08_0016197C") __attribute__((sda));
-extern float D_L08_00161988_gp __asm__("D_L08_00161988") __attribute__((sda));
-extern float D_L08_0016198C_gp __asm__("D_L08_0016198C") __attribute__((sda));
-extern float D_L08_00161990_gp __asm__("D_L08_00161990") __attribute__((sda));
+extern float l08_bombthrower_throw_timing_speed_gp __asm__("D_L08_0016197C") __attribute__((sda));
+extern float l08_bombthrower_aim_shortening_rate_gp __asm__("D_L08_00161988") __attribute__((sda));
+extern float l08_bombthrower_death_horizontal_knockback_speed_gp __asm__("D_L08_0016198C") __attribute__((sda));
+extern float l08_bombthrower_death_vertical_knockback_speed_gp __asm__("D_L08_00161990") __attribute__((sda));
 extern float D_L08_001675C0[];
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -1725,8 +1725,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
             vars->i94 = 9;
             vars->f84 = 0.0005f;
             vars->f80 = frame_time_sq * 30.0f;
-            vars->f88 = D_L08_0016198C_gp * frame_time;
-            vars->f8C = D_L08_00161990_gp * frame_time;
+            vars->f88 = l08_bombthrower_death_horizontal_knockback_speed_gp * frame_time;
+            vars->f8C = l08_bombthrower_death_vertical_knockback_speed_gp * frame_time;
             vars->bAD = 0;
             hero_bytes = (char *)&hero;
             trooper_start_knockback(moby, vars->blk70,
@@ -1890,8 +1890,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
             subtract_vector_xyz(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length_c2(aim);
-            time = distance / FUN_L04_001f1978(D_L08_0016197C_gp);
-            distance = distance - (D_L08_00161988_gp * time + 2.0f);
+            time = distance / FUN_L04_001f1978(l08_bombthrower_throw_timing_speed_gp);
+            distance = distance - (l08_bombthrower_aim_shortening_rate_gp * time + 2.0f);
             if (10.0f < distance) {
                 distance = 10.0f;
             } else if (distance < 3.0f) {
@@ -2001,7 +2001,7 @@ typedef struct {
 
 extern s32 D_L08_0015F5C4;
 extern s32 D_L08_0015F594 __attribute__((sda));
-extern LiftLock D_L08_00179C10;
+extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
 extern s32 D_0013CAE4[];
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
@@ -2069,7 +2069,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         if (hero.ground_moby == moby) {
-            if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
+            if (l08_shuttle_departure_lock.busy == 0 && l08_shuttle_departure_lock.owner == -1) {
                 qcopy(&hero_position_probe, &hero.motion.pos);
                 resolve_point_path_segment_xy_clearance(vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (distance_xyz(&hero.motion.pos, &hero_position_probe) < 0.001f) {
@@ -2100,7 +2100,7 @@ void shuttle_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
 
-extern char D_L08_001DB280[];
+extern char shuttle_stop_local_points[] __asm__("D_L08_001DB280");
 extern int D_L08_001B0CB0[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -2108,7 +2108,7 @@ void update_shuttle_stop_world_points(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int *stop_point_table = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
     if (*stop_point_table == 8) {
-        char *local_point = D_L08_001DB280;
+        char *local_point = shuttle_stop_local_points;
         char *moby_rotation_basis = &moby->rot_row0;
         char *pos = &moby->pos;
         char *world_point = (char *)stop_point_table + 0x10;
@@ -2888,9 +2888,9 @@ void update_path_following_moby(char *moby) {
     float previous_position[4];
     float frame_displacement[4];
     char *moby_vars = *(char **)(moby + 0x78);
-    char *pos = moby + 0x10;
+    char *moby_position = moby + 0x10;
     int *path;
-    qcopy(previous_position, pos);
+    qcopy(previous_position, moby_position);
     path = (int *)D_L08_001B0CB0[*(int *)moby_vars];
     switch (*(unsigned char *)(moby + 0x20)) {
     case MOBY_STATE_INITIALIZE_PATH:
@@ -2930,13 +2930,13 @@ void update_path_following_moby(char *moby) {
         dd = fast_add_rotations(*(float *)(moby + 0x40), falling_rotation_step);
         *(float *)(moby + 0x40) = *(float *)(moby + 0x40) + dd;
         *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(falling_velocity), *(float *)(moby_vars + 0x18));
-        add_vector_xyz(pos, pos, falling_velocity);
+        add_vector_xyz(moby_position, moby_position, falling_velocity);
         if (*(float *)(moby + 0x18) < falling_removal_height) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (coll_sphere(1.25f, pos, 0, moby)) {
-            spawn_explosion(moby, falling_velocity, pos, 0.0f, 0.0f, 0x14, 0x28, 0x10, falling_removal_height, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
+        if (coll_sphere(1.25f, moby_position, 0, moby)) {
+            spawn_explosion(moby, falling_velocity, moby_position, 0.0f, 0.0f, 0x14, 0x28, 0x10, falling_removal_height, 5.0f, 9.0f, 1.0f, -1, falling_gravity, 1, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
         }

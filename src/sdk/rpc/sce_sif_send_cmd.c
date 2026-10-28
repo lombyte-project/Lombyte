@@ -11,7 +11,7 @@ typedef struct {
     u32 size;
     u32 mode;
 } SifDma;
-extern u32 D_00154E60[];
+extern u32 sif_command_dma_destination[] __asm__("D_00154E60");
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 extern s32 sceSifSetDma();
 extern s32 isceSifSetDma();
@@ -40,7 +40,7 @@ s32 _sceSifSendCmd(u32 packet, s32 mode, SifCmd *cmd, s32 size, u32 extra_data_s
         cmd->addr = 0;
         cmd->dsize = 0;
     }
-    addr0 = D_00154E60[0];
+    addr0 = sif_command_dma_destination[0];
     tags[num].data = (u32)cmd;
     tags[num].addr = addr0;
     tags[num].size = size;

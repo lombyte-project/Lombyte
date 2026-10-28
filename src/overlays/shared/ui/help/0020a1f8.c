@@ -9,7 +9,9 @@ typedef struct {
 } S0020a1f8;
 extern S0020a1f8 D_L00_0017A680_0020a1f8 __asm__("D_L00_0017A680");
 /* Stores the two floats in D_L00_0017A680. */
-void FUN_L00_0020a1f8(float a, float b) {
+void set_second_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1f8");
+
+void set_second_hero_easing_parameters(float a, float b) {
     S0020a1f8 *destination = &D_L00_0017A680_0020a1f8;
     destination->a = a;
     destination->b = b;

@@ -489,7 +489,7 @@ typedef struct {
     int mode;
 } L16MovementPlayer;
 
-extern char *D_L05_00174258[];
+extern char *collision_hit_moby[] __asm__("D_L05_00174258");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
@@ -560,7 +560,7 @@ void integrate_hero_motion_with_collisions(void) {
         work.f[2] += 0.5f;
         add_vector_xyz(plane.f, work.f, (char *)position + 0x60);
         if (collision_line(position, plane.f, 2, 0, 0)) {
-            char *hit = D_L05_00174258[0];
+            char *hit = collision_hit_moby[0];
 
             if (!hit || *(short *)(hit + 0xA6) == 0x1F6 || *(short *)(hit + 0xA6) == 0x59F) {
                 player = (L16MovementPlayer *)(((char *)((char *)&hero)));

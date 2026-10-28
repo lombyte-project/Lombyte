@@ -235,12 +235,12 @@ void sync_hero_slot3_animation_speed(void) {
         *(float *)(((char *)base->items[3].moby2) + 0x58) = base->anim_speed;
     }
 }
-extern s16 *D_001415CC[];
+extern s16 *key_value_pair_tables[] __asm__("D_001415CC");
 /* Looks a0 up in the -1-terminated pair list at D_001415CC[0]; stores the pair value in *a1. */
 s32 lookup_s16_pair_value(s32 key, s32 *out_value) __asm__("FUN_L00_002321c0");
 
 s32 lookup_s16_pair_value(s32 key, s32 *out_value) {
-    s16 *pair_table = D_001415CC[0];
+    s16 *pair_table = key_value_pair_tables[0];
     s16 *current_pair;
     if (pair_table == 0) {
         return 0;
@@ -402,7 +402,7 @@ extern char D_L00_00196D00[] __attribute__((section(".data")));
 extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") __attribute__((section(".sdata")));
 extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L00_0015F6E0 __attribute__((sda));
+extern short hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");
@@ -467,7 +467,7 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
         *(unsigned char *)(*(int *)(*(int *)(hero_animation_moby + 0x24) + sequence_pointer_byte_offset + 0x48) + 0x11);
     hero_animation_dispatch_state->anim_changing = 1;
     if (blend_frames_or_selector < 0.0f) {
-        blend_frames_or_selector = *(int *)((char *)&D_L00_0015F6E0 + hero_animation_dispatch_state->anim_blend_curve * 4);
+        blend_frames_or_selector = *(int *)((char *)&hero_blend_curve_frame_counts + hero_animation_dispatch_state->anim_blend_curve * 4);
     }
     if (hero_animation_dispatch_state->vehicle_mode == 0) {
         blend_hero_slot3_mapped_animation_pair(requested_animation_id, starting_frame_index, blend_frames_or_selector);
@@ -1234,7 +1234,7 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
 }
 extern s32 D_00140408[];
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
-extern s32 D_0013DEA0[];
+extern s32 weapon_ammo_used_counts[] __asm__("D_0013DEA0");
 /* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
 s32 use_ammo(s32 weapon_index, s32 amount) {
@@ -1254,7 +1254,7 @@ s32 use_ammo(s32 weapon_index, s32 amount) {
         return 0;
     }
     weapon_ammo_counts[weapon_index] = available_ammo - amount;
-    D_0013DEA0[weapon_index] = D_0013DEA0[weapon_index] + amount;
+    weapon_ammo_used_counts[weapon_index] = weapon_ammo_used_counts[weapon_index] + amount;
     return 1;
 }
 extern int weapon_ammo_counts[] __asm__("D_0013D428");

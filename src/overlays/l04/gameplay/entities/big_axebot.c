@@ -2307,7 +2307,7 @@ extern char *D_L04_0015FFD8;
 extern char *D_L04_00173FD8 __attribute__((section(".data")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166E00[];
-extern char D_L04_001DBC80[];
+extern char blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L04_00166F40[4];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -2461,7 +2461,7 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     path_index_when_selector_nonzero = *(int *)(data + 0xE0);
     if (path_index_when_selector_nonzero == -1 || (path_index_when_selector_zero = *(int *)(data + 0xE4), path_index_when_selector_zero == -1)) {
-        DebugPrint(D_L04_001DBC80, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
+        DebugPrint(blarg_trooper_missing_path_fields_format, truncate_float_to_s32((float)(((char *)moby - D_L04_0015FFD8) >> 8)));
         destroy_blarg_trooper(moby);
         return;
     }
@@ -3009,7 +3009,7 @@ typedef struct {
 } MobyClassHeader;
 
 extern char *moby_array __asm__("D_L04_0015FFD8") MACRO_ADDR;
-extern u8 D_L04_00197D40[];                 /* class slot by oclass */
+extern u8 level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40");                 /* class slot by oclass */
 extern struct MobyClass *D_L04_00197480[];  /* class header by slot */
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
 extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -3043,7 +3043,7 @@ void eudora_bridge_update(struct Moby *moby) {
         switch_follower_vars->voice = -1;
         if (moby->oclass == 0x1B0) {
             moby->oclass = 0x41C;
-            moby->class_slot = D_L04_00197D40[0x41C];
+            moby->class_slot = level04_moby_class_slot_by_oclass[0x41C];
             moby->pclass = D_L04_00197480[moby->class_slot];
             moby->unk71 = 0xFF;
             moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
@@ -3076,7 +3076,7 @@ void eudora_bridge_update(struct Moby *moby) {
                 play_moby_voice(1, 0, moby);
                 if (moby->oclass == 0x41C && *linked_switch_travel == 1.0f) {
                     moby->oclass = 0x1B0;
-                    moby->class_slot = D_L04_00197D40[0x1B0];
+                    moby->class_slot = level04_moby_class_slot_by_oclass[0x1B0];
                     moby->pclass = D_L04_00197480[moby->class_slot];
                     moby->unk71 = 0xFF;
                     moby->scale = ((MobyClassHeader *)moby->pclass)->scale;

@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/update_mpeg_frame_size/func_0012C4C8.s",
-            func_0012C4C8);
-#else
-/* Near miss (sdk BYTES 22/170, size-exact): left is the schedule of the frame_size spill and the
- * mpeg->height/width stores. */
 #include "rnc/sdk/libmpeg.h"
 
 extern s32 InitializeReferenceImage();
@@ -25,6 +17,7 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     u8 *field3;
     u8 *field4;
     u8 *field5;
+    u8 *last_field;
     u8 *pool;
     s32 mpeg2;
     s32 mb_height;
@@ -51,16 +44,18 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     decoder->mb_height = mb_height;
     height = mb_height << 4;
     width = decoder->mb_width << 4;
-    if (width == mpeg->width) {
+    if (width != mpeg->width) {
+        last_field = (u8 *)decoder + 0x528;
+    } else {
         if (height == mpeg->height) {
             return;
         }
-        field5 = (u8 *)decoder + 0x528;
-    } else {
-        field5 = (u8 *)decoder + 0x528;
+        last_field = (u8 *)decoder + 0x528;
     }
     mpeg->height = height;
-    mpeg->width = width;
+    /* Fakematch: the asm stores mpeg->width and moves last_field into field5 in one
+       step, so field5's spill follows both stores as in retail. */
+    __asm__("sw %2,%1" : "=r"(field5), "=m"(mpeg->width) : "r"(width), "0"(last_field) : "memory");
     frame_size = (u32)(width * 0x180 * height) >> 8;
     pool = (u8 *)decoder + 0x108;
     frame0 = (u8 *)decoder + 0x1E8;
@@ -88,4 +83,3 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     InitializeReferenceImage(field4, width, height >> 1);
     InitializeReferenceImage(field5, width, height >> 1);
 }
-#endif /* NON_MATCHING */

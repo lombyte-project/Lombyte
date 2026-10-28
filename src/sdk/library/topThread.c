@@ -3,7 +3,7 @@
 #include "types.h"
 #include "rnc/sdk/top_thread.h"
 
-extern u8 D_001526E8[];
+extern u8 thread_command_error_message[] __asm__("D_001526E8");
 
 extern s32 WaitSema(s32 sema);
 extern s32 WakeupThread(s32 id);
@@ -36,7 +36,7 @@ void topThread(TopThreadQueue *queue) {
             SuspendThread(queue->requests[i].argument);
             break;
         default:
-            kprintf((const char *)D_001526E8);
+            kprintf((const char *)thread_command_error_message);
             break;
         }
     }

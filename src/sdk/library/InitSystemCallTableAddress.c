@@ -13,7 +13,7 @@ struct SyscallMidTable {
     s32 unkC;
 };
 extern u32 D_00130308[];
-extern struct SyscallMidTable D_00130310;
+extern struct SyscallMidTable syscall_table_address_init_bindings __asm__("D_00130310");
 extern s32 InvokeKernelSyscall0083_Rfu();
 extern s32 Rfu116SetSyscallMid();
 extern void FindKernelAddress();
@@ -24,8 +24,8 @@ void InitSystemCallTableAddress(void) {
     s32 var_2_36;
     u32 copy_addr;
     u32 find_addr;
-    Rfu116SetSyscallMid(D_00130310.unk0, D_00130310.unk4);
-    Rfu116SetSyscallMid(D_00130310.unk8, D_00130310.unkC);
+    Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk0, syscall_table_address_init_bindings.unk4);
+    Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk8, syscall_table_address_init_bindings.unkC);
     find_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &FindKernelAddress);
     find_addr = find_cursor - 0x20C;
     copy_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &KernelCopyRdata);

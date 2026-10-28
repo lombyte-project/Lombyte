@@ -33,7 +33,7 @@ struct O2 {
     s32 *f74;
 };
 #include "rnc/ui/menus/menu_system.h"
-extern struct MenuPage D_001D45C8; /* page made current and next at init */
+extern struct MenuPage menu_preview_initial_page __asm__("D_001D45C8"); /* page made current and next at init */
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
@@ -56,8 +56,8 @@ void initialize_menu_preview_scene(void) {
     s32 i;
     s32 preview_workspace_start, graphics_workspace_base, help_text_buffer_start, graphics_buffer_start;
     menu_system.state = 2;
-    menu_system.current = &D_001D45C8;
-    menu_system.next = &D_001D45C8;
+    menu_system.current = &menu_preview_initial_page;
+    menu_system.next = &menu_preview_initial_page;
     menu_system.close_locked = 0;
     fast_vec_scale((s32)D_0019C150, (s32)&menu_preview_lighting_scale_source_gp, 1.0f);
     qcopy(D_0019C150 - 0x10, &menu_preview_lighting_copy_source_gp);

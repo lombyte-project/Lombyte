@@ -18,7 +18,7 @@ extern char D_L12_001CBF40_c[] __asm__("D_L12_001CBF40");
 extern char D_L12_001CAD00_c[] __asm__("D_L12_001CAD00");
 extern char D_L12_001CBE00_c[] __asm__("D_L12_001CBE00");
 
-extern char D_L12_0020BC90[];
+extern char water_tile_limit_message[] __asm__("D_L12_0020BC90");
 extern char D_L12_00167240[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 void initialize_level_12_slot_grid_neighbors(int selected_slot_index) __asm__("FUN_L12_002bf770");
@@ -34,9 +34,9 @@ extern void initialize_slots_c(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_c(float) __asm__("FUN_L01_002b7ef0");
 extern void copy_slot_c(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void finish_slots_c(void *, int) __asm__("FUN_L01_002b7fe0");
-extern float D_L12_00180340[8];
+extern float water_tile_direction_inputs[8] __asm__("D_L12_00180340");
 extern int D_L12_001612D0;
-extern void *D_L12_001612D4;
+extern void *l12_water_tile_position_records __asm__("D_L12_001612D4");
 extern int D_L12_001612D8;
 extern float D_L12_0016120C;
 extern float D_L12_00161210;
@@ -75,7 +75,7 @@ void update_level_12_water_tile(struct Moby *moby) {
         i = (data[3] = next_water_tile_index_gp) + 1;
         next_water_tile_index_gp = i;
         if (i > 0x7f) {
-            slot_limit_c((int)D_L12_0020BC90);
+            slot_limit_c((int)water_tile_limit_message);
         }
         moby->scale = moby->pclass->scale * 2.0f;
         data[0] = 3;
@@ -98,7 +98,7 @@ void update_level_12_water_tile(struct Moby *moby) {
             *(float *)(D_L12_001CAD00_c + 0x14) = 1.0f;
             *(float *)(D_L12_001CAD00_c + 0x18) = 0.9f;
             *(float *)(D_L12_001CAD00_c + 0x20) = 0.1f;
-            value = angle_c(D_L12_00180340[4], D_L12_00180340[5]);
+            value = angle_c(water_tile_direction_inputs[4], water_tile_direction_inputs[5]);
             *(float *)(D_L12_001CAD00_c + 0x30) = sine_c(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x34) = cosine_c(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x38) = -0.57735f;
@@ -107,7 +107,7 @@ void update_level_12_water_tile(struct Moby *moby) {
             *(u8 *)(D_L12_001CAD00_c + 0x3c) = 0x1c;
             *(u8 *)(D_L12_001CAD00_c + 0x3d) = 0x40;
             D_L12_001612D0 = (int)D_L12_001CBF40_c;
-            D_L12_001612D4 = D_L12_001CBE00_c;
+            l12_water_tile_position_records = D_L12_001CBE00_c;
             D_L12_001612D8 = 17;
             D_L12_0016120C = 32768.0f;
             D_L12_00161210 = 255.0f;

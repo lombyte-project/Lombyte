@@ -12,11 +12,11 @@
 /* draw a list of effect entries into the scratchpad */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
 
-extern char D_L12_001CB7A0[];
+extern char textured_effect_gs_state_packet[] __asm__("D_L12_001CB7A0");
 struct Pkt611c0 {
     int *p;
 };
-extern struct Pkt611c0 D_L12_001611C0;
+extern struct Pkt611c0 l12_render_packet_cursor __asm__("D_L12_001611C0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
@@ -32,11 +32,11 @@ void draw_textured_effect_list(void *list_, int count, int context_one_texture_s
     int sphere_check_result;
     vu1_add_g_sregister(6, context_one_texture_state);
     vu1_add_g_sregister(7, context_two_texture_state);
-    D_L12_001611C0.p[0] = 0x30000009;
-    D_L12_001611C0.p[1] = (int)D_L12_001CB7A0;
-    D_L12_001611C0.p[2] = 0;
-    D_L12_001611C0.p[3] = 0x50000009;
-    D_L12_001611C0.p += 4;
+    l12_render_packet_cursor.p[0] = 0x30000009;
+    l12_render_packet_cursor.p[1] = (int)textured_effect_gs_state_packet;
+    l12_render_packet_cursor.p[2] = 0;
+    l12_render_packet_cursor.p[3] = 0x50000009;
+    l12_render_packet_cursor.p += 4;
     font_queue_vu_state();
     sp = (int *)0x70000000;
     for (i = 0xB3; i >= 0; i--) {
@@ -63,7 +63,7 @@ typedef struct {
 } L12MobyList;
 
 extern L12MobyList D_L12_0016CCE0;
-extern unsigned char D_L12_0017C8C0[];
+extern unsigned char l12_npc_big_head_manipulator[] __asm__("D_L12_0017C8C0");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void apply_npc_big_head_cheat(char *moby) __asm__("FUN_L12_002e6b60");
@@ -76,7 +76,7 @@ void apply_npc_big_head_cheat(char *moby) {
             char *candidate_moby = D_L12_0016CCE0.mobys[i];
 
             if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
-                unsigned char *manipulator = D_L12_0017C8C0;
+                unsigned char *manipulator = l12_npc_big_head_manipulator;
 
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 1, manipulator);
@@ -95,14 +95,14 @@ void apply_npc_big_head_cheat(char *moby) {
 /* calls func_L12_002BD3D0 with two looked-up ids */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
 
-extern char D_L12_001F5480[];
+extern char level_12_effect_entries[] __asm__("D_L12_001F5480");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern void draw_textured_effect_list(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void draw_level_12_effects(void) __asm__("FUN_L12_002e71b0");
 
 void draw_level_12_effects(void) {
-    draw_textured_effect_list(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
+    draw_textured_effect_list(level_12_effect_entries, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
 }
 
 f32 D_L15_0017CA60[1] __attribute__((section(".data"))) = {0};

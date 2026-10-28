@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/storage/memory_card/mc_data.h"
-extern char D_001E81D0[];
+extern char out_of_date_save_message[] __asm__("D_001E81D0");
 extern s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
 extern void DebugPrint(char *, ...);
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
@@ -14,7 +14,7 @@ void memcard_restore_game(u8 *save_buffer) {
     s32 i;
 
     if (saved_game_span_bytes != size0 || ((s32 *)save_buffer)[1] != size1) {
-        DebugPrint(D_001E81D0);
+        DebugPrint(out_of_date_save_message);
         return;
     }
     save_buffer += 8;

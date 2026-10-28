@@ -17,7 +17,7 @@ typedef struct {
     FRow dir;
 } LightRec;
 
-extern FRow D_0018CAA0[4];
+extern FRow light_quad_vertex_template[4] __asm__("D_0018CAA0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
@@ -31,7 +31,7 @@ extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
    needs its own counter, not the one the setup loop used. */
 void draw_light_quads(void) __asm__("FUN_001f4880");
 
-extern LightRec D_0018E340[];
+extern LightRec light_quad_records[] __asm__("D_0018E340");
 void draw_light_quads(void) {
     FRow quad_vertices[4];
     int colors[4];
@@ -46,24 +46,24 @@ void draw_light_quads(void) {
     pkt[0] = 5;
     pkt[3] = 0x8000000044;
     for (j = 0; j < 4; j++) {
-        uv[j][0] = D_0018CAA0[j].v[2];
-        uv[j][1] = D_0018CAA0[j].v[3];
+        uv[j][0] = light_quad_vertex_template[j].v[2];
+        uv[j][1] = light_quad_vertex_template[j].v[3];
         colors[j] = 0x40808080;
     }
     for (i = 0; i < effect_quad_count; i++) {
         float radius;
         int k;
 
-        qcopy(&dir, &D_0018E340[i].dir);
+        qcopy(&dir, &light_quad_records[i].dir);
         fast_vec_normalize(&dir, &dir, 1.0f);
-        radius = D_0018E340[i].pos.v[3];
+        radius = light_quad_records[i].pos.v[3];
         for (k = 0; k < 4; k++) {
-            float cx = D_0018CAA0[k].v[0];
+            float cx = light_quad_vertex_template[k].v[0];
             float vx = dir.v[0];
-            float cy = D_0018CAA0[k].v[1];
+            float cy = light_quad_vertex_template[k].v[1];
             float corner_normal_dot = cx * vx + cy * dir.v[1];
 
-            qcopy(&quad_vertices[k], &D_0018E340[i].pos);
+            qcopy(&quad_vertices[k], &light_quad_records[i].pos);
             quad_vertices[k].v[0] += (cx - vx * corner_normal_dot) * radius;
             quad_vertices[k].v[1] += (cy - dir.v[1] * corner_normal_dot) * radius;
             quad_vertices[k].v[2] -= dir.v[2] * corner_normal_dot * radius;

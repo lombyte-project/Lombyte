@@ -13,13 +13,13 @@ void FUN_L00_00262cf0(void *destination, void *base_vector) {
 typedef struct {
     s32 v[19];
 } T;
-extern T D_L00_001E9060;
+extern T l00_planet_unlock_dialogue_message_ids __asm__("D_L00_001E9060");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 void queue_planet_unlock_message(s32 i) __asm__("FUN_L00_00262d38");
 
 void queue_planet_unlock_message(s32 i) {
-    T dialogue_message_ids = D_L00_001E9060;
+    T dialogue_message_ids = l00_planet_unlock_dialogue_message_ids;
     if (i < 0)
         i = 0;
     if (i > 18)

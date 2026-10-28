@@ -49,7 +49,7 @@ typedef struct {
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
-extern S166D80 D_L00_00166C80;
+extern S166D80 player_camera __asm__("D_L00_00166C80");
 extern S17A780 D_L00_0017A680;
 extern S17BEB8 D_L00_0017BDB8;
 extern char D_0013E550[];
@@ -1998,15 +1998,15 @@ void hero_update_transitions(void) {
                 case HERO_STATE_RUN_JUMP:
                 case HERO_STATE_PACK_JUMP:
                 case HERO_STATE_HIGH_JUMP:
-                case 12:
-                case 13:
+                case HERO_STATE_STORED_HEADING_JUMP:
+                case HERO_STATE_JUMP_WITH_TRANSFORM_TRAIL:
                 case HERO_STATE_DOUBLE_JUMP:
-                case 15:
+                case HERO_STATE_JUMP_WITH_VELOCITY_KEY_PROFILE:
                 case HERO_STATE_PACK_LONG_JUMP:
                 case HERO_STATE_REPEATABLE_JUMP:
                 case HERO_STATE_WATER_SURFACE_JUMP:
                 case HERO_STATE_LEDGE_JUMP:
-                case 60:
+                case HERO_STATE_JUMP_WITH_HEALTH_DAMAGE:
                 case HERO_STATE_JUMP_FROM_RESPAWN_WAIT:
                     if (hero.can_chain_high_jump != 0) {
                         int t = get_hero_high_jump_input_window_frames();
@@ -2815,8 +2815,8 @@ void hero_update_transitions(void) {
                         int fr;
 
                         hero.rail_land_frames = scale_game_frames(1);
-                        D_L00_00166C80.f160 = 0.15f;
-                        D_L00_00166C80.f168 = scale_game_frames(0x1E);
+                        player_camera.f160 = 0.15f;
+                        player_camera.f168 = scale_game_frames(0x1E);
                         fr = truncate_float_to_s32(hero.jump_land_anim_frame) + 3;
                         if (hero.anim_frame < hero.target_anim_frame) {
                             set_hero_animation(moby[0x53], fr, scale_game_frames(6));

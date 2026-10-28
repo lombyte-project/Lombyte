@@ -143,7 +143,7 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
-extern void FUN_L00_002648e0(void);
+extern void update_all_mobys_profiled(void) __asm__("FUN_L00_002648e0");
 extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 extern void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
@@ -263,7 +263,7 @@ void handle_pause_input(void) {
         FUN_L00_00297e30_c();
     if (DBG(2)) {
         count_expired_mobys();
-        FUN_L00_002648e0();
+        update_all_mobys_profiled();
         enqueue_voice_request();
         update_ambience_target_cycle();
     }
@@ -868,7 +868,7 @@ extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
 extern void FUN_001e93b0(char *, s32);
 extern void FUN_001f97b0(void);
-extern char D_L00_001E9480[];
+extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
 void prepare_movie_playback(s32 sector, s32 size, s32 language) {
@@ -914,7 +914,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         wait_for_graphics_pipeline_idle(0, 0);
     }
     if (gs_address > 0x400000) {
-        FUN_001e93b0(D_L00_001E9480, gs_address - 0x400000);
+        FUN_001e93b0(mpeg_memory_alloc_error_format, gs_address - 0x400000);
         FUN_001f97b0();
     }
 }
@@ -1084,7 +1084,7 @@ void end_slideshow(void) {
 }
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern char D_0013D1D0[];
-extern s32 D_L00_00173BF0[];
+extern s32 slideshow_frame_thresholds[] __asm__("D_L00_00173BF0");
 extern void FUN_0022ca50(void);
 
 void update_slideshow(void) __asm__("FUN_L00_00299c48");
@@ -1106,7 +1106,7 @@ void update_slideshow(void) {
         skip_check = 0;
     }
     if (slideshow.state == 0) {
-        if (slideshow.frame >= D_L00_00173BF0[slideshow.slide] - 0x24) {
+        if (slideshow.frame >= slideshow_frame_thresholds[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
                 update_audio_stream_until_idle(1);
             }
@@ -1571,7 +1571,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     f12dc80_29ab70();
 }
 extern s32 D_L00_0015F3FC;
-extern s32 D_L00_001CA020[];
+extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
@@ -1638,7 +1638,7 @@ void start_vendor_exit_cutscene(void) {
     index = D_L00_001CA4C0_29ad08.f48;
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
-    item = D_L00_001CA020[index];
+    item = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
@@ -1715,7 +1715,7 @@ extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern unsigned char D_001516EC[];
+extern unsigned char queued_dialogue_id[] __asm__("D_001516EC");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void handle_vendor_auxiliary_moby_event(int vendor_event) __asm__("FUN_L00_0029b4d8");
@@ -1748,7 +1748,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
                     *(int *)(vendor_state_base + 0x3C) = selection_variant_index;
                     vendor_auxiliary_reaction_started = 1;
                     D_L00_00161194 = 0;
-                    *(int *)(D_001516EC) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
+                    *(int *)(queued_dialogue_id) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
                     auxiliary_moby[0x20] = 0xB;
                 }
             }
@@ -1759,7 +1759,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
         *(int *)(vendor_state_base + 0x3C) = ready_variant_index;
         vendor_auxiliary_reaction_started = vendor_event;
         D_L00_00161194 = 0;
-        *(int *)(D_001516EC) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
+        *(int *)(queued_dialogue_id) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby[0x53] != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
         auxiliary_moby[0x20] = 10;
@@ -1937,13 +1937,13 @@ extern struct PadState pad_state __asm__("D_0013C940");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern VendorItemSound D_L00_001C2108[];
 extern VendorItemSlot40 D_L00_001C8FF0[];
-extern VendorItemSlot30 D_L00_001C9930[];
+extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[] __asm__("D_L00_001C9930");
 extern VendorRow D_L00_00165E80[];
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern char D_0013D1D0[];
-extern u8 D_L00_00161128[];
-extern u8 D_L00_00161138[];
-extern u8 D_L00_00161148[];
+extern u8 vendor_moby_update_label[] __asm__("D_L00_00161128");
+extern u8 vendor_hero_update_label[] __asm__("D_L00_00161138");
+extern u8 vendor_part_update_label[] __asm__("D_L00_00161148");
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
 #include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase_2.h"
@@ -2027,7 +2027,7 @@ extern void FUN_0022ca50(void);
 extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
-extern u8 D_00141345[];
+extern u8 vendor_item_0x18_purchased[] __asm__("D_00141345");
 extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
 extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
 extern s32 D_L00_00161E30;
@@ -2225,7 +2225,7 @@ void update_vendor_purchase(void) {
                     grant_inventory_item(CUR_ITEM.fD0, 1);
                     vendor_menu.f48 = CUR_ITEM.fD0;
                     if (CUR_ITEM.fD0 == 0x18) {
-                        D_00141345[0] = 1;
+                        vendor_item_0x18_purchased[0] = 1;
                     }
                     D_0015ED98 = D_0015ED98 - purchase_cost;
                     FUN_L00_0029a400_2ba78(vendor_menu.f40 != 0);
@@ -2305,15 +2305,15 @@ void update_vendor_menu(void) {
                 update_visible_resident_objects();
                 FUN_0022dc50();
             }
-            noop_main_callback(D_L00_00161128, 3);
+            noop_main_callback(vendor_moby_update_label, 3);
             if ((g_debug_menu.update_flags & 1) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 coordinate_hero_frame_update();
             }
-            noop_main_callback(D_L00_00161138, 7);
+            noop_main_callback(vendor_hero_update_label, 7);
             if ((g_debug_menu.update_flags & 4) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
                 update_parts();
             }
-            noop_main_callback(D_L00_00161148, 5);
+            noop_main_callback(vendor_part_update_label, 5);
         }
         vendor_menu_state = vendor_menu.state;
         if (vendor_menu_state == 0) {
@@ -2336,7 +2336,7 @@ void update_vendor_menu(void) {
         } else if (vendor_menu_state == 2) {
             ok = 0;
             if (vendor_menu.f40 == 0 && vendor_menu.f48 >= 0) {
-                if (D_L00_001CA020[vendor_menu.f48] >= 0) { ok = 1; }
+                if (vendor_exit_cutscene_ids_by_item[vendor_menu.f48] >= 0) { ok = 1; }
             }
             vendor_menu.f4++;
             if (vendor_menu.f4 >= scale_game_frames(40) || vendor_menu.f40 != 0) {
@@ -2427,20 +2427,20 @@ void update_vendor_menu(void) {
         position_contribution_scratch.f[2] = fast_sin(D_L00_00161E24) / 20.0f;
         position_scratch.q = position_contribution_scratch.q;
         add_vector_xyz(&position_scratch, &vendor_item_display_common_local_offset_gp, &position_scratch);
-        add_vector_xyz(&position_scratch, &position_scratch, &D_L00_001C9930[CUR_ITEM.fD0].v20);
+        add_vector_xyz(&position_scratch, &position_scratch, &l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].v20);
         transform_vector_by_basis(&vendor_menu.f20[3].pos, &position_scratch, vendor_menu.f1c->mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &vendor_menu.f1c->pos);
-        vendor_menu.f20[3].rot.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f10;
-        vendor_menu.f20[3].rot.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f14;
+        vendor_menu.f20[3].rot.f[0] = l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].f10;
+        vendor_menu.f20[3].rot.f[1] = l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].f14;
         vendor_menu.f20[3].rot.f[2] = D_L00_00161E24;
         advance_moby_animation(&vendor_menu.f20[3]);
         if (!vendor_menu.f20[3].b53 && (vendor_menu.f20[3].b70 & 2)) {
             FUN_00212f90(&vendor_menu.f20[3], 1, 0, 8);
         }
         FUN_L00_00250df8(&vendor_menu.f20[3]);
-        position_contribution_scratch.f[0] = D_L00_001C9930[CUR_ITEM.fD0].f0;
-        position_contribution_scratch.f[1] = D_L00_001C9930[CUR_ITEM.fD0].f4;
-        position_contribution_scratch.f[2] = D_L00_001C9930[CUR_ITEM.fD0].f8;
+        position_contribution_scratch.f[0] = l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].f0;
+        position_contribution_scratch.f[1] = l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].f4;
+        position_contribution_scratch.f[2] = l00_vendor_item_display_transform_parameters[CUR_ITEM.fD0].f8;
         euler_rotation_basis(vendor_menu.f20[3].mtx, &vendor_menu.f20[3].rot);
         transform_vector_by_basis(&position_contribution_scratch, &position_contribution_scratch, vendor_menu.f20[3].mtx);
         add_vector_xyz(&vendor_menu.f20[3].pos, &vendor_menu.f20[3].pos, &position_contribution_scratch);

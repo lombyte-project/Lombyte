@@ -30,7 +30,7 @@ typedef struct {
 } MapWorldObject;
 
 #include "rnc/gameplay/state/level_state.h"
-extern struct MapIcon *D_001A2BC0[];
+extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
 extern MapWorldObject *D_00199478[];
@@ -57,7 +57,7 @@ void update_map_icons(s32 level, s32 flag) {
     s32 icon_index;
 
     if (level < 19 && level_visit_state[level] != 0) {
-        level_map_selection.icons = D_001A2BC0[level];
+        level_map_selection.icons = map_icon_lists_by_level[level];
     } else {
         level_map_selection.icons = 0;
     }
