@@ -509,7 +509,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     for (i = 0; i < data->puff_count; i++) {
                         int puff_spawn_color = (data->puff_c0[3] << 24) | (data->puff_c0[2] << 16) |
                                                (data->puff_c0[1] << 8) | data->puff_c0[0];
-                        int c1 = (data->puff_c1[3] << 24) | (data->puff_c1[2] << 16) |
+                        int puff_payload_color = (data->puff_c1[3] << 24) | (data->puff_c1[2] << 16) |
                                  (data->puff_c1[1] << 8) | data->puff_c1[0];
                         float width = data->size_x * 0.5f;
                         float size = random_float_between(data->puff_size0, data->puff_size1);
@@ -532,7 +532,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                         fast_vec_scale(
                             &sv0, &sv0, 1.0f - data->puff_blend + shape * data->puff_blend);
                         spawn_effect_particle_with_target_scalar(
-                            &sv1, &sv0, puff_spawn_color, c1, size, life);
+                            &sv1, &sv0, puff_spawn_color, puff_payload_color, size, life);
                     }
                 }
                 if (data->light != -1) {
