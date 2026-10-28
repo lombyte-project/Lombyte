@@ -11,7 +11,9 @@ extern char                     D_L00_001B47D0[];
 extern char                     menu_items_when_flag_clear[] __asm__("D_L00_001B4808");
 
 /* Points the menu at one of two item tables, picked by a game flag. */
-int FUN_L00_0027a6e0(char *menu) {
+int select_menu_item_table_by_flag(char *menu) __asm__("FUN_L00_0027a6e0");
+
+int select_menu_item_table_by_flag(char *menu) {
     *(char **)(menu + 0x34) = D_0013D4C2 ? D_L00_001B47D0 : menu_items_when_flag_clear;
     return 0;
 }
