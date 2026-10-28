@@ -198,7 +198,7 @@ extern f32 veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") __attr
 extern Vec4 D_L00_00166DC0;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
-extern Path *D_L00_001B04B0[];
+extern Path *toad_paths[] __asm__("D_L00_001B04B0");
 extern s32 D_L00_0015F580[] MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
@@ -297,7 +297,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            qcopy(&moby->pos, &D_L00_001B04B0[vars->pathIdx]->pts[0]);
+            qcopy(&moby->pos, &toad_paths[vars->pathIdx]->pts[0]);
             moby->state = 1;
             ELECTROID_ANIM(moby, 1, 5);
         } else {
@@ -320,7 +320,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         break;
     case VELDIN_ROBOT_STATE_FOLLOW_PATH:
         path_step_distance = 0.0f;
-        path = D_L00_001B04B0[vars->pathIdx];
+        path = toad_paths[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
         ELECTROID_TURN(moby, vars,
                   fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
@@ -550,7 +550,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     moby->unkA4 = 0xFF;
     trooper_anim_finish(moby, anim);
     if (moby->state == 1) {
-        path = D_L00_001B04B0[vars->unk1B4];
+        path = toad_paths[vars->unk1B4];
         FUN_L00_0025ff38(moby, &vars->targetPos, 0, 0, path->pts, path->count, 64.0f);
     } else if (moby->state != 5) {
         range = veldin_robot_default_target_range_gp;
