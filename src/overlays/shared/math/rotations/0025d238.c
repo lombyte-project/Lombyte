@@ -941,7 +941,7 @@ void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound)
     inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);
 }
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
-extern u8 *l00_active_moby_pool_last_slot __asm__("D_L00_0015FFE0") __attribute__((sda));
+extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 is_moby_in_class_range_500_to_540(u8 *m) __asm__("FUN_L00_0025e3b8");
 s32 is_moby_in_class_range_500_to_540(u8 *moby) {
@@ -953,7 +953,7 @@ s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     if (moby < D_L00_0015FFD8_c) {
         goto bad;
     }
-    if (moby > l00_active_moby_pool_last_slot) {
+    if (moby > D_L00_0015FFE0) {
         goto bad;
     }
     moby_class_id = *(u16 *)(moby + 0xA6);

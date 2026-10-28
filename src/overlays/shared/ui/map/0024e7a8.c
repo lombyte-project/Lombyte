@@ -3,7 +3,7 @@
 #include "asm.h"
 
 extern u8 *D_L00_0015FFDC;
-extern u8 *l00_active_moby_pool_last_slot __asm__("D_L00_0015FFE0");
+extern u8 *D_L00_0015FFE0;
 #include "rnc/overlay/level_labels.h"
 extern s32 D_L00_0015FFBC;
 void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
@@ -11,7 +11,7 @@ void count_expired_mobys(void) {
     u8 *current_record;
     s32 flag = 0;
     D_L00_0015FFBC = 0;
-    for (current_record = D_L00_0015FFDC; current_record < l00_active_moby_pool_last_slot; current_record += 0x100) {
+    for (current_record = D_L00_0015FFDC; current_record < D_L00_0015FFE0; current_record += 0x100) {
         if ((current_record[0x20] >= 0xFE && (*(u32 *)&D_L00_0015F5CC) >= *(u64 *)(current_record + 0x38)) || flag) {
             D_L00_0015FFBC++;
             if (current_record[0x20] == 0xFF)

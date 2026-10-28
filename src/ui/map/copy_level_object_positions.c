@@ -9,7 +9,7 @@ struct ObjectVector {
     f32 z;
 };
 
-extern u8 moby_records[] __asm__("D_0013D5B0");
+extern u8 D_0013D5B0[];
 extern u8 D_00199478[];
 extern u32 level_object_index_boundaries[] __asm__("D_001E03B8");
 
@@ -36,7 +36,7 @@ void copy_level_object_positions(void) {
         return;
     }
     source_base = D_00199478;
-    destination = moby_records + start * 0x10;
+    destination = D_0013D5B0 + start * 0x10;
     source = (u8 **)(source_base + start * 4);
     start = end - start;
     do {

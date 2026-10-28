@@ -22,7 +22,7 @@ typedef struct {
 
 extern u8 D_0013D5BC[];
 extern u16 occl_cam_param1[] __asm__("D_001518D2");
-extern u8 draw_map51 __asm__("D_0015EDB4");
+extern u8 D_0015EDB4;
 extern s32 D_0015FD60 __attribute__((sda));
 extern f32 D_0015FD80 __attribute__((sda));
 extern f32 D_0015FD84 __attribute__((sda));
@@ -102,7 +102,7 @@ void draw_map_overlay(void) {
     map_left = 0x1000;
     setup_gif_paging(0);
     map_top = 0x800;
-    mirror_sign = draw_map51 ? -1 : 1;
+    mirror_sign = D_0015EDB4 ? -1 : 1;
     zoom = level_map_selection.zoom[level_map_selection.loaded];
     pan_y = zoom * (f32)(level_map_selection.pan_y[level_map_selection.loaded] >> 15);
     map_extent = zoom * 8192.0f;
@@ -467,7 +467,7 @@ void draw_map_overlay(void) {
             }
             label_buffer.f[0] = (f32)map_left + label_buffer.f[0] * (f32)(map_right - map_left);
             label_buffer.f[1] = (f32)map_top + label_buffer.f[1] * (f32)(map_bottom - map_top);
-            if (draw_map51 != 0) {
+            if (D_0015EDB4 != 0) {
                 angle = fast_subtract_rotations(-fast_add_rotations(angle, 1.5707964f), 1.5707964f);
             }
             {

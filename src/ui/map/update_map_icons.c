@@ -34,7 +34,7 @@ extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
 extern MapWorldObject *D_00199478[];
-extern MapPoint moby_records[] __asm__("D_0013D5B0");
+extern MapPoint D_0013D5B0[];
 extern s32 D_0013D5BC[];
 extern struct {
     u8 pad0[0x10];
@@ -117,9 +117,9 @@ void update_map_icons(s32 level, s32 flag) {
                         level_map_selection.icons[icon_index].angle = D_00199478[icon->id]->z;
                     }
                 } else {
-                    world_to_map_coords(moby_records[icon->id].x, moby_records[icon->id].y, &icon->x,
+                    world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x,
                                         &icon->y, level);
-                    level_map_selection.icons[icon_index].angle = moby_records[icon->id].z;
+                    level_map_selection.icons[icon_index].angle = D_0013D5B0[icon->id].z;
                 }
             }
             icon_index++;

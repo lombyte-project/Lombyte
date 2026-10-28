@@ -118,7 +118,7 @@ extern float electric_water_on_duration_seconds_gp __asm__("D_L15_00161BC8") __a
 extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
-extern int l15_moby_save_bits[] __asm__("D_L15_001BAAD0");
+extern int D_L15_001BAAD0[];
 extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
 extern Light29FF90 D_L15_001808C0[];
 extern unsigned char l15_fog_color[4] __asm__("D_L15_0015F444");
@@ -219,7 +219,7 @@ void electric_water_update(struct Moby *moby) {
                 save_id = moby_array[vars->switches[reset_sw]].save_id;
                 D_0014C190_257218[current_level_index_gp][(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
                 save_id = moby_array[vars->switches[reset_sw]].save_id;
-                l15_moby_save_bits[(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
+                D_L15_001BAAD0[(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
             } else {
                 reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
             }

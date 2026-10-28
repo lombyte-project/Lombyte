@@ -978,7 +978,7 @@ typedef struct {
     u8 killed[1]; /* per spawn id */
 } KillFlags;
 extern KillFlags D_L15_001BB830;
-extern unsigned int l15_moby_save_bits[] __asm__("D_L15_001BAAD0");
+extern unsigned int D_L15_001BAAD0[];
 extern unsigned int l15_banked_moby_save_bits[] __asm__("D_L15_0014C190");
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
@@ -1091,7 +1091,7 @@ void codebot_slot_update(struct Moby *moby) {
                 bits = (unsigned int *)(((short)moby->save_id >> 5) * 4 + level_save_bank_index * 0x100 + (char *)l15_banked_moby_save_bits);
                 *bits |= 1u << (moby->save_id & 31);
                 {
-                    unsigned int *bits = &l15_moby_save_bits[(short)moby->save_id >> 5];
+                    unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
                     *bits |= 1u << (moby->save_id & 31);
                 }
                 moby->state = 4;
