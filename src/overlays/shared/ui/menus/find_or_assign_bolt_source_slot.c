@@ -41,7 +41,9 @@ extern T_27f448 D_L00_001C1E40[] NOT_SDA;
 extern int     *selection_values __asm__("D_L00_001602A0") __attribute__((sda));
 extern s32      D_0013D510_lui[] __asm__("D_0013D510") NOT_SDA;
 
-int FUN_L00_0027f448(P_27f448 *selection_state) {
+int initialize_selection_entries_and_index(P_27f448 *selection_state) __asm__("FUN_L00_0027f448");
+
+int initialize_selection_entries_and_index(P_27f448 *selection_state) {
     int i;
     for (i = 0; i < 20 && D_0013D510_lui[i]; i++) {
         D_L00_001BA3B8[i].b = 1;
