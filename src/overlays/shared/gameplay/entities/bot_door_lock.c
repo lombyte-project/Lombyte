@@ -171,7 +171,7 @@ extern float bot_door_lock_color_pulse_period_gp __asm__("D_L06_001622E4") __att
 extern float bot_door_lock_number_color_pulse_amplitude_gp __asm__("D_L06_001622E8") __attribute__((sda));
 extern float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622EC") __attribute__((sda));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
-extern unsigned char D_0015EDB4;
+extern unsigned char draw_map51 __asm__("D_0015EDB4");
 extern unsigned char D_0014C050[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -235,7 +235,7 @@ void bot_door_lock_update(char *moby) {
                 if (idata[5] < 10) {
                     draw_number(number_anchor_position, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);
                 } else {
-                    if (D_0015EDB4) {
+                    if (draw_map51) {
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
