@@ -225,7 +225,7 @@ char *find_best_hero_heading_target(float, float, float, float) __asm__("FUN_L00
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void  update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 
-void update_hero_target_heading(float a, float b, float c) {
+void update_hero_target_heading(float range_limit, float b, float elevation_angle_limit) {
     struct Hero *g = &hero;
     float        r;
     char        *heading_target;
@@ -238,7 +238,7 @@ void update_hero_target_heading(float a, float b, float c) {
         g->heading_locked = 1;
         g->melee_target = 0;
     }
-    heading_target = find_best_hero_heading_target(a, r, b, c);
+    heading_target = find_best_hero_heading_target(range_limit, r, b, elevation_angle_limit);
     if (heading_target != 0 && (g->melee_target == 0 || g->heading_locked != 0)) {
         g->attack_target_yaw = fast_arc_tan(*(float *)(heading_target + 0x10) - g->motion.pos.f[0],
                                             *(float *)(heading_target + 0x14) - g->motion.pos.f[1]);
