@@ -14,7 +14,7 @@ void FUN_L00_002ea7a0();
 void FUN_L00_002ed230();
 void FUN_L01_002b9eb0();
 void FUN_L01_002f8718();
-void FUN_L06_002ea6a8();
+void update_moby_suck_cannon_storage_state() __asm__("FUN_L06_002ea6a8");
 void FUN_L10_002be858();
 void FUN_L10_002cc2e8();
 void FUN_L10_002d92b8();
@@ -167,8 +167,8 @@ void *D_L10_001DDE40[6]
                                             mine_blend_color};
 
 void *D_L10_001DDE58[6] __attribute__((section("lvl.vtbl"))) = {update_moby_grab_state,
-                                                                FUN_L06_002ea6a8,
-                                                                FUN_L06_002ea6a8,
+                                                                update_moby_suck_cannon_storage_state,
+                                                                update_moby_suck_cannon_storage_state,
                                                                 cancel_moby_suction_and_save_state,
                                                                 get_moby_data_plus_0x60,
                                                                 mine_blend_color};
