@@ -4,7 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
-#include "fakematch.h"
+#include "macros.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
 
@@ -375,9 +375,9 @@ state_three:
                         /* Fakematch: the pin and the empty barriers order the call setup like
                            retail ($5 before the v[2] store, $4 after it, in the jal slot). */
                         register char *splash_pos __asm__("$5") = (char *)v;
-                        FAKEMATCH_BARRIER();
+                        BARRIER();
                         v[2] = h->water_surface_z;
-                        FAKEMATCH_BARRIER();
+                        BARRIER();
                         spawn_sharkigator_splash_effects((int)moby, splash_pos);
                     }
                     set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);

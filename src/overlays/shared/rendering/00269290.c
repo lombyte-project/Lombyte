@@ -3,7 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "fakematch.h"
+#include "macros.h"
 #include "rnc/overlay/level_labels.h"
 
 typedef struct {
@@ -362,7 +362,7 @@ void update_colliding_effect_particle(unsigned char *m) {
     } else {
         /* Fakematch: retail reads $s0 on this path before setting it, so reorg sees it
            live at the else label and fills the beqz delay slot like retail. */
-        FAKEMATCH_KEEP_LIVE("$16");
+        REG_LIVE("$16");
         *(u128 *)(m + 0x10) = *(u128 *)next;
     }
     if (*(unsigned int *)(e + 0x70) & 2) {

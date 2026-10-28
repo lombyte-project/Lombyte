@@ -51,7 +51,7 @@ LABEL_STRING = re.compile(r"[A-Za-z_.$][\w.$]*(?:\+\d+)?")
 # The only files that may hold instructions: the approved quadword idiom and the
 # EE-kernel primitives (privileged instructions C cannot express).
 ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h", "include/moby_update.h",
-               "include/fakematch.h"}
+               "include/macros.h"}
 ASM_ANY = re.compile(r"\b(?:__asm__|__asm|asm)\b(\s*(?:volatile|__volatile__)\b)?\s*\(")
 FUNC_DECL = re.compile(r"\b(\w+)\s*\(((?:[^;{}()]|\([^()]*\))*)\)\s*__asm__\s*\(\s*\"(" + FUN_LABEL + r")\"\s*\)")
 DATA_DECL = re.compile(r"\b(\w+)\s*((?:\[[^\]]*\]\s*)*)__asm__\s*\(\s*\"(" + DATA_LABEL + r")\"\s*\)")
