@@ -198,7 +198,8 @@ def workspace_problem(workspace: Path, repo: Path | None = None) -> str | None:
 # memory barriers, `.extern` directives, register pins) keeps the unit pending
 # however exact its bytes are, unless marked as below. The approved exceptions live in headers, not in
 # units: include/qcopy.h and include/qzero.h (the quadword idiom) and
-# include/kernel.h (privileged instructions: ei, di, sync, mfc0, syscall).
+# include/kernel.h (privileged instructions: ei, di, sync, mfc0, syscall) and
+# include/moby_update.h (the moby update call with empty delay slots).
 # An asm marked by a `Fakematch:` comment in the 15 lines above it (a register pin
 # or a small helper that forces retail's schedule) counts as C, as in rac1-decomp.
 _ASM_START_RE = re.compile(r"\b(?:__asm__|__asm|asm)\b(?:\s*(?:__volatile__|volatile))?\s*\(")
