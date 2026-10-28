@@ -774,9 +774,9 @@ void update_hero_item_slot_blends(void) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        struct Hero *g = &hero;
-        u8          *o;
-        s32          diff;
+        struct Hero *hero_blend_owner = &hero;
+        u8          *item_slot_blend;
+        s32          hero_animation_ids_differ;
         struct {
             s16 v;
         } w;
@@ -788,10 +788,10 @@ void update_hero_item_slot_blends(void) {
 
         if (blend != 0 && *(s32 *)(blend + 0x34) != 0) {
             if (approach_value((f32 *)(blend + 8), 0.0f, frame_scale * 0.1f) == 0.0f) {
-                release_moby_animation_slot((u8 *)g->moby, &hero.item_slot_blends[i]);
+                release_moby_animation_slot((u8 *)hero_blend_owner->moby, &hero.item_slot_blends[i]);
             }
         } else {
-            s32 anim_count = g->item_slot_anim_count;
+            s32 anim_count = hero_blend_owner->item_slot_anim_count;
             s32 want = 0;
 
             if (anim_count != 0 && (i == 0 || anim_count == 2)) {
@@ -811,9 +811,9 @@ void update_hero_item_slot_blends(void) {
             if (want) {
                 struct Hero *h = &hero;
                 if (hero.item_slot_blends[i] == 0) {
-                    u8 *n = allocate_moby_animation_slot((u8 *)h->moby, D_L00_0015F6A0_gp[i]);
-                    hero.item_slot_blends[i] = n;
-                    *(f32 *)(n + 8) = 0.0f;
+                    u8 *allocated_item_slot_blend = allocate_moby_animation_slot((u8 *)h->moby, D_L00_0015F6A0_gp[i]);
+                    hero.item_slot_blends[i] = allocated_item_slot_blend;
+                    *(f32 *)(allocated_item_slot_blend + 8) = 0.0f;
                     *(u8 **)(hero.item_slot_blends[i] + 0x18) =
                         (u8 *)D_L00_00197300[D_L00_00197BC0_lui[i + 1]];
                 }
@@ -832,33 +832,33 @@ void update_hero_item_slot_blends(void) {
         {
             struct Hero *h = &hero;
             u8          *hr;
-            o = hero.item_slot_blends[i];
-            if (o == 0) {
+            item_slot_blend = hero.item_slot_blends[i];
+            if (item_slot_blend == 0) {
                 continue;
             }
             hr = (u8 *)h->moby;
-            diff = hr[0x52] != hr[0x53];
+            hero_animation_ids_differ = hr[0x52] != hr[0x53];
             if (h->held_item_anim_blend[0] != 0 && h->unkD14 == 0) {
-                approach_value((f32 *)(o + 8), 0.0f, frame_scale * 0.1f);
-            } else if (*(s32 *)(o + 0x34) == 0) {
-                approach_value((f32 *)(o + 8), 1.0f, frame_scale * 0.1f);
+                approach_value((f32 *)(item_slot_blend + 8), 0.0f, frame_scale * 0.1f);
+            } else if (*(s32 *)(item_slot_blend + 0x34) == 0) {
+                approach_value((f32 *)(item_slot_blend + 8), 1.0f, frame_scale * 0.1f);
             }
         }
 
         w.v = 0;
-        if (diff) {
+        if (hero_animation_ids_differ) {
             struct Hero *h = &hero;
             if (h->anim_changing != 0) {
-                s32 a = return_hero_animation_id_unchanged(o[0x23]);
-                if (a != return_hero_animation_id_unchanged(((u8 *)h->moby)[0x53])) {
-                    w.v = o[0x22] != o[0x23];
+                s32 slot_target_animation_id = return_hero_animation_id_unchanged(item_slot_blend[0x23]);
+                if (slot_target_animation_id != return_hero_animation_id_unchanged(((u8 *)h->moby)[0x53])) {
+                    w.v = item_slot_blend[0x22] != item_slot_blend[0x23];
                 }
             }
         }
-        *(s16 *)(o + 0x30) = w.v;
+        *(s16 *)(item_slot_blend + 0x30) = w.v;
 
-        r = hero_get_state_aim_pitch(((u8 *)g->moby)[0x53], &out);
-        if (r != 0 || o[0x32] != 0) {
+        r = hero_get_state_aim_pitch(((u8 *)hero_blend_owner->moby)[0x53], &out);
+        if (r != 0 || item_slot_blend[0x32] != 0) {
             if (out != 0.0f) {
                 f32 x = frame_scale_sq;
                 u8 *tb = (u8 *)hero_eases;
@@ -869,94 +869,94 @@ void update_hero_item_slot_blends(void) {
                 *(f32 *)(tb + 0x624) = x * 0.05f;
                 *(f32 *)(tb + 0x628) = x * 0.3f;
             }
-            if (r != 0 && (o[0x32] == 0 || o[0x23] != 0)) {
-                if (o[0x22] == o[0x23] || 0.5f < *(f32 *)(o + 0x24)) {
-                    o[0x22] = o[0x23];
-                    o[0x20] = o[0x21];
+            if (r != 0 && (item_slot_blend[0x32] == 0 || item_slot_blend[0x23] != 0)) {
+                if (item_slot_blend[0x22] == item_slot_blend[0x23] || 0.5f < *(f32 *)(item_slot_blend + 0x24)) {
+                    item_slot_blend[0x22] = item_slot_blend[0x23];
+                    item_slot_blend[0x20] = item_slot_blend[0x21];
                 }
-                *(f32 *)(o + 0x24) = 0.0f;
-                o[0x23] = 0;
-                o[0x21] = 0;
-                *(f32 *)(o + 0x28) = 1.0f;
-                *(f32 *)(o + 0x2C) = 1.0f / (f32)scale_game_frames(0xF);
-                o[0x32] = 1;
-                o[0x33] = 0;
+                *(f32 *)(item_slot_blend + 0x24) = 0.0f;
+                item_slot_blend[0x23] = 0;
+                item_slot_blend[0x21] = 0;
+                *(f32 *)(item_slot_blend + 0x28) = 1.0f;
+                *(f32 *)(item_slot_blend + 0x2C) = 1.0f / (f32)scale_game_frames(0xF);
+                item_slot_blend[0x32] = 1;
+                item_slot_blend[0x33] = 0;
             }
             if (r == 0) {
-                if (o[0x33] == 0) {
-                    u8 *hr = (u8 *)g->moby;
-                    o[0x23] = resolve_moby_animation_id(hr, hr[0x53]);
-                    o[0x21] = 0;
-                    o[0x33] = 1;
-                    *(f32 *)(o + 0x24) = 0.0f;
-                    *(f32 *)(o + 0x28) = 0.0f;
+                if (item_slot_blend[0x33] == 0) {
+                    u8 *hr = (u8 *)hero_blend_owner->moby;
+                    item_slot_blend[0x23] = resolve_moby_animation_id(hr, hr[0x53]);
+                    item_slot_blend[0x21] = 0;
+                    item_slot_blend[0x33] = 1;
+                    *(f32 *)(item_slot_blend + 0x24) = 0.0f;
+                    *(f32 *)(item_slot_blend + 0x28) = 0.0f;
                 } else {
-                    f32 f = *(f32 *)(o + 0x24) + frame_scale * 0.1f;
-                    *(f32 *)(o + 0x24) = f;
+                    f32 f = *(f32 *)(item_slot_blend + 0x24) + frame_scale * 0.1f;
+                    *(f32 *)(item_slot_blend + 0x24) = f;
                     if (1.0f < f) {
-                        *(f32 *)(o + 0x24) = 1.0f;
+                        *(f32 *)(item_slot_blend + 0x24) = 1.0f;
                     }
-                    if (*(f32 *)(o + 0x24) == 1.0f) {
-                        o[0x32] = 0;
+                    if (*(f32 *)(item_slot_blend + 0x24) == 1.0f) {
+                        item_slot_blend[0x32] = 0;
                     }
                 }
             } else {
-                *(f32 *)(o + 0x28) = 1.0f;
+                *(f32 *)(item_slot_blend + 0x28) = 1.0f;
             }
             for (j = 0; j < 2; j++) {
-                u8 *id = o + 0x22;
-                u8 *e = o + 6;
+                u8 *id = item_slot_blend + 0x22;
+                u8 *e = item_slot_blend + 6;
                 if (id[j] < 0x17) {
                     e[j] = 1;
-                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
+                    *(u8 **)(item_slot_blend + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
                 } else {
                     e[j] = 0;
                 }
             }
-            advance_moby_animation_blend(g->moby, o);
+            advance_moby_animation_blend(hero_blend_owner->moby, item_slot_blend);
         } else {
-            if (*(s16 *)(o + 0x30) == 0) {
+            if (*(s16 *)(item_slot_blend + 0x30) == 0) {
                 struct Hero *h = &hero;
                 for (k = 0; k < 2; k++) {
-                    if (!diff || k == 1) {
+                    if (!hero_animation_ids_differ || k == 1) {
                         u8 *hr = (u8 *)h->moby;
-                        u8 *p = o + 0x22;
-                        p[k] = resolve_moby_animation_id(hr, *(hr + k + 0x52));
+                        u8 *slot_animation_ids = item_slot_blend + 0x22;
+                        slot_animation_ids[k] = resolve_moby_animation_id(hr, *(hr + k + 0x52));
                     }
                 }
             }
-            if (*(s16 *)(o + 0x30) != 0) {
-                f32 f = *(f32 *)(o + 0x24) + frame_scale * 0.15f;
-                *(f32 *)(o + 0x24) = f;
+            if (*(s16 *)(item_slot_blend + 0x30) != 0) {
+                f32 f = *(f32 *)(item_slot_blend + 0x24) + frame_scale * 0.15f;
+                *(f32 *)(item_slot_blend + 0x24) = f;
                 if (1.0f <= f) {
-                    o[0x22] = o[0x23];
-                    o[0x20] = o[0x21];
-                    *(s16 *)(o + 0x30) = 0;
+                    item_slot_blend[0x22] = item_slot_blend[0x23];
+                    item_slot_blend[0x20] = item_slot_blend[0x21];
+                    *(s16 *)(item_slot_blend + 0x30) = 0;
                 }
             } else {
-                if (!diff) {
-                    o[0x20] = ((u8 *)g->moby)[0x50];
+                if (!hero_animation_ids_differ) {
+                    item_slot_blend[0x20] = ((u8 *)hero_blend_owner->moby)[0x50];
                 }
                 /* Fakematch: o is never null; the jump merges the same arms and keeps retail's registers. */
-                if (o) {
-                    o[0x21] = ((u8 *)g->moby)[0x51];
-                    *(f32 *)(o + 0x24) = *(f32 *)((u8 *)g->moby + 0x54);
+                if (item_slot_blend) {
+                    item_slot_blend[0x21] = ((u8 *)hero_blend_owner->moby)[0x51];
+                    *(f32 *)(item_slot_blend + 0x24) = *(f32 *)((u8 *)hero_blend_owner->moby + 0x54);
                 } else {
-                    o[0x21] = ((u8 *)g->moby)[0x51];
-                    *(f32 *)(o + 0x24) = *(f32 *)((u8 *)g->moby + 0x54);
+                    item_slot_blend[0x21] = ((u8 *)hero_blend_owner->moby)[0x51];
+                    *(f32 *)(item_slot_blend + 0x24) = *(f32 *)((u8 *)hero_blend_owner->moby + 0x54);
                 }
             }
             for (j = 0; j < 2; j++) {
-                u8 *id = o + 0x22;
-                u8 *e = o + 6;
+                u8 *id = item_slot_blend + 0x22;
+                u8 *e = item_slot_blend + 6;
                 if (id[j] < 0x17) {
                     e[j] = 1;
-                    *(u8 **)(o + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
+                    *(u8 **)(item_slot_blend + 0x38 + j * 4) = D_L00_0017CA80 + (i * 0x800 + j * 0x400);
                 } else {
                     e[j] = 0;
                 }
             }
-            advance_moby_animation_blend(g->moby, o);
+            advance_moby_animation_blend(hero_blend_owner->moby, item_slot_blend);
         }
     }
 }
