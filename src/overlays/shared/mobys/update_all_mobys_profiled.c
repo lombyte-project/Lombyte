@@ -15,11 +15,11 @@ typedef struct {
 #include "rnc/input/pad_globals.h"
 
 extern s32          D_L00_0015F3F8;
-extern struct Moby *D_L00_0015FFE4;
+extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern s16          D_L00_00197A00[];
-extern char         D_L00_00160118[];
-extern char         D_L00_001E90B0[];
-extern char         D_L00_001E90C8[];
+extern char         l00_moby_profile_newline[] __asm__("D_L00_00160118");
+extern char         l00_moby_profile_frame_format[] __asm__("D_L00_001E90B0");
+extern char         l00_moby_profile_class_report_format[] __asm__("D_L00_001E90C8");
 
 extern void         update_all_mobys(void) __asm__("FUN_L00_00264848");
 extern void         FUN_L00_001eb078(const char *, ...);
@@ -49,13 +49,13 @@ void update_all_mobys_profiled(void) {
         return;
     }
 
-    FUN_L00_001eb078(D_L00_00160118);
-    FUN_L00_001eb078(D_L00_001E90B0, D_L00_0015F3F8);
-    FUN_L00_001eb078(D_L00_00160118);
+    FUN_L00_001eb078(l00_moby_profile_newline);
+    FUN_L00_001eb078(l00_moby_profile_frame_format, D_L00_0015F3F8);
+    FUN_L00_001eb078(l00_moby_profile_newline);
     *(volatile u32 *)0x10000010 = 0x81;
     FUN_L00_001ff040((void *)0x11004000, 0, 0x700);
 
-    moby = D_L00_0015FFE4 = FUN_L00_00250768();
+    moby = suck_moby_list = FUN_L00_00250768();
     while (moby != 0) {
         s32 current_ticks;
         if ((s8)moby->state >= 0) {
@@ -103,7 +103,7 @@ void update_all_mobys_profiled(void) {
                     share = FUN_L00_00200240(current_ticks) / total_ticks;
                     share = share * 100.0f;
                     FUN_L00_001eb078(
-                        D_L00_001E90C8, profile_label, profile->count, scaled_ticks, fptodp(share));
+                        l00_moby_profile_class_report_format, profile_label, profile->count, scaled_ticks, fptodp(share));
                     profile->count = 0;
                 } else if (next_ticks < profile->ticks) {
                     next_ticks = profile->ticks;
