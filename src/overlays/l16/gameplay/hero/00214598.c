@@ -317,9 +317,6 @@ extern s32 test_hero_animation_frame_window(f32) __asm__("FUN_L00_00211870");
 void update_hero_motion_for_current_state(void) __asm__("FUN_L16_00214598");
 
 void update_hero_motion_for_current_state(void) {
-    enum {
-        HERO_STATE_HOVERBOARD_MOVE_WITH_RAMP_LAUNCH = 0x3E
-    };
 
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32 sub = hero.state.step;
