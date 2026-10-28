@@ -100,7 +100,7 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-extern char *D_L07_00173ED0[];
+extern char *l07_collision_query_state[] __asm__("D_L07_00173ED0");
 void         update_growing_ballistic_moby(struct Moby *moby) __asm__("FUN_L07_0030e458");
 s32          allocate_voice_for_target_entry(s32   entry_index,
                                              s32   flags,
@@ -148,7 +148,7 @@ void update_growing_ballistic_moby(struct Moby *moby) {
     }
     if (collision_line(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
-        char *class_filter_moby = D_L07_00173ED0[2];
+        char *class_filter_moby = l07_collision_query_state[2];
         if (class_filter_moby == 0 ||
             (MOBY(class_filter_moby)->oclass != 0x415 && MOBY(class_filter_moby)->oclass != 0x419 &&
              MOBY(class_filter_moby)->oclass != 0x452)) {
