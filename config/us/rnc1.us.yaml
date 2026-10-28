@@ -1596,7 +1596,7 @@ segments:
           - [0x116c94, textbin, text_gap_00215d14_before_fun_00215d18]
           - [0x116c98, c, audio/music/music_start_track_body]
           - [0x116d7c, textbin, text_gap_00215dfc_before_fun_00215e00]
-          - [0x116d80, c, assembly/textbin/audio/music/music_transition]
+          - [0x116d80, c, audio/music/music_transition]
           - [0x116e60, textbin, text_gap_00215ee0_after_fun_00215e00]
           - [0x116e68, c, audio/music/music_stop]
           - [0x116fd0, c, audio/music/music_pause]
