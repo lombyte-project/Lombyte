@@ -753,7 +753,7 @@ typedef struct {
    real prototype evaluates the operands in the other order and moves two words. */
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
 extern float D_0015ED60;
-extern int D_L08_0015F3F8;
+extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
@@ -791,7 +791,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
         float row_noise,phase0,phase1;
         int i,j;
         unsigned int color;
-        time=convert_integer_to_float(D_L08_0015F3F8);
+        time=convert_integer_to_float(l08_effect_animation_time);
         for (remaining=0;remaining<8;remaining++) {
             float *goal;
             if (data->noise[remaining]<*(goal=&data->goal[remaining])) {
@@ -804,7 +804,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             *goal=random_float_between(1.0f-data->jitter,1.0f);
         }
         alpha=func_001FA898_r(data->intensity*convert_integer_to_float(data->alpha)*convert_integer_to_float(moby->alpha)*0.0078125f)&0xFF;
-        if (data->frames) { frame=D_L08_0015F3F8; frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
+        if (data->frames) { frame=l08_effect_animation_time; frame/=data->frame_ticks+1; data->current=data->texture+frame%data->frames; }
         else data->current=data->texture;
         if (data->flags&1) quad.gs[1]=get_effect_texture_alt(data->current);
         else quad.gs[1]=get_effect_texture_alt(data->current+0x28);
@@ -902,14 +902,14 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 int j1=j+1;
                 int i1=i+1;
                 float *vi=&v[i],*vi1=&v[i1];
-                FlickerQuad *q=&quad;
+                FlickerQuad *mesh_quad=&quad;
                 int row_offset=i*row_bytes,next_offset=i1*row_bytes;
                 Vec4 *row=(Vec4*)(points+row_offset),*next_row=(Vec4*)(points+next_offset);
                 quad.uv[0]=u[j]; quad.uv[1]=*vi;
                 quad.uv[2]=u[j1]; quad.uv[3]=*vi;
                 quad.uv[4]=u[j]; quad.uv[5]=*vi1;
                 quad.uv[6]=u[j1]; quad.uv[7]=*vi1;
-                add_vector_xyz(&q->vertex[0],&row[j],&moby->pos);
+                add_vector_xyz(&mesh_quad->vertex[0],&row[j],&moby->pos);
                 add_vector_xyz(&quad.vertex[1],&row[j+1],&moby->pos);
                 add_vector_xyz(&quad.vertex[2],&next_row[j],&moby->pos);
                 add_vector_xyz(&quad.vertex[3],&next_row[j+1],&moby->pos);
@@ -917,7 +917,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
                 quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
                 quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(Vec4))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                draw_geometry_quad(q,0,0);
+                draw_geometry_quad(mesh_quad,0,0);
             }
         }
         }
@@ -983,7 +983,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     float size;
                     short life;
                     int r,g,b,a;
-                    Vec4 *p0=&sv0;
+                    Vec4 *particle_motion=&sv0;
                     normalize_vector_xyz(&sv2,&left_step,-(data->particle_offset+square_root(fast_cos(fraction*3.1415927f))*data->particle_height));
                     normalize_vector_xyz(&sv1,&step,fraction*width);
                     add_vector_xyz(&sv1,&sv1,&moby->pos);
@@ -995,13 +995,13 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     life=scale_game_frames(data->particle_life);
                     r=data->particle_r; g=data->particle_g; b=data->particle_b;
                     a=func_001FA898_r(convert_integer_to_float(data->particle_a)*fraction);
-                    spawn_colored_effect_size_first(moby,&sv1,p0,size,life,r,g,b,a);
+                    spawn_colored_effect_size_first(moby,&sv1,particle_motion,size,life,r,g,b,a);
                 }
             }
             if (fast_dec_timer_s16(&data->puff_timer)) {
                 data->puff_timer=scale_game_frames(data->puff_ticks);
                 for (i=0;i<data->puff_count;i++) {
-                    int c0=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
+                    int puff_spawn_color=(data->puff_c0[3]<<24)|(data->puff_c0[2]<<16)|(data->puff_c0[1]<<8)|data->puff_c0[0];
                     int c1=(data->puff_c1[3]<<24)|(data->puff_c1[2]<<16)|(data->puff_c1[1]<<8)|data->puff_c1[0];
                     float width=data->size_x*0.5f;
                     float size=random_float_between(data->puff_size0,data->puff_size1);
@@ -1018,7 +1018,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     sv0.f[1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
                     sv0.f[2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
                     fast_vec_scale(&sv0,&sv0,1.0f-data->puff_blend+shape*data->puff_blend);
-                    spawn_effect_particle_with_target_scalar(&sv1,&sv0,c0,c1,size,life);
+                    spawn_effect_particle_with_target_scalar(&sv1,&sv0,puff_spawn_color,c1,size,life);
                 }
             }
             if (data->light!=-1) {
