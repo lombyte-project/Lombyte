@@ -309,7 +309,7 @@ void extermitank_update(unsigned char *moby) {
                                      extermitank_tracked_particle_lifetime_base_frames_gp +
                                          extermitank_tracked_particle_lifetime_base_frames_gp)));
             b = truncate_float_to_s32(
-                scale_time(random_float_between(D_L05_00161B18, D_L05_00161B18 * 1.2f)));
+                scale_time(random_float_between(l05_extermitank_tracked_particle_paired_frame_count_base_gp, l05_extermitank_tracked_particle_paired_frame_count_base_gp * 1.2f)));
             e = truncate_float_to_s32(
                 scale_time(random_float_between(D_L05_00161B1C, D_L05_00161B1C * 1.2f)));
             r = ((Spawn_305778)spawn_spark_c2)(working_position,
@@ -373,7 +373,7 @@ void extermitank_update(unsigned char *moby) {
                                      extermitank_secondary_particle_lifetime_base_frames_gp +
                                          extermitank_secondary_particle_lifetime_base_frames_gp)));
             b = truncate_float_to_s32(
-                scale_time(random_float_between(D_L05_00161B48, D_L05_00161B48 * 1.2f)));
+                scale_time(random_float_between(l05_extermitank_secondary_particle_paired_frame_count_base_gp, l05_extermitank_secondary_particle_paired_frame_count_base_gp * 1.2f)));
             e = truncate_float_to_s32(
                 scale_time(random_float_between(D_L05_00161B4C, D_L05_00161B4C * 1.2f)));
             ((Spawn_305778)spawn_spark_c2)(working_position,
