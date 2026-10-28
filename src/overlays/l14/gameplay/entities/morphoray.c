@@ -1400,10 +1400,6 @@ void initialize_path_camera(char *camera) {
             fov_stops->seg[k] = -1;
         }
     }
-    /* Fakematch: the dead update rotates the three address temps around
-       the atan2 call into retail's v0/a0/a1. */
-    D_L14_001600EC++;
-    D_L14_001600EC--;
     fov_stops->fov_end = atan2_4f00(1.0f, l14_camera_projection_state.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
