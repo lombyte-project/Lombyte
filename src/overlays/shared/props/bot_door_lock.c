@@ -29,10 +29,10 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     OvlVec4             result[4];
     float               rotation[4];
     float               matrix[12];
-    OvlVec4             pos[4];
+    OvlVec4             expanding_quad_local_corners[4];
     OvlVec4             corners[4];
     int                 i;
-    OvlVec4            *pos0, *pos1, *pos2, *pos3;
+    OvlVec4            *expanding_quad_local_corner_0, *expanding_quad_local_corner_1, *expanding_quad_local_corner_2, *expanding_quad_local_corner_3;
     OvlVec4            *result0, *result1, *result2, *result3;
     float              *data = ((float *)moby->pvars);
     rotation[0] = 0.0f;
@@ -50,10 +50,10 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     result1 = &result[1];
     result2 = &result[2];
     result3 = &result[3];
-    pos0 = &pos[0];
-    pos1 = &pos[1];
-    pos2 = &pos[2];
-    pos3 = &pos[3];
+    expanding_quad_local_corner_0 = &expanding_quad_local_corners[0];
+    expanding_quad_local_corner_1 = &expanding_quad_local_corners[1];
+    expanding_quad_local_corner_2 = &expanding_quad_local_corners[2];
+    expanding_quad_local_corner_3 = &expanding_quad_local_corners[3];
     for (i = 0; i < 4; i++) {
         transform_vector_by_basis(result0, &D_L06_001fe8d0[D_L06_001fe9d0[i][0]], matrix);
         transform_vector_by_basis(result1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
@@ -110,18 +110,18 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
         corners[3].f[1] = data[8] * 1.2f * data[9];
         corners[3].f[2] = data[8] * scale + offset - 0.2f;
     }
-    pos[0].q = corners[0].q;
-    pos[3].q = corners[3].q;
-    pos[1].q = corners[1].q;
-    pos[2].q = corners[2].q;
+    expanding_quad_local_corners[0].q = corners[0].q;
+    expanding_quad_local_corners[3].q = corners[3].q;
+    expanding_quad_local_corners[1].q = corners[1].q;
+    expanding_quad_local_corners[2].q = corners[2].q;
     rotation[2] = l06_camera.yaw;
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     euler_rotation_basis(matrix, rotation);
-    transform_vector_by_basis(result0, pos0, matrix);
-    transform_vector_by_basis(result1, pos1, matrix);
-    transform_vector_by_basis(result2, pos2, matrix);
-    transform_vector_by_basis(result3, pos3, matrix);
+    transform_vector_by_basis(result0, expanding_quad_local_corner_0, matrix);
+    transform_vector_by_basis(result1, expanding_quad_local_corner_1, matrix);
+    transform_vector_by_basis(result2, expanding_quad_local_corner_2, matrix);
+    transform_vector_by_basis(result3, expanding_quad_local_corner_3, matrix);
     quad.positions[0].f[0] = moby->pos.x + result[0].f[0];
     quad.positions[0].f[1] = moby->pos.y + result[0].f[1];
     quad.positions[0].f[2] = moby->pos.z + result[0].f[2];
