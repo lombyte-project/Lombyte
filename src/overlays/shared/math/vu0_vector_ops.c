@@ -17,7 +17,7 @@ float       random_angle_radians() __asm__("FUN_00213308");
 /* Fills the first free 0x20-byte glints slot with v, b and x; returns its index or -1. */
 int allocate_glint_slot(u128 *input_payload, int b, float x) __asm__("FUN_L00_001fe990");
 
-int allocate_glint_slot(u128 *input_payload, int b, float x) {
+int allocate_glint_slot(u128 *input_payload, int moby_index, float x) {
     u128  input_copy;
     u128 *tp = &input_copy;
     char *slot;
@@ -29,7 +29,7 @@ int allocate_glint_slot(u128 *input_payload, int b, float x) {
             qcopy(slot, tp);
             *(float *)(slot + 0x1c) = x;
             *(short *)(slot + 0x10) = 0x18;
-            *(short *)(slot + 0x14) = b;
+            *(short *)(slot + 0x14) = moby_index;
             *(float *)(slot + 0x18) = random_angle_radians();
             return i;
         }
