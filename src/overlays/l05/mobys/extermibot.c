@@ -49,7 +49,7 @@ extern float D_L05_00161A98 __attribute__((sda));
 
 extern float extermibot_spark_paired_frame_count_min_gp __asm__("D_L05_00161AB0")
     __attribute__((sda));
-extern float D_L05_00161AB4 __attribute__((sda));
+extern float l05_extermibot_spark_timing_min_frames __asm__("D_L05_00161AB4") __attribute__((sda));
 
 #include "rnc/overlay/l05/mobys/extermibot_data/extermibot_update.h"
 
@@ -397,7 +397,7 @@ void extermibot_update(unsigned char *moby) {
                               c1,
                               c2,
                               truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))),
+                                  random_float_between(l05_extermibot_spark_timing_min_frames, l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
             path_goal_or_facing_vector[3] = extermibot_spark_facing_vector_w_gp * 0.1f;
@@ -426,7 +426,7 @@ void extermibot_update(unsigned char *moby) {
                               c1,
                               c2,
                               truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))),
+                                  random_float_between(l05_extermibot_spark_timing_min_frames, l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
         }
