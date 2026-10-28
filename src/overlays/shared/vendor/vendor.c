@@ -121,7 +121,7 @@ void draw_vendor_effects(char *vendor_effect_moby) {
     float(*uv_v)[2];
     float(*uvs)[2];
     int   izero;
-    float off;
+    float uv_v_scroll_or_camera_z_angle;
     /* Fakematch: the sparkle radius 1.1 lives in $f22, copied from the glow block's 1.1. */
     register float sparkle_radius __asm__("$f22");
     /* Fakematch: d0's address for the second euler_rotation_basis call. */
@@ -167,7 +167,7 @@ void draw_vendor_effects(char *vendor_effect_moby) {
         i1 = vendor_sparkle_quad_corners[k][1];
         i2 = vendor_sparkle_quad_corners[k][2];
         i3 = vendor_sparkle_quad_corners[k][3];
-        off = vendor_sparkle_uv_scroll;
+        uv_v_scroll_or_camera_z_angle = vendor_sparkle_uv_scroll;
         qd.col[0] = vendor_sparkle_colors[i0];
         qd.col[1] = vendor_sparkle_colors[i1];
         qd.col[2] = vendor_sparkle_colors[i2];
@@ -175,13 +175,13 @@ void draw_vendor_effects(char *vendor_effect_moby) {
         uvs = l00_vendor_sparkle_base_uvs;
         uv_v = (float(*)[2]) & uvs[0][1];
         qd.uv[0][0] = uvs[i0][0];
-        qd.uv[0][1] = uv_v[i0][0] + off;
+        qd.uv[0][1] = uv_v[i0][0] + uv_v_scroll_or_camera_z_angle;
         qd.uv[1][0] = uvs[i1][0];
-        qd.uv[1][1] = uv_v[i1][0] + off;
+        qd.uv[1][1] = uv_v[i1][0] + uv_v_scroll_or_camera_z_angle;
         qd.uv[2][0] = uvs[i2][0];
-        qd.uv[2][1] = uv_v[i2][0] + off;
+        qd.uv[2][1] = uv_v[i2][0] + uv_v_scroll_or_camera_z_angle;
         qd.uv[3][0] = uvs[i3][0];
-        qd.uv[3][1] = uv_v[i3][0] + off;
+        qd.uv[3][1] = uv_v[i3][0] + uv_v_scroll_or_camera_z_angle;
         draw_geometry_quad(&qd, 0, 1);
     }
 
@@ -225,9 +225,9 @@ void draw_vendor_effects(char *vendor_effect_moby) {
     }
 
     g = (char *)&l00_camera_lui;
-    off = *(float *)(g + 0x158);
+    uv_v_scroll_or_camera_z_angle = *(float *)(g + 0x158);
     effect_camera_rotation_angles[0] = 0.0f;
-    effect_camera_rotation_angles[2] = off;
+    effect_camera_rotation_angles[2] = uv_v_scroll_or_camera_z_angle;
     effect_camera_rotation_angles[1] = 0.0f;
     /* Fakematch: d0_arg = d0 (frame slot 0xD0). The sparkle_radius input puts it after retail's mov.s $f22,$f5;
      * the $4 clobber keeps addiu $a0 (mtx) after it. */
