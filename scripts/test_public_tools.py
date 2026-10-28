@@ -557,6 +557,118 @@ class DataDeclarationTests(unittest.TestCase):
             self.assertEqual(list(decls.conflicts(root)), ["D_0015ED00"])
 
 
+class OverlayDataSymbolCacheTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.proof = load_module("rnc_overlay_proof_cache", ROOT / "scripts/overlay_proof.py")
+
+    @staticmethod
+    def _elf_bytes(symbols, data=b"\x01\x02\x03\x04"):
+        """Small ELF32 object; symbols are (name, type, section, value, size)."""
+        names = b"\0.shstrtab\0.strtab\0.symtab\0.data\0.text\0"
+        strings = bytearray(b"\0")
+        table = bytearray(16)  # ELF null symbol
+        for name, kind, section, value, size in symbols:
+            offset = len(strings)
+            strings.extend(name.encode() + b"\0")
+            table.extend(struct.pack("<IIIBBH", offset, value, size, kind, 0, section))
+        payloads = [b"", names, bytes(strings), bytes(table), data, b"\0" * 4]
+        image = bytearray(52)
+        offsets = []
+        for payload in payloads:
+            offsets.append(len(image))
+            image.extend(payload)
+        while len(image) % 4:
+            image.append(0)
+        shoff = len(image)
+        sections = [(0, 0, 0, 0, 0), (names.index(b".shstrtab"), 3, 0, 0, 0),
+                    (names.index(b".strtab"), 3, 0, 0, 0),
+                    (names.index(b".symtab"), 2, 2, 1, 16),
+                    (names.index(b".data"), 1, 0, 0, 0),
+                    (names.index(b".text"), 1, 0, 0, 0)]
+        for i, (name, kind, link, info, entsize) in enumerate(sections):
+            image.extend(struct.pack("<10I", name, kind, 0, 0, offsets[i],
+                                     len(payloads[i]), link, info, 1, entsize))
+        ident = b"\x7fELF\x01\x01\x01" + b"\0" * 9
+        image[:52] = struct.pack("<16sHHIIIIIHHHHHH", ident, 1, 8, 1, 0, 0,
+                                 shoff, 0, 52, 0, 0, 40, len(sections), 1)
+        return bytes(image)
+
+    def test_filter_order_duplicates_and_independent_lists(self):
+        proof = self.proof
+        elf = proof.ELFFile(io.BytesIO(self._elf_bytes([
+            ("dup", 1, 4, 0, 1), ("function", 2, 4, 0, 1),
+            ("undefined", 1, 0, 0, 1), ("absolute", 1, 0xFFF1, 0, 1),
+            ("text", 1, 5, 0, 1),
+            ("zero", 1, 4, 1, 0), ("dup", 1, 4, 2, 1)])))
+        rows = proof.data_symbols(elf)
+        self.assertEqual([(s.name, s["st_value"], s["st_size"], sec) for s, sec in rows],
+                         [("dup", 0, 1, ".data"), ("zero", 1, 0, ".data"),
+                          ("dup", 2, 1, ".data")])
+        first = rows[0]
+        rows.clear()
+        with mock.patch.object(proof, "_symbols", side_effect=AssertionError("rescanned")):
+            self.assertEqual(len(proof.data_symbols(elf)), 3)
+            self.assertEqual(proof._data_symbol(elf, "dup"), first)
+            self.assertIsNone(proof._data_symbol(elf, "absent"))
+            with mock.patch.object(proof, "data_symbols", side_effect=AssertionError("reindexed")):
+                self.assertEqual(proof._data_symbol(elf, "dup"), first)
+                self.assertIsNone(proof._data_symbol(elf, "absent"))
+
+    def test_empty_cache_does_not_rescan(self):
+        proof = self.proof
+        elf = proof.ELFFile(io.BytesIO(self._elf_bytes([])))
+        self.assertEqual(proof.data_symbols(elf), [])
+        with mock.patch.object(proof, "_symbols", side_effect=AssertionError("rescanned")):
+            self.assertEqual(proof.data_symbols(elf), [])
+            self.assertIsNone(proof._data_symbol(elf, "absent"))
+            with mock.patch.object(proof, "data_symbols", side_effect=AssertionError("reindexed")):
+                self.assertIsNone(proof._data_symbol(elf, "still_absent"))
+
+    def test_rebuilt_object_invalidates_cached_symbols(self):
+        proof = self.proof
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "data.o"
+            try:
+                path.write_bytes(self._elf_bytes([("old", 1, 4, 0, 4)]))
+                os.utime(path, ns=(946684800000000000,) * 2)
+                old = proof.open_elf(path)
+                self.assertIsNotNone(proof._data_symbol(old, "old"))
+                self.assertIs(proof.open_elf(path), old)
+                path.write_bytes(self._elf_bytes([("new", 1, 4, 0, 4)]))
+                os.utime(path, ns=(946684802000000000,) * 2)
+                new = proof.open_elf(path)
+                self.assertIsNot(new, old)
+                self.assertIsNone(proof._data_symbol(new, "old"))
+                self.assertIsNotNone(proof._data_symbol(new, "new"))
+            finally:
+                hit = proof._ELVES.pop(str(path), None)
+                if hit:
+                    hit[2].close()
+
+    def test_warm_cache_does_not_cache_retail_verdicts(self):
+        proof = self.proof
+        for name, check in [("D_L00_00100000", proof.check_data),
+                            ("D_00100000", proof.check_shared_data)]:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / "data.o"
+                path.write_bytes(self._elf_bytes([(name, 1, 4, 0, 4)]))
+                try:
+                    proof.data_symbols(proof.open_elf(path))
+                    with mock.patch.object(proof.ov, "level_ids", return_value=[0]), \
+                            mock.patch.object(proof.ov, "level_data_bytes",
+                                              return_value=b"\x01\x02\x03\x04") as retail:
+                        self.assertTrue(check(path, name)["exact"])
+                        retail.return_value = b"\x01\x02\x03\xff"
+                        verdict = check(path, name)
+                        self.assertFalse(verdict["exact"])
+                        self.assertTrue(verdict["verdict"].startswith("BYTES"))
+                finally:
+                    hit = proof._ELVES.pop(str(path), None)
+                    if hit:
+                        hit[2].close()
+
+
 class OverlaySourceStateTests(unittest.TestCase):
     """overlay_units.source_state must count a C-named function bound to its label."""
 
