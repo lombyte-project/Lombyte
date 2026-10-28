@@ -472,7 +472,7 @@ typedef struct G2d1428 {
     u8 p224[0x10];
     f32 f234;
 } G2d1428;
-extern V2d1428 D_L00_00173E60;
+extern V2d1428 collision_hit_point __asm__("D_L00_00173E60");
 s32 is_moby_in_class_range_500_to_540(M2d1428 *) __asm__("FUN_L00_0025e3b8");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -791,7 +791,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
             collision_start.z += vars->fB0 * 0.75f;
             collision_end.z += vars->vel.z;
             hit = coll_line_fix(&collision_start, &collision_end, 2, 0, 0);
-            qcopy(&landing_position, &D_L00_00173E60);
+            qcopy(&landing_position, &collision_hit_point);
         } else {
             qcopy(&landing_position, &vars->parent->pos);
             landing_position.z += 1.0f;
