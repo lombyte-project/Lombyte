@@ -461,7 +461,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x3E: {
+    case HERO_STATE_HOVERBOARD_MOVE_WITH_RAMP_LAUNCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x15;
         p->unk2284 = 8;
