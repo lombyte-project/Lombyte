@@ -33,35 +33,35 @@ void update_ribbon_effect_moby(struct Moby *moby) {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1
     };
-    char        *data = (char *)moby->pvars;
+    char        *ribbon_effect_state = (char *)moby->pvars;
     struct Hero *x;
     float        forward_point[4];
     float        bounding_sphere[4];
     int          voice_slot_index;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        if (*(int *)(data + 0x1F4) == -1 || *(int *)(data + 0x1F8) == -1 ||
-            *(int *)(data + 0x1FC) == -1 || *(int *)(data + 0x200) < 0) {
+        if (*(int *)(ribbon_effect_state + 0x1F4) == -1 || *(int *)(ribbon_effect_state + 0x1F8) == -1 ||
+            *(int *)(ribbon_effect_state + 0x1FC) == -1 || *(int *)(ribbon_effect_state + 0x200) < 0) {
             mark_moby_for_removal(moby);
             return;
         }
         initialize_ribbon_effect_state(moby);
         moby->state = 1;
-        *(int *)(data + 0x204) = -1;
+        *(int *)(ribbon_effect_state + 0x204) = -1;
         break;
     case MOBY_STATE_UPDATE:
         x = &hero;
         if (x->state.control_mode != 0xF ||
-            (x->rail_spline != (int)l14_splines[*(int *)(data + 0x1F4)].path &&
-             x->rail_spline != (int)l14_splines[*(int *)(data + 0x1F8)].path &&
-             x->rail_spline != (int)l14_splines[*(int *)(data + 0x1FC)].path)) {
+            (x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1F4)].path &&
+             x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1F8)].path &&
+             x->rail_spline != (int)l14_splines[*(int *)(ribbon_effect_state + 0x1FC)].path)) {
             if (16.0f < absolute_float(x->motion.pos.f[0] - moby->pos.x))
                 goto end;
             if (16.0f < absolute_float(x->motion.pos.f[1] - moby->pos.y))
                 goto end;
         }
-        if (voice_is_playing(moby, *(int *)(data + 0x204)) == 0) {
-            *(int *)(data + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
+        if (voice_is_playing(moby, *(int *)(ribbon_effect_state + 0x204)) == 0) {
+            *(int *)(ribbon_effect_state + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
         }
         register_hero_hit_in_clip_volume(moby);
         forward_point[0] = fast_cos(moby->rot.z) * 3.125f;
@@ -76,7 +76,7 @@ void update_ribbon_effect_moby(struct Moby *moby) {
         return;
     }
 end:
-    voice_slot_index = *(int *)(data + 0x204);
+    voice_slot_index = *(int *)(ribbon_effect_state + 0x204);
     if (voice_slot_index >= 0) {
         if (voice_slot_index != -1) {
             char *voice_slot_entry = D_0013E633 - 0xE80 + voice_slot_index * 0x70;
@@ -85,7 +85,7 @@ end:
                 release_voice_slot(voice_slot_index);
             }
         }
-        *(int *)(data + 0x204) = -1;
+        *(int *)(ribbon_effect_state + 0x204) = -1;
     }
 }
 
