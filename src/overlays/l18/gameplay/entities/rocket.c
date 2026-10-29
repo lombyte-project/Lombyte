@@ -1490,7 +1490,7 @@ extern int D_L18_001623A8 __attribute__((sda));
 void spawn_floating_platform_sparks(struct Moby *moby) __asm__("FUN_L18_002d88b8");
 
 extern void spawn_floating_platform_sparks(struct Moby *) __asm__("FUN_L18_002d88b8");
-extern void FUN_L18_00227dd0(int, int);
+extern void hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1595,7 +1595,7 @@ void floating_platform_update(struct Moby *moby) {
         if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
-                    FUN_L18_00227dd0(0x77, 1);
+                    hero_set_state(0x77, 1);
                 }
             }
             *(float *)(data + 0x70) -= frame_time_sq * 13.7f;

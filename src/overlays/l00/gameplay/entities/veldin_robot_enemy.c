@@ -205,7 +205,7 @@ extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678
 extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
 extern void update_joint_animation(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_0025a120(ElectroidMoby *);
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -275,7 +275,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     if (*(u8 *)0x15EDB7 != 0) {
         update_joint_animation(moby, vars->unk120, 2, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp * 0.3f);
     }
-    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, &D_L00_00166DC0) < 27.0f) {
+    if (moby->unk31 != 0 && fast_vec_dist(&moby->pos, &D_L00_00166DC0) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->unk7F = 0x15;
     }
@@ -326,7 +326,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                   fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
                   12.566371f);
         fast_vec_sub(&dir, &delta, &moby->pos);
-        advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]),
+        advance_accelerated_scalar(fast_vec_dist(&moby->pos, &path->pts[path->count - 1]),
                                    frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &path_step_distance,
                                    &vars->speed);
         if (fast_vec_length(&dir) < vars->speed + vars->speed) {
@@ -822,7 +822,7 @@ extern FlockGame D_L00_0016C860;
 
 extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
-extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
+extern FlockPart *spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
 
 void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
 
@@ -868,7 +868,7 @@ void update_phase_effect_controller(FlockMoby *moby) {
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
                     random_magnitude = random_int_between(0, 4);
-                    part = FUN_L00_0026d000(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
+                    part = spawn_puff(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
                                             D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;

@@ -1295,7 +1295,7 @@ extern f32 fast_vec_dist(V4 *, V4 *) __asm__("FUN_001f9b48");
 extern void FUN_001f9a28_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a10");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
+extern u8 *spawn_puff(V4 *, f32, f32, f32, f32, s32, V4 *, u32) __asm__("FUN_L00_0026d000");
 
 void emit_beam_trail_particles(X *x) __asm__("FUN_L00_002b3c50");
 
@@ -1361,7 +1361,7 @@ void emit_beam_trail_particles(X *x) {
         effect_random_upper_bound = 1.037f;
         effect_input_and_position_offset.f[2] -= D_0015ED6C_c * 3.0f;
     }
-    spawned_effect = FUN_L00_0026d000(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
+    spawned_effect = spawn_puff(&emission_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
     if (spawned_effect)
         spawned_effect[3] = 0x44;
     if (trail_state->f0C) {
@@ -1376,7 +1376,7 @@ void emit_beam_trail_particles(X *x) {
         for (i = 1; i < trail_sample_limit; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            spawned_effect = FUN_L00_0026d000(&trail_sample_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
+            spawned_effect = spawn_puff(&trail_sample_position, 0.05f, 1.01f, effect_random_upper_bound, 30000.0f, 6, &effect_input_and_position_offset, col);
             if (spawned_effect)
                 spawned_effect[3] = 0x44;
         }

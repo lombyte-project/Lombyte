@@ -314,7 +314,7 @@ extern Moby_2C27B0 *D_L13_00174158;
 extern struct { char pad[0x18]; Moby_2C27B0 *moby; } D_L13_00174140;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_00259888(float, void *, void *, int, void *);
+extern void make_hit_descriptor(float, void *, void *, int, void *) __asm__("FUN_L00_00259888");
 extern int FUN_L00_001f0d60_2048(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -369,7 +369,7 @@ void update_level_13_class_53_projectile(Moby_2C27B0 *moby) {
     target = *(Moby_2C27B0 **)(moby_data + 0x74);
     if (target != 0 && target->state != 0xFE && target->state != 0xFD &&
         fast_vec_dist(pos, &target->pos) > 8.0f) {
-        FUN_L00_00259888(16.0f, &hitpos, moby, 0x30000, velocity);
+        make_hit_descriptor(16.0f, &hitpos, moby, 0x30000, velocity);
         qcopy(&steering_and_collision_vector, pos);
         steering_and_collision_vector.z += 0.75f;
         flags = collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);

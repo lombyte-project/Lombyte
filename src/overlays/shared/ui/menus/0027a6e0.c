@@ -23,8 +23,8 @@ extern short unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013C940[];
 extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
-extern void FUN_L00_002607d0(int);
-extern void FUN_L00_00263d40(int, int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
 void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
@@ -74,7 +74,7 @@ void process_unlock_code_input(void) {
             D_0013D4C0[code] = 1;
             ((char *)items_acquired)[code] = 1;
         } else if ((unsigned)(code - 0x25) < 0x12) {
-            FUN_L00_002607d0(va);
+            unlock_planet(va);
         } else if ((unsigned)vb < 6) {
             char *code_flags = D_0013D388;
             code_flags[vb] = 1;
@@ -83,7 +83,7 @@ void process_unlock_code_input(void) {
             if (!*selected_code_flag) {
                 *selected_code_flag = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
-                FUN_L00_00263d40(0x53D6, -1);
+                queue_dialogue_message(0x53D6, -1);
             }
         }
     } else {

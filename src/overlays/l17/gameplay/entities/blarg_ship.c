@@ -535,7 +535,7 @@ extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -631,7 +631,7 @@ void blarg_ship_update(struct Moby *moby) {
             moby->collision = 0;
             moby->flags |= 1;
         } else if (moby->visible == 0) {
-            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 32.0f) {
+            if (fast_vec_dist(&moby->pos, &hero.motion.pos) < 32.0f) {
                 moby->state = 3;
                 moby->collision = 0;
                 moby->flags |= 1;
@@ -642,7 +642,7 @@ void blarg_ship_update(struct Moby *moby) {
         qcopy(scratch_vector, &moby->pos);
         scratch_vector[3] = 3.0f;
         if (fast_bsphere_check((char *)&moby->pos, 512.0f) == -1) {
-            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) > 32.0f) {
+            if (fast_vec_dist(&moby->pos, &hero.motion.pos) > 32.0f) {
                 *(int *)(moby_pvars + 0x84) += 1;
                 if (scale_game_frames(60) < *(int *)(moby_pvars + 0x84)) {
                     moby->state = 1;
@@ -699,7 +699,7 @@ void blarg_ship_update(struct Moby *moby) {
             if (moby->visible) {
                 *(int *)(moby_pvars + 0x98) += 1;
             }
-            if (FUN_001f9b48(movement_target_position, &moby->pos.x) < 2.0f) {
+            if (fast_vec_dist(movement_target_position, &moby->pos.x) < 2.0f) {
                 moby->command = 0;
             } else if (scale_game_frames(120) < *(int *)(moby_pvars + 0x98)) {
                 moby->command = 0;

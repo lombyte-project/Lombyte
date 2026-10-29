@@ -7,7 +7,7 @@ struct VoBuf {
     s32 unk10;
 };
 
-extern s32 func_0023D2C8();
+extern s32 vo_buf_is_empty() __asm__("func_0023D2C8");
 s32 vo_buf_get_tag(struct VoBuf *vo_buf) __asm__("FUN_0023d2d8");
 
 s32 vo_buf_get_tag(struct VoBuf *vo_buf) {
@@ -15,7 +15,7 @@ s32 vo_buf_get_tag(struct VoBuf *vo_buf) {
     s32 unk8;
     s32 unkC;
 
-    if (func_0023D2C8() != 0) {
+    if (vo_buf_is_empty() != 0) {
         return 0;
     }
     unk8 = *((volatile s32 *)(&vo_buf->unk8));

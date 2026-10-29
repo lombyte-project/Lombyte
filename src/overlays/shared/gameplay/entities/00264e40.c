@@ -40,7 +40,7 @@ extern int D_L02_001600D4 __attribute__((sda));
 extern int D_L02_001600D8 __attribute__((sda));
 extern float D_L02_001600DC __attribute__((sda));
 extern float D_L02_001600E0 __attribute__((sda));
-extern void FUN_L00_00257d78(float *, float, float);
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -84,7 +84,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     first_count = (D_L02_001600D4);
     if (travel < 4.0f) first_count = 1;
     for (i = 0; i < n + first_count; i++) {
-        FUN_L00_00257d78(offset, 0.0f,
+        random_vector(offset, 0.0f,
             (((D_L02_001600DC) - (D_L02_001600E0)) * (travel / distance) + (D_L02_001600E0)) * frame_time_macro);
         fast_vec_add(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
@@ -105,7 +105,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         float sp2 = random_float_between(10.0f, 30.0f);
         sp2 = FUN_L04_001f1978(sp2);
         ((Slots *)slots)->timer = truncate_float_to_s32(sp2);
-        FUN_L00_00257d78(offset, 0.0f, frame_time_macro + frame_time_macro);
+        random_vector(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         fast_vec_add(velocity, velocity, offset);
         velocity[3] = 0.0f;

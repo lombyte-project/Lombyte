@@ -357,7 +357,7 @@ void resort_owner_update(struct Moby *moby) {
     update_resort_owner_state_transitions(moby);
     update_resort_owner_look_tracking(moby);
 }
-extern int FUN_00214cc8(void *, float);
+extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
 extern void transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern void FUN_00212f90(void *, int, int, int);
@@ -418,7 +418,7 @@ void update_resort_owner_state_actions(void *mp) {
         break;
     }
     case RESORT_OWNER_JUMP_TO_TARGET:
-        if (FUN_00214cc8(moby, 9.0f)) {
+        if (is_value_within_interpolated_window(moby, 9.0f)) {
             fast_vec_sub(pvars + 0x130, pvars + 0x120, (char *)moby + 0x10);
             motion_scalar = (float)scale_game_frames(0x3C);
             fast_vec_scale(pvars + 0x130, pvars + 0x130, 1.0f / motion_scalar);
@@ -429,7 +429,7 @@ void update_resort_owner_state_actions(void *mp) {
         motion_scalar = fast_vec_length(pvars + 0x130);
         if (0.0f < motion_scalar)
             *(float *)(pvars + 0x138) = *(float *)(pvars + 0x138) - D_0015ED70 * 10.8f;
-        if (FUN_00214cc8(moby, 29.0f)) {
+        if (is_value_within_interpolated_window(moby, 29.0f)) {
             clear_u64_value(pvars + 0x130);
             *(float *)((char *)moby + 0x58) = 1.0f;
         }

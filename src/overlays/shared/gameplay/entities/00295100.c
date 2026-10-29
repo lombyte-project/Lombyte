@@ -151,7 +151,7 @@ extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 extern void update_parts(void) __asm__("FUN_00217b88");
 extern void update_glints(void) __asm__("FUN_L00_001fea18");
 extern void update_camera(void) __asm__("FUN_001edaa8");
-extern void FUN_L00_001f3aa0(void);
+extern void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 extern void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void update_all_point_lights(void) __asm__("FUN_00201a28");
@@ -278,7 +278,7 @@ void handle_pause_input(void) {
     if (DBG(8)) {
         update_camera();
     } else if (D_L00_0016C058.w14) {
-        FUN_L00_001f3aa0();
+        update_debug_camera();
         if (D_L00_0016C058.w14 == 2)
             update_hero_from_debug_camera();
     }
@@ -861,8 +861,8 @@ extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
-extern void FUN_001e93b0(char *, s32);
-extern void FUN_001f97b0(void);
+extern void debug_print(char *, s32) __asm__("FUN_001e93b0");
+extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
@@ -909,8 +909,8 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         wait_for_graphics_pipeline_idle(0, 0);
     }
     if (gs_address > 0x400000) {
-        FUN_001e93b0(mpeg_memory_alloc_error_format, gs_address - 0x400000);
-        FUN_001f97b0();
+        debug_print(mpeg_memory_alloc_error_format, gs_address - 0x400000);
+        raise_kernel_trap();
     }
 }
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;

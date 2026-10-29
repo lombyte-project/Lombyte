@@ -490,7 +490,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_L04_0015F580[] MACRO_ADDR;
 extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_00259bc8_cf(float) __asm__("FUN_001f99c0");
 extern float add_vector_xyz_cf(float) __asm__("FUN_001f9de0");
@@ -595,7 +595,7 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     FUN_L00_00263ac8(2.5f, (int)moby, 0, (unsigned char *)&data->m120);
     if (moby->f31 != 0) {
-        if (FUN_001f9b48(moby->pos, D_L04_00166F40) < 27.0f) {
+        if (fast_vec_dist(moby->pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);
             moby->f7F = 0x15;
         }
@@ -621,7 +621,7 @@ void big_axebot_update(M_B7B0 *moby) {
     qcopy(dest, moby->pos);
     qcopy(tpos, tg.pos);
     if (moby->f31 != 0) {
-        if (FUN_001f9b48(moby->pos, D_L04_00166F40) < 32.0f) {
+        if (fast_vec_dist(moby->pos, D_L04_00166F40) < 32.0f) {
             FUN_L00_0025a120(moby);
             moby->f7F = 0x1A;
         }
@@ -1586,7 +1586,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     FUN_L00_00263ac8(2.9f, (int)moby, 7, data->f270);
     if (moby->f31 != 0) {
-        if (FUN_001f9b48(moby->pos, D_L04_00166F40) < 27.0f) {
+        if (fast_vec_dist(moby->pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);
             moby->f7F = 0x15;
         }
@@ -1601,7 +1601,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     update_circular_saw_engine_sound((struct Moby *)moby);
     if (moby->state == 1 || moby->state == 3) {
         H_35F0 *h = (H_35F0 *)(((char *)((char *)&hero)));
-        if (h->f240 == moby || FUN_001f9b48(moby->pos, h->pos) < 1.5f) {
+        if (h->f240 == moby || fast_vec_dist(moby->pos, h->pos) < 1.5f) {
             blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
             data->f146 = scale_game_frames(0x3C);
             moby->state = 7;
@@ -2345,7 +2345,7 @@ void blarg_trooper_update(struct Moby *moby) {
     pos = (float *)&moby->pos;
     manipulator_set_scale(data + 0x110, 3.0f);
     if (moby->visible != 0) {
-        if (FUN_001f9b48(pos, D_L04_00166F40) < 27.0f) {
+        if (fast_vec_dist(pos, D_L04_00166F40) < 27.0f) {
             FUN_L00_0025a120(moby);
             moby->shadow_range = 0x15;
         }

@@ -152,7 +152,7 @@ extern void FUN_L00_00211e30_b(f32, f32, f32, s32) __asm__("FUN_L00_00211e30");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
-extern f32 FUN_001f99c0(f32);
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 extern s32 get_hero_idle_animation_index(s32) __asm__("FUN_L01_00226f10");
 extern void adjust_hero_animation_speed_for_target_frame(f32, f32, f32, f32) __asm__("FUN_L00_00208f20");
@@ -377,13 +377,13 @@ void update_hero_motion_for_current_state(void) {
                 } else if (hero.state.current == 0x17) {
                     turn_hero_toward_move_direction_for_item();
                 }
-                if (FUN_001f99c0(hero.motion.yaw_rate) > frame_time * 0.34906584f) {
+                if (absolute_float(hero.motion.yaw_rate) > frame_time * 0.34906584f) {
                     s32 neg = hero.motion.yaw_rate < 0.0f;
                     s32 anim = neg + 0xE;
                     if (((struct MobyView *)hero.moby)->b53 != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(5));
                     }
-                    hero.anim_speed = FUN_001f99c0(hero.motion.yaw_rate) / (frame_time * 3.3161256f);
+                    hero.anim_speed = absolute_float(hero.motion.yaw_rate) / (frame_time * 3.3161256f);
                     if (hero.anim_speed < 0.55f) {
                         hero.anim_speed = 0.55f;
                     }
@@ -825,7 +825,7 @@ void update_hero_motion_for_current_state(void) {
             if (PD.i1D4 != 0 && hero.unk698 != 0) {
                 hero.target_speed = frame_time * 3.0f;
             }
-            if (FUN_001f99c0(hero.motion.yaw_error) > 0.7853982f) {
+            if (absolute_float(hero.motion.yaw_error) > 0.7853982f) {
                 hero.target_speed = 0.0f;
             }
             speed_step(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
@@ -967,7 +967,7 @@ void update_hero_motion_for_current_state(void) {
             f32 t = -fast_vec_dot(&hero.motion.displacement, &hero.gravity_dir);
             f32 dd;
             pl0 = &hero;
-            if (FUN_001f99c0(t) > frame_time * 0.5f) {
+            if (absolute_float(t) > frame_time * 0.5f) {
                 if (t < 0.0f) {
                     pl0->hoverboard_speed += t * 0.0005f;
                 }
@@ -1103,8 +1103,8 @@ void update_hero_motion_for_current_state(void) {
         speed_step(frame_time_sq * 36.0f, frame_time_sq * 36.0f);
         if (hero.air_frames.s != 0) {
             set_planar_vel(hero.board_air_yaw);
-            if (hero.trick_input == 0 && FUN_001f99c0(hero.motion.rot.f[1]) < 0.6981317f &&
-                FUN_001f99c0(hero.motion.rot.f[0]) < 0.6981317f) {
+            if (hero.trick_input == 0 && absolute_float(hero.motion.rot.f[1]) < 0.6981317f &&
+                absolute_float(hero.motion.rot.f[0]) < 0.6981317f) {
                 spring_angle(&hero.motion.rot.f[2], hero.board_air_yaw, &hero.air_yaw_spring_vel, 0, frame_scale_sq * 0.04f,
                                  frame_scale_sq * 0.3f, frame_time * 6.981317f);
             }
@@ -1695,7 +1695,7 @@ void update_hero_motion_for_current_state(void) {
                 mx = 1.9f;
             }
             combo_spacing_error = d - off;
-            if (FUN_001f99c0(combo_spacing_error) < tol + 3.0f) {
+            if (absolute_float(combo_spacing_error) < tol + 3.0f) {
                 f32 s = combo_spacing_error / 0.9f;
                 if (s > mx) {
                     s = mx;
@@ -1867,7 +1867,7 @@ void update_hero_motion_for_current_state(void) {
         f32 f;
         update_hero_target_speed_from_stick();
         transform_vector(&primary_vector_scratch, &hero_b.motion.move_dir, (Vec4 *)hero_b.inv_rot_matrix);
-        a = FUN_001f99c0(fast_arc_tan(primary_vector_scratch.f[0], primary_vector_scratch.f[1]));
+        a = absolute_float(fast_arc_tan(primary_vector_scratch.f[0], primary_vector_scratch.f[1]));
         if (a > 0.69813168f) {
             f32 x0 = hero.target_speed;
             f32 x1 = hero.ground_speed;
@@ -1921,10 +1921,10 @@ void update_hero_motion_for_current_state(void) {
         if (hero.motion.flat_speed < frame_time * 0.3f && hero.stick_magnitude > 0.85f) {
             hero.unk3B8 = 1;
         }
-        if (FUN_001f99c0(hero.motion.yaw_error) < 0.05235988f || hero.item_anim_active != 0 || hero.state.step == 1) {
+        if (absolute_float(hero.motion.yaw_error) < 0.05235988f || hero.item_anim_active != 0 || hero.state.step == 1) {
             hero.unk3B8 = 0;
         }
-        if (hero.unk3BE != 0 && (FUN_001f99c0(hero.motion.yaw_error) < 0.06981317f || hero.item_anim_active != 0)) {
+        if (hero.unk3BE != 0 && (absolute_float(hero.motion.yaw_error) < 0.06981317f || hero.item_anim_active != 0)) {
             hero.unk3BE = 0;
         }
         update_hero_target_speed_from_stick();

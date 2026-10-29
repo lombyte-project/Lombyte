@@ -1705,7 +1705,7 @@ typedef struct N_2a82c0 {
     struct N_2a82c0 *next;
 } N_2a82c0;
 extern N_2a82c0 *D_L00_0015FFE4;
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int begin_bolt_attraction(void *, void *, float, float) __asm__("FUN_L00_002a7210");
 extern int is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *) __asm__("FUN_L00_0025e3f8");
 extern int try_collect_ammo_pickup(void *) __asm__("FUN_L00_002c5be8");
@@ -1725,12 +1725,12 @@ void process_mobies_near_returning_wrench(unsigned char *wrench_moby) {
         if (scanned_moby->type == 0xFD)
             return;
         if (scanned_moby && scanned_moby->info && *(short *)(scanned_moby->info + 0x46) == 0x13) {
-            if (FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+            if (fast_vec_dist((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
                 moby_processing_result = begin_bolt_attraction(scanned_moby, ((void *)hero_context->moby),
                                      random_float_between(-30.0f, 30.0f) * DEG_TO_RAD, 0.0f);
                 goto check;
             }
-        } else if (is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(scanned_moby) && FUN_001f9b48((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
+        } else if (is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(scanned_moby) && fast_vec_dist((char *)scanned_moby + 0x10, wrench_moby + 0x10) < 2.7f) {
             moby_processing_result = try_collect_ammo_pickup(scanned_moby);
         check:
             if (moby_processing_result)
@@ -1830,7 +1830,7 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int allocate_hero_voice_for_entry(int,int) __asm__("FUN_L00_00216de8");
-extern int FUN_L00_002223f8(int,int);
+extern int hero_set_state(int,int) __asm__("FUN_L00_002223f8");
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char*) __asm__("FUN_L00_0025e368");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
@@ -2026,7 +2026,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             }
         }
         if (reaction) {
-            FUN_L00_002223f8(33,1);
+            hero_set_state(33,1);
             if (collision_hit.moby) {
                 WrenchMoby *target=collision_hit.moby;
                 wrench_hero()->reaction_yaw=fast_arc_tan(wrench_hero()->position[0]-target->position[0],wrench_hero()->position[1]-target->position[1]);

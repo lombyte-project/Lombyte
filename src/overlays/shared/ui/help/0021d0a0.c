@@ -69,7 +69,7 @@ extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
 extern s32 D_L06_0015F5CC_macro __asm__("D_L06_0015F5CC") MACRO_ADDR;
 extern f32 D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") NOT_SDA;
 extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
-extern void FUN_L00_00211670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
@@ -85,7 +85,7 @@ extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b6
 extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
@@ -128,7 +128,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
     s32 color, color2;
 
     advance_hero_animation();
-    FUN_L00_00211670();
+    hero_update();
     apply_hero_ground_material_response();
     g = (char *)&hero;
     if (*(u8 *)(g + 0x20a4) == 1) {
@@ -167,7 +167,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
         {
             char *g = (char *)&hero;
             if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
-                FUN_L00_0024f7c8(*(char **)(g + 0x2080), 7, scratch.rotation);
+                moby_point_position(*(char **)(g + 0x2080), 7, scratch.rotation);
                 qcopy(g + 0x1d80, &scratch.rotation[0]);
                 enqueue_hero_glow_draw_callback_once();
                 if (*(char **)(g + 0x1624) != 0) {
@@ -298,7 +298,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
             }
             g = (char *)&hero;
             for (i = 0; i < 3; i++)
-                FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
+                moby_point_position(hero.moby, i, g + 0x1d50 + i * 0x10);
             g = (char *)&hero;
             moby = *(char **)(g + 0x2080);
             /* Retail snapshots these channels before the alpha helper calls. */

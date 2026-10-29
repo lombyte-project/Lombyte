@@ -519,7 +519,7 @@ extern char fighter_jet_arrow_direction_basis[] __asm__("D_L17_001678D0");
 extern char fighter_jet_screen_marker_vertices[] __asm__("D_L17_001D9AC0");
 extern float fighter_jet_aim_radius_offset_vector[] __asm__("D_L17_001678E0");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
@@ -657,7 +657,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
                     emit_transformed_2d_vertex_packet(fighter_jet_screen_marker_vertices, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
                 }
             }
-            dd = FUN_001f9b48(scanned_moby + 0x10, (&hero.motion.pos));
+            dd = fast_vec_dist(scanned_moby + 0x10, (&hero.motion.pos));
             if (dd < bestd) {
                 near = scanned_moby;
                 bestd = dd;
@@ -741,7 +741,7 @@ int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, 
         ang = fast_add_rotations(fast_arc_tan(v[0], v[1]), 1.5707964f);
         v[0] += 256.0f;
         v[1] += 208.0f;
-        ship_to_arrow_target_distance = FUN_001f9b48(ap, np);
+        ship_to_arrow_target_distance = fast_vec_dist(ap, np);
         heading_error_magnitude = absolute_float(
             fast_subtract_rotations(fast_arc_tan(*(float *)(near + 0x10) - *(float *)((char *)ship_moby + 0x10),
                                       *(float *)(near + 0x14) - *(float *)((char *)ship_moby + 0x14)),
@@ -2415,7 +2415,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     update_robot_dog_glow_effects(robot_dog_moby);
     facing_target_moby = robot_dog_vars->target;
     manipulator_set_scale(robot_dog_vars->a230, 2.1f);
-    if (robot_dog_moby[0x31] != 0 && FUN_001f9b48(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
+    if (robot_dog_moby[0x31] != 0 && fast_vec_dist(robot_dog_moby + 0x10, D_L17_001676C0) < 29.0f) {
         FUN_L00_0025a120(robot_dog_moby);
         robot_dog_moby[0x7F] = 0x17;
     }
@@ -2627,7 +2627,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             if (robot_dog_moby[0x53] != 10) {
                 blend_moby_animation_c(robot_dog_moby, 10, 5, scale_game_frames(10));
             }
-        } else if (FUN_001f9b48(robot_dog_vars->v180, &robot_dog_vars->home) > 32.0f ||
+        } else if (fast_vec_dist(robot_dog_vars->v180, &robot_dog_vars->home) > 32.0f ||
                    absolute_float(robot_dog_vars->v180[2] - *(float *)(robot_dog_moby + 0x18)) > 3.0f) {
             robot_dog_moby[0x20] = 11;
         }
@@ -2784,7 +2784,7 @@ typedef struct {
     Moby_2F1558 *moby;
 } Hit_2F1558;
 
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
@@ -2845,7 +2845,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     if (FUN_L00_0025ff38(128.0f, (char *)moby, moby_vars->v180, 0, 0, 0, 0) == 2) {
         return;
     }
-    if (FUN_001f9b48(moby->pos, moby_vars->v1B0) < 64.0f) {
+    if (fast_vec_dist(moby->pos, moby_vars->v1B0) < 64.0f) {
         target_heading = fast_arc_tan(moby_vars->v180[0] - moby->pos[0], moby_vars->v180[1] - moby->pos[1]);
         yaw = fast_difference_between_rotations(moby->f48, target_heading);
         qcopy(position_buffer, moby->pos);

@@ -176,7 +176,7 @@ extern unsigned char D_0014C050[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void add_draw_callback(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
@@ -215,10 +215,10 @@ void bot_door_lock_update(char *moby) {
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)(moby + 0x10);
         number_anchor_position[2] += 2.75f;
-        if (FUN_001f9b48(D_L06_00167540, moby + 0x10) < 32.0f) {
+        if (fast_vec_dist(D_L06_00167540, moby + 0x10) < 32.0f) {
             data[9] += frame_time + frame_time;
             if (bot_door_lock_max_effect_horizontal_scale_gp < data[9]) data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
-        } else if (36.0f < FUN_001f9b48(D_L06_00167540, moby + 0x10)) {
+        } else if (36.0f < fast_vec_dist(D_L06_00167540, moby + 0x10)) {
             data[9] -= frame_time + frame_time;
             if (data[9] < 0.0f) data[9] = 0.0f;
         }

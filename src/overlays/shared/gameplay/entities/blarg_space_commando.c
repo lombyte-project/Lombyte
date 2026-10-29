@@ -81,7 +81,7 @@ extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -141,7 +141,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     FUN_L06_002feb40_u(moby);
     target = vars->target;
     FUN_L00_00263ac8(moby, 1, vars->unk420, 2.5f);
-    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, &D_L06_00167540) < 27.0f) {
+    if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L06_00167540) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
     }
@@ -330,7 +330,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
         resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &movement_output_or_hit_vector_or_path_point) != 0 &&
-            FUN_001f9b48(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
+            fast_vec_dist(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }
         if (vars->unk188 == 0) {
@@ -383,7 +383,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             FUN_L00_00258b50(moby, &vars->ctl, &position_or_movement_vector, &movement_input_or_output_or_melee_origin, 1.0f);
             resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
         }
-        if (FUN_001f9b48(&vars->home, &moby->pos) < 1.0f) {
+        if (fast_vec_dist(&vars->home, &moby->pos) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
@@ -423,7 +423,7 @@ void blarg_space_commando_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_002FFF70), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0025a420(void *, int, int);
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06_00300c60");
 #include "rnc/data_labels.h"
 extern f32 D_0015ED6C;
@@ -433,7 +433,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float FUN_L04_001f1978(float);
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int *D_L06_001B0C30[];
@@ -446,7 +446,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void update_blarg_space_commando_beam(void *owner_moby) __asm__("FUN_L06_002ff2c8");
 
 void update_blarg_space_commando_beam(void *arg) __asm__("FUN_L06_002ff2c8");
@@ -494,14 +494,14 @@ void process_blarg_space_commando_hits(char *moby) {
     }
     fast_dec_timer((s32 *)(vars + 0x188));
     *(int *)&dt = 0;
-    hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
+    hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_response_index = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
         if (current_level_index_gp == 0xA && hit_record != 0 && *(char **)(hit_record + 0x20) != 0 &&
             *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
             D_0013D408[0x11] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
-            FUN_L00_00263d40(0x53D6, -1);
+            queue_dialogue_message(0x53D6, -1);
         }
         remaining_health = *(float *)(vars + 0x20) - dt;
         *(float *)(vars + 0x20) = remaining_health;
@@ -563,9 +563,9 @@ void process_blarg_space_commando_hits(char *moby) {
                 float fragment_scatter_angle;
                 qcopy(vv, moby + 0x10);
                 vv[2] = vv[2] + 2.5f;
-                vv[0] = vv[0] + FUN_L00_00257c48(lo, hi);
-                vv[1] = vv[1] + FUN_L00_00257c48(lo, hi);
-                vv[2] = vv[2] + FUN_L00_00257c48(lo, hi);
+                vv[0] = vv[0] + randf_sym(lo, hi);
+                vv[1] = vv[1] + randf_sym(lo, hi);
+                vv[2] = vv[2] + randf_sym(lo, hi);
                 fragment_scatter_angle = random_angle_radians();
                 spd = random_float_between(minimum_fragment_speed, 5.7f) * D_0015ED6C;
                 fragment_velocity[0] = fast_cos(fragment_scatter_angle) * spd;

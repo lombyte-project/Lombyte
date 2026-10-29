@@ -10,7 +10,7 @@
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
@@ -59,7 +59,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
             fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
-            if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
+            if (fast_vec_dist(proximity_test_position, &hero.motion.pos) > 4.1f) {
                 *(short *)(proximity_state_data + 0xC) = 0;
             }
         } else {
@@ -67,7 +67,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
                 transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
                 fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
-                if (FUN_001f9b48(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
+                if (fast_vec_dist(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
                     *(short *)(proximity_state_data + 0xC) = 1;
                 }
             }

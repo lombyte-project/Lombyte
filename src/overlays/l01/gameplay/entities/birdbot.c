@@ -1495,7 +1495,7 @@ extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
 extern u8 D_L01_00161A80[] MACRO_ADDR;
 
-extern s32 FUN_001160d8();
+extern s32 rand() __asm__("FUN_001160d8");
 extern f32 FUN_L04_001f1978(f32);
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 f32 FUN_001f99c0(f32);
@@ -1690,7 +1690,7 @@ void peckbot_update(Mob577 *self) {
         peckbot_vars->x18C = 2.0f;
         peckbot_vars->x188 = 2.0f;
         peckbot_vars->x1A4 = peckbot_vars->speed * frame_time;
-        if (FUN_001160d8() & 1) {
+        if (rand() & 1) {
             self->flags |= 0x8000;
         }
         peckbot_vars->xD0 = &D_L01_00161A70;

@@ -1519,7 +1519,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
@@ -1568,7 +1568,7 @@ void update_homing_spark_projectile(Moby *moby) {
     case SPARK_HOME_AND_EMIT:
         set_vector_length_xy(&direction, data, 1.0f);
         data->vel.z = 1.0f;
-        FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &direction);
+        make_hit_descriptor(&hit, moby, 0x10003, 2.0f, &direction);
         set_vector_length_xy(&hit, &hit, 1.0f);
         hit.dir.z = 1.0f;
         hit.dir.w = 5627.9248f;

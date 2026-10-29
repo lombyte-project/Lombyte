@@ -1125,7 +1125,7 @@ extern void update_joint_animation(void *, char *, int, float, float) __asm__("F
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_00284e50(void *, void *);
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void FUN_L01_0027a248(int, int);
+extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
@@ -1317,7 +1317,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         *(unsigned char *)(data + 0x8) = 1;
         unlock_planet(0x10);
         FUN_L00_002502a0(*(int *)(data + 0x284));
-        FUN_L01_0027a248(0, 5);
+        jet_game_state(0, 5);
         if (*(int *)(data + 0x154) != -1) {
             char *paths = D_L15_001600EC;
             char *paths_again;
@@ -2188,7 +2188,7 @@ extern char *D_L15_001600EC;
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float FUN_001f99c0(float);
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
 
@@ -2240,7 +2240,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     if (den == 0.0f) {
         return 0;
     }
-    if (FUN_001f99c0(1.5707964f - fast_arc_sin(dot3 / den)) < projected_angle_limit_degrees * DEG_TO_RAD) {
+    if (absolute_float(1.5707964f - fast_arc_sin(dot3 / den)) < projected_angle_limit_degrees * DEG_TO_RAD) {
         return 1;
     }
     return 0;

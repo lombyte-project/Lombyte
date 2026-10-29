@@ -6429,7 +6429,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
 extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
-extern int FUN_L00_00211250(void);
+extern int hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
@@ -6571,7 +6571,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
     }
     case RAMP_SHARED_VALUE_AFTER_DELAY:
         if (*(float *)(moby_vars + 0xB8) == 1.0f) {
-            FUN_L00_00211250();
+            hero_respawn();
             linked_sequence_exit_ramp_progress = 0.0f;
             return;
         }
@@ -7612,7 +7612,7 @@ extern char D_0013E550[];
 extern float D_0015ED6C;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst_3.h"
 extern float D_L06_001FE890[];
-extern float FUN_L00_00257c48(float lo, float hi);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_vec_dist(void *, void *);
 extern int D_L06_00162234;
 extern int D_L06_00162238;
@@ -7762,7 +7762,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
                 float scale;
                 int particle_lifetime_frames;
                 unsigned char life;
-                fast_vec_normalize(u.m.pos, u.m.b, FUN_L00_00257c48(0.0f, vector_stream_x_extent_gp * 0.75f));
+                fast_vec_normalize(u.m.pos, u.m.b, randf_sym(0.0f, vector_stream_x_extent_gp * 0.75f));
                 fast_vec_add(u.m.pos, u.m.pos, u.m.b + 12);
                 color = fast_tween_color(vector_stream_burst_color_blend_a_gp, vector_stream_burst_color_blend_b_gp, random_float_between(0.0f, 1.0f));
                 scale = random_float_between(vector_stream_burst_min_particle_scale_gp, vector_stream_burst_max_particle_scale_gp);

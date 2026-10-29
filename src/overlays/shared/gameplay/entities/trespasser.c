@@ -1212,7 +1212,7 @@ extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") NOT_SDA;
 extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") NOT_SDA;
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
-extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
+extern struct Moby *spawn_mine(void *, void *, void *) __asm__("FUN_L00_002a9ed0");
 extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
@@ -1415,7 +1415,7 @@ void mine_glove_update(struct Moby *moby) {
         qcopy(&vars->held->pos, &vars->grip);
     } else if (vars->timer54 == 0 && get_ammo(-1)) {
         qzero(&launch);
-        vars->held = FUN_L00_002a9ed0(moby, &vars->grip, &launch);
+        vars->held = spawn_mine(moby, &vars->grip, &launch);
     }
 }
 /*
@@ -1519,7 +1519,7 @@ extern DeliveryStats_2c26c8 D_00141680_2c26c8 __asm__("D_00141680");
 extern struct Moby *D_L00_001ABA00_lui[] __asm__("D_L00_001ABA00") NOT_SDA;
 extern u8 *FUN_002141f8_2c26c8(struct Moby *) __asm__("FUN_002141f8");
 #include "rnc/input/pad_state.h"
-extern struct Moby *FUN_L00_002ace70(struct Moby *, void *);
+extern struct Moby *spawn_bomb(struct Moby *, void *) __asm__("FUN_L00_002ace70");
 extern void launch_bomb(void *, struct Moby *, void *) __asm__("FUN_L00_002acfd8");
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
 void bomb_glove_update(struct Moby *moby) __asm__("FUN_L00_002c26c8");
@@ -1676,7 +1676,7 @@ void bomb_glove_update(struct Moby *moby) {
         break;
     case BOMB_GLOVE_RELEASE_HELD_MOBY:
         if (vars->held == 0) {
-            vars->held = FUN_L00_002ace70(moby, &vars->grip);
+            vars->held = spawn_bomb(moby, &vars->grip);
         } else {
             launch_bomb(&pos, vars->held, vars->held->pvars);
             if (D_00141680_2c26c8.deliveries <= 0xfffe)
@@ -1709,7 +1709,7 @@ void bomb_glove_update(struct Moby *moby) {
     if (vars->held != 0)
         qcopy(&vars->held->pos, &vars->grip);
     else if (get_ammo(-1) || hero.item_anim_active)
-        vars->held = FUN_L00_002ace70(moby, &vars->grip);
+        vars->held = spawn_bomb(moby, &vars->grip);
 }
 extern u8 D_0013E539;
 extern s32 moby_table __asm__("D_L00_0015FFD8");

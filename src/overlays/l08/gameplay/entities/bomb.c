@@ -1324,7 +1324,7 @@ extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern unsigned char *spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1366,7 +1366,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
         spray_velocity_or_splash_position.f[1] = fast_sin(spray_heading_radians) * k;
         spray_velocity_or_splash_position.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
         spray_random_value = FUN_L00_00257b90(0x5A, 0x78);
-        FUN_L00_0026f548(&pos, &spray_velocity_or_splash_position, random_integer_below(2), spray_random_value);
+        spawn_debris_chunk(&pos, &spray_velocity_or_splash_position, random_integer_below(2), spray_random_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;
@@ -1384,7 +1384,7 @@ extern float line_puff_initial_z_velocity_range_end_gp __asm__("D_L08_00161998")
 extern float line_puff_position_jitter_range_end_gp __asm__("D_L08_001619A0") __attribute__((sda));
 extern u16 line_puff_duration_frames_gp __asm__("D_L08_001619A8") __attribute__((sda));
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern unsigned char *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
+extern unsigned char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 
 /* Strings count glowing puffs from one point to another, growing from size0
@@ -1418,7 +1418,7 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
         grey = FUN_L00_00257b90(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
         size = random_float_between(1.0f, 1.02f);
-        puff = FUN_L00_0026d000(&puff_spawn_position, line_puff_position_jitter_range_end_gp, 1.0f, size, FUN_L00_00257b90(-2, 2), &effect_initial_velocity,
+        puff = spawn_puff(&puff_spawn_position, line_puff_position_jitter_range_end_gp, 1.0f, size, FUN_L00_00257b90(-2, 2), &effect_initial_velocity,
                                 grow + size0 * 210000.0f, (alpha << 24) | grey);
         if (puff) {
             tail = puff + 0x20;

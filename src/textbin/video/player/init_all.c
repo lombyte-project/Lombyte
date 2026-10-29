@@ -41,7 +41,7 @@ extern s32 video_dec_set_stream(void *, u32, u32, void *,
 extern void vo_buf_create(void *, u32, u32, u32) __asm__("func_0023D190");
 extern s32 CreateThread(struct AudioDecoderThreadArgs *);
 extern s32 _StartThread(s32, void *);
-extern s32 func_0023BA48(void *, s32, s32);
+extern s32 set_state_fields(void *, s32, s32) __asm__("func_0023BA48");
 extern s32 DebugPrint(void *);
 extern s32 AddIntcHandler(s32, void *, s32);
 extern s32 enable_intc(s32) __asm__("func_00119090");
@@ -83,7 +83,7 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     thread_id = CreateThread(&decoder_thread);
     decoder_thread_id = thread_id;
     _StartThread(thread_id, ((u8 *)decoder_state) + 0xD9048);
-    if (func_0023BA48(((u8 *)decoder_state) + 0xD9040, stream_source, source_mode) == 0) {
+    if (set_state_fields(((u8 *)decoder_state) + 0xD9040, stream_source, source_mode) == 0) {
         opened = 0;
         DebugPrint(movie_open_error_text);
     } else {

@@ -205,7 +205,7 @@ extern float D_L01_0015F5D0 MACRO_ADDR;
 extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -347,18 +347,18 @@ void update_explosive_projectile(struct Moby *moby) {
             }
         }
         if (D_L01_0015F5D0 < 0.95f && view_distance > 9.0f) {
-            FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0xF), 0x7F, 0x7F, 0x7F, 0x20);
-            FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0x18), 0x7F, 0x7F, 0x7F, 0x20);
+            spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0xF), 0x7F, 0x7F, 0x7F, 0x20);
+            spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0x18), 0x7F, 0x7F, 0x7F, 0x20);
         }
-        FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
-        FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 2.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
+        spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 4.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
+        spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, size_scale * 2.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
         if (camera_distance > 100.0f) {
             if (D_L01_0015F5D0 < 0.95f && view_distance > 9.0f) {
-                FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0xF), 0x7F, 0x7F, 0x7F, 0x20);
-                FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0x18), 0x7F, 0x7F, 0x7F, 0x20);
+                spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0xF), 0x7F, 0x7F, 0x7F, 0x20);
+                spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0x18), 0x7F, 0x7F, 0x7F, 0x20);
             }
-            FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
-            FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 15.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
+            spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
+            spawn_glow_particle(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 15.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
         }
         for (spark = 0; cutscene_active_macro != 0 ? spark < 10 : spark < 40; spark++) {
             Vec_2F7E08 spark_vel;

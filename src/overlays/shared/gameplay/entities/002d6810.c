@@ -149,7 +149,7 @@ void draw_electric_water_countdown(char *moby) __asm__("FUN_L15_002d77c0");
 
 void draw_electric_water_countdown(char *moby) __asm__("FUN_L15_002d77c0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern int FUN_L00_0028dc90(int, int, void *, int);
+extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -333,8 +333,8 @@ void electric_water_update(struct Moby *moby) {
                 vars->voice1 = -1;
             }
             vars->owner = hero.moby;
-            vars->voice0 = FUN_L00_0028dc90(0, 4, hero.moby, 0x28F);
-            vars->voice1 = FUN_L00_0028dc90(1, 4, hero.moby, 0x28F);
+            vars->voice0 = trooper_play_sound(0, 4, hero.moby, 0x28F);
+            vars->voice1 = trooper_play_sound(1, 4, hero.moby, 0x28F);
             if (vars->shock_count == 0) {
                 vars->saved_fog[0] = D_L15_0015F448;
                 vars->saved_fog[1] = D_L15_0015F44C;
@@ -421,10 +421,10 @@ void electric_water_update(struct Moby *moby) {
             vars->owner = nearest;
         }
         if (voice_is_playing(vars->owner, vars->voice0) == 0) {
-            vars->voice0 = FUN_L00_0028dc90(0, 5, vars->owner, 0x28F);
+            vars->voice0 = trooper_play_sound(0, 5, vars->owner, 0x28F);
         }
         if (moby->state == 1 && voice_is_playing(vars->owner, vars->voice1) == 0) {
-            vars->voice1 = FUN_L00_0028dc90(1, 5, vars->owner, 0x28F);
+            vars->voice1 = trooper_play_sound(1, 5, vars->owner, 0x28F);
         }
         if (fast_dec_timer_s16(&vars->off_timer) != 0 && moby->state == 2) {
             vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
@@ -437,12 +437,12 @@ void electric_water_update(struct Moby *moby) {
             if (vars->switches[sw] != -1 && moby_array[vars->switches[sw]].oclass == 0x33E && moby_array[vars->switches[sw]].state == 2) {
                 vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
                 moby->state = 3;
-                FUN_L00_0028dc90(2, 0, &moby_array[vars->switches[sw]], 0x28F);
+                trooper_play_sound(2, 0, &moby_array[vars->switches[sw]], 0x28F);
                 vars->armed = 0;
             } else if (vars->switches[sw] != -1 && test_linked_moby_turn_trigger(&moby_array[vars->switches[sw]]) != 0) {
                 vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
                 moby->state = 3;
-                FUN_L00_0028dc90(2, 0, &moby_array[vars->switches[sw]], 0x28F);
+                trooper_play_sound(2, 0, &moby_array[vars->switches[sw]], 0x28F);
                 vars->armed = 0;
             }
         }
@@ -489,7 +489,7 @@ void electric_water_update(struct Moby *moby) {
                 remaining = vars->off_timer;
                 if (remaining < truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f)) - scale_game_frames(0x3C)) {
                     vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
-                    FUN_L00_0028dc90(2, 0, &moby_array[vars->switches[i]], 0x28F);
+                    trooper_play_sound(2, 0, &moby_array[vars->switches[i]], 0x28F);
                 }
             }
             armed = 0;

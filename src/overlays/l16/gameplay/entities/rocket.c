@@ -430,8 +430,8 @@ typedef struct {
 } L16SparkHit;
 
 extern char *D_L16_001B255C __attribute__((section(".data")));
-extern char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float,
-                              float);
+extern char *spawn_particle(void *, void *, int, int, int, int, float, float, float, float,
+                              float) __asm__("FUN_L00_002712b8");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
 extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), frame_time_sq;
@@ -508,7 +508,7 @@ void update_homing_projectile(unsigned char *moby) {
         fast_vec_normalize(previous.f, desired.f,
                              random_float_between(0.0f, 1.0f) * *(float *)(projectile_data + 0x10));
         fast_vec_add(previous.f, previous.f, position);
-        particle = FUN_L00_002712b8(previous.f, velocity.f, scale_game_frames_c(60), 127, 0x606060,
+        particle = spawn_particle(previous.f, velocity.f, scale_game_frames_c(60), 127, 0x606060,
                                     3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle) {
             unsigned char cls = *(unsigned char *)D_L16_001B255C;
@@ -516,7 +516,7 @@ void update_homing_projectile(unsigned char *moby) {
             particle[2] = cls;
         }
         matrix = moby + 0xC0;
-        FUN_L00_002712b8(position, velocity.f, scale_game_frames_c(6), 127, 0xB0B0B0, 3, 40000.0f,
+        spawn_particle(position, velocity.f, scale_game_frames_c(6), 127, 0xB0B0B0, 3, 40000.0f,
                          1000.0f, 1.0f, -0.0004f, 0.0f);
         random.quad = 0;
         random.f[2] = 0.02f;

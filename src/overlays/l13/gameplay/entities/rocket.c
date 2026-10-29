@@ -815,7 +815,7 @@ extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L00_00259d08(void *, void *, void *, void *, struct Moby *, Shot *, int);
+extern void sweep_hit_segment(void *, void *, void *, void *, struct Moby *, Shot *, int) __asm__("FUN_L00_00259d08");
 extern void FUN_L00_0025a120(void *);
 extern void approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -980,7 +980,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.active = 0;
             shot.valid = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
+            sweep_hit_segment(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }
         }
         qcopy(&vars->unk1E0, &point);
@@ -1084,7 +1084,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.active = 0;
             shot.valid = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
+            sweep_hit_segment(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }
         }
         qcopy(&vars->unk1E0, &point);
@@ -1999,7 +1999,7 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
@@ -2145,7 +2145,7 @@ after_state_4:
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
                 other->flags &= 0xfffd;
             }
-            FUN_L00_002607d0(14);
+            unlock_planet(14);
             if (data[8] != -1) {
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
                 other->flags &= 0xffbe;

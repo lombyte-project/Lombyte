@@ -1,5 +1,5 @@
 #include "types.h"
-extern f32 func_001F99C0(f32);
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 *vel) __asm__("FUN_001ebd78");
 
@@ -15,10 +15,10 @@ f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32
             *retained_step = -max;
         }
     }
-    if (*retained_step > func_001F99C0(delta)) {
-        *retained_step = func_001F99C0(delta);
-    } else if (*retained_step < -func_001F99C0(delta)) {
-        *retained_step = -func_001F99C0(delta);
+    if (*retained_step > absolute_float(delta)) {
+        *retained_step = absolute_float(delta);
+    } else if (*retained_step < -absolute_float(delta)) {
+        *retained_step = -absolute_float(delta);
     }
     return from + *retained_step;
 }

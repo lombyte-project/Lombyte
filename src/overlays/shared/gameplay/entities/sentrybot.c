@@ -1689,7 +1689,7 @@ extern Cols l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
 extern Cols l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678");
 extern Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610");
 extern int D_L15_00178500[];
-extern char *FUN_L00_002af450(char *, char *, int, int, int);
+extern char *spawn_debris(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char D_0013E533[];
 typedef struct {
     char pad[0x140];
@@ -1711,7 +1711,7 @@ extern float D_0015ED64;
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile_2.h"
 extern float FUN_L00_001ff430(void *);
-extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(float *, float *) __asm__("FUN_001f9b80");
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile.h"
@@ -1843,14 +1843,14 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             }
         }
         if (target_moby != 0) {
-            missile_moby->rot[2] = FUN_L00_00258110(&missile_data->yawvel, missile_moby->rot[2], yaw,
+            missile_moby->rot[2] = spring_turn(&missile_data->yawvel, missile_moby->rot[2], yaw,
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f);
-            missile_moby->rot[1] = FUN_L00_00258110(&missile_data->pitchvel, missile_moby->rot[1], pitch,
+            missile_moby->rot[1] = spring_turn(&missile_data->pitchvel, missile_moby->rot[1], pitch,
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f);
         } else {
-            missile_moby->rot[2] = FUN_L00_00258110(&missile_data->yawvel, missile_moby->rot[2], yaw,
+            missile_moby->rot[2] = spring_turn(&missile_data->yawvel, missile_moby->rot[2], yaw,
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 4.712389f);
-            missile_moby->rot[1] = FUN_L00_00258110(&missile_data->pitchvel, missile_moby->rot[1], pitch,
+            missile_moby->rot[1] = spring_turn(&missile_data->pitchvel, missile_moby->rot[1], pitch,
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 4.712389f);
         }
         {
@@ -2000,7 +2000,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             fast_vec_normalize(effect_bias_velocity, effect_bias_velocity, (effect_reference_distance + effect_reference_distance) * D_0015ED6C);
             fast_vec_add(burst_position_or_velocity, burst_position_or_velocity, effect_bias_velocity);
             clamp_vector_length(burst_position_or_velocity, burst_position_or_velocity, D_0015ED6C * 10.0f);
-            FUN_L00_002af450((char *)missile_moby->pos, (char *)burst_position_or_velocity, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
+            spawn_debris((char *)missile_moby->pos, (char *)burst_position_or_velocity, FUN_L00_00257b90(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
             {
                 int burst_effect_pair_count;
                 float under;

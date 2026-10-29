@@ -27,9 +27,9 @@ typedef struct {
 
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
+extern void moby_point_position(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
@@ -64,8 +64,8 @@ void underwater_ring_update(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         if (vars->initialized == 0) {
-            FUN_L00_0024f7c8(moby, 0, delta);
-            vars->distance = FUN_001f9b48(&moby->pos, delta);
+            moby_point_position(moby, 0, delta);
+            vars->distance = fast_vec_dist(&moby->pos, delta);
             vars->notified_count = 0;
             vars->parent = moby;
             get_first_moby_in_group(&child, moby->group, 0, 0);
@@ -220,7 +220,7 @@ typedef struct {
 } Obj;
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int D_L15_0015F5C4;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
@@ -258,7 +258,7 @@ void codebot_update(struct Moby *moby) {
             break;
         case CODEBOT_CHECK_HERO_PROXIMITY:
             update_collectible_sprite_effect(moby);
-            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 3.0f) {
+            if (fast_vec_dist(&moby->pos, &hero.motion.pos) < 3.0f) {
                 if (hero.state.current != 0x32) {
                     moby->flags |= 0x41;
                     start_scene(1);

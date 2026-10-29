@@ -1007,7 +1007,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern unsigned char D_0015EDC0[] MACRO_ADDR;
-extern void FUN_L00_00263d40(int, int);
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 
@@ -1086,7 +1086,7 @@ void scan_hero_input_sequences(void) {
             int toggled_selector = D_0015EDB0[i] == 0;
             D_0015EDC0[i] = 1;
             D_0015EDB0[i] = toggled_selector;
-            FUN_L00_00263d40(toggled_selector ? 0x4FBE : 0x4FBF, -1);
+            queue_dialogue_message(toggled_selector ? 0x4FBE : 0x4FBF, -1);
             break;
         }
     }

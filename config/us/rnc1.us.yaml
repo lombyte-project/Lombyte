@@ -238,7 +238,7 @@ segments:
           - [0x19d90, c, sdk/kernel/sbrk]
           - [0x19e3c, textbin, text_gap_00118e10_post_sdk_worker]
           - [0x19e40, c, runtime/status/return_success_code]
-          - [0x19e48, c, runtime/objects/initialize_object]
+          - [0x19e48, c, runtime/newlib/fstat]
           - [0x19e5c, textbin, text_gap_00118edc]
           - [0x19e60, c, assembly/sdk/library/scesdc]
           - [0x19f04, textbin, text_gap_00118f84_before_fun_00118f88]

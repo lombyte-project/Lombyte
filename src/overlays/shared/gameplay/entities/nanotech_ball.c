@@ -1436,7 +1436,7 @@ extern s32 is_suck_cannon_suction_blocked_by_hero_state(void) __asm__("FUN_L00_0
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-extern void FUN_L00_002223f8(int,int);
+extern void hero_set_state(int,int) __asm__("FUN_L00_002223f8");
 extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
 extern void hud_draw_gauge_frame(void) __asm__("FUN_L00_00237840");
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1604,7 +1604,7 @@ void suckcannon_update(SuckMoby *self) {
         if (!(controller_state.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
             (cannon->target && ((u8)cannon->target->state&0x80))) cannon->target=0;
-        if (suck_hero.state==1) FUN_L00_002223f8(30,1);
+        if (suck_hero.state==1) hero_set_state(30,1);
         if (suck_hero.state==30 && (suck_hero.moby->flags&1) && !suck_hero.unk20AC) {
             char *camera=D_L00_00166C80;
             SuckVec *eye;
@@ -2056,7 +2056,7 @@ typedef struct { char p0[0x160]; float f160; int p164; int i168; } Cam;
 extern B50 l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
 extern I6 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100");
 extern I6 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118");
-extern char *FUN_L00_002af450(char *, char *, int, int, int);
+extern char *spawn_debris(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char *mine_camera_blast(char *, char *, int, char *) __asm__("FUN_L00_002d3838");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -2068,7 +2068,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
@@ -2124,7 +2124,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
         fast_vec_add(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_bias_vector);
         {
             int h = scale_game_frames_c(60);
-            FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(120)), 0, (&D_0013E520)->b9);
+            spawn_debris(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(120)), 0, (&D_0013E520)->b9);
         }
     }
     for (j = 0; j < 4 / step; j++) {
@@ -2141,7 +2141,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
         fast_vec_add(spray_vector_or_effect_position, spray_vector_or_effect_position, spray_bias_vector);
         {
             int h = scale_game_frames_c(60);
-            FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
+            spawn_debris(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
         }
     }
     *(u128_DD3D8 *)random_spray_seed = 0;
@@ -2156,7 +2156,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
     clamp_vector_length(spray_vector_or_effect_position, spray_vector_or_effect_position, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
-        FUN_L00_002af450(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
+        spawn_debris(self + 0x10, (char *)spray_vector_or_effect_position, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
     }
     if (camera_distance < 6.0f) {
         k = func_001FA898_r(camera_distance) + 1;
@@ -2222,7 +2222,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
     if ((&D_0013E520)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
         *(u128_DD3D8 *)spray_vector_or_effect_position = *(u128_DD3D8 *)(self + 0x10);
-        FUN_L00_0025a9f8(self, spray_vector_or_effect_position, D_L00_00177F00, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+        send_blast_hits(self, spray_vector_or_effect_position, D_L00_00177F00, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
     }
 }
 #include "qzero.h"
@@ -2900,7 +2900,7 @@ extern float D_0015ED60;
 extern float D_L00_00161B84;
 extern float D_L00_00161B80;
 extern float suck_beam_segment_turn_spring_states[] __asm__("D_L00_001E5FE0");
-extern float FUN_L00_001eb328(void *,float,float,float,float,float);
+extern float rope_spring_turn(void *,float,float,float,float,float) __asm__("FUN_L00_001eb328");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void interpolate_vector(void *,void *,void *,float) __asm__("FUN_L00_0025b6b8");
@@ -3003,7 +3003,7 @@ void suck_beam_update(void *moby,void *position) {
         fast_vec_cross(&tmp_c,&tmp_b,&tmp_a);
         dot=fast_vec_dot(&tmp_a,&tmp_b);
         { float target=1.5707964f-fast_arc_sin(dot/(fast_vec_length(&tmp_a)*D_L00_00161B84));
-        turn=FUN_L00_001eb328(&suck_beam_segment_turn_spring_states[i],0.0f,target,0.06f,0.2f,0.0f);
+        turn=rope_spring_turn(&suck_beam_segment_turn_spring_states[i],0.0f,target,0.06f,0.2f,0.0f);
         delta=fast_subtract_rotations(target,turn); }
         if(absolute_float(delta)>0.31415927f)turn=fast_add_rotations(turn,fast_subtract_rotations(delta,0.31415927f));
         func_002156E0_2D9EA0(&motion,&tmp_a,turn,&tmp_c);

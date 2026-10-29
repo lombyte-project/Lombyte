@@ -95,7 +95,7 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
-extern unsigned char *FUN_L00_0026d000(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color);
+extern unsigned char *spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 
 /* Emits n dust puffs evenly spaced along the segment from a to b. */
 void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, void *b, int puff_count, float sa, float sb) __asm__("FUN_L02_002d3a50");
@@ -129,7 +129,7 @@ void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, v
         dust_puff_velocity[0] = randf_sym(0.0f, 0.0025f);
         dust_puff_velocity[1] = randf_sym(0.0f, 0.0025f);
         dust_puff_velocity[2] = random_float_between(sand_shark_dust_vertical_velocity_scale_gp * 0.1f, sand_shark_dust_vertical_velocity_scale_gp);
-        dust_puff = FUN_L00_0026d000(dust_puff_position, sand_shark_dust_position_jitter_radius_gp, 1.0f, scale, spin, dust_puff_velocity, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
+        dust_puff = spawn_puff(dust_puff_position, sand_shark_dust_position_jitter_radius_gp, 1.0f, scale, spin, dust_puff_velocity, size_delta_per_puff + sa * 210000.0f, r << 24 | color);
         if (dust_puff) {
             dust_puff_extension = dust_puff + 0x20;
             if (random_integer_below(2)) {
@@ -2539,7 +2539,7 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void draw_number(void *, void *, int, int, int, int, int, float) __asm__("FUN_L01_00285768");
-extern void FUN_L02_0022b728(int, int);
+extern void hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern void enter_hero_idle_or_stop(void) __asm__("FUN_L02_00237478");
 void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 
@@ -2734,7 +2734,7 @@ void transport_pod_update(unsigned char *moby) {
         if (rider_readiness_status == 2) {
             moby[0x20] = 7;
             FUN_0022da68_dc88(2, 0, moby);
-            FUN_L02_0022b728(0x72, 0);
+            hero_set_state(0x72, 0);
         } else if (rider_readiness_status == 0) {
             jet_end_mount(2);
             moby[0x20] = 0xD;
@@ -2822,7 +2822,7 @@ void transport_pod_update(unsigned char *moby) {
             }
             moby[0x20] = 0xD;
             jet_end_mount(2);
-            FUN_L02_0022b728(0, 1);
+            hero_set_state(0, 1);
         }
         break;
     case TRANSPORT_POD_RAISE_TO_STOP_HEIGHT:

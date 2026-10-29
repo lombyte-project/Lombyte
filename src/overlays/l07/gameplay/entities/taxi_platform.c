@@ -2680,7 +2680,7 @@ extern Rec * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
-extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 extern int D_L07_001612D8;
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
@@ -2902,7 +2902,7 @@ void sharkigator_update(unsigned char *moby) {
             float damping = 4.5378561f;
             FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
                               frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
-            F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
+            F(moby, 0x44) = spring_turn((float *)(data + 0x124), F(moby, 0x44), 0.0f,
                                               frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             if (wander && is_point_inside_clip_volume(moby + 0x10, *(int *)(data + 0x114))) {
                 if (moby[0x53] != 0) {
@@ -2949,7 +2949,7 @@ void sharkigator_update(unsigned char *moby) {
                           frame_time_sq * pi4, frame_time_sq * zero, frame_time * pi4);
         pitch = vector_distance(moby + 0x10, &target);
         pitch = fast_arc_tan(pitch, target.pos[2] - F(moby, 0x18));
-        F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), -pitch,
+        F(moby, 0x44) = spring_turn((float *)(data + 0x124), F(moby, 0x44), -pitch,
                                           frame_time_sq * pi4, frame_time_sq * zero, frame_time * pi4);
         if (!(vector_distance(moby + 0x10, ((char *)&D_0013F3D0)) < three)) {
             close = 0;
@@ -3037,7 +3037,7 @@ void sharkigator_update(unsigned char *moby) {
         advance_sharkigator_swim_movement((char *)moby, data, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
         FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
                           frame_time_sq * pi2, frame_time_sq * pi, frame_time * pi);
-        F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
+        F(moby, 0x44) = spring_turn((float *)(data + 0x124), F(moby, 0x44), 0.0f,
                                           frame_time_sq * pi2, frame_time_sq * pi, frame_time * pi);
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
@@ -3087,7 +3087,7 @@ void sharkigator_update(unsigned char *moby) {
             float damping = 1.57079637f;
             FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
                               frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
-            F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
+            F(moby, 0x44) = spring_turn((float *)(data + 0x124), F(moby, 0x44), 0.0f,
                                               frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             if (wander && is_point_inside_clip_volume(moby + 0x10, *(int *)(data + 0x114))) {
                 if (moby[0x53] != 3) {

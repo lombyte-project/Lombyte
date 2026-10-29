@@ -72,7 +72,7 @@ void process_dreks_fleet_turret_hits(char *turret_moby) {
 
 
 extern char *D_L17_0015FFD8;
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -134,12 +134,12 @@ void update_fleet_beam(struct Moby *beam_moby) {
         if (k != -1) {
             qcopy(beam_vars, &beam_moby->pos);
             *(float *)(beam_vars + 0x54) = *(float *)(beam_vars + 0x48) * frame_time /
-                                   FUN_001f9b48(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
+                                   fast_vec_dist(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
             beam_moby->state = 2;
         } else if ((j = *(int *)(beam_vars + 0x68)) != -1) {
             qcopy(beam_vars, &beam_moby->pos);
             *(float *)(beam_vars + 0x54) = *(float *)(beam_vars + 0x48) * frame_time /
-                                   FUN_001f9b48(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
+                                   fast_vec_dist(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
             beam_moby->state = 2;
         } else {
             beam_moby->state = 1;
@@ -628,7 +628,7 @@ struct Blk {
 
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_normalize_angle(float) __asm__("func_001FA610");
@@ -737,7 +737,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                             elevation_angle_offset));
                     transform_vector(spC0, spC0, moby_rotation_matrix);
                     add_vectors(spD0, spC0, (moby + 0x10));
-                    if (FUN_001f9b48((moby + 0x10), &hero.motion.pos) < 30.0f) {
+                    if (fast_vec_dist((moby + 0x10), &hero.motion.pos) < 30.0f) {
                         collision_line((moby + 0x10), spC0, 9, moby, &blk);
                     }
                     spD0[0] = *(OvlQuad *)(moby + 0x10);

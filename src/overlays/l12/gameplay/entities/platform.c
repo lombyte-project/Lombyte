@@ -1766,7 +1766,7 @@ extern struct Moby *D_L12_00178380[];
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int collect_mobies_in_sphere(void *, int, void *, int, float) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int test_point_within_moby_limits(void *, void *, float, float, float) __asm__("FUN_L12_0027b8e0");
@@ -1867,7 +1867,7 @@ hide:
                 count = *path;
                 if (count > 0) *path = -count;
                 else *path = count + 20;
-            } else TROOPER_F(0x244) = FUN_L00_00257c48(15.0f, 35.0f);
+            } else TROOPER_F(0x244) = randf_sym(15.0f, 35.0f);
         }
         TROOPER_F(0x244) *= 0.017453292f;
         moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
@@ -2363,7 +2363,7 @@ void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float ma
 }
 extern f32 approach_value_e9f68(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
-extern float FUN_L00_00257c48(float, float);
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void find_point_ahead(void *, void *, float) __asm__("FUN_L01_00274b78");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
 void process_blarg_helicopter_hits(struct Moby *moby) __asm__("FUN_L12_002eb220");
@@ -2581,7 +2581,7 @@ update_state:
                 if (*(int *)(data + 0xc0)) {
                     qcopy(&aim, D_L12_00167240);
                     aim.f[2] += random_float_between(-0.5f, 0.1f);
-                    aim.f[0] += FUN_L00_00257c48(0.0f, 0.4f);
+                    aim.f[0] += randf_sym(0.0f, 0.4f);
                 }
                 fast_vec_sub(&delta, &aim, &position);
                 if (*(int *)(data + 0xc0)) fast_vec_normalize(&delta, &delta, frame_time * 22.0f);
@@ -2594,9 +2594,9 @@ update_state:
                 fast_vec_normalize(&delta, &delta, 0.5f);
                 fast_vec_add(&position, &position, &delta);
                 for (count = 24; count >= 0; --count) {
-                    velocity.f[0] = FUN_L00_00257c48(0.0f, frame_time * spread);
-                    velocity.f[1] = FUN_L00_00257c48(0.0f, frame_time * spread);
-                    velocity.f[2] = FUN_L00_00257c48(0.0f, frame_time * spread);
+                    velocity.f[0] = randf_sym(0.0f, frame_time * spread);
+                    velocity.f[1] = randf_sym(0.0f, frame_time * spread);
+                    velocity.f[2] = randf_sym(0.0f, frame_time * spread);
                     a = FUN_L00_00257b90(170, 240);
                     b = FUN_L00_00257b90(110, 180);
                     color = (b << 8) | ((long)a | 0x7f000000L);

@@ -46,7 +46,7 @@ int fun_0012ba48(int *object) __asm__("func_0012BA48");
 int fun_0012ba58(int *object) __asm__("func_0012BA58");
 int fun_0012bc00(int *object) __asm__("func_0012BC00");
 int fun_0012bc10(int *object) __asm__("func_0012BC10");
-int initialize_object(int unused, int *object) __asm__("func_00118EC8");
+int _fstat(int file_descriptor, int *stat_buffer) __asm__("func_00118EC8");
 int lookup_index(int index) __asm__("func_0011A458");
 void fun_0011ad90(unsigned int *p) __asm__("func_0011AD90");
 int init_block_fn(int value) __asm__("func_00119568");

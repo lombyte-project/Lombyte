@@ -787,7 +787,7 @@ extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259028(void *, void *, void *, void *);
-extern int FUN_L01_0023cf98(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern int is_point_inside_clip_volume(void *point, int volume) __asm__("func_00214720");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 collision_line(void *, void *, s32, void *, s32);
@@ -805,7 +805,7 @@ extern short D_L01_001620C0 __attribute__((sda));
 extern unsigned char D_0013D4C5 NOT_SDA;
 extern unsigned char D_0014C190[] NOT_SDA;
 extern void *FUN_L00_00272060(void *, int, f32, f32, int, int, int, void *, f32);
-extern void FUN_L00_002323b8(f32, int, int);
+extern void set_hero_animation(f32, int, int) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_00258278_df40(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_00258278");
 extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
@@ -957,8 +957,8 @@ void sandmouse_update(Moby *sandmouse_moby) {
                     (*(Moby **)(hero_bytes + 0x1130))->state = 1;
                 }
                 D_L01_001DEB38_lui.owner = sandmouse_moby;
-                FUN_L01_0023cf98(0x1F, 0);
-                FUN_L00_002323b8((float)scale_game_frames(6), 0, 0);
+                hero_set_state(0x1F, 0);
+                set_hero_animation((float)scale_game_frames(6), 0, 0);
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
                     sandmouse_moby->state = 2;
@@ -1041,7 +1041,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 sandmouse_vars->slot = allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
             }
         }
-        FUN_L01_0023cf98(0, 1);
+        hero_set_state(0, 1);
         sandmouse_moby->flags &= 0xFFBE;
         if (sandmouse_vars->link != -1) {
             LNK(sandmouse_vars->link)->flags &= 0xFFBE;

@@ -9,7 +9,7 @@ struct MovieGlobals {
 };
 
 extern s32 vi_buf_reset() __asm__("func_0023BCC0");
-extern s32 func_0023CC80();
+extern s32 get_state_field() __asm__("func_0023CC80");
 extern s32 video_dec_set_state() __asm__("func_0023CC88");
 extern s32 dec_bs0() __asm__("func_0023CEC8");
 extern s32 clear_state_fields() __asm__("func_0023D1E8");
@@ -21,7 +21,7 @@ void video_dec_main(s32 video_dec) {
     clear_state_fields(decoder_state + 0xD9168);
     dec_bs0(video_dec);
     while (((struct MovieGlobals *)decoder_state)->unkD9174 != 0) {
-        if (func_0023CC80(video_dec) == 1) {
+        if (get_state_field(video_dec) == 1) {
             break;
         }
     }

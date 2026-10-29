@@ -1156,13 +1156,13 @@ extern unsigned char D_0014161B;
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern int FUN_L00_00233db8(int, int);
-extern int FUN_L00_00233e98(int);
+extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
+extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int spawn_decoy(void *, void *, void *) __asm__("FUN_L00_002c35c0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L00_001B0830[];
-extern void FUN_L00_002223f8(int, int);
+extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void release_moby_with_collision_check(float *, char *, void *) __asm__("FUN_L00_002c3888");
@@ -1228,12 +1228,12 @@ void decoy_glove_update(unsigned char *moby) {
     *(int *)(glove_vars + 0x50) = 0;
 target_valid:
     hero_data = ((char *)&hero);
-    if (*(int *)(hero_data + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
+    if (*(int *)(hero_data + 0x2084) == 1) hero_set_state(0x1E, 1);
     if (fast_dec_timer((int *)(glove_vars + 0x54))) {
         if (*(unsigned char *)(hero_data + 0x20AC) == 0) {
             if (*(unsigned char *)(hero_data + 0x20A8) && *(int *)(hero_data + 0x1BC) == scale_game_frames(0x11)) goto L3D10;
             if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(hero_data + 0x10A0)) {
-                if (*(int *)(hero_data + 0x2084) == 0x1E && FUN_L00_00233e98(-1)) goto L3D10;
+                if (*(int *)(hero_data + 0x2084) == 0x1E && get_ammo(-1)) goto L3D10;
             }
             hero_data = ((char *)&hero);
             if (*(int *)(hero_data + 0x2084) == 0x23 && *(int *)(hero_data + 0x198) == scale_game_frames(0x10)) goto L3D10;
@@ -1242,7 +1242,7 @@ target_valid:
     goto L3D34;
 L3D10:
     allocate_hero_voice_for_entry(0x1A, 0);
-    FUN_L00_00233db8(-1, 1);
+    use_ammo(-1, 1);
     moby[0x20] = 3;
 L3D34:
     *(u128_D3B20 *)&loc = *(u128_D3B20 *)(glove_vars + 0x40);
@@ -1290,7 +1290,7 @@ L3D34:
         qcopy(*(char **)(glove_vars + 0x50) + 0x10, glove_vars + 0x40);
         return;
     }
-    if (FUN_L00_00233e98(-1)) {
+    if (get_ammo(-1)) {
         qzero(&loc);
         *(int *)(glove_vars + 0x50) = spawn_decoy(moby, glove_vars + 0x40, &loc);
     } else {
@@ -2891,7 +2891,7 @@ extern s32 FUN_001fa6d0(f32);
 extern f32 spring_turn(f32 angle, f32 target, f32 accel, f32 damping, f32 limit, f32 *speed) __asm__("FUN_L00_00258110");
 extern void FUN_L00_0025df68(Path *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 FUN_L00_00260400(struct Moby *, struct Moby *, void *, void *, void *, void *);
-extern void FUN_L00_002607d0(s32);
+extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
@@ -3138,7 +3138,7 @@ void infobot_update(struct Moby *moby)
     }
     case INFOBOT_START_SCENE_SEQUENCE:
         moby->flags |= 0x41;
-        FUN_L00_002607d0(infobot->planet);
+        unlock_planet(infobot->planet);
         jet_clear_persistent(moby->mission);
         if (infobot->cutscene != -1) {
             jet_reset_camera(&D_L00_001600EC_2d5de8[infobot->cutscene].pos, &D_L00_001600EC_2d5de8[infobot->cutscene].dir);

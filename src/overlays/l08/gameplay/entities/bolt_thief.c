@@ -1990,7 +1990,7 @@ extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, in
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void FUN_L00_00257d78(void *, float, float);
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void build_axis_roll_matrix(void *, void *, float) __asm__("FUN_L08_0026a0f8");
@@ -2274,7 +2274,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     break;
                 }
                 shrink = 0.7f;
-                FUN_L00_00257d78(scratch, frame_time * shrink, frame_time);
+                random_vector(scratch, frame_time * shrink, frame_time);
                 fast_vec_scale(scratch + 4, scratch, 10.0f);
                 fast_vec_add(scratch + 4, scratch + 4, &moby->pos);
                 spin = random_integer_below(2);

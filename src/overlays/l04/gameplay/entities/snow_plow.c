@@ -49,7 +49,7 @@ extern void debug_print() __asm__("FUN_001e93b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -131,7 +131,7 @@ void snow_plow_update(struct Moby *moby) {
         if (path[5] != -1) {
             int *p;
             p = D_L04_001B0630[path[5]];
-            if (FUN_001f9b48(p + 4, p + *p * 4) < 0.5f) --*p;
+            if (fast_vec_dist(p + 4, p + *p * 4) < 0.5f) --*p;
         } else {
             char *message = snow_plow_missing_path_warning_format;
             int oclass = moby->oclass;
@@ -817,7 +817,7 @@ void woodcut_bot_update(WBMoby *m) {
     FUN_L00_00263ac8(2.5f, m, 6, p);
     manipulator = p;
     pos = m->pos;
-    if (m->f31 != 0 && FUN_001f9b48(pos, D_L04_00166F40) < 27.0f) {
+    if (m->f31 != 0 && fast_vec_dist(pos, D_L04_00166F40) < 27.0f) {
         FUN_L00_0025a120(m);
         m->f7F = 0x15;
     }
@@ -968,7 +968,7 @@ void woodcut_bot_update(WBMoby *m) {
                 coll_line_fix(pts[i], pts[i + 1], 9, m, &melee_hit_query);
             fast_vec_add(mid, pts[0], pts[4]);
             fast_vec_scale(mid, mid, 0.5f);
-            collect_mobies_in_sphere(mid, FUN_001f9b48(pts[0], pts[4]) * 0.5f, 0x10, m, &melee_hit_query);
+            collect_mobies_in_sphere(mid, fast_vec_dist(pts[0], pts[4]) * 0.5f, 0x10, m, &melee_hit_query);
             moby_point_position(m, 0x11, mid);
             collect_mobies_in_sphere(mid, 0.5f, 0x10, m, &melee_hit_query);
         }

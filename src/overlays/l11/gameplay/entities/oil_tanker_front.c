@@ -673,7 +673,7 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) {
 }
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_oil_tanker_link_path_poses.h"
 extern s32 D_L11_0015F5C4;
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 FUN_001fa6d0(float);
 
 /* A chain path in D_L11_001B0EB0: a point count, then the points (w = 42 marks a sound point). */
@@ -697,8 +697,8 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
         int segment_start_index = chain_vars->offsets[i];
         int segment_end_index = (segment_start_index + 1) % chain_path->count;
         int lookahead_point_index = (segment_start_index + 2) % chain_path->count;
-        float segment_start_distance = FUN_001f9b48(&chain_path->pts[segment_start_index], spacing_reference_position);
-        float segment_end_distance = FUN_001f9b48(&chain_path->pts[segment_end_index], spacing_reference_position);
+        float segment_start_distance = fast_vec_dist(&chain_path->pts[segment_start_index], spacing_reference_position);
+        float segment_end_distance = fast_vec_dist(&chain_path->pts[segment_end_index], spacing_reference_position);
         float segment_fraction;
         struct Moby *link;
         float yaw0, yaw1, pitch0;
@@ -709,7 +709,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
             segment_end_index = (segment_start_index + 1) % chain_path->count;
             segment_start_distance = segment_end_distance;
             lookahead_point_index = (segment_end_index + 1) % chain_path->count;
-            segment_end_distance = FUN_001f9b48(&chain_path->pts[segment_end_index], spacing_reference_position);
+            segment_end_distance = fast_vec_dist(&chain_path->pts[segment_end_index], spacing_reference_position);
         }
         {
             float *segment_start_marker_base = (float *)(path + segment_start_index * 16);
@@ -1237,7 +1237,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
 extern float D_L11_001677D0[];
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -1330,7 +1330,7 @@ void blarg_ship_update(struct Moby *moby) {
             moby->collision = 0;
             moby->flags |= 1;
         } else if (moby->visible == 0) {
-            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 32.0f) {
+            if (fast_vec_dist(&moby->pos, &hero.motion.pos) < 32.0f) {
                 moby->state = 3;
                 moby->collision = 0;
                 moby->flags |= 1;
@@ -1341,7 +1341,7 @@ void blarg_ship_update(struct Moby *moby) {
         qcopy(scratch_vector, &moby->pos);
         scratch_vector[3] = 3.0f;
         if (FUN_001fa728_u((char *)&moby->pos, 512.0f) == -1) {
-            if (FUN_001f9b48(&moby->pos, &hero.motion.pos) > 32.0f) {
+            if (fast_vec_dist(&moby->pos, &hero.motion.pos) > 32.0f) {
                 *(int *)(moby_vars + 0x84) += 1;
                 if (scale_game_frames(60) < *(int *)(moby_vars + 0x84)) {
                     moby->state = 1;
@@ -1398,7 +1398,7 @@ void blarg_ship_update(struct Moby *moby) {
             if (moby->visible) {
                 *(int *)(moby_vars + 0x98) += 1;
             }
-            if (FUN_001f9b48(target_position, &moby->pos.x) < 2.0f) {
+            if (fast_vec_dist(target_position, &moby->pos.x) < 2.0f) {
                 moby->command = 0;
             } else if (scale_game_frames(120) < *(int *)(moby_vars + 0x98)) {
                 moby->command = 0;
@@ -1686,7 +1686,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern char bubble_surface_effect_color_range_start_gp[4] __asm__("D_L11_00162420") __attribute__((sda));
 extern char bubble_surface_effect_color_range_end_gp[4] __asm__("D_L11_00162424") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_00272770_p(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
@@ -1702,7 +1702,7 @@ void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int s
         effect_spawn_scratch[1] = fast_sin(emission_angle) * horizontal_emission_scale;
         effect_spawn_scratch[2] = random_float_between(frame_scale_inv_macro[1] * 3.0f, frame_scale_inv_macro[1] * 6.5f);
         k = random_int_between(0x5A, 0x78);
-        FUN_L00_0026f548(&source_moby->pos, effect_spawn_scratch, random_integer_below(2), k);
+        spawn_debris_chunk(&source_moby->pos, effect_spawn_scratch, random_integer_below(2), k);
     }
     for (i = 0; i < ground_effect_count; i++) {
         char *spawned_ground_effect;

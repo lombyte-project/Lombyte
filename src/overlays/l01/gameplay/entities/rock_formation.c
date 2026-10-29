@@ -1389,7 +1389,7 @@ typedef struct {
     s16 oclass;
 } HoverMoby;
 
-extern f32 FUN_001f99c0(f32);
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
 void door_left_update(HoverMoby *door_moby) {
@@ -1415,7 +1415,7 @@ void door_left_update(HoverMoby *door_moby) {
     case DOOR_CLOSED:
         player = &hero.motion.pos;
         if (vector_distance(door_vars, player) < door_vars->radius &&
-            FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
+            absolute_float(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
             if (door_moby->oclass == 0x300) {
                 FUN_0022da68(0, 0, door_moby);
@@ -1442,7 +1442,7 @@ void door_left_update(HoverMoby *door_moby) {
     case DOOR_CLOSING:
         player = &hero.motion.pos;
         if (vector_distance(door_vars, player) < door_vars->radius &&
-            FUN_001f99c0(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
+            absolute_float(door_moby->pos.f[2] - player->f[2]) < 2.0f) {
             door_moby->state = 2;
         } else {
             door_vars->t -= 1.0f / scale_time(20.0f);

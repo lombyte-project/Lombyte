@@ -424,7 +424,7 @@ extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_00
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void lift_remove(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void lift_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -492,7 +492,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
     rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
     if (shuttle_vars->mode == 0x3039) {
         if (shuttle_vars->anchor != -1)
-            FUN_L00_0024f7c8(shuttle_moby, shuttle_vars->anchor, &base);
+            moby_point_position(shuttle_moby, shuttle_vars->anchor, &base);
         else
             qcopy(&base, &shuttle_moby->pos);
         euler_rotation_matrix(shuttle_rotation_matrix, &shuttle_moby->rot);
@@ -2192,7 +2192,7 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
-extern void FUN_L00_002e8450(int, float, float);
+extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
@@ -2322,7 +2322,7 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_BLEND_STOP_TO_PATH_START: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
-            FUN_L00_002e8450(0, 7.0f, 0.002f);
+            follow_camera_set_distance(0, 7.0f, 0.002f);
         }
         advance_accelerated_scalar(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
         qcopy_nc(blend_from_position_or_rotation_matrix, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
@@ -2358,7 +2358,7 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_FOLLOW_PATH: {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
-            FUN_L00_002e8450(0, 7.0f, 0.003f);
+            follow_camera_set_distance(0, 7.0f, 0.003f);
         }
         if (advance_moby_path((char *)moby)) {
             taxi_vars->t = 0.0f;

@@ -9,7 +9,7 @@ extern char point_lights[] __asm__("D_0019C1C0");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void create_point_light(int) __asm__("FUN_00201ba8");
 extern void refresh_point_light(int) __asm__("FUN_00201f58");
 void update_all_point_lights(void) __asm__("FUN_00201a28");
@@ -32,7 +32,7 @@ void update_all_point_lights(void) {
         char *point_light_definition = point_lights + light_index * 0x20;
         char *point_light_slot = point_light_data + light_index * 0x30;
 
-        if (*(int *)(point_light_slot + 0x10) != 0 && FUN_001f9b48(point_light_definition + 0x10, point_light_slot + 0x20) > 8.0f) {
+        if (*(int *)(point_light_slot + 0x10) != 0 && fast_vec_dist(point_light_definition + 0x10, point_light_slot + 0x20) > 8.0f) {
             qcopy(point_light_slot + 0x20, point_light_definition + 0x10);
             if (*(int *)(point_light_slot + 0x10) == 1) {
                 create_point_light(light_index);

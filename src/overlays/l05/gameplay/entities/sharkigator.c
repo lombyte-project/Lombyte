@@ -499,7 +499,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern unsigned char *spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -521,7 +521,7 @@ void spawn_sharkigator_splash_effects(int unused, char *position) {
         effect_spawn_vector[1] = fast_sin(effect_xy_heading) * k;
         effect_spawn_vector[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
         random_spawn_value = random_int_between(0x5A, 0x78);
-        FUN_L00_0026f548(position, effect_spawn_vector, random_integer_below(2), random_spawn_value);
+        spawn_debris_chunk(position, effect_spawn_vector, random_integer_below(2), random_spawn_value);
     }
     for (i = 0; i < 16; i++) {
         unsigned char *splash;

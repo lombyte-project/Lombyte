@@ -1587,7 +1587,7 @@ extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value_c5bb8(void *) __asm__("FUN_0020c9e0");
-extern int FUN_001160d8(void);
+extern int rand(void) __asm__("FUN_001160d8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_00259028(char *m, char *p, char *pos, char *v);
@@ -1678,7 +1678,7 @@ void robot_dog_update(char *moby) {
         data->f1AC = data->f1A4 * initialization_multiplier_or_desired_heading;
         data->b58 = 8;
         data->b5A = 7;
-        if (FUN_001160d8() & 1) {
+        if (rand() & 1) {
             *(unsigned short *)(moby + 0x34) |= 0x8000;
         }
         data->pD0 = &D_L03_001618D0;

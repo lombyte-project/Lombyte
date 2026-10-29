@@ -3,7 +3,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
 extern void *func_00226720_a(int) __asm__("func_00225490");
 extern int acquire_menu_stream_buffer(int) __asm__("FUN_00225c18");
-extern void func_00225AB8(void *);
+extern void helper_moby_update_noop(void *) __asm__("func_00225AB8");
 /* sets up a pause-menu helper moby in front of the camera */
 int enter_streamed_moby_screen(char *h) __asm__("FUN_00225588");
 
@@ -21,7 +21,7 @@ int enter_streamed_moby_screen(char *screen_state) {
         *(float *)(preview_moby + 0x14) = *(float *)(preview_camera_state + 0x144) + 0.0f;
         *(float *)(preview_moby + 0x18) = *(float *)(preview_camera_state + 0x148) + -1.6f;
         moby_sidecar = *(char **)(preview_moby + 0x78);
-        *(void **)(preview_moby + 0x74) = func_00225AB8;
+        *(void **)(preview_moby + 0x74) = helper_moby_update_noop;
         *(float *)(preview_moby + 0x48) = 3.1415927f;
         *(char **)moby_sidecar = screen_state;
         *(int *)(moby_sidecar + 4) = 0;

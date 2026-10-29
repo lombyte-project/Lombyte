@@ -28,7 +28,7 @@ extern void sceSifAddCmdHandler(u32 cid, void *handler, void *data);
 extern u32 sceSifGetReg(u32 reg);
 extern u32 sceSifSetReg(u32 reg, u32 val);
 extern u32 sceSifSendCmd(u32 cid, void *packet, s32 size, void *src, void *dst, s32 dsize);
-extern u32 func_0011A458(u32 reg);
+extern u32 lookup_index(u32 reg) __asm__("func_0011A458");
 
 void sceSifInitRpc(u32 mode) {
     s32 *packet;
@@ -63,7 +63,7 @@ void sceSifInitRpc(u32 mode) {
     packet = (s32 *)(sif_rpc_request_packets + 64);
     packet[3] = 1;
     sceSifSendCmd(0x80000002, packet, 16, 0, 0, 0);
-    while (func_0011A458(0) == 0) {
+    while (lookup_index(0) == 0) {
     }
     sceSifSetReg(0x80000002, 1);
 }

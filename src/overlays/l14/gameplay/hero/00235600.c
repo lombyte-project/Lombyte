@@ -40,7 +40,7 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l14/gameplay/hero/00235600_globals.h"
 extern float D_L14_001674D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
@@ -1108,7 +1108,7 @@ void process_hero_state_transitions(void) {
                             query_position[0] = 342.0f;
                             query_position[1] = 111.1f;
                             query_position[2] = 42.0f;
-                            if (FUN_001f9b48(hero.motion.pos.f, query_position) < 7.0f) {
+                            if (fast_vec_dist(hero.motion.pos.f, query_position) < 7.0f) {
                                 go = 0;
                                 hero.move_lock_timer = scale_game_frames(0x64);
                             }

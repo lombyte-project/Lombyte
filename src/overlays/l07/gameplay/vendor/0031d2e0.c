@@ -16,7 +16,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
-extern int FUN_00120478(float);
+extern int fptodp(float) __asm__("FUN_00120478");
 extern char *D_L07_001B0530[];
 extern char equalizer_ammo_spawner_missing_trigger_message[] __asm__("D_L07_00211AF0");
 extern char D_L07_00211B30[];
@@ -122,8 +122,8 @@ state_one:
                                 step += retry_step;
                         } while (accepted == 0);
                         total = remaining;
-                        debug_print(D_L07_00211B78, id, batch, FUN_00120478(position[0]), FUN_00120478(position[1]),
-                                    FUN_00120478(position[2]), FUN_00120478(step));
+                        debug_print(D_L07_00211B78, id, batch, fptodp(position[0]), fptodp(position[1]),
+                                    fptodp(position[2]), fptodp(step));
                         spawn_on_path(position, id, batch, 0);
                         step += random_float_between(*(float *)(data + 8) / retry_step, 2.0f);
                         if (remaining < batch) {

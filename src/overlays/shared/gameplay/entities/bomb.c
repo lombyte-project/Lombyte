@@ -662,7 +662,7 @@ extern void FUN_L00_00263ac8(void *, int, void *, float);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 unsigned char *spawn_feather_moby(int unused, void *pos, float *vel) __asm__("FUN_L00_002cbf68");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern void FUN_L00_00258278(void *, float *, float, float, float, float);
@@ -789,7 +789,7 @@ void update_morphoray_chicken(Moby *chicken_moby) {
             spawn_explosion((char *)chicken_moby, &motion_and_normal_scratch, 0, 0.0f, 2.0f, 0, 0, 0, 4.0f, 3.0f, 9.0f, 1.0f, -1, 12.0f, 1, 1, -1, (unsigned char)vars->gold);
             count = FUN_L00_001f2868(&chicken_moby->pos, 3.0f, 0x10, chicken_moby, 0);
             *(u128 *)&point = *(u128 *)&chicken_moby->pos;
-            FUN_L00_0025a9f8(chicken_moby, &point, D_L00_00177F00, count, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
+            send_blast_hits(chicken_moby, &point, D_L00_00177F00, count, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
         }
         count = random_int_between(5, 8);
         if (0.85f < D_L00_0015F5D0 || 0.85f < D_L00_0015F5D4) {

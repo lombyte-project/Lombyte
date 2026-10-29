@@ -1044,8 +1044,8 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_00214db0_217450(void *, float, float, float) __asm__("FUN_00214db0");
 extern float FUN_001f9dc8_217450(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int,
-                                    int);
+extern void spawn_effect(void *, void *, int, int, int, int, int,
+                                    int) __asm__("FUN_L00_00269958");
 
 void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 
@@ -1078,7 +1078,7 @@ void spawn_hero_radial_particle_burst(void) {
         FUN_00214db0_217450(&out, vector_magnitude, azimuth_angle, elevation_angle);
         randomized_position[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
         randomized_position[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
-        FUN_L00_00269958(randomized_position, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
+        spawn_effect(randomized_position, &out, 0x7000C0F0, 0x70F0, scaled_frame_count, random_integer_4_to_7, b, 1);
     } while (i >= 0);
     if (!azimuth_angle) {
     }

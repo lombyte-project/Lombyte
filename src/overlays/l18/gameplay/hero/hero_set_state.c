@@ -26,7 +26,7 @@ extern T2C D_L18_0017C628[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float hero_hurt_animation_blend_curves[][25] __asm__("D_L18_0017C7F0");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
@@ -714,7 +714,7 @@ int hero_set_state(int a, int b) {
         p->item_use_locked = 1;
         *(int *)&p->grapple_pull_speed = 0;
         p->grapple_pull_ending = 0;
-        p->tether_radius = FUN_001f9b48(&p->motion.pos, ((char *)p->grapple_target) + 0x10);
+        p->tether_radius = fast_vec_dist(&p->motion.pos, ((char *)p->grapple_target) + 0x10);
         if (b)
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
@@ -766,7 +766,7 @@ int hero_set_state(int a, int b) {
             q->swing_yaw =
                 fast_arc_tan(*(float *)(((char *)q->swing_target_moby) + 0x10) - q->motion.pos.f[0],
                              *(float *)(((char *)q->swing_target_moby) + 0x14) - q->motion.pos.f[1]);
-            q->unk9A4 = FUN_001f9b48(&q->motion.pos, ((char *)q->swing_target_moby) + 0x10);
+            q->unk9A4 = fast_vec_dist(&q->motion.pos, ((char *)q->swing_target_moby) + 0x10);
             q->swing_gravity = frame_time_sq * 27.0f;
             if (q->state.prev_control_mode == 4) {
                 q->swing_gravity = q->jump_gravity;
@@ -1138,7 +1138,7 @@ int hero_set_state(int a, int b) {
                     grind_direction_or_jump_probe_position[0] = 331.0f;
                     grind_direction_or_jump_probe_position[1] = 104.0f;
                     grind_direction_or_jump_probe_position[2] = 145.0f;
-                    if (FUN_001f9b48(&u->motion.pos, grind_direction_or_jump_probe_position) < 10.0f) {
+                    if (fast_vec_dist(&u->motion.pos, grind_direction_or_jump_probe_position) < 10.0f) {
                         k = 0.7f;
                         u->unk430 = u->unk430 + k;
                         u->jump_height_start = u->jump_height_start + k;

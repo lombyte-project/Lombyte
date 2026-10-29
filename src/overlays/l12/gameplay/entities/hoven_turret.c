@@ -506,14 +506,14 @@ extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L12_002400d0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void FUN_L00_00211250(void);
+extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_002607d0(int);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -581,7 +581,7 @@ void hoven_turret_update(struct Moby *moby) {
         {
             Vec_304920 out;
 
-            FUN_L00_0024f7c8(moby, 3, out);
+            moby_point_position(moby, 3, out);
         }
         if (vector_distance(((float *)&moby->pos), ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f
             || ((Hero *)(D_0013E533 + 0xE1D))->ground_moby == moby) {
@@ -604,7 +604,7 @@ void hoven_turret_update(struct Moby *moby) {
                 if (moby->prev_seq != 5) {
                     set_moby_animation(moby, 5, 0);
                 }
-                FUN_L12_002400d0(0x32, 1);
+                hero_set_state(0x32, 1);
                 FUN_L12_003032e8_c((char *)moby);
                 data->f8C = 200.0f;
                 moby->hit_slot = 0xFF;
@@ -637,7 +637,7 @@ void hoven_turret_update(struct Moby *moby) {
                     D_L12_00161F20--;
                 }
                 ((Hero *)(D_0013E533 + 0xE1D))->ship_flags = 0;
-                FUN_L00_00211250();
+                hero_respawn();
             }
             if (data->f8C <= 0.0f) {
                 D_L12_00161F04 = 1;
@@ -659,7 +659,7 @@ void hoven_turret_update(struct Moby *moby) {
             } else {
                 jet_clear_persistent(moby->mission);
                 queue_scene_movie_with_game_language(0xD);
-                FUN_L00_002607d0(0xD);
+                unlock_planet(0xD);
                 {
                     Vec_304920 cpos;
                     Vec_304920 crot;
@@ -729,9 +729,9 @@ void hoven_turret_update(struct Moby *moby) {
                 build_spherical_offset(firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, data->f74);
                 if (data->f80 == 1) {
                     data->f80 = 0;
-                    FUN_L00_0024f7c8(moby, 2, muz);
+                    moby_point_position(moby, 2, muz);
                 } else {
-                    FUN_L00_0024f7c8(moby, 1, muz);
+                    moby_point_position(moby, 1, muz);
                     data->f80 = 1;
                 }
                 fast_vec_add(muz, muz, firing_offset);
@@ -785,7 +785,7 @@ void hoven_turret_update(struct Moby *moby) {
             data->fAE = scale_game_frames(random_int_between(5, 0xD));
         }
         if (fast_dec_timer_s16(&data->fAC)) {
-            FUN_L00_00211250();
+            hero_respawn();
         }
         break;
     case HOVEN_TURRET_STATE_START_SCENE:

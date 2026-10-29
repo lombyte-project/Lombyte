@@ -625,8 +625,8 @@ extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
-extern int FUN_L00_00233e98(int);
-extern int FUN_L00_00266d60(int, int, int *);
+extern int get_ammo(int) __asm__("FUN_L00_00233e98");
+extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -635,7 +635,7 @@ extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
@@ -691,7 +691,7 @@ int process_hero_primary_item_input(void) {
             if ((*(Hero *)((char *)&hero)).on_slip_ground != 0) {
                 break;
             }
-            if (!FUN_L00_00266d60(mask, scale_game_frames(7), &press_time0)) {
+            if (!pad_pressed_within(mask, scale_game_frames(7), &press_time0)) {
                 break;
             }
             item = (Moby *)(*(Hero *)((char *)&hero)).items[0].moby;
@@ -729,7 +729,7 @@ int process_hero_primary_item_input(void) {
                 if ((*(Hero *)((char *)&hero)).state.current == 0xB || (*(Hero *)((char *)&hero)).state.current == 0xE) {
                     window = scale_game_frames(0x12);
                 }
-                if (!FUN_L00_00266d60(mask, window, 0)) {
+                if (!pad_pressed_within(mask, window, 0)) {
                     break;
                 }
                 if (((*(Hero *)((char *)&hero)).past_jump_apex == 0 && (*(Hero *)((char *)&hero)).ground_distance > 0.1f) || ((*(Hero *)((char *)&hero)).past_jump_apex != 0 && (*(Hero *)((char *)&hero)).ground_distance > 0.57f)
@@ -753,7 +753,7 @@ int process_hero_primary_item_input(void) {
                     if ((*(Hero *)((char *)&hero)).anim_changing != 0) {
                         break;
                     }
-                    if ((*(Hero *)((char *)&hero)).anim_frame >= (float)rec->f10 && (D_0013CA40_p2523C8.held & 0xA) && FUN_L00_00266d60(mask, scale_game_frames(0xF), 0)) {
+                    if ((*(Hero *)((char *)&hero)).anim_frame >= (float)rec->f10 && (D_0013CA40_p2523C8.held & 0xA) && pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
                         break;
                     }
@@ -775,7 +775,7 @@ int process_hero_primary_item_input(void) {
             if ((*(Hero *)((char *)&hero)).on_slip_ground != 0) {
                 break;
             }
-            if (!FUN_L00_00266d60(mask, window, 0)) {
+            if (!pad_pressed_within(mask, window, 0)) {
                 break;
             }
             if (D_0013CA40_p2523C8.held & 0xA) {
@@ -801,7 +801,7 @@ int process_hero_primary_item_input(void) {
             }
             if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 0xF
                 || (*(Hero *)((char *)&hero)).state.control_mode == 5 || (*(Hero *)((char *)&hero)).state.current == 0x1E) {
-                if (FUN_L00_00266d60(mask, window, 0) || ((D_0013CA40_p2523C8.held & mask) && (*(Hero *)((char *)&hero)).items[0].ready_frames > scale_game_frames(0xF))) {
+                if (pad_pressed_within(mask, window, 0) || ((D_0013CA40_p2523C8.held & mask) && (*(Hero *)((char *)&hero)).items[0].ready_frames > scale_game_frames(0xF))) {
                     if ((*(Hero *)((char *)&hero)).swing_target_in_sight != 0) {
                         if ((*(Hero *)((char *)&hero)).grapple_target_in_sight != 0) {
                             if ((*(Hero *)((char *)&hero)).swing_target_dist < (*(Hero *)((char *)&hero)).unk984) {
@@ -829,7 +829,7 @@ int process_hero_primary_item_input(void) {
         if (!FUN_L00_0020fe30_c()) {
             break;
         }
-        if (!FUN_L00_00266d60(mask, scale_game_frames(7), 0)) {
+        if (!pad_pressed_within(mask, scale_game_frames(7), 0)) {
             break;
         }
         if (D_00141660_lui != 0x1F) {
@@ -847,7 +847,7 @@ int process_hero_primary_item_input(void) {
         break;
     case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 5) {
-            if (FUN_L00_00266d60(mask, scale_game_frames(8), 0)) {
+            if (pad_pressed_within(mask, scale_game_frames(8), 0)) {
                 open_vendor_menu(0);
             }
         }
@@ -862,7 +862,7 @@ int process_hero_primary_item_input(void) {
             }
             pv = (PVar *)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby)->pvars;
             if (((D_0013CA40_p2523C8.held & mask) && (*(Hero *)((char *)&hero)).items[0].ready_frames > scale_game_frames(5)) || (D_0013CA40_p2523C8.pressed & mask)) {
-                if (FUN_L00_00233e98(-1)) {
+                if (get_ammo(-1)) {
                     if ((*(Hero *)((char *)&hero)).item_anim_active == 0) {
                         start_equipped_item_animation();
                     }
@@ -870,7 +870,7 @@ int process_hero_primary_item_input(void) {
                 }
             }
             if (D_0013CA40_p2523C8.held & mask) {
-                if (!FUN_L00_00233e98(-1)) {
+                if (!get_ammo(-1)) {
                     if (!voice_is_playing((Moby *)(*(Hero *)((char *)&hero)).items[0].moby, pv->fC)) {
                         pv->fC = allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                     }
@@ -894,9 +894,9 @@ int process_hero_primary_item_input(void) {
             }
             window = scale_game_frames(7);
             held_frames = (*(Hero *)((char *)&hero)).items[0].ready_frames;
-            if (FUN_L00_00266d60(mask, window <= held_frames ? window : held_frames, &press_time1)
+            if (pad_pressed_within(mask, window <= held_frames ? window : held_frames, &press_time1)
                 || ((D_0013CA40_p2523C8.held & 0x20) && held_frames > scale_game_frames(8) && held_frames < scale_game_frames(0x11))) {
-                if (FUN_L00_00233e98(-1)) {
+                if (get_ammo(-1)) {
                     if ((*(Hero *)((char *)&hero)).state.control_mode == 0xC || (*(Hero *)((char *)&hero)).state.control_mode == 0 || (*(Hero *)((char *)&hero)).state.current == 3
                         || ((*(Hero *)((char *)&hero)).state.control_mode == 1 && (*(Hero *)((char *)&hero)).stick_magnitude < 0.7f)) {
                         hero_set_state(0x23, 1);
@@ -917,7 +917,7 @@ int process_hero_primary_item_input(void) {
                 int window = scale_game_frames(0xA);
                 int held_frames = (*(Hero *)((char *)&hero)).items[0].ready_frames;
 
-                if (FUN_L00_00266d60(mask, window <= held_frames ? window : held_frames, &press_time2)) {
+                if (pad_pressed_within(mask, window <= held_frames ? window : held_frames, &press_time2)) {
                     if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
                         hero_set_state(0x20, 1);
                         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
@@ -962,7 +962,7 @@ int process_hero_primary_item_input(void) {
             if ((*(Hero *)((char *)&hero)).shot_cooldown != 0) {
                 break;
             }
-            if (!FUN_L00_00266d60(mask, scale_game_frames(7), 0)) {
+            if (!pad_pressed_within(mask, scale_game_frames(7), 0)) {
                 break;
             }
             best = 0;
@@ -1012,7 +1012,7 @@ int process_hero_primary_item_input(void) {
             }
             stats->stat[27].level_mask = stats->stat[27].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
             allocate_voice_for_target_entry_alt(0, 0, (int)item);
-            FUN_L00_0024f7c8(item, 0, joint_pos);
+            moby_point_position(item, 0, joint_pos);
             create_class_5c3_moby(item, joint_pos, best, (*(Hero *)((char *)&hero)).motion.rot.f[2], (*(Hero *)((char *)&hero)).motion.rot.f[1]);
         }
         break;
