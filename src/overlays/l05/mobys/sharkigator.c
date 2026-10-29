@@ -262,14 +262,14 @@ void spawn_sharkigator_surface_effects(char *moby) __asm__("FUN_L05_002d1e30");
 
 void spawn_sharkigator_surface_effects(char *moby) {
     V2d1e30 spawn_position;
-    char   *data;
+    char   *sharkigator_vars;
     char   *spawned_effect;
     float   opposite_heading;
     int     i;
     float  *spawn_height_ptr;
 
-    data = ((char *)MOBY(moby)->pvars);
-    if (fast_dec_timer(data + 0x84) == 0) {
+    sharkigator_vars = ((char *)MOBY(moby)->pvars);
+    if (fast_dec_timer(sharkigator_vars + 0x84) == 0) {
         return;
     }
     for (i = 0; i < 2; i++) {
@@ -287,7 +287,7 @@ void spawn_sharkigator_surface_effects(char *moby) {
         if (spawned_effect != 0) {
             *(short *)(spawned_effect + 0xA) = scale_game_frames(15);
         }
-        *(int *)(data + 0x84) = truncate_float_to_s32(random_float_between(3.0f, 5.0f));
+        *(int *)(sharkigator_vars + 0x84) = truncate_float_to_s32(random_float_between(3.0f, 5.0f));
     }
 }
 
