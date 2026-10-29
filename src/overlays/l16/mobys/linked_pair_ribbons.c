@@ -34,26 +34,26 @@ void update_linked_pair_ribbons(struct Moby *moby) {
         MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,
         MOBY_STATE_UPDATE_DRAW_AND_SOUND = 1
     };
-    int *data = (int *)moby->pvars;
+    int *linked_pair_effect_data = (int *)moby->pvars;
     if ((moby->flags & 2) == 0) {
         unsigned char state = moby->state;
         switch (state) {
         case MOBY_STATE_INITIALIZE_LINKED_PAIRS:
-            if (data[0] == 0) {
+            if (linked_pair_effect_data[0] == 0) {
                 func_L16_002D0990_2D0870(moby);
                 moby->state = 1;
             }
             break;
         case MOBY_STATE_UPDATE_DRAW_AND_SOUND:
             if (is_linked_pair_ribbon_enabled(moby) != 0) {
-                data[2] = state;
+                linked_pair_effect_data[2] = state;
                 add_draw_callback(FUN_L16_002cf7a8_u, moby);
-                if (voice_is_playing(moby, data[3]) == 0) {
-                    data[3] = allocate_voice_for_target_entry(0, 4, moby);
+                if (voice_is_playing(moby, linked_pair_effect_data[3]) == 0) {
+                    linked_pair_effect_data[3] = allocate_voice_for_target_entry(0, 4, moby);
                 }
-            } else if (data[2] != 0) {
-                int voice_slot_index = data[3];
-                data[2] = 0;
+            } else if (linked_pair_effect_data[2] != 0) {
+                int voice_slot_index = linked_pair_effect_data[3];
+                linked_pair_effect_data[2] = 0;
                 if (voice_slot_index != -1) {
                     char *voice_entry_base = D_0013E533 + 0x1D + voice_slot_index * 0x70;
                     if (*(char **)(voice_entry_base + 0x88) == moby &&
@@ -61,7 +61,7 @@ void update_linked_pair_ribbons(struct Moby *moby) {
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                data[3] = -1;
+                linked_pair_effect_data[3] = -1;
             }
             break;
         }
