@@ -1482,7 +1482,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     Data2C8398 *moby_data;
     char       *hit;
     char       *other;
-    int         result;
+    int         hit_response_code;
 
     damage = 0.0f;
     moby_data = moby->data;
@@ -1496,7 +1496,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->f270 = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
-    result = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    hit_response_code = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
         other = *(char **)(hit + 0x20);
         if (other != 0) {
@@ -1513,9 +1513,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         }
         moby_data->f20 -= damage;
         if (moby_data->f20 <= 0.0f) {
-            result = 1;
+            hit_response_code = 1;
         }
-        switch (result) {
+        switch (hit_response_code) {
         case NO_KNOCKBACK_HIT_RESPONSE:
         case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;
