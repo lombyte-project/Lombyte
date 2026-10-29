@@ -15,17 +15,17 @@ s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 thres
     f32 interp_value;
     f32 window;
     f32 rounded_value_overshoot;
-    s32 result;
+    s32 threshold_within_window;
 
     interp_value = compute_interpolated_record_value();
     rounded_value_overshoot = round_float_to_decimal_places(4, interp_value - threshold);
     window = round_float_to_decimal_places(4, anim->unk58 * anim->unk5C);
-    result = 0;
+    threshold_within_window = 0;
     if (threshold <= interp_value) {
-        result = 1;
+        threshold_within_window = 1;
         if (!(rounded_value_overshoot < window)) {
-            result = 0;
+            threshold_within_window = 0;
         }
     }
-    return result;
+    return threshold_within_window;
 }
