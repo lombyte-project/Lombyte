@@ -332,7 +332,7 @@ extern short drek_missile_wander_radius_range_start_gp __asm__("D_L18_00162224")
 extern short drek_missile_wander_radius_range_end_gp __asm__("D_L18_00162228") __attribute__((sda));
 
 void select_drek_fight_missile_wander_target(struct Moby *moby, void *out) {
-    char *data = ((char *)moby->pvars);
+    char *missile_private_vars = ((char *)moby->pvars);
     float wander_target_offset[3];
     float wander_radius = random_float_between(*(float *)&drek_missile_wander_radius_range_start_gp,
                                                *(float *)&drek_missile_wander_radius_range_end_gp);
@@ -343,8 +343,8 @@ void select_drek_fight_missile_wander_target(struct Moby *moby, void *out) {
     wander_target_offset[2] =
         random_float_between(*(float *)&drek_missile_wander_z_offset_range_start_gp,
                              *(float *)&drek_missile_wander_z_offset_range_end_gp);
-    fast_vec_add(out, wander_target_offset, data + 0x120);
-    *(int *)(data + 0x160) = scale_game_frames(180);
+    fast_vec_add(out, wander_target_offset, missile_private_vars + 0x120);
+    *(int *)(missile_private_vars + 0x160) = scale_game_frames(180);
 }
 
 extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
