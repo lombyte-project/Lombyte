@@ -1515,7 +1515,7 @@ void morphoray_update(Moby *moby) {
     Vq    direction;
     Vq    points[3];
     Vq    matrix[4];
-    Ray  *data;
+    Ray  *morphoray_state;
     int   busy;
     int   in_range;
     Moby *hit;
@@ -1525,7 +1525,7 @@ void morphoray_update(Moby *moby) {
     if (((Hero *)((char *)&hero))->items[0].state == 3) {
         busy = 1;
     }
-    data = (struct Ray *)moby->pvars;
+    morphoray_state = (struct Ray *)moby->pvars;
     if (moby->state == 0) {
         moby->state = 1;
         morphoray_point_light_slot = -1;
@@ -1536,7 +1536,7 @@ void morphoray_update(Moby *moby) {
     if (moby->prev_seq == 0 && compute_interpolated_record_value(moby) < 6.0f) {
         in_range = 0;
     }
-    func_001F9938_2BDAF0(&data->timer);
+    func_001F9938_2BDAF0(&morphoray_state->timer);
     if ((((unsigned int)((Hero *)((char *)&hero))->state.control_mode < 2 ||
           ((Hero *)((char *)&hero))->state.control_mode == 12 ||
           ((Hero *)((char *)&hero))->state.control_mode == 4 ||
@@ -1546,8 +1546,8 @@ void morphoray_update(Moby *moby) {
         if (((Hero *)((char *)&hero))->item_anim_active == 0) {
             start_equipped_item_animation();
         }
-        if (data->seen == 0) {
-            data->seen = 1;
+        if (morphoray_state->seen == 0) {
+            morphoray_state->seen = 1;
             if (((Stats *)(item_usage))->kills <= 0xFFFE) {
                 ((Stats *)(item_usage))->kills++;
             }
@@ -1558,10 +1558,10 @@ void morphoray_update(Moby *moby) {
             ((Stats *)(item_usage))->levels =
                 ((Stats *)(item_usage))->levels | (1 << current_level_index) | 0x80000000;
         }
-        if (data->timer == 0) {
-            data->timer = func_001F9850_2BDAF0(15);
+        if (morphoray_state->timer == 0) {
+            morphoray_state->timer = func_001F9850_2BDAF0(15);
         }
-        moby_point_position(moby, 0, data);
+        moby_point_position(moby, 0, morphoray_state);
         if (((Hero *)((char *)&hero))->state.current == 1) {
             hero_set_state(30, 1);
         }
@@ -1579,32 +1579,32 @@ void morphoray_update(Moby *moby) {
             transform_vector_by_basis(
                 &direction, &direction, ((Hero *)((char *)&hero))->basis[0].f);
         }
-        data->yaw = fast_arc_tan(direction.x, direction.y);
-        data->pitch = fast_arc_tan(func_001F9CE8_2BDAF0(&direction), direction.z);
-        *(u128_2BDAF0 *)&points[0] = *(u128_2BDAF0 *)data->pos;
-        hit = select_morphoray_target_and_adjust_aim(moby, &points[0], &data->yaw, &data->pitch);
-        func_001F9908_2BDAF0(&data->delay);
-        if (data->target != 0) {
-            if (data->target->state == 0xFE) {
-                data->target = 0;
-                data->delay = 0;
-            } else if (data->target->state == 0xFD) {
-                data->target = 0;
-                data->delay = 0;
+        morphoray_state->yaw = fast_arc_tan(direction.x, direction.y);
+        morphoray_state->pitch = fast_arc_tan(func_001F9CE8_2BDAF0(&direction), direction.z);
+        *(u128_2BDAF0 *)&points[0] = *(u128_2BDAF0 *)morphoray_state->pos;
+        hit = select_morphoray_target_and_adjust_aim(moby, &points[0], &morphoray_state->yaw, &morphoray_state->pitch);
+        func_001F9908_2BDAF0(&morphoray_state->delay);
+        if (morphoray_state->target != 0) {
+            if (morphoray_state->target->state == 0xFE) {
+                morphoray_state->target = 0;
+                morphoray_state->delay = 0;
+            } else if (morphoray_state->target->state == 0xFD) {
+                morphoray_state->target = 0;
+                morphoray_state->delay = 0;
             }
         }
-        if (hit != 0 || data->delay != 0) {
+        if (hit != 0 || morphoray_state->delay != 0) {
             if (hit != 0) {
                 float *target_health = get_moby_target_info(hit);
-                if (hit != data->target && data->delay == 0) {
-                    data->target = hit;
-                    data->total = func_001FA888_2BDAF0(((short *)target_health)[2]);
-                    data->left = target_health[0];
-                    data->delay = func_001F9850_2BDAF0(30);
-                    if (data->total <= 1.0f) {
-                        data->left = 0.0f;
+                if (hit != morphoray_state->target && morphoray_state->delay == 0) {
+                    morphoray_state->target = hit;
+                    morphoray_state->total = func_001FA888_2BDAF0(((short *)target_health)[2]);
+                    morphoray_state->left = target_health[0];
+                    morphoray_state->delay = func_001F9850_2BDAF0(30);
+                    if (morphoray_state->total <= 1.0f) {
+                        morphoray_state->left = 0.0f;
                     }
-                    data->snd = queue_animation_update(4,
+                    morphoray_state->snd = queue_animation_update(4,
                                                        0x7533,
                                                        hud_init_particles,
                                                        hud_update_particles,
@@ -1616,23 +1616,23 @@ void morphoray_update(Moby *moby) {
             {
                 float level_bonus = func_001FA888_2BDAF0(D_0013E633_2BDAF0[2]) * 0.33f + 1.0f;
                 float remaining =
-                    data->left - morphoray_base_drain_rate_gp * D_0015ED6C * level_bonus;
-                data->left = remaining;
+                    morphoray_state->left - morphoray_base_drain_rate_gp * D_0015ED6C * level_bonus;
+                morphoray_state->left = remaining;
                 if (remaining < 0.0f) {
-                    data->left = 0.0f;
+                    morphoray_state->left = 0.0f;
                 }
             }
-            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(data->left * 10000.0f / data->total);
+            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(morphoray_state->left * 10000.0f / morphoray_state->total);
         }
-        if (data->target != 0 && data->left <= 0.0f) {
-            if (current_level_index == 5 && data->target->oclass == 0x271 &&
+        if (morphoray_state->target != 0 && morphoray_state->left <= 0.0f) {
+            if (current_level_index == 5 && morphoray_state->target->oclass == 0x271 &&
                 item_unlocked[8] == 0) {
                 item_unlocked[8] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
-            spawn_morphoray_chicken(data->target);
-            data->target = 0;
+            spawn_morphoray_chicken(morphoray_state->target);
+            morphoray_state->target = 0;
         }
         func_L00_002BE3A8_2BDAF0(moby);
         if (morphoray_point_light_slot == -1) {
@@ -1642,7 +1642,7 @@ void morphoray_update(Moby *moby) {
         if (morphoray_point_light_slot >= 0) {
             morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
             func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
-            func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
+            func_001F9BD8_2BDAF0(&points[1], morphoray_state, &points[0]);
             point_lights[morphoray_point_light_slot].position.f[0] = points[1].x;
             point_lights[morphoray_point_light_slot].position.f[1] = points[1].y;
             point_lights[morphoray_point_light_slot].position.f[2] = points[1].z;
@@ -1652,18 +1652,18 @@ void morphoray_update(Moby *moby) {
             D_L00_001617C8 = allocate_voice_for_target_entry(0, 4, moby);
         }
     } else {
-        data->target = 0;
-        data->seen = 0;
-        data->delay = 0;
-        if (data->snd != -1) {
-            remove_hud_item(data->snd);
-            data->snd = -1;
+        morphoray_state->target = 0;
+        morphoray_state->seen = 0;
+        morphoray_state->delay = 0;
+        if (morphoray_state->snd != -1) {
+            remove_hud_item(morphoray_state->snd);
+            morphoray_state->snd = -1;
         }
         D_L00_001617BC = 1;
         if (morphoray_point_light_slot >= 0) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
-            func_001F9BD8_2BDAF0(&points[0], data, &direction);
+            func_001F9BD8_2BDAF0(&points[0], morphoray_state, &direction);
             point_lights[morphoray_point_light_slot].position.f[0] = points[0].x;
             point_lights[morphoray_point_light_slot].position.f[1] = points[0].y;
             point_lights[morphoray_point_light_slot].position.f[2] = points[0].z;
