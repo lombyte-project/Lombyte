@@ -8,7 +8,7 @@
 struct Moby;
 
 /*
- * A trail of moby copies following a source moby (shared/gameplay/state/00261968.c):
+ * A trail of moby copies following a source moby (shared/gameplay/state/test_path_segment_strict_crossing.c):
  * FUN_L00_00262500 sets the source, FUN_L00_00262528 adds a copy,
  * FUN_L00_00262608 records the source's last 8 positions and places each copy
  * `delay` frames behind, FUN_L00_00262840 removes the copies.

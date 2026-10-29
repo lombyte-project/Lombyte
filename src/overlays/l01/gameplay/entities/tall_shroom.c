@@ -384,7 +384,7 @@ DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f3
     }
     return spawned_moby;
 }
-/* Cutscene state at D_L01_0016CCE0 (as struct L10Data in l10/gameplay/vendor/002ea1f0.c). */
+/* Cutscene state at D_L01_0016CCE0 (as struct L10Data in l10/gameplay/vendor/update_configurable_particle_emitter.c). */
 typedef struct {
     u8 pad0[0x30];
     s32 scene;

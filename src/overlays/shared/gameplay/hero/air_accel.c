@@ -923,7 +923,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     FUN_001f9a10_8(&hero.motion.displacement, &hero.motion.displacement, &motion_delta);
     return 1;
 }
-/* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui/help/002020a8.c) /
+/* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui/help/select_hero_help_value.c) /
    FUN_L00_00211380; L01 has only the mode-0 and mode-3 cases and no b12E2 branch. */
 
 extern f32 D_0013F570[] __asm__("D_0013F570");
