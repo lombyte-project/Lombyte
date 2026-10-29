@@ -45,14 +45,14 @@ float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") = 0.1f;
 void  update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
 
 void update_linked_moby_position(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *moby_private_vars = ((char *)MOBY(moby)->pvars);
     float position_offset[4];
-    if (*(char **)(data + 0xF4) != 0) {
+    if (*(char **)(moby_private_vars + 0xF4) != 0) {
         char *linked_position;
         fast_vec_normalize(position_offset, moby + 0xC0, linked_moby_initial_offset_length_gp);
-        fast_vec_add(*(char **)(data + 0xF4) + 0x10, moby + 0x10, position_offset);
+        fast_vec_add(*(char **)(moby_private_vars + 0xF4) + 0x10, moby + 0x10, position_offset);
         fast_vec_normalize(position_offset, moby + 0xE0, linked_moby_additional_offset_length_gp);
-        linked_position = *(char **)(data + 0xF4) + 0x10;
+        linked_position = *(char **)(moby_private_vars + 0xF4) + 0x10;
         fast_vec_add(linked_position, linked_position, position_offset);
     }
 }
