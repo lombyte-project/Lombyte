@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/rpc/snd_send_iop_command_no_wait_globals.h"
 struct SndCb {
     s32 func;
     s32 pad;
@@ -9,7 +10,6 @@ extern s32 snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));
 extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
 extern s32 snd_batch_free_bytes[2] __asm__("D_0015ECA8") __attribute__((sda));
 extern struct SndCb *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
-extern s32 snd_sync_buffer[4] __asm__("D_00133100");
 extern u8 sound_command_client[] __asm__("D_0015EBC0");
 extern char snd_non_idle_error_string[] __asm__("D_00153D20");
 extern char snd_no_wait_continuing_string[] __asm__("D_00154070");
@@ -80,3 +80,5 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
 
 extern __typeof__(snd_send_iop_command_no_wait) func_0012E6E0
     __attribute__((alias("FUN_0012e6e0")));
+
+s32 snd_sync_buffer[4] = {0};
