@@ -707,20 +707,20 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
                                       float        max_angle,
 
                                       float approach_speed) {
-    char *data = (char *)moby->pvars;
+    char *trooper_steering_vars = (char *)moby->pvars;
     float distance;
     float angle;
     float old[4] __attribute__((aligned(16)));
-    float result[4] __attribute__((aligned(16)));
+    float path_constrained_position[4] __attribute__((aligned(16)));
     float next[4] __attribute__((aligned(16)));
     float delta[4] __attribute__((aligned(16)));
     int   count;
 
-    if (*(unsigned char *)(data + 0x242)) {
+    if (*(unsigned char *)(trooper_steering_vars + 0x242)) {
         float *rotation = &moby->rot.z;
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         approach_angle(rotation,
-                       data + 0x23c,
+                       trooper_steering_vars + 0x23c,
                        angle,
                        frame_time_sq * 15.707963f,
                        frame_time_sq * 12.566371f,
@@ -732,7 +732,7 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         angle = fast_add_rotations(angle, max_angle);
         approach_angle(&moby->rot.z,
-                       data + 0x23c,
+                       trooper_steering_vars + 0x23c,
                        angle,
                        frame_time_sq * 15.707963f,
                        frame_time_sq * 12.566371f,
@@ -741,39 +741,39 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
         float *rotation = &moby->rot.z;
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         approach_angle(rotation,
-                       data + 0x23c,
+                       trooper_steering_vars + 0x23c,
                        angle,
                        frame_time_sq * 15.707963f,
                        frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
     }
     if (approach_speed != 0.0f) {
-        approach_value(data + 0xf4, approach_speed, frame_time_sq * 7.0f);
+        approach_value(trooper_steering_vars + 0xf4, approach_speed, frame_time_sq * 7.0f);
     } else {
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         if (fast_difference_between_rotations(moby->rot.z, angle) < 1.5707964f && 6.0f < distance) {
-            approach_value(data + 0xf4, frame_time * 7.0f, frame_time_sq * 7.0f);
+            approach_value(trooper_steering_vars + 0xf4, frame_time * 7.0f, frame_time_sq * 7.0f);
         } else {
-            approach_value(data + 0xf4, frame_time, frame_time_sq * 7.0f);
+            approach_value(trooper_steering_vars + 0xf4, frame_time, frame_time_sq * 7.0f);
         }
     }
     *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
-    move_moby_along_heading(moby, data + 0xd0);
-    if (*(int *)(data + 0x26c) != -1) {
+    move_moby_along_heading(moby, trooper_steering_vars + 0xd0);
+    if (*(int *)(trooper_steering_vars + 0x26c) != -1) {
         fast_vec_sub(delta, old, &moby->pos);
         fast_vec_normalize(delta, delta, 0.05f);
         fast_vec_add(next, old, delta);
-        if (path_8808(*(int *)(data + 0x26c), &moby->pos, next, result)) {
-            char *path = ((char *)l12_paths[*(int *)(data + 0x26c)]);
+        if (path_8808(*(int *)(trooper_steering_vars + 0x26c), &moby->pos, next, path_constrained_position)) {
+            char *path = ((char *)l12_paths[*(int *)(trooper_steering_vars + 0x26c)]);
             if (!point_in_path_xy(&moby->pos, path + 0x10, *(int *)path))
-                *(OvlQuad *)&moby->pos = *(OvlQuad *)result;
+                *(OvlQuad *)&moby->pos = *(OvlQuad *)path_constrained_position;
             if (fast_vec_dist(&moby->pos, old) < frame_time * 0.5f) {
-                ++*(unsigned char *)(data + 0x243);
-                count = *(unsigned char *)(data + 0x243);
+                ++*(unsigned char *)(trooper_steering_vars + 0x243);
+                count = *(unsigned char *)(trooper_steering_vars + 0x243);
                 if (scale_game_frames(15) < count)
-                    *(unsigned char *)(data + 0x242) = 1;
+                    *(unsigned char *)(trooper_steering_vars + 0x242) = 1;
             } else {
-                *(unsigned char *)(data + 0x243) = 0;
+                *(unsigned char *)(trooper_steering_vars + 0x243) = 0;
             }
         }
     }
