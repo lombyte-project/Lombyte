@@ -294,7 +294,7 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
     char *path = D_L13_001B07B0[*(int *)(vars + 0xA0)];
     char *linked;
     char *veh;
-    int   result = 0;
+    int   path_wrapped = 0;
     int   point_count;
     int   forward;
     int   backward;
@@ -406,9 +406,9 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
         *(float *)(vars + 0xCC) = maximum;
     }
 update_path:
-    result = advance_blarg_space_fighter_along_path(moby, vars, aim);
+    path_wrapped = advance_blarg_space_fighter_along_path(moby, vars, aim);
 done:
-    return result;
+    return path_wrapped;
 }
 
 typedef struct {
