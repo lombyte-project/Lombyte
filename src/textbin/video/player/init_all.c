@@ -31,7 +31,7 @@ extern void vblank_handler() __asm__("func_0023B3D8");
 
 extern void handler_end_image() __asm__("FUN_0023b540");
 extern void video_dec_main() __asm__("func_0023CE28");
-extern s32 initialize_state_fields(struct AudioDecoderState *) __asm__("func_0023B940");
+extern s32 read_buf_create(struct AudioDecoderState *) __asm__("func_0023B940");
 extern void sceMpegInit(void);
 extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *,
                             u32) __asm__("FUN_0023cac8");
@@ -59,7 +59,7 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     void *thread_gp;
     *((volatile s32 *)0x1000E000) |= 3;
     *((volatile s32 *)0x1000E010) = 4;
-    initialize_state_fields(decoder_state);
+    read_buf_create(decoder_state);
     sceMpegInit();
     video_dec_create(((u8 *)decoder_state) + 0xD9048, decoder_buffer_address + 0x1C85C0, 0xEB768,
                      ((u8 *)decoder_state) + 0x52040, decoder_buffer_address + 0x1C7180, 0x100,

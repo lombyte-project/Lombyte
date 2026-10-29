@@ -1,14 +1,15 @@
-/* Rebase the state pointer and clear its first fields. */
+#include "rnc/video/decoder/read_buf.h"
 
-void initialize_state_fields(int *state_fields) __asm__("func_0023B940");
+void read_buf_create(struct ReadBuf *buf) __asm__("func_0023B940");
 
-void initialize_state_fields(int *state_fields) {
-    state_fields = (int *)((char *)state_fields + 0x50000);
-    state_fields[2] = 0x50000;
-    state_fields[0] = 0;
-    state_fields[1] = 0;
+void read_buf_create(struct ReadBuf *buf) {
+    struct ReadBuf *b = buf;
+
+    b->size = READ_BUF_SIZE;
+    b->put = 0;
+    b->count = 0;
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(initialize_state_fields) readBufCreate__FP7ReadBuf
+extern __typeof__(read_buf_create) readBufCreate__FP7ReadBuf
     __attribute__((alias("func_0023B940")));

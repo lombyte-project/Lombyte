@@ -26,10 +26,6 @@ extern void audioDecStart(s32) __asm__("func_0023ACB8");
 extern void audio_dec_reset(s32) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
 extern void end_display(void) __asm__("ClearStageStateFlag");
-extern s32 get_state_offset_address(struct ReadBuf *, u8 **) __asm__("func_0023B960");
-extern void read_buf_end_put(struct ReadBuf *, s32) __asm__("func_0023B990");
-extern s32 read_buf_begin_get(struct ReadBuf *, u8 **) __asm__("func_0023B9D8");
-extern s32 read_buf_end_get(struct ReadBuf *, s32) __asm__("GetStateTableWord");
 extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
 extern s32 video_dec_abort(s32) __asm__("func_0023CC70");
 extern s32 get_state_field(struct VideoDec *) __asm__("func_0023CC80");
@@ -98,7 +94,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
                 video_dec_abort(decoder_state + 0xD9048);
             }
         }
-        space = get_state_offset_address(read_buf, &write_ptr);
+        space = read_buf_begin_put(read_buf, &write_ptr);
         if (read_remaining > 0 && space > 0xFFFF) {
             count = read_cd_stream_sectors(cd_stream, write_ptr, 0x10000, 0);
             read_remaining -= count;
@@ -109,7 +105,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         avail = read_buf_begin_get(read_buf, &read_ptr);
         if (avail > 0) {
             count = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf,
-                                        read_buf->capacity);
+                                        read_buf->size);
             decode_remaining -= count;
             read_buf_end_get(read_buf, count);
         }

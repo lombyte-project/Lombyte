@@ -1,18 +1,14 @@
-#include "types.h"
+#include "rnc/video/decoder/read_buf.h"
 
-s32 read_buf_begin_get(s32 *read_buf, s32 *out_ptr) __asm__("FUN_0023b9d8");
+s32 read_buf_begin_get(struct ReadBuf *buf, u8 **ptr) __asm__("FUN_0023b9d8");
 
-s32 read_buf_begin_get(s32 *read_buf, s32 *out_ptr) {
-    s32 *buffer_state = (s32 *)((u8 *)read_buf + 0x50000);
-    s32 read_offset;
-
-    if (buffer_state[1] != 0) {
-        read_offset = (buffer_state[0] - buffer_state[1] + buffer_state[2]) % buffer_state[2];
-        *out_ptr = (s32)read_buf + read_offset;
+s32 read_buf_begin_get(struct ReadBuf *buf, u8 **ptr) {
+    if (buf->count != 0) {
+        *ptr = buf->data + (buf->put - buf->count + buf->size) % buf->size;
     }
-    return buffer_state[1];
+    return buf->count;
 }
 
-extern s32 func_0023B9D8(s32 *read_buf, s32 *out_ptr) __attribute__((alias("FUN_0023b9d8")));
-extern s32 readBufBeginGet__FP7ReadBufPPUc(s32 *read_buf, s32 *out_ptr)
+extern __typeof__(read_buf_begin_get) func_0023B9D8 __attribute__((alias("FUN_0023b9d8")));
+extern __typeof__(read_buf_begin_get) readBufBeginGet__FP7ReadBufPPUc
     __attribute__((alias("FUN_0023b9d8")));

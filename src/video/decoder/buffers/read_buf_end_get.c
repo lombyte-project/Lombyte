@@ -1,21 +1,17 @@
-#include "types.h"
-struct ReadBuf {
-    u8 pad_0[0x50004];
-    s32 count;
-};
+#include "rnc/video/decoder/read_buf.h"
 
-s32 read_buf_end_get(struct ReadBuf *table, s32 requested) __asm__("GetStateTableWord");
+s32 read_buf_end_get(struct ReadBuf *buf, s32 size) __asm__("GetStateTableWord");
 
-s32 read_buf_end_get(struct ReadBuf *table, s32 requested) {
+s32 read_buf_end_get(struct ReadBuf *buf, s32 size) {
     s32 taken;
     s32 result;
 
-    taken = table->count;
+    taken = buf->count;
     result = taken;
-    if (requested < taken) {
-        taken = requested;
+    if (size < taken) {
+        taken = size;
     }
     result -= taken;
-    table->count = result;
+    buf->count = result;
     return taken;
 }

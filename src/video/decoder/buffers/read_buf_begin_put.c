@@ -1,18 +1,16 @@
-/* Returns the active range and resolves its current address when requested. */
+#include "rnc/video/decoder/read_buf.h"
 
-int get_state_offset_address(int *state_fields, int **address_out) __asm__("func_0023B960");
+s32 read_buf_begin_put(struct ReadBuf *buf, u8 **ptr) __asm__("func_0023B960");
 
-int get_state_offset_address(int *state_fields, int **address_out) {
-    int *range_fields = state_fields + 0x14000;
-    int range = range_fields[2] - range_fields[1];
+s32 read_buf_begin_put(struct ReadBuf *buf, u8 **ptr) {
+    s32 free = buf->size - buf->count;
 
-    if (range != 0) {
-        *address_out = (int *)((char *)state_fields + range_fields[0]);
+    if (free != 0) {
+        *ptr = buf->data + buf->put;
     }
-
-    return range;
+    return free;
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(get_state_offset_address) readBufBeginPut__FP7ReadBufPPUc
+extern __typeof__(read_buf_begin_put) readBufBeginPut__FP7ReadBufPPUc
     __attribute__((alias("func_0023B960")));
