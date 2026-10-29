@@ -146,7 +146,7 @@ extern char          D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
 void                 update_elevator(Moby_2FDA70 *moby) __asm__("FUN_L06_002fc640");
 
 void set_moby_and_links_to_states_2_and_3(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *moby_data = ((char *)MOBY(moby)->pvars);
     char **linked_mobys;
     int    i;
     moby[0xBC] = 1;
@@ -154,11 +154,11 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
         moby[0x20] = 2;
         moby[0x31] = 1;
         MOBY(moby)->flags &= 0xFFFE;
-        *(int *)(data + 0x14) = 0;
+        *(int *)(moby_data + 0x14) = 0;
         MOBY(moby)->rot.x =
-            fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
+            fast_subtract_rotations(*(float *)(moby_data + 0x10), *(float *)(moby_data + 0x14));
         update_entity(moby);
-        linked_mobys = (char **)(data + 0x24);
+        linked_mobys = (char **)(moby_data + 0x24);
         for (i = 0; i < 7; i++) {
             char *linked_moby = linked_mobys[i];
             char *linked_data;
