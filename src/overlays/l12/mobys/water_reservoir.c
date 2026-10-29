@@ -154,7 +154,7 @@ extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") _
 extern void  draw_geometry_quad(void *, void *, int);
 
 void draw_water_reservoir(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *water_reservoir_vars = (char *)moby->pvars;
     Quad  quad;
     float rotation_matrix[12];
     float pos[4];
@@ -162,7 +162,7 @@ void draw_water_reservoir(struct Moby *moby) {
     int   i, col;
     copy_matrix_rotation(rotation_matrix, &moby->rot_row0);
     qcopy(pos, &moby->pos);
-    pos[2] = pos[2] + *(float *)(data + 8);
+    pos[2] = pos[2] + *(float *)(water_reservoir_vars + 8);
     pos[3] = 1.0f;
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
@@ -170,7 +170,7 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
                 ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
     col =
-        fast_tween_color(D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+        fast_tween_color(D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;
