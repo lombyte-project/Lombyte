@@ -447,7 +447,7 @@ void process_horny_toad_hit_reaction(unsigned char *m) __asm__("FUN_L00_002d5160
 void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
     unsigned char *toad_vars = *(unsigned char **)(toad_moby + 0x78);
     unsigned char *hit;
-    s32            result;
+    s32            hit_response_status;
     f32            damage;
     f32            angle;
     f32            hit_knockback_vector[4] __attribute__((aligned(16)));
@@ -468,8 +468,8 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
     }
     damage = 0.0f;
     hit = find_moby_hit(toad_moby, 0x330000, 0);
-    hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &result, &damage, 0, 4);
-    if (result != 1 && toad_moby[0x20] != 12 && damage != 0.0f) {
+    hit_reaction(toad_moby, hit, toad_vars + 0x20, 0, &hit_response_status, &damage, 0, 4);
+    if (hit_response_status != 1 && toad_moby[0x20] != 12 && damage != 0.0f) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
