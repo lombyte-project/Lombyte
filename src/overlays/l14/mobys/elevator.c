@@ -429,15 +429,15 @@ void rebuild_elevator_world_path(u8 *moby) {
 extern float fast_sin(float);
 
 void update_elevator_idle_glow(struct Moby *moby) {
-    char        *data = (char *)moby->pvars;
+    char        *elevator_glow_vars = (char *)moby->pvars;
     struct Hero *x = &hero;
     if (absolute_float(moby->pos.x - x->motion.pos.f[0]) > 40.0f ||
         absolute_float(moby->pos.y - x->motion.pos.f[1]) > 40.0f) {
         moby->glow_color = fast_tween_color(moby->glow_color, 0x80303030, 0.1f);
     } else {
         int   i, col;
-        float a = fast_add_rotations(*(float *)(data + 0x138), frame_time * 6.2831855f);
-        *(float *)(data + 0x138) = a;
+        float a = fast_add_rotations(*(float *)(elevator_glow_vars + 0x138), frame_time * 6.2831855f);
+        *(float *)(elevator_glow_vars + 0x138) = a;
         i = func_001FA898_r((fast_sin(a) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80)
             i = 0x80;
