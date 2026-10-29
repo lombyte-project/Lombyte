@@ -60,14 +60,14 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     float        rotation_matrix[16];
     float        matrices[5][16];
     float        anchor[4];
-    Data_303CA8 *data;
+    Data_303CA8 *target_link_strip_state;
     float       *pos;
     float       *translation;
     float        fade;
     float        scroll;
     int          i, segment, uv_index, vertex, pass, ring;
 
-    data = *(Data_303CA8 **)&moby->pvars;
+    target_link_strip_state = *(Data_303CA8 **)&moby->pvars;
     euler_rotation_matrix(rotation_matrix, ((float *)&moby->rot));
     pos = ((float *)&moby->pos);
     translation = &matrices[0][12];
@@ -76,8 +76,8 @@ void draw_oscillating_target_link_strips(Moby *moby) {
 
         euler_rotation_matrix(matrix, oscillating_link_strip_transform_rotations[i]);
         multiply_matrix(matrix, rotation_matrix, matrix);
-        if (!(i & 1) && data->target != -1) {
-            qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
+        if (!(i & 1) && target_link_strip_state->target != -1) {
+            qcopy(anchor, ((float *)&D_L12_0015FFD8[target_link_strip_state->target].pos));
         } else {
             qcopy(anchor, pos);
         }
@@ -103,13 +103,13 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         }
     }
     for (ring = 0; ring < 4; ring++) {
-        if (oscillating_link_strip_fade_pivot_ticks < data->phase[ring]) {
-            fade = convert_integer_to_float(data->phase[ring] -
+        if (oscillating_link_strip_fade_pivot_ticks < target_link_strip_state->phase[ring]) {
+            fade = convert_integer_to_float(target_link_strip_state->phase[ring] -
                                             oscillating_link_strip_fade_pivot_ticks) /
                    convert_integer_to_float(oscillating_link_strip_reset_ticks -
                                             oscillating_link_strip_fade_pivot_ticks);
         } else {
-            fade = 1.0f - convert_integer_to_float(data->phase[ring]) /
+            fade = 1.0f - convert_integer_to_float(target_link_strip_state->phase[ring]) /
                               convert_integer_to_float(oscillating_link_strip_fade_pivot_ticks);
         }
         quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] =
@@ -117,7 +117,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
                              oscillating_link_strip_fade_target_color,
                              fade);
         scroll = 0.0f;
-        for (segment = 0; segment < data->count - 1; segment++) {
+        for (segment = 0; segment < target_link_strip_state->count - 1; segment++) {
             scroll = scroll + oscillating_link_strip_segment_u_step_gp;
             if (1.0f < scroll) {
                 scroll = scroll - 1.0f;
@@ -129,7 +129,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
             for (vertex = 0; vertex < 4; vertex++) {
                 fast_vec_add(&quad[1].v[vertex * 4],
                              oscillating_link_strip_quad_vertex_offsets[vertex],
-                             data->ring[ring][segment + (vertex >> 1)]);
+                             target_link_strip_state->ring[ring][segment + (vertex >> 1)]);
             }
             for (pass = 0; pass < 2; pass++) {
                 func_L00_001FD1D8_303CA8(&quad[1], matrices[pass], 0);
