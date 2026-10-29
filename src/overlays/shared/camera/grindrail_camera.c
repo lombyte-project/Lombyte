@@ -320,11 +320,11 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     SubA         *look = &data->a;
     SubB         *follow = &data->b;
     SubC         *progress = &data->c;
-    CameraPreset *params = l01_camera_preset_rows_macro[camera_to_update->unk84].preset;
+    CameraPreset *camera_path_preset = l01_camera_preset_rows_macro[camera_to_update->unk84].preset;
     float         rate = 0.01f;
-    int           mode = params->kind;
-    int           path_index = params->track_path;
-    float         lead = params->lead;
+    int           mode = camera_path_preset->kind;
+    int           path_index = camera_path_preset->track_path;
+    float         lead = camera_path_preset->lead;
     float         pitch_error;
     float         look_length;
     float         pitch_step;
@@ -355,9 +355,9 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path *pathA = ((Path *)l01_paths[path_index]);
-        Path *pathD = (Path *)l01_splines_macro[params->target].path;
-        Path *pathC = ((Path *)l01_paths[params->path]);
-        Path *pathB = ((Path *)l01_paths[params->look_path]);
+        Path *pathD = (Path *)l01_splines_macro[camera_path_preset->target].path;
+        Path *pathC = ((Path *)l01_paths[camera_path_preset->path]);
+        Path *pathB = ((Path *)l01_paths[camera_path_preset->look_path]);
         int   i;
         int   previous_path_node_index = 0;
         int   range_start = 0;
@@ -434,7 +434,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     } else {
         Path *path = ((Path *)l01_paths[path_index]);
 
-        if (params->target < 0) {
+        if (camera_path_preset->target < 0) {
             float lead_offset;
 
             FUN_L00_0025df68(path,
@@ -446,10 +446,10 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                              20.0f,
                              1.0f,
                              0.0f);
-            if (params->unk36 == 1) {
-                lead_offset = -(params->unk38 * 4.0f);
+            if (camera_path_preset->unk36 == 1) {
+                lead_offset = -(camera_path_preset->unk38 * 4.0f);
             } else {
-                lead_offset = params->unk38;
+                lead_offset = camera_path_preset->unk38;
             }
             sample_path(path, path_point, &segment, &fraction, lead_offset, 1);
             qcopy(camera_goal, path_point);
@@ -463,7 +463,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                         path_point,
                         &hero_segment,
                         &hero_fraction,
-                        params->unk38,
+                        camera_path_preset->unk38,
                         1);
             FUN_L00_0025df68(
                 path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
@@ -475,8 +475,8 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[2] = cam_interp_values(
             camera_to_update->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
-    if (params->target < 0) {
-        Path *path = ((Path *)l01_paths[params->track_path]);
+    if (camera_path_preset->target < 0) {
+        Path *path = ((Path *)l01_paths[camera_path_preset->track_path]);
 
         FUN_L00_0025df68(path,
                          ((Hero *)(((char *)((char *)&hero))))->motion.pos.f,
@@ -487,7 +487,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                          20.0f,
                          1.0f,
                          0.0f);
-        if (current_level_index_macro == 0xE && params->kind == 0) {
+        if (current_level_index_macro == 0xE && camera_path_preset->kind == 0) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);
