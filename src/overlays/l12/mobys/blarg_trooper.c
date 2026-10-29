@@ -671,12 +671,12 @@ void remove_blarg_trooper_and_attachment(struct Moby *moby) {
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 
 void update_blarg_trooper_attachment(struct Moby *moby) {
-    char          *data = (char *)moby->pvars;
-    unsigned char *target = *(unsigned char **)(data + 0x248);
+    char          *blarg_trooper_vars = (char *)moby->pvars;
+    unsigned char *target = *(unsigned char **)(blarg_trooper_vars + 0x248);
     if (target != 0) {
         unsigned char *current;
         update_moby_bone_attachment(moby, target, 1);
-        current = *(unsigned char **)(data + 0x248);
+        current = *(unsigned char **)(blarg_trooper_vars + 0x248);
         if (moby->flags & 1) {
             *(unsigned short *)(current + 0x34) |= 0x41;
         } else {
@@ -685,7 +685,7 @@ void update_blarg_trooper_attachment(struct Moby *moby) {
     } else {
         char vector[16];
         moby_point_position(moby, 1, vector);
-        *(void **)(data + 0x248) = spawn_moby_attachment(moby, vector);
+        *(void **)(blarg_trooper_vars + 0x248) = spawn_moby_attachment(moby, vector);
     }
 }
 /* Initialize two vendor vectors using the global scale. */
