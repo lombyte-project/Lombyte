@@ -207,19 +207,19 @@ void start_camera_transition(struct Moby *moby,
                              int          transition_delay_frames,
 
                              int transition_mode) {
-    char *data = (char *)moby->pvars;
-    *(int *)(data + 0x60) = 0;
-    *(int *)(data + 0x64) = 0;
-    qcopy(data, transition_start_position);
-    qcopy(data + 0x10, transition_target_position);
-    qcopy(data + 0x20, transition_start_rotation);
-    qcopy(data + 0x30, transition_target_rotation);
-    qcopy(data + 0x40, transition_setup_vector);
+    char *position_rotation_transition_vars = (char *)moby->pvars;
+    *(int *)(position_rotation_transition_vars + 0x60) = 0;
+    *(int *)(position_rotation_transition_vars + 0x64) = 0;
+    qcopy(position_rotation_transition_vars, transition_start_position);
+    qcopy(position_rotation_transition_vars + 0x10, transition_target_position);
+    qcopy(position_rotation_transition_vars + 0x20, transition_start_rotation);
+    qcopy(position_rotation_transition_vars + 0x30, transition_target_rotation);
+    qcopy(position_rotation_transition_vars + 0x40, transition_setup_vector);
     moby->state = 2;
-    *(float *)(data + 0x68) = frame_time_sq * 0.333f;
-    *(float *)(data + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
-    *(int *)(data + 0x74) = scale_game_frames(transition_delay_frames);
-    *(int *)(data + 0x78) = transition_mode;
+    *(float *)(position_rotation_transition_vars + 0x68) = frame_time_sq * 0.333f;
+    *(float *)(position_rotation_transition_vars + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
+    *(int *)(position_rotation_transition_vars + 0x74) = scale_game_frames(transition_delay_frames);
+    *(int *)(position_rotation_transition_vars + 0x78) = transition_mode;
     hero.invulnerable_frames = scale_game_frames(invulnerability_duration_frames);
 }
 
