@@ -11,7 +11,7 @@ extern void sceSifWriteBackDCache();
 s32 sceCdMmode(s32 media_mode) {
     register u8 *state;
     register s32 mode;
-    s32          result;
+    s32          media_mode_response;
 
     state = cd_media_mode_request;
     mode = media_mode;
@@ -24,7 +24,7 @@ s32 sceCdMmode(s32 media_mode) {
         SignalSema(cd_scmd_sema);
         return 0;
     }
-    result = *(u32 *)((u32)cd_scmd_result | 0x20000000);
+    media_mode_response = *(u32 *)((u32)cd_scmd_result | 0x20000000);
     SignalSema(cd_scmd_sema);
-    return result;
+    return media_mode_response;
 }
