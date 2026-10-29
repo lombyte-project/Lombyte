@@ -416,7 +416,7 @@ s32 FUN_L00_0025df68(s32     *path,
                      f32      step,
 
                      f32 height_tolerance) {
-    OvlQuad work[4];
+    OvlQuad path_search_points[4];
     s32     current = 0;
     s32     best_segment;
     s32     start, end, previous, count;
@@ -426,10 +426,10 @@ s32 FUN_L00_0025df68(s32     *path,
     f32     distance, previous_distance, next_distance;
     f32     expanded_limit;
 
-    qcopy(&work[0], path + 4);
-    work[1] = *point;
+    qcopy(&path_search_points[0], path + 4);
+    path_search_points[1] = *point;
     best_fraction = 0.0f;
-    distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
+    distance = path_distance_25df68(&path_search_points[0], &path_search_points[1], height_tolerance);
     best_segment = 0;
     if (*path == 0) {
         clear_u64_value(nearest);
@@ -438,9 +438,9 @@ s32 FUN_L00_0025df68(s32     *path,
 
     expanded_limit = step + limit;
     do {
-        crossed = sample_path(path, &work[0], &current, &current_fraction, step, wrap);
-        work[1] = *point;
-        next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
+        crossed = sample_path(path, &path_search_points[0], &current, &current_fraction, step, wrap);
+        path_search_points[1] = *point;
+        next_distance = path_distance_25df68(&path_search_points[0], &path_search_points[1], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
@@ -452,17 +452,17 @@ s32 FUN_L00_0025df68(s32     *path,
 
     start = best_segment;
     current_fraction = best_fraction;
-    sample_path(path, &work[0], &start, &current_fraction, -step, wrap);
+    sample_path(path, &path_search_points[0], &start, &current_fraction, -step, wrap);
     current_fraction = best_fraction;
     end = best_segment;
-    sample_path(path, &work[0], &end, &current_fraction, step, wrap);
+    sample_path(path, &path_search_points[0], &end, &current_fraction, step, wrap);
     end = offset_path_index(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;
     do {
-        work[1] = *(OvlQuad *)(path + 4 + current * 4);
-        work[2] = *point;
-        next_distance = path_distance_25df68(&work[1], &work[2], height_tolerance);
+        path_search_points[1] = *(OvlQuad *)(path + 4 + current * 4);
+        path_search_points[2] = *point;
+        next_distance = path_distance_25df68(&path_search_points[1], &path_search_points[2], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
@@ -485,25 +485,25 @@ s32 FUN_L00_0025df68(s32     *path,
                                                     height_tolerance);
         *segment = previous;
         /* Retail reads the segment vertex before the projected point. */
-        work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
-        work[2] = *(volatile OvlQuad *)nearest;
-        *fraction = path_distance_25df68(&work[1], &work[2], 0.0f);
+        path_search_points[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
+        path_search_points[2] = *(volatile OvlQuad *)nearest;
+        *fraction = path_distance_25df68(&path_search_points[1], &path_search_points[2], 0.0f);
         previous_distance = distance;
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
         next_distance = resolve_level_path_segment_point(
-            &work[1],
+            &path_search_points[1],
             point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
         if (next_distance < previous_distance) {
-            qcopy_nc(nearest, &work[1]);
+            qcopy_nc(nearest, &path_search_points[1]);
             *segment = best_segment;
-            work[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
-            work[3] = *nearest;
-            *fraction = path_distance_25df68(&work[2], &work[3], 0.0f);
+            path_search_points[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
+            path_search_points[3] = *nearest;
+            *fraction = path_distance_25df68(&path_search_points[2], &path_search_points[3], 0.0f);
         }
     }
     return 1;
