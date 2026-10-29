@@ -276,7 +276,7 @@ void set_moby_and_links_to_states_4_and_5(char *moby) {
 }
 
 void set_moby_and_links_to_states_8_and_9(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *parent_moby_vars = ((char *)MOBY(moby)->pvars);
     int    i;
     char **linked_moby_cursor;
     moby[0xBC] = 1;
@@ -288,8 +288,8 @@ void set_moby_and_links_to_states_8_and_9(char *moby) {
         fl &= 0xFFFE;
         moby[0x20] = 8;
         MOBY(moby)->flags = fl;
-        *(int *)(data + 0x18) = 0;
-        linked_moby_cursor = (char **)(data + 0x24);
+        *(int *)(parent_moby_vars + 0x18) = 0;
+        linked_moby_cursor = (char **)(parent_moby_vars + 0x24);
         for (i = 6; i >= 0; i--) {
             char *linked_moby = *linked_moby_cursor;
             linked_moby[0x20] = 9;
