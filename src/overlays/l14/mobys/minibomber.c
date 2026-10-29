@@ -774,25 +774,25 @@ void update_minibomber_target(struct Moby *moby) {
 void initialize_minibomber_path_segment_lengths(struct Moby *moby) __asm__("FUN_L14_002b55b0");
 
 void initialize_minibomber_path_segment_lengths(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *minibomber_path_vars = (char *)moby->pvars;
     char *path;
     int   i;
-    path = ((int *)l14_paths[*(int *)(data + 0xD0)]);
+    path = ((int *)l14_paths[*(int *)(minibomber_path_vars + 0xD0)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) =
             fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    path = ((int *)l14_paths[*(int *)(data + 0x150)]);
+    path = ((int *)l14_paths[*(int *)(minibomber_path_vars + 0x150)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) =
             fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    path = ((int *)l14_paths[*(int *)(data + 0xDC)]);
+    path = ((int *)l14_paths[*(int *)(minibomber_path_vars + 0xDC)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) =
             fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    *(int *)(data + 0x10C) = 0;
+    *(int *)(minibomber_path_vars + 0x10C) = 0;
 }
 
 extern float FUN_L00_0025b8c0_5730(
