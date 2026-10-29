@@ -249,18 +249,18 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 
 void initialize_flight_path_state(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
-    float *path = (float *)l14_paths[*(int *)(data + 0x68)];
+    char  *flight_path_vars = (char *)moby->pvars;
+    float *path = (float *)l14_paths[*(int *)(flight_path_vars + 0x68)];
     int    i;
     for (i = 0; i < *(int *)path - 1; i++) {
         path[i * 4 + 7] = fast_vec_dist(&path[i * 4 + 4], &path[i * 4 + 8]);
     }
-    *(int *)(data + 0x60) = 0;
-    *(int *)(data + 0x64) = 0;
+    *(int *)(flight_path_vars + 0x60) = 0;
+    *(int *)(flight_path_vars + 0x64) = 0;
     qcopy(&moby->pos, path + 4);
     moby->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
-    *(float *)(data + 0x80) = *(float *)(data + 0x84) = *(float *)(data + 0x88) =
-        *(float *)(data + 0x70) = *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
+    *(float *)(flight_path_vars + 0x80) = *(float *)(flight_path_vars + 0x84) = *(float *)(flight_path_vars + 0x88) =
+        *(float *)(flight_path_vars + 0x70) = *(float *)(flight_path_vars + 0x74) = *(float *)(flight_path_vars + 0x78) = 0.0f;
 }
 
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
