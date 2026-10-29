@@ -183,7 +183,7 @@ void update_turret_rocket(char *moby) __asm__("FUN_L08_002e8210");
 
 void update_turret_rocket(char *moby) {
     char *position_ptr = moby + 0x10;
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *homing_projectile_private_state = ((char *)MOBY(moby)->pvars);
     float position_copy[4] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
@@ -195,16 +195,16 @@ void update_turret_rocket(char *moby) {
     char *target;
 
     qcopy(position_copy, position_ptr);
-    fast_vec_add(position_ptr, position_ptr, data);
+    fast_vec_add(position_ptr, position_ptr, homing_projectile_private_state);
     if (MOBY(moby)->pos.x < 10.0f || MOBY(moby)->pos.y < 10.0f || MOBY(moby)->pos.z < 10.0f ||
         500.0f < MOBY(moby)->pos.x || 500.0f < MOBY(moby)->pos.y || 500.0f < MOBY(moby)->pos.z) {
         mark_moby_for_removal(moby);
         return;
     }
-    fast_vec_scale(direction, data, -1.0f / homing_projectile_trail_particle_count_limit_gp);
+    fast_vec_scale(direction, homing_projectile_private_state, -1.0f / homing_projectile_trail_particle_count_limit_gp);
     qcopy(position, position_ptr);
     i = 0;
-    timer_ptr = (int *)(data + 0x18);
+    timer_ptr = (int *)(homing_projectile_private_state + 0x18);
     while ((float)i < homing_projectile_trail_particle_count_limit_gp) {
         fast_vec_add(position, position, direction);
         angle = random_angle_radians();
@@ -235,8 +235,8 @@ void update_turret_rocket(char *moby) {
     }
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x,
                                            homing_projectile_spin_rate_degrees_gp * 0.017453292f *
-                                               frame_time * (float)*(int *)(data + 0x1c));
-    target = *(char **)(data + 0x10);
+                                               frame_time * (float)*(int *)(homing_projectile_private_state + 0x1c));
+    target = *(char **)(homing_projectile_private_state + 0x10);
     if (target != 0) {
         if ((unsigned char)target[0x20] == 0xfe)
             goto clear_target;
@@ -246,27 +246,27 @@ void update_turret_rocket(char *moby) {
             goto clear_target;
         {
             char *target_data = *(char **)(target + 0x78);
-            length = fast_vec_length(data);
-            spread = fast_vec_dist(moby + 0x10, *(char **)(data + 0x10) + 0x10);
+            length = fast_vec_length(homing_projectile_private_state);
+            spread = fast_vec_dist(moby + 0x10, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
             fast_vec_scale(position, target_data + 0x20, spread / length);
-            fast_vec_add(position, position, *(char **)(data + 0x10) + 0x10);
+            fast_vec_add(position, position, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
             fast_vec_sub(direction, position, moby + 0x10);
             fast_vec_normalize(direction, direction, length);
-            fast_vec_sub(velocity, direction, data);
+            fast_vec_sub(velocity, direction, homing_projectile_private_state);
             scale_vector_in_place_002e8210(frame_time * 3.7f, velocity);
-            fast_vec_add(data, data, velocity);
-            fast_vec_normalize(data, data, length);
+            fast_vec_add(homing_projectile_private_state, homing_projectile_private_state, velocity);
+            fast_vec_normalize(homing_projectile_private_state, homing_projectile_private_state, length);
         }
         goto target_done;
     clear_target:
-        *(int *)(data + 0x10) = 0;
+        *(int *)(homing_projectile_private_state + 0x10) = 0;
     }
 target_done:
     ((int *)direction)[1] = 0x50001;
     ((int *)direction)[0] = (int)moby;
     direction[3] = 2.0f;
     ((int *)velocity)[0] = 1;
-    qcopy(position, data);
+    qcopy(position, homing_projectile_private_state);
     if (fast_dec_timer(timer_ptr) == 0)
         goto collision;
 remove:
@@ -285,7 +285,7 @@ collision:
         if (MOBY(moby)->pos.z - 2.0f < radius)
             radius = MOBY(moby)->pos.z - 2.0f;
         FUN_L00_0025e450_002e8210(moby,
-                                  data,
+                                  homing_projectile_private_state,
                                   moby + 0x10,
                                   3.0f,
                                   3.0f,
