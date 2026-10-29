@@ -638,7 +638,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
 void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) {
-    char *data = (char *)moby->pvars;
+    char *trooper_aim_vars = (char *)moby->pvars;
     float target_yaw = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
     float yaw_offset = fast_subtract_rotations(target_yaw, moby->rot.z);
     if (yaw_offset > 1.2217305f) {
@@ -646,8 +646,8 @@ void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) {
     } else if (yaw_offset < -1.2217305f) {
         yaw_offset = -1.2217305f;
     }
-    *(float *)(data + 0x188) = yaw_offset * 0.35f;
-    *(float *)(data + 0x208) = yaw_offset * 0.8f;
+    *(float *)(trooper_aim_vars + 0x188) = yaw_offset * 0.35f;
+    *(float *)(trooper_aim_vars + 0x208) = yaw_offset * 0.8f;
 }
 
 /* Release the vendor moby and any child it owns. */
