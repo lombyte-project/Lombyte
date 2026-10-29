@@ -245,8 +245,8 @@ void spawn_rocket_exhaust_puffs(struct Moby *source_moby) {
 void mark_moby_and_linked_moby_for_removal(struct Moby *moby) __asm__("FUN_L14_002fe238");
 
 void mark_moby_and_linked_moby_for_removal(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    char *other = D_L14_0015FFD8 + (*(int *)(data + 4) << 8);
+    char *moby_vars = ((char *)moby->pvars);
+    char *other = D_L14_0015FFD8 + (*(int *)(moby_vars + 4) << 8);
     if (other != 0 && other[0x20] >= 0)
         mark_moby_for_removal(other);
     if (((char)moby->state) >= 0)
