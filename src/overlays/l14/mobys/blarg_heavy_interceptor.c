@@ -1953,10 +1953,10 @@ scan:
         unsigned short id = *list;
         char          *moby = base + ((id & 0x7FFF) << 8);
         int            state = ((signed char)MOBY(moby)->state);
-        char          *data = ((char *)MOBY(moby)->pvars);
+        char          *group_member_vars = ((char *)MOBY(moby)->pvars);
         if (state >= 0)
             count++;
-        if (state >= 0 && *(short *)(data + 0x88))
+        if (state >= 0 && *(short *)(group_member_vars + 0x88))
             goto success;
         list++;
         if ((short)id < 0)
