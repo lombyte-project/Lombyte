@@ -80,11 +80,11 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
     struct Moby *spawned_moby;
     struct Moby *other;
     u8          *owner_vars;
-    s16         *data;
+    s16         *child_aim_height_record;
     s32          left;
     Vec4         pos_copy;
     Vec4        *pos_ptr;
-    struct Moby *result;
+    struct Moby *respawned_child;
 
     pos_ptr = &pos_copy;
     pos_copy.q = pos->q;
@@ -93,7 +93,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
         return 0;
     owner_vars = owner->pvars;
     spawned_moby = 0;
-    result = 0;
+    respawned_child = 0;
     if (get_first_moby_in_group(&spawned_moby, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
         owner_vars[0x91] = owner_vars[0x91] + 1;
         qcopy_nc(&spawned_moby->pos, pos_ptr);
@@ -136,17 +136,17 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
         }
         copy_hero_moby_field_38(spawned_moby);
         update_entity(spawned_moby);
-        result = spawned_moby;
-        data = get_moby_target_info(result);
-        if (data != 0) {
-            *(f32 *)((u8 *)data + 0x34) = 0.0f;
-            *(f32 *)((u8 *)data + 0x30) = 0.0f;
-            *(f32 *)data = (f32)data[2];
+        respawned_child = spawned_moby;
+        child_aim_height_record = get_moby_target_info(respawned_child);
+        if (child_aim_height_record != 0) {
+            *(f32 *)((u8 *)child_aim_height_record + 0x34) = 0.0f;
+            *(f32 *)((u8 *)child_aim_height_record + 0x30) = 0.0f;
+            *(f32 *)child_aim_height_record = (f32)child_aim_height_record[2];
         }
     } else {
         debug_print(spawner_child_respawn_failure_format, (s16)owner->save_id, D_L09_0015F5CC);
     }
-    return result;
+    return respawned_child;
 }
 
 /* Spawns a moby of class 0x75E and initialises its data. */
