@@ -856,19 +856,19 @@ char *spawn_homing_spark_projectile(char *velocity,
 
                                     float target_height) {
     char *spawned_moby = (char *)create_moby(0x350);
-    char *data;
+    char *projectile_pvars;
     if (spawned_moby != 0) {
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7E;
         MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->state = 1;
-        data = ((char *)MOBY(spawned_moby)->pvars);
+        projectile_pvars = ((char *)MOBY(spawned_moby)->pvars);
         qcopy(spawned_moby + 0x10, spawn_position);
-        qcopy(data, velocity);
-        *(float *)(data + 0xC) = target_height;
-        *(int *)(data + 0x14) = lifetime_frames;
-        *(int *)(data + 0x10) = target_moby;
-        *(int *)(data + 0x18) = 0;
+        qcopy(projectile_pvars, velocity);
+        *(float *)(projectile_pvars + 0xC) = target_height;
+        *(int *)(projectile_pvars + 0x14) = lifetime_frames;
+        *(int *)(projectile_pvars + 0x10) = target_moby;
+        *(int *)(projectile_pvars + 0x18) = 0;
     }
     return spawned_moby;
 }
