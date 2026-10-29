@@ -184,9 +184,9 @@ extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 void update_robosquawker_particle(struct Moby *moby, char *data) __asm__("FUN_L13_002b4f28");
 
-void update_robosquawker_particle(struct Moby *moby, char *data) {
+void update_robosquawker_particle(struct Moby *moby, char *robosquawker_instance_vars) {
     float  opacity = 0.2f;
-    void **handle = (void **)(data + 0x228);
+    void **handle = (void **)(robosquawker_instance_vars + 0x228);
     if (moby->visible) {
         if (!*handle) {
             *handle = create_moby_joint_particle(
