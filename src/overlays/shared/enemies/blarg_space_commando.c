@@ -802,7 +802,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
     char    *moby = owner_moby;
-    FanData *data = ((FanData *)MOBY(moby)->pvars);
+    FanData *beam_state = ((FanData *)MOBY(moby)->pvars);
     int      frames;
     float    point[4];
     float    relative[4];
@@ -812,14 +812,14 @@ void update_blarg_space_commando_beam(void *owner_moby) {
     int      i, j, next, hit_type;
     int      remaining;
 
-    frames = truncate_float_to_s32(data->base.w);
+    frames = truncate_float_to_s32(beam_state->base.w);
     fast_dec_timer((s32 *)&frames);
-    data->base.w = (float)frames;
+    beam_state->base.w = (float)frames;
     if (frames == 0) {
         return;
     }
     if (frames == 20) {
-        char *weights = (char *)data;
+        char *weights = (char *)beam_state;
         for (remaining = 15; remaining >= 0; remaining--) {
             if (1.0f <= *(float *)(weights + 0x23C)) {
                 *(float *)(weights + 0x23C) = 0.98f;
@@ -835,33 +835,33 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         } else {
             step = beam_point_horizontal_speed_gp * frame_time;
         }
-        fast_vec_sub(point, &data->pts[i], &data->base);
+        fast_vec_sub(point, &beam_state->pts[i], &beam_state->base);
         point[2] = 0.0f;
         fast_vec_normalize(point, point, step);
-        fast_vec_add(point, (float *)&data->pts[i], point);
+        fast_vec_add(point, (float *)&beam_state->pts[i], point);
         fast_vec_sub(relative, point, moby + 0x10);
-        alignment = fast_vec_dot(relative, &data->dir);
+        alignment = fast_vec_dot(relative, &beam_state->dir);
         if (0.4f < alignment) {
             point[2] = point[2] - (frame_time + frame_time);
         } else if (alignment < 0.3f) {
             point[2] = point[2] + (frame_time + frame_time);
         }
-        entry = (char *)data + i * 16;
-        if (1.0f <= *(float *)(entry + 0x23C) && collision_line(&data->pts[i], point, 2, 0, 0)) {
+        entry = (char *)beam_state + i * 16;
+        if (1.0f <= *(float *)(entry + 0x23C) && collision_line(&beam_state->pts[i], point, 2, 0, 0)) {
             point[3] = 0.98f;
         } else if (point[3] < 1.0f) {
             approach_value(&point[3], 0.0f, frame_time + frame_time);
         }
-        qcopy(&data->pts[i], point);
+        qcopy(&beam_state->pts[i], point);
     }
 
     j = 0;
     do {
-        char *entry = (char *)data + j * 16;
+        char *entry = (char *)beam_state + j * 16;
         char *next_entry;
         next = j + 1;
         if (0.6f <= *(float *)(entry + 0x23C)) {
-            next_entry = (char *)data + next * 16;
+            next_entry = (char *)beam_state + next * 16;
             if (0.6f <= *(float *)(next_entry + 0x23C)) {
                 point[0] = fast_cos(MOBY(moby)->rot.z);
                 point[1] = fast_sin(MOBY(moby)->rot.z);
@@ -875,7 +875,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 shot.oclass = MOBY(moby)->oclass;
                 shot.unk18 = 0;
                 shot.unk19 = 1;
-                collision_line(&data->pts[j], &data->pts[j + 1], 0, moby, &shot);
+                collision_line(&beam_state->pts[j], &beam_state->pts[j + 1], 0, moby, &shot);
             }
         }
         j = next;
