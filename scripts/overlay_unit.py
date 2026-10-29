@@ -202,12 +202,15 @@ def verify_all(write: bool = False) -> int:
         if data_rows.get(name) != data_defined.get(name):
             bad.append(f"{name:24s} config/overlays/us/data.tsv says {data_rows.get(name)} bytes, "
                        f"src/overlays defines {data_defined.get(name)}")
-    if pools != ov.read_compiler_data():
+    import overlay_exe_data
+    for path, rows in ((ov.COMPILER_DATA, pools), (ov.EXE_DATA, overlay_exe_data.proven_copies())):
+        if rows == ov.read_compiler_data(path):
+            continue
         if write:
-            ov.write_compiler_data(pools)
-            print(f"wrote {ov.COMPILER_DATA.relative_to(ROOT)}")
+            ov.write_compiler_data(rows, path)
+            print(f"wrote {path.relative_to(ROOT)}")
         else:
-            bad.append(f"{ov.COMPILER_DATA.relative_to(ROOT)} is not what the C compiles to: "
+            bad.append(f"{path.relative_to(ROOT)} is not what the C compiles to: "
                        "run scripts/overlay_unit.py --write")
     for line in bad:
         print(line)

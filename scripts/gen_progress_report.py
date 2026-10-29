@@ -183,7 +183,8 @@ def data_totals(repo: Path) -> dict[str, tuple[int, int]]:
 def read_level_data(repo: Path) -> dict[int, int]:
     """Level -> bytes of its data in C: the objects config/overlays/us/data.tsv
     lists, and the switch tables and float literals the overlay C compiles to
-    (config/overlays/us/compiler_data.tsv). A byte both cover counts once."""
+    (config/overlays/us/compiler_data.tsv), and the levels' copies of the
+    executable's data in C (exe_data.tsv). A byte two of them cover counts once."""
     folder = repo / "config" / "overlays" / "us"
     levels = [int(p.stem[-2:]) for p in folder.glob("level-??.json")]
     spans: dict[int, list[tuple[int, int]]] = {}
@@ -196,11 +197,11 @@ def read_level_data(repo: Path) -> dict[int, int]:
         if m:  # data every level holds at that address, proven in all of them
             for level in levels:
                 spans.setdefault(level, []).append((int(m.group(1), 16), int(m.group(2))))
-    path = folder / "compiler_data.tsv"
-    for line in path.read_text().splitlines() if path.is_file() else []:
-        if line and not line.startswith("#"):
-            level, address, size = line.split("\t")[:3]
-            spans.setdefault(int(level), []).append((int(address, 16), int(size)))
+    for path in (folder / "compiler_data.tsv", folder / "exe_data.tsv"):
+        for line in path.read_text().splitlines() if path.is_file() else []:
+            if line and not line.startswith("#"):
+                level, address, size = line.split("\t")[:3]
+                spans.setdefault(int(level), []).append((int(address, 16), int(size)))
     out: dict[int, int] = {}
     for level, rows in spans.items():
         covered, end = 0, 0

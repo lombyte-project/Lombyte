@@ -79,6 +79,14 @@ place the level's table holds, and each literal must equal the level's bytes.
 size); `make overlays` fails when it is out of date, and
 `scripts/overlay_unit.py --write` rewrites it.
 
+A level program also holds a copy of the executable's data, moved to other
+addresses. Where the executable's code reads a data object at A and the same
+function's copy in a level reads A + d, the level's bytes at A + d must equal
+the executable's (pointers moved the same way).
+`config/overlays/us/exe_data.tsv` lists the copies of executable data in C
+that pass (`scripts/overlay_exe_data.py`), so data put in C in the executable
+counts in every level that holds it.
+
 ## Progress
 
 Every distinct function counts once: an `exe` copy counts with the
