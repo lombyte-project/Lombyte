@@ -832,7 +832,7 @@ extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
 
 void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) {
-    char *data = ((char *)moby->pvars);
+    char *bomber_tank_vars = ((char *)moby->pvars);
     char  joint_transform_buffer[32];
     float jitter_direction_source[8];
     float joint_pos[4];
@@ -854,8 +854,8 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
         spawn_pos[0] += random_float_between(-0.05f, 0.05f);
         spawn_pos[1] += random_float_between(-0.05f, 0.05f);
         spawn_pos[2] += random_float_between(-0.05f, 0.05f);
-        qcopy(velocity, data + 0x40);
-        qcopy(spread_vector, data + 0x40);
+        qcopy(velocity, bomber_tank_vars + 0x40);
+        qcopy(spread_vector, bomber_tank_vars + 0x40);
         if (count / 3 < i) {
             func_L00_001FF4B0_2D6C58(
                 jitter,
