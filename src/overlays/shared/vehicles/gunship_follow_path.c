@@ -170,19 +170,19 @@ void apply_gunship_path_position_offsets(char *moby, float *out) {
     float vertical_plane_offset[4];
     float rotated_x_axis_minus_unit_z[4];
     float rotation_matrix[16];
-    char *data;
+    char *gunship_path_vars;
     *(OvlQuad *)unit_x_axis = 0;
     unit_x_axis[0] = 1.0f;
-    data = ((char *)MOBY(moby)->pvars);
-    if (*(float *)(data + 0x130) != 0.0f || *(float *)(data + 0x134) != 0.0f) {
+    gunship_path_vars = ((char *)MOBY(moby)->pvars);
+    if (*(float *)(gunship_path_vars + 0x130) != 0.0f || *(float *)(gunship_path_vars + 0x134) != 0.0f) {
         euler_rotation_matrix(rotation_matrix, (float *)&MOBY(moby)->rot);
         transform_vector(rotated_x_axis, unit_x_axis, rotation_matrix);
         *(OvlQuad *)rotated_x_axis_minus_unit_z = *(OvlQuad *)rotated_x_axis;
         rotated_x_axis_minus_unit_z[2] = rotated_x_axis_minus_unit_z[2] - 1.0f;
         fast_vec_cross(horizontal_offset, rotated_x_axis, rotated_x_axis_minus_unit_z);
         fast_vec_cross(vertical_plane_offset, rotated_x_axis, horizontal_offset);
-        fast_vec_scale(horizontal_offset, horizontal_offset, *(float *)(data + 0x130));
-        fast_vec_scale(vertical_plane_offset, vertical_plane_offset, *(float *)(data + 0x134));
+        fast_vec_scale(horizontal_offset, horizontal_offset, *(float *)(gunship_path_vars + 0x130));
+        fast_vec_scale(vertical_plane_offset, vertical_plane_offset, *(float *)(gunship_path_vars + 0x134));
         fast_vec_add(out, out, horizontal_offset);
         fast_vec_add(out, out, vertical_plane_offset);
     }
