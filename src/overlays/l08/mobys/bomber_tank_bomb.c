@@ -65,19 +65,19 @@ char *spawn_bomber_tank_bomb(char *source_moby,
 
 char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *initial_velocity) {
     char *moby = create_moby(0x1A9);
-    char *data;
+    char *projectile_vars;
     if (moby) {
-        data = ((char *)MOBY(moby)->pvars);
+        projectile_vars = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 1;
-        *(char **)(data + 0x20) = source_moby;
-        *(int *)(data + 0x10) = scale_game_frames(0x12C);
-        *(float *)(data + 0x1C) = 1.0f;
-        *(int *)(data + 0x14) = 0;
+        *(char **)(projectile_vars + 0x20) = source_moby;
+        *(int *)(projectile_vars + 0x10) = scale_game_frames(0x12C);
+        *(float *)(projectile_vars + 0x1C) = 1.0f;
+        *(int *)(projectile_vars + 0x14) = 0;
         qcopy(moby + 0x10, spawn_position);
-        qcopy(data, initial_velocity);
+        qcopy(projectile_vars, initial_velocity);
         MOBY(moby)->rot.x = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
         MOBY(moby)->rot.z =
             fast_arc_tan(*(float *)initial_velocity, *(float *)(initial_velocity + 4)) + 1.5707964f;
