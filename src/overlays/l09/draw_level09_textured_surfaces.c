@@ -218,7 +218,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr,
                                           int   count) __asm__("FUN_L09_002c1978");
 
 void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int count) {
-    char  *data = data_ptr;
+    char  *surface_draw_settings = data_ptr;
     char  *list = list_ptr;
     int    i;
     int    j;
@@ -241,10 +241,10 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     saved_textured_grid_fog_near_intensity = saved2;
     D_L09_00161304 = saved3;
     if (textured_grid_view_settings_mode != 1) {
-        current[0x218 / 4] = *(float *)(data + 0x20);
-        current[0x21c / 4] = *(float *)(data + 0x24);
-        current[0x228 / 4] = *(float *)(data + 0x28);
-        current[0x22c / 4] = *(float *)(data + 0x2c);
+        current[0x218 / 4] = *(float *)(surface_draw_settings + 0x20);
+        current[0x21c / 4] = *(float *)(surface_draw_settings + 0x24);
+        current[0x228 / 4] = *(float *)(surface_draw_settings + 0x28);
+        current[0x22c / 4] = *(float *)(surface_draw_settings + 0x2c);
     }
     update_view_context();
     update_camera_view_matrices();
@@ -307,18 +307,18 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     packet = PACKET_CURSOR;
     words = (u64 *)(packet + 4);
     D_L09_001611C0 = packet + 4;
-    color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 |
-            (unsigned char)data[0x32] << 16;
+    color = (unsigned char)surface_draw_settings[0x30] | (unsigned char)surface_draw_settings[0x31] << 8 |
+            (unsigned char)surface_draw_settings[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
     if (*(volatile int *)&textured_grid_view_settings_mode == 1)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                        (*(int *)(current + 0x238 / 4) << 16));
     {
-        u64 alpha = (unsigned char)data[0x3f];
+        u64 alpha = (unsigned char)surface_draw_settings[0x3f];
         u64 blend;
         words[0] = 0x7000000000008001ULL;
         words[1] = 0xeeeeeeeeULL;
-        blend = (unsigned char)data[0x3f];
+        blend = (unsigned char)surface_draw_settings[0x3f];
         words[3] = 0x42;
         /* Retail stores packed alpha before reading D_L09_001612F0. */
         *(volatile u64 *)&words[2] = (blend << 32) | 100;
@@ -369,7 +369,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
             }
             i++;
         } while (i < count);
-    restore_view_after_textured_grid(data);
+    restore_view_after_textured_grid(surface_draw_settings);
 }
 
 #undef PACKET_CURSOR
