@@ -23,8 +23,8 @@ extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 void destroy_blarg_trooper(struct Moby *moby) __asm__("FUN_L04_002c4808");
 
 void destroy_blarg_trooper(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    void *other = *(void **)(data + 0xF8);
+    char *trooper_pvars = ((char *)moby->pvars);
+    void *other = *(void **)(trooper_pvars + 0xF8);
     if (other != 0) {
         mark_moby_for_removal(other);
     }
