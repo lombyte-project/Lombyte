@@ -261,19 +261,19 @@ extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
-    char *data = ((char *)MOBY(moby)->pvars);
-    int  *list = (int *)(data + 0x80);
+    char *taxi_stop_data = ((char *)MOBY(moby)->pvars);
+    int  *list = (int *)(taxi_stop_data + 0x80);
     int   i;
     int   selected_pose_byte_offset;
     char *pose_table_base;
-    *(short *)(data + 0xAC) = -1;
+    *(short *)(taxi_stop_data + 0xAC) = -1;
     for (i = 0; i < 3; i++) {
         if (fast_vec_dist(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) < 1.0f) {
-            *(short *)(data + 0xAC) = i;
+            *(short *)(taxi_stop_data + 0xAC) = i;
         }
     }
     {
-        if (item_available[0x21] != 0 || *(short *)(data + 0xAC) == 2) {
+        if (item_available[0x21] != 0 || *(short *)(taxi_stop_data + 0xAC) == 2) {
             int model_collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             moby[0x31] = 1;
             MOBY(moby)->collision = model_collision;
@@ -288,12 +288,12 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         int *selected = list;
-        selected += *(short *)(data + 0xAC);
+        selected += *(short *)(taxi_stop_data + 0xAC);
         selected_pose_byte_offset = *selected << 7;
     }
     pose_table_base = D_L16_001601AC_slots_e4900;
-    qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
-    qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
+    qcopy(taxi_stop_data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(taxi_stop_data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 
 extern char *D_L16_001B0930[];
