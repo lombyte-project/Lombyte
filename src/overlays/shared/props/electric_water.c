@@ -534,7 +534,7 @@ font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN
 
 void draw_electric_water_countdown(char *moby) {
     char  countdown_text[8];
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *electric_water_vars = ((char *)MOBY(moby)->pvars);
     float color_blend_factor;
     int   col;
 
@@ -555,15 +555,15 @@ void draw_electric_water_countdown(char *moby) {
                            W(electric_water_countdown_text_color_end),
                            color_blend_factor);
     countdown_text[0] = 0x30;
-    countdown_text[1] = *(short *)(data + 0x12) / scale_game_frames(0xE10) + 0x30;
+    countdown_text[1] = *(short *)(electric_water_vars + 0x12) / scale_game_frames(0xE10) + 0x30;
     countdown_text[2] = 0x3A;
     countdown_text[3] =
-        *(short *)(data + 0x12) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
+        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
     countdown_text[4] =
-        *(short *)(data + 0x12) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
+        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     countdown_text[5] = 0x3A;
     countdown_text[6] =
-        *(short *)(data + 0x12) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     countdown_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large_001f6c20(W(electric_water_countdown_text_x),
                                      W(electric_water_countdown_text_y),
