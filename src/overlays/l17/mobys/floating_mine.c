@@ -61,14 +61,14 @@ void update_floating_mine(struct Moby *moby) {
     float        scaled_particle_vector[4];
     float        random_direction[4];
     int          out;
-    char        *data = (char *)moby->pvars;
+    char        *bobbing_moby_vars = (char *)moby->pvars;
     char        *hit_record;
     struct Hero *hero_contact_context;
     float        yy;
     int          i;
     clear_u64_value(zero_vector);
     hit_record = find_moby_hit(moby, 0x230000, 0);
-    hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
+    hit_reaction(moby, hit_record, bobbing_moby_vars + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
         spawn_explosion(moby,
                         zero_vector,
@@ -93,8 +93,8 @@ void update_floating_mine(struct Moby *moby) {
     }
     switch (moby->state) {
     case BOBBING_INITIALIZE:
-        *(float *)(data + 0x60) = random_angle_radians();
-        *(int *)(data + 0x64) = 0;
+        *(float *)(bobbing_moby_vars + 0x60) = random_angle_radians();
+        *(int *)(bobbing_moby_vars + 0x64) = 0;
         moby->state = 1;
         break;
     case BOBBING_UPDATE_AND_CHECK_CONTACT:
@@ -102,8 +102,8 @@ void update_floating_mine(struct Moby *moby) {
                                          *(float *)&fleet_bobbing_phase_rate_degrees * DEG_TO_RAD *
                                              frame_time,
                                          moby,
-                                         (float *)(data + 0x60),
-                                         (float *)(data + 0x64));
+                                         (float *)(bobbing_moby_vars + 0x60),
+                                         (float *)(bobbing_moby_vars + 0x64));
         make_hit_descriptor(hit_descriptor, (int)moby, 0x10001, 1.0f, zero_vector);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
