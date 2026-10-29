@@ -301,9 +301,9 @@ void set_thruster_pack_lock_green_list_fields(int moby_list_index) {
             int   moby_byte_offset = (*moby_list_entry & 0x7FFF) << 8;
             char *moby = (char *)moby_byte_offset + (int)base;
             if (MOBY(moby)->oclass == 0x247) {
-                char *data = ((char *)MOBY(moby)->pvars);
-                *(int *)(data + 0x30) = 1;
-                *(float *)(data + 0x24) = 1.5f;
+                char *class_247_private_vars = ((char *)MOBY(moby)->pvars);
+                *(int *)(class_247_private_vars + 0x30) = 1;
+                *(float *)(class_247_private_vars + 0x24) = 1.5f;
             }
         } while (*moby_list_entry++ >= 0);
     }
