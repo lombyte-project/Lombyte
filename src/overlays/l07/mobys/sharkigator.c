@@ -564,14 +564,14 @@ int initialize_sharkigator(char *moby, char *sharkigator_pvars) {
     return 0;
 }
 
-void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *data) {
+void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *sharkigator_navigation_state) {
     float probe[4];
     float angle;
     float swept;
     float step;
 
-    if (data->wander == 0) {
-        data->heading = fast_arc_tan(data->goal.f[0] - moby->pos.x, data->goal.f[1] - moby->pos.y);
+    if (sharkigator_navigation_state->wander == 0) {
+        sharkigator_navigation_state->heading = fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x, sharkigator_navigation_state->goal.f[1] - moby->pos.y);
         return;
     }
     {
@@ -579,27 +579,27 @@ void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData 
         probe[1] = fast_sin(moby->rot.z) * 5.2f;
         *(s32 *)&probe[2] = 0;
         fast_vec_add(probe, probe, &moby->pos);
-        if (point_in_path_xy(probe, data->path->pts, data->path->count) &&
+        if (point_in_path_xy(probe, sharkigator_navigation_state->path->pts, sharkigator_navigation_state->path->count) &&
             !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
             !coll_sphere(1.5f, probe, 0x24, moby))
             return;
-        step = absolute_float(data->turnStep);
+        step = absolute_float(sharkigator_navigation_state->turnStep);
         angle = moby->rot.z;
         for (swept = 0.0f; swept < 6.2831855f; swept += step) {
-            angle = fast_add_rotations(angle, data->turnStep);
+            angle = fast_add_rotations(angle, sharkigator_navigation_state->turnStep);
             probe[0] = fast_cos(angle) * 5.2f;
             probe[1] = fast_sin(angle) * 5.2f;
             *(s32 *)&probe[2] = 0;
             fast_vec_add(probe, probe, &moby->pos);
-            if (point_in_path_xy(probe, data->path->pts, data->path->count) &&
+            if (point_in_path_xy(probe, sharkigator_navigation_state->path->pts, sharkigator_navigation_state->path->count) &&
                 !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
                 !coll_sphere(1.5f, probe, 0x24, moby)) {
-                data->heading = angle;
+                sharkigator_navigation_state->heading = angle;
                 return;
             }
         }
     }
-    data->heading = fast_arc_tan(data->goal.f[0] - moby->pos.x, data->goal.f[1] - moby->pos.y);
+    sharkigator_navigation_state->heading = fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x, sharkigator_navigation_state->goal.f[1] - moby->pos.y);
 }
 
 void advance_sharkigator_swim_movement(
