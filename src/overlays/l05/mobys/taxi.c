@@ -187,9 +187,9 @@ void taxi_update(struct Moby *moby) {
             D_0014C050[current_level_index][*(int *)(taxi_data + 0xBC)] == 0xFF) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
-            int            value = *(int *)(model + 0x10);
+            int            class_collision = *(int *)(model + 0x10);
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = class_collision;
             moby->flags = flags & 0xFFFE;
             moby->state = 1;
         }
