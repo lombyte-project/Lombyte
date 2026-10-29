@@ -27,7 +27,7 @@
  */
 
 #include "types.h"
-/* Layout evidence: src/sdk/libc/lshift.c and src/sdk/libc/_Bfree.c. */
+/* Layout evidence: src/sdk/libc/mprec/lshift.c and src/sdk/libc/mprec/_Bfree.c. */
 typedef struct _Bigint {
     struct _Bigint *_next;
     s32 _k, _maxwds, _sign, _wds;
