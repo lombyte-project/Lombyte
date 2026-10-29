@@ -40,7 +40,7 @@ extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002d
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
 void update_tilting_platform(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *tilting_platform_state = (char *)moby->pvars;
     void *rotation;
     u128  old_rotation;
     qcopy(&old_rotation, &moby->rot);
@@ -50,16 +50,16 @@ void update_tilting_platform(struct Moby *moby) {
         moby->command = 0;
         moby->flags |= 0x100;
         moby->pos.z += 0.35f;
-        *(int *)(data + 0x5C) = 1;
-        *(int *)(data + 0x70) = 0;
-        qzero(data + 0x60);
+        *(int *)(tilting_platform_state + 0x5C) = 1;
+        *(int *)(tilting_platform_state + 0x70) = 0;
+        qzero(tilting_platform_state + 0x60);
         qzero(&moby->rot);
         rotation = &moby->rot;
     } else {
         rotation = &moby->rot;
     }
     FUN_L14_002de2b8_call(moby, unused_platform_tilt_argument, 8.0f);
-    update_entity_matrix(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
+    update_entity_matrix(tilting_platform_state + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
