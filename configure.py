@@ -146,7 +146,7 @@ ROUTE_EXCEPTIONS = {
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
     # emit in retail's order a2<-s0, a3<-v0, a1<-s2.
-    "ui/menus/draw_menu_choice_list": "cc_sn_padless",
+    "ui/menus/choice_list/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "storage/stash/init_stash": "cc_sn_padless",
@@ -457,7 +457,7 @@ SDATA_OVERLAYS = {
     "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0, 32),
     "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48, 8),
     "gameplay/state/service_level_archive_load": (0x15EE50, 0x5FDD0, 8),
-    "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
+    "rendering/debug/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
     "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
     "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C, 4),
     "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
@@ -483,8 +483,8 @@ DATA_OVERLAYS = {
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
     "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
-    "ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
-    "rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
+    "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
+    "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),

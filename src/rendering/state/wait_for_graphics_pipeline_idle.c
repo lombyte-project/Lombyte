@@ -1,7 +1,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "../../include/ee_cop2.h"
+#include "ee_cop2.h"
 
 /* Spins until VIF1 and GIF DMA, VIF1, VU1 and the GIF are all idle. The original
  * two incoming argument registers are never consumed. All five sources are
