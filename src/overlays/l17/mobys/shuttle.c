@@ -286,17 +286,17 @@ void shuttle_update(struct Moby *shuttle_moby) {
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void update_shuttle_help_message(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   mode = *(int *)(data + 0x94);
+    char *shuttle_private_vars = (char *)moby->pvars;
+    int   mode = *(int *)(shuttle_private_vars + 0x94);
     switch (mode) {
     case SHUTTLE_STOP_FIRST:
-        *(int *)(data + 0x80) = 0;
+        *(int *)(shuttle_private_vars + 0x80) = 0;
         break;
     case SHUTTLE_STOP_SECOND:
-        *(int *)(data + 0x80) = mode;
+        *(int *)(shuttle_private_vars + 0x80) = mode;
         break;
     }
-    switch (*(int *)(data + 0x80)) {
+    switch (*(int *)(shuttle_private_vars + 0x80)) {
     case SHUTTLE_STOP_FIRST:
         try_set_help_message(0xA, 0x426C);
         break;
