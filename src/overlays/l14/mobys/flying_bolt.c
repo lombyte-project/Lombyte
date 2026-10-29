@@ -30,22 +30,22 @@ char *spawn_flying_bolt(void  *spawn_position,
                         int collision_mode) {
     char *projectile_moby = create_moby(0x2A9);
     if (projectile_moby) {
-        char *data;
+        char *flying_bolt_vars;
         *(int *)(projectile_moby + 0x40) = 0;
         MOBY(projectile_moby)->update_dist = 0xFF;
         MOBY(projectile_moby)->draw_dist = 0x7F;
         projectile_moby[0x31] = 1;
-        data = ((char *)MOBY(projectile_moby)->pvars);
+        flying_bolt_vars = ((char *)MOBY(projectile_moby)->pvars);
         MOBY(projectile_moby)->rot.y =
             -fast_arc_tan(vector_length_xy(launch_vector), launch_vector[2]);
         MOBY(projectile_moby)->rot.z = fast_arc_tan(launch_vector[0], launch_vector[1]);
         qcopy(projectile_moby + 0x10, spawn_position);
-        qcopy(data + 0x10, spawn_position);
-        qcopy(data, launch_vector);
+        qcopy(flying_bolt_vars + 0x10, spawn_position);
+        qcopy(flying_bolt_vars, launch_vector);
         blend_moby_animation(projectile_moby, 1, 0, scale_game_frames(5));
         MOBY(projectile_moby)->flags = 0x208;
-        *(int *)(data + 0x20) = collision_ignore_moby;
-        *(int *)(data + 0x24) = collision_mode;
+        *(int *)(flying_bolt_vars + 0x20) = collision_ignore_moby;
+        *(int *)(flying_bolt_vars + 0x24) = collision_mode;
         projectile_moby[0x23] = 0x10;
         update_entity(projectile_moby);
     }
