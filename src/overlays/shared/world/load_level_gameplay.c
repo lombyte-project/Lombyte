@@ -1962,9 +1962,9 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 base + *(s32 *)moby_class_reference_cursor;
             D_L00_001AFC80[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
             {
-                s32 o = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
+                s32 moby_texture_slot_map_offset = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
                 qcopy(&l00_moby_reference_texture_slot_maps[moby_class_reference_index],
-                      (char *)core_header + core_header[7] + o);
+                      (char *)core_header + core_header[7] + moby_texture_slot_map_offset);
             }
         }
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[9]; i < core_header[8];
