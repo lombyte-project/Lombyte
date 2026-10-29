@@ -361,12 +361,12 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
     float          spot[4];
     float          halved_motion_delta[4];
     float          push[4];
-    char          *data;
+    char          *destruction_respawn_pvars;
     char          *hit;
     int            voice_slot_index;
     unsigned char *voice_slot_entry;
 
-    data = ((char *)MOBY(moby)->pvars);
+    destruction_respawn_pvars = ((char *)MOBY(moby)->pvars);
     hit = find_moby_hit(moby, 0xA30000, 0);
     if (hit != 0 && *(unsigned short *)(hit + 0x28) != 0x102) {
         clear_u64_value(spot);
@@ -383,7 +383,7 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
         } else {
             spawn_randomized_bolt_drop(moby, 3, 5, 2, -1);
         }
-        *(short *)(data + 0x14A) = scale_game_frames(600);
+        *(short *)(destruction_respawn_pvars + 0x14A) = scale_game_frames(600);
         spawn_explosion(moby,
                         halved_motion_delta,
                         spot,
@@ -450,21 +450,21 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
     }
     D_L03_00160770 = (void *)red_ship_1_update;
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    if (*(short *)(data + 0x14A) != 0) {
-        if (fast_dec_timer_s16(data + 0x14A) && flag) {
+    if (*(short *)(destruction_respawn_pvars + 0x14A) != 0) {
+        if (fast_dec_timer_s16(destruction_respawn_pvars + 0x14A) && flag) {
             MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             MOBY(moby)->flags = (MOBY(moby)->flags & 0xFFBE) | 0x1000;
         } else {
             MOBY(moby)->collision = 0;
             MOBY(moby)->flags |= 0x41;
-            voice_slot_index = *(int *)(data + 0x150);
+            voice_slot_index = *(int *)(destruction_respawn_pvars + 0x150);
             if (voice_slot_index != -1) {
                 voice_slot_entry = (unsigned char *)&voice_pool + voice_slot_index * 0x70;
                 if (*(char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                     release_voice_slot(voice_slot_index);
                 }
             }
-            *(int *)(data + 0x150) = -1;
+            *(int *)(destruction_respawn_pvars + 0x150) = -1;
             MOBY(moby)->flags &= 0xEFFF;
         }
     }
