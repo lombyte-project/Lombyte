@@ -17,16 +17,16 @@ extern s32 sceDbcReceiveData(s32 port, DbcCommand cmd, void *buf, void *data);
 
 s32 sceVibGetProfile(s32 port, u8 *profile) {
     DbcCommand cmd;
-    s32        result;
+    s32        profile_byte_count;
     s32        receive_status;
 
     cmd.size = 2;
     cmd.mode = 2;
     cmd.cmd = 3;
     cmd.ver = 1;
-    receive_status = sceDbcReceiveData(port, cmd, &result, profile);
+    receive_status = sceDbcReceiveData(port, cmd, &profile_byte_count, profile);
     if (receive_status < 0) {
         return receive_status;
     }
-    return result;
+    return profile_byte_count;
 }
