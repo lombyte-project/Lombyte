@@ -503,12 +503,12 @@ extern float D_L14_00161A30 __attribute__((sda));
 void         advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
 
 void advance_moby_along_path(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   path_index = *(int *)(data + 0x60);
+    char *path_tracking_state = (char *)moby->pvars;
+    int   path_index = *(int *)(path_tracking_state + 0x60);
     sample_path((int)l14_splines[path_index].path,
                 &moby->pos,
-                data + 0x64,
-                data + 0x68,
+                path_tracking_state + 0x64,
+                path_tracking_state + 0x68,
                 0,
                 D_L14_00161A30 * frame_time);
 }
