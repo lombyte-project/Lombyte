@@ -869,8 +869,8 @@ int try_activate_pokitaru_gate(struct Moby *moby) {
         return 0;
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {
-        int value = scale_game_frames(0x14);
-        blend_moby_animation(current, 0, 0, value);
+        int animation_blend_frames = scale_game_frames(0x14);
+        blend_moby_animation(current, 0, 0, animation_blend_frames);
     }
     return 1;
 }
