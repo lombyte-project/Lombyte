@@ -27,16 +27,16 @@ spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L1
 char *spawn_moby_with_random_yaw(void *position, void *vector, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         float angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        data = ((char *)MOBY(moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         qcopy(moby + 0x10, position);
-        qcopy(data + 0x10, vector);
+        qcopy(spawned_moby_vars + 0x10, vector);
         angle = random_angle_radians();
         *(int *)(moby + 0x40) = 0;
         MOBY(moby)->rot.z = angle;
