@@ -74,7 +74,7 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
     f32 half_x, half_y;
     f32 x, y;
     u32 near_bits, far_bits;
-    s32 i, value, row, column;
+    s32 i, tile_vertex_offset, row, column;
 
     if (mode != 0) {
         row = index >> 2;
@@ -149,13 +149,13 @@ void cull_and_submit_water_grid_tile(f32 *grid_center_position, s32 index, s32 m
             mode = 0;
         }
     }
-    value = (index & 3) * 4 + (index >> 2) * 0x44;
+    tile_vertex_offset = (index & 3) * 4 + (index >> 2) * 0x44;
     if (mode != 0) {
         mode = 0xe;
     } else {
         mode = 0xc;
     }
-    FUN_L01_00262388(mode, value);
+    FUN_L01_00262388(mode, tile_vertex_offset);
 }
 
 void build_water_render_setup_packet(void) __asm__("FUN_L01_002b8f98");
