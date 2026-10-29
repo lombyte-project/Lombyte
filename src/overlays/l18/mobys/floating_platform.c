@@ -179,8 +179,8 @@ extern float floating_platform_bob_amplitude_gp __asm__("D_L18_00161A48") __attr
 extern float floating_platform_bob_phase_rate_gp __asm__("D_L18_00161A4C") __attribute__((sda));
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    float unclamped_rotation_y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x6C));
+    char *floating_platform_private_vars = (char *)moby->pvars;
+    float unclamped_rotation_y = fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
     moby->rot.y = unclamped_rotation_y;
     if (moby->state == 5) {
         if (unclamped_rotation_y > 0.5235988f) {
@@ -201,10 +201,10 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
             moby->rot.y = -0.034906585f;
         }
     }
-    *(float *)(data + 0x74) = fast_add_rotations(
-        *(float *)(data + 0x74), floating_platform_bob_phase_rate_gp * DEG_TO_RAD * frame_time);
-    moby->pos.z = *(float *)(data + 0x64) +
-                  floating_platform_bob_amplitude_gp * fast_sin(*(float *)(data + 0x74));
+    *(float *)(floating_platform_private_vars + 0x74) = fast_add_rotations(
+        *(float *)(floating_platform_private_vars + 0x74), floating_platform_bob_phase_rate_gp * DEG_TO_RAD * frame_time);
+    moby->pos.z = *(float *)(floating_platform_private_vars + 0x64) +
+                  floating_platform_bob_amplitude_gp * fast_sin(*(float *)(floating_platform_private_vars + 0x74));
 }
 
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */
