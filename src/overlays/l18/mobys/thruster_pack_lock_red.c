@@ -186,12 +186,12 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
 int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
 
 int poll_moby_state_and_rearm(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
+    int *moby_private_vars = (int *)moby->pvars;
     if (moby->state == 3) {
         moby->state = 1;
         return 1;
     }
-    if (moby->state == 2 && data[0x6C / 4] == 0) {
+    if (moby->state == 2 && moby_private_vars[0x6C / 4] == 0) {
         return -1;
     }
     return 0;
