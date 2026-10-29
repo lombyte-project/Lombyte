@@ -3003,7 +3003,6 @@ extern A_20b1d8 D_L00_0017A680_20b1d8 __asm__("D_L00_0017A680");
 #define P D_0013F350_20b1d8
 #define A D_L00_0017A680_20b1d8
 extern s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
-extern f32 FUN_001f99c0(f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -3015,9 +3014,9 @@ void update_hero_easing_targets_and_point_effects(void) {
     s32 i;
     if (hero_is_in_special_state())
         return;
-    if (0.03f < FUN_001f99c0(P.f2C0) || 0.03f < FUN_001f99c0(P.f2C4) ||
-        0.06981317f < FUN_001f99c0(P.f2C8) || 0.06981317f < FUN_001f99c0(P.f2CC) ||
-        0.06981317f < FUN_001f99c0(P.f2D0) || 0.06981317f < FUN_001f99c0(P.f2D4)) {
+    if (0.03f < absolute_float(P.f2C0) || 0.03f < absolute_float(P.f2C4) ||
+        0.06981317f < absolute_float(P.f2C8) || 0.06981317f < absolute_float(P.f2CC) ||
+        0.06981317f < absolute_float(P.f2D0) || 0.06981317f < absolute_float(P.f2D4)) {
         if (P.h308 != 1) {
             A.f324 = -P.f2C8;
             A.f3D4 = -P.f2CC;

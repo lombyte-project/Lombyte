@@ -1119,7 +1119,6 @@ void update_hero_hoverboard_trick_animations(void) {
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_001fefc8_c(u8 *) __asm__("FUN_L00_001fefc8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 FUN_001f99c0(f32);
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
@@ -1159,7 +1158,7 @@ void process_hero_race_object_interactions(void) {
                     set_identity_matrix(matrix);
                     transpose_rotation_matrix(matrix, first + 0xC0);
                     transform_vector(delta, delta, matrix);
-                    if (FUN_001f99c0(delta[0]) < 0.5f && FUN_001f99c0(delta[1]) < 2.9f && FUN_001f99c0(delta[2]) < 2.9f) {
+                    if (absolute_float(delta[0]) < 0.5f && absolute_float(delta[1]) < 2.9f && absolute_float(delta[2]) < 2.9f) {
                         hero.boost_pad_timer += **(s32 **)(first + 0x78);
                         first[0xBC] = scale_game_frames(0x3C);
                         if (hero.hoverboard_moby != 0)
@@ -1194,7 +1193,7 @@ void process_hero_race_object_interactions(void) {
                             set_identity_matrix(matrix);
                             transpose_rotation_matrix(matrix, second + 0xC0);
                             transform_vector(delta, delta, matrix);
-                            if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
+                            if (absolute_float(delta[0]) < 2.8f && absolute_float(delta[1]) < 1.25f && absolute_float(delta[2]) < 1.5f) {
                                 hero.boost_pad_timer += **(s32 **)(second + 0x78);
                                 second[0xBC] = scale_game_frames(0x3C);
                                 if (hero.hoverboard_moby != 0)
@@ -1820,6 +1819,7 @@ continue_fall:
 
 extern char hero_hoverboard_animation_link_table[] __asm__("D_L05_0017C068");
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 
 void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
 void hero_update_linked_target(void) {

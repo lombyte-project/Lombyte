@@ -52,6 +52,7 @@ int FUN_L15_001fe778(int allow_item_lookup) {
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 #define GI(o) (*(s32 *)(hero_lui + (o)))
 #define GF(o) (*(f32 *)(hero_lui + (o)))
 #define GH(o) (*(s16 *)(hero_lui + (o)))
@@ -84,7 +85,6 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-f32 FUN_001f99c0(f32);
 
 #define GI(o) (*(s32 *)(hero_lui + (o)))
 #define GF(o) (*(f32 *)(hero_lui + (o)))
@@ -251,7 +251,7 @@ d1:
         if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
-            if (0.4f < FUN_001f99c0(f)) {
+            if (0.4f < absolute_float(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
             FUN_00125180_c(&probe_surface_normal, (u8 *)&HH.normal_x);

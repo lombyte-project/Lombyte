@@ -607,7 +607,6 @@ extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern float FUN_001f99c0(float);
 extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490") __attribute__((sda));
@@ -730,7 +729,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     }
     if (target_selection_status != 2) {
         if (*(float *)(moby_data + 0xD8) < vector_distance(moby + 0x10, moby_data + 0x70) ||
-            8.0f < FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(moby_data + 0x78))) {
+            8.0f < absolute_float(*(float *)(moby + 0x18) - *(float *)(moby_data + 0x78))) {
             *(int *)(moby_data + 0xB4) = 2;
         } else if (moby[0x20] != 5 && collision_line(moby + 0x10, D_0013F350 + 0xD0, 2, moby, 0) != 0) {
             *(int *)(moby_data + 0xB4) = 2;

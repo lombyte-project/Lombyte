@@ -888,7 +888,6 @@ extern char D_L02_00167410[] NOT_SDA;
 extern char D_L02_00167280[] NOT_SDA;
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_001f99c0(float);
 
 int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_degrees, float b) __asm__("FUN_L02_002fb788");
 
@@ -941,7 +940,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
     if (den == 0.0f) {
         return 0;
     }
-    if (FUN_001f99c0(1.5707964f - fast_arc_sin(dot3 / den)) < residual_angle_limit_degrees * DEG_TO_RAD) {
+    if (absolute_float(1.5707964f - fast_arc_sin(dot3 / den)) < residual_angle_limit_degrees * DEG_TO_RAD) {
         return 1;
     }
     return 0;

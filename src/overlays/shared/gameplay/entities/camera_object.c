@@ -766,7 +766,6 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 FUN_001f99c0(f32);
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
@@ -907,7 +906,7 @@ void bolt_update(Bolt *bolt_moby) {
         fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &D_L00_00173E40.point);
         reflect_vector(&v->vel, &v->vel, &geometry_scratch);
         if (vector_distance(&bolt_moby->pos, &hero.motion.pos) < hero.reach_distance &&
-            FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
+            absolute_float(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
                 return;
             }
@@ -953,7 +952,7 @@ void bolt_update(Bolt *bolt_moby) {
         return;
     case BOLT_IDLE:
         hero_distance = vector_distance(&bolt_moby->pos, &hero.motion.pos);
-        if (hero_distance < hero.reach_distance && FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
+        if (hero_distance < hero.reach_distance && absolute_float(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }

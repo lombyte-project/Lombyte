@@ -1278,7 +1278,6 @@ extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float FUN_001f99c0(float);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int update_float_countdown(void *) __asm__("FUN_L08_00211b08");
 extern int convert_float_to_int_a570(float) __asm__("FUN_001fa6d0");
@@ -1456,7 +1455,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         target_angle = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
                               *(float *)(data + 0xD4) - *(float *)(moby + 0x14));
         if ((fast_difference_between_rotations(*(float *)(moby + 0x48), target_angle) < 1.5707964f &&
-             (sentrybot_target_visibility_height_check_gate[0] == 0 || FUN_001f99c0(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
+             (sentrybot_target_visibility_height_check_gate[0] == 0 || absolute_float(*(float *)(moby + 0x18) - *(float *)(data + 0xD8)) < 4.0f)) ||
             moby[0x20] == 0x10 || moby[0x20] == 0x11) {
             seen = data[0x15A];
         }
@@ -3151,7 +3150,6 @@ typedef struct {
     s32 stop_volume;
 } MovingMobyVars;
 
-extern f32 FUN_001f99c0(f32);
 
 void door_update(struct Moby *moby) __asm__("FUN_L15_002bddb0");
 void door_update(struct Moby *moby) {
@@ -3209,7 +3207,7 @@ void door_update(struct Moby *moby) {
         offset.f[2] = 0.0f;
         fast_vec_add(&next, &vars->origin, &offset);
         *(u128 *)&moby->pos = next.q;
-        magnitude = FUN_001f99c0(vars->travel);
+        magnitude = absolute_float(vars->travel);
         scale = moby->scale;
         triple.bits = 0x40400000;
         __builtin_memcpy(&step, &triple.bits, sizeof(step));
@@ -3242,7 +3240,7 @@ void door_update(struct Moby *moby) {
         {
         f32 old_travel;
         f32 new_travel;
-        magnitude = FUN_001f99c0(vars->travel);
+        magnitude = absolute_float(vars->travel);
         step = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         if (step < magnitude) {
             old_travel = vars->travel;

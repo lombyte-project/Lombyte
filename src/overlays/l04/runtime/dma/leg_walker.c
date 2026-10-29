@@ -358,7 +358,6 @@ extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828
 extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
 extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
-extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern s32 D_L04_00173FF0[] NOT_SDA;
 
@@ -509,7 +508,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
                 } else {
                     anim = *fallback;
                 }
-                moby->anim_speed = frame_scale_inv * FUN_001f99c0(rate / anim->rate);
+                moby->anim_speed = frame_scale_inv * absolute_float(rate / anim->rate);
                 break;
             }
             entry++;
@@ -534,7 +533,6 @@ u8 D_L04_001CA938[13][4] = {
     {0x14, 0, 0, 0},
 };
 extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
-extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");
@@ -576,7 +574,7 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
     animation_cursor = rig->anims;
     for (j = 12; j >= 0; j--, animation_cursor++) {
         if ((*animation_cursor)->id == moby->prev_seq) {
-            rig->speed = FUN_001f99c0(moby->anim_speed * (*animation_cursor)->rate);
+            rig->speed = absolute_float(moby->anim_speed * (*animation_cursor)->rate);
             rig->unkB7 = D_L04_001CA938[12 - j][0];
         }
     }

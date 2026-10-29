@@ -25,7 +25,6 @@ float vector_length_xy(void *) __asm__("FUN_001f9b20");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-float FUN_001f99c0(float);
 float fast_arc_sin(float) __asm__("FUN_001f9df8");
 float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -71,7 +70,7 @@ struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_i
             fast_difference_between_rotations(hero.moby->rot.z,
                          fast_arc_tan(candidate_moby->pos.x - hero.motion.pos.f[0],
                                       candidate_moby->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
-            FUN_001f99c0(t_pitch) < 1.0471976f) {
+            absolute_float(t_pitch) < 1.0471976f) {
             *pitch = -t_pitch;
             *yaw = t_yaw;
             return candidate_moby;

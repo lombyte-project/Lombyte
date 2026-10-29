@@ -422,7 +422,6 @@ extern void spawn_particles_at_shape_points(void *, void *, int) __asm__("FUN_L0
 extern s32 allocate_voice_c618(s32, s32, void *) __asm__("FUN_0022da68");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
-extern f32 FUN_001fa6c0(s16);
 extern s32 fast_bsphere_check(u8 *, f32) __asm__("FUN_001fa728");
 typedef struct {
     u8 pad0[0x18];
@@ -625,7 +624,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         moby->glow_color = 0xFF000000 | (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) | (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) | blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
         qcopy(vector_scratch, &moby->pos);
         vector_scratch[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
-        if (fast_bsphere_check((u8 *)vector_scratch, FUN_001fa6c0(moby->draw_dist)) >= 0) {
+        if (fast_bsphere_check((u8 *)vector_scratch, convert_integer_to_float(moby->draw_dist)) >= 0) {
             float *p;
 
             FUN_L00_0024f7c8_c618(moby, 2, secondary_vector_scratch);
@@ -1458,7 +1457,7 @@ void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
     if (random_integer_below(5)) {
         qcopy(bounding_sphere, moby + 0x10);
         bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
-        if (fast_bsphere_check((u8 *)bounding_sphere, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
+        if (fast_bsphere_check((u8 *)bounding_sphere, convert_integer_to_float(*(s16 *)(moby + 0x32))) >= 0) {
             bone_transform = data + 0xA0;
             build_moby_bone_transform(moby, 1, bone_transform);
             fast_vec_normalize(bone_transform, bone_transform, 1.0f);

@@ -479,7 +479,6 @@ s32 is_moby_in_class_range_500_to_540(M2d1428 *) __asm__("FUN_L00_0025e3b8");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-f32 FUN_001f99c0(f32);
 f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -743,7 +742,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
         transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
-        if (FUN_001f99c0(hero_local_offset.x) < 0.55f && FUN_001f99c0(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
+        if (absolute_float(hero_local_offset.x) < 0.55f && absolute_float(hero_local_offset.y) < 0.55f && hero_local_offset.z < 0.0f &&
             -(hero.capsule_top + hero.capsule_radius) < hero_local_offset.z) {
             switch (moby->state) {
             case CRATE_STATE_BREAKABLE:
@@ -760,11 +759,11 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->path) {
             if (vars->parent == 0) {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4, 0.0f, FUN_001f99c0(vars->vel.w)) == 0.0f)
+                if (approach_value(&vars->fF4, 0.0f, absolute_float(vars->vel.w)) == 0.0f)
                     vars->vel.w = 0.0f;
             } else {
                 vars->vel.w -= acceleration_scale_or_speed * 10.0f;
-                if (approach_value(&vars->fF4, vars->parent->vars->fF4 + 1.0f, FUN_001f99c0(vars->vel.w)) ==
+                if (approach_value(&vars->fF4, vars->parent->vars->fF4 + 1.0f, absolute_float(vars->vel.w)) ==
                     0.0f)
                     *(s32 *)&vars->vel.w = 0;
             }
@@ -1575,8 +1574,8 @@ void metal_detector_update(struct Moby *moby) {
             yaw = fast_arc_tan(hero.metal_detector_target->pos.x - vars->pos.f[0], hero.metal_detector_target->pos.y - vars->pos.f[1]);
             yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
-            abs_yaw = FUN_001f99c0(yaw);
-            abs_pitch = FUN_001f99c0(pitch);
+            abs_yaw = absolute_float(yaw);
+            abs_pitch = absolute_float(pitch);
             aim_angle_limit_radians = metal_detector_aim_yaw_limit_degrees_gp * 0.017453292f;
             if (aim_angle_limit_radians < abs_yaw) {
                 yaw /= abs_yaw;

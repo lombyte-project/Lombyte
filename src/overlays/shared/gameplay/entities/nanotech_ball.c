@@ -373,7 +373,6 @@ extern V4 D_L00_001E3D20[];
 extern f32 nanotech_ball_slot_offset_transform_amount_gp __asm__("D_L00_001619F0") __attribute__((sda));
 extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
 void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
-void FUN_001f9bf8(V4 *, V4 *, f32);
 /* Rebuilds the eight D_L00_001E3CA0 entries with build_look_at_matrix and normalizes them. */
 void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
 
@@ -382,7 +381,7 @@ void update_nanotech_ball_slot_offsets(void) {
     for (i = 0; i < 8; i++) {
         build_look_at_matrix(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i],
                              nanotech_ball_slot_offset_transform_amount_gp);
-        FUN_001f9bf8(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14_gp);
+        fast_vec_normalize(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14_gp);
     }
 }
 #include "rnc/math/vector.h"
@@ -2683,6 +2682,7 @@ extern char D_L00_001E5EE0[] NOT_SDA;
 extern char D_L00_001E6020[] NOT_SDA;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/suck_beam_draw_mesh.h"
+#include "rnc/math/fast_math.h"
 extern float D_L00_00161B50 __attribute__((sda));
 extern short D_L00_001E6008[] NOT_SDA;
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");

@@ -898,7 +898,6 @@ extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern int gate_tick_314eb0(s32 *) __asm__("FUN_001f9740");
-extern float FUN_001f99c0(float);
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 
@@ -936,8 +935,8 @@ void update_triggered_gate_motion(struct Moby *gate_moby) {
         if (gate_tick_314eb0(&gate_vars->riseTimer)) {
             advance_accelerated_scalar(gate_vars->topZ, gate_rise_acceleration_gp * frame_time_sq, gate_rise_deceleration_gp * frame_time_sq,
                                        gate_rise_max_speed_gp * frame_time, &gate_moby->pos.z, &gate_vars->riseSpeed);
-            if (gate_moby->oclass == 0x355 && FUN_001f99c0(gate_moby->pos.z - gate_vars->topZ) < 3.0f &&
-                3.0f < FUN_001f99c0(gate_vars->topZ - gate_moby->pos.z + gate_vars->riseSpeed))
+            if (gate_moby->oclass == 0x355 && absolute_float(gate_moby->pos.z - gate_vars->topZ) < 3.0f &&
+                3.0f < absolute_float(gate_vars->topZ - gate_moby->pos.z + gate_vars->riseSpeed))
                 func_0022ED80_i(0, 0, gate_moby);
         }
         if (gate_tick_314eb0(&gate_vars->swingTimer)) {
@@ -1153,7 +1152,6 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 FUN_001f99c0(f32);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
@@ -1232,7 +1230,7 @@ void elevator_with_button_update(struct Moby *moby) {
         moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
         moby->rot.z = fast_subtract_rotations(D_L05_001600EC_l[vars->pose].rot.z, vars->base_yaw) * vars->progress;
         moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
-        if (FUN_001f99c0(vars->progress - target) < 0.01f) {
+        if (absolute_float(vars->progress - target) < 0.01f) {
             vars->timer = scale_game_frames(120);
             if (vars->sound != -1) {
                 LiftVoiceWindow *window = (LiftVoiceWindow *)((u8 *)&voice_pool + vars->sound * sizeof(LiftVoice));
@@ -1325,13 +1323,13 @@ void elevator_with_button_update(struct Moby *moby) {
             vars->fade = 0.0f;
         } else if (moby->state == 4) {
             f32 dist = vector_distance(&moby->pos, &hero.motion.pos);
-            if (FUN_001f99c0(hero.ground_z.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (absolute_float(hero.ground_z.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
                 moby->command = 0;
                 moby->state = 3;
             }
         } else if (moby->state == 5) {
             f32 dist = vector_distance(&moby->pos, &hero.motion.pos);
-            if (FUN_001f99c0(hero.ground_z.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (absolute_float(hero.ground_z.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
             }

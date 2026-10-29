@@ -2543,7 +2543,6 @@ struct WalkerData {
 };
 
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_001f99c0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int line_blocked_30eee8(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
@@ -2569,7 +2568,7 @@ void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData 
             !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
             !coll_sphere(1.5f, probe, 0x24, moby))
             return;
-        step = FUN_001f99c0(data->turnStep);
+        step = absolute_float(data->turnStep);
         angle = moby->rot.z;
         for (swept = 0.0f; swept < 6.2831855f; swept += step) {
             angle = fast_add_rotations(angle, data->turnStep);

@@ -322,7 +322,6 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-f32 FUN_001f99c0(f32);
 
 typedef struct {
     u8 pad88[0x88];
@@ -554,7 +553,7 @@ d1:
         if (collision_line(&surface_probe_start, &collision_ray_end, 0x22, hero_lui.moby, 0)) {
             f = HH.point.f[2] - hero_lui.ground_z.f;
             hero_lui.unk2C0.f[i] = f;
-            if (0.4f < FUN_001f99c0(f)) {
+            if (0.4f < absolute_float(f)) {
                 hero_lui.unk2C0.f[i] = 0.0f;
             }
             sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);

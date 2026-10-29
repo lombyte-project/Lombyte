@@ -1062,7 +1062,6 @@ extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern u8 D_0014C050[];
 extern u8 D_001413F4 NOT_SDA;
 extern u32 D_001413DC NOT_SDA;
-extern f32 FUN_001f99c0(f32);
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 void spawn_point_update(struct Moby *moby) __asm__("FUN_L01_00300220");
@@ -1112,7 +1111,7 @@ void spawn_point_update(struct Moby *moby) {
             jet_clear_persistent(moby->mission);
             qcopy(&pos, &moby->pos);
             pos.z = probe_ground_height(&pos, 0, 0.5f);
-            if (FUN_001f99c0(moby->pos.z - pos.z) > 2.0f) {
+            if (absolute_float(moby->pos.z - pos.z) > 2.0f) {
                 pos.z = moby->pos.z;
             }
             jet_reset_camera(&pos, &moby->rot);
@@ -1337,7 +1336,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (!(vector_distance(&moby->pos, &hero.motion.pos) < 3.0f)) {
             return;
         }
-        if (!(FUN_001f99c0(moby->pos.z - hero.motion.pos.f[2]) < 2.0f)) {
+        if (!(absolute_float(moby->pos.z - hero.motion.pos.f[2]) < 2.0f)) {
             return;
         }
         if (hero.health.hp == 0) {

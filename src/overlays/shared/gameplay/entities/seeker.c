@@ -57,7 +57,6 @@ extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
 extern void debug_print(void *, s16) __asm__("FUN_001e93b0");
 extern void clear_vector(Vec4 *) __asm__("FUN_001f99f8");
-extern f32 FUN_001f9af0(Vec4 *);
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
@@ -253,7 +252,7 @@ void seeker_update(struct Moby *moby) {
         mine_fall(moby, &vars->vel);
         moby->pos.z = height;
         vars->vel.f[2] = 0.0f;
-        if (FUN_001f9af0(&vars->vel) < frame_time * 2.0f) {
+        if (fast_vec_length(&vars->vel) < frame_time * 2.0f) {
             if (vars->voice == -1) {
                 vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }

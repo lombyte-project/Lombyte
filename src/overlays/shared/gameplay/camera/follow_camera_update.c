@@ -477,7 +477,6 @@ void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-float FUN_001f99c0(float);
 float FUN_001ebd78(float, float, float, float, float, float *);
 void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
@@ -503,7 +502,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         rotation_input_target = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
     if (rotation_input_target == 0.0f)
         rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
-    rotation_input_scratch = FUN_001f99c0(camera_rotation_state->a);
+    rotation_input_scratch = absolute_float(camera_rotation_state->a);
     k = hero_aligned_camera_rotation_gain_at_zero_input_gp + (hero_aligned_camera_rotation_gain_at_unit_input_gp - hero_aligned_camera_rotation_gain_at_zero_input_gp) * rotation_input_scratch;
     camera_rotation_state->a = rotation_input_scratch = FUN_001ebd78(camera_rotation_state->a, rotation_input_target, hero_aligned_camera_input_stiffness_gp, hero_aligned_camera_input_damping_gp, hero_aligned_camera_input_step_limit_gp, &camera_rotation_state->va);
     if (rotation_input_scratch != 0.0f)
@@ -521,15 +520,15 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         rotation_input_target = 0.0f;
     if (invert52 == 0)
         rotation_input_target = -rotation_input_target;
-    rotation_input_scratch = FUN_001f99c0(camera_rotation_state->b);
+    rotation_input_scratch = absolute_float(camera_rotation_state->b);
     k = hero_aligned_camera_rotation_gain_at_zero_input_gp + (hero_aligned_camera_rotation_gain_at_unit_input_gp - hero_aligned_camera_rotation_gain_at_zero_input_gp) * rotation_input_scratch;
     camera_rotation_state->b = FUN_001ebd78(camera_rotation_state->b, rotation_input_target, hero_aligned_camera_input_stiffness_gp, hero_aligned_camera_input_damping_gp, hero_aligned_camera_input_step_limit_gp, &camera_rotation_state->vb);
     if (camera_rotation_state->b != 0.0f) {
         float a, prospective_pitch_angle, z;
         fast_vec_cross(&side, camera_object, &up);
         a = k * camera_rotation_state->b;
-        prospective_pitch_angle = FUN_001f99c0(FUN_001fa580_c(camera_rotation_state->ang, a));
-        if (1.1170107f < prospective_pitch_angle && FUN_001f99c0(camera_rotation_state->ang) < prospective_pitch_angle)
+        prospective_pitch_angle = absolute_float(FUN_001fa580_c(camera_rotation_state->ang, a));
+        if (1.1170107f < prospective_pitch_angle && absolute_float(camera_rotation_state->ang) < prospective_pitch_angle)
             a += (0.0f - a) * (FUN_001fa5c8_c(prospective_pitch_angle, 1.1170107f) / 0.3490659f);
         if (prospective_pitch_angle >= 1.1152654f && camera_rotation_state->ang > 0.0f)
             camera_rotation_state->z = FUN_001ebd78(camera_rotation_state->z, 0.5f, 0.005f, 0.2f, 0.0f, &camera_rotation_state->vz);
@@ -545,7 +544,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         if (coll_sphere(camera_object + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
             camera_rotation_state->z = FUN_001ebd78(camera_rotation_state->z, z, 0.005f, 0.2f, z, &camera_rotation_state->vz);
         prospective_pitch_angle = FUN_001fa580_c(camera_rotation_state->ang, a);
-        if (FUN_001f99c0(prospective_pitch_angle) > 1.4660766f) {
+        if (absolute_float(prospective_pitch_angle) > 1.4660766f) {
             float signed_pitch_limit = 1.4660766f;
             if (!(z < prospective_pitch_angle))
                 signed_pitch_limit = -1.4660766f;

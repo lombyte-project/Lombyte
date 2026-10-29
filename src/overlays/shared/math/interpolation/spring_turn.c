@@ -79,7 +79,6 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
         *turn_step = -absolute_float(angle_delta);
     return fast_add_rotations(current_angle, *turn_step);
 }
-extern float FUN_001f99c0(float);
 
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00258278(unsigned char *moby, float *turn_step, float target_heading, float spring_strength, float damping_factor, float limit) {
@@ -99,10 +98,10 @@ void FUN_L00_00258278(unsigned char *moby, float *turn_step, float target_headin
             *turn_step = -limit;
         }
     }
-    if (FUN_001f99c0(wrapped_heading_delta) < *turn_step) {
-        *turn_step = FUN_001f99c0(wrapped_heading_delta);
-    } else if (*turn_step < -FUN_001f99c0(wrapped_heading_delta)) {
-        *turn_step = -FUN_001f99c0(wrapped_heading_delta);
+    if (absolute_float(wrapped_heading_delta) < *turn_step) {
+        *turn_step = absolute_float(wrapped_heading_delta);
+    } else if (*turn_step < -absolute_float(wrapped_heading_delta)) {
+        *turn_step = -absolute_float(wrapped_heading_delta);
     }
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *turn_step);
 }
@@ -654,7 +653,6 @@ void predict_position_with_vertical_drop(void *destination, void *base_position,
     displacement[2] -= convert_integer_to_float((frame_count * frame_count + frame_count) >> 1) * vertical_drop_coefficient;
     fast_vec_add(destination, base_position, displacement);
 }
-float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");
 int solve_quadratic_equation(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) __asm__("FUN_L00_002595a0");
 
@@ -665,7 +663,7 @@ int solve_quadratic_equation(float *larger_root_output, float *smaller_root_outp
         *larger_root_output = -linear_coefficient / (quadratic_coefficient + quadratic_coefficient);
         return 1;
     }
-    sqrt_abs_discriminant = square_root(FUN_001f99c0(discriminant));
+    sqrt_abs_discriminant = square_root(absolute_float(discriminant));
     *larger_root_output = (-linear_coefficient + sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
     *smaller_root_output = (-linear_coefficient - sqrt_abs_discriminant) / (quadratic_coefficient + quadratic_coefficient);
     if (*larger_root_output < *smaller_root_output) {

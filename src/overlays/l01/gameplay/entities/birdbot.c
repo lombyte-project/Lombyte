@@ -1498,7 +1498,6 @@ extern u8 D_L01_00161A80[] MACRO_ADDR;
 extern s32 rand() __asm__("FUN_001160d8");
 extern f32 FUN_L04_001f1978(f32);
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
-f32 FUN_001f99c0(f32);
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -1698,7 +1697,7 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_AIRBORNE_IDLE:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
         if (tick_countdown_32(&peckbot_vars->x228) != 0 && fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
-            FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
+            absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 17;
         } else if (peckbot_vars->x228 == 0 && self->hit == 1 && random_integer_below(0x13) == 0) {
@@ -1771,7 +1770,7 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_GROUNDED_IDLE:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
         if (fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
-            FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
+            absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 2;
             SET_ANIM(self, 5, 0, scale_game_frames(3));
@@ -1792,7 +1791,7 @@ void peckbot_update(Mob577 *self) {
     case PECKBOT_STATE_WAIT_FOR_CLOSE_TARGET:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
         if (fast_vec_length(&vector_scratch) < peckbot_vars->range - 4.0f &&
-            FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
+            absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 2;
             self->pos.f[2] = self->pos.f[2] + 1.0f;
@@ -1804,7 +1803,7 @@ void peckbot_update(Mob577 *self) {
         FUN_L00_00258278(self, peckbot_vars->turn, desired_heading, 0.05f, 0.3f, 0.2f);
         fast_vec_sub(&vector_scratch, &target.pos, &peckbot_vars->home);
         if ((fast_vec_length(&vector_scratch) < peckbot_vars->range &&
-             FUN_001f99c0(peckbot_vars->home.f[2] - target.pos.f[2]) < 8.0f) ||
+             absolute_float(peckbot_vars->home.f[2] - target.pos.f[2]) < 8.0f) ||
             self->hit == 2) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 2);
@@ -1844,7 +1843,7 @@ void peckbot_update(Mob577 *self) {
         FUN_L00_00258278(self, peckbot_vars->turn, desired_heading, 0.02f, 0.3f, 0.1f);
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
         if (fast_vec_length(&vector_scratch) < peckbot_vars->range &&
-            FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
+            absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
@@ -1875,7 +1874,7 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case PECKBOT_STATE_CHASE_TARGET:
-        chase_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
+        chase_target_height_distance_ratio = absolute_float(self->pos.f[2] - target.pos.f[2]);
         chase_target_height_distance_ratio = chase_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
             select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &target.pos, &position_scratch);
@@ -1903,7 +1902,7 @@ void peckbot_update(Mob577 *self) {
             self->state = 12;
             SET_ANIM(self, 5, 0, scale_game_frames(3));
         } else if (fast_vec_length(&home_to_target) < peckbot_vars->range + 4.0f &&
-                   FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f) {
+                   absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
             }
@@ -1922,7 +1921,7 @@ void peckbot_update(Mob577 *self) {
             FUN_L00_001ff8b0_cf(target.pos.f[0] - self->pos.f[0], target.pos.f[1] - self->pos.f[1]);
         FUN_L00_00258278(self, peckbot_vars->turn, desired_heading, 0.05f, 0.3f, 0.2f);
         if (self->anim_next == self->anim && FUN_0020c9e0(self) == 13.0f &&
-            FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 0.5f &&
+            absolute_float(self->pos.f[2] - target.pos.f[2]) < 0.5f &&
             vector_distance(&self->pos, &target.pos) < 2.0f &&
             fast_difference_between_rotations(FUN_L00_001ff8b0_cf(target.pos.f[0] - self->pos.f[0],
                                              target.pos.f[1] - self->pos.f[1]),
@@ -2034,7 +2033,7 @@ void peckbot_update(Mob577 *self) {
         }
         break;
     case PECKBOT_STATE_RECOVER_FROM_BLOCKED_MOVEMENT:
-        recovery_target_height_distance_ratio = FUN_001f99c0(self->pos.f[2] - target.pos.f[2]);
+        recovery_target_height_distance_ratio = absolute_float(self->pos.f[2] - target.pos.f[2]);
         recovery_target_height_distance_ratio = recovery_target_height_distance_ratio / vector_distance(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
             select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
@@ -3212,7 +3211,6 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
         }
     } while (gunship_vars->cutscene_timer > scale_game_frames(0x1FE) - scale_game_frames(0x78));
 }
-f32 FUN_001f99c0(f32);
 
 f32 FUN_L01_002f81c8(f32 *spring_axis_position, f32 *spring_axis_velocity, f32 target, f32 velocity_adjustment_scale, f32 damp, f32 range) {
     f32 velocity_adjustment;
@@ -3233,7 +3231,7 @@ f32 FUN_L01_002f81c8(f32 *spring_axis_position, f32 *spring_axis_velocity, f32 t
         *spring_axis_velocity = *spring_axis_velocity + velocity_adjustment;
     }
     *spring_axis_position = *spring_axis_position + *spring_axis_velocity;
-    return FUN_001f99c0(target - *spring_axis_position);
+    return absolute_float(target - *spring_axis_position);
 }
 typedef union {
     u128 q;
@@ -3260,13 +3258,13 @@ typedef struct {
 
 
 #include "rnc/overlay/l01/gameplay/entities/birdbot_globals.h"
+#include "rnc/math/fast_math.h"
 extern f32 water_lily_spring_velocity_adjustment_scale_gp __asm__("D_L01_00161BF0") __attribute__((sda));
 extern f32 water_lily_spring_damping_gp __asm__("D_L01_00161BF4") __attribute__((sda));
 extern f32 water_lily_hero_separation_radius_gp __asm__("D_L01_00161BF8") __attribute__((sda));
 extern f32 water_lily_max_horizontal_speed_gp __asm__("D_L01_00161BFC") __attribute__((sda));
 extern f32 water_lily_collision_radius_gp __asm__("D_L01_00161C00") __attribute__((sda));
 extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
-f32 FUN_001f99c0(f32);
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
@@ -3305,7 +3303,7 @@ void water_lily_update(HoverMoby *water_lily) {
         spring_axis_to(&water_lily->pos.v.y, v->home_y, &v->vel_y, water_lily_spring_velocity_adjustment_scale_gp * frame_time_sq,
                        water_lily_spring_damping_gp, 3.0f);
         if (vector_distance(&water_lily->pos, &hero.motion.pos) < water_lily_hero_separation_radius_gp) {
-            if (FUN_001f99c0(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
+            if (absolute_float(water_lily->pos.v.z - hero.motion.pos.f[2]) < 0.7f) {
                 hero_separation_angle = fast_arc_tan(water_lily->pos.v.x - hero.motion.pos.f[0],
                                    water_lily->pos.v.y - hero.motion.pos.f[1]);
                 water_lily->pos.v.x = fast_cos(hero_separation_angle) * water_lily_hero_separation_radius_gp;

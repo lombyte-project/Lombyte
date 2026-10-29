@@ -1736,7 +1736,6 @@ extern int FUN_00213260(int);
 extern float FUN_00213308(void);
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_001f99c0(float);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int FUN_001fa6d0(float);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -2002,7 +2001,7 @@ void large_amoeboid_update(unsigned char *moby) {
             FUN_L00_00258b50(moby, data + 0x170, move, data + 0x40, 1.0f);
         }
         if (is_value_within_interpolated_window(15.5f, moby) != 0 && vector_distance(moby + 0x10, (target_position = target + 0x10)) < 2.0f &&
-            FUN_001f99c0(*(float *)(target + 0x18) - *(float *)(moby + 0x18)) <
+            absolute_float(*(float *)(target + 0x18) - *(float *)(moby + 0x18)) <
                 *(float *)(data + 0x250) + *(float *)(data + 0x250)) {
             move[0] = fast_cos(*(float *)(moby + 0x48));
             move[1] = fast_sin(*(float *)(moby + 0x48));

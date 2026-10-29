@@ -667,7 +667,6 @@ extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern void clip_hero_velocity_against_probed_surfaces(s32) __asm__("FUN_L00_00212318");
-extern f32 FUN_001f99c0(f32);
 
 void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
 
@@ -786,7 +785,7 @@ void update_hero_planar_movement_velocity(void) {
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, fast_cos(hero_state->ground_pitch.f));
     }
     hero.unk3B4.f = hero.ground_pitch.f;
-    if (FUN_001f99c0(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
+    if (absolute_float(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
         hero.motion.pos.f[2] = hero.ground_z.f;
     }
 }

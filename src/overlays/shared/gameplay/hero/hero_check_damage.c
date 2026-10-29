@@ -150,7 +150,6 @@ extern struct LedgeSpot *D_L00_0015F70C;
 extern s32 D_L00_0015F710;
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 int nearest_rail_point() __asm__("FUN_L00_0020cd08");
@@ -188,7 +187,7 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             distance_limit += 0.5f;
         }
         distance = vector_distance(query_position, to);
-        height = FUN_001f99c0(query_position->f[2] - to->f[2]);
+        height = absolute_float(query_position->f[2] - to->f[2]);
         if (!(distance < distance_limit && height < height_limit))
             continue;
         *outOwner = D_L00_0015F70C[i].owner;
@@ -3212,7 +3211,6 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-f32 FUN_001f99c0(f32);
 
 extern CollisionHit HH __asm__("D_L00_00173E40") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L00_00173E40 + (o)))
@@ -3383,7 +3381,7 @@ d1:
         if (collision_line(&side_ray_start, &collision_ray_end, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
-            if (0.4f < FUN_001f99c0(f)) {
+            if (0.4f < absolute_float(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
             sceVu0Normalize(&side_hit_normal, (u8 *)&HH.normal_x);
@@ -3505,7 +3503,6 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_213350;
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
-void FUN_001f9ab0(void *, Vec4_213350 *);
 /* fast_vec_dot of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
 void FUN_L00_00213350(u128_213350 *input_vector) {
     u128_213350 dot_operands[2];
@@ -3514,7 +3511,7 @@ void FUN_L00_00213350(u128_213350 *input_vector) {
     ((Vec4_213350 *)&dot_operands[1])->x = fast_cos(hero_state->motion.rot.f[2]);
     ((Vec4_213350 *)&dot_operands[1])->y = fast_sin(hero_state->motion.rot.f[2]);
     ((Vec4_213350 *)&dot_operands[1])->z = 0.0f;
-    FUN_001f9ab0(&dot_operands[0], (Vec4_213350 *)&dot_operands[1]);
+    fast_vec_dot(&dot_operands[0], (Vec4_213350 *)&dot_operands[1]);
 }
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
@@ -4022,6 +4019,7 @@ void air_accel(f32 step) {
 }
 #include "types.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/math/fast_math.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 
 extern char hero_pos[] __asm__("D_0013F3D0");
