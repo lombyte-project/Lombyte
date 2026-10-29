@@ -25,7 +25,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         MOBY_SLIDE_TO_END_POINT = 2,
         MOBY_LOWER_BELOW_POSE_HEIGHT = 3
     };
-    char        *data = ((char *)MOBY(moby)->pvars);
+    char        *slide_and_lowering_vars = ((char *)MOBY(moby)->pvars);
     float        slide_motion_scratch[4];
     float        slide_step_distance;
     float        speed;
@@ -37,12 +37,12 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
     case MOBY_PLACE_AT_POSE_OFFSET: {
         LevelCuboid *initial_pose_entry;
 
-        initial_pose_entry = &l05_cuboids[*(int *)(data + 0x10)];
+        initial_pose_entry = &l05_cuboids[*(int *)(slide_and_lowering_vars + 0x10)];
         qcopy(moby + 0x10, &initial_pose_entry->pos);
         MOBY(moby)->rot.z = initial_pose_entry->rot.z;
         fast_vec_normalize(
-            slide_motion_scratch, &initial_pose_entry->axes[1], *(float *)(data + 0x18));
-        if (*(int *)(data + 0x1C) != 0) {
+            slide_motion_scratch, &initial_pose_entry->axes[1], *(float *)(slide_and_lowering_vars + 0x18));
+        if (*(int *)(slide_and_lowering_vars + 0x1C) != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             MOBY(moby)->flags |= 0x8000;
         }
@@ -51,45 +51,45 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
+        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(slide_and_lowering_vars + 0x14) * 256 + 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = 2;
-            clear_u64_value(data);
+            clear_u64_value(slide_and_lowering_vars);
         }
         break;
     case MOBY_SLIDE_TO_END_POINT:
-        pose_entry = &l05_cuboids[*(int *)(data + 0x10)];
-        reach = *(float *)(data + 0x18) * 3.0f;
+        pose_entry = &l05_cuboids[*(int *)(slide_and_lowering_vars + 0x10)];
+        reach = *(float *)(slide_and_lowering_vars + 0x18) * 3.0f;
         slide_step_distance = 0.0f;
         fast_vec_normalize(slide_motion_scratch, &pose_entry->axes[1], reach);
-        if (*(int *)(data + 0x1C) != 0) {
+        if (*(int *)(slide_and_lowering_vars + 0x1C) != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
         fast_vec_add(slide_motion_scratch, &pose_entry->pos, slide_motion_scratch);
         fast_vec_sub(slide_motion_scratch, slide_motion_scratch, moby + 0x10);
         remaining_slide_distance = fast_vec_length(slide_motion_scratch);
-        speed = fast_vec_length(data);
+        speed = fast_vec_length(slide_and_lowering_vars);
         advance_accelerated_scalar(remaining_slide_distance,
                                    frame_time_sq * 20.0f,
                                    frame_time_sq * 30.0f,
                                    frame_time * 10.0f,
                                    &slide_step_distance,
                                    &speed);
-        fast_vec_normalize(data, slide_motion_scratch, speed);
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
+        fast_vec_normalize(slide_and_lowering_vars, slide_motion_scratch, speed);
+        fast_vec_add(moby + 0x10, moby + 0x10, slide_and_lowering_vars);
         if (fast_vec_length(slide_motion_scratch) < 0.01f) {
             MOBY(moby)->state = 3;
         }
         break;
     case MOBY_LOWER_BELOW_POSE_HEIGHT:
         pose_entry = l05_cuboids;
-        pose_entry += *(int *)(data + 0x10);
+        pose_entry += *(int *)(slide_and_lowering_vars + 0x10);
         advance_accelerated_scalar(pose_entry->pos.z - 5.9f,
                                    frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f,
                                    frame_time * 10.0f,
                                    (float *)&MOBY(moby)->pos.z,
-                                   (float *)(data + 8));
+                                   (float *)(slide_and_lowering_vars + 8));
         if (MOBY(moby)->pos.z < pose_entry->pos.z - 5.9f) {
             MOBY(moby)->state = 4;
         }
