@@ -21,14 +21,14 @@ void update_camera_blend(char *to_cam) __asm__("FUN_001ed2b0");
 
 void update_camera_blend(char *to_cam) {
     char *base = cam_trans_state;
-    int   result;
+    int   transition_complete;
 
     if (*(unsigned char *)(base + 2) == 0) {
-        result = step_camera_blend(to_cam, base + 0x10);
+        transition_complete = step_camera_blend(to_cam, base + 0x10);
     } else {
-        result = advance_alternate_camera_transition(to_cam, base + 0x70);
+        transition_complete = advance_alternate_camera_transition(to_cam, base + 0x70);
     }
-    if (result != 0) {
+    if (transition_complete != 0) {
         if (camera_position_publication_suppressed[0] == 0) {
             qcopy(camera_rows, to_cam);
             qcopy(camera_rows + 0x10, to_cam + 0x10);
