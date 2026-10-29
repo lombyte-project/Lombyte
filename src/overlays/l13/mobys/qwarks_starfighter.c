@@ -529,7 +529,7 @@ void begin_starfighter_death_sequence(struct Moby *moby,
                                       char        *vars,
                                       int         *result) __asm__("FUN_L13_002e97e0");
 
-void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result) {
+void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *remaining_health) {
     int          path_ids = (int)vars + 0xB0;
     struct Moby *mobys;
     float        dx;
@@ -539,7 +539,7 @@ void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result
     float        scale;
     char        *velocity;
 
-    *result = 0;
+    *remaining_health = 0;
     moby->flags &= 0xEFFF;
     FUN_L00_00257470(moby, 0, -1);
     vars[0x67] = 0x78;
