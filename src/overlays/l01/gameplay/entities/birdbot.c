@@ -3746,3 +3746,9 @@ void piston_platform_update(LiftMoby *piston_platform) {
     fast_vec_sub(dp, &piston_platform->pos, &old);
     update_entity_matrix(piston_platform_vars->x60, dp, piston_platform->x40, piston_platform->x40);
 }
+
+u8 D_L05_001CAC80 NOT_SDA = 1;
+u8 D_L07_001CA880 NOT_SDA = 1;
+u8 D_L11_001CB200 NOT_SDA = 1;
+u8 D_L12_001CAC80 NOT_SDA = 1;
+u8 D_L13_001CAB00 NOT_SDA = 1;
