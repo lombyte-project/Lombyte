@@ -411,7 +411,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     int            j;
     short         *list;
     struct Moby   *member;
-    char          *data;
+    char          *scenery_ship_vars;
     float          phase;
     float          ratio;
     u64            texture;
@@ -451,7 +451,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     do {
         member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8);
         if (member->oclass == 0x4f && member->state == 1) {
-            data = (char *)member->pvars;
+            scenery_ship_vars = (char *)member->pvars;
             qcopy_nc(center, &member->pos);
             center[3] = 20.0f;
             if (fast_bsphere_check(center, 512.0f) != -1) {
@@ -461,11 +461,11 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
                 char *points;
                 int   index;
                 int   frame;
-                for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
-                    first = (*(short *)(data + 0x322) - frame + 15) & 15;
+                for (frame = 0; frame < *(short *)(scenery_ship_vars + 0x320); frame++) {
+                    first = (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
                     for (ribbon = 0; ribbon < 3; ribbon++) {
                         if (D_L05_001613F4 == 0) {
-                            points = data + (ribbon * 0x100 + 0x20);
+                            points = scenery_ship_vars + (ribbon * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
                                 index = (first + (k >> 1)) & 15;
                                 fast_vec_add(packet[frame].vertices + k * 0x10,
