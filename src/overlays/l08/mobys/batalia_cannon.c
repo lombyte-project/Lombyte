@@ -736,13 +736,13 @@ void update_batalia_cannon(Moby *moby) {
         CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
     };
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
-    CannonData52 *data = (*(CannonData52 **)&moby->pvars);
+    CannonData52 *cannon_control_vars = (*(CannonData52 **)&moby->pvars);
     int           i, target, all_done, dead, best, min_life;
     Moby        **links;
     float         yaw, pitch, magnitude, best_angle;
     qcopy(position, (*(float(*)[4]) & moby->pos));
     position[2] += 0.4f;
-    if (fast_dec_timer_s16(&data->exit_timer) && moby->command == 1) {
+    if (fast_dec_timer_s16(&cannon_control_vars->exit_timer) && moby->command == 1) {
         qcopy(hero.motion.pos.f, position);
         qcopy(hero.motion.rot.f, (*(float(*)[4]) & moby->rot));
         offset[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
@@ -750,13 +750,13 @@ void update_batalia_cannon(Moby *moby) {
         offset[2] = 0.0f;
         fast_vec_add(hero.motion.pos.f, hero.motion.pos.f, offset);
         fast_mem_zero16((char *)hero.motion.pos.f + 0x60, 0x90);
-        if (data->health == 0) {
+        if (cannon_control_vars->health == 0) {
             Moby *node;
             (*(float(*)[4]) & moby->rot)[1] = 0.0f;
             moby->command = 2;
             jet_end_mount(0);
             moby->state = 4;
-            node = (Moby *)(D_L08_0015FFD8 + (data->platform_index << 8));
+            node = (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
             qcopy(direction, (*(float(*)[4]) & node->rot));
             direction[2] = fast_add_rotations(direction[2], 3.1415927f);
             fast_vec_normalize(work, (*(float(*)[16]) & node->rot_row0), 2.5f);
@@ -788,13 +788,13 @@ void update_batalia_cannon(Moby *moby) {
             int *indices;
             int  count;
             if (moby->state != 5) {
-                data->camera_timer = 2;
+                cannon_control_vars->camera_timer = 2;
                 jet_mount((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->rot), 1, 0, 0);
             }
             moby->state = 5;
             {
                 int waiting = 2, activated = 3;
-                indices = data->indices;
+                indices = cannon_control_vars->indices;
                 for (count = 3; count >= 0; count--) {
                     if (((Moby *)D_L08_0015FFD8)[*indices].state == waiting)
                         ((Moby *)D_L08_0015FFD8)[*indices].state = activated;
@@ -805,12 +805,12 @@ void update_batalia_cannon(Moby *moby) {
     } else if (moby->command == 2) {
         if (vector_distance_xy(position, (*(float(*)[4]) & hero.moby->pos)) > 1.0f) {
             moby->command = 0;
-            data->exit_timer = scale_game_frames(60);
+            cannon_control_vars->exit_timer = scale_game_frames(60);
         }
     } else if (visited52[moby->mission + D_0015ED84 * 16] == 0xFF) {
         if (vector_distance_xy(position, (*(float(*)[4]) & hero.moby->pos)) < 1.0f &&
             hero.motion.pos.f[2] - (*(float(*)[4]) & moby->pos)[2] < 7.0f &&
-            data->exit_timer == 0 && data->health > 0) {
+            cannon_control_vars->exit_timer == 0 && cannon_control_vars->health > 0) {
             moby->command = 1;
             hero_set_state(50, 1);
         }
@@ -821,39 +821,39 @@ void update_batalia_cannon(Moby *moby) {
         int  *indices;
         int   count;
         moby->state = 4;
-        data->health = 200;
-        data->range = 10.0f;
+        cannon_control_vars->health = 200;
+        cannon_control_vars->range = 10.0f;
         node = create_moby(0x710);
-        data->visual = node;
+        cannon_control_vars->visual = node;
         if (node) {
             qcopy((*(float(*)[4]) & node->pos), (*(float(*)[4]) & moby->pos));
             qcopy((*(float(*)[4]) & node->rot), (*(float(*)[4]) & moby->rot));
             node->draw_dist = 0x30;
-            data->visual->visible = 1;
-            (*(long *)&data->visual->spawn_frame) = (*(long *)&moby->spawn_frame);
+            cannon_control_vars->visual->visible = 1;
+            (*(long *)&cannon_control_vars->visual->spawn_frame) = (*(long *)&moby->spawn_frame);
         }
         (*(float(*)[4]) & moby->rot)[1] = 0.0f;
-        data->fire_timer = scale_game_frames(30);
-        data->exit_timer = 0;
-        data->pitch_step = 0.0f;
-        data->yaw_step = 0.0f;
-        indices = (int *)&data->linked[7];
+        cannon_control_vars->fire_timer = scale_game_frames(30);
+        cannon_control_vars->exit_timer = 0;
+        cannon_control_vars->pitch_step = 0.0f;
+        cannon_control_vars->yaw_step = 0.0f;
+        indices = (int *)&cannon_control_vars->linked[7];
         count = 7;
         do {
             *indices-- = 0;
         } while (--count >= 0);
-        data->wave_timer = scale_game_frames(180);
-        data->target_timer = 0;
-        data->target_index = 0;
+        cannon_control_vars->wave_timer = scale_game_frames(180);
+        cannon_control_vars->target_timer = 0;
+        cannon_control_vars->target_index = 0;
         if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF)
-            data->visual_angle = 0.0f;
+            cannon_control_vars->visual_angle = 0.0f;
         else
-            data->visual_angle = 1.5707964f;
+            cannon_control_vars->visual_angle = 1.5707964f;
         break;
     }
     case CANNON_MOUNTED_CONTROL:
-        if (data->health < 0)
-            data->health = 0;
+        if (cannon_control_vars->health < 0)
+            cannon_control_vars->health = 0;
         work[0] = hero.stick_x;
         work[1] = invert52 ? hero.stick_y : -hero.stick_y;
         magnitude = vector_length_xy(work);
@@ -861,47 +861,47 @@ void update_batalia_cannon(Moby *moby) {
             func_L00_001FF328_2E16A0(work, work, magnitude);
         yaw = batalia_cannon_max_yaw_rate_gp * 0.017453292f * D_0015ED6C * -work[0];
         pitch = -(batalia_cannon_max_pitch_rate_gp * 0.017453292f * D_0015ED6C) * work[1];
-        if ((data->yaw_step >= 0.0f && data->yaw_step < yaw) ||
-            (data->yaw_step <= 0.0f && yaw < data->yaw_step))
-            approach_value(&data->yaw_step,
+        if ((cannon_control_vars->yaw_step >= 0.0f && cannon_control_vars->yaw_step < yaw) ||
+            (cannon_control_vars->yaw_step <= 0.0f && yaw < cannon_control_vars->yaw_step))
+            approach_value(&cannon_control_vars->yaw_step,
                            yaw,
                            batalia_cannon_yaw_acceleration_gp * 0.017453292f * D_0015ED70);
         else
-            approach_value(&data->yaw_step,
+            approach_value(&cannon_control_vars->yaw_step,
                            yaw,
                            batalia_cannon_yaw_deceleration_gp * 0.017453292f * D_0015ED70);
-        if ((data->pitch_step >= 0.0f && data->pitch_step < pitch) ||
-            (data->pitch_step <= 0.0f && pitch < data->pitch_step))
-            approach_value(&data->pitch_step,
+        if ((cannon_control_vars->pitch_step >= 0.0f && cannon_control_vars->pitch_step < pitch) ||
+            (cannon_control_vars->pitch_step <= 0.0f && pitch < cannon_control_vars->pitch_step))
+            approach_value(&cannon_control_vars->pitch_step,
                            pitch,
                            batalia_cannon_pitch_acceleration_gp * 0.017453292f * D_0015ED70);
         else
-            approach_value(&data->pitch_step,
+            approach_value(&cannon_control_vars->pitch_step,
                            pitch,
                            batalia_cannon_pitch_deceleration_gp * 0.017453292f * D_0015ED70);
         (*(float(*)[4]) & moby->rot)[2] =
-            fast_add_rotations((*(float(*)[4]) & moby->rot)[2], data->yaw_step);
+            fast_add_rotations((*(float(*)[4]) & moby->rot)[2], cannon_control_vars->yaw_step);
         (*(float(*)[4]) & moby->rot)[1] =
-            fast_add_rotations((*(float(*)[4]) & moby->rot)[1], data->pitch_step);
+            fast_add_rotations((*(float(*)[4]) & moby->rot)[1], cannon_control_vars->pitch_step);
         if ((*(float(*)[4]) & moby->rot)[1] < -0.7853982f)
             (*(float(*)[4]) & moby->rot)[1] = -0.7853982f;
         else if ((*(float(*)[4]) & moby->rot)[1] > 0.34906584f)
             (*(float(*)[4]) & moby->rot)[1] = 0.34906584f;
         target = find_batalia_cannon_aim_target((char *)moby);
         if (target) {
-            if (data->lock_timer < scale_game_frames(30))
-                data->lock_timer++;
-        } else if (data->lock_timer)
-            data->lock_timer--;
-        fast_dec_timer_s16(&data->fire_timer);
-        if ((pad_held[0] & 0x20) && data->fire_timer == 0) {
-            if (data->barrel == 1) {
+            if (cannon_control_vars->lock_timer < scale_game_frames(30))
+                cannon_control_vars->lock_timer++;
+        } else if (cannon_control_vars->lock_timer)
+            cannon_control_vars->lock_timer--;
+        fast_dec_timer_s16(&cannon_control_vars->fire_timer);
+        if ((pad_held[0] & 0x20) && cannon_control_vars->fire_timer == 0) {
+            if (cannon_control_vars->barrel == 1) {
                 int count;
                 build_spherical_offset(direction,
                                        batalia_cannon_rocket_speed_gp * D_0015ED6C,
                                        (*(float(*)[4]) & moby->rot)[2],
                                        -(*(float(*)[4]) & moby->rot)[1]);
-                blend_moby_animation(data->guns[0], 1, 0, 0);
+                blend_moby_animation(cannon_control_vars->guns[0], 1, 0, 0);
                 transform_vector_by_basis(muzzle,
                                           &batalia_cannon_left_muzzle_offset_gp,
                                           (*(float(*)[16]) & moby->rot_row0));
@@ -912,8 +912,8 @@ void update_batalia_cannon(Moby *moby) {
                 l08_camera.shake_frames = scale_game_frames(10);
                 l08_camera.shake2_amount = 0.03f;
                 l08_camera.shake2_frames = scale_game_frames(7);
-                data->barrel = 0;
-                data->fire_timer = scale_game_frames(20);
+                cannon_control_vars->barrel = 0;
+                cannon_control_vars->fire_timer = scale_game_frames(20);
                 count = 4;
                 do {
                     *(u128 *)random_vec = 0;
@@ -949,7 +949,7 @@ void update_batalia_cannon(Moby *moby) {
                                        batalia_cannon_rocket_speed_gp * D_0015ED6C,
                                        (*(float(*)[4]) & moby->rot)[2],
                                        -(*(float(*)[4]) & moby->rot)[1]);
-                blend_moby_animation(data->guns[1], 1, 0, 0);
+                blend_moby_animation(cannon_control_vars->guns[1], 1, 0, 0);
                 transform_vector_by_basis(muzzle,
                                           &batalia_cannon_right_muzzle_offset_gp,
                                           (*(float(*)[16]) & moby->rot_row0));
@@ -961,8 +961,8 @@ void update_batalia_cannon(Moby *moby) {
                 l08_camera.shake_frames = scale_game_frames(10);
                 l08_camera.shake2_amount = 0.03f;
                 l08_camera.shake2_frames = scale_game_frames(7);
-                data->barrel = 1;
-                data->fire_timer = scale_game_frames(20);
+                cannon_control_vars->barrel = 1;
+                cannon_control_vars->fire_timer = scale_game_frames(20);
                 count = 4;
                 do {
                     *(u128 *)random_vec = 0;
@@ -994,7 +994,7 @@ void update_batalia_cannon(Moby *moby) {
                                          500000.0f);
             }
         }
-        if (fast_dec_timer_s16(&data->camera_timer)) {
+        if (fast_dec_timer_s16(&cannon_control_vars->camera_timer)) {
             snap_scripted_camera_to_pose();
             transform_vector_by_basis(
                 direction, &batalia_cannon_camera_offset_gp, (*(float(*)[16]) & moby->rot_row0));
@@ -1003,11 +1003,11 @@ void update_batalia_cannon(Moby *moby) {
             set_camera_rotation((*(float(*)[4]) & moby->rot));
         }
         add_draw_callback(draw_batalia_cannon_hud, moby);
-        if (fast_dec_timer_s16(&data->wave_timer)) {
+        if (fast_dec_timer_s16(&cannon_control_vars->wave_timer)) {
             int count;
             dead = 0;
             all_done = 1;
-            links = data->linked;
+            links = cannon_control_vars->linked;
             count = 7;
             do {
                 if (*links && (signed char)(*links)->state >= 0)
@@ -1016,7 +1016,7 @@ void update_batalia_cannon(Moby *moby) {
             } while (--count >= 0);
             if (all_done) {
                 int  cutoff = -1;
-                int *indices = data->indices;
+                int *indices = cannon_control_vars->indices;
                 int *walk = indices;
                 count = 3;
                 do {
@@ -1028,20 +1028,20 @@ void update_batalia_cannon(Moby *moby) {
                 } while (--count >= 0);
                 switch (dead) {
                 case CANNON_NO_INACTIVE_INDEXED_TARGETS:
-                    data->range = 10.0f;
-                    data->wave_timer = scale_game_frames(285);
+                    cannon_control_vars->range = 10.0f;
+                    cannon_control_vars->wave_timer = scale_game_frames(285);
                     break;
                 case CANNON_ONE_INACTIVE_INDEXED_TARGET:
-                    data->range = 12.5f;
-                    data->wave_timer = scale_game_frames(240);
+                    cannon_control_vars->range = 12.5f;
+                    cannon_control_vars->wave_timer = scale_game_frames(240);
                     break;
                 case CANNON_TWO_INACTIVE_INDEXED_TARGETS:
-                    data->range = 15.0f;
-                    data->wave_timer = scale_game_frames(195);
+                    cannon_control_vars->range = 15.0f;
+                    cannon_control_vars->wave_timer = scale_game_frames(195);
                     break;
                 case CANNON_THREE_INACTIVE_INDEXED_TARGETS:
-                    data->range = 17.5f;
-                    data->wave_timer = scale_game_frames(150);
+                    cannon_control_vars->range = 17.5f;
+                    cannon_control_vars->wave_timer = scale_game_frames(150);
                     break;
                 case CANNON_ALL_INDEXED_TARGETS_INACTIVE:
                     if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF) {
@@ -1050,23 +1050,23 @@ void update_batalia_cannon(Moby *moby) {
                         moby->command = 2;
                         jet_end_mount(0);
                         moby->state = 4;
-                        node = (Moby *)(D_L08_0015FFD8 + (data->platform_index << 8));
+                        node = (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
                         qcopy(muzzle, (*(float(*)[4]) & node->rot));
                         muzzle[2] = fast_add_rotations(muzzle[2], 3.1415927f);
                         fast_vec_normalize(direction, (*(float(*)[16]) & node->rot_row0), 2.5f);
                         fast_vec_add(direction, direction, (*(float(*)[4]) & node->pos));
                         func_L00_00217718_2E16A0(direction, muzzle, 0, 1);
                         set_batalia_cannon_platform_mode((char *)node, 1);
-                        data->visual_angle = 1.5707964f;
+                        cannon_control_vars->visual_angle = 1.5707964f;
                         return;
                     }
                     break;
                 }
-                if (fast_subtract_rotations_cf(&data->target_timer) ||
+                if (fast_subtract_rotations_cf(&cannon_control_vars->target_timer) ||
                     (signed char)((Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices +
-                                                                   (data->target_index << 2))]
+                                                                   (cannon_control_vars->target_index << 2))]
                             .state < 0) {
-                    data->target_timer = 1;
+                    cannon_control_vars->target_timer = 1;
                     best_angle = 3.1415927f;
                     best = -1;
                     for (i = 0; i < 4; i++) {
@@ -1086,10 +1086,10 @@ void update_batalia_cannon(Moby *moby) {
                                 hero.motion.rot.f[2]);
                         }
                     }
-                    data->target_index = best;
+                    cannon_control_vars->target_index = best;
                 }
                 ((Moby *)
-                     D_L08_0015FFD8)[*(int *)((unsigned int)indices + (data->target_index << 2))]
+                     D_L08_0015FFD8)[*(int *)((unsigned int)indices + (cannon_control_vars->target_index << 2))]
                     .command = 1;
             }
         }
@@ -1097,25 +1097,25 @@ void update_batalia_cannon(Moby *moby) {
     case CANNON_UNMOUNTED_IDLE:
         break;
     case CANNON_REMOVE:
-        mark_moby_for_removal(data->guns[0]);
-        mark_moby_for_removal(data->guns[1]);
+        mark_moby_for_removal(cannon_control_vars->guns[0]);
+        mark_moby_for_removal(cannon_control_vars->guns[1]);
         mark_moby_for_removal(moby);
         return;
     }
-    if (data->guns[0] == 0) {
+    if (cannon_control_vars->guns[0] == 0) {
         Moby *node;
         node = create_moby(0x236);
-        data->guns[0] = node;
+        cannon_control_vars->guns[0] = node;
         if (node) {
             node->update_dist = 0xFF;
-            data->guns[0]->draw_dist = 0x7E;
-            data->guns[0]->visible = 1;
-            (*(long *)&data->guns[0]->spawn_frame) = (*(long *)&moby->spawn_frame);
+            cannon_control_vars->guns[0]->draw_dist = 0x7E;
+            cannon_control_vars->guns[0]->visible = 1;
+            (*(long *)&cannon_control_vars->guns[0]->spawn_frame) = (*(long *)&moby->spawn_frame);
             transform_vector_by_basis(
                 work, &batalia_cannon_left_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
             {
-                Moby *gun = data->guns[0];
+                Moby *gun = cannon_control_vars->guns[0];
                 qcopy((*(float(*)[4]) & gun->pos), work);
                 qcopy((*(float(*)[4]) & gun->rot), (*(float(*)[4]) & moby->rot));
                 update_entity(gun);
@@ -1126,7 +1126,7 @@ void update_batalia_cannon(Moby *moby) {
             work, &batalia_cannon_left_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
         fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
         {
-            Moby *gun = data->guns[0];
+            Moby *gun = cannon_control_vars->guns[0];
             qcopy((*(float(*)[4]) & gun->pos), work);
             qcopy((*(float(*)[4]) & gun->rot), (*(float(*)[4]) & moby->rot));
             if ((gun->anim_flags & 2) && gun->prev_seq == 1)
@@ -1134,20 +1134,20 @@ void update_batalia_cannon(Moby *moby) {
         }
     }
 
-    if (data->guns[1] == 0) {
+    if (cannon_control_vars->guns[1] == 0) {
         Moby *node;
         node = create_moby(0x236);
-        data->guns[1] = node;
+        cannon_control_vars->guns[1] = node;
         if (node) {
             node->update_dist = 0xFF;
-            data->guns[1]->draw_dist = 0x7E;
-            data->guns[1]->visible = 1;
-            (*(long *)&data->guns[1]->spawn_frame) = (*(long *)&moby->spawn_frame);
+            cannon_control_vars->guns[1]->draw_dist = 0x7E;
+            cannon_control_vars->guns[1]->visible = 1;
+            (*(long *)&cannon_control_vars->guns[1]->spawn_frame) = (*(long *)&moby->spawn_frame);
             transform_vector_by_basis(
                 work, &batalia_cannon_right_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
             {
-                Moby *gun = data->guns[1];
+                Moby *gun = cannon_control_vars->guns[1];
                 qcopy((*(float(*)[4]) & gun->pos), work);
                 qcopy((*(float(*)[4]) & gun->rot), (*(float(*)[4]) & moby->rot));
                 update_entity(gun);
@@ -1158,7 +1158,7 @@ void update_batalia_cannon(Moby *moby) {
             work, &batalia_cannon_right_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
         fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
         {
-            Moby *gun = data->guns[1];
+            Moby *gun = cannon_control_vars->guns[1];
             qcopy((*(float(*)[4]) & gun->pos), work);
             qcopy((*(float(*)[4]) & gun->rot), (*(float(*)[4]) & moby->rot));
             if ((gun->anim_flags & 2) && gun->prev_seq == 1)
@@ -1166,17 +1166,17 @@ void update_batalia_cannon(Moby *moby) {
         }
     }
 
-    if (data->visual) {
+    if (cannon_control_vars->visual) {
         transform_vector_by_basis(
             work, &batalia_cannon_visual_offset_gp, (*(float(*)[16]) & moby->rot_row0));
-        fast_vec_add((*(float(*)[4]) & data->visual->pos), work, (*(float(*)[4]) & moby->pos));
+        fast_vec_add((*(float(*)[4]) & cannon_control_vars->visual->pos), work, (*(float(*)[4]) & moby->pos));
         {
-            Moby *visual = data->visual;
+            Moby *visual = cannon_control_vars->visual;
             qcopy((*(float(*)[4]) & visual->rot), (*(float(*)[4]) & moby->rot));
-            (*(float(*)[4]) & data->visual->rot)[1] =
-                fast_add_rotations((*(float(*)[4]) & visual->rot)[1], data->visual_angle);
+            (*(float(*)[4]) & cannon_control_vars->visual->rot)[1] =
+                fast_add_rotations((*(float(*)[4]) & visual->rot)[1], cannon_control_vars->visual_angle);
         }
-        update_entity(data->visual);
+        update_entity(cannon_control_vars->visual);
     }
 }
 
