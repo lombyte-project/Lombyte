@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/sound.c, func_0022F0A8). */
 void voice_start_callback(int handle, long context) __asm__("FUN_0022dd90");
 
-void voice_start_callback(int handle, long context) {
-    unsigned char *voice = (unsigned char *)(int)context;
+void voice_start_callback(int handle, long voice_record_address) {
+    unsigned char *voice = (unsigned char *)(int)voice_record_address;
     if (voice != 0) {
         *(int *)voice = handle;
         if (handle != 0) {
