@@ -23,7 +23,7 @@ void door_update(u8 *moby) {
         DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         DOOR_RETURN_TO_INITIAL_POSITION = 4
     };
-    u8         *data = ((u8 *)MOBY(moby)->pvars);
+    u8         *door_data = ((u8 *)MOBY(moby)->pvars);
     u8         *other;
     f32         vectors[8];
     f32         distance;
@@ -31,107 +31,107 @@ void door_update(u8 *moby) {
     typedef u32 quadword __attribute__((mode(TI), aligned(16)));
 
     if (moby[0xb0] != 0xff && visited52[moby[0xb0] + current_level_index * 16] == 0xff)
-        *(s32 *)(data + 0x10) = -1;
+        *(s32 *)(door_data + 0x10) = -1;
 
     state = moby[0x20];
     switch (state) {
     case DOOR_INITIALIZE:
-        qcopy(data, moby + 0x10);
-        if (*(s32 *)(data + 0x38) != -1)
-            D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
+        qcopy(door_data, moby + 0x10);
+        if (*(s32 *)(door_data + 0x38) != -1)
+            D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
         moby[0x20] = 1;
-        *(s32 *)(data + 0x0c) = 0;
+        *(s32 *)(door_data + 0x0c) = 0;
         return;
     case DOOR_WAIT_TO_MOVE_TO_OFFSET_POSITION:
-        if (*(s32 *)(data + 0x38) != -1)
-            D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
-        if (*(s32 *)(data + 0x10) != -1) {
-            other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
+        if (*(s32 *)(door_data + 0x38) != -1)
+            D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
+        if (*(s32 *)(door_data + 0x10) != -1) {
+            other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] != *(u32 *)(data + 0x14))
+                other[0x20] != *(u32 *)(door_data + 0x14))
                 return;
         }
         *(quadword *)(vectors + 4) = 0;
-        vectors[4] = *(f32 *)(data + 0x1c);
-        vectors[5] = *(f32 *)(data + 0x20);
-        vectors[6] = *(f32 *)(data + 0x24);
+        vectors[4] = *(f32 *)(door_data + 0x1c);
+        vectors[5] = *(f32 *)(door_data + 0x20);
+        vectors[6] = *(f32 *)(door_data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        *(f32 *)(data + 0x0c) = fast_vec_length(vectors);
-        if (*(s32 *)(data + 0x30) != -1)
-            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
+        *(f32 *)(door_data + 0x0c) = fast_vec_length(vectors);
+        if (*(s32 *)(door_data + 0x30) != -1)
+            allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
         moby[0x20] = 2;
         return;
     case DOOR_MOVE_TO_OFFSET_POSITION:
-        if (*(s32 *)(data + 0x38) != -1)
-            D_L07_00184528[*(s32 *)(data + 0x38)] = 1;
-        if (*(s32 *)(data + 0x10) != -1) {
-            other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
+        if (*(s32 *)(door_data + 0x38) != -1)
+            D_L07_00184528[*(s32 *)(door_data + 0x38)] = 1;
+        if (*(s32 *)(door_data + 0x10) != -1) {
+            other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] == *(u32 *)(data + 0x18)) {
-                if (*(s32 *)(data + 0x30) != -1)
-                    allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
+                other[0x20] == *(u32 *)(door_data + 0x18)) {
+                if (*(s32 *)(door_data + 0x30) != -1)
+                    allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
                 moby[0x20] = 4;
                 return;
             }
         }
         *(quadword *)(vectors + 4) = 0;
-        vectors[4] = *(f32 *)(data + 0x1c);
-        vectors[5] = *(f32 *)(data + 0x20);
-        vectors[6] = *(f32 *)(data + 0x24);
+        vectors[4] = *(f32 *)(door_data + 0x1c);
+        vectors[5] = *(f32 *)(door_data + 0x20);
+        vectors[6] = *(f32 *)(door_data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         transform_vector_by_basis(vectors, vectors, moby + 0xc0);
-        fast_vec_normalize(vectors + 4, vectors, *(f32 *)(data + 0x28) * frame_time);
+        fast_vec_normalize(vectors + 4, vectors, *(f32 *)(door_data + 0x28) * frame_time);
         fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
-        *(f32 *)(data + 0x0c) -= *(f32 *)(data + 0x28) * frame_time;
-        if (!(*(f32 *)(data + 0x0c) < 0.0f))
+        *(f32 *)(door_data + 0x0c) -= *(f32 *)(door_data + 0x28) * frame_time;
+        if (!(*(f32 *)(door_data + 0x0c) < 0.0f))
             return;
-        fast_vec_add(moby + 0x10, data, vectors);
-        *(f32 *)(data + 0x0c) = 0.0f;
+        fast_vec_add(moby + 0x10, door_data, vectors);
+        *(f32 *)(door_data + 0x0c) = 0.0f;
         moby[0x20] = 3;
-        if (*(s32 *)(data + 0x34) != -1)
-            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
+        if (*(s32 *)(door_data + 0x34) != -1)
+            allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
         return;
     case DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION:
-        if (*(s32 *)(data + 0x38) != -1)
-            D_L07_00184528[*(s32 *)(data + 0x38)] = 1;
-        if (*(s32 *)(data + 0x10) == -1)
+        if (*(s32 *)(door_data + 0x38) != -1)
+            D_L07_00184528[*(s32 *)(door_data + 0x38)] = 1;
+        if (*(s32 *)(door_data + 0x10) == -1)
             return;
-        other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
+        other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
         if (other == 0 || other[0x20] == 0xfe || other[0x20] == 0xfd ||
-            other[0x20] != *(u32 *)(data + 0x18))
+            other[0x20] != *(u32 *)(door_data + 0x18))
             return;
-        *(s32 *)(data + 0x0c) = 0;
-        if (*(s32 *)(data + 0x30) != -1)
-            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
+        *(s32 *)(door_data + 0x0c) = 0;
+        if (*(s32 *)(door_data + 0x30) != -1)
+            allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
         moby[0x20] = 4;
         return;
     case DOOR_RETURN_TO_INITIAL_POSITION:
-        if (*(s32 *)(data + 0x38) != -1)
-            D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
-        if (*(s32 *)(data + 0x10) == -1 ||
-            (other = level_mobys + *(s32 *)(data + 0x10) * 0x100) == 0 || other[0x20] == 0xfe ||
-            other[0x20] == 0xfd || other[0x20] == *(u32 *)(data + 0x14)) {
-            if (*(s32 *)(data + 0x30) != -1)
-                allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
+        if (*(s32 *)(door_data + 0x38) != -1)
+            D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
+        if (*(s32 *)(door_data + 0x10) == -1 ||
+            (other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100) == 0 || other[0x20] == 0xfe ||
+            other[0x20] == 0xfd || other[0x20] == *(u32 *)(door_data + 0x14)) {
+            if (*(s32 *)(door_data + 0x30) != -1)
+                allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
             moby[0x20] = 2;
         } else {
             *(quadword *)(vectors + 4) = 0;
-            vectors[4] = *(f32 *)(data + 0x1c);
-            vectors[5] = *(f32 *)(data + 0x20);
-            vectors[6] = *(f32 *)(data + 0x24);
+            vectors[4] = *(f32 *)(door_data + 0x1c);
+            vectors[5] = *(f32 *)(door_data + 0x20);
+            vectors[6] = *(f32 *)(door_data + 0x24);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
             distance = fast_vec_length(vectors);
-            fast_vec_normalize(vectors, vectors, -(*(f32 *)(data + 0x2c) * frame_time));
+            fast_vec_normalize(vectors, vectors, -(*(f32 *)(door_data + 0x2c) * frame_time));
             transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
             fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
-            *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * frame_time;
-            if (!(distance < *(f32 *)(data + 0x0c)))
+            *(f32 *)(door_data + 0x0c) += *(f32 *)(door_data + 0x2c) * frame_time;
+            if (!(distance < *(f32 *)(door_data + 0x0c)))
                 return;
-            qcopy(moby + 0x10, data);
-            if (*(s32 *)(data + 0x30) != -1)
-                allocate_voice_for_target_entry(*(s32 *)(data + 0x34), 0, moby);
-            if (*(s32 *)(data + 0x38) != -1)
-                D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
+            qcopy(moby + 0x10, door_data);
+            if (*(s32 *)(door_data + 0x30) != -1)
+                allocate_voice_for_target_entry(*(s32 *)(door_data + 0x34), 0, moby);
+            if (*(s32 *)(door_data + 0x38) != -1)
+                D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
             moby[0x20] = 1;
         }
         break;
