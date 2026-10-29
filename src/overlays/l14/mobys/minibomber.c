@@ -1060,18 +1060,18 @@ void initialize_minibomber_path_retrace(struct Moby *moby) {
 void hide_minibomber_and_release_voice(struct Moby *moby) __asm__("FUN_L14_002b5c98");
 
 void hide_minibomber_and_release_voice(struct Moby *moby) {
-    u8 *data = ((u8 *)moby->pvars);
+    u8 *minibomber_vars = ((u8 *)moby->pvars);
     s32 voice_slot_index;
     moby->flags |= 0x41;
     moby->collision = 0;
-    voice_slot_index = *(s32 *)(data + 0x108);
+    voice_slot_index = *(s32 *)(minibomber_vars + 0x108);
     if (voice_slot_index != -1) {
         u8 *voice_slot = (u8 *)&voice_pool + voice_slot_index * 0x70;
         if (*(u8 **)(voice_slot + 0x88) == moby && *(u8 *)(voice_slot + 0x74) != 0) {
             release_voice_slot(voice_slot_index);
         }
     }
-    *(s32 *)(data + 0x108) = -1;
+    *(s32 *)(minibomber_vars + 0x108) = -1;
 }
 
 void initialize_minibomber_path_following(struct Moby *moby) __asm__("FUN_L14_002b5d18");
