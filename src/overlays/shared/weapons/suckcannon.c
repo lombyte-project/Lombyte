@@ -1417,7 +1417,7 @@ void suckcannon_update(SuckMoby *self) {
         SUCKCANNON_STATE_LOADED_AIM = 4,
         SUCKCANNON_STATE_FIRE_STORED_MOBY = 5
     };
-    SuckWork    work;
+    SuckWork    aim_and_fire_scratch;
     SuckCannon *cannon;
     SuckStats  *stats;
     int         slot_released, i, sound, next_state;
@@ -1568,14 +1568,14 @@ void suckcannon_update(SuckMoby *self) {
             LevelCamera *camera = &l00_camera;
             SuckVec     *eye;
             SuckHit     *hit;
-            work.aim.velocity.q = 0;
-            work.aim.velocity.f.z = 50.0f;
-            copy_matrix3x4(&work.aim.rotation, camera->unk0);
+            aim_and_fire_scratch.aim.velocity.q = 0;
+            aim_and_fire_scratch.aim.velocity.f.z = 50.0f;
+            copy_matrix3x4(&aim_and_fire_scratch.aim.rotation, camera->unk0);
             eye = (SuckVec *)&camera->pos;
-            transpose_rotation_matrix(&work.aim.inverse, &work.aim.rotation);
-            transform_vector(&work.aim.velocity, &work.aim.velocity, &work.aim.inverse);
-            fast_vec_add(&work.aim.end, eye, &work.aim.velocity);
-            if (collision_segment_hits(eye, &work.aim.end, 0, (int)self, 0)) {
+            transpose_rotation_matrix(&aim_and_fire_scratch.aim.inverse, &aim_and_fire_scratch.aim.rotation);
+            transform_vector(&aim_and_fire_scratch.aim.velocity, &aim_and_fire_scratch.aim.velocity, &aim_and_fire_scratch.aim.inverse);
+            fast_vec_add(&aim_and_fire_scratch.aim.end, eye, &aim_and_fire_scratch.aim.velocity);
+            if (collision_segment_hits(eye, &aim_and_fire_scratch.aim.end, 0, (int)self, 0)) {
                 hit = (SuckHit *)D_L00_00173E40_lui;
                 if (hit->moby && (hit->moby->flags & 0x1000)) {
                     cannon->target = hit->moby;
@@ -1584,8 +1584,8 @@ void suckcannon_update(SuckMoby *self) {
                 }
             }
             if (cannon->target && !cannon->cooldown) {
-                qcopy(&work.aim.point, &cannon->target->pos);
-                work.aim.point.f.z += cannon->target_height;
+                qcopy(&aim_and_fire_scratch.aim.point, &cannon->target->pos);
+                aim_and_fire_scratch.aim.point.f.z += cannon->target_height;
                 suck_draw_reticle((int)self, 0xFF0FFF0F, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
             } else {
                 suck_draw_reticle((int)self, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
@@ -1631,61 +1631,61 @@ void suckcannon_update(SuckMoby *self) {
         if (stored) {
             SuckMoby *best, *candidate_target;
             float     yaw, pitch, limit;
-            work.fire.velocity.q = 0;
-            copy_matrix3x4(&work.fire.rotation, l00_camera.unk0);
-            transpose_rotation_matrix(&work.fire.inverse, &work.fire.rotation);
+            aim_and_fire_scratch.fire.velocity.q = 0;
+            copy_matrix3x4(&aim_and_fire_scratch.fire.rotation, l00_camera.unk0);
+            transpose_rotation_matrix(&aim_and_fire_scratch.fire.inverse, &aim_and_fire_scratch.fire.rotation);
             if (((SuckHero *)&hero)->state == 30 && (((SuckHero *)&hero)->moby->flags & 1)) {
-                work.fire.offset.q = 0;
-                work.fire.offset.f.z = frame_scale * 0.4462f;
-                work.fire.point.q = work.fire.offset.q;
-                transform_vector(&work.fire.velocity, &work.fire.point, &work.fire.inverse);
-                work.fire.offset.q = 0;
-                work.fire.offset.f.x = 0.15f;
-                work.fire.offset.f.y = 0.3f;
-                work.fire.offset.f.z = 1.0f;
-                transform_vector(&work.fire.launch, &work.fire.offset, &work.fire.inverse);
-                fast_vec_add(&work.fire.launch, &work.fire.launch, &l00_camera.pos);
+                aim_and_fire_scratch.fire.offset.q = 0;
+                aim_and_fire_scratch.fire.offset.f.z = frame_scale * 0.4462f;
+                aim_and_fire_scratch.fire.point.q = aim_and_fire_scratch.fire.offset.q;
+                transform_vector(&aim_and_fire_scratch.fire.velocity, &aim_and_fire_scratch.fire.point, &aim_and_fire_scratch.fire.inverse);
+                aim_and_fire_scratch.fire.offset.q = 0;
+                aim_and_fire_scratch.fire.offset.f.x = 0.15f;
+                aim_and_fire_scratch.fire.offset.f.y = 0.3f;
+                aim_and_fire_scratch.fire.offset.f.z = 1.0f;
+                transform_vector(&aim_and_fire_scratch.fire.launch, &aim_and_fire_scratch.fire.offset, &aim_and_fire_scratch.fire.inverse);
+                fast_vec_add(&aim_and_fire_scratch.fire.launch, &aim_and_fire_scratch.fire.launch, &l00_camera.pos);
             } else {
-                work.fire.offset.q = 0;
-                work.fire.offset.f.x = frame_scale * 0.4462f;
-                work.fire.point.q = work.fire.offset.q;
+                aim_and_fire_scratch.fire.offset.q = 0;
+                aim_and_fire_scratch.fire.offset.f.x = frame_scale * 0.4462f;
+                aim_and_fire_scratch.fire.point.q = aim_and_fire_scratch.fire.offset.q;
                 transform_vector_by_basis(
-                    &work.fire.velocity, &work.fire.point, &((SuckHero *)&hero)->basis);
-                FUN_L00_0024f7c8(self, 0, &work.fire.launch);
+                    &aim_and_fire_scratch.fire.velocity, &aim_and_fire_scratch.fire.point, &((SuckHero *)&hero)->basis);
+                FUN_L00_0024f7c8(self, 0, &aim_and_fire_scratch.fire.launch);
             }
-            qcopy(&stored->pos, &work.fire.launch);
+            qcopy(&stored->pos, &aim_and_fire_scratch.fire.launch);
             refresh_moby_spatial_bounds_from_basis(stored);
             fast_vec_add(
-                &work.fire.velocity, &work.fire.velocity, &((SuckHero *)&hero)->displacement);
+                &aim_and_fire_scratch.fire.velocity, &aim_and_fire_scratch.fire.velocity, &((SuckHero *)&hero)->displacement);
             if (((SuckHero *)&hero)->state != 30 || !(((SuckHero *)&hero)->moby->flags & 1)) {
                 limit = 10000.0f;
                 best = 0;
                 if (((SuckHero *)&hero)->aim_locked)
                     yaw = ((SuckHero *)&hero)->aim_yaw;
                 else
-                    yaw = fast_arc_tan(work.fire.velocity.f.x, work.fire.velocity.f.y);
+                    yaw = fast_arc_tan(aim_and_fire_scratch.fire.velocity.f.x, aim_and_fire_scratch.fire.velocity.f.y);
                 pitch =
-                    -fast_arc_tan(vector_length_xy(&work.fire.velocity), work.fire.velocity.f.z);
+                    -fast_arc_tan(vector_length_xy(&aim_and_fire_scratch.fire.velocity), aim_and_fire_scratch.fire.velocity.f.z);
                 candidate_target = suck_moby_list;
                 while (candidate_target) {
                     if (candidate_target->state >= 0 && candidate_target != stored) {
                         float          tyaw, tpitch, dyaw, distance, offangle;
                         SuckAimHeight *candidate_aim_height;
-                        qcopy(&work.fire.point, &candidate_target->pos);
+                        qcopy(&aim_and_fire_scratch.fire.point, &candidate_target->pos);
                         candidate_aim_height = get_moby_target_info(candidate_target);
                         if (candidate_aim_height)
-                            work.fire.point.f.z += candidate_aim_height->height;
+                            aim_and_fire_scratch.fire.point.f.z += candidate_aim_height->height;
                         else
-                            work.fire.point.f.z += 0.5f;
+                            aim_and_fire_scratch.fire.point.f.z += 0.5f;
                         if ((candidate_target->flags & 0x1000) && candidate_target &&
                             candidate_target->cls && candidate_target->cls->category == 5) {
-                            tyaw = fast_arc_tan(work.fire.point.f.x - work.fire.launch.f.x,
-                                                work.fire.point.f.y - work.fire.launch.f.y);
+                            tyaw = fast_arc_tan(aim_and_fire_scratch.fire.point.f.x - aim_and_fire_scratch.fire.launch.f.x,
+                                                aim_and_fire_scratch.fire.point.f.y - aim_and_fire_scratch.fire.launch.f.y);
                             tpitch = fast_arc_tan(
-                                vector_distance_xy(&work.fire.launch, &work.fire.point),
-                                work.fire.point.f.z - work.fire.launch.f.z);
+                                vector_distance_xy(&aim_and_fire_scratch.fire.launch, &aim_and_fire_scratch.fire.point),
+                                aim_and_fire_scratch.fire.point.f.z - aim_and_fire_scratch.fire.launch.f.z);
                             dyaw = fast_difference_between_rotations(yaw, tyaw);
-                            distance = fast_vec_dist(&work.fire.launch, &work.fire.point);
+                            distance = fast_vec_dist(&aim_and_fire_scratch.fire.launch, &aim_and_fire_scratch.fire.point);
                             if (distance < 2.5f &&
                                 fast_difference_between_rotations(
                                     ((SuckHero *)&hero)->yaw,
@@ -1699,10 +1699,10 @@ void suckcannon_update(SuckMoby *self) {
                             }
                             if (!(limit < distance)) {
                                 float delta;
-                                build_spherical_offset(&work.fire.offset, distance, yaw, pitch);
+                                build_spherical_offset(&aim_and_fire_scratch.fire.offset, distance, yaw, pitch);
                                 fast_vec_add(
-                                    &work.fire.offset, &work.fire.offset, &work.fire.launch);
-                                delta = fast_vec_dist(&work.fire.offset, &work.fire.point);
+                                    &aim_and_fire_scratch.fire.offset, &aim_and_fire_scratch.fire.offset, &aim_and_fire_scratch.fire.launch);
+                                delta = fast_vec_dist(&aim_and_fire_scratch.fire.offset, &aim_and_fire_scratch.fire.point);
                                 offangle =
                                     1.5707964f -
                                     fast_arc_sin(1.0f - delta * delta /
@@ -1718,7 +1718,7 @@ void suckcannon_update(SuckMoby *self) {
                                 }
                                 if (offangle < 0.4537856f) {
                                     if (collision_segment_hits(
-                                            D_L00_00166DC0, &work.fire.point, 6, (int)self, 0))
+                                            D_L00_00166DC0, &aim_and_fire_scratch.fire.point, 6, (int)self, 0))
                                         break;
                                     limit = distance;
                                     pitch = -tpitch;
@@ -1738,7 +1738,7 @@ void suckcannon_update(SuckMoby *self) {
             compose_moby_rotation_with_euler_offset((char *)self, (char *)stored, suck_fire_tuning);
             if (stored->cls->handlers->fire)
                 stored->cls->handlers->fire(
-                    stored, &work.fire.velocity, cannon->target, cannon->target_height);
+                    stored, &aim_and_fire_scratch.fire.velocity, cannon->target, cannon->target_height);
             ((SuckHero *)&hero)->count--;
             if (((SuckHero *)&hero)->count > 0) {
                 ((SuckHero *)&hero)->firing = 0;
