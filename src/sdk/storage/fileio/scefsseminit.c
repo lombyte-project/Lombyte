@@ -6,12 +6,12 @@
 extern s32 CreateSema();
 
 void _sceFsSemInit(void) {
-    struct SemaParam args;
+    struct SemaParam file_call_semaphore_config;
 
     if (fio_wait_sema == -1) {
-        args.option = 0;
-        args.initCount = 1;
-        args.maxCount = 1;
-        fio_wait_sema = CreateSema(&args);
+        file_call_semaphore_config.option = 0;
+        file_call_semaphore_config.initCount = 1;
+        file_call_semaphore_config.maxCount = 1;
+        fio_wait_sema = CreateSema(&file_call_semaphore_config);
     }
 }
