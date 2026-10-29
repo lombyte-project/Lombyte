@@ -21,7 +21,7 @@ int rig_probe_setup(char         *moby,
                     float        *distance) __asm__("FUN_L01_00263a28");
 int rig_probe_setup(
 
-    char *moby, int index, unsigned int *type, float *result, float *radius, float *distance) {
+    char *moby, int index, unsigned int *type, float *probe_position, float *radius, float *distance) {
     char         *entry;
     float         scale;
     u128          matrix[4];
@@ -39,11 +39,11 @@ int rig_probe_setup(
     euler_rotation_matrix(matrix, moby + 0x40);
 
     if (*type < 2 || *type == 3) {
-        qcopy(result, entry + 0x10);
-        fast_vec_scale(result, result, scale);
-        transform_vector(result, result, matrix);
-        fast_vec_add(result, result, moby + 0x10);
-        *radius = result[3] * scale;
+        qcopy(probe_position, entry + 0x10);
+        fast_vec_scale(probe_position, probe_position, scale);
+        transform_vector(probe_position, probe_position, matrix);
+        fast_vec_add(probe_position, probe_position, moby + 0x10);
+        *radius = probe_position[3] * scale;
         if (*type < 2) {
             *distance = 0.0f;
         } else {
@@ -55,10 +55,10 @@ int rig_probe_setup(
         if (joint != 0) {
             compute_moby_joint_matrices(moby, joint, 0);
         }
-        qcopy(result, (void *)(JOINT_POSITIONS + *(int *)(entry + 4) * 0x10));
-        fast_vec_scale(result, result, scale);
-        transform_vector(result, result, matrix);
-        fast_vec_add(result, result, moby + 0x10);
+        qcopy(probe_position, (void *)(JOINT_POSITIONS + *(int *)(entry + 4) * 0x10));
+        fast_vec_scale(probe_position, probe_position, scale);
+        transform_vector(probe_position, probe_position, matrix);
+        fast_vec_add(probe_position, probe_position, moby + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
         *distance = 0.0f;
         return 1;
@@ -71,12 +71,12 @@ int rig_probe_setup(
         scale_vector(scale, first, (void *)(JOINT_POSITIONS + joints[0] * 0x10));
         scale_vector(scale, second, (void *)(JOINT_POSITIONS + joints[1] * 0x10));
         if (first[2] < second[2]) {
-            qcopy(result, first);
+            qcopy(probe_position, first);
         } else {
-            qcopy(result, second);
+            qcopy(probe_position, second);
         }
-        transform_vector(result, result, matrix);
-        fast_vec_add(result, result, moby + 0x10);
+        transform_vector(probe_position, probe_position, matrix);
+        fast_vec_add(probe_position, probe_position, moby + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
         fast_vec_sub(second, second, first);
         *distance = fast_vec_length(second);
