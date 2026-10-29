@@ -90,7 +90,7 @@ unsigned char *spawn_glow_particle(void *owner,
     moby = create_moby(0x70);
     if (moby) {
         Q_2ac910  rot_copy, random_initial_rotation;
-        V_2ac910 *data = ((V_2ac910 *)MOBY(moby)->pvars);
+        V_2ac910 *glow_particle_data = ((V_2ac910 *)MOBY(moby)->pvars);
         float     elapsed;
         random_initial_rotation.q = 0;
         random_initial_rotation.f[0] = random_float_between(-3.1415927f, 3.1415927f);
@@ -103,17 +103,17 @@ unsigned char *spawn_glow_particle(void *owner,
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         set_moby_color(moby, red, green, blue);
-        data->f18 = MOBY(moby)->scale * scale;
+        glow_particle_data->f18 = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2C) = 0;
-        data->o = owner;
+        glow_particle_data->o = owner;
         qcopy(moby + 0x10, spawn_position);
-        qcopy(data, initial_velocity);
+        qcopy(glow_particle_data, initial_velocity);
         qcopy(moby + 0x40, &rot_copy);
-        data->n = lifetime;
-        data->h1c = *(unsigned short *)&data->n - FUN_001f96f8_2ac910(4);
-        elapsed = convert_integer_to_float(data->n - data->h1c);
-        MOBY(moby)->scale = elapsed * data->f18 / convert_integer_to_float(data->n);
-        data->h1e = alpha;
+        glow_particle_data->n = lifetime;
+        glow_particle_data->h1c = *(unsigned short *)&glow_particle_data->n - FUN_001f96f8_2ac910(4);
+        elapsed = convert_integer_to_float(glow_particle_data->n - glow_particle_data->h1c);
+        MOBY(moby)->scale = elapsed * glow_particle_data->f18 / convert_integer_to_float(glow_particle_data->n);
+        glow_particle_data->h1e = alpha;
         update_entity(moby);
     }
     return moby;
