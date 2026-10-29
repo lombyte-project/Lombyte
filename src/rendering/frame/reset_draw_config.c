@@ -4,14 +4,14 @@
 void reset_draw_config(void) {
     s32 *entry;
     s32  remaining;
-    s32  value;
+    s32  entry_fill_value;
 
     entry = (s32 *)&draw_config;
-    value = 1;
+    entry_fill_value = 1;
     remaining = 0x13;
     entry = (s32 *)((u8 *)entry + 0x4C);
     do {
-        *entry = value;
+        *entry = entry_fill_value;
         remaining -= 1;
         entry -= 1;
     } while (remaining >= 0);
