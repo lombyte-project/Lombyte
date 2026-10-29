@@ -37,21 +37,21 @@ extern int  FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 
 void update_plasmabot_target(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    int  *target_filter_record = ((int *)l14_paths[*(int *)(data + 0x244)]);
+    char *plasmabot_private_vars = ((char *)MOBY(moby)->pvars);
+    int  *target_filter_record = ((int *)l14_paths[*(int *)(plasmabot_private_vars + 0x244)]);
     if (FUN_L00_0025ff38(moby,
-                         data + 0xD0,
-                         *(float *)(data + 0x234),
+                         plasmabot_private_vars + 0xD0,
+                         *(float *)(plasmabot_private_vars + 0x234),
                          0,
                          0,
                          target_filter_record + 4,
                          *target_filter_record) != 2) {
-        if (*(float *)(data + 0x234) < vector_distance_xy(moby + 0x10, data + 0xD0)) {
-            *(int *)(data + 0x114) = 2;
+        if (*(float *)(plasmabot_private_vars + 0x234) < vector_distance_xy(moby + 0x10, plasmabot_private_vars + 0xD0)) {
+            *(int *)(plasmabot_private_vars + 0x114) = 2;
         }
     }
-    if (*(int *)(data + 0x110) == 0) {
-        *(int *)(data + 0x110) = *(int *)(D_0013E533 + 0x2E9D);
+    if (*(int *)(plasmabot_private_vars + 0x110) == 0) {
+        *(int *)(plasmabot_private_vars + 0x110) = *(int *)(D_0013E533 + 0x2E9D);
     }
 }
 
