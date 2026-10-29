@@ -1028,7 +1028,7 @@ int          D_L13_00161EEC = 24;
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
 
 void spawn_point_table_sparks(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *point_table_state = (char *)moby->pvars;
     int   i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
         float first_vector_angle_radians, second_vector_angle_radians;
@@ -1038,8 +1038,8 @@ void spawn_point_table_sparks(struct Moby *moby) {
         char *source_point_position;
         int   source_point_byte_offset = i * 16;
         next_point_index = i + 1;
-        if (*(float *)(data + source_point_byte_offset + 0x21c) < 0.99f &&
-            *(float *)(data - (-(next_point_index * 16)) + 0x21c) < 0.99f) {
+        if (*(float *)(point_table_state + source_point_byte_offset + 0x21c) < 0.99f &&
+            *(float *)(point_table_state - (-(next_point_index * 16)) + 0x21c) < 0.99f) {
             continue;
         }
         if (*(float *)&point_spark_spawn_random_threshold < random_float_between(0.0f, 1.0f)) {
@@ -1078,7 +1078,7 @@ void spawn_point_table_sparks(struct Moby *moby) {
         first_vector[3] = *(float *)&point_spark_first_vector_w;
         fast_vec_scale(second_vector, second_vector, 1.0f / (float)third_frame_count);
         second_vector[3] = *(float *)&point_spark_second_vector_w;
-        source_point_position = data + (source_point_byte_offset + 0x210);
+        source_point_position = point_table_state + (source_point_byte_offset + 0x210);
         lerp_vector(spawn_position,
                     source_point_position,
                     source_point_position,
