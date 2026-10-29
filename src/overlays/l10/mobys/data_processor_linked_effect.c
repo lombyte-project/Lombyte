@@ -170,9 +170,9 @@ extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 
 void render_data_processor_linked_effect(u8 *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
-    char  scratch[(unsigned int)*(int *)(data + 4) * 0x40];
+    char *linked_effect_render_vars = ((char *)MOBY(moby)->pvars);
+    char *base = *(char **)((*(int *)(linked_effect_render_vars + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
+    char  scratch[(unsigned int)*(int *)(linked_effect_render_vars + 4) * 0x40];
     struct {
         unsigned char vertices[0x50];
         float         matrix1[16];
@@ -203,21 +203,21 @@ void render_data_processor_linked_effect(u8 *moby) {
         else
             fade = 1.0f;
     }
-    set_scale_matrix(buffers.rotation, *(float *)data * 0.5f);
+    set_scale_matrix(buffers.rotation, *(float *)linked_effect_render_vars * 0.5f);
     matrix1 = buffers.matrix1;
     matrix2 = buffers.packet.fields.matrix2;
     uv1 = matrix1 + 1;
     uv2 = matrix2 + 1;
     {
         int transform_index;
-        for (transform_index = 0; transform_index < *(int *)(data + 4); transform_index++) {
+        for (transform_index = 0; transform_index < *(int *)(linked_effect_render_vars + 4); transform_index++) {
             rotation_matrix(scratch + transform_index * 0x40, moby + 0x40);
             multiply_matrix(scratch + transform_index * 0x40,
                             scratch + transform_index * 0x40,
                             buffers.rotation);
             *(u128_c *)(scratch + transform_index * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
             *(float *)(scratch + transform_index * 0x40 + 0x38) +=
-                convert_integer_to_float(transform_index + 1) * *(float *)(data + 8);
+                convert_integer_to_float(transform_index + 1) * *(float *)(linked_effect_render_vars + 8);
         }
     }
     {
@@ -257,12 +257,12 @@ void render_data_processor_linked_effect(u8 *moby) {
                 matrix1[j * 2] = matrix2[j * 2] = data_processor_linked_effect_base_uvs[j * 2] +
                                                   phase + *(float *)(base + 0x12de0);
             }
-            for (i = 0; i < *(int *)(data + 4); i = next) {
+            for (i = 0; i < *(int *)(linked_effect_render_vars + 4); i = next) {
                 int          offset;
                 int          age;
                 float        progress;
                 unsigned int color;
-                order = (unsigned char *)(data + 0x10);
+                order = (unsigned char *)(linked_effect_render_vars + 0x10);
                 group_age = group * 0x78;
                 age_base = base + 0x10000;
                 ages = age_base + 0x2c00;
@@ -283,7 +283,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     (truncate_float_to_s32(fade * fade * convert_integer_to_float((int)color >> 24))
                      << 24);
                 if (moby[0x20] == 2) {
-                    float alpha = convert_integer_to_float(*(int *)(data + 0x34));
+                    float alpha = convert_integer_to_float(*(int *)(linked_effect_render_vars + 0x34));
                     float duration =
                         scale_time(data_processor_linked_effect_fade_duration_seconds_gp * 60.0f);
                     color = (truncate_float_to_s32(alpha * 255.0f / duration) << 24) | 0xffffff;
