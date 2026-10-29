@@ -622,7 +622,7 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
 }
 
 void draw_scoutbot_glow_quad(struct Moby *moby) {
-    char   *data = ((char *)moby->pvars);
+    char   *scoutbot_private_state = ((char *)moby->pvars);
     Pk      pk;
     float   up[4];
     float   M[4][4];
@@ -646,7 +646,7 @@ void draw_scoutbot_glow_quad(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    qcopy(M[3], (float *)(data + 0x220));
+    qcopy(M[3], (float *)(scoutbot_private_state + 0x220));
     fast_vec_sub(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);
