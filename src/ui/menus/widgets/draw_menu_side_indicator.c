@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222FA8). */
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern void func_001F68E8_c(int, int, long, void *, int) __asm__("func_001F6530");
+extern void font_print_large(int, int, long, void *, int) __asm__("func_001F6530");
 extern int get_icon_frame(int, int) __asm__("func_001FF960");
 typedef struct {
     char c[2];
@@ -22,13 +22,13 @@ int draw_menu_side_indicator(char *menu) {
     setup_gif_paging(0);
     if (*(int *)(menu + 0x38) != 0) {
         indicator_glyph_string = *(Glyph2 *)menu_side_indicator_set_glyph_string;
-        func_001F68E8_c(4, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L, &indicator_glyph_string, -1);
+        font_print_large(4, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L, &indicator_glyph_string, -1);
         draw_rotated_sprite(640.0f, (float)(*(int *)(menu + 0x24) << 3), 0x20, 0x10,
                             get_frame_texture(get_icon_frame(0xE99E, 6)), 128.0f,
                             256.0f, 0.0f);
     } else {
         indicator_glyph_string = *(Glyph2 *)menu_side_indicator_clear_glyph_string;
-        func_001F68E8_c(*(int *)(menu + 0x20) - 0x18, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L,
+        font_print_large(*(int *)(menu + 0x20) - 0x18, *(int *)(menu + 0x24) / 2 - 8, 0x80FFA888L,
                         &indicator_glyph_string, -1);
         draw_rotated_sprite(192.0f, (float)(*(int *)(menu + 0x24) << 3), 0x20, 0x10,
                             get_frame_texture(get_icon_frame(0xE99E, 6)), 128.0f,

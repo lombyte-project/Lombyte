@@ -76,8 +76,8 @@ struct TransferState {
 
 extern struct TransferState D_0018CB20_lui __asm__("D_0018CB20") NOT_SDA;
 extern int cutscene_moby_ids_by_content_variant[] __asm__("D_00160488");
-extern int func_0020C468_2(int, int) __asm__("FUN_0020b618");
-extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern int decompress_wad(int, int) __asm__("FUN_0020b618");
+extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 void update_world_object_animation(void *unused_arg) __asm__("FUN_00204790");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
@@ -95,7 +95,7 @@ void update_world_object_animation(void *unused_arg) {
     int pc;
 
     FlushCache(0);
-    func_0020C468_2(D_0018CB20_lui.unk5C, (int)D_0018CB20_lui.rec);
+    decompress_wad(D_0018CB20_lui.unk5C, (int)D_0018CB20_lui.rec);
     FlushCache(0);
 
     rec = D_0018CB20_lui.rec;
@@ -124,7 +124,7 @@ void update_world_object_animation(void *unused_arg) {
         }
         mob = D_0018CB20_lui.slots[i];
         if (mob == 0) {
-            mob = func_0020D348_m(id);
+            mob = create_moby(id);
             idx = mob->parts->used;
             mob->parts->used = idx + 1;
             mob->idx = idx;

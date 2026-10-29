@@ -15,7 +15,7 @@ extern char camera_rows[] __asm__("D_00187290");
 
 extern f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void derive_camera_orbit_parameters(f32 *, void *, void *, void *, void *,
+extern void compute_camera_angles(f32 *, void *, void *, void *, void *,
                                            void *) __asm__("func_001EC530");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -71,7 +71,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
         qcopy(&forward_axis, transition_state + 8);
         qcopy(&vertical_axis, transition_state + 12);
         fast_vec_cross(&horizontal_axis, &forward_axis, &vertical_axis);
-        derive_camera_orbit_parameters(orbit_angles.v, target_camera + 0x30, &focus_position,
+        compute_camera_angles(orbit_angles.v, target_camera + 0x30, &focus_position,
                                        &forward_axis, &horizontal_axis, &vertical_axis);
     } else {
         qcopy(&focus_position, target_camera + 0x30);

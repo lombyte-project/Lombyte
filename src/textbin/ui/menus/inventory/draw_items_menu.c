@@ -19,7 +19,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 
 extern void font_print_right(s32, s32, u64, char *, s32) __asm__("FUN_001f6940");
 
-extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
+extern void font_print_right_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
 extern void font_print_window_regular(struct TextRegion *, u64, char *,
                                       s32) __asm__("func_001F7580");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -113,17 +113,17 @@ s32 draw_items_menu(ItemsMenu *menu) {
     font_print_right(0xC8, 0x54, 0x80FFA888L, get_help_message_text(0x4F51), -1);
     collected_count = count_nonzero_entries_up_to_40();
     sprintf(text_buffer, D_001602A0, collected_count);
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x1D), 0x80000000L,
+    font_print_right_large(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x1D), 0x80000000L,
                     text_buffer, -1);
-    font_print_left(0xF0, 0x1D, 0x80FFA888L, text_buffer, -1);
+    font_print_right_large(0xF0, 0x1D, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, count_nonzero_entries_up_to_10() * 4);
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x36), 0x80000000L,
+    font_print_right_large(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x36), 0x80000000L,
                     text_buffer, -1);
-    font_print_left(0xF0, 0x36, 0x80FFA888L, text_buffer, -1);
+    font_print_right_large(0xF0, 0x36, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, compute_clamped_count_difference());
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x54), 0x80000000L,
+    font_print_right_large(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x54), 0x80000000L,
                     text_buffer, -1);
-    font_print_left(0xF0, 0x54, 0x80FFA888L, text_buffer, -1);
+    font_print_right_large(0xF0, 0x54, 0x80FFA888L, text_buffer, -1);
     append_screen_rect_packet(add_offset(text_shadow_x, 0xD0), add_offset(text_shadow_y, 0x4D),
                               add_offset(text_shadow_x, 0xF2), add_offset(text_shadow_y, 0x50),
                               0x80000000L, 0);

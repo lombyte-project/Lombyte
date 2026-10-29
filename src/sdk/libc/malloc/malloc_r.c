@@ -7,8 +7,8 @@
 #include "rnc/data_labels.h"
 
 struct _reent;
-extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
-extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
+extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
+extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
 extern void malloc_extend_top(struct _reent *ptr, u32 nb);
 struct malloc_chunk;
 extern struct malloc_chunk malloc_split_remainder_bin_head __asm__("D_0012F790");
@@ -33,7 +33,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
     u32 nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
                  ? ((16 + (16 - 1)) & (~(16 - 1)))
                  : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
-    noop_core_utility(reent_context);
+    __malloc_lock(reent_context);
     if (nb < (512 - 8)) {
         bin_index = ((unsigned long)nb) >> 3;
         bin_cursor = (mbinptr)(((u8 *)(&D_0012F788[(2 * bin_index) + 2])) - (2 * 4));
@@ -48,7 +48,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
             };
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            noop_core_utility_secondary(reent_context);
+            __malloc_unlock(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
         bin_index += 2;
@@ -83,7 +83,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
                 };
                 ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
                 (void)0;
-                noop_core_utility_secondary(reent_context);
+                __malloc_unlock(reent_context);
                 return (void *)(((char *)victim) + (2 * 4));
             }
         }
@@ -103,14 +103,14 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
             remainder->size = remainder_size | 1;
             ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size = remainder_size;
             (void)0;
-            noop_core_utility_secondary(reent_context);
+            __malloc_unlock(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
         (&malloc_split_remainder_bin_head)->fd = ((&malloc_split_remainder_bin_head)->bk = &malloc_split_remainder_bin_head);
         if (remainder_size >= 0) {
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            noop_core_utility_secondary(reent_context);
+            __malloc_unlock(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
         {
@@ -193,7 +193,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
                         ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size =
                             remainder_size;
                         (void)0;
-                        noop_core_utility_secondary(reent_context);
+                        __malloc_unlock(reent_context);
                         return (void *)(((char *)victim) + (2 * 4));
                     } else if (remainder_size >= 0) {
                         ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
@@ -204,7 +204,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
                             bck->fd = fwd;
                         };
                         (void)0;
-                        noop_core_utility_secondary(reent_context);
+                        __malloc_unlock(reent_context);
                         return (void *)(((char *)victim) + (2 * 4));
                     }
                 }
@@ -260,7 +260,7 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
         if (((((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size & (~(1 | 0x2))) <
              nb) ||
             (remainder_size < ((long)16))) {
-            noop_core_utility_secondary(reent_context);
+            __malloc_unlock(reent_context);
             return 0;
         }
     }
@@ -271,6 +271,6 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
         (mchunkptr)(((char *)victim) + nb);
     ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size = remainder_size | 1;
     (void)0;
-    noop_core_utility_secondary(reent_context);
+    __malloc_unlock(reent_context);
     return (void *)(((char *)victim) + (2 * 4));
 }

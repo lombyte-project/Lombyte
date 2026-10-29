@@ -14,8 +14,8 @@
 
 struct _reent;
 
-extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
-extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
+extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
+extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
 extern s32 _malloc_trim_r(struct _reent *ptr, u32 pad);
 
 extern u64 D_0012FB90[]; /* trim_threshold */
@@ -111,7 +111,7 @@ void _free_r(struct _reent *reent_context, void *mem) {
     if (mem == 0)
         return;
 
-    noop_core_utility(reent_context);
+    __malloc_lock(reent_context);
 
     free_chunk = mem2chunk(mem);
     hd = free_chunk->size;
@@ -134,7 +134,7 @@ void _free_r(struct _reent *reent_context, void *mem) {
         top = free_chunk;
         if ((unsigned long)(sz) >= (unsigned long)trim_threshold)
             _malloc_trim_r(reent_context, top_pad);
-        noop_core_utility_secondary(reent_context);
+        __malloc_unlock(reent_context);
         return;
     }
 
@@ -168,5 +168,5 @@ void _free_r(struct _reent *reent_context, void *mem) {
     if (!islr)
         frontlink(free_chunk, sz, free_bin_index, bck, fwd);
 
-    noop_core_utility_secondary(reent_context);
+    __malloc_unlock(reent_context);
 }

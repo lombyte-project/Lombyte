@@ -12,7 +12,7 @@ struct CameraProbePosition {
 #include "rnc/gameplay/entities/resolve_camera_surface_height_globals.h"
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void set_vector_unit_z(s32) __asm__("FUN_001f9a00");
-extern f32 vector_distance(struct CameraProbePosition *, s32 *) __asm__("FUN_001f9b80");
+extern f32 vector_distance_xy(struct CameraProbePosition *, s32 *) __asm__("FUN_001f9b80");
 extern s32 sample_surface_height_map(f32 *, f32, f32, f32) __asm__("func_00239F58");
 
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
@@ -29,7 +29,7 @@ f32 resolve_camera_surface_height(struct CameraProbePosition *position, s32 opti
     }
     if (moby_occl_cluster_count != 0) {
         if (absolute_float(position->z - *(f32 *)0x1611A8) < 0.5f) {
-            if (vector_distance(position, &local_surface_region_center_x) < local_surface_region_radius) {
+            if (vector_distance_xy(position, &local_surface_region_center_x) < local_surface_region_radius) {
                 if (optional_output != 0) {
                     set_vector_unit_z(optional_output);
                 }

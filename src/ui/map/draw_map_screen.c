@@ -47,7 +47,7 @@ extern s32 acquire_menu_stream_buffer() __asm__("FUN_00225c18");
 extern s32 release_menu_stream_buffer() __asm__("FUN_00225cd8");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 extern s32 stash_receive_data() __asm__("FUN_00232f20");
-extern s32 func_0020B618_l() __asm__("FUN_0020b618");
+extern s32 decompress_wad() __asm__("FUN_0020b618");
 extern s64 register_8bit_texture() __asm__("func_00204E30");
 extern void load_map_chunk() __asm__("FUN_00207bb0");
 extern void FUN_0020b4a8();
@@ -139,7 +139,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                 slot = eviction_slot_index;
             }
         }
-        func_0020B618_l(level_map_selection.slot[slot], level_map_selection.hdr);
+        decompress_wad(level_map_selection.slot[slot], level_map_selection.hdr);
         hdr = level_map_selection.hdr;
         pix = (u8 *)hdr + hdr->unk8;
         pal = (u8 *)hdr + hdr->unkC;

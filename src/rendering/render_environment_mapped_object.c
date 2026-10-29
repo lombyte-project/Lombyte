@@ -58,7 +58,7 @@ extern float fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("func_001F9BF8");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern void calculate_object_transform(EnvironmentMappedObject *, int,
+extern void build_moby_bone_transform(EnvironmentMappedObject *, int,
                                        void *) __asm__("func_0020CCA8");
 
 void render_environment_mapped_object(EnvironmentMappedObject *object) __asm__("FUN_002327a0");
@@ -106,7 +106,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    calculate_object_transform(object, 0, object_transform);
+    build_moby_bone_transform(object, 0, object_transform);
     if (game_mode != 0 || (absolute_float(preview_camera.position_x - object->position_x) < 16.0f &&
                             absolute_float(preview_camera.position_y - object->position_y) < 16.0f)) {
         mapping_enabled = 1;
