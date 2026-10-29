@@ -445,8 +445,8 @@ void draw_sandmouse_billboard_quads(struct Moby *moby) {
 void update_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030ded0");
 
 void update_sandmouse_billboard_quads(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    char *entry = data + 0x70;
+    char *sandmouse_instance_variables = ((char *)moby->pvars);
+    char *entry = sandmouse_instance_variables + 0x70;
     int   i;
     for (i = 0; i < 2; i++) {
         moby_point_position(moby, i + 3, entry);
