@@ -79,6 +79,7 @@ void clear_twelve_bytes(s64 *destination) __asm__("FUN_L00_001ff250");
 
 void clear_twelve_bytes(s64 *destination) {
     destination[0] = 0;
+    /* Fakematch: retail has a nop between the two stores that no C form gives. */
     __asm__ volatile ("nop");
     ((s32 *)destination)[2] = 0;
 }
