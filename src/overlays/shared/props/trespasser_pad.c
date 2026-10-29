@@ -244,15 +244,15 @@ void tresspasser_pad_update(Moby *moby) {
         TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
     };
     Vec_2D9F08 camera_pos, camera_rot;
-    Data      *data = (struct Data *)moby->pvars;
+    Data      *pad_puzzle_state = (struct Data *)moby->pvars;
     int        i;
 
-    if (data == 0) {
+    if (pad_puzzle_state == 0) {
         return;
     }
     switch (moby->state) {
     case TRESSPASSER_PAD_STATE_INITIALIZE:
-        data->h12 = 0;
+        pad_puzzle_state->h12 = 0;
         moby->state = 1;
         D_L02_001D33B0[2][1] = 17.0f;
         D_L02_001D33B0[0][1] = 17.0f;
@@ -262,7 +262,7 @@ void tresspasser_pad_update(Moby *moby) {
         D_L02_001D33B0[3][0] = -17.0f;
         D_L02_001D33B0[3][1] = -17.0f;
         D_L02_001D33B0[0][0] = 17.0f;
-        D_L02_00161B1C_gp = data->iEC;
+        D_L02_00161B1C_gp = pad_puzzle_state->iEC;
         if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0 ||
                 (((int *)((char *)D_0014C190_257218 +
@@ -278,8 +278,8 @@ void tresspasser_pad_update(Moby *moby) {
             ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->air_frames.s == 0) {
             int holding_tool;
 
-            if (data->h12 == 0) {
-                data->h12 = 1;
+            if (pad_puzzle_state->h12 == 0) {
+                pad_puzzle_state->h12 = 1;
                 allocate_voice_for_target_entry(3, 0, moby);
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 &&
@@ -292,37 +292,37 @@ void tresspasser_pad_update(Moby *moby) {
             }
             if (holding_tool &&
                 ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->command != 0) {
-                data->h10 = scale_game_frames(0x12C);
-                data->h11C = 0;
-                data->h11E = 0;
+                pad_puzzle_state->h10 = scale_game_frames(0x12C);
+                pad_puzzle_state->h11C = 0;
+                pad_puzzle_state->h11E = 0;
                 hero_set_state(0x72, 0);
                 set_hero_animation(0x57, 0, scale_game_frames(6));
                 jet_mount(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
                 moby->state = 2;
-                data->h10 = scale_game_frames(0x3C);
-                data->f110 = 0.0f;
-                qcopy(&data->vF0, &D_L02_00167440_2D9F08[0]);
-                qcopy(&data->v100, &D_L02_00167440_2D9F08[1]);
+                pad_puzzle_state->h10 = scale_game_frames(0x3C);
+                pad_puzzle_state->f110 = 0.0f;
+                qcopy(&pad_puzzle_state->vF0, &D_L02_00167440_2D9F08[0]);
+                qcopy(&pad_puzzle_state->v100, &D_L02_00167440_2D9F08[1]);
             }
         } else {
-            data->h12 = 0;
+            pad_puzzle_state->h12 = 0;
             moby->glow_color = D_L02_00161AA8_gp;
         }
         break;
     case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:
         func_L02_002DA728_2D9F08(moby);
         func_L02_002D9D48_2D9F08(&camera_pos, &camera_rot, moby);
-        advance_accelerated_scalar(&data->f110,
-                                   &data->f114,
+        advance_accelerated_scalar(&pad_puzzle_state->f110,
+                                   &pad_puzzle_state->f114,
                                    1.0f,
                                    frame_time_sq_macro + frame_time_sq_macro,
                                    frame_time_sq_macro + frame_time_sq_macro,
                                    frame_time_macro + frame_time_macro);
-        lerp_vector(&camera_pos, &data->vF0, &camera_pos, data->f110);
+        lerp_vector(&camera_pos, &pad_puzzle_state->vF0, &camera_pos, pad_puzzle_state->f110);
         camera_rot.z = fast_add_rotations(
-            fast_subtract_rotations(camera_rot.z, data->v100.z) * data->f110, data->v100.z);
+            fast_subtract_rotations(camera_rot.z, pad_puzzle_state->v100.z) * pad_puzzle_state->f110, pad_puzzle_state->v100.z);
         camera_rot.y = fast_add_rotations(
-            fast_subtract_rotations(camera_rot.y, data->v100.y) * data->f110, data->v100.y);
+            fast_subtract_rotations(camera_rot.y, pad_puzzle_state->v100.y) * pad_puzzle_state->f110, pad_puzzle_state->v100.y);
         set_camera_position(&camera_pos);
         set_camera_rotation(&camera_rot);
         D_L02_0017EB08_lui = 1;
@@ -331,69 +331,69 @@ void tresspasser_pad_update(Moby *moby) {
             jet_mount(&l02_camera.pos, &l02_camera.unk150, 1, 0, 0);
         }
         i = 0;
-        if (0.99f <= data->f110 &&
+        if (0.99f <= pad_puzzle_state->f110 &&
             fast_difference_between_rotations(l02_camera.yaw, camera_rot.z) < 0.017453292f) {
             add_draw_callback(func_L02_002DA820_2D9F08, moby);
             for (i = 0; i < 12; i++) {
-                if (data->iB0[i] == 1) {
+                if (pad_puzzle_state->iB0[i] == 1) {
                     break;
                 }
             }
-            if (0.0f < data->fE4) {
-                data->fE4 = fast_add_rotations(data->fE4, frame_time_macro * 6.2831855f);
-                if (0.5235988f < data->fE4) {
-                    data->fE4 = 0.0f;
-                    if (data->iE0 == 1) {
-                        data->i14 += 11;
-                        data->i14 %= 12;
-                    } else if (data->iE0 == 2) {
-                        data->i18 += 11;
-                        data->i18 %= 12;
+            if (0.0f < pad_puzzle_state->fE4) {
+                pad_puzzle_state->fE4 = fast_add_rotations(pad_puzzle_state->fE4, frame_time_macro * 6.2831855f);
+                if (0.5235988f < pad_puzzle_state->fE4) {
+                    pad_puzzle_state->fE4 = 0.0f;
+                    if (pad_puzzle_state->iE0 == 1) {
+                        pad_puzzle_state->i14 += 11;
+                        pad_puzzle_state->i14 %= 12;
+                    } else if (pad_puzzle_state->iE0 == 2) {
+                        pad_puzzle_state->i18 += 11;
+                        pad_puzzle_state->i18 %= 12;
                     } else {
-                        data->i1C += 11;
-                        data->i1C %= 12;
+                        pad_puzzle_state->i1C += 11;
+                        pad_puzzle_state->i1C %= 12;
                     }
                 }
-            } else if (data->fE4 < 0.0f) {
-                data->fE4 = fast_add_rotations(data->fE4, -(frame_time_macro * 6.2831855f));
-                if (data->fE4 < -0.5235988f) {
-                    data->fE4 = 0.0f;
-                    if (data->iE0 == 1) {
-                        data->i14 += 13;
-                        data->i14 %= 12;
-                    } else if (data->iE0 == 2) {
-                        data->i18 += 13;
-                        data->i18 %= 12;
+            } else if (pad_puzzle_state->fE4 < 0.0f) {
+                pad_puzzle_state->fE4 = fast_add_rotations(pad_puzzle_state->fE4, -(frame_time_macro * 6.2831855f));
+                if (pad_puzzle_state->fE4 < -0.5235988f) {
+                    pad_puzzle_state->fE4 = 0.0f;
+                    if (pad_puzzle_state->iE0 == 1) {
+                        pad_puzzle_state->i14 += 13;
+                        pad_puzzle_state->i14 %= 12;
+                    } else if (pad_puzzle_state->iE0 == 2) {
+                        pad_puzzle_state->i18 += 13;
+                        pad_puzzle_state->i18 %= 12;
                     } else {
-                        data->i1C += 13;
-                        data->i1C %= 12;
+                        pad_puzzle_state->i1C += 13;
+                        pad_puzzle_state->i1C %= 12;
                     }
                 }
             } else if (i == 12) {
-                if (fast_dec_timer_s16(&data->h10)) {
+                if (fast_dec_timer_s16(&pad_puzzle_state->h10)) {
                     moby->state = 3;
                 }
             } else if (((Pad *)D_0013C940)->b1C0.l & 0xA00000000000) {
-                data->h11E |= 1;
+                pad_puzzle_state->h11E |= 1;
                 allocate_voice_for_target_entry(0, 0, moby);
                 if (((Pad *)D_0013C940)->b1C0.w.hi & 0x8000) {
-                    data->fE4 = -(frame_time_macro * 6.2831855f);
+                    pad_puzzle_state->fE4 = -(frame_time_macro * 6.2831855f);
                 } else {
-                    data->fE4 = frame_time_macro * 6.2831855f;
+                    pad_puzzle_state->fE4 = frame_time_macro * 6.2831855f;
                 }
             } else if (((Pad *)D_0013C940)->i1A4 & 0x1000) {
-                data->h11E |= 2;
-                data->iE0 = data->iE0 - 1;
-                if (data->iE0 == 0) {
-                    data->iE0 = 1;
+                pad_puzzle_state->h11E |= 2;
+                pad_puzzle_state->iE0 = pad_puzzle_state->iE0 - 1;
+                if (pad_puzzle_state->iE0 == 0) {
+                    pad_puzzle_state->iE0 = 1;
                 } else {
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
             } else if (((Pad *)D_0013C940)->i1A4 & 0x4000) {
-                data->h11E |= 2;
-                data->iE0 = data->iE0 + 1;
-                if (data->iE0 == 4) {
-                    data->iE0 = 3;
+                pad_puzzle_state->h11E |= 2;
+                pad_puzzle_state->iE0 = pad_puzzle_state->iE0 + 1;
+                if (pad_puzzle_state->iE0 == 4) {
+                    pad_puzzle_state->iE0 = 3;
                 } else {
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
@@ -408,7 +408,7 @@ void tresspasser_pad_update(Moby *moby) {
                 moby->state = 1;
                 jet_end_mount(1);
                 request_hero_idle_state_for_vehicle_mode();
-                data->h10 = scale_game_frames(0x3C);
+                pad_puzzle_state->h10 = scale_game_frames(0x3C);
             }
         }
         break;
@@ -427,7 +427,7 @@ void tresspasser_pad_update(Moby *moby) {
         }
         break;
     }
-    func_L00_0025E590_2D9F08(moby, data);
+    func_L00_0025E590_2D9F08(moby, pad_puzzle_state);
 }
 
 void align_hero_to_tresspasser_pad(struct Moby *moby) __asm__("FUN_L02_002d92f0");
