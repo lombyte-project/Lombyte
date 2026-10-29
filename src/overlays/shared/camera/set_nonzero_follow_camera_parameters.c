@@ -11,11 +11,11 @@ extern char *D_L02_00167400_lui __asm__("D_L02_00167400") NOT_SDA;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F79A8), where it is exact; names translated to the US level program. */
 void set_follow_camera_control_word(int value) __asm__("FUN_L02_002f6570");
 
-void set_follow_camera_control_word(int value) {
+void set_follow_camera_control_word(int control_word) {
     char *moby = D_L02_00167400;
     if (MOBY(moby)->unk86 == 0) {
-        char *data = *(char **)(moby + 0x70);
-        *(int *)(data + 0x218) = value;
+        char *follow_camera_data = *(char **)(moby + 0x70);
+        *(int *)(follow_camera_data + 0x218) = control_word;
     }
 }
 
