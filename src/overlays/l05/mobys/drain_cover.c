@@ -192,7 +192,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
         DRAIN_COVER_HOVER = 3,
         DRAIN_COVER_FALL_TO_HOME = 4
     };
-    DrainCoverData *data = moby->d;
+    DrainCoverData *drain_cover_data = moby->d;
     float           old_position[4];
     float           old_rotation[4];
     float           difference[4];
@@ -211,11 +211,11 @@ void drain_cover_update(DrainCoverMoby *moby) {
     qcopy(old_position, moby->pos);
     qcopy(old_rotation, moby->rot);
     if (moby->state >= 2) {
-        if (voice_is_playing(moby, data->sound) == 0) {
-            data->sound = allocate_voice_for_target_entry(0, 4, moby);
+        if (voice_is_playing(moby, drain_cover_data->sound) == 0) {
+            drain_cover_data->sound = allocate_voice_for_target_entry(0, 4, moby);
         }
-    } else if (voice_is_playing(moby, data->sound) != 0) {
-        index = data->sound;
+    } else if (voice_is_playing(moby, drain_cover_data->sound) != 0) {
+        index = drain_cover_data->sound;
         if (index != -1) {
             entry = D_0013E550 + index * 0x70;
             if (*(DrainCoverMoby **)(entry + 0x88) == moby &&
@@ -223,41 +223,41 @@ void drain_cover_update(DrainCoverMoby *moby) {
                 release_voice_slot(index);
             }
         }
-        data->sound = -1;
+        drain_cover_data->sound = -1;
     }
     switch (moby->state) {
     case DRAIN_COVER_INITIALIZE:
         moby->state = 1;
-        data->timer = scale_game_frames(0x78);
-        data->sound = 0xFF;
-        qcopy(data->home, moby->pos);
-        data->f98 = random_angle_radians();
-        data->f9C = random_angle_radians();
-        data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-        data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-        minimum_rise_height = data->f84 + 1.0f;
-        if (data->f80 <= minimum_rise_height) {
-            data->f80 = minimum_rise_height;
+        drain_cover_data->timer = scale_game_frames(0x78);
+        drain_cover_data->sound = 0xFF;
+        qcopy(drain_cover_data->home, moby->pos);
+        drain_cover_data->f98 = random_angle_radians();
+        drain_cover_data->f9C = random_angle_radians();
+        drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+        minimum_rise_height = drain_cover_data->f84 + 1.0f;
+        if (drain_cover_data->f80 <= minimum_rise_height) {
+            drain_cover_data->f80 = minimum_rise_height;
         }
         break;
     case DRAIN_COVER_WAIT_TO_RISE:
         update_drain_cover_tilt((char *)moby, 0.0f, 8.0f);
         if (D_L05_0015F5C4 == 0 && vector_distance_xy(moby->pos, D_0013F3D0) < 24.0f &&
-            fast_dec_timer(&data->timer) != 0) {
+            fast_dec_timer(&drain_cover_data->timer) != 0) {
             moby->state = 2;
-            clear_u64_value(data->vel);
-            data->vel[2] =
-                square_root(data->f80 * 2.0f * (l05_drain_cover_gravity * frame_time_sq));
-        } else if ((float)data->timer < (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.5f) {
+            clear_u64_value(drain_cover_data->vel);
+            drain_cover_data->vel[2] =
+                square_root(drain_cover_data->f80 * 2.0f * (l05_drain_cover_gravity * frame_time_sq));
+        } else if ((float)drain_cover_data->timer < (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.5f) {
             emit_drain_cover_particles((char *)moby,
-                                       data->home[2],
+                                       drain_cover_data->home[2],
                                        l05_drain_cover_pre_rise_particle_height_span +
-                                           data->home[2]);
+                                           drain_cover_data->home[2]);
             emit_drain_cover_particles((char *)moby,
-                                       data->home[2],
+                                       drain_cover_data->home[2],
                                        l05_drain_cover_pre_rise_particle_height_span +
-                                           data->home[2]);
-            if ((float)data->timer < (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.2f) {
+                                           drain_cover_data->home[2]);
+            if ((float)drain_cover_data->timer < (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.2f) {
                 particle_configuration = l05_drain_cover_pre_rise_particle_configuration;
                 b = D_L05_00161DF8;
                 r = truncate_float_to_s32(scale_time(random_float_between(10.0f, 20.0f)));
@@ -303,56 +303,56 @@ void drain_cover_update(DrainCoverMoby *moby) {
         }
         emit_drain_cover_particles(
             (char *)moby,
-            data->home[2],
-            data->vel[2] * (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
+            drain_cover_data->home[2],
+            drain_cover_data->vel[2] * (float)scale_game_frames(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
-        fast_vec_add(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
-        if (data->vel[2] <= 0.0f) {
+        fast_vec_add(moby->pos, moby->pos, drain_cover_data->vel);
+        drain_cover_data->vel[2] = drain_cover_data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
+        if (drain_cover_data->vel[2] <= 0.0f) {
             moby->state = 3;
-            data->home[3] = data->f84 - 0.5f;
-            data->timer = truncate_float_to_s32(scale_time(data->f88));
+            drain_cover_data->home[3] = drain_cover_data->f84 - 0.5f;
+            drain_cover_data->timer = truncate_float_to_s32(scale_time(drain_cover_data->f88));
         }
         break;
     case DRAIN_COVER_HOVER:
-        emit_drain_cover_particles((char *)moby, data->home[2], moby->pos[2]);
+        emit_drain_cover_particles((char *)moby, drain_cover_data->home[2], moby->pos[2]);
         update_drain_cover_tilt((char *)moby, D_L05_00161DD4, 1.0f);
-        advance_accelerated_scalar(data->home[2] + data->home[3],
+        advance_accelerated_scalar(drain_cover_data->home[2] + drain_cover_data->home[3],
                                    l05_drain_cover_hover_acceleration * frame_time_sq,
                                    l05_drain_cover_hover_acceleration * frame_time_sq,
                                    frame_time * 20.0f,
                                    &moby->pos[2],
-                                   &data->vel[2]);
-        if (data->vel[2] == 0.0f) {
-            if (data->home[3] > data->f84) {
-                data->home[3] = data->f84 - 0.5f;
+                                   &drain_cover_data->vel[2]);
+        if (drain_cover_data->vel[2] == 0.0f) {
+            if (drain_cover_data->home[3] > drain_cover_data->f84) {
+                drain_cover_data->home[3] = drain_cover_data->f84 - 0.5f;
             } else {
-                data->home[3] = data->f84 + 0.5f;
+                drain_cover_data->home[3] = drain_cover_data->f84 + 0.5f;
             }
         }
-        if (fast_dec_timer(&data->timer) != 0) {
+        if (fast_dec_timer(&drain_cover_data->timer) != 0) {
             moby->state = 4;
         }
         break;
     case DRAIN_COVER_FALL_TO_HOME:
         emit_drain_cover_particles(
             (char *)moby,
-            data->home[2],
-            data->vel[2] * (float)scale_game_frames(*(int *)&D_L05_00161DB8) + moby->pos[2]);
+            drain_cover_data->home[2],
+            drain_cover_data->vel[2] * (float)scale_game_frames(*(int *)&D_L05_00161DB8) + moby->pos[2]);
         update_drain_cover_tilt((char *)moby,
-                                data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f,
-                                data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
-        fast_vec_add(moby->pos, moby->pos, data->vel);
-        data->vel[2] = data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
-        if (moby->pos[2] < data->home[2]) {
+                                drain_cover_data->home[2] + 1.0f < moby->pos[2] ? D_L05_00161DD4 : 0.0f,
+                                drain_cover_data->home[2] + 1.0f < moby->pos[2] ? 1.0f : 10.0f);
+        fast_vec_add(moby->pos, moby->pos, drain_cover_data->vel);
+        drain_cover_data->vel[2] = drain_cover_data->vel[2] - l05_drain_cover_gravity * frame_time_sq;
+        if (moby->pos[2] < drain_cover_data->home[2]) {
             allocate_voice_for_target_entry(1, 0, moby);
             moby->state = 1;
-            data->timer = scale_game_frames(0x78);
-            qcopy(moby->pos, data->home);
-            data->f98 = random_angle_radians();
-            data->f9C = random_angle_radians();
-            data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
-            data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->timer = scale_game_frames(0x78);
+            qcopy(moby->pos, drain_cover_data->home);
+            drain_cover_data->f98 = random_angle_radians();
+            drain_cover_data->f9C = random_angle_radians();
+            drain_cover_data->fA0 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
+            drain_cover_data->fA4 = randf_sym(70.0f, 120.0f) * 0.017453292f * frame_time;
         }
         break;
     }
@@ -374,20 +374,20 @@ void drain_cover_update(DrainCoverMoby *moby) {
                             effect_velocity[2]);
     }
     fast_vec_sub(difference, moby->pos, old_position);
-    update_entity_matrix(data->f20, difference, old_rotation, moby->rot);
-    if (data->lid == 0) {
-        data->lid = create_moby(0x388);
-        if (data->lid != 0) {
-            data->lid->f30 = 0;
-            data->lid->flags |= 1;
-            data->lid->f32 = 0;
-            data->lid->f31 = 0;
-            lid = data->lid;
+    update_entity_matrix(drain_cover_data->f20, difference, old_rotation, moby->rot);
+    if (drain_cover_data->lid == 0) {
+        drain_cover_data->lid = create_moby(0x388);
+        if (drain_cover_data->lid != 0) {
+            drain_cover_data->lid->f30 = 0;
+            drain_cover_data->lid->flags |= 1;
+            drain_cover_data->lid->f32 = 0;
+            drain_cover_data->lid->f31 = 0;
+            lid = drain_cover_data->lid;
             qcopy(lid->pos, moby->pos);
             update_entity(lid);
         }
     } else {
-        lid = data->lid;
+        lid = drain_cover_data->lid;
         qcopy(lid->pos, moby->pos);
         update_entity(lid);
     }
