@@ -67,7 +67,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     float scaled_axis_vector[4];
     float target_axis_residual[4];
     float r[4];
-    char *data;
+    char *moby_slot_data;
     char *projection_axis_record = angular_limit_projection_axis_record;
     char *g;
     float dot1;
@@ -79,8 +79,8 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     char *moby_slot_table = D_L15_0015EF48[2];
     char *target_record;
 
-    data = *(char **)(moby_slot_table + *(short *)(moby + 0x84) * 32 + 0x1C);
-    target_record = D_L15_001600EC + *(int *)(data + 0x48) * 128;
+    moby_slot_data = *(char **)(moby_slot_table + *(short *)(moby + 0x84) * 32 + 0x1C);
+    target_record = D_L15_001600EC + *(int *)(moby_slot_data + 0x48) * 128;
     if (projected_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
