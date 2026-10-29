@@ -1,10 +1,10 @@
-/* Return the state field at byte offset 0xA8. */
+#include "rnc/video/decoder/video_dec.h"
 
-int get_state_field(int *state_fields) __asm__("func_0023CC80");
+s32 video_dec_get_state(struct VideoDec *vd) __asm__("func_0023CC80");
 
-int get_state_field(int *state_fields) {
-    return state_fields[42];
+s32 video_dec_get_state(struct VideoDec *vd) {
+    return vd->state;
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(get_state_field) videoDecGetState __attribute__((alias("func_0023CC80")));
+extern __typeof__(video_dec_get_state) videoDecGetState __attribute__((alias("func_0023CC80")));

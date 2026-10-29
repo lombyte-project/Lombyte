@@ -5,32 +5,12 @@
 extern int DebugPrint();
 #include "types.h"
 #include "rnc/video/decoder/video_dec.h"
-#define VD_STATE_ABORT 1
-typedef struct {
-    char _pad0[0xD9048];
-    struct VideoDec videoDec; /* 0xD9048 */
-} MovieGlobals;
-extern MovieGlobals *decoder_state_macro __asm__("D_0016120C")MACRO_ADDR;
-typedef struct {
-    void *data;
-    void *tag;
-    volatile int write;
-    volatile int count;
-    int size;
-} VoBuf;
-#define voBuf (*(VoBuf *)((char *)decoder_state_macro + 0xD9168))
-typedef struct {
-    char hdr[0x40];
-    char body[0x138C0 - 0x40];
-} VoTag;
-typedef struct {
-    char v[0xD0000];
-} VoData;
+#include "rnc/video/player/movie_player.h"
+extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
+#define voBuf (movie_player_macro->vo_buf)
 extern s32 sceMpegIsEnd(struct sceMpeg *mpeg) __asm__("func_0012BA48");
-extern int sceMpegGetPicture(struct sceMpeg *, void *, int);     /* sceMpegGetPicture_pal */
-extern void sceMpegReset(struct sceMpeg *);                      /* sceMpegReset_pal */
-extern VoData *vo_buf_get_data(VoBuf *) __asm__("FUN_0023d288"); /* voBufGetData */
-extern void vo_buf_inc_count(VoBuf *) __asm__("func_0023D210");  /* voBufIncCount */
+extern int sceMpegGetPicture(struct sceMpeg *, void *, int);
+extern void sceMpegReset(struct sceMpeg *);
 extern void set_image_tag(void *, int, int,
                                      int) __asm__("func_0023B210"); /* setImageTag */
 extern void switch_thread(void) __asm__("func_0023A770");           /* switchThread */
@@ -41,12 +21,12 @@ extern char mpeg_get_picture_decode_error_message[] __asm__("D_001E8B50");
 int dec_bs0(struct VideoDec *vd) __asm__("FUN_0023cec8");
 
 int dec_bs0(struct VideoDec *vd) {
-    VoData *voData;
+    struct VoData *voData;
     int status = 1;
     int i;
 
     while (!sceMpegIsEnd(&vd->mpeg)) {
-        if (func_0023CC80((int *)vd) == VD_STATE_ABORT) {
+        if (video_dec_get_state(vd) == VD_STATE_ABORT) {
             status = -1;
             DebugPrint(decode_thread_aborted_message);
             break;
@@ -65,8 +45,7 @@ int dec_bs0(struct VideoDec *vd) {
             int image_h = vd->mpeg.height;
 
             for (i = 0; i < voBuf.size; i++) {
-                set_image_tag(((VoTag *)voBuf.tag)[i].body,
-                                         (int)((VoData *)voBuf.data)[i].v, image_w, image_h);
+                set_image_tag(voBuf.tag[i].body, (int)voBuf.data[i].v, image_w, image_h);
             }
         }
 

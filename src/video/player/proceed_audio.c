@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/video/player/movie_player.h"
 
 extern s32 audio_dec_send() __asm__("func_0023AEF0");
 
@@ -8,7 +9,7 @@ s32 proceed_audio(void) __asm__("FUN_0023aba0");
 
 s32 proceed_audio(void) {
     s32 result;
-    result = audio_dec_send(decoder_state + 0xD9100);
+    result = audio_dec_send(&movie_player->audio_dec);
     return result;
 }
 

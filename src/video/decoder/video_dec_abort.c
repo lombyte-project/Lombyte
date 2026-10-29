@@ -1,13 +1,13 @@
-/* Set the state field to one and report success. */
+#include "rnc/video/decoder/video_dec.h"
 
-int video_dec_abort(int *state_fields) __asm__("func_0023CC70");
+s32 video_dec_abort(struct VideoDec *vd) __asm__("func_0023CC70");
 
-int video_dec_abort(int *state_fields) {
-    int value = 1;
+s32 video_dec_abort(struct VideoDec *vd) {
+    s32 state = VD_STATE_ABORT;
 
     /* Fakematch: the block makes the store and the return share one register. */
     do {
-        state_fields[42] = value;
+        vd->state = state;
     } while (0);
-    return value;
+    return state;
 }

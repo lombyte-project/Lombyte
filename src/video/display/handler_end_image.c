@@ -2,14 +2,14 @@
 #include "kernel.h"
 
 #include "rnc/video/display/handler_end_image_globals.h"
-extern u8 *decoder_state __asm__("D_0016120C");
-extern s32 vo_buf_dec_count() __asm__("func_0023D340");
+#include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/video/player/movie_player.h"
 
 s32 handler_end_image(void) __asm__("FUN_0023b540");
 
 s32 handler_end_image(void) {
     if (image_buffer_count_decrement_pending != 0) {
-        vo_buf_dec_count(decoder_state + 0xD9168);
+        vo_buf_dec_count(&movie_player->vo_buf);
         *(s32 *)0x1611E8 = 0;
     }
     CpuSync();

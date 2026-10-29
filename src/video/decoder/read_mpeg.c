@@ -2,17 +2,19 @@
 #include "rnc/globals.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/video/decoder/read_mpeg.h"
+#include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/video/player/movie_player.h"
 
 extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern struct PadStateWords pad_words __asm__("D_0013C940");
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EEA0;
-/* Movie skip mode: -1 no skipping, 2 any new button. Declared volatile
-   here because retail reads it once for the -1 and 2 tests and then
-   again inside the skip-allowed test, with no store or call in between;
-   this compiler only repeats such a load for a volatile object. */
-extern volatile s32 decode_mode __asm__("D_0015EED8");
-extern s32 decoder_state __asm__("D_0016120C");
+/* Movie skip mode (decode_mode): -1 no skipping, 2 any new button. Read
+   through a volatile view because retail loads it once for the -1 and 2
+   tests and then again inside the skip-allowed test, with no store or call
+   in between; this compiler only repeats such a load for a volatile
+   object. */
+#define DECODE_MODE (*(volatile s32 *)&decode_mode)
 extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);
 extern s32 sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
@@ -22,16 +24,13 @@ extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
 extern s32 is_audio_ok(void) __asm__("func_0023A790");
 extern s32 proceed_audio(void) __asm__("func_0023ABA0");
-extern void audioDecStart(s32) __asm__("func_0023ACB8");
-extern void audio_dec_reset(s32) __asm__("FUN_0023ad10");
+extern void audioDecStart(struct AudioDec *) __asm__("func_0023ACB8");
+extern void audio_dec_reset(struct AudioDec *) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
 extern void end_display(void) __asm__("ClearStageStateFlag");
 extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
-extern s32 video_dec_abort(s32) __asm__("func_0023CC70");
-extern s32 get_state_field(struct VideoDec *) __asm__("func_0023CC80");
 extern s32 video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
 extern s32 video_dec_is_flushed(struct VideoDec *) __asm__("FUN_0023cde0");
-extern s32 vo_buf_is_full(s32) __asm__("func_0023D1F8");
 
 /* Each pad test takes the pad by pointer, so retail forms the pad address
    afresh for every test from one shared upper half. */
@@ -77,12 +76,12 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
     read_remaining = decode_remaining;
     FlushCache(2);
     sceGsSyncV(0);
-    while (decode_remaining >= 5 && get_state_field(video_dec) != 3) {
+    while (decode_remaining >= 5 && video_dec_get_state(video_dec) != VD_STATE_END) {
         update_primary_pad_state();
-        mode = decode_mode;
+        mode = DECODE_MODE;
         if (mode != -1) {
             if ((mode == 2 && pad_pressed(&pad_words, -1))
-                || ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || decode_mode != 0
+                || ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0
                      || current_level_index <= 0)
                     && pad_pressed(&pad_words, 0x800))) {
                 skip = 1;
@@ -91,7 +90,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
             }
             if (skip) {
                 skipped = 1;
-                video_dec_abort(decoder_state + 0xD9048);
+                video_dec_abort(&movie_player->video_dec);
             }
         }
         space = read_buf_begin_put(read_buf, &write_ptr);
@@ -110,22 +109,22 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
             read_buf_end_get(read_buf, count);
         }
         proceed_audio();
-        if (!started && vo_buf_is_full(decoder_state + 0xD9168) && is_audio_ok()) {
+        if (!started && vo_buf_is_full(&movie_player->vo_buf) && is_audio_ok()) {
             started = 1;
             start_display(1);
-            audioDecStart(decoder_state + 0xD9100);
+            audioDecStart(&movie_player->audio_dec);
         }
     }
     while (!video_dec_flush(video_dec)) {
         proceed_audio();
         switch_thread();
     }
-    while (!video_dec_is_flushed(video_dec) && get_state_field(video_dec) != 3) {
+    while (!video_dec_is_flushed(video_dec) && video_dec_get_state(video_dec) != VD_STATE_END) {
         proceed_audio();
         switch_thread();
     }
     end_display();
-    audio_dec_reset(decoder_state + 0xD9100);
+    audio_dec_reset(&movie_player->audio_dec);
     snd_set_master_volume(5, voice_pool.unk5C);
     snd_flush_sound_commands();
     return skipped;

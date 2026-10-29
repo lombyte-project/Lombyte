@@ -1,12 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
-struct AudioSystemState {
-    u8 pad_0[0xD90F8];
-    s32 unkD90F8;
-    s32 unkD90FC;
-};
-extern struct AudioSystemState *D_0016120C;
+#include "rnc/video/player/movie_player.h"
 extern s32 DeleteThread();
 extern s32 RemoveDmacHandler();
 extern s32 RemoveIntcHandler();
@@ -14,27 +9,25 @@ extern s32 TerminateThread();
 extern s32 disable_intc() __asm__("func_00119028");
 extern s32 disable_dmac() __asm__("func_001190F8");
 extern s32 audio_dec_delete() __asm__("func_0023AC90");
-extern void read_buf_delete() __asm__("func_0023B958");
-extern s32 get_state_callback_result() __asm__("func_0023BA58");
+extern s32 mpeg_cd_stream_close(struct MpegCdStream *stream) __asm__("func_0023BA58");
 extern s32 video_dec_delete() __asm__("func_0023CC38");
-extern s32 no_op_state_update() __asm__("func_0023D1E0");
 extern s32 sceCdSync();
 void term_all(void) __asm__("FUN_0023aa68");
 
 void term_all(void) {
     sceCdSync(0);
-    read_buf_delete(D_0016120C);
-    no_op_state_update((u8 *)D_0016120C + 0xD9168);
+    read_buf_delete(&movie_player->read_buf);
+    vo_buf_delete(&movie_player->vo_buf);
 
     TerminateThread(decoder_thread);
     DeleteThread(decoder_thread);
     disable_dmac(2);
-    RemoveDmacHandler(2, *(s32 *)((u8 *)D_0016120C + 0xD90F8));
+    RemoveDmacHandler(2, movie_player->video_dec.hid_endimage);
     disable_intc(2);
-    RemoveIntcHandler(2, *(s32 *)((u8 *)D_0016120C + 0xD90FC));
-    video_dec_delete((u8 *)D_0016120C + 0xD9048);
-    audio_dec_delete((u8 *)D_0016120C + 0xD9100);
-    get_state_callback_result((u8 *)D_0016120C + 0xD9040);
+    RemoveIntcHandler(2, movie_player->video_dec.hid_vblank);
+    video_dec_delete(&movie_player->video_dec);
+    audio_dec_delete(&movie_player->audio_dec);
+    mpeg_cd_stream_close(&movie_player->cd_stream);
     sceCdSync(0);
     *(s32 *)0x1000E000 &= 0xFFFFFFFD;
 }

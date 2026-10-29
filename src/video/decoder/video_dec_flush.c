@@ -2,6 +2,7 @@
 #include "rnc/video/decoder/video_dec.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/video/player/movie_player.h"
 
 struct Code4 {
     u8 b[4];
@@ -11,7 +12,7 @@ extern void video_dec_begin_put(struct VideoDec *, u32 *, s32 *, u32 *,
                                 s32 *) __asm__("func_0023CBF0");
 extern s32 cpy2area(u32, s32, u32, s32, void *, s32, s32,
                                     s32) __asm__("func_0023B810");
-extern void video_dec_end_put(s32, s32) __asm__("func_0023CC10");
+extern void video_dec_end_put(struct VideoDec *, s32) __asm__("func_0023CC10");
 extern void vi_buf_flush(void *) __asm__("func_0023C660");
 s32 video_dec_flush(struct VideoDec *vd) __asm__("FUN_0023cd08");
 
@@ -29,10 +30,10 @@ s32 video_dec_flush(struct VideoDec *vd) {
     }
     copied_bytes = cpy2area((destination_a & 0x0FFFFFFF) | 0x20000000, destination_a_len, (destination_b & 0x0FFFFFFF) | 0x20000000,
                                  destination_b_len, &code, 4, 0, 0);
-    video_dec_end_put(decoder_state + 0xD9048, copied_bytes);
+    video_dec_end_put(&movie_player->video_dec, copied_bytes);
     vi_buf_flush(&vd->vi_buf);
-    if (vd->state == 0) {
-        vd->state = 2;
+    if (vd->state == VD_STATE_NORMAL) {
+        vd->state = VD_STATE_FLUSH;
     }
     return 1;
 }

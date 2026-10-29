@@ -1,11 +1,11 @@
-/* Clear the state field used by the small state helpers. */
+#include "rnc/video/decoder/video_dec.h"
 
-void clear_state_field(int *state_fields) __asm__("func_0023CC30");
+void video_dec_reset(struct VideoDec *vd) __asm__("func_0023CC30");
 
-void clear_state_field(int *state_fields) {
-    state_fields[42] = 0;
+void video_dec_reset(struct VideoDec *vd) {
+    vd->state = VD_STATE_NORMAL;
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(clear_state_field) videoDecReset__FP8VideoDec
+extern __typeof__(video_dec_reset) videoDecReset__FP8VideoDec
     __attribute__((alias("func_0023CC30")));

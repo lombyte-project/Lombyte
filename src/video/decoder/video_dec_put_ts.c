@@ -2,8 +2,9 @@
 #include "rnc/video/decoder/video_dec.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/video/player/movie_player.h"
 
-extern s32 vi_buf_put_ts(s32, struct ViBufTimeStamp *) __asm__("func_0023C810");
+extern s32 vi_buf_put_ts(struct ViBuf *, struct ViBufTimeStamp *) __asm__("func_0023C810");
 /* Retail 0x0023cc98 passes a 0x18-byte timestamp record (PTS/DTS at
    +0/+8, relative position/length at +0x10/+0x14) to the global ViBuf at
    decoder context +0xD9090. Position subtraction wraps at 32 bits, as
@@ -21,7 +22,7 @@ s32 video_dec_put_ts(struct VideoDec *vd, s64 pts, s64 dts, s32 pos, s32 len) {
     ts.dts = dts;
     ts.pos = (s32)((u32)pos - (u32)vd->vi_buf.data);
     ts.len = len;
-    return vi_buf_put_ts(decoder_state + 0xD9090, &ts);
+    return vi_buf_put_ts(&movie_player->video_dec.vi_buf, &ts);
 }
 
 extern __typeof__(video_dec_put_ts) func_0023CC98 __attribute__((alias("FUN_0023cc98")));

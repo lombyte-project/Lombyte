@@ -1,9 +1,10 @@
-/* Replace the state field and return its previous value. */
+#include "rnc/video/decoder/video_dec.h"
 
-int video_dec_set_state(int *state_fields, int replacement_value) __asm__("func_0023CC88");
+/* Returns the previous state. */
+s32 video_dec_set_state(struct VideoDec *vd, s32 state) __asm__("func_0023CC88");
 
-int video_dec_set_state(int *state_fields, int replacement_value) {
-    int previous_value = state_fields[42];
-    state_fields[42] = replacement_value;
-    return previous_value;
+s32 video_dec_set_state(struct VideoDec *vd, s32 state) {
+    s32 previous = vd->state;
+    vd->state = state;
+    return previous;
 }

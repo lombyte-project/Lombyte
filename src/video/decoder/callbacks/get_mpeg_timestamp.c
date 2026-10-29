@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
-extern void vi_buf_get_ts(s32, u64 *) __asm__("func_0023C920");
+#include "rnc/video/player/movie_player.h"
+extern void vi_buf_get_ts(struct ViBuf *, u64 *) __asm__("func_0023C920");
 struct Out {
     u8 pad[8];
     u64 a;
@@ -12,7 +13,7 @@ s32 get_mpeg_timestamp(s32 unused_parameter, struct Out *out) __asm__("FUN_0023d
 s32 get_mpeg_timestamp(s32 unused_parameter, struct Out *out) {
     u64 timestamp_values[3];
 
-    vi_buf_get_ts(decoder_state + 0xD9090, timestamp_values);
+    vi_buf_get_ts(&movie_player->video_dec.vi_buf, timestamp_values);
     out->a = timestamp_values[0];
     out->b = timestamp_values[1];
     return 1;

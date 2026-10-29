@@ -1,31 +1,23 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
-
-/* Movie decoder context at *D_0016120C (VideoDec lives at +0xD9048). */
-struct MovieGlobals {
-    u8 pad_0[0xD9174];
-    s32 unkD9174;
-};
+#include "rnc/video/player/movie_player.h"
 
 extern s32 vi_buf_reset() __asm__("func_0023BCC0");
-extern s32 get_state_field() __asm__("func_0023CC80");
-extern s32 video_dec_set_state() __asm__("func_0023CC88");
 extern s32 dec_bs0() __asm__("func_0023CEC8");
-extern s32 clear_state_fields() __asm__("func_0023D1E8");
 
-void video_dec_main(s32 video_dec) __asm__("FUN_0023ce28");
+void video_dec_main(struct VideoDec *vd) __asm__("FUN_0023ce28");
 
-void video_dec_main(s32 video_dec) {
-    vi_buf_reset(video_dec + 0x48);
-    clear_state_fields(decoder_state + 0xD9168);
-    dec_bs0(video_dec);
-    while (((struct MovieGlobals *)decoder_state)->unkD9174 != 0) {
-        if (get_state_field(video_dec) == 1) {
+void video_dec_main(struct VideoDec *vd) {
+    vi_buf_reset(&vd->vi_buf);
+    vo_buf_reset(&movie_player->vo_buf);
+    dec_bs0(vd);
+    while (movie_player->vo_buf.count != 0) {
+        if (video_dec_get_state(vd) == VD_STATE_ABORT) {
             break;
         }
     }
-    video_dec_set_state(video_dec, 3);
+    video_dec_set_state(vd, VD_STATE_END);
 }
 
 extern __typeof__(video_dec_main) func_0023CE28 __attribute__((alias("FUN_0023ce28")));
