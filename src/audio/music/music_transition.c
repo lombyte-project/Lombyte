@@ -15,7 +15,7 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     s32 *entry;
     u8  *disc_table_base;
     s32  track_location_table_offset;
-    s32  result;
+    s32  stream_request_result;
     s64  stream_location;
 
     if (music_stream_state.transition.handle == 0) {
@@ -34,7 +34,7 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
             /* Fakematch: the never-negative test gives `return 1` its own block
                until combine folds it away, as in retail's block layout. */
             stream_location = *entry;
-            result =
+            stream_request_result =
                 (u16)snd_play_vag_stream_by_loc_ex_cb(stream_location,
                                                       0,
                                                       0,
@@ -46,7 +46,7 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
                                                       0x20,
                                                       music_transition_start_callback,
                                                       (u32)&music_stream_state.transition.handle);
-            if (result < 0) {
+            if (stream_request_result < 0) {
                 return 0;
             }
         } else {
