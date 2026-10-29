@@ -213,10 +213,10 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    if (*(float *)(data + 0x2C8) <= 0.0f) {
-        int   path_node_index = *(short *)(data + 0x2F4);
-        char *tab = *(char **)(data + 0x2C0);
+    char *hoverboard_dummy_path_jump_data = (char *)moby->pvars;
+    if (*(float *)(hoverboard_dummy_path_jump_data + 0x2C8) <= 0.0f) {
+        int   path_node_index = *(short *)(hoverboard_dummy_path_jump_data + 0x2F4);
+        char *tab = *(char **)(hoverboard_dummy_path_jump_data + 0x2C0);
         int   path_node_byte_offset = path_node_index * 16;
         if (*(float *)(tab + path_node_byte_offset + 0x1C) == 1.0f) {
             while (1) {
@@ -224,12 +224,12 @@ void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
                 if (*(float *)(tab + path_node_byte_offset + 0x1C) == 2.0f)
                     break;
                 path_node_index = offset_path_index(tab, path_node_index, 1, 1);
-                tab = *(char **)(data + 0x2C0);
+                tab = *(char **)(hoverboard_dummy_path_jump_data + 0x2C0);
                 path_node_byte_offset = path_node_index * 16;
             }
-            *(short *)(data + 0x2F0) = path_node_index;
-            qcopy(data + 0x270, *(char **)(data + 0x2C0) + (short)path_node_index * 16 + 0x10);
-            *(int *)(data + 0x2E4) = 1;
+            *(short *)(hoverboard_dummy_path_jump_data + 0x2F0) = path_node_index;
+            qcopy(hoverboard_dummy_path_jump_data + 0x270, *(char **)(hoverboard_dummy_path_jump_data + 0x2C0) + (short)path_node_index * 16 + 0x10);
+            *(int *)(hoverboard_dummy_path_jump_data + 0x2E4) = 1;
         }
     }
 }
