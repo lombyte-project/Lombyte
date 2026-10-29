@@ -70,8 +70,8 @@ void update_homing_mine(struct Moby *moby) {
         HOMING_MINE_STATE_HOMING = 1,
         HOMING_MINE_STATE_DETONATE = 2
     };
-    Data_304e00 *data = (Data_304e00 *)moby->pvars;
-    s32         *damage = data->damage;
+    Data_304e00 *homing_mine_state = (Data_304e00 *)moby->pvars;
+    s32         *damage = homing_mine_state->damage;
     f32          target[20];
     f32          velocity[3];
     u8           hit_info[0x30];
@@ -114,56 +114,56 @@ void update_homing_mine(struct Moby *moby) {
     switch (moby->state) {
     case HOMING_MINE_STATE_INITIALIZE:
         moby->flags |= 0x1000;
-        qcopy(&data->start, &moby->pos);
+        qcopy(&homing_mine_state->start, &moby->pos);
         moby->state = 1;
-        data->turn = 0.6981317f;
+        homing_mine_state->turn = 0.6981317f;
         if (moby->parent != NULL && ((struct Moby *)moby->parent)->command != 0)
-            data->turn = -data->turn;
-        data->timer = 0;
+            homing_mine_state->turn = -homing_mine_state->turn;
+        homing_mine_state->timer = 0;
         break;
     case HOMING_MINE_STATE_HOMING:
-        data->timer++;
-        if (data->timer < scale_game_frames(30))
+        homing_mine_state->timer++;
+        if (homing_mine_state->timer < scale_game_frames(30))
             moby->pos.z +=
-                fast_sin((f32)data->timer * 3.1415927f / (f32)scale_game_frames(30)) * 0.07f;
-        if (scale_game_frames(15) < data->timer)
-            data->speed += frame_time_sq * 30.0f;
-        if (scale_game_frames(30) < data->timer) {
+                fast_sin((f32)homing_mine_state->timer * 3.1415927f / (f32)scale_game_frames(30)) * 0.07f;
+        if (scale_game_frames(15) < homing_mine_state->timer)
+            homing_mine_state->speed += frame_time_sq * 30.0f;
+        if (scale_game_frames(30) < homing_mine_state->timer) {
             if (moby->prev_seq == 0)
                 blend_moby_animation(moby, 1, 0, 2);
             if (moby->prev_seq == 1 && (moby->anim_flags & 2))
                 blend_moby_animation(moby, 2, 0, 2);
         }
-        if (frame_time * 5.75f < data->speed)
-            data->speed = frame_time * 5.75f;
+        if (frame_time * 5.75f < homing_mine_state->speed)
+            homing_mine_state->speed = frame_time * 5.75f;
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         turn = angle;
         if (vector_distance_xy(&moby->pos, target) < 7.0f)
-            turn = fast_add_rotations(angle, data->turn);
-        velocity[0] = fast_cos(turn) * data->speed;
-        velocity[1] = fast_sin(turn) * data->speed;
+            turn = fast_add_rotations(angle, homing_mine_state->turn);
+        velocity[0] = fast_cos(turn) * homing_mine_state->speed;
+        velocity[1] = fast_sin(turn) * homing_mine_state->speed;
         velocity[2] = 0.0f;
         fast_vec_add(&moby->pos, &moby->pos, velocity);
-        if (scale_game_frames(30) < data->timer) {
-            data->bob_angle = fast_add_rotations(data->bob_angle, frame_time * 5.2359877f);
-            moby->pos.z -= data->bob;
-            data->bob = fast_sin(data->bob_angle) * 0.1f;
-            moby->pos.z += data->bob;
+        if (scale_game_frames(30) < homing_mine_state->timer) {
+            homing_mine_state->bob_angle = fast_add_rotations(homing_mine_state->bob_angle, frame_time * 5.2359877f);
+            moby->pos.z -= homing_mine_state->bob;
+            homing_mine_state->bob = fast_sin(homing_mine_state->bob_angle) * 0.1f;
+            moby->pos.z += homing_mine_state->bob;
         }
-        if (scale_game_frames(30) < data->timer) {
+        if (scale_game_frames(30) < homing_mine_state->timer) {
             height = probe_ground_height(&moby->pos, 0, 0.5f);
             if (height < hero.ground_z.f)
                 height = hero.ground_z.f;
             difference = height - moby->pos.z;
             if (difference < 0.5f && -3.0f < difference)
                 vendor_spring(&moby->pos.z,
-                              &data->climb,
+                              &homing_mine_state->climb,
                               height + 0.58f,
                               frame_scale_sq * 0.02f,
                               frame_scale_sq * 0.3f,
                               frame_time * 4.0f);
         }
-        if (scale_game_frames(30) < data->timer) {
+        if (scale_game_frames(30) < homing_mine_state->timer) {
             direction.f[0] = fast_cos(angle) * 0.3f;
             direction.f[1] = fast_sin(angle) * 0.3f;
             direction.f[3] = 5627.925f;
