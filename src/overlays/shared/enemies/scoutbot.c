@@ -384,16 +384,16 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
+    char *scoutbot_pvars = ((char *)moby->pvars);
     int   hit;
     float dmg;
     int   hit_reaction_code;
     dmg = 0.0f;
     hit_reaction_code =
-        hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit, &dmg, 0, 4);
+        hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), scoutbot_pvars + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
-        *(float *)(data + 0x20) -= dmg;
-        if (*(float *)(data + 0x20) <= 0.0f)
+        *(float *)(scoutbot_pvars + 0x20) -= dmg;
+        if (*(float *)(scoutbot_pvars + 0x20) <= 0.0f)
             hit_reaction_code = 1;
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
@@ -404,17 +404,17 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
-        char *path = ((char *)l08_paths[*(int *)(data + 0x21C)]);
-        if (func_L00_00260FB0_f(moby, data + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(data + 0x1C0, data + 0x170)) {
-                *(int *)(data + 0x1B4) = 2;
-            } else if (3.0f < absolute_float(*(float *)(data + 0x1C8) - *(float *)(data + 0x178))) {
-                *(int *)(data + 0x1B4) = 2;
+        char *path = ((char *)l08_paths[*(int *)(scoutbot_pvars + 0x21C)]);
+        if (func_L00_00260FB0_f(moby, scoutbot_pvars + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
+            if (14.0f < vector_distance_xy(scoutbot_pvars + 0x1C0, scoutbot_pvars + 0x170)) {
+                *(int *)(scoutbot_pvars + 0x1B4) = 2;
+            } else if (3.0f < absolute_float(*(float *)(scoutbot_pvars + 0x1C8) - *(float *)(scoutbot_pvars + 0x178))) {
+                *(int *)(scoutbot_pvars + 0x1B4) = 2;
             }
         }
     }
-    if (*(int *)(data + 0x1B0) == 0) {
-        *(int *)(data + 0x1B0) = ((int)hero.moby);
+    if (*(int *)(scoutbot_pvars + 0x1B0) == 0) {
+        *(int *)(scoutbot_pvars + 0x1B0) = ((int)hero.moby);
     }
 }
 
