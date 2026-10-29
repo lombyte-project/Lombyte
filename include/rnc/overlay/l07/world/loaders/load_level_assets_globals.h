@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/l07/world/loaders/0026b768.c. */
+/* Scalar data read by src/overlays/l07/world/loaders/load_level_assets.c. */
 extern s32 l07_texture_data_base __asm__("D_L07_0015F40C");
 extern s32 l07_asset_sound_bank_handle __asm__("D_L07_00160004");
 extern s32 l07_tfrag_texture_count __asm__("D_L07_00160F54");

@@ -23,7 +23,7 @@ typedef struct {
 } MessageBox;
 
 extern MessageBox l00_message_box __asm__("D_L00_00173040");
-#include "rnc/overlay/shared/runtime/memory/002018c8_globals.h"
+#include "rnc/overlay/shared/runtime/memory/level_draw_dialog_text_globals.h"
 #include "rnc/math/fast_math.h"
 extern char freeze_dialog_default_body_text[] __asm__("D_L00_0015F508");
 extern char freeze_dialog_body_format[] __asm__("D_L00_0015F510");

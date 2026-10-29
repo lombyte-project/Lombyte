@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/l05/gameplay/hero/00255960.c. */
+/* Scalar data read by src/overlays/l05/gameplay/hero/update_hero_state_machine.c. */
 extern float fatal_fall_entry_z_threshold __asm__("D_L05_0015F638");
 extern int item_selector_hud_open_blocker __asm__("D_L05_0015F594") __attribute__((sda));
 extern int landing_run_entry_animation_frame __asm__("D_L05_0015F6EC");

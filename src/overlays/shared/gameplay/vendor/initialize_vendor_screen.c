@@ -20,7 +20,7 @@ extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
 extern float D_L01_0015F3FC;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
-#include "rnc/overlay/shared/gameplay/vendor/002aea70_globals.h"
+#include "rnc/overlay/shared/gameplay/vendor/initialize_vendor_screen_globals.h"
 extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
 extern int level_table_pair_indices[] __asm__("D_L01_001CA4A0");
 extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");

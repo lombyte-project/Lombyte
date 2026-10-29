@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/shared/runtime/memory/002018c8.c. */
+/* Scalar data read by src/overlays/shared/runtime/memory/level_draw_dialog_text.c. */
 extern s32 default_dialog_line1_y __asm__("D_L00_0015F4A8") __attribute__((sda));
 extern s32 default_dialog_line2_y __asm__("D_L00_0015F4AC") __attribute__((sda));
 extern s32 dialog_text_tween_start_color __asm__("D_L00_0015F4B0") __attribute__((sda));

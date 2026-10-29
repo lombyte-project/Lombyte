@@ -59,7 +59,7 @@ extern Load26b768 D_L18_00174800_26b768 __asm__("D_L07_00173E80");
 extern char *D_L18_00174840_26b768[] __asm__("D_L07_00173EC0");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
 extern Ldg26b768 D_0015EE48;
-#include "rnc/overlay/l07/world/loaders/0026b768_globals.h"
+#include "rnc/overlay/l07/world/loaders/load_level_assets_globals.h"
 #include "rnc/math/fast_math.h"
 extern u64 D_L07_00182840[3];
 extern u64 l07_64x64_texture_state[3] __asm__("D_L07_00182858");
