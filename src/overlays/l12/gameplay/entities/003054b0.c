@@ -1097,8 +1097,18 @@ extern int hoven_jittered_second_packet_blend_subtrahend_selector_gp __asm__("D_
 extern int hoven_jittered_second_packet_blend_alpha_factor_selector_gp __asm__("D_L12_00161FD4") __attribute__((sda));
 extern int hoven_jittered_second_packet_blend_addend_selector_gp __asm__("D_L12_00161FD8") __attribute__((sda));
 extern float hoven_jittered_quad_base_uvs[4][2] __asm__("D_L12_001FB6D0");
-extern VendorQuadCorner D_L12_001FB6F0[4] __attribute__((section(".data")));
-extern VendorQuadCorner D_L12_001FB730[4] __attribute__((section(".data")));
+VendorQuadCorner D_L12_001FB6F0[4] = {
+    {0.0f, -5.0f, -0.02f, 1.0f},
+    {0.0f, -5.0f, 0.02f, 1.0f},
+    {0.0f, 5.0f, -0.02f, 1.0f},
+    {0.0f, 5.0f, 0.02f, 1.0f},
+};
+VendorQuadCorner D_L12_001FB730[4] = {
+    {0.0f, -5.0f, -0.2f, 1.0f},
+    {0.0f, -5.0f, 0.2f, 1.0f},
+    {0.0f, 5.0f, -0.2f, 1.0f},
+    {0.0f, 5.0f, 0.2f, 1.0f},
+};
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");

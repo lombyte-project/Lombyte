@@ -1304,7 +1304,7 @@ extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attri
 extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
 extern char *lightning_arc_owner_moby __asm__("D_L14_00161CE8");
 extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
-extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
+f32 lightning_main_arc_points[40][4] __asm__("D_L14_001DFD80") = {0};
 extern s16 D_L14_001E0000[40];
 f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
 u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350") = {0};
@@ -1359,7 +1359,7 @@ void update_branched_lightning_arc(char *moby) {
         D_L14_00161CE0_d530 = 0;
         for (; i < 40; i++) {
             main_arc_age = &D_L14_001E0000[i];
-            main_arc_point = D_L14_001DFD80_d530[i];
+            main_arc_point = lightning_main_arc_points[i];
             main_arc_point[1] = main_arc_point[2] = 0.0f;
             main_arc_point[3] = 1.0f;
             main_arc_point[0] = lightning_main_arc_point_spacing_gp * (float)i;
@@ -1422,7 +1422,7 @@ void update_branched_lightning_arc(char *moby) {
             if (i != 0) {
                 if (i >= 35) {
                     float k5 = 5.0f;
-                    float *pp = D_L14_001DFD80_d530[i];
+                    float *pp = lightning_main_arc_points[i];
                     pp[2] = pp[2] + (0.0f - pp[2]) * (convert_integer_to_float(i - 35) / k5);
                 }
             }
@@ -3693,4 +3693,3 @@ void rocket_update(struct Moby *moby) {
         return;
     }
 }
-
