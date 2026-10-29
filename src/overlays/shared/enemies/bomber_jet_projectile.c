@@ -97,7 +97,7 @@ void update_explosive_projectile(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 void update_explosive_projectile(struct Moby *moby) {
     Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
-    Data      *data;
+    Data      *projectile_vars;
     int        rate_divisor;
     int        i;
     int        j;
@@ -116,10 +116,10 @@ void update_explosive_projectile(struct Moby *moby) {
     if (cutscene_active_macro != 0) {
         rate_divisor = 4;
     }
-    data = (*(void **)&moby->pvars);
+    projectile_vars = (*(void **)&moby->pvars);
     qcopy(&old_pos, &(*(Vec_2F7E08 *)&moby->pos));
-    fast_vec_add(&(*(Vec_2F7E08 *)&moby->pos), &(*(Vec_2F7E08 *)&moby->pos), data);
-    step_length = fast_vec_length(data);
+    fast_vec_add(&(*(Vec_2F7E08 *)&moby->pos), &(*(Vec_2F7E08 *)&moby->pos), projectile_vars);
+    step_length = fast_vec_length(projectile_vars);
     for (i = 0; cutscene_active_macro != 0 ? i < 2 : i < 4; i++) {
         Vec_2F7E08 smoke_vel;
         {
@@ -134,9 +134,9 @@ void update_explosive_projectile(struct Moby *moby) {
             fast_vec_normalize(
                 &smoke_vel, &smoke_vel, random_float_between(0.5f, 1.0f) * D_0015ED6C);
             fast_vec_normalize(
-                &smoke_pos, data, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
+                &smoke_pos, projectile_vars, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
             fast_vec_add(&smoke_vel, &smoke_vel, &smoke_pos);
-            fast_vec_normalize(&smoke_pos, data, random_float_between(0.0f, 1.0f) * step_length);
+            fast_vec_normalize(&smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
             fast_vec_add(&smoke_pos, &smoke_pos, &(*(Vec_2F7E08 *)&moby->pos));
             spawn_effect(&smoke_pos,
                          &smoke_vel,
@@ -146,7 +146,7 @@ void update_explosive_projectile(struct Moby *moby) {
                          0x50,
                          random_int_between(0x50, 0x8C) / rate_divisor,
                          1);
-            fast_vec_normalize(&smoke_pos, data, random_float_between(0.0f, 1.0f) * step_length);
+            fast_vec_normalize(&smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
             fast_vec_add(&smoke_pos, &smoke_pos, &(*(Vec_2F7E08 *)&moby->pos));
             spawn_effect(&smoke_pos,
                          &smoke_vel,
@@ -163,8 +163,8 @@ void update_explosive_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (fast_vec_dist(&data->target, &(*(Vec_2F7E08 *)&moby->pos)) < data->f38) {
-        qcopy(&(*(Vec_2F7E08 *)&moby->pos), &data->target);
+    if (fast_vec_dist(&projectile_vars->target, &(*(Vec_2F7E08 *)&moby->pos)) < projectile_vars->f38) {
+        qcopy(&(*(Vec_2F7E08 *)&moby->pos), &projectile_vars->target);
         moby->state = 1;
     }
     if (moby->state != 0) {
@@ -173,7 +173,7 @@ void update_explosive_projectile(struct Moby *moby) {
         if (cutscene_active_macro != 0) {
             size_scale = 4.0f;
         }
-        fast_vec_scale(data, data, -0.55f);
+        fast_vec_scale(projectile_vars, projectile_vars, -0.55f);
         if (cutscene_active_macro != 0) {
             Dmg damage;
             {
@@ -216,7 +216,7 @@ void update_explosive_projectile(struct Moby *moby) {
             speed = speed * size_scale;
             spawn_particle(
                 &(*(Vec_2F7E08 *)&moby->pos),
-                data,
+                projectile_vars,
                 start_colors.c[random_integer_below(6)],
                 end_colors.c[random_integer_below(6)],
                 size_scale * 400000.0f,
@@ -227,7 +227,7 @@ void update_explosive_projectile(struct Moby *moby) {
                 speed);
             spawn_particle(
                 &(*(Vec_2F7E08 *)&moby->pos),
-                data,
+                projectile_vars,
                 0x7FFFFFFF,
                 0xFFFFFF,
                 size_scale * 400000.0f,
@@ -266,7 +266,7 @@ void update_explosive_projectile(struct Moby *moby) {
         if (D_L01_0015F5D0 < 0.95f && view_distance > 9.0f) {
             spawn_glow_particle(moby,
                                 &(*(Vec_2F7E08 *)&moby->pos),
-                                data,
+                                projectile_vars,
                                 size_scale * 4.0f,
                                 scale_game_frames(0xF),
                                 0x7F,
@@ -275,7 +275,7 @@ void update_explosive_projectile(struct Moby *moby) {
                                 0x20);
             spawn_glow_particle(moby,
                                 &(*(Vec_2F7E08 *)&moby->pos),
-                                data,
+                                projectile_vars,
                                 size_scale * 4.0f,
                                 scale_game_frames(0x18),
                                 0x7F,
@@ -285,7 +285,7 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         spawn_glow_particle(moby,
                             &(*(Vec_2F7E08 *)&moby->pos),
-                            data,
+                            projectile_vars,
                             size_scale * 4.0f,
                             scale_game_frames(0x14),
                             0x7F,
@@ -294,7 +294,7 @@ void update_explosive_projectile(struct Moby *moby) {
                             0x30);
         spawn_glow_particle(moby,
                             &(*(Vec_2F7E08 *)&moby->pos),
-                            data,
+                            projectile_vars,
                             size_scale * 2.0f,
                             scale_game_frames(0x13),
                             0xFF,
@@ -305,7 +305,7 @@ void update_explosive_projectile(struct Moby *moby) {
             if (D_L01_0015F5D0 < 0.95f && view_distance > 9.0f) {
                 spawn_glow_particle(moby,
                                     &(*(Vec_2F7E08 *)&moby->pos),
-                                    data,
+                                    projectile_vars,
                                     30.0f,
                                     scale_game_frames(0xF),
                                     0x7F,
@@ -314,7 +314,7 @@ void update_explosive_projectile(struct Moby *moby) {
                                     0x20);
                 spawn_glow_particle(moby,
                                     &(*(Vec_2F7E08 *)&moby->pos),
-                                    data,
+                                    projectile_vars,
                                     30.0f,
                                     scale_game_frames(0x18),
                                     0x7F,
@@ -324,7 +324,7 @@ void update_explosive_projectile(struct Moby *moby) {
             }
             spawn_glow_particle(moby,
                                 &(*(Vec_2F7E08 *)&moby->pos),
-                                data,
+                                projectile_vars,
                                 30.0f,
                                 scale_game_frames(0x14),
                                 0x7F,
@@ -333,7 +333,7 @@ void update_explosive_projectile(struct Moby *moby) {
                                 0x30);
             spawn_glow_particle(moby,
                                 &(*(Vec_2F7E08 *)&moby->pos),
-                                data,
+                                projectile_vars,
                                 15.0f,
                                 scale_game_frames(0x13),
                                 0xFF,
@@ -357,7 +357,7 @@ void update_explosive_projectile(struct Moby *moby) {
             fast_vec_normalize(
                 &spark_vel, &spark_vel, cutscene_active_macro != 0 ? speed * 0.2f : speed);
             size = 105000.0f;
-            fast_vec_add(&spark_vel, &spark_vel, data);
+            fast_vec_add(&spark_vel, &spark_vel, projectile_vars);
             if (cutscene_active_macro != 0) {
                 size = 21000.0f;
             }
@@ -373,7 +373,7 @@ void update_explosive_projectile(struct Moby *moby) {
                 -1);
         }
         size_scale = (200.0f - camera_distance) / 200.0f;
-        if (data->f34 == 0) {
+        if (projectile_vars->f34 == 0) {
             if (size_scale < 0.1f) {
                 size_scale = 0.1f;
             }
@@ -383,9 +383,9 @@ void update_explosive_projectile(struct Moby *moby) {
             }
         }
         for (link = 0; link < 4; link++) {
-            if (cutscene_active_macro == 0 && data->ids[link] != -1) {
-                if (((struct Moby *)ents_macro)[data->ids[link]].oclass == 0x2BC) {
-                    Tgt *target = (*(void **)&((struct Moby *)ents_macro)[data->ids[link]].pvars);
+            if (cutscene_active_macro == 0 && projectile_vars->ids[link] != -1) {
+                if (((struct Moby *)ents_macro)[projectile_vars->ids[link]].oclass == 0x2BC) {
+                    Tgt *target = (*(void **)&((struct Moby *)ents_macro)[projectile_vars->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 &&
                         is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0 &&
                         is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {
