@@ -48,7 +48,7 @@ s32 handle_hero_hit(s32 apply_response) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (D_L08_0015F5C4 != 0) {
+    if (level_game_mode != 0) {
         return 0;
     }
     G.damage_source_moby = 0;

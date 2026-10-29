@@ -20,7 +20,7 @@
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_001f9740(int *arg0);
+extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
@@ -45,7 +45,7 @@ void bombthrower_grass_update(struct Moby *moby) {
             scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
         moby->state = 1;
     }
-    if (FUN_001f9740((int *)data)) {
+    if (fast_dec_timer((int *)data)) {
         float x = bombthrower_grass_yaw_offset_limit_degrees_gp;
         float yaw_offset = random_float_between_alt(-x, x) * DEG_TO_RAD;
         float launch_yaw = fast_add_rotations(moby->rot.z, yaw_offset);
@@ -74,7 +74,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_fixed_height_destruction_moby(struct Moby *owner) __asm__("FUN_L10_002dd848");
 
@@ -90,7 +90,7 @@ char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
         *(long *)(moby + 0x38) = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
         *(float *)(moby + 0x18) = 59.0f;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -472,7 +472,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void * spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
 extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e8590");
 extern void FUN_L00_002e8648(void);
@@ -492,7 +492,7 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_L00_00272F00_2BFBB8 FUN_L00_00272060
 #define func_L00_00272488_2BFBB8 spawn_moving_resizing_height_snapped_alpha_fade_particle
 #define func_0022ED80_2BFBB8 ((int (*)(int, int, int))allocate_voice_for_target_entry)
-#define func_L00_00217718_2BFBB8 FUN_L00_00216f90
+#define func_L00_00217718_2BFBB8 set_race_camera
 #define func_001FA888_2BFBB8 ((float (*)(int))convert_integer_to_float)
 #define func_001FA898_2BFBB8 ((int (*)(float))truncate_float_to_s32)
 #define func_001FA8A8_2BFBB8 fast_tween_color
@@ -974,10 +974,10 @@ void approach_moby_height(struct Moby *moby, float target_height) {
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L01_00274b78(float, void *, void *);
+extern int find_point_ahead(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -1010,7 +1010,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
 
     qcopy(old, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, data);
-    FUN_L01_00274b78(20.0f, moby, found);
+    find_point_ahead(20.0f, moby, found);
     switch (*(short *)(data + 0x12)) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
@@ -1063,7 +1063,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
                 rand_dir[1] = random_float_between_alt(-1.0f, 1.0f);
                 rand_dir[2] = random_float_between_alt(-1.0f, 1.0f);
                 *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
-                FUN_L00_001ff660(rand_dir, data, D_L10_00174300);
+                reflect_vector(rand_dir, data, D_L10_00174300);
                 fast_vec_normalize(raised, raised, fast_vec_length(rand_dir) * 0.5f);
                 fast_vec_add(raised, rand_dir, raised);
                 fast_vec_normalize(raised, raised,
@@ -1135,7 +1135,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float seg_sqrt(float) __asm__("func_001F9988");
 extern float D_0015ED6C;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
@@ -1166,7 +1166,7 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
             qcopy(moby + 0x10, collision_result + 0x20);
             normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(moby + 0x10, moby + 0x10, scaled_collision_response);
-            FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
+            reflect_vector(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.35f);
             normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, one);
             dot_vectors_xyz(scaled_collision_response, world_up);
@@ -1192,7 +1192,7 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
             qcopy(moby + 0x10, collision_result + 0x20);
             normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(moby + 0x10, moby + 0x10, scaled_collision_response);
-            FUN_L00_001ff660(motion_data, motion_data, collision_result + 0x40);
+            reflect_vector(motion_data, motion_data, collision_result + 0x40);
             scale_vector_xyz_c(motion_data, motion_data, 0.5f);
             normalize_vector_xyz(scaled_collision_response, collision_result + 0x40, one);
             if (0.707f < dot_vectors_xyz(scaled_collision_response, world_up)) {
@@ -1858,7 +1858,7 @@ void button_update(struct Moby *moby) {
             }
         }
     }
-    FUN_001f9740(&plate_vars->sound_timer);
+    fast_dec_timer(&plate_vars->sound_timer);
     if (D_0014C050[current_level_index][moby->mission] == 0xFF) {
         pressed = 1;
     }
@@ -1905,7 +1905,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L10_001BA950[];
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_debris_chunk(void *, void *, unsigned int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
@@ -1945,7 +1945,7 @@ void handle_moby_destruction(char *moby) {
             transformed_offset.q = debris_vector.q;
             transform_vector_by_basis(&transformed_offset, &transformed_offset, moby_rotation_basis);
             normalize_vector_xyz(&debris_vector, &transformed_offset, random_float_between(5.0f, 10.0f) * D_0015ED6C);
-            FUN_L00_001ff290(&translated_position, &transformed_offset, moby + 0x10);
+            add_vectors(&translated_position, &transformed_offset, moby + 0x10);
             if (random_integer_below(1) == 0)
                 k = 0x70E;
             debris_scale_multiplier = random_float_between(0.5f, 1.0f);

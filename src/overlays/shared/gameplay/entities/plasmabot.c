@@ -206,7 +206,7 @@ void update_linked_moby_position(char *moby) {
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) __asm__("FUN_L14_002ffaf8");
 
@@ -227,7 +227,7 @@ unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
         spawned_moby[0x30] = 0xFF;
         *(short *)(spawned_moby + 0x32) = 0xFF;
         spawned_moby[0x31] = 1;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1528,7 +1528,7 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
         *(float *)(spawned_vars + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         *(float *)(spawned_vars + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
         *(int *)(spawned_vars + 0x20) = scale_game_frames(200);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1696,7 +1696,7 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
             *(float *)(spawned_vars + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
             *(float *)(spawned_vars + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
         }
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1758,7 +1758,7 @@ typedef struct {
     T_eca8 tail;
 } P_eca8;
 
-char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");

@@ -4,11 +4,11 @@
 
 #include "rnc/gameplay/entities/moby.h"
 #include "moby_update.h"
-extern struct Moby *D_L00_0015FFD8;
+extern struct Moby *moby_table __asm__("D_L00_0015FFD8");
 extern struct Moby *D_L00_0015FFE4;
 extern void *active_mobies[] __asm__("D_L00_001ABA00");
 extern void FUN_L00_00250480(struct Moby *moby);
-extern void FUN_L00_00250df8(struct Moby *moby);
+extern void update_entity(struct Moby *moby) __asm__("FUN_L00_00250df8");
 
 void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 void link_and_update_all_mobys(void)
@@ -19,7 +19,7 @@ void link_and_update_all_mobys(void)
 
     active_mobies[0] = 0;
     D_L00_0015FFE4 = 0;
-    moby = D_L00_0015FFD8;
+    moby = moby_table;
     last = 0;
     while (moby->state != 0xFF) {
         if (!(moby->state & 0x80) && !(moby->flags & 2)) {
@@ -44,7 +44,7 @@ void link_and_update_all_mobys(void)
             }
             MOBY_CALL_UPDATE(current->update, current);
             if (!(((volatile struct Moby *)current)->flags & 4)) {
-                FUN_L00_00250df8(current);
+                update_entity(current);
             }
         }
         current = current->next;

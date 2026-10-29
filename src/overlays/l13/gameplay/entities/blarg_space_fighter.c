@@ -22,7 +22,7 @@ enum AsteroidSpinAxis {
 };
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
@@ -60,7 +60,7 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby, char *rocket_spawn
             qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
         }
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, initial_expiry_countdown, 0, 500000.0f);
     }
     return moby;
@@ -118,7 +118,7 @@ typedef struct Tex_2C27B0 { char pad0[0x5C]; unsigned char *p5C; } Tex_2C27B0;
 extern Moby_2C27B0 *D_L13_00174158 __attribute__((section(".data")));
 extern Tex_2C27B0 D_L13_001B2380;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern char D_0013F350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
@@ -191,7 +191,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
         particle_direction_scratch.z = 0.02f;
         transform_vector_by_basis(&particle_direction_scratch, &particle_direction_scratch, &rocket_moby->mat);
         build_look_at_matrix(&particle_direction_scratch, &particle_direction_scratch, &rocket_moby->mat, random_angle_radians_c());
-        FUN_L00_0026cbb0(&scratch_vector, &particle_direction_scratch, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
+        spawn_burst(&scratch_vector, &particle_direction_scratch, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames_alt(5), 1, 40000.0f);
     }
     if (rocket_data->target != 0 && rocket_data->target->state != 0xFE && rocket_data->target->state != 0xFD
         && distance_xyz(&rocket_data->tpos, &rocket_data->target->pos) < 3.0f) {
@@ -280,7 +280,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
 
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -309,7 +309,7 @@ unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         copy_hero_moby_field_38(moby);
     }
     return moby;
@@ -618,7 +618,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L13_002c2d30_collision(struct Moby *, void *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, int, int);
@@ -678,19 +678,19 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     FUN_L00_0024f7c8(moby, 2, point_2_position);
     FUN_L00_0024f7c8(moby, 3, point_3_position);
     if (frame_count & 1) {
-        FUN_L00_00269958(point_2_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
-        FUN_L00_00269958(point_3_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
+        spawn_effect(point_2_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
+        spawn_effect(point_3_position, downward_effect_vector, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
     } else {
-        FUN_L00_00269958(point_2_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
-        FUN_L00_00269958(point_3_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
+        spawn_effect(point_2_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
+        spawn_effect(point_3_position, downward_effect_vector, 0x6000FFFF, 0x80, scale_game_frames(FUN_L00_00257b90(0x14, 0x18)), 0x64, -0xA, 1);
     }
     {
         int ra = FUN_L00_00257b90(0xA, 0x19);
         int rb = FUN_L00_00257b90(0xA, 0xF);
-        FUN_L00_00269958(point_2_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
+        spawn_effect(point_2_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
         ra = FUN_L00_00257b90(0xA, 0x19);
         rb = FUN_L00_00257b90(0xA, 0xF);
-        FUN_L00_00269958(point_3_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
+        spawn_effect(point_3_position, downward_effect_vector, 0xEFFF7F4F, 0xFF0000, scale_game_frames(rb), ra, -ra, 1);
     }
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * hovering_rocket_attacker_scale_multiplier_gp;
     damage_amount = 0.0f;
@@ -1742,7 +1742,7 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void 
 }
 #include "rnc/overlay/quad.h"
 extern int fptodp(float) __asm__("FUN_00120478");
-extern int FUN_00213928(struct Moby *, void *, float *, int, int *, int, int, int);
+extern int trooper_take_damage(struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int, float, float,
@@ -1783,7 +1783,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
             DebugPrint(D_L13_001f49a8, *(int *)(hit_record + 0x38), fptodp(*(float *)(hit_record + 0)),
                        fptodp(*(float *)(hit_record + 4)), fptodp(*(float *)(hit_record + 8)));
         }
-        switch (FUN_00213928(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (trooper_take_damage(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *health = 0.0f;
@@ -2019,7 +2019,7 @@ char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_v
         *(float *)(moby + 0x40) = random_angle_radians();
         *(float *)(moby + 0x44) = random_angle_radians();
         *(float *)(moby + 0x48) = random_angle_radians();
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         copy_hero_moby_field_38(moby);
     }
     return moby;
@@ -2521,7 +2521,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_owner_linked_class_160_moby(char *owner) __asm__("FUN_L13_002e8438");
@@ -2540,7 +2540,7 @@ char *spawn_owner_linked_class_160_moby(char *owner) {
         *(char **)data = owner;
         *(int *)(data + 4) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x200;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         copy_hero_moby_field_38(moby);
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
     }
@@ -2678,7 +2678,7 @@ extern int frames_v(int) __asm__("FUN_001f96f8");
 extern int ftoi_v(float) __asm__("FUN_001fa6d0");
 extern float rndf_v(float, float) __asm__("FUN_002132a8");
 extern void bone_v(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
 typedef struct {
     char pad[0xC4];
@@ -2702,15 +2702,15 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
             bone_v(source_moby, gated_effect_joint_indices[i], bone_position);
             if (frame_count & 1) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x14));
-                FUN_L00_00269958(bone_position, &zv, 0xCF0000FF, 0xCF, effect_frame_count, ftoi_v(scale_ratio * 350.0f), -100, 1);
+                spawn_effect(bone_position, &zv, 0xCF0000FF, 0xCF, effect_frame_count, ftoi_v(scale_ratio * 350.0f), -100, 1);
             } else if (source_moby->command == 0 || D_L13_001D3478[source_moby->command - 1] != joint_effect_gate_slot_indices[i] ||
                        below_v(9) == 0) {
                 effect_frame_count = frames_v(rnd_v(0xF, 0x16));
-                FUN_L00_00269958(bone_position, &zv, 0x6000FFFF, 0x80, effect_frame_count, ftoi_v(scale_ratio * 600.0f), -100, 1);
+                spawn_effect(bone_position, &zv, 0x6000FFFF, 0x80, effect_frame_count, ftoi_v(scale_ratio * 600.0f), -100, 1);
             }
             k = ftoi_v(rndf_v(100.0f, 250.0f) * scale_ratio);
             effect_frame_count = frames_v(rnd_v(8, 0xC));
-            FUN_L00_00269958(bone_position, &zv, 0xEFFF7F4F, 0xFF0000, effect_frame_count, k, -k, 1);
+            spawn_effect(bone_position, &zv, 0xEFFF7F4F, 0xFF0000, effect_frame_count, k, -k, 1);
         }
     }
 }
@@ -2723,7 +2723,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
@@ -2744,7 +2744,7 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
         if (frame_count & 1) {
             effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
             k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * randomized_scale_ratio);
-            FUN_L00_00269958(effect_position, z, 0xDF000FFF, 0xCF, effect_frame_count, k, -100, 1);
+            spawn_effect(effect_position, z, 0xDF000FFF, 0xCF, effect_frame_count, k, -100, 1);
         } else {
             if (moby->command != 0) {
                 if (random_integer_below(0xC) != 0)
@@ -2752,7 +2752,7 @@ void emit_randomized_moby_joint_effects(struct Moby *moby) {
             }
             effect_frame_count = scale_game_frames(FUN_L00_00257b90(0x14, 0x32));
             k = func_001FA898_r(random_float_between_alt(600.0f, 800.0f) * randomized_scale_ratio);
-            FUN_L00_00269958(effect_position, z, 0x8000FFFF, 0x80, effect_frame_count, k, -100, 1);
+            spawn_effect(effect_position, z, 0x8000FFFF, 0x80, effect_frame_count, k, -100, 1);
         }
     }
 }

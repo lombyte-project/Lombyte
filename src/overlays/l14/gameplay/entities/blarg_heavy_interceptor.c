@@ -425,7 +425,7 @@ extern f32 random_float_c618(f32, f32) __asm__("FUN_002132a8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 extern void spawn_particles_at_shape_points(void *, void *, int) __asm__("FUN_L00_0025c398");
 extern s32 allocate_voice_c618(s32, s32, void *) __asm__("FUN_0022da68");
@@ -789,7 +789,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             FUN_0020c828(moby);
             return;
         }
-        FUN_L00_0026cbb0(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+        spawn_burst(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
         for (i = 0; i < 2; i++) {
             int signed_puff_random_value = random_integer_below(6);
@@ -3007,7 +3007,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
@@ -3063,7 +3063,7 @@ void update_flying_debris(struct Moby *moby) {
     add_d(at, joint, ofs);
     sub_d(moby_to_joint_direction, joint, &moby->pos);
     normalize_d(moby_to_joint_direction, moby_to_joint_direction, 0.05f);
-    FUN_L00_0026cbb0(at, moby_to_joint_direction, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
+    spawn_burst(at, moby_to_joint_direction, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
             scale_d(ofs, (char *)moby + 0xC0, randf_sym(0.01f, 0.5f));
@@ -3121,7 +3121,7 @@ void update_flying_debris(struct Moby *moby) {
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *);
@@ -3162,7 +3162,7 @@ unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) 
         *(short *)(spawned_vars + 0x10) = scale_game_frames(200);
         *(char **)(spawned_vars + 0x20) = owner;
         *(short *)(spawned_vars + 0x12) = -1;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }

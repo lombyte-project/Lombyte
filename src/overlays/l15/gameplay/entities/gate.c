@@ -889,7 +889,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void cart_burst(float, float, void *, void *, long long) __asm__("FUN_L00_0025f090");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
@@ -995,7 +995,7 @@ void construction_arm_update(struct Moby *moby)
             offset.f[1] = fast_sin(direction) * spread;
             offset.f[2] = 0.0f;
             /* Retail computes the sum but passes velocity to the effect helper. */
-            FUN_L00_001ff290(&sum, &velocity, &offset);
+            add_vectors(&sum, &velocity, &offset);
             moby_point_position(moby, 1, &origin);
             first = scale_game_frames(construction_arm_effect_duration_min_frames_gp);
             duration = scale_game_frames(construction_arm_effect_duration_max_frames_gp);
@@ -1050,7 +1050,7 @@ extern float FUN_001f9b48(void *, void *);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_4f88(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_4f88(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void move_moby_with_sphere_collision(float, float, struct Moby *, void *, int) __asm__("FUN_L15_00247e90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -1116,7 +1116,7 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     FUN_001f9bf8_4f88(vars->speed * 0.1f, &scaled, &scaled);
     FUN_001f9a68_4f88(0.9f, &delta, &vars->delta);
     vars->delta.q = delta.q;
-    FUN_L00_001ff290(&delta, &vars->delta, &scaled);
+    add_vectors(&delta, &vars->delta, &scaled);
     move_moby_with_sphere_collision(1.0f, 2.0f, moby, &vars->delta, 0);
     /* Preserve the retail height store and facing input access order. */
     height = *(volatile float *)&vars->height;
@@ -1321,7 +1321,7 @@ extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008")
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern struct Moby *spawn_homing_spark_projectile(void *, void *, struct Moby *, int, float) __asm__("FUN_L03_002d5208");
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_001fff28(void *, int, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -1632,7 +1632,7 @@ void helicopter_update(struct Moby *moby) {
             aim.f[1] = fast_sin(spin) * 1.5f;
             aim.i[2] = 0;
             spin = fast_add_rotations(spin, 1.5707964f);
-            FUN_L00_001ff290(&target_pos, &aim, &point);
+            add_vectors(&target_pos, &aim, &point);
         }
         moby_point_position(moby, 5, &aim);
         if (vars->pilot != 0) {
@@ -1686,7 +1686,7 @@ void helicopter_update(struct Moby *moby) {
         *(u128 *)&vars->pilot->pos = *(u128 *)&moby->pos;
         *(u128 *)&vars->pilot->rot = *(u128 *)&moby->rot;
         advance_moby_animation(vars->pilot);
-        FUN_L00_00250df8(vars->pilot);
+        update_entity(vars->pilot);
         vars->pilot->flags |= 6;
     }
     if (vars->shot == 0 || vars->shot->oclass != 0x350 || vars->shot->state == 0xFE || vars->shot->state == 0xFD) {
@@ -1993,7 +1993,7 @@ int D_L15_00161B1C = 180;
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
@@ -2252,7 +2252,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 func_L10_002CD578_v(&position_or_motion_vector, 3.0f, &vector_or_hit_descriptor, (int)ultramech_moby, (int)combat_target,
                                     scale_game_frames(D_L15_00161B1C));
                 normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, 3.0f);
-                FUN_L00_001ff290(&vector_arithmetic_result, &vector_or_hit_descriptor, &position_or_motion_vector);
+                add_vectors(&vector_arithmetic_result, &vector_or_hit_descriptor, &position_or_motion_vector);
                 emit_radial_particle_burst(ultramech_moby, &vector_or_hit_descriptor, 0);
                 ultramech_vars->shots++;
             } else if ((float)ultramech_vars->shots >= 6.0f && (ultramech_moby->animFlags & 2)) {
@@ -2353,7 +2353,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         subtract_vector_xyz(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
         position_or_motion_vector.q = vector_arithmetic_result.q;
         normalize_vector_xyz(&position_or_motion_vector, &position_or_motion_vector, frame_time * 6.5f);
-        FUN_L00_001ff290(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
+        add_vectors(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
         if (!FUN_L00_00258490(ultramech_moby, &vector_or_hit_descriptor, &position_or_motion_vector, 1, 2.25f, 1.75f, 0.5f, 0.5235988f) ||
             point_in_path_xy(&vector_or_hit_descriptor, D_L15_001B0AB0[ultramech_vars->side]->pt, D_L15_001B0AB0[ultramech_vars->side]->n)) {
             qcopy(&ultramech_moby->pos, &vector_or_hit_descriptor);

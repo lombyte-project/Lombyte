@@ -84,7 +84,7 @@ extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00
 extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0024f7c8(void *, s32, void *);
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -164,7 +164,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
                 *(f32 *)(*(char **)(g + 0x1624) + 0x2c) *= 1.7f;
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) |= 0x10;
-                FUN_L00_00250df8(*(char **)(g + 0x1624));
+                update_entity(*(char **)(g + 0x1624));
             }
         }
         {
@@ -181,7 +181,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                     ((f32 *)&scratch.help.offset)[2] = 0.0257f;
                     transform_vector_by_basis(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
                     *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
-                    FUN_L00_00250df8(*(char **)(g + 0x1624));
+                    update_entity(*(char **)(g + 0x1624));
                     scale = 1.7f;
                     if (D_0015EDB3_macro) scale = 3.1f;
                     if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
@@ -224,7 +224,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                         (*(char **)(g + 0x1620))[0x31] = 1;
                         (*(char **)(g + 0x1620))[0x30] = 0;
                         *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
-                        FUN_L00_00250df8(*(char **)(g + 0x1620));
+                        update_entity(*(char **)(g + 0x1620));
                     }
                 }
                 if (*(char **)(g + 0x1620)) {
@@ -233,7 +233,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                         OvlQuad *position = &scratch.rotation[3];
                         char *moby = *(char **)(g + 0x1620);
                         qcopy_nc(moby + 0x10, position);
-                        FUN_L00_00250df8(moby);
+                        update_entity(moby);
                     }
                     clear_u64_value((scratch.rotation + 4));
                     ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);

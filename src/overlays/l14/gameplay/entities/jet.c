@@ -1047,7 +1047,7 @@ extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -1072,7 +1072,7 @@ char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collisio
         *(int *)(data + 0x20) = collision_ignore_moby;
         *(int *)(data + 0x24) = collision_mode;
         projectile_moby[0x23] = 0x10;
-        FUN_L00_00250df8(projectile_moby);
+        update_entity(projectile_moby);
     }
     return projectile_moby;
 }
@@ -1103,7 +1103,7 @@ extern s32 bolt_frames(s32) __asm__("FUN_001f96f8");
 extern int bolt_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int bolt_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void bolt_remove(void *) __asm__("FUN_0020c828");
@@ -1180,7 +1180,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
                 particle_launch_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, bolt_impact_reflection_normal);
+                reflect_vector(&spark, &bolt_vars->vel, bolt_impact_reflection_normal);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_length(&spark) * 0.5f);
                 bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 bolt_normalize(&particle_launch_vector, &particle_launch_vector, bolt_random(frame_time * 3.0f, frame_time * 6.0f));

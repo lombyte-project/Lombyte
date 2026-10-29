@@ -1125,7 +1125,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
 extern char *create_moby(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int id) {
@@ -1143,13 +1143,13 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
         *(int *)(data + 0x44) = attachment_joint_index;
         moby_point_position(parent_moby, attachment_joint_index, moby + 0x10);
         *(char **)(data + 0x3C) = parent_moby;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         qcopy(moby + 0x40, parent_moby + 0x40);
         *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(parent_moby + 0xC0);
         *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(parent_moby + 0xD0);
         *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(parent_moby + 0xE0);
         *(int *)(data + 0x40) = scale_game_frames(0x258);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }

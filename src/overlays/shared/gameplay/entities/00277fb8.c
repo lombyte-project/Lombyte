@@ -79,7 +79,7 @@ void spawn_proximity_gated_bolts(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) __asm__("FUN_L01_00278e20");
 
@@ -95,7 +95,7 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
         *(long *)(destination_moby + 0x38) = placement_source_moby->spawn_frame;
         destination_moby[0x30] = 0;
         *(short *)(destination_moby + 0x34) = 0;
-        FUN_L00_00250df8(destination_moby);
+        update_entity(destination_moby);
     }
 }
 

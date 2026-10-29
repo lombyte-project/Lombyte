@@ -508,7 +508,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -573,7 +573,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
         } else {
             qcopy(fragment_pvars + 0x20, class_vector_override);
         }
-        FUN_L00_00250df8(fragment_moby);
+        update_entity(fragment_moby);
     }
     return fragment_moby;
 }

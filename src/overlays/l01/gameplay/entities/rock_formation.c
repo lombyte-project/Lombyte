@@ -291,7 +291,7 @@ extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
-extern void FUN_L00_00250df8();
+extern void update_entity() __asm__("FUN_L00_00250df8");
 
 BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 color) __asm__("FUN_L01_002fa068");
 
@@ -324,7 +324,7 @@ BeamMoby *spawn_colored_half_scale_moby(s32 owner, u128 *pos, u128 *target, s32 
         beam_vars->color = color;
         spawn_source_attached_fading_effect_particle(spawned_moby, 0x2F00007F, color, -1, 210000.0f);
         spawn_source_attached_fading_effect_particle(spawned_moby, 0x4F004F7F, beam_vars->color, -1, 115500.0f);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -352,7 +352,7 @@ extern BurstPalette D_L01_0020B508;   /* outer colours */
 BurstLight D_L01_001E3440 = {{0, 0, 0, 0, 0, 0, 0, 0, 0x66, 0x66, 0xa6, 0x3f, 0, 0, 0, 0, 0, 0, 0xff, 0, 0x13, 0xf, 0, 0xff, 0, 0x13, 0x11, 0, 0x64, 0, 0x13, 0x13}, 13.0f, 13.0f, 13.0f};
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
+extern void spawn_particle(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026a9f0");
 /* s32 return is load-bearing: a void prototype changes the code */
 extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
@@ -383,7 +383,7 @@ void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scal
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
-        FUN_L00_0026a9f0(pos_p, &particle_base_velocity,
+        spawn_particle(pos_p, &particle_base_velocity,
                          inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
                          size,
                          random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
@@ -1571,7 +1571,7 @@ typedef struct {
     s32 *pvars;
 } SpawnedMoby;
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8();
+extern void update_entity() __asm__("FUN_L00_00250df8");
 
 SpawnedMoby *spawn_pipe_replacement_moby(SpawnedMoby *transform_source_moby) __asm__("FUN_L01_002ffa90");
 
@@ -1590,7 +1590,7 @@ SpawnedMoby *spawn_pipe_replacement_moby(SpawnedMoby *transform_source_moby) {
         qcopy(&spawned_moby->pos, &transform_source_moby->pos);
         qcopy(&spawned_moby->rot, &transform_source_moby->rot);
         *spawned_moby_vars = -1;
-        FUN_L00_00250df8(spawned_moby, -1);
+        update_entity(spawned_moby, -1);
     }
     return spawned_moby;
 }
@@ -1691,7 +1691,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         spawned_moby_vars->timer = 0x78;
         spawned_moby_vars->f10 = frame_time_sq * 15.0f;
         spawned_moby_vars->spin = random_float_between(0.0031415929f, 0.062831856f);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1929,7 +1929,7 @@ ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     destination_moby_vars->f250 = 1.0f;
     destination_moby_vars->w170 = truncate_float_to_s32(819.2f);
     destination_moby_vars->f224 = 30.0f;
-    FUN_L00_00250df8(destination_moby);
+    update_entity(destination_moby);
     return destination_moby;
 }
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");

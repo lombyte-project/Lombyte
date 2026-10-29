@@ -733,7 +733,7 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
 extern float FUN_0020c9e0(void *);
 extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
-extern void FUN_00210850(void *, int, void *, void *);
+extern void get_moby_joint_matrices(void *, int, void *, void *) __asm__("FUN_00210850");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float update_snagglebeast_rope(void *, void *) __asm__("FUN_L07_00317e60");
@@ -1512,7 +1512,7 @@ void snagglebeast_update(unsigned char *moby) {
             qcopy(data + 0xC0, &position);
             *(float *)(data + 0xC8) = *(float *)(data + 0x128);
             point = 0xA;
-            FUN_00210850(moby, 1, &point, &velocity);
+            get_moby_joint_matrices(moby, 1, &point, &velocity);
             matrix_to_euler(&velocity, &step);
             *(float *)(data + 0xCC) = fast_add_rotations(*(float *)(moby + 0x48), step.f[2]);
         }

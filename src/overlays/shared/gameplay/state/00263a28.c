@@ -7,7 +7,7 @@
 extern void rotation_matrix_263a28(void *matrix, void *rotation) __asm__("FUN_001fa050");
 extern void apply_matrix_263a28(void *out, void *in, void *matrix) __asm__("FUN_001f9d20");
 extern void scale_joint_263a28(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
-extern void FUN_0020fa90(void *moby, short joint, int flags);
+extern void compute_moby_joint_matrices(void *moby, short joint, int flags) __asm__("FUN_0020fa90");
 
 /* Joint positions in scratchpad, 16 bytes each. */
 #define JOINT_POSITIONS 0x70000000
@@ -48,7 +48,7 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
     } else if (*type == 2) {
         short joint = *(short *)(*(char **)(moby + 0x94) + 2);
         if (joint != 0) {
-            FUN_0020fa90(moby, joint, 0);
+            compute_moby_joint_matrices(moby, joint, 0);
         }
         qcopy(result, (void *)(JOINT_POSITIONS + *(int *)(entry + 4) * 0x10));
         fast_vec_scale(result, result, scale);
@@ -60,7 +60,7 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
     } else if (*type == 4) {
         short joint = *(short *)(*(char **)(moby + 0x94) + 2);
         if (joint != 0) {
-            FUN_0020fa90(moby, joint, 0);
+            compute_moby_joint_matrices(moby, joint, 0);
         }
         joints = (short *)(entry + 4);
         scale_joint_263a28(scale, first, (void *)(JOINT_POSITIONS + joints[0] * 0x10));

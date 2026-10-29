@@ -380,7 +380,7 @@ extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_00250df8(struct Moby *);
+extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Private variables of the two-door moby FUN_L11_00316320 runs. */
 struct L11GateVars {
@@ -462,8 +462,8 @@ void update_two_door_gate(struct Moby *moby) {
         gate_vars->left->pos.z = moby->pos.z + gate_vars->t * 4.0f - 4.0f;
         fast_vec_add(&gate_vars->right->pos, &moby->pos, door_position_offset);
         gate_vars->right->pos.z = moby->pos.z + gate_vars->t * 4.0f - 4.0f;
-        FUN_L00_00250df8(gate_vars->left);
-        FUN_L00_00250df8(gate_vars->right);
+        update_entity(gate_vars->left);
+        update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
             moby->state = 3;
@@ -476,8 +476,8 @@ void update_two_door_gate(struct Moby *moby) {
         a = (1.0f - gate_vars->t) * (gate_door_y_rotation_degrees_gp * 0.017453292f);
         gate_vars->left->rot.y = a;
         gate_vars->right->rot.y = a;
-        FUN_L00_00250df8(gate_vars->left);
-        FUN_L00_00250df8(gate_vars->right);
+        update_entity(gate_vars->left);
+        update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
             moby->state = 4;
@@ -493,8 +493,8 @@ void update_two_door_gate(struct Moby *moby) {
         a = gate_vars->t * 1.5707964f;
         gate_vars->left->rot.x = -a;
         gate_vars->right->rot.x = a;
-        FUN_L00_00250df8(gate_vars->left);
-        FUN_L00_00250df8(gate_vars->right);
+        update_entity(gate_vars->left);
+        update_entity(gate_vars->right);
         if (gate_vars->t >= 1.0f) {
             gate_vars->t = 0.0f;
             moby->state = 5;
@@ -509,12 +509,12 @@ void update_two_door_gate(struct Moby *moby) {
         gate_vars->left->pos.z = moby->pos.z + gate_door_z_offset_gp;
         gate_vars->left->rot.x = -(gate_door_x_rotation_degrees_gp * 0.017453292f);
         gate_vars->left->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
-        FUN_L00_00250df8(gate_vars->left);
+        update_entity(gate_vars->left);
         fast_vec_add(&gate_vars->right->pos, &moby->pos, door_position_offset);
         gate_vars->right->pos.z = moby->pos.z + gate_door_z_offset_gp;
         gate_vars->right->rot.x = gate_door_x_rotation_degrees_gp * 0.017453292f;
         gate_vars->right->rot.y = gate_door_y_rotation_degrees_gp * 0.017453292f;
-        FUN_L00_00250df8(gate_vars->right);
+        update_entity(gate_vars->right);
         break;
     }
 }
@@ -766,7 +766,7 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
                                     pitch0) * segment_fraction,
             pitch0);
         chain_vars->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * segment_fraction, yaw0);
-        FUN_L00_00250df8(chain_vars->links[i]);
+        update_entity(chain_vars->links[i]);
         fast_vec_normalize(spacing_reference_position, &chain_vars->links[i]->rot_row0, oil_tanker_spacing_reference_offset_gp);
         fast_vec_add(spacing_reference_position, spacing_reference_position, &chain_vars->links[i]->pos);
     }

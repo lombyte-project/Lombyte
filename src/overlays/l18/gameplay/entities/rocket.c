@@ -350,7 +350,7 @@ typedef struct {
     int f90;
 } Obj;
 
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -435,7 +435,7 @@ void update_projectile_motion_collision_and_trail(char *moby) {
         *(OvlQuad *)world_effect_direction = 0;
         world_effect_direction[2] = 0.02f;
         transform_vector_by_basis(world_effect_direction, world_effect_direction, moby + 0xC0);
-        FUN_L00_0026cbb0(effect_spawn_position, world_effect_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
+        spawn_burst(effect_spawn_position, world_effect_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
@@ -604,7 +604,7 @@ char *create_rocket_moby(float *rocket_spawn_position, float *initial_movement_s
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6878), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern int scale_game_frames(int);
 typedef unsigned int Q128 __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -638,7 +638,7 @@ void spawn_rocket_trail_effects(void *mobyp, void *movement_step) {
     world_effect_direction.q = 0;
     world_effect_direction.v[2] = 0.02f;
     transform_vector_by_basis(&world_effect_direction, &world_effect_direction, moby + 0xC0);
-    FUN_L00_0026cbb0(effect_spawn_position, &world_effect_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(0x14), 1, 20000.0f);
+    spawn_burst(effect_spawn_position, &world_effect_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(0x14), 1, 20000.0f);
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6A00), where it is exact; names translated to the US level program. */
 

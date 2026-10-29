@@ -788,7 +788,7 @@ extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
@@ -846,7 +846,7 @@ void blarg_gun_update(char *moby)
             if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
                 *(int *)data = 0;
                 if (dot_vectors_xyz(data + 0x30, hs + 0x40) < 0.0f) {
-                    FUN_L00_001ff660(data + 0x30, data + 0x30, hs + 0x40);
+                    reflect_vector(data + 0x30, data + 0x30, hs + 0x40);
                     scale_vector_xyz(data + 0x30, data + 0x30, 0.5f);
                 }
             }

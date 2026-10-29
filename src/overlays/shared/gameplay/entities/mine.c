@@ -209,7 +209,7 @@ extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(v
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void jet_animate(unsigned char *, float) __asm__("FUN_L00_00259fe8");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
@@ -401,14 +401,14 @@ void mine_update(M910 *mine_moby) {
                             if (v->vel.f[2] < frame_time * -9.8f) {
                                 mine_moby->bBC = 1;
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
-                                FUN_L00_001ff660(&collision_response_velocity, v, &coll_hit.nrm);
+                                reflect_vector(&collision_response_velocity, v, &coll_hit.nrm);
                                 normalize_vector_xyz(&collision_response_velocity, &collision_response_velocity, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
                                 normalize_vector_xyz(t, &coll_hit.nrm, frame_time_sq * 9.7f);
                                 add_vector_xyz(&mine_moby->pos, &mine_moby->pos, t);
-                                FUN_L00_001ff660(v, v, &coll_hit.nrm);
+                                reflect_vector(v, v, &coll_hit.nrm);
                                 scale_vector_xyz(v, v, 0.4f);
                                 normalize_vector_xyz(t, &coll_hit.nrm, 1.0f);
                                 dot_vectors_xyz(t, &up);
@@ -422,7 +422,7 @@ void mine_update(M910 *mine_moby) {
                                 v->vel.f[2] < frame_time * -9.8f) {
                                 mine_moby->bBC = 1;
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
-                                FUN_L00_001ff660(&collision_response_velocity, v, &coll_hit.nrm);
+                                reflect_vector(&collision_response_velocity, v, &coll_hit.nrm);
                                 normalize_vector_xyz(&collision_response_velocity, &collision_response_velocity, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
@@ -433,7 +433,7 @@ void mine_update(M910 *mine_moby) {
                                 normalize_vector_xyz(t, &coll_hit.nrm, frame_time_sq * 9.7f);
                                 add_vector_xyz(&mine_moby->pos, &mine_moby->pos, t);
                                 *(OvlQuad *)ov = v->vel.q;
-                                FUN_L00_001ff660(v, v, &coll_hit.nrm);
+                                reflect_vector(v, v, &coll_hit.nrm);
                                 scale_vector_xyz(v, v, 0.6f);
                                 v->vel.f[2] *= 0.5f;
                                 if (v->f6C == 0.0f) {
@@ -2058,7 +2058,7 @@ void scale_2af5b8(void *, void *, float) __asm__("FUN_001f9bf8");
 int rndi_2af5b8(int) __asm__("FUN_00213260");
 int FUN_L00_0025c0e8_c(int, int) __asm__("FUN_L00_0025c0e8");
 int fr_2af5b8(int) __asm__("FUN_001f96f8");
-void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 float app_2af5b8(float, float) __asm__("FUN_001fa580");
 void add_2af5b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void kill_2af5b8(void *) __asm__("FUN_0020c828");
@@ -2085,9 +2085,9 @@ void debris_update(unsigned char *debris_moby) {
             if (debris_moby[0xBC] & 0xFE) {
                 int adjusted_color = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], debris_moby[0xBC] >> 1);
                 int adjusted_secondary_color = FUN_L00_0025c0e8_c(0x4FFF, debris_moby[0xBC] >> 1);
-                FUN_L00_00269958(debris_moby + 0x10, &emission_direction, adjusted_color, adjusted_secondary_color, fr_2af5b8(0x2D), 0x32, 0x78, 1);
+                spawn_effect(debris_moby + 0x10, &emission_direction, adjusted_color, adjusted_secondary_color, fr_2af5b8(0x2D), 0x32, 0x78, 1);
             } else {
-                FUN_L00_00269958(debris_moby + 0x10, &emission_direction, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
+                spawn_effect(debris_moby + 0x10, &emission_direction, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
                             1);
             }
         }
@@ -2571,7 +2571,7 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int set_identity_matrix() __asm__("FUN_001f9fc8");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_001ff290();
+extern int add_vectors() __asm__("FUN_L00_001ff290");
 extern int FUN_L00_001ff2c0();
 extern int FUN_L00_001ff430();
 extern int FUN_L00_001ffd48();
@@ -2593,7 +2593,7 @@ extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(v
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
@@ -2606,7 +2606,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
-void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 void select_gold_devastator_missile_target(char *self, O *out, char *skip) __asm__("FUN_L00_002affa8");
 extern Impact1688 impact1688 __asm__("D_L00_00173E40");
@@ -2619,10 +2619,10 @@ extern unsigned char *smoke1688(void *,void *,int,int,int,int,float,float,float,
 extern void rotate1688(void *,void *,void *) __asm__("FUN_001f9cf8");
 extern float random_angle1688(void) __asm__("FUN_00213308");
 extern void axis_rotate1688(void *,void *,void *,float) __asm__("FUN_00214890");
-extern void FUN_L00_0026cbb0(void *,void *,int,int,int,int,float);
+extern void spawn_burst(void *,void *,int,int,int,int,float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_001ff290_c(void *,void *,void *) __asm__("FUN_L00_001ff290");
 extern int collision1688(void *,void *,int,void *,void *) __asm__("FUN_001efa68");
-extern void FUN_L00_001ff660(void *,void *,void *);
+extern void reflect_vector(void *,void *,void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_001ffd48_c(void *,void *,float) __asm__("FUN_L00_001ffd48");
 extern void FUN_L00_001ffe20_c(void *,void *,void *) __asm__("FUN_L00_001ffe20");
 extern void identity1688(void *) __asm__("FUN_001f9fc8");
@@ -2750,7 +2750,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         axis_rotate1688(&phase.vectors.relative,&phase.vectors.relative,missile_moby->mtx,random_angle1688());
         {
             int color=swap_packed_color_channels(0x4F007FFF,D_0013E520.bB);
-            FUN_L00_0026cbb0(&smoke_position,&phase.vectors.relative,color,0x1FFFFFFF,scale_game_frames_alt(15),1,25000.0f);
+            spawn_burst(&smoke_position,&phase.vectors.relative,color,0x1FFFFFFF,scale_game_frames_alt(15),1,25000.0f);
         }
     }
     qcopy(&previous,(&missile_moby->pos));
@@ -2783,7 +2783,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                 hit_normal=&hit->normal;
                 skip=missile_moby;
                 normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
-                FUN_L00_001ff660(&blast_velocity,&motion,hit_normal);
+                reflect_vector(&blast_velocity,&motion,hit_normal);
                 normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
                 normalize_vector_xyz(&normal,hit_normal,1.0f);
             }
@@ -2793,7 +2793,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
             subtract_vector_xyz(&surface_motion,&hit->velocity_end,&hit->velocity_start);
             hit_normal=&hit->normal;
             normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
-            FUN_L00_001ff660(&blast_velocity,&motion,hit_normal);
+            reflect_vector(&blast_velocity,&motion,hit_normal);
             normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
             normalize_vector_xyz(&normal,hit_normal,1.0f);
         }
@@ -2955,7 +2955,7 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         missile_data->target=0;
         missile_moby->bBC=0;
         normalize_vector_xyz(&impact1688.normal,&impact1688.normal,1.0f);
-        FUN_L00_001ff660(&bounce[0],&motion,&impact1688.normal);
+        reflect_vector(&bounce[0],&motion,&impact1688.normal);
         missile_moby->rz=fast_arc_tan(bounce[0].f[0],bounce[0].f[1]);
         missile_moby->ry=-fast_arc_tan(horizontal1688(&bounce[0]),bounce[0].f[2]);
         missile_data->yaw_velocity=0.0f; missile_data->pitch_velocity=0.0f;

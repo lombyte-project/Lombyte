@@ -28,9 +28,9 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_001ff290(void *, void *, void *);
-extern void *FUN_L00_002712b8(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32);
-extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
+extern void *spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 
 void emit_radial_particle_burst(char *orientation_source, u128 *emission_position, void *velocity_addend) __asm__("FUN_L03_00250ae8");
 
@@ -61,8 +61,8 @@ void emit_radial_particle_burst(char *orientation_source, u128 *emission_positio
         minimum = scale_game_frames(30);
         maximum = scale_game_frames(90);
         duration = random_int_between(minimum, maximum);
-        if (velocity_addend) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, velocity_addend);
-        FUN_L00_002712b8(position, &vectors.velocity, duration, 30, 0xffffff, spin,
+        if (velocity_addend) add_vectors(&vectors.temp, &vectors.velocity, velocity_addend);
+        spawn_particle(position, &vectors.velocity, duration, 30, 0xffffff, spin,
                          60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f);
     }
     for (j = 0; j < truncate_float_to_s32(6.0f); ) {
@@ -73,7 +73,7 @@ void emit_radial_particle_burst(char *orientation_source, u128 *emission_positio
         minimum = scale_game_frames(20);
         maximum = scale_game_frames(60);
         duration = random_int_between(minimum, maximum);
-        if (velocity_addend) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, velocity_addend);
-        FUN_L00_0026cbb0(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
+        if (velocity_addend) add_vectors(&vectors.temp, &vectors.velocity, velocity_addend);
+        spawn_burst(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
     }
 }

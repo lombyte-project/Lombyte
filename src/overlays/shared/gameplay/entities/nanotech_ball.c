@@ -2077,7 +2077,7 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
@@ -2188,7 +2188,7 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
             big = variant_effect_scale * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             color_effect_random_frames = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
-            FUN_L00_0026a9f0(self + 0x10, spray_bias_vector, A, B, big, r1, color_effect_random_frames, 0, 0, sh);
+            spawn_particle(self + 0x10, spray_bias_vector, A, B, big, r1, color_effect_random_frames, 0, 0, sh);
         } while (--color_effects_remaining);
     }
     if (camera_distance > 9.0f) {
@@ -2321,7 +2321,7 @@ extern int matrix_to_quaternion() __asm__("FUN_00214260");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_001ff430();
-extern int FUN_L00_001ff660();
+extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int FUN_L00_00259888();
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -2943,7 +2943,7 @@ extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001e
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L00_001E6008[];
-extern void FUN_L00_0025b6b8(void *,void *,void *,float);
+extern void interpolate_vector(void *,void *,void *,float) __asm__("FUN_L00_0025b6b8");
 extern void FUN_L00_00267a08(void *);
 extern void suck_beam_draw_mesh(void) __asm__("FUN_L00_002dd8e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3151,12 +3151,12 @@ void suck_beam_update(void *moby,void *position) {
                     j=D_L00_001E4C80_lui[i].angle;
                     subtract_vector_xyz(&tmp_b,(char *)((V41 *)D_L00_001E6020)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
                     subtract_vector_xyz(&tmp_c,(char *)((V41 *)D_L00_001E5EE0)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16);
-                    FUN_L00_0025b6b8(&motion,&tmp_b,&tmp_c,amount);
+                    interpolate_vector(&motion,&tmp_b,&tmp_c,amount);
                     j=(j+19)%20;
                     subtract_vector_xyz(&tmp_d,(char *)((V41 *)D_L00_001E6020)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);
                     subtract_vector_xyz(&tmp_e,(char *)((V41 *)D_L00_001E5EE0)+D_L00_001E4C80_lui[i].idx*320+j*16,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16);
-                    FUN_L00_0025b6b8(&interp,&tmp_d,&tmp_e,amount);
-                    FUN_L00_0025b6b8(&motion,&motion,&interp,D_L00_001E4C80_lui[i].phase);
+                    interpolate_vector(&interp,&tmp_d,&tmp_e,amount);
+                    interpolate_vector(&motion,&motion,&interp,D_L00_001E4C80_lui[i].phase);
                     D_L00_001E4C80_lui[i].phase+=D_L00_001E4C80_lui[i].phase_step;
                     if(D_L00_001E4C80_lui[i].phase>=1.0f) { D_L00_001E4C80_lui[i].phase-=1.0f; D_L00_001E4C80_lui[i].angle=j; }
                     add_vector_xyz(&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&((Particle41 *)D_L00_001E4C80_lui[i].p)->pos,&motion);

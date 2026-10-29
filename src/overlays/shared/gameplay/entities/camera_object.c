@@ -206,8 +206,8 @@ int fetch_and_add_global_accumulator(int addend) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void FUN_L00_00250df8(unsigned char *);
-/* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
+void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
+/* Creates a class 0x3EF moby at v and runs update_entity on it. */
 unsigned char *create_camera_collision_moby(u128 *spawn_position) __asm__("FUN_L00_002a4de0");
 
 unsigned char *create_camera_collision_moby(u128 *spawn_position) {
@@ -216,7 +216,7 @@ unsigned char *create_camera_collision_moby(u128 *spawn_position) {
         spawned_moby[0x30] = 0xff;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x41;
         qcopy(spawned_moby + 0x10, spawn_position);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -755,7 +755,7 @@ extern Vec4 l00_bolt_glint_local_offsets_by_class[] __asm__("D_L00_001D73D0");
 extern BoltTrailSlot glints[] __asm__("D_L00_0016EA40");
 extern u8 *D_L00_0015FFDC;
 extern s32 D_L00_0015FFBC;
-extern u8 *D_L00_0015FFD8;
+extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_0015ED84;
 extern MobyKillTable D_L00_001BA5D0 __attribute__((section(".data")));
@@ -792,7 +792,7 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_0020c828(void *);
 extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32 FUN_L00_002603d0(void *);
 extern void convert_pose_to_reference_local(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -920,7 +920,7 @@ void bolt_update(Bolt *bolt_moby) {
         v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
         v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x));
         fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &D_L00_00173E40.point);
-        FUN_L00_001ff660(&v->vel, &v->vel, &geometry_scratch);
+        reflect_vector(&v->vel, &v->vel, &geometry_scratch);
         if (vector_distance(&bolt_moby->pos, &hero.motion.pos) < hero.reach_distance &&
             FUN_001f99c0(bolt_moby->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
@@ -987,7 +987,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (v->slot >= 0) {
             transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
             fast_vec_add(&glints[v->slot], &geometry_scratch, &bolt_moby->pos);
-            if (glints[v->slot].moby != (((u8 *)bolt_moby - D_L00_0015FFD8) >> 8)) {
+            if (glints[v->slot].moby != (((u8 *)bolt_moby - moby_table) >> 8)) {
                 v->slot = -1;
             }
             return;
@@ -997,7 +997,7 @@ void bolt_update(Bolt *bolt_moby) {
         }
         transform_vector_by_basis(&geometry_scratch, &l00_bolt_glint_local_offsets_by_class[bolt_moby->oclass], &bolt_moby->rot);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
-        v->slot = allocate_glint_slot(&geometry_scratch, ((u8 *)bolt_moby - D_L00_0015FFD8) >> 8, 1.4f);
+        v->slot = allocate_glint_slot(&geometry_scratch, ((u8 *)bolt_moby - moby_table) >> 8, 1.4f);
         v->slot_timer = FUN_L00_00257b90(scale_game_frames(300), scale_game_frames(600));
         } else if (v->hop_left != 0) {
             v->hop_left--;
@@ -1437,7 +1437,7 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source, void *pos, void *vel,
                 angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
             begin_bolt_attraction(spawned_bolt, D_001413D0, angle, 0.0f);
         }
-        FUN_L00_00250df8((u8 *)spawned_bolt);
+        update_entity((u8 *)spawned_bolt);
     } else {
         current_bolt_count += value;
     }
@@ -1888,7 +1888,7 @@ extern void offset_hero_position_against_gravity(float*,float*,float) __asm__("F
 extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
 extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
 extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
-extern void FUN_L00_0025b6b8(void*,void*,void*,float);
+extern void interpolate_vector(void*,void*,void*,float) __asm__("FUN_L00_0025b6b8");
 extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_L00_00262480");
 extern void update_moby_transform_history(void*,int) __asm__("FUN_L00_00262608");
 extern void clear_moby_transform_history(char*) __asm__("FUN_L00_00262840");
@@ -2158,7 +2158,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 MobyHitState *hit=(MobyHitState*)suck_get_aim_height(collision_hit.moby);
                 if (!hit || hit->hit_count<2 || hit->hit_index!=work.shifted.query.class_id) {
                     work.q[7]=*(WrenchQuad*)collision_hit.moby->position;
-                    FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); emit_randomized_sparkle_pairs(work.v[6],5);
+                    interpolate_vector(work.v[6],work.v[5],work.v[7],0.5f); emit_randomized_sparkle_pairs(work.v[6],5);
                     wrench_vars->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(get_wrench_hit_sound_variant(),0,(int)wrench_moby);
                 }
             }

@@ -24,7 +24,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_00141850[];
 extern u16 D_00141968[];
-extern u8 *D_L00_0015FFD8 __attribute__((sda));
+extern u8 *moby_table __asm__("D_L00_0015FFD8") __attribute__((sda));
 
 void update_level_help_controller(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 
@@ -68,7 +68,7 @@ void update_level_help_controller(HelpMoby *moby) {
         target_index_ptr = vars + 5;
         for (i = 0; i < 4; i++) {
             if (*target_index_ptr != -1) {
-                target_moby = (HelpTarget *)(D_L00_0015FFD8 + (*target_index_ptr << 8));
+                target_moby = (HelpTarget *)(moby_table + (*target_index_ptr << 8));
                 if (target_moby == 0 || target_moby->state == 0xFE || target_moby->state == 0xFD) {
                     if (hero_ptr->health.hp < 4) {
                         help_request(1, 1);
@@ -568,7 +568,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         qcopy(&vars->targetPos, &hero_ptr->motion.pos);
     }
     if (vars->unk1BC >= 0) {
-        candidate_target = (ElectroidMoby *)(D_L00_0015FFD8 + (vars->unk1BC << 8));
+        candidate_target = (ElectroidMoby *)(moby_table + (vars->unk1BC << 8));
         if (candidate_target == 0 || candidate_target->state == 0xFE || candidate_target->state == 0xFD) {
             vars->unk1BC = -1;
         } else {

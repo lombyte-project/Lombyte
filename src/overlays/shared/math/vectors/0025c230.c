@@ -66,7 +66,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
@@ -93,11 +93,11 @@ void spawn_particles_at_shape_points(void *source_object, void *base_vector, voi
         if (flag[0x10]) {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
             randomized_record_value = random_int_between(40, 60);
-            FUN_L00_00269958(&generated_points[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, randomized_record_value, 1);
+            spawn_effect(&generated_points[i], randomized_vector, 0x7000FFA0, 0xFF00, randomized_frame_count, 30, randomized_record_value, 1);
         } else {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
             randomized_record_value = random_int_between(40, 60);
-            FUN_L00_00269958(&generated_points[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, randomized_record_value, 1);
+            spawn_effect(&generated_points[i], randomized_vector, 0x7000A0FF, 0xFF, randomized_frame_count, 30, randomized_record_value, 1);
         }
     }
 }

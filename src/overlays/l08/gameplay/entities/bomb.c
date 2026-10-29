@@ -97,7 +97,7 @@ extern int bolt_pickup_bob_period_ticks_gp __asm__("D_L08_00161460") __attribute
 extern float bolt_pickup_bob_amplitude_gp __asm__("D_L08_00161464") __attribute__((sda));
 extern int D_L08_00174658;
 extern int D_L08_0015F5CC;
-extern int FUN_L00_001ff660();
+extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
 extern s32 queue_animation_update() __asm__("func_001FF308");
@@ -238,7 +238,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
 extern char *func_0020D348_m(int);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002d22e0");
 
@@ -258,7 +258,7 @@ char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *init
         qcopy(bomb_vars + 0x10, initial_velocity);
         *(float *)(spawned_moby + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
         *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)initial_velocity, *(float *)(initial_velocity + 4)) + 1.5707964f;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -596,7 +596,7 @@ void update_bomber_tank(Moby *moby) {
             qcopy(&part->pos, &moby->pos);
             part->collision = 0;
             blend_moby_animation(vars->part_a, 0, 0, 0);
-            FUN_L00_00250df8(vars->part_a);
+            update_entity(vars->part_a);
         }
         if (vars->part_b == 0) {
             Moby *part;
@@ -610,7 +610,7 @@ void update_bomber_tank(Moby *moby) {
             qcopy(&part->pos, &moby->pos);
             part->collision = 0;
             blend_moby_animation(vars->part_b, 0, 0, 0);
-            FUN_L00_00250df8(vars->part_b);
+            update_entity(vars->part_b);
         }
         attach_manipulator(moby, 0, vars->manipulator);
         moby->flags |= 0x1000;
@@ -1432,7 +1432,7 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern unsigned char *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
-extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 
 /* Strings count glowing puffs from one point to another, growing from size0
  * to size1, then bursts a spark shower at each end. */
@@ -1485,13 +1485,13 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
     effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[2] = 0.0f;
     effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
-    FUN_L00_0026cbb0(from, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
+    spawn_burst(from, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                      FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 10000.0f);
     effect_initial_velocity.f[0] = fast_cos(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     effect_initial_velocity.f[2] = 0.0f;
     effect_initial_velocity.f[2] = random_float_between(0.01f, 0.03f);
-    FUN_L00_0026cbb0(to, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
+    spawn_burst(to, &effect_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                      FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
 }
 /* Picks the best candidate moby from the moby's list by heading and distance.
@@ -1639,7 +1639,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 extern Hit_2D5FA8_c *find_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern int FUN_00213928(struct Moby *, Hit_2D5FA8_c *, float *, int, int *, float *, int, int);
+extern int trooper_take_damage(struct Moby *, Hit_2D5FA8_c *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_00212f90(struct Moby *, int, int, int);
 extern void explode_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void effects_start_2D5FA8_c(struct Moby *, short *) __asm__("FUN_L00_0025d458");
@@ -1695,7 +1695,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         spawn_moby_table_puff_pattern(moby);
         return;
     }
-    FUN_00213928(moby, find_2D5FA8_c(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+    trooper_take_damage(moby, find_2D5FA8_c(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
         vars->health -= damage;
@@ -1999,7 +1999,7 @@ typedef struct {
     s32 owner;           /* 0x24: -1 when free */
 } LiftLock;
 
-extern s32 D_L08_0015F5C4;
+extern s32 level_game_mode __asm__("D_L08_0015F5C4");
 extern s32 D_L08_0015F594 __attribute__((sda));
 extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
 extern s32 D_0013CAE4[];
@@ -2040,7 +2040,7 @@ void shuttle_update(struct Moby *moby) {
 
     qcopy(&old_pos, &moby->pos);
     qcopy(&old_rot, &moby->rot);
-    if (D_L08_0015F5C4 != 2 && vars->ridable != 0) {
+    if (level_game_mode != 2 && vars->ridable != 0) {
         moby->visible = 1;
         moby->flags &= ~1;
     } else {
@@ -2298,7 +2298,7 @@ char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char
         qcopy(data, initial_velocity);
         *(float *)(moby + 0x40) = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
         *(float *)(moby + 0x48) = fast_arc_tan(*(float *)initial_velocity, *(float *)(initial_velocity + 4)) + 1.5707964f;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -2539,7 +2539,7 @@ extern void FUN_L00_00258278(void*,void*,float,float,float,float);
 extern void cart_burst(void*,void*,int,float,float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L00_00262cf0(void*,void*,float,float,float);
-extern void FUN_L00_00269958(void*,void*,int,int,int,int,int,int);
+extern void spawn_effect(void*,void*,int,int,int,int,int,int) __asm__("FUN_L00_00269958");
 extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 extern void FUN_L08_002de528_u(void*,int,int,int) __asm__("FUN_L08_002de528");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -2616,7 +2616,7 @@ void update_rocket(M46 *moby) {
         effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
         size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
-        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
+        spawn_effect(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_HOME_TOWARD_TARGET: {
@@ -2646,7 +2646,7 @@ void update_rocket(M46 *moby) {
         effect[3]=rocket_guidance_effect_velocity_w_gp; aux[3]=rocket_guidance_effect_auxiliary_vector_w_gp;
         life=scale_game_frames_alt(rocket_guidance_effect_frame_count_gp);
         size0=func_001FA898_r(rocket_guidance_effect_velocity_w_gp); size1=func_001FA898_r(rocket_guidance_effect_auxiliary_vector_w_gp);
-        FUN_L00_00269958(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
+        spawn_effect(moby->position,effect,rocket_guidance_effect_initial_color_gp,rocket_guidance_effect_second_color_gp,life,size0,size1,1);
         return;
     }
     case ROCKET_STATE_WAIT_FOR_ACTIVATION:
@@ -2679,13 +2679,13 @@ void update_rocket(M46 *moby) {
             *(Q46*)velocity_correction_or_effect_velocity=*(Q46*)effect; FUN_L00_0025f730(velocity_correction_or_effect_velocity,D_0015ED6C+D_0015ED6C);
             life0=scale_game_frames_alt(FUN_L00_00257b90(30,45));
             size1=FUN_L00_00257b90(40,70);
-            FUN_L00_00269958(moby->position,velocity_correction_or_effect_velocity,0x6F00AFFF,0xFF,life0,40,size1,1);
+            spawn_effect(moby->position,velocity_correction_or_effect_velocity,0x6F00AFFF,0xFF,life0,40,size1,1);
             *(Q46*)aux=(Q46)0;
             aux[0]=random_float_between_c2(-1.0f,1.0f); aux[1]=random_float_between_c2(-1.0f,1.0f); aux[2]=random_float_between_c2(-1.0f,1.0f);
             *(Q46*)effect=*(Q46*)aux; FUN_L00_0025f730(effect,D_0015ED6C+D_0015ED6C);
             life1=scale_game_frames_alt(FUN_L00_00257b90(60,120));
             size1=FUN_L00_00257b90(100,150);
-            FUN_L00_00269958(moby->position,effect,0x1FFFFFFF,0x4F4F4F,life1,40,size1,0);
+            spawn_effect(moby->position,effect,0x1FFFFFFF,0x4F4F4F,life1,40,size1,0);
             return;
         } else {
             short *link=D_L08_001AC040[moby->group];
@@ -2799,7 +2799,7 @@ struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *ve
         *(float *)(data + 0x44) = yaw;
         *(struct Moby **)(data + 0x4C) = target_copy;
         qcopy(data + 0x20, velocity_copy);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }

@@ -94,7 +94,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) __asm__("FUN_L11_00308848");
@@ -127,7 +127,7 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
         spawned_moby[0x23] = func_001FA898_r(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -300,7 +300,7 @@ char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_posi
         *(float *)(moby_vars + 0x20) = z;
         *(int *)(moby_vars + 0x18) = size_length_ratio - 13;
         *(short *)(spawned_moby + 0x34) = 0x200;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -321,7 +321,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -363,7 +363,7 @@ void update_projectile_with_trail(char *moby) {
             spark_scatter_vector[1] = random_float_between(-1.0f, 1.0f);
             spark_scatter_vector[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
-            FUN_L00_001ff660(spark_scatter_vector, data, D_L11_00174880);
+            reflect_vector(spark_scatter_vector, data, D_L11_00174880);
             normalize_vector_xyz(spark_velocity, spark_velocity, vector_length_xyz(spark_scatter_vector) * 0.5f);
             add_vector_xyz(spark_velocity, spark_scatter_vector, spark_velocity);
             normalize_vector_xyz(spark_velocity, spark_velocity, random_float_between(frame_time * 5.0f, frame_time * 9.0f));

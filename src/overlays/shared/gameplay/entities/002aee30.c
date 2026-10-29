@@ -92,7 +92,7 @@ extern float atan2_f(float, float) __asm__("FUN_001f9e90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance between two points */
 extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /*
@@ -141,7 +141,7 @@ struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir,
             spawn_source_attached_fading_effect_particle(spawned_moby, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
             spawn_source_attached_fading_effect_particle(spawned_moby, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
         }
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -170,7 +170,7 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                          /* counts a s16 down, nonzero at 0 */
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -255,7 +255,7 @@ void update_class_b8_projectile(struct Moby *moby)
             random_vector.f[1] = random_float_between(-1.0f, 1.0f);
             random_vector.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = random_vector.q;
-            FUN_L00_001ff660(&random_vector, v, D_L04_00174000);
+            reflect_vector(&random_vector, v, D_L04_00174000);
             normalize_vector_xyz(&push, &push, vector_length_xyz(&random_vector) * 0.5f);
             add_vector_xyz(&push, &random_vector, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
@@ -276,7 +276,7 @@ void update_class_b8_projectile(struct Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 void *spawn_moby_attachment(char *source_moby, char *spawn_position) __asm__("FUN_L04_002ce080");
@@ -296,7 +296,7 @@ void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
         *(float *)(spawned_moby + 0x48) = *(float *)(source_moby + 0x48);
         *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(spawned_moby + 0x10, position_copy_ptr);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }

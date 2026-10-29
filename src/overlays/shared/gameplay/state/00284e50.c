@@ -73,13 +73,13 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     }
 }
 extern char D_L00_001BA5D0[] __attribute__((section(".data")));
-extern u8 *D_L00_0015FFD8;
+extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFDC;
 extern unsigned short D_00151708 __attribute__((section(".data")));
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
@@ -127,7 +127,7 @@ void restore_or_clear_level_state(void) {
         }
 
         for (i = 0; ; i++) {
-            record_cursor = D_L00_0015FFD8 + i * 0x100;
+            record_cursor = moby_table + i * 0x100;
             if (record_cursor >= D_L00_0015FFDC)
                 break;
             if (*(short *)(record_cursor + 0xA6) == id) {
@@ -138,19 +138,19 @@ void restore_or_clear_level_state(void) {
         }
     }
     hero_state = &hero;
-    FUN_L00_00250df8(hero_state->moby);
+    update_entity(hero_state->moby);
     euler_rotation_basis((char *)hero.moby + 0xC0, &hero.motion.rot);
     init_camera_system();
     FUN_L00_002852c0();
 }
-extern u8 *D_L00_0015FFD8;
+extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFDC;
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
 u8 *find_moby_by_id(s32 unused_parameter, s32 id) __asm__("FUN_L00_002851c0");
 
 u8 *find_moby_by_id(s32 unused_parameter, s32 id) {
     u8 *record_cursor;
-    for (record_cursor = D_L00_0015FFD8; record_cursor != D_L00_0015FFDC; record_cursor += 0x100) {
+    for (record_cursor = moby_table; record_cursor != D_L00_0015FFDC; record_cursor += 0x100) {
         if (*(s16 *)(record_cursor + 0xB2) == id)
             return record_cursor;
     }

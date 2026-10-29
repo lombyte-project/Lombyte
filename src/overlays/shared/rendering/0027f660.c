@@ -16,14 +16,14 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) __asm__("FUN_L01_0027f660");
 
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) {
-    unsigned char *particle = FUN_L00_002678b8(10);
+    unsigned char *particle = create_part(10);
     if (particle != 0) {
         char *particle_data = (char *)particle + 0x20;
         qcopy(particle + 0x10, spawn_position);
@@ -175,7 +175,7 @@ unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_po
 unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) {
     float transformed_spawn_offset[4];
     float spawn_offset_transform[16];
-    unsigned char *particle = FUN_L00_002678b8(74);
+    unsigned char *particle = create_part(74);
     if (particle) {
         char *particle_data;
         particle[9] = func_001FA898_r(4.0f) - 0x60;

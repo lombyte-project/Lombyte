@@ -236,7 +236,7 @@ char D_L09_00208FF0[] = "Moby class %d Damage Received: %f\n";
 extern VendorHitSource *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
-extern s32 FUN_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32);
+extern s32 trooper_take_damage(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
 extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
@@ -257,7 +257,7 @@ void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *h
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208F90, moby->oclass, fptodp(damage_hit_record->damage));
         }
-        switch (FUN_00213928(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (trooper_take_damage(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
         case 1:
         case 2:
             *health = 0.0f;
@@ -411,7 +411,7 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208FF0, moby->oclass, fptodp(damage_hit_record->damage));
         }
-        switch (FUN_00213928(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (trooper_take_damage(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
         case 1:
         case 2:
             *health = 0.0f;
@@ -540,7 +540,7 @@ typedef struct {
 } Flags_305710;
 
 char *find_nearby_chain_attachment(char *self, char *pos, int bone) __asm__("FUN_L09_003041d0");
-extern Moby *D_L09_0015FFD8;
+extern Moby *moby_list __asm__("D_L09_0015FFD8");
 extern char D_0013D388[];
 extern char D_L09_00209050[];
 extern char D_L09_00209080[];
@@ -586,7 +586,7 @@ void airship_chain_link_update(Moby *m) {
             FUN_L00_0024f7c8(m, 0, v20);
             r = func_L09_00305580_305710(m, v20, -1);
             if (r != 0) {
-                d->hull = r - D_L09_0015FFD8;
+                d->hull = r - moby_list;
             } else {
                 stub_printf(D_L09_00209050, (*(short *)&m->save_id));
             }
@@ -595,7 +595,7 @@ void airship_chain_link_update(Moby *m) {
             *(u128_305710 *)v20 = *(u128_305710 *)((f32 *)&m->pos);
             r = func_L09_00305580_305710(m, v20, 0);
             if (r != 0) {
-                d->next = r - D_L09_0015FFD8;
+                d->next = r - moby_list;
             } else {
                 stub_printf(D_L09_00209080, (*(short *)&m->save_id));
             }
@@ -611,13 +611,13 @@ void airship_chain_link_update(Moby *m) {
         hull = 0;
         next = 0;
         if (d->hull != -1) {
-            hull = &D_L09_0015FFD8[d->hull];
+            hull = &moby_list[d->hull];
             if (hull == 0 || hull->state == 0xFE || hull->state == 0xFD) {
                 hull = 0;
             }
         }
         if (d->next != -1) {
-            next = &D_L09_0015FFD8[d->next];
+            next = &moby_list[d->next];
             if (next == 0 || next->state == 0xFE || next->state == 0xFD) {
                 d->loose = 0;
                 next = 0;
@@ -651,7 +651,7 @@ void airship_chain_link_update(Moby *m) {
         }
         if (m->command == 1) {
             if (d->trigger != -1) {
-                Moby *o = &D_L09_0015FFD8[d->trigger];
+                Moby *o = &moby_list[d->trigger];
                 if (o->state == 1) {
                     o->command = o->state;
                 }
@@ -665,7 +665,7 @@ void airship_chain_link_update(Moby *m) {
         m->update_dist = 0xFF;
         hull = 0;
         if (d->hull != -1) {
-            hull = &D_L09_0015FFD8[d->hull];
+            hull = &moby_list[d->hull];
             if (hull == 0 || hull->state == 0xFE || hull->state == 0xFD) {
                 hull = 0;
             }
@@ -684,7 +684,7 @@ void airship_chain_link_update(Moby *m) {
         }
         if (fast_dec_timer_s16(&d->timer)) {
             if (d->hull != -1) {
-                Moby *o = &D_L09_0015FFD8[d->hull];
+                Moby *o = &moby_list[d->hull];
                 if (o != 0 && o->state != 0xFE && o->state != 0xFD
                     && (o->oclass == 0x494 || o->oclass == 0x49D || o->oclass == 0x4A0)) {
                     o->update_dist = 0xFF;
@@ -692,7 +692,7 @@ void airship_chain_link_update(Moby *m) {
                 }
             }
             if (d->next != -1) {
-                Moby *o = &D_L09_0015FFD8[d->next];
+                Moby *o = &moby_list[d->next];
                 if (o != 0 && o->state != 0xFE && o->state != 0xFD
                     && (o->oclass == 0x494 || o->oclass == 0x49D || o->oclass == 0x4A0)) {
                     o->update_dist = 0xFF;
@@ -952,9 +952,9 @@ extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
-extern void FUN_L00_002eac18(int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -970,7 +970,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1013,7 +1013,7 @@ void turret_update(struct Moby *moby) {
             add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &offset);
             fast_mem_zero16(&hero.motion.velocity, 0x90);
             if (D_0013CAE4 & 0x10) {
-                FUN_L00_002eac18(0);
+                jet_end_mount(0);
                 hero_set_state(0, 1);
                 moby->command = 2;
                 moby->state = 4;
@@ -1192,18 +1192,18 @@ void turret_update(struct Moby *moby) {
             blend_moby_animation(moby, 5, 0, 1);
         }
         if (fast_dec_timer_s16(&vars->dismount_delay) != 0) {
-            FUN_L00_00250df8(moby);
+            update_entity(moby);
             moby->flags |= 4;
             FUN_L08_00313ba8();
             moby_point_position(moby, 0, &work_vector);
             build_spherical_offset(&shot, turret_camera_offset_length_gp, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
             shot.f[2] += turret_camera_z_offset_gp;
             add_vector_xyz(&muzzle, &work_vector, &shot);
-            FUN_L00_002ea9d8(&muzzle);
+            set_camera_position(&muzzle);
             firing_vector_or_camera_rotation.f[0] = 0.0f;
             firing_vector_or_camera_rotation.f[1] = -vars->pitch;
             firing_vector_or_camera_rotation.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
-            FUN_L00_002eaa30(&firing_vector_or_camera_rotation);
+            set_camera_rotation(&firing_vector_or_camera_rotation);
         }
         suck_draw_reticle(moby, 0xFF0F0FFF, 0, 0xD, -1, 4, 1.0f, 0.0f, 90.0f);
         break;
@@ -1272,7 +1272,7 @@ void update_damage_causer(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) __asm__("FUN_L09_00308220");
@@ -1289,7 +1289,7 @@ char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
         qcopy(moby + 0x10, &owner->pos);
         qcopy(moby + 0x40, &owner->rot);
         moby[0xBC] = scale_game_frames(10);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         copy_hero_moby_field_38(moby);
         *(float *)(moby + 0x2C) = owner->scale;
         *(unsigned short *)(moby + 0x34) = owner->flags;
@@ -1461,7 +1461,7 @@ extern void FUN_L00_00260738_c(char *, void *, void *, void *) __asm__("FUN_L00_
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
-float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
+float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern void func_001F9C30_30A560(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");

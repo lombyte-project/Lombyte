@@ -14,7 +14,7 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_count) __asm__("FUN_L12_0027b370");
 
@@ -34,7 +34,7 @@ void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_c
             matrix_to_euler(composed_rotation_matrix, linked_object + 0x40);
             transform_vector(rotated_offset, list + i * 0x30, parent_rotation_matrix);
             add_vector_xyz(linked_object + 0x10, parent + 0x10, rotated_offset);
-            FUN_L00_00250df8(linked_object);
+            update_entity(linked_object);
         }
     }
 }

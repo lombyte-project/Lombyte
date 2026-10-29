@@ -23,7 +23,7 @@ extern void FUN_L00_001eb078(const char *, ...);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern struct Moby *FUN_L00_00250768(void);
 extern void FUN_L00_00250480(struct Moby *);
-extern void FUN_L00_00250df8(struct Moby *);
+extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern f32 FUN_L00_00200240(s32);
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 
@@ -62,7 +62,7 @@ void update_all_mobys_profiled(void) {
             }
             MOBY_CALL_UPDATE(moby->update, moby);
             if (!(((volatile struct Moby *)moby)->flags & 4)) {
-                FUN_L00_00250df8(moby);
+                update_entity(moby);
             }
             current_ticks = *(volatile s32 *)0x10000000;
             entry = (s32 *)0x11004000 + (moby->class_slot * 2);

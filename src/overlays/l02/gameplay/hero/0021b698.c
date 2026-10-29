@@ -721,7 +721,7 @@ extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float compute_directed_angle_delta(int, float, float) __asm__("FUN_L00_0025bb38");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
-extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
+extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xyz(void *);
@@ -1135,7 +1135,7 @@ void update_hero_state_motion(void) {
             if (fast_difference_between_rotations(a, hero.motion.rot.f[2]) > 90.0f) {
                 a = FUN_001f9b80_cf(a, 3.1415927f);
             }
-            FUN_L00_0025bc98(&hero.swing_yaw, a, &hero.swing_yaw_vel, 0, frame_scale_sq * 0.02f,
+            spring_angle(&hero.swing_yaw, a, &hero.swing_yaw_vel, 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, 0.0f);
         }
         hero.motion.move_yaw = hero.swing_yaw;
@@ -1154,9 +1154,9 @@ void update_hero_state_motion(void) {
         motion_geometry_scratch[1][0] =
             -fast_arc_tan(square_root(motion_geometry_scratch[0][0] * motion_geometry_scratch[0][0] + motion_geometry_scratch[0][2] * motion_geometry_scratch[0][2]), motion_geometry_scratch[0][1]);
         motion_geometry_scratch[1][1] = fast_arc_tan(motion_geometry_scratch[0][2], motion_geometry_scratch[0][0]);
-        FUN_L00_0025bc98(&hero.motion.rot.f[1], motion_geometry_scratch[1][1], &hero.motion.rot_spring_vel.f[1], 0, frame_scale_sq * 0.04f,
+        spring_angle(&hero.motion.rot.f[1], motion_geometry_scratch[1][1], &hero.motion.rot_spring_vel.f[1], 0, frame_scale_sq * 0.04f,
                          frame_scale_sq * 0.2f, frame_time * 9.599311f);
-        FUN_L00_0025bc98(&hero.motion.rot.f[0], motion_geometry_scratch[1][0], &hero.motion.rot_spring_vel.f[0], 0, frame_scale_sq * 0.04f,
+        spring_angle(&hero.motion.rot.f[0], motion_geometry_scratch[1][0], &hero.motion.rot_spring_vel.f[0], 0, frame_scale_sq * 0.04f,
                          frame_scale_sq * 0.2f, frame_time * 9.599311f);
         if (!(hero.motion.pos.f[2] < ((Moby *)hero.swing_target_moby)->f10[2])) {
             below = 0;
@@ -1890,9 +1890,9 @@ void update_hero_state_motion(void) {
                 t = 0.43633232f;
             }
             qcopy(motion_geometry_scratch[0], hero.motion.rot.f);
-            FUN_L00_0025bc98(&motion_geometry_scratch[0][1], t, &hero.motion.rot_spring_vel.f[1], 0, frame_scale_sq * 0.02f,
+            spring_angle(&motion_geometry_scratch[0][1], t, &hero.motion.rot_spring_vel.f[1], 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, frame_time * 2.6179938f);
-            FUN_L00_0025bc98(&motion_geometry_scratch[0][0], 0.0f, &hero.motion.rot_spring_vel.f[0], 0, frame_scale_sq * 0.02f,
+            spring_angle(&motion_geometry_scratch[0][0], 0.0f, &hero.motion.rot_spring_vel.f[0], 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, frame_time * 2.6179938f);
             rotate_hero_about_fixed_local_pivot(hero.motion.rot_spring_vel.f[0], hero.motion.rot_spring_vel.f[1], 0.0f);
             if (hero.ground_distance > 1.0f) {

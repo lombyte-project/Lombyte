@@ -31,7 +31,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) __asm__("FUN_L15_002e4580");
 
@@ -54,7 +54,7 @@ char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spa
         *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
         *(float *)(spawned_moby + 0x48) = fast_arc_tan(direction_vector[0], direction_vector[1]);
         *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(direction_vector), direction_vector[2]);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
         spawn_source_attached_fading_effect_particle(spawned_moby, 0x600040FF, 0x80, -1, 170000.0f);
     }
     return spawned_moby;
@@ -153,7 +153,7 @@ extern int FUN_L00_0028dc90(int, int, void *, int);
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -356,7 +356,7 @@ void electric_water_update(struct Moby *moby) {
             theta = random_angle_radians();
             phi = random_angle_radians();
             build_spherical_offset(&vars->bolt_aim, radius, theta, phi);
-            FUN_L00_001ff290(unused_vector_argument, &vars->bolt_aim, &hero.motion.body_center);
+            add_vectors(unused_vector_argument, &vars->bolt_aim, &hero.motion.body_center);
             vars->bolt_end = vars->bolt_aim;
             vars->bolt_start = hero.motion.body_center.q;
             initialize_electric_water_bolt_effect((char *)moby);

@@ -39,7 +39,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_L08_001612D8;
-extern int D_L08_0015F5C4;
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
@@ -98,7 +98,7 @@ int hero_set_state(int a, int b) {
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
             return 0;
     }
-    if ((D_L08_0015F5C4 == 2 || D_L08_0015F5C4 == 6) && b != 2)
+    if ((level_game_mode == 2 || level_game_mode == 6) && b != 2)
         return 0;
     {
         struct Hero *p = &hero;

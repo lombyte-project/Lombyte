@@ -96,7 +96,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 
@@ -110,7 +110,7 @@ char *spawn_racer_child(char *owner) {
         qcopy(moby + 0x10, owner + 0x10);
         qcopy(moby + 0x40, owner + 0x40);
         *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -2148,7 +2148,7 @@ void extermitank_update(unsigned char *moby) {
             child_moby = *(char **)(data + 0x184);
             qcopy(child_moby + 0x10, moby + 0x10);
             *(int *)(child_moby + 0x94) = 0;
-            FUN_L00_00250df8(*(char **)(data + 0x184));
+            update_entity(*(char **)(data + 0x184));
         }
         if (*(char **)(data + 0x188) == 0) {
             *(char **)(data + 0x188) = func_0020D348_m(0x369);
@@ -2163,7 +2163,7 @@ void extermitank_update(unsigned char *moby) {
             child_moby = *(char **)(data + 0x188);
             qcopy(child_moby + 0x10, moby + 0x10);
             *(int *)(child_moby + 0x94) = 0;
-            FUN_L00_00250df8(*(char **)(data + 0x188));
+            update_entity(*(char **)(data + 0x188));
         }
         attach_manipulator((char *)moby, 0, (unsigned char *)(data + 0xF0));
         attach_manipulator((char *)moby, 1, (unsigned char *)(data + 0x130));
@@ -2811,7 +2811,7 @@ extern f32 random_angle_radians_c3(void) __asm__("func_00213308");
 extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
+extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
 extern int D_L05_00178300[];
@@ -2949,7 +2949,7 @@ void skid_mcmarx_update(Moby *moby) {
             }
             FUN_L05_00307570_c((unsigned char *)moby);
             copy_racer_path_node((char *)moby, data->point_index, path_point);
-            FUN_L00_0025bc98(&moby->rot.z, fast_arc_tan(path_point[0] - moby->pos.x, path_point[1] - moby->pos.y), &data->yaw_speed, 0,
+            spring_angle(&moby->rot.z, fast_arc_tan(path_point[0] - moby->pos.x, path_point[1] - moby->pos.y), &data->yaw_speed, 0,
                               frame_scale_sq_macro * 0.035f, frame_scale_sq_macro * 0.3f, D_0015ED6C_gp * 6.981317f);
             if (data->pos[2] < path_point[2] - 5.0f) {
                 data->pos[2] = path_point[2];

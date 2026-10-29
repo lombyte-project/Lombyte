@@ -247,7 +247,7 @@ extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
@@ -299,7 +299,7 @@ void update_explosive_moby(struct Moby *moby) {
     if (tick_countdown_32(&blob_vars->timer) || hit) {
         if (hit) {
             if (collision_hit.have_normal) {
-                FUN_L00_001ff660(blob_vars, blob_vars, &collision_hit.normal);
+                reflect_vector(blob_vars, blob_vars, &collision_hit.normal);
             } else {
                 clear_vector(blob_vars);
             }
@@ -361,7 +361,7 @@ typedef struct {
 } DebrisMoby;
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(DebrisMoby *);
+extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -387,7 +387,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *debris_vector_source
         debris_vars->spin_y = randf_sym(0.05235988f, 0.13962634f);
         debris_vars->spin_z = randf_sym(0.0f, DEG_TO_RAD);
         debris_vars->timer = scale_game_frames(200);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }

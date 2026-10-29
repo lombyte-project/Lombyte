@@ -533,7 +533,7 @@ void spawner_update(char *moby)
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
     char *spawned_moby = (char *)func_0020D348_m(0x75E);
@@ -554,7 +554,7 @@ char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocit
         moby_vars[0x1C] = owner_slot_index;
         moby_vars[0x1A] = grow_held_moby;
         moby_vars[0x1B] = 0;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -613,7 +613,7 @@ extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern struct Moby *respawn_spawner_child(struct Moby *, Vec4 *) __asm__("FUN_L09_0030a778");
@@ -622,7 +622,7 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
     CollisionHit *hit = &D_L09_00173FC0;
 
     if (hit->moby == 0) {
-        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        reflect_vector(&vars->vel, &vars->vel, &hit->normal_x);
         if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 0.5f);
             if (fast_vec_length(&vars->vel) < 0.025f) {
@@ -630,7 +630,7 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
             }
         }
     } else if (((struct Moby *)hit->moby)->oclass != 0x75E) {
-        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        reflect_vector(&vars->vel, &vars->vel, &hit->normal_x);
         if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 1.2f);
         }

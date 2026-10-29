@@ -983,7 +983,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float truncate_float_to_s32_alt(float, float) __asm__("FUN_001fa6d0");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern int FUN_00213928();
+extern int trooper_take_damage() __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38();
 extern int spawn_randomized_bolt_drop() __asm__("FUN_L00_00260a88");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -1296,7 +1296,7 @@ extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -1830,7 +1830,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             int r;
 
             crab_data->f78 = crab_data->f78 - crab_data->f80;
-            FUN_L00_001ff290(fall_motion_scratch, m->pos, crab_data->v70);
+            add_vectors(fall_motion_scratch, m->pos, crab_data->v70);
             if (m->pos[2] < probe_ground_height(m->pos, 0, 0.5f)) {
                 int knockback_collision_radius_fixed;
                 float x;
@@ -2093,7 +2093,7 @@ extern void FUN_L10_002e0138_c(unsigned char *m) __asm__("FUN_L10_002e0138");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 float absolute_float_c(float input) __asm__("func_001F99C0");
-int FUN_L01_00274b78(char *a, char *o, float best);
+int find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void FUN_L00_0025ab48_c(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_00263d40(int a, int b);
@@ -2599,7 +2599,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
                 fast_vec_scale(&C, &(&hero)->motion.displacement, (float)scale_game_frames_c2(20));
                 *(u128_2E52B0 *)&B = *(u128_2E52B0 *)&C;
-                FUN_L00_001ff290(&C, &A, &B);
+                add_vectors(&C, &A, &B);
                 A.z = probe_ground_height_c2(&A, 0, 0.5f);
             }
             A.z += 0.2f;
@@ -2619,11 +2619,11 @@ void blarg_ship_update(Ship_5E48 *ship) {
             if (near || far) {
                 FUN_L00_0024f7c8(ship, far == 0, &C);
                 build_spherical_offset_c(&B, 1.0f, ship->f48, -ship->f44);
-                FUN_L00_001ff290(&D, &C, &B);
+                add_vectors(&D, &C, &B);
                 func_001F9BF0_2E52B0(&B, &A, &C);
                 fast_vec_normalize(&B, &B, blarg_ship_rocket_speed_gp * D_0015ED6C);
                 fast_vec_scale(&E, &B, FUN_L04_001f1978(3.0f));
-                FUN_L00_001ff290(&D, &E, &C);
+                add_vectors(&D, &E, &C);
                 emit_radial_particle_burst(ship, &E, 0);
                 create_rocket(&B, &C, (int)ship, (int)tgt, scale_game_frames_c2(300), 1.0f);
             }
@@ -2657,7 +2657,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
             if ((Ship_5E48 *)(&hero)->moby == tgt) {
                 fast_vec_scale(&C, &(&hero)->motion.displacement, (float)scale_game_frames_c2(20));
                 *(u128_2E52B0 *)&B = *(u128_2E52B0 *)&C;
-                FUN_L00_001ff290(&C, &A, &B);
+                add_vectors(&C, &A, &B);
                 A.z = probe_ground_height_c2(&A, 0, 0.5f);
             }
             A.z += 0.2f;
@@ -3161,7 +3161,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
@@ -3258,7 +3258,7 @@ state_two:
                 position[0] = fast_cos(moby->rot.z) * 1.5f;
                 position[1] = fast_sin(moby->rot.z) * 1.5f;
                 position[2] = 0.0f;
-                FUN_L00_001ff290(displacement, position, &moby->pos);
+                add_vectors(displacement, position, &moby->pos);
                 build_spherical_offset(rotation, D_0015ED6C * 40.0f,
                     fast_arc_tan(target->pos.x - position[0], target->pos.y - position[1]),
                     fast_arc_tan(vector_distance(position, &target->pos), target->pos.z - position[2]));

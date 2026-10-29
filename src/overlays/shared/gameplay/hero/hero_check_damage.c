@@ -1523,7 +1523,7 @@ extern u8 D_L00_0015F6A8[] __asm__("D_L00_0015F6A8");
 extern u8 opt_mirror_anim __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690") __attribute__((sda));
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00250df8(void *) __asm__("FUN_L00_00250df8");
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_0025c170_f580(void *) __asm__("FUN_00214128");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1602,7 +1602,7 @@ void update_hero_item_mobys(void)
                     slot_vec = (((u8 *) (&hero)) + 0x1080) + slot_offset;
                     matrix_to_euler(hero_joint_world_matrices + (joint * 0x40), slot_vec);
                     advance_moby_animation(moby);
-                    FUN_L00_00250df8(moby);
+                    update_entity(moby);
                     *((u16 *) (moby + 0x34)) &= 0xfffb;
                 }
                 else
@@ -1615,7 +1615,7 @@ void update_hero_item_mobys(void)
                         third = FUN_L00_0020d540(i);
                         if (((first == 0) && (second == 0)) && (third == 0))
                             advance_moby_animation(moby);
-                        FUN_L00_00250df8(moby);
+                        update_entity(moby);
                         copy_matrix3x4(moby + 0xc0, hero_joint_world_matrices + (joint * 0x40));
                         if (((first == 0) && (second == 0)) && (third == 0))
                             FUN_0025c170_f580(moby + 0xc0);
@@ -1681,7 +1681,7 @@ void update_hero_item_mobys(void)
                             matrix_to_euler(hero_joint_world_matrices + (joint * 0x40), moby + 0x40);
                         else
                             update_hero_item_rotation_from_history(moby, (u8 *) ((joint * 0x40) + ((s32) joint_mtx)));
-                        FUN_L00_00250df8(moby);
+                        update_entity(moby);
                         if (opt_mirror_anim)
                             fast_vec_cross(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         refresh_moby_spatial_bounds_from_basis(moby);
@@ -1706,7 +1706,7 @@ void update_hero_item_mobys(void)
                     *((u8 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x30)) = 0;
                     *((u16 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x34)) = 0;
                     *((f32 *) (((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c)))) + 0x2c)) *= 1.3f;
-                    FUN_L00_00250df8((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c))));
+                    update_entity((u8 *) (*((s32 *) (((u8 *) hero_state) + 0x118c))));
                     }
                 }
                 if ((*((s32 *) (((u8 *) hero_state) + 0x118c))) != 0)
@@ -1719,7 +1719,7 @@ void update_hero_item_mobys(void)
                         enqueue_hero_glow_draw_callback_once();
                         qcopy(effect + 0x10, mtx[3]);
                         copy_matrix3x4(effect + 0xc0, mtx);
-                        FUN_L00_00250df8(effect);
+                        update_entity(effect);
                         *((u64 *) (effect + 0x38)) = *((u64 *) (((u8 *) hero_state->moby) + 0x38));
                         random_range = scale_game_frames(0x78);
                         angle = fast_sin((((((f32) (game_frame % random_range)) / convert_integer_to_float(random_range)) * 2.0f) * 3.1415927f) + (-3.1415927f));
@@ -2933,7 +2933,7 @@ typedef float V4_211d78[4] __attribute__((aligned(16)));
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void apply_hero_rotation_offset(float, float, float) __asm__("FUN_L00_00211cf8");
-extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 void turn_hero_toward_transformed_move_direction(int rotation_direction, float x, float y, float z) __asm__("FUN_L00_00211d78");
 
 void turn_hero_toward_transformed_move_direction(int rotation_direction, float x, float y, float z) {
@@ -2944,7 +2944,7 @@ void turn_hero_toward_transformed_move_direction(int rotation_direction, float x
     transform_vector(transformed_direction, &hero.motion.move_dir, hero.inv_rot_matrix);
     transformed_direction_angle = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
     out = zero;
-    hero.motion.yaw_error = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.yaw_rate, rotation_direction, transformed_direction_angle, x, y, z);
+    hero.motion.yaw_error = spring_angle((char *)&out, (char *)&hero.motion.yaw_rate, rotation_direction, transformed_direction_angle, x, y, z);
     apply_hero_rotation_offset(zero, zero, out);
 }
 #define NOT_SDA
@@ -2953,7 +2953,7 @@ void turn_hero_toward_transformed_move_direction(int rotation_direction, float x
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void turn_hero_toward_transformed_move_direction(int, float, float, float) __asm__("FUN_L00_00211d78");
 
 /* Calls 00211d78 when hero.gravity_mode is set, else updates hero.motion.yaw_error via 0025bc98. */
@@ -2964,7 +2964,7 @@ void turn_to(int rotation_direction, float x, float y, float z) {
         turn_hero_toward_transformed_move_direction(rotation_direction, x, y, z);
     } else {
         hero_state->motion.yaw_error =
-            FUN_L00_0025bc98(&hero_state->motion.rot.f[2], &hero_state->motion.yaw_rate, rotation_direction, hero_state->motion.move_yaw, x, y, z);
+            spring_angle(&hero_state->motion.rot.f[2], &hero_state->motion.yaw_rate, rotation_direction, hero_state->motion.move_yaw, x, y, z);
     }
 }
 #define NOT_SDA

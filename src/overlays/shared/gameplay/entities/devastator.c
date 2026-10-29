@@ -511,10 +511,10 @@ void update_linked_moby_states(unsigned char *source_moby) {
         source_moby[0x20] = 1;
         moby_vars->w4 = linked_moby_selection_delay_gp;
         moby_vars->w8 = 3;
-        moby_vars->p[0] = D_L00_0015FFD8 + (moby_vars->idx[0] << 8);
-        moby_vars->p[1] = D_L00_0015FFD8 + (moby_vars->idx[1] << 8);
-        moby_vars->p[2] = D_L00_0015FFD8 + (moby_vars->idx[2] << 8);
-        moby_vars->p[3] = D_L00_0015FFD8 + (moby_vars->idx[3] << 8);
+        moby_vars->p[0] = moby_table + (moby_vars->idx[0] << 8);
+        moby_vars->p[1] = moby_table + (moby_vars->idx[1] << 8);
+        moby_vars->p[2] = moby_table + (moby_vars->idx[2] << 8);
+        moby_vars->p[3] = moby_table + (moby_vars->idx[3] << 8);
         break;
     case STATE_ACTIVE:
         matching_owned_record = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
@@ -1303,7 +1303,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001f9cf8(V4 *, V4 *, V4 *);
 extern s32 FUN_001f96f8_c2(s32) __asm__("FUN_001f96f8");
-extern u8 *FUN_L00_0026cbb0(V4 *, V4 *, s32, s32, s32, s32, f32);
+extern u8 *spawn_burst(V4 *, V4 *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern f32 fast_vec_dist(V4 *, V4 *) __asm__("FUN_001f9b48");
 extern void FUN_001f9a28_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(V4 *, V4 *, f32) __asm__("FUN_001f9bf8");
@@ -1336,10 +1336,10 @@ void emit_beam_trail_particles(X *x) {
     qcopy(&emission_position, &x->v10);
     if (hero.state.current == 0x81) {
         if (D_L00_0015F5CC % 3 == 0) {
-            FUN_L00_0026cbb0(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            spawn_burst(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     } else {
-        FUN_L00_0026cbb0(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+        spawn_burst(&emission_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
     }
     if (trail_state->f0C) {
         trail_sample_spacing = fast_vec_dist(&trail_state->v10, &emission_position) * 0.5f;
@@ -1347,7 +1347,7 @@ void emit_beam_trail_particles(X *x) {
         for (i = 1; i < 2; i++) {
             fast_vec_normalize(&trail_sample_position, &previous_position_delta, trail_sample_spacing * (f32)i);
             FUN_001f9a10_c(&trail_sample_position, &emission_position, &trail_sample_position);
-            FUN_L00_0026cbb0(&trail_sample_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
+            spawn_burst(&trail_sample_position, &effect_input_and_position_offset, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     }
     trail_state->f00 = random_integer_below(FUN_001f96f8_c2(10));
@@ -2104,7 +2104,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *pos, int spin, int col, float range, float f1,
                                        float f2, float f3, float scale) __asm__("FUN_L00_0026b790");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
+extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -2151,7 +2151,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
                 pb = B.v + random_integer_below(6);
                 particle_frame_count = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
                 particle_random_frame_value = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
-                FUN_L00_0026a9f0(source_moby + 0x10, particle_velocity, *pa, *pb, particle_frame_count, particle_random_frame_value, 0, 0, 400000.0f, sc);
+                spawn_particle(source_moby + 0x10, particle_velocity, *pa, *pb, particle_frame_count, particle_random_frame_value, 0, 0, 400000.0f, sc);
             } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
@@ -2925,7 +2925,7 @@ extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
-extern void FUN_L00_00250df8(struct Moby *) __asm__("FUN_L00_00250df8");
+extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Fakematch: a second name for the pad state makes the button tests rebuild its address as retail does. */
 extern struct PadState controller_state_lui __asm__("D_0013C940");
@@ -3109,7 +3109,7 @@ void pyrocitor_update(struct Moby *moby) {
         multiply_matrix3x3(&pyrocitor_vars->other->rot_row0, &moby->rot_row0, &pyrocitor_vars->other->rot_row0);
         other = pyrocitor_vars->other;
         qcopy(&other->pos, &pos);
-        FUN_L00_00250df8(other);
+        update_entity(other);
     }
     update_pyrocitor_flame_effect_slots((char *)moby);
 }

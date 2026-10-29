@@ -597,7 +597,7 @@ extern unsigned short *D_L00_0016010C;
 extern short D_L00_00160110;
 extern char *D_L00_00160114;
 extern int D_L00_0015FFF4;
-extern char *D_L00_0015FFD8;
+extern char *moby_table __asm__("D_L00_0015FFD8");
 extern unsigned short *D_L00_001AB840[];
 
 /* Iterator over the mobies of target's group: finds the next one whose
@@ -622,7 +622,7 @@ int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_en
         do {
             D_L00_0016010C++;
             D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
-            D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
+            D_L00_00160114 = moby_table + (D_L00_00160110 << 8);
             if ((short)*D_L00_0016010C < 0) {
                 return -1;
             }
@@ -633,7 +633,7 @@ int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_en
     do {
         D_L00_0016010C++;
         D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
-        D_L00_00160114 = D_L00_0015FFD8 + (D_L00_00160110 << 8);
+        D_L00_00160114 = moby_table + (D_L00_00160110 << 8);
         *out = D_L00_00160114;
         entry_sign_bit_set = *(signed char *)(D_L00_00160114 + 0x20) < 0;
         if ((include_sign_bit_set_entries == 0 && require_sign_bit_set_entries == 0 && entry_sign_bit_set == 0) || (include_sign_bit_set_entries != 0 && (require_sign_bit_set_entries == 0 || entry_sign_bit_set != 0))) {

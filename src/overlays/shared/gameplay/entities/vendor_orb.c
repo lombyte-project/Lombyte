@@ -138,8 +138,8 @@ s32 FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
 s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0_c(char *m) __asm__("FUN_L00_002e01b0");
 void FUN_L00_002e0340_c(char *a) __asm__("FUN_L00_002e0340");
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002eaa30(char *src);
+void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
+void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
@@ -415,7 +415,7 @@ void emit_hydrodisplacer_effect(char *moby) {
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
     *(int *)(moby_data + 4) = random_int_between(countdown_lower_bound, FUN_001f96f8_2e01b0(15));
 }
-extern u8 *D_L00_0015FFD8;
+extern u8 *moby_table __asm__("D_L00_0015FFD8");
 
 /* Tests flag 2 (or 1 when &hero.hydro_tank_full is set) at 0xBC of the moby selected by +0x2FC. */
 s32 test_hydrodisplacer_activation_flag(void) __asm__("FUN_L00_002e02e0");
@@ -427,7 +427,7 @@ s32 test_hydrodisplacer_activation_flag(void) {
     s32 idx;
     u8 flags;
     base = &hero;
-    linked_moby = D_L00_0015FFD8;
+    linked_moby = moby_table;
     ground_moby_address = ((s32)base->ground_moby);
     flags = (u8)base->hydro_tank_full;
     linked_moby += *(s32 *)*(s32 *)((u8 *)ground_moby_address + 0x78) << 8;
@@ -449,7 +449,7 @@ s32 test_hydrodisplacer_activation_flag(void) {
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void end_hydrodisplacer_interaction(char *moby) __asm__("FUN_L00_002e0340");
@@ -458,7 +458,7 @@ void end_hydrodisplacer_interaction(char *moby) {
     if (*(unsigned char *)(moby + 0x20) == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
-        FUN_L00_002eac18(3);
+        jet_end_mount(3);
     }
     if (hero.state.control_mode == 0x13) {
         hero_set_state(HERO_STATE_IDLE, 1);
@@ -1437,7 +1437,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1525,7 +1525,7 @@ void robot_arm_update(char *moby) {
         speed = vector_length_xyz(moby_data);
         approach = dot_vectors_xyz(moby_data, collision_normal);
         if (approach < 0.0f) {
-            FUN_L00_001ff660(moby_data, moby_data, collision_normal);
+            reflect_vector(moby_data, moby_data, collision_normal);
             normalize_vector_xyz(aD0, collision_normal, approach * 0.5f);
             add_vector_xyz(moby_data, moby_data, aD0);
             normalize_vector_xyz(moby_data, moby_data, speed);

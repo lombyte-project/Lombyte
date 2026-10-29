@@ -270,7 +270,7 @@ typedef struct {
     s32 voice;           /* 0x20: creak voice slot, -1 if none */
 } SwingGateVars;
 
-extern int D_L08_0015F5C4;
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 /* Voice table entries are 0x70 bytes; the volume sits 0x80 past an entry's start. */
 typedef struct {
     u8 pad0[0x80];
@@ -298,7 +298,7 @@ void update_swing_gate_from_driver(struct Moby *moby) {
 
     gate_position_offset.q = 0;
     gate_position_offset.f[2] = 30.0f;
-    if (D_L08_0015F5C4 == 2) {
+    if (level_game_mode == 2) {
         moby->visible = 0;
         moby->flags |= 1;
     } else {
@@ -1135,7 +1135,7 @@ void update_flickering_mesh_effect(struct Moby *moby) {
     light_vars->flags |= 2;
 }
 
-extern int D_L08_0015F5C4;
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 
 #include "qcopy.h"
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -1305,7 +1305,7 @@ void commando_update(WM *moby) {
         }
         break;
     case COMMANDO_POST_DIALOGUE:
-        if (D_L08_0015F5C4 != 2) {
+        if (level_game_mode != 2) {
             commando_vars->b28 = 1;
             if (commando_vars->h24 == 3) {
                 unlock_planet(10);

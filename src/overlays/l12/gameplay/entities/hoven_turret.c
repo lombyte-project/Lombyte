@@ -251,7 +251,7 @@ extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_002
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b);
+void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 extern float func_L00_001FF860_304310(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9D10_304310(void *, void *) __asm__("FUN_001f9b48");
@@ -362,8 +362,8 @@ void update_oscillating_target_link(Moby *moby) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L08_00313ba8(void *);
 
 extern char hoven_turret_camera_local_offset __asm__("D_L12_00161EF0") __attribute__((sda));
@@ -375,11 +375,11 @@ void update_hoven_turret_camera(struct Moby *moby) {
     FUN_L08_00313ba8(moby);
     transform_vector_by_basis(position_and_rotation, &hoven_turret_camera_local_offset, &moby->rot_row0);
     fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
-    FUN_L00_002ea9d8(position_and_rotation);
+    set_camera_position(position_and_rotation);
     position_and_rotation[4] = 0;
     position_and_rotation[5] = -*(float *)(data + 0x74);
     position_and_rotation[6] = fast_add_rotations(1.5707964f, moby->rot.z);
-    FUN_L00_002eaa30(position_and_rotation + 4);
+    set_camera_rotation(position_and_rotation + 4);
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -530,7 +530,7 @@ extern int FUN_L12_002400d0(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_00211250(void);
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -696,7 +696,7 @@ void hoven_turret_update(struct Moby *moby) {
                     crot[2] = -1.7f;
 
                     D_L12_00161F00 = 0;
-                    FUN_L00_00216f90(cpos, crot, 0, 1);
+                    set_race_camera(cpos, crot, 0, 1);
                 }
                 moby->state = 5;
                 break;

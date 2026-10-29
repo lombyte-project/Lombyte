@@ -197,7 +197,7 @@ extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
 
@@ -222,7 +222,7 @@ char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float
         *(float *)(data + 0x24) = nominal_speed;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = scaled_frames;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return (char *)moby;
 }
@@ -252,9 +252,9 @@ extern void mark_moby_for_removal_ece00(struct Moby *) __asm__("FUN_0020c828");
 extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_ece00(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between_ece00(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int FUN_001efa68_ece00(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -302,10 +302,10 @@ void rocket_update(struct Moby *moby) {
         moby->rot.x = fast_add_rotations_72(moby->rot.x, frame_time * 6.2831855f);
         set_vector_length_ece00(side, vars, 0.2f);
         set_vector_length_ece00(back, vars, -0.2f);
-        FUN_L00_001ff290(trail, back, &moby->pos);
-        FUN_L00_00269958(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
+        add_vectors(trail, back, &moby->pos);
+        spawn_effect(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
                          random_int_between_ece00(20, 35), 1);
-        FUN_L00_00269958(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
+        spawn_effect(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
                          random_int_between_ece00(50, 75), 0);
         if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere_ece00(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {

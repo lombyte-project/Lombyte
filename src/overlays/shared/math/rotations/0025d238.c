@@ -746,7 +746,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
@@ -777,7 +777,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
         big = scale * 400000.0f;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
-        FUN_L00_0026a9f0(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
+        spawn_particle(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -829,7 +829,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
         big = scale * k5;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
-        FUN_L00_0026a9f0(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
+        spawn_particle(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -878,13 +878,13 @@ void FUN_L00_0025f730(void *vector, float x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
-extern int D_L00_0015FFD8;
+extern int moby_table __asm__("D_L00_0015FFD8");
 
 /* Adds the moby index of a to the short list unless present or the list holds max. */
 void append_unique_moby_index(int moby_address, short *list, short max) __asm__("FUN_L00_0025f780");
 
 void append_unique_moby_index(int moby_address, short *list, short max) {
-    int k = ((moby_address - D_L00_0015FFD8) << 8) >> 16;
+    int k = ((moby_address - moby_table) << 8) >> 16;
     int i;
     for (i = 1; i <= list[0]; i++) {
         if (list[i] == k)

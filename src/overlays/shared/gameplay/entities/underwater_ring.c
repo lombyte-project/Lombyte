@@ -298,7 +298,7 @@ extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
@@ -361,7 +361,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             pad += *(int *)((u8 *)linked + 0x60);
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
-            FUN_L00_00216f90(position, &moby->rot, 0, 1);
+            set_race_camera(position, &moby->rot, 0, 1);
             pad->collision = pad->pclass->collision;
             pad->visible = 1;
             pad->flags &= ~1;

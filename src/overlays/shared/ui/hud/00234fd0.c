@@ -120,7 +120,7 @@ extern volatile int l00_inactive_moby_array_start __asm__("D_L00_0015FA70");
 extern volatile int l00_inactive_loaded_moby_end __asm__("D_L00_0015FA74");
 extern volatile int l00_inactive_moby_pool_last_slot __asm__("D_L00_0015FA78");
 extern volatile int l00_inactive_moby_pool_end __asm__("D_L00_0015FA7C");
-extern int D_L00_0015FFD8;
+extern int moby_table __asm__("D_L00_0015FFD8");
 extern volatile int D_L00_0015FFE0;
 extern volatile int l00_active_moby_pool_end __asm__("D_L00_0015FFE8");
 extern volatile int l00_active_moby_context_selector __asm__("D_L00_0015F728") __attribute__((sda));
@@ -131,7 +131,7 @@ void select_moby_context(int state) {
     int oldState = l00_active_moby_context_selector;
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
-        oldDC = D_L00_0015FFD8;
+        oldDC = moby_table;
         old70 = l00_inactive_moby_array_start;
         l00_inactive_moby_array_start = oldDC;
         oldDC = D_L00_0015FFDC;
@@ -142,7 +142,7 @@ void select_moby_context(int state) {
         oldE8 = l00_active_moby_pool_end;
         old7C = l00_inactive_moby_pool_end;
         l00_active_moby_context_selector = oldState ^ 1;
-        *(volatile int *)&D_L00_0015FFD8 = old70;
+        *(volatile int *)&moby_table = old70;
         D_L00_0015FFDC = old74;
         D_L00_0015FFE0 = old78;
         l00_inactive_moby_pool_last_slot = oldDC;

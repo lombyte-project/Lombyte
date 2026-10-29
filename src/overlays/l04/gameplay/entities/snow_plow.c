@@ -68,7 +68,7 @@ extern void FUN_L00_00258278(void *, float, void *, float, float, float);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -279,7 +279,7 @@ void snow_plow_update(struct Moby *moby) {
             goto hit;
         }
         advance_moby_animation(other);
-        FUN_L00_00250df8(other);
+        update_entity(other);
         refresh_moby_spatial_bounds_from_basis(other);
         other->flags |= 6;
     }
@@ -771,7 +771,7 @@ extern void coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern void fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
@@ -1109,7 +1109,7 @@ void woodcut_bot_update(WBMoby *m) {
                 debris_horizontal_step[2] = 0.0f;
                 normalize_vector_xyz(upward_biased_random_direction, upward_biased_random_direction, frame_time * 3.0f);
                 upward_biased_random_direction[2] += frame_time * 3.0f;
-                FUN_L00_001ff290(mtx, debris_horizontal_step, upward_biased_random_direction);
+                add_vectors(mtx, debris_horizontal_step, upward_biased_random_direction);
                 rot[0] = random_angle_radians();
                 rot[1] = random_angle_radians();
                 rot[2] = random_angle_radians();
@@ -1473,7 +1473,7 @@ extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");
 extern char D_L04_00173FE0[];
 
@@ -1542,7 +1542,7 @@ void leaf_update(struct Moby *moby) {
         normalize_vector_xyz(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
         add_vector_xyz(&work, &work, &moby->pos);
         if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
-            FUN_L00_001ff660(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
+            reflect_vector(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
             *(float *)(data + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
         add_vector_xyz(data, data, data + 0x10);
@@ -1555,7 +1555,7 @@ void leaf_update(struct Moby *moby) {
         add_vector_xyz(&moby->pos, &moby->pos, data);
         if (collision_line(&old, &moby->pos, 6, 0, 0)) {
             qcopy(&moby->pos, D_L04_00173FE0);
-            FUN_L00_001ff660(data, data, D_L04_00173FE0 + 0x20);
+            reflect_vector(data, data, D_L04_00173FE0 + 0x20);
             scale_vector_xyz(data, data, 0.25f);
             add_vector_xyz(&moby->pos, &moby->pos, data);
             *(float *)(data + 8) += leaf_motion_parameters[5] / 5.0f;

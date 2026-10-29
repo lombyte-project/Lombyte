@@ -59,7 +59,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *, void *);
+extern void update_entity(void *, void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_poison_vessel(void *unused, void *vector) __asm__("FUN_L15_002e7ed8");
 
@@ -78,7 +78,7 @@ char *spawn_poison_vessel(void *unused, void *vector) {
         qcopy(moby + 0x10, vector);
         field = *(char **)(moby + 0x24);
         *(int *)(moby + 0x94) = *(int *)(field + 0x10);
-        FUN_L00_00250df8(moby, field);
+        update_entity(moby, field);
     }
     return moby;
 }
@@ -228,11 +228,11 @@ extern float D_0015ED6C;
 extern float poison_vessel_gravity_gp __asm__("D_L15_00161FBC") __attribute__((sda));
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
-extern int FUN_L00_001ff660();
+extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern void *suck_get_aim_height(struct Moby_A4D88 *) __asm__("FUN_002141f8");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -986,7 +986,7 @@ extern int D_L15_0015FFD8;
 extern float D_0013F3D0[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -998,7 +998,7 @@ extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
 extern int count_missing_or_dying_mobys_in_list(int) __asm__("FUN_L15_002ebfb0");
 extern void set_moby_list_visibility(int, int) __asm__("FUN_L15_002ebf28");
 extern char *spawn_codebot_slot_effect(char *, char *) __asm__("FUN_L15_002eb9e0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 /* Bind this call to its checked overlay instance rather than a duplicate. */
 extern float scale_time(float) __asm__("FUN_L15_001f8648");
@@ -1024,7 +1024,7 @@ void codebot_slot_update(struct Moby *moby) {
         if (moby->state != 0) {
             subtract_vector_xyz(position_rotation_work_vector, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
             *(OvlQuad *)position_work_vector = *(OvlQuad *)position_rotation_work_vector;
-            FUN_L00_001ff290(position_rotation_work_vector, &moby->pos, position_work_vector);
+            add_vectors(position_rotation_work_vector, &moby->pos, position_work_vector);
         }
         *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
     }
@@ -1057,7 +1057,7 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             position_work_vector[2] = 0.0f;
-            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            add_vectors(&position, position_work_vector, &moby->pos);
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
@@ -1066,11 +1066,11 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             position_work_vector[2] = 0.0f;
-            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            add_vectors(&position, position_work_vector, &moby->pos);
             position_work_vector[2] = probe_ground_height(position_work_vector, 0, 0.5f);
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            FUN_L00_00216f90(position_work_vector, position_rotation_work_vector, 0x72, 0);
+            set_race_camera(position_work_vector, position_rotation_work_vector, 0x72, 0);
             if (data[8] != -1)
                 set_moby_list_visibility(data[8], 1);
             moby->state = 3;
@@ -1104,7 +1104,7 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[2] = 0.0f;
-            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            add_vectors(&position, position_work_vector, &moby->pos);
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
@@ -1114,7 +1114,7 @@ void codebot_slot_update(struct Moby *moby) {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[2] = 0.0f;
-            FUN_L00_001ff290(&position, position_work_vector, &moby->pos);
+            add_vectors(&position, position_work_vector, &moby->pos);
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
@@ -1346,7 +1346,7 @@ void ultramech_scientist_update(struct Moby *moby) {
         if (*(int *)(data + 0x154) != -1) {
             char *paths = D_L15_001600EC;
             char *paths_again;
-            FUN_L00_00216f90(paths + (*(int *)(data + 0x154) << 7) + 0x30, paths + (*(int *)(data + 0x154) << 7) + 0x70, 0, 1);
+            set_race_camera(paths + (*(int *)(data + 0x154) << 7) + 0x30, paths + (*(int *)(data + 0x154) << 7) + 0x70, 0, 1);
             paths_again = D_L15_001600EC;
             FUN_L00_00284e50(paths_again + (*(int *)(data + 0x154) << 7) + 0x30, paths_again + (*(int *)(data + 0x154) << 7) + 0x70);
         }

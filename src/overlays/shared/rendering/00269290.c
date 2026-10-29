@@ -271,14 +271,14 @@ void update_damped_effect_particle(O00269a70 *particle) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_001B2094 __attribute__((section(".data")));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void *FUN_L00_002678b8(int);
+extern void *create_part(int) __asm__("FUN_L00_002678b8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00269b70(void *spawn_position, unsigned char red, unsigned char green, unsigned char blue, int target, float particle_scalar_change, float initial_particle_scalar) {
     char *particle;
     float *particle_data;
     if (target) {
-        particle = FUN_L00_002678b8(5);
+        particle = create_part(5);
         if (particle) {
             qcopy(particle + 0x10, spawn_position);
             *(int *)(particle + 4) = 0x7F000000 | (blue << 16) | (green << 8) | red;

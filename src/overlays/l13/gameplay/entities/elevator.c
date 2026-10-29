@@ -213,10 +213,10 @@ extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void compute_elevator_camera_pose(struct Moby *moby, float *camera_position, float *camera_rotation) __asm__("FUN_L13_002b4060");
 
@@ -267,8 +267,8 @@ void elevator_update(struct Moby *moby) {
             add_vector_xyz(camera_pose_scratch, camera_pose_scratch, camera_position_scratch);
             blended_camera_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), blended_camera_rotation[1]) * t, blended_camera_rotation[1]);
             blended_camera_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), blended_camera_rotation[2]) * t, blended_camera_rotation[2]);
-            FUN_L00_002ea9d8(camera_pose_scratch);
-            FUN_L00_002eaa30(blended_camera_rotation);
+            set_camera_position(camera_pose_scratch);
+            set_camera_rotation(blended_camera_rotation);
         } else {
             u8 s = moby->command;
             moby->command = 1;
@@ -284,8 +284,8 @@ void elevator_update(struct Moby *moby) {
         }
         if (moby->command != 0) {
             compute_elevator_camera_pose(moby, camera_position_scratch, camera_pose_scratch);
-            FUN_L00_002ea9d8(camera_position_scratch);
-            FUN_L00_002eaa30(camera_pose_scratch);
+            set_camera_position(camera_position_scratch);
+            set_camera_rotation(camera_pose_scratch);
         }
         if (moby->state == 2) {
             target = vars->top;
@@ -302,7 +302,7 @@ void elevator_update(struct Moby *moby) {
             }
             if (moby->command != 0) {
                 hero_set_state(HERO_STATE_IDLE, 0);
-                FUN_L00_002eac18(1);
+                jet_end_mount(1);
             }
         }
         break;
@@ -675,7 +675,7 @@ typedef struct {
 } Vars;
 
 extern struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(struct Moby *moby);
+extern void update_entity(struct Moby *moby) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(struct Moby *moby) __asm__("FUN_L00_0025d1b8");
 
 /* spawns a class 0x24 child that copies its parent's position and scale */
@@ -705,7 +705,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_vars->unk2A = 3;
         child_vars->unk28 = 0;
         child_vars->unk30 = 0.9f;
-        FUN_L00_00250df8(child_moby);
+        update_entity(child_moby);
         copy_hero_moby_field_38(child_moby);
     }
     return child_moby;
@@ -2881,7 +2881,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         euler_rotation_basis(basis, (char *)&data->roll);
         transform_vector_by_basis(target, offset, basis);
         add_vector_xyz(camera.v.pos, moby->pos, target);
-        FUN_L00_002ea9d8(camera.v.pos);
+        set_camera_position(camera.v.pos);
         camera.v.rot[0] = fast_add_rotations(data->roll * 0.5f, data->steer_x * 0.03125f);
         camera.v.rot[1] = fast_subtract_rotations(fast_add_rotations(data->pitch, 0.09817477f), data->steer_y * (frame_scale_gp * 0.012271847f));
         camera.v.rot[2] = data->yaw;
@@ -2895,7 +2895,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         camera_angles[0] = data->camera_roll;
         camera_angles[2] = data->camera_yaw;
         camera_angles[1] = data->camera_pitch;
-        FUN_L00_002eaa30(camera_angles);
+        set_camera_rotation(camera_angles);
         if (*(short *)(D_L13_00167100 + 0x86) != 5) {
             stub_printf(fighter_jet_camera_mode_correction_message);
             jet_mount(camera.v.pos, camera_angles, 0, 0, 0);

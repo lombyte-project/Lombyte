@@ -792,7 +792,7 @@ void update_moby_visibility_and_half_turn(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -833,7 +833,7 @@ void update_moby_transform_and_child(char *moby) {
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
-        FUN_L00_00250df8(child);
+        update_entity(child);
     }
 }
 extern int D_L18_001AC240[];

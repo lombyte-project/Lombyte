@@ -8,7 +8,7 @@
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_destruction_replacement_moby(struct Moby *owner) __asm__("FUN_L10_002eb8c0");
 
@@ -24,7 +24,7 @@ char *spawn_destruction_replacement_moby(struct Moby *owner) {
         *(long *)(moby + 0x38) = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
         *(float *)(moby + 0x18) = 59.0f;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }

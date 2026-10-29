@@ -44,7 +44,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
@@ -77,7 +77,7 @@ unsigned char *spawn_machinegun_turret_projectile(void *spawn_position, float *i
         *(int *)(moby_data + 0x50) = collision_ignore_moby;
         *(int *)(moby_data + 0x54) = solid_collision;
         spawned_moby[0x23] = 0x10;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -107,7 +107,7 @@ char *spawn_bombomatic_projectile(char *spawn_position, char *initial_velocity, 
         qcopy(moby_data, initial_velocity);
         *(int *)(moby_data + 0x10) = spawning_moby;
         *(int *)(moby_data + 0x14) = burst_index;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -227,7 +227,7 @@ char *spawn_moby_class_1049(char *spawn_position, char *initial_velocity, int sp
         *(int *)(data + 0x10) = spawning_moby;
         spawned_moby[0x23] = 0x30;
         *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
         spawn_source_attached_fading_effect_particle(spawned_moby, 0x800040FF, 0x80, -1, 500000.0f);
     }
     return spawned_moby;
@@ -808,7 +808,7 @@ extern ScenePoints *scene_points __asm__("D_L07_001600EC");
 extern void delete_moby_m(void *) __asm__("FUN_0020c828");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int is_point_inside_clip_volume_i(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
@@ -900,7 +900,7 @@ void update_umbris_scene_progression(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->points_18 != -1) {
-            FUN_L00_00216f90(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
+            set_race_camera(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
         }
         moby->state = 7;
         break;
@@ -922,7 +922,7 @@ void update_umbris_scene_progression(struct Moby *moby)
             if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE || e->state == 0xFD) {
                 if (data->finish_volume != -1) {
                     if (is_point_inside_clip_volume_i(&hero.motion.pos, data->finish_volume) != 0) {
-                        FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0x72, 1);
+                        set_race_camera(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0x72, 1);
                         alternate_item_available[0x2A] = 1;
                         moby->state = 9;
                         start_scene(3);
@@ -951,7 +951,7 @@ void update_umbris_scene_progression(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
         if (scene_state == 2) break;
         if (data->points_1c != -1) {
-            FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
+            set_race_camera(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
         }
         if (data->moby_10 != -1) {
             struct Moby *e = &level_mobys[data->moby_10];
@@ -1029,7 +1029,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
     ((struct SpawnMobyView *)moby)->unk71 = 0xFF;
     moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;
     copy_hero_moby_field_38(moby);
-    FUN_L00_00250df8(moby);
+    update_entity(moby);
     animation_timer = suck_get_aim_height(moby);
     if (animation_timer != 0)
         animation_timer->frames = animation_timer->length;
@@ -1239,7 +1239,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1289,7 +1289,7 @@ void update_linear_projectile(struct Moby *moby) {
                 spark.f[1] = random_float_between(-1.0f, 1.0f);
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
                 particle_motion_vector.q = spark.q;
-                FUN_L00_001ff660(&spark, &bolt_vars->vel, projectile_impact_reflection_normal);
+                reflect_vector(&spark, &bolt_vars->vel, projectile_impact_reflection_normal);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector, vector_length_xyz(&spark) * 0.5f);
                 add_vector_xyz(&particle_motion_vector, &spark, &particle_motion_vector);
                 normalize_vector_xyz(&particle_motion_vector, &particle_motion_vector,
@@ -2166,7 +2166,7 @@ unsigned char *spawn_moby_class_1046(int spawning_moby, void *spawn_position, in
         distance_response_state = distance_reference_position - 0x140;
         *(float *)(distance_response_state + 0x160) = 0.3f - vector_distance(moby + 0x10, distance_reference_position) / 100.0f;
         *(int *)(distance_response_state + 0x168) = scale_game_frames(0x14);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         FUN_0022da68(0, 0, (int)moby);
     }
     return moby;

@@ -10,7 +10,7 @@
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -24,7 +24,7 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_0027
 
 unsigned char *spawn_moby_offset_effect(char *source_moby) {
     float position_offset[4];
-    unsigned char *effect = FUN_L00_002678b8(0x27);
+    unsigned char *effect = create_part(0x27);
     char *source_position;
     char *effect_data;
     if (effect != 0) {
@@ -60,7 +60,7 @@ extern s32 rand(void);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
-extern unsigned char *FUN_L00_002678b8(int);
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
@@ -68,7 +68,7 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, 
 
 unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initial_effect_vector, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) {
-    unsigned char *effect = FUN_L00_002678b8(0x2B);
+    unsigned char *effect = create_part(0x2B);
     unsigned char *effect_data;
     if (effect != 0) {
         effect_data = effect + 0x20;

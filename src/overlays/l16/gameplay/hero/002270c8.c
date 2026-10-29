@@ -113,7 +113,7 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
@@ -2373,7 +2373,7 @@ void update_hero_state_transitions(void) {
                     if (hero.anim_flags & 2) {
                         compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        set_race_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT:
@@ -2381,14 +2381,14 @@ void update_hero_state_transitions(void) {
                         hero.state_timer > hero.board_respawn_delay) {
                         compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        set_race_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT:
                     if (hero.anim_flags & 2) {
                         compute_hero_hoverboard_respawn_transform(v0, v1);
                         hero.board_air_yaw = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        set_race_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_VEHICLE_MODE_3_IDLE:

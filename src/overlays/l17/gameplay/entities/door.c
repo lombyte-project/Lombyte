@@ -1156,7 +1156,7 @@ extern float D_L17_0016D3F0 __attribute__((section(".data")));
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float interpolate_value_with_repeated_squaring(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
@@ -1195,11 +1195,11 @@ float D_L17_001621F0[2] = {512.0f, 512.0f};
 extern unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") __attribute__((sda));
 extern unsigned char D_0013A4E0_c4[] __asm__("D_0013A4E0");
 extern unsigned char D_0013E533_c4[] __asm__("D_0013E533");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void draw_fighter_jet_hud();
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -1328,7 +1328,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         adjust_fighter_jet_steering_for_flight_bounds((char *)ship_moby, &horizontal_steering_input, &vertical_steering_input);
         vendor_spring(&ship_vars->f6C, &ship_vars->f90, horizontal_steering_input, fighter_jet_horizontal_steering_error_gain_gp, fighter_jet_horizontal_steering_velocity_damping_gp, ka);
         vendor_spring(&ship_vars->f70, &ship_vars->f94, vertical_steering_input, fighter_jet_vertical_steering_error_gain_gp, fighter_jet_vertical_steering_velocity_damping_gp, kb);
-        FUN_L00_0025bc98((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
+        spring_angle((char *)&ship_vars->f30, (char *)&ship_vars->f98, 0, ship_vars->f6C * D_L17_0016208C,
                          fighter_jet_roll_error_gain_gp, fighter_jet_roll_velocity_damping_gp, fighter_jet_roll_settle_threshold_scale_gp);
         ship_vars->f34 = fast_subtract_rotations(ship_vars->f34, ship_vars->f70 * D_L17_00162024);
         ship_vars->f38 = fast_subtract_rotations(ship_vars->f38, ship_vars->f6C * D_L17_00162028);
@@ -1415,22 +1415,22 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         vu_euler_rotation_basis(ship_rotation_basis, (char *)&ship_vars->f30);
         transform_vector_by_basis(target, target_record_sum_or_camera_local_offset, ship_rotation_basis);
         add_vector_xyz(wr.e[0].v, ship_moby->pos, target);
-        FUN_L00_002ea9d8(wr.e[0].v);
+        set_camera_position(wr.e[0].v);
         wr.e[1].v[0] = fast_add_rotations(ship_vars->f30 * D_L17_00162048, ship_vars->f6C * D_L17_00162044);
         wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(ship_vars->f34, fighter_jet_camera_pitch_bias_gp),
                                                ship_vars->f70 * D_L17_00162024);
         wr.e[1].v[2] = ship_vars->f38;
-        FUN_L00_0025bc98((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], fighter_jet_camera_roll_error_gain_gp,
+        spring_angle((char *)&ship_vars->f20, (char *)&ship_vars->fA0, 0, wr.e[1].v[0], fighter_jet_camera_roll_error_gain_gp,
                          fighter_jet_camera_roll_velocity_damping_gp, fighter_jet_camera_roll_settle_threshold_scale_gp);
-        FUN_L00_0025bc98((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], fighter_jet_camera_pitch_error_gain_gp,
+        spring_angle((char *)&ship_vars->f24, (char *)&ship_vars->fA4, 0, wr.e[1].v[1], fighter_jet_camera_pitch_error_gain_gp,
                          fighter_jet_camera_pitch_velocity_damping_gp, fighter_jet_camera_pitch_settle_threshold_scale_gp);
-        FUN_L00_0025bc98((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], fighter_jet_camera_yaw_error_gain_gp,
+        spring_angle((char *)&ship_vars->f28, (char *)&ship_vars->fA8, 0, wr.e[1].v[2], fighter_jet_camera_yaw_error_gain_gp,
                          fighter_jet_camera_yaw_velocity_damping_gp, fighter_jet_camera_yaw_settle_threshold_scale_gp);
     }
     camera_rotation[0] = ship_vars->f20;
     camera_rotation[2] = ship_vars->f28;
     camera_rotation[1] = ship_vars->f24;
-    FUN_L00_002eaa30(camera_rotation);
+    set_camera_rotation(camera_rotation);
     vendor_spring(&ship_vars->fB0, &ship_vars->fC0, fighter_jet_cruise_fov_gp + (fighter_jet_boost_fov_gp - fighter_jet_cruise_fov_gp) * ratio,
                      fighter_jet_fov_error_gain_gp, fighter_jet_fov_velocity_damping_gp, fighter_jet_fov_settle_threshold_scale_gp);
     half_fov = ship_vars->fB0 * 0.5f;
@@ -1446,7 +1446,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             (hc = *(short *)(*(char **)(collision_result + 0x18) + 0xA6),
              hc != 0 && hc != 0x192 && hc != 0x4C2 && hc != 0x4C3 && hc != 0x52 && hc != 0x53)) {
             qcopy(ship_moby->pos, collision_result + 0x30);
-            FUN_L00_001ff660(movement_delta.v, movement_delta.v, collision_result + 0x40);
+            reflect_vector(movement_delta.v, movement_delta.v, collision_result + 0x40);
             ship_vars->f38 = fast_add_rotations(
                 ship_vars->f38,
                 fast_subtract_rotations(fast_arc_tan(movement_delta.v[0], movement_delta.v[1]), ship_vars->f38) * fighter_jet_impact_yaw_response_scale_gp);
@@ -1463,7 +1463,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
                     if (hero.ship_hp < 0.0f) {
                         subtract_vector_xyz(side, collision_result + 0x50, collision_result + 0x60);
                         normalize_vector_xyz(side, side, 1.0f);
-                        FUN_L00_001ff660(death_explosion_velocity, movement_delta.v, collision_result + 0x40);
+                        reflect_vector(death_explosion_velocity, movement_delta.v, collision_result + 0x40);
                         normalize_vector_xyz(death_explosion_velocity, death_explosion_velocity, frame_time + frame_time);
                         normalize_vector_xyz(up.v, collision_result + 0x40, 1.0f);
                         func_L00_0025F4A8_alt(ship_moby, death_explosion_velocity, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f,
@@ -1623,9 +1623,9 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 extern void clear_jet_camera_mode_latch(void) __asm__("FUN_L00_00203b78");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
@@ -1684,7 +1684,7 @@ void fighter_jet_update(ShipMoby *moby) {
                         spherical_offset_ed(dir, ship_vars->speed, ship_vars->rot[2], -ship_vars->rot[1]);
                         clamp_vector_length((char *)hit + 0x10, (char *)hit + 0x10, frame_time * 3.0f);
                         add_vector_ed(moby->pos, moby->pos, (char *)hit + 0x10);
-                        FUN_L00_001ff660(dir, dir, (char *)hit + 0x10);
+                        reflect_vector(dir, dir, (char *)hit + 0x10);
                         ship_vars->rot[2] = fast_add_rotations(
                             ship_vars->rot[2],
                             fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), ship_vars->rot[2]) * fighter_jet_impact_yaw_response_scale_gp * k);
@@ -1793,7 +1793,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 jet_game_state(2, 4);
                 if (ship_vars->enter_path != -1) {
                     char *p = D_L17_001600EC + (ship_vars->enter_path << 7);
-                    FUN_L00_00216f90(p + 0x30, p + 0x70, 50, 1);
+                    set_race_camera(p + 0x30, p + 0x70, 50, 1);
                     qcopy_nc(moby->pos, ((char (*)[128])D_L17_001600EC)[ship_vars->enter_path] + 0x30);
                     qcopy_nc(moby->rot, ((char (*)[128])D_L17_001600EC)[ship_vars->enter_path] + 0x70);
                 }
@@ -1860,14 +1860,14 @@ void fighter_jet_update(ShipMoby *moby) {
             g->unk20A5 = 0;
             ((ShipCamera *)g->moby)->unk98 = 0;
             FUN_L17_0021e530(0, 1);
-            FUN_L00_002eac18(0);
+            jet_end_mount(0);
             set_animation_parameter(g->unk160C, 0);
             qcopy_nc(moby->pos, ship_vars->home_pos);
             qcopy_nc(moby->rot, ship_vars->home_rot);
             moby->scale = *(float *)(moby->pclass + 0x24);
             refresh_moby_spatial_bounds_from_basis(moby);
             p = D_L17_001600EC + (ship_vars->exit_path << 7);
-            FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
+            set_race_camera(p + 0x30, p + 0x70, 0, 1);
             jet_game_state(0, 5);
             idx = ship_vars->voice;
             if (idx != -1) {
@@ -1898,7 +1898,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 clear_jet_camera_mode_latch();
                 ((ShipCamera *)g->moby)->unk98 = 0;
                 hero_respawn();
-                FUN_L00_002eac18(0);
+                jet_end_mount(0);
                 jet_game_state(0, 5);
                 qcopy_nc(moby->pos, ship_vars->home_pos);
                 qcopy_nc(moby->rot, ship_vars->home_rot);
@@ -1936,7 +1936,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 g->unk20A5 = 0;
                 ((ShipCamera *)g->moby)->unk98 = 0;
                 FUN_L17_0021e530(0, 1);
-                FUN_L00_002eac18(0);
+                jet_end_mount(0);
                 jet_game_state(0, 5);
                 if (ship_vars->exit_path2 == -1) {
                     debug_print(fighter_jet_missing_victory_placement_message);
@@ -1957,7 +1957,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     }
                     update_moby_class_flags_and_link(0x325, 1, 1, -1);
                     p = D_L17_001600EC + (ship_vars->exit_path << 7);
-                    FUN_L00_00216f90(p + 0x30, p + 0x70, 0, 1);
+                    set_race_camera(p + 0x30, p + 0x70, 0, 1);
                 }
                 if (moby->bB0 != 0xFF) {
                     jet_clear_persistent(moby->bB0);
@@ -2100,7 +2100,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_0022DA68");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_002ea9d8(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern void FUN_L17_002ee9c0_c(char *, char *, char *) __asm__("FUN_L17_002ee9c0");
 extern void FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
@@ -2170,8 +2170,8 @@ void magnet_elevator_update(struct Moby *moby) {
                 fast_subtract_rotations((*(float *)((char *)(base) + (0x154))), camera_rotation[1]) * t, camera_rotation[1]);
             camera_rotation[2] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(base) + (0x158))), camera_rotation[2]) * t, camera_rotation[2]);
-            FUN_L00_002ea9d8(camera_position);
-            FUN_L00_002eaa30(camera_rotation);
+            set_camera_position(camera_position);
+            set_camera_rotation(camera_rotation);
         } else {
             unsigned char s = B(moby, 0xBC);
             B(moby, 0xBC) = 1;
@@ -3524,11 +3524,11 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int scale_game_frames(int);
 extern short shuttle_second_stop_departure_scale_multiplier __asm__("D_L17_001623A8") __attribute__((sda));
 extern short shuttle_first_stop_departure_scale_multiplier __asm__("D_L17_001623AC") __attribute__((sda));
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_002ea9d8(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -3648,9 +3648,9 @@ void shuttle_update(struct Moby *shuttle_moby) {
             rot[1] = -fast_arc_tan(vector_distance(a, b), b[2] - a[2]);
             jet_mount(a, rot, 2, scale_game_frames(300), 0);
             set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
-            FUN_L00_002ea9d8(a);
-            FUN_L00_002eaa30(rot);
-            FUN_L00_00216f90(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,
+            set_camera_position(a);
+            set_camera_rotation(rot);
+            set_race_camera(D_L17_001600EC + (shuttle_vars->cut << 7) + 0x30,
                              D_L17_001600EC + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
         } else if (l17_save_id_collection_state.collected[(short)shuttle_moby->save_id] != 0 ||
                    (*(int *)(((char *)&D_0014C190) +
@@ -3695,8 +3695,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
             add_vector_xyz(b, b, a);
             clear_vector(rot);
             rot[2] = fast_add_rotations(shuttle_moby->rot.z, 3.1415927f);
-            FUN_L00_00216f90(b, rot, 0, 0);
-            FUN_L00_002eac18(0);
+            set_race_camera(b, rot, 0, 0);
+            jet_end_mount(0);
             *(int *)(((char *)&D_0014C190) +
                      (((short)shuttle_moby->save_id >> 5) * 4 + (current_level_index << 8))) |=
                 1 << (shuttle_moby->save_id & 0x1F);

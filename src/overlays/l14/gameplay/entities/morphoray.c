@@ -54,7 +54,7 @@ void exit_camera_set_state(u8 *target_object) {
 }
 
 extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(u8 *);
+extern void update_entity(u8 *) __asm__("FUN_L00_00250df8");
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -72,7 +72,7 @@ u8 *create_helper_sequence_owner_moby(u8 *self) {
         created_moby[0x20] = 0;
         *(s16 *)(created_moby + 0x32) = 0x40;
         created_moby[0x31] = 1;
-        FUN_L00_00250df8(created_moby);
+        update_entity(created_moby);
     }
     return created_moby;
 }

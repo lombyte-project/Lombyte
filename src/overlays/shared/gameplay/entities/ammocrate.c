@@ -47,7 +47,7 @@ float interpolate_value_with_repeated_squaring(int flag, int squaring_loop_limit
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
@@ -61,7 +61,7 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) {
         moby[0x20] = 0;
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         copy_hero_moby_field_38(moby);
     }
     return moby;
@@ -341,7 +341,7 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
             (*(float *)(firing_moby + 0x2C) / *(float *)(*(char **)(firing_moby + 0x24) + 0x24));
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, lifetime_frames, 0, 500000.0f);
     }
     return moby;

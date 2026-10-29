@@ -92,7 +92,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
 
@@ -108,7 +108,7 @@ char *spawn_gadgebot_spawn_container(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -302,7 +302,7 @@ char *spawn_gadgebot_pad(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(char **)(moby + 0xB8) = owner;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -474,7 +474,7 @@ void frog_update(unsigned char *moby) {
                 *(short *)(child + 0x32) = 0x40;
             }
             (*(char **)(data + 0x20C))[0x31] = 1;
-            FUN_L00_00250df8(*(char **)(data + 0x20C));
+            update_entity(*(char **)(data + 0x20C));
             *(unsigned short *)(moby + 0x34) |= 0x41;
         } else if (*(short *)(data + 0x202) != 0) {
             moby[0x20] = 0xF;
@@ -1096,7 +1096,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void spawn_moby_death_effect_burst(char *moby) __asm__("FUN_L06_002ea498");
@@ -1116,7 +1116,7 @@ void spawn_moby_death_effect_burst(char *moby) {
         spawn_position[2] += 0.5f;
         random_frame_count = scale_game_frames(random_int_between(0x14, 0x23));
         random_effect_parameter = random_int_between(0x28, 0x3C);
-        FUN_L00_00269958(spawn_position, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, random_effect_parameter, 1);
+        spawn_effect(spawn_position, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, random_effect_parameter, 1);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -1386,7 +1386,7 @@ extern int tick_countdown_32(int *);
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/gadgebot_update.h"
 #include "rnc/gameplay/state/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -2013,7 +2013,7 @@ void gadgebot_update(GbMoby *moby) {
                 position_and_displacement_scratch[1] = fast_sin(random_angle_radians()) * random_float_between(0.0f, 0.25f);
                 position_and_displacement_scratch[2] = 0.0f;
                 position_and_displacement_scratch[2] += random_float_between(0.0f, 0.5f);
-                FUN_L00_001ff290(temporary_position, position_and_displacement_scratch, moby->pos);
+                add_vectors(temporary_position, position_and_displacement_scratch, moby->pos);
                 normalize_vector_xyz(vector_and_hit_scratch, vector_and_hit_scratch, random_float_between(0.0f, frame_time));
                 vector_and_hit_scratch[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
                 t = scale_game_frames(random_int_between(0xF, 0x1E));
@@ -2532,7 +2532,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
             vA[1] = f20;
             lift = vA[2] + random_float_between_c2(0.0f, 0.5f);
             vA[2] = lift;
-            FUN_L00_001ff290(vC, vA, ctx + 0x10);
+            add_vectors(vC, vA, ctx + 0x10);
             f0 = random_float_between_c2(0.0f, D_0015ED6C);
             fast_vec_normalize_c(vB, vB, f0);
             f0 = random_float_between_c2(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
@@ -2565,7 +2565,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
             vC[1] = f20;
             lift = vC[2] + random_float_between_c2(0.0f, 0.5f);
             vC[2] = lift;
-            FUN_L00_001ff290(vD, vC, ctx + 0x10);
+            add_vectors(vD, vC, ctx + 0x10);
             f0 = random_float_between_c2(0.0f, D_0015ED6C);
             fast_vec_normalize_c(vA, vA, f0);
             f0 = random_float_between_c2(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);

@@ -409,7 +409,7 @@ void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void FUN_L00_00250df8(unsigned char *);
+void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) __asm__("FUN_L00_002c6f88");
 
 unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hook_speed) {
@@ -428,7 +428,7 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
         *(u128 *)(spawned_moby + 0xe0) = *(u128 *)(owner_moby + 0xe0);
         if (spawned_moby[0x53])
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(10));
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
         spawned_moby[0x20] = 0;
         *(unsigned short *)(spawned_moby + 0x34) |= 4;
     }
@@ -599,7 +599,7 @@ s32 collision_hit_material() __asm__("FUN_001f0b58");
 float random_float_between(float, float) __asm__("FUN_002132a8");
 int rand(void) __asm__("FUN_001160d8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
+void spawn_particle(float *, unsigned char, unsigned char, unsigned char, float, float, int) __asm__("FUN_L00_00269b70");
 void spawn_moby_collision_particles(unsigned char *moby) __asm__("FUN_L00_002c8078");
 
 void spawn_moby_collision_particles(unsigned char *moby) {
@@ -628,7 +628,7 @@ void spawn_moby_collision_particles(unsigned char *moby) {
             g = (rand() + 0x20) & 0x3F;
             b = rand() & 0x2F;
             randomized_particle_scalar = random_float_between(100000.0f, 800000.0f);
-            FUN_L00_00269b70(particle_spawn_position, r, g, b, randomized_particle_scalar, 0.0f, scale_game_frames(rand() % 40 + 10));
+            spawn_particle(particle_spawn_position, r, g, b, randomized_particle_scalar, 0.0f, scale_game_frames(rand() % 40 + 10));
         }
         moby[0x20] = 4;
         break;
@@ -1832,7 +1832,7 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
                 candidate[0x20] = 6;
             }
         }
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
         *(u16 *)data = 0;
         data[8] = 0;

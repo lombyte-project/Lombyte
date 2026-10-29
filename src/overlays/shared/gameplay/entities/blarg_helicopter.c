@@ -739,7 +739,7 @@ extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -794,7 +794,7 @@ void FUN_L03_002c4718(struct Moby *moby)
             fast_vec_normalize(&next_pos, &next_pos, 0.215f);
             fast_vec_add(pos, pos, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1) {
                     fast_vec_scale(vars, vars, 0.5f);
@@ -804,7 +804,7 @@ void FUN_L03_002c4718(struct Moby *moby)
                     }
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1)
                     fast_vec_scale(vars, vars, 1.2f);
@@ -822,14 +822,14 @@ first_collision_timer:
             fast_vec_normalize(&next_pos, &next_pos, 0.015f);
             fast_vec_add((Vec4 *)&moby->pos, &D_L03_00173F40.pad30, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1) {
                     fast_vec_scale(vars, vars, 0.5f);
                     if (fast_vec_length(vars) < 0.025f) moby->state = 1;
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect_vector(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vector_length_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1)
                     fast_vec_scale(vars, vars, 1.2f);
@@ -1003,7 +1003,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
@@ -1542,7 +1542,7 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00259888(void *, void *, int, float, void *);
 extern void select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
@@ -1674,7 +1674,7 @@ void update_homing_spark_projectile(Moby *moby) {
                         spark_dir.y = random_float_between_c(-1.0f, 1.0f);
                         spark_dir.z = random_float_between_c(-1.0f, 1.0f);
                         *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&spark_dir;
-                        FUN_L00_001ff660(&spark_dir, &aim, D_L03_00173F80);
+                        reflect_vector(&spark_dir, &aim, D_L03_00173F80);
                         normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&spark_dir) * 0.5f);
                         add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
                         normalize_vector_xyz(&spark_dir, &spark_dir, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));

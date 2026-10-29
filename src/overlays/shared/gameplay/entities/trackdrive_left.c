@@ -446,10 +446,10 @@ extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002eaa30(char *src);
+void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
+void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void FUN_L00_002eac18(int mode);
+void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
@@ -1270,7 +1270,7 @@ extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void ea210_play(int, int) __asm__("FUN_L00_00263d40");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void ea210_timing(int, int) __asm__("FUN_L00_00203908");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void ea210_transform(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern float ea210_interp(float, float) __asm__("FUN_001fa5c8");
@@ -1279,7 +1279,7 @@ extern void ea210_draw(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0"
 extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
 extern float ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
@@ -1353,7 +1353,7 @@ void tresspasser_update(struct Moby *moby) {
             ea210_timing(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
             moby->state = 4;
-            FUN_L00_00216f90(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
+            set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
         ea210_audio(0, -1);
@@ -1389,8 +1389,8 @@ void tresspasser_update(struct Moby *moby) {
             ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
         }
         if (D_L02_0015F3FC != 1.0f) return;
-        FUN_L00_00216f90(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
-        FUN_L00_002eac18(0);
+        set_race_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
+        jet_end_mount(0);
         moby->state = 5;
         return;
     }

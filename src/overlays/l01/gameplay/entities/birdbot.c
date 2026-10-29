@@ -343,7 +343,7 @@ typedef struct {
     s32 kind;
 } PathPickTarget;
 
-extern void FUN_L01_00274b78(void *, void *, f32);
+extern void find_point_ahead(void *, void *, f32) __asm__("FUN_L01_00274b78");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
@@ -382,7 +382,7 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
     target_search_radius = fast ? path_pick_vars->radius * 2.0f : path_pick_vars->radius;
     preceding_node_index = 0;
     next = 0;
-    FUN_L01_00274b78(path_follower_moby, &target, target_search_radius);
+    find_point_ahead(path_follower_moby, &target, target_search_radius);
     best_d = 10000.0f;
     best_a = 0.0f;
     best = 0;
@@ -686,7 +686,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8_u(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L01_0026d930_u(char *p) __asm__("FUN_L01_0026d930");
 extern void set_range_centered_on_value(char *arg, float value) __asm__("FUN_L01_0026eff8");
 extern void add_vector_xyz(void *, void *, void *);
@@ -973,7 +973,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
         }
         if (birdbot_vars->w1C8 == 0 && birdbot_vars->w1C4 != -1) {
-            FUN_L00_002eac18(0);
+            jet_end_mount(0);
             hero_set_state(HERO_STATE_IDLE, 1);
             cutscene_active = 0;
             birdbot_vars->w1C4 = -1;
@@ -2600,7 +2600,7 @@ extern s32 truncate_float_f49(f32) __asm__("FUN_001fa6d0");
 extern f32 fast_subtract_rotations_f49(f32, f32) __asm__("FUN_001fa5c8");
 extern void transform_vector_f49(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2712,7 +2712,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
                 D_L01_0015FFD8_m[v->riders[i]].rot.z =
                     fast_add_rotations(D_L01_0015FFD8_m[v->riders[i]].rot.z, 3.1415927f);
                 advance_moby_animation(&D_L01_0015FFD8_m[v->riders[i]]);
-                FUN_L00_00250df8(&D_L01_0015FFD8_m[v->riders[i]]);
+                update_entity(&D_L01_0015FFD8_m[v->riders[i]]);
                 D_L01_0015FFD8_m[v->riders[i]].flags |= 6;
             }
         }
@@ -2847,7 +2847,7 @@ typedef struct {
 } BeamMoby;
 
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8();
+extern void update_entity() __asm__("FUN_L00_00250df8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
@@ -2890,7 +2890,7 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         spawn_source_attached_fading_effect_particle(created_moby, 0x2F4F7F7F, scale_game_frames(0x78), -1, 420000.0f);
         spawn_source_attached_fading_effect_particle(created_moby, 0x4F6F7F7F, scale_game_frames(0x78), -1, 210000.0f);
         allocate_voice_for_target_entry(0, 0, created_moby);
-        FUN_L00_00250df8(created_moby);
+        update_entity(created_moby);
     }
     return created_moby;
 }
@@ -3572,7 +3572,7 @@ extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void apply_falling_rock_camera_overrides(Obj *obj) __asm__("FUN_L01_002f9000");
-extern void FUN_L00_002eac18(s32);
+extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void falling_rock_update(CapMoby *m) __asm__("FUN_L01_002f9080");
@@ -3671,7 +3671,7 @@ void falling_rock_update(CapMoby *falling_rock) {
     }
     case FALLING_ROCK_STATE_FALLEN:
         if (falling_rock_vars->wait == 0 && falling_rock_vars->music != -1) {
-            FUN_L00_002eac18(0);
+            jet_end_mount(0);
             hero_set_state(HERO_STATE_IDLE, 1);
             cutscene_active = 0;
             falling_rock_vars->music = -1;

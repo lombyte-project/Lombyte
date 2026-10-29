@@ -5696,16 +5696,16 @@ extern float normalize_timer_ffcb0(int) __asm__("FUN_001fa6c0");
 extern void approach_two_stage_ffcb0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void lerp_vector_ffcb0(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void vec_add_ffcb0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
 extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
-extern void FUN_L00_002eac18(int);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
 
@@ -5793,7 +5793,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 }
                 state = data[4];
                 state <<= 7;
-                FUN_L00_00216f90((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
+                set_race_camera((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
             }
         }
         if (data[9] < camera_sequence_scalar_ramp_duration_frames_gp)
@@ -5847,8 +5847,8 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
             camera_setup_rotation_or_position_target[2] += 0.85f;
             lerp_vector_ffcb0(camera_position, camera_position, camera_setup_rotation_or_position_target, *(float *)(data + 6));
             lerp_vector_ffcb0(from, from, target, *(float *)(data + 6));
-            FUN_L00_002ea9d8(camera_position);
-            FUN_L00_002eaa30(from);
+            set_camera_position(camera_position);
+            set_camera_rotation(from);
         }
         break;
     case WAIT_FOR_NEARBY_HERO:
@@ -6482,16 +6482,16 @@ extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_002356a0(int, int);
 extern void set_moby_state_5(char *) __asm__("FUN_L06_00304088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float FUN_L06_00216fa8(float);
+extern float scale_recovery_time(float) __asm__("FUN_L06_00216fa8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
@@ -6502,7 +6502,7 @@ extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
@@ -6572,7 +6572,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
             FUN_L06_00312ad0(vc);
             {
                 char *q = D_L06_001600EC_301b90 + (*(int *)(moby_vars + 0x28) << 7);
-                FUN_L00_00216f90(q + 0x30, q + 0x70, 0x72, 0);
+                set_race_camera(q + 0x30, q + 0x70, 0x72, 0);
             }
         }
         return;
@@ -6589,7 +6589,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         if (nb == **p - 1) {
             moby[0x20] = 4;
             select_localized_moby_voice_line((struct Moby *)moby, 1);
-            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(l06_linked_sequence_post_path_countdown_duration));
+            *(int *)(moby_vars + 0xB4) = truncate_float_to_s32(scale_recovery_time(l06_linked_sequence_post_path_countdown_duration));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
             scripted_camera_sequence_active = 0;
@@ -6623,7 +6623,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         }
         if (fast_dec_timer(moby_vars + 0xC0) != 0) {
             allocate_voice_for_group_entry(0, 0, (int)hero.moby);
-            *(int *)(moby_vars + 0xC0) = truncate_float_to_s32(FUN_L06_00216fa8(FUN_002132a8(480.0f, 600.0f)));
+            *(int *)(moby_vars + 0xC0) = truncate_float_to_s32(scale_recovery_time(FUN_002132a8(480.0f, 600.0f)));
             D_L06_00167400[88] = 0.4f;
             ((int *)D_L06_00167400)[90] = scale_game_frames(60);
         }
@@ -7290,7 +7290,7 @@ extern int float_to_int_03b68(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color_03b68(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *emit_particle_03b68(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void prepare_piece_effect_303748(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 
 void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
     float position[4], direction[4], velocity[4], acceleration[4];
@@ -7320,7 +7320,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
                 high = scale_game_frames(30);
                 second_time = random_int_between(low, high);
             }
-            FUN_L00_0026a9f0(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
+            spawn_particle(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
                              frame_time_03b68 * 10.0f * scale);
         }
     }
@@ -7701,7 +7701,7 @@ extern V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8")
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
@@ -7729,7 +7729,7 @@ void emit_red_button_particle_burst(int unused, void *effect_position) {
             pb = second_color_palette.v + random_integer_below(6);
             scaled_effect_factor = D_L06_001621B4 * 400000.0f;
             random_frame_count = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(effect_position, zero_effect_vector, *pa, *pb, scaled_effect_factor, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
+            spawn_particle(effect_position, zero_effect_vector, *pa, *pb, scaled_effect_factor, random_frame_count, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, frame_scaled_random_factor * D_L06_001621B4);
         } while (i < red_button_particle_emission_count_gp);
     }
 }

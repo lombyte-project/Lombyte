@@ -1488,7 +1488,7 @@ extern unsigned char *select_drek_boss_platform_firing_target(struct Moby *self)
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_0025a120(void *);
@@ -1777,7 +1777,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             restore_saved_hero_moby_and_clear_vehicle_mode();
             {
                 char *b = D_L18_001600EC + boss_data->f2A0 * 0x80;
-                FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                set_race_camera(b + 0x30, b + 0x70, 0, 1);
             }
             jet_clear_persistent(boss_data->f2B0);
             jet_reset_camera(hero.motion.pos.f, hero.motion.rot.f);
@@ -3434,7 +3434,7 @@ typedef union {
     float v[4];
 } QVec;
 
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001fefc8(void *);
@@ -3503,7 +3503,7 @@ void spawn_drek_boss_firing_effects(char *moby, void *effect_position) {
         for (j = 0; j < *(int *)&drek_boss_firing_secondary_effect_count_gp; j++) {
             normalize_vector_xyz(
                 scaled_emission_direction, &emission_direction, random_float_between(*(float *)&drek_boss_firing_secondary_effect_emission_length_range_start_gp, *(float *)&drek_boss_firing_secondary_effect_emission_length_range_end_gp));
-            FUN_L00_0026cbb0(effect_position, scaled_emission_direction, *(int *)&drek_boss_firing_secondary_effect_initial_color_gp, *(int *)&drek_boss_firing_secondary_effect_final_color_gp,
+            spawn_burst(effect_position, scaled_emission_direction, *(int *)&drek_boss_firing_secondary_effect_initial_color_gp, *(int *)&drek_boss_firing_secondary_effect_final_color_gp,
                              scale_game_frames(random_int_between(*(int *)&drek_boss_firing_secondary_effect_lifetime_range_start_frames_gp,
                                                                 *(int *)&drek_boss_firing_secondary_effect_lifetime_range_end_frames_gp)),
                              1, *(float *)&drek_boss_firing_secondary_effect_initial_size_gp);
@@ -3686,7 +3686,7 @@ extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
@@ -3732,7 +3732,7 @@ void rocket_tank_update(M1454 *moby) {
                 *(int *)(t + 0x94) = 0;
             }
             blend_moby_animation(tank_data->c138, 0, 0, 0);
-            FUN_L00_00250df8(tank_data->c138);
+            update_entity(tank_data->c138);
         }
         if (tank_data->c13c == 0) {
             char *c = func_0020D348_m(0x14B);
@@ -3752,7 +3752,7 @@ void rocket_tank_update(M1454 *moby) {
                 *(int *)(t + 0x94) = 0;
             }
             blend_moby_animation(tank_data->c13c, 0, 0, 0);
-            FUN_L00_00250df8(tank_data->c13c);
+            update_entity(tank_data->c13c);
         }
         if (moby->b53 != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));

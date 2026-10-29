@@ -15,7 +15,7 @@
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *create_attached_rocket(struct Moby *source_moby, short joint_index) __asm__("FUN_L13_003058a8");
 
@@ -40,7 +40,7 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
         *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)&source_moby->rot_row2;
         qcopy(moby_vars + 0x10, spawned_moby_position);
         *(int *)(moby + 0x94) = 0;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -55,7 +55,7 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
 
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference_moby, float max_travel_distance) __asm__("FUN_L13_00305988");
 
@@ -76,7 +76,7 @@ void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference
     moby->state = 0;
     moby->flags &= 0xFFFE;
     moby->collision = moby->pclass->collision;
-    FUN_L00_00250df8(moby);
+    update_entity(moby);
 }
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -93,7 +93,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float FUN_002132a8(float, float);
 extern int FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
 extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -212,7 +212,7 @@ void update_attached_rocket(struct Moby *moby) {
             work.direction.y = FUN_002132a8(-1.0f, 1.0f);
             work.direction.z = FUN_002132a8(-1.0f, 1.0f);
             *(OvlQuad *)&work.random_direction = *(OvlQuad *)&work.direction;
-            FUN_L00_001ff660(&work.direction, data, &D_L13_00174140.matrix);
+            reflect_vector(&work.direction, data, &D_L13_00174140.matrix);
             length = fast_vec_length(&work.direction);
             fast_vec_normalize(&work.random_direction, &work.random_direction, length * 0.5f);
             fast_vec_add(&work.random_direction, &work.direction, &work.random_direction);
@@ -277,7 +277,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -307,7 +307,7 @@ char *spawn_gemlik_projectile(float speed, float *spawn_position, float *launch_
         *(float *)(moby_vars + 0x28) = speed;
         moby[0x23] = 0x10;
         *(int *)(moby_vars + 0x2C) = func_001FA898_r(speed / fast_vec_length(moby_vars) + 1.0f);
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -438,7 +438,7 @@ void update_gemlik_projectile(struct Moby *moby) {
             work.random_direction.y = random_float_between(-1.0f, 1.0f);
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             *(OvlQuad_p *)&work.direction = *(OvlQuad_p *)&work.random_direction;
-            FUN_L00_001ff660(&work.random_direction, data, &D_L13_00174140.matrix);
+            reflect_vector(&work.random_direction, data, &D_L13_00174140.matrix);
             fast_vec_normalize(&work.direction, &work.direction, fast_vec_length(&work.random_direction) * 0.5f);
             add_vector_xyz(&work.direction, &work.random_direction, &work.direction);
             fast_vec_normalize(&work.direction, &work.direction,
@@ -1790,10 +1790,10 @@ extern int allocate_voice(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) __asm__("FUN_L13_0030ad38");
 
 extern void compute_lift_mount_transform(struct Moby *, float *, float *) __asm__("FUN_L13_0030ad38");
@@ -1841,8 +1841,8 @@ void update_lift(struct Moby *moby) {
             add_vector_xyz(mount_transform_work, mount_transform_work, mount_position_work);
             mount_rotation[1] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x154), mount_rotation[1]) * remaining_blend_ratio, mount_rotation[1]);
             mount_rotation[2] = fast_add_rotations(fast_subtract_rotations(*(float *)(base + 0x158), mount_rotation[2]) * remaining_blend_ratio, mount_rotation[2]);
-            FUN_L00_002ea9d8(mount_transform_work);
-            FUN_L00_002eaa30(mount_rotation);
+            set_camera_position(mount_transform_work);
+            set_camera_rotation(mount_rotation);
         } else {
             u8 s = moby->command;
             moby->command = 1;
@@ -1857,8 +1857,8 @@ void update_lift(struct Moby *moby) {
             vars->voice = allocate_voice(0, 4, moby);
         if (moby->command != 0) {
             compute_lift_mount_transform(moby, mount_position_work, mount_transform_work);
-            FUN_L00_002ea9d8(mount_position_work);
-            FUN_L00_002eaa30(mount_transform_work);
+            set_camera_position(mount_position_work);
+            set_camera_rotation(mount_transform_work);
         }
         if (moby->state == 2)
             target = vars->top;
@@ -1872,7 +1872,7 @@ void update_lift(struct Moby *moby) {
             else
                 moby->state = 7;
             if (moby->command != 0)
-                FUN_L00_002eac18(2);
+                jet_end_mount(2);
         }
         break;
     }
@@ -2048,7 +2048,7 @@ extern unsigned char D_L13_0015FC88[] __attribute__((section(".sdata")));
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume_alt(void *, int);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -2137,7 +2137,7 @@ after_state_4:
                 index *= 0x80;
                 qcopy(entity + 0x10, &object[index + 0x30]);
                 object += index;
-                FUN_L00_00216f90(object + 0x30, object + 0x70, 0, 1);
+                set_race_camera(object + 0x30, object + 0x70, 0, 1);
                 D_001413F5 = 1;
                 *(float *)(*(char **)(entity + 0x78) + 0x7c) = 0.99f;
                 D_L13_0015F3FC = 0.99f;
@@ -2166,7 +2166,7 @@ after_state_4:
                 other->flags |= 2;
             }
             object = D_L13_001600EC + data[2] * 0x80;
-            FUN_L00_00216f90(object + 0x30, object + 0x70, 0x72, 1);
+            set_race_camera(object + 0x30, object + 0x70, 0x72, 1);
             alternate_item_available[0x66] = 1;
             if (data[8] != -1) {
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[8] * 0x100);
@@ -2409,7 +2409,7 @@ void remove_moby_when_tracked_count_below_threshold(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D468), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_scaled_owned_moby(char *owner, void *position, float scale) __asm__("FUN_L13_0030bfb0");
 
@@ -2427,7 +2427,7 @@ char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
         if (owner != 0) {
             *(int *)(data + 0x64) = *(short *)(owner + 0xA6);
         }
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -2472,7 +2472,7 @@ extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
     unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
@@ -2499,7 +2499,7 @@ char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, in
         *(float *)(data + 0x1C) = *(float *)(moby + 0x2C);
         *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between_alt(2.0f, 5.0f);
         moby[0xBC] = effect_mode;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return (char *)moby;
 }

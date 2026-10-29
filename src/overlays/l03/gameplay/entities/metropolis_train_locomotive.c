@@ -117,7 +117,7 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L03_0015FFD8; /* no foreign declaration */
 extern short metropolis_train_carriage_spacing __asm__("D_L03_00161368") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void advance_moby_animation_alt(void *) __asm__("FUN_0020d580");
@@ -174,7 +174,7 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
         *(float *)(car + 0x48) = fast_add_rotations(fast_arc_tan(car_pos[0] - *(float *)(car + 0x10), car_pos[1] - *(float *)(car + 0x14)), 0.0f);
         *(float *)(car + 0x44) = 0.0f;
         advance_moby_animation_alt(car);
-        FUN_L00_00250df8(car);
+        update_entity(car);
         *(unsigned short *)(car + 0x34) |= 6;
         moby_point_position(car, 1, offset);
         subtract_vector_xyz(delta, car + 0x10, car_data + 0xA0);
@@ -301,7 +301,7 @@ void update_metropolis_train_motion(char *moby) {
             *(float *)(car + 0x44) =
                 -fast_arc_tan(vector_distance(car + 0x10, front), front[2] - *(float *)(car + 0x18));
             advance_moby_animation_alt(car);
-            FUN_L00_00250df8(car);
+            update_entity(car);
             *(unsigned short *)(car + 0x34) |= 6;
             moby_point_position(car, 1, front);
             subtract_vector_xyz(delta, car + 0x10, car_data->prev_pos);

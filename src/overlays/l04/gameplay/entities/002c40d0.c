@@ -47,7 +47,7 @@ s32 FUN_L04_002c41b0(T6 *data_owner) {
 }
 
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
@@ -68,7 +68,7 @@ void *spawn_class_23a_moby(char *source_moby, char *spawn_position) {
         *(float *)(created_moby + 0x48) = *(float *)(source_moby + 0x48);
         *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(created_moby + 0x10, saved_position_ptr);
-        FUN_L00_00250df8(created_moby);
+        update_entity(created_moby);
     }
     return created_moby;
 }

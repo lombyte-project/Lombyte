@@ -538,7 +538,7 @@ extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0")
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258490_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00259740_cf(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
@@ -1141,7 +1141,7 @@ void big_axebot_update(M_B7B0 *moby) {
             axe = data->f424;
             qcopy(axe->pos, axe_bone_transform[3]);
             advance_moby_animation(axe);
-            FUN_L00_00250df8(data->f424);
+            update_entity(data->f424);
             copy_matrix3x4(data->f424->fC0, axe_bone_transform);
             normalize_vector_triplet(data->f424->fC0);
             refresh_moby_spatial_bounds_from_basis(data->f424);
@@ -2336,7 +2336,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_0025a120(void *);
@@ -2956,7 +2956,7 @@ void blarg_trooper_update(struct Moby *moby) {
         o = *(char **)(data + 0xF8);
         qcopy(o + 0x10, update_scratch.w.m[3]);
         advance_moby_animation(o);
-        FUN_L00_00250df8(*(char **)(data + 0xF8));
+        update_entity(*(char **)(data + 0xF8));
         copy_matrix3x4(*(char **)(data + 0xF8) + 0xC0, update_scratch.w.m);
         normalize_vector_triplet(*(char **)(data + 0xF8) + 0xC0);
         {

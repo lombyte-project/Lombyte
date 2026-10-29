@@ -29,7 +29,7 @@ struct G {
 
 extern float D_L08_0015F59C;
 extern float D_L08_0015F5A0;
-extern int D_L08_0015F5C4;
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern struct G D_L08_0016D060;
 extern volatile unsigned char D_0015EDB0[1];
 extern unsigned char D_L08_0017CC40[];
@@ -39,7 +39,7 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) __asm__("FUN_L
 
 void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
     int i;
-    if (D_L08_0015F5C4 == 2 && D_0015EDB0[0]) {
+    if (level_game_mode == 2 && D_0015EDB0[0]) {
         if (D_L08_0016D060.a == 3 && D_L08_0016D060.b >= 0x1BA && D_L08_0016D060.b < 0x284) {
             D_L08_0015F59C = 1.0f;
             D_L08_0015F5A0 = -0.3f;
@@ -302,7 +302,7 @@ struct G_3063f0 {
 
 extern float D_L08_0015F59C;
 extern float D_L08_0015F5A0;
-extern int D_L08_0015F5C4;
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
@@ -312,7 +312,7 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L0
 
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
     int i;
-    if (D_L08_0015F5C4 == 2 && D_0015EDB0_c[0]) {
+    if (level_game_mode == 2 && D_0015EDB0_c[0]) {
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
             D_L08_0015F59C = 1.0f;
             D_L08_0015F5A0 = -0.2f;
@@ -713,7 +713,7 @@ void update_batalia_selected_moby_effects(struct Moby *moby) {
         moby->state = 1;
         break;
     case MOBY_ACTIVE:
-        if (D_L08_0015F5C4 == 2) {
+        if (level_game_mode == 2) {
             int object_selector = D_L08_0016D060_c.a;
             if ((object_selector >= 1 && object_selector <= 2) || object_selector == 4 || object_selector == 5) {
                 if (D_L08_0016D060_c.a != 1 || scale_game_frames(0x8CE) < D_L08_0016D060_c.b) {

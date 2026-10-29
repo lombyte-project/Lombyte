@@ -88,7 +88,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern s32 D_L16_0015F5C4 ;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -136,7 +136,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         if (*(int *)&D_L16_0015F5C4 != 2) {
             char *player;
             moby->state = 1;
-            FUN_L00_00216f90(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
+            set_race_camera(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
             help_request(0x3E82, 0x84);
             grant_inventory_item(0x21, 1);
             jet_clear_persistent(moby->widget);
@@ -226,7 +226,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void initialize_moby_rotation_scales(struct Moby *moby) __asm__("FUN_L16_002e36e8");
 
@@ -237,7 +237,7 @@ void initialize_moby_rotation_scales(struct Moby *moby) {
         fast_vec_normalize(&moby->rot_row2, &moby->rot_row2, rotation_scale_data[1] * 0.25f);
         moby->state = 1;
         moby->flags |= 0x101;
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
 }
 
@@ -1490,7 +1490,7 @@ extern int tick_countdown_32_c(void *) __asm__("tick_countdown_32");
 extern unsigned char D_0013D4DE __attribute__((section(".data")));
 extern unsigned char D_0013D507 __attribute__((section(".data")));
 extern unsigned char D_0013D408[];
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025a120(void *);
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1576,7 +1576,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             activation->pending = pending;
             ceo_moby->event = 0;
             pose = gadgetron_ceo_challenge_start_pose;
-            FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
+            set_race_camera(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);
@@ -1628,7 +1628,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         event = ceo_moby->event;
         if (event == 1) {
             ceo_moby->state = event;
-            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
+            set_race_camera(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             if (!D_0013D507) {
                 int pending;
@@ -1644,7 +1644,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         }
         if (ceo_moby->event == 2) {
             ceo_moby->state = 1;
-            FUN_L00_00216f90(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
+            set_race_camera(gadgetron_ceo_challenge_return_pose, gadgetron_ceo_challenge_return_pose + 0x10, 0, 1);
             ceo_moby->event = 0;
             restore_gadgetron_ceo_non_challenge_environment((char *)ceo_moby);
         }
@@ -1652,7 +1652,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             char *camera;
             char *pose = gadgetron_ceo_challenge_start_pose;
             ceo_moby->event = 0;
-            FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
+            set_race_camera(pose, pose + 0x10, 0, 1);
             camera = (char *)hero.saved_pos_rot;
             qcopy(camera, pose + 0x20);
             qcopy(camera + 0x10, pose + 0x30);

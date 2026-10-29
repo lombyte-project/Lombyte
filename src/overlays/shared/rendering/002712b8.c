@@ -231,13 +231,13 @@ void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
 #include "eetypes.h"
 #include "qcopy.h"
 extern unsigned char *D_L00_001B213C __attribute__((section(".data")));
-unsigned char *FUN_L00_002678b8(int);
+unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int FUN_00213260(int);
 int FUN_001fa6d0(float);
 unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, float x) __asm__("FUN_L00_00271b18");
 
 unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, float x) {
-    unsigned char *particle = FUN_L00_002678b8(0x2f);
+    unsigned char *particle = create_part(0x2f);
     if (particle) {
         qcopy(particle + 0x10, position);
         *(int *)(particle + 4) = ((FUN_00213260(8) + 0x28) << 24) | 0x808080;
@@ -366,7 +366,7 @@ typedef struct {
     f32 x, y, z, w;
 } V __attribute__((aligned(16)));
 void FUN_L00_001ff318(V *, V *, f32);
-void FUN_L00_001ff290(V *, V *, V *);
+void add_vectors(V *, V *, V *) __asm__("FUN_L00_001ff290");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 void update_damped_fading_particle(u8 *particle) __asm__("FUN_L00_00271ec8");
@@ -377,7 +377,7 @@ void update_damped_fading_particle(u8 *particle) {
     u32 faded_color;
     FUN_L00_001ff318(&unused_vector_argument, particle_velocity, 0.95f);
     particle_velocity->z += frame_time_sq * 5.0f;
-    FUN_L00_001ff290(&unused_vector_argument, (V *)(particle + 0x10), particle_velocity);
+    add_vectors(&unused_vector_argument, (V *)(particle + 0x10), particle_velocity);
     faded_color = *(u32 *)(particle + 4) + 0xFE000000;
     *(u32 *)(particle + 4) = faded_color;
     if ((faded_color & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(particle + 0xA) != 0) {
@@ -458,7 +458,7 @@ unsigned char *FUN_L00_00272060(void *initial_position, int lifetime_frames, int
 
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void FUN_L00_00267a08(void *);
+extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 static __inline__ void vcopy_273090(float *d, float *s) {
@@ -496,9 +496,9 @@ void update_moving_size_alpha_tween_particle(char *part) {
     if (*(float *)(part + 0x10) < 2.0f || *(float *)(part + 0x10) > 1021.0f ||
         *(float *)(part + 0x14) < 2.0f || *(float *)(part + 0x14) > 1021.0f ||
         *(float *)(part + 0x18) < 2.0f || *(float *)(part + 0x18) > 1021.0f) {
-        FUN_L00_00267a08(part);
+        free_effect_particle(part);
     } else if (fast_dec_timer_s16(part + 0xA)) {
-        FUN_L00_00267a08(part);
+        free_effect_particle(part);
     }
 }
 typedef unsigned int u128_272438 __attribute__((mode(TI), aligned(16)));
@@ -1359,7 +1359,7 @@ void update_moving_resizing_periodic_alpha_fade_particle(char *particle) {
     }
 }
 extern unsigned char *D_L00_001B218C __attribute__((section(".data")));
-unsigned char *FUN_L00_002678b8(int);
+unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0(float);
 int FUN_00213260(int);
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -1369,7 +1369,7 @@ unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initia
 
 unsigned char *spawn_mode_controlled_orbiting_trail_particle(int k, u128 *initial_position, int lifetime_frames, float x, float y, int mode, int col,
                                 float *initial_position_offset) {
-    unsigned char *particle = FUN_L00_002678b8(0x43);
+    unsigned char *particle = create_part(0x43);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
         qcopy(particle + 0x10, initial_position);

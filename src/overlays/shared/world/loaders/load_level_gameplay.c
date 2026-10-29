@@ -375,7 +375,7 @@ extern LevelState16CB40 D_L00_0016CA40;
 extern LevelLoad173E00 D_L00_00173E00;
 /* Level load state at D_L00_00173E40; this function sets its header pointers (+0x4, +0x8) and clears +0xC..+0x14. */
 extern LevelLoad173E40 level_load __asm__("D_L00_00173E40");
-extern MobyInst *D_L00_0015FFD8 MACRO_ADDR;
+extern MobyInst *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern MobyInst *D_L00_0015FFDC MACRO_ADDR;
 extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
 extern ShipSpawn D_0013E030;
@@ -481,7 +481,7 @@ extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
 extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
 extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
@@ -937,7 +937,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         p += 4;
         n2 = *(int *)p;
         p += 0xC;
-        D_L00_0015FFD8 = (MobyInst *)mem;
+        moby_table = (MobyInst *)mem;
         FillTransferWords(mem, 0, (n + n2) << 8);
         for (i = 0; i < n; i++) {
             int mission;
@@ -1020,7 +1020,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                     short *slot = moby_index_remap + i;
                     *slot = count;
                 }
-                m = D_L00_0015FFD8 + count;
+                m = moby_table + count;
                 init_moby_instance(m, *(int *)p);
                 p += 4;
                 m->fB1 = vis;
@@ -1072,7 +1072,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 m->f34 |= *(unsigned short *)p;
                 p += 4;
                 if (m->f24 != 0) {
-                    FUN_L00_00250df8(m);
+                    update_entity(m);
                 }
                 moby_red = *(int *)p;
                 p += 4;
@@ -1092,13 +1092,13 @@ char *load_level_gameplay(int skip_gameplay_read) {
             }
             p = next;
         }
-        D_L00_0015FFDC = D_L00_0015FFD8 + count;
+        D_L00_0015FFDC = moby_table + count;
         D_L00_0015FFDC->f20 = 0xFF;
         mem += (count + n2) << 8;
         D_L00_0015FFE8_macro = mem;
         mem += n2 << 7;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-        D_L00_0015FFE0 = (MobyInst *)((int)D_L00_0015FFD8 + ((count + n2) << 8) - 0x100);
+        D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((count + n2) << 8) - 0x100);
     }
     if (hdr->f58 != 0) {
         char *pv = (char *)hdr + hdr->f58;
@@ -1136,7 +1136,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 mem += size;
             }
         }
-        for (m = D_L00_0015FFD8; m != D_L00_0015FFDC; m++) {
+        for (m = moby_table; m != D_L00_0015FFDC; m++) {
             int k = m->f78;
 
             if (k < 0) {
@@ -1464,7 +1464,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
         if (D_0015ED84 == 13 && D_0013E030.f26 == 2) {
             if (D_L00_00160540 != 0) {
-                for (m = D_L00_0015FFD8; m->f20 != 0xFF; m++) {
+                for (m = moby_table; m->f20 != 0xFF; m++) {
                     if (m->fA6 == first_class_ids[D_0013E030.f26]) {
                         initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
@@ -1487,7 +1487,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             m->f30 = 0x10;
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
-            FUN_L00_00250df8(m);
+            update_entity(m);
             D_0013E030.f0 = m;
             store_current_level_table_value((int)m, 0);
         }
@@ -1541,7 +1541,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int cnt = 0;
             int k = 0;
 
-            for (m = D_L00_0015FFD8; m->f20 != 0xFF; m++) {
+            for (m = moby_table; m->f20 != 0xFF; m++) {
                 if (m->f36 != 0x7F80) {
                     int uid = m->fB2;
                     int j;
@@ -1629,7 +1629,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int i;
 
         debug_print(level_gameplay_no_occlusion_message);
-        for (m = D_L00_0015FFD8; m != D_L00_0015FFE0; m++) {
+        for (m = moby_table; m != D_L00_0015FFE0; m++) {
             m->f36 = 0x7F80;
         }
         for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {

@@ -63,7 +63,7 @@ void request_batalia_cannon_mount(struct Moby *command_target_moby) {
 extern char *func_0020D348_m(int);
 extern char D_0013E533[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
 
@@ -80,7 +80,7 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
         moby_point_position(child_moby, joint, child_joint_position);
         moby_point_position(parent, pjoint, parent_joint_position);
         fast_vec_sub(child_moby + 0x10, parent_joint_position, child_joint_position);
-        FUN_L00_00250df8(child_moby);
+        update_entity(child_moby);
     }
     return child_moby;
 }
@@ -171,7 +171,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 #include "rnc/overlay/l08/gameplay/entities/bolt_thief_globals.h"
 extern float shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") __attribute__((sda));
@@ -202,7 +202,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
         if (m != 0)
-            FUN_L00_00250df8(m);
+            update_entity(m);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
@@ -240,7 +240,7 @@ void update_commando_parts(struct Moby *parent_moby) {
     for (i = 0; i < 16; i++) {
         char *updated_part = *(char **)part_entry_cursor;
         if (updated_part != 0) {
-            FUN_L00_00250df8(updated_part);
+            update_entity(updated_part);
             updated_part = *(char **)part_entry_cursor;
             if (*(unsigned short *)(updated_part + 0x34) & 0x8000) {
                 fast_vec_scale(updated_part + 0xD0, updated_part + 0xD0, -1.0f);
@@ -656,11 +656,11 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 int FUN_L08_002e0228_c(struct Moby *m) __asm__("FUN_L08_002e0228");
-void FUN_L00_00216f90(void *pos, void *rot, int mode, int flag);
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002eaa30(char *src);
+void set_race_camera(void *pos, void *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
+void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
+void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void FUN_L00_002eac18(int mode);
+void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 void FUN_L08_002deee0_c(struct Moby *moby) __asm__("FUN_L08_002deee0");
 void FUN_L08_00306b30(u8 *object, s32 mode);
 void FUN_L08_00313ba8(void);
@@ -1093,7 +1093,7 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19, float x, float y);
+void spawn_particle(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19, float x, float y) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B890_2E2A38(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
@@ -1322,7 +1322,7 @@ void update_linked_moby_parts(struct Moby *moby) {
     }
     for (i = 1; i < 34; i++) {
         if (links[i].part != 0) {
-            FUN_L00_00250df8(links[i].part);
+            update_entity(links[i].part);
         }
     }
 }
@@ -2046,7 +2046,7 @@ extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") __attribute__((section(".sdata")));
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -2404,7 +2404,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         }
         if (coll_sphere(0.25f, &moby->pos, 0x22, moby) != 0) {
             subtract_vector_xyz(direction, &moby->pos, ((CollPos_4BE8 *)D_L08_00174660)->pos);
-            FUN_L00_001ff660(vars->velocity, vars->velocity, direction);
+            reflect_vector(vars->velocity, vars->velocity, direction);
             if (fast_arc_tan(direction[2], func_001F9CE8_2E16A0(direction)) < 0.7853982f
                 && fast_arc_tan(((Coll_4BE8 *)((char *)D_L08_00174660 - 0x20))->n[2], func_001F9CE8_2E16A0(((CollPos_4BE8 *)D_L08_00174660)->n)) < 0.7853982f) {
                 Coll_4BE8 *coll = (Coll_4BE8 *)((char *)D_L08_00174660 - 0x20);
@@ -2775,7 +2775,7 @@ typedef struct {
 
 extern s32 shrub_updates_disabled_gp __asm__("D_L08_00161D30") __attribute__((sda));
 extern f32 shrub_path_speed_gp __asm__("D_L08_00161D24") __attribute__((sda));
-extern s32 D_L08_0015F5C4;
+extern s32 level_game_mode __asm__("D_L08_0015F5C4");
 extern s64 D_L08_0016D090 __attribute__((section(".data")));
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
@@ -2902,7 +2902,7 @@ void shrub_update(struct Moby *moby) {
         break;
     case SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
         follower = &vars->follow[1];
-        if (D_L08_0015F5C4 == 2 && vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
+        if (level_game_mode == 2 && vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
             qcopy(&moby->pos, &follower->path->points[15]);
             follower->point = 15;
             moby->rot.z = fast_arc_tan(follower->path->points[11].f[0] - moby->pos.x,

@@ -33,7 +33,7 @@ extern int D_L00_0015F5F0;
 extern char *D_L00_0015F5F4;
 extern char *D_L00_0015F660;
 extern s32 D_L00_0015FFBC;
-extern u8 *D_L00_0015FFD8;
+extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern int D_L00_0015FFF0;
 extern int D_L00_00160014;
 extern char *D_L00_00160040;

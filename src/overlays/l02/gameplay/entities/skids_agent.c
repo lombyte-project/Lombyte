@@ -115,14 +115,14 @@ extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void approach_two_stage(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
-extern void FUN_L00_002eac18(int);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
@@ -243,15 +243,15 @@ void skids_agent_update(struct Moby *moby) {
         rot.f[2] = angle_add(angle_sub(to.f[2], from.f[2]) * *(f32 *)(data + 0x180), from.f[2]);
         rot.f[1] = angle_add(angle_sub(to.f[1], from.f[1]) * *(f32 *)(data + 0x180), from.f[1]);
         rot.f[0] = angle_add(angle_sub(to.f[0], from.f[0]) * *(f32 *)(data + 0x180), from.f[0]);
-        FUN_L00_002ea9d8(&pos);
-        FUN_L00_002eaa30(&rot);
+        set_camera_position(&pos);
+        set_camera_rotation(&rot);
         if (*(f32 *)(data + 0x180) < 1.0f) {
             approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
         } else {
             approach_value((f32 *)(data + 0x17C), 1.0f, 0.1f);
             if (*(f32 *)(data + 0x17C) == 1.0f) {
                 moby->state = 4;
-                FUN_L00_002eac18(0);
+                jet_end_mount(0);
             }
         }
         D_L02_0015F3FC = *(f32 *)(data + 0x17C);
@@ -283,7 +283,7 @@ void skids_agent_update(struct Moby *moby) {
             copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
             transform_vector_by_basis(&offset, skids_agent_prop_local_offset, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
-            FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
+            update_entity(*(struct Moby **)(data + 0x178));
         }
     });
 

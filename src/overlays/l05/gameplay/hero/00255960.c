@@ -100,7 +100,7 @@ extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
@@ -2014,7 +2014,7 @@ void update_hero_state_machine(void) {
                     if (hero.anim_flags & 2) {
                         compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
                         hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
-                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
+                        set_race_camera(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_RESPAWN_POSITION_OR_TIMEOUT_WAIT:
@@ -2022,14 +2022,14 @@ void update_hero_state_machine(void) {
                         hero.state_timer > hero.board_respawn_delay) {
                         compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
                         hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
-                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
+                        set_race_camera(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT:
                     if (hero.anim_flags & 2) {
                         compute_hero_hoverboard_respawn_transform(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation);
                         hero.board_air_yaw = ledge_probe_position_or_respawn_rotation[2];
-                        FUN_L00_00216f90(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
+                        set_race_camera(hero_position_or_motion_scratch, ledge_probe_position_or_respawn_rotation, 0x6B, 1);
                     }
                     break;
                 case HERO_STATE_VEHICLE_MODE_3_IDLE:

@@ -1190,10 +1190,10 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18(s32);
+extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern void lift_camera_view(void *, void *, void *) __asm__("FUN_L05_00315ee0");
 extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");
 
@@ -1250,8 +1250,8 @@ void elevator_with_button_update(struct Moby *moby) {
             approach_value(&vars->fade, 0.0f, 0.133f);
             elevator_camera_transition_fade = vars->fade;
             lift_camera_view(moby, &eye, &look);
-            FUN_L00_002ea9d8(&eye);
-            FUN_L00_002eaa30(&look);
+            set_camera_position(&eye);
+            set_camera_rotation(&look);
             scale = 1.0f / (vars->top - vars->bottom);
             progress_speed_limit = frame_time * (moby->command ? 6.0f : 16.0f) * scale;
             max_speed = frame_time_sq * (moby->command ? 6.0f : 16.0f) * scale;
@@ -1303,7 +1303,7 @@ void elevator_with_button_update(struct Moby *moby) {
             tick_countdown_32_alt(&vars->timer);
         }
         if (hero.ground_moby != moby) {
-            FUN_L00_002eac18(1);
+            jet_end_mount(1);
             if (moby->state == 7) {
                 moby->state = 5;
             } else {
@@ -1961,7 +1961,7 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern int FUN_001f9740(void *);
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
@@ -1985,7 +1985,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern char shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -2036,7 +2036,7 @@ void shady_salesman_update(WM *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (moby->animation == 0 && FUN_001f9740((char *)npc_data + 0x154)) {
+        if (moby->animation == 0 && fast_dec_timer((char *)npc_data + 0x154)) {
             npc_data->idle_timer =
                 random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(1200.0f, 2400.0f)));
             if (moby->animation != 1)

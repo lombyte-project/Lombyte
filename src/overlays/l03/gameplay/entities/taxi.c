@@ -1040,7 +1040,7 @@ extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2);
@@ -1070,7 +1070,7 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
             *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)&coll_hit;
             *(int *)(moby_vars + 0x24) = 0;
         }
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1103,13 +1103,13 @@ extern void select_moby_target_with_hero_fallback(void *, void *, f32) __asm__("
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -1151,7 +1151,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
         add_vector_xyz(pos, pos, rocket_vars);
         trail_vector_offset.q = D_0013F490_v.q;
         trail_vector_offset.f[2] *= rocket_trail_offset_z_scale_gp;
-        FUN_L00_001ff290(&trail, pos, &trail_vector_offset);
+        add_vectors(&trail, pos, &trail_vector_offset);
         rocket_moby->rot.z = rocket_vars->heading;
         rocket_moby->rot.x = fast_add_rotations(rocket_moby->rot.x, frame_time * 6.2831855f);
         side.f[0] = fast_cos(rocket_vars->heading) * rocket_vars->speed * -0.5f;
@@ -1162,10 +1162,10 @@ void update_homing_rocket(struct Moby *rocket_moby) {
         add_vector_xyz(&trail, &side, &trail_vector_offset);
         side.q = trail.q;
         normalize_vector_xyz(&back, rocket_vars, -0.2f);
-        FUN_L00_001ff290(&trail, &back, pos);
-        FUN_L00_00269958(&back, &side, 0x6F00AFFF, 0xFF, scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
+        add_vectors(&trail, &back, pos);
+        spawn_effect(&back, &side, 0x6F00AFFF, 0xFF, scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
                          FUN_L00_00257b90(0x14, 0x23), 1);
-        FUN_L00_00269958(&back, &side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)),
+        spawn_effect(&back, &side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)),
                          0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
         if (target.found != 0) {
             pitch = -fast_arc_tan(vector_distance(pos, &target.pos), target.pos.f[2] - rocket_moby->pos.z);
@@ -1580,7 +1580,7 @@ struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance
         *(float *)(moby_vars + 0x64) = initial_path_distance;
         *(struct RailPath **)(moby_vars + 0x60) = path;
         *(u8 **)(moby_vars + 0x8) = move;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1696,7 +1696,7 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int guide_save(int, int) __asm__("FUN_0020b178");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -1833,7 +1833,7 @@ void big_al_update(struct Moby *guide_moby) {
             jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
         }
         guide_save(0, -1);
-        FUN_L00_00216f90(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70, 0, 1);
+        set_race_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70, 0, 1);
         break;
     }
     rate = 0.02f;
@@ -2020,7 +2020,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         pos.f[0] = talker_cos(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[1] = talker_sin(talker_rand_angle()) * talker_rand_range(0.0f, 0.5f) * talker_rand_range(0.0f, 1.0f);
         pos.f[2] = 0.0f;
-        FUN_L00_001ff290(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
+        add_vectors(unused_vector_scratch, &pos, &robot_qwark_moby->pos);
         if (talker_rand_below(3) == 0) {
             spawn_effect_particle_with_target_scalar(&pos, &particle_velocity, 0x20202020, 0x7F7F7F, scale_game_frames(FUN_L00_00257b90(0x3C, 0x78)),
                              157500.0f);

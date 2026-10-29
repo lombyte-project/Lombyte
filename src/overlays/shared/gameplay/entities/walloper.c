@@ -706,7 +706,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
 u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
-void FUN_L00_00250df8();
+void update_entity() __asm__("FUN_L00_00250df8");
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) __asm__("FUN_L00_002bb360");
 
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
@@ -725,7 +725,7 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
         *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(basis_source_moby + 0xD0);
         *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)(basis_source_moby + 0xE0);
         refresh_moby_spatial_bounds_from_basis(spawned_moby);
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -3104,7 +3104,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int ch
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void FUN_L00_00250df8(unsigned char *);
+void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
 
@@ -3121,7 +3121,7 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
         qcopy(spawned_moby + 0x10, spawn_position);
         qcopy(moby_vars + 0x10, initial_vector);
         *(int *)(moby_vars + 0x60) = linked_moby;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
         *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
     }

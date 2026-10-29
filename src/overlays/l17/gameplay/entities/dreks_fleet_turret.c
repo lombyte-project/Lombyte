@@ -87,7 +87,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
 extern unsigned char *spawn_trail_particle(char *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
@@ -238,7 +238,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
-                FUN_L00_001ff290(hit_descriptor_and_vector_scratch, beam_endpoint_and_offset_scratch, beam_endpoint_position_scratch);
+                add_vectors(hit_descriptor_and_vector_scratch, beam_endpoint_and_offset_scratch, beam_endpoint_position_scratch);
                 normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 spawn_trail_particle(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
@@ -663,7 +663,7 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
@@ -749,7 +749,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             elevation_angle_offset));
                     transform_vector(spC0, spC0, moby_rotation_matrix);
-                    FUN_L00_001ff290(spD0, spC0, (moby + 0x10));
+                    add_vectors(spD0, spC0, (moby + 0x10));
                     if (FUN_001f9b48((moby + 0x10), &hero.motion.pos) < 30.0f) {
                         collision_line((moby + 0x10), spC0, 9, moby, &blk);
                     }
@@ -778,7 +778,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 particle_vector_scratch_destination = (char *)particle_vector_scratch;
-                                FUN_L00_001ff290(particle_vector_scratch_destination, spE0, spF0);
+                                add_vectors(particle_vector_scratch_destination, spE0, spF0);
                                 particle_direction_sign_or_minimum_speed = frame_time;
                                 particle_direction_sign_or_minimum_speed *= 10.0f;
                                 normalize_vector_xyz(

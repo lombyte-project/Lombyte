@@ -327,8 +327,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 
 int update_alien_queen_intro_camera(char *moby) __asm__("FUN_L06_002fb2a8");
 
@@ -360,8 +360,8 @@ int update_alien_queen_intro_camera(char *moby) {
     output_rotation[2] = fast_arc_tan(*(float *)(moby + 0x10) - output_position[0], *(float *)(moby + 0x14) - output_position[1]);
     output_rotation[1] = -fast_arc_tan(vector_distance(output_position, pos), *(float *)(moby + 0x18) - output_position[2]) -
            (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
-    FUN_L00_002ea9d8(output_position);
-    FUN_L00_002eaa30(output_rotation);
+    set_camera_position(output_position);
+    set_camera_rotation(output_rotation);
     if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1)
         return 1;
     return 0;
@@ -373,7 +373,7 @@ int update_alien_queen_intro_camera(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 
 extern int *D_L06_001B0C30[];
-extern void FUN_L00_002eac18(int);
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void finish_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb4b0");
@@ -382,7 +382,7 @@ void finish_alien_queen_intro(char *moby) {
     char *data = *(char **)(moby + 0x78);
     hero_set_state(HERO_STATE_IDLE, 0);
     *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
-    FUN_L00_002eac18(2);
+    jet_end_mount(2);
 }
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
@@ -959,7 +959,7 @@ void check_timed_toxic_gas_vent_collisions(char *vent_moby) {
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void set_moby_and_links_to_states_2_and_3(char *moby) __asm__("FUN_L06_002f54a0");
 
@@ -975,7 +975,7 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
         *(int *)(data + 0x14) = 0;
         *(float *)(moby + 0x40) =
             fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
         linked_mobys = (char **)(data + 0x24);
         for (i = 0; i < 7; i++) {
             char *linked_moby = linked_mobys[i];
@@ -987,7 +987,7 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
             *(int *)(linked_data + 0x14) = 0;
             *(float *)(linked_mobys[i] + 0x40) =
                 fast_subtract_rotations(*(float *)(linked_data + 0x10), *(float *)(linked_data + 0x14));
-            FUN_L00_00250df8(linked_mobys[i]);
+            update_entity(linked_mobys[i]);
         }
     }
 }
@@ -1044,7 +1044,7 @@ extern float D_L06_00161D80_gp __asm__("D_L06_00161D80") __attribute__((sda));
 extern int D_L06_00161DA0 __attribute__((sda));
 extern int D_L06_00161DA4 __attribute__((sda));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
@@ -1302,8 +1302,8 @@ void update_drawbridge_segment_transforms(Moby *moby)
         else if (angle < 0.0f) angle = 0.0f;
         data->a[i]->rot.x = -angle;
         data->b[i]->rot.x = angle;
-        FUN_L00_00250df8(data->a[i]);
-        FUN_L00_00250df8(data->b[i]);
+        update_entity(data->a[i]);
+        update_entity(data->b[i]);
     }
 
     for (j = 0; j < 10; j++) {
@@ -1360,8 +1360,8 @@ void update_drawbridge_segment_transforms(Moby *moby)
 
         data->c[j]->rot.y = -left;
         data->d[j]->rot.y = -right;
-        FUN_L00_00250df8(data->c[j]);
-        FUN_L00_00250df8(data->d[j]);
+        update_entity(data->c[j]);
+        update_entity(data->d[j]);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F78A0). */
@@ -3066,7 +3066,7 @@ extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
 extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
 extern short D_L06_0014162A __attribute__((section(".data")));
@@ -3220,7 +3220,7 @@ hit_response_done:
                 moby[0x20] = 5;
                 *(int *)(data + 0x170) = 0;
                 base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
-                FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 1);
+                set_race_camera(base + 0x30, base + 0x70, 0x72, 1);
                 qcopy(moby + 0x10, data + 0xC0);
                 *(float *)(moby + 0x48) = fast_arc_tan(hero.motion.pos.f[0] - *(float *)(moby + 0x10),
                                                          hero.motion.pos.f[1] - *(float *)(moby + 0x14));
@@ -3249,7 +3249,7 @@ hit_response_done:
 
 extern char *D_L06_0016016C __asm__("D_L06_001600EC");
 extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 
 void start_alien_queen_intro(char *moby) __asm__("FUN_L06_002fb148");
@@ -3259,7 +3259,7 @@ void start_alien_queen_intro(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *base = D_L06_0016016C + (*(int *)(data + 0xF8) << 7);
     *(int *)(data + 0x118) = 0;
-    FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 0);
+    set_race_camera(base + 0x30, base + 0x70, 0x72, 0);
     qcopy(output_position, moby + 0x10);
     output_position[2] = hero.motion.pos.f[2] + 2.0f;
     normalize_vector_xyz(moby_offset_vector, moby + 0xC0, 8.0f);
@@ -3269,8 +3269,8 @@ void start_alien_queen_intro(char *moby) {
     output_rotation[1] =
         -fast_arc_tan(vector_distance(output_position, moby + 0x10), *(float *)(moby + 0x18) - output_position[2]) - 0.5235988f;
     jet_mount(output_position, output_rotation, 1, 0, 0);
-    FUN_L00_002ea9d8(output_position);
-    FUN_L00_002eaa30(output_rotation);
+    set_camera_position(output_position);
+    set_camera_rotation(output_rotation);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -3413,7 +3413,7 @@ void update_moby_pair_transforms(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, position_offset);
         fast_vec_normalize(position_offset, data + 0x30, -moby_pair_child_fixed_distance_gp);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        update_entity(*(char **)(data + 0x40));
         moby[0x20] = 5;
         return;
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
@@ -3439,7 +3439,7 @@ void update_moby_pair_transforms(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, position_offset);
         fast_vec_normalize(position_offset, data + 0x30, -child_distance);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        update_entity(*(char **)(data + 0x40));
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f && absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f) moby[0x20] = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
@@ -3502,7 +3502,7 @@ void update_moby_pair_transforms(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, position_offset);
         fast_vec_normalize(position_offset, data + 0x30, -phase_b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        update_entity(*(char **)(data + 0x40));
         if (!fast_dec_timer(data + 0x4c)) return;
         moby[0xbc] = next_phase;
         *(int *)(data + 0x4c) = scale_game_frames_alt(next_timer);
@@ -3739,7 +3739,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     restore_hero_from_vehicle_mode();
                     {
                         char *b = D_L06_001600EC_c + (moby_data->f7C << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        set_race_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                     jet_game_state(0, 10);
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 |= 1;
@@ -3760,7 +3760,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[moby_data->f6C].f34 &= 0xFFFE;
                     {
                         char *b = D_L06_001600EC_c + (moby_data->f80 << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        set_race_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                     enter_hero_vehicle_mode_and_set_moby(1, 0x43, (int)(D_L06_0015FFD8_c + (moby_data->f6C << 8)));
                     jet_game_state(2, 7);
@@ -3773,7 +3773,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     moby_data->f94 = 1;
                     {
                         char *b = D_L06_001600EC_c + (moby_data->f80 << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        set_race_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                 } else {
                     fade_to_black(scale_game_frames_alt(0x10));
@@ -3784,7 +3784,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
                     moby_data->f94 = 0;
                     {
                         char *b = D_L06_001600EC_c + (moby_data->f7C << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        set_race_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                 }
             }

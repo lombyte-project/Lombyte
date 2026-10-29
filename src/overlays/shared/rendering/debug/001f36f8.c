@@ -411,7 +411,7 @@ f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 f32 fast_sin(f32) __asm__("FUN_001f9de0");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
-void FUN_L00_00250df8(void *);
+void update_entity(void *) __asm__("FUN_L00_00250df8");
 void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
 void update_hero_from_debug_camera(void) {
@@ -431,7 +431,7 @@ void update_hero_from_debug_camera(void) {
     qcopy(hero_moby + 0x10, &hero_state->motion.pos);
     qcopy(hero_moby + 0x40, hero_state->motion.rot.f);
     copy_memory_aligned(hero_moby + 0xC0, hero_state, 0x30);
-    FUN_L00_00250df8(*(u8 **)&hero_state->moby);
+    update_entity(*(u8 **)&hero_state->moby);
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F4918). */
 #include "rnc/gameplay/state/game_globals.h"

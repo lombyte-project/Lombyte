@@ -17,7 +17,7 @@ extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
@@ -38,7 +38,7 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
         *(int *)(moby_data + 0x28) = 0;
         *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)moby_data, *(float *)(moby_data + 4));
         *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(moby_data), *(float *)(moby_data + 8));
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -51,10 +51,10 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -86,9 +86,9 @@ void update_fire_bolt(char *fire_bolt) {
             float trail_velocity_scale = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, bolt_data, trail_velocity_scale);
             normalize_vector_xyz(trail_spawn_position, bolt_data, -0.1f);
-            FUN_L00_001ff290(unused_vector_argument, trail_spawn_position, fire_bolt + 0x10);
+            add_vectors(unused_vector_argument, trail_spawn_position, fire_bolt + 0x10);
             trail_frame_count = scale_game_frames(random_int_between(0xF, 0x14));
-            FUN_L00_00269958(trail_spawn_position, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
+            spawn_effect(trail_spawn_position, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);

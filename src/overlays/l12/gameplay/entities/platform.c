@@ -1118,7 +1118,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
  * mirrored across its local Y axis), with random jitter. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1153,9 +1153,9 @@ void emit_platform_exhaust_effects(struct Moby *moby) {
     mirrored_emission_position[1] = -mirrored_emission_position[1];
     transform_vector_by_basis(mirrored_emission_position, mirrored_emission_position, &moby->rot_row0);
     add_vector_xyz_c(mirrored_emission_position, mirrored_emission_position, &moby->pos);
-    FUN_L00_0026cbb0(emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    spawn_burst(emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(emission_position, 0.05f, 1.01f, 1.03f, 6, secondary_emission_direction, 30000.0f, 0x404040);
-    FUN_L00_0026cbb0(mirrored_emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    spawn_burst(mirrored_emission_position, emission_direction, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(mirrored_emission_position, 0.05f, 1.01f, 1.03f, 6, secondary_emission_direction, 30000.0f, 0x404040);
 }
 /* Steers the moby toward a target point, speeding up or braking, and turns it toward the given angles. */
@@ -1296,7 +1296,7 @@ extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern s32 tick_countdown_32_alt_c(s32 *) __asm__("FUN_001f9740");
-extern void FUN_L00_0025b6b8(void *, void *, void *, float);
+extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1439,7 +1439,7 @@ void platform_update(Moby *moby) {
         swing = absolute_float(swing);
         *(u128 *)angles = *(u128 *)&path->nodes[0];
         *(u128 *)goal = *(u128 *)&path->nodes[1];
-        FUN_L00_0025b6b8((*(float (*)[4])&moby->pos), angles, goal, swing);
+        interpolate_vector((*(float (*)[4])&moby->pos), angles, goal, swing);
         angles[2] = (*(float (*)[4])&moby->rot)[2];
         if (is_hero_on_moby(moby)) {
             FUN_L12_002e3e28_c((char *)moby, angles, 1);
@@ -1463,7 +1463,7 @@ void platform_update(Moby *moby) {
         swing = absolute_float(swing);
         *(u128 *)angles = *(u128 *)&path->nodes[0];
         *(u128 *)goal = *(u128 *)&path->nodes[1];
-        FUN_L00_0025b6b8((*(float (*)[4])&moby->pos), angles, goal, swing);
+        interpolate_vector((*(float (*)[4])&moby->pos), angles, goal, swing);
         (*(float (*)[4])&moby->rot)[1] = -1.5707964f;
         break;
     }
@@ -1631,7 +1631,7 @@ extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -2447,7 +2447,7 @@ void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float ma
 extern f32 approach_value_e9f68(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern float FUN_L00_00257c48(float, float);
-extern void FUN_L01_00274b78(void *, void *, float);
+extern void find_point_ahead(void *, void *, float) __asm__("FUN_L01_00274b78");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
 void process_blarg_helicopter_hits(struct Moby *moby) __asm__("FUN_L12_002eb220");
 
@@ -2465,7 +2465,7 @@ extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_002
 extern void release_voice(int) __asm__("FUN_0022d798");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char *spawn_rocket(void *, void *, int, int, float, float, float) __asm__("FUN_L12_002ecce8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern unsigned char D_001413F4 __attribute__((section(".data")));
@@ -2499,7 +2499,7 @@ void blarg_helicopter_update(struct Moby *moby) {
     int index, count, limit, a, b, color, life, size, triggered;
     float distance, angle, value, spread;
     if (D_L12_0015F5C4 == 2) return;
-    FUN_L01_00274b78(moby, target, 70.0f);
+    find_point_ahead(moby, target, 70.0f);
     child = *(struct Moby **)(data + 0xac);
     if (child != 0 && (signed char)child->state >= 0)
         FUN_L00_00263ac8(child, 0, data + 0xd0, 2.7f);
@@ -2686,7 +2686,7 @@ update_state:
                     a = FUN_L00_00257b90(30, 70);
                     life = scale_game_frames_alt(a);
                     size = FUN_L00_00257b90(120, 170);
-                    FUN_L00_00269958(&position, &velocity, color, 255, life, 30, size, 1);
+                    spawn_effect(&position, &velocity, color, 255, life, 30, size, 1);
                 }
                 limit = 4;
                 if (*(int *)(data + 0xc0)) {
