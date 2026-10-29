@@ -31,8 +31,8 @@ void                  update_damage_causer(struct Moby *moby) __asm__("FUN_L09_0
 extern s32 D_L09_0015F5CC NOT_SDA;
 
 void update_damage_causer(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    float work[24];
+    char *damage_causer_vars = (char *)moby->pvars;
+    float sphere_query_workspace[24];
     int   i;
     float count_as_float;
     float start;
@@ -40,36 +40,36 @@ void update_damage_causer(struct Moby *moby) {
 
     if (moby->state == 0) {
         moby->state = 1;
-        *(s32 *)(data + 0x14) = -1;
+        *(s32 *)(damage_causer_vars + 0x14) = -1;
     }
     if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
-        if (*(s32 *)(data + 0x14) == -1 ||
-            (voice_is_playing(moby, *(s32 *)(data + 0x14)) == 0 && *(s32 *)(data + 0x14) == -1)) {
-            *(s32 *)(data + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
+        if (*(s32 *)(damage_causer_vars + 0x14) == -1 ||
+            (voice_is_playing(moby, *(s32 *)(damage_causer_vars + 0x14)) == 0 && *(s32 *)(damage_causer_vars + 0x14) == -1)) {
+            *(s32 *)(damage_causer_vars + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
         }
     }
-    count_as_float = convert_integer_to_float(*(s32 *)(data + 8));
-    start = F(data, 0);
-    end = F(data, 4);
-    *(OvlQuad *)work = 0;
-    work[2] = (end - (start + start)) / count_as_float;
-    qcopy(work + 4, (char *)moby + 0x10);
-    transform_vector_by_basis(work, work, (char *)moby + 0xc0);
-    FUN_001f9bf8(F(data, 0), work + 8, work);
-    fast_vec_add(work + 4, work + 4, work + 8);
-    initialize_hit_descriptor(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
+    count_as_float = convert_integer_to_float(*(s32 *)(damage_causer_vars + 8));
+    start = F(damage_causer_vars, 0);
+    end = F(damage_causer_vars, 4);
+    *(OvlQuad *)sphere_query_workspace = 0;
+    sphere_query_workspace[2] = (end - (start + start)) / count_as_float;
+    qcopy(sphere_query_workspace + 4, (char *)moby + 0x10);
+    transform_vector_by_basis(sphere_query_workspace, sphere_query_workspace, (char *)moby + 0xc0);
+    FUN_001f9bf8(F(damage_causer_vars, 0), sphere_query_workspace + 8, sphere_query_workspace);
+    fast_vec_add(sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace + 8);
+    initialize_hit_descriptor(sphere_query_workspace + 12, moby, *(s32 *)(damage_causer_vars + 0x10), *(float *)(damage_causer_vars + 0xc));
     i = 0;
-    if (*(s32 *)(data + 8) > 0)
+    if (*(s32 *)(damage_causer_vars + 8) > 0)
         do {
-            if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
+            if (collect_mobies_in_sphere(F(damage_causer_vars, 0), sphere_query_workspace + 4, 1, moby, sphere_query_workspace + 12) != 0) {
                 char *hit = D_L09_00173FC0.hit;
                 stub_printf(damage_causer_contact_log_format,
                             *(s16 *)((char *)moby + 0xb2),
                             *(s16 *)(hit + 0xa6),
                             *(s16 *)(hit + 0xb2),
-                            F(data, 0xc));
+                            F(damage_causer_vars, 0xc));
             }
             i++;
-            fast_vec_add(work + 4, work + 4, work);
-        } while (i < *(s32 *)(data + 8));
+            fast_vec_add(sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace);
+        } while (i < *(s32 *)(damage_causer_vars + 8));
 }
