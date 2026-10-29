@@ -553,7 +553,7 @@ void FUN_L00_0025f3e8_2e01a8(char *owner, char *pos, float scale, float flash) _
 void FUN_L00_00263ac8_2e01a8(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void FUN_L10_002e17c0_2e01a8(Moby *moby) __asm__("FUN_L10_002e17c0");
 void FUN_L10_002e1cb0_2e01a8(unsigned char *moby) __asm__("FUN_L10_002e1cb0");
-extern float frame_time_x __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern float func_001F9CB8_2E0630(void *) __asm__("FUN_001f9af0");
 extern void func_001F9BF0_2E0630(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -619,7 +619,7 @@ void FUN_L10_002e01a8(Moby *moby) {
     case 2:
         moby->anim_speed = 4.0f;
         if (func_00214D88_2E0630(&moby->pos.z, vars->home.z + 2.0f, &vars->velocity.z,
-                D_0015ED70 * 18.0f, D_0015ED70 * 18.0f, frame_time_x * 6.0f) == 0.0f) {
+                D_0015ED70 * 18.0f, D_0015ED70 * 18.0f, frame_time * 6.0f) == 0.0f) {
             moby->state = 3;
         }
         break;
@@ -633,9 +633,9 @@ void FUN_L10_002e01a8(Moby *moby) {
         dist = func_001F9D10_2E0630(&vars->goal, &moby->pos);
         travelled = 0.0f;
         func_L00_0025CE58_2E0630(&moby->rot.z, func_L00_001FF860_2E0630(vars->goal.x - moby->pos.x, vars->goal.y - moby->pos.y), &vars->turn_speed,
-            D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, frame_time_x * 50.265484f);
+            D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, frame_time * 50.265484f);
         if (func_001FA850_2E0630(func_L00_001FF860_2E0630(vars->goal.x - moby->pos.x, vars->goal.y - moby->pos.y), moby->rot.z) < 0.78539819f) {
-            func_00214D88_2E0630(&travelled, dist, &speed, D_0015ED70 * 20.0f, D_0015ED70 * 20.0f, frame_time_x * 20.0f);
+            func_00214D88_2E0630(&travelled, dist, &speed, D_0015ED70 * 20.0f, D_0015ED70 * 20.0f, frame_time * 20.0f);
             func_001F9BF0_2E0630(&vars->velocity, &vars->goal, &moby->pos);
             func_L00_002607A8_2E0630(&vars->velocity, speed);
         } else {
@@ -684,7 +684,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         break;
     case 6:
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 6.2831855f);
+            0.02f, 0.3f, frame_time * 6.2831855f);
         if ((moby->anim_flags & 2) == 0) break;
         moby->state = 7;
         if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, func_001F9850_2E0630(10));
@@ -697,7 +697,7 @@ void FUN_L10_002e01a8(Moby *moby) {
     case 7: {
         float lim;
         func_L00_002592B0_2E0630(moby, fast_add_rotations_2e01a8(func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), vars->side_angle), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 6.2831855f);
+            0.02f, 0.3f, frame_time * 6.2831855f);
         lim = func_00214358_2E0630(&moby->pos, 0, 0.5f);
         qcopy(scratch, &target->pos);
         if (scratch[2] < moby->pos.z) {
@@ -708,11 +708,11 @@ void FUN_L10_002e01a8(Moby *moby) {
         scratch[2] = scratch[2] + 0.5f;
         if (scratch[2] < lim) scratch[2] = lim;
         func_001F9BF0_2E0630(&vars->velocity, scratch, &moby->pos);
-        fast_vec_normalize(&vars->velocity, &vars->velocity, frame_time_x * 10.0f);
+        fast_vec_normalize(&vars->velocity, &vars->velocity, frame_time * 10.0f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * vector_length_xy(&vars->velocity);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * vector_length_xy(&vars->velocity);
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
-        func_L00_0025CC58_2E0630(&moby->rot.y, 0, -func_L00_001FF860_2E0630(vector_length_xy(&vars->velocity), vars->velocity.z), frame_time_x * 6.2831855f);
+        func_L00_0025CC58_2E0630(&moby->rot.y, 0, -func_L00_001FF860_2E0630(vector_length_xy(&vars->velocity), vars->velocity.z), frame_time * 6.2831855f);
         if (func_001F9D48_2E0630(&moby->pos, &target->pos) < D_L10_00161DFC) {
             if (absolute_float(moby->pos.z - ((Hero_2e01a8 *)((char *)&hero))->motion.pos.f[2]) < 2.0f) {
                 func_0022ED80_2E1568(0, 0, moby);
@@ -730,9 +730,9 @@ void FUN_L10_002e01a8(Moby *moby) {
     }
     case 8:
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 6.2831855f);
+            0.02f, 0.3f, frame_time * 6.2831855f);
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, -func_L00_001FF860_2E0630(func_001F9D48_2E0630(&moby->pos, &vars->vE0), vars->vE0.z - moby->pos.z),
-            frame_time_x * 12.566371f);
+            frame_time * 12.566371f);
         if (is_value_within_interpolated_window((char *)moby, 20.0f)) {
             float one = 1.0f;
             *(int *)&scratch[13] = 1;
@@ -757,17 +757,17 @@ void FUN_L10_002e01a8(Moby *moby) {
     case 5: {
         float zero = 0.0f;
         float climb;
-        func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, frame_time_x * 12.566371f);
+        func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, frame_time * 12.566371f);
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 6.2831855f);
-        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time_x * 6.0f);
-        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time_x * 6.0f);
+            0.02f, 0.3f, frame_time * 6.2831855f);
+        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 6.0f);
+        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.z = zero;
         climb = vars->home.z + 2.0f - moby->pos.z;
-        if (frame_time_x * 6.0f < climb) {
-            climb = frame_time_x * 6.0f;
-        } else if (climb < frame_time_x * -6.0f) {
-            climb = frame_time_x * -6.0f;
+        if (frame_time * 6.0f < climb) {
+            climb = frame_time * 6.0f;
+        } else if (climb < frame_time * -6.0f) {
+            climb = frame_time * -6.0f;
         }
         vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
@@ -778,19 +778,19 @@ void FUN_L10_002e01a8(Moby *moby) {
         float dist = func_001F9D10_2E0630(&moby->pos, &target->pos);
         float climb;
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 0.78539819f);
-        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
-        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
+            0.02f, 0.3f, frame_time * 0.78539819f);
+        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
+        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
         if (func_001F9908_2E0630(&vars->height_timer)) {
             vars->height_offset = func_002140F8_2E0630(0.0f, D_L10_00161E14);
             vars->height_timer = func_001FA898_2E0630(FUN_001f96b0_2e01a8(D_L10_00161E18 * 60.0f) * func_002140F8_2E0630(0.75f, 1.25f));
         }
         climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z - vars->height_offset;
-        if (frame_time_x + frame_time_x < climb) {
-            climb = frame_time_x + frame_time_x;
-        } else if (climb < frame_time_x * -2.0f) {
-            climb = frame_time_x * -2.0f;
+        if (frame_time + frame_time < climb) {
+            climb = frame_time + frame_time;
+        } else if (climb < frame_time * -2.0f) {
+            climb = frame_time * -2.0f;
         }
         vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
@@ -807,15 +807,15 @@ void FUN_L10_002e01a8(Moby *moby) {
         float climb;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 1.5707964f);
-        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
-        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
+            0.02f, 0.3f, frame_time * 1.5707964f);
+        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
+        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
         climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
-        if (frame_time_x * 4.0f < climb) {
-            climb = frame_time_x * 4.0f;
-        } else if (climb < frame_time_x * -4.0f) {
-            climb = frame_time_x * -4.0f;
+        if (frame_time * 4.0f < climb) {
+            climb = frame_time * 4.0f;
+        } else if (climb < frame_time * -4.0f) {
+            climb = frame_time * -4.0f;
         }
         vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
@@ -838,15 +838,15 @@ void FUN_L10_002e01a8(Moby *moby) {
         float one;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 6.2831855f);
-        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time_x * 6.0f);
-        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time_x * 6.0f);
+            0.02f, 0.3f, frame_time * 6.2831855f);
+        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 6.0f);
+        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.z = 0.0f;
         climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
-        if (frame_time_x * 3.0f < climb) {
-            climb = frame_time_x * 3.0f;
-        } else if (climb < frame_time_x * -3.0f) {
-            climb = frame_time_x * -3.0f;
+        if (frame_time * 3.0f < climb) {
+            climb = frame_time * 3.0f;
+        } else if (climb < frame_time * -3.0f) {
+            climb = frame_time * -3.0f;
         }
         vars->velocity.z = climb;
         zero = 0.0f;
@@ -875,15 +875,15 @@ void FUN_L10_002e01a8(Moby *moby) {
     case 12: {
         float climb;
         func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
-            0.02f, 0.3f, frame_time_x * 1.0471976f);
-        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
-        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time_x * 4.0f);
+            0.02f, 0.3f, frame_time * 1.0471976f);
+        vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
+        vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
         climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
-        if (frame_time_x * 3.0f < climb) {
-            climb = frame_time_x * 3.0f;
-        } else if (climb < frame_time_x * -3.0f) {
-            climb = frame_time_x * -3.0f;
+        if (frame_time * 3.0f < climb) {
+            climb = frame_time * 3.0f;
+        } else if (climb < frame_time * -3.0f) {
+            climb = frame_time * -3.0f;
         }
         vars->velocity.z = climb;
         FUN_L00_001ff290_2e01a8(scratch, &moby->pos, &vars->velocity);

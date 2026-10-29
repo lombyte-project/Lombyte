@@ -13,7 +13,7 @@ typedef struct {
 
 extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
 
-extern u8 skill_point_completed[] __asm__("D_0013D408");
+extern u8 item_unlocked[] __asm__("D_0013D408");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 decompress_wad() __asm__("func_0020B618");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
@@ -138,7 +138,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
         }
     process_stream_state:
         if (stream->data.stream.flags & 0x2000) {
-            resource_index = (skill_point_completed[resource_index] == 0) ? 0x1E : resource_index;
+            resource_index = (item_unlocked[resource_index] == 0) ? 0x1E : resource_index;
         }
         stream_state = stream->data.stream.state;
         switch (stream_state) {

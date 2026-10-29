@@ -22,7 +22,7 @@ typedef struct TexEntry_23fa00 {
     s32 w[4];
 } TexEntry_23fa00;
 extern u8 *level_archive_base __asm__("D_0015EE54") __attribute__((section(".sdata")));
-extern s32 vram_base_23fa00[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
+extern s32 depth_buffer_address[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
 extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */
 #define first_record_23fa00 ((TexRecord_23fa00 *)&first_record)
@@ -70,19 +70,19 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     last_offset = ((ImageBank_23fa00 *)bank)->last_offset;
     do {
         if (i == 0) {
-            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
+            sceGsSetDefLoadImage_23fa00(image, (depth_buffer_address[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x14430;
         } else if (i == 1) {
-            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
+            sceGsSetDefLoadImage_23fa00(image, (depth_buffer_address[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x15430;
         } else if (i == 2) {
-            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(image, (depth_buffer_address[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             upload_pixels = first + 0x30;
             bulk_copy_destination = bank + first_offset;
         } else {
-            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(image, (depth_buffer_address[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = bank + last_offset + 0x30;
         }

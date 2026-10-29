@@ -1124,7 +1124,7 @@ extern unsigned char D_0013D50B __attribute__((section(".data")));
 extern int D_0015ED84;
 extern unsigned char D_0014C050[];
 extern char *D_L11_001600EC;
-extern struct UsageStat usage_stats_f0e40[] __asm__("D_00141968") __attribute__((section(".data")));
+extern struct UsageStat help_records[] __asm__("D_00141968") __attribute__((section(".data")));
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -1167,11 +1167,11 @@ void fred_pokitaru_update(struct Moby *moby) {
         }
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
             if (fast_vec_dist(&moby->pos, hero.motion.pos.f) < 4.0f) {
-                int help_frame_delta = scale_game_frames(D_0015EEA4) - usage_stats_f0e40[0x86].unk2 * 600;
-                if ((int)(scale_game_frames(18) * 60.0f) < help_frame_delta || usage_stats_f0e40[0x86].unk2 * 600 == 0) {
+                int help_frame_delta = scale_game_frames(D_0015EEA4) - help_records[0x86].unk2 * 600;
+                if ((int)(scale_game_frames(18) * 60.0f) < help_frame_delta || help_records[0x86].unk2 * 600 == 0) {
                     help_request(0x2B03, 0x86);
-                } else if (scale_game_frames(D_0015EEA4) / 600 > usage_stats_f0e40[0x86].unk2) {
-                    usage_stats_f0e40[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x86].unk2) {
+                    help_records[0x86].unk2 = scale_game_frames(D_0015EEA4) / 600;
                 }
             }
         }

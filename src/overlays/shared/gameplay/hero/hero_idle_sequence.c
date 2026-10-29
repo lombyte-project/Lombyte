@@ -983,7 +983,7 @@ typedef struct {
     u8 p282[0x13E];
     u16 x3c0;
 } G00206cf8;
-extern G00206cf8 help_stats __asm__("D_00141968");
+extern G00206cf8 help_records __asm__("D_00141968");
 extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
 extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA;
@@ -994,7 +994,7 @@ void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 
 void check_hero_item_reward_conditions(void) {
     s32 i, qualifying_item_count;
-    if (help_stats.x3c0 == 0 && item_available[4] != 0 &&
+    if (help_records.x3c0 == 0 && item_available[4] != 0 &&
         FUN_L00_0020d568_00206cf8() != 0) {
         help_request(0x4E2E, 0x78);
     }
@@ -1002,7 +1002,7 @@ void check_hero_item_reward_conditions(void) {
         return;
     if (D_L00_0015F5CC_00206cf8 & 0x7F)
         return;
-    if (help_stats.x280 != 0)
+    if (help_records.x280 != 0)
         return;
     if (D_001418F0 != 0)
         return;
@@ -2533,7 +2533,7 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
         FUN_L00_0026f548(&start, &effect_vector, color, life);
     }
 }
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero __asm__("D_0013F350") __attribute__((section(".data")));
 extern float D_0015ED6C;
 int fast_dec_timer(void *) __asm__("FUN_001f9770");
 float FUN_001fa580_209ec8(float, float) __asm__("FUN_001fa580");
@@ -2596,7 +2596,7 @@ void emit_hero_timed_effects(void) {
     }
     frame_count = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
     {
-        struct Hero *hero_state = &hero_data;
+        struct Hero *hero_state = &hero;
         hero_state->unk49C = frame_count;
     }
 }

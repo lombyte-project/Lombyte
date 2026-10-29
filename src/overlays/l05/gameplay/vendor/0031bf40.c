@@ -66,18 +66,18 @@ typedef struct {
     unsigned char pad_1[12];
     unsigned char menu_item_enabled_1;
 } L05Fields_0013D388;
-extern L05Fields_0013D388 l05_0013D388 __asm__("D_0013D388");
-#define D_0013D388 (l05_0013D388.D_0013D388)
-#define menu_item_enabled_1 (l05_0013D388.menu_item_enabled_1)
+extern L05Fields_0013D388 alternate_item_available __asm__("D_0013D388");
+#define D_0013D388 (alternate_item_available.D_0013D388)
+#define menu_item_enabled_1 (alternate_item_available.menu_item_enabled_1)
 typedef struct {
     unsigned char pad_0[15];
     unsigned char D_0013D4CF;
     unsigned char pad_10[6];
     unsigned char D_0013D4D6;
 } L05Fields_0013D4C0;
-extern L05Fields_0013D4C0 l05_0013D4C0 __asm__("D_0013D4C0");
-#define D_0013D4D6 (l05_0013D4C0.D_0013D4D6)
-#define D_0013D4CF (l05_0013D4C0.D_0013D4CF)
+extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
+#define D_0013D4D6 (item_available.D_0013D4D6)
+#define D_0013D4CF (item_available.D_0013D4CF)
 #define D_0013F64C (*(int *)(D_0013F3D0 + 0x27c))
 #define D_0013F65E (*(short *)(D_0013F3D0 + 0x28e))
 

@@ -3,7 +3,7 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
-extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
+extern int *gif_page_marker __asm__("D_0015F450") MACRO_ADDR;
 extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
 typedef struct {
@@ -36,7 +36,7 @@ void setup_gif_paging(int skip_paging_entry_reset) {
     int *packet_cursor = render_packet_cursor.words;
     int i;
 
-    gif_page_marker_a = packet_cursor;
+    gif_page_marker = packet_cursor;
     packet_cursor += 4;
     render_packet_cursor.words = packet_cursor;
     gs_texture_allocation_cursor = gs_texture_allocation_start;

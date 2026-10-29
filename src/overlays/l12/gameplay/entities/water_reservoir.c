@@ -246,7 +246,7 @@ typedef struct {
 
 typedef struct { char pad0[0x18]; int moby; } ShotColl_ece00;
 extern ShotColl_ece00 D_L12_001742C0_ece00 __asm__("D_L12_001742C0") __attribute__((section(".data")));
-extern int camera_secondary_mode_ece00 __asm__("D_001413D4") __attribute__((section(".data")));
+extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
 extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -286,7 +286,7 @@ void rocket_update(struct Moby *moby) {
             moby->state = 2;
             break;
         }
-        if (current_level_index == 12 && camera_secondary_mode_ece00 == 50 && vars->owner != 0) {
+        if (current_level_index == 12 && camera_secondary_mode == 50 && vars->owner != 0) {
             if ((signed char)vars->owner->state < 0) {
                 mark_moby_for_removal(moby);
                 return;
@@ -310,7 +310,7 @@ void rocket_update(struct Moby *moby) {
         if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {
                 damage = 1;
-                if (current_level_index == 12 && camera_secondary_mode_ece00 == 50) {
+                if (current_level_index == 12 && camera_secondary_mode == 50) {
                     damage = D_L12_00161F20 >= 16 ? 2 : 3;
                 }
                 make_hit_descriptor(&hit, moby, 0x10003, damage, vars);
@@ -334,7 +334,7 @@ void rocket_update(struct Moby *moby) {
         subtract_vector_ece00(old_pos, &moby->pos, D_L12_00167240);
         fast_vec_normalize(old_pos, old_pos, 0.4f);
         add_vector_ece00(&moby->pos, &moby->pos, old_pos);
-        if (current_level_index == 12 && camera_secondary_mode_ece00 == 50) {
+        if (current_level_index == 12 && camera_secondary_mode == 50) {
             char *camera = D_L12_00167240 - 0x140;
             spawn_explosion(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
                              -1, 0);

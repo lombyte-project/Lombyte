@@ -105,7 +105,7 @@ extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
-extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
+extern u8 item_available[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -144,7 +144,7 @@ void skids_agent_update(struct Moby *moby) {
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SKIDS_AGENT_INITIALIZE:
-        if (items_owned[0x2D] != 0) {
+        if (item_available[0x2D] != 0) {
             goto kill;
         }
         *(char **)(data + 0x20) = skids_agent_dialogue_data;
@@ -167,7 +167,7 @@ void skids_agent_update(struct Moby *moby) {
         if (update_npc_dialogue(moby, data) != 0) {
             begin_dialogue_camera_transition(moby, 2.2f);
             moby->state = 2;
-        } else if (items_owned[0x5] == 0 && vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+        } else if (item_available[0x5] == 0 && vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
                 usage_time_value = scale_game_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
                 if ((int)(scale_game_frames(0x12) * 60.0f) < usage_time_value || D_00141968[14].unk2 * 600 == 0) {

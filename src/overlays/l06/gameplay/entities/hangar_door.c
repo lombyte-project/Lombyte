@@ -2700,7 +2700,7 @@ extern char D_L06_00167540_q[] __asm__("D_L06_00167540");
 extern int *D_L06_001B0C30_q[] __asm__("D_L06_001B0C30");
 extern char *level_mobys_q __asm__("D_L06_0015FFD8");
 extern float frame_time_sq_q __asm__("D_0015ED70");
-extern float frame_time_q __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern int level_game_mode_q __asm__("D_L06_0015F5C4");
 extern unsigned char D_0013D3A7_q[] __asm__("D_0013D3A7");
 extern unsigned char D_0013D4FD_q[] __asm__("D_0013D4FD");
@@ -2852,12 +2852,12 @@ void alien_queen_update(unsigned char *moby)
                             func_L00_001FF860_q(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                                                 *(float *)(target + 0x14) - *(float *)(moby + 0x14)),
                             (float *)(data + 0xE0), frame_time_sq_q * 6.2831855f, frame_time_sq_q * 6.2831855f,
-                            frame_time_q * 3.1415927f);
+                            frame_time * 3.1415927f);
         if (turn < 0.7853982f && *(float *)&D_L06_00161F00 < dist) {
-            func_00214D28_q((float *)(data + 0xE8), *(float *)&D_L06_00161EF4 * frame_time_q,
+            func_00214D28_q((float *)(data + 0xE8), *(float *)&D_L06_00161EF4 * frame_time,
                             alien_queen_movement_acceleration_gp * frame_time_sq_q);
         } else if (dist < *(float *)&D_L06_00161F04) {
-            func_00214D28_q((float *)(data + 0xE8), -(*(float *)&D_L06_00161EF4 * frame_time_q),
+            func_00214D28_q((float *)(data + 0xE8), -(*(float *)&D_L06_00161EF4 * frame_time),
                             alien_queen_movement_acceleration_gp * frame_time_sq_q);
         } else {
             func_00214D28_q((float *)(data + 0xE8), 0.0f, frame_time_sq_q * 8.0f);
@@ -2900,7 +2900,7 @@ void alien_queen_update(unsigned char *moby)
     case 9:
         func_001F9908_q(data + 0x120);
         func_L00_0025CE58_q((float *)(moby + 0x48), *(float *)(moby + 0x48), (float *)(data + 0xE0),
-                            frame_time_sq_q * 6.2831855f, frame_time_sq_q * 6.2831855f, frame_time_q * 3.1415927f);
+                            frame_time_sq_q * 6.2831855f, frame_time_sq_q * 6.2831855f, frame_time * 3.1415927f);
         if (moby[0x70] & 2) {
             moby[0x20] = 0xA;
             if ((unsigned char)moby[0x53] != 5) {
@@ -2967,11 +2967,11 @@ void alien_queen_update(unsigned char *moby)
                             func_L00_001FF860_q(*(float *)(data + 0xC0) - *(float *)(moby + 0x10),
                                                 *(float *)(data + 0xC4) - *(float *)(moby + 0x14)),
                             (float *)(data + 0xE0), frame_time_sq_q * 6.2831855f, frame_time_sq_q * 6.2831855f,
-                            frame_time_q * 3.1415927f);
+                            frame_time * 3.1415927f);
         if (turn < 0.7853982f) {
             func_001F9BF0_q(step, home, pos);
             step[2] = 0.0f;
-            func_L00_001FF4B0_q(step, step, *(float *)&D_L06_00161EF4 * frame_time_q);
+            func_L00_001FF4B0_q(step, step, *(float *)&D_L06_00161EF4 * frame_time);
             func_001F9BD8_q(pos, pos, step);
             func_L00_00262DF0_q(*(int *)(data + 0xEC), pos, 1.0f, pos);
         }

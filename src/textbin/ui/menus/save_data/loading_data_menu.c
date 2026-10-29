@@ -31,7 +31,7 @@ struct LoadMenuDescriptor {
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern s16 D_0013E05A[];
-extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
+extern struct LoadMenuMixerState voice_pool __asm__("D_0013E550");
 extern s32 music_volume __asm__("D_0015EDEC");
 extern s32 sound_volume __asm__("D_0015EDF0");
 extern s32 selected_save_slot __asm__("D_0015EE34");
@@ -58,15 +58,15 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
                 return 0;
             }
             memory_card_state.unkF4 = 1;
-            mixer_state.group_0_volume = ((s32)(sound_volume * 8)) / 10;
-            mixer_state.group_1_volume = music_volume;
+            voice_pool.group_0_volume = ((s32)(sound_volume * 8)) / 10;
+            voice_pool.group_1_volume = music_volume;
             scaled_volume_70 = ((s32)(sound_volume * 7)) / 10;
-            scaled_volume_80 = mixer_state.group_0_volume;
-            mixer_state.group_2_volume = scaled_volume_80;
-            mixer_state.group_3_volume = ((s32)(sound_volume * 7)) / 10;
+            scaled_volume_80 = voice_pool.group_0_volume;
+            voice_pool.group_2_volume = scaled_volume_80;
+            voice_pool.group_3_volume = ((s32)(sound_volume * 7)) / 10;
             scaled_volume_70 = ((s32)(sound_volume * 7)) / 10;
-            mixer_state.group_4_volume = scaled_volume_70;
-            mixer_state.group_5_volume = sound_volume;
+            voice_pool.group_4_volume = scaled_volume_70;
+            voice_pool.group_5_volume = sound_volume;
             InitializeGlobalStateEntry(current_level_index);
             D_0013E05A[0] = 0;
         } else {

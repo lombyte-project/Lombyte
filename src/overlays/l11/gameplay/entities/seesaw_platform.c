@@ -42,7 +42,7 @@ float D_L11_00161EF8 = 0;
 extern float D_L11_0015F3FC;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
-extern u8 alternate_item_available_c788[128] __asm__("D_0013D388");
+extern u8 alternate_item_available[128] __asm__("D_0013D388");
 extern struct Moby *create_moby_c788(int) __asm__("FUN_0020c4f8");
 extern int FUN_L11_0030f270_c788(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -216,7 +216,7 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
                           frame_time_sq * 4.0f, frame_time + frame_time);
         }
         update_child_set_poses(child_sets_controller);
-        if (alternate_item_available_c788[0x56] != 0 && D_0013CAE4 != 0) {
+        if (alternate_item_available[0x56] != 0 && D_0013CAE4 != 0) {
             child_sets_controller->command = 1;
         }
         if (D_L11_00161ED8 < 1.0f && child_sets_controller->command == 0) {
@@ -244,7 +244,7 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
             child_sets_controller->state = 4;
             jet_end_mount(3);
             set_race_camera(&hero.motion.pos, &hero.motion.rot, 0, 1);
-            alternate_item_available_c788[0x56] = 1;
+            alternate_item_available[0x56] = 1;
         }
         break;
     case CHILD_SETS_STATE_FADE_AFTER_HERO_HANDOFF:
@@ -2029,7 +2029,7 @@ typedef struct {
    shows message a for record b while b's count is below 0xFFFF. The ship
    uses 0x56 (message 0x2AFD), 0x57 (0x2AFE, low ammo) and 0x58 (0x2AFF, low
    health). */
-extern struct UsageStat help_stats[] __asm__("D_00141968");
+extern struct UsageStat help_records[] __asm__("D_00141968");
 extern s32 D_0015EEA4;
 extern short ship_ammo_pip_points[] __asm__("D_L11_001F0CF8");  /* outline of an ammo pip */
 /* The health bar's palette: jet_fighter_update points clut at it in texture
@@ -2160,7 +2160,7 @@ void draw_ship_hud(struct Moby *moby) {
     }
 
     if (hero.ship_hp < hero.ship_hp_max * 0.25f) {
-        s32 shown = help_stats[0x58].count;
+        s32 shown = help_records[0x58].count;
 
         if (shown == 0) {
             help_request(0x2AFF, 0x58);
@@ -2171,23 +2171,23 @@ void draw_ship_hud(struct Moby *moby) {
             }
         }
     } else if (vars->low_hp_frames != 0) {
-        if (help_stats[0x58].count < 0xFFFF) {
-            help_stats[0x58].count++;
+        if (help_records[0x58].count < 0xFFFF) {
+            help_records[0x58].count++;
         }
-        if (scale_game_frames(D_0015EEA4) / 600 > help_stats[0x58].unk2) {
-            help_stats[0x58].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x58].unk2) {
+            help_records[0x58].unk2 = scale_game_frames(D_0015EEA4) / 600;
         }
-        help_stats[0x58].level_mask = help_stats[0x58].level_mask | (1 << current_level_index) | 0x80000000;
+        help_records[0x58].level_mask = help_records[0x58].level_mask | (1 << current_level_index) | 0x80000000;
         vars->low_hp_frames = 0;
     }
 
     FUN_001f9740_c(&vars->ammo_hint_timer);
-    if ((hero.ship_ammo < 5 && help_stats[0x57].count == 0) ||
-        (hero.ship_ammo == 0 && help_stats[0x57].count < 2 && vars->ammo_hint_timer == 0)) {
+    if ((hero.ship_ammo < 5 && help_records[0x57].count == 0) ||
+        (hero.ship_ammo == 0 && help_records[0x57].count < 2 && vars->ammo_hint_timer == 0)) {
         help_request(0x2AFE, 0x57);
         vars->ammo_hint_timer = scale_game_frames(1200);
     }
-    if (help_stats[0x56].count == 0 && vars->hint_frames++ > scale_game_frames(3600)) {
+    if (help_records[0x56].count == 0 && vars->hint_frames++ > scale_game_frames(3600)) {
         help_request(0x2AFD, 0x56);
     }
 
@@ -2819,11 +2819,11 @@ void jet_fighter_update(struct Moby *moby) {
                 if (item_available[7] != 0) {
                     try_set_help_message(7, 0x2B09);
                 } else {
-                    frames_since_help_timestamp = scale_game_frames(D_0015EEA4) - help_stats[0x3C].unk2 * 600;
-                    if (frames_since_help_timestamp > (int)((float)scale_game_frames(0x12) * 60.0f) || help_stats[0x3C].unk2 * 600 == 0) {
+                    frames_since_help_timestamp = scale_game_frames(D_0015EEA4) - help_records[0x3C].unk2 * 600;
+                    if (frames_since_help_timestamp > (int)((float)scale_game_frames(0x12) * 60.0f) || help_records[0x3C].unk2 * 600 == 0) {
                         help_request(0x2AFA, 0x3C);
-                    } else if (scale_game_frames(D_0015EEA4) / 600 > help_stats[0x3C].unk2) {
-                        help_stats[0x3C].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x3C].unk2) {
+                        help_records[0x3C].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                 }
                 if (item_available[7] != 0 && (D_0013CAE4 & 0x10)) {
@@ -2851,7 +2851,7 @@ void jet_fighter_update(struct Moby *moby) {
                 clear_u64_value(&ship_vars->f20);
                 ship_vars->f38 = ship_vars->f28 = moby->rot.z;
                 ship_vars->i114 = scale_game_frames(0x708);
-                if (help_stats[0x55].count == 0) {
+                if (help_records[0x55].count == 0) {
                     help_request(0x2AFC, 0x55);
                 }
                 g = &hero;

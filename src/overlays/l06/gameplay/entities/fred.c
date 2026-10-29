@@ -6207,8 +6207,8 @@ extern float D_L06_00167540[];
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
 extern s32 D_L06_00179B90[] __asm__("D_L06_00179B90");
-extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
-extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
+extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
+extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern int D_0013D8AC_lui __asm__("D_0013D8AC") __attribute__((section(".data")));
 
 char D_L06_00201880[] = "Scrawny Scientist";
@@ -6439,7 +6439,7 @@ void fred_update(struct Moby *moby) {
             fred_vars->f128 = yaw * 0.4f;
         }
     }
-    if (cheats_301070[0]) fred_vars->fB0 = 2.75f;
+    if (big_head_cheat_enabled[0]) fred_vars->fB0 = 2.75f;
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->f40, 0);
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->fC0, 2);
 }
@@ -7280,7 +7280,7 @@ extern int D_L06_0016214C __attribute__((sda));
 extern int D_L06_00162150 __attribute__((sda));
 extern int D_L06_00162154 __attribute__((sda));
 extern int D_L06_00162158 __attribute__((sda));
-extern float frame_time_03b68 __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
@@ -7321,7 +7321,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
                 second_time = random_int_between(low, high);
             }
             spawn_particle(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
-                             frame_time_03b68 * 10.0f * scale);
+                             frame_time * 10.0f * scale);
         }
     }
     for (i = 0; i < count * D_L06_00162150;) {
@@ -7332,11 +7332,11 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
         fast_vec_scale(velocity, direction,
-            random_float_between(D_L06_00162114, D_L06_00162118) * frame_time_03b68);
+            random_float_between(D_L06_00162114, D_L06_00162118) * frame_time);
         random_vector(direction, 0.0f, 0.9f);
         fast_vec_add(direction, direction, push);
         fast_vec_scale(acceleration, direction,
-            random_float_between(D_L06_00162124, D_L06_00162128) * frame_time_03b68);
+            random_float_between(D_L06_00162124, D_L06_00162128) * frame_time);
         velocity[3] = random_float_between(D_L06_0016211C, D_L06_00162120) * scale;
         acceleration[3] = random_float_between(D_L06_0016212C, D_L06_00162130) * scale;
         color1 = fast_tween_color(D_L06_00162134, D_L06_00162138, random_float_between(0.0f, 1.0f));

@@ -13,7 +13,7 @@ struct ScreenDimensions {
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/item_state.h"
-extern struct ScreenDimensions screen_dimensions __asm__("D_00151780");
+extern struct ScreenDimensions fs_aa_buffer __asm__("D_00151780");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
@@ -89,7 +89,7 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
     } else {
         texture = load_texture_file(menu->data.stream.buffer[1]);
     }
-    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0,
+    draw_textured_quad(0, 0, fs_aa_buffer.width, fs_aa_buffer.height, 0, 0,
                        menu->data.stream.texture_width, menu->data.stream.texture_height,
                        0x80808080, texture);
     do_gif_paging();

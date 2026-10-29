@@ -1353,7 +1353,7 @@ typedef struct {
     int i70;
     float f74;
 } D_2e3a88;
-extern int *vend_paths[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
+extern int *toad_paths[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
 extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
 void FUN_0020c828_2e3a88(void *) __asm__("FUN_0020c828");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -1370,7 +1370,7 @@ void pterodactyl_update(unsigned char *moby) {
         PTERODACTYL_FOLLOW_PATH = 1
     };
     D_2e3a88 *moby_data = *(D_2e3a88 **)(moby + 0x78);
-    int *path = vend_paths[moby_data->path];
+    int *path = toad_paths[moby_data->path];
     float y;
     switch (moby[0x20]) {
     case PTERODACTYL_INITIALIZE:

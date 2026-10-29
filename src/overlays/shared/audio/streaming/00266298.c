@@ -21,7 +21,7 @@ struct SceneEntry {
     s16 scene;                     /* 0x04: -1 none; bit 0x4000 = other kind (FUN_L00_00299460) */
     u8 pad_06[2];
     s16 cost_kind;                 /* 0x08: 1 bolts (price table), 4 item flag, 6 bolts (no charge here) */
-    s16 cost_id;                   /* 0x0A: index into D_L00_001C40B0 / item_flags */
+    s16 cost_id;                   /* 0x0A: index into D_L00_001C40B0 / alternate_item_available */
     u8 pad_0C[4];
     u16 flags;                     /* 0x10: 1 = no facing check, 8 = has a cost */
     u8 pad_12[0xA];
@@ -57,8 +57,8 @@ extern s32 D_L00_0015F5C4;                                  /* nonzero blocks al
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_0013CAE4[];                                    /* bit 0x10 lifts the facing check */
 extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
-extern struct MobyRecord moby_records[] __asm__("D_0013D5B0");
-extern u8 item_flags[] __asm__("D_0013D388");
+extern struct MobyRecord race_gates[] __asm__("D_0013D5B0");
+extern u8 alternate_item_available[] __asm__("D_0013D388");
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");                    /* distance */
@@ -124,8 +124,8 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 
     if (trigger->any_direction != 0 || (D_0013CAE4[0] & 0x10)) {
         index = FUN_L00_002667d0_c2(moby);
-        if (moby_records[index].seen == 0)
-            moby_records[index].seen = 1;
+        if (race_gates[index].seen == 0)
+            race_gates[index].seen = 1;
         active_scene_trigger.moby = moby;
         active_scene_trigger.trigger = trigger;
 
@@ -134,7 +134,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
             if (entry->cost_kind == 1)
                 current_bolt_count -= D_L00_001C40B0[entry->cost_id].f0;
             else if (entry->cost_kind == 4)
-                item_flags[entry->cost_id] = 0;
+                alternate_item_available[entry->cost_id] = 0;
         }
         if (entry->scene == -1) {
             fun_00216c48(moby, trigger, 1);

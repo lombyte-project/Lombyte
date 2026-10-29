@@ -1470,7 +1470,7 @@ extern char D_0013E550[];
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 extern SuckHero suck_hero __asm__("D_0013F350");
 extern SuckItemVariant suck_item_variant __asm__("D_0013E520");
-extern SuckInput suck_input __asm__("D_0013C940");
+extern SuckInput controller_state __asm__("D_0013C940");
 extern SuckMoby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern char suck_fire_tuning[1] __asm__("D_L00_00161B30") __attribute__((sda));
 extern void suck_delete_callback(void) __asm__("FUN_L00_00237798");
@@ -1528,7 +1528,7 @@ void suckcannon_update(SuckMoby *self) {
             self->state = 4;
             break;
         }
-        if ((suck_input.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
+        if ((controller_state.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
             suck_hero.unk20AC==0 && scale_game_frames(15) < suck_hero.ready_frames && is_suck_cannon_suction_blocked_by_hero_state()==0) {
             start_equipped_item_animation();
             cannon->sound = allocate_voice_for_target_entry(2,4,(int)self);
@@ -1573,7 +1573,7 @@ void suckcannon_update(SuckMoby *self) {
             blend_moby_animation(self,3,0,scale_game_frames(5));
         func_001F9908_r(&cannon->cooldown);
         if (!(suck_hero.sucking || (suck_hero.count < (suck_item_variant.gold==0?5:10) &&
-            is_suck_cannon_suction_blocked_by_hero_state()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
+            is_suck_cannon_suction_blocked_by_hero_state()==0 && ((controller_state.held&suck_hero.fire_buttons) || cannon->cooldown) &&
             !suck_hero.unk20AC && !suck_hero.unk20A7))) {
             cancel_hero_item_animation();
             sound=cannon->sound;
@@ -1608,7 +1608,7 @@ void suckcannon_update(SuckMoby *self) {
             blend_moby_animation(self,6,0,scale_game_frames(0));
             cancel_hero_item_animation();
         }
-        if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
+        if (!(controller_state.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
             (cannon->target && ((u8)cannon->target->state&0x80))) cannon->target=0;
         if (suck_hero.state==1) FUN_L00_002223f8(30,1);
@@ -1645,7 +1645,7 @@ void suckcannon_update(SuckMoby *self) {
             cannon->target_height=D_L00_00173E68-cannon->target->pos.f.z;
         }
         if(!cannon->blocked && suck_hero.count>0 && !cannon->cooldown &&
-            (suck_input.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&
+            (controller_state.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&
             suck_hero.control_mode!=18 && suck_hero.control_mode!=17 && !suck_hero.unk20AC && !suck_hero.unk20A7 &&
             scale_game_frames(22)<suck_hero.ready_frames) {
             start_equipped_item_animation();
@@ -1780,7 +1780,7 @@ done:
             if(s[1].owner==self && s[1].active) release_voice_slot(sound);
         }
         cannon->sound=-1;
-        if(suck_input.held&5) suck_input.used |=5;
+        if(controller_state.held&5) controller_state.used |=5;
     }
 }
 typedef s32 (*Fn_db890)(void *);

@@ -2129,11 +2129,11 @@ extern s32 FUN_L00_001f0d60_1638(f32, void *, s32, struct Moby *) __asm__("FUN_L
 extern char *find_moby_hit_1638(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal_1638(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L13_002e1348_1638(struct Moby *, struct BlobVars *, f32) __asm__("FUN_L13_002e1348");
-extern struct Hero hero_1638 __asm__("D_0013F350");
-extern Vec4f hero_pos_1638 __asm__("D_0013F3D0");
+extern struct Hero hero __asm__("D_0013F350");
+extern Vec4f hero_pos __asm__("D_0013F3D0");
 extern CollisionHit coll_hit_1638 __asm__("D_L13_00174140");
 extern s32 frame_count __asm__("D_L13_0015F5CC");
-extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
+extern char *moby_base __asm__("D_L13_0015FFD8");
 
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
 void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
@@ -2146,7 +2146,7 @@ void asteroid_update(struct Moby *moby) {
         ASTEROID_WAIT_TO_RESPAWN = 4
     };
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
-    f32 distance = fast_vec_dist(&moby->pos, &hero_pos_1638);
+    f32 distance = fast_vec_dist(&moby->pos, &hero_pos);
     f32 size;
     f32 spin;
     char *hit;
@@ -2164,7 +2164,7 @@ void asteroid_update(struct Moby *moby) {
         moby->state = 3;
         break;
     case ASTEROID_WAIT_TO_LAUNCH:
-        if (hero_1638.state.current == 0x32 && hero_1638.ship_moby != 0 && hero_1638.ship_moby->oclass == 0x45
+        if (hero.state.current == 0x32 && hero.ship_moby != 0 && hero.ship_moby->oclass == 0x45
             && (moby->visible != 0 || distance < 40.0f)) {
             fast_vec_normalize(vars, vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
             moby->state = 2;
@@ -2182,7 +2182,7 @@ void asteroid_update(struct Moby *moby) {
             if (vars->cooldown == 0) {
                 moby->collision = moby->pclass->collision;
                 size = moby->scale / moby->pclass->scale;
-                if ((frame_count & 1) == (((char *)moby - moby_base_1638) >> 8 & 1)
+                if ((frame_count & 1) == (((char *)moby - moby_base) >> 8 & 1)
                     && FUN_L00_001f0d60_1638(size * 6.2f, &moby->pos, 0, moby) != 0) {
                     if ((struct Moby *)coll_hit_1638.moby != vars->owner) {
                         reflect_vector(vars, vars, &coll_hit_1638.normal_x);

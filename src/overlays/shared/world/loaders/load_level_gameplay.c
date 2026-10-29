@@ -374,7 +374,7 @@ extern Light l00_gameplay_lights[] __asm__("D_L00_0017EEC0");
 extern LevelState16CB40 D_L00_0016CA40;
 extern LevelLoad173E00 D_L00_00173E00;
 /* Level load state at D_L00_00173E40; this function sets its header pointers (+0x4, +0x8) and clears +0xC..+0x14. */
-extern LevelLoad173E40 level_load __asm__("D_L00_00173E40");
+extern LevelLoad173E40 coll_hit __asm__("D_L00_00173E40");
 extern MobyInst *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern MobyInst *D_L00_0015FFDC MACRO_ADDR;
 extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
@@ -544,11 +544,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
             set_video_timing(0);
         }
     }
-    level_load.f4 = D_L00_00173F00;
-    level_load.f8 = D_L00_00173EC0;
-    level_load.fC = 0;
-    level_load.f10 = 0;
-    level_load.f14 = 0;
+    coll_hit.f4 = D_L00_00173F00;
+    coll_hit.f8 = D_L00_00173EC0;
+    coll_hit.fC = 0;
+    coll_hit.f10 = 0;
+    coll_hit.f14 = 0;
     clear_blocks_16(D_L00_0019B7E0, 0x10000);
     clear_blocks_16(D_L00_001AB7E0, 0x60);
     {

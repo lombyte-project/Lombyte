@@ -30,7 +30,7 @@ struct FrameTextureTables {
     s32 image_pages_address;
     s32 palette_pages_address;
 };
-extern struct FrameTextureTables frame_texture_tables __asm__("D_0019A3E8");
+extern struct FrameTextureTables hud_state __asm__("D_0019A3E8");
 
 u64 get_frame_texture(s32 frame_id) __asm__("FUN_001ffa10");
 
@@ -54,10 +54,10 @@ u64 get_frame_texture(s32 frame_id) {
     u64 palette_word;
 
     frame =
-        (struct FrameTextureRef *)(frame_id * 4 + frame_texture_tables.frame_references_address);
-    palette_page = (struct FramePalettePage *)(frame_texture_tables.palette_pages_address +
+        (struct FrameTextureRef *)(frame_id * 4 + hud_state.frame_references_address);
+    palette_page = (struct FramePalettePage *)(hud_state.palette_pages_address +
                                                frame->palette_index * 8);
-    image_page = (struct FrameImagePage *)(frame_texture_tables.image_pages_address +
+    image_page = (struct FrameImagePage *)(hud_state.image_pages_address +
                                            frame->image_index * 8);
     queued_transfer = 0;
 

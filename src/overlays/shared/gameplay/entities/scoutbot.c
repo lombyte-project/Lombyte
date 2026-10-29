@@ -119,8 +119,8 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void draw_target_beam() __asm__("FUN_L08_002d3878");
 extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
-extern float frame_3DF8 __asm__("D_0015ED6C");
-extern float dt_3DF8 __asm__("D_0015ED70");
+extern float frame_time __asm__("D_0015ED6C");
+extern float frame_time_sq __asm__("D_0015ED70");
 
 void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
 void scoutbot_update(Moby *moby) {
@@ -159,7 +159,7 @@ void scoutbot_update(Moby *moby) {
         data->f204 = random_angle_radians();
         data->f208 = 0.5f;
         clear_u64_value(data->vel);
-        data->f20C = frame_3DF8 * 2.0943952f;
+        data->f20C = frame_time * 2.0943952f;
         data->b58 = truncate_float_to_s32(15.0f);
         data->b5A = truncate_float_to_s32(9.6f);
         data->pD0 = &D_L08_00161888;
@@ -205,8 +205,8 @@ void scoutbot_update(Moby *moby) {
 
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (dt_3DF8 * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (dt_3DF8 * 12.0f);
+            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
         if (vector_distance(&moby->pos, data->wander_goal) < 0.5f) {
             if (moby->prev_seq != 0) {
@@ -221,8 +221,8 @@ void scoutbot_update(Moby *moby) {
 
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (dt_3DF8 * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (dt_3DF8 * 12.0f);
+            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
         if (vector_distance(&moby->pos, &data->current_target->pos) < 3.0f && absolute_float(data->current_target->pos.z - moby->pos.z) < 2.0f) {
             data->voice = allocate_voice_for_target_entry(0, 0, moby);
@@ -244,8 +244,8 @@ void scoutbot_update(Moby *moby) {
         data->f208 = 0.5f;
         turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (dt_3DF8 * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (dt_3DF8 * 12.0f);
+            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
         if (vector_distance(&moby->pos, data->home) < 1.0f && absolute_float(data->home[2] - moby->pos.z) >= 3.9f) {
             if (moby->prev_seq != 0) {

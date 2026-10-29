@@ -27,7 +27,7 @@ extern struct LabelSelectorTable label_selector_table __asm__("D_001E8728");
 extern struct LabelTextTable label_text_table __asm__("D_001E8748");
 
 extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
-extern u8 selector_values[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern u8 big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
 
 s32 rebuild_configured_text_label_list(void) __asm__("FUN_0021a1e0");
 
@@ -52,7 +52,7 @@ s32 rebuild_configured_text_label_list(void) {
             for (source_index = 0; source_index < 12; source_index++) {
                 selector = selectors.values[source_index];
                 if (selector != -1 && selector_available[selector] != 0) {
-                    configured_label_entries[entry_count].flag = &selector_values[selector];
+                    configured_label_entries[entry_count].flag = &big_head_cheat_enabled[selector];
                     configured_label_entries[entry_count].text = selectors.values[source_index + 8];
                     configured_label_entries[entry_count].first_message = 0x4F5A;
                     configured_label_entries[entry_count].second_message = 0x4F5B;

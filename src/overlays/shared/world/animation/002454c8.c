@@ -58,7 +58,7 @@ typedef struct {
     u8 *buf;
     s32 ptr[70];
 } H_245610;
-extern Tab_245610 T_245610 __asm__("D_00137B80");
+extern Tab_245610 disc_table __asm__("D_00137B80");
 extern H_245610 H245610 __asm__("D_L00_0016C860");
 void start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
@@ -70,9 +70,9 @@ void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) {
     s32 pointer_index;
     s32 *offset_entry;
     if (pal_mode == 0) {
-        start_audio_stream_read(H245610.buf, T_245610.x[i].a, T_245610.x[i].b);
+        start_audio_stream_read(H245610.buf, disc_table.x[i].a, disc_table.x[i].b);
     } else {
-        start_audio_stream_read(H245610.buf, T_245610.y[i].a, T_245610.y[i].b);
+        start_audio_stream_read(H245610.buf, disc_table.y[i].a, disc_table.y[i].b);
     }
     if (fade_frame_count != 0) {
         update_audio_stream_until_idle(0);

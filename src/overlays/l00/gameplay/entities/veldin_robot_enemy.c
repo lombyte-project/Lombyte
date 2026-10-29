@@ -683,7 +683,7 @@ typedef struct {
     GlowVars *vars;
 } GlowMoby;
 
-extern GlowVec glow_origin __asm__("D_L00_00166DC0");
+extern GlowVec g_debug_camera __asm__("D_L00_00166DC0");
 extern GlowVec l00_veldin_robot_effect_quad_template_corners[4] __asm__("D_L00_001E6CA0");
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -702,7 +702,7 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     qcopy(&quad_transform[3], &moby->vars->pos);
     one = 1.0f;
     quad_transform[3].f[3] = one;
-    fast_vec_sub(&quad_transform[0], &glow_origin, &quad_transform[3]);
+    fast_vec_sub(&quad_transform[0], &g_debug_camera, &quad_transform[3]);
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], one);
     fast_vec_cross(&quad_transform[1], &quad_transform[0], (GlowVec *)&hero.gravity_dir);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);

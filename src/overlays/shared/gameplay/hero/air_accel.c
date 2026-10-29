@@ -279,7 +279,7 @@ void update_hero_frame(void) {
     update_hero_blink_and_gold_weapon_tint();
     update_hero_moby_probed_height_bounds();
 }
-extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
+extern unsigned char item_text_variant[] __asm__("D_0013E520");
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
@@ -317,7 +317,7 @@ void update_hero_blink_and_gold_weapon_tint(void)
         set_moby_color(hero.moby, r, g, b);
         copy_hero_color_to_item_mobys();
     }
-    if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
+    if (hero.items[0].item_id >= 0 && item_text_variant[hero.items[0].item_id] != 0
         && hero.items[0].moby != 0)
         update_item_tint_from_hero(hero.items[0].moby, hero.moby);
 }

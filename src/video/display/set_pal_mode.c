@@ -7,8 +7,8 @@
 #include "rnc/rendering/draw_environment.h"
 
 extern s32 pal_mode __asm__("D_0015ED80");
-extern s32 first_image_buffer_address __asm__("D_0015EE74");
-extern s32 second_image_buffer_address __asm__("D_0015EE78");
+extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
+extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
@@ -60,9 +60,9 @@ void set_pal_mode(void) {
     FlushCache(0);
     wait_for_graphics_pipeline_idle(0, 0);
     frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
-    first_image_buffer_address = gs_texture_allocation_base;
+    gs_texture_allocation_cursor = gs_texture_allocation_base;
     draw_environment.frame1 = frame;
-    second_image_buffer_address = gs_texture_allocation_base;
+    gs_texture_allocation_start = gs_texture_allocation_base;
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     draw_environment.frame2 = frame;
     draw_environment.xyoffset1 = screen_extent.left | ((u64)screen_extent.top << 32);

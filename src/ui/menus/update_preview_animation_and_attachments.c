@@ -38,7 +38,7 @@ typedef struct {
 
 extern s32 preview_request_count __asm__("D_00160350");
 extern s32 preview_request_count_macro __asm__("D_00160350") MACRO_ADDR;
-extern CdReadState cd_read_state __asm__("D_001516D0");
+extern CdReadState music_stream_state __asm__("D_001516D0");
 typedef struct {
     u8 pad0[0x48];
     s32 animation_tables[1];
@@ -95,7 +95,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             delay_expired = 1;
         }
     }
-    if (menu_system.pending_buffer != 0 && cd_read_state.active == 0) {
+    if (menu_system.pending_buffer != 0 && music_stream_state.active == 0) {
         s32 buffer_index = menu_system.pending_buffer - 1;
         s32 *buffer_slot = &menu_system.stream_buffer[buffer_index];
         s32 buffer_address = *buffer_slot;
@@ -112,7 +112,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                                       preview_animation_requests[0].animation_id);
         menu_system.pending_buffer = 0;
     }
-    if (menu_system.pending_buffer == 0 && cd_read_state.active == 0 &&
+    if (menu_system.pending_buffer == 0 && music_stream_state.active == 0 &&
         preview_request_count > 0) {
         if (preview_animation_requests[0].status == 0) {
             u32 animation_id = preview_animation_requests[0].animation_id;

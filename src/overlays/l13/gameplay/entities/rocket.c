@@ -1193,7 +1193,7 @@ struct WalkerVars_8d10 {
 
 extern f32 D_L13_00161E58 __attribute__((sda));
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_blarg_space_commando_damage_targeting_and_ground_motion.h"
-extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
+extern s32 *walker_paths[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
@@ -1313,7 +1313,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     } else {
         vars->range = vars->near_range;
     }
-    path = walker_paths_8d10[vars->path];
+    path = walker_paths[vars->path];
     if (find_target_8d10(vars->range, moby, &vars->target, 0, 0, path + 4, *path) != 2) {
         if (vars->range < vector_distance(&vars->home, &vars->target)
             || absolute_float(moby->pos.z - vars->target.z) > 3.0f) {

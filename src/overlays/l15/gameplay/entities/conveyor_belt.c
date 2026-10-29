@@ -1507,7 +1507,7 @@ extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d568_2ed398(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") __attribute__((section(".sdata")));
-extern char *moby_list_2ed398 __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern char *moby_array __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
 extern char D_00141680_2ed398[] __asm__("D_00141680");
 extern char D_00141968_2ed398[] __asm__("D_00141968");
 extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
@@ -1539,7 +1539,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
         break;
     case HINT_DIALOGUE_CHECK_TRIGGERS:
         if (hint_dialogue_data->npc[0] != -1) {
-            npc_moby = (struct Moby *)(moby_list_2ed398 + (hint_dialogue_data->npc[0] << 8));
+            npc_moby = (struct Moby *)(moby_array + (hint_dialogue_data->npc[0] << 8));
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->zone[3]) != 0
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
@@ -1607,7 +1607,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             hint_dialogue_data->last = -1;
         }
         if (npc != -1) {
-            npc_moby = (struct Moby *)(moby_list_2ed398 + (npc << 8));
+            npc_moby = (struct Moby *)(moby_array + (npc << 8));
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 && pick != hint_dialogue_data->last
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)

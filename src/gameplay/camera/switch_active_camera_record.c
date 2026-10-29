@@ -38,7 +38,7 @@ struct CameraTransitionState {
     s32 snapshot_pending;
 };
 
-extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
+extern struct CameraTransitionState preview_camera __asm__("D_00186F40");
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
@@ -61,7 +61,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     s32 previous_transition_state;
 
     descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
-    previous_camera = camera_transition_state.current;
+    previous_camera = preview_camera.current;
     previous_transition_state = previous_camera->transition_state;
     if (descriptor != 0) {
         descriptor_kind = descriptor->descriptor_kind;
@@ -71,28 +71,28 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     } else if (previous_transition_state == 2 || descriptor_kind == 1 || descriptor_kind == 5) {
         if (descriptor_kind == 1) {
             mode_one_duration = next_camera->transition_duration;
-            camera_transition_state.transition_mode = 0;
+            preview_camera.transition_mode = 0;
             if (mode_one_duration > 0.0f) {
-                camera_transition_state.configured_position_rate = mode_one_duration;
-                camera_transition_state.configured_rotation_rate = mode_one_duration;
+                preview_camera.configured_position_rate = mode_one_duration;
+                preview_camera.configured_rotation_rate = mode_one_duration;
             } else {
-                camera_transition_state.configured_position_rate = 0.018f;
-                camera_transition_state.configured_rotation_rate = 0.018f;
+                preview_camera.configured_position_rate = 0.018f;
+                preview_camera.configured_rotation_rate = 0.018f;
             }
         } else if (descriptor_kind == 5) {
             transition_duration = next_camera->transition_duration;
-            camera_transition_state.transition_mode = 2;
+            preview_camera.transition_mode = 2;
             if (transition_duration > 0.0f) {
-                camera_transition_state.configured_frames =
+                preview_camera.configured_frames =
                     truncate_float_to_s32(transition_duration);
             } else {
-                camera_transition_state.configured_frames = 40;
+                preview_camera.configured_frames = 40;
             }
         }
-        if (camera_transition_state.transition_phase == 0) {
-            camera_transition_state.transition_phase = 1;
+        if (preview_camera.transition_phase == 0) {
+            preview_camera.transition_phase = 1;
         } else {
-            camera_transition_state.transition_phase = 2;
+            preview_camera.transition_phase = 2;
         }
     } else if (previous_transition_state == 3 || previous_transition_state == 5 ||
                descriptor_kind == 3 || descriptor_kind == 6) {
@@ -103,22 +103,22 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
         next_camera->handoff_state = 2;
         if (previous_camera->transition_state == 5 || descriptor_kind == 6) {
             handoff_duration = next_camera->transition_duration;
-            camera_transition_state.transition_mode = 0;
+            preview_camera.transition_mode = 0;
             if (handoff_duration > 0.0f) {
-                camera_transition_state.configured_position_rate = handoff_duration;
-                camera_transition_state.configured_rotation_rate = handoff_duration;
+                preview_camera.configured_position_rate = handoff_duration;
+                preview_camera.configured_rotation_rate = handoff_duration;
             } else {
-                camera_transition_state.configured_position_rate = 0.018f;
-                camera_transition_state.configured_rotation_rate = 0.018f;
+                preview_camera.configured_position_rate = 0.018f;
+                preview_camera.configured_rotation_rate = 0.018f;
                 if (current_level_index == 1) {
-                    camera_transition_state.configured_position_rate = 0.01f;
-                    camera_transition_state.configured_rotation_rate = 0.01f;
+                    preview_camera.configured_position_rate = 0.01f;
+                    preview_camera.configured_rotation_rate = 0.01f;
                 }
             }
-            if (camera_transition_state.transition_phase == 0) {
-                camera_transition_state.transition_phase = 1;
+            if (preview_camera.transition_phase == 0) {
+                preview_camera.transition_phase = 1;
             } else {
-                camera_transition_state.transition_phase = 2;
+                preview_camera.transition_phase = 2;
             }
         }
     } else {
@@ -129,17 +129,17 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_camera->transition_state = 0;
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
-    camera_transition_state.previous = previous_camera;
+    preview_camera.previous = previous_camera;
     fast_mem_copy(&camera_saved_states[1], &camera_saved_states[0], 0x280);
-    camera_transition_state.previous->saved_state = &camera_saved_states[1];
-    camera_transition_state.current = next_camera;
+    preview_camera.previous->saved_state = &camera_saved_states[1];
+    preview_camera.current = next_camera;
     next_camera->saved_state = &camera_saved_states[0];
-    camera_transition_state.snapshot_pending = 0;
+    preview_camera.snapshot_pending = 0;
     camera_run_setup_to_new_cam(next_camera);
     backup_current_cam();
     /* The callbacks run before this flag is read; previous_position is updated either way. */
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(&camera_transition_state.published_position, &next_camera->pos);
+        qcopy(&preview_camera.published_position, &next_camera->pos);
     }
     previous_position = &next_camera->prev_pos.x;
     previous_position[0] = next_camera->pos.x;

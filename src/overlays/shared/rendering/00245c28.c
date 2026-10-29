@@ -21,7 +21,7 @@
 extern char level_bss_clear_args[] __asm__("D_L00_0015FCB0");
 extern char level_frame_callback_args[] __asm__("D_L00_0015FCB8");
 extern unsigned char D_0013D390 NOT_SDA;
-extern struct UsageStat level_usage[] __asm__("D_00141680");
+extern struct UsageStat item_usage[] __asm__("D_00141680");
 extern short D_L00_0016C8B0 NOT_SDA;
 extern int D_0015EEA4;
 extern long frm_clock_time __asm__("D_0015ED40");
@@ -151,15 +151,15 @@ void run_level_main_loop(void) {
     if (level_visit_state[current_level_index] == 0) {
         level_visit_state[current_level_index] = 1;
     }
-    if (level_usage[current_level_index].count < 0xFFFF) {
-        level_usage[current_level_index].count++;
+    if (item_usage[current_level_index].count < 0xFFFF) {
+        item_usage[current_level_index].count++;
     }
     per = 600;
-    if (scale_game_frames(D_0015EEA4) / per > level_usage[current_level_index].unk2) {
-        level_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+    if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
+        item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
     }
-    level_usage[current_level_index].level_mask =
-        level_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
+    item_usage[current_level_index].level_mask =
+        item_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
     read_global_table_entry();
 
     while (D_L00_0015F570 == 0) {
@@ -306,8 +306,8 @@ void run_level_main_loop(void) {
             init_hud();
         }
         per = 600;
-        if (scale_game_frames(D_0015EEA4) / per > level_usage[current_level_index].unk2) {
-            level_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / per > item_usage[current_level_index].unk2) {
+            item_usage[current_level_index].unk2 = scale_game_frames(D_0015EEA4) / 600;
         }
     }
     do_space_transition();

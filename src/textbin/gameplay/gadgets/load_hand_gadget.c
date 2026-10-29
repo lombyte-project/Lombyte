@@ -49,9 +49,9 @@ typedef struct HandGadgetDefinition {
     s32 oclass;
     u8 pad14[0x38];
 } HandGadgetDefinition;
-extern u8 gadget_available[] __asm__("D_0013D4C0");
-extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
+extern u8 item_available[] __asm__("D_0013D4C0");
+extern u8 item_text_variant[] __asm__("D_0013E520");
+extern HandGadgetDefinition menu_item_info[] __asm__("D_001863D0");
 extern void noop_callback_q(s32, s32) __asm__("func_001E9470");
 extern void noop_callback_r(Moby *, s32) __asm__("func_001E9478");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
@@ -96,7 +96,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     moby = hand->class_pose_moby;
     previous_selected_class = (moby != 0) ? (moby->oclass) : (-1);
     selected_gadget = menu_system.equipped[0];
-    selected_class = gadget_definitions[selected_gadget].oclass;
+    selected_class = menu_item_info[selected_gadget].oclass;
     selected_class_ready = selected_class == menu_system.unk120;
     if ((previous_selected_class != selected_class) && selected_class_ready) {
         delete_moby(moby);
@@ -117,7 +117,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         moby = create_menu_preview_moby(selected_class);
         if (moby != 0) {
             loaded_gadget = selected_gadget;
-            if (gold_weapon_purchased[loaded_gadget]) {
+            if (item_text_variant[loaded_gadget]) {
                 noop_callback_r(moby, hand->source_moby_address);
             }
             *moby->vars = hand;
@@ -134,7 +134,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->animation_moby;
     previous_animation_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[menu_system.equipped[2]].oclass;
+    requested_class = menu_item_info[menu_system.equipped[2]].oclass;
     if (previous_animation_class != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
@@ -150,7 +150,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->first_attachment_moby;
     previous_attachment_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[menu_system.equipped[1]].oclass;
+    requested_class = menu_item_info[menu_system.equipped[1]].oclass;
     if (previous_attachment_class != requested_class) {
         moby = delete_moby(moby);
         if (first_attachment_manipulator.active) {
@@ -190,7 +190,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->pose_moby;
     previous_pose_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[menu_system.equipped[3]].oclass;
+    requested_class = menu_item_info[menu_system.equipped[3]].oclass;
     if (previous_pose_class != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
@@ -211,7 +211,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->class_0197_moby;
     previous_class_0197 = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (gadget_available[0x23]) ? (0x197) : (-1);
+    requested_class = (item_available[0x23]) ? (0x197) : (-1);
     if (previous_class_0197 != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
@@ -226,7 +226,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->class_0266_moby;
     previous_class_0266 = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (gadget_available[0x21]) ? (0x266) : (-1);
+    requested_class = (item_available[0x21]) ? (0x266) : (-1);
     if (previous_class_0266 != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
@@ -241,7 +241,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->class_026a_moby;
     previous_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (gadget_available[0x22]) ? (0x26A) : (-1);
+    requested_class = (item_available[0x22]) ? (0x26A) : (-1);
     if (previous_class != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {

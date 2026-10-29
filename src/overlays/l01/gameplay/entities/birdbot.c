@@ -2987,7 +2987,7 @@ extern f32 gunship_far_dist __asm__("D_L01_00161BD4") __attribute__((sda));
 extern f32 gunship_near_dist __asm__("D_L01_00161BD8") __attribute__((sda));
 GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0") = {{-1, -1, -1, -1}};
 extern char camera_pos[] __asm__("D_L01_00167240");
-extern u8 gunship_banner_shown __asm__("D_0013D408") NOT_SDA;
+extern u8 item_unlocked __asm__("D_0013D408") NOT_SDA;
 extern char gunship_no_path_fmt[] __asm__("D_L01_0020B4A0");
 extern u8 moby_collected[] __asm__("D_L01_001BBB04");
 extern GunshipHit collision_hit __asm__("D_L01_001742C0");
@@ -3046,8 +3046,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     hit = find_moby_hit(bomber_jet_moby, 0x800000, 0);
     bomber_jet_moby->bA4 = 0xFF;
     if (hit != 0) {
-        if (gunship_banner_shown == 0) {
-            gunship_banner_shown = 1;
+        if (item_unlocked == 0) {
+            item_unlocked = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }

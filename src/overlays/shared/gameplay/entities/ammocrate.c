@@ -137,7 +137,7 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
 #include "rnc/gameplay/entities/moby.h"
 
 extern float D_0015ED6C_1cc8 __asm__("D_0015ED6C");
-extern struct Moby *moby_pool_1cc8 __asm__("D_L13_0015FFD8");
+extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
 extern int D_L13_00174158_1cc8 __asm__("D_L13_00174158") __attribute__((section(".data")));
 
 extern int timer_expired_1cc8(void *) __asm__("FUN_001f9740");
@@ -196,7 +196,7 @@ void ammocrate_update(char *moby) {
         break;
     case SHIP_PICKUP_WAIT_FOR_TARGET_STATE: {
         int target_index = vars[0];
-        int target_base = (int)moby_pool_1cc8;
+        int target_base = (int)moby_base;
         struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
         if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
             vars[1] != -1 && target->state != vars[1]) {

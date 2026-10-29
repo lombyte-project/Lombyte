@@ -2419,7 +2419,7 @@ typedef struct {
     short sound_single;
     char pad2[0x14];
 } FxAmmoRecord;
-extern char ammo_sounds_2c53c0[] __asm__("D_L00_00179AC0");
+extern char item_defs[] __asm__("D_L00_00179AC0");
 extern FxVec D_L00_00173E70_2c53c0 __asm__("D_L00_00173E70");
 extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -2554,9 +2554,9 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
             if (before < after) {
                 difference = after - before;
                 if (difference == 1) {
-                    sound = ((FxAmmoRecord *)(ammo_sounds_2c53c0 + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
+                    sound = ((FxAmmoRecord *)(item_defs + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
                 } else {
-                    sound = ((FxAmmoRecord *)(ammo_sounds_2c53c0 + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
+                    sound = ((FxAmmoRecord *)(item_defs + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
                 }
                 queue_formatted_dialogue_message(sound, difference, -1);
             }
@@ -3282,9 +3282,9 @@ typedef float Vec_2c7548[4] __attribute__((aligned(16)));
 typedef float Mat_2c7548[4][4] __attribute__((aligned(16)));
 typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
 
-extern char camera_2c7548[] __asm__("D_L00_00166C80");
-extern char camera_pos_2c7548[] __asm__("D_L00_00166DC0");
-extern CollisionHit collision_hit_2c7548 __asm__("D_L00_00173E40");
+extern char player_camera[] __asm__("D_L00_00166C80");
+extern char g_debug_camera[] __asm__("D_L00_00166DC0");
+extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -3321,7 +3321,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     float *pos = throw_origin;
 
     *(u128 *)pos = grip->q;
-    copy_matrix3x4(basis, camera_2c7548);
+    copy_matrix3x4(basis, player_camera);
     transpose_rotation_matrix(matrix, basis);
     held = vars->held;
     if (held == 0) return;
@@ -3351,7 +3351,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
             build_spherical_offset(arc, (controller_state.held & 5) ? 3.5f : 2.5f, angle, slope);
-            qcopy(saved, camera_2c7548 + 0x140);
+            qcopy(saved, player_camera + 0x140);
             distance = vector_length_xy(arc);
             {
                 float z = arc[2];
@@ -3368,10 +3368,10 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
                 arc[0] = fast_cos(angle) * radius;
                 arc[1] = fast_sin(angle) * radius;
                 arc[2] = vertical;
-                fast_vec_add(probe, camera_pos_2c7548, arc);
-                if (collision_line_2c7548(camera_pos_2c7548, probe, 2, (int)moby, 0)
-                    && collision_hit_2c7548.moby != (s32)hero.moby) {
-                    qcopy(target, collision_hit_2c7548.point.f);
+                fast_vec_add(probe, g_debug_camera, arc);
+                if (collision_line_2c7548(g_debug_camera, probe, 2, (int)moby, 0)
+                    && coll_hit.moby != (s32)hero.moby) {
+                    qcopy(target, coll_hit.point.f);
                     hit = 1;
                     angle = fast_arc_tan(target[0] - pos[0], target[1] - pos[1]);
                 }
@@ -3380,7 +3380,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
                     target[0] = fast_cos(angle) * radius * horizontal;
                     target[1] = fast_sin(angle) * radius * horizontal;
                     target[2] = vertical * horizontal;
-                    fast_vec_add(target, target, camera_pos_2c7548);
+                    fast_vec_add(target, target, g_debug_camera);
                 }
             }
         } else {

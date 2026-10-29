@@ -42,7 +42,7 @@ struct PreviewClassResource {
 
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
-extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
+extern u8 item_text_variant[] __asm__("D_0013E520");
 #include "rnc/gameplay/hero.h"
 extern s32 active_decode_buffer __asm__("D_0015FF50");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
@@ -145,7 +145,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             animation_index = 1;
         }
         if (moby != 0) {
-            if (load_class && gold_weapon_purchased[item_index] != 0) {
+            if (load_class && item_text_variant[item_index] != 0) {
                 noop_callback_r(moby, preview->variant);
             }
             preview->primary_moby = moby;

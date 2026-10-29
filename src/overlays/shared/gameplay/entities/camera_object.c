@@ -536,7 +536,7 @@ typedef struct {
     u8 p2090[0x20A4 - 0x2090];
     u8 b20A4;
 } G_2a57a8;
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero __asm__("D_0013F350") __attribute__((section(".data")));
 extern V_2a57a8 hero_pos __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern s32 D_0013CAE4_2a57a8 __asm__("D_0013CAE4") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
@@ -634,15 +634,15 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         vendor_manipulator_counter_rotation_phase = FUN_001fa580_2a57a8(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
         upd_a(q->mC);
-        if (hero_data.state.control_mode != 0 && hero_data.state.current != 3 && hero_data.state.control_mode != 1) {
+        if (hero.state.control_mode != 0 && hero.state.current != 3 && hero.state.control_mode != 1) {
             interaction_allowed = 0;
             help_message_allowed = 0;
         }
-        if (hero_data.state.current == 0x1D || hero_data.state.current == 0x32) {
+        if (hero.state.current == 0x1D || hero.state.current == 0x32) {
             interaction_allowed = 0;
             help_message_allowed = 0;
         }
-        if (hero_data.vehicle_mode) {
+        if (hero.vehicle_mode) {
             interaction_allowed = 0;
             help_message_allowed = 0;
         }
@@ -652,8 +652,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             interaction_allowed = 0;
             help_message_allowed = 0;
         }
-        if (FUN_001fa688_2a57a8(hero_data.motion.rot.f[2], fast_arc_tan(vendor_moby->f10 - hero_data.motion.pos.f[0],
-                                                                   vendor_moby->f14 - hero_data.motion.pos.f[1])) >
+        if (FUN_001fa688_2a57a8(hero.motion.rot.f[2], fast_arc_tan(vendor_moby->f10 - hero.motion.pos.f[0],
+                                                                   vendor_moby->f14 - hero.motion.pos.f[1])) >
             1.5707964f) {
             interaction_allowed = 0;
             help_message_allowed = 0;
@@ -1075,7 +1075,7 @@ extern s32 current_bolt_count __asm__("D_0015ED98");
 extern s32 D_0015EE2C;                       /* bolts counted when the bolt's pvars[0x40] is set or it is an early moby */
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 /* second name for D_0015ED84: retail loads the level index again here */
-extern s32 current_level_index_b __asm__("D_0015ED84") MACRO_ADDR;
+extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern BoltSourceStats bolt_source_stats[][64] __asm__("D_0014D590");
 extern s32 level_bolts[] __asm__("D_0013DF38");  /* bolts collected per level */
 extern s32 D_L00_0015F598;
@@ -1133,7 +1133,7 @@ void collect_bolt(struct Moby *bolt)
     current_bolt_count += value;
     if (bolt->pvars[0x40] || (D_L00_0015F598 && (void *)bolt < D_L00_0015FFDC_u))
         D_0015EE2C += value;
-    level_bolts[current_level_index_b] += value;
+    level_bolts[current_level_index] += value;
 
     k = 0.7f;
     queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility, draw_bolt_counter_hud_panel,
@@ -1475,7 +1475,7 @@ typedef struct {
     u64 tag[4];
 } V_2a7780;
 extern P_2a7780 D_0013F350_2a7780 __asm__("D_0013F350");
-extern int frame_2a7780 __asm__("D_L00_0015F5CC");
+extern int game_frame __asm__("D_L00_0015F5CC");
 extern int FUN_001f44b8_2a7780(int) __asm__("FUN_001f44b8");
 extern s32 FUN_001fa6d0_2a7780(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a68_2a7780(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1536,9 +1536,9 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
         qcopy(&r->m[0], hero_moby + 0xC0);
         qcopy(&r->m[1], hero_moby + 0xD0);
         qcopy(&r->m[2], hero_moby + 0xE0);
-        last_frame = frame_2a7780;
+        last_frame = game_frame;
     }
-    current_frame = frame_2a7780;
+    current_frame = game_frame;
     elapsed_frames = current_frame - last_frame;
     if (elapsed_frames <= 0) elapsed_frames = 1;
     r->f70 = effect_progress + (f32)elapsed_frames * effect_config->f48;
@@ -1591,14 +1591,14 @@ typedef struct {
     char p2[8];
     s32 i2090;
 } G_002a7c70;
-extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero __asm__("D_0013F350") __attribute__((section(".data")));
 s32 FUN_001f96f8_002a7c70(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002a7c70(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) __asm__("FUN_L00_002a7c70");
 
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
-    struct Hero *hero_context = &hero_data2;
+    struct Hero *hero_context = &hero;
     if (hero_context->state.current == 0x3B) {
         u8 hero_current_animation = ((O_002a7c70 *)hero_context->moby)->b53;
         s32 k = 0xB;

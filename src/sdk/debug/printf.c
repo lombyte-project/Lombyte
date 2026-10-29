@@ -10,7 +10,7 @@ typedef struct PrintReent {
     PrintFile *stdout_file;
 } PrintReent;
 
-extern PrintReent *GlobalReent __asm__("D_0012F76C") __attribute__((section(".data")));
+extern PrintReent *GlobalStateResource __asm__("D_0012F76C") __attribute__((section(".data")));
 extern int Vfprintf(PrintFile *file, const char *format,
                     va_list arguments) __asm__("func_00116DA8");
 
@@ -18,7 +18,7 @@ int Printf(const char *format, ...) __asm__("printf");
 
 int Printf(const char *format, ...) {
     va_list arguments;
-    PrintReent *reent = GlobalReent;
+    PrintReent *reent = GlobalStateResource;
 
     reent->stdout_file->data = reent;
     arguments = __builtin_next_arg(format) - 0x38;

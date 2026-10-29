@@ -51,8 +51,8 @@ extern s32 D_001B6180[];
    string, and the unprefixed name orders its %hi before the slot table's, which
    gives retail's s0/s4 assignment for the two hoisted %hi registers. */
 extern void *D_001B3200[];
-extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
-extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
+extern GadgetRec menu_item_info[] __asm__("D_001863D0");
+extern u8 item_text_variant[] __asm__("D_0013E520");
 extern void FlushCache(s32);
 extern void decompress_wad(s32, void *) __asm__("func_0020B618");
 extern void prepare_resident_class_render_data(void *, void *, void *,
@@ -108,12 +108,12 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
         }
     }
     for (vendor_item_index = 0; vendor_item_index < 0x25; vendor_item_index++) {
-        if (vendor_item_definitions[vendor_item_index].class_id == class_id) {
+        if (menu_item_info[vendor_item_index].class_id == class_id) {
             ClassResourceHeader *resource_header;
             ClassRenderGroup *render_group;
             char *patch_packet;
 
-            if (gold_weapon_purchased[vendor_item_index] == 0) {
+            if (item_text_variant[vendor_item_index] == 0) {
                 return;
             }
             resource_header = (ClassResourceHeader *)D_001B3200[class_slot];

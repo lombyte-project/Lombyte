@@ -1125,7 +1125,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
 }
 extern u8 D_0014C050_edc30[] __asm__("D_0014C050");
 extern float D_L09_00166F40_edc30[] __asm__("D_L09_00166F40");
-extern float frame_time_edc30 __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern void mark_moby_for_removal_edc30(struct Moby *) __asm__("FUN_0020c828");
 extern char *find_moby_hit_edc30(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(u8 *);
@@ -1223,7 +1223,7 @@ void display_update(struct Moby *moby) {
         falloff = FUN_001f99c0_edc30(3.0f - fast_vec_length(debris_offset_or_velocity)) / 3.0f;
         fast_vec_normalize(pull, hit + 0x10, falloff * falloff * 8.0f);
         fast_vec_add(debris_offset_or_velocity, debris_offset_or_velocity, pull);
-        fast_vec_normalize(debris_offset_or_velocity, debris_offset_or_velocity, falloff * (random_float_between(6.0f, 10.0f) * frame_time_edc30));
+        fast_vec_normalize(debris_offset_or_velocity, debris_offset_or_velocity, falloff * (random_float_between(6.0f, 10.0f) * frame_time));
         fast_vec_add(pos, pos, push);
         if (moby->oclass == 0x514 || random_integer_below(4) == 0) {
             spawn_tumbling_debris(moby, (Vec4 *)pos, (Vec4 *)debris_offset_or_velocity, i & 1, random_float_between(1.0f, 2.0f));

@@ -55,9 +55,9 @@ extern float collision_hit_z_2b2100 __asm__("D_L00_00173E68") __attribute__((sec
 extern struct Moby *D_L00_001ABA00_2b2100[] __asm__("D_L00_001ABA00");
 extern Light_2b2100 lights_2b2100[] __asm__("D_L00_001802C0");
 extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
-extern float frame_time_2b2100 __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern int D_0015EEA4;
-extern int level_index_2b2100 __asm__("D_0015ED84");
+extern int current_level_index __asm__("D_0015ED84");
 extern void emit_object_offset_particles(struct Moby *) __asm__("FUN_L00_002b1af0");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_001fa2d8_2b2100(void *, void *) __asm__("FUN_001fa2d8");
@@ -169,10 +169,10 @@ void devastator_update(struct Moby *devastator_moby) {
         velocity.q = 0;
         if (devastator_moby->prev_seq == 0) blend_moby_animation(devastator_moby, 1, 0, scale_game_frames(4));
         if (hero.state.current == 30 && (hero.moby->flags & 1)) {
-            velocity.f.z = frame_time_2b2100 * 10.0f;
+            velocity.f.z = frame_time * 10.0f;
             transform_vector(&velocity, &velocity, &inverse);
         } else {
-            velocity.f.x = frame_time_2b2100 * 10.0f;
+            velocity.f.x = frame_time * 10.0f;
             transform_vector_by_basis(&velocity, &velocity, &hero.basis);
         }
         if (use_ammo(-1, 1)) {
@@ -258,7 +258,7 @@ void devastator_update(struct Moby *devastator_moby) {
             if (stats->uses < 65535) stats->uses++;
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
-            stats->levels = (stats->levels | (1 << level_index_2b2100)) | 0x80000000;
+            stats->levels = (stats->levels | (1 << current_level_index)) | 0x80000000;
             if (hero.unk22C8 == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;

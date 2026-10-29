@@ -673,7 +673,7 @@ extern char *D_L08_0015FFD8;
 extern int D_0015ED84;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern CannonCamera52_2E16A0 cannon_camera52 __asm__("D_L08_00167480");
+extern CannonCamera52_2E16A0 camera_state_bytes __asm__("D_L08_00167480");
 extern short D_L08_00161B20_2E16A0 __asm__("D_L08_00161A90") __attribute__((sda));
 extern short D_L08_00161BA0_2E16A0 __asm__("D_L08_00161B10") __attribute__((sda));
 extern short D_L08_00161BB0_2E16A0 __asm__("D_L08_00161B20") __attribute__((sda));
@@ -867,10 +867,10 @@ void update_batalia_cannon(Moby *moby) {
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 func_L08_002E9288_2E16A0(moby, muzzle, direction, target);
                 sound52(0,0,moby);
-                cannon_camera52.mag0 = 0.03f;
-                cannon_camera52.timer0 = func_001F9850_2E16A0(10);
-                cannon_camera52.mag1 = 0.03f;
-                cannon_camera52.timer1 = func_001F9850_2E16A0(7);
+                camera_state_bytes.mag0 = 0.03f;
+                camera_state_bytes.timer0 = func_001F9850_2E16A0(10);
+                camera_state_bytes.mag1 = 0.03f;
+                camera_state_bytes.timer1 = func_001F9850_2E16A0(7);
                 data->barrel = 0; data->fire_timer = func_001F9850_2E16A0(20);
                 count = 4;
                 do {
@@ -896,10 +896,10 @@ void update_batalia_cannon(Moby *moby) {
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 func_L08_002E9288_2E16A0(moby, muzzle, direction, func_L08_002E15A0_2E16A0((char *)moby));
                 sound52(0,0,moby);
-                cannon_camera52.mag0 = 0.03f;
-                cannon_camera52.timer0 = func_001F9850_2E16A0(10);
-                cannon_camera52.mag1 = 0.03f;
-                cannon_camera52.timer1 = func_001F9850_2E16A0(7);
+                camera_state_bytes.mag0 = 0.03f;
+                camera_state_bytes.timer0 = func_001F9850_2E16A0(10);
+                camera_state_bytes.mag1 = 0.03f;
+                camera_state_bytes.timer1 = func_001F9850_2E16A0(7);
                 data->barrel = 1; data->fire_timer = func_001F9850_2E16A0(20);
                 count = 4;
                 do {

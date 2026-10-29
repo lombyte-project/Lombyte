@@ -30,7 +30,7 @@ extern float D_0015ED6C __attribute__((section(".sdata")));   /* frame-rate scal
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
-extern Vec4 coll_hit_normal_2c8440 __asm__("D_L00_00173E80") __attribute__((section(".data")));
+extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") __attribute__((section(".data")));
 extern Vec4 D_L00_00166DC0_2c8440 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -149,7 +149,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *
     }
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
         FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, thrown_moby);
-    throw_vars->normal.q = coll_hit_normal_2c8440.q;
+    throw_vars->normal.q = coll_hit_normal.q;
     fast_vec_sub(&position_scratch, &throw_vars->landing, &D_L00_00166DC0_2c8440);
     scale_vector_xyz_2c8440(&position_scratch, &position_scratch, 0.94999998807907104492f);
     add_vector_xyz_2c8440(&throw_vars->landing, &position_scratch, &D_L00_00166DC0_2c8440);
@@ -1772,10 +1772,10 @@ typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
-extern float camera_pos_2cc608[] __asm__("D_L00_00166DC0");
+extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern int play_frames_2cc608 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern int D_0015ED84 __attribute__((section(".sdata")));
-extern struct UsageStats item_usage_2cc608 __asm__("D_00141680");
+extern struct UsageStats item_usage __asm__("D_00141680");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
@@ -1850,7 +1850,7 @@ void ryno_update(struct Moby *ryno_moby) {
                 ryno_vars->target = 0;
                 ryno_vars->height = 0;
             } else {
-                float f = fast_vec_dist(camera_pos_2cc608, ((float *)&ryno_vars->target->pos)) / 150.0f;
+                float f = fast_vec_dist(g_debug_camera, ((float *)&ryno_vars->target->pos)) / 150.0f;
                 qcopy(aim.f, ((float *)&ryno_vars->target->pos));
                 f = f * 0.65f;
                 aim.f[2] = aim.f[2] + ryno_vars->height;
@@ -1875,7 +1875,7 @@ void ryno_update(struct Moby *ryno_moby) {
         if (use_ammo(-1, 1) == 0) return;
         {
             int per;
-            struct UsageStats *s = &item_usage_2cc608;
+            struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
             if (scale_game_frames(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames_2cc608) / 600;
@@ -1904,7 +1904,7 @@ void ryno_update(struct Moby *ryno_moby) {
         if (use_ammo(-1, 1) == 0) return;
         {
             int per;
-            struct UsageStats *s = &item_usage_2cc608;
+            struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
             if (scale_game_frames(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames_2cc608) / 600;

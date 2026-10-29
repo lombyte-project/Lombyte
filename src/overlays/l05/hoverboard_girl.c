@@ -90,7 +90,7 @@ extern s32 game_mode __asm__("D_L05_0015F5C4");
 extern s32 game_mode_absolute __asm__("D_L05_0015F5C4");
 extern s32 frame_number __asm__("D_L05_0015F5CC");
 extern s32 frame_number __asm__("D_L05_0015F5CC");
-extern u8 race_completed __asm__("D_0013D388") NOT_SDA;
+extern u8 alternate_item_available __asm__("D_0013D388") NOT_SDA;
 extern HoverboardRaceGates race_gates __asm__("D_0013D5B0");
 extern HoverboardRaceEntry *race_entries[] __asm__("D_L05_001B1AF8");
 extern const char race_girl_name[] __asm__("D_L05_00161ED8");
@@ -219,7 +219,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         if (moby->dialogue_event == 1) {
             set_race_camera(&race_camera_vectors[2], &race_camera_vectors[3], 0, 1);
             jet_game_state(0, 8);
-            if (race_completed == 0) {
+            if (alternate_item_available == 0) {
                 state->previous_dialogue_state = state->dialogue_state;
                 state->dialogue_state = 4;
                 state->dialogue_state_frame = frame_number;
@@ -255,7 +255,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         if (game_mode != 2) {
             moby->state = 1;
             if (state->previous_dialogue_state == 4) {
-                race_completed = 1;
+                alternate_item_available = 1;
                 queue_dialogue_message(0x1395, scale_game_frames(300));
                 func_0020b178(0, -1);
             }

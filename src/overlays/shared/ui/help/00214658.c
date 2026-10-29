@@ -370,7 +370,7 @@ typedef struct {
     f32 fD08;
 } LeanState;
 
-extern LeanState lean_state __asm__("D_L00_0017A680") __attribute__((section(".data")));
+extern LeanState hero_eases __asm__("D_L00_0017A680") __attribute__((section(".data")));
 /* D_L00_0017A680 + 0xD0C, written through its own symbol as in retail */
 extern f32 D_L00_0017B38C[];
 extern f32 D_0015EE18;
@@ -398,8 +398,8 @@ void update_hero_lean_and_sway_parameters(void)
     scale = 1024.0f / hero_state->items[3].moby2->scale;
     if (hero_state->state.current == 2) {
         clamped_lean_input = hero_state->motion.yaw_error;
-        lean_state.fD04 = 0.02f;
-        lean_state.fD08 = 0.35f;
+        hero_eases.fD04 = 0.02f;
+        hero_eases.fD08 = 0.35f;
         if (clamped_lean_input > 1.4f)
             clamped_lean_input = 1.4f;
         else if (clamped_lean_input < -1.4f)
@@ -409,12 +409,12 @@ void update_hero_lean_and_sway_parameters(void)
             lean = 1.3089969f;
         else if (lean < -1.3089969f)
             lean = -1.3089969f;
-        lean_state.fCC8 = lean;
+        hero_eases.fCC8 = lean;
         sway = 0.1f;
         sway = absolute_float(clamped_lean_input) * sway + sway;
         if (sway > 0.07f)
             sway = 0.07f;
-        lean_state.fCF8 = sway * scale;
+        hero_eases.fCF8 = sway * scale;
     }
 }
 #include "eetypes.h"
