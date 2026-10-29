@@ -402,7 +402,7 @@ void update_planetbuster_maximus_guns(char *moby) {
 }
 
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) {
-    char        *data = (char *)moby->pvars;
+    char        *motion_owner_pvars = (char *)moby->pvars;
     struct Moby *selected;
     float       *speed;
     int          offset;
@@ -423,13 +423,13 @@ void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int
     initial_speed = random_float_between(frame_time_sq * 3.7f, frame_time_sq * 5.0f);
     angle_scale = frame_time;
     {
-        char *base = data + 0x570;
+        char *base = motion_owner_pvars + 0x570;
         speed = (float *)(base + offset);
     }
     *speed = initial_speed;
     first_angle = randf_sym(angle_scale * 0.05235988f, angle_scale * 0.13962634f);
     second_scale = frame_time;
-    slot_data = data + slot * 0x10;
+    slot_data = motion_owner_pvars + slot * 0x10;
     *(float *)(slot_data + 0x450) = first_angle;
     *(float *)(slot_data + 0x454) =
         randf_sym(second_scale * 0.05235988f, second_scale * 0.17453292f);
