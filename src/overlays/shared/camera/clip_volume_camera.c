@@ -77,26 +77,26 @@ void smooth_transform_orientation_toward_hero(char *transform_state) __asm__("FU
 void smooth_transform_orientation_toward_hero(char *transform_state) {
     float  position[4] __attribute__((aligned(16)));
     float  direction[4] __attribute__((aligned(16)));
-    char  *data = *(char **)(transform_state + 0x70);
-    float *height = (float *)(data + 0x10);
-    char  *result;
+    char  *orientation_spring_state = *(char **)(transform_state + 0x70);
+    float *height = (float *)(orientation_spring_state + 0x10);
+    char  *saved_direction;
     float  angle, rotation_scale;
     qcopy(position, hero.motion.pos.f);
     position[2] += height[19];
-    result = transform_state + 0x40;
+    saved_direction = transform_state + 0x40;
     fast_vec_sub(direction, position, transform_state + 0x30);
     fast_vec_normalize(direction, direction, 1.0f);
     angle = fast_arc_sin(fast_vec_dot(direction, transform_state));
-    rotation_scale = rope_spring_turn(data,
+    rotation_scale = rope_spring_turn(orientation_spring_state,
                                       0.0f,
                                       1.57079637f - angle,
-                                      *(float *)(data + 4),
-                                      *(float *)(data + 8),
-                                      *(float *)(data + 12));
+                                      *(float *)(orientation_spring_state + 4),
+                                      *(float *)(orientation_spring_state + 8),
+                                      *(float *)(orientation_spring_state + 12));
     rotate_vector_by_scaled_angle_between_vectors(
-        rotation_scale, (float *)transform_state, (float *)result, direction, 1);
-    fast_vec_normalize(result, transform_state, 1.0f);
-    qcopy(transform_state, result);
+        rotation_scale, (float *)transform_state, (float *)saved_direction, direction, 1);
+    fast_vec_normalize(saved_direction, transform_state, 1.0f);
+    qcopy(transform_state, saved_direction);
     fast_vec_cross(transform_state + 0x10, transform_state, transform_basis_reference_vector);
     fast_vec_normalize(transform_state + 0x10, transform_state + 0x10, 1.0f);
     fast_vec_cross(transform_state + 0x20, transform_state + 0x10, transform_state);
