@@ -538,7 +538,7 @@ void collect_bolt(struct Moby *bolt) {
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
 
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
     float local_rotation_angles[4];
@@ -550,12 +550,12 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     float rotation_angle_step, class_local_rotation_angle, base_axis_offset_distance,
         rotated_axis_offset_distance, ground_collision_radius;
 
-    if (*(char **)(data + 0x5C) != 0) {
+    if (*(char **)(grounded_bolt_vars + 0x5C) != 0) {
         transform_attachment_pose(
-            (int)moby, *(char **)(data + 0x5C), (float *)data, (float *)(data + 0x10), A, B);
+            (int)moby, *(char **)(grounded_bolt_vars + 0x5C), (float *)grounded_bolt_vars, (float *)(grounded_bolt_vars + 0x10), A, B);
     } else {
-        qcopy(A, data);
-        qcopy(B, data + 0x10);
+        qcopy(A, grounded_bolt_vars);
+        qcopy(B, grounded_bolt_vars + 0x10);
     }
     switch (MOBY(moby)->oclass) {
     case BOLT_CLASS_ONE:
@@ -587,15 +587,15 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
         ground_collision_radius = 0.25f;
         break;
     }
-    if (*(unsigned char *)(data + 0x55) & 1) {
-        *(float *)(data + 0x50) = fast_add_rotations(*(float *)(data + 0x50), rotation_angle_step);
-        *(float *)(data + 0x58) = fast_add_rotations(*(float *)(data + 0x58), -0.0125f);
+    if (*(unsigned char *)(grounded_bolt_vars + 0x55) & 1) {
+        *(float *)(grounded_bolt_vars + 0x50) = fast_add_rotations(*(float *)(grounded_bolt_vars + 0x50), rotation_angle_step);
+        *(float *)(grounded_bolt_vars + 0x58) = fast_add_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
     } else {
-        *(float *)(data + 0x50) =
-            fast_subtract_rotations(*(float *)(data + 0x50), rotation_angle_step);
-        *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
+        *(float *)(grounded_bolt_vars + 0x50) =
+            fast_subtract_rotations(*(float *)(grounded_bolt_vars + 0x50), rotation_angle_step);
+        *(float *)(grounded_bolt_vars + 0x58) = fast_subtract_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
     }
-    qcopy(local_rotation_angles, data + 0x50);
+    qcopy(local_rotation_angles, grounded_bolt_vars + 0x50);
     local_rotation_angles[1] = class_local_rotation_angle;
     euler_rotation_basis(local_rotation_basis, local_rotation_angles);
     euler_rotation_basis(base_rotation_basis, B);
@@ -609,12 +609,12 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     if (out2 != 0)
         qcopy(out2, B);
     if (MOBY(moby)->state == 3) {
-        char *ground_moby = *(char **)(data + 0x5C);
-        if (ground_moby != 0 && *(unsigned char *)(data + 0x57) == 0) {
+        char *ground_moby = *(char **)(grounded_bolt_vars + 0x5C);
+        if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
             char *x;
             if ((unsigned char)ground_moby[0x20] == 0xFE ||
-                (*(unsigned char **)(data + 0x5C))[0x20] == 0xFD) {
+                (*(unsigned char **)(grounded_bolt_vars + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {
                 should_detach_from_ground =
@@ -622,20 +622,20 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
             }
             if (should_detach_from_ground) {
                 moby[0x20] = 1;
-                clear_u64_value(data + 0x30);
-                *(float *)(data + 0x3C) = 1.0f;
-                x = FUN_L00_002603d0_c(*(char **)(data + 0x5C));
+                clear_u64_value(grounded_bolt_vars + 0x30);
+                *(float *)(grounded_bolt_vars + 0x3C) = 1.0f;
+                x = FUN_L00_002603d0_c(*(char **)(grounded_bolt_vars + 0x5C));
                 if (x != 0) {
-                    qcopy(data + 0x20, x + 0x10);
+                    qcopy(grounded_bolt_vars + 0x20, x + 0x10);
                 } else {
-                    clear_u64_value(data + 0x20);
+                    clear_u64_value(grounded_bolt_vars + 0x20);
                 }
                 fast_vec_normalize(C, &base_rotation_basis[8], D_0015ED6C);
                 fast_vec_normalize(D, (float *)&MOBY(moby)->rot_row0, D_0015ED6C);
                 fast_vec_add(C, C, D);
-                fast_vec_add(data + 0x20, data + 0x20, C);
-                fast_vec_add(moby + 0x10, moby + 0x10, data + 0x20);
-                *(char **)(data + 0x5C) = 0;
+                fast_vec_add(grounded_bolt_vars + 0x20, grounded_bolt_vars + 0x20, C);
+                fast_vec_add(moby + 0x10, moby + 0x10, grounded_bolt_vars + 0x20);
+                *(char **)(grounded_bolt_vars + 0x5C) = 0;
             }
         }
     }
