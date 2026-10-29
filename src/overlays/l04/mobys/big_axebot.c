@@ -30,10 +30,10 @@ void blend_big_axebot_and_axe_animation(char *moby,
                                         void *frame_index,
 
                                         void *blend_frames) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *axebot_pvars = ((char *)MOBY(moby)->pvars);
     void *other;
     blend_moby_animation(moby, new_seq, frame_index, blend_frames);
-    other = *(void **)(data + 0x424);
+    other = *(void **)(axebot_pvars + 0x424);
     if (other != 0) {
         blend_moby_animation(other, new_seq, frame_index, blend_frames);
     }
