@@ -1010,8 +1010,8 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L01_002efa88");
 
 int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
-    int value = process_moby_suck_cannon_suction(moby);
-    if (value != 0) {
+    int suction_result = process_moby_suck_cannon_suction(moby);
+    if (suction_result != 0) {
         if (moby->oclass != 0x362) {
             return 0;
         } else if (moby->state == 8) {
@@ -1022,7 +1022,7 @@ int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
     } else if (moby->state == 0xE) {
         moby->state = 1;
     }
-    return value;
+    return suction_result;
 }
 
 /* Suck cannon methods of the amoeboids. */
