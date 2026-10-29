@@ -8,17 +8,17 @@ extern s32 try_set_help_message() __asm__("FUN_00215130");
 s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 
 s32 force_help_message(s32 owner, s32 message_id) {
-    s32 result;
+    s32 help_message_status;
 
-    result = try_set_help_message();
-    if (result == 0) {
+    help_message_status = try_set_help_message();
+    if (help_message_status == 0) {
         if (message_id != 0) {
             copy_text_to_shared_buffer(get_help_message_text(message_id));
         }
         D_0015F5D4 = owner;
         D_0015F5D0 = 2;
         D_00161288 = message_id;
-        result = 3;
+        help_message_status = 3;
     }
-    return result;
+    return help_message_status;
 }
