@@ -323,8 +323,8 @@ void draw_teleporter_ring(struct Moby *moby) {
 void restore_teleporter_visibility_and_collision(struct Moby *moby) __asm__("FUN_L11_002f3040");
 
 void restore_teleporter_visibility_and_collision(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
-    char **child = (char **)(data + 0x14);
+    char  *teleporter_vars = (char *)moby->pvars;
+    char **child = (char **)(teleporter_vars + 0x14);
     int    count;
     int    on;
     moby->visible = 1;
