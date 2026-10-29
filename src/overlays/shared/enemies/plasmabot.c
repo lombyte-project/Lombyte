@@ -1112,26 +1112,26 @@ int follow_plasmabot_path(char *moby) {
     float path_target_position[4];
     float pre_spring_position[4];
     float target_offset[4];
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *plasmabot_private_state = ((char *)MOBY(moby)->pvars);
     int   reached =
-        sample_path(((int *)l14_paths[*(int *)(data + 0x240)]),
+        sample_path(((int *)l14_paths[*(int *)(plasmabot_private_state + 0x240)]),
                     path_target_position,
-                    data + 0x24C,
-                    data + 0x250,
+                    plasmabot_private_state + 0x24C,
+                    plasmabot_private_state + 0x250,
                     0,
-                    plasmabot_path_traversal_speed_gp * frame_time * *(float *)(data + 0x27C));
+                    plasmabot_path_traversal_speed_gp * frame_time * *(float *)(plasmabot_private_state + 0x27C));
     float path_target_heading;
     float k;
     float turn_step_limit;
     qcopy(pre_spring_position, moby + 0x10);
     vendor_spring((float *)&MOBY(moby)->pos,
-                  (float *)(data + 0x254),
+                  (float *)(plasmabot_private_state + 0x254),
                   path_target_position[0],
                   0.01f,
                   0.2f,
                   0.0f);
     vendor_spring((float *)&MOBY(moby)->pos.y,
-                  (float *)(data + 0x258),
+                  (float *)(plasmabot_private_state + 0x258),
                   path_target_position[1],
                   0.01f,
                   0.2f,
@@ -1142,7 +1142,7 @@ int follow_plasmabot_path(char *moby) {
     turn_step_limit = frame_time * 6.2831855f;
     func_L00_0025CE58_2B4668((float *)&MOBY(moby)->rot.z,
                              path_target_heading,
-                             (float *)(data + 0x23C),
+                             (float *)(plasmabot_private_state + 0x23C),
                              k,
                              k,
                              turn_step_limit);
