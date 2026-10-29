@@ -151,14 +151,14 @@ s32        allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__(
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 
-void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) {
-    char *data = (char *)moby->pvars;
+void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_frames) {
+    char *red_lock_vars = (char *)moby->pvars;
     if (moby->state != 2) {
         moby->state = 2;
-        *(int *)(data + 0x6C) = value;
+        *(int *)(red_lock_vars + 0x6C) = wait_duration_frames;
     }
-    if (!voice_is_playing(moby, *(int *)(data + 0x70))) {
-        *(int *)(data + 0x70) = allocate_voice_for_group_entry(0x12, 0, moby);
+    if (!voice_is_playing(moby, *(int *)(red_lock_vars + 0x70))) {
+        *(int *)(red_lock_vars + 0x70) = allocate_voice_for_group_entry(0x12, 0, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
