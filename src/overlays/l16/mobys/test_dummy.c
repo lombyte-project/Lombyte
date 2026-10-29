@@ -691,7 +691,7 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
     short *group_entry;
     float  angle_increment;
     char  *group_moby;
-    char  *data;
+    char  *test_dummy_group_member_data;
     if (moby->group != 0xFF) {
         angle_increment = test_dummy_glow_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C;
         group_entry = (short *)D_L16_001ABCC0_c2[moby->group];
@@ -701,10 +701,10 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
                 (char *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
             if (MOBY(group_moby)->oclass != 0x21D)
                 goto again;
-            data = ((char *)MOBY(group_moby)->pvars);
-            *(int *)(data + 0x118) = D_L16_0015F5CC;
-            *(float *)(data + 0x11C) =
-                fast_add_rotations(*(float *)(data + 0x11C), angle_increment);
+            test_dummy_group_member_data = ((char *)MOBY(group_moby)->pvars);
+            *(int *)(test_dummy_group_member_data + 0x118) = D_L16_0015F5CC;
+            *(float *)(test_dummy_group_member_data + 0x11C) =
+                fast_add_rotations(*(float *)(test_dummy_group_member_data + 0x11C), angle_increment);
         } while (*group_entry++ >= 0);
         add_draw_callback(draw_test_dummy_group_glows, moby);
     }
