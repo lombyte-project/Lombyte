@@ -394,11 +394,11 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
 
     sum *= 0.25f;
     {
-        f32 c = sum * 5.0f;
-        if (1.0f < c)
-            c = 1.0f;
-        c = 1.0f - c;
-        if (c < follow_camera_rotation_slide_trigger_threshold_gp)
+        f32 rotation_slide_trigger_value = sum * 5.0f;
+        if (1.0f < rotation_slide_trigger_value)
+            rotation_slide_trigger_value = 1.0f;
+        rotation_slide_trigger_value = 1.0f - rotation_slide_trigger_value;
+        if (rotation_slide_trigger_value < follow_camera_rotation_slide_trigger_threshold_gp)
             m->h12 = scale_game_frames(0x20);
     }
     if (m->h12 != 0) {
