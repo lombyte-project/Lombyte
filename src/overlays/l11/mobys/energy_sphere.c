@@ -50,25 +50,25 @@ void energy_sphere_update(unsigned char *moby) {
         ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
         ENERGY_SPHERE_MOVE_AND_DETONATE = 2
     };
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *energy_sphere_private_vars = ((char *)MOBY(moby)->pvars);
     float  previous_position[4];
     float *vp;
     FUN_L11_00319028_c((char *)moby);
     switch (moby[0x20]) {
     case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
-        if (fast_dec_timer(data + 0x20)) {
+        if (fast_dec_timer(energy_sphere_private_vars + 0x20)) {
             float *scale_approach_pointer = ((float *)MOBY(moby)->pclass);
             float  scale_approach_frames = (float)scale_game_frames(0x14);
             float  target_scale = scale_approach_pointer[9];
             float  scale_approach_step = (((float *)MOBY(moby)->pclass))[9] / scale_approach_frames;
-            scale_approach_pointer = (float *)(data + 0x1C);
+            scale_approach_pointer = (float *)(energy_sphere_private_vars + 0x1C);
             approach_value((float *)&MOBY(moby)->scale, target_scale, scale_approach_step);
             approach_value(scale_approach_pointer,
                            *(float *)&energy_sphere_particle_scale_target_gp,
                            *(float *)&energy_sphere_particle_scale_target_gp /
                                (float)scale_game_frames(0x14));
         }
-        if (fast_dec_timer(data + 0x28)) {
+        if (fast_dec_timer(energy_sphere_private_vars + 0x28)) {
             mark_moby_for_removal(moby);
         }
         break;
@@ -77,11 +77,11 @@ void energy_sphere_update(unsigned char *moby) {
         FUN_L11_003191c0_c((char *)moby);
         vp = previous_position;
         qcopy(vp, sphere_position);
-        fast_vec_add(sphere_position, sphere_position, data);
-        if (fast_dec_timer(data + 0x20) || collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
-            collect_mobies_in_sphere(0.333f, (char *)moby + 0x10, 0, *(void **)(data + 0x24), 0)) {
+        fast_vec_add(sphere_position, sphere_position, energy_sphere_private_vars);
+        if (fast_dec_timer(energy_sphere_private_vars + 0x20) || collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
+            collect_mobies_in_sphere(0.333f, (char *)moby + 0x10, 0, *(void **)(energy_sphere_private_vars + 0x24), 0)) {
             spawn_explosion(moby,
-                            data,
+                            energy_sphere_private_vars,
                             (char *)moby + 0x10,
                             1.5f,
                             2.0f,
