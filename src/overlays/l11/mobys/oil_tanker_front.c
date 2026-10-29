@@ -458,12 +458,12 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
         moby_array_index = *list & 0x7FFF;
         group_moby = (struct Moby *)((moby_array_index << 8) + (u32)D_L11_0015FFD8);
         if (group_moby->oclass == 0x527) {
-            struct L11ChainVars *data = (struct L11ChainVars *)group_moby->pvars;
+            struct L11ChainVars *group_moby_chain_vars = (struct L11ChainVars *)group_moby->pvars;
             /* no memory clobber: lets the D_L11_0015FFD8 load be hoisted out of the loop as in retail */
             qcopy_nc(&group_moby->pos, table + offset * 16 + 0x10);
-            data->count = offset;
-            data->path_index = table_index;
-            data->point = 0;
+            group_moby_chain_vars->count = offset;
+            group_moby_chain_vars->path_index = table_index;
+            group_moby_chain_vars->point = 0;
             offset += stride;
         }
     } while (*(short *)list++ >= 0);
