@@ -297,11 +297,11 @@ void bomb_glove_update(struct Moby *moby) {
             struct Moby *candidate;
             hero.throw_target = 0;
             while ((candidate = D_L00_001ABA00_lui[entry]) != 0) {
-                u8 *data = get_moby_target_info(candidate);
-                if ((s8)candidate->state >= 0 && data && (candidate->flags & 0x1000)) {
+                u8 *candidate_aim_info = get_moby_target_info(candidate);
+                if ((s8)candidate->state >= 0 && candidate_aim_info && (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
                     qcopy(&temporary.arc, &candidate->pos);
-                    temporary.arc.f[2] += *(f32 *)(data + 0x10);
+                    temporary.arc.f[2] += *(f32 *)(candidate_aim_info + 0x10);
                     distance = vector_distance(&pos, &temporary.arc);
                     candidateAngle =
                         fast_arc_tan(temporary.arc.f[0] - pos.f[0], temporary.arc.f[1] - pos.f[1]);
