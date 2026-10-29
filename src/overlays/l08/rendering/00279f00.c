@@ -54,7 +54,7 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
 
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char *D_L08_001B292C NOT_SDA;
+unsigned char *D_L08_001B292C NOT_SDA = 0;
 
 unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) __asm__("FUN_L08_0027b450");
