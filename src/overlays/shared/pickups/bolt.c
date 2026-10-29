@@ -464,7 +464,7 @@ void collect_bolt(struct Moby *bolt) __asm__("FUN_L00_002a6b70");
 void collect_bolt(struct Moby *bolt) {
     Vec4        sparkle_initial_velocity;
     Vec4        pos;
-    s32         value;
+    s32         bolt_value;
     s32         spin;
     f32         k;
     f32         size;
@@ -473,26 +473,26 @@ void collect_bolt(struct Moby *bolt) {
     switch (bolt->oclass) {
     default:
     case 0:
-        value = 1;
+        bolt_value = 1;
         break;
     case BOLT_CLASS_FIVE:
-        value = 5;
+        bolt_value = 5;
         break;
     case BOLT_CLASS_TWENTY:
-        value = 20;
+        bolt_value = 20;
         break;
     case BOLT_CLASS_FIFTY:
-        value = 50;
+        bolt_value = 50;
         break;
     }
 
     bolt_source = bolt->parent;
     if (bolt_source && !(bolt_source->id & 0x80))
-        bolt_source_stats[current_level_index][bolt_source->id].bolts += value;
-    current_bolt_count += value;
+        bolt_source_stats[current_level_index][bolt_source->id].bolts += bolt_value;
+    current_bolt_count += bolt_value;
     if (bolt->pvars[0x40] || (D_L00_0015F598 && (void *)bolt < D_L00_0015FFDC_u))
-        D_0015EE2C += value;
-    level_bolts[current_level_index] += value;
+        D_0015EE2C += bolt_value;
+    level_bolts[current_level_index] += bolt_value;
 
     k = 0.7f;
     queue_animation_update(2,
