@@ -270,8 +270,8 @@ void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotat
 
 void FUN_L05_00315f70(char *moby) {
     int   i = 0;
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *tab = ((char *)l05_paths[*(int *)(data + 0x68)]);
+    char *lift_vars = ((char *)MOBY(moby)->pvars);
+    char *tab = ((char *)l05_paths[*(int *)(lift_vars + 0x68)]);
     float ring_point_angle = 0.0f;
     float step = 6.28318f / (float)(*(int *)tab - 1);
     for (; i < *(int *)tab; i++) {
