@@ -3,7 +3,7 @@
 `src/` is grouped by subsystem: `audio`, `gameplay`, `input`, `math`,
 `rendering`, `runtime`, `sdk`, `storage`, `ui`, `video` and `world`.
 
-- A file is named after the function it holds (`ui/map/save_map_coverage.c`);
+- A file is named after the function it holds (`ui/map/coverage/save_map_coverage.c`);
   `fun_<address>.c` means the function is not understood yet.
 - `assembly/` holds units that still build from the retail assembly (the
   oracle), with their C draft under `#else`. Promotion moves the file out of

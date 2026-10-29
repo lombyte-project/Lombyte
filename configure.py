@@ -115,7 +115,7 @@ ROUTE_EXCEPTIONS = {
     "audio/rpc/snd_send_current_batch": "cc_sn",
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
-    "ui/map/downsample_map_coverage": "cc_sn",
+    "ui/map/coverage/downsample_map_coverage": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
@@ -141,7 +141,7 @@ ROUTE_EXCEPTIONS = {
     "gameplay/animation/update_moby_animation_state": "cc_sn_padless",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
-    "gameplay/entities/patch_moby_gifs": "cc_sn_padless",
+    "gameplay/entities/draw/patch_moby_gifs": "cc_sn_padless",
     # fun_00221460: A dead `p = m->items;` statement that cc1 deletes still
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
@@ -487,7 +487,7 @@ DATA_OVERLAYS = {
     "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
-    "ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
+    "ui/map/level_selection/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
     "rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
     "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
     "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
