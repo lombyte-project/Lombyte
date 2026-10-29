@@ -61,7 +61,7 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
         STATE_BURST_OR_LAUNCH = 2,
         STATE_BALLISTIC_FLIGHT = 3
     };
-    float *data = (float *)moby->pvars;
+    float *hit_response_and_flight_private_vars = (float *)moby->pvars;
     long   state = moby->state;
     float  magnitude;
 
@@ -73,8 +73,8 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
                 goto remove;
         }
         moby->state = 1;
-        if (*(int *)data != 0)
-            *(int *)(*(int *)data) = 3;
+        if (*(int *)hit_response_and_flight_private_vars != 0)
+            *(int *)(*(int *)hit_response_and_flight_private_vars) = 3;
         return;
     }
     case STATE_WAIT_FOR_HIT:
@@ -179,25 +179,25 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
             float speed = random_float_between(10.0f, 15.0f) * frame_time;
             moby->collision = 0;
             moby->state = 3;
-            data[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
-            data[3] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
-            subtract_vector_9768(data + 4, &moby->pos.x, D_0013F3D0);
-            data[6] = 0.0f;
-            scale_vector_9768(data + 4, data + 4, speed);
+            hit_response_and_flight_private_vars[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
+            hit_response_and_flight_private_vars[3] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
+            subtract_vector_9768(hit_response_and_flight_private_vars + 4, &moby->pos.x, D_0013F3D0);
+            hit_response_and_flight_private_vars[6] = 0.0f;
+            scale_vector_9768(hit_response_and_flight_private_vars + 4, hit_response_and_flight_private_vars + 4, speed);
             random_vector(vector, speed, speed);
-            add_vector_9768(data + 4, data + 4, vector);
-            data[6] = absolute_float(data[6]);
-            data[7] = moby->pos.z;
+            add_vector_9768(hit_response_and_flight_private_vars + 4, hit_response_and_flight_private_vars + 4, vector);
+            hit_response_and_flight_private_vars[6] = absolute_float(hit_response_and_flight_private_vars[6]);
+            hit_response_and_flight_private_vars[7] = moby->pos.z;
             return;
         }
         break;
     case STATE_BALLISTIC_FLIGHT: {
         float *pos = &moby->pos.x;
-        moby->rot.x = fast_add_rotations(moby->rot.x, data[2]);
-        moby->rot.y = fast_add_rotations(moby->rot.y, data[2]);
-        data[6] -= frame_time_sq * 20.0f;
-        add_vector_9768(pos, pos, data + 4);
-        if (data[7] - 16.0f > moby->pos.z || coll_sphere(1.0f, pos, 2, moby)) {
+        moby->rot.x = fast_add_rotations(moby->rot.x, hit_response_and_flight_private_vars[2]);
+        moby->rot.y = fast_add_rotations(moby->rot.y, hit_response_and_flight_private_vars[2]);
+        hit_response_and_flight_private_vars[6] -= frame_time_sq * 20.0f;
+        add_vector_9768(pos, pos, hit_response_and_flight_private_vars + 4);
+        if (hit_response_and_flight_private_vars[7] - 16.0f > moby->pos.z || coll_sphere(1.0f, pos, 2, moby)) {
             cart_burst(1.5f, 0.0f, moby, pos, -1);
             mark_moby_for_removal(moby);
         }
