@@ -17,7 +17,7 @@ extern void FlushCache(s32 a0);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 dbp, s32 dbw, s32 psm, s32 x, s32 y, s32 w,
                                 s32 h);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *img, s32 src);
-extern s32 sceGsSyncPath(s32 a0, s32 a1) __asm__("FUN_00120558");
+extern s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) __asm__("FUN_00120558");
 
 void upload_texture_images(s32 base, s32 count, struct TextureImage *p) __asm__("FUN_00203120");
 

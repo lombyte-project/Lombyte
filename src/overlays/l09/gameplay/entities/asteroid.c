@@ -1618,7 +1618,7 @@ void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void 
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
+extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 extern void func_L00_00263B78_2F9A50(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_2F9A50(void *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_2F9A50(float, float) __asm__("FUN_001fa580");
@@ -1724,7 +1724,7 @@ extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
-extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 

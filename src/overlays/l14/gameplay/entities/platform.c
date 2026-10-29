@@ -719,7 +719,7 @@ extern char D_0013E633[] __asm__("D_0013F3D0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");
 extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58");

@@ -434,7 +434,7 @@ extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int lerp_vector() __asm__("FUN_001f9a40");
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
-extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
+extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");

@@ -152,7 +152,7 @@ extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned short D_001417A2 NOT_SDA;
 extern unsigned short D_00141888 NOT_SDA;
 extern unsigned short D_001418E8 NOT_SDA;
-extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern char D_00141968[];
 extern s32 D_0014EE90[];
 

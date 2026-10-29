@@ -220,7 +220,7 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int D_L15_0015F5C4;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
-extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");

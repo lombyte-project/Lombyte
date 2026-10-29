@@ -19,9 +19,9 @@ extern s32 sceCdSync(s32 a0);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *load_image, s32 image_address);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *load_image, s32 block_offset, s32 buffer_width,
                                 s32 pixel_storage_format, s32 x, s32 y, s32 width, s32 height);
-extern s32 sceGsSyncPath(s32 a0, s32 a1) __asm__("func_00120558");
+extern s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) __asm__("func_00120558");
 extern s32 decompress_wad(s32 source_address, s32 destination_address) __asm__("func_0020B618");
-extern s32 submit_audio_stream_io_request(void *a0, u32 a1, u32 a2) __asm__("func_00216728");
+extern s32 submit_audio_stream_io_request(void *read_destination, u32 lsn, u32 sectors) __asm__("func_00216728");
 
 void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 second_slide,
                                     u64 *shared_texture, u64 *first_texture,

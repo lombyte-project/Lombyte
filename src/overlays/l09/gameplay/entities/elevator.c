@@ -1441,7 +1441,7 @@ extern int func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern void func_001F9BF0_30A560(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
+extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 extern float func_001FA748_30A560(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002617B0_30A560(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");

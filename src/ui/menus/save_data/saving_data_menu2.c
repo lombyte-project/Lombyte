@@ -19,7 +19,7 @@ extern struct MenuPage D_001D4F98[];
 extern void InitializeGlobalStateEntry(s32 value);
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void start_memory_card_save(s32 arg0, s32 arg1) __asm__("FUN_00226a70");
+extern void start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
 extern s32 load_level_zero_preserving_progress() __asm__("FUN_00226b08");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 

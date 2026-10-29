@@ -1261,7 +1261,7 @@ extern Level14State D_L14_0016CF60;
 extern int D_L14_0015F5C4;
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
-extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void update_moby_list_clear_notification(struct Moby *moby) __asm__("FUN_L14_003087c0");

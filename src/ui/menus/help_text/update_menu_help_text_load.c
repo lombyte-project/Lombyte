@@ -9,7 +9,7 @@ extern u8 D_001996D0[];
 
 extern s32 help_msgs __asm__("D_0015F6A0");
 
-extern s32 start_audio_stream_read(s32 menu, s32 arg1, s32 arg2) __asm__("FUN_00216788");
+extern s32 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 
 static inline int pauseSlotCount(void) {

@@ -1319,7 +1319,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
-extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern int compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");

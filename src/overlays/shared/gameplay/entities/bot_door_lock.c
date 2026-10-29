@@ -135,7 +135,7 @@ void draw_bot_door_lock_glow(char *moby) {
 /* state transitions of a moby depending on its id at 0xA6 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
 
-extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 

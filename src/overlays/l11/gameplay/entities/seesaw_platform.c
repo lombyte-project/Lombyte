@@ -3083,7 +3083,7 @@ extern float D_L11_001622CC __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/puffoid_update.h"
 extern float D_L11_001622F0 __attribute__((sda));
 extern void update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
-extern void update_moby_target_heading_and_conditional_movement(char *a0, float *a1) __asm__("FUN_L11_00315f58");
+extern void update_moby_target_heading_and_conditional_movement(char *moby, float *target_position) __asm__("FUN_L11_00315f58");
 extern short count_group_class_4de_mobys_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 extern void spawn_4318(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void FUN_L00_0025a120_4318(struct Moby *) __asm__("FUN_L00_0025a120");

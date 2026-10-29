@@ -1720,7 +1720,7 @@ void spawn_floating_platform_sparks(struct Moby *moby) {
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float);
-extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32_p() __asm__("FUN_001fa6d0");
 extern short D_L18_00161BFC __attribute__((sda));

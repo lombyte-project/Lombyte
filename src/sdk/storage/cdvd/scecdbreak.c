@@ -4,7 +4,7 @@ extern volatile u32 D_00131314[];
 extern u8 D_001324C0[];
 extern u8 D_00132D08[];
 extern s32 SignalSema(s32 semaId);
-extern s32 cd_check_scmd(s32 arg0) __asm__("func_00120D40");
+extern s32 cd_check_scmd(s32 cmd) __asm__("func_00120D40");
 extern s32 sceSifCallRpc(void *pkt, u32 cmd, s32 mode, void *send, s32 sendsize, void *recv,
                          s32 recvsize, void *endfunc, void *endparam);
 s32 sceCdBreak(void) {

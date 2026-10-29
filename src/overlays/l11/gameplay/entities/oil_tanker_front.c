@@ -1469,7 +1469,7 @@ short count_listed_blarg_ships_in_state_5(int moby_list_index) {
 extern char D_L11_001677C0[];
 extern f32 D_L11_001677D0[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+extern s32 random_integer_below(s32 limit) __asm__("FUN_00213260");
 extern void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 char *activate_listed_blarg_ship(int list) __asm__("FUN_L11_0031a7d8");

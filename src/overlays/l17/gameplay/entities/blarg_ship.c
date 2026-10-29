@@ -32,7 +32,7 @@ extern unsigned char D_0013D4DF NOT_SDA;
 extern int pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern void DebugPrint();
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");

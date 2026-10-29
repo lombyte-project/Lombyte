@@ -2264,7 +2264,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
 
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void suck_beam_queue_draw(int arg0) __asm__("FUN_L00_002defe0");
+extern void suck_beam_queue_draw(int draw_callback_context) __asm__("FUN_L00_002defe0");
 
 void detach_snagglebeast_rope_particles(int target_entry) {
     float segment_offset[4];

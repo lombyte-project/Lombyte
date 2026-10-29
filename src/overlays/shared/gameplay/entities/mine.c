@@ -1566,7 +1566,7 @@ extern unsigned char *FUN_L00_002603d0_2adb30(unsigned char *) __asm__("FUN_L00_
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_0026a9f0_2adb30(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
-extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern int FUN_L00_002ad410_2adb30(void *, void *, int) __asm__("FUN_L00_002ad410");
 extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");

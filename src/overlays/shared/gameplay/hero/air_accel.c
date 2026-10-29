@@ -46,7 +46,7 @@ int get_hero_idle_animation_index(int item_lookup_enabled) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
 
-extern int request_grouped_voice(int a0, int a1, int a2, int a3, int a4) __asm__("FUN_L00_0028de68");
+extern int request_grouped_voice(int voice_group_index, int voice_pair_index, int voice_index_offset, int voice_flags, int voice_moby) __asm__("FUN_L00_0028de68");
 
 void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 
