@@ -105,12 +105,12 @@ void draw_fading_ring_effect(struct Moby *moby) {
     int          index = 0;
     unsigned int green = 0x80;
     float        band = 0.0f;
-    char        *data = ((char *)moby->pvars);
+    char        *ring_effect_vars = ((char *)moby->pvars);
     unsigned int green_step = (green / 11) & 0xFF;
     float        radius_threshold = 0.9f;
     float        inner_scale = 0.96f;
     float        pi = 3.1415927f;
-    *(long *)(packet + 0x78) = get_effect_texture(*(int *)(data + 0x18));
+    *(long *)(packet + 0x78) = get_effect_texture(*(int *)(ring_effect_vars + 0x18));
     *(long *)(packet + 0x80) = 0xFF9000000260L;
     *(long *)(packet + 0x70) = 4;
     *(long *)(packet + 0x88) = 0x8000000048L;
@@ -122,11 +122,11 @@ void draw_fading_ring_effect(struct Moby *moby) {
         *(int *)(packet + 0x48) = color;
         *(int *)(packet + 0x44) = color;
         *(int *)(packet + 0x40) = color;
-        if (*(float *)(data + 8) < radius_threshold)
-            radius = *(float *)(data + 8) * band;
+        if (*(float *)(ring_effect_vars + 8) < radius_threshold)
+            radius = *(float *)(ring_effect_vars + 8) * band;
         else
-            radius = *(float *)(data + 8) - band * radius_threshold;
-        side = (1.0f - band * 0.5f) * *(float *)(data + 0x10);
+            radius = *(float *)(ring_effect_vars + 8) - band * radius_threshold;
+        side = (1.0f - band * 0.5f) * *(float *)(ring_effect_vars + 0x10);
         ft = convert_integer_to_float(D_L07_0015F5CC);
         phase = split_float_fraction(phase_work, ft / (band * 40.0f + 40.0f));
         if ((index & 1) == 0)
