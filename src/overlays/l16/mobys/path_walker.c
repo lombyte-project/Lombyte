@@ -281,7 +281,7 @@ void initialize_path_walker_group(struct Moby *moby) {
     rank = count;
     for (i = 0; i < count; i++) {
         unsigned char *current;
-        L16WalkerData *data;
+        L16WalkerData *selected_walker_data;
         unsigned short flags;
 
         if (i == count - 1) {
@@ -305,17 +305,17 @@ void initialize_path_walker_group(struct Moby *moby) {
         *(float *)(current + 0x2C) *= path_walker_initial_scale_multiplier;
         *(int *)(current + 0x94) = 0;
         *(unsigned short *)(current + 0x32) = flags;
-        data = *(L16WalkerData **)(current + 0x78);
-        data->parameter = (float)rank * (period / convert_integer_to_float(count));
-        data->owner = previous;
-        data->period = period;
+        selected_walker_data = *(L16WalkerData **)(current + 0x78);
+        selected_walker_data->parameter = (float)rank * (period / convert_integer_to_float(count));
+        selected_walker_data->owner = previous;
+        selected_walker_data->period = period;
         previous = current;
-        data->height_step = random_float_between(path_walker_height_range_start_gp,
+        selected_walker_data->height_step = random_float_between(path_walker_height_range_start_gp,
                                                  path_walker_height_range_end_gp);
-        data->speed =
+        selected_walker_data->speed =
             random_float_between(path_walker_speed_range_start_gp, path_walker_speed_range_end_gp) *
             frame_time;
-        data->target_speed = data->speed;
+        selected_walker_data->target_speed = selected_walker_data->speed;
         current[0x20] = 1;
         rank--;
     }
