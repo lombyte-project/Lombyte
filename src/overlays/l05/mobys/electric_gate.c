@@ -27,7 +27,7 @@ void electric_gate_update(char *gate_moby) {
         ELECTRIC_GATE_WAIT_FOR_TRIGGER = 1,
         ELECTRIC_GATE_TRIGGERED = 2
     };
-    char *data = ((char *)MOBY(gate_moby)->pvars);
+    char *electric_gate_vars = ((char *)MOBY(gate_moby)->pvars);
     int   state = MOBY(gate_moby)->state;
     char *base;
     char *tab;
@@ -41,7 +41,7 @@ void electric_gate_update(char *gate_moby) {
         MOBY(gate_moby)->flags |= 1;
         MOBY(gate_moby)->state = 1;
         MOBY(gate_moby)->visible = 0;
-        **(int **)(data + 4) = -1;
+        **(int **)(electric_gate_vars + 4) = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&electric_gate_beam_callback_frame_gp != D_L05_0015F5CC_e[2]) {
@@ -51,7 +51,7 @@ void electric_gate_update(char *gate_moby) {
         gate_position = gate_moby + 0x10;
         tab = D_L05_001671C0;
         if (fast_vec_dist(gate_position, tab) < 64.0f) {
-            voice_slot_index = **(int **)(data + 4);
+            voice_slot_index = **(int **)(electric_gate_vars + 4);
             if (voice_slot_index >= 0) {
                 base = D_0013E550;
                 voice_owner = *(char **)(base + voice_slot_index * 0x70 + 0x88);
@@ -65,18 +65,18 @@ void electric_gate_update(char *gate_moby) {
                                     goto after;
                             }
                             voice_position_base = base + 0x90;
-                            *(char **)(base + **(int **)(data + 4) * 0x70 + 0x88) = gate_moby;
-                            qcopy(**(int **)(data + 4) * 0x70 + voice_position_base, gate_position);
+                            *(char **)(base + **(int **)(electric_gate_vars + 4) * 0x70 + 0x88) = gate_moby;
+                            qcopy(**(int **)(electric_gate_vars + 4) * 0x70 + voice_position_base, gate_position);
                         }
                         goto after;
                     }
                 }
             }
-            **(int **)(data + 4) = allocate_voice_for_target_entry(0, 4, gate_moby);
+            **(int **)(electric_gate_vars + 4) = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
     after:
-        if (*(int *)data >= 0) {
-            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)data * 256 + 0xBC] != 0) {
+        if (*(int *)electric_gate_vars >= 0) {
+            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)electric_gate_vars * 256 + 0xBC] != 0) {
                 allocate_voice_for_target_entry(1, 0, gate_moby);
                 MOBY(gate_moby)->collision = 0;
                 MOBY(gate_moby)->state = 2;
