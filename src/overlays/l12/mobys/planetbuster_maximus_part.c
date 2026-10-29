@@ -454,7 +454,7 @@ extern float D_L12_00161F70;
 void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
     int   i;
     int   vertical_step_decrement_offset;
-    char *data = ((char *)moby->pvars);
+    char *detached_parts_owner_data = ((char *)moby->pvars);
     int   last = 17;
     for (i = 0, vertical_step_decrement_offset = 0; i < 18;
          i++, vertical_step_decrement_offset += 4) {
@@ -493,23 +493,23 @@ void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
             mark_moby_for_removal(slot_moby);
             D_L12_001FB688[i] = -1;
         }
-        position_or_vertical_step = *(float *)(data + 0x338 + i * 16) -
-                                    *(float *)(data + vertical_step_decrement_offset + 0x570);
-        *(float *)(data + 0x338 + i * 16) = position_or_vertical_step;
+        position_or_vertical_step = *(float *)(detached_parts_owner_data + 0x338 + i * 16) -
+                                    *(float *)(detached_parts_owner_data + vertical_step_decrement_offset + 0x570);
+        *(float *)(detached_parts_owner_data + 0x338 + i * 16) = position_or_vertical_step;
         MOBY(slot_moby)->pos.z = MOBY(slot_moby)->pos.z + position_or_vertical_step;
         if (MOBY(slot_moby)->oclass == 0x500) {
             MOBY(slot_moby)->rot.x =
                 fast_add_rotations(MOBY(slot_moby)->rot.x, D_0015ED6C * 0.34906584f);
             spring_angle(
-                slot_moby + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
+                slot_moby + 0x44, 1.5707964f, detached_parts_owner_data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
         } else if (MOBY(slot_moby)->oclass == 0x4FD) {
             MOBY(slot_moby)->rot.x =
-                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(data + 0x450 + i * 16));
+                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
             spring_angle(slot_moby + 0x44,
                          -1.5707964f,
-                         (float *)(data + 0x450 + i * 16) + 1,
+                         (float *)(detached_parts_owner_data + 0x450 + i * 16) + 1,
                          0,
-                         *(float *)(data + 0x45C + i * 16),
+                         *(float *)(detached_parts_owner_data + 0x45C + i * 16),
                          0.3f,
                          0.0f);
         } else if (MOBY(slot_moby)->oclass == 0x4FA) {
@@ -517,15 +517,15 @@ void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
             MOBY(slot_moby)->rot.x =
                 fast_add_rotations(MOBY(slot_moby)->rot.x, D_0015ED6C * -0.87266463f);
             updated_rotation_angle =
-                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(data + 0x454 + i * 16));
+                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
             MOBY(slot_moby)->pos.y = MOBY(slot_moby)->pos.y + D_0015ED6C * -4.0f;
             MOBY(slot_moby)->rot.y = updated_rotation_angle;
         } else {
             MOBY(slot_moby)->pos.y = MOBY(slot_moby)->pos.y + D_0015ED6C * -4.0f;
             MOBY(slot_moby)->rot.x =
-                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(data + 0x450 + i * 16));
+                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
             MOBY(slot_moby)->rot.y =
-                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(data + 0x454 + i * 16));
+                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
         }
         if (i == last) {
             qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
