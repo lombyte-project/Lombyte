@@ -8,6 +8,8 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -273,7 +275,6 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -341,13 +342,9 @@ typedef struct {
 } ItemDef;
 
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
-extern int weapon_ammo_counts[] __asm__("D_0013D428");
-extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern int D_L00_001B0340[] NOT_SDA;
 extern int D_L00_001C3E98[] NOT_SDA;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
-extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern int D_00141408 NOT_SDA;
 extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;
@@ -430,17 +427,12 @@ extern int D_0015EE28_macro __asm__("D_0015EE28") MACRO_ADDR;
 extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern int D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");

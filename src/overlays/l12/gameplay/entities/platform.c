@@ -511,7 +511,6 @@ extern int func_002140B0_2E2EF0(int) __asm__("FUN_00213260");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
 extern float func_001F9D10_2E2EF0(void *,void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float,float) __asm__("FUN_001fa688");
 extern float func_001F9B88_2E2EF0(float) __asm__("FUN_001f99c0");
 extern float func_002140F8_2E2EF0(float,float) __asm__("FUN_002132a8");
 extern float smooth54(float *,float,float) __asm__("FUN_00213ed8");

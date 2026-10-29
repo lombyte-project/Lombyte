@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -11,9 +12,7 @@
 #endif
 #include "qcopy.h"
 extern int func_002140B0_6fb60(int) __asm__("FUN_00213260");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");

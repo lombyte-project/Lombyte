@@ -895,7 +895,6 @@ typedef struct {
 } SaleVars;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern u8 item_text_variant[] __asm__("D_0013E520");
 extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
 extern s32 initialize_npc_dialogue(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");

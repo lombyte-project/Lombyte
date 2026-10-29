@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 
 
@@ -50,10 +51,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
@@ -66,9 +63,7 @@ extern f32 spring_angle(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 
 #define ED64 frame_scale_sq

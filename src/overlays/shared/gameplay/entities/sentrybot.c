@@ -11,6 +11,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -1143,7 +1144,6 @@ int can_sentrybot_advance_patrol(void *input_moby) {
     return 1;
 }
 /* Wakes every linked switch that can see this moby, or rearms the timer when there is no list. */
-extern int camera_secondary_mode[] __asm__("D_001413D4");
 extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
 extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
 extern int FUN_001f96f8_a0(int) __asm__("FUN_001f96f8");
@@ -2616,7 +2616,6 @@ extern int func_001FA898_2A3DD0(float) __asm__("FUN_001fa6d0");
 extern void func_001F9BF0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FF4B0_2A3DD0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001FA4A0_2A3DD0(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");

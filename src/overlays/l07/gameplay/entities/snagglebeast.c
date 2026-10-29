@@ -683,7 +683,6 @@ extern void FUN_L00_0025a120(struct Moby *);
 extern int get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
 extern int FUN_L00_001fefc8(void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void suck_beam_queue_draw(int) __asm__("FUN_L00_002defe0");
 extern void add_draw_callback(void (*)(), void *) __asm__("FUN_001f4600");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
@@ -2308,7 +2307,6 @@ extern char *hit_lookup_19040(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420
 extern s32 hit_test_19040(struct Moby *, char *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");

@@ -151,9 +151,7 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_258490(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9bf8_258490(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");

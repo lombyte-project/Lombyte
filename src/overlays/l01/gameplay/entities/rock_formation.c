@@ -1389,7 +1389,6 @@ typedef struct {
     s16 oclass;
 } HoverMoby;
 
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
 void door_left_update(HoverMoby *door_moby) {

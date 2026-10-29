@@ -1105,7 +1105,6 @@ extern void mark_moby_for_removal_cf(struct Moby *, int, int) __asm__("FUN_L00_0
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
 extern void cart_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,

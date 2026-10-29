@@ -319,7 +319,6 @@ extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");

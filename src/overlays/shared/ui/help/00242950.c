@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
@@ -18,10 +19,6 @@ typedef union {
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
 extern u8 D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");

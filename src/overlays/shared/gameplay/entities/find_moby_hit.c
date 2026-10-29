@@ -485,7 +485,6 @@ typedef union {
 } Vec4_25aca0 __attribute__((aligned(16)));
 
 extern void compute_moby_joint_matrices(void *, int, int) __asm__("FUN_0020fa90");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector(float, void *, void *) __asm__("FUN_001f9a80");

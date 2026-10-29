@@ -239,7 +239,6 @@ typedef struct {
     char *c;
 } C_2a4e48;
 extern C_2a4e48 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
-extern float frame_time __asm__("D_0015ED6C");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 void camera_object_update(char *camera_object) {

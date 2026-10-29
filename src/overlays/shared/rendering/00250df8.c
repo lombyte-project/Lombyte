@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/gameplay/state/item_state.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250df8.s", FUN_L00_00250df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250e30.s", FUN_L00_00250e30);
@@ -27,7 +28,6 @@ extern int D_0015ED84;
 extern int D_0014C190[][64];
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 extern u8 D_0013D4C0[];
-extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern Item257218 D_L00_001C40B0[] NOT_SDA;
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
@@ -71,7 +71,6 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     if (FUN_00213260(5) == 0) drops = 2;
     return drops;
 }
-extern int current_level_index __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
     __attribute__((section(".data")));

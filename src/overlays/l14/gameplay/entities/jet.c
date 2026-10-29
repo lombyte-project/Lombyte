@@ -12,6 +12,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/camera/follow_cam.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -2163,7 +2164,6 @@ extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
-extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");

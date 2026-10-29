@@ -13,6 +13,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -1705,7 +1706,6 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern char item_unlocked[] __asm__("D_0013D408");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
 
 void update_two_region_trigger_latch(char *moby) {

@@ -8,6 +8,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/collision.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 
 
 
@@ -81,7 +82,6 @@ void update_parent_following_effect(char *moby) {
 
 extern char *D_L03_001600EC;
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int sample_random_transformed_point(int transform_index, float *out) __asm__("FUN_L03_002beba0");
@@ -705,7 +705,6 @@ void spawner_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -735,14 +734,10 @@ char *spawn_class_221_moby(char *owner, float *pos, float *launch_velocity, shor
     return spawned_moby;
 }
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_0022da68(int, int, void *);
@@ -978,7 +973,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -1009,7 +1003,6 @@ extern void attach_manipulator_c(int, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -1053,7 +1046,6 @@ extern float func_001F9D10_2CDDC8(void *, void *) __asm__("FUN_001f9b48");
 extern int func_00215570_2CDDC8(void *, int) __asm__("FUN_00214720");
 extern char D_0013E633_2CDDC8[] __asm__("D_0013E533");
 extern float func_001FA888_2CDDC8(int) __asm__("FUN_001fa6c0");
-extern void fast_vec_normalize(void *,void *,float) __asm__("FUN_001f9bf8");
 extern float func_001F9F90_2CDDC8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2CDDC8(float) __asm__("FUN_001f9de0");
 extern void func_L00_00250800_2CDDC8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -1755,7 +1747,6 @@ void attach_shared_manipulator_to_matching_class_moby(char *moby) {
 }
 
 extern float FUN_001f9b48(void *, void *);
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 void fred_1_update(char *m) __asm__("FUN_L03_002dc310");
 void fred_1_update(char *moby) {

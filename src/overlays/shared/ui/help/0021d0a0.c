@@ -422,9 +422,7 @@ extern P_2291d0 D_0013F350_2291d0 __asm__("D_0013F350") NOT_SDA;
 extern X_2291d0 D_L06_001745C0_lui __asm__("D_L06_001745C0") NOT_SDA;
 extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 FUN_001f9de0_2291d0(f32) __asm__("FUN_001f9de0");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2291d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -645,7 +643,6 @@ extern void enter_hero_vehicle_mode_and_set_moby(s32, s32, struct Moby *) __asm_
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void FUN_001f9a28_2348d0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_2348d0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_2348d0(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");

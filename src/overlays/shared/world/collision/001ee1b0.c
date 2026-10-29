@@ -64,10 +64,8 @@ extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");
 extern unsigned char *D_L00_001600FC_1ee318 __asm__("D_L00_001600FC");
 extern unsigned char *D_L00_001600F4_1ee318 __asm__("D_L00_001600F4");
 extern void FUN_001f9a28_1ee318(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float FUN_001f9b20_1ee318(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) __asm__("FUN_L00_001ee318");

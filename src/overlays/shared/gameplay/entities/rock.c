@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -1191,7 +1192,6 @@ typedef struct {
     s32 count;
 } ZoneVars;
 
-extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");

@@ -241,7 +241,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern Res *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_002603d0(int);
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern void func_L00_0025F4A8_2E9358(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
@@ -1469,7 +1468,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") MACRO_ADDR;
 extern char *moby_array __asm__("D_L15_0015FFD8") MACRO_ADDR;
-extern char item_usage[] __asm__("D_00141680");
 extern char D_00141968_2ed398[] __asm__("D_00141968");
 extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
 
@@ -2171,7 +2169,6 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
 

@@ -274,10 +274,8 @@ typedef struct {
     long q88;
 } S_a95b8;
 extern void func_001F9BF0_a95b8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_L00_001FF4B0_a95b8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
 extern struct {
     float a, b;

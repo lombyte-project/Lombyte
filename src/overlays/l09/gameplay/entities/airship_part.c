@@ -1,4 +1,6 @@
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
@@ -11,8 +13,6 @@ int spawn_airship_part() __asm__("FUN_L09_002c2500");
 #include "qcopy.h"
 
 extern s32 fptodp(f32) __asm__("FUN_00120478");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 typedef struct Data {
@@ -51,23 +51,17 @@ extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern char alternate_item_available[] __asm__("D_0013D388");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
 extern Pair_2c26c8 D_L09_001613D0 NOT_SDA;

@@ -13,6 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_pool.h"
 #include "sda.h"
+#include "rnc/input/pad_globals.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -531,7 +532,6 @@ extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
-extern int pad_held[] __asm__("D_0013CAE0") NOT_SDA;
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;

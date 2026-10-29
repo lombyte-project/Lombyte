@@ -463,7 +463,6 @@ extern void * spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, i
 extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
-extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 
 #define func_001F9850_2BFBB8 ((int (*)(int))scale_game_frames)

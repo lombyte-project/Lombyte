@@ -1732,7 +1732,6 @@ int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern void func_L00_001FF4B0_2E17B8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
 extern Particle_2E17B8 *func_L00_002757E8_2E17B8(void *, void *, int, Moby *) __asm__("FUN_L00_00274948");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");

@@ -9,11 +9,11 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/gameplay/state/item_state.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
 extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");

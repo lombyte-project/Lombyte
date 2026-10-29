@@ -1676,7 +1676,6 @@ extern float func_001FA888_2B4E40(int) __asm__("FUN_001fa6c0");
 extern int func_001F9938_2B4E40(void *) __asm__("FUN_001f9770");
 extern float func_001FA748_2B4E40(float, float) __asm__("FUN_001fa580");
 extern void func_001F9C30_2B4E40(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_002140B0_2B4E40(int) __asm__("FUN_00213260");
 extern void func_L00_001FF4B0_2B4E40(void *, void *, float) __asm__("FUN_001f9bf8");
 

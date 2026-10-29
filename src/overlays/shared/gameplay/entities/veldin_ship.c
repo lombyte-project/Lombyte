@@ -512,7 +512,6 @@ extern void FUN_0028dbe8_2d09b8(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
 extern s32 FUN_0025e3b8_2d09b8(void *) __asm__("FUN_L00_0025e3b8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void spawn_spinning_fade_in_out_effect_particle(f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff8b0_2d09b8(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern s32 FUN_00200250_2d09b8(f32) __asm__("FUN_001fa6d0");

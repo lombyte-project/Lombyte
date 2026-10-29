@@ -19,7 +19,6 @@ typedef struct {
     float f24;
 } S_2e89b0;
 extern float D_0013CA40_lui[] __asm__("D_0013CA40") NOT_SDA;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
 void follow_camera_read_stick(char *camera_object, float *turn_input_out, float *pitch_input_out) {
@@ -75,11 +74,8 @@ typedef float V_2e8bb8[4] __attribute__((aligned(16)));
 extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
     __attribute__((section(".data")));
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_001f9af0_2e8bb8(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void FUN_001f9bf8_2e8bb8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");

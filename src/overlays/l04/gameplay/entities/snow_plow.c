@@ -1733,12 +1733,10 @@ typedef struct {
 } L10SpriteData;
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_298940(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");

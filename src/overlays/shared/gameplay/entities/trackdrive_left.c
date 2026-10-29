@@ -461,7 +461,6 @@ extern float func_001FA748_2D9F08(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002EBE88_2D9F08(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2D9F08(void *) __asm__("FUN_L00_002eaa30");
 extern int func_00216028_2D9F08(int, int) __asm__("FUN_002151d8");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void func_001F49B0_2D9F08(void (*)(void), Moby *) __asm__("FUN_001f4600");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
