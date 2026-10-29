@@ -19,7 +19,7 @@ void update_moby_transform_and_child(char *moby) {
         INITIALIZE_TRANSFORM_HISTORY = 0,
         UPDATE_TRANSFORM_FROM_HISTORY = 1
     };
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *transform_and_child_vars = ((char *)MOBY(moby)->pvars);
     char  position_delta[16];
     char *child;
     switch (MOBY(moby)->state) {
@@ -27,24 +27,24 @@ void update_moby_transform_and_child(char *moby) {
         moby[0x20] = 1;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
-        fast_vec_sub(position_delta, moby + 0x10, data + 0x60);
-        update_entity_matrix(data + 0x20, position_delta, data + 0x70, moby + 0x40);
+        fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars + 0x60);
+        update_entity_matrix(transform_and_child_vars + 0x20, position_delta, transform_and_child_vars + 0x70, moby + 0x40);
         break;
     }
-    if (MOBY(moby)->command != 0 && *(int *)(data + 0x80) != 0 && *(int *)(data + 0x84) == 0) {
+    if (MOBY(moby)->command != 0 && *(int *)(transform_and_child_vars + 0x80) != 0 && *(int *)(transform_and_child_vars + 0x84) == 0) {
         char *new_child = create_moby(0x764);
-        *(char **)(data + 0x84) = new_child;
+        *(char **)(transform_and_child_vars + 0x84) = new_child;
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
-            (*(char **)(data + 0x84))[0x31] = 1;
-            *(long *)(*(char **)(data + 0x84) + 0x38) = ((long)MOBY(moby)->spawn_frame);
-            *(float *)(*(char **)(data + 0x84) + 0x2C) *=
+            (*(char **)(transform_and_child_vars + 0x84))[0x31] = 1;
+            *(long *)(*(char **)(transform_and_child_vars + 0x84) + 0x38) = ((long)MOBY(moby)->spawn_frame);
+            *(float *)(*(char **)(transform_and_child_vars + 0x84) + 0x2C) *=
                 MOBY(moby)->scale / *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         }
     }
-    qcopy(data + 0x60, moby + 0x10);
-    qcopy(data + 0x70, moby + 0x40);
-    child = *(char **)(data + 0x84);
+    qcopy(transform_and_child_vars + 0x60, moby + 0x10);
+    qcopy(transform_and_child_vars + 0x70, moby + 0x40);
+    child = *(char **)(transform_and_child_vars + 0x84);
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
