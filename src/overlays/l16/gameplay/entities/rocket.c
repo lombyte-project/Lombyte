@@ -2906,4 +2906,3 @@ int get_target_reposition_status(char *moby_or_private_data) {
     }
     return 0;
 }
-

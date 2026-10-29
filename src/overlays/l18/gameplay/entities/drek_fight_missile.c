@@ -3869,3 +3869,14 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
         qcopy(q + 0x10, &moby->pos);
     }
 }
+
+short l18_drek_missile_wander_to_dive_random_bound_gp __asm__("D_L18_00162234") = 0x3e8;
+
+float drek_missile_trail_texture_coordinates[4][2] __asm__("D_L18_001DA2F0") = {
+    {0.0f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 0.5f},
+    {1.0f, 0.5f},
+};
+
+short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C") = 0x55;

@@ -3547,3 +3547,10 @@ void rocket_update(struct Moby *moby) {
         return;
     }
 }
+
+s32 shuttle_enter_riding_transition_frames_gp __asm__("D_L14_00161B8C") = 0x3c;
+s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") = 0x5a;
+
+s32 D_L14_00162238 = 0;
+
+s32 wind_push_decay_frames_gp __asm__("D_L14_00161C04") = 0x1e;

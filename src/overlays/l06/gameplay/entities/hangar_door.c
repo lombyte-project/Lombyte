@@ -3769,3 +3769,11 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
     fast_vec_add(&position_delta, &position_delta, &moby->pos);
     update_entity_matrix(moby_data->f20, &position_delta, &initial_rotation, &moby->rot);
 }
+
+float D_L06_00161D78_gp __asm__("D_L06_00161D78") = 0;
+float D_L06_00161D7C_gp __asm__("D_L06_00161D7C") = 0;
+float D_L06_00161D80_gp __asm__("D_L06_00161D80") = 0;
+
+int D_L06_00161E40[4] = {0};
+int D_L06_00161E50 = 0;
+int D_L06_00161E54 = 0;

@@ -271,3 +271,5 @@ void update_airship_part(struct Moby *moby) {
         break;
     }
 }
+
+Pair_2c26c8 D_L09_001613D0 = {{0x2f000000, 0x3f000000}};

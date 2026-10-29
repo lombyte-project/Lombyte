@@ -1365,3 +1365,5 @@ void commando_update(WM *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, commando_vars->body, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, commando_vars->head, 1);
 }
+
+Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28") = {0};

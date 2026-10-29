@@ -3031,3 +3031,5 @@ mark_hit:
     if (sound >= 0)
         allocate_voice_for_target_entry(sound, 0, moby);
 }
+
+Pair_2E2A38 D_L08_00161C30 = {{0x2f000000, 0x3f000000}};

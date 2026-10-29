@@ -2075,3 +2075,13 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         break;
     }
 }
+
+char oil_tanker_link_effect_spawn_random_limit_gp[4] __asm__("D_L11_00162340") = {0xc, 0, 0, 0};
+
+short bubble_spark_spawn_random_limit_gp __asm__("D_L11_00162410") = 3;
+
+int D_L11_001625B0[2] = {0};
+
+unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590") = 0;
+
+int D_L11_00162630[2] = {0};

@@ -2035,3 +2035,20 @@ int FUN_L14_00316748(char *moby, char *other) {
     }
     return 0;
 }
+
+int helper_sequence_slot_animation_duration_frames __asm__("D_L14_00162204") = 0xf;
+
+int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") = 0x78;
+
+Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8") = {67.0f, 2.3e+02f, 132.0f};
+
+unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") = 0xc;
+
+int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") = 0x1f4;
+
+float D_L14_001624A8 = 0;
+
+int D_L14_001624B4 = 0;
+int D_L14_001624B8 = 0;
+float D_L14_001624BC = 0;
+float D_L14_001624C0 = 0;

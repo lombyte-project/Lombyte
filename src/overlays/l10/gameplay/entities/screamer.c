@@ -3430,3 +3430,5 @@ void gate_2_update(GateMoby *moby)
         break;
     }
 }
+
+int D_L10_00161EE4 = 0x5a;

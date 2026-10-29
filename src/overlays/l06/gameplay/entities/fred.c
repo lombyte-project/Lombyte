@@ -7888,3 +7888,10 @@ void draw_moby_vector_streams(char *moby) {
         pp += 16;
     }
 }
+
+V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+int D_L06_00162234 = 0;
+int D_L06_00162238 = 0;
+
+f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") = 0;

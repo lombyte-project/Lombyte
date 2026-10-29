@@ -3223,3 +3223,13 @@ void update_level14_racer(struct Moby *racer_moby) {
 char D_L14_001FBD50[] = "Turret with no aiming cuboid. UID: %d\n";
 
 char D_L14_001FBD78[] = "Turret with no waking cuboid. UID: %d\n";
+
+int machinegun_turret_target_wait_timeout_frames_gp __asm__("D_L14_00161534") = 0x12c;
+
+int minibomber_aim_return_duration_frames __asm__("D_L14_00161560") = 0xb4;
+
+int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") = 0x2d;
+
+s32 blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp __asm__("D_L14_001613BC") = 0x104;
+
+int D_L14_0016150C_gp __asm__("D_L14_0016150C") = 0x3c;

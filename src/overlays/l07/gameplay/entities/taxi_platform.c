@@ -3718,3 +3718,5 @@ f32 D_L07_001CA938[1] __attribute__((section(".data"))) = {0};
 char D_L07_00211580[] = "Moby 871 short on mines at %d in group %d compared to mine count in pVar %d\n";
 
 char D_L07_002117F8[] = "Initialization failed for moby 1059 instance #%d. Deleting.\n";
+
+int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") = 0;

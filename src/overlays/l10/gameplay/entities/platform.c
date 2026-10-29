@@ -2378,3 +2378,6 @@ void block_cave_update(struct Moby *moby) {
         }
     }
 }
+
+int D_L10_00161D64 = 0;
+int D_L10_00161D68 = 0;

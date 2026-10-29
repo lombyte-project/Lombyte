@@ -2941,3 +2941,11 @@ void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
         spawned_spark[9] = func_001FA898_r(8.0f) - 0x70;
     }
 }
+
+blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {{-1, -1, -1, 0x2f, -1, -1, 0, 0x2f, -1, 0x7f, 0, 0x2f, -1, 0x4f, 0, 0x2f}};
+
+int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0") = 0;
+int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") = 0;
+int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") = 0;
+
+int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8") = 0;

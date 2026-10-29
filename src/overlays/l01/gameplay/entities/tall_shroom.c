@@ -737,3 +737,5 @@ void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
         break;
     }
 }
+
+f32 level01_environment_map_uv_scroll_offsets[2] __asm__("D_L01_00162110") = {0};

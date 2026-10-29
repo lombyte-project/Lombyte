@@ -3206,3 +3206,21 @@ void draw_moby_billboard_quad_pair(void *mv) {
     }
     draw_ec130(&quad, 0, 0);
 }
+
+short D_L18_00161BFC_gp __asm__("D_L18_00161BFC") = -16192;
+
+int D_L18_00162008_gp __asm__("D_L18_00162008") = 0;
+int D_L18_00162010_gp __asm__("D_L18_00162010") = 0;
+int D_L18_00162024_gp __asm__("D_L18_00162024") = 0;
+
+short D_L18_001620C8_q __asm__("D_L18_001620C8") = 0;
+short D_L18_001620D0_q __asm__("D_L18_001620D0") = 0;
+
+short electric_bolt_second_side_arc_reset_frames __asm__("D_L18_001620CA") = 0;
+short electric_bolt_third_side_arc_reset_frames __asm__("D_L18_001620CC") = 0;
+short electric_bolt_fourth_side_arc_reset_frames __asm__("D_L18_001620CE") = 0;
+short electric_bolt_second_side_arc_timer_distance_reference __asm__("D_L18_001620D2") = 0;
+short electric_bolt_third_side_arc_timer_distance_reference __asm__("D_L18_001620D4") = 0;
+short electric_bolt_fourth_side_arc_timer_distance_reference __asm__("D_L18_001620D6") = 0;
+
+int D_L18_001620DC = 0;

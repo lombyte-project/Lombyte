@@ -1367,3 +1367,8 @@ void update_hoven_scrolling_texture_layers(M_bff0 *moby) {
 }
 
 s32 D_L12_001FB6CC[1] __attribute__((section(".data"))) = {0};
+
+float D_L12_00161F60_gp __asm__("D_L12_00161F60") = 0;
+float D_L12_00161F70_gp __asm__("D_L12_00161F70") = 0;
+
+float D_L12_00162108[2] = {0};

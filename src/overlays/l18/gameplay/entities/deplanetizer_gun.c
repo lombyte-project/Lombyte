@@ -1459,3 +1459,26 @@ void draw_group_class_0772_joint_glows(struct Moby *moby) {
         }
     }
 }
+
+struct Moby *l18_deplanetizer_class_059b_glow_moby __asm__("D_L18_00162528") = 0;
+
+Vec4 D_L18_00162530 = {0};
+Vec4 D_L18_00162540 = {0};
+
+EffectRadii l18_deplanetizer_object_trail_base_radii __asm__("D_L18_001F2C20") = {{1.2e+06f, 5e+05f, 8e+05f, 4e+05f, 2e+05f}};
+
+float deplanetizer_three_quad_local_vertices[4][4] __asm__("D_L18_001DFBD0") = {
+    {-1.0f, 0.0f, 1.0f, 1.0f},
+    {-1.0f, 0.0f, -1.0f, 1.0f},
+    {1.0f, 0.0f, 1.0f, 1.0f},
+    {1.0f, 0.0f, -1.0f, 1.0f},
+};
+
+float gadgebot_launch_glow_quad_uvs[4][2] __asm__("D_L18_001EFCD0") = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+};
+
+short gadgebot_joint_glow_alpha_gp __asm__("D_L18_00162654") = 0x20;

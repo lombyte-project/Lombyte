@@ -956,3 +956,12 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         break;
     }
 }
+
+RingUV l17_fleet_radial_quad_base_uvs[4] __asm__("D_L17_001D3F70") = {
+    {0},
+    {0.0f, 1.0f},
+    {0.25f, 0.0f},
+    {0.25f, 1.0f},
+};
+
+RingStep D_L17_00161BC8 = {{1.0f, 0.62831855f}};
