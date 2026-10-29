@@ -2121,8 +2121,8 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
                                                     float movement_speed_limit,
 
                                                     void *x) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *boss_position = data + 0x3C0;
+    char *boss_private_vars = ((char *)MOBY(moby)->pvars);
+    char *boss_position = boss_private_vars + 0x3C0;
     float planar_displacement[4];
     float distance_progress[4];
     float initialization_zero = 0.0f;
@@ -2140,11 +2140,11 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
         acceleration_and_braking_step,
         movement_speed_limit,
         distance_progress,
-        (float *)(data + 0x374));
-    fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(data + 0x374));
+        (float *)(boss_private_vars + 0x374));
+    fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(boss_private_vars + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
     if (planar_target_distance < 0.1f) {
-        if (*(float *)(data + 0x374) < 0.1f) {
+        if (*(float *)(boss_private_vars + 0x374) < 0.1f) {
             return 1;
         }
         return 0;
