@@ -1652,33 +1652,33 @@ update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) __asm__("FUN_L14_002aea08");
 
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) {
-    u8 *data = ((u8 *)moby->pvars);
+    u8 *interceptor_private_vars = ((u8 *)moby->pvars);
     f32 heading_offset;
     update_moby_vertical_oscillation(
         blarg_heavy_interceptor_vertical_oscillation_amplitude_gp,
         blarg_heavy_interceptor_vertical_oscillation_phase_increment_gp,
         moby,
-        (f32 *)(data + 0x1A0),
-        (f32 *)(data + 0x1A4));
+        (f32 *)(interceptor_private_vars + 0x1A0),
+        (f32 *)(interceptor_private_vars + 0x1A4));
     update_moby_rotation_oscillation(
         moby,
-        data + 0x1A8,
-        data + 0x1AC,
+        interceptor_private_vars + 0x1A8,
+        interceptor_private_vars + 0x1AC,
         blarg_heavy_interceptor_rotation_oscillation_amplitude_gp,
         blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp,
         blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp);
     if (moby->state == 1) {
-        if (fast_dec_timer_s16((s16 *)(data + 0x1B4))) {
-            *(s16 *)(data + 0x1B4) =
+        if (fast_dec_timer_s16((s16 *)(interceptor_private_vars + 0x1B4))) {
+            *(s16 *)(interceptor_private_vars + 0x1B4) =
                 scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp);
             heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude_gp;
             if (random_integer_below(2))
                 heading_offset = -heading_offset;
-            *(f32 *)(data + 0x1B0) = fast_add_rotations(moby->rot.z, heading_offset);
+            *(f32 *)(interceptor_private_vars + 0x1B0) = fast_add_rotations(moby->rot.z, heading_offset);
         }
         vendor_spring((f32 *)&moby->rot.z,
-                      (f32 *)(data + 0x1B8),
-                      *(f32 *)(data + 0x1B0),
+                      (f32 *)(interceptor_private_vars + 0x1B8),
+                      *(f32 *)(interceptor_private_vars + 0x1B0),
                       blarg_heavy_interceptor_patrol_heading_error_gain_gp,
                       blarg_heavy_interceptor_patrol_heading_damping_coefficient_gp,
                       blarg_heavy_interceptor_patrol_heading_snap_threshold_scale_gp);
