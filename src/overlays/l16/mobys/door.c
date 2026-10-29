@@ -122,7 +122,7 @@ void *activate_class_0287_group_and_find_nearest(int index, int secondary) {
     char  *nearest = 0;
     float  distance = 1000.0f;
     char  *moby;
-    int   *data;
+    int   *class_0287_moby_data;
     float  candidate_distance;
     if (!group_entry)
         return 0;
@@ -131,15 +131,15 @@ void *activate_class_0287_group_and_find_nearest(int index, int secondary) {
         if (MOBY(moby)->oclass != 0x287)
             continue;
         candidate_distance = fast_vec_dist(D_L16_001671C0, moby + 0x10);
-        data = ((int *)MOBY(moby)->pvars);
+        class_0287_moby_data = ((int *)MOBY(moby)->pvars);
         if (candidate_distance < distance) {
             distance = candidate_distance;
             nearest = moby;
         }
         moby[0x20] = 1;
-        data[5] = 0;
+        class_0287_moby_data[5] = 0;
         if (secondary)
-            data[6] = 0;
+            class_0287_moby_data[6] = 0;
         if (*group_entry++ < 0)
             return nearest;
     }
