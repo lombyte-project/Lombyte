@@ -98,7 +98,7 @@ void update_bomber_tank_bomb(struct Moby *moby) {
         DETONATION_EFFECT_SPHERICAL_VELOCITY = 3
     };
     char        *moby_bytes = (char *)moby;
-    char        *data = *(char **)(moby_bytes + 0x78);
+    char        *ballistic_projectile_vars = *(char **)(moby_bytes + 0x78);
     float        original[4];
     EffectRecord record;
     float       *position;
@@ -111,30 +111,30 @@ void update_bomber_tank_bomb(struct Moby *moby) {
 
     if (FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 0.5f, 0, moby_bytes, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
-        (D_L08_00174658_2DC9A8 != *(int *)(data + 0x20) || *(int *)(data + 0x14) != 0)) {
+        (D_L08_00174658_2DC9A8 != *(int *)(ballistic_projectile_vars + 0x20) || *(int *)(ballistic_projectile_vars + 0x14) != 0)) {
         moby_bytes[0x20] = 99;
     }
     switch ((unsigned char)moby_bytes[0x20]) {
     case PROJECTILE_STATE_FLYING: {
         position = (float *)(moby_bytes + 0x10);
         qcopy(original, position);
-        fast_vec_add(position, position, data);
-        *(float *)(data + 8) -= D_0015ED70 * 10.8f;
+        fast_vec_add(position, position, ballistic_projectile_vars);
+        *(float *)(ballistic_projectile_vars + 8) -= D_0015ED70 * 10.8f;
         qcopy(record.pos, position);
         record.owner = moby_bytes;
         record.flags = 0x810000;
         record.state = 1;
         record.scale = 1.0f;
-        qcopy(record.velocity, data);
+        qcopy(record.velocity, ballistic_projectile_vars);
         if (FUN_L08_002dc9a8_trace(original, &record, 0, moby_bytes, 0) != 0) {
-            if (*(int *)(data + 0x20) != 0 && D_L08_00174640.moby != *(int *)(data + 0x20)) {
+            if (*(int *)(ballistic_projectile_vars + 0x20) != 0 && D_L08_00174640.moby != *(int *)(ballistic_projectile_vars + 0x20)) {
                 moby_bytes[0x20] = 99;
                 qcopy(position, D_L08_00174640.point.f);
-                FUN_L08_002dc9a8_add(data, data, &D_L08_00174640.normal_x);
-                FUN_L08_002dc9a8_scale(D_0015ED6C_lui + D_0015ED6C_lui, data, data);
+                FUN_L08_002dc9a8_add(ballistic_projectile_vars, ballistic_projectile_vars, &D_L08_00174640.normal_x);
+                FUN_L08_002dc9a8_scale(D_0015ED6C_lui + D_0015ED6C_lui, ballistic_projectile_vars, ballistic_projectile_vars);
             }
         } else {
-            if (fast_dec_timer(data + 0x10) != 0)
+            if (fast_dec_timer(ballistic_projectile_vars + 0x10) != 0)
                 moby_bytes[0x20] = 99;
         }
     } break;
