@@ -165,8 +165,8 @@ void shuttle_update(struct Moby *moby) {
 }
 
 void update_shuttle_stop_world_points(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int  *stop_point_table = (int *)l08_paths[*(int *)(data + 0x8C)];
+    char *shuttle_moby_vars = (char *)moby->pvars;
+    int  *stop_point_table = (int *)l08_paths[*(int *)(shuttle_moby_vars + 0x8C)];
     if (*stop_point_table == 8) {
         char *local_point = shuttle_stop_local_points;
         char *moby_rotation_basis = &moby->rot_row0;
