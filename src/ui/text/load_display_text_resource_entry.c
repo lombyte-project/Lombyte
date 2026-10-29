@@ -18,7 +18,7 @@ struct Loc {
 
 extern void fast_vector_from_packed_chars(void *dst, s32 src) __asm__("FUN_001f9d50");
 
-void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
+void load_display_text_resource_entry(void *destination, s32 *packed_chars_source) __asm__("FUN_00214bc0");
 
 void load_display_text_resource_entry(void *destination, s32 *packed_chars_source) {
     struct Loc loc;

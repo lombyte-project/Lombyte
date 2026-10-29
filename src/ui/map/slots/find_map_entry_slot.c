@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/map/map_state.h"
 
-s32 find_map_entry_slot(s32 arg0) __asm__("FUN_002050a0");
+s32 find_map_entry_slot(s32 map_id) __asm__("FUN_002050a0");
 
 /* Returns the cache slot holding map id arg0, or -1. */
 s32 find_map_entry_slot(s32 map_id) {

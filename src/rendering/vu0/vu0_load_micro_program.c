@@ -2,7 +2,7 @@
 
 extern void SpinWait(s32);
 
-void vu0_load_micro_program(s32 arg0) __asm__("FUN_002334d8");
+void vu0_load_micro_program(s32 dma_tag_address) __asm__("FUN_002334d8");
 
 void vu0_load_micro_program(s32 dma_tag_address) {
     if ((*(volatile u32 *)0x10008000 & 0x100) != 0) {

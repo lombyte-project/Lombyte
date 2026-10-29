@@ -45,7 +45,7 @@ int map_filter_l02_0(void) {
 /* Menu hit test: arg3 is the third float ($f14). b (state 16) is
    computed before a, as retail evaluates it; the second if's own
    `arg1 >= 0xC8` is retail's second test of $a1. */
-int map_filter_l01_3(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002069D0");
+int map_filter_l01_3(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_002069D0");
 
 int map_filter_l01_3(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *hero_ptr = &hero;
@@ -66,7 +66,7 @@ extern unsigned char D_0013D396 NOT_SDA;
 /* `if (x) return 1;` in both arms with one shared `return 0;` keeps the
    flag test a beqz with the li in its slot; a result variable or a
    return 0 per arm becomes sltu. */
-int map_filter_l01_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_00206A90");
+int map_filter_l01_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00206A90");
 
 int map_filter_l01_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     int is16 = D_001413DC[0] == 0x10;
@@ -84,7 +84,7 @@ int map_filter_l01_4(int reveal_test_selector, float unused1, float unused2, flo
 /* Ported from rac1-decomp (src/game/menu.c, func_00207340). */
 /* The struct's address in a local keeps one base register for both
    field reads. */
-int map_filter_l01_5(int arg0, float unused1, float unused2, float arg1) __asm__("func_00206B10");
+int map_filter_l01_5(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00206B10");
 
 int map_filter_l01_5(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0x100) {
@@ -197,7 +197,7 @@ s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
 
 s32 region_enabled NOT_SDA = 0;
 
-s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00206E18");
+s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__("func_00206E18");
 
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     struct Hero *hero_ptr = &hero;
@@ -255,7 +255,7 @@ s32 map_filter_l07_2(s32 px, s32 py) {
 }
 
 extern u32 D_001A03BC[];
-s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) __asm__("func_00207100");
+s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__("func_00207100");
 
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     if (py < 0xBB) {
@@ -276,7 +276,7 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_v
 
 extern s32 D_001A03B4[];
 
-s32 map_filter_l07_4(s32 arg0, s32 arg1) __asm__("func_002071C0");
+s32 map_filter_l07_4(s32 point_x, s32 point_y) __asm__("func_002071C0");
 
 s32 map_filter_l07_4(s32 point_x, s32 point_y) {
     s32 point_clockwise_of_first_edge;
@@ -307,7 +307,7 @@ extern int D_001A03B8 NOT_SDA;
    [73.5, 80] with D_001A03C0 set, or for arg1 >= 0x9D in [51.5, 54] with
    D_001A03B8 set. Written as `<`/`>` rejections so they compile to retail's
    c.lt/bc1t; the second arm's `return 0` cross-jumps into the first's. */
-int map_filter_l07_5(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_00207250");
+int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207250");
 
 int map_filter_l07_5(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0x9D) {
@@ -381,7 +381,7 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 unused_input, f32 unused_parameter, f32
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207CB0). */
-int map_filter_l08_0(int arg0, int arg1) __asm__("func_00207480");
+int map_filter_l08_0(int unused_input, int reveal_test_selector) __asm__("func_00207480");
 
 int map_filter_l08_0(int unused_input, int reveal_test_selector) {
     if (reveal_test_selector >= 0x101) {
@@ -394,7 +394,7 @@ int map_filter_l08_0(int unused_input, int reveal_test_selector) {
 /* The two unused float parameters put the threshold's argument in
    $f14 (floats count consecutively from $f12). The nops after the mtc1
    and the compare are ps2eeas's (tools/ps2eeas_nops.py). */
-int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) __asm__("func_002074B0");
+int map_filter_l08_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_002074B0");
 
 int map_filter_l08_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0xE0) {
@@ -406,7 +406,7 @@ int map_filter_l08_1(int reveal_test_selector, float unused1, float unused2, flo
 /* Ported from rac1-decomp (src/game/menu.c, func_00207D38). */
 /* `(a && b) ? 1 : 0` gives retail's bc1f then bc1tl; the other arm is
    a plain `? 1 : 0`. */
-int map_filter_l08_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207508");
+int map_filter_l08_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207508");
 
 int map_filter_l08_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0xE0) {
@@ -431,7 +431,7 @@ int map_filter_l08_3(int frame, float unused0, float unused1, float value) {
 /* Returning the compare as `? 1 : 0` gives bc1t with the `li 1` in its
    slot; folded into `&&` it becomes bc1tl. The two nops, after the mtc1
    and after the compare, are ps2eeas's (tools/ps2eeas_nops.py). */
-int map_filter_l08_4(int arg0, float unused1, float unused2, float arg1) __asm__("func_002075F8");
+int map_filter_l08_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_002075F8");
 
 int map_filter_l08_4(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector >= 0xE0) {
@@ -491,7 +491,7 @@ int map_filter_l09_2(void) {
 /* Ported from rac1-decomp (src/game/menu.c, func_00207EC0). */
 /* The recorded C was right; the two ps2eeas nops were the only
    residual. */
-int map_filter_l10_0(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207690");
+int map_filter_l10_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207690");
 
 int map_filter_l10_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector >= 0xBE)
@@ -541,7 +541,7 @@ int map_filter_l10_5(void) {
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207F50). */
 extern unsigned char D_0013D3DE NOT_SDA;
-int map_filter_l11_0(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207720");
+int map_filter_l11_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207720");
 
 int map_filter_l11_0(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0xDD) {
@@ -552,7 +552,7 @@ int map_filter_l11_0(int reveal_test_selector, float unused1, float unused2, flo
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207FD0). */
 extern unsigned char D_0013D3DF NOT_SDA;
-int map_filter_l11_1(int arg0, float unused1, float unused2, float arg1) __asm__("func_002077A0");
+int map_filter_l11_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_002077A0");
 
 int map_filter_l11_1(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0xDD) {
@@ -563,7 +563,7 @@ int map_filter_l11_1(int reveal_test_selector, float unused1, float unused2, flo
 
 /* Ported from rac1-decomp (src/game/menu.c, downsample_map_coverage). */
 extern unsigned char D_0013D3E0 NOT_SDA;
-int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207800");
+int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207800");
 
 int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     if (reveal_test_selector < 0xDD) {
@@ -576,7 +576,7 @@ int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, flo
 /* The struct Hero state test of func_00207340, computed up front (retail
    evaluates it before the arg0 branch), gates the arg0 < 0x15F arm; the
    other arm is func_00208160's second test with D_0013D3E2. */
-int map_filter_l11_3(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207880");
+int map_filter_l11_3(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_00207880");
 
 int map_filter_l11_3(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *hero_ptr = &hero;
@@ -613,7 +613,7 @@ int map_filter_l11_5(void) {
    func_00207CE0). With `r` defaulting to 1, reorg turns the reset into
    retail's bc1fl with `r = 0` in its delay slot. The nop after the mtc1
    is ps2eeas's (tools/ps2eeas_nops.py). */
-int map_filter_l12_0(void *arg0, int arg1, float unused1, float unused2, float arg3) __asm__("func_002079D8");
+int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) __asm__("func_002079D8");
 
 int map_filter_l12_0(void *unused_input, int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     int reveal_allowed = 1;

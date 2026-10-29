@@ -1804,7 +1804,7 @@ extern int collect_oil_tanker_chain_mobys(char *moby, void **out) __asm__("FUN_L
 extern short *D_L11_001AC240[];
 void count_active_and_visible_listed_mobys(void *moby, void *active_moby_count, void *visible_moby_count) __asm__("FUN_L11_00311be8");
 
-void count_active_and_visible_listed_mobys(void *moby, void *a1, void *a2) __asm__("FUN_L11_00311be8");
+void count_active_and_visible_listed_mobys(void *moby, void *active_moby_count, void *visible_moby_count) __asm__("FUN_L11_00311be8");
 
 void *select_ship_lock_on_target(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float unused_float_parameter_0, float unused_float_parameter_1, float unused_float_parameter_2, void *current_target, int unused_parameter) __asm__("FUN_L11_00311948");
 

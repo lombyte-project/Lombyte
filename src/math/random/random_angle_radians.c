@@ -1,6 +1,6 @@
 #include "types.h"
 extern s32 rand();
-f32 random_angle_radians(s32 arg0) __asm__("FUN_00213308");
+f32 random_angle_radians(s32 unused_arg) __asm__("FUN_00213308");
 
 f32 random_angle_radians(s32 unused_arg) {
     return (f32)(((rand() >> 0x10) & 0xFFF) - 0x800) * 3.1415927f * 0.00048828125f;

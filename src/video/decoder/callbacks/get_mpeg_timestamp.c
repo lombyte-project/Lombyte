@@ -7,7 +7,7 @@ struct Out {
     u64 a;
     u64 b;
 };
-s32 get_mpeg_timestamp(s32 arg0, struct Out *out) __asm__("FUN_0023d140");
+s32 get_mpeg_timestamp(s32 unused_parameter, struct Out *out) __asm__("FUN_0023d140");
 
 s32 get_mpeg_timestamp(s32 unused_parameter, struct Out *out) {
     u64 timestamp_values[3];

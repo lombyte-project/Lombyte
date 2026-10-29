@@ -5,7 +5,7 @@ extern s32 _DisableIntc();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
 
-s32 disable_intc(s32 arg0) __asm__("FUN_00119028");
+s32 disable_intc(s32 intc_cause) __asm__("FUN_00119028");
 
 s32 disable_intc(s32 intc_cause) {
     u32 status;

@@ -8,8 +8,7 @@ extern s32 sceMpegCreate();
 extern s32 AddMpegCallback();
 extern s32 vi_buf_create() __asm__("func_0023BC48");
 extern s32 clear_state_field() __asm__("func_0023CC30");
-s32 video_dec_create(s32 video_dec, s32 arg1, s32 arg2, s32 data, s32 tag, s32 size, s32 ts,
-                     s32 ts_count) __asm__("FUN_0023cac8");
+s32 video_dec_create(s32 video_dec, s32 mpeg_work_area, s32 mpeg_work_area_size, s32 data, s32 tag, s32 size, s32 ts, s32 ts_count) __asm__("FUN_0023cac8");
 
 s32 video_dec_create(s32 video_dec, s32 mpeg_work_area, s32 mpeg_work_area_size, s32 data, s32 tag, s32 size, s32 ts,
                      s32 ts_count) {

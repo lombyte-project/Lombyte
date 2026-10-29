@@ -4,7 +4,7 @@
    The product is a block of its own (a do/while (0), as a macro would
    expand), which keeps the two leading differences ahead of it, as in
    retail. */
-int point_is_clockwise(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
+int point_is_clockwise(int first_point_x, int first_point_y, int reference_x, int reference_y, int second_point_x, int second_point_y) __asm__("func_00208818");
 int point_is_clockwise(int first_point_x, int first_point_y, int reference_x, int reference_y, int second_point_x, int second_point_y) {
     int dx;
     int dy;

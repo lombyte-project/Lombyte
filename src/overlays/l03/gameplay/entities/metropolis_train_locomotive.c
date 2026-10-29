@@ -990,7 +990,7 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 struct Moby;
 char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
 
-char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int a3, int a4, float f, float scale) __asm__("FUN_L03_002bad40");
+char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
 
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */

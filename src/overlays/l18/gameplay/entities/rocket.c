@@ -844,7 +844,7 @@ extern int D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
 extern f32 D_L18_00161994_gp __asm__("D_L18_00161994") __attribute__((sda));
 void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-char *launch_class_238_moby_from_list(float horizontal_speed, int a0, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) __asm__("FUN_L18_002d5cf8");
+char *launch_class_238_moby_from_list(float horizontal_speed, int launching_moby, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) __asm__("FUN_L18_002d5cf8");
 
 char *launch_class_238_moby_from_list(float horizontal_speed, int launching_moby, int moby_list_index, float *launch_position, float *target_position, int detonation_countdown) {
     float adjusted_target_position[4];

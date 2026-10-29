@@ -26,7 +26,7 @@ static inline char *PagingArena(void) {
    gives retail's copy for the loop) with the element offset first
    (`i * 8 + base`); the second through a block-local pointer, whose
    %hi retail keeps. */
-void setup_gif_paging(int arg0) __asm__("FUN_001f4280");
+void setup_gif_paging(int skip_paging_entry_reset) __asm__("FUN_001f4280");
 
 extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
 extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;

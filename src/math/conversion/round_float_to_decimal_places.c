@@ -2,7 +2,7 @@
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-f32 round_float_to_decimal_places(s32 arg0, f32 fparg0) __asm__("FUN_00214c48");
+f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) __asm__("FUN_00214c48");
 
 f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) {
     s32 count;

@@ -8,7 +8,7 @@
  * observed on every pass, in order; the retail routine has no timeout.
  * COP2 access stays in the separately documented low-level EE accessor.
  */
-s32 sceGsSyncPath(s32 arg0, s32 arg1) __asm__("FUN_00120558");
+s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) __asm__("FUN_00120558");
 
 s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) {
     u32 busy;

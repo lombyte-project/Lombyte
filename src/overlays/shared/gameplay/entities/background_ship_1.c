@@ -109,7 +109,7 @@ extern short background_ship_1_color_tween_start_gp __asm__("D_L02_00161F74") __
 extern short background_ship_1_color_tween_end_gp __asm__("D_L02_00161F78") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void spawn_background_ship_1_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002eca30");
+extern void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) __asm__("FUN_L02_002eca30");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
@@ -362,7 +362,7 @@ extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161F
 extern int background_ship_2_color_tween_start_gp __asm__("D_L02_00161FC8") __attribute__((sda));
 extern int background_ship_2_color_tween_end_gp __asm__("D_L02_00161FCC") __attribute__((sda));
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
-extern void spawn_background_ship_2_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002ed420");
+extern void spawn_background_ship_2_joint_sparks(char *moby, void *previous_position) __asm__("FUN_L02_002ed420");
 extern void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *arg) __asm__("FUN_L02_002ed658");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 extern char D_001413F4[];

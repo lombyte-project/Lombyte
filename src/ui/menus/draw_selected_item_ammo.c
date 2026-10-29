@@ -22,7 +22,7 @@ extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_00
 extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 extern s32 sprintf();
-s32 draw_selected_item_ammo(s32 arg0) __asm__("FUN_0021f158");
+s32 draw_selected_item_ammo(s32 image_descriptor_input) __asm__("FUN_0021f158");
 
 s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     u8 sp_slot[0x50];

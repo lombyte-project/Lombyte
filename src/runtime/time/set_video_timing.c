@@ -5,7 +5,7 @@
 extern s32 D_0015ED78 MACRO_ADDR;
 extern f32 frame_delta_time __asm__("D_0015ED7C") MACRO_ADDR;
 
-void set_video_timing(s32 arg0) __asm__("FUN_00214970");
+void set_video_timing(s32 pal_mode_enabled) __asm__("FUN_00214970");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;

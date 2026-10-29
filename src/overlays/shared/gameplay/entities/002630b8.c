@@ -354,7 +354,7 @@ int FUN_001f96f8_263b70(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
-void draw_trail(void *p0, void *p1, void *vel, float a, float b) __asm__("FUN_L00_00263b70");
+void draw_trail(void *first_spawn_position, void *second_spawn_position, void *particle_velocity, float first_spawn_particle_value, float second_spawn_particle_value) __asm__("FUN_L00_00263b70");
 void draw_trail(void *first_spawn_position, void *second_spawn_position, void *particle_velocity, float first_spawn_particle_value, float second_spawn_particle_value) {
     P_263b70 *part;
     T_263b70 *tail;

@@ -1,6 +1,6 @@
 #include "types.h"
 
-s32 handle_sif_initialize_command(s32 *a0, s32 *a1) __asm__("FUN_0011a448");
+s32 handle_sif_initialize_command(s32 *initialize_packet, s32 *command_state) __asm__("FUN_0011a448");
 
 s32 handle_sif_initialize_command(s32 *initialize_packet, s32 *command_state) {
     s32 value;

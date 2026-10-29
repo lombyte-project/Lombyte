@@ -5,8 +5,7 @@ extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 
-void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
-                           void *axis) __asm__("FUN_001ec530");
+void compute_camera_angles(f32 *out, void *position, void *focus, void *orbit_reference_direction, void *orbit_yaw_side_direction, void *axis) __asm__("FUN_001ec530");
 
 void compute_camera_angles(f32 *out, void *position, void *focus, void *orbit_reference_direction, void *orbit_yaw_side_direction, void *axis) {
     f32 orbit_offset[4];

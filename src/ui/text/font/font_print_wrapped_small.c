@@ -2,8 +2,7 @@
 #include "rnc/ui/text/font_metrics.h"
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern s32 font_print_wrapped() __asm__("FUN_001f6cb8");
-void font_print_wrapped_small(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
-                              s32 arg6) __asm__("FUN_001f6fd0");
+void font_print_wrapped_small(s32 start_x, s32 start_y, s32 wrap_width, s32 max_height, s32 packed_render_attributes, s32 text, s32 byte_limit) __asm__("FUN_001f6fd0");
 
 void font_print_wrapped_small(s32 start_x, s32 start_y, s32 wrap_width, s32 max_height, s32 packed_render_attributes, s32 text,
                               s32 byte_limit) {

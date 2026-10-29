@@ -1,6 +1,6 @@
 #include "types.h"
 
-void vo_buf_create(void *buffer, s32 a1, s32 a2, s32 count) __asm__("FUN_0023d190");
+void vo_buf_create(void *buffer, s32 initial_buffer_word, s32 entry_base_address, s32 count) __asm__("FUN_0023d190");
 void vo_buf_create(void *buffer, s32 initial_buffer_word, s32 entry_base_address, s32 count) {
     s32 offset;
     volatile s32 *buffer_words;

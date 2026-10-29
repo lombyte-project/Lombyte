@@ -3,7 +3,7 @@
 extern void DIntr(void);
 extern void EnableInterrupts(void);
 
-void set_d3_chcr(s32 arg0) __asm__("FUN_0023bb40");
+void set_d3_chcr(s32 chcr_value) __asm__("FUN_0023bb40");
 
 void set_d3_chcr(s32 chcr_value) {
     DIntr();

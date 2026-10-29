@@ -13,7 +13,7 @@ extern s32 sceSifDmaStat(s32 dma_id);
 extern s32 sceSifLoadModuleBuffer(s32 iop_address, s32 arguments_length, s32 arguments) __asm__("InvokeIopStatus");
 extern void invoke_state_initializer(s32 module_id) __asm__("InvokeStateInitializer");
 
-s32 load_irx_module(s32 irx_image, s32 arg1) __asm__("FUN_00201520");
+s32 load_irx_module(s32 irx_image, s32 size_bytes) __asm__("FUN_00201520");
 s32 load_irx_module(s32 irx_image, s32 size_bytes) {
     struct sceSifDmaData transfer;
     s32 module_id;

@@ -14,7 +14,7 @@ extern void font_print_window_small(struct TextRegion *, long, char *,
    is an aggregate initializer: this compiler clears it with a memset
    libcall, fills a temporary and copies that into the local with
    ldl/ldr/sdl/sdr pairs, exactly retail's sequence. */
-int draw_prompt_box(char *arg0) __asm__("FUN_00221b50");
+int draw_prompt_box(char *prompt_dimensions) __asm__("FUN_00221b50");
 
 int draw_prompt_box(char *prompt_dimensions) {
     char *text;

@@ -11,7 +11,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 
 /* Writes into arg2 the 0x30 point of joint arg1, scaled by 0x2C/1024 and moved to world space. */
-void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
+void moby_point_position(char *moby, int joint_index, void *world_position_out) __asm__("FUN_L00_0024f7c8");
 void moby_point_position(char *moby, int joint_index, void *world_position_out) {
     char joint_point_data[0x40];
     int joint_index_copy;

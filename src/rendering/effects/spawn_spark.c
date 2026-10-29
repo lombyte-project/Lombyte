@@ -38,8 +38,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("func_00214A98");
 extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
 
-struct Obj *spawn_spark(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
-                         s32 arg7, s32 arg8) __asm__("FUN_00218888");
+struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 initial_spark_word, s32 second_spark_word, s32 frame_count, s32 second_frame_count, s32 third_frame_count, s32 lookup_index_and_flags) __asm__("FUN_00218888");
 
 struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 initial_spark_word, s32 second_spark_word, s32 frame_count, s32 second_frame_count,
                          s32 third_frame_count, s32 lookup_index_and_flags) {

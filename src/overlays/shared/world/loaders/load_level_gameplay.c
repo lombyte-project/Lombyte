@@ -503,7 +503,7 @@ void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
-char *load_level_gameplay(int arg0) __asm__("FUN_L00_00241940");
+char *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
 extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;

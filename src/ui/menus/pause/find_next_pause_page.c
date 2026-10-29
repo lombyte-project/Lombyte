@@ -10,7 +10,7 @@
    own copy is why GCSE leaves its +0x138 load in the loop (only +0x134,
    read first in the body, is hoisted by loop.c), and the last block's
    copy is retail's kept %hi. */
-int find_next_pause_page(char *arg0, int reverse) __asm__("FUN_0021b7a8");
+int find_next_pause_page(char *page, int reverse) __asm__("FUN_0021b7a8");
 
 int find_next_pause_page(char *page, int reverse) {
     int ok = 0;

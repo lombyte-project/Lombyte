@@ -2,8 +2,7 @@
 
 #include "rnc/rendering/material_templates.h"
 
-void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0,
-                           s32 mode) __asm__("FUN_00202fd0");
+void set_up_vis_gif_viewer(u64 *packet_destination, s32 draw_control_high_word, s32 prim, s32 material_control_base, s32 material_control_shift2, s32 mode) __asm__("FUN_00202fd0");
 
 void set_up_vis_gif_viewer(u64 *packet_destination, s32 draw_control_high_word, s32 prim, s32 material_control_base, s32 material_control_shift2, s32 mode) {
     u64 template_texture_state0;

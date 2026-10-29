@@ -5,7 +5,7 @@ extern s32 _DisableDmac();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
 
-s32 disable_dmac(s32 arg0) __asm__("FUN_001190f8");
+s32 disable_dmac(s32 channel_index) __asm__("FUN_001190f8");
 
 s32 disable_dmac(s32 channel_index) {
     u32 status;

@@ -3,7 +3,7 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 
-void vu1_add_vif_code(s32 arg0) __asm__("FUN_00233938");
+void vu1_add_vif_code(s32 vif_code) __asm__("FUN_00233938");
 
 void vu1_add_vif_code(s32 vif_code) {
     *render_packet_cursor.words = 0x10000000;

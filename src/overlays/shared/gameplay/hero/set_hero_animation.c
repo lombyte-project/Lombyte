@@ -401,7 +401,7 @@ extern void FUN_L00_00251ce8(void *, int);
 extern void FlushCache(s32);
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
-void set_hero_animation(int a0, int a1, float t) __asm__("FUN_L00_002323b8");
+void set_hero_animation(int requested_animation_id, int starting_frame_index, float blend_frames_or_selector) __asm__("FUN_L00_002323b8");
 void set_hero_animation(int requested_animation_id, int starting_frame_index, float blend_frames_or_selector) {
     struct Hero *hero_blend_state;
     struct Hero *hero_animation_dispatch_state;

@@ -14,7 +14,7 @@ extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("f
    the end of the body, so it is its own register at the loop test as
    in retail; the header bytes go through a local copy of the buffer
    pointer (one load, as retail). */
-void send_adpcm(void *arg0) __asm__("FUN_0023afc0");
+void send_adpcm(void *audio_decoder) __asm__("FUN_0023afc0");
 
 void send_adpcm(void *audio_decoder) {
     enum {

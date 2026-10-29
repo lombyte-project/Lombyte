@@ -1474,7 +1474,7 @@ void hide_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002
 extern void hide_drek_boss_moby_group(int unused, int idx) __asm__("FUN_L18_002f6fa8");
 void show_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f7028");
 
-extern void show_drek_boss_moby_group(int a0, int idx) __asm__("FUN_L18_002f7028");
+extern void show_drek_boss_moby_group(int unused, int group_index) __asm__("FUN_L18_002f7028");
 extern void set_drek_boss_relative_aim_yaw() __asm__("FUN_L18_002f7220");
 void update_drek_boss_state_dependent_scalars(char *moby) __asm__("FUN_L18_002f7288");
 

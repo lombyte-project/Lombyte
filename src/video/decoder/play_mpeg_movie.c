@@ -8,7 +8,7 @@ extern s32 read_mpeg() __asm__("func_0023A460");
 extern s32 init_all() __asm__("func_0023A7C0");
 extern s32 term_all() __asm__("func_0023AA68");
 
-s32 play_mpeg_movie(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_0023a3b8");
+s32 play_mpeg_movie(s32 movie_source, s32 movie_size, s32 decoder_buffer_base, s32 decoder_state_base, s32 callback_registration_value) __asm__("FUN_0023a3b8");
 
 s32 play_mpeg_movie(s32 movie_source, s32 movie_size, s32 decoder_buffer_base, s32 decoder_state_base, s32 callback_registration_value) {
     decoder_buffer_address = decoder_buffer_base;

@@ -18,7 +18,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 
-s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
+s32 actuator_calc_power(s32 *output_power) __asm__("FUN_001e8d08");
 
 s32 actuator_calc_power(s32 *output_power)
 {

@@ -14,7 +14,7 @@ extern void FlushCache(s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
-s32 snd_bank_load_by_loc(s32 location, s32 arg1) __asm__("FUN_0012df20");
+s32 snd_bank_load_by_loc(s32 location, s32 byte_offset) __asm__("FUN_0012df20");
 
 s32 snd_bank_load_by_loc(s32 location, s32 byte_offset) {
     snd_cd_load_error = 0;

@@ -6,7 +6,7 @@ struct VoBuf {
 };
 
 extern s32 vo_buf_is_full() __asm__("FUN_0023d1f8");
-s32 vo_buf_get_data(struct VoBuf *arg0) __asm__("FUN_0023d288");
+s32 vo_buf_get_data(struct VoBuf *vo_buffer) __asm__("FUN_0023d288");
 
 s32 vo_buf_get_data(struct VoBuf *vo_buffer) {
     if (vo_buf_is_full() != 0) {

@@ -40,7 +40,7 @@ extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
-s32 draw_pause_ring(struct PauseState *arg0) __asm__("FUN_00220b20");
+s32 draw_pause_ring(struct PauseState *pause_state) __asm__("FUN_00220b20");
 
 s32 draw_pause_ring(struct PauseState *pause_state) {
     s32 i;
