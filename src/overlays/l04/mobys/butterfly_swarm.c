@@ -84,7 +84,7 @@ void steer_child_moby(Moby **others,
                       Steer *steer,
                       float *params) __asm__("FUN_L04_001f30e0");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) {
+void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *steering_settings) {
     Vec_1F3010 path_hit;
     Vec_1F3010 force;
     Vec_1F3010 uninitialized_point;
@@ -121,7 +121,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &path_hit, &moby->pos);
             length = fast_vec_length(&force);
             if (length != 0.0f) {
-                length = -params[2] / (length * length);
+                length = -steering_settings[2] / (length * length);
             } else {
                 length = -1000.0f;
             }
@@ -129,7 +129,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &path_hit, &moby->pos);
             length = fast_vec_length(&force) + 3.0f;
             if (distance < length) {
-                length = length * (params[2] * length);
+                length = length * (steering_settings[2] * length);
             } else {
                 length = 10000.0f;
             }
@@ -137,13 +137,13 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         fast_vec_normalize(&force, &force, length);
         fast_vec_add(steer, steer, &force);
     }
-    if (params[0] != 0.0f) {
-        fast_vec_normalize(&force, &steer->dir, params[0]);
+    if (steering_settings[0] != 0.0f) {
+        fast_vec_normalize(&force, &steer->dir, steering_settings[0]);
         fast_vec_add(steer, steer, &force);
     }
     if (steer->target == moby) {
         qcopy(&force, &steer->pos);
-        fast_vec_normalize(&force, &force, params[1]);
+        fast_vec_normalize(&force, &force, steering_settings[1]);
         fast_vec_add(steer, steer, &force);
     } else {
         if (steer->path != -1) {
@@ -180,7 +180,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             if (hit == 0) {
                 fast_vec_sub(&force, &force, &moby->pos);
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[2]));
+                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[2]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -188,7 +188,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &steer->target->pos, &moby->pos);
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[1]));
+                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -198,7 +198,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             force.z = steer->point->z - moby->pos.z;
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[1]));
+                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -223,7 +223,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 class_index++;
             } while (class_index < steer->count);
             if (class_index < steer->count) {
-                if (length < params[4]) {
+                if (length < steering_settings[4]) {
                     too_close = other;
                     break;
                 }
@@ -249,32 +249,32 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 qcopy(&surface_normal, &coll_hit.normal_x);
                 length = fast_arc_tan(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
                 set_vector_length_xy(&surface_normal, &surface_normal, 1.0f);
-                fast_vec_scale(&surface_normal, &surface_normal, params[3]);
+                fast_vec_scale(&surface_normal, &surface_normal, steering_settings[3]);
                 fast_vec_add(steer, steer, &surface_normal);
                 if (0.4f < length) {
                     fast_vec_scale(
-                        &surface_normal, &surface_normal, params[3] * (length * 10000.0f));
+                        &surface_normal, &surface_normal, steering_settings[3] * (length * 10000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
                 if (0.2f < moby->pos.z - coll_hit.point.f[2]) {
-                    set_vector_length_xy(&surface_normal, &steer->pos, -(params[3] * 1000.0f));
+                    set_vector_length_xy(&surface_normal, &steer->pos, -(steering_settings[3] * 1000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
             }
         }
     } else {
-        if (coll_sphere(params[4], &moby->pos, 4, moby) != 0) {
+        if (coll_sphere(steering_settings[4], &moby->pos, 4, moby) != 0) {
             fast_vec_sub(&force, D_L04_00173FF0, &moby->pos);
-            force.z = force.z + params[3];
-            fast_vec_normalize(&force, &force, params[3]);
+            force.z = force.z + steering_settings[3];
+            fast_vec_normalize(&force, &force, steering_settings[3]);
             fast_vec_add(steer, steer, &force);
         }
     }
     if (steer->f48 == 0.0f) {
-        set_vector_length_xy(steer, steer, params[6]);
+        set_vector_length_xy(steer, steer, steering_settings[6]);
         steer->vel.z = 0.0f;
     } else {
-        fast_vec_normalize(steer, steer, params[6]);
+        fast_vec_normalize(steer, steer, steering_settings[6]);
         steer->vel.z = steer->vel.z / steer->f48;
     }
     if (fast_dec_timer_s16(&steer->timer) != 0) {
@@ -291,9 +291,9 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     if (too_close != 0) {
         fast_vec_sub(&force, &moby->pos, &too_close->pos);
         if (steer->f48 != 0.0f) {
-            fast_vec_normalize(steer, &force, params[6]);
+            fast_vec_normalize(steer, &force, steering_settings[6]);
         } else {
-            set_vector_length_xy(steer, &force, params[6]);
+            set_vector_length_xy(steer, &force, steering_settings[6]);
         }
     }
 }
