@@ -575,7 +575,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     int   uv[4];
     long  xy[4];
     int   colors[4];
-    Data *data = *(Data **)&moby->pvars;
+    Data *hoven_turret_hud_state = *(Data **)&moby->pvars;
     long  texture;
     int   filled;
     int   color;
@@ -646,12 +646,12 @@ void draw_hoven_turret_hud(Moby *moby) {
     uv[1] = hoven_turret_hud_health_dial_vertex_1_uv;
     uv[2] = hoven_turret_hud_health_dial_vertex_2_uv;
     uv[3] = hoven_turret_hud_health_dial_vertex_3_uv;
-    if (data->f8C > 100.0f) {
-        color = fast_tween_color(0x6000FFFF, 0x6000FF00, (data->f8C - 100.0f) / 100.0f);
+    if (hoven_turret_hud_state->f8C > 100.0f) {
+        color = fast_tween_color(0x6000FFFF, 0x6000FF00, (hoven_turret_hud_state->f8C - 100.0f) / 100.0f);
     } else {
-        color = fast_tween_color(0x600000FF, 0x6000FFFF, data->f8C / 100.0f);
+        color = fast_tween_color(0x600000FF, 0x6000FFFF, hoven_turret_hud_state->f8C / 100.0f);
     }
-    filled = truncate_float_to_s32((1.0f - data->f8C / 200.0f) * 32.0f);
+    filled = truncate_float_to_s32((1.0f - hoven_turret_hud_state->f8C / 200.0f) * 32.0f);
     dim_color = (color & 0xFFFFFF) + 0x20000000;
     for (j = 0; j < 32; j++) {
         float start_angle, end_angle;
@@ -705,16 +705,16 @@ void draw_hoven_turret_hud(Moby *moby) {
         xy[3] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
-    if (scale_game_frames(0xF) < data->f88) {
+    if (scale_game_frames(0xF) < hoven_turret_hud_state->f88) {
         color = fast_tween_color(0x5000FFFF,
                                  0x500000FF,
-                                 convert_integer_to_float(data->f88 - scale_game_frames(0xF)) /
+                                 convert_integer_to_float(hoven_turret_hud_state->f88 - scale_game_frames(0xF)) /
                                      (float)scale_game_frames(0xF));
     } else {
         color =
             fast_tween_color(0x5000FF00,
                              0x5000FFFF,
-                             convert_integer_to_float(data->f88) / (float)scale_game_frames(0xF));
+                             convert_integer_to_float(hoven_turret_hud_state->f88) / (float)scale_game_frames(0xF));
     }
     uv[0] = hoven_turret_hud_orientation_indicator_vertex_0_uv;
     uv[1] = hoven_turret_hud_orientation_indicator_vertex_1_uv;
@@ -774,7 +774,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 0.0f));
+    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 0.0f));
     xy[0] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -784,7 +784,7 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 1.5707964f));
     xy[1] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -794,7 +794,7 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, -1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, -1.5707964f));
     xy[2] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -804,7 +804,7 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 3.1415927f));
+    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
