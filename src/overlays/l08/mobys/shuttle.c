@@ -189,11 +189,11 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
         SHUTTLE_SELECT_ROUTE_START = 2,
         SHUTTLE_SELECT_ALTERNATE_PATH_START = 3
     };
-    char  *data = (char *)moby->pvars;
+    char  *shuttle_route_vars = (char *)moby->pvars;
     char  *pl = (char *)&hero.motion.pos;
-    Route *route = ((Route *)l08_paths[*(int *)(data + 0x88)]);
-    Route *configured_path = ((Route *)l08_paths[*(int *)(data + 0x80)]);
-    Route *alternate_path = ((Route *)l08_paths[*(int *)(data + 0x84)]);
+    Route *route = ((Route *)l08_paths[*(int *)(shuttle_route_vars + 0x88)]);
+    Route *configured_path = ((Route *)l08_paths[*(int *)(shuttle_route_vars + 0x80)]);
+    Route *alternate_path = ((Route *)l08_paths[*(int *)(shuttle_route_vars + 0x84)]);
     float  best_candidate_distance = fast_vec_dist(pl, (char *)route + (route->count << 4));
     float  configured_path_start_distance = fast_vec_dist(pl, configured_path->e[0]);
     float  alternate_path_start_distance = fast_vec_dist(pl, alternate_path->e[0]);
@@ -205,14 +205,14 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
     }
     if (alternate_path_start_distance < best_candidate_distance)
         sel = 3;
-    if (*(int *)(data + 0x100) == sel)
+    if (*(int *)(shuttle_route_vars + 0x100) == sel)
         return;
-    *(int *)(data + 0x100) = sel;
-    *(int *)(data + 0xE4) = 0;
-    *(float *)(data + 0x104) = 1.0f;
+    *(int *)(shuttle_route_vars + 0x100) = sel;
+    *(int *)(shuttle_route_vars + 0xE4) = 0;
+    *(float *)(shuttle_route_vars + 0x104) = 1.0f;
     moby->visible = 1;
     moby->flags &= 0xFFFE;
-    *(int *)(data + 0x124) = 1;
+    *(int *)(shuttle_route_vars + 0x124) = 1;
     moby->collision = moby->pclass->collision;
     switch (sel) {
     case SHUTTLE_SELECT_ROUTE_END: {
@@ -220,52 +220,52 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
         unsigned char *visited_table;
         int            configured_path_entry_is_ff, alternate_path_entry_is_ff;
         int            fr;
-        qcopy(data + 0x60, (char *)((route_point_count << 4) + (int)route));
+        qcopy(shuttle_route_vars + 0x60, (char *)((route_point_count << 4) + (int)route));
         y = fast_arc_tan(*(float *)((char *)route + ((route_point_count - 2) << 4) + 0x10) -
-                             *(float *)(data + 0x60),
+                             *(float *)(shuttle_route_vars + 0x60),
                          *(float *)((char *)route + ((route_point_count - 2) << 4) + 0x14) -
-                             *(float *)(data + 0x64));
+                             *(float *)(shuttle_route_vars + 0x64));
         fr = current_level_index << 4;
         visited_table = visited52;
-        *(float *)(data + 0x78) = y;
-        *(float *)(data + 0xE4) = 1.0f;
-        *(int *)(data + 0x104) = 0;
-        configured_path_entry_is_ff = visited_table[*(int *)(data + 0x94) + fr] == 0xFF;
-        alternate_path_entry_is_ff = visited_table[*(int *)(data + 0x98) + fr] == 0xFF;
+        *(float *)(shuttle_route_vars + 0x78) = y;
+        *(float *)(shuttle_route_vars + 0xE4) = 1.0f;
+        *(int *)(shuttle_route_vars + 0x104) = 0;
+        configured_path_entry_is_ff = visited_table[*(int *)(shuttle_route_vars + 0x94) + fr] == 0xFF;
+        alternate_path_entry_is_ff = visited_table[*(int *)(shuttle_route_vars + 0x98) + fr] == 0xFF;
         if (alternate_path_entry_is_ff) {
-            *(Route **)(data + 0x120) = alternate_path;
+            *(Route **)(shuttle_route_vars + 0x120) = alternate_path;
         } else if (configured_path_entry_is_ff) {
-            *(Route **)(data + 0x120) = configured_path;
+            *(Route **)(shuttle_route_vars + 0x120) = configured_path;
         } else if (32.0f < vector_distance_xy(&moby->pos, pl) || D_L08_0015F5CC < 5) {
             moby->visible = 0;
             moby->flags |= 1;
-            *(int *)(data + 0x124) = 0;
+            *(int *)(shuttle_route_vars + 0x124) = 0;
             moby->collision = 0;
         }
         return;
     }
     case SHUTTLE_SELECT_CONFIGURED_PATH_START:
-        qcopy(data + 0x60, configured_path->e[0]);
-        y = fast_arc_tan(configured_path->e[1][0] - *(float *)(data + 0x60),
-                         configured_path->e[1][1] - *(float *)(data + 0x64));
-        *(Route **)(data + 0x120) = configured_path;
+        qcopy(shuttle_route_vars + 0x60, configured_path->e[0]);
+        y = fast_arc_tan(configured_path->e[1][0] - *(float *)(shuttle_route_vars + 0x60),
+                         configured_path->e[1][1] - *(float *)(shuttle_route_vars + 0x64));
+        *(Route **)(shuttle_route_vars + 0x120) = configured_path;
         break;
     case SHUTTLE_SELECT_ROUTE_START:
-        qcopy(data + 0x60, route->e[0]);
-        y = fast_arc_tan(route->e[1][0] - *(float *)(data + 0x60),
-                         route->e[1][1] - *(float *)(data + 0x64));
-        *(Route **)(data + 0x120) = route;
+        qcopy(shuttle_route_vars + 0x60, route->e[0]);
+        y = fast_arc_tan(route->e[1][0] - *(float *)(shuttle_route_vars + 0x60),
+                         route->e[1][1] - *(float *)(shuttle_route_vars + 0x64));
+        *(Route **)(shuttle_route_vars + 0x120) = route;
         break;
     case SHUTTLE_SELECT_ALTERNATE_PATH_START:
-        qcopy(data + 0x60, alternate_path->e[0]);
-        y = fast_arc_tan(alternate_path->e[1][0] - *(float *)(data + 0x60),
-                         alternate_path->e[1][1] - *(float *)(data + 0x64));
-        *(Route **)(data + 0x120) = alternate_path;
+        qcopy(shuttle_route_vars + 0x60, alternate_path->e[0]);
+        y = fast_arc_tan(alternate_path->e[1][0] - *(float *)(shuttle_route_vars + 0x60),
+                         alternate_path->e[1][1] - *(float *)(shuttle_route_vars + 0x64));
+        *(Route **)(shuttle_route_vars + 0x120) = alternate_path;
         break;
     default:
         return;
     }
-    *(float *)(data + 0x78) = y;
+    *(float *)(shuttle_route_vars + 0x78) = y;
 }
 
 /* Bobs the shuttle up and down and rocks it about its home position and rotation. */
