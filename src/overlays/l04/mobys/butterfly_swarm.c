@@ -541,7 +541,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 
 void update_butterfly_swarm(struct Moby *moby) {
-    PVars        *data = (PVars *)moby->pvars;
+    PVars        *swarm_controller_pvars = (PVars *)moby->pvars;
     struct Moby **children;
     struct Moby  *other;
     f32           distance;
@@ -555,53 +555,53 @@ void update_butterfly_swarm(struct Moby *moby) {
     if (swarm_motion_parameters_initialized_gp == 0) {
         f32 *effect_dest = D_L04_00166130;
         memset(effect, 0, 0x20);
-        effect[1] = convert_integer_to_float(data->child_count) * 2.073f;
+        effect[1] = convert_integer_to_float(swarm_controller_pvars->child_count) * 2.073f;
         effect[3] = 2.0f;
         effect[4] = 1.0f;
         effect[5] = 1.0f;
         swarm_motion_parameters_initialized_gp = 1;
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
-    if (data->initialized == 0) {
-        qcopy(&data->origin, &moby->pos);
-        data->angle = 0.0f;
-    } else if (data->child_count == 0) {
+    if (swarm_controller_pvars->initialized == 0) {
+        qcopy(&swarm_controller_pvars->origin, &moby->pos);
+        swarm_controller_pvars->angle = 0.0f;
+    } else if (swarm_controller_pvars->child_count == 0) {
         for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
             if ((s8)other->state >= 0 && other->oclass == 0x55) {
-                data->child_count++;
+                swarm_controller_pvars->child_count++;
             }
         }
-        D_L04_00166130[1] = convert_integer_to_float(data->child_count) * 2.073f;
+        D_L04_00166130[1] = convert_integer_to_float(swarm_controller_pvars->child_count) * 2.073f;
     }
-    if (data->path_index == -1) {
-        data->angle = fast_add_rotations(data->angle, frame_scale * 0.0034906587f);
-        moby->pos.x = data->origin.x + data->radius * fast_cos(data->angle);
-        moby->pos.y = data->origin.y + data->radius * fast_sin(data->angle);
-    } else if (data->initialized != 0) {
+    if (swarm_controller_pvars->path_index == -1) {
+        swarm_controller_pvars->angle = fast_add_rotations(swarm_controller_pvars->angle, frame_scale * 0.0034906587f);
+        moby->pos.x = swarm_controller_pvars->origin.x + swarm_controller_pvars->radius * fast_cos(swarm_controller_pvars->angle);
+        moby->pos.y = swarm_controller_pvars->origin.y + swarm_controller_pvars->radius * fast_sin(swarm_controller_pvars->angle);
+    } else if (swarm_controller_pvars->initialized != 0) {
         s32 i;
         distance = 10000.0f;
-        for (i = 0; i < data->count; i++) {
-            f32 child_distance = vector_distance_xy(&moby->pos, &data->children[i]->pos);
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
+            f32 child_distance = vector_distance_xy(&moby->pos, &swarm_controller_pvars->children[i]->pos);
             if (child_distance < distance)
                 distance = child_distance;
         }
         speed = 0.0f;
         if (distance < 3.0f)
             speed = 3.0f - distance;
-        data->direction = advance_moby_along_path(
-            moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
+        swarm_controller_pvars->direction = advance_moby_along_path(
+            moby, D_L04_001b0630[swarm_controller_pvars->path_index], swarm_controller_pvars->direction, 1, speed);
     }
-    if (data->initialized == 0) {
+    if (swarm_controller_pvars->initialized == 0) {
         s32          i;
         struct Moby *child;
-        data->initialized = 1;
-        data->child_count = 0;
-        for (i = 0; i < data->count; i++) {
-            data->children[i] = 0;
+        swarm_controller_pvars->initialized = 1;
+        swarm_controller_pvars->child_count = 0;
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
+            swarm_controller_pvars->children[i] = 0;
             child = create_moby(0x55);
             if (child != 0) {
                 SwarmPartVars *part = (SwarmPartVars *)child->pvars;
-                data->children[i] = child;
+                swarm_controller_pvars->children[i] = child;
                 child->update_dist = 0x7f;
                 child->draw_dist = 0x7f;
                 child->scale *= random_float_between(0.7f, 1.3f);
@@ -636,17 +636,17 @@ void update_butterfly_swarm(struct Moby *moby) {
     } else {
         s32          i;
         struct Moby *child;
-        for (i = 0; i < data->count; i++) {
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
             void *part;
-            children = data->children;
+            children = swarm_controller_pvars->children;
             child = children[i];
             part = child->pvars;
-            D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale *
+            D_L04_00166130[6] = ((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale *
                                 ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq *
                                 ((child->anim_speed + 1.0f) * 0.5f);
-            D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) *
+            D_L04_00166130[7] = (((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale) *
                                 ((child->anim_speed + 1.0f) * 0.5f);
-            steer_child_moby(children, data->count, child, part, D_L04_00166130);
+            steer_child_moby(children, swarm_controller_pvars->count, child, part, D_L04_00166130);
             update_moby_movement_with_sphere_collision(0.0f, child, part, D_L04_00166130);
         }
     }
