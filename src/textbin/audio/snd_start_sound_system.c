@@ -4,14 +4,13 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/audio/sound_read_work.h"
+#include "rnc/textbin/audio/snd_start_sound_system_globals.h"
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
     void *volatile server;
 };
 
-extern u8 snd_command_buffer1[] __asm__("D_00133280");
-extern u8 snd_command_buffer2[] __asm__("D_00134280");
 extern u8 snd_stream_buffer1[] __asm__("D_00135280");
 extern u8 snd_stream_buffer2[] __asm__("D_00136280");
 extern u8 snd_return_buffer1[] __asm__("D_00137280");
@@ -20,7 +19,7 @@ extern u8 snd_sif_bind_rpc_error_string[] __asm__("D_00153C50");
 extern u8 snd_989_snd_source_file[] __asm__("D_00153C78");
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern u8 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
+extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
 extern s32 snd_batch_free_bytes __asm__("D_0015ECA8") __attribute__((sda));
 extern s32 D_0015ECAC MACRO_ADDR;
 extern u8 *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
@@ -40,8 +39,8 @@ s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 s32 snd_start_sound_system(void) {
     s32 bind_result;
     s32 command_arg;
-    u8 *const command_buffer1 = snd_command_buffer2;
-    u8 *const command_buffer0 = snd_command_buffer1;
+    s32 *const command_buffer1 = snd_command_buffer2;
+    s32 *const command_buffer0 = snd_command_buffer1;
 
     snd_batch_command_buffers[0] = command_buffer0;
     snd_batch_command_buffers[1] = command_buffer1;
@@ -83,12 +82,16 @@ s32 snd_start_sound_system(void) {
         }
     } while (sound_stream_client.server == NULL);
 
-    *(s32 *)snd_command_buffer1 = 0;
+    snd_command_buffer1[0] = 0;
     sound_read_work.read_active = 0;
-    *(s32 *)snd_command_buffer2 = 0;
+    snd_command_buffer2[0] = 0;
     sound_read_work.read_error = 0;
     snd_batch_free_bytes = 0xFFC;
     D_0015ECAC = 0xFFC;
     command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }
+
+s32 snd_command_buffer1[1024] = {0};
+
+s32 snd_command_buffer2[1024] = {0};
