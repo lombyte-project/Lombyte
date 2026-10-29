@@ -86,7 +86,7 @@ void *set_class_0287_group_activation_and_find_nearest(int index, int secondary)
     char  *nearest = 0;
     float  distance = 1000.0f;
     char  *moby;
-    float *data;
+    float *class_0287_group_member_data;
     float  candidate_distance;
     float  activation_value;
     if (!group_entry)
@@ -100,12 +100,12 @@ void *set_class_0287_group_activation_and_find_nearest(int index, int secondary)
             distance = candidate_distance;
             nearest = moby;
         }
-        data = ((float *)MOBY(moby)->pvars);
+        class_0287_group_member_data = ((float *)MOBY(moby)->pvars);
         moby[0x20] = 1;
         activation_value = class_0287_group_activation_value_gp;
-        data[5] = activation_value;
+        class_0287_group_member_data[5] = activation_value;
         if (secondary)
-            data[6] = activation_value;
+            class_0287_group_member_data[6] = activation_value;
         if (*group_entry++ < 0)
             return nearest;
     }
