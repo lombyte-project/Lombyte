@@ -166,7 +166,7 @@ void start_electric_beam_pulse(char *moby) {
     ElectricBeamVars *beam = ((ElectricBeamVars *)MOBY(moby)->pvars);
     Vec4              path[32];
     Vec4              path_steps[32];
-    Vec4              work, delta;
+    Vec4              beam_geometry_scratch, delta;
     Vec4              matrix[4];
     LevelCuboid      *frame;
     float             length;
@@ -209,19 +209,19 @@ void start_electric_beam_pulse(char *moby) {
             qcopy(&beam->points[j], &path[j]);
             qcopy(&beam->point_steps[j], &path_steps[j]);
         } else {
-            fast_vec_add(&work, &path[j - 1], &path[j]);
-            fast_vec_add(&work, &work, &path[j + 1]);
-            fast_vec_scale(&beam->points[j], &work, 0.333f);
-            fast_vec_add(&work, &path_steps[j - 1], &path_steps[j]);
-            fast_vec_add(&work, &work, &path_steps[j + 1]);
-            fast_vec_scale(&beam->point_steps[j], &work, 0.333f);
+            fast_vec_add(&beam_geometry_scratch, &path[j - 1], &path[j]);
+            fast_vec_add(&beam_geometry_scratch, &beam_geometry_scratch, &path[j + 1]);
+            fast_vec_scale(&beam->points[j], &beam_geometry_scratch, 0.333f);
+            fast_vec_add(&beam_geometry_scratch, &path_steps[j - 1], &path_steps[j]);
+            fast_vec_add(&beam_geometry_scratch, &beam_geometry_scratch, &path_steps[j + 1]);
+            fast_vec_scale(&beam->point_steps[j], &beam_geometry_scratch, 0.333f);
         }
     }
 
     for (branch = 0; branch < 4; branch++) {
         int   start;
         float spread = electric_beam_displacement_radius_gp;
-        random_vector(&work, spread, spread);
+        random_vector(&beam_geometry_scratch, spread, spread);
         start = truncate_float_to_s32(
                     random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) +
                 4;
@@ -233,7 +233,7 @@ void start_electric_beam_pulse(char *moby) {
             random_vector(&beam->branch_steps[k][branch],
                           0.0f,
                           electric_beam_max_point_speed_gp * frame_time);
-            fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
+            fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &beam_geometry_scratch);
             fast_vec_add(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
     }
@@ -246,13 +246,13 @@ void start_electric_beam_pulse(char *moby) {
         qcopy(&matrix[3], &l14_cuboids[beam->frame].pos);
         for (point = 0; point < 32; point += 8) {
             int frames;
-            transform_vector(&work, &beam->points[point], matrix);
+            transform_vector(&beam_geometry_scratch, &beam->points[point], matrix);
             qcopy(&delta, &beam->point_steps[point]);
             delta.f[3] = electric_beam_spark_step_w_gp;
             color =
                 random_integer_below(2) ? D_L14_0016211C : electric_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
-            spawn_spark(&work,
+            spawn_spark(&beam_geometry_scratch,
                         &delta,
                         &delta,
                         electric_beam_spark_initial_word_gp,
@@ -264,7 +264,7 @@ void start_electric_beam_pulse(char *moby) {
         }
         for (k = 0; k < 2; k++) {
             int frames, unused_color;
-            transform_vector(&work, &beam->branches[3][k], matrix);
+            transform_vector(&beam_geometry_scratch, &beam->branches[3][k], matrix);
             qcopy(&delta, &beam->branch_steps[3][k]);
             delta.f[3] = electric_beam_spark_step_w_gp;
             unused_color =
@@ -274,7 +274,7 @@ void start_electric_beam_pulse(char *moby) {
              * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
             if (never)
                 continue;
-            spawn_spark(&work,
+            spawn_spark(&beam_geometry_scratch,
                         &delta,
                         &delta,
                         electric_beam_spark_initial_word_gp,
