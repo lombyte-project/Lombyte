@@ -191,25 +191,25 @@ void update_chicken_relocator(struct Moby *moby) {
         TARGET_STATUS_REPOSITION_READY = 2
     };
     char *hero_position = (char *)&hero.motion.pos;
-    char *data = (char *)moby->pvars;
+    char *target_cycle_data = (char *)moby->pvars;
     char *target;
     int   target_status;
     float pos[4];
-    if (!is_point_inside_clip_volume(hero_position, *(int *)(data + 8)))
+    if (!is_point_inside_clip_volume(hero_position, *(int *)(target_cycle_data + 8)))
         return;
-    target = D_L16_0015FFD8 + (*(int *)(data + 4) << 8);
+    target = D_L16_0015FFD8 + (*(int *)(target_cycle_data + 4) << 8);
     switch (moby->state) {
     case TARGET_CYCLE_INITIALIZE_DELAY:
         moby->state = 1;
-        *(int *)(data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
+        *(int *)(target_cycle_data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance_xy(hero_position, target + 0x10) > 3.0f) {
-            if (find_group_chicken_in_state_6(*(int *)data) != 0) {
-                if (fast_dec_timer(data + 0xC)) {
+            if (find_group_chicken_in_state_6(*(int *)target_cycle_data) != 0) {
+                if (fast_dec_timer(target_cycle_data + 0xC)) {
                     moby->state = 2;
                     request_target_reposition(target);
-                    *(int *)(data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
+                    *(int *)(target_cycle_data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
                 }
             }
         }
@@ -223,7 +223,7 @@ void update_chicken_relocator(struct Moby *moby) {
         case TARGET_STATUS_REPOSITION_READY:
             moby->state = 1;
             {
-                char *other = find_group_chicken_in_state_6(*(int *)data);
+                char *other = find_group_chicken_in_state_6(*(int *)target_cycle_data);
                 if (other != 0) {
                     qcopy(pos, target + 0x10);
                     pos[2] += 1.0f;
