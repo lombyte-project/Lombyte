@@ -225,9 +225,9 @@ void taxi_update(struct Moby *moby) {
         if (D_0013D4E1) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
-            int            value = *(int *)(model + 0x10);
+            int            taxi_model_collision = *(int *)(model + 0x10);
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = taxi_model_collision;
             moby->flags = flags & 0xFFFE;
             moby->state = 1;
         }
