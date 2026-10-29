@@ -695,8 +695,8 @@ extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 
 /* Eases the moby's height toward the ground below it. */
 void ease_blarg_trooper_height_to_ground(char *moby) {
-    float value = probe_ground_height(moby + 0x10, 0, 0.5f);
-    approach_value(moby + 0x18, value, 27.0f * frame_time_sq);
+    float ground_height = probe_ground_height(moby + 0x10, 0, 0.5f);
+    approach_value(moby + 0x18, ground_height, 27.0f * frame_time_sq);
 }
 
 extern void approach_angle(void *, void *, float, float, float, float) __asm__("FUN_L00_0025be00");
