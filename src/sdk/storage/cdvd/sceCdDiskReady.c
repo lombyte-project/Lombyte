@@ -1,12 +1,10 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/sdk/libcdvd.h"
 
-extern s32 D_001312D0[];
-extern volatile s32 D_001312EC[];
 extern s32 D_00131304[];
 extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");
 extern s32 D_001599D0[];
-extern u8 D_001324C0[];
 extern u8 cd_disk_ready_entry_message[] __asm__("D_00152F80");
 extern u8 cd_disk_ready_bind_error_message[] __asm__("D_00152F90");
 extern u8 cd_disk_ready_completion_message[] __asm__("D_00152FB0");
@@ -28,15 +26,15 @@ s32 sceCdDiskReady(s32 mode) {
     s32 response;
     s32 spin;
 
-    if (D_001312D0[0] > 0) {
+    if (cd_debug > 0) {
         scePrintf(cd_disk_ready_entry_message);
     }
     cmd_sem_init();
-    if (D_001312EC[0] != PollSema(D_001312EC[0])) {
+    if (cd_scmd_sema != PollSema(cd_scmd_sema)) {
         return 6;
     }
     if (sceCdSyncS(1) != 0) {
-        SignalSema(D_001312EC[0]);
+        SignalSema(cd_scmd_sema);
         if (mode == 8) {
             return -1;
         }
@@ -46,7 +44,7 @@ s32 sceCdDiskReady(s32 mode) {
     if (D_00131304[0] < 0) {
         for (;;) {
             if (sceSifBindRpc(&cd_disk_ready_rpc_client, 0x8000059A, 0) < 0) {
-                if (D_001312D0[0] > 0) {
+                if (cd_debug > 0) {
                     scePrintf(cd_disk_ready_bind_error_message);
                 }
                 for (spin = 0x100000; spin != -1; spin--) {
@@ -63,18 +61,18 @@ s32 sceCdDiskReady(s32 mode) {
     }
     D_001599D0[0] = mode;
     sceSifWriteBackDCache(D_001599D0, 4);
-    if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, D_001324C0, 4, 0, 0) < 0) {
-        SignalSema(D_001312EC[0]);
+    if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, cd_scmd_result, 4, 0, 0) < 0) {
+        SignalSema(cd_scmd_sema);
         if (mode == 8) {
             return -1;
         }
         return 6;
     }
-    if (D_001312D0[0] > 0) {
+    if (cd_debug > 0) {
         scePrintf(cd_disk_ready_completion_message);
     }
-    response = *(s32 *)((u32)D_001324C0 | 0x20000000);
-    SignalSema(D_001312EC[0]);
+    response = *(s32 *)((u32)cd_scmd_result | 0x20000000);
+    SignalSema(cd_scmd_sema);
     return response;
 }
 

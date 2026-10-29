@@ -10,15 +10,11 @@ struct CdReadCommand {
     s32 *status;
 };
 
-extern s32 D_001312D0[];
-extern volatile u32 D_001312E8[];
-extern volatile u32 D_001312F0[];
 extern volatile u32 D_001312F4[];
 extern volatile u32 D_00131314[];
 extern struct CdReadCommand native_cd_read_request __asm__("D_001313C0");
 extern u8 native_cd_read_completion_buffer[] __asm__("D_001323C0");
 extern u8 native_cd_read_response[] __asm__("D_00132480");
-extern u8 D_00132490[];
 extern u8 native_cd_read_submit_debug_message[] __asm__("D_00152FC8");
 extern u8 native_cd_read_queued_debug_message[] __asm__("D_00152FE0");
 extern void process_native_cd_read_completion(void *) __asm__("func_00120788");
@@ -71,18 +67,18 @@ s32 sceCdRead(u32 sector, u32 count, void *buffer, struct sceCdRMode *mode) {
     sceSifWriteBackDCache(native_cd_read_completion_buffer, 0x90);
     sceSifWriteBackDCache(command, sizeof(*command));
     sceSifWriteBackDCache(native_cd_read_response, 4);
-    if (D_001312D0[0] > 0) {
+    if (cd_debug > 0) {
         scePrintf(native_cd_read_submit_debug_message);
     }
     D_00131314[0] = 1;
-    D_001312F0[0] = 1;
-    if (sceSifCallRpc(D_00132490, 1, 1, command, sizeof(*command), 0, 0, process_native_cd_read_completion, native_cd_read_completion_buffer) < 0) {
+    cd_read_pending = 1;
+    if (sceSifCallRpc(&cd_ncmd_client, 1, 1, command, sizeof(*command), 0, 0, process_native_cd_read_completion, native_cd_read_completion_buffer) < 0) {
         D_00131314[0] = 0;
-        D_001312F0[0] = 0;
-        SignalSema(D_001312E8[0]);
+        cd_read_pending = 0;
+        SignalSema(cd_ncmd_sema);
         return 0;
     }
-    if (D_001312D0[0] > 0) {
+    if (cd_debug > 0) {
         scePrintf(native_cd_read_queued_debug_message);
     }
     return 1;

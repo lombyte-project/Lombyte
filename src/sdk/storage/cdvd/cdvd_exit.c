@@ -1,8 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/libcdvd.h"
 extern s32 D_001312D4[];
-extern s32 D_001312E0[];
-extern s32 D_001312E8[];
-extern s32 D_001312EC[];
 extern s32 D_00131314[];
 extern s32 DIntr();
 extern s32 DeleteSema();
@@ -15,11 +13,11 @@ void cdvd_exit(void) {
         do {
             D_00131314[0] = -1;
         } while (0);
-        SignalSema(D_001312E0[0]);
+        SignalSema(cd_callback_sema);
     }
-    DeleteSema(D_001312E8[0]);
-    DeleteSema(D_001312EC[0]);
-    DeleteSema(D_001312E0[0]);
+    DeleteSema(cd_ncmd_sema);
+    DeleteSema(cd_scmd_sema);
+    DeleteSema(cd_callback_sema);
     interrupts_enabled = DIntr();
     sceSifRemoveCmdHandler(0x80000012);
     if (interrupts_enabled != 0)

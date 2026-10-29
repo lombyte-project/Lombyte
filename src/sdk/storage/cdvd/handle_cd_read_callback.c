@@ -1,8 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/libcdvd.h"
 extern volatile s32 D_001312D4[];
-extern volatile s32 D_001312E0[];
-extern volatile s32 D_001312E8[];
-extern volatile s32 D_001312F0[];
 extern volatile s32 D_00131314[];
 extern volatile s32 native_cd_last_command_state[] __asm__("D_00131318");
 extern volatile s32 D_00159740[];
@@ -15,14 +13,14 @@ void handle_cd_read_callback(s32 *status) {
     native_cd_last_command_state[0] = D_00131314[0];
     if (D_00131314[0] == 11) {
         D_00131314[0] = 0;
-        D_001312F0[0] = 0;
+        cd_read_pending = 0;
         return;
     }
-    iSignalSema(D_001312E8[0]);
+    iSignalSema(cd_ncmd_sema);
     if (D_001312D4[0] != 0 && D_00159740[0] != 0) {
-        iSignalSema(D_001312E0[0]);
+        iSignalSema(cd_callback_sema);
     } else {
-        D_001312F0[0] = 0;
+        cd_read_pending = 0;
     }
     D_00131314[0] = 0;
 }

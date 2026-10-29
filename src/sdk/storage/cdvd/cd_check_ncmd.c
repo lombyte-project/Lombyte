@@ -1,11 +1,8 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/sdk/libcdvd.h"
 
-extern s32 D_001312D0[];
-extern s32 D_001312DC[];
-extern volatile s32 D_001312E8[];
 extern s32 D_001312F8[];
-extern struct sceSifClientData D_00132490;
 const u8 D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
 extern u8 cd_ncmd_bind_error_message[] __asm__("D_00152ED8");
 extern s32 D_00159750[];
@@ -25,16 +22,16 @@ s32 cd_check_ncmd(s32 cmd) {
     s32 spin;
 
     cmd_sem_init();
-    if (D_001312E8[0] != PollSema(D_001312E8[0])) {
-        if (D_001312D0[0] > 0) {
-            scePrintf(D_00152EB0, cmd, D_001312DC[0]);
+    if (cd_ncmd_sema != PollSema(cd_ncmd_sema)) {
+        if (cd_debug > 0) {
+            scePrintf(D_00152EB0, cmd, cd_ncmd_keep_cmd);
         }
         return 0;
     }
-    D_001312DC[0] = cmd;
+    cd_ncmd_keep_cmd = cmd;
     ReferThreadStatus(D_00159750[0], D_00159758);
     if (sceCdSync(1) != 0) {
-        SignalSema(D_001312E8[0]);
+        SignalSema(cd_ncmd_sema);
         return 0;
     }
     sceSifInitRpc(0);
@@ -42,15 +39,15 @@ s32 cd_check_ncmd(s32 cmd) {
         return 1;
     }
     for (;;) {
-        if (sceSifBindRpc(&D_00132490, 0x80000595, 0) < 0) {
-            if (D_001312D0[0] > 0) {
+        if (sceSifBindRpc(&cd_ncmd_client, 0x80000595, 0) < 0) {
+            if (cd_debug > 0) {
                 scePrintf(cd_ncmd_bind_error_message);
             }
             for (spin = 0x100000; spin != -1; spin--) {
             }
             continue;
         }
-        if (D_00132490.serve != 0) {
+        if (cd_ncmd_client.serve != 0) {
             break;
         }
         for (spin = 0x100000; spin != -1; spin--) {

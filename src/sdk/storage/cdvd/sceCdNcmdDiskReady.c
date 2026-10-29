@@ -1,7 +1,6 @@
 #include "types.h"
-extern s32 D_001312E8[];
+#include "rnc/sdk/libcdvd.h"
 extern u8 native_cd_drive_state_response[] __asm__("D_00131340");
-extern u8 D_00132490[];
 extern s32 SignalSema();
 extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceSifCallRpc();
@@ -11,11 +10,11 @@ s32 sceCdNcmdDiskReady(void) {
     if (cd_check_ncmd(2) == 0) {
         return 0;
     }
-    if (sceSifCallRpc(D_00132490, 0xE, 0, 0, 0, native_cd_drive_state_response, 4, 0, 0) < 0) {
-        SignalSema(D_001312E8[0]);
+    if (sceSifCallRpc(&cd_ncmd_client, 0xE, 0, 0, 0, native_cd_drive_state_response, 4, 0, 0) < 0) {
+        SignalSema(cd_ncmd_sema);
         return 0;
     }
     status = *(u32 *)((u32)native_cd_drive_state_response | 0x20000000);
-    SignalSema(D_001312E8[0]);
+    SignalSema(cd_ncmd_sema);
     return status;
 }
