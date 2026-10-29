@@ -31,15 +31,15 @@ struct Reent {
 
 extern void std();
 void __sinit(struct Reent *reent_context) {
-    s32 *temp_17_9;
+    s32 *std_streams;
 
-    temp_17_9 = ((u8 *)reent_context + (0x1E4));
+    std_streams = ((u8 *)reent_context + (0x1E4));
     reent_context->unk3C = D_00113AC8;
     reent_context->unk38 = 1;
-    std(temp_17_9, 4, 0, reent_context);
+    std(std_streams, 4, 0, reent_context);
     std(((u8 *)reent_context + (0x23C)), 9, 1, reent_context);
     std(((u8 *)reent_context + (0x294)), 0xA, 2, reent_context);
-    reent_context->unk1E0 = temp_17_9;
+    reent_context->unk1E0 = std_streams;
     reent_context->unk1DC = 3;
     reent_context->unk1D8 = 0;
 }

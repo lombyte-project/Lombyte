@@ -11,21 +11,21 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) __asm__("FUN_00222d98");
 
 s32 draw_menu_selection_text(struct MenuScreen *menu) {
     s32 center_y;
-    s32 temp_16_80;
-    s32 temp_17_21;
+    s32 center_x2;
+    s32 entry_index;
     s32 center_x;
-    s32 temp_18_57;
-    s32 temp_16_62;
+    s32 entry_offset;
+    s32 mid_x;
     u32 height;
-    u32 temp_16_56;
-    u32 temp_16_74;
+    u32 menu_width;
+    u32 width2;
     u32 width;
     struct MemoryCardState *base;
     base = &memory_card_state;
-    temp_17_21 = *((s32 *)((((u8 *)base) - (-(menu_system.current->focus->data.save.slot * 0x1C))) + 0x20));
+    entry_index = *((s32 *)((((u8 *)base) - (-(menu_system.current->focus->data.save.slot * 0x1C))) + 0x20));
     setup_gif_paging(0);
     if (((base->state < 3) && (base->pending_state < 0)) && (base->card[0].type == 2)) {
-        if (temp_17_21 == (-1)) {
+        if (entry_index == (-1)) {
             height = menu->height;
             width = menu->width;
             center_x = ((s32)(width + (((u32)width) >> 0x1F))) >> 1;
@@ -33,18 +33,18 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
             font_print_center(center_x, center_y, 0x80FFA888, get_help_message_text(0x5217),
                               -1);
         } else {
-            temp_16_56 = menu->width;
-            temp_18_57 = temp_17_21 * 0xC;
-            temp_16_62 = ((s32)(temp_16_56 + ((((u32)temp_16_56) >> 24) >> 7))) >> 1;
-            font_print_center(temp_16_62, 4, 0x80FFA888,
-                              get_help_message_text(*((s32 *)((void *)(temp_18_57 + D_001DDD40)))),
+            menu_width = menu->width;
+            entry_offset = entry_index * 0xC;
+            mid_x = ((s32)(menu_width + ((((u32)menu_width) >> 24) >> 7))) >> 1;
+            font_print_center(mid_x, 4, 0x80FFA888,
+                              get_help_message_text(*((s32 *)((void *)(entry_offset + D_001DDD40)))),
                               -1);
-            temp_16_74 = menu->width;
+            width2 = menu->width;
             if (1) {
-                temp_16_80 = ((s32)(temp_16_74 + (((u32)temp_16_74) >> 0x1F))) >> 1;
+                center_x2 = ((s32)(width2 + (((u32)width2) >> 0x1F))) >> 1;
                 font_print_center(
-                    temp_16_80, 0x14, 0x80FFA888,
-                    get_help_message_text(*((s32 *)(((u8 *)(D_001DDD40 + temp_18_57)) + 0x4))), -1);
+                    center_x2, 0x14, 0x80FFA888,
+                    get_help_message_text(*((s32 *)(((u8 *)(D_001DDD40 + entry_offset)) + 0x4))), -1);
             }
         }
     }

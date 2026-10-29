@@ -20,13 +20,13 @@ extern s32 sceSifWriteBackDCache();
 extern s32 strncpy(s8 *, s8 *, s32);
 s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
     s32 result;
-    s32 var_2_30;
+    s32 ret;
     register s32 path_arg = slot;
 
     if (D_00159A00.serve == 0) {
         return -0x64;
     }
-    var_2_30 = -0xC8;
+    ret = -0xC8;
     if (PollSema(D_00132DAC[0]) >= 0) {
         if ((name == NULL) || (*name == 0)) {
             SignalSema(D_00132DAC[0]);
@@ -48,9 +48,9 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         } else {
             SignalSema(D_00132DAC[0]);
         }
-        var_2_30 = result;
+        ret = result;
         /* Duplicate return node #12. Try simplifying control flow for better match */
-        return var_2_30;
+        return ret;
     }
-    return var_2_30;
+    return ret;
 }

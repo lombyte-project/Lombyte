@@ -34,7 +34,7 @@ void init_hud(void) __asm__("FUN_001fee88");
 
 void init_hud(void) {
     s32 slot_index;
-    s32 *temp_2_41;
+    s32 *bank;
     struct HudSlot *slot;
 
     slot_index = 0;
@@ -55,8 +55,8 @@ void init_hud(void) {
         slot->unk0 = 0;
         slot = (struct HudSlot *)((u8 *)slot + 0x90);
     } while (slot_index < 0xD);
-    temp_2_41 = hud_bank_main;
-    if (temp_2_41 == NULL) {
+    bank = hud_bank_main;
+    if (bank == NULL) {
         hud_bank_main = hud_heap_alloc(0x2800, 0, hud_file_str, 0x115);
         hud_bank_aux = hud_heap_alloc(0x1400, 0, hud_file_str, 0x116);
     }

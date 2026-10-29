@@ -25,16 +25,16 @@ void render_vendor_item_icon_strip_pass(void) __asm__("FUN_002386e8");
 
 void render_vendor_item_icon_strip_pass(void) {
     s32 slot_x;
-    s32 temp_3_162;
-    s32 temp_58_3;
-    s32 var_16_144;
-    s32 var_17_145;
+    s32 entry_offset;
+    s32 first_slot;
+    s32 strip_x;
+    s32 slot;
     s32 item_index;
     s32 sprite_x;
-    s32 var_2_171;
+    s32 strip_frame;
     s32 frame_index;
-    u16 temp_4_170;
-    u16 temp_4_73;
+    u16 icon;
+    u16 item_icon;
     s32 *item;
     s32 fill_color;
 
@@ -52,13 +52,13 @@ void render_vendor_item_icon_strip_pass(void) {
         if (D_001E63C0.unk210 > 0) {
             do {
                 item = (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
-                temp_4_73 =
+                item_icon =
                     ((struct HudItemEntry *)(void *)((u8 *)menu_item_info + item[-1] * 0x4C))
                         ->unk38;
                 if (item[0] == 1) {
-                    frame_index = get_icon_frame(temp_4_73, 2);
+                    frame_index = get_icon_frame(item_icon, 2);
                 } else {
-                    frame_index = get_icon_frame(temp_4_73, 0);
+                    frame_index = get_icon_frame(item_icon, 0);
                 }
                 draw_hud_sprite(frame_index, sprite_x, 6, 0x30, 0x30, 0x80);
                 sprite_x += 0x38;
@@ -78,27 +78,27 @@ void render_vendor_item_icon_strip_pass(void) {
                     (s32)0x80000000);
             draw_framebuffer_rect(0xB2, 4, 0xE6, 0x38, 0x200, 0x80, 0x80000000);
         }
-        var_16_144 = D_001E63C0.unk4C - 0x64;
-        var_17_145 = -2;
+        strip_x = D_001E63C0.unk4C - 0x64;
+        slot = -2;
         do {
-            temp_58_3 = D_001E63C0.unk58 - 3;
-            temp_3_162 =
-                ((s32)((D_001E63C0.unk210 * 2) + var_17_145 + temp_58_3) % (s32)D_001E63C0.unk210) *
+            first_slot = D_001E63C0.unk58 - 3;
+            entry_offset =
+                ((s32)((D_001E63C0.unk210 * 2) + slot + first_slot) % (s32)D_001E63C0.unk210) *
                 0x14;
-            temp_4_170 =
+            icon =
                 ((struct HudItemEntry *)(void *)((u8 *)menu_item_info +
-                                                   *(s32 *)(void *)(temp_3_162 +
+                                                   *(s32 *)(void *)(entry_offset +
                                                                     ((u8 *)&D_001E63C0 + 0xD0)) *
                                                        0x4C))
                     ->unk38;
-            if (*(s32 *)(void *)(temp_3_162 + ((u8 *)&D_001E63C0 + 0xD4)) == 1) {
-                var_2_171 = get_icon_frame(temp_4_170, 2);
+            if (*(s32 *)(void *)(entry_offset + ((u8 *)&D_001E63C0 + 0xD4)) == 1) {
+                strip_frame = get_icon_frame(icon, 2);
             } else {
-                var_2_171 = get_icon_frame(temp_4_170, 0);
+                strip_frame = get_icon_frame(icon, 0);
             }
-            var_17_145 += 1;
-            draw_hud_sprite(var_2_171, var_16_144, 6, 0x30, 0x30, 0x80808080);
-            var_16_144 += 0x38;
-        } while (var_17_145 < 9);
+            slot += 1;
+            draw_hud_sprite(strip_frame, strip_x, 6, 0x30, 0x30, 0x80808080);
+            strip_x += 0x38;
+        } while (slot < 9);
     }
 }

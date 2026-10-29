@@ -20,12 +20,12 @@ extern s32 strncpy(s8 *, s8 *, s32);
 extern void mceStorePwd();
 s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
     s32 result;
-    s32 var_2_28;
+    s32 ret;
 
     if (D_00159A00.serve == 0) {
         return -0x64;
     }
-    var_2_28 = -0xC8;
+    ret = -0xC8;
     if (PollSema(D_00132DAC[0]) >= 0) {
         if ((path == NULL) || (*path == 0)) {
             SignalSema(D_00132DAC[0]);
@@ -44,9 +44,9 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
         } else {
             SignalSema(D_00132DAC[0]);
         }
-        var_2_28 = result;
+        ret = result;
         /* Duplicate return node #10. Try simplifying control flow for better match */
-        return var_2_28;
+        return ret;
     }
-    return var_2_28;
+    return ret;
 }

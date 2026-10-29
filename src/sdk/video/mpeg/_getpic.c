@@ -15,60 +15,60 @@ s32 _getpic(struct sceMpeg *mpeg) {
         MPEG_BIDIRECTIONAL_PICTURE = 3,
         MPEG_DC_INTRA_PICTURE = 4
     };
-    s32 temp_6_13;
-    s32 var_18_8;
-    u32 var_19_6;
-    struct MpegDecoder *temp_16_12;
+    s32 image_addr;
+    s32 status;
+    u32 start_code;
+    struct MpegDecoder *decoder;
 
-    var_19_6 = 1;
-    var_18_8 = 0;
-    temp_16_12 = mpeg->sys;
-    temp_6_13 = temp_16_12->unkD8;
-    temp_16_12->unk0 = 0;
-    if (temp_6_13 & 0x3F) {
-        _Error1(temp_16_12, image_buffer_alignment_error_format, temp_6_13);
+    start_code = 1;
+    status = 0;
+    decoder = mpeg->sys;
+    image_addr = decoder->unkD8;
+    decoder->unk0 = 0;
+    if (image_addr & 0x3F) {
+        _Error1(decoder, image_buffer_alignment_error_format, image_addr);
         return -1;
     }
-    temp_16_12->unk820 = 0;
+    decoder->unk820 = 0;
     do {
-        if (var_18_8 == -1) {
+        if (status == -1) {
             goto dispatch;
         }
         do {
-            var_19_6 = _nextHeader(temp_16_12);
-            if (var_19_6 == 0) {
+            start_code = _nextHeader(decoder);
+            if (start_code == 0) {
                 break;
             }
-            if (temp_16_12->picture_structure == temp_16_12->unkD4) {
+            if (decoder->picture_structure == decoder->unkD4) {
                 break;
             }
-        } while (temp_16_12->mpeg2 != 0);
+        } while (decoder->mpeg2 != 0);
     dispatch:
-        switch (var_19_6) {
+        switch (start_code) {
         case MPEG_SEQUENCE_END:
             _sceMpegFlush(mpeg);
-            temp_16_12->unk0 = 1;
+            decoder->unk0 = 1;
             break;
         case MPEG_INTRA_PICTURE:
-            temp_16_12->unkA8 = 0;
-            temp_16_12->unkA4 = 0;
-            temp_16_12->unkA0 = 0;
-            var_18_8 = _decodeOrSkip(mpeg, 0, temp_16_12->unk94);
-            temp_16_12->unkA0 = (s32)(temp_16_12->unkA0 + 1);
+            decoder->unkA8 = 0;
+            decoder->unkA4 = 0;
+            decoder->unkA0 = 0;
+            status = _decodeOrSkip(mpeg, 0, decoder->unk94);
+            decoder->unkA0 = (s32)(decoder->unkA0 + 1);
             break;
         case MPEG_PREDICTIVE_PICTURE:
-            var_18_8 = _decodeOrSkip(mpeg, temp_16_12->unkA4, temp_16_12->unk98);
-            temp_16_12->unkA4 = (s32)(temp_16_12->unkA4 + 1);
+            status = _decodeOrSkip(mpeg, decoder->unkA4, decoder->unk98);
+            decoder->unkA4 = (s32)(decoder->unkA4 + 1);
             break;
         case MPEG_BIDIRECTIONAL_PICTURE:
         case MPEG_DC_INTRA_PICTURE:
-            var_18_8 = _decodeOrSkip(mpeg, temp_16_12->unkA8, temp_16_12->unk9C);
-            temp_16_12->unkA8 = (s32)(temp_16_12->unkA8 + 1);
+            status = _decodeOrSkip(mpeg, decoder->unkA8, decoder->unk9C);
+            decoder->unkA8 = (s32)(decoder->unkA8 + 1);
             break;
         }
-        if (temp_16_12->unk820 != 0) {
+        if (decoder->unk820 != 0) {
             return 1;
         }
-    } while (temp_16_12->unk0 == 0);
+    } while (decoder->unk0 == 0);
     return 1;
 }

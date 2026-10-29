@@ -22,8 +22,8 @@ void update_hud(void) {
     short new_var2;
     u8 *slot;
     s32 text_color;
-    s32 temp_2_59;
-    s32 temp_2_76;
+    s32 raised_alpha;
+    s32 lowered_alpha;
     s32 remaining;
     if (hud_state.unk30 == 0) {
         goto block_2;
@@ -70,18 +70,18 @@ block_11:
     if (hud_msg_count == 0) {
         goto block_15;
     }
-    temp_2_59 = D_0015F684 + (0x80 / scale_game_frames(8));
-    D_0015F684 = temp_2_59;
-    if (temp_2_59 < 0x81) {
+    raised_alpha = D_0015F684 + (0x80 / scale_game_frames(8));
+    D_0015F684 = raised_alpha;
+    if (raised_alpha < 0x81) {
         goto block_17;
     }
     D_0015F684 = 0x80;
     goto block_17;
 block_15:
-    temp_2_76 = D_0015F684 - (0x80 / scale_game_frames(8));
+    lowered_alpha = D_0015F684 - (0x80 / scale_game_frames(8));
 
-    D_0015F684 = temp_2_76;
-    if (temp_2_76 >= 0) {
+    D_0015F684 = lowered_alpha;
+    if (lowered_alpha >= 0) {
         goto block_17;
     }
     D_0015F684 = 0;

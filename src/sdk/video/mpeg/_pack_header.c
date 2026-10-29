@@ -11,31 +11,31 @@ extern s32 _sysbitGet();
 extern s32 _sysbitMarker();
 extern s32 _system_header();
 s32 _pack_header(s32 bitstream_context, struct PackHeaderInfo *pack_header_info) {
-    u32 temp_16_20;
-    u32 temp_17_26;
-    u32 temp_18_32;
-    u32 temp_20_45;
-    u32 var_21_16;
+    u32 scr_high;
+    u32 scr_mid;
+    u32 scr_low;
+    u32 stuffing_length;
+    u32 skipped;
 
-    var_21_16 = 0;
+    skipped = 0;
     _sysbitGet(bitstream_context, 0x22);
-    temp_16_20 = _sysbitGet(bitstream_context, 3);
+    scr_high = _sysbitGet(bitstream_context, 3);
     _sysbitMarker(bitstream_context);
-    temp_17_26 = _sysbitGet(bitstream_context, 0xF);
+    scr_mid = _sysbitGet(bitstream_context, 0xF);
     _sysbitMarker(bitstream_context);
-    temp_18_32 = _sysbitGet(bitstream_context, 0xF);
+    scr_low = _sysbitGet(bitstream_context, 0xF);
     _sysbitMarker(bitstream_context);
     pack_header_info->unk0 = _sysbitGet(bitstream_context, 9);
     _sysbitGet(bitstream_context, 0x1E);
-    temp_20_45 = _sysbitGet(bitstream_context, 3);
-    pack_header_info->unk8 = (s32)((temp_16_20 >> 2) & 1);
-    pack_header_info->unk4 = (s32)((temp_16_20 << 0x1E) | (temp_17_26 << 0xF) | temp_18_32);
-    if (temp_20_45 != 0) {
+    stuffing_length = _sysbitGet(bitstream_context, 3);
+    pack_header_info->unk8 = (s32)((scr_high >> 2) & 1);
+    pack_header_info->unk4 = (s32)((scr_high << 0x1E) | (scr_mid << 0xF) | scr_low);
+    if (stuffing_length != 0) {
         do {
             do {
                 _sysbitGet(bitstream_context, 8);
-                var_21_16 += 1;
-            } while (var_21_16 < temp_20_45);
+                skipped += 1;
+            } while (skipped < stuffing_length);
         } while (0);
     }
     if (peek_bits(bitstream_context, 0x20) == 0x1BB) {

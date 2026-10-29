@@ -6,7 +6,7 @@ extern s32 SignalSema();
 extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceSifCallRpc();
 s32 sceCdNcmdDiskReady(void) {
-    s32 temp_16_37;
+    s32 status;
 
     if (cd_check_ncmd(2) == 0) {
         return 0;
@@ -15,7 +15,7 @@ s32 sceCdNcmdDiskReady(void) {
         SignalSema(D_001312E8[0]);
         return 0;
     }
-    temp_16_37 = *(u32 *)((u32)native_cd_drive_state_response | 0x20000000);
+    status = *(u32 *)((u32)native_cd_drive_state_response | 0x20000000);
     SignalSema(D_001312E8[0]);
-    return temp_16_37;
+    return status;
 }

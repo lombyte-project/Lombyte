@@ -18,7 +18,7 @@ s32 saving_data_menu(struct MenuScreen *menu) __asm__("FUN_00222f88");
 
 s32 saving_data_menu(struct MenuScreen *menu) {
     u8 *new_var;
-    struct MenuPage *temp_2_126;
+    struct MenuPage *back_menu;
     s32 prev_slot;
     s32 save_state;
     s32 slot;
@@ -69,9 +69,9 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
     block_17:
         if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
-            temp_2_126 = menu_system.current->back;
-            if (temp_2_126 != 0) {
-                menu_system.next = temp_2_126;
+            back_menu = menu_system.current->back;
+            if (back_menu != 0) {
+                menu_system.next = back_menu;
                 goto block_23;
             }
             if (menu_system.close_locked == 0) {

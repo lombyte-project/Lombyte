@@ -7,19 +7,19 @@ extern s32 _nextBit();
 extern s32 _sendIpuCommand();
 extern s32 _waitIpuIdle();
 void _quantMatrixExtension(struct MpegDecoder *mpeg) {
-    s32 temp_2_20;
-    s32 temp_2_7;
+    s32 load_non_intra;
+    s32 load_intra;
 
-    temp_2_7 = _nextBit(mpeg, 1);
-    mpeg->load_intra_quantiser_matrix = temp_2_7;
-    if (temp_2_7 != 0) {
+    load_intra = _nextBit(mpeg, 1);
+    mpeg->load_intra_quantiser_matrix = load_intra;
+    if (load_intra != 0) {
         _waitIpuIdle(mpeg);
         _sendIpuCommand(mpeg, 0x50000000);
         _waitIpuIdle(mpeg);
     }
-    temp_2_20 = _nextBit(mpeg, 1);
-    mpeg->load_non_intra_quantiser_matrix = temp_2_20;
-    if (temp_2_20 != 0) {
+    load_non_intra = _nextBit(mpeg, 1);
+    mpeg->load_non_intra_quantiser_matrix = load_non_intra;
+    if (load_non_intra != 0) {
         _waitIpuIdle(mpeg);
         _sendIpuCommand(mpeg, 0x58000000);
         _waitIpuIdle(mpeg);

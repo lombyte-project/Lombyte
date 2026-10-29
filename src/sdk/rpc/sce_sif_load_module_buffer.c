@@ -11,12 +11,12 @@ extern s32 memcpy();
 extern s32 sceSifCallRpc();
 #define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
 s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 size, s32 module_arguments, s32 *result_out) {
-    s32 var_2_18;
+    s32 mask;
     s32 rpc_return_value;
 
-    var_2_18 = 0xFFFF0000;
+    mask = 0xFFFF0000;
     if (_lf_bind() < 0) {
-        return var_2_18;
+        return mask;
     }
     if (sif_load_module_server_changed() != 0) {
         return 0xFFFEFFFC;

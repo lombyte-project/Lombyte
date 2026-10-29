@@ -17,13 +17,13 @@ extern u8 skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868");
 extern s32 _Error(struct MpegDecoder *a0, u8 *a1);
 s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 *picture_structure_mode, struct MpegMotionRef *motion_reference,
              s32 *flags) {
-    s32 temp_10_11;
-    s32 temp_2_32;
-    s32 var_9_6;
+    s32 buf_offset;
+    s32 bottom_field;
+    s32 ok;
 
-    var_9_6 = 1;
-    temp_10_11 = decoder->mb_buf_index * 0x140;
-    *(s32 *)((u8 *)(((u8 *)decoder + (temp_10_11))) + 0x6CC) = 1;
+    ok = 1;
+    buf_offset = decoder->mb_buf_index * 0x140;
+    *(s32 *)((u8 *)(((u8 *)decoder + (buf_offset))) + 0x6CC) = 1;
     decoder->dc_reset = 1;
     if (decoder->picture_coding_type == 2) {
         skip_state->unk14 = 0;
@@ -35,14 +35,14 @@ s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 
         *picture_structure_mode = 2;
     } else {
         *picture_structure_mode = 1;
-        temp_2_32 = decoder->picture_structure == 2;
-        motion_reference->unk4 = temp_2_32;
-        motion_reference->unk0 = temp_2_32;
+        bottom_field = decoder->picture_structure == 2;
+        motion_reference->unk4 = bottom_field;
+        motion_reference->unk0 = bottom_field;
     }
     if (decoder->picture_coding_type == 1) {
         _Error(decoder, skipped_macroblock_in_i_picture_error_message);
-        var_9_6 = 0;
+        ok = 0;
     }
     *flags &= ~1;
-    return var_9_6;
+    return ok;
 }

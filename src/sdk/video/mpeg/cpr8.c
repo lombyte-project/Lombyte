@@ -23,73 +23,73 @@ void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     struct MpegDecoderFrame *decoder_transfer_layout;
     s32 transfer_pass_count;
     s32 destination_pass_base;
-    s32 temp_2_106;
-    s32 temp_2_73;
-    s32 temp_4_27;
-    s32 var_16_70;
-    s32 var_17_68;
-    s32 var_18_22;
-    s32 var_20_40;
-    s32 var_21_38;
-    s32 var_30_43;
-    s32 var_3_29;
-    s32 var_5_64;
+    s32 interrupts_on2;
+    s32 interrupts_on;
+    s32 layout_width;
+    s32 row;
+    s32 dest_addr;
+    s32 source_addr;
+    s32 qword_count;
+    s32 source_stride;
+    s32 dest_stride;
+    s32 dest_width;
+    s32 pass;
 
     decoder_transfer_layout = (struct MpegDecoderFrame *)decoder;
-    var_18_22 = copy_params->unk0 & 0x0FFFFFFF;
+    source_addr = copy_params->unk0 & 0x0FFFFFFF;
     destination_pass_base = decoder->unkD8 & 0x0FFFFFFF;
     if (decoder_transfer_layout->unk174 == 3) {
         goto block_3;
     }
-    temp_4_27 = decoder_transfer_layout->unkE0;
-    var_3_29 = temp_4_27;
-    if (temp_4_27 != 0) {
+    layout_width = decoder_transfer_layout->unkE0;
+    dest_width = layout_width;
+    if (layout_width != 0) {
         goto block_8;
     }
     goto block_4;
 block_3:
-    var_3_29 = decoder_transfer_layout->unkE0;
+    dest_width = decoder_transfer_layout->unkE0;
 block_4:
-    var_21_38 = copy_params->unk10 * 0x180;
-    var_20_40 = var_21_38 >> 4;
-    if (var_3_29 == 0) {
+    source_stride = copy_params->unk10 * 0x180;
+    qword_count = source_stride >> 4;
+    if (dest_width == 0) {
         goto block_6;
     }
-    var_30_43 = (var_3_29 >> 4) * 0x180;
+    dest_stride = (dest_width >> 4) * 0x180;
     goto block_7;
 block_6:
-    var_30_43 = var_21_38;
+    dest_stride = source_stride;
 block_7:
     transfer_pass_count = 1;
     goto block_9;
 block_8:
-    var_30_43 = (temp_4_27 >> 4) * 0xC0;
-    var_21_38 = ((s32)copy_params->unk10 >> 1) * 0x180;
+    dest_stride = (layout_width >> 4) * 0xC0;
+    source_stride = ((s32)copy_params->unk10 >> 1) * 0x180;
     transfer_pass_count = 2;
-    var_20_40 = var_21_38 >> 4;
+    qword_count = source_stride >> 4;
 block_9:
-    var_5_64 = 0;
-    while (var_5_64 < transfer_pass_count) {
-        var_17_68 = destination_pass_base;
-        for (var_16_70 = 0; var_16_70 < copy_params->unkC; var_16_70++) {
-            temp_2_73 = DIntr();
+    pass = 0;
+    while (pass < transfer_pass_count) {
+        dest_addr = destination_pass_base;
+        for (row = 0; row < copy_params->unkC; row++) {
+            interrupts_on = DIntr();
             *(volatile s32 *)0x1000D480 = 0;
-            *(volatile s32 *)0x1000D410 = var_18_22;
-            *(volatile s32 *)0x1000D420 = var_20_40;
+            *(volatile s32 *)0x1000D410 = source_addr;
+            *(volatile s32 *)0x1000D420 = qword_count;
             *(volatile s32 *)0x1000D400 = 0x101;
-            if (temp_2_73 == 0) {
+            if (interrupts_on == 0) {
                 goto block_15;
             }
             EnableInterrupts();
         block_15:
             while (*(volatile u32 *)0x1000D400 & 0x100) {
             }
-            temp_2_106 = DIntr();
+            interrupts_on2 = DIntr();
             *(volatile s32 *)0x1000D080 = 0;
-            *(volatile s32 *)0x1000D010 = var_17_68;
-            *(volatile s32 *)0x1000D020 = var_20_40;
+            *(volatile s32 *)0x1000D010 = dest_addr;
+            *(volatile s32 *)0x1000D020 = qword_count;
             *(volatile s32 *)0x1000D000 = 0x100;
-            if (temp_2_106 == 0) {
+            if (interrupts_on2 == 0) {
                 goto block_19;
             }
             EnableInterrupts();
@@ -98,10 +98,10 @@ block_9:
             }
             while (*(volatile u32 *)0x1000D020 != 0) {
             }
-            var_17_68 += var_30_43;
-            var_18_22 += var_21_38;
+            dest_addr += dest_stride;
+            source_addr += source_stride;
         }
-        var_5_64++;
+        pass++;
         destination_pass_base += decoder_transfer_layout->unkE4 * 0xC0;
     }
     return;

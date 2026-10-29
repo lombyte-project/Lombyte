@@ -11,22 +11,22 @@ s32 draw_selected_menu_item_text(struct MenuScreen *menu) __asm__("FUN_002220f0"
 s32 draw_selected_menu_item_text(struct MenuScreen *menu) {
     s32 height;
     s32 center_y;
-    s32 temp_16_61;
-    s32 temp_16_88;
+    s32 mid_x;
+    s32 lower_y;
     s32 center_x;
-    s32 temp_17_64;
-    s32 temp_17_85;
-    s32 temp_20_22;
-    s32 temp_20_48;
-    u32 temp_16_50;
+    s32 upper_y;
+    s32 center_x2;
+    s32 entry_index;
+    s32 entry_offset;
+    u32 menu_width;
     u32 width;
-    u32 temp_17_75;
-    struct MenuScreen *temp_3_16;
+    u32 width2;
+    struct MenuScreen *focus_list;
 
-    temp_3_16 = menu_system.current->focus;
-    temp_20_22 = temp_3_16->data.list.items[temp_3_16->data.list.selected].param.value;
+    focus_list = menu_system.current->focus;
+    entry_index = focus_list->data.list.items[focus_list->data.list.selected].param.value;
     setup_gif_paging(0);
-    if (temp_20_22 == -1) {
+    if (entry_index == -1) {
         goto block_2;
     }
     goto block_4;
@@ -38,17 +38,17 @@ block_2:
     font_print_center(center_x, center_y, 0x80FFA888, get_help_message_text(0x5019), -1);
     goto block_5;
 block_4:
-    temp_20_48 = temp_20_22 * 0xC;
-    temp_16_50 = menu->width;
-    temp_16_61 = (s32)(temp_16_50 + ((u32)temp_16_50 >> 0x1F)) >> 1;
-    temp_17_64 = ((s32)menu->height / 3) - 8;
-    font_print_center(temp_16_61, temp_17_64, 0x80FFA888,
-                      get_help_message_text(*(s32 *)(void *)(temp_20_48 + D_001DDD40)), -1);
-    temp_17_75 = menu->width;
-    temp_17_85 = (s32)(temp_17_75 + ((u32)temp_17_75 >> 0x1F)) >> 1;
-    temp_16_88 = ((s32)(menu->height * 2) / 3) - 8;
-    font_print_center(temp_17_85, temp_16_88, 0x80FFA888,
-                      get_help_message_text(*(s32 *)((u8 *)(D_001DDD40 + temp_20_48) + 0x4)), -1);
+    entry_offset = entry_index * 0xC;
+    menu_width = menu->width;
+    mid_x = (s32)(menu_width + ((u32)menu_width >> 0x1F)) >> 1;
+    upper_y = ((s32)menu->height / 3) - 8;
+    font_print_center(mid_x, upper_y, 0x80FFA888,
+                      get_help_message_text(*(s32 *)(void *)(entry_offset + D_001DDD40)), -1);
+    width2 = menu->width;
+    center_x2 = (s32)(width2 + ((u32)width2 >> 0x1F)) >> 1;
+    lower_y = ((s32)(menu->height * 2) / 3) - 8;
+    font_print_center(center_x2, lower_y, 0x80FFA888,
+                      get_help_message_text(*(s32 *)((u8 *)(D_001DDD40 + entry_offset) + 0x4)), -1);
 block_5:
     do_gif_paging();
     return 2;

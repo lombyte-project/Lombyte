@@ -10,7 +10,7 @@ extern s32 SignalSema();
 extern s32 sceSifRemoveCmdHandler();
 extern s32 EnableInterrupts();
 void cdvd_exit(void) {
-    s32 temp_16_31;
+    s32 interrupts_enabled;
     if (D_001312D4[0] != 0) {
         do {
             D_00131314[0] = -1;
@@ -20,8 +20,8 @@ void cdvd_exit(void) {
     DeleteSema(D_001312E8[0]);
     DeleteSema(D_001312EC[0]);
     DeleteSema(D_001312E0[0]);
-    temp_16_31 = DIntr();
+    interrupts_enabled = DIntr();
     sceSifRemoveCmdHandler(0x80000012);
-    if (temp_16_31 != 0)
+    if (interrupts_enabled != 0)
         EnableInterrupts();
 }

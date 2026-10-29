@@ -4,15 +4,15 @@ extern s32 snd_start_movie_sound() __asm__("func_0012F108");
 void audio_dec_start(struct AudioDec *dec) __asm__("FUN_0023acb8");
 
 void audio_dec_start(struct AudioDec *dec) {
-    s32 temp_2_10;
+    s32 buff_size;
     s32 channel_count;
     s32 four;
     s32 copy;
 
-    temp_2_10 = dec->iopBuffSize;
+    buff_size = dec->iopBuffSize;
     four = 0x400;
     channel_count = dec->hdr.ch;
-    snd_start_movie_sound(dec->iopBuff, ((copy = temp_2_10) / 0x400) * four, dec->iopZero,
+    snd_start_movie_sound(dec->iopBuff, ((copy = buff_size) / 0x400) * four, dec->iopZero,
                           dec->hdr.rate, channel_count);
     dec->state = 2;
     /* Fakematch: GCC removes both stores, but the read-modify-write

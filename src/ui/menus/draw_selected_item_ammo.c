@@ -27,37 +27,37 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) __asm__("FUN_0021f158");
 s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     u8 sp_slot[0x50];
     u8 descriptor[0x20];
-    s16 temp_4_20;
+    s16 cell_id;
     s32 selected_item_id;
-    s32 temp_17_38;
-    s32 temp_18_40;
+    s32 ammo;
+    s32 entry_field;
     struct ImageEntry *entry;
     struct MenuScreen *grid;
     u8 *end_ptr;
 
     grid = menu_system.current->focus;
-    temp_4_20 = grid->data.grid.cells[grid->data.grid.selected_cell].id;
-    selected_item_id = temp_4_20;
+    cell_id = grid->data.grid.cells[grid->data.grid.selected_cell].id;
+    selected_item_id = cell_id;
     if (*(selected_item_id + item_available) == 0) {
         return 0;
     }
-    temp_17_38 = weapon_ammo_counts[selected_item_id];
+    ammo = weapon_ammo_counts[selected_item_id];
     entry = &D_001DFFB0[selected_item_id];
-    temp_18_40 = (s32)entry->unkE;
+    entry_field = (s32)entry->unkE;
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0xB);
     if (entry->unk8 == 0) {
         sprintf(sp_slot, get_help_message_text(0x4F52));
     } else {
-        if (temp_17_38 < 0x3E8) {
-            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_decimal_format, temp_17_38);
+        if (ammo < 0x3E8) {
+            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_decimal_format, ammo);
         } else {
-            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_grouped_decimal_format, temp_17_38 / 1000, temp_17_38 % 1000);
+            end_ptr = sp_slot + sprintf(sp_slot, ammo_count_grouped_decimal_format, ammo / 1000, ammo % 1000);
         }
-        if ((s32)temp_18_40 < 0x3E8) {
-            sprintf(end_ptr, D_001602A0, (s32)temp_18_40);
+        if ((s32)entry_field < 0x3E8) {
+            sprintf(end_ptr, D_001602A0, (s32)entry_field);
         } else {
-            sprintf(end_ptr, D_001602D0, (s32)temp_18_40 / 1000, (s32)temp_18_40 % 1000);
+            sprintf(end_ptr, D_001602D0, (s32)entry_field / 1000, (s32)entry_field % 1000);
         }
     }
     setup_gif_paging(0);

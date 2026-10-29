@@ -362,13 +362,13 @@ block_7:
 s32 map_filter_l07_7(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) __asm__("func_002073B8");
 
 s32 map_filter_l07_7(s32 px, s32 py, f32 unused_input, f32 unused_parameter, f32 reveal_test_value) {
-    s32 var_4_15;
+    s32 enabled;
 
-    var_4_15 = 0;
+    enabled = 0;
     if (((u32)(hero.state.control_mode - 0x11) < 2U) || (hero.base_condition == 1)) {
-        var_4_15 = 1;
+        enabled = 1;
     }
-    if (var_4_15 != 0) {
+    if (enabled != 0) {
         return 0;
     }
     if (reveal_test_value < 71.5f) {

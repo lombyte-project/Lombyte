@@ -21,7 +21,7 @@ extern void KernelCopyRdata();
 void InitSystemCallTableAddress(void) {
     s32 copy_cursor;
     s32 find_cursor;
-    s32 var_2_36;
+    s32 found_before;
     u32 copy_addr;
     u32 find_addr;
     Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk0, syscall_table_address_init_bindings.unk4);
@@ -42,7 +42,7 @@ void InitSystemCallTableAddress(void) {
                     InvokeKernelSyscall0083_Rfu(copy_cursor + 4, 0x80080000, &KernelCopyRdata);
                 copy_addr = copy_cursor - 0x168;
             }
-            var_2_36 = find_addr < copy_addr;
+            found_before = find_addr < copy_addr;
         } while (find_addr != copy_addr);
     }
     D_00130308[0] = find_addr;
