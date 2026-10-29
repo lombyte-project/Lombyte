@@ -7,7 +7,6 @@ typedef struct MobyClassData {
     u8 pad[0x2C];
     s32 unk2C;
 } MobyClassData;
-extern s16 resident_class_id_by_slot[] __asm__("D_001B3900");
 extern void assign_moby_class_data(s32) __asm__("FUN_00212d68");
 extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
                                                s32) __asm__("FUN_00203338");
@@ -32,3 +31,5 @@ void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material
 }
 
 extern __typeof__(register_moby_class) func_00203640 __attribute__((alias("FUN_00203640")));
+
+s16 resident_class_id_by_slot[224] = {0};

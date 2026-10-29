@@ -10,6 +10,9 @@
    differs per user (class record, streamed resource, preview resource): cast at use. */
 extern void *moby_class_resources[224] __asm__("D_001B3200");
 
+/* Slot -> class id, the reverse of resident_class_slot_by_id. */
+extern s16 resident_class_id_by_slot[224] __asm__("D_001B3900");
+
 /* Class id -> slot in the table above; initialize_level_runtime and transition_load_wad
    fill all 0x800 bytes with 0xFF before the classes register. */
 extern u8 resident_class_slot_by_id[0x800] __asm__("D_001B3AC0");
