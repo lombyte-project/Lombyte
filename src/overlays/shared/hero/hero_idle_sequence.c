@@ -2185,13 +2185,13 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
         {
             f32 target = frame_delta_scale * step;
             f32 speed = anim_speed_divisor * rate2;
-            f32 result = target / speed;
+            f32 target_anim_speed = target / speed;
 
             if (anim_speed_step == negone) {
-                anim_speed_owner->anim_speed = result;
+                anim_speed_owner->anim_speed = target_anim_speed;
                 return negone;
             }
-            return approach_value((f32 *)(&anim_speed_owner->anim_speed), result, anim_speed_step);
+            return approach_value((f32 *)(&anim_speed_owner->anim_speed), target_anim_speed, anim_speed_step);
         }
     }
 
