@@ -82,12 +82,12 @@ void initialize_linked_pair_group(struct Moby *moby) {
         do {
             char *other = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
             if (*(short *)(other + 0xA6) == 0x228) {
-                int *data;
+                int *linked_partner_slot;
                 if (moby != other) {
                     *(unsigned short *)(other + 0x34) |= 2;
                 }
-                data = *(int **)(other + 0x78);
-                *data = FUN_L16_002cf678_u(other);
+                linked_partner_slot = *(int **)(other + 0x78);
+                *linked_partner_slot = FUN_L16_002cf678_u(other);
             }
         } while (*group_entry++ >= 0);
     }
