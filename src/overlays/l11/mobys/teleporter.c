@@ -210,8 +210,8 @@ void teleporter_update(struct Moby *moby) {
 void request_teleporter_help_message(struct Moby *moby) __asm__("FUN_L11_002f2cd0");
 
 void request_teleporter_help_message(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    switch (*(int *)(data + 0x10)) {
+    char *teleporter_private_vars = (char *)moby->pvars;
+    switch (*(int *)(teleporter_private_vars + 0x10)) {
     case 0:
         try_set_help_message(0xB, 0x2B0D);
         break;
