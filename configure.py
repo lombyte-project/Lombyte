@@ -519,6 +519,7 @@ DATA_OVERLAYS = {
     "textbin/audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
     "gameplay/camera/update_all_cameras": (0x187410, 0x88390, 7680),
     "world/loaders/register_moby_class": (0x1B3900, 0xB4880, 448),
+    "rendering/tfrag/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
