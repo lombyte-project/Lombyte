@@ -336,9 +336,9 @@ void taxi_update(struct Moby *moby) {
         int            k = current_level_index * 16;
         if (t[taxi_vars->item_a + k] == 0xFF || t[taxi_vars->item_b + k] == 0xFF) {
             unsigned short bits = moby->flags;
-            int            value = moby->pclass->collision;
+            int            class_collision = moby->pclass->collision;
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = class_collision;
             moby->flags = bits & 0xFFFE;
             moby->state = 1;
         }
