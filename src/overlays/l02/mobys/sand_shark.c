@@ -907,7 +907,7 @@ extern int D_L02_001ABE40[];
 
 int select_group_class_29c_moby(void *argp) {
     char  *moby = argp;
-    int    result = 0;
+    int    selected_group_moby = 0;
     short *group_ids;
     if (((unsigned char *)moby)[0x21] == 0xFF) {
         return 0;
@@ -917,12 +917,12 @@ int select_group_class_29c_moby(void *argp) {
         int   group_moby_byte_offset = (*(unsigned short *)group_ids & 0x7FFF) << 8;
         char *group_moby = (char *)(group_moby_byte_offset + D_L02_0015FFD8_m);
         if (MOBY(group_moby)->oclass == 0x29C && ((unsigned char *)group_moby)[0x20] < 0x7F) {
-            if (result == 0 || (random_integer_below(0xFF) & 1)) {
-                result = D_L02_0015FFD8_m + group_moby_byte_offset;
+            if (selected_group_moby == 0 || (random_integer_below(0xFF) & 1)) {
+                selected_group_moby = D_L02_0015FFD8_m + group_moby_byte_offset;
             }
         }
     } while (*group_ids++ >= 0);
-    return result;
+    return selected_group_moby;
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
 
