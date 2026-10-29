@@ -431,8 +431,8 @@ extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__(
 void draw_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030de68");
 
 void draw_sandmouse_billboard_quads(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    char *entry = data + 0x70;
+    char *sandmouse_instance_vars = ((char *)moby->pvars);
+    char *entry = sandmouse_instance_vars + 0x70;
     int   i;
     for (i = 1; i >= 0; i--) {
         draw_offset_textured_effect_quad(entry, 0x2528AA28, 0.1f, 0.08f);
