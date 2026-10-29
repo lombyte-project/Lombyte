@@ -118,14 +118,14 @@ spawn_drek_boss_electric_ball(void *owner, void *vector, int value) __asm__("FUN
 char *spawn_drek_boss_electric_ball(void *owner, void *vector, int value) {
     char *moby = create_moby(0x3D7);
     if (moby != 0) {
-        char *data;
+        char *class_3d7_private_vars;
         ((unsigned char *)moby)[0x30] = 0xFF;
         qcopy(moby + 0x10, vector);
-        data = ((char *)MOBY(moby)->pvars);
-        *(void **)(data + 0x20) = owner;
-        *(int *)(data + 0x28) = 5;
-        *(int *)(data + 0x34) = value;
-        *(int *)(data + 0x24) = 0;
+        class_3d7_private_vars = ((char *)MOBY(moby)->pvars);
+        *(void **)(class_3d7_private_vars + 0x20) = owner;
+        *(int *)(class_3d7_private_vars + 0x28) = 5;
+        *(int *)(class_3d7_private_vars + 0x34) = value;
+        *(int *)(class_3d7_private_vars + 0x24) = 0;
     }
     return moby;
 }
