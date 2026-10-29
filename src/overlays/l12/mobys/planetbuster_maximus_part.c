@@ -543,7 +543,7 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) __asm__("FUN_L12_
 void update_planetbuster_maximus_glow_color(struct Moby *moby) {
     int   i;
     int   alpha = 0x80000000;
-    char *data = (char *)moby->pvars;
+    char *linked_parts_owner_pvars = (char *)moby->pvars;
     for (i = 0; i < 18; i++) {
         struct Moby *other;
         int          period;
@@ -559,7 +559,7 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) {
             other = moby;
         } else {
             other = (struct Moby *)((char *)(*(struct Moby **)&D_L12_0015FFD8_p) +
-                                    ((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8));
+                                    ((unsigned int)*(int *)(linked_parts_owner_pvars + i * 0x30 + 0x20) << 8));
         }
         if (other->oclass == 0x4FE)
             continue;
