@@ -179,7 +179,7 @@ void update_child_grid_poses(struct Moby *grid_controller) {
     Vec4f parent_axis0_offset;
     Vec4f parent_axis1_offset;
     Vec4f child_position_offset;
-    char *data;
+    char *child_grid_vars;
     struct Moby *(*grid)[6];
     float progress;
     float hi;
@@ -189,13 +189,13 @@ void update_child_grid_poses(struct Moby *grid_controller) {
     int   row;
     int   col;
 
-    data = grid_controller->pvars;
-    grid = (struct Moby * (*)[6]) data;
+    child_grid_vars = grid_controller->pvars;
+    grid = (struct Moby * (*)[6]) child_grid_vars;
     fast_vec_normalize(
         &parent_axis0_offset, &grid_controller->rot_row0, child_grid_parent_axis0_offset_length_gp);
     fast_vec_normalize(
         &parent_axis1_offset, &grid_controller->rot_row1, child_grid_parent_axis1_offset_length_gp);
-    progress = *(float *)(data + 0x6C);
+    progress = *(float *)(child_grid_vars + 0x6C);
     hi = 90.0f - progress * 180.0f;
     if (hi < -90.0f) {
         hi = -90.0f;
