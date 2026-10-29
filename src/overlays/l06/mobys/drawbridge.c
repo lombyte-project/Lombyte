@@ -291,8 +291,8 @@ void update_drawbridge(Moby *moby) {
 }
 
 void update_drawbridge_segment_transforms(Moby *moby) {
-    Vec_2F69D0      result, first, second;
-    DrawbridgeVars *data = (DrawbridgeVars *)moby->pvars;
+    Vec_2F69D0      segment_position, first, second;
+    DrawbridgeVars *drawbridge_vars = (DrawbridgeVars *)moby->pvars;
     int             i, j;
     float           length, angle, left, min_length, right, limit;
 
@@ -302,24 +302,24 @@ void update_drawbridge_segment_transforms(Moby *moby) {
             length = 0.0f;
         fast_vec_normalize(&first, &moby->rot_row0, length);
         transform_vector_by_basis(
-            &result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
-        fast_vec_add(&result, &result, &moby->pos);
-        fast_vec_add(&result, &result, &first);
-        qcopy(&data->a[i]->pos, &result);
+            &segment_position, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
+        fast_vec_add(&segment_position, &segment_position, &moby->pos);
+        fast_vec_add(&segment_position, &segment_position, &first);
+        qcopy(&drawbridge_vars->a[i]->pos, &segment_position);
         transform_vector_by_basis(
-            &result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
-        fast_vec_add(&result, &result, &moby->pos);
-        fast_vec_add(&result, &result, &first);
-        qcopy(&data->b[i]->pos, &result);
+            &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
+        fast_vec_add(&segment_position, &segment_position, &moby->pos);
+        fast_vec_add(&segment_position, &segment_position, &first);
+        qcopy(&drawbridge_vars->b[i]->pos, &segment_position);
         angle = drawbridge_pitch_degrees * 0.017453292f - (float)(i * 45) * 0.017453292f;
         if (angle > 1.5707964f)
             angle = 1.5707964f;
         else if (angle < 0.0f)
             angle = 0.0f;
-        data->a[i]->rot.x = -angle;
-        data->b[i]->rot.x = angle;
-        update_entity(data->a[i]);
-        update_entity(data->b[i]);
+        drawbridge_vars->a[i]->rot.x = -angle;
+        drawbridge_vars->b[i]->rot.x = angle;
+        update_entity(drawbridge_vars->a[i]);
+        update_entity(drawbridge_vars->b[i]);
     }
 
     for (j = 0; j < 10; j++) {
@@ -334,15 +334,15 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         fast_vec_normalize(&first, &moby->rot_row0, length);
         fast_vec_normalize(&second, &moby->rot_row0, right);
         transform_vector_by_basis(
-            &result, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
-        fast_vec_add(&result, &result, &moby->pos);
-        fast_vec_add(&result, &result, &first);
-        qcopy(&data->c[j]->pos, &result);
+            &segment_position, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
+        fast_vec_add(&segment_position, &segment_position, &moby->pos);
+        fast_vec_add(&segment_position, &segment_position, &first);
+        qcopy(&drawbridge_vars->c[j]->pos, &segment_position);
         transform_vector_by_basis(
-            &result, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
-        fast_vec_add(&result, &result, &moby->pos);
-        fast_vec_add(&result, &result, &second);
-        qcopy(&data->d[j]->pos, &result);
+            &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
+        fast_vec_add(&segment_position, &segment_position, &moby->pos);
+        fast_vec_add(&segment_position, &segment_position, &second);
+        qcopy(&drawbridge_vars->d[j]->pos, &segment_position);
 
         left = drawbridge_pitch_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f;
         limit = left - drawbridge_pitch_speed_gp * 0.017453292f;
@@ -370,8 +370,8 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         if (right != 0.0f && limit == 0.0f)
             allocate_voice_for_target_entry(1, 0, data->d[j]);
 
-        data->c[j]->rot.x = -left;
-        data->d[j]->rot.x = right;
+        drawbridge_vars->c[j]->rot.x = -left;
+        drawbridge_vars->d[j]->rot.x = right;
 
         left = drawbridge_yaw_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f;
         limit = left - drawbridge_yaw_speed_gp * 0.017453292f;
@@ -399,9 +399,9 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         if (right != 0.0f && limit == 0.0f)
             allocate_voice_for_target_entry(2, 0, data->d[j]);
 
-        data->c[j]->rot.y = -left;
-        data->d[j]->rot.y = -right;
-        update_entity(data->c[j]);
-        update_entity(data->d[j]);
+        drawbridge_vars->c[j]->rot.y = -left;
+        drawbridge_vars->d[j]->rot.y = -right;
+        update_entity(drawbridge_vars->c[j]);
+        update_entity(drawbridge_vars->d[j]);
     }
 }
